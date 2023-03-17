@@ -2,178 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E366BE815
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C366BE81A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjCQLcV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 07:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S229938AbjCQLct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCQLcU (ORCPT
+        with ESMTP id S229811AbjCQLcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:32:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C7F442CE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:32:18 -0700 (PDT)
-Received: from dggpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PdMQc0zh6zrS14;
-        Fri, 17 Mar 2023 19:31:20 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500004.china.huawei.com (7.185.36.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 19:32:15 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2507.021;
- Fri, 17 Mar 2023 19:32:15 +0800
-From:   "chenjun (AM)" <chenjun102@huawei.com>
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-CC:     "xuqiang (M)" <xuqiang36@huawei.com>,
-        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
-Thread-Topic: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
-Thread-Index: AQHZVnGyqCLx+d0GeECeM+z9zE2Dsg==
-Date:   Fri, 17 Mar 2023 11:32:15 +0000
-Message-ID: <344c7521d72e4107b451c19b329e9864@huawei.com>
-References: <20230314123403.100158-1-chenjun102@huawei.com>
- <0cad1ff3-8339-a3eb-fc36-c8bda1392451@suse.cz>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.178.43]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+        Fri, 17 Mar 2023 07:32:47 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B7853281
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:32:45 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so8755058pjv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1679052765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=de8XOkLa149BQ2L925B1UG2ePVsDMnMyaob4tHRpfnA=;
+        b=zRx+qECqCL+KBpmPW6IxWec6kaUi46CFGaPNEijpptYDaUZF4otdAOYGbrRvuaqdF/
+         4cZDdbxGKv04z/reTAWqC2R2Fu+y76cS5qGbJ+d/M+K8VqAQ6O01df17Ax7aJM67hlN0
+         UOrAr2Kawim3Nh0ZHUwMFXIPI7fu+T8IlYslpE4tl85vC7GvztX2+YTUfqtub1HVzh7d
+         z+6RCtqMrWVGlrJ5i0WFLuadU+g97mzDFDQKAHml7oqIemx6KFhTVnEOViX6yimTfgEM
+         ifCmaoQ0AV8KMDEP/xOhXGB/Qj7KA8aRsM9RRXoNFKgjrsJSC5fzMZO+0j2wPA2uMuHm
+         JtgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679052765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=de8XOkLa149BQ2L925B1UG2ePVsDMnMyaob4tHRpfnA=;
+        b=yqf1ESeCPLOJCurGdc0h78XGFjBS6044bK83BL5+2dtdch1ZCUXMyiGB2skIHiZ5hM
+         yNIH8j8UTmgd0+tVO5zG6wPTh5VvSWXu7b4kORaGZSbh1b2xxuKdtgP6klGJLxAIQhB4
+         JIICKftjmbgRT3BPAdX4GbAyRXrI/trWhGYQFuW+bm7Yj75M2JPhbBdRkJe0xaBwE2Ht
+         d/y+YKIGSA1oM/AeYO4IuRvKEV+bXTAKMVkW5vHbjk5rJoe0x5k0WS1DoxDRQId+oXIN
+         7DRzduyd0Bz0O5k0JpHp6NXI/+OEGoJ+qL5V7jVZDC83xh0jXJtRNxEdGnxGGLCGWKEZ
+         sKpg==
+X-Gm-Message-State: AO0yUKVjU/x3bP2i3H4O8bKQ5doCqqQ0eozwBjZu6uHcwhUBInTpDmDF
+        gLy5IVZrdjslOMrBffJAbLdcCw==
+X-Google-Smtp-Source: AK7set/qmRB3Cq2Ngf5a0+tELWz+JRQGDGER7Sp32pRtVVD93EZ5RnqfAwY57iOTxes/HoyJvmeK2Q==
+X-Received: by 2002:a17:90b:3ec5:b0:22c:6d7c:c521 with SMTP id rm5-20020a17090b3ec500b0022c6d7cc521mr7537439pjb.45.1679052765133;
+        Fri, 17 Mar 2023 04:32:45 -0700 (PDT)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090a818300b00233aacab89esm1182904pjn.48.2023.03.17.04.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 04:32:44 -0700 (PDT)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shunsuke Mie <mie@igel.co.jp>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [RFC PATCH 00/11] Introduce a test for continuous transfer
+Date:   Fri, 17 Mar 2023 20:32:27 +0900
+Message-Id: <20230317113238.142970-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/3/14 22:41, Vlastimil Babka 写道:
-> 
-> On 3/14/23 13:34, Chen Jun wrote:
->> When kmalloc_node() is called without __GFP_THISNODE and the target node
->> lacks sufficient memory, SLUB allocates a folio from a different node
->> other than the requested node, instead of taking a partial slab from it.
->>
->> However, since the allocated folio does not belong to the requested
->> node, it is deactivated and added to the partial slab list of the node
->> it belongs to.
->>
->> This behavior can result in excessive memory usage when the requested
->> node has insufficient memory, as SLUB will repeatedly allocate folios
->> from other nodes without reusing the previously allocated ones.
->>
->> To prevent memory wastage,
->> when (node != NUMA_NO_NODE) && (gfpflags & __GFP_THISNODE) is:
->> 1) try to get a partial slab from target node with __GFP_THISNODE.
->> 2) if 1) failed, try to allocate a new slab from target node with
->>     __GFP_THISNODE.
->> 3) if 2) failed, retry 1) and 2) without __GFP_THISNODE constraint.
->>
->> when node != NUMA_NO_NODE || (gfpflags & __GFP_THISNODE), the behavior
->> remains unchanged.
->>
->> On qemu with 4 numa nodes and each numa has 1G memory. Write a test ko
->> to call kmalloc_node(196, GFP_KERNEL, 3) for (4 * 1024 + 4) * 1024 times.
->>
->> cat /proc/slabinfo shows:
->> kmalloc-256       4200530 13519712    256   32    2 : tunables..
->>
->> after this patch,
->> cat /proc/slabinfo shows:
->> kmalloc-256       4200558 4200768    256   32    2 : tunables..
->>
->> Signed-off-by: Chen Jun <chenjun102@huawei.com>
->> ---
->>   mm/slub.c | 22 +++++++++++++++++++---
->>   1 file changed, 19 insertions(+), 3 deletions(-)
->>
->> diff --git a/mm/slub.c b/mm/slub.c
->> index 39327e98fce3..32e436957e03 100644
->> --- a/mm/slub.c
->> +++ b/mm/slub.c
->> @@ -2384,7 +2384,7 @@ static void *get_partial(struct kmem_cache *s, int node, struct partial_context
->>   		searchnode = numa_mem_id();
->>   
->>   	object = get_partial_node(s, get_node(s, searchnode), pc);
->> -	if (object || node != NUMA_NO_NODE)
->> +	if (object || (node != NUMA_NO_NODE && (pc->flags & __GFP_THISNODE)))
->>   		return object;
->>   
->>   	return get_any_partial(s, pc);
->> @@ -3069,6 +3069,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
->>   	struct slab *slab;
->>   	unsigned long flags;
->>   	struct partial_context pc;
->> +	bool try_thisnode = true;
->>   
->>   	stat(s, ALLOC_SLOWPATH);
->>   
->> @@ -3181,8 +3182,18 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
->>   	}
->>   
->>   new_objects:
->> -
->>   	pc.flags = gfpflags;
->> +
->> +	/*
->> +	 * when (node != NUMA_NO_NODE) && (gfpflags & __GFP_THISNODE)
->> +	 * 1) try to get a partial slab from target node with __GFP_THISNODE.
->> +	 * 2) if 1) failed, try to allocate a new slab from target node with
->> +	 *    __GFP_THISNODE.
->> +	 * 3) if 2) failed, retry 1) and 2) without __GFP_THISNODE constraint.
->> +	 */
->> +	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
->> +			pc.flags |= __GFP_THISNODE;
-> 
-> Hmm I'm thinking we should also perhaps remove direct reclaim possibilities
-> from the attempt 2). In your qemu test it should make no difference, as it
-> fills everything with kernel memory that is not reclaimable. But in practice
-> the target node might be filled with user memory, and I think it's better to
-> quickly allocate on a different node than spend time in direct reclaim. So
-> the following should work I think?
-> 
-> pc.flags = GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
-> 
+This patchset introduces testing through continuous transfer to the PCI
+endpoint tests. The purpose is to find bugs that may exist in the endpoint
+controller driver. This changes able to find bugs in the DW EDMA driver and
+this patchset includes the fix.
 
-Hmm, Should it be that:
+This bug does not appear in the current tests because these synchronize to
+finish with every data transfer. However, the problem occurs with
+continuous DMA issuances. The continuous transfers are required to get high
+throughput and low latency. Therefore, the added tests will enable
+realistic transfer testing.
 
-pc.flags |= GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
-          ^
->> +
->>   	pc.slab = &slab;
->>   	pc.orig_size = orig_size;
->>   	freelist = get_partial(s, node, &pc);
->> @@ -3190,10 +3201,15 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
->>   		goto check_new_slab;
->>   
->>   	slub_put_cpu_ptr(s->cpu_slab);
->> -	slab = new_slab(s, gfpflags, node);
->> +	slab = new_slab(s, pc.flags, node);
->>   	c = slub_get_cpu_ptr(s->cpu_slab);
->>   
->>   	if (unlikely(!slab)) {
->> +		if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
->> +			try_thisnode = false;
->> +			goto new_objects;
->> +		}
->> +
->>   		slab_out_of_memory(s, gfpflags, node);
->>   		return NULL;
->>   	}
-> 
-> 
+This patchset is divided into three parts:
+- Remove duplicated definitions and improve some code [1-6/11]
+- Add continuous transfer tests [7-9/11]
+- Fix for the DW EDMA driver bug [10,11/11]
+
+This patchset has beed tested on RCar Spidar that has dw pci edma chip.
+
+Shunsuke Mie (11):
+  misc: pci_endpoint_test: Aggregate irq_type checking
+  misc: pci_endpoint_test: Remove an unused variable
+  pci: endpoint: function/pci-epf-test: Unify a range of time
+    measurement
+  PCI: endpoint: functions/pci-epf-test: Move common difinitions to
+    header file
+  MAINTAINERS: Add a header file for pci-epf-test
+  misc: pci_endpoint_test: Use a common header file between endpoint
+    driver
+  PCI: endpoint: functions/pci-epf-test: Extend the test for continuous
+    transfers
+  misc: pci_endpoint_test: Support a test of continuous transfer
+  tools: PCI: Add 'C' option to support continuous transfer
+  dmaengine: dw-edma: Fix to change for continuous transfer
+  dmaengine: dw-edma: Fix to enable to issue dma request on DMA
+    processing
+
+ MAINTAINERS                                   |   1 +
+ drivers/dma/dw-edma/dw-edma-core.c            |  30 ++-
+ drivers/misc/pci_endpoint_test.c              | 132 ++++--------
+ drivers/pci/endpoint/functions/pci-epf-test.c | 199 ++++++++----------
+ include/linux/pci-epf-test.h                  |  67 ++++++
+ include/uapi/linux/pcitest.h                  |   1 +
+ tools/pci/pcitest.c                           |  13 +-
+ 7 files changed, 231 insertions(+), 212 deletions(-)
+ create mode 100644 include/linux/pci-epf-test.h
+
+-- 
+2.25.1
 
