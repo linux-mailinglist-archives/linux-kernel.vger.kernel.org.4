@@ -2,125 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068916BE357
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FFD6BE333
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjCQIX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S230190AbjCQIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjCQIXR (ORCPT
+        with ESMTP id S230091AbjCQIXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:23:17 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98679D5A44;
-        Fri, 17 Mar 2023 01:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679041375; x=1710577375;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f8DXY+pVVHfCkMB1JHs3DE65L96pEtB89jOaYuZ7eoY=;
-  b=U9R9kNDcrPO2zTS8hv/DNwkQHmb4wym1kuOB71S4DDiOl11vWim4ssQn
-   Yn5bboQcRdUkCm33uXFETIGYmEqJzfhy+YKY6eltiQkrxG4ZHXQl+dneM
-   3B4CcZ+bAdXVxccvBJjcbrM0c2gdjBAyaW3scA6PIqvvqKO3MDfpYrsyj
-   WlqkLUNHZE9+wAP4YIXntSGMI7j14LS9ph5m8Lb3qSyG4RT3DHqBO2IR4
-   HuiAk6Lw1fAXHBChIZ56fGOv+PkNbL7W2fTrWVS3SugU9ga7r1yO/C3+M
-   rcHakIdqQ0t4vEuxlcnkW3jx6Z3Jh/6I1NKmiqIeyCJakjor1/2gciNew
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="403081807"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="403081807"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:22:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="680220217"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="680220217"
-Received: from gsd-build.iind.intel.com ([10.227.90.132])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:22:31 -0700
-From:   "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex.williamson@redhat.com, cohuck@redhat.com, jgg@ziepe.ca,
-        kevin.tian@intel.com, michal.winiarski@intel.com,
-        dave.jiang@intel.com, ashok.raj@intel.com
-Cc:     "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>
-Subject: [PATCH v2] vfio/pci: Add DVSEC PCI Extended Config Capability to user visible list.
-Date:   Fri, 17 Mar 2023 08:22:22 +0000
-Message-Id: <20230317082222.3355912-1-satyanarayana.k.v.p@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 17 Mar 2023 04:23:08 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E11A5E4;
+        Fri, 17 Mar 2023 01:22:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q189so2429925pga.9;
+        Fri, 17 Mar 2023 01:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679041352;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CvZiznDb8feEQFPyw13u7jzCgvHCPleXRdMTnsLV7lw=;
+        b=C8TyryX7x0nOZ97prNCZujblQ48n0MKZf+xrMx4QaLu0I/EHiQXEr9P1ACNGDKEGMl
+         AwaKjtQUhL2sK4kCKib3CImwYzmS8e+Ew83YM5u/6gghKH1lTImrrwiTnWoCSy42BVIk
+         nfT0kyS9bwedBVEzkf9jffVgYxAktc2x4tLFUEDR+gr6QSRcIfrHCbqRELGn+UsgrljO
+         VFsvNInVq0rQocz9c1jqHK/fiAhYib6Lf4T4mi0UxtvmqVm/2catXHsNRqlHB9qaKEkA
+         E7BT0U359ir9fFvyLffQa3FuWq9IMF/7rPCHlDzavP8nVh0XdNEzLO7kfO4FBlzLIHAN
+         qy+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679041352;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CvZiznDb8feEQFPyw13u7jzCgvHCPleXRdMTnsLV7lw=;
+        b=CjviwO4+vc8fGfOdGsE/NFTooJunLfsxAxL9/T/6McAXNfWALyiCJSKJuvos9UAxdv
+         XmwiXFBKIzBCmnkVVZgbI5ZU2p/9jcavHKQehXMPFO7XVsYN8yIZ8XGhgAqAerx/BBGw
+         XsKOY9RW1LjIZOfiPRQ98M96PP9zfSNs6thNwvsX3p/a3ubjtuDBNcxIFOPrZnUCPHHJ
+         wgcoWrRlFxZaji8BHKMrdm/k/iv+Wy9BpweHbaYGEkTjmo2ki5Qnd+Frjwi3N19kTerl
+         ku7eZnH/qgUdrr/fNAR0wPFypWbXDvF1YDmEJvT2QAXIdL88a1SKldC+5ddnqkUAzMED
+         anRg==
+X-Gm-Message-State: AO0yUKVWpYCw9T1i72nfaxyc3bVFSlC3Zs7Ac0OIS2/mLVssCQXSVoy3
+        d/UEeDMgiOGkixtycO5y6ho=
+X-Google-Smtp-Source: AK7set/FA59a7uWFIVnTi0ZBQn89n77yG+1RamBNmOtXukjVceklC42Q/lvsQUOox1U2EBkHEC24vg==
+X-Received: by 2002:aa7:9830:0:b0:625:55e5:afe4 with SMTP id q16-20020aa79830000000b0062555e5afe4mr6021026pfl.26.1679041352007;
+        Fri, 17 Mar 2023 01:22:32 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
+        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b005d4360ed2bbsm964214pfm.197.2023.03.17.01.22.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 01:22:31 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9737C106581; Fri, 17 Mar 2023 15:22:28 +0700 (WIB)
+Date:   Fri, 17 Mar 2023 15:22:28 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] ELF: document some de-facto PT_* ABI quirks
+Message-ID: <ZBQjRLiXOwfmoIs+@debian.me>
+References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
+ <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xx//7xiLGuGFtrC6"
+Content-Disposition: inline
+In-Reply-To: <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Designated Vendor-Specific Extended Capability (DVSEC Capability) is an
-optional Extended Capability that is permitted to be implemented by any PCI
-Express Function. This allows PCI Express component vendors to use
-the Extended Capability mechanism to expose vendor-specific registers that can
-be present in components by a variety of vendors. A DVSEC Capability structure
-can tell vendor-specific software which features a particular component
-supports.
 
-An example usage of DVSEC is Intel Platform Monitoring Technology (PMT) for
-enumerating and accessing hardware monitoring capabilities on a device.
-PMT encompasses three device monitoring features, Telemetry (device metrics),
-Watcher (sampling/tracing), and Crashlog. The DVSEC is used to discover these
-features and provide a BAR offset to their registers with the Intel vendor code.
+--xx//7xiLGuGFtrC6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The current VFIO driver does not pass DVSEC capabilities to Virtual Machine (VM)
-which makes PMT not to work inside the virtual machine. This series adds DVSEC
-capability to user visible list to allow its use with VFIO. VFIO supports
-passing of Vendor Specific Extended Capability (VSEC) and raw write access to
-device. DVSEC also passed to VM in the same way as of VSEC.
+On Tue, Mar 14, 2023 at 07:34:11PM -0700, Randy Dunlap wrote:
+> Hi,
+>=20
+> [adding linux-doc for other interested parties]
 
-Signed-off-by: K V P Satyanarayana <satyanarayana.k.v.p@intel.com>
+Unfortunately akpm had already applied this doc as 60b38b7cbb295d ("ELF:
+document some de-facto PT_* ABI quirks") while it being reviewed and
+doesn't have any consensus yet.
 
-Changes since Version V2:
-- Added support for raw pci write for DVSEC same as VSEC.
----
- drivers/vfio/pci/vfio_pci_config.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> And could the document have a title, like:
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> ELF header usage in Linux
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
 
-diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-index 523e0144c86f..948cdd464f4e 100644
---- a/drivers/vfio/pci/vfio_pci_config.c
-+++ b/drivers/vfio/pci/vfio_pci_config.c
-@@ -96,6 +96,7 @@ static const u16 pci_ext_cap_length[PCI_EXT_CAP_ID_MAX + 1] = {
- 	[PCI_EXT_CAP_ID_SECPCI]	=	0,	/* not yet */
- 	[PCI_EXT_CAP_ID_PMUX]	=	0,	/* not yet */
- 	[PCI_EXT_CAP_ID_PASID]	=	0,	/* not yet */
-+	[PCI_EXT_CAP_ID_DVSEC]	=	0xFF,
- };
- 
- /*
-@@ -1101,6 +1102,7 @@ int __init vfio_pci_init_perm_bits(void)
- 	ret |= init_pci_ext_cap_err_perm(&ecap_perms[PCI_EXT_CAP_ID_ERR]);
- 	ret |= init_pci_ext_cap_pwr_perm(&ecap_perms[PCI_EXT_CAP_ID_PWR]);
- 	ecap_perms[PCI_EXT_CAP_ID_VNDR].writefn = vfio_raw_config_write;
-+	ecap_perms[PCI_EXT_CAP_ID_DVSEC].writefn = vfio_raw_config_write;
- 
- 	if (ret)
- 		vfio_pci_uninit_perm_bits();
-@@ -1440,6 +1442,11 @@ static int vfio_ext_cap_len(struct vfio_pci_core_device *vdev, u16 ecap, u16 epo
- 			return PCI_TPH_BASE_SIZEOF + (sts * 2) + 2;
- 		}
- 		return PCI_TPH_BASE_SIZEOF;
-+	case PCI_EXT_CAP_ID_DVSEC:
-+		ret = pci_read_config_dword(pdev, epos + PCI_DVSEC_HEADER1, &dword);
-+		if (ret)
-+			return pcibios_err_to_errno(ret);
-+		return PCI_DVSEC_HEADER1_LEN(dword);
- 	default:
- 		pci_warn(pdev, "%s: unknown length for PCI ecap %#x@%#x\n",
- 			 __func__, ecap, epos);
--- 
-2.34.1
+The current doc path is Documentation/ELF/ELF.rst, which means that
+readers expect to find general info about the executable format, not
+some sort of trivia/niche like this.
 
+>=20
+> (I just made that up. Feel free to change it. :)
+>=20
+> Also, the .rst file should be added to some chapter in the current
+> documentation tree, such as under "Other documentation", so add this file=
+ name
+> to Documentation/staging/index.rst. In fact this file could live in
+> Documentation/staging instead of in Documentation/ELF/ (IMO of course).
+
+If there are more ELF docs there then a separate directory may be
+warranted.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--xx//7xiLGuGFtrC6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBQjPwAKCRD2uYlJVVFO
+owcuAP4lDPdQVO6AVHUCej5SAiOUSoMlyrGjiEIDl26TaprLNgD+K4PvtF55ZbCc
+XjJzxMW1l5SXOEdmoWt8jltxCwrvWAg=
+=eLk5
+-----END PGP SIGNATURE-----
+
+--xx//7xiLGuGFtrC6--
