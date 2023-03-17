@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988B76BDF8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 04:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DBF6BDF95
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 04:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjCQDZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 23:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        id S229697AbjCQD00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 23:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjCQDZC (ORCPT
+        with ESMTP id S229556AbjCQD0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 23:25:02 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4392031E21
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 20:25:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pd8dN1h4lz4x4r;
-        Fri, 17 Mar 2023 14:24:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1679023497;
-        bh=+772HMtbGhPv+DtNZJaD3dLNNsKybhWx1jy0I4qG7ms=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FyWdg1E9LxSnWVlyMtVaIp8VJNeGzFgJ+ImtdKg8KQ8Oxi9Sov0zubftQytf8AGjv
-         9qSUSsiugax+LlMKcRFPCdY2no3e1fFhJM7tHJPFtJJs65TMODqwrEQpC8MmQXZOgE
-         Y4iRP7H0NZcWIvt5WcA1rKVzDxCDvi1hfzO0dl7Q5GLz+6p6DJEhVcesV71kIPYuOX
-         yZRBRl5qQe1g4BKRc7+fy34sSOLLnNGy67v2SBaigI1AGmMSvdeDWnGuIkM8FE5ZTS
-         AQQ8uXxZ6THMbPFgmAg4YhTJT1HdOC1ZFM8rNFfCHEzCtbTuKR0tXTTQ6fDF2oh4br
-         eMgHmBQc7+7xA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        rdunlap@infradead.org, ruscur@russell.cc
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.3-3 tag
-Date:   Fri, 17 Mar 2023 14:24:51 +1100
-Message-ID: <87cz58m54s.fsf@mpe.ellerman.id.au>
+        Thu, 16 Mar 2023 23:26:23 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8198C3A878;
+        Thu, 16 Mar 2023 20:26:21 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pd0jC-005aoj-JQ; Fri, 17 Mar 2023 11:26:03 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 17 Mar 2023 11:26:02 +0800
+Date:   Fri, 17 Mar 2023 11:26:02 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        Thomas.Lendacky@amd.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Felix.Held@amd.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Subject: Re: [PATCH v4 0/8] Export platform features from ccp driver
+Message-ID: <ZBPdypC1EBbQ1lDR@gondor.apana.org.au>
+References: <20230310211954.2490-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310211954.2490-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+On Fri, Mar 10, 2023 at 03:19:43PM -0600, Mario Limonciello wrote:
+> The i2c-designware-amdpsp driver communicates with a platform
+> features mailbox provided by the PSP.  The address used for
+> communication is discovered via a non-architecturally
+> guaranteed mechanism.
+> 
+> To better scale, export a feature for communication with platform
+> features directly from the ccp driver.
+> 
+> v3->v4
+>  Drop the ACPI ID as result of confirmation with internal team.
+>  Future platforms should use doorbell, so will treat Cezanne as quirk
+>  and assume doorbell going forward.
+> 
+> Mario Limonciello (8):
+>   crypto: ccp: Drop TEE support for IRQ handler
+>   crypto: ccp: Add a header for multiple drivers to use `__psp_pa`
+>   crypto: ccp: Move some PSP mailbox bit definitions into common header
+>   crypto: ccp: Add support for an interface for platform features
+>   crypto: ccp: Enable platform access interface on client PSP parts
+>   i2c: designware: Use PCI PSP driver for communication
+>   crypto: ccp: Add support for ringing a platform doorbell
+>   i2c: designware: Add doorbell support for Skyrim
+> 
+>  arch/x86/kvm/svm/sev.c                      |   1 +
+>  drivers/crypto/ccp/Makefile                 |   3 +-
+>  drivers/crypto/ccp/platform-access.c        | 232 ++++++++++++++++++++
+>  drivers/crypto/ccp/platform-access.h        |  35 +++
+>  drivers/crypto/ccp/psp-dev.c                |  32 +--
+>  drivers/crypto/ccp/psp-dev.h                |  11 +-
+>  drivers/crypto/ccp/sev-dev.c                |  16 +-
+>  drivers/crypto/ccp/sev-dev.h                |   2 +-
+>  drivers/crypto/ccp/sp-dev.h                 |  10 +
+>  drivers/crypto/ccp/sp-pci.c                 |   9 +
+>  drivers/crypto/ccp/tee-dev.c                |  17 +-
+>  drivers/i2c/busses/Kconfig                  |   2 +-
+>  drivers/i2c/busses/i2c-designware-amdpsp.c  | 188 ++++------------
+>  drivers/i2c/busses/i2c-designware-core.h    |   1 -
+>  drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+>  drivers/tee/amdtee/call.c                   |   2 +-
+>  drivers/tee/amdtee/shm_pool.c               |   2 +-
+>  include/linux/psp-platform-access.h         |  65 ++++++
+>  include/linux/psp-sev.h                     |   8 -
+>  include/linux/psp.h                         |  29 +++
+>  20 files changed, 461 insertions(+), 205 deletions(-)
+>  create mode 100644 drivers/crypto/ccp/platform-access.c
+>  create mode 100644 drivers/crypto/ccp/platform-access.h
+>  create mode 100644 include/linux/psp-platform-access.h
+>  create mode 100644 include/linux/psp.h
+> 
+> -- 
+> 2.34.1
 
-Hi Linus,
-
-Please pull some more powerpc fixes for 6.3:
-
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
-
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
-werpc-6.3-3
-
-for you to fetch changes up to f2c7e3562b4c4f1699acc1538ebf3e75f5cced35:
-
-  powerpc/mm: Fix false detection of read faults (2023-03-15 20:48:53 +1100)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.3 #3
-
- - Fix false detection of read faults, introduced by execute-only support.
-
- - Fix a build failure when GENERIC_ALLOCATOR is not selected.
-
-Thanks to: Russell Currey, Randy Dunlap, Michal Such=C3=A1nek, Nathan Lynch,
-Benjamin Gray.
-
-- ------------------------------------------------------------------
-Randy Dunlap (1):
-      powerpc/pseries: RTAS work area requires GENERIC_ALLOCATOR
-
-Russell Currey (1):
-      powerpc/mm: Fix false detection of read faults
-
-
- arch/powerpc/mm/fault.c                | 11 ++++++++---
- arch/powerpc/platforms/pseries/Kconfig |  1 +
- 2 files changed, 9 insertions(+), 3 deletions(-)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmQT3ToACgkQUevqPMjh
-pYApfA/5AdTCYQx6dLZOvYbLWLnfq9V1W1EREx8QzLNyKfgJ8gTdDr8ogBZLvg42
-KDpxWjzY2eLNC3Ip9rXjUDu8n06YcpqTzPK/kvJR7RfWtOnMzsY9FqRALrQdz+BO
-nr/rSxMVJN4we1Rc2iaVuSXhGV65kWJ2X0j9kVx5LrG4LOWSWMr1Y61J9GJi/Emv
-44eiIfcfHNILxHpm7QBYGNBhQpRyOzh8feNTnKxxHr+qQS3GQ0+QdGk21MwCtVHM
-A2cPmpSW5cvGGsDOxjyNn5B4Mrkgbp9vW182XqqxMCC0KZf2PSksQVp3LTTua2GP
-HPX9peeiiTO1ct2/HeL+EiLrshAghmE9J7DFhuhXZpdDQY68iej/sUQhMfrmj+/W
-UTA2qHi63Yv7VcflT7mtFUoqdFH33fuyzkFB1+R9FBzR7nYHpDs8osKbIkXNX4Fr
-O9eiv/A1cbwN2tr6bnXUoILPMU0rc6EZgQqq8qaGrvxDDdVPcgsmDaHxLaV/OWGS
-Uh4KB79WmYr3MIqXF7Ehb7Svh8G+8oTJ7OAaO6ev8f7izBzjf1RY8o1LF8hn1AJd
-jpkclCwVulP/t9rb9BpX7iUBref4JwWBE3LDASM02WPJR9ykW3QPlbWmyPVjXvCS
-0rex8gU8ki2lWUvoeq29DDasRbTIEjkOYLnWp6A0yd00HA/sNm4=3D
-=3DAMyS
------END PGP SIGNATURE-----
+Patches 1-5 and 7 applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
