@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08486BF4B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718E36BF4C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjCQVyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S230419AbjCQV51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbjCQVyj (ORCPT
+        with ESMTP id S231201AbjCQV5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:54:39 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A34984D6;
-        Fri, 17 Mar 2023 14:54:17 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id y2so6713725pjg.3;
-        Fri, 17 Mar 2023 14:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679090057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uZLLDbPm3nkjoP0JuZeXds6jg7ClAAqz2Z12AuSnWK4=;
-        b=hYjLY8ATu6it/don+rer9uslXtao78n3n6+zA1KdL2ODoAHrNNbCJ2I9kovibJhoQq
-         SGNAEFVD2qE9qJxh1PJuBpFJ0jHQDZ+PtsxV97ycCGdeB4D87Eu+jDy/6m9oXgRECvwG
-         nzSJ1fpOETu0qYWVJxWMwNDJk2g07Uko4IWxekBidZ/xoPnt78tyaSBveigFb3LmcGZZ
-         UpS6pYVvJ3T1uhkkvmrqFwIepKop+0buA1nJ1cNSkFQiqhXJhPAEnD/FrgDd+ncwcHyn
-         b4H1y2ewGun69vepLaWlidOi5iV5N91WjYIs7N1+8a2qwZPJxNWI7ZG8CvpRN3rJUkgg
-         oyeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679090057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uZLLDbPm3nkjoP0JuZeXds6jg7ClAAqz2Z12AuSnWK4=;
-        b=j25gaaTS6He4VeYXlk9FlIaAsGE5B1WyLb3I+U5xM2ewTfBbcHzmI2QsFCsHJPi0Np
-         meC7s8JIaQ5v2tnr47o2To6Fyk3vDRDNnb6a+LR+rl5DszlKfB55QU6WQ0S91b/H8KNt
-         5tApro0EBtFz4eK+m8VN9uddPP6N5Gdw7Jh81OU0Ax9z0gQWf2teQTKg2i57/ySbm2d9
-         zcSpwdv6AOtA5U3ex/i+ne6/LMJ5qDzNJr41Z8wZf0VS5cYp7GL7qp4dfTXBmqmLDiEC
-         mb6bxc7KyzHcY6rZbpFMGPrm4y2eYlVCQp7pkMOvah6BRIzRoM0xlhk+/fqIXEhU1iyM
-         Jmvg==
-X-Gm-Message-State: AO0yUKVP+O3gLh/oXrlfidL8gywiDBPT2oNCzBpegu/Ba1SPsqLUMke7
-        I1R5rxUkoN58CalKTN136XA=
-X-Google-Smtp-Source: AK7set/t9oC6xoocjc5+W6yf1YIOlsHqaitrdnjMfBG9ETATyxHCRUyhxEvcYhGrOlPY0zVrJdICRQ==
-X-Received: by 2002:a17:90b:4c8d:b0:23d:2f73:d3c8 with SMTP id my13-20020a17090b4c8d00b0023d2f73d3c8mr10132317pjb.42.1679090056783;
-        Fri, 17 Mar 2023 14:54:16 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b0019719f752c5sm1997319ply.59.2023.03.17.14.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:54:16 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 21:54:15 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v1] virtio/vsock: check transport before skb
- allocation
-Message-ID: <ZBThh0y3yVNwhlM5@bullseye>
-References: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
+        Fri, 17 Mar 2023 17:57:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD285298D5;
+        Fri, 17 Mar 2023 14:56:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BB01B825C3;
+        Fri, 17 Mar 2023 21:56:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DC6C433EF;
+        Fri, 17 Mar 2023 21:56:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679090211;
+        bh=RcXRkLZJ0QUiQo2PkgHUJgLw7K4eCtZTz+7xcLtd8gc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LQ52gPcq7B7KpQewa8arpjOH/RHGDvWniPMgCTUt08BidUSzn57gVqCgbA/UJfQQw
+         2noMdjLPJVPIru50MD0BA+8HhW0eI9nnyoNGvJRs7DDOUwHgFjaRwjLzllptVfpR99
+         00CFMbcc4AWGYT4e6Gq9L5KRkscAryhZFb3yBBejqT1OvdxwTZ6cVBlXWJrOrY3VMc
+         KSTQVL+pLrh1jl1JzsXvmmmdHBKwQvJ/yTtcNznvtoZuRFm4CQ6gZZw9OUqVcHgrp/
+         PkoTjUF1DLvgg0dk2YqynfsQYOxQfWr69Env2PfEABv9VkP1IKYrMmwrSpzkq3b6x7
+         5h4SCeHq9s9Vg==
+Date:   Fri, 17 Mar 2023 16:56:50 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     lorenzo.pieralisi@arm.com, kw@linux.com, Zhiqiang.Hou@nxp.com,
+        bhelgaas@google.com, devicetree@vger.kernel.org,
+        gustavo.pimentel@synopsys.com, leoyang.li@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, minghuan.Lian@nxp.com,
+        mingkai.hu@nxp.com, robh+dt@kernel.org, roy.zang@nxp.com,
+        shawnguo@kernel.org
+Subject: Re: [PATCH 1/1] PCI: layerscape: Add power management support
+Message-ID: <20230317215650.GA1973940@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230317200528.2481154-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:37:10PM +0300, Arseniy Krasnov wrote:
-> Pointer to transport could be checked before allocation of skbuff, thus
-> there is no need to free skbuff when this pointer is NULL.
+On Fri, Mar 17, 2023 at 04:05:28PM -0400, Frank Li wrote:
+> From: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
 > 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  net/vmw_vsock/virtio_transport_common.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> index cda587196475..607149259e8b 100644
-> --- a/net/vmw_vsock/virtio_transport_common.c
-> +++ b/net/vmw_vsock/virtio_transport_common.c
-> @@ -867,6 +867,9 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
->  	if (le16_to_cpu(hdr->op) == VIRTIO_VSOCK_OP_RST)
->  		return 0;
->  
-> +	if (!t)
-> +		return -ENOTCONN;
+> Add PME_Turn_Off/PME_TO_Ack handshake sequence, and finally
+> put the PCIe controller into D3 state after the L2/L3 ready
+> state transition process completion.
+
+Can you please include a sentence or two about what this means for
+devices below the PCIe controller?  Is this guaranteed to be safe for
+them, i.e., can all PCIe devices tolerate PME_Turn_Off, etc., and
+resume correctly afterwards?
+
+I suspect other drivers will copy this sort of pattern if it is safe
+and useful.
+
+>  struct ls_pcie {
+>  	struct dw_pcie *pci;
+> +	const struct ls_pcie_drvdata *drvdata;
+> +	void __iomem *pf_base;
+> +	void __iomem *lut_base;
+> +	bool big_endian;
+> +	bool ep_presence;
+
+This means "any downstream device present", right?  Could be an
+Endpoint or could be a Switch Upstream Port?  I guess it's basically a
+cache of dw_pcie_link_up() at ls_pcie_host_init()-time.
+
+> +	bool pm_support;
+> +	struct regmap *scfg;
+> +	int index;
+>  };
+
+> +static void ls1021a_pcie_send_turnoff_msg(struct ls_pcie *pcie)
+> +{
+> +	u32 val;
 > +
->  	reply = virtio_transport_alloc_skb(&info, 0,
->  					   le64_to_cpu(hdr->dst_cid),
->  					   le32_to_cpu(hdr->dst_port),
-> @@ -875,11 +878,6 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
->  	if (!reply)
->  		return -ENOMEM;
->  
-> -	if (!t) {
-> -		kfree_skb(reply);
-> -		return -ENOTCONN;
-> -	}
-> -
->  	return t->send_pkt(reply);
->  }
->  
-> -- 
-> 2.25.1
+> +	if (!pcie->scfg) {
+> +		dev_dbg(pcie->pci->dev, "SYSCFG is NULL\n");
+> +		return;
+> +	}
+> +
+> +	/* Send Turn_off message */
+> +	regmap_read(pcie->scfg, SCFG_PEXPMWRCR(pcie->index), &val);
+> +	val |= PMXMTTURNOFF;
+> +	regmap_write(pcie->scfg, SCFG_PEXPMWRCR(pcie->index), val);
+> +
+> +	/*
+> +	 * Components with an upstream port must respond to
+> +	 * PME_Turn_Off with PME_TO_Ack but we can't check.
+> +	 *
+> +	 * The standard recommends a 1-10ms timeout after which to
+> +	 * proceed anyway as if acks were received.
 
-LGTM.
+Spec citation please.
 
-Reviewed-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> +	 */
+> +	mdelay(10);
+> +
+> +	/* Clear Turn_off message */
+> +	regmap_read(pcie->scfg, SCFG_PEXPMWRCR(pcie->index), &val);
+> +	val &= ~PMXMTTURNOFF;
+> +	regmap_write(pcie->scfg, SCFG_PEXPMWRCR(pcie->index), val);
+> +}
+
+> +static bool ls_pcie_pm_check(struct ls_pcie *pcie)
+
+This is used as a boolean ("if (!ls_pcie_pm_check())") so it needs a
+better name.  "Check" doesn't give any hint about what a true or false
+return value means.  Something like "pm_supported" *would* give a
+hint because "if (!ls_pcie_pm_supported())" is a sensible question to
+ask.
+
+> +{
+> +	if (!pcie->ep_presence) {
+> +		dev_dbg(pcie->pci->dev, "Endpoint isn't present\n");
+> +		return false;
+> +	}
+> +
+> +	if (!pcie->pm_support)
+> +		return false;
+
+Why test the negative ("!pcie->pm_support") and then return false?
+How about:
+
+  if (pcie->pm_support)
+    return true;
+
+  return false;
+
+or even better, just:
+
+  return pcie->pm_support;
+
+> +	return true;
+> +}
