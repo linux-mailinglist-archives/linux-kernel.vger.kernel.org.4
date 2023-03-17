@@ -2,245 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1296D6BDDD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 01:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663CE6BDDDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 02:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCQA4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 20:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S229617AbjCQBB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 21:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCQA4q (ORCPT
+        with ESMTP id S229436AbjCQBBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 20:56:46 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3577F5ADDA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 17:56:40 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 591FD24E1D3;
-        Fri, 17 Mar 2023 08:56:38 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
- 2023 08:56:38 +0800
-Received: from [192.168.125.89] (113.72.145.194) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
- 2023 08:56:37 +0800
-Message-ID: <eccd860a-fea0-ac24-1796-8e9ae0758bea@starfivetech.com>
-Date:   Fri, 17 Mar 2023 08:56:36 +0800
+        Thu, 16 Mar 2023 21:01:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576ECB6D19;
+        Thu, 16 Mar 2023 18:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679014913; x=1710550913;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=90aXFT30DnFK60tUbNIT7GTgbDigZvOI9/EjEEL+EKw=;
+  b=TPUuqqpS38x4KPGyXpQOm2XV6FhbtqelJgOU4RQuUHtJSdO3lhwigzfR
+   nHp7XOW6G+8keIn5Qf9H+4dCXHOa977gAvG7289Cu0AeuY5QkJF6Wj9p0
+   S52x2NVMTBDnmUgP1lqsa4r9MhDmts6n0/PuevGClhNhbOkFg6YmvzB6M
+   ul6MFvSUDerDnOtCcQPvglk9+ibs2IzOdLDUXBaPhsrDohKRMQcy3DY0T
+   L/poWvhm3VWSYa/ShWuIJpPbyJq1+RwWMRUP04JTwb8V4kRPndG+9OhsP
+   EFkmNxo4oofvHrFIHsJuCbX/Cer+FJrI7t15+TngORCXj/4iR3+gDA3bD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317806976"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="317806976"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 18:01:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="710335151"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="710335151"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 16 Mar 2023 18:01:50 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcyTd-0008wQ-23;
+        Fri, 17 Mar 2023 01:01:49 +0000
+Date:   Fri, 17 Mar 2023 09:01:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org,
+        mazziesaccount@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mehdi Djait <mehdi.djait.k@gmail.com>
+Subject: Re: [PATCH 2/3] iio: accel: kionix-kx022a: Add chip_info structure
+Message-ID: <202303170813.jSOLGCL5-lkp@intel.com>
+References: <3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v4] irqchip/irq-sifive-plic: Add syscore callbacks for
- hibernation
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Ley Foon Tan" <leyfoon.tan@starfivetech.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>
-References: <20230308064643.24805-1-mason.huo@starfivetech.com>
-From:   Mason Huo <mason.huo@starfivetech.com>
-In-Reply-To: <20230308064643.24805-1-mason.huo@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Hi Mehdi,
 
-Any feedback about the following v4 patch which is based on 6.3-rc1.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks
-Mason
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on next-20230316]
+[cannot apply to linus/master v6.3-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On 2023/3/8 14:46, Mason Huo wrote:
-> The priority and enable registers of plic will be reset
-> during hibernation power cycle in poweroff mode,
-> add the syscore callbacks to save/restore those registers.
-> 
-> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
-> Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/r/202302140709.CdkxgtPi-lkp@intel.com/
-> ---
->  drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
->  1 file changed, 91 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-> index ff47bd0dec45..2800e7bb149a 100644
-> --- a/drivers/irqchip/irq-sifive-plic.c
-> +++ b/drivers/irqchip/irq-sifive-plic.c
-> @@ -17,6 +17,7 @@
->  #include <linux/of_irq.h>
->  #include <linux/platform_device.h>
->  #include <linux/spinlock.h>
-> +#include <linux/syscore_ops.h>
->  #include <asm/smp.h>
->  
->  /*
-> @@ -67,6 +68,8 @@ struct plic_priv {
->  	struct irq_domain *irqdomain;
->  	void __iomem *regs;
->  	unsigned long plic_quirks;
-> +	unsigned int nr_irqs;
-> +	unsigned long *prio_save;
->  };
->  
->  struct plic_handler {
-> @@ -78,6 +81,7 @@ struct plic_handler {
->  	 */
->  	raw_spinlock_t		enable_lock;
->  	void __iomem		*enable_base;
-> +	u32			*enable_save;
->  	struct plic_priv	*priv;
->  };
->  static int plic_parent_irq __ro_after_init;
-> @@ -229,6 +233,71 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
->  	return IRQ_SET_MASK_OK;
->  }
->  
-> +static int plic_irq_suspend(void)
-> +{
-> +	unsigned int i, cpu;
-> +	u32 __iomem *reg;
-> +	struct plic_priv *priv;
-> +
-> +	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-> +
-> +	for (i = 0; i < priv->nr_irqs; i++)
-> +		if (readl(priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID))
-> +			__set_bit(i, priv->prio_save);
-> +		else
-> +			__clear_bit(i, priv->prio_save);
-> +
-> +	for_each_cpu(cpu, cpu_present_mask) {
-> +		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-> +
-> +		if (!handler->present)
-> +			continue;
-> +
-> +		raw_spin_lock(&handler->enable_lock);
-> +		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-> +			reg = handler->enable_base + i * sizeof(u32);
-> +			handler->enable_save[i] = readl(reg);
-> +		}
-> +		raw_spin_unlock(&handler->enable_lock);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void plic_irq_resume(void)
-> +{
-> +	unsigned int i, index, cpu;
-> +	u32 __iomem *reg;
-> +	struct plic_priv *priv;
-> +
-> +	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
-> +
-> +	for (i = 0; i < priv->nr_irqs; i++) {
-> +		index = (i / BITS_PER_LONG);
-> +		writel((priv->prio_save[index] & BIT(i % BITS_PER_LONG)) ? 1 : 0,
-> +		       priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-> +	}
-> +
-> +	for_each_cpu(cpu, cpu_present_mask) {
-> +		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-> +
-> +		if (!handler->present)
-> +			continue;
-> +
-> +		raw_spin_lock(&handler->enable_lock);
-> +		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
-> +			reg = handler->enable_base + i * sizeof(u32);
-> +			writel(handler->enable_save[i], reg);
-> +		}
-> +		raw_spin_unlock(&handler->enable_lock);
-> +	}
-> +}
-> +
-> +static struct syscore_ops plic_irq_syscore_ops = {
-> +	.suspend	= plic_irq_suspend,
-> +	.resume		= plic_irq_resume,
-> +};
-> +
->  static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
->  			      irq_hw_number_t hwirq)
->  {
-> @@ -345,6 +414,7 @@ static int __init __plic_init(struct device_node *node,
->  	u32 nr_irqs;
->  	struct plic_priv *priv;
->  	struct plic_handler *handler;
-> +	unsigned int cpu;
->  
->  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
-> @@ -363,15 +433,21 @@ static int __init __plic_init(struct device_node *node,
->  	if (WARN_ON(!nr_irqs))
->  		goto out_iounmap;
->  
-> +	priv->nr_irqs = nr_irqs;
-> +
-> +	priv->prio_save = bitmap_alloc(nr_irqs, GFP_KERNEL);
-> +	if (!priv->prio_save)
-> +		goto out_free_priority_reg;
-> +
->  	nr_contexts = of_irq_count(node);
->  	if (WARN_ON(!nr_contexts))
-> -		goto out_iounmap;
-> +		goto out_free_priority_reg;
->  
->  	error = -ENOMEM;
->  	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
->  			&plic_irqdomain_ops, priv);
->  	if (WARN_ON(!priv->irqdomain))
-> -		goto out_iounmap;
-> +		goto out_free_priority_reg;
->  
->  	for (i = 0; i < nr_contexts; i++) {
->  		struct of_phandle_args parent;
-> @@ -441,6 +517,11 @@ static int __init __plic_init(struct device_node *node,
->  		handler->enable_base = priv->regs + CONTEXT_ENABLE_BASE +
->  			i * CONTEXT_ENABLE_SIZE;
->  		handler->priv = priv;
-> +
-> +		handler->enable_save =  kcalloc(DIV_ROUND_UP(nr_irqs, 32),
-> +						sizeof(*handler->enable_save), GFP_KERNEL);
-> +		if (!handler->enable_save)
-> +			goto out_free_enable_reg;
->  done:
->  		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
->  			plic_toggle(handler, hwirq, 0);
-> @@ -461,11 +542,19 @@ static int __init __plic_init(struct device_node *node,
->  				  plic_starting_cpu, plic_dying_cpu);
->  		plic_cpuhp_setup_done = true;
->  	}
-> +	register_syscore_ops(&plic_irq_syscore_ops);
->  
->  	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
->  		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
->  	return 0;
->  
-> +out_free_enable_reg:
-> +	for_each_cpu(cpu, cpu_present_mask) {
-> +		handler = per_cpu_ptr(&plic_handlers, cpu);
-> +		kfree(handler->enable_save);
-> +	}
-> +out_free_priority_reg:
-> +	kfree(priv->prio_save);
->  out_iounmap:
->  	iounmap(priv->regs);
->  out_free_priv:
+url:    https://github.com/intel-lab-lkp/linux/commits/Mehdi-Djait/dt-bindings-iio-Add-KX132-accelerometer/20230317-075056
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k%40gmail.com
+patch subject: [PATCH 2/3] iio: accel: kionix-kx022a: Add chip_info structure
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230317/202303170813.jSOLGCL5-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/40c75341c42d0e5bea5d73961202978a4be41cd2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mehdi-Djait/dt-bindings-iio-Add-KX132-accelerometer/20230317-075056
+        git checkout 40c75341c42d0e5bea5d73961202978a4be41cd2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/iio/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170813.jSOLGCL5-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/iio/accel/kionix-kx022a.c: In function '__kx022a_fifo_flush':
+>> drivers/iio/accel/kionix-kx022a.c:598:9: warning: ISO C90 forbids variable length array 'buffer' [-Wvla]
+     598 |         __le16 buffer[data->chip_info->fifo_length * 3];
+         |         ^~~~~~
+--
+   drivers/iio/accel/kionix-kx022a-i2c.c: In function 'kx022a_i2c_probe':
+>> drivers/iio/accel/kionix-kx022a-i2c.c:27:19: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      27 |         chip_info = device_get_match_data(&i2c->dev);
+         |                   ^
+   drivers/iio/accel/kionix-kx022a-i2c.c:29:27: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      29 |                 chip_info = (const struct kx022a_chip_info *) id->driver_data;
+         |                           ^
+--
+   drivers/iio/accel/kionix-kx022a-spi.c: In function 'kx022a_spi_probe':
+>> drivers/iio/accel/kionix-kx022a-spi.c:27:19: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      27 |         chip_info = device_get_match_data(&spi->dev);
+         |                   ^
+   drivers/iio/accel/kionix-kx022a-spi.c:29:27: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      29 |                 chip_info = (const struct kx022a_chip_info *) id->driver_data;
+         |                           ^
+
+
+vim +/buffer +598 drivers/iio/accel/kionix-kx022a.c
+
+   593	
+   594	static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+   595				       bool irq)
+   596	{
+   597		struct kx022a_data *data = iio_priv(idev);
+ > 598		__le16 buffer[data->chip_info->fifo_length * 3];
+   599		uint64_t sample_period;
+   600		int count, fifo_bytes;
+   601		bool renable = false;
+   602		int64_t tstamp;
+   603		int ret, i;
+   604	
+   605		fifo_bytes = kx022a_get_fifo_bytes(data);
+   606		count = fifo_bytes / KX_FIFO_SAMPLES_SIZE_BYTES;
+   607		if (!count)
+   608			return 0;
+   609	
+   610		/*
+   611		 * If we are being called from IRQ handler we know the stored timestamp
+   612		 * is fairly accurate for the last stored sample. Otherwise, if we are
+   613		 * called as a result of a read operation from userspace and hence
+   614		 * before the watermark interrupt was triggered, take a timestamp
+   615		 * now. We can fall anywhere in between two samples so the error in this
+   616		 * case is at most one sample period.
+   617		 */
+   618		if (!irq) {
+   619			/*
+   620			 * We need to have the IRQ disabled or we risk of messing-up
+   621			 * the timestamps. If we are ran from IRQ, then the
+   622			 * IRQF_ONESHOT has us covered - but if we are ran by the
+   623			 * user-space read we need to disable the IRQ to be on a safe
+   624			 * side. We do this usng synchronous disable so that if the
+   625			 * IRQ thread is being ran on other CPU we wait for it to be
+   626			 * finished.
+   627			 */
+   628			disable_irq(data->irq);
+   629			renable = true;
+   630	
+   631			data->old_timestamp = data->timestamp;
+   632			data->timestamp = iio_get_time_ns(idev);
+   633		}
+   634	
+   635		/*
+   636		 * Approximate timestamps for each of the sample based on the sampling
+   637		 * frequency, timestamp for last sample and number of samples.
+   638		 *
+   639		 * We'd better not use the current bandwidth settings to compute the
+   640		 * sample period. The real sample rate varies with the device and
+   641		 * small variation adds when we store a large number of samples.
+   642		 *
+   643		 * To avoid this issue we compute the actual sample period ourselves
+   644		 * based on the timestamp delta between the last two flush operations.
+   645		 */
+   646		if (data->old_timestamp) {
+   647			sample_period = data->timestamp - data->old_timestamp;
+   648			do_div(sample_period, count);
+   649		} else {
+   650			sample_period = data->odr_ns;
+   651		}
+   652		tstamp = data->timestamp - (count - 1) * sample_period;
+   653	
+   654		if (samples && count > samples) {
+   655			/*
+   656			 * Here we leave some old samples to the buffer. We need to
+   657			 * adjust the timestamp to match the first sample in the buffer
+   658			 * or we will miscalculate the sample_period at next round.
+   659			 */
+   660			data->timestamp -= (count - samples) * sample_period;
+   661			count = samples;
+   662		}
+   663	
+   664		fifo_bytes = count * KX_FIFO_SAMPLES_SIZE_BYTES;
+   665		ret = regmap_noinc_read(data->regmap, data->chip_info->buf_read,
+   666					&buffer[0], fifo_bytes);
+   667		if (ret)
+   668			goto renable_out;
+   669	
+   670		for (i = 0; i < count; i++) {
+   671			__le16 *sam = &buffer[i * 3];
+   672			__le16 *chs;
+   673			int bit;
+   674	
+   675			chs = &data->scan.channels[0];
+   676			for_each_set_bit(bit, idev->active_scan_mask, AXIS_MAX)
+   677				chs[bit] = sam[bit];
+   678	
+   679			iio_push_to_buffers_with_timestamp(idev, &data->scan, tstamp);
+   680	
+   681			tstamp += sample_period;
+   682		}
+   683	
+   684		ret = count;
+   685	
+   686	renable_out:
+   687		if (renable)
+   688			enable_irq(data->irq);
+   689	
+   690		return ret;
+   691	}
+   692	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
