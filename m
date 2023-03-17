@@ -2,156 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12176BED82
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2626BED84
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjCQP6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S231384AbjCQP7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjCQP6S (ORCPT
+        with ESMTP id S230113AbjCQP7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:58:18 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2068.outbound.protection.outlook.com [40.107.22.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7EC3E0A6;
-        Fri, 17 Mar 2023 08:58:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b+6lzEMikAVURkH7BCxIBkfbLcQ/dkoCf1QviQXLGZ59uyGobXWBJegJqg1Q1yVDH9n1kLlLspd8qbVJfrt7I0NYZdPi22Weo4NcRdkng6DkWmEY4h0hix3yGz/EUAlyKP9Bmy6KlBNt0ANNsyUNP3jqtfBVQzDM21h2qWmgfd7PHyI5IfQK6EDQYTmFca3VSI2bjBS2yu5juSkI+u9voPnnqk/Peiu08G9chbEU50ybgQQXnJiJ/i/MOIMiK3dCYkLlbQI6dDtuazKhR3jADLSvvrzTvHSFjDa8HbJSISS8mj3NRA8UWlszlbzPoeu66YxAdeq9qZHEEoZrCn+dpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hGxGmGTmu+GYUuGqycgFd2V+IPyqxT6/I/kNf+g0i2s=;
- b=lHytNmRMQ62Z31KaW9mSzY+K6IdG6ny7X04vCNf4QWn7EicCSugqeHYDVCvxRsJFs/DxfahJWXQMyR0DKnBJeqbXAS9pcKQdOmQ5ap/eDHWTL0gzVXk8Ifp1Fqapu18m84y7qPA4ZE4TQawDsG1Uqfh846vRgE0wg1/BRQ2rKscBONL+xHNXZakZwsOE1DereQLGCji//W5cGpKnlgn9LBob6Q7JDwpLaybTJYyMsgLj6ah3jeDhkRW0mrhfh6OF/+iToFZ7Xd8RmdZuP5faur3pxMOBMxArcC3U4yez7NPvoV2Agiamgbr/aodORyuf2Fc1io77TE+VRs21173FGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hGxGmGTmu+GYUuGqycgFd2V+IPyqxT6/I/kNf+g0i2s=;
- b=HUybq7LFi1q/gxJbFQ+ZaaziW66zulqCl1/vNHrmLWcf2b9uiAaqv2CFEdtyTYe9/RLH3zQLKbnIzxLz/d40+hQHzsGd6klYcnP6HZTtJ/oeoTftEElkDi4xTvRmUn1H1/i8GmSGqbh6fOLbrpd71H8zMZ5absEdJNPQlPHKglA=
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AM9PR04MB7540.eurprd04.prod.outlook.com (2603:10a6:20b:283::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
- 2023 15:58:13 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::fb2a:a683:b78e:b9b5]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::fb2a:a683:b78e:b9b5%4]) with mapi id 15.20.6178.029; Fri, 17 Mar 2023
- 15:58:13 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     "M.H. Lian" <minghuan.lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-pci@vger.kernel.org>,
-        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: RE: [EXT] Re: [PATCH 1/1] PCI: layerscape: Add the workaround for
- A-010305
-Thread-Topic: [EXT] Re: [PATCH 1/1] PCI: layerscape: Add the workaround for
- A-010305
-Thread-Index: AQHZJr5WwkFDleZU9E2wO25hi20GTK77GsyAgARoY6A=
-Date:   Fri, 17 Mar 2023 15:58:13 +0000
-Message-ID: <AM6PR04MB4838BBCA8E49EE13C9545F4388BD9@AM6PR04MB4838.eurprd04.prod.outlook.com>
-References: <20230112194433.1514149-1-Frank.Li@nxp.com>
- <20230314203249.GA1673140@bhelgaas>
-In-Reply-To: <20230314203249.GA1673140@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|AM9PR04MB7540:EE_
-x-ms-office365-filtering-correlation-id: 7a136f06-49b2-4d4a-979a-08db27006a28
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aEEtd0ZT3BLbFkP6BGIM7ECPRMyJ8Qg9p1HqXyBNltxmJ0Dy/2PtSxj5FzknHjH5vGymFmsn6kQfRkt0FC+U/+zuYUPOzI8qW5ucLdso4nHUnNyXZ1FqF0dVIE821pHmq0XAJImv9hlX2u/+kDDmjOzXTH3ImUUf834KoKY0OJbR/Zy7R+NXATkk3AUUbKGelag8/mUftyeiIytlro/xf4eoAnbH0qS5mJ76/2IB+awaJ0Oi0ww8Ri+CSeNnoZdlFevUNJpvMBjtgnoHzmLF1h0Zfj90xTT6YxecHvL8fkyQzmt3Jp2OmCWnLO5J1ouCDb2EMcagtlEQ+c+H+tc6bOdok4Kb5bcs4/ClKNLPdTS0uEc/hqIZAiFbD10kt/2OOkfXRu77a4Fu9vFv0MPg83B/7sR3NIcM13YyWn61jmQhz+1LzIeA3JJlHAogi5TgdurZ7vcfPVa5EwQwssNA3YsdUYt/DQ8OPQd4jOGQpJ2UgrpZm7nNQFDKTE8IvAr+qitTJG/Vjlsltk+X6OUIofq9Dzu4PMy4OauNnzsXmTzz06sFAM8ViH3bVhTuk9+Ta6kChR/TqjvwMuBxMlWrlTO8AgxyD7ZpZNhUBNxYlJb+Czmi3ng/mC56Yv5x75Fe0DeJhRbDi0iSGcpBKG7BhY7MjjVwvSaEPCAs5PclVLAkA02RlpVtMEVksB3BnWGM9IY6IKxwT2hGnrNlj59zn5BN7x8u4nx8m/idn4HzDxw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(366004)(136003)(396003)(376002)(451199018)(66946007)(2906002)(122000001)(76116006)(9686003)(186003)(66476007)(66446008)(64756008)(66556008)(86362001)(38070700005)(478600001)(7696005)(71200400001)(41300700001)(33656002)(966005)(316002)(54906003)(55236004)(55016003)(38100700002)(6506007)(26005)(8936002)(4744005)(7416002)(5660300002)(6916009)(52536014)(8676002)(44832011)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?Nxwgwk+9ArkF9L9F7s0aDfk4qrIjwVZLdhaMP1JEz8520T+urBM4Utbh8V?=
- =?iso-8859-2?Q?UzOO69emyPR2njIQU+DboHV6SLTkz6zjTY5l+vap33eA/dkbLkRQonotbP?=
- =?iso-8859-2?Q?hIVAQi5iZbumU6ysmnZOSG8tA2yuBGLm45aweouE3jo08oYAaS3hextusw?=
- =?iso-8859-2?Q?kA65KxtbZ/60WfdJP7JYIoPXdZrKtsYPaJ+EWGSS5Ba5Czv3wQQGnQ4cPp?=
- =?iso-8859-2?Q?YyD0u58DT/kyzV72qaPFPM3xIk7ozcttA3TJ5RlMOt02LwC8RaSOwIe1bJ?=
- =?iso-8859-2?Q?D6MaMa4+NuM/DJS29iF9gp6qXSGrDxZ4ZxPE8bS1VbvGsYHDGNxTPAulvn?=
- =?iso-8859-2?Q?qzuAlZ+havODWIZkAoqdxx3bv0Av0gF4EUbyMaDj/vjMyQhZYn3rGVci7s?=
- =?iso-8859-2?Q?FMt/HRaSvNHszQEtAXvXJTss7j5E9o1OeRnQZ/1R/iG6RMhtdP+rOxjyc8?=
- =?iso-8859-2?Q?DAJnMWgyQhkLyXP1Ofp4igsTWv6CesjSLvQ0PHZ/Xwj725mSyzCGuGGhM1?=
- =?iso-8859-2?Q?/ZhGXvCFa69v5MaIIc/BkJccM2CSU/cmzwp3/s1KE4Nice0qwh6NdqJ/OB?=
- =?iso-8859-2?Q?JS6ia+kR/WJU0z6UI87XPBgsWvOFy+NaAaGifTzNAx6E+UJwn0w4pn3pKs?=
- =?iso-8859-2?Q?AQJy8SgbARb5UsumbqWtNSs6/obFjG2k1QKQ42IXZd32PBG1ku+MFQwpNx?=
- =?iso-8859-2?Q?JUo/OsklLuAjb7i2OdhtRs32WmVwTLJXPZzYSD61b9FxrFQBpYkm2KvLJH?=
- =?iso-8859-2?Q?AdDhKYerBvW1O2ufTLDCEys8FOZS6TAoGy4jZmtQKphjH18GHW8dfZVrcg?=
- =?iso-8859-2?Q?VRmxcWWeoBe1LfDSFt0OuoEOdQ7UB6S+DGou3K0SDZbt4ZYdHKuOfSfMVl?=
- =?iso-8859-2?Q?y4yRF6Yc7kGBFlwlwv+dvkfflrmkwlj55Vif3pX1CocyasnL/f5NF7uxgP?=
- =?iso-8859-2?Q?DZ1cFNQv1yvt+fPbmZ3wnn4gMGVJtwlAIefrpNvKkutrYbUz3LjJbwpBmF?=
- =?iso-8859-2?Q?Wm+2tkIddC5avfFxXyuSbrRVc4yTJHkHzveuZUY+mzeg36jZcf3liRJWy+?=
- =?iso-8859-2?Q?cL7aCu5GnXdgYoZDPqeGT+vn+LhCdkxdYYYp2QqDt+9srZOU1sEVmBDNVG?=
- =?iso-8859-2?Q?MdHmF+TKwF+1VMH4SGsmL1tO8MQLQUAJR2jqROfLnTxv3HazhaAP4iuY5I?=
- =?iso-8859-2?Q?VnxDaQL7shKrA1rIywG0nceOvQlMIS2Fk4bM4Y68EtYjS+LtUMCcTqVxu1?=
- =?iso-8859-2?Q?jB+ZIPiPfXkfWHZRfKwPCOYEkPA2Uxr/FfZo98IatSoiXMZ31TrNTBvgnp?=
- =?iso-8859-2?Q?yCpE/1UnwBrFKzakQelZvFdDtXYbmSfBsFp4QBoMt2Iw+Os6RPd/XKUaSb?=
- =?iso-8859-2?Q?YNYhwXdFXgNBoetRDoQ3SBl1TZFLngrjiDp+R63xEmB3OREYr1brk6yqz5?=
- =?iso-8859-2?Q?xD7E2Cnu/6o9qDcRlyroUHe9NO6Vwfbxewc/FaucSmEJUzR89/Gh1Oua2J?=
- =?iso-8859-2?Q?uKuI6TYqUnyT7Bmtvmrsq//7zac/LtdYZNdE819No3y4sZr+quX+ogWtP+?=
- =?iso-8859-2?Q?zZmr7k9T2X9c6WlLRSwqBJ/5rGO/xpizu4SynhcoChYqzEtc0yzoTdnihr?=
- =?iso-8859-2?Q?UnQWZn04bYhoSTnYQaOtGZEKaalp2jKxvQ?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Mar 2023 11:59:41 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98A3E39295;
+        Fri, 17 Mar 2023 08:59:39 -0700 (PDT)
+Received: from [192.168.2.1] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3470720C32D1;
+        Fri, 17 Mar 2023 08:59:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3470720C32D1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679068779;
+        bh=eSD4HrH/QXippuTgT51HeCPn4/58lROw7Skk1W+wJbw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Kx9KjArZYqGLXeRI3pu1t2eekDre+Qmg99Kv/rQabwrnvCZNyVsr1CzY9yJxEPdGq
+         jJlP2tF1Re3eNOSPPFw/uEYX5sUf+5oUgQpdkMiOyCR6f6tvWijYOFXfIgHSUV3HKl
+         93Jvh84n+JCMaWfU8COQy/1R5w0HF7/JQl7Uga/Q=
+Message-ID: <14d92d4b-d2c9-3a63-31b4-b083dba0878e@linux.microsoft.com>
+Date:   Fri, 17 Mar 2023 16:59:37 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a136f06-49b2-4d4a-979a-08db27006a28
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 15:58:13.7273
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4sceIb6xYcu1BPGyAg1WH4HPAFTzobGl2UxHHJprNdYHg9kTXKqEogITo15zSqNfXvP++jxiQ6Z0Rh9LHdmo3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7540
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 RESEND] ptp: kvm: Use decrypted memory in confidential
+ guest on x86
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20230308150531.477741-1-jpiotrowski@linux.microsoft.com>
+Content-Language: en-US
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <20230308150531.477741-1-jpiotrowski@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >       pci->ep.ops =3D &ls_pcie_ep_ops;
-> >
-> > +     pcie->big_endian =3D of_property_read_bool(dev->of_node, "big-
-> endian");
->=20
-> Somewhat surprising that 6c389328c985 ("dt-bindings: pci:
-> layerscape-pci: Add a optional property big-endian") added this
-> property a year ago, but it has been unused until now?
->=20
+On 08/03/2023 16:05, Jeremi Piotrowski wrote:
+> KVM_HC_CLOCK_PAIRING currently fails inside SEV-SNP guests because the
+> guest passes an address to static data to the host. In confidential
+> computing the host can't access arbitrary guest memory so handling the
+> hypercall runs into an "rmpfault". To make the hypercall work, the guest
+> needs to explicitly mark the memory as decrypted. Do that in
+> kvm_arch_ptp_init(), but retain the previous behavior for
+> non-confidential guests to save us from having to allocate memory.
+> 
+> Add a new arch-specific function (kvm_arch_ptp_exit()) to free the
+> allocation and mark the memory as encrypted again.
+> 
+> Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> ---
+> Hi,
+> 
+> I would love to not allocate a whole page just for this driver, swiotlb is
+> decrypted but I don't have access to a 'struct device' here. Does anyone have
+> any suggestion?
+> 
+> Jeremi
+> 
 
-No, it also for pci host part. Zhiqiang send patch=20
-https://lore.kernel.org/lkml/20210407030948.3845-1-Zhiqiang.Hou@nxp.com/
+Hi,
 
-Not sure why bind-doc accepted, but driver code patch have not accepted.=20
+Does anyone have any comments or suggestions? Or can this be merged.
 
-The same case happen at https://lore.kernel.org/imx/20230209151050.233973-1=
--Frank.Li@nxp.com/T/#t
+Jeremi
 
-I tried repost the missed part. But no any response over months.  The above=
- one is just one line change.=20
-
-> > --
-> > 2.34.1
-> >
+> Changes since v1:
+> - forgot to commit include/linux/ptp_kvm.h
+> 
+>  drivers/ptp/ptp_kvm_arm.c    |  4 +++
+>  drivers/ptp/ptp_kvm_common.c |  1 +
+>  drivers/ptp/ptp_kvm_x86.c    | 59 +++++++++++++++++++++++++++++-------
+>  include/linux/ptp_kvm.h      |  1 +
+>  4 files changed, 54 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/ptp/ptp_kvm_arm.c b/drivers/ptp/ptp_kvm_arm.c
+> index b7d28c8dfb84..e68e6943167b 100644
+> --- a/drivers/ptp/ptp_kvm_arm.c
+> +++ b/drivers/ptp/ptp_kvm_arm.c
+> @@ -22,6 +22,10 @@ int kvm_arch_ptp_init(void)
+>  	return 0;
+>  }
+>  
+> +void kvm_arch_ptp_exit(void)
+> +{
+> +}
+> +
+>  int kvm_arch_ptp_get_clock(struct timespec64 *ts)
+>  {
+>  	return kvm_arch_ptp_get_crosststamp(NULL, ts, NULL);
+> diff --git a/drivers/ptp/ptp_kvm_common.c b/drivers/ptp/ptp_kvm_common.c
+> index 9141162c4237..2418977989be 100644
+> --- a/drivers/ptp/ptp_kvm_common.c
+> +++ b/drivers/ptp/ptp_kvm_common.c
+> @@ -130,6 +130,7 @@ static struct kvm_ptp_clock kvm_ptp_clock;
+>  static void __exit ptp_kvm_exit(void)
+>  {
+>  	ptp_clock_unregister(kvm_ptp_clock.ptp_clock);
+> +	kvm_arch_ptp_exit();
+>  }
+>  
+>  static int __init ptp_kvm_init(void)
+> diff --git a/drivers/ptp/ptp_kvm_x86.c b/drivers/ptp/ptp_kvm_x86.c
+> index 4991054a2135..902844cc1a17 100644
+> --- a/drivers/ptp/ptp_kvm_x86.c
+> +++ b/drivers/ptp/ptp_kvm_x86.c
+> @@ -14,27 +14,64 @@
+>  #include <uapi/linux/kvm_para.h>
+>  #include <linux/ptp_clock_kernel.h>
+>  #include <linux/ptp_kvm.h>
+> +#include <linux/set_memory.h>
+>  
+>  static phys_addr_t clock_pair_gpa;
+> -static struct kvm_clock_pairing clock_pair;
+> +static struct kvm_clock_pairing clock_pair_glbl;
+> +static struct kvm_clock_pairing *clock_pair;
+>  
+>  int kvm_arch_ptp_init(void)
+>  {
+> +	struct page *p;
+>  	long ret;
+>  
+>  	if (!kvm_para_available())
+>  		return -ENODEV;
+>  
+> -	clock_pair_gpa = slow_virt_to_phys(&clock_pair);
+> -	if (!pvclock_get_pvti_cpu0_va())
+> -		return -ENODEV;
+> +	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+> +		p = alloc_page(GFP_KERNEL | __GFP_ZERO);
+> +		if (!p)
+> +			return -ENOMEM;
+> +
+> +		clock_pair = page_address(p);
+> +		ret = set_memory_decrypted((unsigned long)clock_pair, 1);
+> +		if (ret) {
+> +			__free_page(p);
+> +			clock_pair = NULL;
+> +			goto nofree;
+> +		}
+> +	} else {
+> +		clock_pair = &clock_pair_glbl;
+> +	}
+> +
+> +	clock_pair_gpa = slow_virt_to_phys(clock_pair);
+> +	if (!pvclock_get_pvti_cpu0_va()) {
+> +		ret = -ENODEV;
+> +		goto err;
+> +	}
+>  
+>  	ret = kvm_hypercall2(KVM_HC_CLOCK_PAIRING, clock_pair_gpa,
+>  			     KVM_CLOCK_PAIRING_WALLCLOCK);
+> -	if (ret == -KVM_ENOSYS)
+> -		return -ENODEV;
+> +	if (ret == -KVM_ENOSYS) {
+> +		ret = -ENODEV;
+> +		goto err;
+> +	}
+>  
+>  	return ret;
+> +
+> +err:
+> +	kvm_arch_ptp_exit();
+> +nofree:
+> +	return ret;
+> +}
+> +
+> +void kvm_arch_ptp_exit(void)
+> +{
+> +	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+> +		WARN_ON(set_memory_encrypted((unsigned long)clock_pair, 1));
+> +		free_page((unsigned long)clock_pair);
+> +		clock_pair = NULL;
+> +	}
+>  }
+>  
+>  int kvm_arch_ptp_get_clock(struct timespec64 *ts)
+> @@ -49,8 +86,8 @@ int kvm_arch_ptp_get_clock(struct timespec64 *ts)
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> -	ts->tv_sec = clock_pair.sec;
+> -	ts->tv_nsec = clock_pair.nsec;
+> +	ts->tv_sec = clock_pair->sec;
+> +	ts->tv_nsec = clock_pair->nsec;
+>  
+>  	return 0;
+>  }
+> @@ -81,9 +118,9 @@ int kvm_arch_ptp_get_crosststamp(u64 *cycle, struct timespec64 *tspec,
+>  			pr_err_ratelimited("clock pairing hypercall ret %lu\n", ret);
+>  			return -EOPNOTSUPP;
+>  		}
+> -		tspec->tv_sec = clock_pair.sec;
+> -		tspec->tv_nsec = clock_pair.nsec;
+> -		*cycle = __pvclock_read_cycles(src, clock_pair.tsc);
+> +		tspec->tv_sec = clock_pair->sec;
+> +		tspec->tv_nsec = clock_pair->nsec;
+> +		*cycle = __pvclock_read_cycles(src, clock_pair->tsc);
+>  	} while (pvclock_read_retry(src, version));
+>  
+>  	*cs = &kvm_clock;
+> diff --git a/include/linux/ptp_kvm.h b/include/linux/ptp_kvm.h
+> index c2e28deef33a..746fd67c3480 100644
+> --- a/include/linux/ptp_kvm.h
+> +++ b/include/linux/ptp_kvm.h
+> @@ -14,6 +14,7 @@ struct timespec64;
+>  struct clocksource;
+>  
+>  int kvm_arch_ptp_init(void);
+> +void kvm_arch_ptp_exit(void);
+>  int kvm_arch_ptp_get_clock(struct timespec64 *ts);
+>  int kvm_arch_ptp_get_crosststamp(u64 *cycle,
+>  		struct timespec64 *tspec, struct clocksource **cs);
