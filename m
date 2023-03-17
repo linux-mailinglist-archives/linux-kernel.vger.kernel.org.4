@@ -2,211 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB616BED33
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCE36BED4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjCQPpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S230223AbjCQPvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCQPpb (ORCPT
+        with ESMTP id S229991AbjCQPvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:45:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BE54D41C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E83C4B82627
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0988BC433EF;
-        Fri, 17 Mar 2023 15:45:19 +0000 (UTC)
-Date:   Fri, 17 Mar 2023 15:45:17 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kristina Martsenko <kristina.martsenko@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/10] arm64: mops: handle MOPS exceptions
-Message-ID: <ZBSLDTUD3yLY7SHJ@arm.com>
-References: <20230216160012.272345-1-kristina.martsenko@arm.com>
- <20230216160012.272345-8-kristina.martsenko@arm.com>
+        Fri, 17 Mar 2023 11:51:19 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1554AD02F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:51:18 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32HFolij015247
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 11:50:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1679068250; bh=tsuI/3AQbb01opNQjlPT5OtU6shs2k5NRqebA+XQ/O4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=oGQSktXGSx7A73SE3u8bOgcG6CYh40tQTA0hbo3KWAxrR4P/XVYNa/tT5l8cteSqy
+         6wZt7G7NO/Bn3tiQsQixOtl87C2xELVCdHL2l0PNYsD3jian/BBX0SVVQSNix5snOY
+         mrlK650tq/w+I2gqnkeDV8+5VTBjzy8n9PjPH8kp9EWCtUgN9sD90PeBJf1s59X/AR
+         DPsjzjeKYLH4Ro84Yfv2UDibyOlLDqlL/eF2bnG/i1lAXJWI+2T8kUWhi+hfcjNzAe
+         rxGigEa5azKlALNSjDB/tpS4YNjycjNuORbUws1NEECTsVeubgnJRVgADf+Hotlurh
+         IWTrg4dPzxkjg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id B108615C33A7; Fri, 17 Mar 2023 11:50:47 -0400 (EDT)
+Date:   Fri, 17 Mar 2023 11:50:47 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
+        ritesh.list@gmail.com,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 20/20] ext4: simplify calculation of blkoff in
+ ext4_mb_new_blocks_simple
+Message-ID: <20230317155047.GB3270589@mit.edu>
+References: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
+ <20230303172120.3800725-21-shikemeng@huaweicloud.com>
+ <20230316050740.GL860405@mit.edu>
+ <d88a3d33-6832-2921-c8bb-b935b19e7db4@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230216160012.272345-8-kristina.martsenko@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d88a3d33-6832-2921-c8bb-b935b19e7db4@huaweicloud.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 04:00:09PM +0000, Kristina Martsenko wrote:
-> The memory copy/set instructions added as part of FEAT_MOPS can take an
-> exception part-way through their execution and resume execution
-> afterwards. If however the task is re-scheduled and execution resumes on
-> a different CPU, then the CPU may take a new type of exception to
-> indicate this. In this case the OS has to reset the registers and restart
-> execution from the prologue instruction. The algorithm for doing this is
-> provided as part of the Arm ARM.
-> 
-> Add an exception handler for the new exception and wire it up for
-> userspace tasks.
-> 
-> Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
+On Thu, Mar 16, 2023 at 06:19:40PM +0800, Kemeng Shi wrote:
+> Hi Theodore, thanks for feedback. I will submit another patchset for
+> mballoc and I would like to include this fix if no one else does. As
+> new patches may be conflicted with old ones I submited, I would submit
+> the new patchset after the old ones are fully reviewed and applied
+> if this fix is not in rush. Thanks!
 
-It may be worth adding a short note in the cover that the architecture
-allows two options to implement the memory instructions and on a
-heterogeneous system we can have different implementations between CPUs.
-That's the reason for an exception after migration (it's not obvious
-from your text above).
+Hi, I've already taken the your patches into the dev branch; were
+there any changes you were intending to make to your patches?
 
-> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-> index c9f15b9e3c71..96caaaee97a3 100644
-> --- a/arch/arm64/include/asm/esr.h
-> +++ b/arch/arm64/include/asm/esr.h
-> @@ -47,7 +47,7 @@
->  #define ESR_ELx_EC_DABT_LOW	(0x24)
->  #define ESR_ELx_EC_DABT_CUR	(0x25)
->  #define ESR_ELx_EC_SP_ALIGN	(0x26)
-> -/* Unallocated EC: 0x27 */
-> +#define ESR_ELx_EC_MOPS		(0x27)
->  #define ESR_ELx_EC_FP_EXC32	(0x28)
->  /* Unallocated EC: 0x29 - 0x2B */
->  #define ESR_ELx_EC_FP_EXC64	(0x2C)
-> @@ -352,6 +352,15 @@
->  #define ESR_ELx_SME_ISS_ZA_DISABLED	3
->  #define ESR_ELx_SME_ISS_ZT_DISABLED	4
->  
-> +/* ISS field definitions for MOPS exceptions */
-> +#define ESR_ELx_MOPS_ISS_MEM_INST	(UL(1) << 24)
-> +#define ESR_ELx_MOPS_ISS_FROM_EPILOGUE	(UL(1) << 18)
-> +#define ESR_ELx_MOPS_ISS_WRONG_OPTION	(UL(1) << 17)
-> +#define ESR_ELx_MOPS_ISS_OPTION_A	(UL(1) << 16)
-> +#define ESR_ELx_MOPS_ISS_DESTREG(esr)	(((esr) & (UL(0x1f) << 10)) >> 10)
-> +#define ESR_ELx_MOPS_ISS_SRCREG(esr)	(((esr) & (UL(0x1f) << 5)) >> 5)
-> +#define ESR_ELx_MOPS_ISS_SIZEREG(esr)	(((esr) & (UL(0x1f) << 0)) >> 0)
-> +
->  #ifndef __ASSEMBLY__
->  #include <asm/types.h>
->  
-> diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
-> index 92963f98afec..5a6dc3643e9b 100644
-> --- a/arch/arm64/include/asm/exception.h
-> +++ b/arch/arm64/include/asm/exception.h
-> @@ -77,6 +77,7 @@ void do_el0_svc(struct pt_regs *regs);
->  void do_el0_svc_compat(struct pt_regs *regs);
->  void do_el0_fpac(struct pt_regs *regs, unsigned long esr);
->  void do_el1_fpac(struct pt_regs *regs, unsigned long esr);
-> +void do_el0_mops(struct pt_regs *regs, unsigned long esr);
->  void do_serror(struct pt_regs *regs, unsigned long esr);
->  void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags);
->  
-> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-> index cce1167199e3..2ef3ab5d7555 100644
-> --- a/arch/arm64/kernel/entry-common.c
-> +++ b/arch/arm64/kernel/entry-common.c
-> @@ -611,6 +611,14 @@ static void noinstr el0_bti(struct pt_regs *regs)
->  	exit_to_user_mode(regs);
->  }
->  
-> +static void noinstr el0_mops(struct pt_regs *regs, unsigned long esr)
-> +{
-> +	enter_from_user_mode(regs);
-> +	local_daif_restore(DAIF_PROCCTX);
-> +	do_el0_mops(regs, esr);
-> +	exit_to_user_mode(regs);
-> +}
-> +
->  static void noinstr el0_inv(struct pt_regs *regs, unsigned long esr)
->  {
->  	enter_from_user_mode(regs);
-> @@ -688,6 +696,9 @@ asmlinkage void noinstr el0t_64_sync_handler(struct pt_regs *regs)
->  	case ESR_ELx_EC_BTI:
->  		el0_bti(regs);
->  		break;
-> +	case ESR_ELx_EC_MOPS:
-> +		el0_mops(regs, esr);
-> +		break;
->  	case ESR_ELx_EC_BREAKPT_LOW:
->  	case ESR_ELx_EC_SOFTSTP_LOW:
->  	case ESR_ELx_EC_WATCHPT_LOW:
-> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-> index 0ccc063daccb..689188712909 100644
-> --- a/arch/arm64/kernel/traps.c
-> +++ b/arch/arm64/kernel/traps.c
-> @@ -507,6 +507,50 @@ void do_el1_fpac(struct pt_regs *regs, unsigned long esr)
->  	die("Oops - FPAC", regs, esr);
->  }
->  
-> +void do_el0_mops(struct pt_regs *regs, unsigned long esr)
-> +{
-> +	bool wrong_option = esr & ESR_ELx_MOPS_ISS_WRONG_OPTION;
-> +	bool option_a = esr & ESR_ELx_MOPS_ISS_OPTION_A;
-> +	int dstreg = ESR_ELx_MOPS_ISS_DESTREG(esr);
-> +	int srcreg = ESR_ELx_MOPS_ISS_SRCREG(esr);
-> +	int sizereg = ESR_ELx_MOPS_ISS_SIZEREG(esr);
-> +	unsigned long dst, src, size;
-> +
-> +	dst = pt_regs_read_reg(regs, dstreg);
-> +	src = pt_regs_read_reg(regs, srcreg);
-> +	size = pt_regs_read_reg(regs, sizereg);
-> +
-> +	/*
-> +	 * Put the registers back in the original format suitable for a
-> +	 * prologue instruction, using the generic return routine from the
-> +	 * Arm ARM (DDI 0487I.a) rules CNTMJ and MWFQH.
-> +	 */
-> +	if (esr & ESR_ELx_MOPS_ISS_MEM_INST) {
-> +		if ((!option_a && wrong_option) || (option_a && !wrong_option)) {
-> +			pt_regs_write_reg(regs, dstreg, dst + size);
-> +			pt_regs_write_reg(regs, sizereg, -size);
-> +		}
+If you could submit a separate fix for the bug that I noticed, that
+would be great.
 
-Please add a comment here that this is for the SET* instructions (rule
-MWFQH). It confused me a bit when trying to review against the Arm ARM.
-I'd also add the comments from the spec like "format is Option A" and
-"forward copy".
+Also, if you are interested in doing some more work in mballoc.c, I
+was wondering if you would be interested in adding some Kunit tests
+for mballoc.c.  A simple example Kunit test for ext4 can be found in
+fs/ext4/inode_test.c.  (The convention is to place tests for foo.c in
+foo_test.c.)
 
-> +	} else {
-> +		if ((option_a && wrong_option) || (!option_a && !wrong_option)) {
-> +			if (regs->pstate & PSR_N_BIT) {
-> +				pt_regs_write_reg(regs, dstreg, dst - size);
-> +				pt_regs_write_reg(regs, srcreg, src - size);
-> +			}
-> +		} else {
-> +			if (size & BIT(63)) {
-> +				pt_regs_write_reg(regs, dstreg, dst + size);
-> +				pt_regs_write_reg(regs, srcreg, src + size);
-> +				pt_regs_write_reg(regs, sizereg, -size);
-> +			}
-> +		}
-> +	}
-> +
-> +	if (esr & ESR_ELx_MOPS_ISS_FROM_EPILOGUE)
-> +		regs->pc -= 8;
-> +	else
-> +		regs->pc -= 4;
-> +}
+[1] https://docs.kernel.org/dev-tools/kunit/
 
-Same here about the comments in the Arm ARM, copy them over here as
-well.
+In order to add mballoc Kunit tests, we will need to add some "mock"[2]
+functions to simulate what happens when mballoc.c tries reading a
+block bitmap.  My thinking was to have a test provide an array of some
+data structure like this:
 
-I think rule CNTMJ has a typo with the indentation as the return
-address seems to only be updated on the second 'else' block above.
+struct test_bitmap {
+       unsigned int	start;
+       unsigned int	len;
+};
 
-Otherwise the code looks fine.
+[2] https://en.wikipedia.org/wiki/Mock_object
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+... which indicates the starting block, and the length of a run of
+blocks that are marked as in use, where the list of blocks are sorted
+by starting block number, and where a starting block of ~0 indicates
+the end of the list of block extents.
+
+We would also need have a set of utility ext4 Kunit functions to
+create "fake" ext4 superblocks and ext4_sb_info structures.
+
+I was originally thinking that obvious starting Kunit tests would be
+for fs/ext4/hash.c and fs/ext4/extents_status.c, since they require
+the little or no "mocking" support.  However, there are so many
+changes in fs/ext4/mballoc.c, the urgency in having unit tests for it
+is getting more urgent --- since if there is a bug in one of these
+functions, such as the one that I noted in
+ext4_mb_new_blocks_simple(), since it's harder to exhaustively test
+some of these smaller sub-functions in integration tests such as those
+found in xfstests.  Unit tests are the best way to make sure we're
+testing all of the code paths in a complex module such as mballoc.c
+
+Cheers,
+
+						- Ted
