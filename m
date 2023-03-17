@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57E96BE7E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8FB6BE7E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjCQLUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        id S229848AbjCQLUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjCQLUI (ORCPT
+        with ESMTP id S229850AbjCQLUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:20:08 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D80B13534;
-        Fri, 17 Mar 2023 04:19:41 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id t4so4190978vsq.1;
-        Fri, 17 Mar 2023 04:19:41 -0700 (PDT)
+        Fri, 17 Mar 2023 07:20:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBF77606F;
+        Fri, 17 Mar 2023 04:19:57 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso4841024pjb.3;
+        Fri, 17 Mar 2023 04:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679051979;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1cFGw0u2n8KUD7BLlUXmazMizht5nMVZl6kSY6hio1Q=;
-        b=nxtxSikDDAG8XEtAosNM++fPa5RqD9NA4jqriO7+7M04XoME9Q8LiDk+9JC+w82cbY
-         ZSnLEwsYWb41RRo788qjdcNs2WJPzMMxQkL+icN+E2BhWr5pSMhv9j434zDKTP6FpWWS
-         82TZGEJUBq8nFjbYlOXd2BU1exsx7NSwsvY2pmmY81mQaciVeOtJ530qK3hnzNrXk2m2
-         HRMWJd7aVXD3/vPIifjK5IEm+ZOM7BpqOZD4Cj2WE7Vh+jA7/9kEWvYFkSNwhlk/RTPv
-         fe93EngbXK4DEFzXRmxu6hprKSaKohEcSd0xE9DJGZdwJSSwf9cXocxJWifT3SCd09Oq
-         Pnrw==
+        d=gmail.com; s=20210112; t=1679051997;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0QpTAcEGna+yl0Brgjs6Bn1Df3Qs/JcBmXdFEtNXC5g=;
+        b=YZg9RHZNhV9AbpV23NNl/0lXMU+MUi9FN4QqL+Hb4nrSE0HrJLNi2MTjtmBkjepaB8
+         v4pBAwLPxRthKYBdqWp9Tnzd78Vzct8z7dLJK/5X1tsAtYUNAskzND0Pyg9IcV24AJ9G
+         3R0Z6QZso3IjfPyJC03m7PiTKDPGS0znxpOsKsUfJaZpv9JqnKPsBPxkXs3RroV4FN1S
+         5EZcSw7XsrVSdJ5alGdVwwaSsRUFOvPR79O1Yz1LEeHVPPVsmeNb1rsfuYS9fAO5l++j
+         ACokctnNgoW3iLl140V4Av989j42K3OPilWswUJhH/zyMzwqzhiaBvc2tEHkN4Fk6d55
+         rY6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679051979;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+        d=1e100.net; s=20210112; t=1679051997;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1cFGw0u2n8KUD7BLlUXmazMizht5nMVZl6kSY6hio1Q=;
-        b=BCiVV+KsIE6bDwLDSPgikDbG9DpF6l/RyvNCeLdOoLbKLvPpt7zR8TJRkWqaN4gQbw
-         0jgh5Yrl8WVoE7GDD+pUi9uERN81EkqkPyFhNongtN2VgPsLJdgbSOYXRyAShiFmzAmw
-         ENCksR7vTnpPbPnIlDvfCmNnDCZL8I98d1jY0wInDls5CLiNfBjkw7nYB5ce20jT0jLl
-         hRx+yPmSRjb8Ub1iJw+F8Q37/AhxgqPrBqbXyqnm2pgqm1wEvaHcu2nUF3qp4zWKyyMd
-         4ZFJMB8fju1D1BlIgKXHzsAClj3g9KieqrRIBjCaZYnHWmhYFdnZmVo0OKvgV9xha8Np
-         CEoQ==
-X-Gm-Message-State: AO0yUKXXuI4KHstgQV2zHaVkSwmcuBGStr6FZwaKe3RAbHb8IzlhTrqF
-        TYuLrBxVhEvPGjSbsWcAaNgDPec4JX4XAvtHUyXXAQpDQJ8=
-X-Google-Smtp-Source: AK7set8QGmUVwCOtUEUCGDdAs69bISaDfQEqCIXK1AvR7kjBaoVZn+CQXQViIunUGG3FWkg/h39jV3w1ao9Y12xI+OE=
-X-Received: by 2002:a67:d709:0:b0:425:de7e:3dce with SMTP id
- p9-20020a67d709000000b00425de7e3dcemr2664979vsj.6.1679051979549; Fri, 17 Mar
- 2023 04:19:39 -0700 (PDT)
+        bh=0QpTAcEGna+yl0Brgjs6Bn1Df3Qs/JcBmXdFEtNXC5g=;
+        b=Mz/st4ohhNugutmseO/ZsJo4pMkvqUeslAS447MDy1qDAsB+vtUFpuLAqoz5wn+fsK
+         ZLVv4bQSR72rbxqIJGFlgPDBRdaujk/3xJZ7aIJ7BGVOVZmBDLtKvKGV+FuxBwlE3HIj
+         SnUu29b21T2W9FF5bbpyQ+SXft4KDmmxYe5HdUNp/QTr5QOro7nJJlOAGIRoNG5yu4vS
+         TNCUxMyDLO3BeSeudlozuzi+VDT7eOnIIGdXtYuXvAguGx0pkgtvOChO/5Q/7axtLtu4
+         UymHYPpxOg0tbMqOCHF2X6U5ShIWjCe1PcjG3mxulEVj4cG6kJOnD2ezLfgQNT1yUAsD
+         EESw==
+X-Gm-Message-State: AO0yUKVPHc4kUoMwcStKYhUWKJmZikNwSbJhEvTQoeLSc8/b8Mltqunz
+        FjVUgi8pJfO3kA3UxaGnSy4DD0SE3AaR1g==
+X-Google-Smtp-Source: AK7set8LcvpwH/OcfmOgBd9z/URO4reQNgW2quausnEUb7s/x7XYAMDRnIMNlLgalnJzoLZoQJxJsA==
+X-Received: by 2002:a17:902:dacf:b0:19d:62b:f040 with SMTP id q15-20020a170902dacf00b0019d062bf040mr8295103plx.37.1679051997006;
+        Fri, 17 Mar 2023 04:19:57 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d084:8252:e846:af61])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c10c00b0019cad2de86bsm1329122pli.156.2023.03.17.04.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 04:19:56 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 04:19:52 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/4] Input: st-keyscan: drop of_match_ptr for ID table
+Message-ID: <ZBRM2GPgh9u5PJaS@google.com>
+References: <20230312131514.351603-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <CAOuPNLgTWNMSaZmE4UzOq8UhsLWnBzyt0xwsO=dS9NpQxh-h_g@mail.gmail.com>
-In-Reply-To: <CAOuPNLgTWNMSaZmE4UzOq8UhsLWnBzyt0xwsO=dS9NpQxh-h_g@mail.gmail.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Fri, 17 Mar 2023 16:49:28 +0530
-Message-ID: <CAOuPNLiu+40HREtXFL_yMaXiaRtnZSbW9VvZRZmEpNXvZWzaQw@mail.gmail.com>
-Subject: Re: ubi0 error: ubi_open_volume: cannot open device 0, volume 6,
- error -16
-To:     open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230312131514.351603-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -67,78 +79,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Mar 12, 2023 at 02:15:11PM +0100, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).  This
+> also fixes !CONFIG_OF error:
+> 
+>   drivers/input/keyboard/st-keyscan.c:251:34: error: ‘keyscan_of_match’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Sorry, for missing the subject last time.
+Applied, thank you.
 
-On Wed, 15 Feb 2023 at 23:06, Pintu Agarwal <pintu.ping@gmail.com> wrote:
->
-> Hi,
->
-> We are seeing below "ubi errors" during booting.
-> Although this does not cause any functionality break, I am wondering
-> if there is any way to fix it ?
-> We are using Kernel 4.14 with UBI and squashfs (ubiblock) as volumes,
-> and with systemd.
->
-> Anybody have experienced the similar logs with ubi/squashfs and
-> figured out a way to avoid it ?
-> It seems like these open volumes are called twice, thus error -16
-> indicates (device or resource busy).
-> Or, are these logs expected because of squashfs or ubiblock ?
-> Or, do we need to add anything related to udev-rules ?
->
-> {
-> ....
-> [  129.394789] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 6, error -16
-> [  129.486498] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 7, error -16
-> [  129.546582] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 8, error -16
-> [  129.645014] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 9, error -16
-> [  129.676456] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 6, error -16
-> [  129.706655] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 10, error -16
-> [  129.732740] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 7, error -16
-> [  129.811111] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 8, error -16
-> [  129.852308] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 9, error -16
-> [  129.923429] ubi0 error: ubi_open_volume: cannot open device 0,
-> volume 10, error -16
->
-> }
->
-
-I see that the errors are reported by systemd-udevd and other processes.
-Is there a way to fix it by some means ?
-These logs actually consume lots of boot up time...
-
-[   54.300726] ubi0 error: ubi_open_volume: comm: systemd-udevd, pid:
-1460, cannot open device 0, volume 4, error -16
-[   54.507095] ubi0 error: ubi_open_volume: comm: systemd-udevd, pid:
-1469, cannot open device 0, volume 5, error -16
-[   54.509816] ubi0 error: ubi_open_volume: comm: systemd-udevd, pid:
-1465, cannot open device 0, volume 6, error -16
-[   54.650627] ubi0 error: ubi_open_volume: comm: systemd-udevd, pid:
-1469, cannot open device 0, volume 7, error -16
-[   54.680203] ubi0 error: ubi_open_volume: comm: systemd-udevd, pid:
-1445, cannot open device 0, volume 8, error -16
-[   56.311902] ubi0 error: ubi_open_volume: comm: mtd_probe, pid:
-2042, cannot open device 0, volume 4, error -16
-[   56.795532] ubi0 error: ubi_open_volume: comm: mtd_probe, pid:
-2043, cannot open device 0, volume 5, error -16
-[   57.087962] ubi0 error: ubi_open_volume: comm: mtd_probe, pid:
-2044, cannot open device 0, volume 6, error -16
-[   57.130853] ubi0 error: ubi_open_volume: comm: mtd_probe, pid:
-2047, cannot open device 0, volume 8, error -16
-[   57.345761] ubi0 error: ubi_open_volume: comm: mtd_probe, pid:
-2046, cannot open device 0, volume 7, error -16
-
-
-Thanks,
-Pintu
+-- 
+Dmitry
