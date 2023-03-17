@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7FC6BE620
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937056BE624
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjCQKAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S229995AbjCQKBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjCQKAH (ORCPT
+        with ESMTP id S229562AbjCQKBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:00:07 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6762C49891;
-        Fri, 17 Mar 2023 03:00:04 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxYcwiOhRkt1QNAA--.19364S3;
-        Fri, 17 Mar 2023 18:00:02 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuQgOhRk04oDAA--.15428S3;
-        Fri, 17 Mar 2023 18:00:00 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add loongson spi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
- <20230317082950.12738-2-zhuyinbo@loongson.cn>
- <a736c6db-466a-12e4-8e22-c8dc900978d4@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <e944732b-9a2d-b6ff-8336-7363788809b9@loongson.cn>
-Date:   Fri, 17 Mar 2023 18:00:00 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 17 Mar 2023 06:01:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F017A4E5CB
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 03:01:42 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id s8so5510985lfr.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 03:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112; t=1679047301;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IULcPf2+7dUXnSWr6iZnijROMDOSV5jq63jdWgbmy2U=;
+        b=f1HmXyXbOUwUP6bnI42e+hugNWSsvj/DDYL9h0o3VvirKuv5uLPBjdGmr0KXf+KoDO
+         wki3tTzJV1eAsLV6n9DzdTBsLijTyondI0GueVoVy/4ku76epFHGq+SUgWiTWDmZi/bf
+         iw5r6MPDABmM9f9vEBjFEHFl51tlJrsS46d5V+HiV5358Dvg2U2Qw6WpxvrBXCinpPLJ
+         axOw4SdpF3eMJI0VzBYnCBk713rga3rRvnXsGy2AeklqTH2KMo4jEnp+kOGz/cKAHOpk
+         JnSth4LaDyvD0+t7PXZl1ZDILBL4GP/NH97RFuo6N9RjjaPn7CCDsFKJMWm+r7YIVEHV
+         /QMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679047301;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IULcPf2+7dUXnSWr6iZnijROMDOSV5jq63jdWgbmy2U=;
+        b=dVGrhYqSd5ebXCZ+6YAKt6znPZATm7hQ5JFfQrUfrsuHTriN+3wkLNCQF7vLqi6H/s
+         S5MIC7v7xm3cwyVnGBYPzixeZI0UJ6QRczp4fS8qAwOHqKExMkC6UB7PuyUvPau4JSrb
+         MsMJ+7gz1KUMH4HaqG/weljxaq9m8ibr/Cq6nh4CVZepFVlhn9RXRmV/1hPpRZjaXR6A
+         RFeukq4IR99Zx2h1fHTOg0kvObvx///vlnssZziHx7RGLv9PKR2BrCVJHwZ9vPJpa0JW
+         cQh/02Ru2jSKLTPa7u7ihaxLlkOtNGbee2zsRgsnXb9x1PWI4oXhFi3RcwcRTmwEBTjq
+         0tZA==
+X-Gm-Message-State: AO0yUKWip/lTFEa80JO1RBJonavuW5Lr1PrOSaO6QUE1dNDQ+OOV9fIr
+        6D1cruIGEiRU0R0npQkfXhdb5A==
+X-Google-Smtp-Source: AK7set9a07Ek6cej+3Iq/soaUrRsFDaiYmA1FuVeu1wEL4haHCOYOPfeE2FA4Ia14DI6qKIv93iPLQ==
+X-Received: by 2002:ac2:5618:0:b0:4df:9ce8:300 with SMTP id v24-20020ac25618000000b004df9ce80300mr4052919lfd.52.1679047301199;
+        Fri, 17 Mar 2023 03:01:41 -0700 (PDT)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id l28-20020ac24a9c000000b004e80038e2aasm293788lfp.191.2023.03.17.03.01.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 03:01:40 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 11:01:39 +0100
+From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: renesas: Add "renesas," file content pattern
+Message-ID: <ZBQ6g1gxBD8vOpc1@oden.dyn.berto.se>
+References: <c1be1e97c5457eade25b0eb5118196677cecfc08.1679039809.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-In-Reply-To: <a736c6db-466a-12e4-8e22-c8dc900978d4@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8BxHuQgOhRk04oDAA--.15428S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7ur4ktF47Cr17GFyxCryfJFb_yoW8Xw1xpF
-        1xCFs3GFWjqF17Jwsaga48GwsxZr95JFnrJF47t347CF9093WFqF43KryUZw43AF18GFW2
-        vFyjgr4UKF4UAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
-        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8pnQUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <c1be1e97c5457eade25b0eb5118196677cecfc08.1679039809.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
-在 2023/3/17 下午5:15, Krzysztof Kozlowski 写道:
-> On 17/03/2023 09:29, Yinbo Zhu wrote:
->> Add the Loongson platform spi binding with DT schema format using
->> json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../bindings/spi/loongson,ls-spi.yaml         | 44 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
->>   2 files changed, 50 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->> new file mode 100644
->> index 000000000000..936b8dc82ce8
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->> @@ -0,0 +1,44 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +
-> Drop blank line above.
->
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson SPI controller
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +allOf:
->> +  - $ref: /schemas/spi/spi-controller.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - loongson,ls2k-spi
->> +      - loongson,ls7a-spi
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    minItems: 1
-> I don't understand why did you change it. I did not ask for it.
->
-> Best regards,
-> Krzysztof
-Add clocks "minItems: 1" description is for fix yaml file compile issue.
+Neat!
 
+On 2023-03-17 08:59:00 +0100, Geert Uytterhoeven wrote:
+> Add a keyword match pattern for the word "renesas," in files to the
+> ARM/RISC-V/RENESAS ARCHITECTURE section.  This make sure patches
+> changing drivers that match against "renesas,<foo>" (as used mostly for
+> Renesas on-SoC components) are CCed to the linux-renesas-soc mailing
+> list.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Acked-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+> To be queued in renesas-devel for v6.4.
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fc343041495b7015..281c6da85a4bdf5d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2655,6 +2655,7 @@ F:	arch/arm64/configs/renesas_defconfig
+>  F:	arch/riscv/boot/dts/renesas/
+>  F:	drivers/soc/renesas/
+>  F:	include/linux/soc/renesas/
+> +K:	\brenesas,
+>  
+>  ARM/RISCPC ARCHITECTURE
+>  M:	Russell King <linux@armlinux.org.uk>
+> -- 
+> 2.34.1
+> 
+
+-- 
+Kind Regards,
+Niklas Söderlund
