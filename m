@@ -2,233 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD986BE38D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39F46BE2EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjCQIbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S229678AbjCQITk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCQIbL (ORCPT
+        with ESMTP id S229769AbjCQITh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:31:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A1A21956
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:30:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16FB4B82506
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3AEC433A0;
-        Fri, 17 Mar 2023 08:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679041433;
-        bh=ok0j9ISAJdgCP3cxdqxCuQtsbBTIBD8uq8kYJDLeLlc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wf4WNk2z6Cs+Ut5ipokBOtyNqRyMdQYzuDp6IJy3neIagKzefvfGjmGE0ZUm3ydt4
-         JoZ4J9umpVgdxT5g66M9CMphDih/HDxxTCC1ILisDgjqzv7RcEhhi2Cs8AfZTcqVh6
-         gHtERvl2mK9emMQloOTrY/bIxVSgMbWj9/xiSFNXN+N4txGsY43/07YElbKgoAJNjZ
-         GPIc+vs+BIpNS0gQbfJV7b3q1PdtJW9NAiRfvrWushCGPE1VBDcmVwYTlP4qn/CSe6
-         PAjRezZ9q3x7KVQV76+3FV5mJHQOIf1A0dNNKhdVC+kicPPcmXzNeuuhOOf0+AFNoQ
-         wpbCrW+/lXgoQ==
-From:   Lee Jones <lee@kernel.org>
-To:     lee@kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, Liu Ying <victor.liu@nxp.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 37/37] drm/bridge/imx/Kconfig: Prevent imx-ldb-helper from appearing in 2 separate modules
-Date:   Fri, 17 Mar 2023 08:17:18 +0000
-Message-Id: <20230317081718.2650744-38-lee@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230317081718.2650744-1-lee@kernel.org>
-References: <20230317081718.2650744-1-lee@kernel.org>
+        Fri, 17 Mar 2023 04:19:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D266623664;
+        Fri, 17 Mar 2023 01:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679041144; x=1710577144;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/omHGfZ5dOYrjoSumS2lKvLRuYatBfJZeL4MVZdQvsM=;
+  b=ar5vgMHcIDoTV7R5bM7psD3sH0G2OJjZRHRjktk8t2fJOUQwj4Op2boQ
+   K6j4ZsC9OHVZdfwCDytjAHzF1zAVhjNzqnCPJPGrzeUlSJbeFEaJZGja/
+   PTEKZevJDwnzFtbIhzbBeW01bV8lgUeCLBrmyyD/+ujNSDi7zy+PV9YSZ
+   gbkk+U0QxWzRmuvXyMFEmTuxiUV7UlPiiJ859yQ19Vp0kNasx69DjuBKQ
+   sZYhmWhz97pCQpUVcwzWJ0ntwCf88PWCdoIIQOlNETH/10NynAOx3kboe
+   t1fWjD25YveXwpjA/8lTinZwbEkg0q1D4UrbpBHd4dhuT1lvpAXiwjgPv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="322058149"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="322058149"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:18:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="804031943"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="804031943"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:18:15 -0700
+Date:   Fri, 17 Mar 2023 09:18:06 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kuba@kernel.org, sgoutham@marvell.com, gakula@marvell.com,
+        sbhatta@marvell.com, hkelam@marvell.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] octeontx2-vf: Add missing free for alloc_percpu
+Message-ID: <ZBQiPmhuH7aNJo5p@localhost.localdomain>
+References: <20230317064337.18198-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317064337.18198-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+On Fri, Mar 17, 2023 at 02:43:37PM +0800, Jiasheng Jiang wrote:
+> Add the free_percpu for the allocated "vf->hw.lmt_info" in order to avoid
+> memory leak, same as the "pf->hw.lmt_info" in
+> `drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c`.
+> 
+> Fixes: 5c0512072f65 ("octeontx2-pf: cn10k: Use runtime allocated LMTLINE region")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+> Acked-by: Geethasowjanya Akula <gakula@marvell.com>
+> ---
+> Changelog:
+> 
+> v1 -> v2:
+> 
+> 1. Remove the if () checks.
+Hi,
 
- scripts/Makefile.build:252: drivers/gpu/drm/bridge/imx/Makefile: imx-ldb-helper.o is added to multiple modules: imx8qm-ldb imx8qxp-ldb
+Did You change that because of my comments? I am not sure it is correct.
+I meant moving these two ifs to new function, because they are called
+two times. It will be easier to do changes in the future.
 
-Cc: Liu Ying <victor.liu@nxp.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Robert Foss <rfoss@kernel.org>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Jonas Karlman <jonas@kwiboo.se>
-Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Lee Jones <lee@kernel.org>
----
- drivers/gpu/drm/bridge/imx/Kconfig          |  7 +++++++
- drivers/gpu/drm/bridge/imx/Makefile         |  7 +++++--
- drivers/gpu/drm/bridge/imx/imx-ldb-helper.c | 13 +++++++++++++
- 3 files changed, 25 insertions(+), 2 deletions(-)
+void cn10k_lmtst_deinit(struct otx2_nic *pfvf)
+{
+	if (vf->hw.lmt_info)
+		free_percpu(vf->hw.lmt_info);
+	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+		qmem_free(vf->dev, vf->dync_lmt);
+}
 
-diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-index 608f47f41bcd1..97018dcd078d0 100644
---- a/drivers/gpu/drm/bridge/imx/Kconfig
-+++ b/drivers/gpu/drm/bridge/imx/Kconfig
-@@ -1,10 +1,16 @@
- if ARCH_MXC || COMPILE_TEST
- 
-+config DRM_IMX8_LIB
-+	tristate
-+	help
-+	  Common helper functions used by some of the drivers below.
-+
- config DRM_IMX8QM_LDB
- 	tristate "Freescale i.MX8QM LVDS display bridge"
- 	depends on OF
- 	depends on COMMON_CLK
- 	select DRM_KMS_HELPER
-+	select DRM_IMX8_LIB
- 	help
- 	  Choose this to enable the internal LVDS Display Bridge(LDB) found in
- 	  Freescale i.MX8qm processor.  Official name of LDB is pixel mapper.
-@@ -14,6 +20,7 @@ config DRM_IMX8QXP_LDB
- 	depends on OF
- 	depends on COMMON_CLK
- 	select DRM_KMS_HELPER
-+	select DRM_IMX8_LIB
- 	help
- 	  Choose this to enable the internal LVDS Display Bridge(LDB) found in
- 	  Freescale i.MX8qxp processor.  Official name of LDB is pixel mapper.
-diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
-index aa90ec8d54336..e1146b0347014 100644
---- a/drivers/gpu/drm/bridge/imx/Makefile
-+++ b/drivers/gpu/drm/bridge/imx/Makefile
-@@ -1,7 +1,10 @@
--imx8qm-ldb-objs := imx-ldb-helper.o imx8qm-ldb-drv.o
-+imx-ldb-lib-objs := imx-ldb-helper.o
-+obj-$(CONFIG_DRM_IMX8_LIB) += imx-ldb-lib.o
-+
-+imx8qm-ldb-objs := imx8qm-ldb-drv.o
- obj-$(CONFIG_DRM_IMX8QM_LDB) += imx8qm-ldb.o
- 
--imx8qxp-ldb-objs := imx-ldb-helper.o imx8qxp-ldb-drv.o
-+imx8qxp-ldb-objs := imx8qxp-ldb-drv.o
- obj-$(CONFIG_DRM_IMX8QXP_LDB) += imx8qxp-ldb.o
- 
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
-diff --git a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
-index 7338b84bc83d2..4cd570947b093 100644
---- a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
-+++ b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
-@@ -19,12 +19,14 @@ bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch)
- {
- 	return ldb_ch->link_type == LDB_CH_SINGLE_LINK;
- }
-+EXPORT_SYMBOL_GPL(ldb_channel_is_single_link);
- 
- bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch)
- {
- 	return ldb_ch->link_type == LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS ||
- 	       ldb_ch->link_type == LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS;
- }
-+EXPORT_SYMBOL_GPL(ldb_channel_is_split_link);
- 
- int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
- 				   struct drm_bridge_state *bridge_state,
-@@ -38,6 +40,7 @@ int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_atomic_check_helper);
- 
- void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
- 				const struct drm_display_mode *mode,
-@@ -69,6 +72,7 @@ void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
- 		break;
- 	}
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_mode_set_helper);
- 
- void ldb_bridge_enable_helper(struct drm_bridge *bridge)
- {
-@@ -81,6 +85,7 @@ void ldb_bridge_enable_helper(struct drm_bridge *bridge)
- 	 */
- 	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_enable_helper);
- 
- void ldb_bridge_disable_helper(struct drm_bridge *bridge)
- {
-@@ -95,6 +100,7 @@ void ldb_bridge_disable_helper(struct drm_bridge *bridge)
- 
- 	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_disable_helper);
- 
- int ldb_bridge_attach_helper(struct drm_bridge *bridge,
- 			     enum drm_bridge_attach_flags flags)
-@@ -117,6 +123,7 @@ int ldb_bridge_attach_helper(struct drm_bridge *bridge,
- 				ldb_ch->next_bridge, bridge,
- 				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_attach_helper);
- 
- int ldb_init_helper(struct ldb *ldb)
- {
-@@ -157,6 +164,7 @@ int ldb_init_helper(struct ldb *ldb)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(ldb_init_helper);
- 
- int ldb_find_next_bridge_helper(struct ldb *ldb)
- {
-@@ -184,6 +192,7 @@ int ldb_find_next_bridge_helper(struct ldb *ldb)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(ldb_find_next_bridge_helper);
- 
- void ldb_add_bridge_helper(struct ldb *ldb,
- 			   const struct drm_bridge_funcs *bridge_funcs)
-@@ -204,6 +213,7 @@ void ldb_add_bridge_helper(struct ldb *ldb,
- 		drm_bridge_add(&ldb_ch->bridge);
- 	}
- }
-+EXPORT_SYMBOL_GPL(ldb_add_bridge_helper);
- 
- void ldb_remove_bridge_helper(struct ldb *ldb)
- {
-@@ -219,3 +229,6 @@ void ldb_remove_bridge_helper(struct ldb *ldb)
- 		drm_bridge_remove(&ldb_ch->bridge);
- 	}
- }
-+EXPORT_SYMBOL_GPL(ldb_remove_bridge_helper);
-+
-+MODULE_LICENSE("GPL v2");
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+Thanks,
+Michal
 
+> ---
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+> index 7f8ffbf79cf7..ab126f8706c7 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+> @@ -709,6 +709,7 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  err_ptp_destroy:
+>  	otx2_ptp_destroy(vf);
+>  err_detach_rsrc:
+> +	free_percpu(vf->hw.lmt_info);
+>  	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+>  		qmem_free(vf->dev, vf->dync_lmt);
+>  	otx2_detach_resources(&vf->mbox);
+> @@ -762,6 +763,7 @@ static void otx2vf_remove(struct pci_dev *pdev)
+>  	otx2_shutdown_tc(vf);
+>  	otx2vf_disable_mbox_intr(vf);
+>  	otx2_detach_resources(&vf->mbox);
+> +	free_percpu(vf->hw.lmt_info);
+>  	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+>  		qmem_free(vf->dev, vf->dync_lmt);
+>  	otx2vf_vfaf_mbox_destroy(vf);
+> -- 
+> 2.25.1
+> 
