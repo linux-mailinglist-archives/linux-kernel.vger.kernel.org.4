@@ -2,129 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2922B6BEA21
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F62D6BEA26
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCQNed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        id S230369AbjCQNfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjCQNeb (ORCPT
+        with ESMTP id S230301AbjCQNfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:34:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6742A6F6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:34:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B562FB8255C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F1EC4339B;
-        Fri, 17 Mar 2023 13:34:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679060067;
-        bh=acAFgWVAW9Z16jtQyDLytLmE2NTyzAFRY8egGYSBlpA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=henuGGhglknoZ8qup/Rt9WTxF4ivkJWfsz2ImqjDbnJ92C2CgIQGjZrIUn/WKo4QI
-         DhZwVK+o0WyqaQ3i2G9eHS4dcAX7rbb8rk4XpomxiFyFAt8mB1OJ+HJgW2QgpFNTjx
-         hZoKtVrDEcpsH8BVSowgifyWvH/SHT+fc6slkV1EoWee56IQjCTQg8OXsAmev7VdNK
-         faESzw0kkHGJRbAHsFB9xpX5MxYVRdd1I3SdmUgH5GRtihWE+4O/KOv8l2tg33fz4r
-         +tGwJyEAwbpvxrjy3XyajTq9a6V9I4lFMX5gwzTofV8RKDNEltIF0LNG9nKr86Zexp
-         BYTI3SBRfNRDw==
-Date:   Fri, 17 Mar 2023 19:04:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-Cc:     alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, amadeuszx.slawinski@linux.intel.com,
-        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
-        claudiu.beznea@microchip.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V6 2/8] soundwire: amd: Add support for AMD Manager driver
-Message-ID: <ZBRsX7W4l1HyT44y@matsya>
-References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
- <20230307133135.545952-3-Vijendar.Mukunda@amd.com>
- <ZBGTDXJvVjVuUkiZ@matsya>
- <7a7f5d93-d6ec-5ad1-9927-7ac4b6d9a643@amd.com>
+        Fri, 17 Mar 2023 09:35:02 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2255932CF6;
+        Fri, 17 Mar 2023 06:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=sMgPoyPPbmthFsOo4pbmCIyEwyFeSHdtD951iyErX4c=; b=N+Y1sHinP4QOoLsO2qOFjgGPGD
+        jRqmx45xn4xtEWFjeN/F1sNKAbV2b8yySim0h7I3sEDVUc40Afz25wbdGX3CpsTO0jPXXKMGa0AFO
+        P6/YbERXaivsDWH5iiN3L0afOlZAfYU3tYqA6Zntm6CSMgDRnsY4+Ov+7Ej5lr41Owww=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pdAE7-007c37-QO; Fri, 17 Mar 2023 14:34:35 +0100
+Date:   Fri, 17 Mar 2023 14:34:35 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michal Kubiak <michal.kubiak@intel.com>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v4 02/14] net: dsa: qca8k: add LEDs basic support
+Message-ID: <1c84a42a-2691-4ee9-bbe3-dc8e65fc31b1@lunn.ch>
+References: <20230317023125.486-1-ansuelsmth@gmail.com>
+ <20230317023125.486-3-ansuelsmth@gmail.com>
+ <ZBRN563Zw9Z28aET@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a7f5d93-d6ec-5ad1-9927-7ac4b6d9a643@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZBRN563Zw9Z28aET@localhost.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-03-23, 19:28, Mukunda,Vijendar wrote:
-> On 15/03/23 15:12, Vinod Koul wrote:
-> > On 07-03-23, 19:01, Vijendar Mukunda wrote:
+> (I guess the LED configuration i only makes sense for non-CPU ports? It
+> seems you want to configure up to 15 LEDs in total for 5 ports).
 
-> >> +/**
-> >> + * struct amd_sdw_manager - amd manager driver context
-> >> + * @bus: bus handle
-> >> + * @dev: linux device
-> >> + * @mmio: SoundWire registers mmio base
-> >> + * @acp_mmio: acp registers mmio base
-> >> + * @reg_mask: register mask structure per manager instance
-> >> + * @probe_work: SoundWire manager probe workqueue
-> >> + * @acp_sdw_lock: mutex to protect acp share register access
-> >> + * @num_din_ports: number of input ports
-> >> + * @num_dout_ports: number of output ports
-> >> + * @cols_index: Column index in frame shape
-> >> + * @rows_index: Rows index in frame shape
-> >> + * @instance: SoundWire manager instance
-> >> + * @quirks: SoundWire manager quirks
-> >> + * @wake_en_mask: wake enable mask per SoundWire manager
-> >> + * @power_mode_mask: flag interprets amd SoundWire manager power mode
-> >> + */
-> >> +struct amd_sdw_manager {
-> >> +	struct sdw_bus bus;
-> >> +	struct device *dev;
-> >> +
-> >> +	void __iomem *mmio;
-> >> +	void __iomem *acp_mmio;
-> >> +
-> >> +	struct sdw_manager_reg_mask *reg_mask;
-> >> +	struct work_struct probe_work;
-> >> +	/* mutex to protect acp common register access */
-> >> +	struct mutex *acp_sdw_lock;
-> >> +
-> >> +	int num_din_ports;
-> >> +	int num_dout_ports;
-> >> +
-> >> +	int cols_index;
-> >> +	int rows_index;
-> >> +
-> >> +	u32 instance;
-> >> +	u32 quirks;
-> >> +	u32 wake_en_mask;
-> >> +	u32 power_mode_mask;
-> >> +};
-> > Does the manager need to be exposed to rest of kernel or users of this
-> > driver, is so why?
-> Currently, amd_manager structure being used in ACP PCI driver
-> (parent driver) and Soundwire DMA driver.
-> 
-> In ACP PCI driver, IRQ handler we will use amd_manager structure to
-> schedule workqueue based on soundwire manager instance.
-> In Soundwire DMA driver, we need to retrieve amd_manager instance.
-> As per our design, we have fixed mapping. We need to use same set of
-> DMA registers based on CPU DAI ID.
->  i.e if AUDIO0 TX port is selected in amd_manager driver
-> then we need to use AUDIO0 TX registers for DMA programming.
-> we have included comments for describing mapping in amd_manager.h
-> file.
+Hi Michal
 
-Sorry not sure I follow, can you elaborate which members of above struct
-are used by PCI driver?
+In the general case, there is no reason that i can think that stops
+the CPU port having LEDs. For many switch designs, there is no
+specific CPU port, any can be used. And all ports are likely to have
+an LED controller.
 
--- 
-~Vinod
+What becomes tricky with Linux is offloading blinking to CPU ports.
+There is no netdev to represent it, hence no netdev based software
+blinking. And without software blinking, you have nothing to offload
+to hardware. But you could still use the LEDs for other things.
+
+Having said all that, i don't think i have ever seen a box with LEDs
+for the CPU port.
+
+    Andrew
