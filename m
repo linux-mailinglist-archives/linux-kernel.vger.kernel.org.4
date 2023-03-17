@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92F16BE445
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3225A6BE44D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCQIuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S229658AbjCQIvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjCQIt4 (ORCPT
+        with ESMTP id S229816AbjCQIvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:49:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812C7509B4;
-        Fri, 17 Mar 2023 01:49:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B2666221F;
-        Fri, 17 Mar 2023 08:49:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7303C433D2;
-        Fri, 17 Mar 2023 08:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679042965;
-        bh=ykt+2ZCz3fJnDj9RH3P/+IvPyVarY3iXaWoZy2um+KQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ASlDJrZelehzIwW2Z9VzYs6Yymp4sfhk+lPTy1rfj7IMYKry3XAmgaEkxvKDPNLuo
-         UKP1933d6dTIUg9+GFtsFk6iiwHfK3dtxpHxb/0jUE4K/rErFB2RmpNA8ZsANeTj1u
-         18FxT5XPdx30MtVkPfwqtMZeDoDeAFrXHS1qQ9ndhOtdA1yFGgtnHORVFmfSVop1F3
-         s5XO3h1/KbvYLFpyFzBoSMWLGIelKa/6Lp+Lk0ydn3t1z7D2+4+qiifR8aLa91xvO5
-         LZsjEcZiG1OND+JJiZFUrNqNGEI1k8c+hS7BmRP45mhj9VU5hfyOtGmH2c3+iNJ1eU
-         R5ZP2HY3NSONQ==
-Date:   Fri, 17 Mar 2023 10:49:11 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>
-Subject: Re: [PATCH 02/10] um: Fix MAX_ORDER usage in linux_main()
-Message-ID: <ZBQph4KXO23Hql+8@kernel.org>
-References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
- <20230315113133.11326-3-kirill.shutemov@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315113133.11326-3-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 04:51:01 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CBB30298
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:50:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z21so17566890edb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1679043057;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KUhD0MyixfIqswuuyf5YxBcoxL2uotSy4IJZo8MuW1o=;
+        b=1aHHVElTR/UGBUj8wrqxRU7knv+qQq6srORFnJdSeG4SP3eD8POuSGHdIptMsQoZaY
+         S6ipdLQ+fDl/I0Pkfz3caKmvsszoQdRSQHNQnJQf/8UI/rdWJEFAUhvf+JaXryd7zz0M
+         0+GooKTIKQWKX7Gn1iw7j8UProeZsbQEhZpsdZoExDHrBMcwmn4rgt4LPPabxfGXyAyp
+         VrkVlfCnBisHnxj4wD6yAvHIAFYro2yARAcaLldJwNTmeHkvolA8NMfxsnVUec6u+89n
+         Qn8YQUtb8WsqhMdFjapEvpyDXmJndu5qRpXAWcapvpRx6k/TXyLt43TzWhhQ55W4cHlW
+         WUqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679043057;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KUhD0MyixfIqswuuyf5YxBcoxL2uotSy4IJZo8MuW1o=;
+        b=L88kWRTJk9XPsn6Cs+EMDNHv3EgEw29K1gn+vzfatjtEwHoFyMTrdUzJncnELlk2RV
+         0rRzSNu8o+LfNf8mDKRIrXrBtZjrBZ1l49xtJ5HJAlwULNjI8WbigsIkJw4pPQCne8o7
+         1wBe++mHF9jkEZUhGCoDXvEI7yBASuGxsp3F8zCCbxYYCWpl2ecXWaAob96Ct2Qnmsb4
+         4IpkHwNhXIK5JBt2JjYr1/N6a6fj7dxYS5HGwEMt+7D/M7WdxTmZTEOw7Q064AZ+TwHS
+         3z7ukVtxHaggQdhKGphQgHuDZNpxPMbV4jsgdpWUi+TNT6pHi4fOdEkzDm3zKD9OWZPd
+         skMQ==
+X-Gm-Message-State: AO0yUKUK/7l/nxBZ3us/wGazD3Tzm63nVSTrKW5UJxqkkdfR3uwTwbQW
+        vLopSboGxX1j+QYtw6mlpPlooQ==
+X-Google-Smtp-Source: AK7set+7ONQpWPeXdAkH0lEOUfQerwdYwh+LvG+oh9YEVCWvEuOiaMnwgSPB85zPE3Nbzwi+gepGkw==
+X-Received: by 2002:a05:6402:5159:b0:500:29e3:ce with SMTP id n25-20020a056402515900b0050029e300cemr2169796edd.36.1679043057613;
+        Fri, 17 Mar 2023 01:50:57 -0700 (PDT)
+Received: from localhost (2a02-8388-6582-fe80-0000-0000-0000-000b.cable.dynamic.v6.surfer.at. [2a02:8388:6582:fe80::b])
+        by smtp.gmail.com with ESMTPSA id q30-20020a50aa9e000000b004fadc041e13sm756198edc.42.2023.03.17.01.50.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 01:50:57 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 17 Mar 2023 09:50:56 +0100
+Message-Id: <CR8J37NBHHRY.2S8LQ5O7IQ9PU@otso>
+Cc:     "Marijn Suijten" <marijn.suijten@somainline.org>,
+        "Rob Herring" <robh@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 3/5] arm64: dts: qcom: sm6350: Add QFPROM node
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@somainline.org>
+X-Mailer: aerc 0.14.0
+References: <20230315-topic-lagoon_gpu-v1-0-a74cbec4ecfc@linaro.org>
+ <20230315-topic-lagoon_gpu-v1-3-a74cbec4ecfc@linaro.org>
+In-Reply-To: <20230315-topic-lagoon_gpu-v1-3-a74cbec4ecfc@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 02:31:25PM +0300, Kirill A. Shutemov wrote:
-> MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
-> can deliver is MAX_ORDER-1.
-> 
-> Fix MAX_ORDER usage in linux_main().
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
+On Thu Mar 16, 2023 at 12:16 PM CET, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+>
+> Add a node for the QFPROM NVMEM hw and define the GPU fuse.
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  arch/um/kernel/um_arch.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-> index 8dcda617b8bf..5e5a9c8e0e5d 100644
-> --- a/arch/um/kernel/um_arch.c
-> +++ b/arch/um/kernel/um_arch.c
-> @@ -368,10 +368,10 @@ int __init linux_main(int argc, char **argv)
->  	max_physmem = TASK_SIZE - uml_physmem - iomem_size - MIN_VMALLOC;
->  
->  	/*
-> -	 * Zones have to begin on a 1 << MAX_ORDER page boundary,
-> +	 * Zones have to begin on a 1 << MAX_ORDER-1 page boundary,
->  	 * so this makes sure that's true for highmem
->  	 */
-> -	max_physmem &= ~((1 << (PAGE_SHIFT + MAX_ORDER)) - 1);
-> +	max_physmem &= ~((1 << (PAGE_SHIFT + MAX_ORDER - 1)) - 1);
->  	if (physmem_size + iomem_size > max_physmem) {
->  		highmem = physmem_size + iomem_size - max_physmem;
->  		physmem_size -= highmem;
-> -- 
-> 2.39.2
-> 
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/q=
+com/sm6350.dtsi
+> index 523c7edfa4b3..60b68d305e53 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -637,6 +637,18 @@ ipcc: mailbox@408000 {
+>  			#mbox-cells =3D <2>;
+>  		};
+> =20
+> +		qfprom: qfprom@784000 {
+> +			compatible =3D "qcom,sm6350-qfprom", "qcom,qfprom";
+> +			reg =3D <0 0x00784000 0 0x3000>;
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <1>;
+> +
+> +			gpu_speed_bin: gpu_speed_bin@2015 {
 
--- 
-Sincerely yours,
-Mike.
+gpu-speed-bin@2015 ?
+
+With that fixed:
+
+Reviewed-by: Luca Weiss <luca.weiss@fairphone.com>
+
+> +				reg =3D <0x2015 0x1>;
+> +				bits =3D <0 8>;
+> +			};
+> +		};
+> +
+>  		rng: rng@793000 {
+>  			compatible =3D "qcom,prng-ee";
+>  			reg =3D <0 0x00793000 0 0x1000>;
+>
+> --=20
+> 2.39.2
+
