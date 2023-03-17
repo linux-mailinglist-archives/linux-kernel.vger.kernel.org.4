@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502266BDEEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AA66BDEAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjCQCe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 22:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
+        id S229875AbjCQCdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 22:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjCQCeL (ORCPT
+        with ESMTP id S229599AbjCQCdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 22:34:11 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EF48A4E;
-        Thu, 16 Mar 2023 19:33:42 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id w11so1410295wmo.2;
-        Thu, 16 Mar 2023 19:33:42 -0700 (PDT)
+        Thu, 16 Mar 2023 22:33:25 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E88C2B2B4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:33:21 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id x33so2451852uaf.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:33:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679020418;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oy4rJp/0zV8uQx96aqdFOna+cm21IPd+B8/oErRDE1c=;
-        b=DiYT5S/jOvNwe4CzhjdiIkvIKBggeGR7CexVNd4rd/sjT5lAPS1XWF1W+7fLOFMLc9
-         +M+nVvH/VqGoT3HRVUevSaiDK++YKjOvPsz8umYJfLqED/NO2vBkV/scUd1luER6cra4
-         MU9TLGEoBzC2egkV45V3/dkoR/6reCXuIEI/4Onu6ISM86v2ODghCyVpzQR3QShPKWAL
-         9jZ7MIgNa9bnV7GstyBvBvcr169haI0sCUfFl73RZ7foJuE+TayH+Tf6hYDaMGLkB/kS
-         fhVvp3xBGubVX6uhvop1IHbnljGIKuh1xuXwPSH1/oNVSjdbVXXZJzhlDpDrUqMIbqpC
-         kXqA==
+        d=linaro.org; s=google; t=1679020400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/29vahDq+IahclEIO3DqdUneYi5GpXJQJAJm71A3XfQ=;
+        b=Wd5ZkxLw4+Tx76Qi2UxtLWnf3DstimMl1Ge1JEgwOOJYirLkItALIyA2uSTUYLLVi5
+         Pky2SYJEzblGGzw84/aDoERI28pvsdNlQvUkwszvIRjo2a3R06RprL3jFk+6IighMIyr
+         7kvmq1Hz5ay6OK8U3MJoDCL+d+gqkMdQfTpNZoXt5m1rgRevF4+YSCZdwot6SXaPpM1Q
+         w9mTg88avKFa2zBMiVzV90x4wFORGAa29D8QKPDMOPVc9EgNuYPy5XN8buraRNZIahnu
+         HrcpW/ksBlMg593JBZ9dTftmfouy/AsD6p3oaxoOCqN6DwENu7xfEZJu3j+n0GFfxnjn
+         CQKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679020418;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679020400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oy4rJp/0zV8uQx96aqdFOna+cm21IPd+B8/oErRDE1c=;
-        b=rPGCMwC5lEyATn2XIj9TYWwccH0ijOOKbKu505DFQ/yntSXE6LIM+EsgjTXDIXWnox
-         9cLKLknfWu6BSGE2ITyTfOhv9M70nO/2ZvtwMRzfH9vIMtt3xV+KEZYpVQRw7MusGQMM
-         ssK3BE95Wo+oBu6l6dEdmH4FBvVpGcLlC9scX4+3XFLpHY9qRL2QjNqdXI2rG6ZSRox2
-         Y0iW5oBHh17kNGyYokI3ow/r8/awDBnZEXsXuvVGT8/VlxGPqNO2PwngLQkxwgpoAnvK
-         kZ/h+gPd4Kotz6NPaetljhabqCjm8XnFJ5HFWGkGVy6KVlkGr88N5SJxgiI7kPzRp2Rv
-         3btQ==
-X-Gm-Message-State: AO0yUKXldj1G0urmL+gT+amy9DmOIpf1b1/2Er6nlJS/QRdIop5mG1Vd
-        81TqJpwJiEqY863/WopY24o=
-X-Google-Smtp-Source: AK7set/vLpvKe0YMV6V4xFFxWeIDZxral5oel3M8ZEVRVHfcThgwCE2w0hq0lN0ZZ/FAMivfH7aOVw==
-X-Received: by 2002:a1c:7215:0:b0:3ed:5d41:f9a7 with SMTP id n21-20020a1c7215000000b003ed5d41f9a7mr3675091wmc.2.1679020418287;
-        Thu, 16 Mar 2023 19:33:38 -0700 (PDT)
-Received: from localhost.localdomain (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.googlemail.com with ESMTPSA id z15-20020a5d44cf000000b002ce9f0e4a8fsm782313wrr.84.2023.03.16.19.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 19:33:38 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: [net-next PATCH v4 14/14] arm: mvebu: dt: Add PHY LED support for 370-rd WAN port
-Date:   Fri, 17 Mar 2023 03:31:25 +0100
-Message-Id: <20230317023125.486-15-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230317023125.486-1-ansuelsmth@gmail.com>
-References: <20230317023125.486-1-ansuelsmth@gmail.com>
+        bh=/29vahDq+IahclEIO3DqdUneYi5GpXJQJAJm71A3XfQ=;
+        b=tGCvBJ8noMj2PZy90otdya3T/fddPHg3vOktBFAM8m9iIbU6OK2nRnTwuWuBBV+h6Z
+         AUiSEIM3DnA+V3GSeY0I9FcBSsVysIfIhs3j0cuH+ZaeOQYoW/8b9qeAd4uzdBfAWQ3k
+         uKJQ85A4br0O5ZYTrPmmU83XoLsrAZzSoyK0EheynsBgBytp835t1MAAOyspLTGbq+qA
+         +s79WamR8pmFdQqJfPIy2pFlvpTEkSpg3Vj8RMlW52+IeCmf8/POncWjR68rTVuaJDHc
+         ASe6N1LOM1EbOY1/Ng6jqm4MUB5j/eR0n5ir47AiwnvMv0+u1eJpxoWnyiBkAmM5LWE1
+         Ii/Q==
+X-Gm-Message-State: AO0yUKXD/IBw/3mwXuOynX5bkXllf8XA47ObBZppgiAJ/3agnqE/TAjm
+        68o5sTCyJf9P8iesc90cVCeSgT5exb5PrBMsnSXalQ==
+X-Google-Smtp-Source: AK7set9UurZSx4mwUvtzm0f7zfh1TxXciq/dMpK0gv4nD8/JSRYoaikln7SYbfdD14YxI53hbDtfO2TLXOkokgnBll0=
+X-Received: by 2002:a05:6122:c8f:b0:401:7625:e9e3 with SMTP id
+ ba15-20020a0561220c8f00b004017625e9e3mr1275144vkb.1.1679020400302; Thu, 16
+ Mar 2023 19:33:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230316083430.973448646@linuxfoundation.org>
+In-Reply-To: <20230316083430.973448646@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 17 Mar 2023 08:03:09 +0530
+Message-ID: <CA+G9fYt9KrMohHLEpbPc2CxzNS28hnss7=qnCYGvpbi34_p7rg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/91] 5.10.175-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,49 +73,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+On Thu, 16 Mar 2023 at 14:20, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.175 release.
+> There are 91 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.175-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The WAN port of the 370-RD has a Marvell PHY, with one LED on
-the front panel. List this LED in the device tree.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/armada-370-rd.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/arch/arm/boot/dts/armada-370-rd.dts b/arch/arm/boot/dts/armada-370-rd.dts
-index be005c9f42ef..15b36aa34ef4 100644
---- a/arch/arm/boot/dts/armada-370-rd.dts
-+++ b/arch/arm/boot/dts/armada-370-rd.dts
-@@ -20,6 +20,7 @@
- /dts-v1/;
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/gpio/gpio.h>
- #include "armada-370.dtsi"
- 
-@@ -135,6 +136,19 @@ &mdio {
- 	pinctrl-names = "default";
- 	phy0: ethernet-phy@0 {
- 		reg = <0>;
-+		leds {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			led@0 {
-+				reg = <0>;
-+				label = "WAN";
-+				color = <LED_COLOR_ID_WHITE>;
-+				function = LED_FUNCTION_LAN;
-+				function-enumerator = <1>;
-+				linux,default-trigger = "netdev";
-+			};
-+		};
- 	};
- 
- 	switch: switch@10 {
--- 
-2.39.2
+## Build
+* kernel: 5.10.175-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: ba6c29f68bb2cc2c8bf9fbffe4856db450c9447f
+* git describe: v5.10.173-96-gba6c29f68bb2
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.173-96-gba6c29f68bb2
 
+## Test Regressions (compared to v5.10.173)
+
+## Metric Regressions (compared to v5.10.173)
+
+## Test Fixes (compared to v5.10.173)
+
+## Metric Fixes (compared to v5.10.173)
+
+## Test result summary
+total: 134577, pass: 112556, fail: 3872, skip: 17830, xfail: 319
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 115 total, 114 passed, 1 failed
+* arm64: 42 total, 39 passed, 3 failed
+* i386: 33 total, 31 passed, 2 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 26 total, 20 passed, 6 failed
+* riscv: 12 total, 11 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 36 total, 34 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
