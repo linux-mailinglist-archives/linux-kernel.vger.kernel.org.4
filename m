@@ -2,127 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104DF6BE1C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF5D6BE1C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjCQHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S230304AbjCQHOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjCQHNp (ORCPT
+        with ESMTP id S230290AbjCQHOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:13:45 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFE452F7C;
-        Fri, 17 Mar 2023 00:13:43 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id iw3so4412230plb.6;
-        Fri, 17 Mar 2023 00:13:43 -0700 (PDT)
+        Fri, 17 Mar 2023 03:14:20 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C7F60A8E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:14:02 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so4283548pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:14:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679037223;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rS8vmgsmQUQexeshG8mg626xwm1wz51m7Q+8asY/2Rw=;
-        b=dhf4sO35yzWINMqYFOfO0OiEfnkf/Ms5Tso+UVfgZtZ42r+r1xIn4kJhUgYmKxeJ8u
-         h3FwuIt3itmFdxlFgYinuYSUk0xEqo1ee3o/qqq9lQ8ZkyZpCgg4mUFE9EFIUsGkBlYl
-         t3/UgPnDTOaqqkSqGZoy26MXGe9NkqMR+RD1pBgNfyABMSxnBmIkQ9EHDiRfFP36QnOl
-         icyehwAC9hy6osr8EvZdfagt48ecy1B4eYDuW55L3ZdWMtTEM27V4sRSiws7WGUdAqHt
-         zsSWCvMjrWr3YZ41EBOcLCUMtmiuHIrKLRHDiBIECDZwlsav3sVw0KxN4pmnqKD28Lor
-         /Dsg==
+        d=gmail.com; s=20210112; t=1679037241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRnYDcnKGtoBZkuiq/lt8z18fHea+PPaGqCtFysWiDM=;
+        b=Nu7S65ypJG2PIfGNW0iHhiUGstx6Bvqkj4/u3/WGGd+wT60t6X66xPg1wP3DZfo9pW
+         0h5NptbuVJITIdJHK81E9YPL7ZAmmYhrmdsdAs32GwDtfRNqwt13CTTDGfNfbNuj3SPo
+         R/TrpXgmbu50h6jZGAKOFDwefacpNgCbEl1LvP2MKcm5iGpFxWQuxvt3k8DZJ3AHXA8h
+         bFmVZMWlaxrqI/0XbNAlj5Dz/6XixjSqu8VVw9Aq4aYpgwbkCO0h7usP8DcPulRIjPXL
+         3w/pu4McmQ8dZdbZMk6yAw6D/NOlxvsYUI30nvA5wf6mhALvau3IosRdyHtWHgz5vf/s
+         EdqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679037223;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rS8vmgsmQUQexeshG8mg626xwm1wz51m7Q+8asY/2Rw=;
-        b=y3C2Y3wQQrWdylZhJ5dERAJeHcz1J1WHlTu1S0dZtvtfXB4Qdm3010HBMdjNnq4MRx
-         IlIBk1xsOr7v8Z6tnWpVX00BoaQCN17QiLHE2a1wI+Be51ZLh0LGRo960sfSymZjIIXP
-         KPwgFtT9WL0DioQOTT8OUKJ8aZUR2uBByJ9Grzby0bG+iINwGZ8rdHsn3lH9rvhUW2kP
-         7QCYAnP8KY5nHtjy+zzritkuTnestk0wS33WNKOpiTEtJaetYE87AUijgJ0fk8XBG2xf
-         kmiHGoegCBbtG2zY+aH5FI7V9FVdvwqoOYM6zaEfjH669iUdjGDK+fcQIIBYK4NKAd4i
-         sXTQ==
-X-Gm-Message-State: AO0yUKX/i5UcPMUQcfoSwzILyid1669IqUpE+B5a6RMT2GnacB9pySun
-        1V/X3FnJhOlKEySloPaYdwQ=
-X-Google-Smtp-Source: AK7set+ragKq/pQ1oF0HYlPS9kQvnXfjm0DjLY6PdurywOwCN6KVkYzJcWX/Km5eamNV0UdUUIq+bw==
-X-Received: by 2002:a17:90b:350e:b0:23d:3f32:1cd5 with SMTP id ls14-20020a17090b350e00b0023d3f321cd5mr7053391pjb.26.1679037223289;
-        Fri, 17 Mar 2023 00:13:43 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id y10-20020a1709029b8a00b0019a7bb18f98sm853322plp.48.2023.03.17.00.13.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 00:13:42 -0700 (PDT)
-Message-ID: <1120263c-60d3-d359-5e68-d922fdc20c87@gmail.com>
-Date:   Fri, 17 Mar 2023 15:13:39 +0800
+        d=1e100.net; s=20210112; t=1679037241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vRnYDcnKGtoBZkuiq/lt8z18fHea+PPaGqCtFysWiDM=;
+        b=kN0dYEDWa5IBMCoybuX8iWR12VdVqKPIdFxeJpeASDKcDYtj25ETqz8kCoje/9UF9r
+         X+3lUigW6aqC/p1yeztUMDcX5MWl9MDazOSpIWU1d9fzs+aDHpJHruldJQJalWJhUYBm
+         9Y1MRVH1DSWEeu58YWUbim34Q+nsVC4rsrhF40ZsBTBH2EjiW8Jwyx7nEohmsOUB5xlK
+         iaIifYNzIf9pbksE6nvNoCgE/iizUJsMeMQTKINac6ppsV4u0RhKNdUsKLNFL7xA4bQm
+         Nc7KLUqeQ+yiuDa1e3EN/qumKpR8zZIFjBFvjXV2dDaikP96WSvqI95jOt90grZ+KXQt
+         /RlA==
+X-Gm-Message-State: AO0yUKW+F9KNqskLfxPFM69mObS6+scPw3WXCsspbRtd79AYMuwusvA+
+        ovLtdyJrozBJgIDAAciKDv8=
+X-Google-Smtp-Source: AK7set/bVwRCYhq47jmjk2ofdd77sALIsCyt/iRjdk71zK5ugzcRKSKf5IKBF9BprY4TafrIYOiQ2g==
+X-Received: by 2002:a05:6a20:7351:b0:b8:a0e1:2739 with SMTP id v17-20020a056a20735100b000b8a0e12739mr7859667pzc.3.1679037241480;
+        Fri, 17 Mar 2023 00:14:01 -0700 (PDT)
+Received: from sumitra.com ([14.139.226.12])
+        by smtp.gmail.com with ESMTPSA id p18-20020a62ab12000000b005a8f1d76d46sm864281pff.13.2023.03.17.00.13.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 00:14:00 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 00:13:52 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     drv@mailo.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v4] Staging: octeon: Fix line ending with '('
+Message-ID: <20230317071352.GA83845@sumitra.com>
+References: <20230317052455.GA83442@sumitra.com>
+ <alpine.DEB.2.22.394.2303170700270.3105@hadrien>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Jacky Huang <ychuang570808@gmail.com>
-Subject: Re: [PATCH 13/15] reset: Add Nuvoton ma35d1 reset driver support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-14-ychuang570808@gmail.com>
- <cbfad8ff-fe52-4e25-40d8-84ff43f5c3ad@linaro.org>
-Content-Language: en-US
-In-Reply-To: <cbfad8ff-fe52-4e25-40d8-84ff43f5c3ad@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2303170700270.3105@hadrien>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-
-On 2023/3/16 下午 03:51, Krzysztof Kozlowski wrote:
-> On 15/03/2023 08:29, Jacky Huang wrote:
->> From: Jacky Huang<ychuang3@nuvoton.com>
->>
->> This driver supports individual IP reset for ma35d1. The reset
->> control registers is a subset of system control registers.
->>
->> Signed-off-by: Jacky Huang<ychuang3@nuvoton.com>
->> ---
->>   drivers/reset/Kconfig        |   6 ++
->>   drivers/reset/Makefile       |   1 +
->>   drivers/reset/reset-ma35d1.c | 152 +++++++++++++++++++++++++++++++++++
->>   3 files changed, 159 insertions(+)
->>   create mode 100644 drivers/reset/reset-ma35d1.c
->>
->> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
->> index 2a52c990d4fe..47671060d259 100644
->> --- a/drivers/reset/Kconfig
->> +++ b/drivers/reset/Kconfig
->> @@ -143,6 +143,12 @@ config RESET_NPCM
->>   	  This enables the reset controller driver for Nuvoton NPCM
->>   	  BMC SoCs.
->>   
->> +config RESET_NUVOTON_MA35D1
->> +	bool "Nuvton MA35D1 Reset Driver"
->> +	default ARCH_NUVOTON
-> || COMPILE_TEST
-
-I will add this config. Thank you.
-
->> +	help
->> +	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
->> +
-> Best regards,
-> Krzysztof
+On Fri, Mar 17, 2023 at 07:03:08AM +0100, Julia Lawall wrote:
+> 
+> 
+> On Thu, 16 Mar 2023, Sumitra Sharma wrote:
+> 
+> > Since the coding style limited the code to 80 columns per line which caused
+> > splitting the function header into two lines resulted in the first line
+> > ending with a '('. This caused the checkpatch error.
+> 
+> The first sentence is still not really grammatical.  Something like:
+> 
+> The coding style used to limit lines to 80 characters, which led to
+> splitting this function header into multiple lines, and ending thie first
+> line with a (.
+> 
+> For checkpatch, is it an error or a warning?
 >
 
-Best regards,
+HI julia, 
 
-Jacky Huang
+Yes, you are correct, I did the mistake its not the error but a check. 
 
+How about this...
+
+###
+The coding style used to limit lines to 80 characters, which led to splitting 
+this function header into multiple lines and ending the first line with a '('. 
+This split causes a check reported by the checkpatch.
+
+Place the function parameters immediately after '(' in a single line to
+align the function header.
+###
+
+
+Thank you for your reviews.
+
+Regards, 
+Sumitra
+
+> julia
+> 
+> >
+> > Place the function parameters immediately after '(' in a single
+> > line to align the function header.
+> >
+> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > ---
+> > v2: Change patch subject and description
+> >
+> > v3: Change patch description, noted by Deepak R Varma
+> > <drv@mailo.com>
+> >
+> > v4: Correct grammartical mistakes, noted by Julia Lawall
+> > <julia.lawall@inria.fr>
+> >
+> >
+> >
+> >  drivers/staging/octeon/octeon-stubs.h | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
+> > index 7a02e59e283f..3e7b92cd2e35 100644
+> > --- a/drivers/staging/octeon/octeon-stubs.h
+> > +++ b/drivers/staging/octeon/octeon-stubs.h
+> > @@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
+> >  						  int32_t value)
+> >  { }
+> >
+> > -static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
+> > -	int interface,
+> > -	int port)
+> > +static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
+> >  {
+> >  	union cvmx_gmxx_rxx_rx_inbnd r;
+> >
+> > --
+> > 2.25.1
+> >
+> >
+> >
