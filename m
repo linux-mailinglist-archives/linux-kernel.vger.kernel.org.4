@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BAB6BEAED
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF316BEAEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjCQOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60808 "EHLO
+        id S229938AbjCQORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjCQORY (ORCPT
+        with ESMTP id S230309AbjCQORZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:17:24 -0400
+        Fri, 17 Mar 2023 10:17:25 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC211C581;
-        Fri, 17 Mar 2023 07:17:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D331164A;
+        Fri, 17 Mar 2023 07:17:21 -0700 (PDT)
 Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H7YLCZ016596;
-        Fri, 17 Mar 2023 14:17:11 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HBww7r028647;
+        Fri, 17 Mar 2023 14:17:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=wfmGrrfC7vhTkVsssPLjO7EMgWkmtEjtqoWPrRqoWrc=;
- b=nhFpRURC0QpycmopOzHshtqdcDq2CIG+05+kOD70HVUz3+Fzq2vfTKSs/yHqYw4u3KQ9
- qMKd0Z1Bd0dllgkkyH/TDCzH9NDyY0vrO7JBTFMQcafT1wLXMoj8Ul1Kc5J40jcQLFSX
- 5lck42wJ/BUuiwS/KuLBchtGgrnVC5AdmYNeuXVoJq1Pskid5RqjejJat1VJpfeCm52C
- DzI3IC8NEIa7umqXY/mtm6tLpQZt2wuAhaDFIZHpGZnsV0CnZMBkdqEMDQYjZdZwg5lm
- 1T7BxJ1D334fgHuc3KiCLIQGQN/APFxdgbGNkxbUwvI2i+lh4a9+LvvhRqFIQjo2eEfk Yw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pcbasab13-1
+ bh=1OFhEHSj6wHnMWxcMSoeHh9a1Od3DjynmxAiD4DfTvQ=;
+ b=LjzsxafIyCM8lidIyrVBDyvAK3smEmFcYww/U2YR2Zz+KsrmkCDGuqM9qZVjd9H+gHj9
+ 6j3FYAvMbemwyojq98BJgi3E8x0waovRhBs5HUCpqpiV9bC2OW48RV8AG9ZVAu47TznZ
+ Q9r7uYGoHgVyBTwMuJ/FTHhsDvEl1BPsukJpfb87Y78eZrA6AT7VtMHz68kbEiDVHJZX
+ DaWo09M9QTcXIoUA/W8rX05OpRPCvzxj/vMRREklvsVWMRIO2RzGi4InRj7CBYG/7Ap2
+ H/v80gtjNYE730K0otq+ZUQnn33JXs+hZXxene3Rsg+VH2V5X2E86zQWETktRQ4LmYyX 5g== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pcbasab18-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Mar 2023 14:17:10 +0000
+        Fri, 17 Mar 2023 14:17:15 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32HEH86S009238
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32HEHE9m005064
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Mar 2023 14:17:08 GMT
+        Fri, 17 Mar 2023 14:17:14 GMT
 Received: from hu-mohs-hyd.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 17 Mar 2023 07:17:04 -0700
+ 15.2.986.41; Fri, 17 Mar 2023 07:17:09 -0700
 From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 To:     <swboyd@chromium.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
@@ -48,11 +48,10 @@ To:     <swboyd@chromium.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <quic_visr@quicinc.com>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v9 1/4] dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode property
-Date:   Fri, 17 Mar 2023 19:46:19 +0530
-Message-ID: <20230317141622.1926573-2-quic_mohs@quicinc.com>
+        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Subject: [PATCH v9 2/4] clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+Date:   Fri, 17 Mar 2023 19:46:20 +0530
+Message-ID: <20230317141622.1926573-3-quic_mohs@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230317141622.1926573-1-quic_mohs@quicinc.com>
 References: <20230317141622.1926573-1-quic_mohs@quicinc.com>
@@ -64,12 +63,12 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kz2dLmF6YHBaKfrEq5EIoBNZiJOGIxD9
-X-Proofpoint-ORIG-GUID: kz2dLmF6YHBaKfrEq5EIoBNZiJOGIxD9
+X-Proofpoint-GUID: RR4FUirdf8TFtFTXHjhDsC_C0nPejVnl
+X-Proofpoint-ORIG-GUID: RR4FUirdf8TFtFTXHjhDsC_C0nPejVnl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-17_08,2023-03-16_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=8
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
  mlxlogscore=999 mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0
  spamscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
  priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
@@ -85,46 +84,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 
-When this property is set, the remoteproc is used to boot the
-LPASS and therefore qdsp6ss clocks would be used to bring LPASS
-out of reset, hence they are directly controlled by the remoteproc.
+The qdsp6ss memory region is being shared by ADSP remoteproc device and
+lpasscc clock device, hence causing memory conflict.
+As the qdsp6ss clocks are being enabled in remoteproc driver, skip qdsp6ss
+clock registration if "qcom,adsp-pil-mode" is enabled.
 
-This is a cleanup done to handle overlap of regmap of lpasscc
-and adsp remoteproc blocks.
-
+Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC7280")
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 ---
- .../devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml     | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/clk/qcom/lpasscc-sc7280.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
-index 6151fdebbff8..97c6bd96e0cb 100644
---- a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
-@@ -41,6 +41,12 @@ properties:
-       - const: qdsp6ss
-       - const: top_cc
+diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
+index 5c1e17bd0d76..85dd5b9d64f0 100644
+--- a/drivers/clk/qcom/lpasscc-sc7280.c
++++ b/drivers/clk/qcom/lpasscc-sc7280.c
+@@ -118,12 +118,14 @@ static int lpass_cc_sc7280_probe(struct platform_device *pdev)
+ 		goto destroy_pm_clk;
+ 	}
  
-+  qcom,adsp-pil-mode:
-+    description:
-+      Indicates if the LPASS would be brought out of reset using
-+      remoteproc peripheral loader.
-+    type: boolean
-+
- required:
-   - compatible
-   - reg
-@@ -60,6 +66,7 @@ examples:
-       reg-names = "qdsp6ss", "top_cc";
-       clocks = <&gcc GCC_CFG_NOC_LPASS_CLK>;
-       clock-names = "iface";
-+      qcom,adsp-pil-mode;
-       #clock-cells = <1>;
-     };
- ...
+-	lpass_regmap_config.name = "qdsp6ss";
+-	desc = &lpass_qdsp6ss_sc7280_desc;
++	if (!of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode")) {
++		lpass_regmap_config.name = "qdsp6ss";
++		desc = &lpass_qdsp6ss_sc7280_desc;
+ 
+-	ret = qcom_cc_probe_by_index(pdev, 0, desc);
+-	if (ret)
+-		goto destroy_pm_clk;
++		ret = qcom_cc_probe_by_index(pdev, 0, desc);
++		if (ret)
++			goto destroy_pm_clk;
++	}
+ 
+ 	lpass_regmap_config.name = "top_cc";
+ 	desc = &lpass_cc_top_sc7280_desc;
 -- 
 2.25.1
 
