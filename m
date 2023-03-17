@@ -2,185 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275566BE64D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05676BE64F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjCQKMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S230142AbjCQKMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCQKMn (ORCPT
+        with ESMTP id S230034AbjCQKMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:12:43 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A299A40F8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 03:12:40 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PdKcL6SCZz17KV1;
-        Fri, 17 Mar 2023 18:09:38 +0800 (CST)
-Received: from [10.67.111.115] (10.67.111.115) by
- dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 18:12:38 +0800
-Message-ID: <f0879a30-6f88-30e0-ce30-e230df8f2936@huawei.com>
-Date:   Fri, 17 Mar 2023 18:12:38 +0800
+        Fri, 17 Mar 2023 06:12:48 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717451207E;
+        Fri, 17 Mar 2023 03:12:47 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p16so2969037wmq.5;
+        Fri, 17 Mar 2023 03:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679047966;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DwS/vv31f4BuEfVrvdbvseaIFS29tE8KLLx+JthWfKo=;
+        b=kqYUbUCx7rarPzu1sjKivk4CQ1upiEdKzDr5T0rYLb87bdZ8TDWTTirWGwI6M/WVZE
+         T/ueZTlr/XJN+MhEGtYdA8+ZOSrZxkjlUAYtnX7h1edorVAFIkqNqY8A2VfbGHoJub84
+         VXmOTpw5y59SU7iWFMvd4ycCtOa93f8WF10alm5TJeroKb3upInUcfFqeZXAEJ034/R1
+         wu/hlSFEDBEz/haiMhZ3siTsqQ5G/Vkko4/iPNOQJs5miGzhzpiFdg3xaI1H+T9ujxWI
+         e0rNUf2PGJmbK6C02KGOkdjLUj1Rakm9KHxGZrcgHKkbC3Cymmv9pKAOamPRYXVh7F5H
+         hsCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679047966;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DwS/vv31f4BuEfVrvdbvseaIFS29tE8KLLx+JthWfKo=;
+        b=N9hnozdc1qEknueuHY1kniXxNaWYswZjScQ6mJ+q39r+uV7NfLI4IfZIoO8qjknrEy
+         4zp/DghkML/on/eGSIXMJf+1BiJ1EDgwq/oR2l7ywES/ZY3b3kePSY+EPntSVRtoCIu9
+         dLfq5Ju5F8dLcgYwdvJjMlAo7JLVMeF6ZaDtN13fsCq1szcuSKd9rUkP9wc4sNkClgo/
+         y+PWK9615u7SNSdhrY/azkOImVNYWF8uobDNrkij0Vtrv2pFuvtSZPTAfBI2mkVJiVDg
+         d7Xj9ZfZRvSJ9rEI4Jj30A4xPKzLGP6wk2zmn/FjU9jdp/ht94jneYkW+oaZkUWywN2w
+         iGkg==
+X-Gm-Message-State: AO0yUKX1UqsMa1a8uy4u0h8zPuitlk4jQb9o5U8rEfe6TDAFlGmEMMHF
+        Ef/hGXO9HKiBo8WwHzV3ATo=
+X-Google-Smtp-Source: AK7set9t0nI25zcAALJYDS8Ya6hHA1lT5YjlB5SYqg/ZM0iK/wFqLj2Hwa4T8WrJ5MfdoTj9qk7Kiw==
+X-Received: by 2002:a05:600c:21c6:b0:3ed:775e:5257 with SMTP id x6-20020a05600c21c600b003ed775e5257mr1910770wmj.35.1679047965728;
+        Fri, 17 Mar 2023 03:12:45 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003dc522dd25esm1535687wmb.30.2023.03.17.03.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 03:12:45 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 10:12:43 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/140] 6.1.20-rc2 review
+Message-ID: <ZBQ9Gzk4dGfeYUv6@debian>
+References: <20230316083444.336870717@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-To:     James Gowans <jgowans@amazon.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-CC:     <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Marc Zyngier <maz@kernel.org>,
-        KarimAllah Raslan <karahmed@amazon.com>
-References: <20230317095300.4076497-1-jgowans@amazon.com>
-Content-Language: en-US
-From:   Yipeng Zou <zouyipeng@huawei.com>
-In-Reply-To: <20230317095300.4076497-1-jgowans@amazon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.115]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316083444.336870717@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
-在 2023/3/17 17:53, James Gowans 写道:
-> Update the generic handle_fasteoi_irq to cater for the case when the
-> next interrupt comes in while the previous handler is still running.
-> Currently when that happens the irq_may_run() early out causes the next
-> IRQ to be lost. Change the behaviour to mark the interrupt as pending
-> and re-run the handler when handle_fasteoi_irq sees that the pending
-> flag has been set again. This is largely inspired by handle_edge_irq.
->
-> Generally it should not be possible for the next interrupt to arrive
-> while the previous handler is still running: the next interrupt should
-> only arrive after the EOI message has been sent and the previous handler
-> has returned. However, there is a race where if the interrupt affinity
-> is changed while the previous handler is running, then the next
-> interrupt can arrive at a different CPU while the previous handler is
-> still running. In that case there will be a concurrent invoke and the
-> early out will be taken.
->
-> For example:
->
->             CPU 0             |          CPU 1
-> -----------------------------|-----------------------------
-> interrupt start              |
->    handle_fasteoi_irq         | set_affinity(CPU 1)
->      handler                  |
->      ...                      | interrupt start
->      ...                      |   handle_fasteoi_irq -> early out
->    handle_fasteoi_irq return  | interrupt end
-> interrupt end                |
->
-> This issue was observed specifically on an arm64 system with a GIC-v3
-> handling MSIs; GIC-v3 uses the handle_fasteoi_irq handler. The issue is
-> that the global ITS is responsible for affinity but does not know
-> whether interrupts are pending/running, only the CPU-local redistributor
-> handles the EOI. Hence when the affinity is changed in the ITS, the new
-> CPU's redistributor does not know that the original CPU is still running
-> the handler.
->
-> There are a few uncertainties about this implementation compared to the
-> prior art in handle_edge_irq:
->
-> 1. Do we need to mask the IRQ and then unmask it later? I don't think so
-> but it's not entirely clear why handle_edge_irq does this anyway; it's
-> an edge IRQ so not sure why it needs to be masked.
->
-> 2. Should the EOI delivery be inside the do loop after every handler
-> run? I think outside the loops is best; only inform the chip to deliver
-> more IRQs once all pending runs have been finished.
->
-> 3. Do we need to check that desc->action is still set? I don't know if
-> it can be un-set while the IRQ is still enabled.
->
-> 4. There is now more overlap with the handle_edge_eoi_irq handler;
-> should we try to unify these?
->
-> Signed-off-by: James Gowans <jgowans@amazon.com>
-> Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: KarimAllah Raslan <karahmed@amazon.com>
-> ---
->   Documentation/core-api/genericirq.rst | 9 ++++++++-
->   kernel/irq/chip.c                     | 9 +++++++--
->   2 files changed, 15 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/core-api/genericirq.rst b/Documentation/core-api/genericirq.rst
-> index f959c9b53f61..b54485eca8b5 100644
-> --- a/Documentation/core-api/genericirq.rst
-> +++ b/Documentation/core-api/genericirq.rst
-> @@ -240,7 +240,14 @@ which only need an EOI at the end of the handler.
->   
->   The following control flow is implemented (simplified excerpt)::
->   
-> -    handle_irq_event(desc->action);
-> +    if (desc->status & running) {
-> +        desc->status |= pending;
-> +        return;
-> +    }
-> +    do {
-> +        desc->status &= ~pending;
-> +        handle_irq_event(desc->action);
-> +    } while (status & pending);
->       desc->irq_data.chip->irq_eoi();
->   
->   
-> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-> index 49e7bc871fec..4e5fc2b7e8a9 100644
-> --- a/kernel/irq/chip.c
-> +++ b/kernel/irq/chip.c
-> @@ -692,8 +692,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
->   
->   	raw_spin_lock(&desc->lock);
->   
-> -	if (!irq_may_run(desc))
-> +	if (!irq_may_run(desc)) {
-> +		desc->istate |= IRQS_PENDING;
->   		goto out;
-> +	}
->   
->   	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
->   
-> @@ -711,7 +713,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
->   	if (desc->istate & IRQS_ONESHOT)
->   		mask_irq(desc);
->   
-> -	handle_irq_event(desc);
-> +	do {
-> +		handle_irq_event(desc);
-> +	} while (unlikely((desc->istate & IRQS_PENDING) &&
-> +			!irqd_irq_disabled(&desc->irq_data)));
->   
->   	cond_unmask_eoi_irq(desc, chip);
->   
+On Thu, Mar 16, 2023 at 09:50:22AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.20 release.
+> There are 140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> Anything received after that time might be too late.
 
-Hi:
+Build test (gcc version 12.2.1 20230311):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Finally, someone also hit this problem.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+mips: Booted on ci20 board. No regression. [2]
 
-I just send patch a  few weeks ago.
+[1]. https://openqa.qa.codethink.co.uk/tests/3134
+[2]. https://openqa.qa.codethink.co.uk/tests/3146
 
-It seems that we have the same solution.(I introduced a new flow handler).
-
-Hopefully this issue will be fixed as soon as possible.
-
-[1] 
-https://lore.kernel.org/all/20230310101417.1081434-1-zouyipeng@huawei.com/
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
 -- 
-Regards,
-Yipeng Zou
-
+Regards
+Sudip
