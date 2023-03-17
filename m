@@ -2,240 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C886BDE6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852E96BDE6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCQCCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 22:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S229808AbjCQCHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 22:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjCQCCl (ORCPT
+        with ESMTP id S229697AbjCQCG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 22:02:41 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A705AA76A0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:02:36 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230317020233epoutp043fff5c9d3181669c660b52a8095f4860~NEnqgiT820393303933epoutp04n
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:02:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230317020233epoutp043fff5c9d3181669c660b52a8095f4860~NEnqgiT820393303933epoutp04n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679018554;
-        bh=HzuXTIGhsJtmn+7K+M/XpU65FRNGqAod8SGW99Rw/90=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=Y3Ydni+mTyloHfip/pPkg8U35msx7zyLwUU4DSoWINRTvf9YOYGXB3JpOCCqlHZjG
-         d6qa2Zivm3HGdS86k4VYrSXrSdzAIsteQCu6ggvAuj1FqpSSS19EwOxJbeNKJ31HRl
-         yT2VfodnxIgdDx1uWCrO3s0gzvjtoUtzeke6KNfw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230317020233epcas2p1ac37ad088bea59e1cc0220fa2e0bb0d3~NEnqUHUfO1891918919epcas2p1_;
-        Fri, 17 Mar 2023 02:02:33 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Pd6pJ5TyYz4x9Q3; Fri, 17 Mar
-        2023 02:02:32 +0000 (GMT)
-X-AuditID: b6c32a45-8bdf87000001f1e7-07-6413ca3805aa
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0F.E4.61927.83AC3146; Fri, 17 Mar 2023 11:02:32 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v1] f2fs: Fix system crash due to lack of free space
- in LFS
-Reply-To: yonggil.song@samsung.com
-Sender: Yonggil Song <yonggil.song@samsung.com>
-From:   Yonggil Song <yonggil.song@samsung.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-CC:     "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <ZBNOKq/EYNMnMSFi@google.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230317020232epcms2p8674f817aeddbcf3aaf6a64f9fa77d5c3@epcms2p8>
-Date:   Fri, 17 Mar 2023 11:02:32 +0900
-X-CMS-MailID: 20230317020232epcms2p8674f817aeddbcf3aaf6a64f9fa77d5c3
+        Thu, 16 Mar 2023 22:06:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3845442DE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679018818; x=1710554818;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ylpBSS50N7LY1qvM6cDS8D3XqGhjJ1NeTBlIOSnAez4=;
+  b=i35L10CdxmT+dK10LyNzp5u8CcRjatbq7CCI4E9B0crNl+5cHZW10b3T
+   qy+FD5iE9GbV8iEZ2kdNHTX8MBtgt3WIXQm9Vz9LpHyW4XnBMid14i1Mh
+   U90Qkd3RLc240n9LX4omv0P6zj+rNHWndqmDrDGqsd/Xv6BS1NrttLFyg
+   rYUNAIwJbYDhQID/+1VKzxeE6XDH0e4P8W2fJMaWNsnrTEXDP8Lro+aL2
+   xKNpZ7Gt7ssNZEse13WPF9BPdiKGIyiADvQCk6+qVvxUKH8E84iEv3Cbv
+   hB7cj7InO16efp8zRMnUAN5tNOmyoaCsw2pWPXM9QxsiU8Mf/iL3IXPyg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317816160"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="317816160"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 19:06:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="803951514"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="803951514"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2023 19:06:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pczUY-0008yW-3B;
+        Fri, 17 Mar 2023 02:06:50 +0000
+Date:   Fri, 17 Mar 2023 10:06:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ cbebd68f59f03633469f3ecf9bea99cd6cce3854
+Message-ID: <6413cb37.eOJzMbCJ44AYzDih%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFKsWRmVeSWpSXmKPExsWy7bCmha7FKeEUg51r5SxOTz3LZPFk/Sxm
-        i0uL3C0u75rD5sDisWlVJ5vH7gWfmTw+b5ILYI7KtslITUxJLVJIzUvOT8nMS7dV8g6Od443
-        NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBWqakUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVK
-        LUjJKTAv0CtOzC0uzUvXy0stsTI0MDAyBSpMyM6Ysoun4LtexeTvu1gbGLeodTFyckgImEi8
-        Wd3F1sXIxSEksINRYubr04xdjBwcvAKCEn93CIPUCAuESExceIAJxBYSUJK4dqCXBSKuL7F5
-        8TJ2EJtNQFfi74blYLaIgIrEoUWX2UFmMgvsZ5S407ODCWIZr8SM9qcsELa0xPblWxlBbE4B
-        LYm+DfvYIeIaEj+W9TJD2KISN1e/ZYex3x+bzwhhi0i03jsLVSMo8eDnbqi4pMSiQ+ehduVL
-        /F1xnQ3CrpHY2tAGFdeXuNaxkQXiR1+JnafSQMIsAqoSL/5thRrjInH82hew8cwC8hLb385h
-        BilnFtCUWL9LH8SUEFCWOHKLBaKCT6Lj8F92mAd3zHsCtUhNYvOmzawQtozEhcdtUNM9JH7N
-        PMk6gVFxFiKcZyHZNQth1wJG5lWMYqkFxbnpqcVGBYbwmE3Oz93ECE50Wq47GCe//aB3iJGJ
-        g/EQowQHs5IIbziLQIoQb0piZVVqUX58UWlOavEhRlOgLycyS4km5wNTbV5JvKGJpYGJmZmh
-        uZGpgbmSOK+07clkIYH0xJLU7NTUgtQimD4mDk6pBqbIooDp5UFXDt7fWmEbmZ38eEHskg16
-        l75EXVrtuvQuQ6+NxOub8nI9XRzqIn4Bf5o2MOtt3TONkWHLF46Aear15wRmik95F+P5QE+7
-        o8OQaYFTztkJ3yb5VOUefGug6rNhvrGLR0pkXvK0LeY/M92FPQ/NbWtSXSSSoaN6Q0m+w6I/
-        PktJI/fpxsT5ttFJ0klHV7G/+tgfeWBqHVdcDMPPVJ3fx/grY48U7UwIUb+6iLM1siYx47yG
-        kcgdjxPBdv06Uu3dxxIUM/Z+aFnqZhX6aGE8n/IXr5k3bziX3sgLikqrs92WJeWsaPFhwRHJ
-        iJIrORo12WzSzFuNY4U99seo/JvB91bgz+GFOY5KLMUZiYZazEXFiQDUxc/N/QMAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb
-References: <ZBNOKq/EYNMnMSFi@google.com>
-        <20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
-        <CGME20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p8>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 03/14, Yonggil Song wrote:
->> When f2fs tries to checkpoint during foreground gc in LFS mode, system
->> crash occurs due to lack of free space if the amount of dirty node and
->> dentry pages generated by data migration exceeds free space.
->> The reproduction sequence is as follows.
->> 
->>  - 20GiB capacity block device (null_blk)
->>  - format and mount with LFS mode
->>  - create a file and write 20,000MiB
->>  - 4k random write on full range of the file
->> 
->>  RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
->>  Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
->>  RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
->>  RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
->>  RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
->>  RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
->>  R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
->>  R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
->>  FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
->>  CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>  CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
->>  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>  Call Trace:
->>  <TASK>
->>  allocate_segment_by_default+0x9c/0x110 [f2fs]
->>  f2fs_allocate_data_block+0x243/0xa30 [f2fs]
->>  ? __mod_lruvec_page_state+0xa0/0x150
->>  do_write_page+0x80/0x160 [f2fs]
->>  f2fs_do_write_node_page+0x32/0x50 [f2fs]
->>  __write_node_page+0x339/0x730 [f2fs]
->>  f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
->>  block_operations+0x257/0x340 [f2fs]
->>  f2fs_write_checkpoint+0x102/0x1050 [f2fs]
->>  f2fs_gc+0x27c/0x630 [f2fs]
->>  ? folio_mark_dirty+0x36/0x70
->>  f2fs_balance_fs+0x16f/0x180 [f2fs]
->> 
->> This patch adds checking whether free sections are enough before checkpoint
->> during gc.
->> 
->> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
->> ---
->>  fs/f2fs/gc.c      |  7 ++++++-
->>  fs/f2fs/segment.h | 26 +++++++++++++++++++++-----
->>  2 files changed, 27 insertions(+), 6 deletions(-)
->> 
->> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->> index 4546e01b2ee0..b22f49a6f128 100644
->> --- a/fs/f2fs/gc.c
->> +++ b/fs/f2fs/gc.c
->> @@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>  		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
->>  	};
->>  	unsigned int skipped_round = 0, round = 0;
->> +	unsigned int nr_needed_secs = 0, node_blocks = 0, dent_blocks = 0;
->>  
->>  	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
->>  				gc_control->nr_free_secs,
->> @@ -1858,8 +1859,12 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>  		}
->>  	}
->>  
->> +	/* need more three extra sections for writer's data/node/dentry */
->> +	nr_needed_secs = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + 3;
->
->	get_min_need_secs(&lower, &upper)
->	{
->		...
->
->		*lower = node_secs + dent_secs;
->		*upper = *lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
->	}
->
->> +	nr_needed_secs += ((node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0));
->> +
->>  	/* Write checkpoint to reclaim prefree segments */
->> -	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
->> +	if (free_sections(sbi) <= nr_needed_secs &&
->
->#define NR_GC_CHECKPOINT_SECS	(3)	/* data/node/dentry sections */
->
->	if (free_sections(sbi) <= upper + NR_GC_CHECKPOINT_SECS &&
->
->>  				prefree_segments(sbi)) {
->>  		ret = f2fs_write_checkpoint(sbi, &cpc);
->>  		if (ret)
->> diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
->> index be8f2d7d007b..ac11c47bfe37 100644
->> --- a/fs/f2fs/segment.h
->> +++ b/fs/f2fs/segment.h
->> @@ -605,8 +605,11 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
->>  	return true;
->>  }
->>  
->> -static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
->> -					int freed, int needed)
->> +/*
->> + * calculate the minimum number of sections (needed) for dirty node/dentry
->> + */
->> +static inline unsigned int get_min_need_secs(struct f2fs_sb_info *sbi,
->> +		unsigned int *node_blocks, unsigned int *dent_blocks)
->>  {
->>  	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
->>  					get_pages(sbi, F2FS_DIRTY_DENTS) +
->> @@ -614,15 +617,28 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
->>  	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
->>  	unsigned int node_secs = total_node_blocks / CAP_BLKS_PER_SEC(sbi);
->>  	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
->> -	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
->> -	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
->> +
->> +	f2fs_bug_on(sbi, (!node_blocks || !dent_blocks));
->> +
->> +	*node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
->> +	*dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
->> +
->> +	return (node_secs + dent_secs);
->> +}
->> +
->> +static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
->> +					int freed, int needed)
->> +{
->> +	unsigned int node_blocks = 0;
->> +	unsigned int dent_blocks = 0;
->>  	unsigned int free, need_lower, need_upper;
->>  
->>  	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
->>  		return false;
->>  
->>  	free = free_sections(sbi) + freed;
->> -	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
->> +	need_lower = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + needed +
->> +				reserved_sections(sbi);
->>  	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
->>  
->>  	if (free > need_upper)
->> -- 
->> 2.34.1
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: cbebd68f59f03633469f3ecf9bea99cd6cce3854  x86/mm: Fix use of uninitialized buffer in sme_enable()
 
-Thanks for your review.
-I'll send a patch v2 soon.
+elapsed time: 725m
+
+configs tested: 98
+configs skipped: 159
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r001-20230313   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230312   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r004-20230312   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r013-20230313   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230312   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r011-20230312   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230312   clang
+hexagon              randconfig-r041-20230313   clang
+hexagon              randconfig-r045-20230312   clang
+hexagon              randconfig-r045-20230313   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230313   gcc  
+i386                 randconfig-a002-20230313   gcc  
+i386                 randconfig-a003-20230313   gcc  
+i386                 randconfig-a004-20230313   gcc  
+i386                 randconfig-a005-20230313   gcc  
+i386                 randconfig-a006-20230313   gcc  
+i386                 randconfig-a011-20230313   clang
+i386                          randconfig-a011   clang
+i386                 randconfig-a012-20230313   clang
+i386                          randconfig-a012   gcc  
+i386                 randconfig-a013-20230313   clang
+i386                          randconfig-a013   clang
+i386                 randconfig-a014-20230313   clang
+i386                          randconfig-a014   gcc  
+i386                 randconfig-a015-20230313   clang
+i386                          randconfig-a015   clang
+i386                 randconfig-a016-20230313   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r002-20230312   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r012-20230312   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r016-20230313   gcc  
+microblaze   buildonly-randconfig-r002-20230313   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r006-20230312   gcc  
+nios2        buildonly-randconfig-r003-20230312   gcc  
+nios2        buildonly-randconfig-r005-20230313   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r012-20230313   gcc  
+parisc       buildonly-randconfig-r006-20230313   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r014-20230312   gcc  
+riscv                randconfig-r042-20230313   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230313   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230312   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230313   gcc  
+x86_64               randconfig-a002-20230313   gcc  
+x86_64               randconfig-a003-20230313   gcc  
+x86_64               randconfig-a004-20230313   gcc  
+x86_64               randconfig-a005-20230313   gcc  
+x86_64               randconfig-a006-20230313   gcc  
+x86_64               randconfig-a011-20230313   clang
+x86_64               randconfig-a012-20230313   clang
+x86_64               randconfig-a013-20230313   clang
+x86_64               randconfig-a014-20230313   clang
+x86_64               randconfig-a015-20230313   clang
+x86_64               randconfig-a016-20230313   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r001-20230312   gcc  
+xtensa               randconfig-r015-20230312   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
