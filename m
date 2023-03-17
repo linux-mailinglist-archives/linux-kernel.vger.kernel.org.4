@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAFA6BEE9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7A36BEE9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjCQQk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S230271AbjCQQlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjCQQko (ORCPT
+        with ESMTP id S230262AbjCQQkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:40:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0994E5D8B9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:40:43 -0700 (PDT)
+        Fri, 17 Mar 2023 12:40:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B235A6CD;
+        Fri, 17 Mar 2023 09:40:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 49848CE20DE
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:40:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD02C433EF;
-        Fri, 17 Mar 2023 16:40:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34BDD60C7F;
+        Fri, 17 Mar 2023 16:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9820C4339C;
+        Fri, 17 Mar 2023 16:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679071240;
-        bh=zzj5xFoA7fcW2ai1OCzgVDIOUVE95vKPZjxuGeoZ1w4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=G1dMEdK26p1myMFu7+Mqy4HjKMe55IVEq9DN9WFO+7qT12rCyLskpS674dUOULU/F
-         kWhLaiB/by9Yed/p8dyCtB4tT6IPymd23UekXr1J4OacDsuZqkg7admWKBEnxz2uWE
-         TAGMcXNzelhGOvofLlNMNbY28ixqo7fVXaO2d+Tl3wgeTtkIoc1ltzre9/th+fsma1
-         82xQBjCX5cWh9ssZ5zIli01Cgolxf6R/vzvtRLh5o9G1Z36iwZ+jzARqt3DMcMt89K
-         3sg9uMLPiIjkwVatg0AaYqXZoCGvnUYO/5MKOKSLW8UU/nLipigjp/p1vcSX4lXE3m
-         KdSRI0oW9y29g==
+        s=k20201202; t=1679071244;
+        bh=Pfx1OfplKXtSZ7oy2GQi8FZJpWIVZujUx3snzJWO+HY=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=SwqzyT+9mL3loVh0nPKiufOKPHJmshnp7tQL45K8kmh7/R6YgmTaLKHKi5+Qlf1QS
+         R/QDHJSbOmdco385Q6LnNYcxwA6sFTmOygDSiXBKUPnZmewMtGB8VlQHgnaWRD5jj2
+         60ECubpEaNIDt/nCqLtzrbcIkt6aeJwqseaHeHUrrHCJatDJtd7weW7lAzstMs3KeA
+         wFTJ6YmqWc+4Y0e2IFsfHK2E9JFwaaPvp4CK5sNkKI4x7VJNRnj09fNeCMazaTtFFa
+         e+t31ZgW61kvLfdObkR0EA+N283ZEKZzOlpup6qR8Nh6lBkcLvj2E7tzX7DKB/nOC2
+         j6oMWP2KrM8og==
 From:   Mark Brown <broonie@kernel.org>
-To:     Ge-org Brohammer <gbrohammer@outlook.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <PAVP195MB22610BD3A98379E740C93C08DABF9@PAVP195MB2261.EURP195.PROD.OUTLOOK.COM>
-References: <PAVP195MB22610BD3A98379E740C93C08DABF9@PAVP195MB2261.EURP195.PROD.OUTLOOK.COM>
-Subject: Re: [PATCH] ASoC: amd: yc: Add DMI entries to support Victus by HP
- Laptop 16-e1xxx (8A22)
-Message-Id: <167907123961.46507.2293327345396862339.b4-ty@kernel.org>
-Date:   Fri, 17 Mar 2023 16:40:39 +0000
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Vijaya Anand <sunrockers8@gmail.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230317092900.16770-1-krzysztof.kozlowski@linaro.org>
+References: <20230317092900.16770-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] ASoC: dt-bindings: adi,adau17x1: fix indentation
+ and example
+Message-Id: <167907124254.46507.14257812881099935258.b4-ty@kernel.org>
+Date:   Fri, 17 Mar 2023 16:40:42 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,9 +60,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 21:26:00 +0000, Ge-org Brohammer wrote:
-> This model requires an additional detection quirk to
-> enable the internal microphone.
+On Fri, 17 Mar 2023 10:29:00 +0100, Krzysztof Kozlowski wrote:
+> Fix errors in binding indentation and example:
+> 
+>   adi,adau17x1.yaml:8:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
+>   adi,adau17x1.example.dts:29.3-30.1 syntax error
 > 
 > 
 
@@ -66,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: amd: yc: Add DMI entries to support Victus by HP Laptop 16-e1xxx (8A22)
-      commit: 205efd4619b860404ebb5882e5a119eb3b3b3716
+[1/1] ASoC: dt-bindings: adi,adau17x1: fix indentation and example
+      commit: b36bf721578bfe8229c1d7f2fcd0bd021cc8b2f4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
