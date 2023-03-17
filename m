@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0196BED01
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E706D6BED00
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCQPcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S231151AbjCQPcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCQPcF (ORCPT
+        with ESMTP id S230272AbjCQPb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:32:05 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F95D9663C;
-        Fri, 17 Mar 2023 08:32:04 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id EA6565C00C1;
-        Fri, 17 Mar 2023 11:32:03 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 17 Mar 2023 11:32:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679067123; x=1679153523; bh=jB
-        gCssmgOfG5MkjfkiPqcV9O/3gEfCK3M40fWK1PAh4=; b=PV+mFUPDDJAka+xToN
-        j3JVVOoFBD8x7hBKnKegHMbLEo9F8F3yk1yj2+mZCKYxuFYv0/QpHo/lw/jw8xO+
-        ouTmskQ8qhnWBSx96OcrEbqm1XGxJn0R1UDe93YIZ7bTCMIHWfh6oPNEUs3cavSX
-        TwcXphRIT7ZFQMKa+d4pZtl49rsXyKONEnbOJWkJBS6qiIozWt5vUe0klIjlNKwO
-        dL+A0UCi6BEdRRzz9nALHTCGkWsg4VROh1CNveFE3XPWqkIdngqaBgQ9TlU9L0Ov
-        2Ujc2cBlJFYI7N0cU1ndGaYIOWRoLCZ3AxN3ZFEmkqWmaX6WDDKHVOiIz+nQ1tSP
-        Hl4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679067123; x=1679153523; bh=jBgCssmgOfG5M
-        kjfkiPqcV9O/3gEfCK3M40fWK1PAh4=; b=fwm63yHcv00u2sjVH5H+Z3Us/ft5x
-        Gg2cDMeZ5XtaUzf0juBe+mUWSVZtAIoNauSny1sviPjfSeD9iERvlC5cn1Y1yase
-        sQw16d7FHZUqFYijPMOFa2wft3qK9fHognZo7HavCvYlIk5pZku6+mRIUJCm3qnG
-        dQJEeaCtLT5rj0B3Uwu+WCra6NqndCIRtLu2h9f4QljkjSvpy+QxF4H+YhkK9ojd
-        Cp0XPydWoFQiqAR6J1LDor8pIGOSs9khwXeFUof0Vo/+4xzrqdZZQCISaud0cBi0
-        JOD+AG82gixH7TwF8eBNxbOcMuxM9mUy/gldbAiNPppW+1O7H02Z7voFg==
-X-ME-Sender: <xms:84cUZHvqS7VrITUPyYBIN0ilJD0KTapRE3Qth09cTTeuROH_cjtZfw>
-    <xme:84cUZId0V4GRS0oqi6qXC8bGCZtEN5k9xypkQXoEXRNwC_WSGRp9vXx_wy5M8_U59
-    p6IYGIBiSRn24UVZCM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:84cUZKw_whoVRzsocaKakyKmGE3tmgnq4rMrfkTac0bNWP0MWRxKIw>
-    <xmx:84cUZGMQXQmKYG-Kwdr3CA5BZZFWEAlc4dqdBw5MxGX5z_J1PUEGHw>
-    <xmx:84cUZH-w4MrehzkZo6Aah9au3WJZPV8ymrFNmIkYktCKACvfgjSPQA>
-    <xmx:84cUZKaJV8x7rApGvpESsp7EVY353DbBBvextLPRveA1rAUBMEu33g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4F1C6B60086; Fri, 17 Mar 2023 11:32:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <b030a920-d9c0-4f2a-b1a8-f6d89bcbdfe1@app.fastmail.com>
-In-Reply-To: <20230317081156.32337-1-lukas.bulwahn@gmail.com>
-References: <20230317081156.32337-1-lukas.bulwahn@gmail.com>
-Date:   Fri, 17 Mar 2023 16:31:43 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     "Lubomir Rintel" <lkundrak@v3.sk>,
-        "Russell King" <linux@armlinux.org.uk>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: mmp: remove obsolete config USB_EHCI_MV_U2O
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 11:31:58 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6FC6153C;
+        Fri, 17 Mar 2023 08:31:47 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h8so21894195ede.8;
+        Fri, 17 Mar 2023 08:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679067105;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9TJgCv8uP/EGpF2zbM75KEFfZndGIlcsO1G99GNTrFg=;
+        b=N8YspkOGuGBWotBx1iEZRMkbVJQ0Z53MqKLhuLb36m1w6OVkbz5H7+Cr9JX2FbvDri
+         nQsHAvqF1mVaLHNtCrgbM46i2ntim9l3xY8YIyNKTVvzW0Wrjtbj767g30pWehS21EGC
+         S0atQ7xQe188aYbBfZ4yXHyFpmy7fsYvFX557BzQyjW6PlnkTZUbTn0YODaU8XCnRDjC
+         dRHXyphdWjxdD5KgX+hymgCeZRZ2+BebzepK+SvsTuYro/jsCyvXPsQtTWsPbRsmYnVS
+         7080EckHKdzh9XAdfARMPJu28aiesiTtkrE4Q6NFaNndbv4hLw0ZSPakYcSlYo0es1/S
+         NB9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679067105;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9TJgCv8uP/EGpF2zbM75KEFfZndGIlcsO1G99GNTrFg=;
+        b=Dar9R/vmNqSmo/xzkoghYj9f0N8MV2b7WLPKTtGwJTwwMsyWpkJYeLOOJNCIXrpnU8
+         hqIWgtQnOQ6asae3Lkag/Klt+Apg13wB0rAQlUVKj0rRPAlk4mjbfRaPTXCh3i1RlYyr
+         6EuFOE/f0aSNa5iJw6a6OuCKX+4wO48GOW1lFUkhHebCt7q3K+RkPdaBaNquryCWdNv0
+         1TmG6UPG9WrOAOWtm+BKYD97hDFzme/Vx3rx1q+5y7qJam5YEO2110/cQvmvrFjyeZp+
+         RlgHVK0FmdSqFNuGa3X3z6JTyDE+cDDI3oL5y9qCvpVmFKECT6J+YU7R0glwy8+4B6+/
+         E0xA==
+X-Gm-Message-State: AO0yUKV31ZpILbVwh7Or0G0hhKz5IB2iP49urE+AzZpjit/dCHycPsh+
+        qv0GCADrBJ8fQIt+cKFIPufsKURCkqakCA==
+X-Google-Smtp-Source: AK7set8312plZYVf9gUlPrTfNwF2d+gY1xO+5BwIieTao4fYIv9QYzvOZBHUyc9hiO6q9DrHkYO/aA==
+X-Received: by 2002:a17:906:3fd2:b0:885:a62c:5a5c with SMTP id k18-20020a1709063fd200b00885a62c5a5cmr13308948ejj.46.1679067105515;
+        Fri, 17 Mar 2023 08:31:45 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id e23-20020a50d4d7000000b004bf28bfc9absm1219939edj.11.2023.03.17.08.31.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 08:31:45 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 17:31:43 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 2/4] net: dsa: mv88e6xxx: re-order functions
+Message-ID: <20230317153143.njzbfildvvibhkjr@skbuf>
+References: <20230315163846.3114-1-klaus.kudielka@gmail.com>
+ <20230315163846.3114-3-klaus.kudielka@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315163846.3114-3-klaus.kudielka@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023, at 09:11, Lukas Bulwahn wrote:
-> Commit 77acc85ce797 ("ARM: mmp: remove device definitions") and commit
-> 06f11dfb5b75 ("ARM: mmp: remove all board files") remove mach-mmp's device
-> definitions and the board file for the Marvell PXA910-based TTC_DKB
-> Development Platform. With that removal, all references to the config
-> USB_EHCI_MV_U2O are gone. The config has no remaining effect and can be
-> deleted.
->
-> Remove the obsolete config USB_EHCI_MV_U2O.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+On Wed, Mar 15, 2023 at 05:38:44PM +0100, Klaus Kudielka wrote:
+> Move mv88e6xxx_setup() below mv88e6xxx_mdios_register(), so that we are
+> able to call the latter one from here. Do the same thing for the
+> inverse functions.
+> 
+> Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 > ---
-> Arnd, please pick this minor clean-up patch as follow-up to your patches
-> mentioned above. Thanks.
 
-Ok, added for 6.4 now. Note: for platforms that don't normally have
-pull requests, you can add soc@kernel.org to Cc. That way it will show
-up in patchwork to make sure I don't miss it. Don't use it for the
-more active platforms though.
-
-    Arnd
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
