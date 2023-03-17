@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013206BF341
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0A26BF33E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjCQU5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S229950AbjCQU5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjCQU5S (ORCPT
+        with ESMTP id S229499AbjCQU5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:57:18 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C6562B45
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:57:11 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-544787916d9so115616977b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679086631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tq4CiYTqfmf4TaYq5krJqAFk8s/TIaovR9UIi5ez0rA=;
-        b=RlTeA4P4YaiZyOkLV7otxazXH3cO0lIxxBRDRJqSXbn64TwP+BYDWF+mWAe5HXF7G+
-         VoraJA1LYZhAfYMOBwEbigA81sDYZaJQ0Ze+xjeRG5bNqcFhNxXLQSs/sCl/gl9M8d3G
-         vY+3m5pTY0rJ7cf1EOVQ2w4kAelvyTMjkOeIwEo1ZVTSzkLDUo+z5mBgAvc0x3NIDIVs
-         8L2Ho4IoASnObAL0ItBoxrN0aGrSJ5xjwZarN5AXXV4kLPj3fVixox3lkvA4mQ4iwP2f
-         1rqU9V9itwkYqPznGSUHiYI0Joh/xKiD8xkUTa7fVoI6jjbA7DPTFTHZawkOIVXNcFZB
-         6Arg==
+        Fri, 17 Mar 2023 16:57:14 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B1060435;
+        Fri, 17 Mar 2023 13:57:04 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id v10so2855950iol.9;
+        Fri, 17 Mar 2023 13:57:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679086631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tq4CiYTqfmf4TaYq5krJqAFk8s/TIaovR9UIi5ez0rA=;
-        b=DC8KcUW+YtTha2vA/3UqF+B/Kt7SUvZ4+DudEfQF1gr4W1Tm0zZHgjuNdfbYUNBXoC
-         VTzvqnoD594JVsnlf4bNLPEm0AGfASxDxO+ghvudZpT0dcln2HXtzAe/yEg+3NLB1n3T
-         NzxKK0+sExLv73yKWwkfByVdrGUM0S4aUkBLhHDmA9DlijeBV+rppSdpZZBIlSUcUX/v
-         X2mJp1b+UMjcywgAwWQr2s9jFlp5BlEv7FNjzAHhQUCYqmSMNztd+VpFGoAbHQHUjXwZ
-         Egp7vp/5tKFtJlZ4miOcI5arkx736JJ+qL5uu8zQ18D2iPul/26zORGpc86U0aya9nt3
-         yKAA==
-X-Gm-Message-State: AO0yUKUl6SOryG9U3Gy87BDUpspJ23gd4hOKCB26DTbkCCvZCCFjxtQ8
-        8R202SoxT343uloDueWFiwsNeBBewyOsD64ZI9Sz5g==
-X-Google-Smtp-Source: AK7set8EcpfwxeXanBkExM/pG+0cpQ1FDxMPFkbktFbcuhw7+EsIYJGKUkkqcd/xAts8rpwpBbNFjlTJKeIYxUdRUaw=
-X-Received: by 2002:a81:af46:0:b0:541:693f:cdd1 with SMTP id
- x6-20020a81af46000000b00541693fcdd1mr5289306ywj.9.1679086631025; Fri, 17 Mar
- 2023 13:57:11 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679086623;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uLFg5SJlhums3IhrKCKFmTnC2PnKge+4XwzniRuOanQ=;
+        b=yEn7k7fFrpuKCdYONc7AwpuurbC7Qhxr2qWuGC1Z2OnAES8hJK4wv986cCQ/NDrjZE
+         XMd1iQpo3Bwa2uXRdfpFfZ0JZKk/WkAo27r24zNc8+RoOaaeymgSxeAc6k3EpiEYc2zh
+         PNwWAmPg76vowijWvHXYrTYDSf5hDaoWC1qMBOqYVL1X0hHBqfiuNQTcmj12DfCVnfm0
+         NFebcNTj1fLizzhwnZTMkW6SAao+QaZlGeSt047obIPixUDjsNA0lKDSB4CaVStUmUkv
+         +F87TJ6EFbEWlYcVlyUocSQ53KQcODfseGv4qCy5MgQdRanek++WDbMLh5OGPZ491D1C
+         uRDw==
+X-Gm-Message-State: AO0yUKVMlHRxRYfAj/gGPrVBnnNWMJKox7bqKwYXRD9XPvvfKj/HZuWS
+        4eD0gn98kA3O8DyJNygCBA==
+X-Google-Smtp-Source: AK7set/Rej6w9mB2VDRi5FHjVEC3hMKbesjJ9soHth3jWZgIRADTjBlxR2RmJUvd0fxae8dMdcK3qw==
+X-Received: by 2002:a5e:a918:0:b0:753:568:358e with SMTP id c24-20020a5ea918000000b007530568358emr472070iod.20.1679086623499;
+        Fri, 17 Mar 2023 13:57:03 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id n17-20020a02a191000000b003a958069dbfsm1009918jah.8.2023.03.17.13.57.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 13:57:02 -0700 (PDT)
+Received: (nullmailer pid 2788499 invoked by uid 1000);
+        Fri, 17 Mar 2023 20:57:00 -0000
+Date:   Fri, 17 Mar 2023 15:57:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next 16/16] dt-bindings: net: dwmac: Add MTL Tx queue
+ CBS-algo props dependencies
+Message-ID: <167908661916.2788441.13598395924571888568.robh@kernel.org>
+References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
+ <20230313225103.30512-17-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <1679070482-8391-1-git-send-email-quic_mojha@quicinc.com> <1679070482-8391-2-git-send-email-quic_mojha@quicinc.com>
-In-Reply-To: <1679070482-8391-2-git-send-email-quic_mojha@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 17 Mar 2023 21:56:59 +0100
-Message-ID: <CACRpkdb95V5GC81w8fiuLfx_V1DtWYpO33FOfMnArpJeC9SDQA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] firmware: qcom_scm: provide a read-modify-write function
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313225103.30512-17-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 5:28=E2=80=AFPM Mukesh Ojha <quic_mojha@quicinc.com=
-> wrote:
 
-> It was released by Srinivas K. that there is a need of
-> read-modify-write scm exported function so that it can
-> be used by multiple clients.
->
-> Let's introduce qcom_scm_io_update_field() which masks
-> out the bits and write the passed value to that
-> bit-offset. Subsequent patch will use this function.
->
-> Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+On Tue, 14 Mar 2023 01:51:03 +0300, Serge Semin wrote:
+> Currently the CBS algorithm specific properties could be used
+> unconditionally in the MTL Tx queue sub-nodes. It's definitely wrong from
+> the correct Tx queue description point of view. Let's fix that in a way so
+> the "snps,send_slope", "snps,idle_slope", "snps,high_credit" and
+> "snps,low_credit" properties would be allowed only if the CBS TC algorithm
+> is enabled for the MTL Tx queue.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-This is starting to reimplement regmap.
-In this case regmap_update_bits().
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-What about just using regmap as accessor for these
-registers instead?
-
-Yours,
-Linus Walleij
