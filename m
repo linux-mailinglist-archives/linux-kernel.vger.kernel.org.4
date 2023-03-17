@@ -2,167 +2,386 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEEB6BEA3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BD16BEA44
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCQNi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S230241AbjCQNi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjCQNiX (ORCPT
+        with ESMTP id S230395AbjCQNit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:38:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3194ECD67D;
-        Fri, 17 Mar 2023 06:38:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BEF922199B;
-        Fri, 17 Mar 2023 13:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679060294; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iIzCYOxhPdB2RLuSFuafc3TAfEqe6WZaJsEMEMOF87E=;
-        b=HPWP6Gc+bzLXPXiPvDSd8flDkw446zLzu7LUnLHiG0QDtryRBG/cM+iOcJmtCFjKLsZvEB
-        nkX+riii1JBFeuFhl+LcgsuJCYON7nx9W/hfbH0HkcwhrylrpiVwVEt2SGsB5rWz9wkwFw
-        gCwi0gn1JTv+702t5qXw5TVoN+aQwMI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679060294;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iIzCYOxhPdB2RLuSFuafc3TAfEqe6WZaJsEMEMOF87E=;
-        b=sS9YFdsf5mrCS8mzRZrqhh2Bs9xzTSOS7Q1tCShcbNmoTNDD7IACaoctI6yff/xyO/VgSk
-        dPOVISniD8JFXtAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF01113428;
-        Fri, 17 Mar 2023 13:38:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bxbcIERtFGT3XAAAMHmgww
-        (envelope-from <colyli@suse.de>); Fri, 17 Mar 2023 13:38:12 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [PATCH] bcache: fix wild pointer dereference in
- btree_gc_rewrite_node
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20230317104919.118125-1-yili@winhong.com>
-Date:   Fri, 17 Mar 2023 21:37:59 +0800
-Cc:     linux-bcache@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        yilikernel@gmail.com, guochao@winhong.com,
-        kent.overstreet@gmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CFD1126D-F897-49BB-8581-BAC356644CBA@suse.de>
-References: <20230317104919.118125-1-yili@winhong.com>
-To:     Yi Li <yili@winhong.com>
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 09:38:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CD7D5A74;
+        Fri, 17 Mar 2023 06:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679060318; x=1710596318;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=kCCJlhrr43K4jpYXLUlpw34aeInYihAH0F2YosQ5DtM=;
+  b=FSORd2Yyr9yua1K8etiDKzGDVrW7Df8wcC8GOyxd2XK37CNwhHNZDFI3
+   xO6pXhtJrhbxWXq3V5dH3k4ISxg5ws/LUpmFXDd6FWCgCatowOgJBBDmm
+   It7PD1jVw9FT3F9KnZWfBVxpp5+C1J7ZDI+ySf/XTSATZg0W6CsUsoUqY
+   SNOOy7sqHP9fLubR0tUxmJiT5Urew9q2vFaFdsBU/QqCv+q61fs1kf+7k
+   wVSxSTDQ7TVmlMWErwRrp9BKthwFOVSCs58vP5hpi01jxjWEs08V1vQJz
+   QpYfaN2MmjAClP3C3ueMvWpMrjsh4CfuJAWFcFIipb9LzH/0D8fhmDDGx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="336960711"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="336960711"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 06:38:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="749257068"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="749257068"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Mar 2023 06:38:37 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 17 Mar 2023 06:38:36 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 06:38:36 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 17 Mar 2023 06:38:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YUS131jzodbRwlfunKCX8OqZCCRI9ZTzm//GXpZYckZy+bCvx3lL8GSYJWv2IijkvZBiOIEpKjI3Tf3sYcEIYlJeH9PFDG2876l9S6KNscNwzM1KCwutrVE/Eq2v0YwYI8PzEQ7gms0QfhY92lWHkOsy0x8sMcoCKS8p/VymiYqO7TyzGzqJX4xtLLYRPOUR6qDFPp0v+2wwPoCs6RFZ307M7qGIcUn9OjRRe+BRvwNBm1Dye+DwfiJRbx2aXWsrHs5JbETm4kRk2AY13Mt754D+MeSkozp21mCWqALtogwx+Lhq8kHUsVM+wB2EiynPoTx3QM/7k9wiwgQhwpUpDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WNmhP0vvJNy8TSBlmLBWYkD+3pCPIQT1ll6Qd6LiSJA=;
+ b=RoKZz60fpYqhahxTqKhCg7KiMp7Wu8l6b8TXgJ7dNL0EubzuU6YnOexlCI7tCR+a5LC1+QM6eZvL4bU+uVtLmNZqNwZwyz90BzIlRE1UfjCPZJdvmN1uVeFOAnF54z9StWI7q+H3K1SEgL3LBjTUgth3LER2GJdjoNtA1k0PgQhGWD1Sh6I0QaDJtzW3FAX50WPSlNanbaquwirvG7+rzchS8SenL16/jodq+TwKUYgaHXzu8Po5stzW7Qd5AvMw04IzzPur7+22fzM242ayQY6coMlYMifCcPQoG+MBMOqeJ0nsFl2Q1KS4BqOq3CxFUH/aB4SkcwWbC0z4UNrZyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB2937.namprd11.prod.outlook.com (2603:10b6:5:62::13) by
+ CY8PR11MB7688.namprd11.prod.outlook.com (2603:10b6:930:75::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.35; Fri, 17 Mar 2023 13:38:33 +0000
+Received: from DM6PR11MB2937.namprd11.prod.outlook.com
+ ([fe80::cece:5e80:b74f:9448]) by DM6PR11MB2937.namprd11.prod.outlook.com
+ ([fe80::cece:5e80:b74f:9448%7]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
+ 13:38:33 +0000
+Date:   Fri, 17 Mar 2023 14:38:15 +0100
+From:   Michal Kubiak <michal.kubiak@intel.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+CC:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, "Lee Jones" <lee@kernel.org>,
+        <linux-leds@vger.kernel.org>
+Subject: Re: [net-next PATCH v4 04/14] net: phy: Add a binding for PHY LEDs
+Message-ID: <ZBRtRw8pg0mcRxbZ@localhost.localdomain>
+References: <20230317023125.486-1-ansuelsmth@gmail.com>
+ <20230317023125.486-5-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230317023125.486-5-ansuelsmth@gmail.com>
+X-ClientProxiedBy: FR3P281CA0106.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a3::16) To DM6PR11MB2937.namprd11.prod.outlook.com
+ (2603:10b6:5:62::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB2937:EE_|CY8PR11MB7688:EE_
+X-MS-Office365-Filtering-Correlation-Id: c286ddab-e63f-440d-35ef-08db26ece6a6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9smkM5kuCvnO/5wqGwKvkUYC9V1xdyFciLM7CAcajGz7iOqfDVkA5EjoKlz7rjZclxu72Qk3punbDRN1SCBTuaZpOLXKbCMapIPIlK2F/7w1G3ij9R2K+he92mfncToB813M8Ps2q6CluNGBu2ZowV838OESENV0Lcf6WTlo+4HAJfGC+V2N15N+FWiQn0sqNgMpuq0xKnRh72MIZf4MjWUSgKusA2antI7ZxYYQ3lH6ICItOQ8dO2ri2Z44OuOVklKZpIIm4FrJU3LdAuE42D0nF7yZIib4J0My/5bPQ9+CrJuOoyQdkjmd9oGH4J+fZL4ixBoy7VSVe+XIBOBHFRvIH4fVhwRozjeMW3hQ1wXYzfkqnVJvgbWiBb0ETGReZ/NQDzx2lzO1H05ezHKO0m9imowL/l6gKujkTEWBkEaEfpjIJiLz78sQ3hrHzG76ePdmIBI1okVitTpDOSTWn4bYgiPIrIyOFg1OPoQupSl3uM+1hlJTGvHIQ469h+batRclFhyjjVm7VYL+lz2T8owP9Z58GV7Rtl+CFojyXqoClv2wGI8eQYcER0xFYrrS8cxEaO26dmiKhDRrwAFdtW2aKS8Whx3/ll/atEPPnVxJSMdJfz+WRV8VUhR7R9waTSd5xCGZDxYtDLUp7D3kKA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2937.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(366004)(136003)(39860400002)(376002)(346002)(451199018)(186003)(6486002)(83380400001)(6666004)(478600001)(316002)(66556008)(66476007)(66946007)(8676002)(6506007)(9686003)(6512007)(26005)(54906003)(4326008)(41300700001)(6916009)(8936002)(44832011)(7416002)(5660300002)(38100700002)(82960400001)(2906002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bQUdXi6h4o0X3ykP3GkhH+UU9Dnhkw6mwaxFYEv9rC5xEldNrPwZeLgtDunB?=
+ =?us-ascii?Q?Ld8WzJg6CXK1RLneBvKSQygM2s7fosSShWOwyKwH8ZkHA6uw6nmxwJP+THhx?=
+ =?us-ascii?Q?157Wfbyfbhfv6QKQ+MwJm5ofFQBiAkYwfyoPcFKwYOfFpoCdW5evHpN/7oy2?=
+ =?us-ascii?Q?awZ5AmapbFf2tCZjObTJJvm7E2iXzoMPgsGRgfBcF0ubcePg4c2eFwgCFdqm?=
+ =?us-ascii?Q?zNP5KkAuu7MqI2sEdr9IUyp7uD7gvPqRGvAgqr5fzTkBn+5/kDrbYvkv1X2A?=
+ =?us-ascii?Q?BQpdHhRonHl2zRc4sE2NHKbt2eN/cZc5IprWp7+vUBE8n2hUHR3Mo+8nQ8cT?=
+ =?us-ascii?Q?u7c4C3mQxDaod7Zgw+czOl8AkzwXw2ieYOpCy2g7K/HgN1QQAYdDkdz54/4I?=
+ =?us-ascii?Q?6TXlsvu77Q9+IIbbqWrisQCIDVF2rmPwXc90DYZwgsxgEXLwfGIu6J2UzlgY?=
+ =?us-ascii?Q?U84OgyIAP35NZPraAO6HTSm+kHXFwMdL23UsT+wtC4KPFnUUZobHEInkb6Ib?=
+ =?us-ascii?Q?wi8z8zvZhbtNpbHi5EG4+f2h6Npm09yzk68WcZ4DawVOEjb966/9uoYI5uJz?=
+ =?us-ascii?Q?+4P6GJcxRmpOmpg44n82hNAIjz+hMN0Oq+WU8iun1/4oPmD+LMV80DzRhS0P?=
+ =?us-ascii?Q?38r7LylFiPr9fFAwg6BFw6HUk1p+y9yuYWHgC/6Eif6LDrBvi6JCMBew6zoY?=
+ =?us-ascii?Q?tUxL8B9hHeNHz4LvDcEUCN7AkF7fqb/+MhonOtdVFdhkFntsWiLkGYfKCQBl?=
+ =?us-ascii?Q?E8ohu+ANFVJwY1QswXD1CD7N4UaQC1oOjVey215e+pQMe4J+R02Nc+EyQJW3?=
+ =?us-ascii?Q?e+EMKYbf7iQBHwAHykHqoGD0b1S/ZgyAYbhC5dMpVbs2OxewlygO6H8Fc/f2?=
+ =?us-ascii?Q?/spq17MSz/q7141i/ZQiQWJpJmxjkhPZdw22koX2l20fwxX+L7uxu7voxf04?=
+ =?us-ascii?Q?DB2rdI1/xJew+pNuPv8TrhbHRNm0R1a6xgftC1ivkVY6fB8Q5VpT3JE1UoIF?=
+ =?us-ascii?Q?B0ZVdRUomhX25tglaL3w3Yr+r/iB/7ZaDUT4ygpV46dRPN5/oU7nL7RYwupi?=
+ =?us-ascii?Q?wf94FLCIW7D5i43c51uIJGd7aumn1MfYLwzqYQ5RiiFmw/qJz+1PUqggYtxa?=
+ =?us-ascii?Q?mHgRLVjbAyMkJRJL+jcOu6pWrGNGXC9Px177MWYnT2cLUfQuuq9iyjVsLR7A?=
+ =?us-ascii?Q?asnHYhwcIuxSN0M1SVCKO5FZeqrWjG1YZ8saiHCPVS/83b8clovEArg2Q4qH?=
+ =?us-ascii?Q?unqY5TLKX/u9G7zE2o2iYtd/b9p2LNeXsLDNIHsbazHfc8QsN2/vtRQajtQ+?=
+ =?us-ascii?Q?V7J1aM9Qo9EofyIMbWGpr5/edfibmK2ECD5EEjSm909qUlsW3WpoMozTzr+I?=
+ =?us-ascii?Q?fghpm9HF4MDVwhu+LlQQtn4jlDlF6fkfMJ7nGtR318gTK/WoVSQyaoNap0Ue?=
+ =?us-ascii?Q?BK3kxWh6nW+lHjQA7/eRwCW8ga7/+GIgb9WAYmSyMl7PyX0z29Ssfnf8+PaX?=
+ =?us-ascii?Q?zdeUSK6rOldSem5WCzcKgoNTPVZcfZ0Of4ZvP6oSk0sJDlkbGSzR0EM3bqv9?=
+ =?us-ascii?Q?Vj7IWKDcqWCDTh6Z0CWoURX47wWW3PWPZPRC8+LjaIZ1UPlzc65f6f0zV2pP?=
+ =?us-ascii?Q?bA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c286ddab-e63f-440d-35ef-08db26ece6a6
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2937.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 13:38:33.0284
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sXJwerMiIcPlTLQQeWbDyEtJ57YNuVHLXRgIffOHyYw8DX1j04zq2/XC1T9FHgTjQSlvroLT0CNZgjWGXVYTYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7688
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added in my test directory. Thanks.
+On Fri, Mar 17, 2023 at 03:31:15AM +0100, Christian Marangi wrote:
+> From: Andrew Lunn <andrew@lunn.ch>
+> 
+> Define common binding parsing for all PHY drivers with LEDs using
+> phylib. Parse the DT as part of the phy_probe and add LEDs to the
+> linux LED class infrastructure. For the moment, provide a dummy
+> brightness function, which will later be replaced with a call into the
+> PHY driver.
+>
 
-Coly Li
+Hi Andrew,
 
-> 2023=E5=B9=B43=E6=9C=8817=E6=97=A5 18:49=EF=BC=8CYi Li =
-<yili@winhong.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> This causes a wild pointer dereference in the path:
->=20
->  btree_gc_rewrite_node()
->  -> btree_node_alloc_replacement() // will return -EAGIN(-11)
->  -> bch_btree_node_write_sync(-EAGIN)
->     ...
->     -> mutex_lock(&b->write_lock)
->     ..write_lock Offset of structure btree is 152
->     ..b->write_lock addr is 000000000000008d (-11 + 152)
->     .. BUG!
->=20
->  BUG: unable to handle kernel NULL pointer dereference at =
-000000000000008d
->  Caching disabled for sde2
->  PGD 0 P4D 0
->  Oops: 0002 [#1] SMP NOPTI
->  CPU: 32 PID: 5050 Comm: bcache_gc Kdump: loaded Tainted: G        W
->       4.19.90-22.0401.87d4c7a.ckv.x86_64 #1 Hardware name: XFUSION =
-2288H
->  V5/BC11SPSCB10, BIOS 8.27 03/08/2022
->  RIP: 0010:mutex_lock+0x19/0x30
->  Code: 90 0f 1f 44 00 00 be 02 00 00 00 e9 51 fb ff ff 90 0f 1f 44 00 =
-00 53 48 89 fb e8
->   02 e4 ff ff 65 48 8b 14 25 80 5c 01 00 31 c0 <f0> 48 0f b1 13 75 02 =
-5b c3 48
->   89 df 5b eb c8 0f 1f 84 00 00 00 00
->  RSP: 0018:ffffab1b0aba3b70 EFLAGS:
->  00010246 RAX: 0000000000000000 RBX: 000000000000008d RCX: =
-0000000000000000
->  RDX: ffff89d3a7060000 RSI: 0000000000000000 RDI: 000000000000008d =
-RBP:
->  fffffffffffffff5 R08: ffff89e3a6860d70 R09: ffff89e3bcc32000 R10:
->  0000000000000001 R11: 000007ffffffffff R12: 000000000000008d R13:
->  ffff89e3bb2a8c00 R14: ffffab1b0aba3e08 R15: 0000000000000000 FS:
->  0000000000000000(0000) GS:ffff89d3bff00000(0000) =
-knlGS:0000000000000000 CS:
->  0010 DS: 0000 ES: 0000 CR0: 0000000080050033 CR2: 000000000000008d =
-CR3:
->  0000001bd1e0a001 CR4: 00000000007606e0 DR0: 0000000000000000 DR1:
->  0000000000000000 DR2: 0000000000000000 DR3: 0000000000000000 DR6:
->  00000000fffe0ff0 DR7: 0000000000000400 PKRU: 55555554
->  Call Trace:
->  bch_btree_node_write_sync+0x45/0xa0 [bcache]
->  btree_gc_rewrite_node+0x8f/0x160 [bcache]
->  ? btree_gc_mark_node+0x64/0x220 [bcache]
->  btree_gc_recurse+0x30a/0x3c0 [bcache]
->  ? call_rwsem_down_write_failed+0x13/0x20
->  ? bch_btree_gc+0x3e5/0x660 [bcache]
->  bch_btree_gc+0x3e5/0x660 [bcache]
->  ? finish_wait+0x80/0x80  ?
->  bch_btree_gc+0x660/0x660 [bcache]
->  Buffer I/O error on dev bcache1, logical block 468885310, lost async =
-page write
->  bch_gc_thread+0x30/0x1e0 [bcache]
->  ? finish_wait+0x80/0x80
->  Buffer I/O error on dev bcache1, logical block 468885311, lost async =
-page write
->  kthread+0x113/0x130  ?
->  kthread_create_worker_on_cpu+0x70/0x70
->  ret_from_fork+0x1f/0x4
->=20
-> Signed-off-by: Yi Li <yili@winhong.com>
-> Signed-off-by: Guo Chao  <guochao@winhong.com>
+Personally, I see no good reason to provide a dummy implementation
+of "phy_led_set_brightness", especially if you implement it in the next
+patch. You only use that function only the function pointer in
+"led_classdev". I think you can just skip it in this patch.
+
+Please find the rest of my comments inline.
+
+Thanks,
+Michal
+
+
+> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
-> drivers/md/bcache/btree.c | 2 ++
-> 1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> index 147c493a989a..5d41331e96f2 100644
-> --- a/drivers/md/bcache/btree.c
-> +++ b/drivers/md/bcache/btree.c
-> @@ -1505,6 +1505,8 @@ static int btree_gc_rewrite_node(struct btree =
-*b, struct btree_op *op,
->=20
-> n =3D btree_node_alloc_replacement(replace, NULL);
->=20
-> + if (IS_ERR_OR_NULL(n))
-> + return -EINTR;
-> /* recheck reserve after allocating replacement node */
-> if (btree_check_reserve(b, NULL)) {
-> btree_node_free(n);
-> --=20
-> 2.25.4
->=20
+>  drivers/net/phy/Kconfig      |  1 +
+>  drivers/net/phy/phy_device.c | 75 ++++++++++++++++++++++++++++++++++++
+>  include/linux/phy.h          | 16 ++++++++
+>  3 files changed, 92 insertions(+)
+> 
+> diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+> index f5df2edc94a5..666efa6b1c8e 100644
+> --- a/drivers/net/phy/Kconfig
+> +++ b/drivers/net/phy/Kconfig
+> @@ -16,6 +16,7 @@ config PHYLINK
+>  menuconfig PHYLIB
+>  	tristate "PHY Device support and infrastructure"
+>  	depends on NETDEVICES
+> +	depends on LEDS_CLASS
+>  	select MDIO_DEVICE
+>  	select MDIO_DEVRES
+>  	help
+> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> index 9ba8f973f26f..ee800f93c8c3 100644
+> --- a/drivers/net/phy/phy_device.c
+> +++ b/drivers/net/phy/phy_device.c
+> @@ -19,10 +19,12 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/kernel.h>
+> +#include <linux/list.h>
+>  #include <linux/mdio.h>
+>  #include <linux/mii.h>
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/netdevice.h>
+>  #include <linux/phy.h>
+>  #include <linux/phy_led_triggers.h>
+> @@ -658,6 +660,7 @@ struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
+>  	device_initialize(&mdiodev->dev);
+>  
+>  	dev->state = PHY_DOWN;
+> +	INIT_LIST_HEAD(&dev->leds);
+>  
+>  	mutex_init(&dev->lock);
+>  	INIT_DELAYED_WORK(&dev->state_queue, phy_state_machine);
+> @@ -2964,6 +2967,73 @@ static bool phy_drv_supports_irq(struct phy_driver *phydrv)
+>  	return phydrv->config_intr && phydrv->handle_interrupt;
+>  }
+>  
+> +/* Dummy implementation until calls into PHY driver are added */
+> +static int phy_led_set_brightness(struct led_classdev *led_cdev,
+> +				  enum led_brightness value)
+> +{
+> +	return 0;
+> +}
 
+It can be removed from this patch.
+
+> +
+> +static int of_phy_led(struct phy_device *phydev,
+> +		      struct device_node *led)
+> +{
+> +	struct device *dev = &phydev->mdio.dev;
+> +	struct led_init_data init_data = {};
+> +	struct led_classdev *cdev;
+> +	struct phy_led *phyled;
+> +	int err;
+> +
+> +	phyled = devm_kzalloc(dev, sizeof(*phyled), GFP_KERNEL);
+> +	if (!phyled)
+> +		return -ENOMEM;
+> +
+> +	cdev = &phyled->led_cdev;
+> +
+> +	err = of_property_read_u32(led, "reg", &phyled->index);
+> +	if (err)
+> +		return err;
+
+Memory leak. 'phyled' is not freed in case of error.
+
+> +
+> +	cdev->brightness_set_blocking = phy_led_set_brightness;
+
+Please move this initialization to the patch where you are actually
+implementing this callback.
+
+> +	cdev->max_brightness = 1;
+> +	init_data.devicename = dev_name(&phydev->mdio.dev);
+> +	init_data.fwnode = of_fwnode_handle(led);
+> +
+> +	err = devm_led_classdev_register_ext(dev, cdev, &init_data);
+> +	if (err)
+> +		return err;
+
+Another memory leak.
+
+> +
+> +	list_add(&phyled->list, &phydev->leds);
+
+Where do you free the memory allocated for phy_led structure?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int of_phy_leds(struct phy_device *phydev)
+> +{
+> +	struct device_node *node = phydev->mdio.dev.of_node;
+> +	struct device_node *leds, *led;
+> +	int err;
+> +
+> +	if (!IS_ENABLED(CONFIG_OF_MDIO))
+> +		return 0;
+> +
+> +	if (!node)
+> +		return 0;
+> +
+> +	leds = of_get_child_by_name(node, "leds");
+> +	if (!leds)
+> +		return 0;
+> +
+> +	for_each_available_child_of_node(leds, led) {
+> +		err = of_phy_led(phydev, led);
+> +		if (err) {
+> +			of_node_put(led);
+> +			return err;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * fwnode_mdio_find_device - Given a fwnode, find the mdio_device
+>   * @fwnode: pointer to the mdio_device's fwnode
+> @@ -3142,6 +3212,11 @@ static int phy_probe(struct device *dev)
+>  	/* Set the state to READY by default */
+>  	phydev->state = PHY_READY;
+>  
+> +	/* Get the LEDs from the device tree, and instantiate standard
+> +	 * LEDs for them.
+> +	 */
+> +	err = of_phy_leds(phydev);
+> +
+>  out:
+>  	/* Assert the reset signal */
+>  	if (err)
+> diff --git a/include/linux/phy.h b/include/linux/phy.h
+> index fbeba4fee8d4..88a77ff60be9 100644
+> --- a/include/linux/phy.h
+> +++ b/include/linux/phy.h
+> @@ -14,6 +14,7 @@
+>  #include <linux/compiler.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/ethtool.h>
+> +#include <linux/leds.h>
+>  #include <linux/linkmode.h>
+>  #include <linux/netlink.h>
+>  #include <linux/mdio.h>
+> @@ -595,6 +596,7 @@ struct macsec_ops;
+>   * @phy_num_led_triggers: Number of triggers in @phy_led_triggers
+>   * @led_link_trigger: LED trigger for link up/down
+>   * @last_triggered: last LED trigger for link speed
+> + * @leds: list of PHY LED structures
+>   * @master_slave_set: User requested master/slave configuration
+>   * @master_slave_get: Current master/slave advertisement
+>   * @master_slave_state: Current master/slave configuration
+> @@ -690,6 +692,7 @@ struct phy_device {
+>  
+>  	struct phy_led_trigger *led_link_trigger;
+>  #endif
+> +	struct list_head leds;
+>  
+>  	/*
+>  	 * Interrupt number for this PHY
+> @@ -825,6 +828,19 @@ struct phy_plca_status {
+>  	bool pst;
+>  };
+>  
+> +/**
+> + * struct phy_led: An LED driven by the PHY
+> + *
+> + * @list: List of LEDs
+> + * @led_cdev: Standard LED class structure
+> + * @index: Number of the LED
+> + */
+> +struct phy_led {
+> +	struct list_head list;
+> +	struct led_classdev led_cdev;
+> +	u32 index;
+> +};
+> +
+>  /**
+>   * struct phy_driver - Driver structure for a particular PHY type
+>   *
+> -- 
+> 2.39.2
+> 
