@@ -2,102 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5D46BF08D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E456BF090
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjCQSRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 14:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
+        id S230479AbjCQSSe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 14:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjCQSRh (ORCPT
+        with ESMTP id S230117AbjCQSSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 14:17:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A76CA78A;
-        Fri, 17 Mar 2023 11:17:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DA7BB82694;
-        Fri, 17 Mar 2023 18:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4F7C433D2;
-        Fri, 17 Mar 2023 18:17:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679077052;
-        bh=fbZaO/bjuHxIfSFiexEmKgUXmB5DqFSacCk1E1Qa7kA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NaiXWbmMipdUChL0sNZn8tHfaLYCNmL+GrJeQF+JVWwxbhF0cbT7JbbIdXL+Yln3C
-         AYqXCMw7qwyYpUDj4C0DokfbR+wnEeW88kKEKjb0piZayVMG4sppxzRMg94P2yOVNq
-         MUEYUkWMqcyM6KKsFxD94M36dquiAul4LFGp535RYZ5uXfi+HM991iMEVmHl/5wzDc
-         t0MixSJk3S0gsYlC7ng1ePrMlMrvGKTV/gFlqLVumweHbTTROsxZEBKL3896j4jO/0
-         UszBUQSoo7ug+g8Mo31pf/iXpDMbHRW0IwaESH1kFKqSHPgB3V/F7AWp8f4bOmi5oz
-         sMTi4kpTm9KFw==
-Date:   Fri, 17 Mar 2023 12:18:01 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] drm/i915/uapi: Replace fake flex-array with
- flexible-array member
-Message-ID: <ZBSu2QsUJy31kjSE@work>
+        Fri, 17 Mar 2023 14:18:32 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9654722A2E;
+        Fri, 17 Mar 2023 11:18:30 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id er8so12005721edb.0;
+        Fri, 17 Mar 2023 11:18:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679077109;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YptXJwRXpxncMnTBG6/8A/xYJX7x56JvCTmg5lsowkU=;
+        b=g4WLzOPTa4xZe7iZ/lnD2fcuXHZSFk9cD/KB5OQRRP8bec2XA/qUV54QDiu5mNcxFc
+         sOSLlAGqvlUvjIRk+gWQrG9moMlST0R+5/2K6rVoExqbe6Yy/H/92Mmz3FPTbMR1nWaO
+         gvAINjIJjptFtqHBB5PXR/7lPeSvg9g8N5ehgssYnOO8V+th0H+MBn+d8mVhuaSfMMmH
+         SkQNwZAvAIWqkuPTDJ98YmE0Yjp9L5mBmtZV/1q3m5nhL/nMOGUquWiw6tG0kE3JKpOl
+         fDfAhcW3VqsxGvZP9kpHS+lhKCYvlDJx+4aCzjIdsA2KG+kdonO/8wqc4CaxUi3p+XRQ
+         YMzQ==
+X-Gm-Message-State: AO0yUKVVBU/+tTcP2c2a1wL9MVoUrPZrXqVJ7LAzg7VbVRT702D2Zeo3
+        D7UAZ5/PbOZ3RgBYiDG6xMsKbawb/63zlKmgfe8=
+X-Google-Smtp-Source: AK7set8KLBjWewwqHlLO1d/RXgdglkGUMPq0AkZvo0bq44vDz+e18Q7ZzXCCp1wIrdN06JC7qMascKIjLBtk5eKzh84=
+X-Received: by 2002:a50:a406:0:b0:4fb:c8e3:1ae2 with SMTP id
+ u6-20020a50a406000000b004fbc8e31ae2mr1006016edb.3.1679077109137; Fri, 17 Mar
+ 2023 11:18:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-4-daniel.lezcano@linaro.org> <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
+ <CAJZ5v0iYk7mC0K7Tsv7Dh9N=dQW151YhVcphvLm7T2vEY10tMA@mail.gmail.com> <b0e158d4-5522-821f-d3e5-abc6f77509cb@linaro.org>
+In-Reply-To: <b0e158d4-5522-821f-d3e5-abc6f77509cb@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Mar 2023 19:18:18 +0100
+Message-ID: <CAJZ5v0g7Smzd5sOJ9K1sSF73C9sRC-GmDvAEV629+bYOa7F47Q@mail.gmail.com>
+Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove add_one_attribute
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        amitk@kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
+        "open list:INTEL MENLOW THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays as fake flexible arrays are deprecated and we are
-moving towards adopting C99 flexible-array members instead.
+On Mon, Mar 13, 2023 at 1:35 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 13/03/2023 13:26, Rafael J. Wysocki wrote:
+> > On Mon, Mar 13, 2023 at 11:55 AM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >>
+> >> Hi,
+> >>
+> >> is this code removal acceptable ?
+> >
+> > I'll let you know later this week.
+>
+> Great, thank you
 
-Address the following warning found with GCC-13 and
--fstrict-flex-arrays=3 enabled:
-drivers/gpu/drm/i915/gem/i915_gem_context.c: In function ‘set_proto_ctx_engines.isra’:
-drivers/gpu/drm/i915/gem/i915_gem_context.c:769:41: warning: array subscript n is outside array bounds of ‘struct i915_engine_class_instance[0]’ [-Warray-bounds=]
-  769 |                 if (copy_from_user(&ci, &user->engines[n], sizeof(ci))) {
-      |                                         ^~~~~~~~~~~~~~~~~
-./include/uapi/drm/i915_drm.h:2494:43: note: while referencing ‘engines’
- 2494 |         struct i915_engine_class_instance engines[0];
+So it would be acceptable if it had no users, but that's somewhat hard
+to establish.
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+As I wrote in a reply to the RFC version of this, I'd rather make
+these attributes depend on a Kconfig option or a module parameter
+before removing them completely.
 
-Link: https://github.com/KSPP/linux/issues/21
-Link: https://github.com/KSPP/linux/issues/271
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- include/uapi/drm/i915_drm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
-index 8df261c5ab9b..5e458d6f2895 100644
---- a/include/uapi/drm/i915_drm.h
-+++ b/include/uapi/drm/i915_drm.h
-@@ -2491,7 +2491,7 @@ struct i915_context_param_engines {
- #define I915_CONTEXT_ENGINES_EXT_LOAD_BALANCE 0 /* see i915_context_engines_load_balance */
- #define I915_CONTEXT_ENGINES_EXT_BOND 1 /* see i915_context_engines_bond */
- #define I915_CONTEXT_ENGINES_EXT_PARALLEL_SUBMIT 2 /* see i915_context_engines_parallel_submit */
--	struct i915_engine_class_instance engines[0];
-+	struct i915_engine_class_instance engines[];
- } __attribute__((packed));
- 
- #define I915_DEFINE_CONTEXT_PARAM_ENGINES(name__, N__) struct { \
--- 
-2.34.1
-
+> >> On 07/03/2023 14:37, Daniel Lezcano wrote:
+> >>> The driver hooks the thermal framework sysfs to add some driver
+> >>> specific information. A debatable approach as that may belong the
+> >>> device sysfs directory, not the thermal zone directory.
+> >>>
+> >>> As the driver is accessing the thermal internals, we should provide at
+> >>> least an API to the thermal framework to add an attribute to the
+> >>> existing sysfs thermal zone entry.
+> >>>
+> >>> Before doing that and given the age of the driver (2008) may be it is
+> >>> worth to double check if these attributes are really needed. So my
+> >>> first proposal is to remove them if that does not hurt.
+> >>>
+> >>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >>
+> >>
+> >>
+> >>> ---
+> >>>    drivers/thermal/intel/intel_menlow.c | 193 ---------------------------
+> >>>    1 file changed, 193 deletions(-)
+> >>>
+> >>> diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+> >>> index 5a6ad0552311..5a9738a93083 100644
+> >>> --- a/drivers/thermal/intel/intel_menlow.c
+> >>> +++ b/drivers/thermal/intel/intel_menlow.c
+> >>> @@ -230,174 +230,8 @@ struct intel_menlow_attribute {
+> >>>    static LIST_HEAD(intel_menlow_attr_list);
+> >>>    static DEFINE_MUTEX(intel_menlow_attr_lock);
+> >>>
+> >>> -/*
+> >>> - * sensor_get_auxtrip - get the current auxtrip value from sensor
+> >>> - * @handle: Object handle
+> >>> - * @index : GET_AUX1/GET_AUX0
+> >>> - * @value : The address will be fill by the value
+> >>> - */
+> >>> -static int sensor_get_auxtrip(acpi_handle handle, int index,
+> >>> -                                                     unsigned long long *value)
+> >>> -{
+> >>> -     acpi_status status;
+> >>> -
+> >>> -     if ((index != 0 && index != 1) || !value)
+> >>> -             return -EINVAL;
+> >>> -
+> >>> -     status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
+> >>> -                                    NULL, value);
+> >>> -     if (ACPI_FAILURE(status))
+> >>> -             return -EIO;
+> >>> -
+> >>> -     return 0;
+> >>> -}
+> >>> -
+> >>> -/*
+> >>> - * sensor_set_auxtrip - set the new auxtrip value to sensor
+> >>> - * @handle: Object handle
+> >>> - * @index : GET_AUX1/GET_AUX0
+> >>> - * @value : The value will be set
+> >>> - */
+> >>> -static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
+> >>> -{
+> >>> -     acpi_status status;
+> >>> -     union acpi_object arg = {
+> >>> -             ACPI_TYPE_INTEGER
+> >>> -     };
+> >>> -     struct acpi_object_list args = {
+> >>> -             1, &arg
+> >>> -     };
+> >>> -     unsigned long long temp;
+> >>> -
+> >>> -     if (index != 0 && index != 1)
+> >>> -             return -EINVAL;
+> >>> -
+> >>> -     status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
+> >>> -                                    NULL, &temp);
+> >>> -     if (ACPI_FAILURE(status))
+> >>> -             return -EIO;
+> >>> -     if ((index && value < temp) || (!index && value > temp))
+> >>> -             return -EINVAL;
+> >>> -
+> >>> -     arg.integer.value = value;
+> >>> -     status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
+> >>> -                                    &args, &temp);
+> >>> -     if (ACPI_FAILURE(status))
+> >>> -             return -EIO;
+> >>> -
+> >>> -     /* do we need to check the return value of SAX0/SAX1 ? */
+> >>> -
+> >>> -     return 0;
+> >>> -}
+> >>> -
+> >>> -#define to_intel_menlow_attr(_attr)  \
+> >>> -     container_of(_attr, struct intel_menlow_attribute, attr)
+> >>> -
+> >>> -static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
+> >>> -                     char *buf, int idx)
+> >>> -{
+> >>> -     struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
+> >>> -     unsigned long long value;
+> >>> -     int result;
+> >>> -
+> >>> -     result = sensor_get_auxtrip(attr->handle, idx, &value);
+> >>> -     if (result)
+> >>> -             return result;
+> >>> -
+> >>> -     return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
+> >>> -}
+> >>> -
+> >>> -static ssize_t aux0_show(struct device *dev,
+> >>> -                      struct device_attribute *dev_attr, char *buf)
+> >>> -{
+> >>> -     return aux_show(dev, dev_attr, buf, 0);
+> >>> -}
+> >>> -
+> >>> -static ssize_t aux1_show(struct device *dev,
+> >>> -                      struct device_attribute *dev_attr, char *buf)
+> >>> -{
+> >>> -     return aux_show(dev, dev_attr, buf, 1);
+> >>> -}
+> >>> -
+> >>> -static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
+> >>> -                      const char *buf, size_t count, int idx)
+> >>> -{
+> >>> -     struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
+> >>> -     int value;
+> >>> -     int result;
+> >>> -
+> >>> -     /*Sanity check; should be a positive integer */
+> >>> -     if (!sscanf(buf, "%d", &value))
+> >>> -             return -EINVAL;
+> >>> -
+> >>> -     if (value < 0)
+> >>> -             return -EINVAL;
+> >>> -
+> >>> -     result = sensor_set_auxtrip(attr->handle, idx,
+> >>> -                                 celsius_to_deci_kelvin(value));
+> >>> -     return result ? result : count;
+> >>> -}
+> >>> -
+> >>> -static ssize_t aux0_store(struct device *dev,
+> >>> -                       struct device_attribute *dev_attr,
+> >>> -                       const char *buf, size_t count)
+> >>> -{
+> >>> -     return aux_store(dev, dev_attr, buf, count, 0);
+> >>> -}
+> >>> -
+> >>> -static ssize_t aux1_store(struct device *dev,
+> >>> -                       struct device_attribute *dev_attr,
+> >>> -                       const char *buf, size_t count)
+> >>> -{
+> >>> -     return aux_store(dev, dev_attr, buf, count, 1);
+> >>> -}
+> >>> -
+> >>>    /* BIOS can enable/disable the thermal user application in dabney platform */
+> >>>    #define BIOS_ENABLED "\\_TZ.GSTS"
+> >>> -static ssize_t bios_enabled_show(struct device *dev,
+> >>> -                              struct device_attribute *attr, char *buf)
+> >>> -{
+> >>> -     acpi_status status;
+> >>> -     unsigned long long bios_enabled;
+> >>> -
+> >>> -     status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
+> >>> -     if (ACPI_FAILURE(status))
+> >>> -             return -ENODEV;
+> >>> -
+> >>> -     return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
+> >>> -}
+> >>> -
+> >>> -static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
+> >>> -                                       void *store, struct device *dev,
+> >>> -                                       acpi_handle handle)
+> >>> -{
+> >>> -     struct intel_menlow_attribute *attr;
+> >>> -     int result;
+> >>> -
+> >>> -     attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
+> >>> -     if (!attr)
+> >>> -             return -ENOMEM;
+> >>> -
+> >>> -     sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
+> >>> -     attr->attr.attr.name = name;
+> >>> -     attr->attr.attr.mode = mode;
+> >>> -     attr->attr.show = show;
+> >>> -     attr->attr.store = store;
+> >>> -     attr->device = dev;
+> >>> -     attr->handle = handle;
+> >>> -
+> >>> -     result = device_create_file(dev, &attr->attr);
+> >>> -     if (result) {
+> >>> -             kfree(attr);
+> >>> -             return result;
+> >>> -     }
+> >>> -
+> >>> -     mutex_lock(&intel_menlow_attr_lock);
+> >>> -     list_add_tail(&attr->node, &intel_menlow_attr_list);
+> >>> -     mutex_unlock(&intel_menlow_attr_lock);
+> >>> -
+> >>> -     return 0;
+> >>> -}
+> >>>
+> >>>    static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+> >>>                                                void *context, void **rv)
+> >>> @@ -420,12 +254,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+> >>>        if (ACPI_FAILURE(status))
+> >>>                return (status == AE_NOT_FOUND) ? AE_OK : status;
+> >>>
+> >>> -     result = intel_menlow_add_one_attribute("aux0", 0644,
+> >>> -                                             aux0_show, aux0_store,
+> >>> -                                             &thermal->device, handle);
+> >>> -     if (result)
+> >>> -             return AE_ERROR;
+> >>> -
+> >>>        status = acpi_get_handle(handle, GET_AUX1, &dummy);
+> >>>        if (ACPI_FAILURE(status))
+> >>>                goto aux1_not_found;
+> >>> @@ -434,27 +262,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
+> >>>        if (ACPI_FAILURE(status))
+> >>>                goto aux1_not_found;
+> >>>
+> >>> -     result = intel_menlow_add_one_attribute("aux1", 0644,
+> >>> -                                             aux1_show, aux1_store,
+> >>> -                                             &thermal->device, handle);
+> >>> -     if (result) {
+> >>> -             intel_menlow_unregister_sensor();
+> >>> -             return AE_ERROR;
+> >>> -     }
+> >>> -
+> >>> -     /*
+> >>> -      * create the "dabney_enabled" attribute which means the user app
+> >>> -      * should be loaded or not
+> >>> -      */
+> >>> -
+> >>> -     result = intel_menlow_add_one_attribute("bios_enabled", 0444,
+> >>> -                                             bios_enabled_show, NULL,
+> >>> -                                             &thermal->device, handle);
+> >>> -     if (result) {
+> >>> -             intel_menlow_unregister_sensor();
+> >>> -             return AE_ERROR;
+> >>> -     }
+> >>> -
+> >>>        return AE_OK;
+> >>>
+> >>>     aux1_not_found:
+> >>
+> >> --
+> >> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> >>
+> >> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> >> <http://twitter.com/#!/linaroorg> Twitter |
+> >> <http://www.linaro.org/linaro-blog/> Blog
+> >>
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
