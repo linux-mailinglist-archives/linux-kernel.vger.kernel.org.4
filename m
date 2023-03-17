@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD34F6BF487
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAAF6BF494
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjCQVpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S229892AbjCQVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjCQVpO (ORCPT
+        with ESMTP id S229934AbjCQVum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:45:14 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55AB1CAFA;
-        Fri, 17 Mar 2023 14:44:27 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so6647080pjz.1;
-        Fri, 17 Mar 2023 14:44:27 -0700 (PDT)
+        Fri, 17 Mar 2023 17:50:42 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBD03E1E6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:49:59 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id ja10so6717118plb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:49:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679089063;
+        d=gmail.com; s=20210112; t=1679089783;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VM4L650jvOHnOrzjxyybDkCmQtbFyLFT1T/BqqmyWcU=;
-        b=BMtstbKLHuH8Y2UCzCOd8xm/eCyHo7c5eIYlFb96xgHM115JNQM+OFQ4k59hUkiBnE
-         ftqWS3pKGpJsbiYoNoKCWwmz5P18p9hMSLR6skLG3iXxHg4OcB66U65UhRT0YDJ0d3CS
-         Xs7YKbDPjetM1g4ow3EMHRk5kYw8gNzC5t7Q/4cOtnFzaZnaWjciLtLKPnC2R+8i0L/5
-         2fmcfzvbGluZoFNhqL9IWuH78tneHzxy1LGIdJR8mWsc3YufBwxahT4Yz2GsXRVCRkhB
-         LeNU1/n9TxwTTM5LUq83iz4V24ouqBqsjeuXJwFOu+OBPySm82YBfjILXj532EBjLu+e
-         xW8A==
+        bh=17vrAHPcpt7USxungNYJ/wvRhGxMRagStdViFJpnIxw=;
+        b=X683k1CZjfuoHw4S0vH3N+223YNtZr1Gy+GVCBMKPztJdT+t1sC76ZWk1A3tbLpkd1
+         7g6u/czKLuPkBj9PIlIrBDuZXqwK2MzSStiUEQwXMA/7tM+eBpgLu7CbIwdAeSkuj1Xz
+         6B/IRZ55cDFWv5ggBTJSVwgaIYA3aoEt4CaqEzYeyjh8Us6pa7kxk+MImpYDwzhzd8aD
+         dXijvZGJGKgFlnwMKvQJbFhW4sSV0tD4tNcyKQsjiNXvj+qMlxC7S/16k6ILVX2ri7V+
+         79BW2PhuBNvlvfni0Jf5nkc6TCGCBYzA+Fe3NakD/rDxNdWhGniMKMDHl27JIpIohaUs
+         ARDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679089063;
+        d=1e100.net; s=20210112; t=1679089783;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VM4L650jvOHnOrzjxyybDkCmQtbFyLFT1T/BqqmyWcU=;
-        b=B/riO2eaTv5w6cWumk0yAMCjV/o3JcYsQXUluaw4APp3s0yOqCBxjHyBBsjtnmFYlx
-         WFcqlL4+4xzBXklwUeU0NbNMlJUmEo7R00y1KlofGKo8LNLSy7vovdtnYxbBCZWdKQdo
-         D/TwnUUsGv7me06TBxwids/TIrnkn0m4K445MJBCvStJe1u+XK01L/z1BOcXnDUokPaG
-         /rFQU73/mYMo9publ5XI5Xso/BpdHxrLlYqtd/QVD1Vzd0of3RMF4I93QSWlQ5F4m1Q+
-         YOnj2rMsNPWRREQtojSc8dLOq/Qa8QZfhlfj8lKBQNfvA5zzhMsRf0UpCdq7Qa7i2r+r
-         PUZQ==
-X-Gm-Message-State: AO0yUKUFTrwi7EMUVgQPwmDTN6eCCK3kSLA+65T4+RUe5uGu8zPOzWp/
-        J1boa0o5x9MopBAnXhAUe6g=
-X-Google-Smtp-Source: AK7set9GNEiVxeBdO0CFGjfPfAM2MhAmu+ExOcF0+C7WJ5Hy4TYmspAyMRLBJC8H/4V/UdY+FjkJxQ==
-X-Received: by 2002:a17:90a:51c5:b0:23d:4a9e:868b with SMTP id u63-20020a17090a51c500b0023d4a9e868bmr9873155pjh.31.1679089063439;
-        Fri, 17 Mar 2023 14:37:43 -0700 (PDT)
+        bh=17vrAHPcpt7USxungNYJ/wvRhGxMRagStdViFJpnIxw=;
+        b=kvUa12F6Ui0sgC70m8IUhXsriLl2iuVEOjb40uYZVj9UAv8sRP5gkUm6Pk//Qf88tt
+         3aUYhnbvW+9+my/5p9L2MuddorI3ONa8MKTNJmSCiLxcl6O5ZJkTqQ4FKD7u3odb5GDm
+         JCSXsJJlXm7QAwqXsZ+3kEdTTT2+ErHmPp7lRBEgGRASqVYN25grinGQQGy5UVB+by8G
+         +x6Kw9IwABzHAGQxW+kzK04ZUDfpkXb6GU2mQfiUDB60m3wA9D+wZHBmJK+rpWnsHL/D
+         g2kU/LBDN2q7UbBNxxavN8D6egJ6roZJBiXzcMEfLW06sZxYBUnvsZXHYY01wO74RaNj
+         YNtw==
+X-Gm-Message-State: AO0yUKViGSSY0upzh5lOmkyKeKmcFRBHqfhHPIinfp6HFifgmvIZQtvH
+        H0B7Z2/U98KrujMS99OQutQ=
+X-Google-Smtp-Source: AK7set+iXI2Lb9xULVAkDOCN8RmCZiri3oqGPASnA+qbG/dqSvOmKU/9RHGIMor5EtKBRL27kBGf1g==
+X-Received: by 2002:a17:902:fb43:b0:1a0:4046:23f2 with SMTP id lf3-20020a170902fb4300b001a0404623f2mr7075874plb.56.1679089782783;
+        Fri, 17 Mar 2023 14:49:42 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902b78600b0019edb3ae415sm2000828pls.14.2023.03.17.14.37.42
+        by smtp.gmail.com with ESMTPSA id n6-20020a170902968600b001a194df5a58sm1976910plp.167.2023.03.17.14.49.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:37:43 -0700 (PDT)
+        Fri, 17 Mar 2023 14:49:42 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 17 Mar 2023 11:37:41 -1000
+Date:   Fri, 17 Mar 2023 11:49:41 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     longman@redhat.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpuset: Clean up cpuset_node_allowed
-Message-ID: <ZBTdpYaBG2nJmWbL@slm.duckdns.org>
-References: <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
- <20230228083537.102665-1-haifeng.xu@shopee.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: Re: [PATCH v1 0/2] Two small patches for workqueue
+Message-ID: <ZBTgdWov93mp2ifa@slm.duckdns.org>
+References: <20230226165321.24825-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230228083537.102665-1-haifeng.xu@shopee.com>
+In-Reply-To: <20230226165321.24825-1-ammarfaizi2@gnuweeb.org>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 08:35:37AM +0000, Haifeng Xu wrote:
-> Commit 002f290627c2 ("cpuset: use static key better and convert to new API")
-> has used __cpuset_node_allowed() instead of cpuset_node_allowed() to check
-> whether we can allocate on a memory node. Now this function isn't used by
-> anyone, so we can do the follow things to clean up it.
+On Sun, Feb 26, 2023 at 11:53:19PM +0700, Ammar Faizi wrote:
+> Two small boring patches for workqueue.
 > 
-> 1. remove unused codes
-> 2. rename __cpuset_node_allowed() to cpuset_node_allowed()
-> 3. update comments in mm/page_alloc.c
-> 
-> Suggested-by: Waiman Long <longman@redhat.com>
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Waiman, can you review and ack?
+Applied 1-2 to wq/for-6.4.
 
 Thanks.
 
