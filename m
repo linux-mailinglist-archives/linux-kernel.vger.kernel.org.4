@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FFF6BEDC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185686BEDCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjCQQMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S229690AbjCQQOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCQQMs (ORCPT
+        with ESMTP id S229499AbjCQQOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:12:48 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D43FBA1;
-        Fri, 17 Mar 2023 09:12:46 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id w9so22491770edc.3;
-        Fri, 17 Mar 2023 09:12:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679069564;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6+rn1YSZmbdUqRFG/vNEu75EzysOAso/oXOoTMRkq2w=;
-        b=B6UUMH4j7viakkjBSD6DEvk1LFmOYrUFv12LeLCU/Ta+59K0+gN7WUjR7ScsbNKeek
-         Xiw43K6VjOzz4x6B4Y9R+qH7N+eOSwSn1Of1pQ0E6PvGv0Pj8ifEq5oMa6VXOsHpSW8X
-         79FU5aveJU4oZ9RsZOLIuiUelvzBCmFsA+MsXdy2SefC/m8gVFPva5YTvS6bLBSY+Ait
-         QWfF1YB8/0Z3PLb3xKWH/lsm7x1IPt4tN5RUbus6tKAKs22SMJedjPhufN2lynGvyiKV
-         1pE3rtipNce9lt/OCRxGYCtE3yJeG4bIZRn4CtSMeE58Kad7VzLFtjDbV4dCRLBFiD9r
-         4ITA==
-X-Gm-Message-State: AO0yUKW+U+CmIR3+UrpOHjRVPocqA7AmK8XEt1WBWQuFGqXf3VCemDmW
-        evxluayZF89RHEAmdS/aZ/GbFypT6Yay3W7rzxvOyVfd2Dg=
-X-Google-Smtp-Source: AK7set8aTYlTuP/LTjAsV0iYNY7A3KgjsTIJEdAjg5Y1tcfhlkASP5RQjJGoxRvAMJO+ECuTInx4eeR1VEWOSfQhXgM=
-X-Received: by 2002:a50:d0d3:0:b0:4fa:71a2:982b with SMTP id
- g19-20020a50d0d3000000b004fa71a2982bmr1970762edf.0.1679069564593; Fri, 17 Mar
- 2023 09:12:44 -0700 (PDT)
+        Fri, 17 Mar 2023 12:14:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6EF222D7;
+        Fri, 17 Mar 2023 09:14:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7964E60B39;
+        Fri, 17 Mar 2023 16:14:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6E9C433D2;
+        Fri, 17 Mar 2023 16:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679069668;
+        bh=1pQRqWfj+GpCWMENR8ZnvXT1k2q8gneEQaUYLVxcKh0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gH8CC00x3SphiPOaLuoeGhXzQdR0uzhsyKjVcmB5fV0RDP0iNfw9jLkvyx2ngxPla
+         mNr4Nuuz97pJ+J18yb80ju0PbcUpwQ4CiFQi0yuyohQYz0ljBpsQfXOMZWWVUAfTXN
+         cIrcJEOqejRGu7BEDnFbAbejdTkKYsJLg1+ATQ59jvwLSitkWtRZuzoadGW2cWakK6
+         pIzeSUVTdTqjsvG3PT+cJKmIWig5ycrCmZapyV35Pep4E9cUmTdrhJz7wrqnBSBRUp
+         XRVDUqytMSc1DYltbI2/ersLQnZnXnV+T4zMma3sEc3uYszjp3zDy/L5Uh31EVeGJJ
+         mgjRV4iwmo4Lg==
+Date:   Fri, 17 Mar 2023 16:14:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add loongson spi
+Message-ID: <76c3a130-0413-4e56-8c97-b3697efd5a9e@sirena.org.uk>
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-2-zhuyinbo@loongson.cn>
+ <a736c6db-466a-12e4-8e22-c8dc900978d4@linaro.org>
+ <e944732b-9a2d-b6ff-8336-7363788809b9@loongson.cn>
+ <7469290a-0671-7d2f-b0ce-cdde2a9e66cc@linaro.org>
+ <c904c1ec-9080-0cc0-ae86-7d369d52e818@linaro.org>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Mar 2023 17:12:33 +0100
-Message-ID: <CAJZ5v0haUo_G041D4N7D++MBOHDX=z04sagWMs7BEmV0sjYUDw@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.3-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TfiaVJaqPd0bQ/Nj"
+Content-Disposition: inline
+In-Reply-To: <c904c1ec-9080-0cc0-ae86-7d369d52e818@linaro.org>
+X-Cookie: Life is like an analogy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Please pull from the tag
+--TfiaVJaqPd0bQ/Nj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.3-rc3
+On Fri, Mar 17, 2023 at 04:51:48PM +0100, Krzysztof Kozlowski wrote:
+> On 17/03/2023 16:51, Krzysztof Kozlowski wrote:
 
-with top-most commit 1fa9d47baa9e61ff973e03f0ef26f5b78d545e37
+> > minItems: 1 is not correct, so you cannot use incorrect code to suppress
+> > some warning. This should be list the clocks or use maxItems: 1, if you
+> > have only one clock.
 
- Merge branch 'pm-cpuidle'
+> BTW, as Rob's bot reports, this wasn't even tested... Please test the
+> patches before sending them.
 
-on top of commit eeac8ede17557680855031c6f305ece2378af326
+If they're managing to see and try to fix warnings they're doing some
+kinds of testing, obviously they've missed something you wanted doing
+but there's clearly been some testing done.
 
- Linux 6.3-rc2
+--TfiaVJaqPd0bQ/Nj
+Content-Type: application/pgp-signature; name="signature.asc"
 
-to receive power management fixes for 6.3-rc3.
+-----BEGIN PGP SIGNATURE-----
 
-These fix an error code path issue in a cpuidle driver and make the
-sleepgraph utility more robust against unexpected input.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQUkd4ACgkQJNaLcl1U
+h9DFmwf/Sh61mkU1K6WOZKGKaJAPZveq9pY5ETorB7xp5gl0mH9Vg+eXzT0aukf3
+wBZqOGNZWn2Pb7KkGivb+xSk/XHN3TTu1utVoSO1nY3fBgt2S16xqCM3ckHlagAO
+5JEvldusT+YfznSFpLKEiSJYy11bEd3UbfV4Fzla6ETVVRCIIWa3kTvM+bahOdxc
+0WIAC4JdpfYd4QpmfCtwvfsp3y2zj5g7Co4HiDLCuD38pTS+WDeEL/oW7oQpIZJc
+jlMrCTcfPCmmKjiqyB2qJVR9w0cDeREk8pGCRPnhfUAxlHsdctJTVCxlh/fRC7JH
+Z73sF+0nGX9NAiALvZb8bqFx0vJt5A==
+=0mEQ
+-----END PGP SIGNATURE-----
 
-Specifics:
-
- - Fix the psci_pd_init_topology() failure path in the PSCI cpuidle
-   driver (Shawn Guo).
-
- - Modify the sleepgraph utility so it does not crash on binary data
-   in device names (Todd Brandt).
-
-Thanks!
-
-
----------------
-
-Shawn Guo (1):
-      cpuidle: psci: Iterate backwards over list in psci_pd_remove()
-
-Todd Brandt (1):
-      pm-graph: sleepgraph: Avoid crashing on binary data in device names
-
----------------
-
- drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
- tools/power/pm-graph/sleepgraph.py    | 5 ++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+--TfiaVJaqPd0bQ/Nj--
