@@ -2,148 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1325F6BE0AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 06:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC316BE0EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCQFei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 01:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S229925AbjCQGCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCQFeb (ORCPT
+        with ESMTP id S229778AbjCQGCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 01:34:31 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13A2F940;
-        Thu, 16 Mar 2023 22:34:29 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id n2so4591660qtp.0;
-        Thu, 16 Mar 2023 22:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679031269;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7/GcK3ST5seDShdKUAT+Ly3z8BvqJ6uC+lJYQIWJMMM=;
-        b=lFyz6F9UsZO61Y6dJ947WIhMUEJnlu9oTELO/Xk2A6yS/VqTz4qMkEarvYPmk8l8Ct
-         P8jdcv0BqrvNDq+/1Sq3kmUQwa24jskLcmx6bH9pyCxodORxu8pD1UgaoSgjVohEvDah
-         ifTE5PU75RP5rW5SojIhSIs5PNSxc8jxhMVh1lEEzfplVqyE6CxOiTRnJe4NwWzemtPb
-         DEB2etFF9HKDqXH+4EwZkFIctPBb2kC2kN9/fDrgvshMVbcV0wsUBRNpdvPoD2uNqXyH
-         FFEe+wkOL+Ot2qX89SfH6f9n9qcxvcY964CLm97iIPdQm/uyWVGmRSo4loRo5FsXs8vr
-         0IwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679031269;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7/GcK3ST5seDShdKUAT+Ly3z8BvqJ6uC+lJYQIWJMMM=;
-        b=T/S1a1scvd/lT0PFI01VrrfkljsX7Iil/1P83BejN5ALvs3Z7sDgIBab5MW0KrSvfT
-         HPUSWSpfYo6rgYVyl+BnkDuVoaiCmD06J+Dfso8g22pmD9EgMj/vX+BLWcDgJJuE5k9Z
-         0gq90PKmQxAUt8QHJ1CQ1EHvQwTFiOnCg24BorbWVFMCDaSCsmhZwk/nz6kKwIwsgi8Z
-         JdMwptJOq5rpy5b4f84qxYCcOwfiWIiNs8SuQwbVJgqVdbeQQo4mXhNYeIiTK9jI+jwK
-         VommwN1tmk6cQfYU/gR3YaMe/sfZ5Gw9I5034xyvty13mdBU6PF668Kpyz7kW1ReiRY1
-         aMkw==
-X-Gm-Message-State: AO0yUKWMrWEvgmaNNjeCRiZNqbc+XgHNh5d5e0gtOF3GpKwKprNr2f1L
-        L8cSvfOmqbA2OClrK4QTmaYao/+uN+g=
-X-Google-Smtp-Source: AK7set9bBUA+Hmo3UZGk+DY2y/igOweTOcOhMrhYCAq6wHrVnwo7Irht7XIFmaXw1+Fl9twph7mxSA==
-X-Received: by 2002:ac8:5894:0:b0:3bf:c388:cbea with SMTP id t20-20020ac85894000000b003bfc388cbeamr11456463qta.43.1679031269060;
-        Thu, 16 Mar 2023 22:34:29 -0700 (PDT)
-Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:557c:9772:415e:adc7])
-        by smtp.gmail.com with ESMTPSA id i5-20020ac860c5000000b003b34650039bsm737649qtm.76.2023.03.16.22.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 22:34:28 -0700 (PDT)
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 2/2] of: unittest: treat missing of_root as error instead of fixing up
-Date:   Fri, 17 Mar 2023 00:34:15 -0500
-Message-Id: <20230317053415.2254616-3-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230317053415.2254616-1-frowand.list@gmail.com>
-References: <20230317053415.2254616-1-frowand.list@gmail.com>
+        Fri, 17 Mar 2023 02:02:05 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D207739CCE;
+        Thu, 16 Mar 2023 23:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679032924; x=1710568924;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=9uJ3MkfA/qwcgaYzN5ANURWlB8iYIiA//moMDgAR3Aw=;
+  b=n7Iq5X0IOC/rj4tOuf+fTshepASYujGNG2KkjpvtYoXOLAFB3deECJzV
+   674iqGZ5c74PFb+j8h0tb9c+GKhdNWbdCtqf+6U1VO0MUkBu0K81Sk+CS
+   FlceBlemofWWrC+UW4lsZy6/Hlz8r8Jy2iOSin2yrYvwZBLcJtSSaUfZA
+   tXOQjUxlzyXvA7Cb2HWex7PiTP/y2cS2P9Uv3iXsiDzg0LNsyRD0OLx1I
+   wrjsoPH7sXZIyvCfmdXoyPLACBUZzZuU6m7HPNjzDo0mxTX8tVnOp0U7V
+   fwmpHcquq4jY/z1Lf+1eXERYkLWg4Jhr9dGXGV0Rryk7SFt5kEkqNyHhi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="326551211"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="326551211"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 23:02:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="710396322"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="710396322"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga008.jf.intel.com with ESMTP; 16 Mar 2023 23:02:03 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 23:02:03 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 23:02:03 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 23:02:03 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 16 Mar 2023 23:02:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kb5TS4ntLdlqsIw1899bTdtKjeKPX3QOl2cucj6wsmBg0iZnFIVuOuHUm50KKVpUZcNK4otrvCJwkEgn3qD49InwkMo20VxM33P6b0rf3P3XlDrgg3fHseNGX3PQJ4qnboBCsPRwOL7OZ2yUpVnT/4/8rMuS1n9owhFdbcbziWq3xYUlLunD7CWSuEiQ4BUnRIqGEFiQJpk3sNBdnCVrAwRazXpMSGome7M2BMAffy2hmzZf9t1FuqNpwQAD7SjKu6HqUMjJDuHj7ptdjNZoVVAYf14GDambykb0XdcP+eFoasWrL5biXDppoOa8zc30kNjFWkddCXt5OXgmwh6ZBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NbF2lqX7uO8xlAIvD+rHKCfsIVsO+17heK2Dll2MBik=;
+ b=FPPY1mhUoBHnbdnMVBes5sJT5oPt98FOwY+/ZeIFGrLHmRah+tY/h3biBqTlqlIaBV/HXychGvzvasIWdXLzUZh27w+ZGqz6e7tV85NNKXtt130zJV/VMSDGUQKU2Gl7ZT1fMgg0s2iZ1vAGPEsHCMCd51PKARnJ+37eB91nt9FfyQjJ5Q/ooAuXfG0JQyua9gakZQuXUqdpv+ruba0qTbX7LfaQztupw7GWIOSSAg4c5sTLpdEmDxnWnukpbt7bgY1UZHLdSXG25rGEVLbVUfQ2bWXD5KkmB2fL+sa2qok8inoJZlEi9x5Rkws7wu/TNftyIM+QXKkg+dwhTs5CYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 06:01:58 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::b00e:ac74:158e:1c7e]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::b00e:ac74:158e:1c7e%4]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
+ 06:01:59 +0000
+Date:   Fri, 17 Mar 2023 13:37:21 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 07/27] drm/i915/gvt: Don't rely on KVM's gfn_to_pfn()
+ to query possible 2M GTT
+Message-ID: <ZBP8kd+4+HjdekPZ@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230311002258.852397-1-seanjc@google.com>
+ <20230311002258.852397-8-seanjc@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230311002258.852397-8-seanjc@google.com>
+X-ClientProxiedBy: SG2P153CA0001.APCP153.PROD.OUTLOOK.COM (2603:1096::11) To
+ DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|BL1PR11MB5271:EE_
+X-MS-Office365-Filtering-Correlation-Id: e412e039-f46d-46b4-abfa-08db26ad1ea9
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sJiuyUAvbCDldKNS3My6nyo6h3rGPKwpnRPENeHcp3yq/o6ks/rV+kLaYBf+qHPETwpzvPy4TyreFTkRc1Glp0AWObh1ic5xSLQQbAF1zuoBMI1rlZ6twCt0pnOx20+K5jTp+7bwFrCi/OT4H/gPwy/SBXr4rtaKyVjTJef3FWa2gXGbm88KSM9SdPBJ1D9c6ztgvx7TXqUfkjfFUrZB+tUCxVxXvAdcBFIkwHCgClP+ZhqVD+rQBfrkh210MyEupqexSBFS6Du+X2IBrj2Yk0JARREfqhuDmlb1d7Jul7bqNIHQLw015vs/ApVJzMgCF/4fY4Voptek83TfLyxIgNZhSekC69jljHPV2xVfb2ksDF5OVi60IRKAxT+jtPtxYC8pcjlaGtQT4kG0sR7YbUKYzExE+R4cYnNSvKgw2QnYms3W+gTxctn+/P4exoASXcngYDRcDdnC/5I1iLFH4cao3wio3gXRSjuiryuHq3xcAKdNWfRV6YqzI4+FHHX476JYwyATUO1c3fD+kjDwZuk/1jHQHmPA4nLkE9FRiyp3R5Ihyk0aP32mZyDqb9CJUQk9V43qD5FgZGkdqYzbVrdYjIUvnoRjLDAJGRYdKkdIrEEcFZ2skv4znsl+MDVLVRArCZ6gCyhU/VaSmv/rQA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(136003)(396003)(346002)(39860400002)(451199018)(3450700001)(8936002)(2906002)(5660300002)(38100700002)(82960400001)(86362001)(186003)(6512007)(6506007)(26005)(6666004)(54906003)(316002)(478600001)(41300700001)(6916009)(4326008)(6486002)(66946007)(66556008)(8676002)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nmfQzzflTY5dvvJDGWttAaarotu+A2CjnJbJOj1/Uku+qPdzijuYHjD2FjZt?=
+ =?us-ascii?Q?DGdtkw5tfjzp91nAuUs3l90fTmCTWsQxcTjbMwGO92o5yVPa9OBdXR2m19vq?=
+ =?us-ascii?Q?UiI69ofM6/U50oGBcdDB+CBk2kLp0kwTlKf66vFNafynyE6oVxJHmf0Ysqi8?=
+ =?us-ascii?Q?Z6Qb9qeQvn2KBWh6JWtWvIQ0m0PYBx+oAb3rnrSd3VXtn4LMmWKYxzcwuXOK?=
+ =?us-ascii?Q?JxmhUBoBxUOrnubCmoz2EylH6d8Ph6cCl8c7TPabyP+ldI8kpFAih3E1BMPa?=
+ =?us-ascii?Q?c4edkqIWwYYk2VcQ3QQo0vJJUQlY68uLHoG4k5jQWF5Q3U9yUMLM9TJ3Nba1?=
+ =?us-ascii?Q?MQxPyc274diUw07qx58gDatCAio0PPi+5LJOuNeh75E8uSSHFOBngkawb8Hl?=
+ =?us-ascii?Q?ro2A0q3FAWH4SA0sj6uldJRyeB3l3bUy/tdaC2PbQmQst/8mc33qukthdXyQ?=
+ =?us-ascii?Q?C1/JjfhURGyVYaJ2kJ9Kn0280xj5noEqJKxoNCCF9lnDLORdkS3L5ya8a5ys?=
+ =?us-ascii?Q?8FAUGMU44PHqj/6C6p2WZ1T0/Im29zqbKavm3nNa5pofut0W5HvL68PE55+V?=
+ =?us-ascii?Q?lEzSx7k7UOkMXYwWORgL3IAKKtrE2ZHUp9bl/0kHm3ncGvfl0tA85vwKbh6z?=
+ =?us-ascii?Q?YjW0DlFMXwhgJfh9i67lpRtRUP+7r1kxP5f5TkfyeuUH7d8I4kLwNXsASUnI?=
+ =?us-ascii?Q?LJLbn0o/o2w1toYTWcH4Wt0miCLhT6fQC4JEdGkqJ+50klbYPN2Y/uhoeXvm?=
+ =?us-ascii?Q?7bek56S9Y6X/5vmX2aOdaw2W3MPXRnEg8WR0H7C4xhtxidrPx/zhDPteW6+b?=
+ =?us-ascii?Q?Dlsfei5VtwYD+Rbpr/Iaz94gLhPq4d0/yD2cF4MXVaf3iik7LkNJd2uhV9Pl?=
+ =?us-ascii?Q?B8iiG67PQlnx+iX/4tK4kkWbACgbcCHMpB0sqDaTSiyoAHbchqa3RsQFiDmF?=
+ =?us-ascii?Q?y3LFd+gb4HQhKDghPnzdSUSqS//lU6WQcizsvWtfABsVYw6omo4l3PrqQCVu?=
+ =?us-ascii?Q?x2VBoLPEm8p/csDI77WQ8FCJopREzxxs7frhw9u+1KXiI6c1JShZcsUFsjSF?=
+ =?us-ascii?Q?Yuubktin9rvG+wDv02PT3eVWbYaEundFxUZZDBQY/a5hWuF5T5+RB9JCXdsT?=
+ =?us-ascii?Q?C/pumyT0Ty43uHtUde+h9vq78CsZnmVbdDy5btaPgZOEHJH9r13gE4x/vF0F?=
+ =?us-ascii?Q?st0zg2go32muFA7szT4wQs84xeSh9aNfXT52Kv/cJeVk7phtFMN+t4m7Mpgn?=
+ =?us-ascii?Q?iyCPHGCOClNDx4K1wZuRhhgBI+ZIbP7M+nafUFg9E6/E6tHHCTngEhnntcCV?=
+ =?us-ascii?Q?a2eLM0YFIULeVMFv0WEypqc0TQ6W/gw7uhl3+nPzuTFT7iFqdQiBnovs22U6?=
+ =?us-ascii?Q?Mlj/bjh+2V+nfthQOUTcJaMeHfv1oQOvxf0pRAd4YM6g9uEtShUzpWZJrzTH?=
+ =?us-ascii?Q?jX+s1bCUTc9rPWmZD52Tjir5vFGGxVwUlmrvQKdWUmcH6j2iHI1SyejHy6Pu?=
+ =?us-ascii?Q?wLyU7IcG0QI/16rd9EmLH2wziz7vq/Nmgl3Gq/84MrxprfFEX7dIr45dVazK?=
+ =?us-ascii?Q?uGetooX5kY3yTWe2qFhgps+ge4WmaqbPIQshr21tZdaz2VCRcKDVYDDYv92i?=
+ =?us-ascii?Q?xg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e412e039-f46d-46b4-abfa-08db26ad1ea9
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 06:01:59.0878
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DGGHkXlG3ZfK7UYQuvXbi5mmsU71oOnIr+vU8DDq3aRHS9ljQ0WkDuzNzFqigXDxyNzcazFK5EybTA5LTCJpyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5271
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-setup_of() now ensures that of_root node is populated with the
-root of a default devicetree. Remove the unittest code that
-created of_root if it was missing.  Verify that of_root is
-valid before attempting to attach the testcase-data subtree.
-Remove the unittest code that unflattens the unittest overlay
-base if architecture is UML.
-
-Signed-off-by: Frank Rowand <frowand.list@gmail.com>
----
-
-Changes since version 3:
-  - refresh for 6.3-rc1
-  - remove the CONFIG_UML case of populating the devicetree
-  - unittest_data_add() - move an EXPECT_BEGIN() to after an error
-    check that can result in an early return
-
-Changes since version 2:
-  - none
-
-Changes since version 1:
-  - refresh for 6.2-rc1
-  - update Signed-off-by
-  - fix formatting error (leading space) in patch comment
-
- drivers/of/unittest.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index b5a7a31d8bd2..8dc293ac08b7 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -1476,20 +1476,16 @@ static int __init unittest_data_add(void)
- 		return -EINVAL;
- 	}
- 
-+	/* attach the sub-tree to live tree */
- 	if (!of_root) {
--		of_root = unittest_data_node;
--		for_each_of_allnodes(np)
--			__of_attach_node_sysfs(np);
--		of_aliases = of_find_node_by_path("/aliases");
--		of_chosen = of_find_node_by_path("/chosen");
--		of_overlay_mutex_unlock();
--		return 0;
-+		pr_warn("%s: no live tree to attach sub-tree\n", __func__);
-+		kfree(unittest_data);
-+		return -ENODEV;
- 	}
- 
- 	EXPECT_BEGIN(KERN_INFO,
- 		     "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
- 
--	/* attach the sub-tree to live tree */
- 	np = unittest_data_node->child;
- 	while (np) {
- 		struct device_node *next = np->sibling;
-@@ -3612,10 +3608,6 @@ static int __init of_unittest(void)
- 	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
- 
- 	/* adding data for unittest */
--
--	if (IS_ENABLED(CONFIG_UML))
--		unittest_unflatten_overlay_base();
--
- 	res = unittest_data_add();
- 	if (res)
- 		return res;
--- 
-Frank Rowand <frowand.list@gmail.com>
-
+On Fri, Mar 10, 2023 at 04:22:38PM -0800, Sean Christopherson wrote:
+>  /*
+> - * Check if can do 2M page
+> + * Try to map a 2M gtt entry.
+>   * @vgpu: target vgpu
+>   * @entry: target pfn's gtt entry
+>   *
+> - * Return 1 if 2MB huge gtt shadowing is possible, 0 if miscondition,
+> - * negative if found err.
+> + * Return 1 if 2MB huge gtt shadow was creation, 0 if the entry needs to be
+> + * split, negative if found err.
+>   */
+> -static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
+> -	struct intel_gvt_gtt_entry *entry)
+> +static int try_map_2MB_gtt_entry(struct intel_vgpu *vgpu,
+> +	struct intel_gvt_gtt_entry *entry, dma_addr_t *dma_addr)
+>  {
+>  	const struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
+>  	unsigned long gfn = ops->get_pfn(entry);
+> -	kvm_pfn_t pfn;
+>  	int max_level;
+> -	int ret;
+>  
+>  	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
+>  		return 0;
+> @@ -1173,16 +1171,7 @@ static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
+>  	if (max_level < PG_LEVEL_2M)
+>  		return 0;
+>  
+> -	pfn = gfn_to_pfn(vgpu->vfio_device.kvm, gfn);
+> -	if (is_error_noslot_pfn(pfn))
+> -		return -EINVAL;
+> -
+> -	if (!pfn_valid(pfn))
+> -		return -EINVAL;
+> -
+> -	ret = PageTransHuge(pfn_to_page(pfn));
+> -	kvm_release_pfn_clean(pfn);
+> -	return ret;
+> +	return intel_gvt_dma_map_guest_page(vgpu, gfn, I915_GTT_PAGE_SIZE_2M, dma_addr);
+intel_gvt_dma_map_guest_page() returns 0 on success, which is not in
+consistent with the expected return value of this function, i.e.
+"
+Return 1 if 2MB huge gtt shadow was creation, 0 if the entry needs to be
+split, negative if found err.
+"
