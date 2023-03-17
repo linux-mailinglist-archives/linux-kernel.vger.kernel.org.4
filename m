@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D516BEBB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7766BEBB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjCQOsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S231273AbjCQOst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjCQOsJ (ORCPT
+        with ESMTP id S230136AbjCQOsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:48:09 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE73584AB
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:48:07 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id x8so3567074qvr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:48:07 -0700 (PDT)
+        Fri, 17 Mar 2023 10:48:46 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F95714494;
+        Fri, 17 Mar 2023 07:48:44 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id g17so6812122lfv.4;
+        Fri, 17 Mar 2023 07:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679064486;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y00W2vlLuMTbF2Huj0Es001wY7aldQjIanbtN1YOkHg=;
-        b=GkkJPsXsxAnJCR1XPtQdP3YFkyJOXudoVpKmeyKidWxq5/F+DaHJ50CBo/SM2CWZkd
-         q0OfIHgh3368j1WUWO3ddvm5pg1ZPrQ7Y25LxtVhO5uIs+c4Z17ucftFryTjJES78N04
-         41InlRoIBySZWbfAhx443i5LGCYhFQQKuCerE=
+        d=gmail.com; s=20210112; t=1679064522;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VK1KzYy/5H9i6btPM5HWOxKnSEHvSGLN6SWcopPygK0=;
+        b=pLeS9TSnE8P0Qkcrg6o7ZWG9Z4SvbtpUvOdJRVKRXu6kmScSQoAiHA/bG4hlrZO9bh
+         AHOg+1cBNQ9o4/c5jQhHZ7LVm59N+VmET5YP07ZwDaz57kR3E0m/Vktjl/IZ76rMxFQp
+         W6e63r2ozSkFVVs4CL9fE8t4NIIQItJWsvnHhWVL1XXr4BeSAFoAFOtPjPpjMgrj2PpK
+         9aHMYXxVFWrelQpnT0lT03q8r/4OstLcSu1PfSKP0LnMtfKEcpFSEjHbff5nAH4azhrw
+         TBZhv9fi5LsPn8X0E1Ah4TGuHY+j8EzWnWjqIazsDxYbHfV3NGbB0b02wMpE/TIdYnS3
+         Mbqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679064486;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y00W2vlLuMTbF2Huj0Es001wY7aldQjIanbtN1YOkHg=;
-        b=SbGpv3XhwXOin8QQ+lgDh0TYBV2RSystUZ/7KrsNPcMLipYQmva1z2gQeLfWlcOZQb
-         vKvwL2lpMbQqEOYFWDL4WPedk/qLOGPEHA8Z3/vhf+tcG4onKXw94/UNK4HPbEsJbM45
-         4C0e0r3GXLsFirIWlUIzujPy6ryYJ3vZPVaRvG5GOoM7J08hVGIzhlw637wMVzEsFX+g
-         CPfdGikvscTI+UkvtzhUxp7wFsaaoVbxTBrMribU3myzagDS0Tnt5ZbHe+VTYoZRCtbl
-         4DMsyio6041+YIQucfsC9WfyHMaYGz4hZ3PSCbryHlZOjE9u5iUBdzkkRXU+6BUzZYL2
-         Q4Bw==
-X-Gm-Message-State: AO0yUKW3SHPggo56djXGHciWmCf+NvXHkPOnJRmdMwDNdZb4BOTtGFOv
-        m9/WF4/JKnj9PkZAqZgarnHoRA==
-X-Google-Smtp-Source: AK7set/8JqWEiXgvw/KNL4eR/Drm+OM2J6X6b3kpVOvGlbkjiNe1G4th6mtxiSnoXVzd/sVarz3FZw==
-X-Received: by 2002:a05:6214:528e:b0:5a1:d92e:5cb2 with SMTP id kj14-20020a056214528e00b005a1d92e5cb2mr23731115qvb.10.1679064486364;
-        Fri, 17 Mar 2023 07:48:06 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id x1-20020ac84a01000000b003d4008dccb7sm1408824qtq.48.2023.03.17.07.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 07:48:05 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 10:48:03 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/3] COVER: Remove memcpy_page_flushcache()
-Message-ID: <20230317144803.kktahbp4fhmkutsq@meerkat.local>
-References: <20221230-kmap-x86-v1-0-15f1ecccab50@intel.com>
- <3523ddf9-03f5-3179-9f39-cec09f79aa97@intel.com>
- <64126d113d163_2595222942@iweiny-mobl.notmuch>
- <87lejxmax8.fsf@mpe.ellerman.id.au>
- <641340e2998b4_2695182944f@iweiny-mobl.notmuch>
+        d=1e100.net; s=20210112; t=1679064522;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VK1KzYy/5H9i6btPM5HWOxKnSEHvSGLN6SWcopPygK0=;
+        b=DoAMXaCBpxOTUHqn9a/8Z7tLbiU/z8QwCADp8BH/oqL88xiky2swJ00wAvKoFaLV4J
+         pjUICyhyOi9PKIiV+86emg/cH8K5um7bSFBhcUlPpDNyOZMrzRr2XSmmYjp4GjRl/VhE
+         6v6OgTqbjtPd4TLrkI4teZlIKSqYpML0/CC1KDL+J3ZTLzjfv+wxASem+hgC5vrZLQho
+         X5Hz3dvcZ8KssacRrGwUWxWMoA8/WNNhMACg+6oXhC28nHTRbTP4pn5AypEinuf0HAJc
+         yqQYRNhkWSwXuNj3ygqg5KEoOobQiumi2q+qmmkKzLsTOPIzhi+WY1t7fUzhzMp+hLnk
+         YhMA==
+X-Gm-Message-State: AO0yUKX6nHJwF1CsranQZgAWQjvrkKZ0dmMSrbxhCmw/bUZwJJIAvcIZ
+        0q0EzpBiPlhBeefiHbipttI=
+X-Google-Smtp-Source: AK7set/kAC3oqG4fJA2gLuteYlSIvY5IZlT7p8MeOMk6ANibXIrPuykNaLUzEBu8ztRXgUkDaWN/+A==
+X-Received: by 2002:ac2:59d0:0:b0:4de:7a23:23e2 with SMTP id x16-20020ac259d0000000b004de7a2323e2mr4174573lfn.21.1679064522463;
+        Fri, 17 Mar 2023 07:48:42 -0700 (PDT)
+Received: from [172.16.196.130] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id f22-20020a2e3816000000b00295b0eead9asm442065lja.114.2023.03.17.07.48.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 07:48:42 -0700 (PDT)
+Message-ID: <61169e7e-b839-eb06-046f-e41bd3eabcec@gmail.com>
+Date:   Fri, 17 Mar 2023 16:48:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <641340e2998b4_2695182944f@iweiny-mobl.notmuch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 7/8] iio: light: ROHM BU27034 Ambient Light Sensor
+Content-Language: en-US, en-GB
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+References: <cover.1679062529.git.mazziesaccount@gmail.com>
+ <feb7e7f6785e93af45510ca22d9aecc28e436cf2.1679062529.git.mazziesaccount@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <feb7e7f6785e93af45510ca22d9aecc28e436cf2.1679062529.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:16:34AM -0700, Ira Weiny wrote:
-> > It's also much easier to run git-send-email HEAD^^^, rather than running
-> > it three separate times, let alone if it's a 20 patch series.
+On 3/17/23 16:44, Matti Vaittinen wrote:
+> ROHM BU27034 is an ambient light sensor with 3 channels and 3 photo diodes
+> capable of detecting a very wide range of illuminance. Typical application
+> is adjusting LCD and backlight power of TVs and mobile phones.
 > 
-> Exactly.  And I'm using b4 which would have forced me to create a separate
-> branch for each of the patches to track.  So I was keeping them around in
-> a single branch to let 0day run after the merge window.  Then I forgot
-> about the idea of splitting them because b4 had it all packaged up nice!
+> Add initial  support for the ROHM BU27034 ambient light sensor.
 > 
-> > 
-> > I wonder if we could come up with some convention to indicate that a
-> > series is made up of independent patches, and maintainers are free to
-> > pick them individually - but still sent as a single series.
+> NOTE:
+> 	- Driver exposes 4 channels. One IIO_LIGHT channel providing the
+> 	  calculated lux values based on measured data from diodes #0 and
+> 	  #1. In addition, 3 IIO_INTENSITY channels are emitting the raw
+> 	  register data from all diodes for more intense user-space
+> 	  computations.
+> 	- Sensor has GAIN values that can be adjusted from 1x to 4096x.
+> 	- Sensor has adjustible measurement times of 5, 55, 100, 200 and
+> 	  400 mS. Driver does not support 5 mS which has special
+> 	  limitations.
+> 	- Driver exposes standard 'scale' adjustment which is
+> 	  implemented by:
+> 		1) Trying to adjust only the GAIN
+> 		2) If GAIN adjustment alone can't provide requested
+> 		   scale, adjusting both the time and the gain is
+> 		   attempted.
+> 	- Driver exposes writable INT_TIME property that can be used
+> 	  for adjusting the measurement time. Time adjustment will also
+> 	  cause the driver to try to adjust the GAIN so that the
+> 	  overall scale is kept as close to the original as possible.
 > 
-> Maybe.  But perhaps b4 could have a send option which would split them
-> out?  I'll see about adding an option to b4 but I've Cc'ed Konstantin as
-> well for the idea.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> ---
+> Changes
+> v3 => v4:
+> - use min_t() for division by zero check
+> - adapt to new GTS helper header location
+> - calculate luxes not milli luxes
+> - drop scale for PROCESSED channel
+> - comment improvements
+> - do not allow changing gain (scale) for channel 2.
+>     - 'tie' channel 2 scale to channel 0 scale
+>       This is because channel 0 and channel 2 GAIN settings share part of
+>       the bits in the register. This means that setting one will also
+>       impact the other. The v3 of the patches attempted to work-around
+>       this by only disallowing the channel 2 gain setting to set the bits
+>       which were shared with channel 0 gain. This does not work because
+>       setting channel 0 gain (which was allowed to set also the shared
+>       bits) could result unsupported bit combinations for channel 2 gain.
+>       Thus it is safest to always set also the channel 2 gain to same
+>       value as channel 0 gain.
+> - Use the correct integration time (55 mS) in the gain table as the
+>    calcuations can be done based on the time multiplier.
+> - styling
+> 
 
-Yes, I plan to introduce the concept of "bundles" in addition to "series". The
-distinction is that when you send a bundle, each patch is sent as individual
-submission and we generate the change-id for each patch. It's a bit more work
-to send a v2 of some patch (you have to do a "prep -n --from-thread <msgid>"),
-but it's not insurmountable and should help with queuing up individual patches
-for sending post merge-window, like in your case.
+And right after sending out this version I realized I forgot to run 
+spell-checker for the comments. I will do that for v5 - please bear with me.
 
--K
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
