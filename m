@@ -2,121 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269106BF268
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461106BF279
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjCQU1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S229629AbjCQU2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCQU1v (ORCPT
+        with ESMTP id S229913AbjCQU2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:27:51 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B17AA0284;
-        Fri, 17 Mar 2023 13:27:50 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id bg11so4699963oib.5;
-        Fri, 17 Mar 2023 13:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679084869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ba1T52G1S948o7T3Sv1JQdxUM0FGCuF6VR8R5Mn80os=;
-        b=e5hycfXZJoahdd+EK2xsTNQpEheR1OaVRQ2wD6fTlb/tYwRqaK5PjxVNd2daMEJkIO
-         BoXetfGiJLB6y6/krTD6mAKCvtObcv7WfzAO2r5K9a6JMbXjD0sT/vIhM0Y7a++WzQMo
-         93o0pzgjrW+ffCHTUUclRJNrW9dkwSfOYuDEzAhTTwREnGRMLKuizTANO/1k7CGf4WBm
-         kMbD/KtlI9cj7a7TQeD9D9Bh5nz/X4sso6fprKCGWUMeQlG3YG3hP29q4vjl3pR90q/7
-         9NM4S0cDnoJFrTmloDK6+hj7tDvQ/UC9LmKLZRmK1n8LLEMy+Sop3ue/W+7Tln+2u1JT
-         TPag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679084869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ba1T52G1S948o7T3Sv1JQdxUM0FGCuF6VR8R5Mn80os=;
-        b=S9qpxH7J8b8Z6/KuFsrQufew8UD5o0zoUeVZeXWN58UKzU0SdVg0K+2Sgb7gU6s9q9
-         c0KxFSYyFddAuwgMFXknhNVHa8yBGpfZLy3rSfZTVxxqk3nU7kFWGGQiMrRXAzY9OiNl
-         zuGN7TblDEOUlattdMQD4m3kkp8W6s7ZBvdGf69xTGmGkw8KwUpPlgWAJQnBRB/yPNE4
-         KUGAt5ovVfDchzwOzuG2D5Yey/3tuId93G2XlooxrUqeISpZuMtrp1BS2YUJXRirGAwI
-         QwgrcJsP9zKegf1T1ObJKVEqjMsDzHTCfTI0JjswP+y3RuNfU2w86yiX7TgBv9Eg4+mt
-         wVkA==
-X-Gm-Message-State: AO0yUKWM7ZfsEMjnnzr3awXDn22VrAQmnCTHOE4KIars5vXrRnB/n6mp
-        UyzATXk2DCAxcd7sHAW/g0NIMgCO9cAue1yYEnI=
-X-Google-Smtp-Source: AK7set8/mMOeRQfI0SzS7VmayrF+lkziaBf2mSmKHYCfX8qAH2GPW32TprON+LtUX5ehQJAw/2SL7eWbeq0Hx8m8+Z0=
-X-Received: by 2002:a05:6808:9a7:b0:386:d34c:16fe with SMTP id
- e7-20020a05680809a700b00386d34c16femr969451oig.3.1679084869443; Fri, 17 Mar
- 2023 13:27:49 -0700 (PDT)
+        Fri, 17 Mar 2023 16:28:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53224A6BE1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679084875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DV4XApSba1H+jI1EziaiPZNIFxJwaca8BPvrUrvzx4E=;
+        b=aZ/5AzmViyUEbAh5DtvuRWGOr099gpT9fLbK4d4r8lHPHWmQXG3OapoQ1hIlEzpT8XvLEv
+        MDxhrh0WSW7vZlz7Kyw9GIpbfnpajjC1lZmlUsagdnmJNj1WEiyPqhdc+jov5XZC/C7O/f
+        HGyR0G1/z+iPn0Hj8YZrRrVi8jdh8T0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-97-4mtHtnXROQi3iVu07KYAzQ-1; Fri, 17 Mar 2023 16:27:52 -0400
+X-MC-Unique: 4mtHtnXROQi3iVu07KYAzQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6F9383C025C0;
+        Fri, 17 Mar 2023 20:27:51 +0000 (UTC)
+Received: from green.redhat.com (unknown [10.2.16.99])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A6BEB492B02;
+        Fri, 17 Mar 2023 20:27:50 +0000 (UTC)
+From:   Eric Blake <eblake@redhat.com>
+To:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org
+Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] nbd: s/handle/cookie/
+Date:   Fri, 17 Mar 2023 15:27:44 -0500
+Message-Id: <20230317202749.419094-1-eblake@redhat.com>
 MIME-Version: 1.0
-References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-19-lee@kernel.org>
-In-Reply-To: <20230317081718.2650744-19-lee@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 17 Mar 2023 16:27:36 -0400
-Message-ID: <CADnq5_Piyr=XPu3OvPAE6YUhT1gcuUFJYkxgf=0YZbVr1fKDHA@mail.gmail.com>
-Subject: Re: [PATCH 18/37] drm/amd/amdgpu/amdgpu_vce: Provide description for
- amdgpu_vce_validate_bo()'s 'p' param
-To:     Lee Jones <lee@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linaro-mm-sig@lists.linaro.org, Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied with minor modification.  Thanks!
+v1 was here: https://lkml.org/lkml/2023/3/10/1162
+since then:
+- split original 1/3 into 1/5 and 5/5
+- new patch 2/5
+- reorder members of anon union
+- always send cookie in network order
 
-Alex
+Eric Blake (5):
+  uapi nbd: improve doc links to userspace spec
+  block nbd: send handle in network order
+  uapi nbd: add cookie alias to handle
+  block nbd: use req.cookie instead of req.handle
+  docs nbd: userspace NBD now favors github over sourceforge
 
-On Fri, Mar 17, 2023 at 4:23=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
->
-> Fixes the following W=3D1 kernel build warning(s):
->
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c:599: warning: Function parameter=
- or member 'p' not described in 'amdgpu_vce_validate_bo'
->
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linaro-mm-sig@lists.linaro.org
-> Signed-off-by: Lee Jones <lee@kernel.org>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c b/drivers/gpu/drm/am=
-d/amdgpu/amdgpu_vce.c
-> index 2fb61410b1c02..c4d65ade5c00a 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
-> @@ -585,6 +585,7 @@ static int amdgpu_vce_get_destroy_msg(struct amdgpu_r=
-ing *ring, uint32_t handle,
->  /**
->   * amdgpu_vce_validate_bo - make sure not to cross 4GB boundary
->   *
-> + * @p: parser context
->   * @ib: indirect buffer to use
->   * @lo: address of lower dword
->   * @hi: address of higher dword
-> --
-> 2.40.0.rc1.284.g88254d51c5-goog
->
+ Documentation/admin-guide/blockdev/nbd.rst |  2 +-
+ drivers/block/nbd.c                        |  6 +++---
+ include/uapi/linux/nbd.h                   | 25 +++++++++++++++++-----
+ 3 files changed, 24 insertions(+), 9 deletions(-)
+
+
+base-commit: 8d3c682a5e3d9dfc2448ecbb22f4cd48359b9e21
+-- 
+2.39.2
+
