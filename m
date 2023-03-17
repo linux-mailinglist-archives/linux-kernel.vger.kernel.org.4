@@ -2,263 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3CC6BE92E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8306BE934
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCQM2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S230087AbjCQMa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjCQM2J (ORCPT
+        with ESMTP id S229780AbjCQMaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:28:09 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D183B21D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:28:05 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eg48so19554531edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679056084;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c4NJZTZucxQIhmv+yhQCHkUP4VMj8aSUUr6DI8AUneE=;
-        b=l3HbbDmGhWJkfrjdeVRql3v6S18wD3xSANEHfyxftEs99S0h1gdT4hA2xMdVFe04f0
-         GdpH+F77m2VruQr7DBdj9iphFo/oK3n3KN/tpIHMXOEdIs21miF+chuVuGQBqj32B7ym
-         mcQk7e9I44HH9wgpZyV4R1bjc57w1HCnYtK38NQAldVN2NjPvGMzRNm/m5PLnlYMysHu
-         VOhb34OheGo7T3hFViX3Dl6be3FSj0HLF539spYWEQU0KihI5Xje3+iBjO32mLXTtaoq
-         FICKqui1l3X2IOOslxWckIWWKfCFFIPoQIYPyvG507Ir6hx20nDUS8OrZp/fAEeLflmq
-         8JoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679056084;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c4NJZTZucxQIhmv+yhQCHkUP4VMj8aSUUr6DI8AUneE=;
-        b=HQs4L+yEXCeNzts0Yl1faR0yR3yRQM+Pop4wbGo+6Vn66bjs//p/WmGY9Zj9k1peoB
-         zJkO4HVVY/UFgjQw9IdCAMnUDaaGms+9MEP4zwfctFAmQs1iecqa5MT1HEIM1qsbrKut
-         GBOuAGfiJLYXsEH7Jf+cx7sGdQM6UNvl/IDTrRY66Oxs8wdB9r9JINLf+kDrlaGH5ZHU
-         NUpwarb1BDiC5aY5mKTkvV5RQm+LDurKWSaG2eWKbyLT5yq5LcnLanMt3AMhTB9QrK3P
-         C4pW7x12pV6HC2zhjAvb6nkY7ISwU+iq79rFM1AR6LFXiHP5Q0hQPOQTP8KhdrWD2M8o
-         A+dQ==
-X-Gm-Message-State: AO0yUKU4KJ5C3uZbXcI5OigKC13wZ6bNElvgyrKvjllRv4LVvZqrFc4D
-        rWIX8aEHGNAOyEFy4zQfVNbUdQ==
-X-Google-Smtp-Source: AK7set9t/UoX9hFHOcngKEhZnhSWZjQqE2c9vms2p3PISVzTQWVOpgxYc5pqcHwBaTzITEMiLULNzw==
-X-Received: by 2002:aa7:dbd8:0:b0:4ae:e5ab:46d7 with SMTP id v24-20020aa7dbd8000000b004aee5ab46d7mr2667687edt.8.1679056084346;
-        Fri, 17 Mar 2023 05:28:04 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d013:3eeb:7658:cec? ([2a02:810d:15c0:828:d013:3eeb:7658:cec])
-        by smtp.gmail.com with ESMTPSA id u20-20020a50a414000000b004fd1ee3f723sm1002701edb.67.2023.03.17.05.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 05:28:03 -0700 (PDT)
-Message-ID: <216262b8-fe48-6696-17a4-eaa82e776db7@linaro.org>
-Date:   Fri, 17 Mar 2023 13:28:02 +0100
+        Fri, 17 Mar 2023 08:30:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBBE69CF2;
+        Fri, 17 Mar 2023 05:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679056223; x=1710592223;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dcu+SfJwqEMVOxpF4gx5A8y0ttWQQQWkDFj8IuNC5TE=;
+  b=bV/9ib5/JYO3hFSzNJS3XqdakY60G2y9nJao5L2sX53IXncfJaXfC81B
+   WJgjOn4x31r+HhAM6j6mxH5TzI+IQi64sMIpSkkf5DdTALLTB7Ug34IW2
+   tGQTghbtQ6VrPo+pAB3chOaiEb9ze7BjOBOj54jvwT549xccbNzSXglPW
+   k8vsND+WzA/b2Kg95eC8h/esE9S9PtcUd+y9l2M0SKF/mW7AFV9nmc/ul
+   35LLoz9CjtL5Jxxcd7eucAsy0uD79W+S6Y6Jl6RXy2ooJLMSBtksnghTC
+   IPJkxnDQLkBr0DJ3Z6JqqtJt+TgfG4Ro6JYSt1MTYOg4NbUNUCn/hei7C
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="322096897"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="322096897"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 05:30:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="657546450"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="657546450"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 05:30:20 -0700
+Date:   Fri, 17 Mar 2023 13:30:11 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jacob.e.keller@intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next] net: ethernet: ti: am65-cpts: reset pps genf
+ adj settings on enable
+Message-ID: <ZBRdU8Ij341WCs+f@localhost.localdomain>
+References: <20230316095232.2002680-1-s-vadapalli@ti.com>
+ <b0dc760d-fb7e-a19b-babc-8cd571b8f74d@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/2] ARM: dts: exynos: add mmc aliases
-Content-Language: en-US
-To:     Henrik Grimler <henrik@grimler.se>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        m.szyprowski@samsung.com, jenneron@protonmail.com,
-        markuss.broks@gmail.com, martin.juecker@gmail.com,
-        virag.david003@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Cc:     Valentine Iourine <iourine@iourine.msk.su>
-References: <20230316211558.8526-1-henrik@grimler.se>
- <20230316211558.8526-3-henrik@grimler.se>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230316211558.8526-3-henrik@grimler.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0dc760d-fb7e-a19b-babc-8cd571b8f74d@kernel.org>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 22:15, Henrik Grimler wrote:
-> Add aliases for eMMC, SD card and WiFi where applicable, so that
-> assigned mmc indeces are always the same.
+On Fri, Mar 17, 2023 at 01:27:36PM +0200, Roger Quadros wrote:
 > 
-> Co-developed-by: Anton Bambura <jenneron@protonmail.com>
-> Signed-off-by: Anton Bambura <jenneron@protonmail.com>
-> [ Tested on exynos5800-peach-pi ]
-> Tested-by: Valentine Iourine <iourine@iourine.msk.su>
-> Signed-off-by: Henrik Grimler <henrik@grimler.se>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > 
+> On 16/03/2023 11:52, Siddharth Vadapalli wrote:
+> > From: Grygorii Strashko <grygorii.strashko@ti.com>
+> > 
+> > The CPTS PPS GENf adjustment settings are invalid after it has been
+> > disabled for a while, so reset them.
+> > 
+> > Fixes: eb9233ce6751 ("net: ethernet: ti: am65-cpts: adjust pps following ptp changes")
+> > Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> 
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
+Small nit for the future: should be [PATCH net] instead of net-next when
+You sending fixes.
 
-
->  	chosen {
-> diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
-> index bba85011ecc9..7051e2c4b391 100644
-> --- a/arch/arm/boot/dts/exynos4210-i9100.dts
-> +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
-> @@ -25,6 +25,12 @@ memory@40000000 {
->  		reg = <0x40000000 0x40000000>;
->  	};
->  
-> +	aliases {
-> +		mmc0 = &sdhci_0;
-> +		mmc2 = &sdhci_2;
-> +		mmc3 = &sdhci_3;
-
-Here...
-
-> +	};
-> +
->  	chosen {
->  		stdout-path = "serial2:115200n8";
->  	};
-> diff --git a/arch/arm/boot/dts/exynos4210-origen.dts b/arch/arm/boot/dts/exynos4210-origen.dts
-> index 1103e7f92b57..1970c31410e5 100644
-> --- a/arch/arm/boot/dts/exynos4210-origen.dts
-> +++ b/arch/arm/boot/dts/exynos4210-origen.dts
-> @@ -30,6 +30,11 @@ memory@40000000 {
->  		       0x70000000 0x10000000>;
->  	};
->  
-> +	aliases {
-> +		mmc0 = &sdhci_0;
-
-here ....
-
-> +		mmc2 = &sdhci_2;
-> +	};
-> +
->  	chosen {
->  		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
->  		stdout-path = "serial2:115200n8";
-> diff --git a/arch/arm/boot/dts/exynos4210-smdkv310.dts b/arch/arm/boot/dts/exynos4210-smdkv310.dts
-> index 181c99eca675..cb74af41e17c 100644
-> --- a/arch/arm/boot/dts/exynos4210-smdkv310.dts
-> +++ b/arch/arm/boot/dts/exynos4210-smdkv310.dts
-> @@ -25,6 +25,10 @@ memory@40000000 {
->  		reg = <0x40000000 0x80000000>;
->  	};
->  
-> +	aliases {
-> +		mmc2 = &sdhci_2;
-> +	};
-> +
->  	chosen {
->  		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
->  		stdout-path = "serial1:115200n8";
-> diff --git a/arch/arm/boot/dts/exynos4210-trats.dts b/arch/arm/boot/dts/exynos4210-trats.dts
-> index b8e9dd23fc51..b6b0c116016c 100644
-> --- a/arch/arm/boot/dts/exynos4210-trats.dts
-> +++ b/arch/arm/boot/dts/exynos4210-trats.dts
-> @@ -26,6 +26,12 @@ memory@40000000 {
->  			0x70000000 0x10000000>;
->  	};
->  
-> +	aliases {
-> +		mmc0 = &sdhci_0;
-> +		mmc2 = &sdhci_2;
-> +		mmc3 = &sdhci_3;
-> +	};
-> +
->  	chosen {
->  		bootargs = "root=/dev/mmcblk0p5 rootwait earlyprintk panic=5";
->  		stdout-path = "serial2:115200n8";
-> diff --git a/arch/arm/boot/dts/exynos4210-universal_c210.dts b/arch/arm/boot/dts/exynos4210-universal_c210.dts
-> index 140abfb38e1d..f42cfcbcdcfa 100644
-> --- a/arch/arm/boot/dts/exynos4210-universal_c210.dts
-> +++ b/arch/arm/boot/dts/exynos4210-universal_c210.dts
-> @@ -24,6 +24,12 @@ memory@40000000 {
->  			0x50000000 0x10000000>;
->  	};
->  
-> +	aliases {
-> +		mmc0 = &sdhci_0;
-> +		mmc2 = &sdhci_2;
-
-
-Why this is 2? Aliases are continues and match the board. For example
-Universal calls this mmc1 and the next mmc2, not 3.
-
-I bet it is the same on Trats and all other boards.
-
-> +		mmc3 = &sdhci_3;
-> +	};
-> +
->  	chosen {
->  		bootargs = "root=/dev/mmcblk0p5 rw rootwait earlyprintk panic=5 maxcpus=1";
->  		stdout-path = "serial2:115200n8";
-> diff --git a/arch/arm/boot/dts/exynos4412-itop-elite.dts b/arch/arm/boot/dts/exynos4412-itop-elite.dts
-> index 6260da187e92..0e5419c0eaff 100644
-> --- a/arch/arm/boot/dts/exynos4412-itop-elite.dts
-> +++ b/arch/arm/boot/dts/exynos4412-itop-elite.dts
-> @@ -20,6 +20,10 @@ / {
->  	model = "TOPEET iTop 4412 Elite board based on Exynos4412";
->  	compatible = "topeet,itop4412-elite", "samsung,exynos4412", "samsung,exynos4";
->  
-> +	aliases {
-> +		mmc2 = &sdhci_2;
-
-mmc1
-
-> +	};
-> +
->  	chosen {
->  		bootargs = "root=/dev/mmcblk0p2 rw rootfstype=ext4 rootdelay=1 rootwait";
->  		stdout-path = "serial2:115200n8";
-> diff --git a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-> index ca8d42b2ce3b..7bc6968af9c3 100644
-> --- a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-> @@ -23,6 +23,10 @@ memory@40000000 {
->  		reg = <0x40000000 0x40000000>;
->  	};
->  
-> +	aliases {
-> +		mmc0 = &mshc_0;
-> +	};
-> +
->  	firmware@203f000 {
->  		compatible = "samsung,secure-firmware";
->  		reg = <0x0203f000 0x1000>;
-> diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
-> index 82aed59cba7c..e6b949c1a00f 100644
-> --- a/arch/arm/boot/dts/exynos4412-midas.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
-> @@ -25,6 +25,9 @@ / {
->  	aliases {
->  		i2c11 = &i2c_max77693;
->  		i2c12 = &i2c_max77693_fuel;
-> +		mmc0 = &mshc_0;
-> +		mmc2 = &sdhci_2;
-> +		mmc3 = &sdhci_3;
-
-This is actually correct.
-
->  	};
->  
->  	chosen {
-> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> index 25e082fda955..45ef7b7ba7e0 100644
-> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> @@ -13,6 +13,11 @@
->  #include "exynos-mfc-reserved-memory.dtsi"
->  
->  / {
-> +	aliases {
-> +		mmc0 = &mshc_0;
-> +		mmc2 = &sdhci_2;
-
-This is also correct.
-
-> +	};
-
-For all other cases, where schematics are missing, just make them linear.
-
-Krzysztof
-
+Looks fine, thanks
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
