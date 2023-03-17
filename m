@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38AE6BEAE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 988636BEAEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjCQOQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S229985AbjCQORe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjCQOQi (ORCPT
+        with ESMTP id S229541AbjCQOR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:16:38 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0384261525;
-        Fri, 17 Mar 2023 07:16:36 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id h5so2795178ile.13;
-        Fri, 17 Mar 2023 07:16:36 -0700 (PDT)
+        Fri, 17 Mar 2023 10:17:26 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D4C1ADFC;
+        Fri, 17 Mar 2023 07:17:24 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id n125so5810966ybg.7;
+        Fri, 17 Mar 2023 07:17:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679062596;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7ckr4N9Sg6yKbc6efTCWtcAHsD7HxkVk0i05mjYu31s=;
-        b=WNJy2ZnBkM8Tkwd+KJi7m787VnBx0swkocx+gbV662DuU/V4GLdrU9OZnb8ykE9cia
-         P6oSqNRA7TabRBdENL0v0ncOdiUwVj9nL2v/paZBi227Z1J8qmzcmqfGSeUzSRwnU+5b
-         XNchW5m717XFXc/SzHNiWbfjC00B1BpdZ4N4CODgvMjLbCYzcxCbBhRfW4xbj+5Bmcf1
-         Ugv3LC8U//tpgnxEMRM0RoGCpQ4sEb2gsLcqLroCL8r1C5SOAY+pdjcxeyQn8Gc4kjkT
-         hSEGYJxWlqYJu+F7VSZ7BIFpic0+1HDJKTkf3xBF7aw3iZRE9Abfuh8sb8IxB6vrdw9b
-         sOYg==
+        d=gmail.com; s=20210112; t=1679062643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KWj7UtLe90naf1fPcSOD1HiWgunjA67trQ9URwm+TNg=;
+        b=CBw5lO1KlmCsceOVZnKaycjOSfZat/Hlh/JFUlOVLQY3GDDyn/p1goa9Y67+wpB5Pw
+         em4d2UfXmjupCYFjMSIpg95wQ6LjvhB6kEWIW9ukPIZgXYybWKPJyH0IPeLHv8aaJwNz
+         Ygp768EPeata8kYssjBBuBb+l7qwn2btDMfnRIlKzG6/cdszyZTT3zMz4Wjytvl/TU6c
+         NC7vVUqvFlsS+STxxmvDfuGaaVZma/beHmEARHhyB3BH5TK0HiFn7R/uqspVeNPC7raA
+         KoirEmVKYiDKE4zs3fdPp0Qu0lSL3UZIpSR4wTXt5dh0bNkbCbQ1RvfpidobHgB5Nu8I
+         jCjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679062596;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679062643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7ckr4N9Sg6yKbc6efTCWtcAHsD7HxkVk0i05mjYu31s=;
-        b=sM0MIcmYSRCgkpre+yJlvjdwGGgxOY6gc210BTVl3YoGnOOobEafS2ZfXQSG6ij6/O
-         j/xENgBi1Mm87q7eCzir4ecxCSS2faiJfrR46dB0zYWzqgwsE5y1g1h79NcdZ8ZRyz7+
-         v2/uJMbbNVm4rfXOldgEZxK9zJU3cG5N+278HeibDjiiqm/u9uDYYSkPw0LZu/HkYscW
-         4MwzyrfiY2vN5hXpe03IFYBGxuPpVLaJtCsMpFc3jiPL8JMq6qY+5K2k2IUV2IraVNeC
-         nesyQz1rkNJTLlnSe0uikMtuKQpWMKo/NdK4Han3hwX1sLiB5/R6xY/roHkZnknR2mPU
-         ukMw==
-X-Gm-Message-State: AO0yUKUByRrSwpmfeou/d/GbXhPPT7yxiLUdbSDBCBBU8ApF/0mSBh7J
-        Z8F1sQXeSf8Mr4eDzS2Bx6o=
-X-Google-Smtp-Source: AK7set9SLmJwK/CZFRPZV2uNhmXoOUlXDKKRGv8Vge8H2EEO6FUoFm4c2gVXXbQYUQGPsz8OALi7UA==
-X-Received: by 2002:a92:6a0c:0:b0:317:9c8b:c0a7 with SMTP id f12-20020a926a0c000000b003179c8bc0a7mr9056018ilc.11.1679062596257;
-        Fri, 17 Mar 2023 07:16:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s29-20020a02b15d000000b004061ba59f18sm706712jah.120.2023.03.17.07.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 07:16:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 17 Mar 2023 07:16:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, adrian.hunter@intel.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, andy.shevchenko@gmail.com,
-        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-Message-ID: <f28c7c34-077c-4c7e-afd8-c4180718d403@roeck-us.net>
-References: <20221205085351.27566-1-tmaimon77@gmail.com>
- <20221205085351.27566-3-tmaimon77@gmail.com>
+        bh=KWj7UtLe90naf1fPcSOD1HiWgunjA67trQ9URwm+TNg=;
+        b=Ba4clilcuIX7pPvU41KrAgHs3NNADR36ECN9qRCm8wT30ZcWxdDWjUmBsNeBigC3Qn
+         QFonURVjKE82BI6+65ziJGaQ3yzrXOGZmaLHQWXfoH6if5CnNPanBXEhfB42whzrCusC
+         +dYUSJBPCHRWUwwkmk/WKW5AyfJBPiZQ2BBwVPtmnZ/tgzK0+HqJBo0PhOQlKEDtU6lF
+         6fVahhHxAGQxp3Puh5V5OfuP8LymOBUPEpTCr7DOUeGHq0pYplJeghvLlKDX/03zbMPh
+         Hkj1aRwZPsT0btIaQj05dS/OtxigseFA+kM5z1EQMXXRiCAAsrpVft5kLAfJT0X8cx6w
+         6zLQ==
+X-Gm-Message-State: AO0yUKW3hm+E4kgHbXMV0VskXow/EgbxZE3JQM2I1PGBv7RvJdNT+1F6
+        i+JzWTYxlJSNXCHRockWQKn2qOXVA4+xfINlZ7s=
+X-Google-Smtp-Source: AK7set/AvkXboti3g67W0E5gnj9H9gbp70iGfPV3mPZRmPqigCw1kWMNrv2MiRw/vCo1kpiG2eElsC9PgotFwb7Aa94=
+X-Received: by 2002:a25:f50a:0:b0:b46:4a5e:3651 with SMTP id
+ a10-20020a25f50a000000b00b464a5e3651mr8184686ybe.9.1679062643166; Fri, 17 Mar
+ 2023 07:17:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205085351.27566-3-tmaimon77@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230317113427.302162-1-noltari@gmail.com> <20230317113427.302162-3-noltari@gmail.com>
+ <20230317115115.s32r52rz3svuj4ed@skbuf> <CAKR-sGe3xHkN-1+aLn0ixnskctPK4GTzfXu8O_dkFhHyY1nTeg@mail.gmail.com>
+ <20230317130434.7cbzk5gxx5guarcz@skbuf>
+In-Reply-To: <20230317130434.7cbzk5gxx5guarcz@skbuf>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Fri, 17 Mar 2023 15:17:12 +0100
+Message-ID: <CAKR-sGeFZLnuqH=4Gok1URJEvrQKxbk203Q8zdMd9830G_XD7A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] net: dsa: b53: mmap: register MDIO Mux bus controller
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
+        jonas.gorski@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,159 +75,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 10:53:51AM +0200, Tomer Maimon wrote:
-> Add Nuvoton NPCM BMC sdhci-pltfm controller driver.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+Hi Vladimir
 
-I still don't see this driver in the upstream kernel, or in linux-next.
+El vie, 17 mar 2023 a las 14:04, Vladimir Oltean (<olteanv@gmail.com>) escr=
+ibi=C3=B3:
+>
+> On Fri, Mar 17, 2023 at 01:06:43PM +0100, =C3=81lvaro Fern=C3=A1ndez Roja=
+s wrote:
+> > Hi Vladimir,
+> >
+> > El vie, 17 mar 2023 a las 12:51, Vladimir Oltean (<olteanv@gmail.com>) =
+escribi=C3=B3:
+> > >
+> > > On Fri, Mar 17, 2023 at 12:34:26PM +0100, =C3=81lvaro Fern=C3=A1ndez =
+Rojas wrote:
+> > > > b53 MMAP devices have a MDIO Mux bus controller that must be regist=
+ered after
+> > > > properly initializing the switch. If the MDIO Mux controller is reg=
+istered
+> > > > from a separate driver and the device has an external switch presen=
+t, it will
+> > > > cause a race condition which will hang the device.
+> > >
+> > > Could you describe the race in more details? Why does it hang the dev=
+ice?
+> >
+> > I didn't perform a full analysis on the problem, but what I think is
+> > going on is that both b53 switches are probed and both of them fail
+> > due to the ethernet device not being probed yet.
+> > At some point, the internal switch is reset and not fully configured
+> > and the external switch is probed again, but since the internal switch
+> > isn't ready, the MDIO accesses for the external switch fail due to the
+> > internal switch not being ready and this hangs the device because the
+> > access to the external switch is done through the same registers from
+> > the internal switch.
+>
+> The proposed solution is too radical for a problem that was not properly
+> characterized yet, so this patch set has my temporary NACK.
 
-Couple of comments:
+Forgive me, but why do you consider this solution too radical?
 
-- devm ordering does not really matter here. The devm resource
-  is the clock, it does not depend on local data, and it will be
-  released last, so that is ok.
-- sdhci_pltfm_unregister() calls clk_disable_unprepare(),
-  so there is no enabled clock floating around on driver removal.
-  Unfortunately, that also means that the more convenient
-  devm_clk_get_optional_enabled() can not be used.
+>
+> > But maybe Florian or Jonas can give some more details about the issue..=
+.
+>
+> I think you also have the tools necessary to investigate this further.
+> We need to know what resource belonging to the switch is it that the
+> MDIO mux needs. Where is the earliest place you can add the call to
+> b53_mmap_mdiomux_init() such that your board works reliably? Note that
+> b53_switch_register() indirectly calls b53_setup(). By placing this
+> function where you have, the entirety of b53_setup() has finished
+> execution, and we don't know exactly what is it from there that is
+> needed.
 
-Real problem inline below.
+In the following link you will find different bootlogs related to
+different scenarios all of them with the same result: any attempt of
+calling b53_mmap_mdiomux_init() earlier than b53_switch_register()
+will either result in a kernel panic or a device hang:
+https://gist.github.com/Noltari/b0bd6d5211160ac7bf349d998d21e7f7
 
-Guenter
+1. before b53_switch_register():
+[ 1.756010] bcm53xx 0.1:1e: found switch: BCM53125, rev 4
+[ 1.761917] bcm53xx 0.1:1e: failed to register switch: -517
+[ 1.767759] b53-switch 10e00000.switch: MDIO mux bus init
+[ 1.774237] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+[ 1.785673] bcm6368-enetsw 1000d800.ethernet: IRQ tx not found
+[ 1.795932] bcm6368-enetsw 1000d800.ethernet: mtd mac 4c:60:de:86:52:12
+[ 1.884320] bcm7038-wdt 1000005c.watchdog: Registered BCM7038 Watchdog
+[ 1.901957] NET: Registered PF_INET6 protocol family
+[ 1.935223] Segment Routing with IPv6
+[ 1.939160] In-situ OAM (IOAM) with IPv6
+[ 1.943514] NET: Registered PF_PACKET protocol family
+[ 1.949564] 8021q: 802.1Q VLAN Support v1.8
+[ 1.987591] CPU 1 Unable to handle kernel paging request at virtual
+address 00000000, epc =3D=3D 804be000, ra =3D=3D 804bbf3c
+[ 1.998697] Oops[#1]:
+[ 2.000995] CPU: 1 PID: 91 Comm: kworker/u4:3 Not tainted 5.15.98 #0
+[ 2.007533] Workqueue: events_unbound deferred_probe_work_func
+[ 2.013541] $ 0 : 00000000 00000001 804bdfd4 81ee6800
+[ 2.018916] $ 4 : 834c7000 00000000 00000002 00000001
+[ 2.024291] $ 8 : c0000000 00000110 00000114 00000000
+[ 2.029668] $12 : 00000001 81cf2f8a fffffffc 00000000
+[ 2.035043] $16 : 00000000 00000000 00000002 834bc680
+[ 2.040420] $20 : 00000000 00000080 81c0700d 81f37a40
+[ 2.045796] $24 : 00000018 00000000
+[ 2.051171] $28 : 81f58000 81f59c80 80870000 804bbf3c
+[ 2.056547] Hi : e6545baf
+[ 2.059505] Lo : a4644567
+[ 2.062462] epc : 804be000 mdio_mux_read+0x2c/0xd4
+[ 2.067569] ra : 804bbf3c __mdiobus_read+0x20/0xc4
+[ 2.072766] Status: 10008b03 KERNEL EXL IE
+[ 2.077066] Cause : 00800008 (ExcCode 02)
+[ 2.081187] BadVA : 00000000
+[ 2.084145] PrId : 0002a070 (Broadcom BMIPS4350)
+[ 2.088983] Modules linked in:
+[ 2.092119] Process kworker/u4:3 (pid: 91, threadinfo=3D(ptrval),
+task=3D(ptrval), tls=3D00000000)
+[ 2.100812] Stack : 00000080 80255cfc 81c0700d 81f37a40 834c7000
+00000000 00000002 834c7558
+[ 2.109438] 00000002 804bbf3c 00000000 83501f78 834bb0b0 834df478
+8194eae0 834c7000
+[ 2.118058] 00000000 804bc020 ffffffed 83508780 00000000 00000004
+834bb0b0 81f5b800
+[ 2.126677] 808eb104 808eb104 81950000 804c48cc 00000003 81f5b800
+81f5b800 00000000
+[ 2.135297] 808eb104 81f5b800 808eb104 804bc6c0 834c7570 10008b01
+81f5b800 81f5b8e0
+[ 2.143925] ...
+[ 2.146435] Call Trace:
+[ 2.148943] [<804be000>] mdio_mux_read+0x2c/0xd4
+[ 2.153697] [<804bbf3c>] __mdiobus_read+0x20/0xc4
+[ 2.158533] [<804bc020>] mdiobus_read+0x40/0x6c
+[ 2.163193] [<804c48cc>] b53_mdio_probe+0x38/0x16c
+[ 2.168120] [<804bc6c0>] mdio_probe+0x34/0x7c
+[ 2.172600] [<80437930>] really_probe.part.0+0xac/0x35c
+[ 2.177976] [<80437c8c>] __driver_probe_device+0xac/0x164
+[ 2.183531] [<80437d90>] driver_probe_device+0x4c/0x158
+[ 2.188907] [<80438444>] __device_attach_driver+0xd0/0x15c
+[ 2.194552] [<804353a0>] bus_for_each_drv+0x70/0xb0
+[ 2.199569] [<804380f0>] __device_attach+0xc0/0x1d8
+[ 2.204588] [<804367f4>] bus_probe_device+0x9c/0xb8
+[ 2.209604] [<80436d58>] deferred_probe_work_func+0x94/0xd4
+[ 2.215339] [<80058314>] process_one_work+0x290/0x4d0
+[ 2.220536] [<800588ac>] worker_thread+0x358/0x614
+[ 2.225464] [<80061064>] kthread+0x148/0x16c
+[ 2.229854] [<80013848>] ret_from_kernel_thread+0x14/0x1c
+[ 2.235413]
+[ 2.236931] Code: 00a0a025 8e700004 00c09025 <8e040000> 0c1ba5d8
+24840558 8e020010 8e06000c 8e65000c
+[ 2.247011]
+[ 2.248726] ---[ end trace 9e5942a13795eb30 ]---
+[ 2.253490] Kernel panic - not syncing: Fatal exception
+[ 2.258831] Rebooting in 1 seconds..
 
-> ---
->  drivers/mmc/host/Kconfig      |  8 ++++
->  drivers/mmc/host/Makefile     |  1 +
->  drivers/mmc/host/sdhci-npcm.c | 84 +++++++++++++++++++++++++++++++++++
->  3 files changed, 93 insertions(+)
->  create mode 100644 drivers/mmc/host/sdhci-npcm.c
-> 
-> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> index fb1062a6394c..82ab6fc25dca 100644
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@ -415,6 +415,14 @@ config MMC_SDHCI_MILBEAUT
->  
->  	  If unsure, say N.
->  
-> +config MMC_SDHCI_NPCM
-> +	tristate "Secure Digital Host Controller Interface support for NPCM"
-> +	depends on ARCH_NPCM || COMPILE_TEST
-> +	depends on MMC_SDHCI_PLTFM
-> +	help
-> +	  This provides support for the SD/eMMC controller found in
-> +	  NPCM BMC family SoCs.
-> +
->  config MMC_SDHCI_IPROC
->  	tristate "SDHCI support for the BCM2835 & iProc SD/MMC Controller"
->  	depends on ARCH_BCM2835 || ARCH_BCM_IPROC || ARCH_BRCMSTB || COMPILE_TEST
-> diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-> index 4e4ceb32c4b4..a101f87a5f19 100644
-> --- a/drivers/mmc/host/Makefile
-> +++ b/drivers/mmc/host/Makefile
-> @@ -97,6 +97,7 @@ obj-$(CONFIG_MMC_SDHCI_MICROCHIP_PIC32)	+= sdhci-pic32.o
->  obj-$(CONFIG_MMC_SDHCI_BRCMSTB)		+= sdhci-brcmstb.o
->  obj-$(CONFIG_MMC_SDHCI_OMAP)		+= sdhci-omap.o
->  obj-$(CONFIG_MMC_SDHCI_SPRD)		+= sdhci-sprd.o
-> +obj-$(CONFIG_MMC_SDHCI_NPCM)		+= sdhci-npcm.o
->  obj-$(CONFIG_MMC_CQHCI)			+= cqhci.o
->  cqhci-y					+= cqhci-core.o
->  cqhci-$(CONFIG_MMC_CRYPTO)		+= cqhci-crypto.o
-> diff --git a/drivers/mmc/host/sdhci-npcm.c b/drivers/mmc/host/sdhci-npcm.c
-> new file mode 100644
-> index 000000000000..beace15b6c00
-> --- /dev/null
-> +++ b/drivers/mmc/host/sdhci-npcm.c
-> @@ -0,0 +1,84 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * NPCM SDHC MMC host controller driver.
-> + *
-> + * Copyright (c) 2020 Nuvoton Technology corporation.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/mmc/host.h>
-> +#include <linux/mmc/mmc.h>
-> +#include <linux/module.h>
-> +
-> +#include "sdhci-pltfm.h"
-> +
-> +static const struct sdhci_pltfm_data npcm_sdhci_pdata = {
-> +	.quirks  = SDHCI_QUIRK_DELAY_AFTER_POWER,
-> +	.quirks2 = SDHCI_QUIRK2_STOP_WITH_TC |
-> +		   SDHCI_QUIRK2_NO_1_8_V,
-> +};
-> +
-> +static int npcm_sdhci_probe(struct platform_device *pdev)
-> +{
-> +	struct sdhci_pltfm_host *pltfm_host;
-> +	struct sdhci_host *host;
-> +	u32 caps;
-> +	int ret;
-> +
-> +	host = sdhci_pltfm_init(pdev, &npcm_sdhci_pdata, 0);
-> +	if (IS_ERR(host))
-> +		return PTR_ERR(host);
-> +
-> +	pltfm_host = sdhci_priv(host);
-> +
-> +	pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
-> +	if (IS_ERR(pltfm_host->clk))
-> +		return PTR_ERR(pltfm_host->clk);
-> +
-> +	ret = clk_prepare_enable(pltfm_host->clk);
-> +	if (ret)
-> +		return ret;
-> +
+2. before dsa_register_switch():
+[ 1.759901] bcm53xx 0.1:1e: failed to register switch: -19
+[ 1.765837] b53-switch 10e00000.switch: MDIO mux bus init
+[ 1.771412] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+[ 1.782683] bcm6368-enetsw 1000d800.ethernet: IRQ tx not found
+[ 1.793149] bcm6368-enetsw 1000d800.ethernet: mtd mac 4c:60:de:86:52:12
+[ 1.875791] bcm7038-wdt 1000005c.watchdog: Registered BCM7038 Watchdog
+[ 1.893480] NET: Registered PF_INET6 protocol family
+[ 1.922283] Segment Routing with IPv6
+[ 1.926192] In-situ OAM (IOAM) with IPv6
+[ 1.930392] NET: Registered PF_PACKET protocol family
+[ 1.936526] 8021q: 802.1Q VLAN Support v1.8
+[ 2.245288] bcm53xx 1.1:1e: failed to register switch: -19
+[ 2.251210] b53-switch 10e00000.switch: MDIO mux bus init
+[ 2.256761] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+*** Device hangs ***
 
-The two functions above should not return but goto the call
-to sdhci_pltfm_free() to avoid a memory leak on error.
+3. before b53_switch_init():
+[ 1.757728] bcm53xx 0.1:1e: failed to register switch: -19
+[ 1.763689] b53-switch 10e00000.switch: MDIO mux bus init
+[ 1.769780] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+[ 1.781130] bcm6368-enetsw 1000d800.ethernet: IRQ tx not found
+[ 1.790996] bcm6368-enetsw 1000d800.ethernet: mtd mac 4c:60:de:86:52:12
+[ 1.875775] bcm7038-wdt 1000005c.watchdog: Registered BCM7038 Watchdog
+[ 1.893523] NET: Registered PF_INET6 protocol family
+[ 1.921605] Segment Routing with IPv6
+[ 1.925513] In-situ OAM (IOAM) with IPv6
+[ 1.929695] NET: Registered PF_PACKET protocol family
+[ 1.935809] 8021q: 802.1Q VLAN Support v1.8
+[ 2.244702] bcm53xx 1.1:1e: failed to register switch: -19
+[ 2.250653] b53-switch 10e00000.switch: MDIO mux bus init
+[ 2.256751] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+*** Device hangs ***
 
-> +	caps = sdhci_readl(host, SDHCI_CAPABILITIES);
-> +	if (caps & SDHCI_CAN_DO_8BIT)
-> +		host->mmc->caps |= MMC_CAP_8_BIT_DATA;
-> +
-> +	ret = mmc_of_parse(host->mmc);
-> +	if (ret)
-> +		goto err_sdhci_add;
-> +
-> +	ret = sdhci_add_host(host);
-> +	if (ret)
-> +		goto err_sdhci_add;
-> +
-> +	return 0;
-> +
-> +err_sdhci_add:
-> +	clk_disable_unprepare(pltfm_host->clk);
-> +	sdhci_pltfm_free(pdev);
-> +	return ret;
-> +}
-> +
-> +static const struct of_device_id npcm_sdhci_of_match[] = {
-> +	{ .compatible = "nuvoton,npcm750-sdhci" },
-> +	{ .compatible = "nuvoton,npcm845-sdhci" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm_sdhci_of_match);
-> +
-> +static struct platform_driver npcm_sdhci_driver = {
-> +	.driver = {
-> +		.name	= "npcm-sdhci",
-> +		.of_match_table = npcm_sdhci_of_match,
-> +		.pm	= &sdhci_pltfm_pmops,
-> +	},
-> +	.probe		= npcm_sdhci_probe,
-> +	.remove		= sdhci_pltfm_unregister,
-> +};
-> +module_platform_driver(npcm_sdhci_driver);
-> +
-> +MODULE_DESCRIPTION("NPCM Secure Digital Host Controller Interface driver");
-> +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.33.0
-> 
+I will be happy to do any more tests if needed.
+
+Best regards,
+=C3=81lvaro.
