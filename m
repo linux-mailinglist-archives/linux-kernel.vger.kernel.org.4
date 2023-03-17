@@ -2,165 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04D56BEA08
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8316BEA06
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCQNXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S230015AbjCQNXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjCQNXn (ORCPT
+        with ESMTP id S229599AbjCQNXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:23:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3EEBBB35
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:23:38 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679059417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 17 Mar 2023 09:23:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D989293E09
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:23:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 937862187E;
+        Fri, 17 Mar 2023 13:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679059397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Hjxw4YXpa9CYAEMmuD3Rpy1EqI53zWBIa8N76+228Tw=;
-        b=krfcHFxRhypmLhAd3Vwu3A13A3YHkFcCJuxk3RoT4PItx8BEzHO4R1J1fQvygB6ScF54Mn
-        yyQT5tFD9MDvSUHtX6FKkDGC2eukHINZNQpMUGNIGepYlB5jGT83fETX60kCXQTIVTsDb0
-        PNTf6S9R/FCxErnL+96Nguipu4E1hcrcVyu77006vDkFaJMVh/KroWF4fYG44ROFkncc1F
-        Q7Ae2gpci6L2QPVHmGdnb2axI9ZShnxKjA3kHMHFJb0VlvXX1fTiAxQ8RPU++peI9zu4ex
-        5Bn7z2PZrSipIL5q9FJZvLE4VD0C284rLppIP15BqKuG7dIGRS3F1kS9mpRJNw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679059417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hjxw4YXpa9CYAEMmuD3Rpy1EqI53zWBIa8N76+228Tw=;
-        b=oyIWQPOi5hj0hHOvwDagE5xaCvP0BRV2pa7lJaqsj0BgQZS4Cc5F5VQCRcGyJivEIKQYMX
-        IJ883CjHUT24NMBA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 04/18] printk: Add per-console suspended state
-In-Reply-To: <ZAieQtcs7YEuCCDa@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-5-john.ogness@linutronix.de>
- <ZAieQtcs7YEuCCDa@alley>
-Date:   Fri, 17 Mar 2023 14:28:04 +0106
-Message-ID: <87y1nv5x8j.fsf@jogness.linutronix.de>
+        bh=gF7651brT7caQSsc2jrEix3SN7RITX7+MOeFG4i9BS4=;
+        b=ErskkrqTCLfexaVF7cv1PKz0rDT/m5kwVhpWTpqGd767kBAroYAUHZ+6FVQNkCLETmfxv6
+        N43Z0kWlkh/uqLOHp9Oy8tzgl5syN3f5DywjhaXI7Ejcfumr06+XmfN7p+7tJRYIAk6Zgd
+        oCy4CPnFOdLc7pmNbbi8b9hS1Tgl+Uo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 334FF13428;
+        Fri, 17 Mar 2023 13:23:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mE2tCsVpFGTSVAAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 17 Mar 2023 13:23:17 +0000
+Message-ID: <25fd6eca-a7c7-9b08-80a0-a0c998df664a@suse.com>
+Date:   Fri, 17 Mar 2023 14:23:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] hvc/xen: prevent concurrent accesses to the shared
+ ring
+Content-Language: en-US
+To:     Roger Pau Monne <roger.pau@citrix.com>,
+        linux-kernel@vger.kernel.org
+Cc:     xen-devel@lists.xenproject.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jan Beulich <jbeulich@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Wright <chrisw@sous-sol.org>,
+        Ingo Molnar <mingo@elte.hu>,
+        Jeremy Fitzhardinge <jeremy@xensource.com>,
+        Olof Johansson <olof@lixom.net>, linuxppc-dev@lists.ozlabs.org
+References: <20221130150919.13935-1-roger.pau@citrix.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20221130150919.13935-1-roger.pau@citrix.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------gie0V2XxEfCsFniL0HzrnZyl"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-08, Petr Mladek <pmladek@suse.com> wrote:
->> --- a/include/linux/console.h
->> +++ b/include/linux/console.h
->> @@ -153,6 +153,8 @@ static inline int con_debug_leave(void)
->>   *			receiving the printk spam for obvious reasons.
->>   * @CON_EXTENDED:	The console supports the extended output format of
->>   *			/dev/kmesg which requires a larger output buffer.
->> + * @CON_SUSPENDED:	Indicates if a console is suspended. If true, the
->> + *			printing callbacks must not be called.
->>   */
->>  enum cons_flags {
->>  	CON_PRINTBUFFER		= BIT(0),
->> @@ -162,6 +164,7 @@ enum cons_flags {
->>  	CON_ANYTIME		= BIT(4),
->>  	CON_BRL			= BIT(5),
->>  	CON_EXTENDED		= BIT(6),
->> +	CON_SUSPENDED		= BIT(7),
->
-> We have to show it in /proc/consoles, see fs/proc/consoles.c.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------gie0V2XxEfCsFniL0HzrnZyl
+Content-Type: multipart/mixed; boundary="------------AZPK0VwxiAmD9f0gJJzyGN8v";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Roger Pau Monne <roger.pau@citrix.com>, linux-kernel@vger.kernel.org
+Cc: xen-devel@lists.xenproject.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Jan Beulich <jbeulich@suse.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Chris Wright <chrisw@sous-sol.org>, Ingo Molnar <mingo@elte.hu>,
+ Jeremy Fitzhardinge <jeremy@xensource.com>, Olof Johansson <olof@lixom.net>,
+ linuxppc-dev@lists.ozlabs.org
+Message-ID: <25fd6eca-a7c7-9b08-80a0-a0c998df664a@suse.com>
+Subject: Re: [PATCH v2] hvc/xen: prevent concurrent accesses to the shared
+ ring
+References: <20221130150919.13935-1-roger.pau@citrix.com>
+In-Reply-To: <20221130150919.13935-1-roger.pau@citrix.com>
 
-Are we supposed to show all flags in /proc/consoles? Currently
-CON_EXTENDED is not shown either.
+--------------AZPK0VwxiAmD9f0gJJzyGN8v
+Content-Type: multipart/mixed; boundary="------------FGQVLPfXwFLtDKIHICeFHKy1"
 
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -2574,11 +2590,26 @@ void suspend_console(void)
->>  
->>  void resume_console(void)
->>  {
->> +	struct console *con;
->> +
->>  	if (!console_suspend_enabled)
->>  		return;
->>  	down_console_sem();
->>  	console_suspended = 0;
->>  	console_unlock();
->> +
->> +	console_list_lock();
->> +	for_each_console(con)
->> +		console_srcu_write_flags(con, con->flags & ~CON_SUSPENDED);
->> +	console_list_unlock();
->> +
->> +	/*
->> +	 * Ensure that all SRCU list walks have completed. All printing
->> +	 * contexts must be able to see they are no longer suspended so
->> +	 * that they are guaranteed to wake up and resume printing.
->> +	 */
->> +	synchronize_srcu(&console_srcu);
->> +
->
-> The setting of the global "console_suspended" and per-console
-> CON_SUSPENDED flag is not synchronized. As a result, they might
-> become inconsistent:
+--------------FGQVLPfXwFLtDKIHICeFHKy1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-They do not need to be synchronized and it doesn't matter if they become
-inconsistent. With this patch they are no longer related. One is for
-tracking the state of the console (CON_SUSPENDED), the other is for
-tracking the suspend trick for the console_lock.
+T24gMzAuMTEuMjIgMTY6MDksIFJvZ2VyIFBhdSBNb25uZSB3cm90ZToNCj4gVGhlIGh2YyBt
+YWNoaW5lcnkgcmVnaXN0ZXJzIGJvdGggYSBjb25zb2xlIGFuZCBhIHR0eSBkZXZpY2UgYmFz
+ZWQgb24NCj4gdGhlIGh2IG9wcyBwcm92aWRlZCBieSB0aGUgc3BlY2lmaWMgaW1wbGVtZW50
+YXRpb24uICBUaG9zZSB0d28NCj4gaW50ZXJmYWNlcyBob3dldmVyIGhhdmUgZGlmZmVyZW50
+IGxvY2tzLCBhbmQgdGhlcmUncyBubyBzaW5nbGUgbG9ja3MNCj4gdGhhdCdzIHNoYXJlZCBi
+ZXR3ZWVuIHRoZSB0dHkgYW5kIHRoZSBjb25zb2xlIGltcGxlbWVudGF0aW9ucywgaGVuY2UN
+Cj4gdGhlIGRyaXZlciBuZWVkcyB0byBwcm90ZWN0IGl0c2VsZiBhZ2FpbnN0IGNvbmN1cnJl
+bnQgYWNjZXNzZXMuDQo+IE90aGVyd2lzZSBjb25jdXJyZW50IGNhbGxzIHVzaW5nIHRoZSBz
+cGxpdCBpbnRlcmZhY2VzIGFyZSBsaWtlbHkgdG8NCj4gY29ycnVwdCB0aGUgcmluZyBpbmRl
+eGVzLCBsZWF2aW5nIHRoZSBjb25zb2xlIHVudXNhYmxlLg0KPiANCj4gSW50cm9kdWNlIGEg
+bG9jayB0byB4ZW5jb25zX2luZm8gdG8gc2VyaWFsaXplIGFjY2Vzc2VzIHRvIHRoZSBzaGFy
+ZWQNCj4gcmluZy4gIFRoaXMgaXMgb25seSByZXF1aXJlZCB3aGVuIHVzaW5nIHRoZSBzaGFy
+ZWQgbWVtb3J5IGNvbnNvbGUsDQo+IGNvbmN1cnJlbnQgYWNjZXNzZXMgdG8gdGhlIGh5cGVy
+Y2FsbCBiYXNlZCBjb25zb2xlIGltcGxlbWVudGF0aW9uIGFyZQ0KPiBub3QgYW4gaXNzdWUu
+DQo+IA0KPiBOb3RlIHRoZSBjb25kaXRpb25hbCBsb2dpYyBpbiBkb21VX3JlYWRfY29uc29s
+ZSgpIGlzIHNsaWdodGx5IG1vZGlmaWVkDQo+IHNvIHRoZSBub3RpZnlfZGFlbW9uKCkgY2Fs
+bCBjYW4gYmUgZG9uZSBvdXRzaWRlIG9mIHRoZSBsb2NrZWQgcmVnaW9uOg0KPiBpdCdzIGFu
+IGh5cGVyY2FsbCBhbmQgdGhlcmUncyBubyBuZWVkIGZvciBpdCB0byBiZSBkb25lIHdpdGgg
+dGhlIGxvY2sNCj4gaGVsZC4NCj4gDQo+IEZpeGVzOiBiNTM2YjRiOTYyMzAgKCd4ZW46IHVz
+ZSB0aGUgaHZjIGNvbnNvbGUgaW5mcmFzdHJ1Y3R1cmUgZm9yIFhlbiBjb25zb2xlJykNCj4g
+U2lnbmVkLW9mZi1ieTogUm9nZXIgUGF1IE1vbm7DqSA8cm9nZXIucGF1QGNpdHJpeC5jb20+
+DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0K
+SnVlcmdlbg0KDQo=
+--------------FGQVLPfXwFLtDKIHICeFHKy1
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> I think that we could just remove the global "console_suspended" flag.
->
-> IMHO, it used to be needed to avoid moving the global "console_seq" forward
-> when the consoles were suspended. But it is not needed now with the
-> per-console con->seq. console_flush_all() skips consoles when
-> console_is_usable() fails and it bails out when there is no progress.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-The @console_suspended flag is used to allow console_lock/console_unlock
-to be called without triggering printing. This is probably so that vt
-code can make use of the console_lock for its own internal locking, even
-when in a state where ->write() should not be called. I would expect we
-still need it, even if the consoles do not.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-The only valid criteria for allowing to call ->write() is CON_SUSPENDED.
+--------------FGQVLPfXwFLtDKIHICeFHKy1--
 
->> @@ -3712,14 +3745,7 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
->>  		}
->>  		console_srcu_read_unlock(cookie);
->>  
->> -		/*
->> -		 * If consoles are suspended, it cannot be expected that they
->> -		 * make forward progress, so timeout immediately. @diff is
->> -		 * still used to return a valid flush status.
->> -		 */
->> -		if (console_suspended)
->> -			remaining = 0;
->
-> I wonder if it would make sense to add a comment somewhere,
-> e.g. above the later check:
->
-> +		/* diff is zero also when there is no usable console. */
-> 		if (diff == 0 || remaining == 0)
-> 			break;
+--------------AZPK0VwxiAmD9f0gJJzyGN8v--
 
-I think that is obvious, but I can add a similar comment to remind the
-reader that only usable consoles are counted.
+--------------gie0V2XxEfCsFniL0HzrnZyl
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> Anyway, we should update the comment above pr_flush():
->
-> -  * Return: true if all enabled printers are caught up.
-> +  * Return: true if all usable printers are caught up.
+-----BEGIN PGP SIGNATURE-----
 
-Nice catch.
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQUacQFAwAAAAAACgkQsN6d1ii/Ey+K
+PggAn0AyCpypkmATVWalZEldbjHh3OyR1GoRNfBjBG2NVjTZmvSitO3cqe8RgL9fZ36WF21XtQ5q
+XvthG06ZtxvCfecd63jJ0tajxTlG+A/g9+VKuJKGIHaaHtBe/YcceveDS3r5GaFSiBNTOWqPkclP
+CvPB59452Rf7Y57wBN1+rYJXTE15e1huGagXZpbIjtdW5iHrQKQT9QpSBlcEfyYdZHjUhTUaSsUp
+hRmp1WM4cyPUTgdg5W/I77rk9JWHMzWC56f8d4z4ApaajqzLTuTohbuB0s6YC1ahcy+ftXcaAT8Q
+USRNpt1OFrNYts8gCwcQiXWYeFeO5UDFr/vMtCKpyw==
+=oESl
+-----END PGP SIGNATURE-----
 
-John
+--------------gie0V2XxEfCsFniL0HzrnZyl--
