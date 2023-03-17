@@ -2,202 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32356BE98E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 661656BE992
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjCQMpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
+        id S230310AbjCQMpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCQMpQ (ORCPT
+        with ESMTP id S230301AbjCQMpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:45:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FCAA54C2;
-        Fri, 17 Mar 2023 05:45:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E2E3921A57;
-        Fri, 17 Mar 2023 12:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679057113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=13wHn270QC2EQIv2STg6ZbJmqaKqLZmBmJiFjnKTwvs=;
-        b=Qut3hqc62LhEoqknDZyCmGO2oR93XHZ3JzqRD6vpejnvwODTQcV6jJeK3sasp0abOxdFC/
-        PRdjRh0NkBRKNn+biTi/XsseBY//nkxiqSFdrRutvWidOENOs51014KWRYmY+ufwrLunbV
-        R7V9tDEqB3j9a4oQ8y5DfhWG9aYUQRg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679057113;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=13wHn270QC2EQIv2STg6ZbJmqaKqLZmBmJiFjnKTwvs=;
-        b=q8H+KfiNRWMn9w/fU7d84yvMgpfML13d2YqlfrM54CFcIT80izEqu3difcTYOK7UuCqiCB
-        D7WpQry3Ka05QDCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1AB213428;
-        Fri, 17 Mar 2023 12:45:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3wgjM9lgFGS4PgAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 17 Mar 2023 12:45:13 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 57DC4A06FD; Fri, 17 Mar 2023 13:45:13 +0100 (CET)
-Date:   Fri, 17 Mar 2023 13:45:13 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.com,
-        tudor.ambarus@linaro.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH] ext4: Fix i_disksize exceeding i_size problem in
- paritally written case
-Message-ID: <20230317124513.drx3wywcjnap5jme@quack3>
-References: <20230317013553.1009553-1-chengzhihao1@huawei.com>
+        Fri, 17 Mar 2023 08:45:42 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF28A909F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:45:40 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id o12so19819061edb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679057139;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YNUx6NmU9vZIk5t3kL2stMiQn94hJ9T4laNaCYrljdo=;
+        b=kyyRtRuugrOqI7ZhjjbW6di3tEIIXiBeqgJp/mWjLdjjJ8UVVwX648TTtEUGaV79F1
+         Zg5sntrHeWjoKkmHt1TjLRgtoTp2CPQgx6q9xwlEQOCPujX19EvjwxGPlRjDNeMTZESS
+         95bmTuhrS1/Sk9sPwmm0QMycsPXP2pL6by6Vm4Pf61NLdGIFRIDxy4txivsNxHYzr7yq
+         ttxldATMRmZxZQJ3Q9fMEoz57auvcnYy5x+344SpYcdow8Yv3LzjCWhZ8nwyA5rf2ToF
+         mw6zDIjCa+hB06qzbt3+VXLsrortorbrR3qSzqoAyVoATTaCwZJ/Dx/AiYNBpQJeSMwv
+         zH1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679057139;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YNUx6NmU9vZIk5t3kL2stMiQn94hJ9T4laNaCYrljdo=;
+        b=OGn3q7+9M/Gv/Fp9kr5ee5YpzT5eQDa+k09VcaMvLd2rvQMjZbwxCk8RTNShwQKr8J
+         jvCtiTVG8R9H/aDioMsJDh0ldM5YfRwjFVkMmTtEeM1A4DII61qoZ+s1XA2XbePQAOTf
+         qyAynPhmeJSCFR7AbetpuPWU6dt+tP7cmckrkHvh876A1CoUF74r9fPQx2/HHo1Fn3jE
+         QOtRoxhpXxm7fUHKjl1LS1vu/dvP2fpuMp0QsEE2L7YQFNe56m76dAg0D4QtRmstoZOx
+         mKKATMP4p2kSWYjDP/45Izpl5wgIOjzNitUm/noCf/JdWK4lDwsSLBNjRtDisKQ0HoWS
+         ptUw==
+X-Gm-Message-State: AO0yUKULJAnp2JQFVJmJLq3zeIsDKs8xE76kZT8qHfyDL43p4YyIT6xV
+        Jp9ld9WNz3Jui0eZ39SGD2/mlw==
+X-Google-Smtp-Source: AK7set+8e4GUEhfFVhELM/7UtvIZCcHDuzN/lx9ayum4pr2NWqS4HYwQbH6HZE+jdKxUdvpzJ1pY2g==
+X-Received: by 2002:a17:906:71d8:b0:878:7a0e:5730 with SMTP id i24-20020a17090671d800b008787a0e5730mr13994270ejk.56.1679057138958;
+        Fri, 17 Mar 2023 05:45:38 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:d013:3eeb:7658:cec])
+        by smtp.gmail.com with ESMTPSA id lt11-20020a170906fa8b00b008e54ac90de1sm938522ejb.74.2023.03.17.05.45.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 05:45:38 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     virag.david003@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        phone-devel@vger.kernel.org, robh+dt@kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, m.szyprowski@samsung.com,
+        Henrik Grimler <henrik@grimler.se>, alim.akhtar@samsung.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 0/2] arm64: dts: add mmc aliases for Exynos devices
+Date:   Fri, 17 Mar 2023 13:45:36 +0100
+Message-Id: <167905713176.29125.2783264582338805395.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230315212814.15908-1-henrik@grimler.se>
+References: <20230315212814.15908-1-henrik@grimler.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317013553.1009553-1-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 17-03-23 09:35:53, Zhihao Cheng wrote:
-> Following process makes i_disksize exceed i_size:
+On Wed, 15 Mar 2023 22:28:12 +0100, Henrik Grimler wrote:
+> It is convenient to have fixed mmcblk numbering of the eMMC and sdcard
+> so that assigned numbers will not change from boot-to-boot or
+> depending on if storage devices are actually attached or not.
 > 
-> generic_perform_write
->  copied = iov_iter_copy_from_user_atomic(len) // copied < len
->  ext4_da_write_end
->  | ext4_update_i_disksize
->  |  new_i_size = pos + copied;
->  |  WRITE_ONCE(EXT4_I(inode)->i_disksize, newsize) // update i_disksize
->  | generic_write_end
->  |  copied = block_write_end(copied, len) // copied = 0
->  |   if (unlikely(copied < len))
->  |    if (!PageUptodate(page))
->  |     copied = 0;
->  |  if (pos + copied > inode->i_size) // return false
->  if (unlikely(copied == 0))
->   goto again;
->  if (unlikely(iov_iter_fault_in_readable(i, bytes))) {
->   status = -EFAULT;
->   break;
->  }
+> Also drop mshc aliases while we are at it and instead add mmc
+> capabilities to the individual device trees (right now they are added
+> depending on alias index).
 > 
-> We get i_disksize greater than i_size here, which could trigger WARNING
-> check 'i_size_read(inode) < EXT4_I(inode)->i_disksize' while doing dio:
-> 
-> ext4_dio_write_iter
->  iomap_dio_rw
->   __iomap_dio_rw // return err, length is not aligned to 512
->  ext4_handle_inode_extension
->   WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize) // Oops
-> 
->  WARNING: CPU: 2 PID: 2609 at fs/ext4/file.c:319
->  CPU: 2 PID: 2609 Comm: aa Not tainted 6.3.0-rc2
->  RIP: 0010:ext4_file_write_iter+0xbc7
->  Call Trace:
->   vfs_write+0x3b1
->   ksys_write+0x77
->   do_syscall_64+0x39
-> 
-> Fix it by putting block_write_end() before i_disksize updating just
-> like ext4_write_end() does.
-> 
-> Fetch a reproducer in [Link].
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217209
-> Fixes: 64769240bd07f ("ext4: Add delayed allocation support in data=writeback mode")
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> [...]
 
-Good catch (although practically this will hardly have any negative
-effect). But rather than opencoding generic_write_end() I'd do:
+Applied, thanks!
 
-        if (unlikely(copied < len) && !PageUptodate(page))
-                copied = 0;
+[1/2] arm64: dts: exynos: drop mshc aliases
+      https://git.kernel.org/krzk/linux/c/c04d7b263d3ff036ca124494c57011c1c274dbe6
+[2/2] arm64: dts: exynos: add mmc aliases
+      https://git.kernel.org/krzk/linux/c/5f67124757464d632f0e5288e0ba48e3ff5531a9
 
-at the beginning of ext4_da_write_end() and that should solve these
-problems as well?
-
-								Honza
-
-> ---
->  fs/ext4/inode.c | 32 +++++++++++++++++++++++++-------
->  1 file changed, 25 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index bf0b7dea4900..577dc23f3b78 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -3136,6 +3136,8 @@ static int ext4_da_write_end(struct file *file,
->  	loff_t new_i_size;
->  	unsigned long start, end;
->  	int write_mode = (int)(unsigned long)fsdata;
-> +	bool i_size_changed = false;
-> +	loff_t old_size = inode->i_size;
->  
->  	if (write_mode == FALL_BACK_TO_NONDELALLOC)
->  		return ext4_write_end(file, mapping, pos,
-> @@ -3148,6 +3150,8 @@ static int ext4_da_write_end(struct file *file,
->  	    ext4_has_inline_data(inode))
->  		return ext4_write_inline_data_end(inode, pos, len, copied, page);
->  
-> +	copied = block_write_end(file, mapping, pos, len, copied, page, fsdata);
-> +
->  	start = pos & (PAGE_SIZE - 1);
->  	end = start + copied - 1;
->  
-> @@ -3162,16 +3166,30 @@ static int ext4_da_write_end(struct file *file,
->  	 * check), we need to update i_disksize here as neither
->  	 * ext4_writepage() nor certain ext4_writepages() paths not
->  	 * allocating blocks update i_disksize.
-> -	 *
-> -	 * Note that we defer inode dirtying to generic_write_end() /
-> -	 * ext4_da_write_inline_data_end().
->  	 */
->  	new_i_size = pos + copied;
-> -	if (copied && new_i_size > inode->i_size &&
-> -	    ext4_da_should_update_i_disksize(page, end))
-> -		ext4_update_i_disksize(inode, new_i_size);
-> +	if (new_i_size > inode->i_size) {
-> +		i_size_write(inode, new_i_size);
-> +		i_size_changed = true;
-> +		if (copied && ext4_da_should_update_i_disksize(page, end))
-> +			ext4_update_i_disksize(inode, new_i_size);
-> +	}
-> +
-> +	unlock_page(page);
-> +	put_page(page);
-> +
-> +	if (old_size < pos)
-> +		pagecache_isize_extended(inode, old_size, pos);
-> +	/*
-> +	 * Don't mark the inode dirty under page lock. First, it unnecessarily
-> +	 * makes the holding time of page lock longer. Second, it forces lock
-> +	 * ordering of page lock and transaction start for journaling
-> +	 * filesystems.
-> +	 */
-> +	if (i_size_changed)
-> +		mark_inode_dirty(inode);
->  
-> -	return generic_write_end(file, mapping, pos, len, copied, page, fsdata);
-> +	return copied;
->  }
->  
->  /*
-> -- 
-> 2.31.1
-> 
+Best regards,
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
