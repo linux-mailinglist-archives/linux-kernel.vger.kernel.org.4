@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE286BF6B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 132566BF6B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCQX4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 19:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S229648AbjCQX7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 19:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCQX4m (ORCPT
+        with ESMTP id S229516AbjCQX7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 19:56:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F1A7B381;
-        Fri, 17 Mar 2023 16:56:40 -0700 (PDT)
+        Fri, 17 Mar 2023 19:59:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600AC77991
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:59:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66C8AB8273E;
-        Fri, 17 Mar 2023 23:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB073C433D2;
-        Fri, 17 Mar 2023 23:56:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3878C60B81
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 23:59:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C80CC433EF;
+        Fri, 17 Mar 2023 23:59:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1679097398;
-        bh=3bZogyBb+BgWIc/n46yzkc9qQmL59iUbkTrU3RkHuwY=;
+        s=korg; t=1679097546;
+        bh=m6/a10CVnRU0DBLRiwVNu4MUaIUuwYZVNvRbzYhnpZ0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=egefDn2kg6gwEkYAefO4skRDz2AesInOi4UU1D//xOyrby31TQzzIVkT+wiVJpXzW
-         ebkBW1+qtKePCory3KwBDEwwwKzWgngUqLLJ+cTTaqDdkHaF+Wdwnb5AXwJN5AURUG
-         EpWgeT8M4ukdjKl66NLbiXQCWvOh5fGZ5gzfItXc=
-Date:   Fri, 17 Mar 2023 16:56:37 -0700
+        b=FPsyJDFfTSUm3O8MS0sgG6du4oIaoVMYwrm0+V4kBhyekibpHRlAqdpu4UwWDpRem
+         rd81GwY4ueWVBlJSlfRVF9+2KwSLV4dey1jbIweDOU/Cu/G7Jk4rTWu7WaGVUcsi6j
+         PdRV76yi8fdf1nDNmUs0PNfQKhi+qZn3kLwmqSqM=
+Date:   Fri, 17 Mar 2023 16:59:05 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] Add results of early memtest to /proc/meminfo
-Message-Id: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
-In-Reply-To: <CAH2-hcJicFJ0h76JzY2DoLNF+4Nk7vGtk8gQv8JWFikt6X-wfA@mail.gmail.com>
-References: <CAH2-hcJicFJ0h76JzY2DoLNF+4Nk7vGtk8gQv8JWFikt6X-wfA@mail.gmail.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH 0/2] Refactor do_fault_around()
+Message-Id: <20230317165905.f4f90b125e459617fa19a3d5@linux-foundation.org>
+In-Reply-To: <98fc8545-6bd3-4c06-9b12-d781a19982ac@lucifer.local>
+References: <cover.1679089214.git.lstoakes@gmail.com>
+        <20230317163936.06d9c7d032a5c2296075caa1@linux-foundation.org>
+        <98fc8545-6bd3-4c06-9b12-d781a19982ac@lucifer.local>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,84 +56,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Mar 2023 20:30:01 +0100 Tomáš Mudruňka <tomas.mudrunka@gmail.com> wrote:
+On Fri, 17 Mar 2023 23:48:17 +0000 Lorenzo Stoakes <lstoakes@gmail.com> wrote:
 
-> Currently the memtest results were only presented in dmesg.
-> This adds /proc/meminfo entry which can be easily used by scripts.
-> 
+> I went so far as to literally copy/paste
+> the existing code and my speculative change to a userland program, generate a
+> whole host of random sensible input data and compare output data with this and
+> the original logic en masse.
 
-/proc/meminfo is documented in Documentation/filesystems/proc.rst,
-please.
-
-meminfo is rather top-level and important.  Is this data sufficiently
-important to justify a place there?
-
-Please describe the value.  The use-case(s).  Why would people want
-this?
-
-> --- a/fs/proc/meminfo.c
-> +++ b/fs/proc/meminfo.c
-> @@ -6,6 +6,7 @@
->  #include <linux/hugetlb.h>
->  #include <linux/mman.h>
->  #include <linux/mmzone.h>
-> +#include <linux/memblock.h>
->  #include <linux/proc_fs.h>
->  #include <linux/percpu.h>
->  #include <linux/seq_file.h>
-> @@ -131,6 +132,18 @@ static int meminfo_proc_show(struct seq_file *m, void
-> *v)
->   show_val_kb(m, "VmallocChunk:   ", 0ul);
->   show_val_kb(m, "Percpu:         ", pcpu_nr_pages());
-> 
-> +#ifdef CONFIG_MEMTEST
-> + /* Only show 0 Bad memory when test was actually run.
-> + * Make sure bad regions smaller than 1kB are not reported as 0.
-> + * That way when 0 is reported we can be sure there actually was
-> successful test */
-
-Comment layout is unconventional.
-
-> + if (early_memtest_done)
-> + seq_printf(m, "EarlyMemtestBad:   %5lu kB\n",
-> + (unsigned long) (
-> + ((early_memtest_bad_size>0) && (early_memtest_bad_size>>10 <= 0))
-> + ? 1
-> + : early_memtest_bad_size>>10));
-
-Coding style is unconventional (white spaces).
-
-I expect this code would look much cleaner if some temporaries were used.
-
-	if (early_memtest_done) {
-		unsigned long size = 1;
-		long sz =  early_memtest_bad_size  >> 10;
-
-		if (early_memtest_bad_size > 0 && sz <= 0)
-			size = sz;
-		seq_printf(m, "EarlyMemtestBad:   %5lu kB\n", size)
-	}
-
-(or something like that, I didn't try hard)
-
-I don't understand this logic anyway.  Why not just print the value of
-early_memtest_bad_size>>10 and be done with it.
-
-
-> +extern int early_memtest_done; /* How many memtest passes were done? */
-
-The name implies a bool, but the comment says otherwise.
-
-> start, phys_addr_t end)
->   memtest(pattern, this_start, this_end - this_start);
->   }
->   }
-> + early_memtest_done++;
-
-It's a counter, but it's used as a boolean.  Why not make it bool, and do
-
-	early_memtest_done = true;
-
-here?
-
-Also, your email client is replacing tabs with spaces.
+Ah, great, all good, thanks.
