@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7745D6BF35D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F81C6BF368
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjCQVAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S229926AbjCQVBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCQVAS (ORCPT
+        with ESMTP id S230075AbjCQVBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:00:18 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D45D33F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:00:15 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-53d277c1834so115855557b3.10
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679086815;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4pSPDsSpYr0yzHIhE9QqHD/oXvXGj/zx+/wwbZGGiKE=;
-        b=TLAPZObVbM6RimvFIq982tCnrphh2E8b4WnAsFslm59mu9C4n4OLg2kQev1+xjLbg+
-         2mitKhD5cGv5G0XN85Rp4tPSNxVr85FQkGJGSwdK7KmCwJlM9e3kSu9hoM9x1IkIi/FA
-         KEkxamYocSxlBIZKihAGoh5y8a68DWfU1du9MsCvsWkDvnf+uZZqM5N1n/Wp/CsSGO0p
-         jSariuFyMrAx5ZnvxcUe71YEAwSQrFdGoEtyq2PudpolSPN3Yoe5lF3DAliDLyiT7h4w
-         DeeKwiRKTDJO3zD/+N4mYgfokEIrqie0/2tPnMxROJ5K9GRx/jKrfJ/S+ws05JAf3CXr
-         0lCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679086815;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4pSPDsSpYr0yzHIhE9QqHD/oXvXGj/zx+/wwbZGGiKE=;
-        b=qkiC4ORgP7dTSLrgXel9APv+S+I5SdE/bhWjW7wJIjspNmlxYkkLAAYkigGheoc+eG
-         PjO/2PZQ3n0IEVKyO4IcTcgY2Xi789v3mnVLpxWYlHxBdOkAjzATR/55KMUB8cJhoAdD
-         D+dOGuBVYXam+p4oP2Ow1FPRmdlyaAhd2LWDGWpYGfnka5OjodAMhQn+dc7ekyWDtUiy
-         lvgLijZOaAhZvNovC5Xj8LKlq7wH/9yQdvLb7r5Kevvh2qOEJI3Vb0I04RqIBES/qhyc
-         /nbL9MV6n1ZKDiG5xF0jwa0Z2PdZa80hdYJLEuXOiGFBmL4PAbW3OhlM8gs0feQ6U2D/
-         9myQ==
-X-Gm-Message-State: AO0yUKXxwA+y8YazpEB+x8sbp6CVpIyyoaN66KXGbGbsPXuZTnJqmTjW
-        taed7byPEciTwgcw6sW9Lg012v2845+g7ZnntqESbg==
-X-Google-Smtp-Source: AK7set/QsTUG3EEsvs9ExltdFx7/LqW6bRg6UIEkaEIPkBXihYNrXoghB4S0x7WKrIwB3mTvAVKhXTm20ajPQWcQ48Q=
-X-Received: by 2002:a81:ac1f:0:b0:541:9895:4ce9 with SMTP id
- k31-20020a81ac1f000000b0054198954ce9mr5307886ywh.9.1679086815073; Fri, 17 Mar
- 2023 14:00:15 -0700 (PDT)
+        Fri, 17 Mar 2023 17:01:13 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6AB255A;
+        Fri, 17 Mar 2023 14:01:10 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 32HL0JoW3783027
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 17 Mar 2023 14:00:19 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 32HL0JoW3783027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023030901; t=1679086823;
+        bh=c2Kk0W0ZsOg5b+toH7a7Rx0E39TD9h8rBmehVqukQMs=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=VcSJvQ+UT0GUldWk3BAuoQNtsFeqOQT6A1lhiVOq5cdc7yGLrXwjKT7rUY/ojfhzC
+         EAe6yug/ZCDuaFYKlTw2vkKeRRxe/5wOhCNTJiWl6aJWA8ofNbVcXQ7owfnHPMWP2J
+         WDXhpAKoNExwpTFoWOQuGqnxgLqTmQs4bvEhSZE21G16P904UIA9xQ+QIWgcjFnZuy
+         ZmJ6uLm6tlb1iDCHS8CSZ9gXO8CwmdLs6lsBU6mSEFF8drFZBmb7P+y7pgmOOqg+is
+         5tycNTtCTRw6PczmQt4Q/XRyVVnN1KHr+hlJwud0GVAEcnP3fBk85qNY9WGeu7KJmQ
+         Gk0h4bbb/j2oA==
+Date:   Fri, 17 Mar 2023 14:00:16 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     andrew.cooper3@citrix.com, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Xin Li <xin3.li@intel.com>
+CC:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, peterz@infradead.org,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_28/34=5D_x86/fred=3A_fixup_fault_?= =?US-ASCII?Q?on_ERETU_by_jumping_to_fred=5Fentrypoint=5Fuser?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ed318bd6-25b2-efcf-0cc4-c57699f6654a@citrix.com>
+References: <20230307023946.14516-1-xin3.li@intel.com> <20230307023946.14516-29-xin3.li@intel.com> <CAJhGHyC6LgCwdDTkiy2TaQ8wzBQQfrx8ni7fY8vH-bUT2kR8pg@mail.gmail.com> <ed318bd6-25b2-efcf-0cc4-c57699f6654a@citrix.com>
+Message-ID: <D3DB8A8F-7293-4715-AAB6-213F00CB521C@zytor.com>
 MIME-Version: 1.0
-References: <20230315215027.30685-1-asmaa@nvidia.com> <20230315215027.30685-2-asmaa@nvidia.com>
-In-Reply-To: <20230315215027.30685-2-asmaa@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 17 Mar 2023 22:00:03 +0100
-Message-ID: <CACRpkdZwpU_ZSC2KnTjgMCwKY8iDcBt7EyEUipSm0caMUG9BxQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] gpio: mlxbf3: Add gpio driver support
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     andy.shevchenko@gmail.com, bgolaszewski@baylibre.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 10:50=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wr=
-ote:
-
-> Add support for the BlueField-3 SoC GPIO driver.
-> This driver configures and handles GPIO interrupts. It also enables a use=
-r
-> to manipulate certain GPIO pins via libgpiod tools or other kernel driver=
-s.
-> The usables pins are defined via the "gpio-reserved-ranges" property.
+On March 17, 2023 2:55:44 AM PDT, andrew=2Ecooper3@citrix=2Ecom wrote:
+>On 17/03/2023 9:39 am, Lai Jiangshan wrote:
+>>> +#ifdef CONFIG_X86_FRED
+>>> +static bool ex_handler_eretu(const struct exception_table_entry *fixu=
+p,
+>>> +                            struct pt_regs *regs, unsigned long error=
+_code)
+>>> +{
+>>> +       struct pt_regs *uregs =3D (struct pt_regs *)(regs->sp - offset=
+of(struct pt_regs, ip));
+>>> +       unsigned short ss =3D uregs->ss;
+>>> +       unsigned short cs =3D uregs->cs;
+>>> +
+>>> +       fred_info(uregs)->edata =3D fred_event_data(regs);
+>>> +       uregs->ssx =3D regs->ssx;
+>>> +       uregs->ss =3D ss;
+>>> +       uregs->csx =3D regs->csx;
+>>> +       uregs->current_stack_level =3D 0;
+>>> +       uregs->cs =3D cs;
+>> Hello
+>>
+>> If the ERETU instruction had tried to return from NMI to ring3 and just=
+ faulted,
+>> is NMI still blocked?
+>>
+>> We know that IRET unconditionally enables NMI, but I can't find any clu=
+e in the
+>> FRED's manual=2E
+>>
+>> In the pseudocode of ERETU in the manual, it seems that NMI is only ena=
+bled when
+>> ERETU succeeds with bit28 in csx set=2E  If so, this code will fail to =
+reenable
+>> NMI if bit28 is not explicitly re-set in csx=2E
 >
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+>IRET clearing NMI blocking is the source of an immense amount of grief,
+>and ultimately the reason why Linux and others can't use supervisor
+>shadow stacks at the moment=2E
+>
+>Changing this property, so NMIs only get unblocked on successful
+>execution of an ERET{S,U}, was a key demand of the FRED spec=2E
+>
+>i=2Ee=2E until you have successfully ERET*'d, you're still logically in t=
+he
+>NMI handler and NMIs need to remain blocked even when handling the #GP
+>from a bad ERET=2E
+>
+>~Andrew
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+This is correct=2E
