@@ -2,199 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852446BEB2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64746BEB38
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjCQO3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S229909AbjCQO3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjCQO27 (ORCPT
+        with ESMTP id S230079AbjCQO3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:28:59 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F46A25C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:28:56 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id v25so1143832wra.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679063334;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=tR0wQE8M8Ta7hlf9T/C518wbuU/k1dFHdTpiVCbCQdI=;
-        b=HCaaMySfgkDU+bWp7bW2t9rdVrsQ8GHioDCTlMLMf+IjW9YDEPsuVCotEPWyrbXYTd
-         4br89bZ1UzJv1aPgq0dvgItl5QG8RMJBynsBt6HACyz+qZeEXkBzqFAvT3dPJa0uQBEG
-         aDH5KCDYVdMPmarak8pJ4iWTYDLGrciE2h2Yjz+PC3PvNYtsbzRARj8aX9I0KFj0QWDW
-         PhcbFQjS7o5FjxP6zzQiXy//CpKR2j6Ah1KYAvE4cHiwLNB56qKgp79SZCX8BxD9X01C
-         q9ZEmGUAmkylHO0zHr77aEZcEfR1vRYqv9gYSI38HVwfpt0AU7kAkfew7EjzqjKeatRX
-         qIjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679063334;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tR0wQE8M8Ta7hlf9T/C518wbuU/k1dFHdTpiVCbCQdI=;
-        b=L3eHzOuNgI0yNXXOJ6ciIPe1HhfL3Qpgy6i213GepEpYLzfJqihpBjEJ9n5SOzJcSO
-         cbN5F8mwY0I9Jr0sDn+NILdZO3XK8qY0U6pZtfGF40zwYgkf2tm7LkNujnH9z6X9Cxjp
-         HUNFZnxBh9N91VXi8BECzGzLEeJTHPJGropqutc9OcAxRU4PDxXDOcF0LivdGAtnSryd
-         i9WC9tSsWkGQRtXF9+3K5xc+mqz7mLiIkavymWdEWT13LGwd8yYK+9ez3tmJb/8ijRIz
-         gQkxkC2nxH/M8OmHo3ljCzYfTy1oV2P/zDOHi2qLoQQ01oXd9Hzw+mMuDUh/1vmR7oDI
-         te4w==
-X-Gm-Message-State: AO0yUKVSx/X9dEGE06Rs+8qJUrjAcE3W4vDcwXucWq7hl7BamnJm36T3
-        v8NIlzTdXs4kaQL2ro0oCDsbVQ==
-X-Google-Smtp-Source: AK7set8AKYEIAth7Eh89Fp1MUe2n6Pd90pcAPWLJZ+SNTSiWn6+fUk1b6MLbrI5cbflwdqY3s2h0AA==
-X-Received: by 2002:adf:f68b:0:b0:2cb:d8f1:1d2f with SMTP id v11-20020adff68b000000b002cbd8f11d2fmr7678165wrp.17.1679063334621;
-        Fri, 17 Mar 2023 07:28:54 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:9ed5:bad0:e925:7938? ([2a01:e0a:982:cbb0:9ed5:bad0:e925:7938])
-        by smtp.gmail.com with ESMTPSA id e8-20020adffc48000000b002c8476dde7asm2057650wrs.114.2023.03.17.07.28.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 07:28:54 -0700 (PDT)
-Message-ID: <77195576-34c1-d522-194c-85eba5d023fe@linaro.org>
-Date:   Fri, 17 Mar 2023 15:28:53 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v5 4/5] arm64: dts: qcom: sm8450: switch to usb3/dp combo
- phy
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Fri, 17 Mar 2023 10:29:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D747D9C;
+        Fri, 17 Mar 2023 07:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B8F66226B;
+        Fri, 17 Mar 2023 14:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56996C433EF;
+        Fri, 17 Mar 2023 14:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679063351;
+        bh=D3V8W1v72x8mIyG6Ens123mTd1y9kzSOKpYqPHAW7PI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q+s8F3AifNO8AjIPQqst3WN0ZV1pQbk/u2d2LqRK7UFa6YE2z1vkD54OjQTS+4ZOI
+         DyuO0zIZp/owksQ8P7mMM3T6NxuA2gXorXMTxGOqcGJxLXc9ngARElCL+kjL8Mikxh
+         I4Fhz96bxyYMzTDzDJSZUym5APnit9NfuQ8NXW8AZWpkMcBHvQ2vkCEP7VHweXa4qx
+         S4zpmyUnKgxiLtwMmwLerzXULgndMvbe3YxP9o613kl1UkTluLEFrGxk9lZN/GdmjU
+         Zeo0Kkasggy+uKf3s1v1/G04wpocS/xU0YoFr8UaSCVpfgzn8hpdcAcEoNo9P0N6bO
+         wxJmhbdiEyRdw==
+Date:   Fri, 17 Mar 2023 15:29:03 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v5-0-a27f1b26ebe8@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v5-4-a27f1b26ebe8@linaro.org>
- <ab6391c4-ff38-8286-77ff-c781669f5aa0@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <ab6391c4-ff38-8286-77ff-c781669f5aa0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v4 04/14] net: phy: Add a binding for PHY LEDs
+Message-ID: <20230317152903.5103f2c4@dellmb>
+In-Reply-To: <6cf03603-2a8e-4c08-a61b-aef164a0f5d9@lunn.ch>
+References: <20230317023125.486-1-ansuelsmth@gmail.com>
+        <20230317023125.486-5-ansuelsmth@gmail.com>
+        <20230317084519.12d3587a@dellmb>
+        <6cf03603-2a8e-4c08-a61b-aef164a0f5d9@lunn.ch>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 13:09, Dmitry Baryshkov wrote:
-> On 17/03/2023 11:12, Neil Armstrong wrote:
->> The QMP PHY is a USB3/DP combo phy, switch to the newly
->> documented bindings and register the clocks to the GCC
->> and DISPCC controllers.
->>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 42 +++++++++++++-----------------------
->>   1 file changed, 15 insertions(+), 27 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 69695eb83897..0b5a151ce138 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -11,6 +11,7 @@
->>   #include <dt-bindings/dma/qcom-gpi.h>
->>   #include <dt-bindings/gpio/gpio.h>
->>   #include <dt-bindings/mailbox/qcom-ipcc.h>
->> +#include <dt-bindings/phy/phy-qcom-qmp.h>
->>   #include <dt-bindings/power/qcom-rpmpd.h>
->>   #include <dt-bindings/interconnect/qcom,sm8450.h>
->>   #include <dt-bindings/soc/qcom,gpr.h>
->> @@ -748,7 +749,7 @@ gcc: clock-controller@100000 {
->>                    <&ufs_mem_phy_lanes 0>,
->>                    <&ufs_mem_phy_lanes 1>,
->>                    <&ufs_mem_phy_lanes 2>,
->> -                 <0>;
->> +                 <&usb_1_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
->>               clock-names = "bi_tcxo",
->>                         "sleep_clk",
->>                         "pcie_0_pipe_clk",
->> @@ -2034,37 +2035,24 @@ usb_1_hsphy: phy@88e3000 {
->>               resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
->>           };
->> -        usb_1_qmpphy: phy-wrapper@88e9000 {
->> -            compatible = "qcom,sm8450-qmp-usb3-phy";
->> -            reg = <0 0x088e9000 0 0x200>,
->> -                  <0 0x088e8000 0 0x20>;
->> -            status = "disabled";
->> -            #address-cells = <2>;
->> -            #size-cells = <2>;
->> -            ranges;
->> +        usb_1_qmpphy: phy@88e8000 {
->> +            compatible = "qcom,sm8450-qmp-usb3-dp-phy";
->> +            reg = <0 0x088e8000 0 0x4000>;
-> 
-> This should be 0x3000 too, like 8350
+On Fri, 17 Mar 2023 14:55:11 +0100
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-Ack thx for noticing
+> On Fri, Mar 17, 2023 at 08:45:19AM +0100, Marek Beh=C3=BAn wrote:
+> > On Fri, 17 Mar 2023 03:31:15 +0100
+> > Christian Marangi <ansuelsmth@gmail.com> wrote:
+> >  =20
+> > > +	cdev->brightness_set_blocking =3D phy_led_set_brightness;
+> > > +	cdev->max_brightness =3D 1;
+> > > +	init_data.devicename =3D dev_name(&phydev->mdio.dev);
+> > > +	init_data.fwnode =3D of_fwnode_handle(led);
+> > > +
+> > > +	err =3D devm_led_classdev_register_ext(dev, cdev, &init_data); =20
+> >=20
+> > Since init_data.devname_mandatory is false, devicename is ignored.
+> > Which is probably good, becuse the device name of a mdio device is
+> > often ugly, taken from devicetree or switch drivers, for example:
+> >   f1072004.mdio-mii
+> >   fixed-0
+> >   mv88e6xxx-1
+> > So either don't fill devicename or use devname_mandatory (and maybe
+> > fill devicename with something less ugly, but I guess if we don't have
+> > much choice if we want to keep persistent names).
+> >=20
+> > Without devname_mandatory, the name of the LED classdev will be of the
+> > form
+> >   color:function[-function-enumerator],
+> > i.e.
+> >   green:lan
+> >   amber:lan-1
+> >=20
+> > With multiple switch ethenret ports all having LAN function, it is
+> > worth noting that the function enumerator must be explicitly used in the
+> > devicetree, otherwise multiple LEDs will be registered under the same
+> > name, and the LED subsystem will add a number at the and of the name
+> > (function led_classdev_next_name), resulting in names
+> >   green:lan
+> >   green:lan_1
+> >   green:lan_2
+> >   ... =20
+>=20
+> I'm testing on a Marvell RDK, with limited LEDs. It has one LED on the
+> front port to represent the WAN port. The DT patch is at the end of
+> the series. With that, i end up with:
+>=20
+> root@370rd:/sys/class/leds# ls -l
+> total 0
+> lrwxrwxrwx 1 root root 0 Mar 17 01:10 f1072004.mdio-mii:00:WAN -> ../../d=
+evices/platform/soc/soc:interna
+> l-regs/f1072004.mdio/mdio_bus/f1072004.mdio-mii/f1072004.mdio-mii:00/leds=
+/f1072004.mdio-mii:00:WAN
+>=20
+> I also have:
+>=20
+> root@370rd:/sys/class/net/eth0/phydev/leds# ls
+> f1072004.mdio-mii:00:WAN
 
-> 
->>               clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
->>                    <&rpmhcc RPMH_CXO_CLK>,
->> -                 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
->> -            clock-names = "aux", "ref_clk_src", "com_aux";
->> +                 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
->> +                 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
->> +            clock-names = "aux", "ref", "com_aux", "usb3_pipe";
->>               resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
->>                    <&gcc GCC_USB3_PHY_PRIM_BCR>;
->>               reset-names = "phy", "common";
->> -            usb_1_ssphy: phy@88e9200 {
->> -                reg = <0 0x088e9200 0 0x200>,
->> -                      <0 0x088e9400 0 0x200>,
->> -                      <0 0x088e9c00 0 0x400>,
->> -                      <0 0x088e9600 0 0x200>,
->> -                      <0 0x088e9800 0 0x200>,
->> -                      <0 0x088e9a00 0 0x100>;
->> -                #phy-cells = <0>;
->> -                #clock-cells = <0>;
->> -                clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
->> -                clock-names = "pipe0";
->> -                clock-output-names = "usb3_phy_pipe_clk_src";
->> -            };
->> +            #clock-cells = <1>;
->> +            #phy-cells = <1>;
->> +
->> +            status = "disabled";
->>           };
->>           remoteproc_slpi: remoteproc@2400000 {
->> @@ -2972,8 +2960,8 @@ dispcc: clock-controller@af00000 {
->>                    <&mdss_dsi0_phy 1>,
->>                    <&mdss_dsi1_phy 0>,
->>                    <&mdss_dsi1_phy 1>,
->> -                 <0>, /* dp0 */
->> -                 <0>,
->> +                 <&usb_1_qmpphy QMP_USB43DP_DP_LINK_CLK>,
->> +                 <&usb_1_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>,
->>                    <0>, /* dp1 */
->>                    <0>,
->>                    <0>, /* dp2 */
->> @@ -4168,7 +4156,7 @@ usb_1_dwc3: usb@a600000 {
->>                   iommus = <&apps_smmu 0x0 0x0>;
->>                   snps,dis_u2_susphy_quirk;
->>                   snps,dis_enblslpm_quirk;
->> -                phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
->> +                phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
->>                   phy-names = "usb2-phy", "usb3-phy";
->>               };
->>           };
->>
-> 
+Hmm, yes I see.  If label is specified, devicename is used even if
+devname_mandatory is false.
 
+> f1072004.mdio-mii:00: is not nice, but it is unique to a netdev. The
+> last part then comes from the label property. Since there is only one
+> LED, i went with what the port is intended to be used as. If there had
+> been more LEDs, i would of probably used labels like "LINK" and
+> "ACTIVITY", since that is often what they reset default
+> to. Alternatively, you could names the "Left" and "Right", which does
+> suggest they can be given any function.
+>=20
+> I don't actually think the name is too important, so long as it is
+> unique. You are going to find it via /sys/class/net. MAC LEDs should
+> be /sys/class/net/eth42/leds, and PHY LEDs will be
+> /sys/class/net/phydev/leds.
+
+Maybe the name may not be that important from the perspective of a user
+who just wants to find the LED for a given phy, yes, but the
+proposal of how LED classdev should be named was done in good faith
+and accepted years ago. The documentation still defines the name format
+and until that part of documenation is changed, I think we should at
+least try to follow it.
+
+Also, the label DT property has been deprecated for LEDs. IMO it should
+be removed from that last patch of this series.
+
+> It has been discussed in the past to either extend ethtool to
+> understand this, or write a new little tool to make it easier to
+> manipulate these LEDs.
+
+Yes, and this would solve the problem for a user who wants to change
+the behaviour of a LED for a given PHY. But a user who wants to list
+all available LEDs by listing /sys/class/leds can also retrieve a nice
+list of names that make sense, if the documented format is followed.
+
+Marek
