@@ -2,178 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5468D6BE5C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051EE6BE5C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjCQJiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S230499AbjCQJjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCQJiE (ORCPT
+        with ESMTP id S229962AbjCQJjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:38:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39B0170F;
-        Fri, 17 Mar 2023 02:38:02 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AA6F3660309E;
-        Fri, 17 Mar 2023 09:38:00 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679045881;
-        bh=rmmWudAsSvMomWU/4fDVcXJ8Rtt1hVjirKy1iG0ELDs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aBnKahfJNgs/WHPGR5Z2WVQlkVBpkAadZjyTZUgUEZ7nZDC3i5EGLvepHobwTWD4D
-         7vc9MJxqJk6pXw3GuXacqWZCXQmuh4te0jaQ7SUBdz5Kr0E94PFH+S40qtVlqZ3Y3x
-         4rYQTCMbfHKf462ylqImBcZTQQnypHMvt8RoueLMyjyukz/HjOHI0r+vbFvQ+Buurk
-         WZQdnuhpNmvPbSY2HKe4LJtO0I+1ySONKuAA8FluTO2fRg0Ag7XYdk6c5AsgkGu8bZ
-         Cd24vQ4qRawksvtR02G+AVvYBdzWwzwCmu0EDGB0YL4qO7VGAKyerLfkU4AHZttOqQ
-         cqnUwyX3YSyPw==
-Message-ID: <fdd0a157-eedb-bf21-c632-79b02a4cd6b0@collabora.com>
-Date:   Fri, 17 Mar 2023 10:37:58 +0100
+        Fri, 17 Mar 2023 05:39:15 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B423C75;
+        Fri, 17 Mar 2023 02:39:14 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id k15so1762192pgt.10;
+        Fri, 17 Mar 2023 02:39:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679045953;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NeeR+x2NJdavxdOYfpdrEMQAe89MyGMfDA3FFptwvrc=;
+        b=iPgHp0r6Z3pCnuf9b/SBxJeKIz3MPkwzGtNe6kovGNnvJsVW2f0ocF4dYmnxj/Cjby
+         C0ONzUsYgQJ6MLn/PksYRPFZdhOKy2jks4Wcc9XUYYFBAtxitqc4zhcKgKFLuzYPm2Lo
+         RHOTvKO+uTRyNc5I9L/MoHhlrct8jQg6t1HHRouhzSj90OEEt0vNLrdXcedcPKoCG2kJ
+         AnBg5oqEwH4zIvuMiUtCIZhE0JczLpZWrAGE+O8INu0fO1JDhYowCKdLB2XNqQjNMw4X
+         iXu5PiBjZ9sXSbuAJtj/Y8CkLck6A9wtt1Ze6Z0tC31V5d0VefMWQRQQLn877kVkUuDM
+         jXDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679045953;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NeeR+x2NJdavxdOYfpdrEMQAe89MyGMfDA3FFptwvrc=;
+        b=iiBnIV0NVIWJdNrAlmeoWoqt+F3mjOf+/AZ89/W1gUpR0C8xeGN9udSK3o/FmAIqCj
+         YHPi8x/9IVGYHKfhVcl0Q0Uc150v1mCN+8PCkZYZWKQXCxbxUmEAXP0X2R15qyXFK6xi
+         P0jtXRnZXJNnDh3mm+7Wx2xPww822XmUhlkwSeYFJk1vrAJJjjHEPC3HFY7jzcwyaXxK
+         fawHGx64NYYPG7Q6GK/Y3r5F1efcQ+S68Eq+X1IOko9HLG3aP+BIpwENBAziATopRPbx
+         IXXNfe2VoSu6DiTphciBiuFWJAGxsy/2VYC3C4lcw4LhQgKYLxmGHvcdpf5eXI7sgUEe
+         moyw==
+X-Gm-Message-State: AO0yUKX4BP0nEFk7CAIfvAxPfXJ7ngh040IAAeMTB7BwwBfTf23i+FL+
+        dMZWPzo1cTDimR9UnMLp+hBsFkNgAMMWygi76ag=
+X-Google-Smtp-Source: AK7set8b/hpUYvinzbakbM4Qe7xrTuC4DytJeB9Smn9Fv5M5epfCDXtDPeaUCFstb+NnkwQgXHiAMMQHl1WrhDoB3+U=
+X-Received: by 2002:a65:528c:0:b0:50b:18ac:fbea with SMTP id
+ y12-20020a65528c000000b0050b18acfbeamr1788547pgp.9.1679045953561; Fri, 17 Mar
+ 2023 02:39:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-References: <20221227081011.6426-1-nancy.lin@mediatek.com>
- <20221227081011.6426-2-nancy.lin@mediatek.com>
- <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
- <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
- <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
- <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
- <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
- <0ebf187d-972e-4228-d8a0-8c0ce02f642d@linaro.org>
- <72cf6344a1c5942bff0872d05dce82b787b49b76.camel@mediatek.com>
- <4027714e-b4e8-953b-68e2-f74f7a7f0e8e@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <4027714e-b4e8-953b-68e2-f74f7a7f0e8e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230307023946.14516-1-xin3.li@intel.com> <20230307023946.14516-29-xin3.li@intel.com>
+In-Reply-To: <20230307023946.14516-29-xin3.li@intel.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Fri, 17 Mar 2023 17:39:01 +0800
+Message-ID: <CAJhGHyC6LgCwdDTkiy2TaQ8wzBQQfrx8ni7fY8vH-bUT2kR8pg@mail.gmail.com>
+Subject: Re: [PATCH v5 28/34] x86/fred: fixup fault on ERETU by jumping to fred_entrypoint_user
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
+        ravi.v.shankar@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/03/23 10:03, Krzysztof Kozlowski ha scritto:
-> On 17/03/2023 08:55, Nancy Lin (林欣螢) wrote:
->> On Thu, 2023-03-16 at 12:36 +0100, Krzysztof Kozlowski wrote:
->>> On 16/03/2023 10:53, AngeloGioacchino Del Regno wrote:
->>>
->>>> Hello Krzysztof, Nancy,
->>>>
->>>> Since this series has reached v29, can we please reach an agreement
->>>> on the bindings
->>>> to use here, so that we can get this finally upstreamed?
->>>>
->>>> I will put some examples to try to get this issue resolved.
->>>>
->>>> ### Example 1: Constrain the number of GCE entries to *seven* array
->>>> elements (7x4!)
->>>>
->>>>     mediatek,gce-client-reg:
->>>>       $ref: /schemas/types.yaml#/definitions/phandle-array
->>>>       maxItems: 1
->>>>       description: The register of display function block to be set
->>>> by gce.
->>>>         There are 4 arguments in this property, gce node, subsys id,
->>>> offset and
->>>>         register size. The subsys id is defined in the gce header of
->>>> each chips
->>>>         include/dt-bindings/gce/<chip>-gce.h, mapping to the
->>>> register of display
->>>>         function block.
->>>>       items:
->>>>         minItems: 28
->>>>         maxItems: 28
->>>>         items:                     <----- this block doesn't seem to
->>>> get checked :\
->>>>           - description: phandle of GCE
->>>>           - description: GCE subsys id
->>>>           - description: register offset
->>>>           - description: register size
->>>
->>> This is what we would like to have but it requires exception in
->>> dtschema. Thus:
->>>
->>>>
->>>>
->>>> ### Example 2: Don't care about constraining the number of
->>>> arguments
->>>>
->>>>     mediatek,gce-client-reg:
->>>>       $ref: /schemas/types.yaml#/definitions/phandle-array
->>>>       maxItems: 1
->>>>       description: The register of display function block to be set
->>>> by gce.
->>>>         There are 4 arguments in this property, gce node, subsys id,
->>>> offset and
->>>>         register size. The subsys id is defined in the gce header of
->>>> each chips
->>>>         include/dt-bindings/gce/<chip>-gce.h, mapping to the
->>>> register of display
->>>>         function block.
->>>
->>> use this.
->>>
->>> Best regards,
->>> Krzysztof
->>
->>
->> Hi Krzysztof, Angelo,
->>
->> Thanks for the comment.
->> The Example 2 can pass dt_binding_check.
->>
->> But the example in the binding has 7 items [1] and dts [2]. Does the
->> "maxItems: 1" affect any other schema or dts check?
-> 
-> Ah, then it should be maxItems: 7, not 1.
-> 
+> +#ifdef CONFIG_X86_FRED
+> +static bool ex_handler_eretu(const struct exception_table_entry *fixup,
+> +                            struct pt_regs *regs, unsigned long error_code)
+> +{
+> +       struct pt_regs *uregs = (struct pt_regs *)(regs->sp - offsetof(struct pt_regs, ip));
+> +       unsigned short ss = uregs->ss;
+> +       unsigned short cs = uregs->cs;
+> +
+> +       fred_info(uregs)->edata = fred_event_data(regs);
+> +       uregs->ssx = regs->ssx;
+> +       uregs->ss = ss;
+> +       uregs->csx = regs->csx;
+> +       uregs->current_stack_level = 0;
+> +       uregs->cs = cs;
 
-Keep in mind for your v30:
+Hello
 
-maxItems: 7 will pass - but only if minItems is *not* 7 :-)
+If the ERETU instruction had tried to return from NMI to ring3 and just faulted,
+is NMI still blocked?
 
--> (so, do not declare minItems, as default is 1) <-
+We know that IRET unconditionally enables NMI, but I can't find any clue in the
+FRED's manual.
 
-Regards,
-Angelo
+In the pseudocode of ERETU in the manual, it seems that NMI is only enabled when
+ERETU succeeds with bit28 in csx set.  If so, this code will fail to reenable
+NMI if bit28 is not explicitly re-set in csx.
 
-> Best regards,
-> Krzysztof
-> 
+Thanks,
+Lai
+
+> +
+> +       /* Copy error code to uregs and adjust stack pointer accordingly */
+> +       uregs->orig_ax = error_code;
+> +       regs->sp -= 8;
+> +
+> +       return ex_handler_default(fixup, regs);
+> +}
