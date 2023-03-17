@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278176BE705
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933486BE6F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjCQKkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S229936AbjCQKiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCQKkf (ORCPT
+        with ESMTP id S229654AbjCQKiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:40:35 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F92132E7B;
-        Fri, 17 Mar 2023 03:40:33 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E18055FD3D;
-        Fri, 17 Mar 2023 13:40:29 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679049629;
-        bh=rd/dOTnDe+BcqbCPdIvmhuxmSpptLS9RYhwrV6xtdsI=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=daR9AoWKhqByDghg86PjTmKX1KagfMHR3VqrJy5ySSPeiDqkLs3vWTHUwuqJzbLUX
-         NarHbA5ZZlYgiCFMJzY6R1r5K9wXxB0DdMAv416ndoRqLG/0JUGO/cGhJA26eIwV6X
-         +NmSYO0MNhYxcdJFfe904ZJvrZlHMRnS7Gr06zkppj9MLNgSxp/TQHQA6ehBp+jBFt
-         5PaaCWqzWIZrFJBA1NsR2hSvCPbpYInlt8yRiV3eh0HlYUs67aHomKBAP0l686dnRJ
-         EYPVb61Suj1chezYG9zK8M6+xNZD9UmVart5OuEdj/3lWOGUFvwj1DREtLICKpMX+2
-         t95I4Eb+ZIjoQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 17 Mar 2023 13:40:26 +0300 (MSK)
-Message-ID: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
-Date:   Fri, 17 Mar 2023 13:37:10 +0300
+        Fri, 17 Mar 2023 06:38:04 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1326166E6;
+        Fri, 17 Mar 2023 03:38:02 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so257289pjl.4;
+        Fri, 17 Mar 2023 03:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679049482;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L8hDCM0BvKf6M/FAL95ch0TPHn3it9hzyPSQddz+nU0=;
+        b=GJtPM8/YPgBYVMf80AQyvXk1icXvfz253xYaj492Oqj9f2Xr8BuRvMTxlCLMOSmO8g
+         OCEW1pR4cPU0uHkc+1zLI6pyoWGyHHBUtNDyaF+WMoMWvSdJL7Rn+Qibiov1HLHS4ONj
+         Czx4yL4EW31OFsTIOto0o5sbBjK+ihL9RO0CqhoSJgQqpj37oEH7AtNf28W6cwhIrbPB
+         mxFFRjK0x+mOe21jz1SCANSA95F6etzIhzbGoCp7hnrtdQnUz+wn1E23XpDO0UouV7gz
+         lVYhPrPS/D8FH1IVsBlsLYZLOqrQYO8+WGDSes8SeGxK9AKm2OtLgSUGWwTzQEdqprYd
+         qelw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679049482;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L8hDCM0BvKf6M/FAL95ch0TPHn3it9hzyPSQddz+nU0=;
+        b=tZU671H3yiHkyR1RJucIpn+CtklUQGLMqkr3bweLThumzVxq+oU1uJV9BaWxPPZUBS
+         t/xFJ1fvqdVu1iaC+984U+7u2ADcoyelXBixeAMtA4lg/vm9lQRsM/Ne7g01K7cFzUwg
+         2FlT994WgKFoZ5fjzaddKxYThZfZfwLPRS2R5L6vz/Mt63Ipvtf4e0Ir/CEmTpEhIouy
+         K6nIB2zFv6o0fnVgolzKyOq5RfpLog3Q+kl3SnJ6hc6AInCX/kOpZ2/VIT0mIjYDobqE
+         U7EUbFQ6q1yzIxHBZZYsM/YY6BxvSUwswpG9lZ9Z4ZmYVhon+vCxG1t+RKtNfcOgWRK4
+         FV2Q==
+X-Gm-Message-State: AO0yUKV0Z5fZFqx+rtyl7HkI5jktq5nr4n2njJZQyH0iNLwDdaKo6ezi
+        CJylNJlyCGE29rQytij+Y0s=
+X-Google-Smtp-Source: AK7set9YMjnNmOUNgiio6BWh5Vvz0PBCktdEJQFGzWFOOCjDSSWLULlKx/hs+9jU8D/t+D0Jvb4nEQ==
+X-Received: by 2002:a05:6a20:3d92:b0:be:da1c:df65 with SMTP id s18-20020a056a203d9200b000beda1cdf65mr8074412pzi.28.1679049482106;
+        Fri, 17 Mar 2023 03:38:02 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d084:8252:e846:af61])
+        by smtp.gmail.com with ESMTPSA id j19-20020aa783d3000000b005dca6f0046dsm1308934pfn.12.2023.03.17.03.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 03:38:01 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 03:37:58 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jonathan Denose <jdenose@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Denose <jdenose@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: i8042 - Add quirk for Fujitsu Lifebook A574/H
+Message-ID: <ZBRDBrLeRwrTboTl@google.com>
+References: <20230303152623.45859-1-jdenose@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v1] virtio/vsock: check transport before skb allocation
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/17 09:15:00 #20959649
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303152623.45859-1-jdenose@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer to transport could be checked before allocation of skbuff, thus
-there is no need to free skbuff when this pointer is NULL.
+On Fri, Mar 03, 2023 at 09:26:23AM -0600, Jonathan Denose wrote:
+> Fujitsu Lifebook A574/H requires the nomux option to properly
+> probe the touchpad, especially when waking from sleep.
+> 
+> Signed-off-by: Jonathan Denose <jdenose@google.com>
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- net/vmw_vsock/virtio_transport_common.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Applied, thank you.
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index cda587196475..607149259e8b 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -867,6 +867,9 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
- 	if (le16_to_cpu(hdr->op) == VIRTIO_VSOCK_OP_RST)
- 		return 0;
- 
-+	if (!t)
-+		return -ENOTCONN;
-+
- 	reply = virtio_transport_alloc_skb(&info, 0,
- 					   le64_to_cpu(hdr->dst_cid),
- 					   le32_to_cpu(hdr->dst_port),
-@@ -875,11 +878,6 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
- 	if (!reply)
- 		return -ENOMEM;
- 
--	if (!t) {
--		kfree_skb(reply);
--		return -ENOTCONN;
--	}
--
- 	return t->send_pkt(reply);
- }
- 
 -- 
-2.25.1
+Dmitry
