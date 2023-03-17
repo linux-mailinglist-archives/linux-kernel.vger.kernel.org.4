@@ -2,103 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE94D6BE88E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8D36BE891
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjCQLuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S230060AbjCQLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjCQLt4 (ORCPT
+        with ESMTP id S229868AbjCQLuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:49:56 -0400
+        Fri, 17 Mar 2023 07:50:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D1C54C96
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:49:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E801B422B;
+        Fri, 17 Mar 2023 04:50:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D8B8B82433
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 11:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530A3C433EF;
-        Fri, 17 Mar 2023 11:49:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21DFEB82560;
+        Fri, 17 Mar 2023 11:50:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8165DC433D2;
+        Fri, 17 Mar 2023 11:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679053788;
-        bh=AF71asxE7X13lcCyaqDpizk2SwpjJ/tXOc4hfN2y0/M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fytkpfzfopmuZJZEf+6m4NozJGkkCFVNe+9PaF2NIg0n+JgMhoPN4ndCF/LmSqu5J
-         M4OD3k6RNxbE4Hbjl9shSkUhCGmpjMELb1XPgHIgXLdipsTKihF0sKHoblvh/QyRZi
-         l2Q+YIZqjUAfx2M2GJoeEQQ/S9yDeeYNb7457fkxlZkvLYR/+oIYDWQjn7nF1fEqdv
-         /J0QKiXdVQNBRdG1F86oesCX6ELU12EyuVpiQhiW/a3YwajkPCM2sDw+oqbJTNssJL
-         gPZUgMRmOcG2uANehy56VfaDHgU3ti6zHzBsjN6JQUBdzGvuML5eypmsEEAfmVg9xH
-         chqQLQR67gRwA==
-Message-ID: <ae7c1d45-8e19-dc96-6769-c0b37791132d@kernel.org>
-Date:   Fri, 17 Mar 2023 12:49:43 +0100
+        s=k20201202; t=1679053807;
+        bh=T8NNfXFxQwO5AYO7a1OktwX6XNNJlHxRWVwZujDSwwM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G3tBAQGWyF+d/xztZGv8w2CJOXhMijhJ4Da4wdAf/DGrDr25vdbpQor3X0mjKeUoA
+         EJAx3W+NLy0rFxU0oLEJVZyZPdpjcfKTe90OZL7MA1MB5qwW+YpJi6NzhnwdvqHows
+         OlJuLWMlWh0AYgxV038lxwTtg3BZ4IVAO/Qe41OVIlyHwVa+F1UtjZ7pwC9Pxck2P9
+         ubkv23es+XVnoLL2NfqNwJ0TnWlU5ZCvQGfLM/gFp8kxDQgXtVgVzaCJFrgVGOFPzM
+         EyVrtvSRLfz6oSyETvktfPDkVXIOxQBg25BXOJBaX3Bxk2xem/ZYHjO+Mclq9iVrAI
+         ACIk3ZQqFNVpw==
+Date:   Fri, 17 Mar 2023 13:49:53 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-doc@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: Re: [PATCH v2 1/6] mm/slob: remove CONFIG_SLOB
+Message-ID: <ZBRT4Q24y1vvioIY@kernel.org>
+References: <20230317104307.29328-1-vbabka@suse.cz>
+ <20230317104307.29328-2-vbabka@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] bindings: regulator: pca9450: Add LOADSW regulator
-To:     Nicolas Heemeryck <nicolas.heemeryck@devialet.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230317093911.1254530-1-nicolas.heemeryck@devialet.com>
- <20230317093911.1254530-3-nicolas.heemeryck@devialet.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230317093911.1254530-3-nicolas.heemeryck@devialet.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317104307.29328-2-vbabka@suse.cz>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 10:39, Nicolas Heemeryck wrote:
-> Add the binding documentation for the load switch regulator.
-
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
-
-You missed important mailing lists as well, thus patch won't be tested.
-That's a NAK. :(
-
+On Fri, Mar 17, 2023 at 11:43:02AM +0100, Vlastimil Babka wrote:
+> Remove SLOB from Kconfig and Makefile. Everything under #ifdef
+> CONFIG_SLOB, and mm/slob.c is now dead code.
 > 
-> Signed-off-by: Nicolas Heemeryck <nicolas.heemeryck@devialet.com>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Acked-by: Lorenzo Stoakes <lstoakes@gmail.com>
+
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
 > ---
->  .../bindings/regulator/nxp,pca9450-regulator.yaml  | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+>  init/Kconfig               |  2 +-
+>  kernel/configs/tiny.config |  1 -
+>  mm/Kconfig                 | 22 ----------------------
+>  mm/Makefile                |  2 --
+>  4 files changed, 1 insertion(+), 26 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-> index 835b53302db8..064d57256aff 100644
-> --- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-> @@ -20,6 +20,7 @@ description: |
->  #The valid names for PCA9450 regulator nodes are:
->  #BUCK1, BUCK2, BUCK3, BUCK4, BUCK5, BUCK6,
->  #LDO1, LDO2, LDO3, LDO4, LDO5
-> +#LOADSW
->  #Note: Buck3 removed on PCA9450B and connect with Buck1 on PCA9450C.
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 1fb5f313d18f..72ac3f66bc27 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -973,7 +973,7 @@ config MEMCG
 >  
->  properties:
-> @@ -74,6 +75,14 @@ properties:
+>  config MEMCG_KMEM
+>  	bool
+> -	depends on MEMCG && !SLOB
+> +	depends on MEMCG
+>  	default y
 >  
->          unevaluatedProperties: false
+>  config BLK_CGROUP
+> diff --git a/kernel/configs/tiny.config b/kernel/configs/tiny.config
+> index c2f9c912df1c..144b2bd86b14 100644
+> --- a/kernel/configs/tiny.config
+> +++ b/kernel/configs/tiny.config
+> @@ -7,6 +7,5 @@ CONFIG_KERNEL_XZ=y
+>  # CONFIG_KERNEL_LZO is not set
+>  # CONFIG_KERNEL_LZ4 is not set
+>  # CONFIG_SLAB is not set
+> -# CONFIG_SLOB_DEPRECATED is not set
+>  CONFIG_SLUB=y
+>  CONFIG_SLUB_TINY=y
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 4751031f3f05..669399ab693c 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -238,30 +238,8 @@ config SLUB
+>  	   and has enhanced diagnostics. SLUB is the default choice for
+>  	   a slab allocator.
 >  
-> +        "LOADSW":
+> -config SLOB_DEPRECATED
+> -	depends on EXPERT
+> -	bool "SLOB (Simple Allocator - DEPRECATED)"
+> -	depends on !PREEMPT_RT
+> -	help
+> -	   Deprecated and scheduled for removal in a few cycles. SLUB
+> -	   recommended as replacement. CONFIG_SLUB_TINY can be considered
+> -	   on systems with 16MB or less RAM.
+> -
+> -	   If you need SLOB to stay, please contact linux-mm@kvack.org and
+> -	   people listed in the SLAB ALLOCATOR section of MAINTAINERS file,
+> -	   with your use case.
+> -
+> -	   SLOB replaces the stock allocator with a drastically simpler
+> -	   allocator. SLOB is generally more space efficient but
+> -	   does not perform as well on large systems.
+> -
+>  endchoice
+>  
+> -config SLOB
+> -	bool
+> -	default y
+> -	depends on SLOB_DEPRECATED
+> -
+>  config SLUB_TINY
+>  	bool "Configure SLUB for minimal memory footprint"
+>  	depends on SLUB && EXPERT
+> diff --git a/mm/Makefile b/mm/Makefile
+> index 8e105e5b3e29..e347958fc6b2 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -22,7 +22,6 @@ KCSAN_INSTRUMENT_BARRIERS := y
+>  # flaky coverage that is not a function of syscall inputs. E.g. slab is out of
+>  # free pages, or a task is migrated between nodes.
+>  KCOV_INSTRUMENT_slab_common.o := n
+> -KCOV_INSTRUMENT_slob.o := n
+>  KCOV_INSTRUMENT_slab.o := n
+>  KCOV_INSTRUMENT_slub.o := n
+>  KCOV_INSTRUMENT_page_alloc.o := n
+> @@ -81,7 +80,6 @@ obj-$(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP)	+= hugetlb_vmemmap.o
+>  obj-$(CONFIG_NUMA) 	+= mempolicy.o
+>  obj-$(CONFIG_SPARSEMEM)	+= sparse.o
+>  obj-$(CONFIG_SPARSEMEM_VMEMMAP) += sparse-vmemmap.o
+> -obj-$(CONFIG_SLOB) += slob.o
+>  obj-$(CONFIG_MMU_NOTIFIER) += mmu_notifier.o
+>  obj-$(CONFIG_KSM) += ksm.o
+>  obj-$(CONFIG_PAGE_POISONING) += page_poison.o
+> -- 
+> 2.39.2
+> 
 
-Does not look like pattern... unless you want something-LOADSW, but then
-why?
-
-
-
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
