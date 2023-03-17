@@ -2,130 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594576BEEF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 567456BEF00
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCQQzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S229617AbjCQQ5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQQzI (ORCPT
+        with ESMTP id S229488AbjCQQ5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:55:08 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3234044A4;
-        Fri, 17 Mar 2023 09:55:07 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso9647230pjb.3;
-        Fri, 17 Mar 2023 09:55:07 -0700 (PDT)
+        Fri, 17 Mar 2023 12:57:36 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ED7B7D8C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:57:35 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id s12so6259945qtq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679072106;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AQBpav1FYobf3FdN98BFiGZMbqLp2dtSePWz+wd/wDU=;
-        b=DItLMS1d3mWz/5TcrtphrYofycA1jCPq6/0jEmwewNozlTUqCH3XAvDPhZjpEF/kXB
-         JXPaxpP8d+YlQGdzVB/AKSPX0R0XRVCRD5320YS/BEQKRaRgfbQKidC+ftfFjl1D5o0X
-         hKf6n0hd3nsuF6x48cRS9bochchQKNBCzuT6N7zflTzo9uiT2SqpO/5ZI2MBCHuAHY0K
-         7pSTK4rDOZJ594FNjrOoIr6xfznzGIcu6crcfeYDEJPK46whZYEx7Apn8KzInWx+kfTf
-         wuYth7ifK51zVJaA7pxHFgkUB3lOI+i6x+wk7qj/oZfXnOpjg26HNcYlqRFyiMB3nNEx
-         XmoQ==
+        d=chromium.org; s=google; t=1679072253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L9dNM5x4oEV/eACFTwRAEYcuMGzTPuMAMyLjmcgT0x4=;
+        b=Ofr/IXMxIfg0qBXEXCWDyU/2rkOwZjxElsHTzUq0uEBalUuB4qpQ6H3oWQAf4qi4TM
+         3LLdQgoTZIlA64DTZK8QQZxK8ksuXsmB21qK4fqQr1Xc8Ow/OLSF7FEGs9WsMtrIUcJv
+         NypDCIF8rNHtmoi33osJpz+n1G8lE8uhLdPYE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679072106;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQBpav1FYobf3FdN98BFiGZMbqLp2dtSePWz+wd/wDU=;
-        b=DwrVDRlBYZVXlKlej46ujTtrPqazHHe1SNGCPLDbB6pUnsQ6Z7GQe9J7IuFlMRLWoN
-         2sHpSqTXGp4ia9s6prVB0JtpV70gRuWL8jey07m94VqFk1X5jUJaE9e6AA2nHSjGzgk6
-         nE1VRi7Om/mhDigx27n77mt5DwdxtaxXM0GgIgyTrSxVK0s3zMNVfiYjJluXSwlmL4ds
-         L80LPKlahejcB+FUMbeMl84/+VdFTMWXA8WJMhHw9ZJWybzofaNbGx7iGau7zptLCVoY
-         2GpYkOlWq5EmJfwJ7nHt9EAhV2+UAzA0Y7T3uc+85FxQ5IpuTGqSScC3VaDGbq6AQNEP
-         cong==
-X-Gm-Message-State: AO0yUKXqLNncohtIFybrBYaXoGpQRo0YL6II8sMZFhSG2vu1pCVjbB5M
-        CPw2XMNb/IiM7A4rKCBL1+8=
-X-Google-Smtp-Source: AK7set/wdNYlcSaXja9Wy9Rv5RxF6uNAeWSUfwiDKTYXBDQh0ik9TYkps4sAmgW0dU0OHT/i1OYWsQ==
-X-Received: by 2002:a05:6a21:99a6:b0:d6:532:6671 with SMTP id ve38-20020a056a2199a600b000d605326671mr3791392pzb.14.1679072106382;
-        Fri, 17 Mar 2023 09:55:06 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id a3-20020a637f03000000b005034a46fbf7sm1703624pgd.28.2023.03.17.09.55.01
+        d=1e100.net; s=20210112; t=1679072253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L9dNM5x4oEV/eACFTwRAEYcuMGzTPuMAMyLjmcgT0x4=;
+        b=EzbiSJvcy7sOJFH5nncRqV6VBUvJKEk0nWGSgfs0bDud7mG0PrPh3Lj7oVM67mEbSv
+         uzfWQvzjHOy6jGhyOVRPB/sN/Zp3HQe+MyUgdJp2dTN/w6ebzrSZtqx5uT4v0lkj+1FL
+         Hvuqi86A4wu18QlmQhr7c6hU35M/U7msiULHCxEirDEBDmkJpwXZTBY3SYfs3AJiGbKr
+         GlXS5r1xoUjtYUaOY3tN9emvXWkWp89JdM8F2VPnzRDYLVmUhQamwuH7E7kShiFQ7Xuj
+         S1pIPvB2/VvR/z92/IIvuV3KRDIzfFWAJw/lIOmkCMxXSBnyRAYoeKfo44ev8/ftZiPf
+         5aag==
+X-Gm-Message-State: AO0yUKWPNGVMsoOBUaR4MwR92lGWwCL6ojYknc0sPrQ7UkOMjuOegvuw
+        44JIkOwC9Ncy89hHzn/7slLzqtkP84m4btoZFi8=
+X-Google-Smtp-Source: AK7set9gkvGcADK+t+tlWRGukAIdcSbupG8L/K1eQOkzeM554S/SBQ5W72ahqiKLljw3lkse+CRLqg==
+X-Received: by 2002:ac8:5f0e:0:b0:3d7:3cf4:33f9 with SMTP id x14-20020ac85f0e000000b003d73cf433f9mr13051830qta.68.1679072253655;
+        Fri, 17 Mar 2023 09:57:33 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id r14-20020ac867ce000000b003c034837d8fsm1560417qtp.33.2023.03.17.09.57.31
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 09:55:05 -0700 (PDT)
-Message-ID: <9f771318-5a59-ac31-a333-e2ad9947679f@gmail.com>
-Date:   Fri, 17 Mar 2023 09:54:59 -0700
+        Fri, 17 Mar 2023 09:57:32 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id p203so6372460ybb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:57:31 -0700 (PDT)
+X-Received: by 2002:a05:6902:707:b0:b45:5cbe:48b3 with SMTP id
+ k7-20020a056902070700b00b455cbe48b3mr236008ybt.0.1679072251542; Fri, 17 Mar
+ 2023 09:57:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] net: dsa: tag_brcm: legacy: fix daisy-chained switches
-Content-Language: en-US
-To:     Jonas Gorski <jonas.gorski@gmail.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+References: <20230315010732.633992-1-saravanak@google.com> <ZBR1WHPpcrOMFwVe@kroah.com>
+In-Reply-To: <ZBR1WHPpcrOMFwVe@kroah.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 17 Mar 2023 09:57:19 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XUe194BqM42QhZzxQ1M1uDmVbeya34p7shEGjTr2C1SQ@mail.gmail.com>
+Message-ID: <CAD=FV=XUe194BqM42QhZzxQ1M1uDmVbeya34p7shEGjTr2C1SQ@mail.gmail.com>
+Subject: Re: [PATCH v2] driver core: Add CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, kernel-team@android.com,
         linux-kernel@vger.kernel.org
-References: <20230317120815.321871-1-noltari@gmail.com>
- <00783066-a99c-4bab-ae60-514f4bce687b@lunn.ch>
- <CAOiHx==TiSZKE4AP3PZ9Ah4zuAsrfpOTvRADWpT2kMS9UVRH9Q@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAOiHx==TiSZKE4AP3PZ9Ah4zuAsrfpOTvRADWpT2kMS9UVRH9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 09:49, Jonas Gorski wrote:
-> On Fri, 17 Mar 2023 at 17:32, Andrew Lunn <andrew@lunn.ch> wrote:
->>
->> On Fri, Mar 17, 2023 at 01:08:15PM +0100, Álvaro Fernández Rojas wrote:
->>> When BCM63xx internal switches are connected to switches with a 4-byte
->>> Broadcom tag, it does not identify the packet as VLAN tagged, so it adds one
->>> based on its PVID (which is likely 0).
->>> Right now, the packet is received by the BCM63xx internal switch and the 6-byte
->>> tag is properly processed. The next step would to decode the corresponding
->>> 4-byte tag. However, the internal switch adds an invalid VLAN tag after the
->>> 6-byte tag and the 4-byte tag handling fails.
->>> In order to fix this we need to remove the invalid VLAN tag after the 6-byte
->>> tag before passing it to the 4-byte tag decoding.
->>
->> Is there an errata for this invalid VLAN tag? Or is the driver simply
->> missing some configuration for it to produce a valid VLAN tag?
->>
->> The description does not convince me you are fixing the correct
->> problem.
-> 
-> This isn't a bug per se, it's just the interaction of a packet going
-> through two tagging CPU ports.
-> 
-> My understanding of the behaviour is:
-> 
-> 1. The external switch inserts a 4-byte Broadcom header before the
-> VLAN tag, and sends it to the internal switch.
-> 2. The internal switch looks at the EtherType, finds it is not a VLAN
-> EtherType, so assumes it is untagged, and adds a VLAN tag based on the
-> configured PVID (which 0 in the default case).
-> 3. The internal switch inserts a legacy 6-byte Broadcom header before
-> the VLAN tag when forwarding to its CPU port.
-> 
-> The internal switch does not know how to handle the (non-legacy)
-> Broadcom tag, so it does not know that there is a VLAN tag after it.
-> 
-> The internal switch enforces VLAN tags on its CPU port when it is in
-> VLAN enabled mode, regardless what the VLAN table's untag bit says.
-> 
-> The result is a bogus VID 0 and priority 0 tag between the two
-> Broadcom Headers. The VID would likely change based on the PVID of the
-> port of the external switch.
+Hi,
 
-My understanding matches yours, at the very least, we should only strip 
-off the VLAN tag == 0, in case we are stacked onto a 4-bytes Broadcom 
-tag speaking switch, otherwise it seems to me we are stripping of VLAN 
-tags a bait too greedily.
--- 
-Florian
+On Fri, Mar 17, 2023 at 7:12=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Mar 14, 2023 at 06:07:31PM -0700, Saravana Kannan wrote:
+> > Add a build time equivalent of fw_devlink.sync_state=3Dtimeout so that
+> > board specific kernels could enable it and not have to deal with settin=
+g
+> > or cluttering the kernel commandline.
+> >
+> > Cc: Doug Anderson <dianders@chromium.org>
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >  drivers/base/Kconfig | 12 ++++++++++++
+> >  drivers/base/core.c  |  5 +++++
+> >  2 files changed, 17 insertions(+)
+> >
+> > diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> > index 6f04b831a5c0..aac247512d69 100644
+> > --- a/drivers/base/Kconfig
+> > +++ b/drivers/base/Kconfig
+> > @@ -230,4 +230,16 @@ config GENERIC_ARCH_NUMA
+> >         Enable support for generic NUMA implementation. Currently, RISC=
+-V
+> >         and ARM64 use it.
+> >
+> > +config FW_DEVLINK_SYNC_STATE_TIMEOUT
+> > +     bool
+> > +     help
+> > +       This is build time equivalent of adding kernel command line par=
+ameter
+> > +       "fw_devlink.sync_state=3Dtimeout". Give up waiting on consumers=
+ and
+> > +       call sync_state() on any devices that haven't yet received thei=
+r
+> > +       sync_state() calls after deferred_probe_timeout has expired or =
+by
+> > +       late_initcall() if !CONFIG_MODULES. You should almost always wa=
+nt to
+> > +       select N here unless you have already successfully tested with =
+the
+> > +       command line option on every system/board your kernel is expect=
+ed to
+> > +       work on.
+>
+> As nothing can actually select this, it doesn't make sense to add this
+> now, right?  We need a user, otherwise the automated tools will come
+> along and remove this option when they figure out that it can't be ever
+> used.
 
+I think the hope was that it could be setup as a config that would
+show up as user selectable (like in menuconfig). Saravana: the problem
+is your bare "bool" above. That should be changed to a description
+shown to the user. Like maybe you'd want to change that to:
+
+  bool "sync_state behavior defaults to timeout instead of strict"
+
+-Doug
