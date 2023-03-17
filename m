@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54ADF6BF297
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750B06BF2A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCQUbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        id S229999AbjCQUdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjCQUbV (ORCPT
+        with ESMTP id S229599AbjCQUdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:31:21 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5381BD1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:30:53 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id bd36so4675370oib.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:30:53 -0700 (PDT)
+        Fri, 17 Mar 2023 16:33:19 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B900DE1C90
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:32:57 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aeb49429eso6651671fac.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679085051;
+        d=gmail.com; s=20210112; t=1679085176;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zgzPzELDRnlSYA6MsmYOolzvoDuLjYqI48hOINLp/VU=;
-        b=n2GadBEyYknydFrD4m7kROU9UA0PJQr/Gx/qdFjoB7AAo4jcYipOO9aFFFQs/Otm9p
-         EzKZ6J8Tb4BFjoAdQMl541IiSFt1v27HyqsFoQj7Zo0XYnW8ApzopdKD1lgTAY2YtaPt
-         456Gdh5zJUR07z+GcBuwgiWhFn215fGTA+hEnsruTyPtnQANA6ngCOMvBVfS02GGzflw
-         +J4fmkcupMeC6Y4tZ12XxKP+1S574X2FyZVuoutGobGbYnmD90sCv8H/WXbPTVM/FJec
-         7gbrZUyin8qHHqg1PAtS+zZHHiaQ9w7V8NF8AzdlVAYUF5l2nUz2CgHkBSgllLvzxh/G
-         gayA==
+        bh=/RfMN7DRIcyqsTtzN8E9y+T6KdTmfa65N2EjbDjm3zY=;
+        b=FCW5yVym72MxBW25JQav1TzIabA1cYrb4CyrTIayWtwSGPt0m9OAV/IHKHgXY6qgoQ
+         IKtZoU1qsTr10zUsRONDgaRZcNdWQokX39v2ufOerYGbHjuqid7fsnXwccIWtXmeyLrL
+         WYJx8euxaY9CEJ6Q8tNGxc7EmFWCIkBunhQfVgx4tNFBQlu/fnx8BdK+dc/A8gk/V50v
+         1rIJ5TbaT7vQqzLwNBRgqAMyasbNnmE2TrQlCgqMpquTtrZFgi1gqdMhambWqdFGYjG8
+         OfRce4S/DzqVUCZhQXUlkVLrlBLwVrSgr9HRr0koylzLx8FNvsstjXI/LFq5VpUsm8Zh
+         yErA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679085051;
+        d=1e100.net; s=20210112; t=1679085176;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zgzPzELDRnlSYA6MsmYOolzvoDuLjYqI48hOINLp/VU=;
-        b=1qkOzqIvFJ5/oeMkAhCUilbL7CiddUf1O0VtfHaUMW/wnQdebSQ2xgYh3FHtMY7YSb
-         FtfegXYy0VjbZufjG3w9f0AqYH3h1dedgY1a7pIscMTMRx5GmEgedvC5667BNRaB3/nK
-         MHUxJhpX556jIYY7dVcCjxHFFfj9HHwbZWKnk+Zs0CDbZLlYO/nFYHD+fsmzRNU31Htt
-         BhsjdbA2BQ65KcTCeLjeiawlSRoce49l3ElA3a6USwhfQE+1OsWU0qD8dtGBnGUXHh9M
-         4mXrpG5cs48WZQ66YkAbSA02jlyCah0/gmxaQSLwulBJSeeW/NTAWW5J6UxF65nDcm7o
-         6hLw==
-X-Gm-Message-State: AO0yUKW8M0nCQlnHuwS6omXzVDjDb8OCt+A9DfK7mTTQMFg/kicTypYg
-        VknITHlSnP81wFKjNjhkKdsH0tt7Cc7bgCAyWeM=
-X-Google-Smtp-Source: AK7set+UKwCYs1V1Ri1PUeftVGJmtb0qs/ntSmquTYl0HxYXGeP/0RgArIif59CW4iMKP3g56h3O8GvKZa7MA+nMPJU=
-X-Received: by 2002:aca:6709:0:b0:384:253:642d with SMTP id
- z9-20020aca6709000000b003840253642dmr3819397oix.3.1679085050979; Fri, 17 Mar
- 2023 13:30:50 -0700 (PDT)
+        bh=/RfMN7DRIcyqsTtzN8E9y+T6KdTmfa65N2EjbDjm3zY=;
+        b=ouFXhUu8cLZBXvxvW4gQ0HzTRhcVBrWrRi5ZVCU8XGQFkODLFCjtdTOkGkJncyHDvu
+         i1C6BQ6oj3vsnKp8bPGMfxDusvihi8rNdvg3pjs2cuAAyuh+JdG6Bfe0GScHehke2Blu
+         CZEwb/V2EpkEyhIqaBzkekU11CLKPHWRQb0USvn/i1UJKGt+Z41aMa7d8LkURKr+/qXr
+         fj+jRT2O8eUhP4NGhwrLk5JPzSLqXycjPfikt4pCffp5ly7jK3DQPjvnO63c70YXM0pD
+         bi21BnGlmd4tdrIbNBMuiv5T+heueyme2EubEV57poai9dkcP7KD/C8z3qmDQWlXbWoR
+         1h1w==
+X-Gm-Message-State: AO0yUKVYh1EoG9QkiXZ4y/fc+ArDQc3HbEIibDSwelwNUv3RguRLJMRY
+        A/HHds+ZzkyImP01+s+KaWfYk7epMfzshMQB1XQ=
+X-Google-Smtp-Source: AK7set9pwElEd/aUD3iyT/dmmI+xSHtUnpnvu7q5FwEC9FpCXyCDiYObJzPkAJO7vw6nJFli+VEKTOKzZN/kH6PIIXg=
+X-Received: by 2002:a05:6871:48c6:b0:17a:a999:e87e with SMTP id
+ qf6-20020a05687148c600b0017aa999e87emr337853oab.3.1679085176245; Fri, 17 Mar
+ 2023 13:32:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-21-lee@kernel.org>
-In-Reply-To: <20230317081718.2650744-21-lee@kernel.org>
+References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-27-lee@kernel.org>
+In-Reply-To: <20230317081718.2650744-27-lee@kernel.org>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 17 Mar 2023 16:30:39 -0400
-Message-ID: <CADnq5_Pj31O7Xvikn4SpCdxp3vkfYe0+PKxev-1VoECPk0YP-Q@mail.gmail.com>
-Subject: Re: [PATCH 20/37] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
- defines out to where they are actually used
+Date:   Fri, 17 Mar 2023 16:32:45 -0400
+Message-ID: <CADnq5_OD8o=zEndGqyEPEpgtW9b3xRh=62haLZOfEFMARFRJ6A@mail.gmail.com>
+Subject: Re: [PATCH 26/37] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
+ SYNAPTICS_DEVICE_ID into CONFIG_DRM_AMD_DC_DCN ifdef
 To:     Lee Jones <lee@kernel.org>
 Cc:     dri-devel@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
+        David Airlie <airlied@gmail.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
         Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
         =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -74,38 +77,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
-
-Alex
-
 On Fri, Mar 17, 2023 at 4:23=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
 >
 > Fixes the following W=3D1 kernel build warning(s):
 >
->   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h: At t=
-op level:
->   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:143:2=
-2:
->       warning: =E2=80=98SYNAPTICS_DEVICE_ID=E2=80=99 defined but not used=
- [-Wunused-const-variable=3D]
->   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:140:2=
-2:
->       warning: =E2=80=98DP_VGA_LVDS_CONVERTER_ID_3=E2=80=99 defined but n=
-ot used [-Wunused-const-variable=3D]
->   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:138:2=
-2:
->       warning: =E2=80=98DP_VGA_LVDS_CONVERTER_ID_2=E2=80=99 defined but n=
-ot used [-Wunused-const-variable=3D]
->   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:2=
-2:
->       warning: =E2=80=98DP_SINK_DEVICE_STR_ID_2=E2=80=99 defined but not =
-used [-Wunused-const-variable=3D]
->   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:2=
-2:
->       warning: =E2=80=98DP_SINK_DEVICE_STR_ID_1=E2=80=99 defined but not =
-used [-Wunused-const-variable=3D]
->
-> [snip 400 similar lines brevity]
+>  drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:48:2=
+2: warning: =E2=80=98SYNAPTICS_DEVICE_ID=E2=80=99 defined but not used [-Wu=
+nused-const-variable=3D]
+
+CONFIG_DRM_AMD_DC_DCN was recently dropped so this patch is no longer relev=
+ant.
+
+Alex
+
+
 >
 > Cc: Harry Wentland <harry.wentland@amd.com>
 > Cc: Leo Li <sunpeng.li@amd.com>
@@ -119,103 +104,35 @@ used [-Wunused-const-variable=3D]
 > Cc: dri-devel@lists.freedesktop.org
 > Signed-off-by: Lee Jones <lee@kernel.org>
 > ---
->  .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c   |  3 +++
->  drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c       |  3 +++
->  .../gpu/drm/amd/display/dc/link/link_detection.c    |  2 ++
->  .../dc/link/protocols/link_edp_panel_control.c      |  5 +++++
->  .../gpu/drm/amd/display/include/ddc_service_types.h | 13 -------------
->  5 files changed, 13 insertions(+), 13 deletions(-)
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
 > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/=
 drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> index 9c1e91c2179eb..330ab036c830f 100644
+> index 330ab036c830f..a8904184673f6 100644
 > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
 > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> @@ -44,6 +44,9 @@
+> @@ -44,9 +44,6 @@
 >  #include "dm_helpers.h"
 >  #include "ddc_service_types.h"
+>
+> -/* MST Dock */
+> -static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
+> -
+>  /* dm_helpers_parse_edid_caps
+>   *
+>   * Parse edid caps
+> @@ -703,6 +700,9 @@ static void apply_synaptics_fifo_reset_wa(struct drm_=
+dp_aux *aux)
+>         DC_LOG_DC("Done apply_synaptics_fifo_reset_wa\n");
+>  }
 >
 > +/* MST Dock */
 > +static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
 > +
->  /* dm_helpers_parse_edid_caps
->   *
->   * Parse edid caps
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c b/drivers/gpu/=
-drm/amd/display/dc/dce/dmub_psr.c
-> index 19440bdf63449..27b8f3435d86f 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
-> @@ -33,6 +33,9 @@
->
->  #define MAX_PIPES 6
->
-> +static const uint8_t DP_SINK_DEVICE_STR_ID_1[] =3D {7, 1, 8, 7, 3};
-> +static const uint8_t DP_SINK_DEVICE_STR_ID_2[] =3D {7, 1, 8, 7, 5};
-> +
->  /*
->   * Convert dmcub psr state to dmcu psr state.
->   */
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drive=
-rs/gpu/drm/amd/display/dc/link/link_detection.c
-> index 8cfeddfb65c89..9177b146a80a8 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-> @@ -60,6 +60,8 @@
->   */
->  #define LINK_TRAINING_MAX_VERIFY_RETRY 2
->
-> +static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] =3D "7580\x80u";
-> +
->  static const uint8_t dp_hdmi_dongle_signature_str[] =3D "DP-HDMI ADAPTOR=
-";
->
->  static enum ddc_transaction_type get_ddc_transaction_type(enum signal_ty=
-pe sink_signal)
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel=
-_control.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_c=
-ontrol.c
-> index 93a6bbe954bb7..d895046787bc4 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_contro=
-l.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_contro=
-l.c
-> @@ -37,6 +37,11 @@
->  #include "abm.h"
->  #define DC_LOGGER_INIT(logger)
->
-> +/* Travis */
-> +static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] =3D "sivarT";
-> +/* Nutmeg */
-> +static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] =3D "dnomlA";
-> +
->  void dp_set_panel_mode(struct dc_link *link, enum dp_panel_mode panel_mo=
-de)
->  {
->         union dpcd_edp_config edp_config_set;
-> diff --git a/drivers/gpu/drm/amd/display/include/ddc_service_types.h b/dr=
-ivers/gpu/drm/amd/display/include/ddc_service_types.h
-> index 31a12ce79a8e0..f843fc4978552 100644
-> --- a/drivers/gpu/drm/amd/display/include/ddc_service_types.h
-> +++ b/drivers/gpu/drm/amd/display/include/ddc_service_types.h
-> @@ -129,17 +129,4 @@ struct av_sync_data {
->         uint8_t aud_del_ins3;/* DPCD 0002Dh */
->  };
->
-> -static const uint8_t DP_SINK_DEVICE_STR_ID_1[] =3D {7, 1, 8, 7, 3};
-> -static const uint8_t DP_SINK_DEVICE_STR_ID_2[] =3D {7, 1, 8, 7, 5};
-> -
-> -static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] =3D "7580\x80u";
-> -
-> -/*Travis*/
-> -static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] =3D "sivarT";
-> -/*Nutmeg*/
-> -static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] =3D "dnomlA";
-> -
-> -/*MST Dock*/
-> -static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
-> -
->  #endif /* __DAL_DDC_SERVICE_TYPES_H__ */
+>  static uint8_t write_dsc_enable_synaptics_non_virtual_dpcd_mst(
+>                 struct drm_dp_aux *aux,
+>                 const struct dc_stream_state *stream,
 > --
 > 2.40.0.rc1.284.g88254d51c5-goog
 >
