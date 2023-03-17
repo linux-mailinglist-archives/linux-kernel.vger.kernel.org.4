@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5F86BE361
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 431CE6BE36F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjCQIYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S231286AbjCQIZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCQIXe (ORCPT
+        with ESMTP id S230504AbjCQIY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:23:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB00110272
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:23:13 -0700 (PDT)
+        Fri, 17 Mar 2023 04:24:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718BEC489B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:23:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E911B6222D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C23C433EF;
-        Fri, 17 Mar 2023 08:23:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A3E5B824F8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25F4C433A0;
+        Fri, 17 Mar 2023 08:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679041385;
-        bh=Yy6qQhiWlQeyRXwDMARwFhqS8zBGMG54yD+MPv2mfpM=;
+        s=k20201202; t=1679041388;
+        bh=23nfPFTFGcnwSPkN4r4O/42o/vE5oOp9nAtzXQO8XHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EjxtDlZyH9IgO2RrdO8cPGAXjcXr/cr9/taRKEB359jIZzlOSKIZiOLhafVN05amT
-         B43Yyacb9tFrPYub1uHBTYJAY3rkO+IzwpY24lal5neRg0gKHn2z5vObTkojNxtM8h
-         uKunhQxvc0pA7cbj7Mn4cHz4hzwAwU35bRyIH2M7cIHpRv00Y0ETIyM/yR4Zol3Xbv
-         GBFLDU9/kq2WJk8pk4GnWH9NLe9t9+TemPeL2wDSf7QntdpobBn9UKMYmR6MTHNHeQ
-         E0YhjH8jnhnS7Tsk+urMBX83n2gnnvEqC89mFyWbo9i7AYhqWwE0FmllDpthylwM7p
-         IdiNp5YFmkYNw==
+        b=RpdmEiE76feDAyTFXYsYzLfMGp3/3Bj8DOZRK5hp0IEaAmZKtO5CZweQZbWcalcea
+         DXcHpfnjLHQNdPeZ7v6Yxi24XYm0mu9pY9baz18ulAQhUlm04Yh0rM5cAr7WFdTsmt
+         IGr6VShQL4BPe3nz0nt1+S00rUfMHcanhKQPrktRUH0onAct2R2vLjl8Yz7COSWz4d
+         eZ71oqgrmWt9Lq6m3NVOmu1ThIBLZ3JzYBuCCsk2LiYMyRVErh1+lTSDgDWHEVRMVP
+         s/0xIdTHoC7utoz2K5N1lz+4e+i4Zkf4o16T5LaMq1j7KWgb1JK1O5BYYJfz2iwIlU
+         D7wnI8pKoRFFg==
 From:   Lee Jones <lee@kernel.org>
 To:     lee@kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+Cc:     linux-kernel@vger.kernel.org,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Ma <li.ma@amd.com>,
-        amd-gfx@lists.freedesktop.org
-Subject: [PATCH 19/37] drm/amd/pm/swsmu/smu11/vangogh_ppt: Provide a couple of missing parameter descriptions
-Date:   Fri, 17 Mar 2023 08:17:00 +0000
-Message-Id: <20230317081718.2650744-20-lee@kernel.org>
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org
+Subject: [PATCH 20/37] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move defines out to where they are actually used
+Date:   Fri, 17 Mar 2023 08:17:01 +0000
+Message-Id: <20230317081718.2650744-21-lee@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230317081718.2650744-1-lee@kernel.org>
 References: <20230317081718.2650744-1-lee@kernel.org>
@@ -61,43 +63,118 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:2381: warning: Function parameter or member 'residency' not described in 'vangogh_get_gfxoff_residency'
- drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:2399: warning: Function parameter or member 'entrycount' not described in 'vangogh_get_gfxoff_entrycount'
+  drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h: At top level:
+  drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:143:22:
+      warning: ‘SYNAPTICS_DEVICE_ID’ defined but not used [-Wunused-const-variable=]
+  drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:140:22:
+      warning: ‘DP_VGA_LVDS_CONVERTER_ID_3’ defined but not used [-Wunused-const-variable=]
+  drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:138:22:
+      warning: ‘DP_VGA_LVDS_CONVERTER_ID_2’ defined but not used [-Wunused-const-variable=]
+  drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:22:
+      warning: ‘DP_SINK_DEVICE_STR_ID_2’ defined but not used [-Wunused-const-variable=]
+  drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:22:
+      warning: ‘DP_SINK_DEVICE_STR_ID_1’ defined but not used [-Wunused-const-variable=]
 
-Cc: Evan Quan <evan.quan@amd.com>
+[snip 400 similar lines brevity]
+
+Cc: Harry Wentland <harry.wentland@amd.com>
+Cc: Leo Li <sunpeng.li@amd.com>
+Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
 Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
 Cc: David Airlie <airlied@gmail.com>
 Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Li Ma <li.ma@amd.com>
 Cc: amd-gfx@lists.freedesktop.org
 Cc: dri-devel@lists.freedesktop.org
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c   |  3 +++
+ drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c       |  3 +++
+ .../gpu/drm/amd/display/dc/link/link_detection.c    |  2 ++
+ .../dc/link/protocols/link_edp_panel_control.c      |  5 +++++
+ .../gpu/drm/amd/display/include/ddc_service_types.h | 13 -------------
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-index 4590374251f3b..7433dcaa16e04 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-@@ -2389,6 +2389,7 @@ static u32 vangogh_set_gfxoff_residency(struct smu_context *smu, bool start)
-  * vangogh_get_gfxoff_residency
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+index 9c1e91c2179eb..330ab036c830f 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+@@ -44,6 +44,9 @@
+ #include "dm_helpers.h"
+ #include "ddc_service_types.h"
+ 
++/* MST Dock */
++static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
++
+ /* dm_helpers_parse_edid_caps
   *
-  * @smu: amdgpu_device pointer
-+ * @residency: placeholder for return value
-  *
-  * This function will be used to get gfxoff residency.
-  *
-@@ -2407,6 +2408,7 @@ static u32 vangogh_get_gfxoff_residency(struct smu_context *smu, uint32_t *resid
-  * vangogh_get_gfxoff_entrycount - get gfxoff entry count
-  *
-  * @smu: amdgpu_device pointer
-+ * @entrycount: placeholder for return value
-  *
-  * This function will be used to get gfxoff entry count
-  *
+  * Parse edid caps
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
+index 19440bdf63449..27b8f3435d86f 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
+@@ -33,6 +33,9 @@
+ 
+ #define MAX_PIPES 6
+ 
++static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3};
++static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5};
++
+ /*
+  * Convert dmcub psr state to dmcu psr state.
+  */
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+index 8cfeddfb65c89..9177b146a80a8 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+@@ -60,6 +60,8 @@
+  */
+ #define LINK_TRAINING_MAX_VERIFY_RETRY 2
+ 
++static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
++
+ static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
+ 
+ static enum ddc_transaction_type get_ddc_transaction_type(enum signal_type sink_signal)
+diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_control.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_control.c
+index 93a6bbe954bb7..d895046787bc4 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_control.c
++++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_control.c
+@@ -37,6 +37,11 @@
+ #include "abm.h"
+ #define DC_LOGGER_INIT(logger)
+ 
++/* Travis */
++static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] = "sivarT";
++/* Nutmeg */
++static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] = "dnomlA";
++
+ void dp_set_panel_mode(struct dc_link *link, enum dp_panel_mode panel_mode)
+ {
+ 	union dpcd_edp_config edp_config_set;
+diff --git a/drivers/gpu/drm/amd/display/include/ddc_service_types.h b/drivers/gpu/drm/amd/display/include/ddc_service_types.h
+index 31a12ce79a8e0..f843fc4978552 100644
+--- a/drivers/gpu/drm/amd/display/include/ddc_service_types.h
++++ b/drivers/gpu/drm/amd/display/include/ddc_service_types.h
+@@ -129,17 +129,4 @@ struct av_sync_data {
+ 	uint8_t aud_del_ins3;/* DPCD 0002Dh */
+ };
+ 
+-static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3};
+-static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5};
+-
+-static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
+-
+-/*Travis*/
+-static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] = "sivarT";
+-/*Nutmeg*/
+-static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] = "dnomlA";
+-
+-/*MST Dock*/
+-static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+-
+ #endif /* __DAL_DDC_SERVICE_TYPES_H__ */
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
