@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988D06BE0BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 06:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2CC6BE0BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 06:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjCQFqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 01:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S229608AbjCQFrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 01:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQFp7 (ORCPT
+        with ESMTP id S229488AbjCQFrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 01:45:59 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2162CC40
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:45:56 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id o2so3547914vss.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:45:56 -0700 (PDT)
+        Fri, 17 Mar 2023 01:47:40 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF432BF17
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:47:36 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id t4so3594528vsq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679031955;
+        d=google.com; s=20210112; t=1679032055;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GTK+OnvQ2c6GsVujaKeIjj2bf3drtdoYMSZyB+QKKiU=;
-        b=iV9XMJoMOOJ10GadKGa/ExqeN2B/eogfRSC5IMbMmOZ0b/KknCGW/G8b2FJs+GumJk
-         OR5a2ZxOLCK5PL2WQihrUCj18NMMi6WzmQqCs5//OOH5Sic94gDORCoE376lIDa1NZli
-         CerLMpgj/4iCGrOdLPkIyb32euaXIh6loqcs+bjwSIXmXeC2+thk07CaNmnXDVlzOBYL
-         ck0SAujsOaap6wgnnkRJ6UrShPmIqAJCVjgts2E1wXizKV50OwJrVroZMixzz3bnAoiw
-         aZcKAe+Qw+I78v8XfTJBcFhPkuzaiDvlqGbLw1Vq0c/Y2OF7/LRSU6uuNEQGaPI1MdGL
-         Se5w==
+        bh=deUkNIG8Pu7A1PZKRrR6HjMzctnHtqHTb84xPPgIo8o=;
+        b=eKYmamSnIt6OBbfJorqeW8wMyBCPgHzyrhPt2IwbIYvE66S1wZOaqmI8v6rrg1daWP
+         AZ4kyVn41kQfyDece6Wc0TcnICO5DOC+omDxz8mKB+d/me10eMj+E5HF6qL2ZGlHk9qZ
+         wHfOvdeFZd/7xNEF6OigdOKquYZxcRNZU4uD5u7vWwrvnYTwLELJkS5UgG3y5UsOzU0b
+         zPyaMcXtKG9e0xWoZ62lemtCVSNAZUWyPjKx2l13mZY16/hXSHI9dvhrLaTAWF4WqwUZ
+         tKF7bphjPOdEYCmAs8Em+bzJe2GI/B86BFYNs1iBcLEGqr+SG9eJffrZNUSxgNQSBePD
+         QH7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679031955;
+        d=1e100.net; s=20210112; t=1679032055;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GTK+OnvQ2c6GsVujaKeIjj2bf3drtdoYMSZyB+QKKiU=;
-        b=0DU75XAJIjkL0x6u0jBAL7AT7O5iHPnz+GQW1xUq8wUfPjEwZY4tRwR9E+nWBykH2i
-         CyV4KrDTvwL7D+ACz5S8MNd6i44szpcut8FFrQ7CJaX85SuWbyVBIIpVUff9ckSPKiGG
-         cpfAWNjyQF5SCKE45zQqnPIYRw6ehsFog+SveTxciueqkbuu0uLZRWD93Vtk39LFqql8
-         2BWjxOZjyb9fQvh8pC/ytZCdfRATcd9tr+QzI5LOfCT5+5EZC6v7fr1ysEB35UNCGPIE
-         Nx1Abz+Con5MMG9BzqbWdW7rl0V2uzSHLXxVO88Ci2BeNR36jWNPDgknV7gqwXBUL8CX
-         75ew==
-X-Gm-Message-State: AO0yUKUCk20WM8z4ENgwh20slJSfc/8g2SteCX/lGxW0X3UErRtjWelC
-        TOtLe4lQpAnYQnQWVfM3cRIDl46pYc5X9ecoAu2Hug==
-X-Google-Smtp-Source: AK7set90JJQbFJkQO4hcrHUk9LVi8ZNSMyQov5YcMecPr2OaLUAPFnBATLPixowinlqOdesGRu8JCP69D/1ULTTLCn8=
-X-Received: by 2002:a05:6102:ed4:b0:421:c4a3:b607 with SMTP id
- m20-20020a0561020ed400b00421c4a3b607mr1458561vst.3.1679031955581; Thu, 16 Mar
- 2023 22:45:55 -0700 (PDT)
+        bh=deUkNIG8Pu7A1PZKRrR6HjMzctnHtqHTb84xPPgIo8o=;
+        b=UVh0tWsIFfC2ijpwk7dACZ/Ahi7kFzXYe1IUVft+ozufPhUhDRcDgOcGOuc40xTxCq
+         BD50jS7Y8SbesXn5YvgZux3avMUtgLxrfR5kTBsaqnjsVpNU3ASJdt3Ea+AEA8Zh/YLt
+         xKI8mJUFHA11qomkXt/bHN7iFlFD5rNni4fwf4AzkALF4glXux7eU9vA4rWlvTV2c8gg
+         OjHw/KmYtv0RFBD+ojwOpg+SLGc6UEN4uNx4fkOwfp9cnrDsaOTMgmlXiQqZsUj8fLGg
+         x7HJFysWm64danqidbs2v6cV3SI1iRB97+1rGX8gx3AimsjFrgOQlLcuxL0yrQDWw39Y
+         utCw==
+X-Gm-Message-State: AO0yUKXpdH+fXUtkdEhx2P/6ALPSCRX9HrxQVS72rsQaMHEJIoO5IYa5
+        Zno37mzvGm3RboYkizRfQJqQrLU2Xnupi3EiEi2/Gw==
+X-Google-Smtp-Source: AK7set9auaedY47x9XhulJotGnjmD3QCOlItuX1CQyuC/eJwFDMkCPLLKn0EzBIpDlClf+qwDO4fcUAgQ01bNid48/8=
+X-Received: by 2002:a67:b748:0:b0:425:bbc6:aa64 with SMTP id
+ l8-20020a67b748000000b00425bbc6aa64mr5424769vsh.5.1679032055357; Thu, 16 Mar
+ 2023 22:47:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316220638.983743-1-dlatypov@google.com>
-In-Reply-To: <20230316220638.983743-1-dlatypov@google.com>
+References: <20230316220638.983743-1-dlatypov@google.com> <20230316220638.983743-2-dlatypov@google.com>
+In-Reply-To: <20230316220638.983743-2-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 17 Mar 2023 13:45:43 +0800
-Message-ID: <CABVgOS=1WQ1m7-fFuPNZBQ+CbfnDofKQ-xcknqnSDgUFEsR7EA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations
- where appropriate
+Date:   Fri, 17 Mar 2023 13:47:24 +0800
+Message-ID: <CABVgOSk3BOyNsV77YohgV5L8cN+j67m7PNa36HFhdb5vN2SRtQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kunit: tool: remove unused imports and variables
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     brendanhiggins@google.com, rmoar@google.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>
+        johannes@sipsolutions.net
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004cecbe05f7121733"
+        boundary="0000000000003fd3aa05f7121d17"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,102 +71,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004cecbe05f7121733
+--0000000000003fd3aa05f7121d17
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, 17 Mar 2023 at 06:06, Daniel Latypov <dlatypov@google.com> wrote:
 >
-> E.g. for subprocess.Popen, it can be opened in `text=True` mode where it
-> returns strings, or `text=False` where it returns bytes.
-> To differentiate, you can annotate types as `Popen[str]` or
-> `Popen[bytes]`.
+> We don't run a linter regularly over kunit.py code (the default settings
+> on most don't like kernel style, e.g. tabs) so some of these imports
+> didn't get removed when they stopped being used.
 >
-> This patch should add subscripts in all the places we were missing them.
->
-> Reported-by: Johannes Berg <johannes.berg@intel.com>
-> Link: https://lore.kernel.org/linux-kselftest/20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid/
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
-> Note: this is unchanged, just added a 3rd patch to this series.
-> ---
 
-Looks good.
+While personally, I don't lose sleep over the occasional unused
+variable, these (and particularly the imports) seem sensible.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Thanks, Johannes and Daniel!
-
+Cheers,
 -- David
 
->  tools/testing/kunit/kunit_kernel.py  | 6 +++---
->  tools/testing/kunit/kunit_printer.py | 2 +-
->  tools/testing/kunit/run_checks.py    | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+> Note: this is unchanged, just added a 3rd patch to this series.
+> ---
+>  tools/testing/kunit/kunit.py           | 2 +-
+>  tools/testing/kunit/kunit_config.py    | 2 +-
+>  tools/testing/kunit/kunit_kernel.py    | 1 -
+>  tools/testing/kunit/kunit_parser.py    | 1 -
+>  tools/testing/kunit/kunit_tool_test.py | 2 +-
+>  5 files changed, 3 insertions(+), 5 deletions(-)
 >
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 741f15420467..52853634ba23 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -123,7 +123,7 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
+>                 parts = t.split('.', maxsplit=2)
+>                 if len(parts) != 2:
+>                         raise ValueError(f'internal KUnit error, test name should be of the form "<suite>.<test>", got "{t}"')
+> -               suite, case = parts
+> +               suite, _ = parts
+>                 if not suites or suites[-1] != suite:
+>                         suites.append(suite)
+>         return suites
+> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+> index 48b5f34b2e5d..9f76d7b89617 100644
+> --- a/tools/testing/kunit/kunit_config.py
+> +++ b/tools/testing/kunit/kunit_config.py
+> @@ -8,7 +8,7 @@
+>
+>  from dataclasses import dataclass
+>  import re
+> -from typing import Dict, Iterable, List, Set, Tuple
+> +from typing import Dict, Iterable, List, Tuple
+>
+>  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+>  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
 > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 53e90c335834..e6fc8fcb071a 100644
+> index e6fc8fcb071a..775842b912d8 100644
 > --- a/tools/testing/kunit/kunit_kernel.py
 > +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
->                 if stderr:  # likely only due to build warnings
->                         print(stderr.decode())
+> @@ -18,7 +18,6 @@ import threading
+>  from typing import Iterator, List, Optional, Tuple
 >
-> -       def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-> +       def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
->                 raise RuntimeError('not implemented!')
+>  import kunit_config
+> -from kunit_printer import stdout
+>  import qemu_config
 >
+>  KCONFIG_PATH = '.config'
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index a225799f6b1b..fbc094f0567e 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -12,7 +12,6 @@
+>  from __future__ import annotations
+>  from dataclasses import dataclass
+>  import re
+> -import sys
+>  import textwrap
 >
-> @@ -112,7 +112,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->                 kconfig.merge_in_entries(base_kunitconfig)
->                 return kconfig
+>  from enum import Enum, auto
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 0c2190514103..be35999bb84f 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -328,7 +328,7 @@ class KUnitParserTest(unittest.TestCase):
+>         def test_parse_subtest_header(self):
+>                 ktap_log = test_data_path('test_parse_subtest_header.log')
+>                 with open(ktap_log) as file:
+> -                       result = kunit_parser.parse_run_tests(file.readlines())
+> +                       kunit_parser.parse_run_tests(file.readlines())
+>                 self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
 >
-> -       def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-> +       def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
->                 kernel_path = os.path.join(build_dir, self._kernel_path)
->                 qemu_command = ['qemu-system-' + self._qemu_arch,
->                                 '-nodefaults',
-> @@ -141,7 +141,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->                 kconfig.merge_in_entries(base_kunitconfig)
->                 return kconfig
->
-> -       def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-> +       def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
->                 """Runs the Linux UML binary. Must be named 'linux'."""
->                 linux_bin = os.path.join(build_dir, 'linux')
->                 params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
-> diff --git a/tools/testing/kunit/kunit_printer.py b/tools/testing/kunit/kunit_printer.py
-> index 5f1cc55ecdf5..015adf87dc2c 100644
-> --- a/tools/testing/kunit/kunit_printer.py
-> +++ b/tools/testing/kunit/kunit_printer.py
-> @@ -15,7 +15,7 @@ _RESET = '\033[0;0m'
->  class Printer:
->         """Wraps a file object, providing utilities for coloring output, etc."""
->
-> -       def __init__(self, output: typing.IO):
-> +       def __init__(self, output: typing.IO[str]):
->                 self._output = output
->                 self._use_color = output.isatty()
->
-> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
-> index 066e6f938f6d..61cece1684df 100755
-> --- a/tools/testing/kunit/run_checks.py
-> +++ b/tools/testing/kunit/run_checks.py
-> @@ -37,7 +37,7 @@ def main(argv: Sequence[str]) -> None:
->         if argv:
->                 raise RuntimeError('This script takes no arguments')
->
-> -       future_to_name: Dict[futures.Future, str] = {}
-> +       future_to_name: Dict[futures.Future[None], str] = {}
->         executor = futures.ThreadPoolExecutor(max_workers=len(commands))
->         for name, argv in commands.items():
->                 if name in necessary_deps and shutil.which(necessary_deps[name]) is None:
->
-> base-commit: 2c6a96dad5797e57b4cf04101d6c8d5c7a571603
+>         def test_show_test_output_on_failure(self):
 > --
 > 2.40.0.rc1.284.g88254d51c5-goog
 >
 
---0000000000004cecbe05f7121733
+--0000000000003fd3aa05f7121d17
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -234,14 +234,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB2
-eyy/lX/gfLIGBw8fdCjBZb+v4jbvJA8Q5uWe+PIcnDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTcwNTQ1NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBz
+qgtaRvVmahVCeZq/8wMFZtfPpRIhv8K8iqswYvdloTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTcwNTQ3MzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAojiaFw6vNQQX8ZUMXA7m
-7G7SUpxyK1n4aUTL9Mt+QD2YtCHgrV02ep89Nq3iZ6DXTXe654/xgkmfVakH8oKW+Ywg72JW5fTM
-g7Uzq+OgSy7N3stPdF6OFzk8LDa8OG2gyXolUH4CCB461GbwA6lDKW7q8Q9FqAPe76+wKxYpl4sf
-1pFIEahsxc6NJjrmzGxEGSeG4jno1cW2DF2vTSAKjr3FXJGsk8mnVgPLVx3/PcZNFNsVHAungHXj
-tJIuQTBs8U/js0kRn7Z0+X77bnQSl2LJR1TyseA6u2wCyIi91wQsmRTJIVzZoUUQsPzfUv5Ua7Ys
-4gDojT6a2IsJDuMjmg==
---0000000000004cecbe05f7121733--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAA9T94saO5ApKMJv2QLsO
+n/JOStodq0yYU9Ji7TgPchnbfyS9esYSbNZ41fFClXFvJ9M5OYk0viVGbF+0BtxHiJb6JKmp016W
+R5Pw8AsL9at1Jeu7WGe0hXMnatfaiDBH2fNx6YcCf2ub1oF+ltJM3wtTHh8j7FyNMViKnauQTHY9
+5pXLksrHothg8CmU+hHxYgweXrt4K0q20OQbkn+TH4zkamqWP+AnxdPwpUrz92VDOS82UbB6/xJ+
+1hf9zdmuJB5Ew1C57MA2ny9hWuOxEM0aMUBRcjny2AwyRpIeVtsW7qIfWkh5hPyZ4X51NWD63DCh
+XxTgY8QL8RVVmd8qHQ==
+--0000000000003fd3aa05f7121d17--
