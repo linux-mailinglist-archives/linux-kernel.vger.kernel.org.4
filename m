@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D4F6BF29A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ADF6BF297
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCQUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S230058AbjCQUbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjCQUbz (ORCPT
+        with ESMTP id S229999AbjCQUbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:31:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB25270D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679084997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZfI3A5lLUd+09/+y0z8qaJcUWRJWrslDGbCcJ6wExMU=;
-        b=RQpoLB2AmfXILEpFQDjdsgJw5kDGFAx99y/u5VVXNyLplIO+8wUbdyJj7O3i+PF5dlpuKR
-        qHGgaYWjZ8iU7rsJ2KquHGh65Db1VewrxzuVsEqtYND1n3G9Roenm71cQrG7D0nUZBCDTJ
-        lxqZKbkUPfeKGIF0gLtpoYsyUKRT6wo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-xz_omIicNESOkGk9Xc2xhw-1; Fri, 17 Mar 2023 16:29:51 -0400
-X-MC-Unique: xz_omIicNESOkGk9Xc2xhw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 383A885A588;
-        Fri, 17 Mar 2023 20:29:51 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.16.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BFEFA1121315;
-        Fri, 17 Mar 2023 20:29:50 +0000 (UTC)
-Date:   Fri, 17 Mar 2023 16:29:48 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Marcos Paulo de Souza <mpdesouza@suse.de>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-Message-ID: <ZBTNvEPrCcRj3F1C@redhat.com>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230314202356.kal22jracaw5442y@daedalus>
+        Fri, 17 Mar 2023 16:31:21 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5381BD1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:30:53 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id bd36so4675370oib.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679085051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zgzPzELDRnlSYA6MsmYOolzvoDuLjYqI48hOINLp/VU=;
+        b=n2GadBEyYknydFrD4m7kROU9UA0PJQr/Gx/qdFjoB7AAo4jcYipOO9aFFFQs/Otm9p
+         EzKZ6J8Tb4BFjoAdQMl541IiSFt1v27HyqsFoQj7Zo0XYnW8ApzopdKD1lgTAY2YtaPt
+         456Gdh5zJUR07z+GcBuwgiWhFn215fGTA+hEnsruTyPtnQANA6ngCOMvBVfS02GGzflw
+         +J4fmkcupMeC6Y4tZ12XxKP+1S574X2FyZVuoutGobGbYnmD90sCv8H/WXbPTVM/FJec
+         7gbrZUyin8qHHqg1PAtS+zZHHiaQ9w7V8NF8AzdlVAYUF5l2nUz2CgHkBSgllLvzxh/G
+         gayA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679085051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zgzPzELDRnlSYA6MsmYOolzvoDuLjYqI48hOINLp/VU=;
+        b=1qkOzqIvFJ5/oeMkAhCUilbL7CiddUf1O0VtfHaUMW/wnQdebSQ2xgYh3FHtMY7YSb
+         FtfegXYy0VjbZufjG3w9f0AqYH3h1dedgY1a7pIscMTMRx5GmEgedvC5667BNRaB3/nK
+         MHUxJhpX556jIYY7dVcCjxHFFfj9HHwbZWKnk+Zs0CDbZLlYO/nFYHD+fsmzRNU31Htt
+         BhsjdbA2BQ65KcTCeLjeiawlSRoce49l3ElA3a6USwhfQE+1OsWU0qD8dtGBnGUXHh9M
+         4mXrpG5cs48WZQ66YkAbSA02jlyCah0/gmxaQSLwulBJSeeW/NTAWW5J6UxF65nDcm7o
+         6hLw==
+X-Gm-Message-State: AO0yUKW8M0nCQlnHuwS6omXzVDjDb8OCt+A9DfK7mTTQMFg/kicTypYg
+        VknITHlSnP81wFKjNjhkKdsH0tt7Cc7bgCAyWeM=
+X-Google-Smtp-Source: AK7set+UKwCYs1V1Ri1PUeftVGJmtb0qs/ntSmquTYl0HxYXGeP/0RgArIif59CW4iMKP3g56h3O8GvKZa7MA+nMPJU=
+X-Received: by 2002:aca:6709:0:b0:384:253:642d with SMTP id
+ z9-20020aca6709000000b003840253642dmr3819397oix.3.1679085050979; Fri, 17 Mar
+ 2023 13:30:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314202356.kal22jracaw5442y@daedalus>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-21-lee@kernel.org>
+In-Reply-To: <20230317081718.2650744-21-lee@kernel.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 17 Mar 2023 16:30:39 -0400
+Message-ID: <CADnq5_Pj31O7Xvikn4SpCdxp3vkfYe0+PKxev-1VoECPk0YP-Q@mail.gmail.com>
+Subject: Re: [PATCH 20/37] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
+ defines out to where they are actually used
+To:     Lee Jones <lee@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,148 +74,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 05:23:56PM -0300, Marcos Paulo de Souza wrote:
-> On Mon, Mar 06, 2023 at 09:08:14AM -0500, Joe Lawrence wrote:
-> > Summary
-> > -------
-> > 
-> > Livepatches may use symbols which are not contained in its own scope,
-> > and, because of that, may end up compiled with relocations that will
-> > only be resolved during module load. Yet, when the referenced symbols
-> > are not exported, solving this relocation requires information on the
-> > object that holds the symbol (either vmlinux or modules) and its
-> > position inside the object, as an object may contain multiple symbols
-> > with the same name.  Providing such information must be done accordingly
-> > to what is specified in Documentation/livepatch/module-elf-format.txt.
-> > 
-> > Currently, there is no trivial way to embed the required information as
-> > requested in the final livepatch elf object. klp-convert solves this
-> > problem in two different forms: (i) by relying on a symbol map, which is
-> > built during kernel compilation, to automatically infer the relocation
-> > targeted symbol, and, when such inference is not possible (ii) by using
-> > annotations in the elf object to convert the relocation accordingly to
-> > the specification, enabling it to be handled by the livepatch loader.
-> > 
-> > Given the above, add support for symbol mapping in the form of a
-> > symbols.klp file; add klp-convert tool; integrate klp-convert tool into
-> > kbuild; make livepatch modules discernible during kernel compilation
-> > pipeline; add data-structure and macros to enable users to annotate
-> > livepatch source code; make modpost stage compatible with livepatches;
-> > update livepatch-sample and update documentation.
-> > 
-> > The patch was tested under three use-cases:
-> > 
-> > use-case 1: There is a relocation in the lp that can be automatically
-> > resolved by klp-convert.  For example. see the saved_command_line
-> > variable in lib/livepatch/test_klp_convert2.c.
-> > 
-> > use-case 2: There is a relocation in the lp that cannot be automatically
-> > resolved, as the name of the respective symbol appears in multiple
-> > objects. The livepatch contains an annotation to enable a correct
-> > relocation.  See the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections
-> > in lib/livepatch/test_klp_convert{1,2}.c.
-> > 
-> > use-case 3: There is a relocation in the lp that cannot be automatically
-> > resolved similarly as 2, but no annotation was provided in the
-> > livepatch, triggering an error during compilation.  Reproducible by
-> > removing the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections in
-> > lib/livepatch/test_klp_convert{1,2}.c.
-> > 
-> > Selftests have been added to exercise these klp-convert use-cases
-> > through several tests.
-> > 
-> > 
-> > Testing
-> > -------
-> > 
-> > The patchset selftests build and execute on x86_64, s390x, and ppc64le
-> > for both default config (with added livepatch dependencies) and a larger
-> > RHEL-9-ish config.
-> > 
-> > Using the Intel's Linux Kernel Performance tests's make.cross,
-> > klp-convert builds and processes livepatch .ko's for x86_64 ppc64le
-> > ppc32 s390 arm64 arches.
-> > 
-> > 
-> > Summary of changes in v7
-> > ------------------------
-> > 
-> > - rebase for v6.2
-> > - combine ("livepatch: Add klp-convert tool") with ("livepatch: Add
-> >   klp-convert annotation helpers")
-> > - combine ("kbuild: Support for symbols.klp creation") with ("modpost:
-> >   Integrate klp-convert") to simplify Kbuild magic [Petr, Nicolas]
-> > - klp-convert: add safe_snprintf() (-Wsign-compare)
-> > - klp-convert: fix -Wsign-compare warnings
-> > - klp-convert: use calloc() where appropriate
-> > - klp-convert: copy ELF e_flags
-> > - selftests: fix various build warnings
-> > - klp-convert: WARN msg simplification, failed sanity checks, and sympos
-> >   comment [Marcos]
-> > - klp-convert: fix elf_write_file() error paths [Petr]
-> 
-> Thanks for the new version Joe. I've run the ksefltests on my x86 laptop, and it
-> succeed as expected, so
-> 
-> Tested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> 
+Applied.  Thanks!
 
-Thanks for the testing and reviews, Marcos.
+Alex
 
-The selftests are the first level of testing... we should probably
-tackle a real or simulated CVE fix to see how well the tooling fits
-larger livepatches.
-
-One complication that I can envision is symbol positioning.  Currently,
-the klp-convert annotations are a direct mirror of the kernel's
-<obj,symbol,pos> tuple.  It should be possible to make this a bit more
-user friendly for the livepatch developer if the annotations were
-<obj,file,symbol>, as derived from the vmlinux / module.tmp.ko symbol
-tables.
-
-For example, the following code:
-
-  KLP_MODULE_RELOC(test_klp_convert_mod, test_klp_convert_mod_b.c) test_klp_convert_mod_relocs_b[] = {
-        KLP_SYMPOS(homonym_string),
-        KLP_SYMPOS(get_homonym_string),
-  };
-
-could generate the following relocations:
-
-  Relocation section '.rela.klp.module_relocs.test_klp_convert_mod.test_klp_convert_mod_b.c' at offset 0x1dc0 contains 2 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000003f00000001 R_X86_64_64            0000000000000000 homonym_string + 0
-  0000000000000008  0000004900000001 R_X86_64_64            0000000000000000 get_homonym_string + 0
-
-for which klp-convert looks up in symbols.klp:
-
-  klp-convert-symbol-data.0.2
-  *vmlinux
-  ...
-  *test_klp_convert_mod
-  -test_klp_convert_mod_a.c             << added filenames to the format
-  test_klp_get_driver_name
-  driver_name
-  get_homonym_string                    << sympos = 1
-  homonym_string                        << sympos = 1
-  ...
-  -test_klp_convert_mod_b.c
-  get_homonym_string                    << sympos = 2
-  homonym_string                        << sympos = 2
-  ...
-
-and then generates the usual klp-relocations as currently defined.
-
-(Unfortunately full pathnames are not saved in the STT_FILE symbol table
-entries, so there will be a few non-unique <obj,file,symbol> entries.  I
-believe the last time this was discussed, we found that there were a
-relatively small number of such symbols.)
-
-Have you tried retrofitting klp-convert into any real-world livepatch?
-I'm curious as to your observations on the overall experience, or
-thoughts on the sympos annotation style noted above.
-
-Regards,
-
--- Joe
-
+On Fri, Mar 17, 2023 at 4:23=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
+>
+> Fixes the following W=3D1 kernel build warning(s):
+>
+>   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h: At t=
+op level:
+>   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:143:2=
+2:
+>       warning: =E2=80=98SYNAPTICS_DEVICE_ID=E2=80=99 defined but not used=
+ [-Wunused-const-variable=3D]
+>   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:140:2=
+2:
+>       warning: =E2=80=98DP_VGA_LVDS_CONVERTER_ID_3=E2=80=99 defined but n=
+ot used [-Wunused-const-variable=3D]
+>   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:138:2=
+2:
+>       warning: =E2=80=98DP_VGA_LVDS_CONVERTER_ID_2=E2=80=99 defined but n=
+ot used [-Wunused-const-variable=3D]
+>   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:2=
+2:
+>       warning: =E2=80=98DP_SINK_DEVICE_STR_ID_2=E2=80=99 defined but not =
+used [-Wunused-const-variable=3D]
+>   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:132:2=
+2:
+>       warning: =E2=80=98DP_SINK_DEVICE_STR_ID_1=E2=80=99 defined but not =
+used [-Wunused-const-variable=3D]
+>
+> [snip 400 similar lines brevity]
+>
+> Cc: Harry Wentland <harry.wentland@amd.com>
+> Cc: Leo Li <sunpeng.li@amd.com>
+> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
+> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+>  .../drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c   |  3 +++
+>  drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c       |  3 +++
+>  .../gpu/drm/amd/display/dc/link/link_detection.c    |  2 ++
+>  .../dc/link/protocols/link_edp_panel_control.c      |  5 +++++
+>  .../gpu/drm/amd/display/include/ddc_service_types.h | 13 -------------
+>  5 files changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/=
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> index 9c1e91c2179eb..330ab036c830f 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> @@ -44,6 +44,9 @@
+>  #include "dm_helpers.h"
+>  #include "ddc_service_types.h"
+>
+> +/* MST Dock */
+> +static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
+> +
+>  /* dm_helpers_parse_edid_caps
+>   *
+>   * Parse edid caps
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c b/drivers/gpu/=
+drm/amd/display/dc/dce/dmub_psr.c
+> index 19440bdf63449..27b8f3435d86f 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
+> @@ -33,6 +33,9 @@
+>
+>  #define MAX_PIPES 6
+>
+> +static const uint8_t DP_SINK_DEVICE_STR_ID_1[] =3D {7, 1, 8, 7, 3};
+> +static const uint8_t DP_SINK_DEVICE_STR_ID_2[] =3D {7, 1, 8, 7, 5};
+> +
+>  /*
+>   * Convert dmcub psr state to dmcu psr state.
+>   */
+> diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drive=
+rs/gpu/drm/amd/display/dc/link/link_detection.c
+> index 8cfeddfb65c89..9177b146a80a8 100644
+> --- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+> +++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+> @@ -60,6 +60,8 @@
+>   */
+>  #define LINK_TRAINING_MAX_VERIFY_RETRY 2
+>
+> +static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] =3D "7580\x80u";
+> +
+>  static const uint8_t dp_hdmi_dongle_signature_str[] =3D "DP-HDMI ADAPTOR=
+";
+>
+>  static enum ddc_transaction_type get_ddc_transaction_type(enum signal_ty=
+pe sink_signal)
+> diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel=
+_control.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_c=
+ontrol.c
+> index 93a6bbe954bb7..d895046787bc4 100644
+> --- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_contro=
+l.c
+> +++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_edp_panel_contro=
+l.c
+> @@ -37,6 +37,11 @@
+>  #include "abm.h"
+>  #define DC_LOGGER_INIT(logger)
+>
+> +/* Travis */
+> +static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] =3D "sivarT";
+> +/* Nutmeg */
+> +static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] =3D "dnomlA";
+> +
+>  void dp_set_panel_mode(struct dc_link *link, enum dp_panel_mode panel_mo=
+de)
+>  {
+>         union dpcd_edp_config edp_config_set;
+> diff --git a/drivers/gpu/drm/amd/display/include/ddc_service_types.h b/dr=
+ivers/gpu/drm/amd/display/include/ddc_service_types.h
+> index 31a12ce79a8e0..f843fc4978552 100644
+> --- a/drivers/gpu/drm/amd/display/include/ddc_service_types.h
+> +++ b/drivers/gpu/drm/amd/display/include/ddc_service_types.h
+> @@ -129,17 +129,4 @@ struct av_sync_data {
+>         uint8_t aud_del_ins3;/* DPCD 0002Dh */
+>  };
+>
+> -static const uint8_t DP_SINK_DEVICE_STR_ID_1[] =3D {7, 1, 8, 7, 3};
+> -static const uint8_t DP_SINK_DEVICE_STR_ID_2[] =3D {7, 1, 8, 7, 5};
+> -
+> -static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] =3D "7580\x80u";
+> -
+> -/*Travis*/
+> -static const uint8_t DP_VGA_LVDS_CONVERTER_ID_2[] =3D "sivarT";
+> -/*Nutmeg*/
+> -static const uint8_t DP_VGA_LVDS_CONVERTER_ID_3[] =3D "dnomlA";
+> -
+> -/*MST Dock*/
+> -static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
+> -
+>  #endif /* __DAL_DDC_SERVICE_TYPES_H__ */
+> --
+> 2.40.0.rc1.284.g88254d51c5-goog
+>
