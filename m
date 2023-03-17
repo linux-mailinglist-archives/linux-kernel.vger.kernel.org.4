@@ -2,181 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8386BE384
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D3B6BE389
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjCQI2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S231499AbjCQI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjCQI2M (ORCPT
+        with ESMTP id S231569AbjCQI3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:28:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B08AE2501
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:26:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A50F46220B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8064C433EF;
-        Fri, 17 Mar 2023 08:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679041503;
-        bh=IJACNKHIMb3VFfqK/F0n1ocUFyj5JkV9qD04tkUiy+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I98xJ1+R5+Q4vUrRCuN3h1Z0L/EO9nUXMCZes6aAGimw8aKjPg6DXS5iGBKnNpi7b
-         0/RbqwoPvXAfNOo8cBQXsFMGqRhacpD/iVBsywCYl9HTlxNgbnQlFbe6zO9/VpHkZM
-         n3UgqsbEPGEpefsLcHZQnY4aAoHQMuYnGSnYFlhS5H+onzap+PpMZWgdJbjj0ydsav
-         wkAHS/bfI3S3NZNLQQBvPDI2gK5Lv4avbDVonmBpusH0N334glBCsZwmn7mL9YPWVZ
-         T7IWac1Ljl7KHmGLsjLF4dqiJh2yef8JCd2innzJwStG4wIuL+i/+tWs7CJlJygS9K
-         bJrDf1L22rHuQ==
-Date:   Fri, 17 Mar 2023 10:24:47 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Hildenbrand <david@redhat.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] mm: prefer xxx_page() alloc/free functions for order-0
- pages
-Message-ID: <ZBQjz9vzFaLjW0MM@kernel.org>
-References: <50c48ca4789f1da2a65795f2346f5ae3eff7d665.1678710232.git.lstoakes@gmail.com>
+        Fri, 17 Mar 2023 04:29:16 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EAE7EEF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:27:59 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id l12so3651653wrm.10
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679041588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hQQ8Rr0GNNjEqZiFdGJDuoFmQDajpElxjEgIIXNrg+A=;
+        b=CzspyjegKHykcmyIo8utz3QbIpdHNKov0r3UAEZb/RLinWUxOhbJDpbZtBJ61moMQr
+         cfyJCsApMRC/Y/F3jh+H4HLiE48eOblbhCg5sQLkG2sMaSSeRjfQGs1Dd+Upyo8tiyvY
+         NXWjRFpcBe3rd9cZRsokafh54Z4jgEUH3MdMwdKw5WgiDM2VTPzbhiY1Ml1AtDGYFxZa
+         m2IbLvMNNhyQsyrqFEp1kU2ZdE7QWUq3ma2flxlokf8JeEO34Gpyhk8m63/xaAPncACe
+         V3TU4D4afDpq39Ilc9oLjbiTlH10PjbqUMoNpULKciY05wfradFtwnJ0jJ/S7L0bp5z8
+         VDmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679041588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hQQ8Rr0GNNjEqZiFdGJDuoFmQDajpElxjEgIIXNrg+A=;
+        b=WzzXB43Ui9BbZB/mSj1nUfetPdWAo5lQSSSvloEbMcRiIf7qXq+RCRq88cbswXm55u
+         VO0x0aAJJP10ZXAWCl7iBV02m1qKQjNpwm+39nSvIpNAwQ0vXwnD89+sGEjmJ8YDibh2
+         7cMxMbebgOC5pkxPOIwmwH0tmbgJ/RVQadugtvdB6PFquP9uRbOC1+OM85oFdyeFNS9/
+         O1HWRNjZxQDVOqTPgXPPtxDljmpQLGfkTIuAgPFF0+P43JXxq2WDq53AAsSvcTfdgk7f
+         0u7LUjeWNWnI+sSmi6U+1PzvT0Bmeq07iLpq4w/UoXV2DUeNCgxGdT6LjDUJqxygVlK1
+         uGEQ==
+X-Gm-Message-State: AO0yUKWzWPVjOogi23VfRRXHQ21aMxxAvNNnU9RuQpJEQgjP07SiaR2O
+        yNZKS/7/e5+lHzEa69C6MKfAyJOEFmOPeMhgXzk2mVgq61A=
+X-Google-Smtp-Source: AK7set/XsKYXKPcgHxVDMQuU50dAs2voaZzF3O4clp0ePF612HRJSWrds+0U4UndaC5r7Gl85K3xcZ57jyioc1WJ0Ow=
+X-Received: by 2002:adf:fb42:0:b0:2c9:bd6e:83c0 with SMTP id
+ c2-20020adffb42000000b002c9bd6e83c0mr1579848wrs.3.1679041587654; Fri, 17 Mar
+ 2023 01:26:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50c48ca4789f1da2a65795f2346f5ae3eff7d665.1678710232.git.lstoakes@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
+ <CAHk-=wh0foAi-kPgNOq6qSHPgsfekT8N9_--usjiTynpQbqvRA@mail.gmail.com>
+In-Reply-To: <CAHk-=wh0foAi-kPgNOq6qSHPgsfekT8N9_--usjiTynpQbqvRA@mail.gmail.com>
+From:   richard clark <richard.xnu.clark@gmail.com>
+Date:   Fri, 17 Mar 2023 16:26:15 +0800
+Message-ID: <CAJNi4rO+gdRH4Hsx3gOOBS3m=wiH=uroPh7iJ5QgP1iqvNEd_Q@mail.gmail.com>
+Subject: Re: Question about select and poll system call
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 12:27:14PM +0000, Lorenzo Stoakes wrote:
-> Update instances of alloc_pages(..., 0), __get_free_pages(..., 0) and
-> __free_pages(..., 0) to use alloc_page(), __get_free_page() and
-> __free_page() respectively in core code.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+I had to confess I've got *almost* the similar consideration after a
+long dedicated thinking before seeing this, so it's one of the
+greatest decisions we can make together. A very nice and patient
+explanation, and happy weekend, good guy:). Please feel free to raise
+your different options for anyone watching this...
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Anyway, some comments inline...
 
-But why limit this only to mm?
-> ---
->  include/asm-generic/pgalloc.h | 4 ++--
->  mm/debug_vm_pgtable.c         | 4 ++--
->  mm/hugetlb_vmemmap.c          | 2 +-
->  mm/mmu_gather.c               | 2 +-
->  mm/page_alloc.c               | 2 +-
->  mm/vmalloc.c                  | 2 +-
->  6 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-> index 977bea16cf1b..a7cf825befae 100644
-> --- a/include/asm-generic/pgalloc.h
-> +++ b/include/asm-generic/pgalloc.h
-> @@ -123,11 +123,11 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long addr)
-> 
->  	if (mm == &init_mm)
->  		gfp = GFP_PGTABLE_KERNEL;
-> -	page = alloc_pages(gfp, 0);
-> +	page = alloc_page(gfp);
->  	if (!page)
->  		return NULL;
->  	if (!pgtable_pmd_page_ctor(page)) {
-> -		__free_pages(page, 0);
-> +		__free_page(page);
->  		return NULL;
->  	}
->  	return (pmd_t *)page_address(page);
-> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-> index 7887cc2b75bf..4362021b1ce7 100644
-> --- a/mm/debug_vm_pgtable.c
-> +++ b/mm/debug_vm_pgtable.c
-> @@ -1048,7 +1048,7 @@ static void __init destroy_args(struct pgtable_debug_args *args)
-> 
->  	if (args->pte_pfn != ULONG_MAX) {
->  		page = pfn_to_page(args->pte_pfn);
-> -		__free_pages(page, 0);
-> +		__free_page(page);
-> 
->  		args->pte_pfn = ULONG_MAX;
->  	}
-> @@ -1290,7 +1290,7 @@ static int __init init_args(struct pgtable_debug_args *args)
->  		}
->  	}
-> 
-> -	page = alloc_pages(GFP_KERNEL, 0);
-> +	page = alloc_page(GFP_KERNEL);
->  	if (page)
->  		args->pte_pfn = page_to_pfn(page);
-> 
-> diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-> index a15cc56cf70a..1198064f80eb 100644
-> --- a/mm/hugetlb_vmemmap.c
-> +++ b/mm/hugetlb_vmemmap.c
-> @@ -400,7 +400,7 @@ static int alloc_vmemmap_page_list(unsigned long start, unsigned long end,
->  	return 0;
->  out:
->  	list_for_each_entry_safe(page, next, list, lru)
-> -		__free_pages(page, 0);
-> +		__free_page(page);
->  	return -ENOMEM;
->  }
-> 
-> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-> index 2b93cf6ac9ae..ea9683e12936 100644
-> --- a/mm/mmu_gather.c
-> +++ b/mm/mmu_gather.c
-> @@ -32,7 +32,7 @@ static bool tlb_next_batch(struct mmu_gather *tlb)
->  	if (tlb->batch_count == MAX_GATHER_BATCH_COUNT)
->  		return false;
-> 
-> -	batch = (void *)__get_free_pages(GFP_NOWAIT | __GFP_NOWARN, 0);
-> +	batch = (void *)__get_free_page(GFP_NOWAIT | __GFP_NOWARN);
->  	if (!batch)
->  		return false;
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 680a4d76460e..256e8d3c8742 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5538,7 +5538,7 @@ EXPORT_SYMBOL(__get_free_pages);
-> 
->  unsigned long get_zeroed_page(gfp_t gfp_mask)
->  {
-> -	return __get_free_pages(gfp_mask | __GFP_ZERO, 0);
-> +	return __get_free_page(gfp_mask | __GFP_ZERO);
->  }
->  EXPORT_SYMBOL(get_zeroed_page);
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 5e60e9792cbf..978194dc2bb8 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2739,7 +2739,7 @@ void vfree(const void *addr)
->  		 * High-order allocs for huge vmallocs are split, so
->  		 * can be freed as an array of order-0 allocations
->  		 */
-> -		__free_pages(page, 0);
-> +		__free_page(page);
->  		cond_resched();
->  	}
->  	atomic_long_sub(vm->nr_pages, &nr_vmalloc_pages);
-> --
-> 2.39.2
-> 
+On Fri, Mar 17, 2023 at 2:15=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Mar 13, 2023 at 7:28=E2=80=AFPM richard clark
+> <richard.xnu.clark@gmail.com> wrote:
+> >
+> > There're two questions about these system calls:
+> > 1. According to https://pubs.opengroup.org/onlinepubs/7908799/xsh/selec=
+t.html:
+> > ERRORS
+> > [EINVAL]
+> >       The nfds argument is less than 0 or greater than FD_SETSIZE.
+> > But the current implementation in Linux like:
+> >        if (nfds > FD_SETSIZE)
+> >                nfds =3D FD_SETSIZE
+> > What's the rationale behind this?
+>
+> Basically, the value of FD_SETSIZE has changed, and different pieces
+> of the system have used different values over the years.
+>
+> The exact value of FD_SETSIZE ends up actually depending on the
+> compile-time size of the "fd_set" variable, and both the kernel and
+> glibc (and presumably other C library implementations) have changed
+> over time.
+>
+> Just to give you a flavor of that history, 'select()' was implemented
+> back in early '92 in linux-0.12 (one of the greatest Linux releases of
+> all time - 0.12 was when Linux actually became *useful* to some
+> people).
+>
+> And back then, we had this:
+>
+>   typedef unsigned long fd_set;
+>
+> which may seem a bit limiting today ("Only 32 bits??!?"), but to put
+> that in perspective, back then we also had this:
+>
+>   #define NR_OPEN 20
+>
+> and Linux-0.12 also did the *radical* change of changing NR_INODE from
+> 32 to 64. Whee..
+>
+> It was a very different time, in other words.
+>
+> Now, imagine what happens when you increase those kinds of limits (as
+> we obviously did), and you do the library and kernel maintenance
+> separately. Some people might use a newer library with an older
+> kernel, and vice versa.
+>
+> Doing that
+>
+>          if (nfds > FD_SETSIZE)
+>                  nfds =3D FD_SETSIZE;
+>
+> basically allows you to at least limp along in that situation, where
+> maybe the library uses a 'fd_set' with thousands of bits, but the
+> kernel has a smaller limit.
+>
+> Because you *will* find user programs that basically do
+>
+>           select(FD_SETSIZE, ...)
+>
+> even if they don't actually use all those bits. Returning an error
+> because the C library had a different idea of how big the fdset was
+> compared to the kernel would be bad.
+>
+> Now, the above is the *historical* reason for this all. The kernel
+> hasn't actually changed FD_SETSIZE in decades. We could say "by now,
+> if you use FD_SETSIZE larger than 1024, we'll return an error instead
+> of just truncating it".
+>
+> But at the same time, while time has passed and we could do those
+> kinds of decisions, by now the POSIX spec is almost immaterial, and
+> compatibility with older versions of Linux is more important than
+> POSIX paper compatibility.
+>
+> So there just isn't any reason to change any more.
+>
+> > 2. Can we unify the two different system calls? For example, using
+> > poll(...) to implement the frontend select call(...), is there
+> > something I'm missing for current implementation?
+>
+> No. select() and poll() are completely different animals. Trying to
+> unify them means having to convert from an array of fd descriptors to
+> several arrays of bits. They are just very different interfaces.
 
--- 
-Sincerely yours,
-Mike.
+Technically, this kind of conversion is not as radical as thought(even
+I think the performance pain can be ignored), the pros. is the
+maintainer needs to care about only one piece of code. Actually the
+unified implementation of the fd->poll(...) can be seen as obvious
+evidence, essentially the core is the same but with different skin, at
+least this is weak to justify current implementation.
+
+>
+> Inside the kernel, the low-level implementation as far as individual
+> file descriptors is concerned is all unified already. Once you just
+> deal with one single file descriptor, we internally use a "->poll()"
+> thing. But to *get* to that individual file descriptor, select() and
+> poll() walk very different data structures.
+>
+>                   Linus
