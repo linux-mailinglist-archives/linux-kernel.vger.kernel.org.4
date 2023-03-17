@@ -2,331 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17F56BE969
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E496BE93A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCQMhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S230117AbjCQMcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjCQMhg (ORCPT
+        with ESMTP id S229963AbjCQMcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:37:36 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DE3AD31;
-        Fri, 17 Mar 2023 05:36:54 -0700 (PDT)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 932665B6;
-        Fri, 17 Mar 2023 13:36:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679056589;
-        bh=EvLTNZd1r7ZkfQDY14BCMttegUAqYVO14FTeWKB9xmY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lye5Gpx950Nh/PkRLTGli6cN/nw81MFgDV4r6q+UUU797/lw2wRi27hevxSloXtmZ
-         k155fZ7MZpYfL97VqC4oC/TJP3oiHFubrlBeSfBiC9LISr0NG94zsoD/r7mlNT0T/G
-         UAdgQDFWQIlIyVdgN08H06zTqlR848j0mqF7BSP8=
-Message-ID: <b281b472-f911-1f04-2cc8-c3713e771bf6@ideasonboard.com>
-Date:   Fri, 17 Mar 2023 14:36:25 +0200
+        Fri, 17 Mar 2023 08:32:09 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2066.outbound.protection.outlook.com [40.107.241.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BFE6C8B5;
+        Fri, 17 Mar 2023 05:32:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YJohECUj5Vy43o0iR0KQPOPGoO/WaZ5EEm3iWb39By9uSMKDSE7EEcez6ZU+rx/St2cXt09DIULwXt6LkrFWE7jmMDYP1KQJ9WtMqticsAPoyp2+ziUzJPtALMPbo/LeiBnoMbMXSf4kO8J+V/8xtrScxY9DWIMhjU5ATmI1yfCwXttrxzyMmBQIIOXXWDTqH6Bgmlvm2v3NCNyTXm4sqt/9qlM9ETc8XE5DZsTWaKha5BdrteJnU96YnIR8dwqXT6s/220qt3db32axkZAAerHgwk+KwH7eeR2jcD4LJsR7XIoSbb0hUM3RyJjstu3dJQi5tOA8H4EEgndvsPTt+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h5GlWoW0LmToNwGdzmrAbrAN4NezCSBLlqBfA2gUtuQ=;
+ b=OdX+uSUNIiud5HnJzm3owNDNmrv73OE6aP5mmamO7gRmZgaxoAav62bov/rQ8yDW8as5ZghfDTDQg+PIcVqrXFVeCUk8R439pRseRnKwuH/9mADP4voBk5kkGbXX1eUGvBAFDTGJiajAM/BFa+5UNrRYWenC7LNdoBNplGVWnj/dHhzL6E8qG+4Q4cJtNQuiV/kRSMoUY6jCCT/1URN1l+VLQO59B8w0bVvcYkCacNBzO1GFDO0Z0ypNquh1rN/1BQ0vv1RO4nt1QDUzTzmnqmWSqvxYmFnVSqrAWXqOxa/I99YNA3CVpZeyuRjI4JbJHGVlEC5RdLO+/LNnfOswYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h5GlWoW0LmToNwGdzmrAbrAN4NezCSBLlqBfA2gUtuQ=;
+ b=kC5WW8hXUJKLHsGeI83k96csXIA+CukYS4SBiixyFpsJF2f1zv/PpRgK+gnzJFQYrKJNMrN6FHtkL7sdlSRkerbRjqvSHQEyOL3/6fHY8FI+YRkj0JwpUMWhdKPtgeycWQmoGDRRyok1MCkfKa7E8aqKmP/2sl73+nWpGwQk1wI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
+ by AM8PR04MB7361.eurprd04.prod.outlook.com (2603:10a6:20b:1d2::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 12:32:03 +0000
+Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
+ ([fe80::7ebc:3d88:4dd1:ecbf]) by PA4PR04MB9416.eurprd04.prod.outlook.com
+ ([fe80::7ebc:3d88:4dd1:ecbf%6]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
+ 12:32:03 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V4 0/6] dt-bindings: usb: covert ci-hdrc-usb2/usbmisc-imx to yaml
+Date:   Fri, 17 Mar 2023 20:37:02 +0800
+Message-Id: <20230317123708.337286-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::12) To PA4PR04MB9416.eurprd04.prod.outlook.com
+ (2603:10a6:102:2ab::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
- <20230317101606.69602bba@booty>
-Content-Language: en-US
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230317101606.69602bba@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9416:EE_|AM8PR04MB7361:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7949103-4357-469f-2dd2-08db26e39c4f
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q8BMdfsgKR1tg8hrIDR5l3GFQc5tlw37pkx1WsHUfSl9WKzDY3meTJi6BXdoCKk70UNFFkeL2zDI94sth5mProM+7+pyaMwL3tt1xWdsq975BbxunuM0goBgoEWCkUVHkXivqSv+Z+6n1bsDIFbyZS49jaJ6anuI2JP7GEno02WiETJdVkYIGTQLNph1wfOIwwPX63ntJn5UI0wt8urloN7Awl48mPbmLHcGOBAFLNmrFgFhYSK1CM2+tkTkuUp+L9CZHnuKubpppyoYNJKG0B6pOgQjCQYfHDWjOqFYxsjveQy4jbutNjdTsCIBGYVVZlfrkssiwshb1WCHbrXPD8vt2PEfxStEztMYI5/mvPr8pmCSduG9cT1C28cfSptNPCQMJ+SP+w4SymMtKTPgRzyoXwBHMiXyElzx3SAFVVO3Aa+JM8WJhdOpnsvBtIiOpnDckBgpTPVK96FzQegUAtrV2ZAlssnrd1jB7riif0scQyH0EI3ogCFZ034ovUXXer7wluzaSePNK/UerpL04jJC1x6/IOs8u2wY3Bqpdnwyn13qni4tPU+Xt6Pc47OCwTsQsEzdcPik6P+36qqUEAhg64IxGVG+EecmHu01DXbIwpVIkJf65AaMj6gGA9UIu2+pu0M9C+jBOugp9VZUAz8KOaSS+FmrvcDVuRcmADeGdLS3dL8XQebLkIMLJCW4q9Pj78stpJjg652sCOuW8Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199018)(38350700002)(316002)(38100700002)(2906002)(478600001)(4326008)(8936002)(5660300002)(41300700001)(66556008)(66946007)(66476007)(8676002)(83380400001)(7416002)(86362001)(186003)(52116002)(26005)(6512007)(6506007)(2616005)(1076003)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kc8yGJf2TSA+zwH7xBIzYoV6QDEu3d7Ax/glGaM/evoKtrBAKBIoB7JLgKzf?=
+ =?us-ascii?Q?vTWglS3GEazJhU24nabQkwga1KKd3uGe+7Xw+Tl7eYGpcFCw2DDbhsVXk7UH?=
+ =?us-ascii?Q?2weQ7bYwvAQOlL3Na6ObygzmAWFhBCb/VbGb0WUsIGRiQS7LhKE2n9DrwHTW?=
+ =?us-ascii?Q?rPtux8beuwfCkcRRwTXPo9OgLlmCFB5yftI5yibbYtgK9GQLqrB5ypfLgvT9?=
+ =?us-ascii?Q?llRxBIC3KPmQ95sJBYm4XdCf+fmweyD1JygJzcPivSyR6HSRtAJ3T/sEQ53Y?=
+ =?us-ascii?Q?wrW0snjz8SeB6KYHg/JSpRmWoewxRRIYeOaJmD9reUoUIR6E/KoMRLwCDqkT?=
+ =?us-ascii?Q?p8CPK/5V2UWm/hacnDXOEWSw51k+PQKNR7Jg6H3J/tIbTGPeHdNw1bq/Ic6X?=
+ =?us-ascii?Q?T8RJ6mC3QtXSJt+2IJwALUd/gaWpgibXl9NHxunZT9mz/2DYQDiDPN2yyO2Q?=
+ =?us-ascii?Q?fG3ly8zfT53SzDB2PXtv1RkRSaGXZrJaJXGL9QGIQl9CfYKmjsNdEOy1fK4Z?=
+ =?us-ascii?Q?OsaeWR25pFHrv9O/bU2EPjBZu1Ky7K9y5iMQDzYFphAgAsGRnEppp8ciRvwl?=
+ =?us-ascii?Q?syXH5PR1vUtAPOyra8VOWxicDs+PCgzATMq57fDJnmhIHUGnMSRDy0/mBNPy?=
+ =?us-ascii?Q?s8vTckrw8zBKXWpZbJVarH98k6hSuJEQhBz/rtvhLvYORYLLkBNIm0Bc2V/d?=
+ =?us-ascii?Q?EBB9tb1zIcG5JHU5GDuHTxBWWV/vMa89KY5Gng7EVhQ19CD0nOF4R6Q2j1EU?=
+ =?us-ascii?Q?fsXJ6LyJh0t35xmG7IilSBK/Q2fQ8BrNzVdTbz0sUQMInARJ0cQdIGVmw7nk?=
+ =?us-ascii?Q?GYOip3ECvfsDA5i3QlCp+FUU53CzE2J98XJW9CxbZapQQ9rFhIlJfXhY6+Gy?=
+ =?us-ascii?Q?CXkO4o6GtJCBLx4Cr7+qS6nIwhuM76au2wtcwG252xEKU7ozorLZIbIX5gUQ?=
+ =?us-ascii?Q?07/JwzReyVFJaVFrybx9kU4aTE+8upMdVWV88MoQFdNxR2QTWLBessQxjq3R?=
+ =?us-ascii?Q?GkUOT+Was1dYLh0m+gNlAo5NE10Vgi7zItHVMpB5VYIOLBvV2D13maTDfLcL?=
+ =?us-ascii?Q?9Suw5F1qVVjcb3Le/aUX8Xlo0jlaWhbEfs2G3QnmdgyBbPzbZEcDt6rcYBO5?=
+ =?us-ascii?Q?q4lljTWfulTQDSfuFQOrP8oB+ebAnN/QgVz0mbNLa6OAhr3/k71vZusqBpuE?=
+ =?us-ascii?Q?nxRMi9EG7D6k/ebexgFbtaTWZ6ZP60KSPk0exj728YFfjH6GYNqLpXuuY4nV?=
+ =?us-ascii?Q?sk+jKAcITguZurtnVKbtUOAni7By9vmbT/1HF3AyV957IDLvka6qnrSpxvmT?=
+ =?us-ascii?Q?zgo0CM9EtWy3SVUIZbK9AP5xjisw8IONhesgs8a4fRurjg8qX8o2CV5S/yWU?=
+ =?us-ascii?Q?VB1EZxAKqFLjUFJ4OVYB2tKQ2zPQFD33errsEwzYsDuxszIFXeIVAXuJQxlw?=
+ =?us-ascii?Q?PPkvoThpJh/Om9anJ938sqha6MB5KS+TchObtXiDR/ZGp6btiwlCgfcaglHF?=
+ =?us-ascii?Q?TAZ4dZi0OeKyoiIDZI86ee3r+xwX3zuIgcicESbLPrzJYazleFMOOXhgln0h?=
+ =?us-ascii?Q?rFWu+QjIxd4z/MQVZfP/1enorYhvAzP/sSf5sHDb?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7949103-4357-469f-2dd2-08db26e39c4f
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 12:32:03.2265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mqRMxeUnryNb13Cc6G2yJxfUCEliPFhUx4Ob96+3IOlOFy72R0bR7OO8vD4jsR8lUaJUBWdzQdHo5Q34Rdu0aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7361
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Peng Fan <peng.fan@nxp.com>
 
-On 17/03/2023 11:16, Luca Ceresoli wrote:
-> Hi Tomi, Wolfram,
-> 
-> On Wed, 22 Feb 2023 15:29:00 +0200
-> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
-> 
->> From: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> An ATR is a device that looks similar to an i2c-mux: it has an I2C
->> slave "upstream" port and N master "downstream" ports, and forwards
->> transactions from upstream to the appropriate downstream port. But it
->> is different in that the forwarded transaction has a different slave
->> address. The address used on the upstream bus is called the "alias"
->> and is (potentially) different from the physical slave address of the
->> downstream chip.
->>
->> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
->> implementing ATR features in a device driver. The helper takes care or
->> adapter creation/destruction and translates addresses at each transaction.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> 
-> Wolfram, I think Tomi improved this work as much as currently possible
-> and this patch now looks extremely good to me. I wish we had this in
-> mainline soon. Does it make sense for me to send a Reviewed-by tag,
-> given I already have a S-o-b one?
-> 
-> I have a few _extremely_ minor notes below, but I hope they won't
-> slow down merging this work. They can definitely be addressed as a
-> follow-up patch after merging this.
-> 
-> Thank you a lot Tomi for having persisted in improving the ATR code!
-> 
->> diff --git a/Documentation/i2c/muxes/i2c-atr.rst b/Documentation/i2c/muxes/i2c-atr.rst
->> new file mode 100644
->> index 000000000000..da226fd4de63
->> --- /dev/null
->> +++ b/Documentation/i2c/muxes/i2c-atr.rst
->> @@ -0,0 +1,97 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +=====================
->> +Kernel driver i2c-atr
->> +=====================
->> +
->> +Author: Luca Ceresoli <luca@lucaceresoli.net>
->> +Author: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->> +
->> +Description
->> +-----------
->> +
->> +An I2C Address Translator (ATR) is a device with an I2C slave parent
->> +("upstream") port and N I2C master child ("downstream") ports, and
->> +forwards transactions from upstream to the appropriate downstream port
->> +with a modified slave address. The address used on the parent bus is
->> +called the "alias" and is (potentially) different from the physical
->> +slave address of the child bus. Address translation is done by the
->> +hardware.
->> +
->> +An ATR looks similar to an i2c-mux except:
->> + - the address on the parent and child busses can be different
->> + - there is normally no need to select the child port; the alias used on the
->> +   parent bus implies it
->> +
->> +The ATR functionality can be provided by a chip with many other
->> +features. This file provides a helper to implement an ATR within your
->> +driver.
->> +
->> +The ATR creates a new I2C "child" adapter on each child bus. Adding
->> +devices on the child bus ends up in invoking the driver code to select
->> +an available alias. Maintaining an appropriate pool of available aliases
->> +and picking one for each new device is up to the driver implementer. The
->> +ATR maintains an table of currently assigned alias and uses it to modify
-> 
-> s/an table/a table/
+This is target for i.MX8M* System-Ready IR 2.0 Cert.
+V4:
+ Merged V3 patch 1,2,3 into one patch
+ Merged V3 patch 4,5,6 into one patch
+ Added patch 3,4,5,6 for dts update
+ Addressed Rob's comments to v3 patch 1, patch 4 for compatible, deprecated property
 
-Right.
+V3:
+ Sorry for this long time delay for V3. I thought this should be V5, but actually
+ I only posted two versions before.
+ Add myself ad maintainer
+ The major changes are in patch 4:
+   Added some properties to address dtbs_check error, for qcom, fsl. But I still leave
+   some properties not introduced, such as phy-select for qcom,
+   nvidia,needs-double-reset operating-points-v2 for nvidia, which I would expect
+   sub-soc maintainers continue on it.
 
->> +all I2C transactions directed to devices on the child buses.
->> +
->> +A typical example follows.
->> +
->> +Topology::
->> +
->> +                      Slave X @ 0x10
->> +              .-----.   |
->> +  .-----.     |     |---+---- B
->> +  | CPU |--A--| ATR |
->> +  `-----'     |     |---+---- C
->> +              `-----'   |
->> +                      Slave Y @ 0x10
->> +
->> +Alias table:
->> +
->> +A, B and C are three physical I2C busses, electrically independent from
->> +each other. The ATR receives the transactions initiated on bus A and
->> +propagates them on bus B or bus C or none depending on the device address
->> +in the transaction and based on the alias table.
->> +
->> +Alias table:
->> +
->> +.. table::
->> +
->> +   ===============   =====
->> +   Client            Alias
->> +   ===============   =====
->> +   X (bus B, 0x10)   0x20
->> +   Y (bus C, 0x10)   0x30
->> +   ===============   =====
->> +
->> +Transaction:
->> +
->> + - Slave X driver sends a transaction (on adapter B), slave address 0x10
-> 
-> s/sends/requests/ is possibly better to clarify there is still no
-> electrical transaction yet at this step, as we are still in software.
+ Add A-b from Rob
+ Add a new patch 7
 
-I don't like "requests" too much either, but I see your point and I 
-think it's better than "sends".
+v2:
+ patch order changed, usbmisc-imx moved to first
+ Add Xu Yang as maintainer
+ Typo fix
+ Not define properties within if/then/else
+ Set additionalProperties to false
+ Drop duplicated compatibles
+ Fix checkpatch issue
+ For pinctrl-names: I think there is restrictin in allOf, so not list items
+ Add fsl,usbmisc: ref
+ Define items for mux-control-names
+ Rename usbmisc-imx.yaml to fsl,usbmisc.yaml
 
->> + - ATR driver finds slave X is on bus B and has alias 0x20, rewrites
->> +   messages with address 0x20, forwards to adapter A
->> + - Physical I2C transaction on bus A, slave address 0x20
->> + - ATR chip detects transaction on address 0x20, finds it in table,
->> +   propagates transaction on bus B with address translated to 0x10,
->> +   keeps clock streched on bus A waiting for reply
->> + - Slave X chip (on bus B) detects transaction at its own physical
->> +   address 0x10 and replies normally
->> + - ATR chip stops clock stretching and forwards reply on bus A,
->> +   with address translated back to 0x20
->> + - ATR driver receives the reply, rewrites messages with address 0x10
->> +   as they were initially
->> + - Slave X driver gets back the msgs[], with reply and address 0x10
->> +
->> +Usage:
->> +
->> + 1. In your driver (typically in the probe function) add an ATR by
->> +    calling i2c_atr_new() passing your attach/detach callbacks
->> + 2. When the attach callback is called pick an appropriate alias,
->> +    configure it in your chip and return the chosen alias in the
->> +    alias_id parameter
->> + 3. When the detach callback is called, deconfigure the alias from
->> +    your chip and put it back in the pool for later usage
->> +
->> +I2C ATR functions and data structures
->> +-------------------------------------
->> +
->> +.. kernel-doc:: include/linux/i2c-atr.h
-> 
-> ...
-> 
->> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
->> new file mode 100644
->> index 000000000000..5ab890b83670
->> --- /dev/null
->> +++ b/drivers/i2c/i2c-atr.c
->> @@ -0,0 +1,548 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * I2C Address Translator
->> + *
->> + * Copyright (c) 2019,2022 Luca Ceresoli <luca@lucaceresoli.net>
->> + * Copyright (c) 2022,2023 Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->> + *
->> + * Originally based on i2c-mux.c
-> 
-> Not quite anymore I think... should this line be removed?
+ Hope I not miss any comments
 
-Well, it still originally based on i2c-mux. Maybe it doesn't resemble 
-i2c-mux much anymore, but the above line is a kind of thanks for the 
-original authors.
+ Note: there will still be dtbs_check failure if run with only a single patch,
+ with this patchset applied, there is no related dtbs_check failure.
 
->> +/**
->> + * struct i2c_atr - The I2C ATR instance
->> + * @parent:    The parent &struct i2c_adapter
->> + * @dev:       The device that owns the I2C ATR instance
->> + * @ops:       &struct i2c_atr_ops
->> + * @priv:      Private driver data, set with i2c_atr_set_driver_data()
->> + * @algo:      The &struct i2c_algorithm for adapters
->> + * @lock:      Lock for the I2C bus segment (see &struct i2c_lock_operations)
->> + * @max_adapters: Maximum number of adapters this I2C ATR can have
->> + * @adapter:   Array of adapters
->> + */
->> +struct i2c_atr {
->> +	struct i2c_adapter *parent;
->> +	struct device *dev;
->> +	const struct i2c_atr_ops *ops;
->> +
->> +	void *priv;
->> +
->> +	struct i2c_algorithm algo;
->> +	/* lock for the I2C bus segment (see struct i2c_lock_operations) */
-> 
-> This comment is identical to the one in the kerneldoc comments just
-> above, I'd just remove it.
 
-checkpatch wants an explicit comment for each lock.
+This patchset is to convert ci-hdrc-usb2 and usbmisc-imx to yaml format.
+There are compatible strings not landed in binding doc, but in device tree,
+so run dtbs_check on the single yaml conversion patch will report
+dtbs_check failure. If apply the whole patchset, there will be no failure.
 
->> +	struct mutex lock;
->> +	int max_adapters;
->> +
->> +	struct notifier_block i2c_nb;
-> 
-> Undocumented?
 
-Indeed, I'll add something here.
 
-> ...
-> 
->> +void i2c_atr_delete(struct i2c_atr *atr)
->> +{
-> 
-> Maybe here we could iterate over atr->adapter[] and if any is != NULL
-> just call BUG_ON() or WARN()?
+Peng Fan (6):
+  dt-bindings: usb: usbmisc-imx: convert to DT schema
+  dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format
+  ARM64: dts: imx8mn: update usb compatible
+  arm64: dts: imx8mm: update usb compatible
+  arm64: dts: imx8: update usb compatible
+  arm64: dts: imx8dxl: update usb compatible
 
-Yes, good idea.
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 412 ++++++++++++++++++
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  68 +++
+ .../devicetree/bindings/usb/usbmisc-imx.txt   |  19 -
+ .../boot/dts/freescale/imx8-ss-conn.dtsi      |   2 +-
+ .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   |   4 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |   5 +-
+ 8 files changed, 492 insertions(+), 187 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
 
->> +	bus_unregister_notifier(&i2c_bus_type, &atr->i2c_nb);
->> +	mutex_destroy(&atr->lock);
->> +	kfree(atr);
->> +}
->> +EXPORT_SYMBOL_NS_GPL(i2c_atr_delete, I2C_ATR);
-> 
-> ...
-> 
->> diff --git a/include/linux/i2c-atr.h b/include/linux/i2c-atr.h
->> new file mode 100644
->> index 000000000000..7596f70ce1ab
->> --- /dev/null
->> +++ b/include/linux/i2c-atr.h
->> @@ -0,0 +1,116 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * I2C Address Translator
->> + *
->> + * Copyright (c) 2019,2022 Luca Ceresoli <luca@lucaceresoli.net>
->> + * Copyright (c) 2022,2023 Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->> + *
->> + * Based on i2c-mux.h
-> 
-> As above, this does not apply very much anymore as it did in v1.
-> 
-> ...
-> 
->> +/**
->> + * i2c_atr_delete - Delete an I2C ATR helper.
->> + * @atr: I2C ATR helper to be deleted.
->> + *
->> + * Precondition: all the adapters added with i2c_atr_add_adapter() mumst be
-> 
-> s/mumst/must/
-
-Yep.
-
-Thanks for the comments!
-
-  Tomi
+-- 
+2.37.1
 
