@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048606BF677
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0826BF685
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCQXgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 19:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S230117AbjCQXgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 19:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjCQXgW (ORCPT
+        with ESMTP id S229599AbjCQXg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 19:36:22 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E5168AC;
-        Fri, 17 Mar 2023 16:36:18 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id o12so3002737iow.6;
-        Fri, 17 Mar 2023 16:36:18 -0700 (PDT)
+        Fri, 17 Mar 2023 19:36:28 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7EF5F236;
+        Fri, 17 Mar 2023 16:36:22 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id f14so3004613iow.5;
+        Fri, 17 Mar 2023 16:36:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679096177;
+        d=1e100.net; s=20210112; t=1679096182;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YAZcuKYJLCFnnEBKwS88rbdIifxh3NqeJFPoZLaOyjw=;
-        b=oRaRraxlXe7772+ZMeC6SLcPFxTwGrFiUwD+DM69mjhWjW1OTGLA2VduY1bQOhOhTo
-         KP+Wcinrpp3Hvdd2ZcHM4/0xt4X0A2ZB+PlqLNPXG12sVyPErwNQlMBr0TBJUpSti++I
-         sldhbf9BByRdEBxp3D0H7BV63vjpw5fIwLo1/NBVLeM8jAVWs78IRrEt/Dm79/0MWIPz
-         KiGaMrs5oHqySg2yyq9qe0oyxsAG75nIwKSewXWHyvY18n0pxiAsoRAr+bOV0QFDQ/Qp
-         uhne+jQ3HYmYYghg2fErpLjgVrhAYXf6TEAjehCiZPwZl8znH+6t3C4V0P/KeTgcZjSl
-         sxMw==
-X-Gm-Message-State: AO0yUKXrQ4C8D+8JVZqoQV0d+1rBQ9+dGPmyqyLSwSUbNGw9MtjfQ9PM
-        vqnEEDVnbDAm9fU25Bx/WA==
-X-Google-Smtp-Source: AK7set9gCASFPcC1fuJCihIuym7rvnt9NnFL5ocgZ9H5SbJyCefO3q+izumFnA1p86VcXbLopc6Cug==
-X-Received: by 2002:a5d:9041:0:b0:74c:d67a:6f97 with SMTP id v1-20020a5d9041000000b0074cd67a6f97mr238081ioq.17.1679096177277;
-        Fri, 17 Mar 2023 16:36:17 -0700 (PDT)
+        bh=q9mJ4gBbzJW/jLgwBgdQ9NurBXu5dWraoFyNH2hL32I=;
+        b=CoRGKRX780maV25UZyYDT7RG+CGbiPLCELuq8iL5ZJ9G6I351TyR6SS1daWW78MhwW
+         Nm0Hp+GdUcppRGRuNy+BTAfw8aZvsN47uiJzbQgeKAiQqFSA9tZ0YraLHKTM22+XMWHH
+         TfpdEvFm0q0oVlqGnr8sGng6QYUg/4pvo4KB/qoR2k4DlZW2/fJqWFUkRdCxnHdkmsJn
+         V2IvhGt2ike7hTW+r7YVfgz56DkNzG9JPegzaOKKGtMpvhsI2jMavD+9CxOhocKSIdh1
+         BubGEhLO1lwkipYRFIs3yOW8sif/nVdDzbA6U/asTyDCO2ZShrB5eGBLwSx/qLQYS2qs
+         Ti2w==
+X-Gm-Message-State: AO0yUKXtGgjt0LoUdMDHr1NGL9Krzkr7i+XXLMoCNQpZYtXzM1vF7+gN
+        raScOPiji3j4/bZDxarZRA==
+X-Google-Smtp-Source: AK7set9BcX24R10T31XKQmxfyekFzc2clwSrZ/upqb17tJPU7EkiHRPkKbK+wk90LjAtkZhwPnyl3g==
+X-Received: by 2002:a6b:c411:0:b0:74c:a5ac:7759 with SMTP id y17-20020a6bc411000000b0074ca5ac7759mr244882ioa.5.1679096181570;
+        Fri, 17 Mar 2023 16:36:21 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id c7-20020a6bec07000000b007549f6e6d3csm591593ioh.28.2023.03.17.16.36.15
+        by smtp.gmail.com with ESMTPSA id g33-20020a028524000000b00403d770399csm1092780jai.3.2023.03.17.16.36.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 16:36:16 -0700 (PDT)
-Received: (nullmailer pid 3967959 invoked by uid 1000);
-        Fri, 17 Mar 2023 23:36:13 -0000
+        Fri, 17 Mar 2023 16:36:21 -0700 (PDT)
+Received: (nullmailer pid 3968128 invoked by uid 1000);
+        Fri, 17 Mar 2023 23:36:18 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH] ASoC: dt-bindings: Drop unneeded quotes
-Date:   Fri, 17 Mar 2023 18:36:10 -0500
-Message-Id: <20230317233612.3967849-1-robh@kernel.org>
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        patches@opensource.cirrus.com
+Subject: [PATCH] regulator: dt-bindings: Drop unneeded quotes
+Date:   Fri, 17 Mar 2023 18:36:14 -0500
+Message-Id: <20230317233616.3968003-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,642 +94,983 @@ checking for this can be enabled in yamllint.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/sound/adi,adau1372.yaml          |  2 +-
- .../bindings/sound/adi,max98396.yaml          |  8 +++---
- .../bindings/sound/audio-graph-port.yaml      | 22 ++++++++--------
- .../bindings/sound/audio-graph.yaml           |  8 +++---
- .../bindings/sound/cirrus,cs35l45.yaml        |  2 +-
- .../bindings/sound/cirrus,cs42l42.yaml        | 12 ++++-----
- .../bindings/sound/mt8186-afe-pcm.yaml        |  6 ++---
- .../sound/mt8186-mt6366-da7219-max98357.yaml  |  2 +-
- .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |  2 +-
- .../bindings/sound/mt8192-afe-pcm.yaml        |  6 ++---
- .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |  4 +--
- .../bindings/sound/mt8195-afe-pcm.yaml        |  2 +-
- .../bindings/sound/mt8195-mt6359.yaml         |  8 +++---
- .../sound/nvidia,tegra-audio-alc5632.yaml     |  8 +++---
- .../sound/nvidia,tegra-audio-max98090.yaml    |  8 +++---
- .../sound/nvidia,tegra-audio-rt5640.yaml      |  6 ++---
- .../sound/nvidia,tegra-audio-rt5677.yaml      | 26 +++++++++----------
- .../sound/nvidia,tegra-audio-sgtl5000.yaml    |  6 ++---
- .../sound/nvidia,tegra-audio-wm8753.yaml      |  6 ++---
- .../sound/nvidia,tegra-audio-wm8903.yaml      |  8 +++---
- .../sound/nvidia,tegra-audio-wm9712.yaml      |  8 +++---
- .../bindings/sound/qcom,q6asm-dais.yaml       |  2 +-
- .../bindings/sound/renesas,rsnd.yaml          |  2 +-
- .../devicetree/bindings/sound/sgtl5000.yaml   |  6 ++---
- .../bindings/sound/simple-card.yaml           |  2 +-
- .../sound/socionext,uniphier-aio.yaml         |  2 +-
- 26 files changed, 87 insertions(+), 87 deletions(-)
+ .../bindings/regulator/anatop-regulator.yaml  | 22 +++++++++----------
+ .../bindings/regulator/dlg,da9121.yaml        |  2 +-
+ .../bindings/regulator/fixed-regulator.yaml   |  2 +-
+ .../regulator/google,cros-ec-regulator.yaml   |  2 +-
+ .../bindings/regulator/gpio-regulator.yaml    |  2 +-
+ .../regulator/max77650-regulator.yaml         |  2 +-
+ .../bindings/regulator/max8660.yaml           |  2 +-
+ .../bindings/regulator/max8893.yaml           |  2 +-
+ .../regulator/mediatek,mt6331-regulator.yaml  | 12 +++++-----
+ .../regulator/mediatek,mt6332-regulator.yaml  |  4 ++--
+ .../bindings/regulator/mps,mp5416.yaml        |  4 ++--
+ .../bindings/regulator/mps,mp886x.yaml        |  2 +-
+ .../bindings/regulator/mps,mpq7920.yaml       |  6 ++---
+ .../bindings/regulator/mt6315-regulator.yaml  |  2 +-
+ .../bindings/regulator/mt6359-regulator.yaml  | 16 +++++++-------
+ .../bindings/regulator/mt6360-regulator.yaml  |  4 ++--
+ .../regulator/nxp,pca9450-regulator.yaml      |  4 ++--
+ .../regulator/nxp,pf8x00-regulator.yaml       |  4 ++--
+ .../bindings/regulator/pfuze100.yaml          |  8 +++----
+ .../regulator/qcom,rpmh-regulator.yaml        |  8 +++----
+ ...ypi,7inch-touchscreen-panel-regulator.yaml |  2 +-
+ .../bindings/regulator/regulator.yaml         | 22 +++++++++----------
+ .../regulator/richtek,rt6245-regulator.yaml   |  8 +++----
+ .../regulator/richtek,rtmv20-regulator.yaml   |  2 +-
+ .../regulator/rohm,bd71815-regulator.yaml     |  8 +++----
+ .../regulator/rohm,bd71828-regulator.yaml     |  8 +++----
+ .../regulator/rohm,bd71837-regulator.yaml     |  6 ++---
+ .../regulator/rohm,bd71847-regulator.yaml     |  6 ++---
+ .../regulator/rohm,bd9576-regulator.yaml      |  2 +-
+ .../socionext,uniphier-regulator.yaml         |  2 +-
+ .../bindings/regulator/st,stm32-booster.yaml  |  4 ++--
+ .../bindings/regulator/st,stm32-vrefbuf.yaml  |  2 +-
+ .../regulator/st,stm32mp1-pwr-reg.yaml        |  2 +-
+ .../bindings/regulator/ti,tps62360.yaml       |  2 +-
+ .../regulator/vqmmc-ipq4019-regulator.yaml    |  2 +-
+ .../bindings/regulator/wlf,arizona.yaml       |  6 ++---
+ 36 files changed, 97 insertions(+), 97 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/adi,adau1372.yaml b/Documentation/devicetree/bindings/sound/adi,adau1372.yaml
-index 044bcd370d49..ea62e51aba90 100644
---- a/Documentation/devicetree/bindings/sound/adi,adau1372.yaml
-+++ b/Documentation/devicetree/bindings/sound/adi,adau1372.yaml
-@@ -32,7 +32,7 @@ properties:
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/regulator/anatop-regulator.yaml b/Documentation/devicetree/bindings/regulator/anatop-regulator.yaml
+index 0a66338c7e5a..17250378542a 100644
+--- a/Documentation/devicetree/bindings/regulator/anatop-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/anatop-regulator.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Ying-Chun Liu (PaulLiu) <paul.liu@linaro.org>
  
-   clock-names:
--    const: "mclk"
-+    const: mclk
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
  
-   powerdown-gpios:
-     description: GPIO used for hardware power-down.
-diff --git a/Documentation/devicetree/bindings/sound/adi,max98396.yaml b/Documentation/devicetree/bindings/sound/adi,max98396.yaml
-index fd5aa61b467f..bdc10d4204ec 100644
---- a/Documentation/devicetree/bindings/sound/adi,max98396.yaml
-+++ b/Documentation/devicetree/bindings/sound/adi,max98396.yaml
-@@ -41,21 +41,21 @@ properties:
+ properties:
+   compatible:
+@@ -19,43 +19,43 @@ properties:
+   regulator-name: true
  
-   adi,vmon-slot-no:
-     description: slot number of the voltage sense monitor
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-reg-offset:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 15
-     default: 0
+     description: u32 value representing the anatop MFD register offset.
  
-   adi,imon-slot-no:
-     description: slot number of the current sense monitor
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-vol-bit-shift:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 15
-     default: 1
+     description: u32 value representing the bit shift for the register.
  
-   adi,spkfb-slot-no:
-     description: slot number of speaker DSP monitor
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-vol-bit-width:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 15
-     default: 2
-@@ -64,7 +64,7 @@ properties:
-     description:
-       Selects the PCM data input channel that is routed to the speaker
-       audio processing bypass path.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+     description: u32 value representing the number of bits used in the register.
+ 
+   anatop-min-bit-val:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 15
-     default: 0
-diff --git a/Documentation/devicetree/bindings/sound/audio-graph-port.yaml b/Documentation/devicetree/bindings/sound/audio-graph-port.yaml
-index 6b4e02a0695a..fa9f9a853365 100644
---- a/Documentation/devicetree/bindings/sound/audio-graph-port.yaml
-+++ b/Documentation/devicetree/bindings/sound/audio-graph-port.yaml
-@@ -16,19 +16,19 @@ definitions:
-     $ref: /schemas/graph.yaml#/$defs/port-base
-     properties:
-       convert-rate:
--        $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-sample-rate"
-+        $ref: /schemas/sound/dai-params.yaml#/$defs/dai-sample-rate
-       convert-channels:
--        $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-channels"
-+        $ref: /schemas/sound/dai-params.yaml#/$defs/dai-channels
-       convert-sample-format:
--        $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-sample-format"
-+        $ref: /schemas/sound/dai-params.yaml#/$defs/dai-sample-format
-       mclk-fs:
--        $ref: "simple-card.yaml#/definitions/mclk-fs"
-+        $ref: simple-card.yaml#/definitions/mclk-fs
+     description: u32 value representing the minimum value of this register.
  
-   endpoint-base:
-     $ref: /schemas/graph.yaml#/$defs/endpoint-base
-     properties:
-       mclk-fs:
--        $ref: "simple-card.yaml#/definitions/mclk-fs"
-+        $ref: simple-card.yaml#/definitions/mclk-fs
-       frame-inversion:
-         description: dai-link uses frame clock inversion
-         $ref: /schemas/types.yaml#/definitions/flag
-@@ -49,11 +49,11 @@ definitions:
-         description: Indicates system clock
-         $ref: /schemas/types.yaml#/definitions/phandle
-       system-clock-frequency:
--        $ref: "simple-card.yaml#/definitions/system-clock-frequency"
-+        $ref: simple-card.yaml#/definitions/system-clock-frequency
-       system-clock-direction-out:
--        $ref: "simple-card.yaml#/definitions/system-clock-direction-out"
-+        $ref: simple-card.yaml#/definitions/system-clock-direction-out
-       system-clock-fixed:
--        $ref: "simple-card.yaml#/definitions/system-clock-fixed"
-+        $ref: simple-card.yaml#/definitions/system-clock-fixed
- 
-       dai-format:
-         description: audio format.
-@@ -69,11 +69,11 @@ definitions:
-             - msb
-             - lsb
-       convert-rate:
--        $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-sample-rate"
-+        $ref: /schemas/sound/dai-params.yaml#/$defs/dai-sample-rate
-       convert-channels:
--        $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-channels"
-+        $ref: /schemas/sound/dai-params.yaml#/$defs/dai-channels
-       convert-sample-format:
--        $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-sample-format"
-+        $ref: /schemas/sound/dai-params.yaml#/$defs/dai-sample-format
- 
-       dai-tdm-slot-num:
-         description: Number of slots in use.
-diff --git a/Documentation/devicetree/bindings/sound/audio-graph.yaml b/Documentation/devicetree/bindings/sound/audio-graph.yaml
-index d59baedee180..c87eb91de159 100644
---- a/Documentation/devicetree/bindings/sound/audio-graph.yaml
-+++ b/Documentation/devicetree/bindings/sound/audio-graph.yaml
-@@ -15,7 +15,7 @@ properties:
-   label:
-     maxItems: 1
-   prefix:
--    description: "device name prefix"
-+    description: device name prefix
-     $ref: /schemas/types.yaml#/definitions/string
-   routing:
-     description: |
-@@ -27,11 +27,11 @@ properties:
-     description: User specified audio sound widgets.
-     $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-   convert-rate:
--    $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-sample-rate"
-+    $ref: /schemas/sound/dai-params.yaml#/$defs/dai-sample-rate
-   convert-channels:
--    $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-channels"
-+    $ref: /schemas/sound/dai-params.yaml#/$defs/dai-channels
-   convert-sample-format:
--    $ref: "/schemas/sound/dai-params.yaml#/$defs/dai-sample-format"
-+    $ref: /schemas/sound/dai-params.yaml#/$defs/dai-sample-format
- 
-   pa-gpios:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
-index 88a0ca474c3d..b79990cf4f9f 100644
---- a/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
-+++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
-@@ -45,7 +45,7 @@ properties:
-       Audio serial port SDOUT Hi-Z control. Sets the Hi-Z
-       configuration for SDOUT pin of amplifier. Logical OR of
-       CS35L45_ASP_TX_HIZ_xxx values.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-min-voltage:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 3
-     default: 2
-diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs42l42.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs42l42.yaml
-index 7356084a2ca2..af599d8735e2 100644
---- a/Documentation/devicetree/bindings/sound/cirrus,cs42l42.yaml
-+++ b/Documentation/devicetree/bindings/sound/cirrus,cs42l42.yaml
-@@ -68,7 +68,7 @@ properties:
-       This is "normal tip sense (TS)" in the datasheet.
+     description: u32 value representing the minimum voltage of this regulator.
  
-       The CS42L42_TS_INV_* defines are available for this.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-max-voltage:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 1
+     description: u32 value representing the maximum voltage of this regulator.
  
-@@ -87,7 +87,7 @@ properties:
-       7 - 1.5s
- 
-       The CS42L42_TS_DBNCE_* defines are available for this.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-delay-reg-offset:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 7
+     description: u32 value representing the anatop MFD step time register offset.
  
-@@ -106,7 +106,7 @@ properties:
-       7 - 1.5s
- 
-       The CS42L42_TS_DBNCE_* defines are available for this.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-delay-bit-shift:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 7
+     description: u32 value representing the bit shift for the step time register.
  
-@@ -120,7 +120,7 @@ properties:
- 
-       0ms - 200ms,
-       Default = 100ms
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-delay-bit-width:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 200
+     description: u32 value representing the number of bits used in the step time register.
  
-@@ -133,7 +133,7 @@ properties:
- 
-       0ms - 20ms,
-       Default = 10ms
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   anatop-enable-bit:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 20
+     description: u32 value representing regulator enable bit offset.
  
-@@ -169,7 +169,7 @@ properties:
-       3 - Slowest
+   vin-supply:
+diff --git a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+index 63e1161a87de..dc626517c2ad 100644
+--- a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
++++ b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+@@ -109,7 +109,7 @@ properties:
+             description: Specify a valid GPIO for platform control of the regulator
  
-       The CS42L42_HSBIAS_RAMP_* defines are available for this.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 3
+           dlg,ripple-cancel:
+-            $ref: "/schemas/types.yaml#/definitions/uint32"
++            $ref: /schemas/types.yaml#/definitions/uint32
+             enum: [ 0, 1, 2, 3 ]
+             description: |
+               Defined in include/dt-bindings/regulator/dlg,da9121-regulator.h
+diff --git a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+index 48af7cba4652..ac0281b1cceb 100644
+--- a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+@@ -17,7 +17,7 @@ description:
+   to be the same.
  
-diff --git a/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
-index 88f82d096443..7fe85b08f9df 100644
---- a/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
-@@ -26,15 +26,15 @@ properties:
-     const: audiosys
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/google,cros-ec-regulator.yaml b/Documentation/devicetree/bindings/regulator/google,cros-ec-regulator.yaml
+index 0921f012c901..e0ff5012b763 100644
+--- a/Documentation/devicetree/bindings/regulator/google,cros-ec-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/google,cros-ec-regulator.yaml
+@@ -14,7 +14,7 @@ description:
+   regulator.yaml, can also be used.
  
-   mediatek,apmixedsys:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek apmixedsys controller
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
  
-   mediatek,infracfg:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek infracfg controller
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/gpio-regulator.yaml b/Documentation/devicetree/bindings/regulator/gpio-regulator.yaml
+index 6c3371d706bb..f4c1f36e52e9 100644
+--- a/Documentation/devicetree/bindings/regulator/gpio-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/gpio-regulator.yaml
+@@ -15,7 +15,7 @@ description:
+   regulator.txt, can also be used.
  
-   mediatek,topckgen:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek topckgen controller
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
  
-   clocks:
-diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
-index d427f7f623db..9853c11a1330 100644
---- a/Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
-@@ -18,7 +18,7 @@ properties:
-       - mediatek,mt8186-mt6366-da7219-max98357-sound
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+index 01b9775a92d1..27d5e9c2bb93 100644
+--- a/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+@@ -25,7 +25,7 @@ properties:
  
-   mediatek,platform:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8186 ASoC platform.
- 
-   headset-codec:
-diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-index aa23b0024c46..d80083df03eb 100644
---- a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-@@ -19,7 +19,7 @@ properties:
-       - mediatek,mt8186-mt6366-rt5682s-max98360-sound
- 
-   mediatek,platform:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8186 ASoC platform.
- 
-   dmic-gpios:
-diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-index 7a25bc9b8060..064ef172bef4 100644
---- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-@@ -24,15 +24,15 @@ properties:
-     const: audiosys
- 
-   mediatek,apmixedsys:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek apmixedsys controller
- 
-   mediatek,infracfg:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek infracfg controller
- 
-   mediatek,topckgen:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek topckgen controller
- 
-   power-domains:
-diff --git a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
-index c6e614c1c30b..7e50f5d65c8f 100644
---- a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
-@@ -21,11 +21,11 @@ properties:
-       - mediatek,mt8192_mt6359_rt1015p_rt5682s
- 
-   mediatek,platform:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8192 ASoC platform.
- 
-   mediatek,hdmi-codec:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of HDMI codec.
- 
-   headset-codec:
-diff --git a/Documentation/devicetree/bindings/sound/mt8195-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8195-afe-pcm.yaml
-index 4452a4070eff..d5adf07d46e0 100644
---- a/Documentation/devicetree/bindings/sound/mt8195-afe-pcm.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8195-afe-pcm.yaml
-@@ -32,7 +32,7 @@ properties:
-       See ../reserved-memory/reserved-memory.txt for details.
- 
-   mediatek,topckgen:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of the mediatek topckgen controller
- 
-   power-domains:
-diff --git a/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml b/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml
-index ad3447ff8b2c..c1ddbf672ca3 100644
---- a/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml
-@@ -24,19 +24,19 @@ properties:
-     description: User specified audio sound card name
- 
-   mediatek,platform:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8195 ASoC platform.
- 
-   mediatek,dptx-codec:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8195 Display Port Tx codec node.
- 
-   mediatek,hdmi-codec:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8195 HDMI codec node.
- 
-   mediatek,adsp:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: The phandle of MT8195 ADSP platform.
- 
-   mediatek,dai-link:
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-alc5632.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-alc5632.yaml
-index 7ef774910e5c..96f2f927a6f5 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-alc5632.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-alc5632.yaml
-@@ -31,10 +31,10 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headset Stereophone"
--        - "Int Spk"
--        - "Headset Mic"
--        - "Digital Mic"
-+        - Headset Stereophone
-+        - Int Spk
-+        - Headset Mic
-+        - Digital Mic
- 
-         # CODEC Pins
-         - SPKOUT
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max98090.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max98090.yaml
-index ccc2ee77ca30..4d912458b18b 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max98090.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max98090.yaml
-@@ -38,10 +38,10 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphones"
--        - "Speakers"
--        - "Mic Jack"
--        - "Int Mic"
-+        - Headphones
-+        - Speakers
-+        - Mic Jack
-+        - Int Mic
- 
-         # CODEC Pins
-         - MIC1
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5640.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5640.yaml
-index b1deaf271afa..2638592435b2 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5640.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5640.yaml
-@@ -31,9 +31,9 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphones"
--        - "Speakers"
--        - "Mic Jack"
-+        - Headphones
-+        - Speakers
-+        - Mic Jack
- 
-         # CODEC Pins
-         - DMIC1
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml
-index a49997d6028b..09e1d0b18d27 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml
-@@ -31,11 +31,11 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphone"
--        - "Speaker"
--        - "Headset Mic"
--        - "Internal Mic 1"
--        - "Internal Mic 2"
-+        - Headphone
-+        - Speaker
-+        - Headset Mic
-+        - Internal Mic 1
-+        - Internal Mic 2
- 
-         # CODEC Pins
-         - IN1P
-@@ -47,14 +47,14 @@ properties:
-         - DMIC2
-         - DMIC3
-         - DMIC4
--        - "DMIC L1"
--        - "DMIC L2"
--        - "DMIC L3"
--        - "DMIC L4"
--        - "DMIC R1"
--        - "DMIC R2"
--        - "DMIC R3"
--        - "DMIC R4"
-+        - DMIC L1
-+        - DMIC L2
-+        - DMIC L3
-+        - DMIC L4
-+        - DMIC R1
-+        - DMIC R2
-+        - DMIC R3
-+        - DMIC R4
-         - LOUT1
-         - LOUT2
-         - LOUT3
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-sgtl5000.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-sgtl5000.yaml
-index 943e7c01741c..e5bc6a6ade24 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-sgtl5000.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-sgtl5000.yaml
-@@ -31,9 +31,9 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphone Jack"
--        - "Line In Jack"
--        - "Mic Jack"
-+        - Headphone Jack
-+        - Line In Jack
-+        - Mic Jack
- 
-         # CODEC Pins
-         - HP_OUT
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8753.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8753.yaml
-index a5b431d7d0c2..3323d6a438f5 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8753.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8753.yaml
-@@ -31,8 +31,8 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphone Jack"
--        - "Mic Jack"
-+        - Headphone Jack
-+        - Mic Jack
- 
-         # CODEC Pins
-         - LOUT1
-@@ -53,7 +53,7 @@ properties:
-         - MIC1
-         - MIC2N
-         - MIC2
--        - "Mic Bias"
-+        - Mic Bias
+ patternProperties:
+   "^regulator-(ldo|sbb[0-2])$":
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     unevaluatedProperties: false
  
  required:
-   - nvidia,i2s-controller
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8903.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8903.yaml
-index 1b836acab980..1be25ce4514b 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8903.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm8903.yaml
-@@ -35,10 +35,10 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphone Jack"
--        - "Int Spk"
--        - "Mic Jack"
--        - "Int Mic"
-+        - Headphone Jack
-+        - Int Spk
-+        - Mic Jack
-+        - Int Mic
+diff --git a/Documentation/devicetree/bindings/regulator/max8660.yaml b/Documentation/devicetree/bindings/regulator/max8660.yaml
+index 35792a927b03..f05f4644c8ee 100644
+--- a/Documentation/devicetree/bindings/regulator/max8660.yaml
++++ b/Documentation/devicetree/bindings/regulator/max8660.yaml
+@@ -25,7 +25,7 @@ properties:
  
-         # CODEC Pins
-         - IN1L
-diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm9712.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm9712.yaml
-index a1448283344b..397306b8800d 100644
---- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm9712.yaml
-+++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-wm9712.yaml
-@@ -31,9 +31,9 @@ properties:
-     items:
-       enum:
-         # Board Connectors
--        - "Headphone"
--        - "LineIn"
--        - "Mic"
-+        - Headphone
-+        - LineIn
-+        - Mic
+     patternProperties:
+       "^regulator-.+$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         unevaluatedProperties: false
  
-         # CODEC Pins
-         - MONOOUT
-@@ -48,7 +48,7 @@ properties:
-         - PCBEEP
-         - MIC1
-         - MIC2
--        - "Mic Bias"
-+        - Mic Bias
+     additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/regulator/max8893.yaml b/Documentation/devicetree/bindings/regulator/max8893.yaml
+index 2b5e977bf409..e40ee798e198 100644
+--- a/Documentation/devicetree/bindings/regulator/max8893.yaml
++++ b/Documentation/devicetree/bindings/regulator/max8893.yaml
+@@ -25,7 +25,7 @@ properties:
+ 
+     patternProperties:
+       "^(ldo[1-5]|buck)$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+ 
+     additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6331-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6331-regulator.yaml
+index 771cc134393c..79e5198e1c73 100644
+--- a/Documentation/devicetree/bindings/regulator/mediatek,mt6331-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6331-regulator.yaml
+@@ -18,7 +18,7 @@ description: |
+ patternProperties:
+   "^buck-v(core2|io18|dvfs11|dvfs12|dvfs13|dvfs14)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -28,7 +28,7 @@ patternProperties:
+ 
+   "^ldo-v(avdd32aud|auxa32)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -38,7 +38,7 @@ patternProperties:
+ 
+   "^ldo-v(dig18|emc33|ibr|mc|mch|mipi|rtc|sram|usb10)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -48,7 +48,7 @@ patternProperties:
+ 
+   "^ldo-vcam(a|af|d|io)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -58,7 +58,7 @@ patternProperties:
+ 
+   "^ldo-vtcxo[12]$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -71,7 +71,7 @@ patternProperties:
+ 
+   "^ldo-vgp[1234]$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6332-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6332-regulator.yaml
+index 3218f43e6957..2eb512c29a0d 100644
+--- a/Documentation/devicetree/bindings/regulator/mediatek,mt6332-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6332-regulator.yaml
+@@ -18,7 +18,7 @@ description: |
+ patternProperties:
+   "^buck-v(dram|dvfs2|pa|rf18a|rf18b|sbst)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -28,7 +28,7 @@ patternProperties:
+ 
+   "^ldo-v(bif28|dig18|sram|usb33)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+diff --git a/Documentation/devicetree/bindings/regulator/mps,mp5416.yaml b/Documentation/devicetree/bindings/regulator/mps,mp5416.yaml
+index 7023c597c3ed..2e720d152890 100644
+--- a/Documentation/devicetree/bindings/regulator/mps,mp5416.yaml
++++ b/Documentation/devicetree/bindings/regulator/mps,mp5416.yaml
+@@ -28,11 +28,11 @@ properties:
+ 
+     patternProperties:
+       "^buck[1-4]$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         type: object
+ 
+       "^ldo[1-4]$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         type: object
+ 
+     additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/regulator/mps,mp886x.yaml b/Documentation/devicetree/bindings/regulator/mps,mp886x.yaml
+index 9245b7199439..374a4f6b1e23 100644
+--- a/Documentation/devicetree/bindings/regulator/mps,mp886x.yaml
++++ b/Documentation/devicetree/bindings/regulator/mps,mp886x.yaml
+@@ -28,7 +28,7 @@ properties:
+   mps,fb-voltage-divider:
+     description: An array of two integers containing the resistor
+       values R1 and R2 of the feedback voltage divider in kilo ohms.
+-    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
+     maxItems: 2
+ 
+   mps,switch-frequency-hz:
+diff --git a/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml b/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml
+index c2e8c54e5311..f3fcfc8be72f 100644
+--- a/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml
++++ b/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml
+@@ -29,7 +29,7 @@ properties:
+ 
+     properties:
+       mps,switch-freq:
+-        $ref: "/schemas/types.yaml#/definitions/uint8"
++        $ref: /schemas/types.yaml#/definitions/uint8
+         enum: [0, 1, 2, 3]
+         default: 2
+         description: |
+@@ -51,14 +51,14 @@ properties:
+ 
+         properties:
+           mps,buck-softstart:
+-            $ref: "/schemas/types.yaml#/definitions/uint8"
++            $ref: /schemas/types.yaml#/definitions/uint8
+             enum: [0, 1, 2, 3]
+             description: |
+               defines the soft start time of this buck, must be one of the following
+               corresponding values 150us, 300us, 610us, 920us
+ 
+           mps,buck-phase-delay:
+-            $ref: "/schemas/types.yaml#/definitions/uint8"
++            $ref: /schemas/types.yaml#/definitions/uint8
+             enum: [0, 1, 2, 3]
+             description: |
+               defines the phase delay of this buck, must be one of the following
+diff --git a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
+index 364b58730be2..6317daf76d1f 100644
+--- a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
+@@ -28,7 +28,7 @@ properties:
+     patternProperties:
+       "^vbuck[1-4]$":
+         type: object
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         unevaluatedProperties: false
+ 
+         properties:
+diff --git a/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+index 8cc413eb482d..d6b3b5a5c0b3 100644
+--- a/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+@@ -17,7 +17,7 @@ description: |
+ patternProperties:
+   "^buck_v(s1|gpu11|modem|pu|core|s2|pa|proc2|proc1|core_sshub)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -27,7 +27,7 @@ patternProperties:
+ 
+   "^ldo_v(ibr|rf12|usb|camio|efuse|xo22)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -37,7 +37,7 @@ patternProperties:
+ 
+   "^ldo_v(rfck|emc|a12|a09|ufs|bbck)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -47,7 +47,7 @@ patternProperties:
+ 
+   "^ldo_vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -57,7 +57,7 @@ patternProperties:
+ 
+   "^ldo_vsram_(proc2|others|md|proc1|others_sshub)$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -67,7 +67,7 @@ patternProperties:
+ 
+   "^ldo_v(fe|bif|io)28$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -77,7 +77,7 @@ patternProperties:
+ 
+   "^ldo_v(aud|io|aux|rf|m)18$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+@@ -87,7 +87,7 @@ patternProperties:
+ 
+   "^ldo_vsim[12]$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       regulator-name:
+diff --git a/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml
+index 8a0931dc2f30..9c879bc3c360 100644
+--- a/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml
+@@ -26,11 +26,11 @@ properties:
+ 
+ patternProperties:
+   "^buck[12]$":
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     unevaluatedProperties: false
+ 
+   "^ldo[123567]$":
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     unevaluatedProperties: false
  
  required:
-   - nvidia,ac97-controller
-diff --git a/Documentation/devicetree/bindings/sound/qcom,q6asm-dais.yaml b/Documentation/devicetree/bindings/sound/qcom,q6asm-dais.yaml
-index 0110b38f6de9..ce811942a9f1 100644
---- a/Documentation/devicetree/bindings/sound/qcom,q6asm-dais.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,q6asm-dais.yaml
-@@ -56,7 +56,7 @@ patternProperties:
-           Compress offload dai.
+diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+index 6b53dc87694e..3d469b8e9774 100644
+--- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+@@ -57,7 +57,7 @@ properties:
  
+         properties:
+           nxp,dvs-run-voltage:
+-            $ref: "/schemas/types.yaml#/definitions/uint32"
++            $ref: /schemas/types.yaml#/definitions/uint32
+             minimum: 600000
+             maximum: 2187500
+             description:
+@@ -65,7 +65,7 @@ properties:
+               dvs(dynamic voltage scaling) property.
+ 
+           nxp,dvs-standby-voltage:
+-            $ref: "/schemas/types.yaml#/definitions/uint32"
++            $ref: /schemas/types.yaml#/definitions/uint32
+             minimum: 600000
+             maximum: 2187500
+             description:
+diff --git a/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
+index aabf50f5b39e..8c0f37d8d082 100644
+--- a/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
+@@ -59,7 +59,7 @@ properties:
+               should be "buck1", ..., "buck7"
+ 
+           nxp,ilim-ma:
+-            $ref: "/schemas/types.yaml#/definitions/uint32"
++            $ref: /schemas/types.yaml#/definitions/uint32
+             minimum: 2100
+             maximum: 4500
+             deprecated: true
+@@ -75,7 +75,7 @@ properties:
+               4500
+ 
+           nxp,phase-shift:
+-            $ref: "/schemas/types.yaml#/definitions/uint32"
++            $ref: /schemas/types.yaml#/definitions/uint32
+             default: 0
+             enum: [ 0, 45, 90, 135, 180, 225, 270, 315 ]
+             description:
+diff --git a/Documentation/devicetree/bindings/regulator/pfuze100.yaml b/Documentation/devicetree/bindings/regulator/pfuze100.yaml
+index a26bbd68b729..67a30b23b92c 100644
+--- a/Documentation/devicetree/bindings/regulator/pfuze100.yaml
++++ b/Documentation/devicetree/bindings/regulator/pfuze100.yaml
+@@ -63,19 +63,19 @@ properties:
+ 
+     patternProperties:
+       "^sw([1-4]|[1-4][a-c]|[1-4][a-c][a-c])$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         type: object
+ 
+       "^vgen[1-6]$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         type: object
+ 
+       "^vldo[1-4]$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         type: object
+ 
+       "^(vsnvs|vref|vrefddr|swbst|coin|v33|vccsd)$":
+-        $ref: "regulator.yaml#"
++        $ref: regulator.yaml#
+         type: object
+ 
+     additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+index 297a75069f60..a765837dc069 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+@@ -105,18 +105,18 @@ properties:
+ 
+   bob:
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     description: BOB regulator node.
      dependencies:
--      is-compress-dai: ["direction"]
-+      is-compress-dai: [ direction ]
+-      regulator-allow-set-load: ["regulator-allowed-modes"]
++      regulator-allow-set-load: [ regulator-allowed-modes ]
  
-     required:
-       - reg
-diff --git a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-index 12ccf29338d9..5cfe71994bf7 100644
---- a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-+++ b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-@@ -155,7 +155,7 @@ properties:
-           dmas:
-             maxItems: 1
-           dma-names:
--            const: "tx"
-+            const: tx
-         required:
-           - dmas
-           - dma-names
-diff --git a/Documentation/devicetree/bindings/sound/sgtl5000.yaml b/Documentation/devicetree/bindings/sound/sgtl5000.yaml
-index 02059d66b084..1353c051488f 100644
---- a/Documentation/devicetree/bindings/sound/sgtl5000.yaml
-+++ b/Documentation/devicetree/bindings/sound/sgtl5000.yaml
-@@ -50,7 +50,7 @@ properties:
-     description: The bias voltage to be used in mVolts. The voltage can take
-       values from 1.25V to 3V by 250mV steps. If this node is not mentioned
-       or the value is unknown, then the value is set to 1.25V.
+ patternProperties:
+   "^(smps|ldo|lvs|bob)[0-9]+$":
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     description: smps/ldo regulator nodes(s).
+     dependencies:
+-      regulator-allow-set-load: ["regulator-allowed-modes"]
++      regulator-allow-set-load: [ regulator-allowed-modes ]
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/regulator/raspberrypi,7inch-touchscreen-panel-regulator.yaml b/Documentation/devicetree/bindings/regulator/raspberrypi,7inch-touchscreen-panel-regulator.yaml
+index 0ae25d119b6f..41678400e63f 100644
+--- a/Documentation/devicetree/bindings/regulator/raspberrypi,7inch-touchscreen-panel-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/raspberrypi,7inch-touchscreen-panel-regulator.yaml
+@@ -15,7 +15,7 @@ description: |
+   and control the backlight.
+ 
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/regulator.yaml b/Documentation/devicetree/bindings/regulator/regulator.yaml
+index 53b81d8a2d41..e158c2d3d3f9 100644
+--- a/Documentation/devicetree/bindings/regulator/regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/regulator.yaml
+@@ -13,7 +13,7 @@ maintainers:
+ properties:
+   regulator-name:
+     description: A string used as a descriptive name for regulator outputs
+-    $ref: "/schemas/types.yaml#/definitions/string"
++    $ref: /schemas/types.yaml#/definitions/string
+ 
+   regulator-min-microvolt:
+     description: smallest voltage consumers may set
+@@ -23,7 +23,7 @@ properties:
+ 
+   regulator-microvolt-offset:
+     description: Offset applied to voltages to compensate for voltage drops
 -    $ref: "/schemas/types.yaml#/definitions/uint32"
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [ 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000 ]
  
-   lrclk-strength:
-@@ -63,7 +63,7 @@ properties:
-         1 =		1.66 mA		2.87 mA		4.02  mA
-         2 =		3.33 mA		5.74 mA		8.03  mA
-         3 =		4.99 mA		8.61 mA		12.05 mA
+   regulator-min-microamp:
+     description: smallest current consumers may set
+@@ -59,7 +59,7 @@ properties:
+     description: ramp delay for regulator(in uV/us) For hardware which supports
+       disabling ramp rate, it should be explicitly initialised to zero (regulator-ramp-delay
+       = <0>) for disabling ramp delay.
 -    $ref: "/schemas/types.yaml#/definitions/uint32"
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [ 0, 1, 2, 3 ]
  
-   sclk-strength:
-@@ -76,7 +76,7 @@ properties:
-         1 =		1.66 mA		2.87 mA		4.02  mA
-         2 =		3.33 mA		5.74 mA		8.03  mA
-         3 =		4.99 mA		8.61 mA		12.05 mA
+   regulator-enable-ramp-delay:
+     description: The time taken, in microseconds, for the supply rail to
+@@ -68,7 +68,7 @@ properties:
+       required due to the combination of internal ramping of the regulator
+       itself, and board design issues such as trace capacitance and load
+       on the supply.
 -    $ref: "/schemas/types.yaml#/definitions/uint32"
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [ 0, 1, 2, 3 ]
  
-   port:
-diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
-index 806e2fff165f..b05e05c81cc4 100644
---- a/Documentation/devicetree/bindings/sound/simple-card.yaml
-+++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
-@@ -78,7 +78,7 @@ definitions:
-     $ref: /schemas/types.yaml#/definitions/uint32
+   regulator-settling-time-us:
+     description: Settling time, in microseconds, for voltage change if regulator
+@@ -95,7 +95,7 @@ properties:
+     description: initial operating mode. The set of possible operating modes
+       depends on the capabilities of every hardware so each device binding
+       documentation explains which values the regulator supports.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
  
-   prefix:
--    description: "device name prefix"
-+    description: device name prefix
-     $ref: /schemas/types.yaml#/definitions/string
+   regulator-allowed-modes:
+     description: list of operating modes that software is allowed to configure
+@@ -103,12 +103,12 @@ properties:
+       The set of possible operating modes depends on the capabilities of
+       every hardware so each device binding document explains which values
+       the regulator supports.
+-    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
  
-   label:
-diff --git a/Documentation/devicetree/bindings/sound/socionext,uniphier-aio.yaml b/Documentation/devicetree/bindings/sound/socionext,uniphier-aio.yaml
-index 9cf0efaed88e..8600520d7c47 100644
---- a/Documentation/devicetree/bindings/sound/socionext,uniphier-aio.yaml
-+++ b/Documentation/devicetree/bindings/sound/socionext,uniphier-aio.yaml
+   regulator-system-load:
+     description: Load in uA present on regulator that is not captured by
+       any consumer request.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   regulator-pull-down:
+     description: Enable pull down resistor when the regulator is disabled.
+@@ -206,14 +206,14 @@ properties:
+       0: Disable active discharge.
+       1: Enable active discharge.
+       Absence of this property will leave configuration to default.
+-    $ref: "/schemas/types.yaml#/definitions/uint32"
++    $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [0, 1]
+ 
+   regulator-coupled-with:
+     description: Regulators with which the regulator is coupled. The linkage
+       is 2-way - all coupled regulators should be linked with each other.
+       A regulator should not be coupled with its supplier.
+-    $ref: "/schemas/types.yaml#/definitions/phandle-array"
++    $ref: /schemas/types.yaml#/definitions/phandle-array
+     items:
+       maxItems: 1
+ 
+@@ -221,7 +221,7 @@ properties:
+     description: Array of maximum spread between voltages of coupled regulators
+       in microvolts, each value in the array relates to the corresponding
+       couple specified by the regulator-coupled-with property.
+-    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
+ 
+   regulator-max-step-microvolt:
+     description: Maximum difference between current and target voltages
+@@ -269,7 +269,7 @@ patternProperties:
+           of possible operating modes depends on the capabilities of every
+           hardware so the valid modes are documented on each regulator device
+           tree binding document.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+ 
+     additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt6245-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt6245-regulator.yaml
+index e983d0e70c9b..b73762e151bb 100644
+--- a/Documentation/devicetree/bindings/regulator/richtek,rt6245-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/richtek,rt6245-regulator.yaml
+@@ -32,7 +32,7 @@ properties:
+     maxItems: 1
+ 
+   richtek,oc-level-select:
+-    $ref: "/schemas/types.yaml#/definitions/uint8"
++    $ref: /schemas/types.yaml#/definitions/uint8
+     enum: [0, 1, 2, 3]
+     description: |
+       Over current level selection. Each respective value means the current
+@@ -40,7 +40,7 @@ properties:
+       in chip default.
+ 
+   richtek,ot-level-select:
+-    $ref: "/schemas/types.yaml#/definitions/uint8"
++    $ref: /schemas/types.yaml#/definitions/uint8
+     enum: [0, 1, 2]
+     description: |
+       Over temperature level selection. Each respective value means the degree
+@@ -48,7 +48,7 @@ properties:
+       default.
+ 
+   richtek,pgdly-time-select:
+-    $ref: "/schemas/types.yaml#/definitions/uint8"
++    $ref: /schemas/types.yaml#/definitions/uint8
+     enum: [0, 1, 2, 3]
+     description: |
+       Power good signal delay time selection. Each respective value means the
+@@ -57,7 +57,7 @@ properties:
+ 
+ 
+   richtek,switch-freq-select:
+-    $ref: "/schemas/types.yaml#/definitions/uint8"
++    $ref: /schemas/types.yaml#/definitions/uint8
+     enum: [0, 1, 2]
+     description: |
+       Buck switch frequency selection. Each respective value means 400KHz,
+diff --git a/Documentation/devicetree/bindings/regulator/richtek,rtmv20-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rtmv20-regulator.yaml
+index a8ccb5cb8d77..446ec5127d1f 100644
+--- a/Documentation/devicetree/bindings/regulator/richtek,rtmv20-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/richtek,rtmv20-regulator.yaml
+@@ -120,7 +120,7 @@ properties:
+   lsw:
+     description: load switch current regulator description.
+     type: object
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+index 027fab3dc181..cc4ceb32e9d6 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+@@ -56,7 +56,7 @@ patternProperties:
+           PMIC "RUN" state voltage in uV when PMIC HW states are used. See
+           comments below for bucks/LDOs which support this. 0 means
+           regulator should be disabled at RUN state.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+@@ -67,7 +67,7 @@ patternProperties:
+           keeps regulator enabled. BD71815 does not change voltage level
+           when PMIC transitions to SNVS.SNVS voltage depends on the previous
+           state (from which the PMIC transitioned to SNVS).
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+@@ -76,7 +76,7 @@ patternProperties:
+           PMIC "SUSPEND" state voltage in uV when PMIC HW states are used. See
+           comments below for bucks/LDOs which support this. 0 means
+           regulator should be disabled at SUSPEND state.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+@@ -85,7 +85,7 @@ patternProperties:
+           PMIC "LPSR" state voltage in uV when PMIC HW states are used. See
+           comments below for bucks/LDOs which support this. 0 means
+           regulator should be disabled at LPSR state.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
+index bbf38d5cd06d..d898800d6bca 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
+@@ -52,7 +52,7 @@ patternProperties:
+         description:
+           PMIC default "RUN" state voltage in uV. See below table for
+           bucks which support this. 0 means disabled.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+@@ -60,7 +60,7 @@ patternProperties:
+         description:
+           PMIC default "IDLE" state voltage in uV. See below table for
+           bucks which support this. 0 means disabled.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+@@ -68,7 +68,7 @@ patternProperties:
+         description:
+           PMIC default "SUSPEND" state voltage in uV. See below table for
+           bucks which support this. 0 means disabled.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+@@ -76,7 +76,7 @@ patternProperties:
+         description:
+           PMIC default "LPSR" state voltage in uV. See below table for
+           bucks which support this. 0 means disabled.
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 3300000
+ 
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.yaml
+index abf1fbdf3850..29b350a4f88a 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.yaml
+@@ -55,7 +55,7 @@ patternProperties:
+           should be "buck1", ..., "buck8"
+ 
+       rohm,dvs-run-voltage:
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1300000
+         description:
+@@ -63,7 +63,7 @@ patternProperties:
+           bucks which support this. 0 means disabled.
+ 
+       rohm,dvs-idle-voltage:
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1300000
+         description:
+@@ -71,7 +71,7 @@ patternProperties:
+           bucks which support this. 0 means disabled.
+ 
+       rohm,dvs-suspend-voltage:
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1300000
+         description:
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.yaml
+index 34ce781954b6..7ba4ccf723d8 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.yaml
+@@ -54,7 +54,7 @@ patternProperties:
+           should be "buck1", ..., "buck6"
+ 
+       rohm,dvs-run-voltage:
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1300000
+         description:
+@@ -62,7 +62,7 @@ patternProperties:
+           bucks which support this. 0 means disabled.
+ 
+       rohm,dvs-idle-voltage:
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1300000
+         description:
+@@ -70,7 +70,7 @@ patternProperties:
+           bucks which support this. 0 means disabled.
+ 
+       rohm,dvs-suspend-voltage:
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1300000
+         description:
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml
+index 89b8592db81d..f573128da06f 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml
+@@ -25,7 +25,7 @@ patternProperties:
+     type: object
+     description:
+       Properties for single regulator.
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+     properties:
+       rohm,ocw-fet-ron-micro-ohms:
+diff --git a/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml b/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml
+index a6949a581cd1..ddaa112252e5 100644
+--- a/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml
 @@ -42,7 +42,7 @@ properties:
-       Specifies a phandle to soc-glue, which is used for changing mode of S/PDIF
-       signal pin to output from Hi-Z. This property is optional if you use I2S
-       signal pins only.
+   reset-names: true
+ 
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+   - if:
+       properties:
+         compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml
+index c82f6f885d97..c863100f6e7d 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml
+@@ -14,7 +14,7 @@ description: |
+   to supply ADC analog input switches.
+ 
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+ 
+ properties:
+   compatible:
+@@ -23,7 +23,7 @@ properties:
+       - st,stm32mp1-booster
+ 
+   st,syscfg:
 -    $ref: "/schemas/types.yaml#/definitions/phandle"
 +    $ref: /schemas/types.yaml#/definitions/phandle
+     description: phandle to system configuration controller.
  
-   "#sound-dai-cells":
-     const: 1
+   vdda-supply:
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
+index c1bf1f90490a..05f4ad2c7d3a 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
+@@ -15,7 +15,7 @@ maintainers:
+   - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
+index bd07b9c81570..7d53cfa2c288 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
+@@ -26,7 +26,7 @@ patternProperties:
+   "^(reg11|reg18|usb33)$":
+     type: object
+ 
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/regulator/ti,tps62360.yaml b/Documentation/devicetree/bindings/regulator/ti,tps62360.yaml
+index 12aeddedde05..90c39275c150 100644
+--- a/Documentation/devicetree/bindings/regulator/ti,tps62360.yaml
++++ b/Documentation/devicetree/bindings/regulator/ti,tps62360.yaml
+@@ -19,7 +19,7 @@ description: |
+   https://www.ti.com/lit/gpn/tps62360
+ 
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/vqmmc-ipq4019-regulator.yaml b/Documentation/devicetree/bindings/regulator/vqmmc-ipq4019-regulator.yaml
+index dd7a2f92634c..3b16a25ba3b8 100644
+--- a/Documentation/devicetree/bindings/regulator/vqmmc-ipq4019-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/vqmmc-ipq4019-regulator.yaml
+@@ -15,7 +15,7 @@ description: |
+   controller is also embedded.
+ 
+ allOf:
+-  - $ref: "regulator.yaml#"
++  - $ref: regulator.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml b/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml
+index 7b4ae5d23351..011819c10988 100644
+--- a/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml
++++ b/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml
+@@ -21,19 +21,19 @@ properties:
+   wlf,ldoena:
+     description:
+       GPIO specifier for the GPIO controlling LDOENA.
+-    $ref: "/schemas/types.yaml#/definitions/phandle-array"
++    $ref: /schemas/types.yaml#/definitions/phandle-array
+     maxItems: 1
+ 
+   ldo1:
+     description:
+       Initial data for the LDO1 regulator.
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     type: object
+ 
+   micvdd:
+     description:
+       Initial data for the MICVDD regulator.
+-    $ref: "regulator.yaml#"
++    $ref: regulator.yaml#
+     type: object
+ 
+ additionalProperties: true
 -- 
 2.39.2
 
