@@ -2,65 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6070E6BE5E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D5D6BE5EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjCQJvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S229693AbjCQJwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjCQJvB (ORCPT
+        with ESMTP id S229604AbjCQJwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:51:01 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627BC1CAC9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:50:59 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id ay18so2754930pfb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:50:59 -0700 (PDT)
+        Fri, 17 Mar 2023 05:52:36 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6391F485;
+        Fri, 17 Mar 2023 02:52:33 -0700 (PDT)
+X-UUID: 6c4bdb50c4a911edbd2e61cc88cc8f98-20230317
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=cRnjvJM/d5t+hNkhEbUK0wMlxFnr0KXf49brPrYZiFE=;
+        b=twUynwj62vxBjSgDG/kI8jcXePfsJFWovL+KxJj048JMs3MgR1gyc/XMPGTEkVeGsNFJf0BADI3zgpEutKSwkUkfkOM3vsbZ/X5RatTzNd6aV9d+rSdwDc+1EFTL2rAC5JcQGm10IIuk/yBMOj5SJUoyRsZEc58LRYw0ilPQSSs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.21,REQID:864c1f8c-b696-4ef6-8503-5a11743c51bf,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:83295aa,CLOUDID:a982af28-564d-42d9-9875-7c868ee415ec,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 6c4bdb50c4a911edbd2e61cc88cc8f98-20230317
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <nancy.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1538863733; Fri, 17 Mar 2023 17:52:26 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 17 Mar 2023 17:52:25 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 17 Mar 2023 17:52:25 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mkuaTuuZukmSBGbRTkdkI21RiM1qBEdVCj8DLzrSprlDSmrBY3abaEmvtSYCdfvomJOUbXc5uQeDr5u8BBHG6kEl5WIADMvba0dogs0m5xG6G6a1SKWmOwBmhrOT4zGp2+MVIf+09XRBvXNnIIYBr/S9gYPMbJ5YYr/jZhB9SU13e1FNy5knl1I9U6a+H/7DDGGBh2J62NU4+COh2XVBJ8ivnCbPlFpBP7Vdir4ZnIIf1n9ll2KJRPQYVGQzT62IO3XpV6HG3HNijAbp8/w8o1lhOBTDmG3SyG6OM3KPv4GDM8vt4CNPuD2kP7LZBlsB6ZwfThBpbW0GMUw+XjhXZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cRnjvJM/d5t+hNkhEbUK0wMlxFnr0KXf49brPrYZiFE=;
+ b=SpMzdmJc3A+5m3VRBbKqcofcTvx/+z7SNr+YbHEo8qQlpFd6PJQGPGgus6N2z1oAd2/eZhdPcLc34kC2vS+GjZ+kIGMhO37P1SSjcG3maxI7ycPA+z5F8fo6lrFhFFC+P1UYaWrwr6D2LdAvZ3amfmlsAq2ZyFCNxK8C2TwCcbpOkp4wUXF6I1QPHlAP5YLdSotXayQ2Z117KJNgGV+xQLc4O/1VEOabKaw8RWfob+GGsSthrvN9ja8F68KsjFFvZEPTS3F7bUVRCtR3XZBeNU1WxV64fITMT3znBpu5ZrA1MJfElQsnLSrQN/WkQNhgtdCmZZDqy5E1vFWoRjrf4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1679046658;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IQouKbztgEXI/GX4OnWRW1CoUxg0mNouSqPmkVWb82s=;
-        b=BiDksCrWC3vb9Z+LC1lrZby7qZOsXSWbeO7roIL6LTz/P7+b7nazdszxhohZmY02ZJ
-         uQql4T9ellIYNdfiIaQlEW1rI2L+1gDl6+ZNs1k4a5qEbxvYhU1KaLD1Ej4/YADZKgR9
-         rVqt9gFh84hy+TU8+eqd4Zd6Md2sudnsqYku8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679046658;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IQouKbztgEXI/GX4OnWRW1CoUxg0mNouSqPmkVWb82s=;
-        b=77DGZBDCt42oNx9qMrdA+jsTED/TvXMg1iKF51S8vK0bnBpjTqlyPXbRZ4eNwKAO6C
-         pXVDaCda3XpSi0pE4aeeyV1TtBFyVsIjBDB+hd533CpltKFClrwyJ6RBiAmnVO8Ebvmj
-         cSzXFa+fAYLcRm5G8ZkQp4kNOPmSQzkCnnXm+cPoPSqPhDtTovYtXFY1LwFBciYXorSU
-         yfkhQQKR7Pg6u1ITK3NsNcgs3kPirLs9qojg/HeRxAmR1NjD3TN6DUYSPIF4ndmBjs1s
-         jO60X6pxFFrzKcXyLI3vtmxNpDYwkDGDTaVc6qz6bPnT65lo0OhV/6XS6kaN6Pv1RJ8j
-         01Kg==
-X-Gm-Message-State: AO0yUKWdW6TxliQmiNDQqpaA1aFi6votwUhjKnsaqpZsAuE1ONTwab0S
-        cnO0LCWPUrz1ywVew5UZdoBz7A/r6tuVdZE4HIqvnD6ZnVPBrRNhjWMh9+nTV+VegyP2h8sTp0k
-        7cI806Fa6g8kaslJ8YPwVPbhLq2DSOhwipb65xRjtXeQWNcenQT5PYodnIleaJ7pN6J7rsEUblH
-        EUlbN95V6Ex8u9VXX+Z0vaAcI=
-X-Google-Smtp-Source: AK7set960uqewLJLJvH8lUtfrf1KkSDdoBu5Dl61a0DtGH5xk2IlssVQzeaG1g9B8y+AnLbETWNkqg==
-X-Received: by 2002:aa7:9dc1:0:b0:626:72b8:743b with SMTP id g1-20020aa79dc1000000b0062672b8743bmr313167pfq.33.1679046658362;
-        Fri, 17 Mar 2023 02:50:58 -0700 (PDT)
-Received: from ldt-sj3-komrakov.dhcp.broadcom.net ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id u3-20020aa78483000000b00625e6eb438bsm1158912pfn.71.2023.03.17.02.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 02:50:57 -0700 (PDT)
-From:   Alexander Komrakov <alexander.komrakov@broadcom.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     giometti@enneenne.com, gregkh@linuxfoundation.org,
-        Alexander Komrakov <alexander.komrakov@broadcom.com>
-Subject: [PATCH v5] [PATCH v5] pps: Add elapsed realtime timestamping
-Date:   Fri, 17 Mar 2023 02:51:01 -0700
-Message-Id: <20230317095101.249784-1-alexander.komrakov@broadcom.com>
-X-Mailer: git-send-email 2.25.1
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cRnjvJM/d5t+hNkhEbUK0wMlxFnr0KXf49brPrYZiFE=;
+ b=MOS4T9dXsNe6p+fRiTGix6SWA9/uXtt+Kqmyo+87dMQHImm9l6OWQgJorcPRCAbrBizy9LzvncwWED99W82QQmz/a6K0DXf39mwMV0/LOdOol9W8hYuhU+0BZ1fXLMXmL7ZlZaTUA860hcL+tr1h3bvSCk42QRwTQz2wl7lU+Oc=
+Received: from KL1PR03MB5175.apcprd03.prod.outlook.com (2603:1096:820:8::11)
+ by SI2PR03MB5435.apcprd03.prod.outlook.com (2603:1096:4:ef::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Fri, 17 Mar
+ 2023 09:52:23 +0000
+Received: from KL1PR03MB5175.apcprd03.prod.outlook.com
+ ([fe80::dd54:60c1:df32:bc65]) by KL1PR03MB5175.apcprd03.prod.outlook.com
+ ([fe80::dd54:60c1:df32:bc65%4]) with mapi id 15.20.6178.031; Fri, 17 Mar 2023
+ 09:52:22 +0000
+From:   =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>
+To:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        =?utf-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
+ mt8195
+Thread-Topic: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
+ mt8195
+Thread-Index: AQHZGcrXQb/1V2Icz0ST2hH4Pb2de677rZiAgAA66wCAAYJcAIAAA1eAgAA4mYCAABzVgIABVIIAgAATFQCAAAmAAIAABASA
+Date:   Fri, 17 Mar 2023 09:52:22 +0000
+Message-ID: <5695b8e5ab8339764c646ee581529cb6cee04346.camel@mediatek.com>
+References: <20221227081011.6426-1-nancy.lin@mediatek.com>
+         <20221227081011.6426-2-nancy.lin@mediatek.com>
+         <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
+         <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
+         <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
+         <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
+         <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
+         <0ebf187d-972e-4228-d8a0-8c0ce02f642d@linaro.org>
+         <72cf6344a1c5942bff0872d05dce82b787b49b76.camel@mediatek.com>
+         <4027714e-b4e8-953b-68e2-f74f7a7f0e8e@linaro.org>
+         <fdd0a157-eedb-bf21-c632-79b02a4cd6b0@collabora.com>
+In-Reply-To: <fdd0a157-eedb-bf21-c632-79b02a4cd6b0@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: KL1PR03MB5175:EE_|SI2PR03MB5435:EE_
+x-ms-office365-filtering-correlation-id: 78ac7168-1e59-499d-4a5f-08db26cd4e45
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7/0H2MkgJrK1QvAShYMaK6pJzotLLxJo/lfegRA/K5/2qrTbZQNBOgh8qGAfQQ5V74WffmmEj6OX2VuShLKWJbs8/VuePA7nzizEYGepTFXdQH3C4/UglkNpo4O9qnwH6x80WHOJz/RttaLti7+70YaO3gAIwuMuqIqEl38schcceOW6wpXKGCsnkqrM6OrNUKZM3XA3gX76Fy4qL2sEkzPOyW1FOzLJImFsajNFw3Rsv/BjvVPqDd52/J/I87sCr6XQ/fOonE8061o/dyO9CnEHURFc+MQ2KqpEG/6YiXrexcPbAZQPPF+Y4aMHRKSi/OVvWSOWrPN3s2l+sRY7+tZklJK30+wxaH/lnnelv7b/LcLzXi0SOyPnMdK8s0sCj3i/BeSFLC46JOe5cGPNK0YLGqWHfWTRmQeZqJSZ5fjum7mHQlB0Biic9zuce2bsBdM2syg6mxQCkaNnrTmyI/KAazuz8PKe7kkfHRp5MCvIVdsso+Nues6rcN7q3jeudZAMW5jzxlLiWWItzmxS5d+zjGlni7otTtyKWodvIRL57qudfj6Kf4deWM+ZasX+WLVwXhbft9iNpuimvGCwTBHqpCUCgiLEwYNmIuZ79dlweXGxCIf5AqD2/KVbuKOU5XMZjBwkQ3KclJYhJS04LcGokjIOrQCXw0l2MVm/rvMhTLoelNt9ckG9ipro86i4bQRmeOXA6lkoOCY2vwghvA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5175.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199018)(7416002)(5660300002)(110136005)(83380400001)(85182001)(36756003)(186003)(91956017)(66476007)(26005)(6506007)(53546011)(478600001)(6512007)(66556008)(6486002)(2616005)(38070700005)(316002)(4326008)(71200400001)(86362001)(38100700002)(8676002)(41300700001)(66946007)(8936002)(64756008)(66446008)(76116006)(54906003)(2906002)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UzlsWnNCUys1eS9xMWxpdzRGcEdRclozQmc1YjJiUlE0YXJSSjNlSk5naWl4?=
+ =?utf-8?B?RmQ5Y2VnSXZQckwzem9aU09jOXdMWEVQczBFak9lYW12djFXU2FqTkRIWkdW?=
+ =?utf-8?B?YlpTTVRVcHNia0J4NUl2ZEl1WHdBSWM5ZWFhRGpXZlcwYmNFdWwxOUlqYngv?=
+ =?utf-8?B?RzNVV2FsYWU1SzgrK3l1R3Z4WEt6c2ZGamRlL1lMYmU5MitmK0JHaUoxRUVY?=
+ =?utf-8?B?S2pSR1I0Njh6MDFPdjhwRG1DaG82RnozU1pLV2ZrcEdkUjFZc1BmeGYrUS82?=
+ =?utf-8?B?L2NkZzZob2tza0ptUVBPUzhCSk5uNExnMmZ2My9PSDlUL0R6NjRsUDRyeE1D?=
+ =?utf-8?B?UFl6Q1hZdHR4KzZYK1BTR21QT1NORmJDZ2ZORmRYYW10b2hCY1hXTlNmTXdi?=
+ =?utf-8?B?VGZQaDlncjRKdTFPcjhsWnBIeDEwRW9jZG0wanR6S2k0ZzBMNWhyU1F3VDBl?=
+ =?utf-8?B?cWI5UXdSTEIzV1cxQk5rVTdMTjZpaEpOV0MrL1ZjOGNFWFd2UXA1TkVpSkdw?=
+ =?utf-8?B?OGxRb1MwSW5kczRmQ1VqWnp4eno5bG1VVUtWZzZnVFNvY0Zxc1RtSjlvSlN0?=
+ =?utf-8?B?OWlRZXZDQ2xnMklqWUFZVXF6QzhhUytTeEhqVHZDWXNCbDdER0J2WWJvY3Fw?=
+ =?utf-8?B?a3c5NFNZTmVTMGpodGVUbVFRSXYxYVFXejhGQjBLenR5VnlnNW92OEJ3K01q?=
+ =?utf-8?B?MkE0cW14dkY0dGpQRGQzN1ZUM29Oc1Arc3RreDZWWlhnM0ZlQ2FlKzVubGZK?=
+ =?utf-8?B?MjVRaG1KZ2k1anBmZ2hrQUlEaGd2L3A5VlV3aFdKNGhMWTlTSE14TmtYdzNM?=
+ =?utf-8?B?R2JHZWtrUi9tczNXbXZHU3BzcU5kbXlyZUs3NWI5YjdDcW4xMm9razMyTWNG?=
+ =?utf-8?B?RDd6MUo5Vm43cmU1QW9lTlJQTXBsU2lUNEFOanhFK2k5UUYyVFl5TFFVZk1W?=
+ =?utf-8?B?bDdHdEZDTGZ3RTBXV2NBcTVybWQ1OXBpek1LQmdHTXVkTnpKOEd2aWRMMnN6?=
+ =?utf-8?B?MGR6ODBmMmVZZ241Vm5mZXUyOTJnR1BPY0dtak1SSXVlUDlFM1dGYVpOcDZl?=
+ =?utf-8?B?Ulh1djMxVkRtbEVpZy9zVUNmWU9CcldaOW5pR3RJVzA5Vk9iRi8wd2lERlFI?=
+ =?utf-8?B?Y0toVnk2Yk1PZmlmTlpIajd0L0RwaUt1Vm5hdFN2aDErNllqYysya0Vjc3lz?=
+ =?utf-8?B?NkltMnVjQ1VuSDE3UUlYTHdsaXIxV0E4UDNWSjdWTVlkcTZteVlBS1NhRGR1?=
+ =?utf-8?B?d2dGbm9TS3ZSY21lUFNqQkg5Z3ZacTFTeWdCWSsrU3F6bTRwUlJSZU1oZzBW?=
+ =?utf-8?B?VTdoNlBxZURWOXNGMUpJWlIrNUhQK0QyYU5rVk1xbTg0YkNMSGNxYUs2NGlp?=
+ =?utf-8?B?Sk0rY2ZLdmJEZi9yQ05JdDk2YUJkdlBQaUl4cHRRZk9qUGVsMWN5RjNxTTNq?=
+ =?utf-8?B?a0xWaTZDSUtTbmFzdmhacFNvcmdTRXFBd3Bvb1oxUmptUVkvZTdFUE5OSklN?=
+ =?utf-8?B?L3BxM0t5UlZWdnBOT1pDZzNHOGxlbU9zZmFzVkZsaG8wdG9iRm1FcVJVS3BP?=
+ =?utf-8?B?SXNEQTNQYmszd1YyNFEyQVYrS0JrWUNydSt5OVpyUk1ianVrS1daUnVhWVZC?=
+ =?utf-8?B?dWg2Q0dFMHlkZ3h3YnluL2diSFZMNmZsbjVJVnl5cnVFWVFMRnVNVWdiVU4z?=
+ =?utf-8?B?UXBYYTY0eXEyZS9xc2pDdVNlRm4zZEdsUmxlamd0K0xNMFNmYkFDb3RNQWtY?=
+ =?utf-8?B?K1FuZFdVV0FJNWxKaGt1RjF0VkZKeVJvb1haMGZOVTNwNUxDTEpKK2JMSmNQ?=
+ =?utf-8?B?SUhuNEhWbVJzTnNoY1BVVXNYZXZlOGVCQXBkN05QK3lzQlpKUU9halVNYzlq?=
+ =?utf-8?B?ODFjZXlkSE9uTG8ra1pCUEsxRk1zMzV0MVVTMFpWVEdMR0pwTGtRaU5nSS9S?=
+ =?utf-8?B?b09uY0lzZGJpVnhJc08yWjBUNGM2V1ZBOFVkTW1FOVdpR3E3R3FxM285cEtX?=
+ =?utf-8?B?YUw2TGgzekZOaEtnL0JXb1lFQWxVdVF1RmlFRENFTWRoWkJWZm5JREcwdU5y?=
+ =?utf-8?B?eERGU28yaXF0TWNpTnN5ZzVGLyt6eXArcVl3Z2kxKzR6YzZPWndVV2QwZXhP?=
+ =?utf-8?B?NGhMK3JZS0lPdDBOUUtZOEpjZ2hRN2l3cGtmcU1SM243bVkwTUpIbXpGZWdx?=
+ =?utf-8?B?d1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <119F44B48FEF214294A2E36F45B577E4@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a9802b05f71583c0"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5175.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78ac7168-1e59-499d-4a5f-08db26cd4e45
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 09:52:22.5903
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X3iPqHpNBRas7NFea0wq3Yyh9TGBpgOdmcYosnCvPnOGeMJTEvvTRkOCF1zP0sre/X1TUHC1HGp2WmTBXkXi8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5435
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,309 +186,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a9802b05f71583c0
-Content-Transfer-Encoding: 8bit
-
-Some applications like Android needs elapsed realtime timestamping
-to PPS pulse for its clock management. Add sysfs node for this.
-
-Signed-off-by: Alexander Komrakov <alexander.komrakov@broadcom.com>
----
- Documentation/ABI/testing/sysfs-pps | 27 +++++++++++++++++++++++
- Documentation/driver-api/pps.rst    | 19 ++++++++++++++++
- drivers/pps/kapi.c                  | 24 +++++++++++++++++---
- drivers/pps/sysfs.c                 | 34 +++++++++++++++++++++++++++++
- include/linux/pps_kernel.h          |  2 ++
- 5 files changed, 103 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-pps b/Documentation/ABI/testing/sysfs-pps
-index 25028c7bc37d..031ec89e1ed6 100644
---- a/Documentation/ABI/testing/sysfs-pps
-+++ b/Documentation/ABI/testing/sysfs-pps
-@@ -1,3 +1,30 @@
-+What:		/sys/class/pps/pps0/assert_elapsed
-+Date:		October 2021
-+Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
-+Description:
-+		The /sys/class/pps/ppsX/assert_elapsed file reports the
-+		elapsed real-time assert events and the elapsed
-+		real-time assert sequence number of the X-th source
-+		in the form:
-+
-+			<secs>.<nsec>#<sequence>
-+
-+		If the source has no elapsed real-time assert events
-+		the content of this file is empty.
-+
-+What:		/sys/class/pps/ppsX/clear_elapsed
-+Date:		October 2021
-+Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
-+Description:
-+		The /sys/class/pps/ppsX/clear_elapsed file reports the elapsed
-+		real-time clear events and the elapsed real-time clear
-+		sequence number of the X-th source in the form:
-+
-+			<secs>.<nsec>#<sequence>
-+
-+		If the source has no elapsed real-time clear events the
-+		content of this file is empty.
-+
- What:		/sys/class/pps/
- Date:		February 2008
- Contact:	Rodolfo Giometti <giometti@linux.it>
-diff --git a/Documentation/driver-api/pps.rst b/Documentation/driver-api/pps.rst
-index 2d6b99766ee8..bd0e63f15f95 100644
---- a/Documentation/driver-api/pps.rst
-+++ b/Documentation/driver-api/pps.rst
-@@ -167,6 +167,25 @@ sequence number. Other files are:
-  * path: reports the PPS source's device path, that is the device the
-    PPS source is connected to (if it exists).
- 
-+Real-time assert event::
-+
-+   Calculate the monotonic clock from the timespec clock to generate PPS elapsed
-+   real-time event value and store the result into /sys/class/pps/pps0/assert_elapsed.
-+   Because we have requirements to make sure the delta between standard time,
-+   say the GPS Time, and elapsedRealtime < 1 millisecond,
-+   regular linux clock timestamp is not enough for our use case.
-+   The pin PPS will generate elapsedRealtime event at 1 sec boundary
-+   which is an exact value of the monotonic clock from the kernel PPS driver
-+   /sys/class/pps/pps0/assert_elapsed.
-+   Whenever AP receives this pulse, kernel's pps driver timestamp this
-+   elapsedRealtime event and let this time available via sysfs node
-+   /sys/class/pps/pps0/assert_elapsed or the IOCTL call.
-+
-+   The device's Unix epoch time system clock is not monotonic; it can jump forwards
-+   or backwards unpredictably and may be changed at any time by the user,
-+   so this time should not be used to order or compare locations.
-+   Prefer for that purpose, as the elapsed realtime clock is guaranteed to be monotonic.
-+
- 
- Testing the PPS support
- -----------------------
-diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
-index d9d566f70ed1..1f3ddccf9642 100644
---- a/drivers/pps/kapi.c
-+++ b/drivers/pps/kapi.c
-@@ -162,11 +162,21 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	unsigned long flags;
- 	int captured = 0;
- 	struct pps_ktime ts_real = { .sec = 0, .nsec = 0, .flags = 0 };
-+	struct pps_ktime ts_real_elapsed = { .sec = 0, .nsec = 0, .flags = 0 };
-+	struct timespec64 ts64 = { .tv_sec = 0, .tv_nsec = 0 };
- 
- 	/* check event type */
- 	BUG_ON((event & (PPS_CAPTUREASSERT | PPS_CAPTURECLEAR)) == 0);
- 
--	dev_dbg(pps->dev, "PPS event at %lld.%09ld\n",
-+	/* Calculate the monotonic clock from the timespec clock and stores the result in pps_ktime format
-+	   ktime_get_boottime_ts64() : because elapsed realtime includes time spent in sleep */
-+	ktime_get_boottime_ts64(&ts64);
-+	timespec_to_pps_ktime(&ts_real_elapsed,ts64);
-+
-+	dev_dbg(pps->dev, "PPS event (monotonic) at %lld.%09d\n",
-+			(s64)ts_real_elapsed.sec, ts_real_elapsed.nsec);
-+
-+	dev_dbg(pps->dev, "PPS event (timestamp) at %lld.%09ld\n",
- 			(s64)ts->ts_real.tv_sec, ts->ts_real.tv_nsec);
- 
- 	timespec_to_pps_ktime(&ts_real, ts->ts_real);
-@@ -181,11 +191,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	pps->current_mode = pps->params.mode;
- 	if (event & pps->params.mode & PPS_CAPTUREASSERT) {
- 		/* We have to add an offset? */
--		if (pps->params.mode & PPS_OFFSETASSERT)
-+		if (pps->params.mode & PPS_OFFSETASSERT) {
-+			pps_add_offset(&ts_real_elapsed,
-+					&pps->params.assert_off_tu);
- 			pps_add_offset(&ts_real,
- 					&pps->params.assert_off_tu);
-+		}
- 
- 		/* Save the time stamp */
-+		pps->assert_elapsed_tu = ts_real_elapsed;
- 		pps->assert_tu = ts_real;
- 		pps->assert_sequence++;
- 		dev_dbg(pps->dev, "capture assert seq #%u\n",
-@@ -195,11 +209,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	}
- 	if (event & pps->params.mode & PPS_CAPTURECLEAR) {
- 		/* We have to add an offset? */
--		if (pps->params.mode & PPS_OFFSETCLEAR)
-+		if (pps->params.mode & PPS_OFFSETCLEAR)	{
-+			pps_add_offset(&ts_real_elapsed,
-+					&pps->params.clear_off_tu);
- 			pps_add_offset(&ts_real,
- 					&pps->params.clear_off_tu);
-+		}
- 
- 		/* Save the time stamp */
-+		pps->clear_elapsed_tu = ts_real_elapsed;
- 		pps->clear_tu = ts_real;
- 		pps->clear_sequence++;
- 		dev_dbg(pps->dev, "capture clear seq #%u\n",
-diff --git a/drivers/pps/sysfs.c b/drivers/pps/sysfs.c
-index 134bc33f6ad0..983f16b86a62 100644
---- a/drivers/pps/sysfs.c
-+++ b/drivers/pps/sysfs.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/string.h>
- #include <linux/pps_kernel.h>
-+#include <linux/sysfs.h>
- 
- /*
-  * Attribute functions
-@@ -29,6 +30,21 @@ static ssize_t assert_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(assert);
- 
-+static ssize_t assert_elapsed_show(struct device *dev,
-+			   struct device_attribute *attr, char *buf)
-+{
-+	struct pps_device *pps = dev_get_drvdata(dev);
-+
-+	if (!(pps->info.mode & PPS_CAPTUREASSERT))
-+		return 0;
-+
-+	return sysfs_emit(buf, "%lld.%09d#%d\n",
-+			   (long long) pps->assert_elapsed_tu.sec,
-+			   pps->assert_elapsed_tu.nsec,
-+			   pps->assert_sequence);
-+}
-+static DEVICE_ATTR_RO(assert_elapsed);
-+
- static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-@@ -43,6 +59,22 @@ static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(clear);
- 
-+static ssize_t clear_elapsed_show(struct device *dev,
-+			  struct device_attribute *attr,
-+			  char *buf)
-+{
-+	struct pps_device *pps = dev_get_drvdata(dev);
-+
-+	if (!(pps->info.mode & PPS_CAPTURECLEAR))
-+		return 0;
-+
-+	return sysfs_emit(buf, "%lld.%09d#%d\n",
-+			(long long) pps->clear_elapsed_tu.sec,
-+			pps->clear_elapsed_tu.nsec,
-+			pps->clear_sequence);
-+}
-+static DEVICE_ATTR_RO(clear_elapsed);
-+
- static ssize_t mode_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
-@@ -82,6 +114,8 @@ static DEVICE_ATTR_RO(path);
- static struct attribute *pps_attrs[] = {
- 	&dev_attr_assert.attr,
- 	&dev_attr_clear.attr,
-+	&dev_attr_assert_elapsed.attr,
-+	&dev_attr_clear_elapsed.attr,
- 	&dev_attr_mode.attr,
- 	&dev_attr_echo.attr,
- 	&dev_attr_name.attr,
-diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
-index 78c8ac4951b5..807642da12f7 100644
---- a/include/linux/pps_kernel.h
-+++ b/include/linux/pps_kernel.h
-@@ -47,6 +47,8 @@ struct pps_device {
- 
- 	__u32 assert_sequence;			/* PPS assert event seq # */
- 	__u32 clear_sequence;			/* PPS clear event seq # */
-+	struct pps_ktime assert_elapsed_tu;	/* PPS elapsed rt assert seq # */
-+	struct pps_ktime clear_elapsed_tu;	/* PPS elapsed rt clear event seq */
- 	struct pps_ktime assert_tu;
- 	struct pps_ktime clear_tu;
- 	int current_mode;			/* PPS mode at event time */
--- 
-2.25.1
-
-
---000000000000a9802b05f71583c0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-dlCTVYtojuUaRbmzA19y0yWkhdD+tvBz6ZhiadUNgctJrRB/eM/Haly51x78TAN/7VMnEWcMJOAI
-VqjxmYlUuUSDPxgXnmYPrOW6BoN2Gdu8XPtl7PMaDi5hpmKwmXBjAgMBAAGjggHgMIIB3DAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCoGA1UdEQQjMCGBH2FsZXhhbmRlci5rb21yYWtvdkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
-KwYBBQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFPkwjpj+
-FmVF/4S+Xdk0AEyqpwxWMA0GCSqGSIb3DQEBCwUAA4IBAQCb5JMXul2vbdO/cV9H0z8JwNx+fZND
-3wpL+BeVFFv2+CqHQUsGXEE2RfswQsmqO2oiD5oDDaxmQf7L4Oriw+KftdjmrJdJNCcMaJmhLNVw
-YQeqEpOVnI5QlzKjUEwRqBpmbP01qvCoywUk+rP3NyesFiVLnFUTeclNnsdbwsbq7E9sAaDOmqaB
-RHynszy96G2ivLxlhO8mmtesGggPPO1ZtDNoRtqLhCQ3w3dJwV11auZCqJEoMHzGxc7ZWKveQZnW
-VfoQxBddLcnLJHjOvhYNiZrbpyPq0sCDoJpOlFH1MaXTVRYhUOIZ/brFvlUB3I/AC9nxzt6W37L1
-7ma2ySaiMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
-di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
-BJ2duBPw/VvvslqDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBOgdsAJOd+oyVU
-MZLRWpsSP3/L3MwBO1LZDTEoP3aEmDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
-DQEJBTEPFw0yMzAzMTcwOTUwNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
-SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
-BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEA1I1z9/KYvbS/yxneg43UBjcTclK8RCug
-c8ZXxbw5jvAEKlbZAi702gIFi3c/fbeVTEarML5dZGD7/axf81cPVqbnLUhlDRvvdGlnCzhBD78d
-/n6EN97z07WLEJZcCa2Jz5ZSTNlafGb9TUMeM9AR8bgdUoSg2Ofs9fMq5nqBXPm20H22PpteVT9M
-dcW6lvzD4A3x/9vtQRCQzwgi110hzC3zWHY8Ue5RBExrlqWMgQ2MZkGJNep4sOibm/W/Wu1YpykE
-46MTgjWpnTNM8bMQPmMEYHAnSDsAQO7YtagKIoVZEug3grtFlueMVHJ+6X9E0w+paiBhZvwe5vTR
-Lb+GHQ==
---000000000000a9802b05f71583c0--
+T24gRnJpLCAyMDIzLTAzLTE3IGF0IDEwOjM3ICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
+ZWdubyB3cm90ZToNCj4gSWwgMTcvMDMvMjMgMTA6MDMsIEtyenlzenRvZiBLb3psb3dza2kgaGEg
+c2NyaXR0bzoNCj4gPiBPbiAxNy8wMy8yMDIzIDA4OjU1LCBOYW5jeSBMaW4gKOael+aso+ieoikg
+d3JvdGU6DQo+ID4gPiBPbiBUaHUsIDIwMjMtMDMtMTYgYXQgMTI6MzYgKzAxMDAsIEtyenlzenRv
+ZiBLb3psb3dza2kgd3JvdGU6DQo+ID4gPiA+IE9uIDE2LzAzLzIwMjMgMTA6NTMsIEFuZ2Vsb0dp
+b2FjY2hpbm8gRGVsIFJlZ25vIHdyb3RlOg0KPiA+ID4gPiANCj4gPiA+ID4gPiBIZWxsbyBLcnp5
+c3p0b2YsIE5hbmN5LA0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IFNpbmNlIHRoaXMgc2VyaWVzIGhh
+cyByZWFjaGVkIHYyOSwgY2FuIHdlIHBsZWFzZSByZWFjaCBhbg0KPiA+ID4gPiA+IGFncmVlbWVu
+dA0KPiA+ID4gPiA+IG9uIHRoZSBiaW5kaW5ncw0KPiA+ID4gPiA+IHRvIHVzZSBoZXJlLCBzbyB0
+aGF0IHdlIGNhbiBnZXQgdGhpcyBmaW5hbGx5IHVwc3RyZWFtZWQ/DQo+ID4gPiA+ID4gDQo+ID4g
+PiA+ID4gSSB3aWxsIHB1dCBzb21lIGV4YW1wbGVzIHRvIHRyeSB0byBnZXQgdGhpcyBpc3N1ZSBy
+ZXNvbHZlZC4NCj4gPiA+ID4gPiANCj4gPiA+ID4gPiAjIyMgRXhhbXBsZSAxOiBDb25zdHJhaW4g
+dGhlIG51bWJlciBvZiBHQ0UgZW50cmllcyB0byAqc2V2ZW4qDQo+ID4gPiA+ID4gYXJyYXkNCj4g
+PiA+ID4gPiBlbGVtZW50cyAoN3g0ISkNCj4gPiA+ID4gPiANCj4gPiA+ID4gPiAgICAgbWVkaWF0
+ZWssZ2NlLWNsaWVudC1yZWc6DQo+ID4gPiA+ID4gICAgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMu
+eWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZS1hcnJheQ0KPiA+ID4gPiA+ICAgICAgIG1heEl0ZW1z
+OiAxDQo+ID4gPiA+ID4gICAgICAgZGVzY3JpcHRpb246IFRoZSByZWdpc3RlciBvZiBkaXNwbGF5
+IGZ1bmN0aW9uIGJsb2NrIHRvDQo+ID4gPiA+ID4gYmUgc2V0DQo+ID4gPiA+ID4gYnkgZ2NlLg0K
+PiA+ID4gPiA+ICAgICAgICAgVGhlcmUgYXJlIDQgYXJndW1lbnRzIGluIHRoaXMgcHJvcGVydHks
+IGdjZSBub2RlLA0KPiA+ID4gPiA+IHN1YnN5cyBpZCwNCj4gPiA+ID4gPiBvZmZzZXQgYW5kDQo+
+ID4gPiA+ID4gICAgICAgICByZWdpc3RlciBzaXplLiBUaGUgc3Vic3lzIGlkIGlzIGRlZmluZWQg
+aW4gdGhlIGdjZQ0KPiA+ID4gPiA+IGhlYWRlciBvZg0KPiA+ID4gPiA+IGVhY2ggY2hpcHMNCj4g
+PiA+ID4gPiAgICAgICAgIGluY2x1ZGUvZHQtYmluZGluZ3MvZ2NlLzxjaGlwPi1nY2UuaCwgbWFw
+cGluZyB0byB0aGUNCj4gPiA+ID4gPiByZWdpc3RlciBvZiBkaXNwbGF5DQo+ID4gPiA+ID4gICAg
+ICAgICBmdW5jdGlvbiBibG9jay4NCj4gPiA+ID4gPiAgICAgICBpdGVtczoNCj4gPiA+ID4gPiAg
+ICAgICAgIG1pbkl0ZW1zOiAyOA0KPiA+ID4gPiA+ICAgICAgICAgbWF4SXRlbXM6IDI4DQo+ID4g
+PiA+ID4gICAgICAgICBpdGVtczogICAgICAgICAgICAgICAgICAgICA8LS0tLS0gdGhpcyBibG9j
+ayBkb2Vzbid0DQo+ID4gPiA+ID4gc2VlbSB0bw0KPiA+ID4gPiA+IGdldCBjaGVja2VkIDpcDQo+
+ID4gPiA+ID4gICAgICAgICAgIC0gZGVzY3JpcHRpb246IHBoYW5kbGUgb2YgR0NFDQo+ID4gPiA+
+ID4gICAgICAgICAgIC0gZGVzY3JpcHRpb246IEdDRSBzdWJzeXMgaWQNCj4gPiA+ID4gPiAgICAg
+ICAgICAgLSBkZXNjcmlwdGlvbjogcmVnaXN0ZXIgb2Zmc2V0DQo+ID4gPiA+ID4gICAgICAgICAg
+IC0gZGVzY3JpcHRpb246IHJlZ2lzdGVyIHNpemUNCj4gPiA+ID4gDQo+ID4gPiA+IFRoaXMgaXMg
+d2hhdCB3ZSB3b3VsZCBsaWtlIHRvIGhhdmUgYnV0IGl0IHJlcXVpcmVzIGV4Y2VwdGlvbiBpbg0K
+PiA+ID4gPiBkdHNjaGVtYS4gVGh1czoNCj4gPiA+ID4gDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4g
+DQo+ID4gPiA+ID4gIyMjIEV4YW1wbGUgMjogRG9uJ3QgY2FyZSBhYm91dCBjb25zdHJhaW5pbmcg
+dGhlIG51bWJlciBvZg0KPiA+ID4gPiA+IGFyZ3VtZW50cw0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+
+ICAgICBtZWRpYXRlayxnY2UtY2xpZW50LXJlZzoNCj4gPiA+ID4gPiAgICAgICAkcmVmOiAvc2No
+ZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy9waGFuZGxlLWFycmF5DQo+ID4gPiA+ID4gICAg
+ICAgbWF4SXRlbXM6IDENCj4gPiA+ID4gPiAgICAgICBkZXNjcmlwdGlvbjogVGhlIHJlZ2lzdGVy
+IG9mIGRpc3BsYXkgZnVuY3Rpb24gYmxvY2sgdG8NCj4gPiA+ID4gPiBiZSBzZXQNCj4gPiA+ID4g
+PiBieSBnY2UuDQo+ID4gPiA+ID4gICAgICAgICBUaGVyZSBhcmUgNCBhcmd1bWVudHMgaW4gdGhp
+cyBwcm9wZXJ0eSwgZ2NlIG5vZGUsDQo+ID4gPiA+ID4gc3Vic3lzIGlkLA0KPiA+ID4gPiA+IG9m
+ZnNldCBhbmQNCj4gPiA+ID4gPiAgICAgICAgIHJlZ2lzdGVyIHNpemUuIFRoZSBzdWJzeXMgaWQg
+aXMgZGVmaW5lZCBpbiB0aGUgZ2NlDQo+ID4gPiA+ID4gaGVhZGVyIG9mDQo+ID4gPiA+ID4gZWFj
+aCBjaGlwcw0KPiA+ID4gPiA+ICAgICAgICAgaW5jbHVkZS9kdC1iaW5kaW5ncy9nY2UvPGNoaXA+
+LWdjZS5oLCBtYXBwaW5nIHRvIHRoZQ0KPiA+ID4gPiA+IHJlZ2lzdGVyIG9mIGRpc3BsYXkNCj4g
+PiA+ID4gPiAgICAgICAgIGZ1bmN0aW9uIGJsb2NrLg0KPiA+ID4gPiANCj4gPiA+ID4gdXNlIHRo
+aXMuDQo+ID4gPiA+IA0KPiA+ID4gPiBCZXN0IHJlZ2FyZHMsDQo+ID4gPiA+IEtyenlzenRvZg0K
+PiA+ID4gDQo+ID4gPiANCj4gPiA+IEhpIEtyenlzenRvZiwgQW5nZWxvLA0KPiA+ID4gDQo+ID4g
+PiBUaGFua3MgZm9yIHRoZSBjb21tZW50Lg0KPiA+ID4gVGhlIEV4YW1wbGUgMiBjYW4gcGFzcyBk
+dF9iaW5kaW5nX2NoZWNrLg0KPiA+ID4gDQo+ID4gPiBCdXQgdGhlIGV4YW1wbGUgaW4gdGhlIGJp
+bmRpbmcgaGFzIDcgaXRlbXMgWzFdIGFuZCBkdHMgWzJdLiBEb2VzDQo+ID4gPiB0aGUNCj4gPiA+
+ICJtYXhJdGVtczogMSIgYWZmZWN0IGFueSBvdGhlciBzY2hlbWEgb3IgZHRzIGNoZWNrPw0KPiA+
+IA0KPiA+IEFoLCB0aGVuIGl0IHNob3VsZCBiZSBtYXhJdGVtczogNywgbm90IDEuDQo+ID4gDQo+
+IA0KPiBLZWVwIGluIG1pbmQgZm9yIHlvdXIgdjMwOg0KPiANCj4gbWF4SXRlbXM6IDcgd2lsbCBw
+YXNzIC0gYnV0IG9ubHkgaWYgbWluSXRlbXMgaXMgKm5vdCogNyA6LSkNCj4gDQo+IC0+IChzbywg
+ZG8gbm90IGRlY2xhcmUgbWluSXRlbXMsIGFzIGRlZmF1bHQgaXMgMSkgPC0NCj4gDQo+IFJlZ2Fy
+ZHMsDQo+IEFuZ2Vsbw0KPiANCkhpIEFuZ2VsbywNCg0KSSBzdGlsbCBoYXZlIG9uZSBtZXNzYWdl
+IFsxXSB3aGVuIHJ1bmluZyBkdF9iaW5kaW5nX2NoZWNrIGZvciAiZXhhbXBsZQ0KMiArIG1heEl0
+ZW1zOiA3IiBbMl0uDQoNClsxXQ0KL3Byb2ovbXRrMTkzNDcvY3Jvcy9zcmMvdGhpcmRfcGFydHkv
+a2VybmVsL3Y1LjEwL0RvY3VtZW50YXRpb24vZGV2aWNldHINCmVlL2JpbmRpbmdzL2Rpc3BsYXkv
+bWVkaWF0ZWsvbWVkaWF0ZWssZXRoZHIuZXhhbXBsZS5kdGI6IA0KaGRyLWVuZ2luZUAxYzExNDAw
+MDogbWVkaWF0ZWssZ2NlLWNsaWVudC1yZWc6IFtbNDI5NDk2NzI5NSwgNywgMTYzODQsDQo0MDk2
+LCA0Mjk0OTY3Mjk1LCA3LCAyMDQ4MCwgNDA5NiwgNDI5NDk2NzI5NSwgNywgMjg2NzIsIDQwOTYs
+DQo0Mjk0OTY3Mjk1LCA3LCAzNjg2NCwgNDA5NiwgNDI5NDk2NzI5NSwgNywgNDA5NjAsIDQwOTYs
+IDQyOTQ5NjcyOTUsIDcsDQo0NTA1NiwgNDA5NiwgNDI5NDk2NzI5NSwgNywgNDkxNTIsIDQwOTZd
+XSBpcyB0b28gc2hvcnQNCg0KDQpbMl0NCiAgIG1lZGlhdGVrLGdjZS1jbGllbnQtcmVnOg0KICAg
+ICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy9waGFuZGxlLWFycmF5DQog
+ICAgIG1heEl0ZW1zOiA3DQogICAgIGRlc2NyaXB0aW9uOiBUaGUgcmVnaXN0ZXIgb2YgZGlzcGxh
+eSBmdW5jdGlvbiBibG9jayB0byBiZSBzZXQgYnkNCmdjZS4NCiAgICAgICBUaGVyZSBhcmUgNCBh
+cmd1bWVudHMgaW4gdGhpcyBwcm9wZXJ0eSwgZ2NlIG5vZGUsIHN1YnN5cyBpZCwNCm9mZnNldCBh
+bmQNCiAgICAgICByZWdpc3RlciBzaXplLiBUaGUgc3Vic3lzIGlkIGlzIGRlZmluZWQgaW4gdGhl
+IGdjZSBoZWFkZXIgb2YNCmVhY2ggY2hpcHMNCiAgICAgICBpbmNsdWRlL2R0LWJpbmRpbmdzL2dj
+ZS88Y2hpcD4tZ2NlLmgsIG1hcHBpbmcgdG8gdGhlIHJlZ2lzdGVyIG9mDQpkaXNwbGF5DQogICAg
+ICAgZnVuY3Rpb24gYmxvY2suDQoNClJlZ2FyZHMsDQpOYW5jeQ0KDQoNCj4gPiBCZXN0IHJlZ2Fy
+ZHMsDQo+ID4gS3J6eXN6dG9mDQo+ID4gDQo=
