@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F786BE836
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3ED6BE839
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCQLd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S230116AbjCQLeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCQLd4 (ORCPT
+        with ESMTP id S230102AbjCQLeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:33:56 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149612686A
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:14 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id bc12so4374335plb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:14 -0700 (PDT)
+        Fri, 17 Mar 2023 07:34:00 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6910BA8C55
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:18 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so4861236pjt.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1679052794;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1679052798;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FeG3wRBDmKNCCUZ5fz5gWcA/vZS940xFTGQw0n7HN+E=;
-        b=O6SXGDuUKlQ+9oQOkCmvU04ck+RyNmL8hdU9s6Nvyza/sjnC2hq+lrJ9WuLhWElkb3
-         H6nH2JAjDt+A244Vi+2jSnJwNmdXNoe06nDr6Buxuui+5GUDvNxTeHtW0kF8rupLT6yv
-         k/g6AHHcoxIXZVxEQ+JC3ebI6vI33WynceSPnNbAm0WhNp+rKo2H56Z+4xP6BGJ50yRh
-         cLDex5tzITakt+e7nJwbUniSCYNydjTm2Au706qpmhGfgNs+oCaIGTYYenpQ2M4KxzLY
-         XqVZPXqsav7oT6hhUsohmbzC/l4HWG51jCW4qvFFpFJ6Etv0POdkma8qEasDCWdv4o4i
-         d5tg==
+        bh=znKfKtHV6TgFWLrDIG0H6CwhrMa6Sg0ibY+beHEykvU=;
+        b=ueqNZvZn+HPM/j87SWRqQzkqDAM75u9n1eh0Ej8ZqQ5w4ZsnWheJsDzwp60Jtezhyo
+         OC4CifyjKZYzPQM7wNV4Lez3j5u55SR2ZzclpJBDyp0CYKTJ2SwQXtWvlWj2cvmdY97a
+         +STY2TuVveQdjgZTYR1ozzT1wSJccym7hxbInqTZlbtbmTDETsP6cnPm7y4Z8BH/WsTo
+         n85euSBP3Bf1kLhUjXNKrY9E3kX0IqwZIP1yui7quTzz4weWt/s2YF0Y86AITyuz8EuJ
+         at6v903i3AEidzNB3kh0mHbQHIBiDUF6bp2xZE/poJuVJBHDeeaZukQHOhzD6JZHJmDH
+         t7uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679052794;
+        d=1e100.net; s=20210112; t=1679052798;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FeG3wRBDmKNCCUZ5fz5gWcA/vZS940xFTGQw0n7HN+E=;
-        b=rPOW9C67ifaJFeqaeRj8+TMjJ3lMicJMuUhuQfQ73h/KLKNIbPz8nk6Pmn9R+S5wax
-         apUKyB30S6/DOIoNOl72kSEF4zkyeq8qk+5qx4u0um6PwVfceFlE6SQZkoKtskwzZkib
-         Ze3PNJJFDelqMfFZzQ25+rnl0U75kOayBAJaBb3+P3qrkrBX27qde1xIf9ciZLlln0Ks
-         GN8W3SxzMDtZVUg7DZHdSvzaTGkzzBRiawsCoFmXjkhhaCeOoJ2DjgvwyuwuLg4F7hdE
-         PvbZespxJbD3+x1jmeYSPSVCozAjxaauJKucqeNaMGXBYIY9R/2ni22z5SkkYNWEm44I
-         z0Hg==
-X-Gm-Message-State: AO0yUKXj2AA2lF6qWBBGtKw1OlzQmXQGFr2htzZh2z0ipMzM1i7W7Lm8
-        qgtPwZveAkY799S8r9+xSghmoA==
-X-Google-Smtp-Source: AK7set+NQnSKYe8rjJOnq8VGzJNvTIqjYGfSG9K3yeXxMJf6U4NYDvg9R2U3W1W0s4+0B9RWCEeMgA==
-X-Received: by 2002:a17:90a:e7cc:b0:237:c52f:a54d with SMTP id kb12-20020a17090ae7cc00b00237c52fa54dmr2618477pjb.21.1679052794296;
-        Fri, 17 Mar 2023 04:33:14 -0700 (PDT)
+        bh=znKfKtHV6TgFWLrDIG0H6CwhrMa6Sg0ibY+beHEykvU=;
+        b=Jc1VRqaGjQTlhQpFp4yITSXcokloameEpgSYEFWpbw1VCvDdSofLav5H0yVu0xefmo
+         tQ66ppWt9w+51fN1q6+JMZURJu5DMxpyuOwHY0fGv7RUV5mIKMBt+1aZSidfrXYNPGn3
+         LRGi7PI+i8PiXSh61F4Aeq167LtR+tLsoqvYGtfrijpacYsuURMkyZ+19HzSRhmz+rpO
+         7t7q1ylnUVLLi3OJFrsce2TM6BQD9hHvPEJP5pEA6mFaqadyslcTqOehn57MPuShDS9s
+         uB4tRn+xS3BcwGiDFTx9DaM77yCH3Zvh444zH5+9g1s/AQA/jupZGVRd1FtDAV2PsLtH
+         hxdA==
+X-Gm-Message-State: AO0yUKU1Dm0k5dbSNPMqod6MSSSxklpVAMOHP6URYhVXoMO+nZKkyfRs
+        VNauRUfkXKnq0nh4JRhSHKP4dA==
+X-Google-Smtp-Source: AK7set/LgrS1REaYSHbX7wy9zHzuHqlQGfTkMV7xpn0Bgj4jZ+J0GnfpGtRwL4MisMzUmi3zDFRDKg==
+X-Received: by 2002:a17:90b:17cb:b0:23d:3057:12a3 with SMTP id me11-20020a17090b17cb00b0023d305712a3mr7729422pjb.27.1679052797846;
+        Fri, 17 Mar 2023 04:33:17 -0700 (PDT)
 Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id e3-20020a17090a818300b00233aacab89esm1182904pjn.48.2023.03.17.04.33.11
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090a818300b00233aacab89esm1182904pjn.48.2023.03.17.04.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 04:33:14 -0700 (PDT)
+        Fri, 17 Mar 2023 04:33:17 -0700 (PDT)
 From:   Shunsuke Mie <mie@igel.co.jp>
 To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>
 Cc:     Vinod Koul <vkoul@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Vinod Koul <vkoul@kernel.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [RFC PATCH 08/11] misc: pci_endpoint_test: Support a test of continuous transfer
-Date:   Fri, 17 Mar 2023 20:32:35 +0900
-Message-Id: <20230317113238.142970-9-mie@igel.co.jp>
+Subject: [RFC PATCH 09/11] tools: PCI: Add 'C' option to support continuous transfer
+Date:   Fri, 17 Mar 2023 20:32:36 +0900
+Message-Id: <20230317113238.142970-10-mie@igel.co.jp>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230317113238.142970-1-mie@igel.co.jp>
 References: <20230317113238.142970-1-mie@igel.co.jp>
@@ -82,248 +82,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a `count` parameter that indicates a number of transfer continuously in
-a test. Buffers for the test will be allocated with a size equal to size *
-count, and passed address of the buffer to epf-test.
+Add a new command line option 'C' to specify the number of transfers to
+perform continuously. This option helps to detect problem of DMAC in DMA
+transfers. By default, the number is set to 1.
 
 Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
 ---
- drivers/misc/pci_endpoint_test.c | 60 +++++++++++++++++---------------
- include/uapi/linux/pcitest.h     |  1 +
- 2 files changed, 33 insertions(+), 28 deletions(-)
+ tools/pci/pcitest.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index d4a42e9ab86a..a49303f8c987 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -302,7 +302,7 @@ static int pci_endpoint_test_validate_xfer_params(struct device *dev,
- 		return -EINVAL;
- 	}
- 
--	if (param->size > SIZE_MAX - alignment) {
-+	if (param->size * param->count > SIZE_MAX - alignment) {
- 		dev_dbg(dev, "Maximum transfer data size exceeded\n");
- 		return -EINVAL;
- 	}
-@@ -323,7 +323,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 	void *src_addr;
- 	void *dst_addr;
- 	u32 flags = 0;
--	size_t size;
-+	size_t xfer_size;
- 	dma_addr_t src_phys_addr;
- 	dma_addr_t dst_phys_addr;
- 	struct pci_dev *pdev = test->pdev;
-@@ -349,21 +349,22 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 	if (err)
- 		return false;
- 
--	size = param.size;
-+	xfer_size = param.size * param.count;
- 
- 	if (param.flags & PCITEST_FLAGS_USE_DMA)
- 		flags |= FLAG_USE_DMA;
- 
--	orig_src_addr = kzalloc(size + alignment, GFP_KERNEL);
-+
-+	orig_src_addr = kzalloc(xfer_size + alignment, GFP_KERNEL);
- 	if (!orig_src_addr) {
- 		dev_err(dev, "Failed to allocate source buffer\n");
- 		ret = false;
- 		goto err;
- 	}
- 
--	get_random_bytes(orig_src_addr, size + alignment);
-+	get_random_bytes(orig_src_addr, xfer_size + alignment);
- 	orig_src_phys_addr = dma_map_single(dev, orig_src_addr,
--					    size + alignment, DMA_TO_DEVICE);
-+					    xfer_size + alignment, DMA_TO_DEVICE);
- 	if (dma_mapping_error(dev, orig_src_phys_addr)) {
- 		dev_err(dev, "failed to map source buffer address\n");
- 		ret = false;
-@@ -385,9 +386,9 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_SRC_ADDR,
- 				 upper_32_bits(src_phys_addr));
- 
--	src_crc32 = crc32_le(~0, src_addr, size);
-+	src_crc32 = crc32_le(~0, src_addr, xfer_size);
- 
--	orig_dst_addr = kzalloc(size + alignment, GFP_KERNEL);
-+	orig_dst_addr = kzalloc(xfer_size + alignment, GFP_KERNEL);
- 	if (!orig_dst_addr) {
- 		dev_err(dev, "Failed to allocate destination address\n");
- 		ret = false;
-@@ -395,7 +396,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 	}
- 
- 	orig_dst_phys_addr = dma_map_single(dev, orig_dst_addr,
--					    size + alignment, DMA_FROM_DEVICE);
-+					    xfer_size + alignment, DMA_FROM_DEVICE);
- 	if (dma_mapping_error(dev, orig_dst_phys_addr)) {
- 		dev_err(dev, "failed to map destination buffer address\n");
- 		ret = false;
-@@ -417,7 +418,8 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 				 upper_32_bits(dst_phys_addr));
- 
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE,
--				 size);
-+				 param.size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COUNT, param.count);
- 
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-@@ -427,10 +429,10 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 
- 	wait_for_completion(&test->irq_raised);
- 
--	dma_unmap_single(dev, orig_dst_phys_addr, size + alignment,
-+	dma_unmap_single(dev, orig_dst_phys_addr, xfer_size + alignment,
- 			 DMA_FROM_DEVICE);
- 
--	dst_crc32 = crc32_le(~0, dst_addr, size);
-+	dst_crc32 = crc32_le(~0, dst_addr, xfer_size);
- 	if (dst_crc32 == src_crc32)
- 		ret = true;
- 
-@@ -438,7 +440,7 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- 	kfree(orig_dst_addr);
- 
- err_dst_addr:
--	dma_unmap_single(dev, orig_src_phys_addr, size + alignment,
-+	dma_unmap_single(dev, orig_src_phys_addr, xfer_size + alignment,
- 			 DMA_TO_DEVICE);
- 
- err_src_phys_addr:
-@@ -464,7 +466,7 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 	size_t offset;
- 	size_t alignment = test->alignment;
- 	int irq_type = test->irq_type;
--	size_t size;
-+	size_t xfer_size;
- 	u32 crc32;
- 	int err;
- 
-@@ -478,21 +480,21 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 	if (err)
- 		return false;
- 
--	size = param.size;
-+	xfer_size = param.size * param.count;
- 
- 	if (param.flags & PCITEST_FLAGS_USE_DMA)
- 		flags |= FLAG_USE_DMA;
- 
--	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
-+	orig_addr = kzalloc(xfer_size + alignment, GFP_KERNEL);
- 	if (!orig_addr) {
- 		dev_err(dev, "Failed to allocate address\n");
- 		ret = false;
- 		goto err;
- 	}
- 
--	get_random_bytes(orig_addr, size + alignment);
-+	get_random_bytes(orig_addr, xfer_size + alignment);
- 
--	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
-+	orig_phys_addr = dma_map_single(dev, orig_addr, xfer_size + alignment,
- 					DMA_TO_DEVICE);
- 	if (dma_mapping_error(dev, orig_phys_addr)) {
- 		dev_err(dev, "failed to map source buffer address\n");
-@@ -509,7 +511,7 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 		addr = orig_addr;
- 	}
- 
--	crc32 = crc32_le(~0, addr, size);
-+	crc32 = crc32_le(~0, addr, xfer_size);
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_CHECKSUM,
- 				 crc32);
- 
-@@ -518,7 +520,8 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_SRC_ADDR,
- 				 upper_32_bits(phys_addr));
- 
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, param.size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COUNT, param.count);
- 
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-@@ -532,7 +535,7 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 	if (reg & STATUS_READ_SUCCESS)
- 		ret = true;
- 
--	dma_unmap_single(dev, orig_phys_addr, size + alignment,
-+	dma_unmap_single(dev, orig_phys_addr, xfer_size + alignment,
- 			 DMA_TO_DEVICE);
- 
- err_phys_addr:
-@@ -548,7 +551,7 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 	struct pci_endpoint_test_xfer_param param;
- 	bool ret = false;
- 	u32 flags = 0;
--	size_t size;
-+	size_t xfer_size;
- 	void *addr;
- 	dma_addr_t phys_addr;
- 	struct pci_dev *pdev = test->pdev;
-@@ -571,19 +574,19 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 	if (err)
- 		return false;
- 
--	size = param.size;
-+	xfer_size = param.size * param.count;
- 
- 	if (param.flags & PCITEST_FLAGS_USE_DMA)
- 		flags |= FLAG_USE_DMA;
- 
--	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
-+	orig_addr = kzalloc(xfer_size + alignment, GFP_KERNEL);
- 	if (!orig_addr) {
- 		dev_err(dev, "Failed to allocate destination address\n");
- 		ret = false;
- 		goto err;
- 	}
- 
--	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
-+	orig_phys_addr = dma_map_single(dev, orig_addr, xfer_size + alignment,
- 					DMA_FROM_DEVICE);
- 	if (dma_mapping_error(dev, orig_phys_addr)) {
- 		dev_err(dev, "failed to map source buffer address\n");
-@@ -605,7 +608,8 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_DST_ADDR,
- 				 upper_32_bits(phys_addr));
- 
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, param.size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COUNT, param.count);
- 
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
- 	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-@@ -615,10 +619,10 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 
- 	wait_for_completion(&test->irq_raised);
- 
--	dma_unmap_single(dev, orig_phys_addr, size + alignment,
-+	dma_unmap_single(dev, orig_phys_addr, xfer_size + alignment,
- 			 DMA_FROM_DEVICE);
- 
--	crc32 = crc32_le(~0, addr, size);
-+	crc32 = crc32_le(~0, addr, xfer_size);
- 	if (crc32 == pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM))
- 		ret = true;
- 
-diff --git a/include/uapi/linux/pcitest.h b/include/uapi/linux/pcitest.h
-index f9c1af8d141b..8f05df4f95a6 100644
---- a/include/uapi/linux/pcitest.h
-+++ b/include/uapi/linux/pcitest.h
-@@ -25,6 +25,7 @@
- 
- struct pci_endpoint_test_xfer_param {
- 	unsigned long size;
-+	unsigned long count;
- 	unsigned char flags;
+diff --git a/tools/pci/pcitest.c b/tools/pci/pcitest.c
+index 441b54234635..a66b28e1e65e 100644
+--- a/tools/pci/pcitest.c
++++ b/tools/pci/pcitest.c
+@@ -35,6 +35,7 @@ struct pci_test {
+ 	bool		write;
+ 	bool		copy;
+ 	unsigned long	size;
++	unsigned long	count;
+ 	bool		use_dma;
  };
  
+@@ -115,6 +116,7 @@ static int run_test(struct pci_test *test)
+ 
+ 	if (test->write) {
+ 		param.size = test->size;
++		param.count = test->count;
+ 		if (test->use_dma)
+ 			param.flags = PCITEST_FLAGS_USE_DMA;
+ 		ret = ioctl(fd, PCITEST_WRITE, &param);
+@@ -127,6 +129,7 @@ static int run_test(struct pci_test *test)
+ 
+ 	if (test->read) {
+ 		param.size = test->size;
++		param.count = test->count;
+ 		if (test->use_dma)
+ 			param.flags = PCITEST_FLAGS_USE_DMA;
+ 		ret = ioctl(fd, PCITEST_READ, &param);
+@@ -139,6 +142,7 @@ static int run_test(struct pci_test *test)
+ 
+ 	if (test->copy) {
+ 		param.size = test->size;
++		param.count = test->count;
+ 		if (test->use_dma)
+ 			param.flags = PCITEST_FLAGS_USE_DMA;
+ 		ret = ioctl(fd, PCITEST_COPY, &param);
+@@ -171,10 +175,13 @@ int main(int argc, char **argv)
+ 	/* set default size as 100KB */
+ 	test->size = 0x19000;
+ 
++	/* set default transfer count */
++	test->count = 1;
++
+ 	/* set default endpoint device */
+ 	test->device = "/dev/pci-endpoint-test.0";
+ 
+-	while ((c = getopt(argc, argv, "D:b:m:x:i:deIlhrwcs:")) != EOF)
++	while ((c = getopt(argc, argv, "D:b:m:x:i:deIlhrwcs:C:")) != EOF)
+ 	switch (c) {
+ 	case 'D':
+ 		test->device = optarg;
+@@ -221,6 +228,9 @@ int main(int argc, char **argv)
+ 	case 's':
+ 		test->size = strtoul(optarg, NULL, 0);
+ 		continue;
++	case 'C':
++		test->count = strtoul(optarg, NULL, 0);
++		continue;
+ 	case 'd':
+ 		test->use_dma = true;
+ 		continue;
+@@ -243,6 +253,7 @@ int main(int argc, char **argv)
+ 			"\t-w			Write buffer test\n"
+ 			"\t-c			Copy buffer test\n"
+ 			"\t-s <size>		Size of buffer {default: 100KB}\n"
++			"\t-C <count>		Number of The continuous data transfers {default: 1}\n"
+ 			"\t-h			Print this help message\n",
+ 			argv[0]);
+ 		return -EINVAL;
 -- 
 2.25.1
 
