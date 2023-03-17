@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4346B6BF038
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637896BF03A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCQRxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S230084AbjCQRzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjCQRxW (ORCPT
+        with ESMTP id S229811AbjCQRzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:53:22 -0400
+        Fri, 17 Mar 2023 13:55:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2529D99240;
-        Fri, 17 Mar 2023 10:53:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C189655055
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:55:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B3E6103A;
-        Fri, 17 Mar 2023 17:53:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90472C433D2;
-        Fri, 17 Mar 2023 17:53:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5554E6103F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B57F9C433EF;
+        Fri, 17 Mar 2023 17:55:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679075598;
-        bh=K7AS9eG4BG8X7ACaQcl0gNrVqrTznv06MYTvsbEb2zw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KBaBJryq/m4LBp53d3If3uuiKB2DiW7YPLmdnP+Lvzb1pCTdz3aB1RBc7OO0h+DwU
-         hz7tQx9lM8Z5y5jh/vlYY7sPbZHms0QqizVK9/rIsGz++9GTokA1SslNyK8qngWdiz
-         LBe8w1GAu0hmeGuqD1tliMs37X2He++LnKeS0dznFHHi1SmkQX+HBvSXspT9b9QGpy
-         5TlfuWBtuDzfS1oe7JReu0h3wf9sNE19UxgQYqkof+poIRqkVy4sSiJRXj3DSfTDkk
-         QD8GvQ8VhOk8OGNyYilBRKQqjzSUYvobJ/h7BbN7YKrhsaLZDLlYHedPYXNsGw/Jc4
-         F3QNVVrpF4aDg==
-Date:   Fri, 17 Mar 2023 23:23:14 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     michal.simek@xilinx.com, lizhi.hou@amd.com, brian.xu@amd.com,
-        raj.kumar.rampelli@amd.com, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] dmaengine: xilinx: xdma: Fix some kernel-doc
- comments
-Message-ID: <ZBSpCnmDGa+b/PLl@matsya>
-References: <20230214010344.5354-1-yang.lee@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214010344.5354-1-yang.lee@linux.alibaba.com>
+        s=k20201202; t=1679075739;
+        bh=pOiJt/GdXT+g7wc43tRROZKnfISDSVnPoMPzLBoXC5E=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=SpMiI8O9VWo8E0fg4RFzJFY+Ahj/F3mOtw+HslrKnIB7N+QUFJFPr7ZkjoorHdZDy
+         +zfQC6NUZEf/P/q1DhIbxZG0eEy5n3+1hzmZDMqF1c1XWtrHuKXDKupLkBIQrFmaEJ
+         XfiDl7Nn7No9rSZNSqlGekZsqm/TL5/CRk5jEnOqurBOG3fbCQmZg/hy6LRRl3mFuf
+         kUjBNZty9QaEx5l0JXf3NG6KiLyW5nVyMK0+2yd+ulDd7wLLFWb/Siqw+wrvl8tJkv
+         jRHdHbP1+q3Tv2EonLpg43NRzovZuNs/QlYKq+IcgkIswSa1YCga+D61iEq4nxPYaA
+         1y44zJxQSY4EQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A17BEC43161;
+        Fri, 17 Mar 2023 17:55:39 +0000 (UTC)
+Subject: Re: [GIT PULL] xen: branch for v6.3-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230317064023.1229-1-jgross@suse.com>
+References: <20230317064023.1229-1-jgross@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230317064023.1229-1-jgross@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.3-rc3-tag
+X-PR-Tracked-Commit-Id: 7ad2c39860dc0ca01d2152232224d2124e160fe3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0eb392ec095ee29b932985deefb43e6d86d8a463
+Message-Id: <167907573965.19035.6263826550490708525.pr-tracker-bot@kernel.org>
+Date:   Fri, 17 Mar 2023 17:55:39 +0000
+To:     Juergen Gross <jgross@suse.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, sstabellini@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,10 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-02-23, 09:03, Yang Li wrote:
-> Make the description of @xdma_chan to @xchan to silence the warnings:
+The pull request you sent on Fri, 17 Mar 2023 07:40:23 +0100:
 
-Applied, thanks
+> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.3-rc3-tag
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0eb392ec095ee29b932985deefb43e6d86d8a463
+
+Thank you!
 
 -- 
-~Vinod
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
