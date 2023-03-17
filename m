@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4337C6BE090
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 06:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B39F6BE093
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 06:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjCQFZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 01:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S229938AbjCQF0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 01:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCQFZC (ORCPT
+        with ESMTP id S229523AbjCQF0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 01:25:02 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF1520A0D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:25:01 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so7877919pjt.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679030700;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5OsTv5mWSZFVE+t+Dyd8RSnvy3cQsZjJUc/om6AkPA0=;
-        b=NUWyGYTVEEzFBCnAk9Y1gR61+or/NIRmsqXPVcsOJWE5dlw5IdeK8me71AnxHF5VWf
-         wqNbQaDkQXl0H4/UYLLgPcHWQjTmgrLDCGh1uixA2Yi6BkJBQmva4yHHDNiw7f9q8xT4
-         zWfaBe1jXf6ZK1xNd6Vy4int361bUlC6aUN0oyuVtTX6YfF2x/428WeeHUDbPAB9BJ/m
-         2W1X6WUWXNf8bYn7C1sCXX5C8EUZiaYaSBMGENfyb80EtIpecITTbMkNwarazOtUfv7M
-         ApDA43Iw5+0eSf16PSnfBzUsqv1LT/7Y3QeYy3y5GJr7PMOM6zLr/Y3rY4LtMmt/EQW8
-         OmCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679030700;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OsTv5mWSZFVE+t+Dyd8RSnvy3cQsZjJUc/om6AkPA0=;
-        b=A9ddrb5K31gb5xnvrpENvS/ahC3hQubHmMfP5HYmLbJpPXErCgl1Z0MiwuRFlp87Z+
-         mDh3HFJsxHv6NNs9unywGX23z5G9fPw04Nyim03rdLeYN5Tz05t3LjSUPmSkDcQnur48
-         rlE/Z90/WlRza8ac/UWzci+ebVQK6h+HFiEkt2rOu2SyWUzSnYg2jmBcBQ78v185w6+F
-         nfNSVayHSGrr99o2KI7R9Zv1KsaudQx9SvabPPLzpJZYpyOmXHrUWiHIG/V5JiQej+sh
-         15vH2qZWQd1xf6T2oysQPLr5z9INdcVx4knI2nKeQWz+T4b8ggbx4NfeeRMti76FaTHB
-         QSyg==
-X-Gm-Message-State: AO0yUKW/Xvqn5NusXM49JADNkoNYBg68NLT648d+e8RabIgsJmlx48s9
-        h/0A7g6rTKvyRp0fJeb0iek=
-X-Google-Smtp-Source: AK7set9Im1IFpX88ON4gzwTNyE+UVHwYPAYwvbo5KfrpPnrVF0jOFpzHNbtctISclL//JRZN4ysV3A==
-X-Received: by 2002:a17:902:c451:b0:19a:a9d8:e48a with SMTP id m17-20020a170902c45100b0019aa9d8e48amr4983489plm.22.1679030700573;
-        Thu, 16 Mar 2023 22:25:00 -0700 (PDT)
-Received: from sumitra.com ([14.139.226.12])
-        by smtp.gmail.com with ESMTPSA id p6-20020a1709026b8600b0019a97f180fcsm610512plk.37.2023.03.16.22.24.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 22:24:59 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 22:24:55 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     drv@mailo.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev
-Subject: [PATCH v4] Staging: octeon: Fix line ending with '('
-Message-ID: <20230317052455.GA83442@sumitra.com>
+        Fri, 17 Mar 2023 01:26:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1908C5AA;
+        Thu, 16 Mar 2023 22:26:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3B99621AD;
+        Fri, 17 Mar 2023 05:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6508DC433EF;
+        Fri, 17 Mar 2023 05:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679030777;
+        bh=91ql8DhWlt0+bx8+WmyJZqX4qLO+KJ0hyv2IMk0xLek=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=rrax3MGVjXtyvm38OlVfNuGiu4WTeJLLUNK7hWtgX95xZeI4V7xSW0b++JNQlx4+a
+         bErqMbfckH0cpl0Zr6ms2Y2fMSPFmYO9z28rANobZSoSdbNOvG+QU7t4r5FMkQdRf+
+         D5OwusCqNINaZSYlS7gZePyQ8/GB8mnkSyxMMkJuyISsPNWnGYnzniehSW9DoituhG
+         686EDU/X8Z/wlE7gyWs6ftBiKuBKOx8iwLiWUoRXQFY0anXcfhMGUH3+HUsAyTfMU0
+         6t3e4SUhyUbtOoS41O0qWrMa+RNygy84ONUgvFgwDzePkl1eOmGeAyB0rLILmZoz6/
+         vQ80X6RTesHng==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/3] wifi: ath9k: avoid referencing uninit memory in ath9k_wmi_ctrl_rx
+References: <20230315202112.163012-1-pchelkin@ispras.ru>
+        <20230315202112.163012-2-pchelkin@ispras.ru>
+Date:   Fri, 17 Mar 2023 07:26:11 +0200
+In-Reply-To: <20230315202112.163012-2-pchelkin@ispras.ru> (Fedor Pchelkin's
+        message of "Wed, 15 Mar 2023 23:21:10 +0300")
+Message-ID: <871qlovtho.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the coding style limited the code to 80 columns per line which caused
-splitting the function header into two lines resulted in the first line
-ending with a '('. This caused the checkpatch error.
+Fedor Pchelkin <pchelkin@ispras.ru> writes:
 
-Place the function parameters immediately after '(' in a single
-line to align the function header.
+> For the reasons described in commit b383e8abed41 ("wifi: ath9k: avoid
+> uninit memory read in ath9k_htc_rx_msg()"), ath9k_htc_rx_msg() should
+> validate pkt_len before accessing the SKB. For example, the obtained SKB
+> may have uninitialized memory in the case of
+> ioctl(USB_RAW_IOCTL_EP_WRITE).
+>
+> Implement sanity checking inside the corresponding endpoint RX handlers:
+> ath9k_wmi_ctrl_rx() and ath9k_htc_rxep(). Otherwise, uninit memory can
+> be referenced.
+>
+> Add comments briefly describing the issue.
+>
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
-v2: Change patch subject and description
+It would be also nice to know how you have tested these. Syzkaller is no
+substitute for testing on a real hardware.
 
-v3: Change patch description, noted by Deepak R Varma 
-<drv@mailo.com>
-
-v4: Correct grammartical mistakes, noted by Julia Lawall
-<julia.lawall@inria.fr>
-
-
-
- drivers/staging/octeon/octeon-stubs.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 7a02e59e283f..3e7b92cd2e35 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
- 						  int32_t value)
- { }
- 
--static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
--	int interface,
--	int port)
-+static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
- {
- 	union cvmx_gmxx_rxx_rx_inbnd r;
- 
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
