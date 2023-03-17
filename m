@@ -2,133 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DF26BE7EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026C06BE7EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCQLVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S229908AbjCQLWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjCQLVN (ORCPT
+        with ESMTP id S229603AbjCQLWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:21:13 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1711EFDF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:20:49 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id z8-20020a92cd08000000b00317b27a795aso2258368iln.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:20:49 -0700 (PDT)
+        Fri, 17 Mar 2023 07:22:06 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4BD35AF;
+        Fri, 17 Mar 2023 04:21:37 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id d13so4775274pjh.0;
+        Fri, 17 Mar 2023 04:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679052094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WxKX5ZJpiF04icvSHpZ1JZbirujoxDwuq90/M5FjSys=;
+        b=YSJDOLaroYd5w6iQfw3pdh471hY8XPd5FvwTmVPnGRUkl28QMXCHqo/o7llbDurN6W
+         jDPnDPltYLthgdu1rM3rv8u0PR9XOIz5HezA9EUENzU8JmPgPI8ozfmT79k0Zx3TlG6X
+         /7QNPd73hFIQ6mKIUijKptnhjDagvipVHSkTgX0XKUiKTLuY0MGHz1BkKnPGYgm6lmFZ
+         KtnO/pHVbVAJzPtRxOJ3sqzY08tSW8c2E29p19VL/TfoAhT1XLVPzein5X+te5WgdVNp
+         Be4wfNIVTgP3xU69HvUNrNOm2v1m4xylYKTeL95Ryggxkn23nUUhIdWvpdF4L1/xqW8Z
+         9JgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679052048;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oqnk41ySeSNX2yCHZGZE/dWEboCHTt1MyXh/PnBDvLQ=;
-        b=1Dcs1S6Cbj2fzCPaWVIzvNawsDEZUbClusAo528ONGV3WEGl3kiLTqATEYeaoy6z/4
-         XgFj9eucCAMkYWDEEmR3qhxJdKYrBuXX6fUjVGhLaM1afFjoNt9k8Zrq8lV4HC9O3q0y
-         1afRuzEkJ+uZM4LM6rOOzTCbwqk3VlIBQvF5EgD4fIETk9Anm374yXJBGPvYXh0t63U6
-         U2Fk+jbkTnaaQlz7uH0Y8AikjWnFAk8JzA4Jd6222VSq9x9IVI7iL7pgrxmaoCNW7b+F
-         ch30QcWvmUk7eXB5bzKjNqyfEX6OdwhRSyhAbWBgG09c58EuPOaFQ/BJqVcg0A99AWad
-         WndA==
-X-Gm-Message-State: AO0yUKUtazVTpJOSISBA5xaT7AJRW3Bx5O3xa3bKx0cxHTOYHS4VMsRx
-        Q480KEZixK5+4x1ylGsLH5cUAnKzDgLSvZPhlNyrMfgGGbU9
-X-Google-Smtp-Source: AK7set/E46YUb/h8n4P1dIpqcv0BhxhTRIa/AlZKjOHC1IjT6dYDvSb1+C4bOw1cBKRbe6vxJJyG8SchGgcG/0BpqrnEGXVGqslS
+        d=1e100.net; s=20210112; t=1679052094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WxKX5ZJpiF04icvSHpZ1JZbirujoxDwuq90/M5FjSys=;
+        b=H7MvIti2pcQWyfI3fvVeP2koA22HCCJSqAcV6FK2EtFWtlYvQf8CoVj19Crv7pizU9
+         FBBzSwuI6c9dCiBOGAVivwQ3YYURRJwnIVl9nckggM5rhsIzyiMOkXaT5NdMeB7txGjI
+         uJeSmeauabEKOFGsFREpW2ld9/SoUei897YMaAmvWbaGntwFt5bifQ8QzBPzgSS1ptZv
+         3BNbKRLOVsg50ORiHPFt2sRB2ixnTqIzM64hcD6icDg3QPf1ENZr65lg+DMSxg2Qlc1h
+         5sIk/1NNZL3juto7+gNtw6nxuyx0MsJiiqUqTptmmWyJurxXIwCsKNC/EIecBOF+FxXj
+         XNNw==
+X-Gm-Message-State: AO0yUKVWnoO4XYLn9xgrBZYxfaK7oyqddb0K6f9HZNxdeq74+iM+zqRX
+        Lvz1pABcvNDU7sakk5gc8OQ=
+X-Google-Smtp-Source: AK7set8ja1cWo1D6wJamqoAnRPQ12MFPwJrSryte3yXlsyCvRIdPaGtpd49G2n0EsAW3H9Yz1f497g==
+X-Received: by 2002:a17:902:ea0f:b0:19e:8267:9590 with SMTP id s15-20020a170902ea0f00b0019e82679590mr7836526plg.41.1679052093980;
+        Fri, 17 Mar 2023 04:21:33 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:d084:8252:e846:af61])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902900800b0019a88c1cf63sm1328760plp.180.2023.03.17.04.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 04:21:33 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 04:21:30 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] Input: Use of_property_read_bool() for boolean properties
+Message-ID: <ZBRNOgXAS8wC9xSH@google.com>
+References: <20230310144708.1542751-1-robh@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2147:b0:3c5:1971:1b7f with SMTP id
- z7-20020a056638214700b003c519711b7fmr1037599jaj.6.1679052048555; Fri, 17 Mar
- 2023 04:20:48 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 04:20:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e9e9ee05f716c445@google.com>
-Subject: [syzbot] [udf?] WARNING in udf_new_block
-From:   syzbot <syzbot+cc717c6c5fee9ed6e41d@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310144708.1542751-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 10, 2023 at 08:47:08AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-syzbot found the following issue on:
+Applied, thank you.
 
-HEAD commit:    eeac8ede1755 Linux 6.3-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e97a70c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dbab9019ad6fc418
-dashboard link: https://syzkaller.appspot.com/bug?extid=cc717c6c5fee9ed6e41d
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/204f10b1db6d/disk-eeac8ede.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c0ab57601df9/vmlinux-eeac8ede.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/21d53c00efd1/bzImage-eeac8ede.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cc717c6c5fee9ed6e41d@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 14411 at fs/udf/udfdecl.h:123 udf_add_free_space fs/udf/balloc.c:125 [inline]
-WARNING: CPU: 1 PID: 14411 at fs/udf/udfdecl.h:123 udf_table_new_block fs/udf/balloc.c:667 [inline]
-WARNING: CPU: 1 PID: 14411 at fs/udf/udfdecl.h:123 udf_new_block+0x1dc2/0x2130 fs/udf/balloc.c:733
-Modules linked in:
-CPU: 1 PID: 14411 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:udf_updated_lvid fs/udf/udfdecl.h:121 [inline]
-RIP: 0010:udf_add_free_space fs/udf/balloc.c:125 [inline]
-RIP: 0010:udf_table_new_block fs/udf/balloc.c:667 [inline]
-RIP: 0010:udf_new_block+0x1dc2/0x2130 fs/udf/balloc.c:733
-Code: fe e9 00 fd ff ff e8 ed 61 8d fe 48 8b bc 24 88 00 00 00 e8 60 82 b8 07 45 31 f6 48 8b 5c 24 78 e9 6d fd ff ff e8 ce 61 8d fe <0f> 0b e9 64 fc ff ff 89 d9 80 e1 07 fe c1 38 c1 0f 8c 7d e3 ff ff
-RSP: 0018:ffffc9001688f580 EFLAGS: 00010287
-RAX: ffffffff82fde5b2 RBX: 000000004c84c04c RCX: 0000000000040000
-RDX: ffffc90012967000 RSI: 0000000000000938 RDI: 0000000000000939
-RBP: ffffc9001688f7d0 R08: ffffffff82fde210 R09: fffffbfff1ca8066
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
-R13: dffffc0000000000 R14: ffff8880489d301c R15: 0000000000000037
-FS:  00007fe1f2f80700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000002004c000 CR3: 000000001e4ed000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- udf_new_inode+0x389/0xd10 fs/udf/ialloc.c:71
- udf_create+0x21/0xe0 fs/udf/namei.c:384
- lookup_open fs/namei.c:3416 [inline]
- open_last_lookups fs/namei.c:3484 [inline]
- path_openat+0x13df/0x3170 fs/namei.c:3712
- do_filp_open+0x234/0x490 fs/namei.c:3742
- do_sys_openat2+0x13f/0x500 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_open fs/open.c:1372 [inline]
- __se_sys_open fs/open.c:1368 [inline]
- __x64_sys_open+0x225/0x270 fs/open.c:1368
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fe1f228c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fe1f2f80168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007fe1f23ac050 RCX: 00007fe1f228c0f9
-RDX: 0000000000000048 RSI: 00000000000060c2 RDI: 0000000020000100
-RBP: 00007fe1f22e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffec8d11ecf R14: 00007fe1f2f80300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Dmitry
