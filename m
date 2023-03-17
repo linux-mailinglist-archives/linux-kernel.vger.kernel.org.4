@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47366BE31E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928F06BE349
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjCQIXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S230011AbjCQIXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjCQIXA (ORCPT
+        with ESMTP id S230139AbjCQIXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:23:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AAE1CF76
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:22:24 -0700 (PDT)
+        Fri, 17 Mar 2023 04:23:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC523801C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:22:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C6C3B824F8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:22:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD7EC433D2;
-        Fri, 17 Mar 2023 08:22:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8956B6222E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B3BC4339C;
+        Fri, 17 Mar 2023 08:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679041338;
-        bh=Y+FeuoEYgmV4XhHzbi4ynmacHPNSPmfGmHfMCN1rXcU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NdRFTP73vf+1YSrrFyUr9aOcvf6sGAhDReiGyXWwEEAtGgLbFwRevI4olZC+B+9UL
-         wfbK6Jxj5y0GmZwtl+jMyxO+P6JZMKvr2M6cul7d1eQJmHGvSuW5Oy8Vppjy2jkpUe
-         jFWRMjt8PN/y5CjapbWI5ZqIfMg8H+OolpTsq2sNR9k7k/udj2bKoyBbZ3+nIYenwC
-         Fnp2KS+tiY5SkcTyLWRlQ280dWvB+kJ/3W9JrmJGJhGBFALs9psCYgv1RwSoVax+d0
-         qxVze/5I1LOIuIozs1q9j9odGNJWYN8psaZLZqi6oxJVUe2txHpgoHMzE4LYVXZEnp
-         kk5TtLJ8w47yw==
+        s=k20201202; t=1679041341;
+        bh=TfCb3mpgK92w4qveQROMcLLOHyHxIIuO1T+X3c8+2WM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C3V5hKZ8yxClqUUmqB9GbZQXkjU+WxPT8eINXBN6T1RTrdVccRPxk7X9iXomfZ7wd
+         69sGVLYm8T3KnI9DcISQ1Wwu8JTbC2mBYjX1VvuVdiQlxmpbTvCKF7gQdOA7tclFuB
+         lFznjaX9201MF00ECDXGsOOTkWLA+oiVLOw3HtFtQlsHwb0eO7XAeAsEOX5wyDikUX
+         5mbCnoM2nASvJ12rLkiz8o0ErpyhilM/8l7Pi0pSOwvZnbhNT0Swes8A3iQxiWvrir
+         waxez3K1vxli5yhIvDrP/X50h+rbosv6OTL14keCogNW/0mMiHboxDXgUBTDC3C27c
+         3BOu9BoOU7jEg==
 From:   Lee Jones <lee@kernel.org>
 To:     lee@kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 00/37] Rid W=1 warnings from GPU
-Date:   Fri, 17 Mar 2023 08:16:41 +0000
-Message-Id: <20230317081718.2650744-1-lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Subject: [PATCH 01/37] drm/amd/display/dc/dc_hdmi_types: Move string definition to the only file it's used in
+Date:   Fri, 17 Mar 2023 08:16:42 +0000
+Message-Id: <20230317081718.2650744-2-lee@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230317081718.2650744-1-lee@kernel.org>
+References: <20230317081718.2650744-1-lee@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,116 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Fixes the following W=1 kernel build warning(s):
 
-Lee Jones (37):
-  drm/amd/display/dc/dc_hdmi_types: Move string definition to the only
-    file it's used in
-  drm/xlnx/zynqmp_disp: Use correct kerneldoc formatting in zynqmp_disp
-  drm/amd/amdgpu/amdgpu_device: Provide missing kerneldoc entry for
-    'reset_context'
-  drm/xlnx/zynqmp_dp: Fix function name zynqmp_dp_link_train() ->
-    zynqmp_dp_train()
-  drm/ttm/ttm_bo: Provide a missing 'bulk' description and correct
-    misnaming of 'placement'
-  drm/vkms/vkms_composer: Fix a few different kerneldoc formatting
-  drm/mediatek/mtk_disp_aal: Remove half completed incorrect struct
-    header
-  drm/mediatek/mtk_disp_ccorr: Remove half completed incorrect struct
-    header
-  drm/tegra/dc: Remove set but unused variable 'state'
-  drm/nouveau/nvkm/nvfw/acr: Make local function
-    ‘wpr_generic_header_dump’ static
-  drm/nouveau/nvkm/subdev/acr/lsfw: Remove unused variable 'loc'
-  drm/nouveau/nvkm/subdev/bios/init: Demote a bunch of kernel-doc abuses
-  drm/amd/amdgpu/amdgpu_ucode: Remove unused function
-    ‘amdgpu_ucode_print_imu_hdr’
-  drm/amd/amdgpu/amdgpu_vm_pt: Supply description for
-    amdgpu_vm_pt_free_dfs()'s unlocked param
-  drm/amd/amdgpu/gmc_v11_0: Provide a few missing param descriptions
-    relating to hubs and flushes
-  drm/amd/amdgpu/ih_v6_0: Repair misspelling and provide descriptions
-    for 'ih'
-  drm/amd/amdgpu/amdgpu_mes: Ensure amdgpu_bo_create_kernel()'s return
-    value is checked
-  drm/amd/amdgpu/amdgpu_vce: Provide description for
-    amdgpu_vce_validate_bo()'s 'p' param
-  drm/amd/pm/swsmu/smu11/vangogh_ppt: Provide a couple of missing
-    parameter descriptions
-  drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move defines out to where
-    they are actually used
-  drm/nouveau/nvkm/subdev/volt/gk20a: Demote kerneldoc abuses
-  drm/nouveau/nvkm/engine/fifo/runl: Staticify local function
-    nvkm_engn_cgrp_get()
-  drm/nouveau/nvkm/engine/fifo/gf100: Staticify local function
-    gf100_fifo_nonstall_block()
-  drm/nouveau/nvkm/engine/gr/gf100: Demote kerneldoc abuse
-  drm/nouveau/nvkm/engine/gr/tu102: Staticify local function
-    gf100_fifo_nonstall_block()
-  drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move SYNAPTICS_DEVICE_ID
-    into CONFIG_DRM_AMD_DC_DCN ifdef
-  drm/amd/display/dc/dce/dmub_psr: Demote kerneldoc abuse
-  drm/amd/display/dc/core/dc_stat: Convert a couple of doc headers to
-    kerneldoc format
-  drm/amd/display/dc/link/link_detection: Remove unused variable
-    'status'
-  drm/amd/display/dc/link/protocols/link_dp_training: Remove set but
-    unused variable 'result'
-  drm/nouveau/dispnv04/crtc: Demote kerneldoc abuses
-  drm/amd/display/dc/link/protocols/link_dp_capability: Remove unused
-    variable and mark another as __maybe_unused
-  drm/amd/display/dc/link/protocols/link_dp_capability: Demote
-    non-compliant kerneldoc
-  drm/nouveau/nvkm/engine/gr/tu102: Completely remove unused function
-    ‘tu102_gr_load’
-  drm/amd/display/dc/dce60/Makefile: Fix previous attempt to silence
-    known override-init warnings
-  drm/amd/display/dc/link/link_detection: Demote a couple of kerneldoc
-    abuses
-  drm/bridge/imx/Kconfig: Prevent imx-ldb-helper from appearing in 2
-    separate modules
+ drivers/gpu/drm/amd/amdgpu/../display/dc/dc_hdmi_types.h:53:22:
+   warning: ‘dp_hdmi_dongle_signature_str’ defined but not used [-Wunused-const-variable=]
 
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   1 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c       |   5 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c     |  13 --
- drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c       |   1 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c     |   1 +
- drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c        |   4 +
- drivers/gpu/drm/amd/amdgpu/ih_v6_0.c          |   5 +-
- .../amd/display/amdgpu_dm/amdgpu_dm_helpers.c |   3 +
- drivers/gpu/drm/amd/display/dc/core/dc_stat.c |  28 ++--
- .../gpu/drm/amd/display/dc/dc_hdmi_types.h    |   1 -
- drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c |   5 +-
- drivers/gpu/drm/amd/display/dc/dce60/Makefile |   2 +-
- .../drm/amd/display/dc/link/link_detection.c  |  12 +-
- .../dc/link/protocols/link_dp_capability.c    |   4 +-
- .../dc/link/protocols/link_dp_training.c      |   3 +-
- .../link/protocols/link_edp_panel_control.c   |   5 +
- .../amd/display/include/ddc_service_types.h   |  13 --
- .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  |   2 +
- drivers/gpu/drm/bridge/imx/Kconfig            |   7 +
- drivers/gpu/drm/bridge/imx/Makefile           |   7 +-
- drivers/gpu/drm/bridge/imx/imx-ldb-helper.c   |  13 ++
- drivers/gpu/drm/mediatek/mtk_disp_aal.c       |   5 -
- drivers/gpu/drm/mediatek/mtk_disp_ccorr.c     |   5 -
- drivers/gpu/drm/nouveau/dispnv04/crtc.c       |   4 +-
- .../gpu/drm/nouveau/nvkm/engine/fifo/gf100.c  |   2 +-
- .../gpu/drm/nouveau/nvkm/engine/fifo/runl.c   |   2 +-
- .../gpu/drm/nouveau/nvkm/engine/gr/gf100.c    |   2 +-
- .../gpu/drm/nouveau/nvkm/engine/gr/tu102.c    |  13 --
- drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c       |   2 +-
- .../gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c    |   3 +-
- .../gpu/drm/nouveau/nvkm/subdev/bios/init.c   | 136 +++++++++---------
- .../gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c  |   4 +-
- drivers/gpu/drm/tegra/dc.c                    |   2 -
- drivers/gpu/drm/ttm/ttm_bo.c                  |   3 +-
- drivers/gpu/drm/vkms/vkms_composer.c          |   6 +-
- drivers/gpu/drm/xlnx/zynqmp_disp.c            |   6 +-
- drivers/gpu/drm/xlnx/zynqmp_dp.c              |   2 +-
- 37 files changed, 163 insertions(+), 169 deletions(-)
+[snipped 400 similar lines for brevity]
 
---
+Cc: Harry Wentland <harry.wentland@amd.com>
+Cc: Leo Li <sunpeng.li@amd.com>
+Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Wenjing Liu <wenjing.liu@amd.com>
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Lee Jones <lee@kernel.org>
+---
+ drivers/gpu/drm/amd/display/dc/dc_hdmi_types.h       | 1 -
+ drivers/gpu/drm/amd/display/dc/link/link_detection.c | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dc_hdmi_types.h b/drivers/gpu/drm/amd/display/dc/dc_hdmi_types.h
+index c364744b4c835..b015e80672ec9 100644
+--- a/drivers/gpu/drm/amd/display/dc/dc_hdmi_types.h
++++ b/drivers/gpu/drm/amd/display/dc/dc_hdmi_types.h
+@@ -50,7 +50,6 @@ struct dp_hdmi_dongle_signature_data {
+ 
+ /* DP-HDMI dongle slave address for retrieving dongle signature*/
+ #define DP_HDMI_DONGLE_ADDRESS 0x40
+-static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
+ #define DP_HDMI_DONGLE_SIGNATURE_EOT 0x04
+ 
+ 
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+index fee71ebdfc733..8cfeddfb65c89 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+@@ -60,6 +60,8 @@
+  */
+ #define LINK_TRAINING_MAX_VERIFY_RETRY 2
+ 
++static const uint8_t dp_hdmi_dongle_signature_str[] = "DP-HDMI ADAPTOR";
++
+ static enum ddc_transaction_type get_ddc_transaction_type(enum signal_type sink_signal)
+ {
+ 	enum ddc_transaction_type transaction_type = DDC_TRANSACTION_TYPE_NONE;
+-- 
 2.40.0.rc1.284.g88254d51c5-goog
 
