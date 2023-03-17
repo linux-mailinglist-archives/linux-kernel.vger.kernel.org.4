@@ -2,146 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFC16BF60D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6966BF622
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCQXOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 19:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
+        id S230030AbjCQXT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 19:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCQXOI (ORCPT
+        with ESMTP id S229575AbjCQXTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 19:14:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2DF1DBAA;
-        Fri, 17 Mar 2023 16:14:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 878B2CE217C;
-        Fri, 17 Mar 2023 23:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB691C433D2;
-        Fri, 17 Mar 2023 23:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679094843;
-        bh=rG+bBSgOxiO21ihqH6RYASznC+jK4NI+jpCvNbCCiJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NHQbMj53KcDE7XZVrPetHzimjlYpz2uL9/l6oLb0xu8rflDtYoEI6GHZC6WzafKOR
-         1ytQ3CR8CXbz2GsBFVqQ1Fo1zqkyaBBZU4xc+lEfkquysmgAPXcMreM0u2fiz2oz/C
-         328nrgm1UbTauJsQvdMWI3i9dlS6WGpUyPwHzLY+DTZSARk+xbB2uDjSRb+MxClYpA
-         TLtVD5pRjCp6qVs/zt2SDJrAO/Z9bX32OrAICM+TMjO5kkDTmApvUfWlK1LKpNN4lT
-         a4WYGABj3MUsEEb1tI+tgxR2q/Oj7xJeMATpZ1k2YCfh6JNbuwhczwsdpb+X9PEFx0
-         raHMa+VfRAbmw==
-Date:   Fri, 17 Mar 2023 16:14:01 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Ben Serebrin <serebrin@google.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] kvm: vmx: Add IA32_FLUSH_CMD guest support
-Message-ID: <20230317231401.GA4100817@dev-arch.thelio-3990X>
-References: <20230201132905.549148-1-eesposit@redhat.com>
- <20230201132905.549148-2-eesposit@redhat.com>
- <20230317190432.GA863767@dev-arch.thelio-3990X>
- <20230317225345.z5chlrursjfbz52o@desk>
+        Fri, 17 Mar 2023 19:19:24 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2073.outbound.protection.outlook.com [40.107.8.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861E338B61;
+        Fri, 17 Mar 2023 16:19:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h2IWzfJlf6L6JGuvCFRKUpPOJ7jQ51kGXE4WipEB+edwAz7zcsXS6kNYDojVlXGLBlN+PC/GutiFm2v9RQ/M3V/47ZIAwnrfabhk4a4dg1AuqYTI177gSJsZDidcnfkSPeFenKlVuvr/cNFPej3/ZHT/BV8I9NxTPMSTm2IU8asl8ajiT0IUXPBFiTsgdycWFKVVg3qwtUQrcSrZMDzQrQ0DkRWoh74TC96DLbr5jc8rc+0ZVJmE1icOenlaPi1IcUG9I8pR4aFvQSjN3ccqRttNndAOyLkmJN2YJyDNU57vmGfY/tXKY6JWTYRhUWjhVs5SOLQ8o/TyztAm1Ef3Ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JMjd6R2pZyzIHcwcMIC3BAJMd5mkMB99JcnWgLCzOhM=;
+ b=aKSwyWyayYUjOZX57vWHKK9M2o2m8aW1pzbl7gXDFzb0lca3aqEm0v/LjnAJTXoSSCKIRbZm0FFQgqd/toJsC5jcU1a/K+w4ej3WtElYj6MwlGwsklVvDgaIqkpLWaScToQXfKBqRuTMea1MvaivbXvtH2WEVe93QJiD2kJ6PHlv6Id373DSQQ5SY96/Z2gYQ+bwEbkdBYfhWXAhEcl8EopSBVc9iGBKvlX0SoEnptdpDQVn4bBI9bUnTX99h48Y49wwF3p4dAfEcetik2Oa+eRpD8RzIi2k2dO5Q6qzucx5sGMJfF9hj+aPogI9rUiXZO2/Rhae7TMruMNCvWUELQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JMjd6R2pZyzIHcwcMIC3BAJMd5mkMB99JcnWgLCzOhM=;
+ b=CuaxcU/Sia914X8qgzj79QEHGAaL1ZNyeCub0R2TEvxxYd6yhcckDNca+sfq2QKVR5MgGhqOCD9BQMoPGaap0jmHzBtEHjrZfNSfCVvdj4cOumj37IQLbT7LwtAtgI+a0iZvIerxDMJ+FbFg0dzSbWFvuOafOQ1UxBOkxsLgLkg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AS8PR04MB9143.eurprd04.prod.outlook.com (2603:10a6:20b:44a::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 23:19:19 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::29a3:120c:7d42:3ca8]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::29a3:120c:7d42:3ca8%7]) with mapi id 15.20.6178.036; Fri, 17 Mar 2023
+ 23:19:19 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: dsa: report rx_bytes unadjusted for ETH_HLEN
+Date:   Sat, 18 Mar 2023 01:19:00 +0200
+Message-Id: <20230317231900.3944446-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR0P281CA0074.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::20) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317225345.z5chlrursjfbz52o@desk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB9143:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95288b5c-9533-4358-f048-08db273e08bd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l9B1YXV1fV+1C9kem7Io4334CtBM941hn6OPhlvROE23VY0n9E5mj+4zX3uDjvWQ1P4cynAxEevvX/vw1Ve0CTzlGpEXatxsCC+5GQthcuxRlMePwISH1WLfVuPB2W9DWVtGNM5Y0JQ5YXb3Fi2ICAAUtGmSM6EJ8R0rpBoNn/XLZj406Ngjd+BPuGm55Q2p2pz7AWUuKDZxTzjXw4JF5jeq9L8P2+VHZLgv6HWQxV0jynrHWpvNsd4Kiug1f1no/UVhTfYE+/1Ivhg7K/56HVmMLydtlQ7byBMXGFv+t/Atxx6G8VS4yH7wsAmnxNoMiEn6EYtz6z2lU2s69kDbakad57e7W1s0YNIeAjOP5NRvKK9obPN5ngp/4MBKQ7pY0nZYLPmkvRKN8x9ZoAS4GgP3PLtgezJoLBJzvAJeHLhKckA5EBNm/6PNgAMdAtqYv5SLJZ9LSQf1QI6IuILpUAnM+6Sf1xzmTpdjGdXYPIAxihDUEMCujm7cKPjDH9nGapWvt530YeNIRoULS9EL6X+q2zHAsd0+sTTCQUw/WNQwgx9AcgUX2wf6WEtteXjZOakAzsjVnQ/UkqwiBgoLEbIkiVz9YCN1DPyPoGSNs/OQo6j1ovUEnkA8o45amoWGMzWdvQpkwKNBDmx0t1QjWXPVSxOA4bqlqSOEmvEBwJE4McZg0iaGAtaPTmbLhJ8vYrLIkRr8TYLmcYKbDFg7JQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(346002)(136003)(39860400002)(396003)(451199018)(41300700001)(66946007)(66476007)(66556008)(6916009)(4326008)(8676002)(5660300002)(38350700002)(38100700002)(44832011)(8936002)(2906002)(2616005)(52116002)(6486002)(36756003)(6506007)(26005)(6512007)(1076003)(186003)(6666004)(316002)(478600001)(54906003)(86362001)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2WVMVshIAGDFT5qnsTnjd1zBCwsbx/dw/+HlajkzjFdxOzaCsSKC34Mty7Dd?=
+ =?us-ascii?Q?ZbUW8zzyFAw6was5djdFoLfJPRyjpLOxOFt/uab6LPhKYnkfBfGuAQQa7oJo?=
+ =?us-ascii?Q?ErvHLyVVsT6pHuSe5jJ8jzrYVy1dbFvKrwAcVt5LBfXcPKjVrducspggVULy?=
+ =?us-ascii?Q?LSVxeJ7O2bxb7vVnXk9pBXFDMHyxGTZqpfOZRRr8OrjC1NyucIPnNdJLNbTB?=
+ =?us-ascii?Q?SuixXaP559fl4UcjZ0y/kcnBmwoikoFAEKchEZHq3vFc823bNNFP61VgLbRo?=
+ =?us-ascii?Q?WDARcT3V1tamEMPDWvtSiYwcR/5/nHPrENIX2yXqrqIRx/sFqLYPCMXac0zq?=
+ =?us-ascii?Q?wkaf2iSLDKyJuBD8HQdIuzX9t0LeZHaUnrz6Y1bBWqvPFVqrYeK2ndvCcahV?=
+ =?us-ascii?Q?4fH/TGbPYUepHfi0lEMkEqOuqwlikGMwiofToyQw8NsTQSBWeruSJ15McWQ9?=
+ =?us-ascii?Q?TsCpQCRKTF6VVIRiZHkWlqN1FErGT1U6BKdP0w6w10sfiDGbCHIRpqUbSlcE?=
+ =?us-ascii?Q?9B8K1UXBt8GV9dJtM+5E0xVFlseYK7MIpMpLM6JLvVUaEXlOEAAxmqCKGVWI?=
+ =?us-ascii?Q?qfxaoTYAaQaBbKPqcQTH74IgjzgtS+i+wnsnYeKJKVR8d25rWE3R/665qm6v?=
+ =?us-ascii?Q?S5h78FQIfF77RPfj90DJ01lDBKkyjA08s8t18TnOeuUO0AasWJiqU/sN2XEf?=
+ =?us-ascii?Q?P21zquh1mbNV1zXTDUFQtq7cAlJTqKwgAqdTrw5QvI7VG0vWLgFtlZ5/C0zS?=
+ =?us-ascii?Q?qFVFNX4wisTfXX6zRfbd9/1WVp84G2ogqCJ8akLwS0zn8NBZKfMQgHiPdApJ?=
+ =?us-ascii?Q?3mic22fBhqbXs/ClgTH76kJNTa5D1pkxt5BCLCU9Q9WMj1fMfbw1cJfgGweX?=
+ =?us-ascii?Q?Zm8nmnF2F2S80CJEGUlNyH/xUqG2/+nZtmqzweLcYg+DC74Et5dCJqV4fdd6?=
+ =?us-ascii?Q?Qc0XgRnCd4BNRXSPymRnSokBzkZtcl5q4t7a7f577OgJslnOKG80Wa1A8qMF?=
+ =?us-ascii?Q?8F86uElr6hPvkazfEfgyODr5ZUnRbkt9/dTCoDrs0i2+CLH6SULn508TrMtP?=
+ =?us-ascii?Q?Sme8YtHM7u+iJ6zj2MadX7/ocUNo38XVCGM6yKXn1N6hbcpU8zxemiRcdlBV?=
+ =?us-ascii?Q?zD0RiazLP0Hn5SvTBxXZABf0smCBwShLtmUvpD+Q4BqaRKPCWRavyh31z8ID?=
+ =?us-ascii?Q?Uac+sRWxjy86xUzLzDt92Ov8CnrvXu3wE+mVthMA5KYV4ZNIZOZR30ybMVXO?=
+ =?us-ascii?Q?t2wUyYMIXdMYa/P1pxxyiV+T18ht4myfiFz/6J13EyL/rMm9ITpb7FmTG/1e?=
+ =?us-ascii?Q?l3AoDEQWLu38JuIWtcYeL2usi2z4k3KyQODaMTvZv7QPgjG7aoHwtTV2YTHV?=
+ =?us-ascii?Q?PeETenmuQr2D4YbRHQcsvaXV+OpmbY7AfXpLHRV2rpH+Yp18HKXqekw2Xw+G?=
+ =?us-ascii?Q?tussOkaXgKxdHCZ+EPNXKp6lCjgozgoRKB3mJaonA1zHDKnDNVaESeaGXGF0?=
+ =?us-ascii?Q?vADzK5iUdTAtbbQr9C9ZKQ3yfN1YaSkvn3zC5Ag+1DI/G5qVf5YJsyCwidUm?=
+ =?us-ascii?Q?VBnFDn9/sGKXdHCBV3irsjzISal6ka0gUTFISPTC8OqF4yupxFXJDE3ky3LK?=
+ =?us-ascii?Q?CQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95288b5c-9533-4358-f048-08db273e08bd
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 23:19:19.4459
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8/RKq42+izCJF6sXXnrzT82LyQVmfwm5zudSJV2W1xq+NN7jX4Y23o/UiJRlbIyop0e32vCe39cytiWApjlR+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 03:53:45PM -0700, Pawan Gupta wrote:
-> On Fri, Mar 17, 2023 at 12:04:32PM -0700, Nathan Chancellor wrote:
-> > Hi Emanuele,
-> > 
-> > On Wed, Feb 01, 2023 at 08:29:03AM -0500, Emanuele Giuseppe Esposito wrote:
-> > > Expose IA32_FLUSH_CMD to the guest if the guest CPUID enumerates
-> > > support for this MSR. As with IA32_PRED_CMD, permission for
-> > > unintercepted writes to this MSR will be granted to the guest after
-> > > the first non-zero write.
-> > > 
-> > > Signed-off-by: Jim Mattson <jmattson@google.com>
-> > > Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-> > > ---
-> > >  arch/x86/kvm/vmx/nested.c |  3 ++
-> > >  arch/x86/kvm/vmx/vmx.c    | 70 +++++++++++++++++++++++++--------------
-> > >  2 files changed, 48 insertions(+), 25 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > > index 557b9c468734..075b5ade7c80 100644
-> > > --- a/arch/x86/kvm/vmx/nested.c
-> > > +++ b/arch/x86/kvm/vmx/nested.c
-> > > @@ -654,6 +654,9 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
-> > >  	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-> > >  					 MSR_IA32_PRED_CMD, MSR_TYPE_W);
-> > >  
-> > > +	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-> > > +					 MSR_IA32_FLUSH_CMD, MSR_TYPE_W);
-> > > +
-> > >  	kvm_vcpu_unmap(vcpu, &vmx->nested.msr_bitmap_map, false);
-> > >  
-> > >  	vmx->nested.force_msr_bitmap_recalc = false;
-> > > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > > index c788aa382611..9a78ea96a6d7 100644
-> > > --- a/arch/x86/kvm/vmx/vmx.c
-> > > +++ b/arch/x86/kvm/vmx/vmx.c
-> > > @@ -2133,6 +2133,39 @@ static u64 vmx_get_supported_debugctl(struct kvm_vcpu *vcpu, bool host_initiated
-> > >  	return debugctl;
-> > >  }
-> > >  
-> > > +static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
-> > > +				struct msr_data *msr_info,
-> > > +				bool guest_has_feat, u64 cmd,
-> > > +				int x86_feature_bit)
-> > > +{
-> > > +	if (!msr_info->host_initiated && !guest_has_feat)
-> > > +		return 1;
-> > > +
-> > > +	if (!(msr_info->data & ~cmd))
-> 
-> Looks like this is doing a reverse check. Shouldn't this be as below:
+We collect the software statistics counters for RX bytes (reported to
+/proc/net/dev and to ethtool -S $dev | grep 'rx_bytes: ") at a time when
+skb->len has already been adjusted by the eth_type_trans() ->
+skb_pull_inline(skb, ETH_HLEN) call to exclude the L2 header.
 
-That diff on top of next-20230317 appears to resolve the issue for me
-and my L1 guest can spawn an L2 guest without any issues (which is the
-extent of my KVM testing).
+This means that when connecting 2 DSA interfaces back to back and
+sending 1 packet with length 100, the sending interface will report
+tx_bytes as incrementing by 100, and the receiving interface will report
+rx_bytes as incrementing by 86.
 
-Is this a problem for the SVM version? It has the same check it seems,
-although I did not have any issues on my AMD test platform (but I guess
-that means that the system has the support?).
+Since accounting for that in scripts is quirky and is something that
+would be DSA-specific behavior (requiring users to know that they are
+running on a DSA interface in the first place), the proposal is that we
+treat it as a bug and fix it.
 
-I assume this will just be squashed into the original change but if not:
+This design bug has always existed in DSA, according to my analysis:
+commit 91da11f870f0 ("net: Distributed Switch Architecture protocol
+support") also updates skb->dev->stats.rx_bytes += skb->len after the
+eth_type_trans() call. Technically, prior to Florian's commit
+a86d8becc3f0 ("net: dsa: Factor bottom tag receive functions"), each and
+every vendor-specific tagging protocol driver open-coded the same bug,
+until the buggy code was consolidated into something resembling what can
+be seen now. So each and every driver should have its own Fixes: tag,
+because of their different histories until the convergence point.
+I'm not going to do that, for the sake of simplicity, but just blame the
+oldest appearance of buggy code.
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+There are 2 ways to fix the problem. One is the obvious way, and the
+other is how I ended up doing it. Obvious would have been to move
+dev_sw_netstats_rx_add() one line above eth_type_trans(), and below
+skb_push(skb, ETH_HLEN). But DSA processing is not as simple as that.
+We count the bytes after removing everything DSA-related from the
+packet, to emulate what the packet's length was, on the wire, when the
+user port received it.
 
-Cheers,
-Nathan
+When eth_type_trans() executes, dsa_untag_bridge_pvid() has not run yet,
+so in case the switch driver requests this behavior - commit
+412a1526d067 ("net: dsa: untag the bridge pvid from rx skbs") has the
+details - the obvious variant of the fix wouldn't have worked, because
+the positioning there would have also counted the not-yet-stripped VLAN
+header length, something which is absent from the packet as seen on the
+wire (there it may be untagged, whereas software will see it as
+PVID-tagged).
 
-> ---
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index f88578407494..e8d9033559c4 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2141,7 +2141,7 @@ static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
->  	if (!msr_info->host_initiated && !guest_has_feat)
->  		return 1;
->  
-> -	if (!(msr_info->data & ~cmd))
-> +	if (msr_info->data & ~cmd)
->  		return 1;
->  	if (!boot_cpu_has(x86_feature_bit))
->  		return 1;
+Fixes: f613ed665bb3 ("net: dsa: Add support for 64-bit statistics")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ net/dsa/tag.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/dsa/tag.c b/net/dsa/tag.c
+index b2fba1a003ce..5105a5ff58fa 100644
+--- a/net/dsa/tag.c
++++ b/net/dsa/tag.c
+@@ -114,7 +114,7 @@ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+ 		skb = nskb;
+ 	}
+ 
+-	dev_sw_netstats_rx_add(skb->dev, skb->len);
++	dev_sw_netstats_rx_add(skb->dev, skb->len + ETH_HLEN);
+ 
+ 	if (dsa_skb_defer_rx_timestamp(p, skb))
+ 		return 0;
+-- 
+2.34.1
+
