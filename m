@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BEC6BEDC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FFF6BEDC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjCQQLl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 12:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        id S229990AbjCQQMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCQQLj (ORCPT
+        with ESMTP id S229654AbjCQQMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:11:39 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A4F3FBA1;
-        Fri, 17 Mar 2023 09:11:38 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id x3so22337681edb.10;
-        Fri, 17 Mar 2023 09:11:38 -0700 (PDT)
+        Fri, 17 Mar 2023 12:12:48 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D43FBA1;
+        Fri, 17 Mar 2023 09:12:46 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id w9so22491770edc.3;
+        Fri, 17 Mar 2023 09:12:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679069496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+UuCf1PJrLrKxIyaFZnzsznvIqEjzKrZTS2+zfLkrvo=;
-        b=OsjUPyKkLqc8ePxtbGuhJN1+e65dAUXglNyL6AqLweZgKNYfhFSiB2I/Dl7Cee1vLh
-         EuAOtjVvN79QBGGZT0wedEuNegbVZkI3YYPyBZZfupQXGPYBH5ay/rENqF6zJvVIfNeJ
-         ZQ8pyzuO2AhzHslqD5luDtdU+pIf08pqJ1NNqTdx98EJpWuC3ThGzJJYfaczqO8aLSnz
-         Vb3FlrCIQV4DOLOKxFtfbo7eNSzh5wK+oTP6HPWunuOjePF23/eRGOV3HctN0OGEiDw6
-         8osH4MGgH3GO6VgQMBXdgBbuzvBjIProvd0DaNZePD/1H/cfAkHHXvCn3yQb4H/bqC5G
-         A/3Q==
-X-Gm-Message-State: AO0yUKXiDoe7+NgY1+BAotUHQWo8K33hozZp5PnAYyiIiYTPrWD4uYYn
-        DttLep4+p/CDgG24NUjfjcEvb8Nn20VjNMt6E9HaFx1HpQo=
-X-Google-Smtp-Source: AK7set/XlV/hK+svbmdvfHJLFqE5tbYJnuPdfxiFpfDtsjGq+4WkW2g5cdrxn50qVpzpdKjZtUvhgHIObXZNKqjpUeo=
-X-Received: by 2002:a50:9ecf:0:b0:4fa:b302:6168 with SMTP id
- a73-20020a509ecf000000b004fab3026168mr738078edf.3.1679069496484; Fri, 17 Mar
- 2023 09:11:36 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679069564;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6+rn1YSZmbdUqRFG/vNEu75EzysOAso/oXOoTMRkq2w=;
+        b=B6UUMH4j7viakkjBSD6DEvk1LFmOYrUFv12LeLCU/Ta+59K0+gN7WUjR7ScsbNKeek
+         Xiw43K6VjOzz4x6B4Y9R+qH7N+eOSwSn1Of1pQ0E6PvGv0Pj8ifEq5oMa6VXOsHpSW8X
+         79FU5aveJU4oZ9RsZOLIuiUelvzBCmFsA+MsXdy2SefC/m8gVFPva5YTvS6bLBSY+Ait
+         QWfF1YB8/0Z3PLb3xKWH/lsm7x1IPt4tN5RUbus6tKAKs22SMJedjPhufN2lynGvyiKV
+         1pE3rtipNce9lt/OCRxGYCtE3yJeG4bIZRn4CtSMeE58Kad7VzLFtjDbV4dCRLBFiD9r
+         4ITA==
+X-Gm-Message-State: AO0yUKW+U+CmIR3+UrpOHjRVPocqA7AmK8XEt1WBWQuFGqXf3VCemDmW
+        evxluayZF89RHEAmdS/aZ/GbFypT6Yay3W7rzxvOyVfd2Dg=
+X-Google-Smtp-Source: AK7set8aTYlTuP/LTjAsV0iYNY7A3KgjsTIJEdAjg5Y1tcfhlkASP5RQjJGoxRvAMJO+ECuTInx4eeR1VEWOSfQhXgM=
+X-Received: by 2002:a50:d0d3:0:b0:4fa:71a2:982b with SMTP id
+ g19-20020a50d0d3000000b004fa71a2982bmr1970762edf.0.1679069564593; Fri, 17 Mar
+ 2023 09:12:44 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Mar 2023 17:11:25 +0100
-Message-ID: <CAJZ5v0gOXYVLXkPmk6_9r+Gwa+FXMdVXZBvjJsY--KW2MOC_tg@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.3-rc3
+Date:   Fri, 17 Mar 2023 17:12:33 +0100
+Message-ID: <CAJZ5v0haUo_G041D4N7D++MBOHDX=z04sagWMs7BEmV0sjYUDw@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.3-rc3
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,68 +58,42 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.3-rc3
+ pm-6.3-rc3
 
-with top-most commit f36cc6cd65204352815640a34e37ef39e56fbd42
+with top-most commit 1fa9d47baa9e61ff973e03f0ef26f5b78d545e37
 
- Merge branches 'acpi-video', 'acpi-x86', 'acpi-tools' and 'acpi-docs'
+ Merge branch 'pm-cpuidle'
 
 on top of commit eeac8ede17557680855031c6f305ece2378af326
 
  Linux 6.3-rc2
 
-to receive ACPI fixes for 6.3-rc3.
+to receive power management fixes for 6.3-rc3.
 
-These add some new quirks, fix PPTT handling, fix an ACPI utility and correct a
-mistake in the ACPI documentation.
+These fix an error code path issue in a cpuidle driver and make the
+sleepgraph utility more robust against unexpected input.
 
 Specifics:
 
- - Fix ACPI PPTT handling to avoid sleep in the atomic context when it
-   is not present (Sudeep Holla).
+ - Fix the psci_pd_init_topology() failure path in the PSCI cpuidle
+   driver (Shawn Guo).
 
- - Add backlight=native DMI quirk for Dell Vostro 15 3535 to the ACPI
-   video driver (Chia-Lin Kao).
-
- - Add ACPI quirks for I2C device enumeration on Lenovo Yoga Book X90
-   and Acer Iconia One 7 B1-750 (Hans de Goede).
-
- - Fix handling of invalid command line option values in the ACPI pfrut
-   utility (Chen Yu).
-
- - Fix references to I2C device data type in the ACPI documentation for
-   device enumeration (Andy Shevchenko).
+ - Modify the sleepgraph utility so it does not crash on binary data
+   in device names (Todd Brandt).
 
 Thanks!
 
 
 ---------------
 
-Andy Shevchenko (1):
-      ACPI: docs: enumeration: Correct reference to the I²C device data type
+Shawn Guo (1):
+      cpuidle: psci: Iterate backwards over list in psci_pd_remove()
 
-Chen Yu (1):
-      ACPI: tools: pfrut: Check if the input of level and type is in
-the right numeric range
-
-Chia-Lin Kao (AceLan) (1):
-      ACPI: video: Add backlight=native DMI quirk for Dell Vostro 15 3535
-
-Hans de Goede (3):
-      ACPI: x86: Introduce an acpi_quirk_skip_gpio_event_handlers() helper
-      ACPI: x86: Add skip i2c clients quirk for Acer Iconia One 7 B1-750
-      ACPI: x86: Add skip i2c clients quirk for Lenovo Yoga Book X90
-
-Sudeep Holla (1):
-      ACPI: PPTT: Fix to avoid sleep in the atomic context when PPTT is absent
+Todd Brandt (1):
+      pm-graph: sleepgraph: Avoid crashing on binary data in device names
 
 ---------------
 
- Documentation/firmware-guide/acpi/enumeration.rst |  2 +-
- drivers/acpi/pptt.c                               |  5 ++-
- drivers/acpi/video_detect.c                       |  7 ++++
- drivers/acpi/x86/utils.c                          | 45 +++++++++++++++++++++--
- drivers/gpio/gpiolib-acpi.c                       |  3 ++
- include/acpi/acpi_bus.h                           |  5 +++
- tools/power/acpi/tools/pfrut/pfrut.c              | 18 +++++++--
- 7 files changed, 77 insertions(+), 8 deletions(-)
+ drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+ tools/power/pm-graph/sleepgraph.py    | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
