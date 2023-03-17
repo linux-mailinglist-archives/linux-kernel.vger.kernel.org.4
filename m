@@ -2,172 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84FA6BDE8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D622F6BDE95
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCQCTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 22:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S229735AbjCQCZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 22:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCQCTP (ORCPT
+        with ESMTP id S229455AbjCQCZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 22:19:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A71C3FB81;
-        Thu, 16 Mar 2023 19:19:12 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8BxMI8fzhNkazINAA--.19273S3;
-        Fri, 17 Mar 2023 10:19:11 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOQXzhNk8BADAA--.14729S3;
-        Fri, 17 Mar 2023 10:19:03 +0800 (CST)
-Message-ID: <d8c7df2e-b170-7287-437a-b70778c43a3d@loongson.cn>
-Date:   Fri, 17 Mar 2023 10:19:03 +0800
+        Thu, 16 Mar 2023 22:25:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA659806;
+        Thu, 16 Mar 2023 19:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679019905; x=1710555905;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=lN0S0duYEVhVpeYJoWbsZCurdfLSk8Po8nthinSp1NI=;
+  b=SUW+Bl2u2CaNitcRu65C3k2PBAfUSYzxaeGG5xlDjUnw1C02nCZQk/3Q
+   IgTL+QIV09NTQ1wKxV+FMyFg5OjlheayTiWy662BeAwHej0saepPsPMlq
+   pPhIffQ14Sg2zGgxGB3lEM42Uazczc9kfZGk6byzF/n7CGteANcH87Q03
+   zRGJU5wEuQB62DXR5fFGTaJdgvcISBwDnABzf8QM7lNIqjPa2DcjbFpbT
+   81qeGBthsrB8fquPPKnUjz5xTDhS8M7RSVs/QdpElF5tCsFG51zYZxQSR
+   Sdq8KMZhFVnZrohIoXZJOCdeskyA//W2Cin7yLYtbVGO66GSZDXTMmk5w
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="365858535"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="365858535"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 19:24:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="769187710"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="769187710"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2023 19:24:52 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 19:24:52 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 19:24:51 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 19:24:51 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 16 Mar 2023 19:24:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hs5YdC7KLL2Q5rlrekDk83A+DIdht2/RFXmniNzh3oN/eWJIY648nNUJA8bOQIg6WlrbOAOdJxs535j5rFdLu0UXZaslkPK+MEfj6s+7gwlDw5ks6DebIBxwenVQCO0zLolmFMDf5jWAEBlj/o/yMMFunEU96jIKZmVTR43d5dIkaZU9Yvl6lK76YmU302LkooA5tsIrn1gWhbs3tIIW6iXI6a7R5rNRRIBVgFy1sJwwhq8+iOVcmX6RkwqLn6srzKWYEhYio30wh3TZ2r6oTcczcJm1BawZkVCne4OBXez0+MpQI8nsvN9R1DM5p1sut+HWQ5H5iiypfw10G5FL+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k0YL0wa8vDpUsOp2T9OAKgdKcEz68gdusDSue7mfgpo=;
+ b=B+xSrV2yKADWX3sbiTOvYq1MBMlLlaWgBH0HEnTOaplQUwQPerNdguqAroZyQGTNsoaEtlR40kU2EKqObbeUm3nA6c966hs24SLWtgBIZ/hcxkC62srKlXsSeYRZB6Or1/gDalfha0OzdzrLUfTRMFB5Kiid42SAAuajqcDwq2m6h6xRnqE0RcUY/PuN4crTV+EHDO3sjbsynwVByVckghMID0b4z57ykhmNIjWYcptldH+630RjVS29/DVsmwD4Owh00GAYxAoRsk5Z964DusszQZGZSfilmEHIMMjDZ00J1d1ndsLg0J2QVfTrFDiv8mNgj6TjsvVYUvvhpzTN2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by SN7PR11MB7139.namprd11.prod.outlook.com (2603:10b6:806:2a2::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Fri, 17 Mar
+ 2023 02:24:47 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::66b:243c:7f3d:db9e]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::66b:243c:7f3d:db9e%4]) with mapi id 15.20.6178.033; Fri, 17 Mar 2023
+ 02:24:47 +0000
+Date:   Fri, 17 Mar 2023 10:22:02 +0800
+From:   Yujie Liu <yujie.liu@intel.com>
+To:     Dave Chinner <david@fromorbit.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+CC:     kernel test robot <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
+        <linux-xfs@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
+        <linux-mm@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <yebin10@huawei.com>
+Subject: Re: [PATCH 4/4] pcpcntr: remove percpu_counter_sum_all()
+Message-ID: <ZBPOyjUIInaKhnNd@yujie-X299>
+References: <20230315084938.2544737-5-david@fromorbit.com>
+ <202303160333.XqIRz3JU-lkp@intel.com>
+ <20230315205550.GS360264@dread.disaster.area>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230315205550.GS360264@dread.disaster.area>
+X-ClientProxiedBy: SG2PR06CA0218.apcprd06.prod.outlook.com
+ (2603:1096:4:68::26) To CY5PR11MB6392.namprd11.prod.outlook.com
+ (2603:10b6:930:37::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 2/2] drm: add kms driver for loongson display
- controller
-To:     kernel test robot <lkp@intel.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linaro-mm-sig@lists.linaro.org,
-        Li Yi <liyi@loongson.cn>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <20230315211550.2620818-3-15330273260@189.cn>
- <202303161727.8HnBf6cW-lkp@intel.com>
-Content-Language: en-US
-From:   Sui jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <202303161727.8HnBf6cW-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxoOQXzhNk8BADAA--.14729S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWw4DAFWkZw1UKF4rJr13Jwb_yoWrWryxpa
-        1Yka9xKrW8Xr48GaykGa97Ca4aqan5X34UXryUGw15Z3ZFvFWqgr1I9FWY9rsrKFn7KFW2
-        yrZ3uF1kWFnrZaDanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|SN7PR11MB7139:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85f7f642-3076-4b35-238e-08db268ec711
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +tz7+j8AdwtZb4bDJ2HZdmLB2v0ljS31mIib1M2Ev1/QtYtHalDZN6MawQGgj94wN6JRWNFJx9+8VpqWZgA3UAebvrzbskYAepe/UAgX1mFUp2f53feBWINXCBDpY0z5T2VGhT+B/JFDc2lScbp2lWVV5r1qvV3ZmBdi4Lp/AAebYwJ6oielrSgr+Pw67mf/UoaGU9qNt7GyYo1H5Y5bZjMwDwlkB72haDONFYJ0DUxOWMvyHz5gBty3dXzqRsUiYyZ3ddZtWLihE0y6meokG1gyNXWfQNTiCyEySQgnj/1STwYwHucCDjH9c6nraLjpnyNM1jztyJM4iELzIspI/KWZ5T7y4r2PmWZPG6ruBHRU4cF4PZblpnD0zLQO0SRFiUd+EB+ARstdiRWbzC7KmjMqt5ekM5++Bn/dW4pxIzBYLZJ3LB6472VpPkCYobnVFSxZOIRkU7zqrYILr76J+rJ3EaXSrh7/bZKen5yPqxdsRIPtpHOaMaozg9xSGYo5XNw0jsSQ/Qfu4L4j9v0bwTAwlIgM+UHRJNlyh9iB6MutvjPP5Bz/KzhS25XV94kKBplU+ZqOeMBpyIKF8c16GtichfYTJm1SUJ5dt7aSGaqA66eqmerXbSsFzgWN90ueDCrAqkCMs7N2OKJtijG3yOLPFOGYl43wG9gYFiQkXX8iIgTRwXcpV3G6NGTNNxPOAUd2kUM0zXi4qRAUi7ISBo9Dqv++C555kLxxFA9LWUw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199018)(110136005)(966005)(41300700001)(478600001)(8676002)(8936002)(66556008)(66476007)(33716001)(86362001)(66946007)(38100700002)(82960400001)(4326008)(26005)(9686003)(186003)(6666004)(6486002)(44832011)(6512007)(5660300002)(2906002)(6506007)(316002)(83380400001)(133343001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rocWwkkTVNsUXnULBKkGrLOa43+kPyEV9b75RsdFZAletRQDB335iKCFDSJV?=
+ =?us-ascii?Q?P4sSi2hOsdwGzmXIFFrgzEGxyXOvG8pvohcniP2yeEOgoAac7OocIbm0Hh+w?=
+ =?us-ascii?Q?KMFDM9raVoTxuMCg+xIIn0s8Dnz5cVw9kGrtGeQyHzfAREr+BIceW8EG/J37?=
+ =?us-ascii?Q?ePzbdJsZw1BP8RjK36wJ8wMAr3t919zmsCWnEnoeyVBPJ9KD/X/DlmCih2YH?=
+ =?us-ascii?Q?GoOGZiwszC55DCMzqkVFoGdlm9eF0Z6TzmD96QCKZxrqDWI838Z0YEs8U2EG?=
+ =?us-ascii?Q?VOmSMme+cw8sWdeJhaJPJkSLX3EgdJ2GaVZuXpStvlP1TWsWONjhOTELH7fS?=
+ =?us-ascii?Q?lKb0TLrxMm8QoVeb9BrbzzBEqKkrYuy985uCA8lgF0/t1UIzLqjnx86hYm2V?=
+ =?us-ascii?Q?lCOh7lQDrdwoD+UlwnHT1H7cnOmK1LwPdR2vbJ90TQ7dl70vDrWcsKk0X/o5?=
+ =?us-ascii?Q?yEFScCHP28Z9Ct+l/nVWH/QGSkpRUz0k5zudu1ZqvigDreBMZANd/gOkhpcL?=
+ =?us-ascii?Q?I+KKL22ZGAjAhF0YJN71Myk7yziO3ZBkWDR7DIDX4ePJ7uDox67yAXA8pPv/?=
+ =?us-ascii?Q?4TyPsiEDAclNMbGNBs7UUuaf87Mk3y2NGf77z9zLmatWzTGFvVWVqagP6JjP?=
+ =?us-ascii?Q?/yPcMork8o6H1RnzElP4xkBfogS4+v3C9fnKleotsLIaPpd0mqCFIyp0oS8X?=
+ =?us-ascii?Q?CZDM9czXmSRLobv+NOPllBzIzd7n6DzsO967S+VW09bGmUxoP/tiS2vIlJ2Q?=
+ =?us-ascii?Q?QoOK+s1h5/QEOhVpdEFojoDvtSPk+sMQBXcSRy1ZVCphnorsMBrHiblP8RK0?=
+ =?us-ascii?Q?iPCqZ7pphYH+yF6Ukbs42OTQfgVltd5D/DPRLXb415BFaOsOxQxaBW/7e4Ea?=
+ =?us-ascii?Q?2lQJv5ySFOzfOIv7EXDpbDCpBXdYz43o7jHk2uKaaOWfLm0nfyC0FdstI/u3?=
+ =?us-ascii?Q?jjVjvGLeF0cI3YIapr5iZ2ziyGhHF5hBuGprWTUnb0vz3VskYl3FQ9p3TtOp?=
+ =?us-ascii?Q?8svxtp7lSJuzP57Of1eBYOJDjaxGPWrJS1H6S+aLozr6U/nG4sCqoPzqC/dm?=
+ =?us-ascii?Q?g3rbdTlKyqDcfcUytkGe1A7I2ZaRcndcKRl7NE9VtLGO8K3Hq4ff6BQsTKpW?=
+ =?us-ascii?Q?iNTDyRG+SccIFPZ3NseR/zvO5uAqFwwROQSHoIBH5XvrqC4LAMoIkfk/pBo2?=
+ =?us-ascii?Q?DiJzPpmo8vSUoSmkzAaxIYFfL7YK9KbOTtaTc2+iqFkNu3VMJGQFcjhkP4ww?=
+ =?us-ascii?Q?a/lxgzaGtW53gdW5KwCDwfouVfD1p35jWPJOlH8PcckBFnaFFB5ElDsGsFHe?=
+ =?us-ascii?Q?VeHXNobKqcdn4l7Ot62dFtrY73BGaHyXy/6rMzyhed5M9RziDnSu1vwxumhJ?=
+ =?us-ascii?Q?O6G7F2nVlNANYwaBY+BAON7oVj47Pn7U4wve6Su72wNPClTjZa/4u2dP9pZe?=
+ =?us-ascii?Q?YQZXUJFO9RFtv/zQbXQ84xly4AOuPfHMTLTjo2bvYGY7S+CMc9hdgh5WrXWn?=
+ =?us-ascii?Q?S9aFZDbzQfckCcmed/HL7iyY2O+BISG4OGzR9Ayu0rxhNPrmOOAAbSBifpFM?=
+ =?us-ascii?Q?ja18TqLEgBCj/XGALQB7lDoUoeoi3fbtbLsBraE1?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85f7f642-3076-4b35-238e-08db268ec711
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 02:24:47.7568
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7JNcE4VibAPFI7hPq54hYQPIsV+NFLg03hfX/MIUpPsYJ1RecJEWuUO8ceeqsdJH4JDjiHCqU2IbtShr5aZmtw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7139
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 07:55:50AM +1100, Dave Chinner wrote:
+> On Thu, Mar 16, 2023 at 03:22:31AM +0800, kernel test robot wrote:
+> > Hi Dave,
+> > 
+> > Thank you for the patch! Yet something to improve:
+> 
+> No, ithere is nothing wrong with my patch series, this is something
+> for _you_ to improve.
+> 
+> > [auto build test ERROR on linus/master]
+> > [also build test ERROR on v6.3-rc2 next-20230315]
+> > [cannot apply to dennis-percpu/for-next]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/cpumask-introduce-for_each_cpu_or/20230315-165202
+> > patch link:    https://lore.kernel.org/r/20230315084938.2544737-5-david%40fromorbit.com
+> > patch subject: [PATCH 4/4] pcpcntr: remove percpu_counter_sum_all()
+> > config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20230316/202303160333.XqIRz3JU-lkp@intel.com/config)
+> > compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> > reproduce (this is a W=1 build):
+> >         # https://github.com/intel-lab-lkp/linux/commit/8360dcb55f1eb08fe7a1f457f3b99bef8e306c8b
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review Dave-Chinner/cpumask-introduce-for_each_cpu_or/20230315-165202
+> >         git checkout 8360dcb55f1eb08fe7a1f457f3b99bef8e306c8b
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         make W=1 O=build_dir ARCH=i386 olddefconfig
+> >         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/ fs/xfs/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202303160333.XqIRz3JU-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    In file included from include/linux/string.h:5,
+> >                     from include/linux/uuid.h:11,
+> >                     from fs/xfs/xfs_linux.h:10,
+> >                     from fs/xfs/xfs.h:22,
+> >                     from fs/xfs/xfs_super.c:7:
+> >    fs/xfs/xfs_super.c: In function 'xfs_destroy_percpu_counters':
+> > >> fs/xfs/xfs_super.c:1079:16: error: implicit declaration of function 'percpu_counter_sum_all'; did you mean 'percpu_counter_sum'? [-Werror=implicit-function-declaration]
+> >     1079 |                percpu_counter_sum_all(&mp->m_delalloc_blks) == 0);
+> >          |                ^~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+> >       77 | # define likely(x)      __builtin_expect(!!(x), 1)
+> >          |                                             ^
+> >    fs/xfs/xfs_super.c:1078:9: note: in expansion of macro 'ASSERT'
+> >     1078 |         ASSERT(xfs_is_shutdown(mp) ||
+> >          |         ^~~~~~
+> >    cc1: some warnings being treated as errors
+> > 
+> > 
+> > vim +1079 fs/xfs/xfs_super.c
+> > 
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1070  
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1071  static void
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1072  xfs_destroy_percpu_counters(
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1073  	struct xfs_mount	*mp)
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1074  {
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1075  	percpu_counter_destroy(&mp->m_icount);
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1076  	percpu_counter_destroy(&mp->m_ifree);
+> > 8757c38f2cf6e5 Ian Kent        2019-11-04  1077  	percpu_counter_destroy(&mp->m_fdblocks);
+> > 75c8c50fa16a23 Dave Chinner    2021-08-18  1078  	ASSERT(xfs_is_shutdown(mp) ||
+> > c35278f526edf1 Ye Bin          2023-03-14 @1079  	       percpu_counter_sum_all(&mp->m_delalloc_blks) == 0);
+> 
+> This change has not been committed to any tree that I am aware of.
+> It was only posted to the XFS list yesterday, and I effectively
+> NACK'd it and wrote this patchset instead to fix the issue.
+> 
+> IOWs, if -anyone- has actually committed this change to add
+> percpu_counter_sum_all() to XFS, they've done the wrong thing.
+> Hence this build failure is a robot issue, not a problem with my
+> patch series.
 
-On 2023/3/16 17:53, kernel test robot wrote:
-> Hi Sui,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm-misc/drm-misc-next]
-> [also build test WARNING on linus/master v6.3-rc2 next-20230316]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230316-051724
-> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> patch link:    https://lore.kernel.org/r/20230315211550.2620818-3-15330273260%40189.cn
-> patch subject: [PATCH v7 2/2] drm: add kms driver for loongson display controller
-> config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230316/202303161727.8HnBf6cW-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/ba899dba3475b9612f212e3b1daedc3d9a299458
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230316-051724
->          git checkout ba899dba3475b9612f212e3b1daedc3d9a299458
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/loongson/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303161727.8HnBf6cW-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->     drivers/gpu/drm/loongson/lsdc_gem.c: In function 'lsdc_show_buffer_object':
->>> drivers/gpu/drm/loongson/lsdc_gem.c:280:51: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
->       280 |                 seq_printf(m, "bo[%04u]: size: %8lukB %s\n",
->           |                                                ~~~^
->           |                                                   |
->           |                                                   long unsigned int
->           |                                                %8u
->       281 |                            i,
->       282 |                            lsdc_bo_size(tbo) >> 10,
->           |                            ~~~~~~~~~~~~~~~~~~~~~~~
->           |                                              |
->           |                                              size_t {aka unsigned int}
->
->
-> vim +280 drivers/gpu/drm/loongson/lsdc_gem.c
->
->     264	
->     265	int lsdc_show_buffer_object(struct seq_file *m, void *arg)
->     266	{
->     267	#ifdef CONFIG_DEBUG_FS
->     268		struct drm_info_node *node = (struct drm_info_node *)m->private;
->     269		struct drm_device *ddev = node->minor->dev;
->     270		struct lsdc_device *ldev = to_lsdc(ddev);
->     271		struct lsdc_bo *lbo;
->     272		unsigned int i = 0;
->     273	
->     274		mutex_lock(&ldev->gem.mutex);
->     275	
->     276		list_for_each_entry(lbo, &ldev->gem.objects, list) {
->     277			struct ttm_buffer_object *tbo = &lbo->tbo;
->     278			struct ttm_resource *resource = tbo->resource;
->     279	
->   > 280			seq_printf(m, "bo[%04u]: size: %8lukB %s\n",
->
-Hi, this is buffer objects tracking implemented in v7
+Sorry about this false positive report.
 
-For example,
+The robot misinterpreted the link in the cover letter, and wrongly
+thought it was a prerequisite patch for this patch series, leading to
+this false report.
 
-[root@fedora 0]# pwd
+We will improve the robot and increase the accuracy.
 
-/sys/kernel/debug/dri/0
-
-[root@fedora 0]# cat chip
-
-I'm in LS7A2000, running on cpu 0xc0, cpu revison: 0x11
-
-[root@fedora 0]# cat bos
-bo[0000]: size:     8112kB VRAM
-bo[0001]: size:    16208kB VRAM
-bo[0002]: size:       16kB VRAM
-bo[0003]: size:       16kB VRAM
-
-
-When using with modesetting driver with shadowfb option enabled.
-
-by default we have only 4 BOs create, the first one is for fbcon,  the 
-largest one is  framebuffer of double screen.
-
-another two is hardware cursor bo.  Our system page size is 16KB by default.
-
+--
+Best Regards,
+Yujie
