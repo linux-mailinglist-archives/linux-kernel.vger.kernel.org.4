@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618BD6BE164
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A1F6BE170
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjCQGkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 02:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S230107AbjCQGoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjCQGkg (ORCPT
+        with ESMTP id S229665AbjCQGoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 02:40:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EA89224C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 23:40:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 12F561FDD8;
-        Fri, 17 Mar 2023 06:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679035224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=oXhQ00jPveWGt6xvfgqkrGOY8fgVyIZGH7STWyheHWY=;
-        b=E1t/Sg7Ji8i0b2pYewTrDjtoAbUewcg/C5VkVXR9piZ0rjNgQLg9gzt99o1W0Vosl/rP6T
-        8Ndj7sJyl7xhgjhtsCXV+2rRxks2BF9P9A8LwWnKKnMXcPVvnULAUrDpXixWjmLC9bS7ls
-        GgZ5NxXpUshiyN+P/oUavsDn/ONtHsY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF10113428;
-        Fri, 17 Mar 2023 06:40:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wksJNVcLFGQhfwAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 17 Mar 2023 06:40:23 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        sstabellini@kernel.org
-Subject: [GIT PULL] xen: branch for v6.3-rc3
-Date:   Fri, 17 Mar 2023 07:40:23 +0100
-Message-Id: <20230317064023.1229-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 17 Mar 2023 02:44:06 -0400
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0942A5C137;
+        Thu, 16 Mar 2023 23:43:53 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABHTQkaDBRk5fQMEQ--.40302S2;
+        Fri, 17 Mar 2023 14:43:38 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     kuba@kernel.org
+Cc:     sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
+        hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Subject: [PATCH v2] octeontx2-vf: Add missing free for alloc_percpu
+Date:   Fri, 17 Mar 2023 14:43:37 +0800
+Message-Id: <20230317064337.18198-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowABHTQkaDBRk5fQMEQ--.40302S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rZF4fCr17uw15XFWfGrg_yoW8WF13pa
+        18AFy7ur45XF43WwsrAa4rGFWfGayDt3ySg34Fkw4Fvw43tFn5ZFyqkrW0kr18GrWkWFnx
+        ta4Yv393W3Z5JaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUb2Nt3UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Add the free_percpu for the allocated "vf->hw.lmt_info" in order to avoid
+memory leak, same as the "pf->hw.lmt_info" in
+`drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c`.
 
-Please git pull the following tag:
+Fixes: 5c0512072f65 ("octeontx2-pf: cn10k: Use runtime allocated LMTLINE region")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Acked-by: Geethasowjanya Akula <gakula@marvell.com>
+---
+Changelog:
 
- git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.3-rc3-tag
+v1 -> v2:
 
-xen: branch for v6.3-rc3
+1. Remove the if () checks.
+---
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-It contains:
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+index 7f8ffbf79cf7..ab126f8706c7 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+@@ -709,6 +709,7 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ err_ptp_destroy:
+ 	otx2_ptp_destroy(vf);
+ err_detach_rsrc:
++	free_percpu(vf->hw.lmt_info);
+ 	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+ 		qmem_free(vf->dev, vf->dync_lmt);
+ 	otx2_detach_resources(&vf->mbox);
+@@ -762,6 +763,7 @@ static void otx2vf_remove(struct pci_dev *pdev)
+ 	otx2_shutdown_tc(vf);
+ 	otx2vf_disable_mbox_intr(vf);
+ 	otx2_detach_resources(&vf->mbox);
++	free_percpu(vf->hw.lmt_info);
+ 	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
+ 		qmem_free(vf->dev, vf->dync_lmt);
+ 	otx2vf_vfaf_mbox_destroy(vf);
+-- 
+2.25.1
 
-- a small cleanup series for xen time handling
-- a patch for enabling the VGA console in a Xen PVH dom0
-- a small cleanup patch for the xenfs driver
-
-Thanks.
-
-Juergen
-
- arch/x86/include/asm/xen/cpuid.h | 22 ++++++++++++++++++----
- arch/x86/xen/Makefile            |  2 +-
- arch/x86/xen/enlighten_pv.c      |  3 ++-
- arch/x86/xen/enlighten_pvh.c     | 13 +++++++++++++
- arch/x86/xen/time.c              |  7 ++-----
- arch/x86/xen/vga.c               |  5 ++---
- arch/x86/xen/xen-ops.h           |  7 ++++---
- drivers/xen/xenfs/xensyms.c      | 10 +++++-----
- include/xen/interface/platform.h |  3 +++
- 9 files changed, 50 insertions(+), 22 deletions(-)
-
-Jan Beulich (1):
-      x86/PVH: obtain VGA console info in Dom0
-
-Krister Johansen (2):
-      xen: update arch/x86/include/asm/xen/cpuid.h
-      x86/xen/time: cleanup xen_tsc_safe_clocksource
-
-Yu Zhe (1):
-      xen: remove unnecessary (void*) conversions
