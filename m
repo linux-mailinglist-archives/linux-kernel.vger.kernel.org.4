@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4FF6BE038
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F0B6BE03E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjCQEk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 00:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S229804AbjCQEmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 00:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCQEkX (ORCPT
+        with ESMTP id S229620AbjCQEmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 00:40:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B3627D68;
-        Thu, 16 Mar 2023 21:40:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D82CB81C3C;
-        Fri, 17 Mar 2023 04:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9ADFEC4339B;
-        Fri, 17 Mar 2023 04:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679028019;
-        bh=GuSbANHANMsTyqANAtTFzxbCC5Q6L7J9KyihUnvmIWs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ToYjBPnJsOEw/JwakbUZMC/Lyfs6vMo0Oudn1DumR/IZndrvnxvQlHER3GCnPXs9f
-         TPxtPl0m6KoG79soT1lDWkrCxA0aPrN+S26/QB41ymO58bFFrEQGmb9MMun61I11WW
-         zRNOWmFRu9V/cRr8VWvkDOplX5jMqvrTAfrEacCcz25ESX9G1l8e0BGv+iGZUqQihd
-         QmmtaiPyJMUOjXwGbz8lPCZNei2zHORVRo5x5da6z9OLACOEnhGFCghwnzORZ4N8If
-         xn6q4msCx29i6L65yR2hMxKwihPxESgQwSVpCE72vscAm6iJqU7CxzzWAWU5WljhhR
-         skFJRnoqks1Jg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7192CE66CBF;
-        Fri, 17 Mar 2023 04:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Mar 2023 00:42:01 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7534839B90;
+        Thu, 16 Mar 2023 21:42:00 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o11so4089446ple.1;
+        Thu, 16 Mar 2023 21:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679028120;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3oQztqU78ZT+tQqAztj2/Sep9u0A1fhNGYG5/eDPvQQ=;
+        b=ogeZfnLsVIaIST03i51847uLuChbd4rUYQXHvcP8zkQUNHhXRasziBP8SiQS2aM0OQ
+         nO9bP5sigHc3SvMCU/Aa5GEhTptjfZg+3xGn4QHoH92pstpIclP8fXcdBwSEXNQ6yHKU
+         WqJBoInir0sFl+SUA/qxxMO9El7KlXMs/M/vNt8xs71xxxSViQIU31pMJezxlkWcrDS8
+         9HGYcDlv/Ep3QiyyYobCikR//rPTTrxvY70azXXZOketS4a1NuKgAbIXLd1sVdEeBF26
+         mKDVdDS5zkpy6u9Y9ncJ9ZMxw5IGM3DInNrrmuu8cyV0F5S/7oBOlFwPyxRmFnXAfrqo
+         SKAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679028120;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3oQztqU78ZT+tQqAztj2/Sep9u0A1fhNGYG5/eDPvQQ=;
+        b=YO0I8ejo40qA7j9o0GhCzuaNuE8tQw/XX50E8t7H+CFGl3p7YuChgqUTAyUbqb0ksZ
+         hdM0xRSIWUo/VbrTZ4r82aprsUVqfgkO8/TepswGoAp6cEer+CLYh/3YBFseHhVWUckl
+         PSTDpycEp0b0KwObi5mMf44G8y5rsxOZz5jX8kRaZC6eCNQEDs6nrUomguJsRpTXSMEM
+         69Uu42+w6OTYKHLvF5Vhx4+2saB8liF0N7MPquqNt1zxOLobnBqy+cbJSiV2fQYyOT02
+         52ZpCnK3BNzjqnNC0XlexO7A5zr8eVnPalWhAW54szTO792LU29+gh5ljW76GC/t079o
+         VBig==
+X-Gm-Message-State: AO0yUKV4VmNv08cEGzOg+N9m6UnU1EApfX3cjggUWykt5AHFQLnPgNLa
+        83ICg6dtv0JhcZ6+tlREGQw=
+X-Google-Smtp-Source: AK7set86Aq4DKVfNN16hZY5NYjUMmeTEfvIfcpE3APKapY81xbPAVdTDh1PpgLqvClfg7SbsvPR3OA==
+X-Received: by 2002:a17:902:fa8b:b0:19d:14c:e590 with SMTP id lc11-20020a170902fa8b00b0019d014ce590mr4761933plb.9.1679028119966;
+        Thu, 16 Mar 2023 21:41:59 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170902728100b0019a7f427b79sm518231pll.119.2023.03.16.21.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 21:41:59 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 0E7E0105FAD; Fri, 17 Mar 2023 11:41:55 +0700 (WIB)
+Date:   Fri, 17 Mar 2023 11:41:55 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/137] 6.2.7-rc2 review
+Message-ID: <ZBPvk+qsO1SNWRZ6@debian.me>
+References: <20230316083443.733397152@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/4] net: ipa: minor bug fixes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167902801945.7493.9442486454215262056.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Mar 2023 04:40:19 +0000
-References: <20230316145136.1795469-1-elder@linaro.org>
-In-Reply-To: <20230316145136.1795469-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, caleb.connolly@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hI0+/BKgqinWJgLM"
+Content-Disposition: inline
+In-Reply-To: <20230316083443.733397152@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+--hI0+/BKgqinWJgLM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 16 Mar 2023 09:51:32 -0500 you wrote:
-> The four patches in this series fix some errors, though none of them
-> cause any compile or runtime problems.
-> 
-> The first changes the files included by "drivers/net/ipa/reg.h" to
-> ensure everything it requires is included with the file.  It also
-> stops unnecessarily including another file.  The prerequisites are
-> apparently satisfied other ways, currently.
-> 
-> [...]
+On Thu, Mar 16, 2023 at 09:50:31AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.7 release.
+> There are 137 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Here is the summary with links:
-  - [net,v3,1/4] net: ipa: reg: include <linux/bug.h>
-    https://git.kernel.org/netdev/net/c/dd172d0c2cea
-  - [net,v3,2/4] net: ipa: add two missing declarations
-    https://git.kernel.org/netdev/net/c/55c49e5c9441
-  - [net,v3,3/4] net: ipa: kill FILT_ROUT_CACHE_CFG IPA register
-    https://git.kernel.org/netdev/net/c/786bbe50e1d5
-  - [net,v3,4/4] net: ipa: fix some register validity checks
-    https://git.kernel.org/netdev/net/c/21e8aaca401c
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--hI0+/BKgqinWJgLM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBPvjgAKCRD2uYlJVVFO
+o0CvAQDJcWVbAMlyRpDPQpIY8SCVINyhjyV4HtUqAMlr0rQhDQD9GXqEjZp3Mvvg
+YoUbCKs8wCCgHMfjI1D461zvgZh4zAc=
+=7HGc
+-----END PGP SIGNATURE-----
+
+--hI0+/BKgqinWJgLM--
