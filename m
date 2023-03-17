@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3A46BE1F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0E26BE1F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCQHdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S229755AbjCQHhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjCQHdt (ORCPT
+        with ESMTP id S229488AbjCQHhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:33:49 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8839168A5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:33:40 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CF54A1C0E45; Fri, 17 Mar 2023 08:33:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1679038418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E/USnkD21tOk/mNzvc6EzgZMBGT4MDY9VGR86oLWqmE=;
-        b=hzeCKbtqHLgDBeN9zC/AdieGsJ1GHTqo8frsZMbNBEkMW8DtoMw24WWyYebGi1+pHoYpxs
-        WvZXcoPu5q43o0Bl5FXV2U7AU6QnTy85j5qvVAMdzQKuxohFimT9E5W2hI1NifyyWrj16B
-        hW4TL3UPPiYX4lZyw6JLUdHzyoZyp9g=
-Date:   Fri, 17 Mar 2023 08:33:38 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     1000001101000 <systemalerts@jeremypeper.com>
-Cc:     linux-kernel@vger.kernel.org, arnd@kernel.org,
-        "Jeremy J . Peper" <jeremy@jeremypeper.com>
-Subject: Re: [PATCH 1/3] set the correct driver for the i2c RTC
-Message-ID: <ZBQX0i1QB11mXhQ8@duo.ucw.cz>
-References: <20230316234009.2115005-1-user@earth>
+        Fri, 17 Mar 2023 03:37:36 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99395591CE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=zyt1cfw0jYCCk9h4gwhTQKl7e2xx/66T6CVpLRuvcDQ=;
+  b=XoYZKsvA7xdaR+qNoowkvAMiYnJ3UNtqu2dJ8KyBd/F9UObeH3YTEoN7
+   6Dl9flD4+HZ0P7Fm4EIhe7xwwgRmK45KEQVXdF+XyTHWCMbdM71xh8bq0
+   M35q2qceBnvCODC8J/2ochsodSdIfMDxDeaSxnqUUedJzJu8cJ4ZWXjZd
+   o=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,268,1673910000"; 
+   d="scan'208";a="97686576"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 08:37:33 +0100
+Date:   Fri, 17 Mar 2023 08:37:33 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+cc:     drv@mailo.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v4] Staging: octeon: Fix line ending with '('
+In-Reply-To: <20230317071352.GA83845@sumitra.com>
+Message-ID: <5b46f3a3-d12-299b-7223-df46ce90166c@inria.fr>
+References: <20230317052455.GA83442@sumitra.com> <alpine.DEB.2.22.394.2303170700270.3105@hadrien> <20230317071352.GA83845@sumitra.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="pCJ/V5672q2ALyz1"
-Content-Disposition: inline
-In-Reply-To: <20230316234009.2115005-1-user@earth>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,51 +51,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---pCJ/V5672q2ALyz1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu 2023-03-16 18:40:07, 1000001101000 wrote:
-> From: Jeremy J. Peper <jeremy@jeremypeper.com>
+On Fri, 17 Mar 2023, Sumitra Sharma wrote:
 
-You probably should use this as a "From:" in the email, and need to
-sign-off the patches.
+> On Fri, Mar 17, 2023 at 07:03:08AM +0100, Julia Lawall wrote:
+> >
+> >
+> > On Thu, 16 Mar 2023, Sumitra Sharma wrote:
+> >
+> > > Since the coding style limited the code to 80 columns per line which caused
+> > > splitting the function header into two lines resulted in the first line
+> > > ending with a '('. This caused the checkpatch error.
+> >
+> > The first sentence is still not really grammatical.  Something like:
+> >
+> > The coding style used to limit lines to 80 characters, which led to
+> > splitting this function header into multiple lines, and ending thie first
+> > line with a (.
+> >
+> > For checkpatch, is it an error or a warning?
+> >
+>
+> HI julia,
+>
+> Yes, you are correct, I did the mistake its not the error but a check.
+>
+> How about this...
+>
+> ###
+> The coding style used to limit lines to 80 characters, which led to splitting
+> this function header into multiple lines and ending the first line with a '('.
+> This split causes a check reported by the checkpatch.
+>
+> Place the function parameters immediately after '(' in a single line to
+> align the function header.
+> ###
 
-Best regards,
-								Pavel
+Looks better.
 
-> ---
->  arch/arm/mach-mv78xx0/buffalo-wxl-setup.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c b/arch/arm/mach-mv=
-78xx0/buffalo-wxl-setup.c
-> index 383dc6eab..c3f6dc351 100644
-> --- a/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-> +++ b/arch/arm/mach-mv78xx0/buffalo-wxl-setup.c
-> @@ -39,7 +39,7 @@ static struct mv_sata_platform_data db78x00_sata_data =
-=3D {
->  };
-> =20
->  static struct i2c_board_info __initdata db78x00_i2c_rtc =3D {
-> -	I2C_BOARD_INFO("ds1338", 0x68),
-> +	I2C_BOARD_INFO("rs5c372a", 0x32),
->  };
-> =20
-> =20
+thanks,
+julia
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---pCJ/V5672q2ALyz1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBQX0gAKCRAw5/Bqldv6
-8jL1AKC2ddpKiDNGmrGproStlPxJWf7BOwCfYVIwLZQM7mDmCOyCTxPIc6QP3U4=
-=n1fP
------END PGP SIGNATURE-----
-
---pCJ/V5672q2ALyz1--
+>
+>
+> Thank you for your reviews.
+>
+> Regards,
+> Sumitra
+>
+> > julia
+> >
+> > >
+> > > Place the function parameters immediately after '(' in a single
+> > > line to align the function header.
+> > >
+> > > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > > ---
+> > > v2: Change patch subject and description
+> > >
+> > > v3: Change patch description, noted by Deepak R Varma
+> > > <drv@mailo.com>
+> > >
+> > > v4: Correct grammartical mistakes, noted by Julia Lawall
+> > > <julia.lawall@inria.fr>
+> > >
+> > >
+> > >
+> > >  drivers/staging/octeon/octeon-stubs.h | 4 +---
+> > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
+> > > index 7a02e59e283f..3e7b92cd2e35 100644
+> > > --- a/drivers/staging/octeon/octeon-stubs.h
+> > > +++ b/drivers/staging/octeon/octeon-stubs.h
+> > > @@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
+> > >  						  int32_t value)
+> > >  { }
+> > >
+> > > -static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
+> > > -	int interface,
+> > > -	int port)
+> > > +static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
+> > >  {
+> > >  	union cvmx_gmxx_rxx_rx_inbnd r;
+> > >
+> > > --
+> > > 2.25.1
+> > >
+> > >
+> > >
+>
