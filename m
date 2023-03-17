@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046B26BE57F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95BD6BE581
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjCQJZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S231310AbjCQJZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjCQJY7 (ORCPT
+        with ESMTP id S231193AbjCQJZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:24:59 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE78A5EF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:24:54 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id b13so4376244ljf.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:24:54 -0700 (PDT)
+        Fri, 17 Mar 2023 05:25:15 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD279B6D04
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:25:13 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y4so17906722edo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679045093;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8MM6+PVvmNctKWRUEeKFo+Q7UBEhBwI3Y3kPxVWz3mQ=;
-        b=UWAlgGtSiDeVy/+M72RpLqqMDEvcTiOhVZt8+EP6WOqov7RObi1ZUS5+/Bca/DAcJg
-         sIAHvgoX4UwLVbmTO2G0/D4RI53zNZpD5ZDfnQKFBv40rtvzApPCLffEGwwUFnuifDFR
-         7rzK/fHf8e78PwZjX9kswhFfGiMXFjKYa5YYSOX2snNA8D/4YCgt0n3bzj0jXmV6DWIW
-         utssuqZ0kL6G99U/PjISyJCXWr3MsSxFprXN+thOpiJbwil0c/YqqtyLwkYbTX5xepPM
-         wo4EmtUdwjFGBgtQlr5uK7hNkOQ/wpMHZe+Xb+Rt8qHItPp2S11RbR2FPF6YP6lio1d8
-         C7tQ==
+        d=linaro.org; s=google; t=1679045112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MlLEXPAyc6Yf23gKGJxdN1O2nSWmWz8A1QbLTo26vFc=;
+        b=sGRD3ZniFxujJcvbDRiM5xD17dwCf5vPaQdVPdd6LO7bDHprGJNzcRVFnVkcldquo1
+         wM90wjTCGqOjB6OCDALvnJdV4ytKBTSqP8EwMW6AWmsJuekh3p5tS+MkzVMzNsTquTAP
+         3W5kvd3H3hNtlsSz2vHMqJL7LDHVNZFhuTf+V+e8dC9755giWHu+/lCmcnkvX/5GeJ7p
+         A9YI8XxJmGMeicuiekoG3QB1HXOfs3x7wp62+b9y9l+1+oQJ+5rM8QN+y/Q2WFk+mMzm
+         /EzPc9McE8m1j5jfVMvCHEIkrm420OwfkfN5WxvPQ3BlhilDgMxa3nzJ6M2NFf+NO/4S
+         pnWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679045093;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8MM6+PVvmNctKWRUEeKFo+Q7UBEhBwI3Y3kPxVWz3mQ=;
-        b=K8UmQGT1HL4Zgze1xK1Rax/rv32kr16SmTC53nqPr3kJkNeBZbOu9JL5ELxzcNL4cG
-         7vbbc0AoD7oJ1eg16iCCQ5O41S9y3HxCrFPw0wDJWLpdPVHL/aMUT+QktvBjtv3DoP9T
-         nM8QRqbY1dhBcNXTa/BXSIipfvDaxV7O2qncq1ZfbkgwqdhsxvEcJF+xXEddBoDqr5IC
-         H1tdUsohY0uf/p51krIBxXarg3akHfRJkpuXweyffPpuJAiE/AwRK21BD7q0hvIB/5b8
-         1mEKOHqZldBT8t0ZxoFX12UQeM9j+lIy4C0Idi1ElNPxRCiQF/LKodq2gMCR3HzXW2v0
-         983Q==
-X-Gm-Message-State: AO0yUKWnwRhCOQDgROl5d87iCC5Hq6LGwkTMJ0yrg68Ilq3rd5qZoh/k
-        rbv2M+6Yd6GYYq1bWDD0H0yW7g==
-X-Google-Smtp-Source: AK7set8tsWcmrQBmVnRYk/PTEJDPWVrGYwgtzlLxYLNZxvANqSEgL3T4/ONo8ENL2VjImNR4KL3Gtg==
-X-Received: by 2002:a2e:b8c4:0:b0:295:c455:1cea with SMTP id s4-20020a2eb8c4000000b00295c4551ceamr3812204ljp.49.1679045093088;
-        Fri, 17 Mar 2023 02:24:53 -0700 (PDT)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id p4-20020a19f004000000b004db3890cb53sm281148lfc.223.2023.03.17.02.24.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 02:24:52 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v6.3-rc3
-Date:   Fri, 17 Mar 2023 10:24:51 +0100
-Message-Id: <20230317092451.1616451-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1679045112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MlLEXPAyc6Yf23gKGJxdN1O2nSWmWz8A1QbLTo26vFc=;
+        b=NdPXboUoSYFGM8pkavkqqDOdGzvqr/fu61uMEGuZwvQonN5UJnMmcpdB6oUbHImfiJ
+         MOvBqe0Ren8K7kL253LEN5/bGMkf6h0kXQGfX1yLLFyNB7iX5OnJDSYG3+aLc7A2JhKh
+         mZYm5OiYWwvmglbOF5+EGsZCjvEY2+5kS36Trnr7uTRmmcHRcYLr4i8uYgKX5uy+yMni
+         1e9Whmn/iSFTmWDD9La1weiKyhOjTiNzitG1belinSB9WrOyZyGXXKWlshUjJ5viwDLg
+         iXK+v7Z4MkrV7nNHyq+EIHlRATijyE/L8YFMHC35raa6mGC6V0ai8k1oubeHCgQOmBjL
+         j7Dg==
+X-Gm-Message-State: AO0yUKUKfHRTXbepnUOf7MsU1A29LytO233H+hqIHcl4Hd2sv/D9YgbJ
+        adgXG0Kl3en1GAILLLY48iB6rA==
+X-Google-Smtp-Source: AK7set+/11HaRj2WG12Q+vtk7E+WmOqsUPkGKCKykvzvbAhuh30lRW80FOyVwzc/xzcYheaQqTMrdQ==
+X-Received: by 2002:a17:906:3d7:b0:930:be70:320d with SMTP id c23-20020a17090603d700b00930be70320dmr4190876eja.13.1679045112343;
+        Fri, 17 Mar 2023 02:25:12 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
+        by smtp.gmail.com with ESMTPSA id p9-20020a170906838900b00922e3221c88sm744588ejx.117.2023.03.17.02.25.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 02:25:12 -0700 (PDT)
+Message-ID: <2840fe92-0c15-d476-d0ab-ec87884fcf31@linaro.org>
+Date:   Fri, 17 Mar 2023 10:25:09 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ASoC: dt-bindings: adi,adau17x1: Convert to DT schema
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vijaya Anand <sunrockers8@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>
+References: <20230315231055.3067-1-sunrockers8@gmail.com>
+ <167897628543.92626.6326219364017588458.b4-ty@kernel.org>
+ <a3f7b1bf-b37a-1e42-1e43-02b82fbd895b@linaro.org>
+ <1cfd50ed-f7fc-46c0-9e6b-5a35b1a9572d@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1cfd50ed-f7fc-46c0-9e6b-5a35b1a9572d@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 16/03/2023 20:45, Mark Brown wrote:
+> On Thu, Mar 16, 2023 at 08:16:29PM +0100, Krzysztof Kozlowski wrote:
+> 
+>> There was a warning from Rob's bot. Can you drop the patch or you expect
+>> follow-up?
+> 
+> A followup would be easiest.
 
-Here's a PR with a couple of MMC fixes intended for v6.3-rc3. Details about the
-highlights are as usual found in the signed tag.
+Sent one.
 
-Please pull this in!
+Best regards,
+Krzysztof
 
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
-
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.3-rc1
-
-for you to fetch changes up to 92771cdd90de64b15e65f3c88d6c6199bd5f33f5:
-
-  mmc: dw_mmc-starfive: Fix initialization of prev_err (2023-03-09 15:33:51 +0100)
-
-----------------------------------------------------------------
-MMC host:
- - dw_mmc-starfive: Fix initialization of the prev_err variable
- - sdhci_am654: Lower power-on failed message severity
-
-----------------------------------------------------------------
-Francesco Dolcini (1):
-      mmc: sdhci_am654: lower power-on failed message severity
-
-William Qiu (1):
-      mmc: dw_mmc-starfive: Fix initialization of prev_err
-
- drivers/mmc/host/dw_mmc-starfive.c | 2 +-
- drivers/mmc/host/sdhci_am654.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
