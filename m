@@ -2,92 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E8A6BEABD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C07F6BEABE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjCQOJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S231138AbjCQOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjCQOJQ (ORCPT
+        with ESMTP id S231232AbjCQOJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:09:16 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73839AF68D;
-        Fri, 17 Mar 2023 07:09:14 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v16so4575337wrn.0;
-        Fri, 17 Mar 2023 07:09:14 -0700 (PDT)
+        Fri, 17 Mar 2023 10:09:56 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40A61115B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:09:54 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id m6so3526393qvq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679062153;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4cUCHnqI0AfBz7a3GUqT80VORgI3VfkloynuB2ZGZu0=;
-        b=EN1Ss5BBviaWKyN2iiPCA1G5rxgzBrkndGVa31XHU6NkfbITRgv0arw/VjyDahrvGS
-         s236GuMvfBLK+DaP0g01LgyUbrtAULb8C6ddbBwwdzbM70Ei98BQh7abhu3rVCzW0TpB
-         YiG0/X2b0hROkMyc8C5e8eMP/2wDpm8bEGVMKlOI2y/BAz4VRQldd5onU8KhXKD9aZal
-         7PMWnT6rTjJsSjIIM9+OKf6HVa8RrDkP/SVRyTiIv3IDiSSgcA08e+z9FRQesdEoswzu
-         mgLEtNPdhNEzkw4vpbk4BJUOVqa+GnjrGNyu47owdc1ucgu3QN+D/eMeAIy4Opj347eF
-         UjKg==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679062194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7soAOZz6NR1eZEWlBBPKzE8Phw744HY/clHBuCipMIQ=;
+        b=GJE2sGyV/zNswHv/7z89KXA6Cb429VDXVVNbH4B5+f+XRZPbPKi7IKo29LF5wh/bbS
+         bdV/flZ2c4Qx4e1cMLrbTXBz1PjOtmDDfuulOzISfCWtEomTOJH6MLe6CH10fL+8XBm3
+         AOZVAtagi87V8voZUBBleOn0Zs6BO/iI7hGWfXhDRLiU3JzVB6q9g2VUZh5z+qY4pa1/
+         XSH391RhIP9GWyxr2Tgv1F1po4q5/5IambFCWiIByQ+zTWbx6+4yMpjIz+/5mYd4DSaa
+         X98LcGZOCKPUfaYjpG/Lq5k7yDyUqkPn/QwKPg0KXyH61oT/7A9LmCrPlIadxrOKznt3
+         zzyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679062153;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cUCHnqI0AfBz7a3GUqT80VORgI3VfkloynuB2ZGZu0=;
-        b=lyqeyeyng45a3RRRl6yHZN+uOVq+VCmBTyRo9zogl3qLoyq/u/pE4p9IDaqWLb1IrJ
-         q4ta1g0kg8ez8LhlWy7CgE6qeHj8Sr7cOsSMHv+lCjCFUwNEedAkdD9tm6mwzxQ25o/v
-         y16g+iWeXcMTl9//vm2mTM3c97oar0+Dr+/LKQsd0z5j4AkH/1pqVk2YJt7mAsc6Uq4p
-         GoB+H60kXx+ZlZkVMQqftVnAMWAmqdAG2fgs47LFXzaQdQ4oZGZlci7zDhe3iUxPl4FY
-         ZQWf1kSTc5bcukHRiTQhbzTPSyIgUOpQshHRHZIdwPHW23IL1NeY6Dfa+F5Y0edJ157t
-         TGVw==
-X-Gm-Message-State: AO0yUKW8cHj0Z9Nyd9XbdxJUyxp+VMPhyGfF9UWg5mlYhIjs2V9b+23w
-        7pZJAZar9KAlMm8SUHCnh2k=
-X-Google-Smtp-Source: AK7set8ZSvwh8C861MbmcI8zrheicg6wTcJWJ3VwxxFhvYzCdZUnVxz3BSHRZNrwiFZ2hxPOhXIojw==
-X-Received: by 2002:adf:fb0d:0:b0:2ce:a758:d6fb with SMTP id c13-20020adffb0d000000b002cea758d6fbmr2601899wrr.1.1679062152605;
-        Fri, 17 Mar 2023 07:09:12 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.gmail.com with ESMTPSA id h6-20020adfe986000000b002d09cba6beasm2064775wrm.72.2023.03.17.07.09.11
+        d=1e100.net; s=20210112; t=1679062194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7soAOZz6NR1eZEWlBBPKzE8Phw744HY/clHBuCipMIQ=;
+        b=fv7ZySHuDpaVQEVYMb+hNUHmPEkU30aXiH9xE7cR3Ua3Cz1TNVzO5uhKDdXrPZCLN4
+         YMDBADytnTrH9LMefu64DebjMchU2ZciDsLpAjMw7tuncGhPrkpVg36KE6DvmZzCMWQ4
+         N7yr6R4M8SvC8DTeAsJkdQ1stlcOZsF12s6uGXySml0qY2zNoDFCv1ZUasZiI0va2pZs
+         wsB8lzW7oGl09TPJwlwzXjwkiu/hnIldbM+2lYGG+k3pMqUczkgJg2BbMW2aeuZ+J2oK
+         XQOcUZB41IUn7gcfsqdUJ6AU9wHYaaqJLTMMUFGx6keKhAP0IkoYwddqezVHCrBcscvI
+         o7eg==
+X-Gm-Message-State: AO0yUKXdhjGFiGNvzp+fAaqwQreY59loYkRA7xuaAtUmtN857Ky8Qjq0
+        A1qM1gIedQ8Tb4y9zNX8TT7FdMD8UWQDS0WNnHs=
+X-Google-Smtp-Source: AK7set+qN246fWnzI9pdVkkjz8IcefLkz8J54CXZP+n5oPR4V1S/SUbYc3X9+w7bLhhjTLghkaGjmA==
+X-Received: by 2002:ad4:5962:0:b0:56e:9986:4fa9 with SMTP id eq2-20020ad45962000000b0056e99864fa9mr45763775qvb.7.1679062193817;
+        Fri, 17 Mar 2023 07:09:53 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:62db])
+        by smtp.gmail.com with ESMTPSA id 4-20020a370504000000b007458ae32290sm1693202qkf.128.2023.03.17.07.09.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 07:09:12 -0700 (PDT)
-Message-ID: <64147488.df0a0220.5d091.cce2@mx.google.com>
-X-Google-Original-Message-ID: <ZBR0hQ/AH2M8A9t9@Ansuel-xps.>
-Date:   Fri, 17 Mar 2023 15:09:09 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org, pavel@ucw.cz,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [net-next PATCH v4 10/14] dt-bindings: net: dsa: qca8k: add LEDs
- definition example
-References: <20230317023125.486-1-ansuelsmth@gmail.com>
- <20230317023125.486-11-ansuelsmth@gmail.com>
- <20230317091410.58787646@dellmb>
+        Fri, 17 Mar 2023 07:09:53 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 10:09:52 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yang Yang <yang.yang29@zte.com.cn>
+Cc:     akpm@linux-foundation.org, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        willy@infradead.org
+Subject: Re: [PATCH linux-next] mm: workingset: simplify the calculation of
+ workingset size
+Message-ID: <20230317140952.GA153257@cmpxchg.org>
+References: <20230316143007.GC116016@cmpxchg.org>
+ <20230317015903.16978-1-yang.yang29@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230317091410.58787646@dellmb>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230317015903.16978-1-yang.yang29@zte.com.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,154 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 09:14:10AM +0100, Marek Behún wrote:
-> Hello Christian, also Rob Herring, Andrew Lunn and Pavel Machek,
+On Fri, Mar 17, 2023 at 01:59:03AM +0000, Yang Yang wrote:
+> >On Thu, Mar 16, 2023 at 05:23:05PM +0800, yang.yang29@zte.com.cn wrote:
+> >> From: Yang Yang <yang.yang29@zte.com.cn>
+> >> 
+> >> After we implemented workingset detection for anonymous LRU[1],
+> >> the calculation of workingset size is a little complex. Actually there is
+> >> no need to call mem_cgroup_get_nr_swap_pages() if refault page is
+> >> anonymous page, since we are doing swapping then should always
+> >> give pressure to NR_ACTIVE_ANON.
+> >
+> > This is false.
+> >
+> > (mem_cgroup_)get_nr_swap_pages() returns the *free swap slots*. There
+> > might be swap, but if it's full, reclaim stops scanning anonymous
+> > pages altogether. That means that refaults of either type can no
+> > longer displace existing anonymous pages, only cache.
 > 
-> On Fri, 17 Mar 2023 03:31:21 +0100
-> Christian Marangi <ansuelsmth@gmail.com> wrote:
-> 
-> > Add LEDs definition example for qca8k Switch Family to describe how they
-> > should be defined for a correct usage.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  .../devicetree/bindings/net/dsa/qca8k.yaml    | 24 +++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> > index 389892592aac..2e9c14af0223 100644
-> > --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> > +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-> > @@ -18,6 +18,8 @@ description:
-> >    PHY it is connected to. In this config, an internal mdio-bus is registered and
-> >    the MDIO master is used for communication. Mixed external and internal
-> >    mdio-bus configurations are not supported by the hardware.
-> > +  Each phy has at least 3 LEDs connected and can be declared
-> > +  using the standard LEDs structure.
-> >  
-> >  properties:
-> >    compatible:
-> > @@ -117,6 +119,7 @@ unevaluatedProperties: false
-> >  examples:
-> >    - |
-> >      #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/leds/common.h>
-> >  
-> >      mdio {
-> >          #address-cells = <1>;
-> > @@ -226,6 +229,27 @@ examples:
-> >                      label = "lan1";
-> >                      phy-mode = "internal";
-> >                      phy-handle = <&internal_phy_port1>;
-> > +
-> > +                    leds {
-> > +                        #address-cells = <1>;
-> > +                        #size-cells = <0>;
-> > +
-> > +                        led@0 {
-> > +                            reg = <0>;
-> > +                            color = <LED_COLOR_ID_WHITE>;
-> > +                            function = LED_FUNCTION_LAN;
-> > +                            function-enumerator = <1>;
-> > +                            default-state = "keep";
-> > +                        };
-> > +
-> > +                        led@1 {
-> > +                            reg = <1>;
-> > +                            color = <LED_COLOR_ID_AMBER>;
-> > +                            function = LED_FUNCTION_LAN;
-> > +                            function-enumerator = <1>;
-> > +                            default-state = "keep";
-> > +                        };
-> > +                    };
-> >                  };
-> 
-> I have nothing against this, but I would like to point out the
-> existence of the trigger-sources DT property, and I would like to
-> discuss how this property should be used by the LED subsystem to choose
-> default behaviour of a LED.
-> 
-> Consider that we want to specify in device-tree that a PHY LED (or any
-> other LED) should blink on network activity of the network device
-> connected to this PHY (let's say the attached network device is eth0).
-> (Why would we want to specify this in devicetree? Because currently the
->  drivers either keep the behaviour from boot or change it to something
->  specific that is not configurable.)
-> 
-> We could specify in DT something like:
->   eth0: ethernet-controller {
->     ...
->   }
-> 
->   ethernet-phy {
->     leds {
->       led@0 {
->         reg = <0>;
->         color = <LED_COLOR_ID_GREEN>;
->         trigger-sources = <&eth0>;
->         function = LED_FUNCTION_ ?????? ;
->       }
->     }
->   }
-> 
-> The above example specifies that the LED has a trigger source (eth0),
-> but we still need to specify the trigger itself (for example that
-> the LED should blink on activity, or the different kinds of link). In my
-> opinion, this should be specified by the function property, but this
-> property is currently used in other way: it is filled in with something
-> like "wan" or "lan" or "wlan", an information which, IMO,
-> should instead come from the devicename part of the LED, not the
-> function part.
-> 
-> Recall that the LED names are of the form
->   devicename:color:function
-> where the devicename part is supposed to be something like mmc0 or
-> sda1. With LEDs that are associated with network devices I think the
-> corresponding name should be the name of the network device (like eth0),
-> but there is the problem of network namespaces and also that network
-> devices can be renamed :(.
-> 
-> So one option how to specify the behaviour of the LED to blink on
-> activity would be to set
->   function = LED_FUNCTION_ACTIVITY;
-> but this would conflict with how currently some devicetrees use "lan",
-> "wlan" or "wan" as the function (which is IMO incorrect, as I said
-> above).
-> 
-> Another option would be to ignore the function and instead use
-> additional argument in the trigger-source property, something like
->   trigger-sources = <&eth0 TRIGGER_SOURCE_ACTIVITY>;
-> 
-> I would like to start a discussion on this and hear about your opinions,
-> because I think that the trigger-sources and function properties were
-> proposed in good faith, but currently the implementation and usage is a
-> mess.
-> 
+> I see in this patch "mm: vmscan: enforce inactive:active ratio at the
+> reclaim root", reclaim will be done in the combined workingset of
+> different workloads in different cgroups.
+>
+> So if current cgroup reach it's swap limit(mem_cgroup_get_nr_swap_pages(memcg) == 0),
+> but other cgroup still has swap slot, should we allow the refaulting page
+> to active and give pressure to other cgroup?
 
-I think we should continue and make this discussion when we start
-implementing the hw contro for these LEDs to configure them in DT.
+That's what we do today.
 
-Currently we are implementing very basic support so everything will be
-in sw.
+The shadow entry remembers the reclaim root, so that refaults can
+later evaluated at the same level. So, say you have:
 
-Anyway just to give some ideas. Yes it sound a good idea to use the
-trigger-sources binding. My idea would be that trigger needs to have
-specific support for them. 
-If this in mind netdev can be configured in DT and setup hw control to
-offload blink with the required interface passed.
+root - A - A1
+        `- A2
 
-The current implementation still didn't include a way to configure the
-blink in DT as the series are already a bit big... (currently we have 3:
-- This series that already grow from 10 patch to 14
-- A cleanup series for netdev trigger that is already 7 patch
-- hw control that is another big boy with 12 patch
-)
+and A1 and A2 are reclaimed due to a limit in A. The shadow entries of
+evictions from A1 and A2 will actually refer to A.
 
-So our idea was to first implement the minor things and then polish and
-improve it. (to make it easier to review)
-
-But agree with you that it would be a nice idea to have a correct and
-good implementation for trigger-sources.
-
--- 
-	Ansuel
+When they refault later on, the distance is interpreted based on
+whether A has swap (eviction_lruvec).
