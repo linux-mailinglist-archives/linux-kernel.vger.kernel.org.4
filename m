@@ -2,92 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9716BE3A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA60B6BE3A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjCQIda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
+        id S231631AbjCQIdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjCQIdJ (ORCPT
+        with ESMTP id S231552AbjCQIdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:33:09 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C37BDDF2D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:31:55 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id fd5so17329034edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679041907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F22xKzaXQ16zz1R+nPdvOmBcImJHM2RC64dPlAyscLI=;
-        b=aWHmZxuyjKoQeJE36fh5yBR6stqa3XOEzB1SVT5U3CDiWrUEUqd2msGm72CQst+RK/
-         Vkvm0winBTSa9GH01ItcF++wZbeu9Ca1O3OtCD+slaX2sfyNvwLNaP1kIkpF3YZUMRQn
-         HfvmrKvHVhT+8utKUDchex+GgFH/jLaIYm4bbhg36sw75vbB0yaziDmmZIytqIRMJ/g7
-         is+q5vtZXQM8KHDf43TQvE+c6zwdlCIA18cenpVd/XaOf8fvgq8Nh1BPceGza5/jL5BR
-         uck6vWW5VahlzU7RL2fq2660WI4kK3wtWgp/dcDhr9zyW0GxJp9pXvMbmxOhPThJ0YhX
-         8BDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679041907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F22xKzaXQ16zz1R+nPdvOmBcImJHM2RC64dPlAyscLI=;
-        b=E+CwJNlEJlsUCGgeTe3aJKzdMiAU7JC2lN/qK2ChDcgF8KANo+9KX5hhUSUcmEPmUo
-         nzaQugKBYPMjrsmM78io2Xpc3jxidGKBrUih8bSpoUIcx7IPkMUmnJKNtJ5Wk7MmTfTZ
-         ZCn/+Wo7sO6DFNjgo0ulIOWnJ30O/ebHHLxGClca4KuBL8ddLzkNYZOzFD1Tcucvz1n2
-         BToFYoghl1C27eLuktjR3kY+5RE7rB4Q2LJH0To8dfX3ZqsAysuzopH5u38FDcCxUoym
-         YX/Fr4d7lnSbDPQLT4bQinGIe1ZoCgSxpb5CMjZSsIvQioUoU3ilyo3GsUUclGjhnJih
-         2OZw==
-X-Gm-Message-State: AO0yUKV4zCvC4KSBZZSnnu2WZjRkQ/wpWYDPxdBFYigWor8CVHMyxgGS
-        yjeqKALYAt4y3ND++raOdwLiWA==
-X-Google-Smtp-Source: AK7set9P1SuFct7TKYsl2uFH88M5Njs8psB88aLuEx8C2MfAzct4blZqPVjveqZ3ledMk3g6rAb+8Q==
-X-Received: by 2002:a17:907:6eab:b0:932:3942:f28f with SMTP id sh43-20020a1709076eab00b009323942f28fmr618319ejc.61.1679041907355;
-        Fri, 17 Mar 2023 01:31:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id e18-20020a170906845200b009222eec8097sm692325ejy.75.2023.03.17.01.31.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 01:31:46 -0700 (PDT)
-Message-ID: <3679f2d0-55f0-1710-abc2-b268b6fc6969@linaro.org>
-Date:   Fri, 17 Mar 2023 09:31:45 +0100
+        Fri, 17 Mar 2023 04:33:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D93DFB43;
+        Fri, 17 Mar 2023 01:32:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A206BB824F6;
+        Fri, 17 Mar 2023 08:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06C8C433D2;
+        Fri, 17 Mar 2023 08:31:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679041919;
+        bh=oomZDnVxdHZtUJnlVWXEtuwr3xT++1ZZD4/CrL6Q6KA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oZHAbvzuggGsV0kFkw//uH222iU6B2cdqfqqS+WMOBSAcPPZ36sGeR6ZWQlBe5V5/
+         xl53mRL8CXa4lKX89H74MVRR9BjfRDJtyYG/+/PL25S8TSBvJyPEMBleVfkNdCZt4U
+         7WcHsxKsMVkZokb42IE2Jfg1uM7+9/PFPN6V1mDeOcB5PRS8A43l1ETq53+1phO3ZG
+         7dFzutQO3OEq4gbTBoSjGIDsAgjDqwdN++zZ4fE8RlGRbKo+hEQM2tVOBLKgld7biN
+         OkAD9y39ug72oyhRCzeCg8lf2mnXmAAI52tvlcrlffTnCfuTuw6MUYlTDYmxenVx2s
+         LCn2hfN6fFrCg==
+Message-ID: <d8776be3-75a2-02fd-3702-79169675e4f6@kernel.org>
+Date:   Fri, 17 Mar 2023 10:31:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 02/11] dt-bindings: serial: snps-dw-apb-uart: Relax
- dma-names order constraint
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 4/5] soc: ti: pruss: Add
+ helper functions to set GPI mode, MII_RT_event and XFR
 Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Drake <drake@endlessm.com>,
-        Katsuhiro Suzuki <katsuhiro@katsuster.net>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
- <20230315114806.3819515-3-cristian.ciocaltea@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315114806.3819515-3-cristian.ciocaltea@collabora.com>
+To:     Md Danish Anwar <a0501179@ti.com>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-5-danishanwar@ti.com>
+ <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
+ <b1409f34-86b5-14e8-f352-5032aa57ca46@ti.com>
+ <60e73395-f670-6eaa-0eb7-389553320a71@kernel.org>
+ <20718115-7606-a77b-7e4d-511ca9c1d798@ti.com>
+ <e49b9a78-5e35-209e-7ecc-2333478b98b0@kernel.org>
+ <468f85ad-e4b0-54e1-a5b9-4692ae8a1445@ti.com>
+ <455440f4-7f2b-366e-53ec-700c3bb98534@kernel.org>
+ <22b8860c-12bd-384d-41af-93f1dde9a0fd@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <22b8860c-12bd-384d-41af-93f1dde9a0fd@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,19 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 12:47, Cristian Ciocaltea wrote:
-> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
-> dma-names properties") documented dma-names property to handle Allwiner
-> D1 dtbs_check warnings, but relies on a strict rx->tx ordering, which is
-> the reverse of what a different board expects:
+
+
+On 17/03/2023 07:02, Md Danish Anwar wrote:
 > 
->   rk3326-odroid-go2.dtb: serial@ff030000: dma-names:0: 'rx' was expected
 > 
-> A quick and incomplete check shows the inconsistency is present in many
-> other DT files:
+> On 16/03/23 19:34, Roger Quadros wrote:
+>>
+>> Hi,
+>>
+>> On 16/03/2023 15:11, Md Danish Anwar wrote:
+>>>
+>>>
+>>> On 16/03/23 17:49, Roger Quadros wrote:
+>>>>
+>>>>
+>>>> On 16/03/2023 13:44, Md Danish Anwar wrote:
+>>>>>
+>>>>> On 16/03/23 17:06, Roger Quadros wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 16/03/2023 13:05, Md Danish Anwar wrote:
+>>>>>>> Hi Roger,
+>>>>>>>
+>>>>>>> On 15/03/23 17:52, Roger Quadros wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
+>>>>>>>>> From: Suman Anna <s-anna@ti.com>
+>>
+> 
+> [..]
+> 
+>>> Sure, then I will use the existing enum pru_type.
+>>>
+>>> The enum pru_type is currently in drivers/remoteproc/pruss.c I will move this
+>>> enum definition from there to include/linux/remoteproc/pruss.h
+>>
+>> There are 2 public pruss.h files.
+>> 	include/linux/remoteproc/pruss.h
+>> and
+>> 	include/linux/pruss_driver.h
+>>
+>> Why is that and when to use what?
+>>
+> 
+> The include/linux/remoteproc/pruss.h file was introduced in series [1] as a
+> public header file for PRU_RPROC driver (drivers/remoteproc/pru_rproc.c)
+> 
+> The second header file include/linux/pruss_driver.h was introduced much earlier
+> as part of [2] , "soc: ti: pruss: Add a platform driver for PRUSS in TI SoCs".
+> 
+> As far as I can see, seems like pruss_driver.h was added as a public header
+> file for PRUSS platform driver (drivers/soc/ti/pruss.c)
+> 
+> [1] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/
+> [2] https://lore.kernel.org/all/1542886753-17625-7-git-send-email-rogerq@ti.com/
 
-Why not fixing the DTS? The properties should have fixed order.
+Thanks. "include/linux/remoteproc/pruss.h" seems appropriate for enum pru_type.
 
-Best regards,
-Krzysztof
-
+cheers,
+-roger
