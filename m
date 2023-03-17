@@ -2,185 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E245E6BE4D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40AF6BE4EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbjCQJFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        id S230402AbjCQJHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjCQJFY (ORCPT
+        with ESMTP id S230490AbjCQJGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:05:24 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3F2E63F3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:04:02 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eh3so17574417edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679043840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F+9q32H5maQAY7+Dr81+RVllp8r8V/8Ihh6QFteXqFU=;
-        b=monslhkk1VBvMFaXE+OmJpTJ7739bvnwzQ1nH76yBk0x2FvUZw9b+Eu8kFOwfvJDyQ
-         EMTxv3ziUDzdDYeevUA8okud/BGIBN7JVK/57Q4RaX3SKWkBwygjKPH64x0bG5c0Lgqa
-         A4kqEOuXntc2b9UGi+QJj3o814dpeuwV6GV3vpJZSFwr9wuXSnXECIYc+19S8HR2pI/T
-         rmOFjTzUfN7KMBXlFGr0glqk4sooxMJ1UYIRmKssQXUXE5z8QSUU/sa5wbNDkK6eDj4P
-         bPD/AR27HeaDD9i0DFNqnyU1ZBJnP6W2m6M/Sic6cDta89U0qQxoIDpf8pVcDSlRm+/7
-         KR3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679043840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F+9q32H5maQAY7+Dr81+RVllp8r8V/8Ihh6QFteXqFU=;
-        b=xxVsEtaLTVQ8+cy3Jrxjzg2tQ6krjetQf1wQz0tX7LPtkaguooY3jh2IgXzbWn5NBA
-         LXSovmvqkUg5sG4rs/FXh2Y8Tcy6NzzvDRcSN69gRWNPuWufMpJvytDss4RHCqRFRC/6
-         iqs47tmDfmVTkKKEu3nQroPw4bxbWksA/1p88W6aqZSTBGNQzmbl5sdxA2oF3U6aC+qk
-         DKDSjbcnXLLJPivSfLS20cAfPF84kcGi01+4phbZcN58P7N9EptXCvhSF2lpx+uVaWdg
-         //faZ+1Mx5nvb/3ruJ9v2CaOS1i74UpiHW3ndmIy0U36n4uDRyvNRjD8Liy6x8ZrV/PZ
-         F6HA==
-X-Gm-Message-State: AO0yUKWB0l9JhmatWaZ2YoW42Ck7bX4aNVRE93BSjwXSuwfSNC0G6xBJ
-        qele3bADkxmDNJmdP1k16w33lA==
-X-Google-Smtp-Source: AK7set8bTjVCu5fhcJEjLTpRFEkjqV3j8SkNDWaEpR82X2mKS8ejahTe3YQClj1j5CUX+i8qaGJ3Tw==
-X-Received: by 2002:a17:907:9622:b0:932:35b1:47fa with SMTP id gb34-20020a170907962200b0093235b147famr601376ejc.64.1679043840103;
-        Fri, 17 Mar 2023 02:04:00 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id lg10-20020a170906f88a00b008cc920469b5sm744608ejb.18.2023.03.17.02.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 02:03:59 -0700 (PDT)
-Message-ID: <4027714e-b4e8-953b-68e2-f74f7a7f0e8e@linaro.org>
-Date:   Fri, 17 Mar 2023 10:03:58 +0100
+        Fri, 17 Mar 2023 05:06:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89CF10EA8A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679043854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OQdgWFc6bLqbUjsOerHrtF2OlkuzdzQLwLSMHD36fpI=;
+        b=hgumKmmXDD4JxkvyJYvd7CUaNpHamx4HiswLbuib7nkKROATLOZOnaHNQMonlKEstmw39T
+        fy9mnf0zDGBl5FGUloAX7ONNYkXa+Hp2R0xWwEK7QnfZ8Oe8IZc1eJqdKY90KmlvhVhcFe
+        azGXZXQT67FdvOL9C+qJOq+D5K7vTZY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-488-bnocHIOQPXazumCh-Gg7zw-1; Fri, 17 Mar 2023 05:04:10 -0400
+X-MC-Unique: bnocHIOQPXazumCh-Gg7zw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B4C31C087A7;
+        Fri, 17 Mar 2023 09:04:07 +0000 (UTC)
+Received: from localhost (ovpn-12-67.pek2.redhat.com [10.72.12.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 317A540C6E67;
+        Fri, 17 Mar 2023 09:04:06 +0000 (UTC)
+Date:   Fri, 17 Mar 2023 17:04:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v19 2/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <ZBQtAYJpC+h9weUD@MiWiFi-R3L-srv>
+References: <20230306162228.8277-1-eric.devolder@oracle.com>
+ <20230306162228.8277-3-eric.devolder@oracle.com>
+ <ZBLrTl3UHYa1FV2S@MiWiFi-R3L-srv>
+ <cab057d8-98d8-a72a-8b61-8a01a0f088e7@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Content-Language: en-US
-To:     =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-References: <20221227081011.6426-1-nancy.lin@mediatek.com>
- <20221227081011.6426-2-nancy.lin@mediatek.com>
- <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
- <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
- <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
- <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
- <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
- <0ebf187d-972e-4228-d8a0-8c0ce02f642d@linaro.org>
- <72cf6344a1c5942bff0872d05dce82b787b49b76.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <72cf6344a1c5942bff0872d05dce82b787b49b76.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cab057d8-98d8-a72a-8b61-8a01a0f088e7@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 08:55, Nancy Lin (林欣螢) wrote:
-> On Thu, 2023-03-16 at 12:36 +0100, Krzysztof Kozlowski wrote:
->> On 16/03/2023 10:53, AngeloGioacchino Del Regno wrote:
->>
->>> Hello Krzysztof, Nancy,
->>>
->>> Since this series has reached v29, can we please reach an agreement
->>> on the bindings
->>> to use here, so that we can get this finally upstreamed?
->>>
->>> I will put some examples to try to get this issue resolved.
->>>
->>> ### Example 1: Constrain the number of GCE entries to *seven* array
->>> elements (7x4!)
->>>
->>>    mediatek,gce-client-reg:
->>>      $ref: /schemas/types.yaml#/definitions/phandle-array
->>>      maxItems: 1
->>>      description: The register of display function block to be set
->>> by gce.
->>>        There are 4 arguments in this property, gce node, subsys id,
->>> offset and
->>>        register size. The subsys id is defined in the gce header of
->>> each chips
->>>        include/dt-bindings/gce/<chip>-gce.h, mapping to the
->>> register of display
->>>        function block.
->>>      items:
->>>        minItems: 28
->>>        maxItems: 28
->>>        items:                     <----- this block doesn't seem to
->>> get checked :\
->>>          - description: phandle of GCE
->>>          - description: GCE subsys id
->>>          - description: register offset
->>>          - description: register size
->>
->> This is what we would like to have but it requires exception in
->> dtschema. Thus:
->>
->>>
->>>
->>> ### Example 2: Don't care about constraining the number of
->>> arguments
->>>
->>>    mediatek,gce-client-reg:
->>>      $ref: /schemas/types.yaml#/definitions/phandle-array
->>>      maxItems: 1
->>>      description: The register of display function block to be set
->>> by gce.
->>>        There are 4 arguments in this property, gce node, subsys id,
->>> offset and
->>>        register size. The subsys id is defined in the gce header of
->>> each chips
->>>        include/dt-bindings/gce/<chip>-gce.h, mapping to the
->>> register of display
->>>        function block.
->>
->> use this.
->>
->> Best regards,
->> Krzysztof
+On 03/16/23 at 09:44am, Eric DeVolder wrote:
 > 
 > 
-> Hi Krzysztof, Angelo,
+> On 3/16/23 05:11, Baoquan He wrote:
+> > On 03/06/23 at 11:22am, Eric DeVolder wrote:
+> > ......
+> > > +static void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> > > +{
+> > > +	/* Obtain lock while changing crash information */
+> > > +	if (kexec_trylock()) {
+> > > +
+> > > +		/* Check kdump is loaded */
+> > > +		if (kexec_crash_image) {
+> > > +			struct kimage *image = kexec_crash_image;
+> > > +
+> > > +			if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+> > > +				hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+> > > +				pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
+> > > +			else
+> > > +				pr_debug("hp_action %u\n", hp_action);
+> > > +
+> > > +			/*
+> > > +			 * When the struct kimage is allocated, the elfcorehdr_index
+> > > +			 * is set to -1. Find the segment containing the elfcorehdr,
+> > > +			 * if not already found. This works for both the kexec_load
+> > > +			 * and kexec_file_load paths.
+> > > +			 */
+> > > +			if (image->elfcorehdr_index < 0) {
+> > > +				unsigned long mem;
+> > > +				unsigned char *ptr;
+> > > +				unsigned int n;
+> > > +
+> > > +				for (n = 0; n < image->nr_segments; n++) {
+> > > +					mem = image->segment[n].mem;
+> > > +					ptr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
+> > > +					if (ptr) {
+> > > +						/* The segment containing elfcorehdr */
+> > > +						if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+> > > +							image->elfcorehdr_index = (int)n;
+> > > +						}
+> > > +						kunmap_local(ptr);
+> > > +					}
+> > > +				}
+> > > +			}
+> > > +
+> > > +			if (image->elfcorehdr_index < 0) {
+> > > +				pr_err("unable to locate elfcorehdr segment");
+> > > +				goto out;
+> > > +			}
+> > > +
+> > > +			/* Needed in order for the segments to be updated */
+> > > +			arch_kexec_unprotect_crashkres();
+> > > +
+> > > +			/* Differentiate between normal load and hotplug update */
+> > > +			image->hp_action = hp_action;
+> > > +
+> > > +			/* Now invoke arch-specific update handler */
+> > > +			arch_crash_handle_hotplug_event(image);
+> > > +
+> > > +			/* No longer handling a hotplug event */
+> > > +			image->hp_action = KEXEC_CRASH_HP_NONE;
+> > > +			image->elfcorehdr_updated = true;
+> > 
+> > It's good to initialize the image->hp_action here, however where do
+> > you check it? Do you plan to add some check somewhere?
 > 
-> Thanks for the comment.
-> The Example 2 can pass dt_binding_check. 
+> Hi Baoquan,
+> The hp_action member is initialized to 0 in do_image_alloc_init(). I've
+> mapped KEXEC_CRASH_HP_NONE onto 0 on purpose.
 > 
-> But the example in the binding has 7 items [1] and dts [2]. Does the
-> "maxItems: 1" affect any other schema or dts check? 
+> But the use of image->hp_action = KEXEC_CRASH_HP_NONE is to actually
+> delineate that a hotplug event handling has completed. You can see
+> imae->hp_action set to hp_action to capture what the triggering event
+> was, as passed into this function.
+> 
+> I will go ahead and set image->hp_action = KEXEC_CRASH_HP_NONE; explicitly
+> in do_kimage_alloc_init(), as that is done for the other crash hotplug members.
 
-Ah, then it should be maxItems: 7, not 1.
+Yeah, setting image->hp_action = KEXEC_CRASH_HP_NONE in
+do_kimage_alloc_init() will make code clearer. While I am wondering if
+we don't initialie image->hp_action to KEXEC_CRASH_HP_NONE, and don't
+set image->hp_action to KEXEC_CRASH_HP_NONE to actually delineate that a
+hotplug event handling has completed, what will happen?
 
-Best regards,
-Krzysztof
+I mean you set image->hp_action to KEXEC_CRASH_HP_NONE explicitly, where
+do you check if it should not be KEXEC_CRASH_HP_NONE? In
+crash_handle_hotplug_event(), we took __kexec_lock and assign the passed
+hp_action anyway.
 
