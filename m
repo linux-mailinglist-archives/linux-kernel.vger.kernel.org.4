@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750B06BF2A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9016BF2A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCQUdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S230135AbjCQUds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCQUdT (ORCPT
+        with ESMTP id S229480AbjCQUdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:33:19 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B900DE1C90
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:32:57 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aeb49429eso6651671fac.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:32:57 -0700 (PDT)
+        Fri, 17 Mar 2023 16:33:46 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DCD5B9D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:33:43 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id v17-20020a9d6051000000b0069a413e9cf6so3535641otj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679085176;
+        d=gmail.com; s=20210112; t=1679085223;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/RfMN7DRIcyqsTtzN8E9y+T6KdTmfa65N2EjbDjm3zY=;
-        b=FCW5yVym72MxBW25JQav1TzIabA1cYrb4CyrTIayWtwSGPt0m9OAV/IHKHgXY6qgoQ
-         IKtZoU1qsTr10zUsRONDgaRZcNdWQokX39v2ufOerYGbHjuqid7fsnXwccIWtXmeyLrL
-         WYJx8euxaY9CEJ6Q8tNGxc7EmFWCIkBunhQfVgx4tNFBQlu/fnx8BdK+dc/A8gk/V50v
-         1rIJ5TbaT7vQqzLwNBRgqAMyasbNnmE2TrQlCgqMpquTtrZFgi1gqdMhambWqdFGYjG8
-         OfRce4S/DzqVUCZhQXUlkVLrlBLwVrSgr9HRr0koylzLx8FNvsstjXI/LFq5VpUsm8Zh
-         yErA==
+        bh=wke3FPs7Ksv6rdzTGLQOkGDYUGmajxnF7vbyk/QEY5M=;
+        b=d2K5saJxtag/+i3+VeoPKXiNDCahExg8ilgXIYP14klahMootWNVks/mtmw/SAt9we
+         dM2fd88rxNN55ZVnAfU+nYcFq3NYemlyDsgC/T3CiC765J026M/3Ulbl+8aLZCN5c2yo
+         bcgl1ylGyBLUJhq0o3bu7QjKdmjlFbmUIVS7CU9AQo0UInUuGAMKL7dBw9RmQfFcoOpy
+         nZ155XRJw9gsaCQoyodEMg/BGSVN067wTsOYxm/8jFtaSIA9T+8jq249qJhhjfNQ2UCq
+         749nWIIh4uNdG1he5P8ZgeM8H+KtN5QEv/LLeWE1h5NVpL1yEcFsu1yxd0xcQlhVdWWi
+         ikSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679085176;
+        d=1e100.net; s=20210112; t=1679085223;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/RfMN7DRIcyqsTtzN8E9y+T6KdTmfa65N2EjbDjm3zY=;
-        b=ouFXhUu8cLZBXvxvW4gQ0HzTRhcVBrWrRi5ZVCU8XGQFkODLFCjtdTOkGkJncyHDvu
-         i1C6BQ6oj3vsnKp8bPGMfxDusvihi8rNdvg3pjs2cuAAyuh+JdG6Bfe0GScHehke2Blu
-         CZEwb/V2EpkEyhIqaBzkekU11CLKPHWRQb0USvn/i1UJKGt+Z41aMa7d8LkURKr+/qXr
-         fj+jRT2O8eUhP4NGhwrLk5JPzSLqXycjPfikt4pCffp5ly7jK3DQPjvnO63c70YXM0pD
-         bi21BnGlmd4tdrIbNBMuiv5T+heueyme2EubEV57poai9dkcP7KD/C8z3qmDQWlXbWoR
-         1h1w==
-X-Gm-Message-State: AO0yUKVYh1EoG9QkiXZ4y/fc+ArDQc3HbEIibDSwelwNUv3RguRLJMRY
-        A/HHds+ZzkyImP01+s+KaWfYk7epMfzshMQB1XQ=
-X-Google-Smtp-Source: AK7set9pwElEd/aUD3iyT/dmmI+xSHtUnpnvu7q5FwEC9FpCXyCDiYObJzPkAJO7vw6nJFli+VEKTOKzZN/kH6PIIXg=
-X-Received: by 2002:a05:6871:48c6:b0:17a:a999:e87e with SMTP id
- qf6-20020a05687148c600b0017aa999e87emr337853oab.3.1679085176245; Fri, 17 Mar
- 2023 13:32:56 -0700 (PDT)
+        bh=wke3FPs7Ksv6rdzTGLQOkGDYUGmajxnF7vbyk/QEY5M=;
+        b=sEcl7ENcV58BnTe5n1C8j1I7t/lKshwdcqtit9bXK1LXRjABgaKU5VCixBsFFLjDxe
+         h8IQ90t0arJffqL4MFRAmoSY85F/FOt5hv+NKF6vWb8EbOe9Sob1BQWCKKcGZMSC2sFN
+         E0y6Y2aXiNaNj0nePU0gmJxJd3HhH8Pk62DT533TQtgjic/Mgs0eArZpsY7AfRr/5If2
+         6DPRAUJndDRmA8U3rqVVKUDUdXFg488pV0HZHN1Mz+d6DKeVsXduJAfEbVnnYuVqctxA
+         XE6L8W/imAd0RktopdDtO7/YNC9NwFmwTtziK6Wc96XY0Nog6qrF2naf4Q0t5iyJxaoH
+         bC5Q==
+X-Gm-Message-State: AO0yUKUI7VFJBs1UTutpkQKtVS/tgOtys0a6AUUMDagdsx3zVuYorxN8
+        caGie8Hogb91pMvA4wRwzGM5J8nQJ8tMnPmorqk=
+X-Google-Smtp-Source: AK7set/YuBkzP6WyMGzlC9nZEPEbnnDJ9dqg2061edUzcDXG7f3D3edvz316vDzNRmw/On8Ilp4z5tSaeQqfvaVv+ag=
+X-Received: by 2002:a9d:5d04:0:b0:69f:882:cdb2 with SMTP id
+ b4-20020a9d5d04000000b0069f0882cdb2mr6297oti.3.1679085223009; Fri, 17 Mar
+ 2023 13:33:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-27-lee@kernel.org>
-In-Reply-To: <20230317081718.2650744-27-lee@kernel.org>
+References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-28-lee@kernel.org>
+In-Reply-To: <20230317081718.2650744-28-lee@kernel.org>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 17 Mar 2023 16:32:45 -0400
-Message-ID: <CADnq5_OD8o=zEndGqyEPEpgtW9b3xRh=62haLZOfEFMARFRJ6A@mail.gmail.com>
-Subject: Re: [PATCH 26/37] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
- SYNAPTICS_DEVICE_ID into CONFIG_DRM_AMD_DC_DCN ifdef
+Date:   Fri, 17 Mar 2023 16:33:31 -0400
+Message-ID: <CADnq5_M5Q+MJvd6RJjeYNMmf3WgnGkUBKhp3v8BU67CaaKokrA@mail.gmail.com>
+Subject: Re: [PATCH 27/37] drm/amd/display/dc/dce/dmub_psr: Demote kerneldoc abuse
 To:     Lee Jones <lee@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
-        David Airlie <airlied@gmail.com>,
+Cc:     dri-devel@lists.freedesktop.org,
+        David Zhang <dingchen.zhang@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
         Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
         =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -77,20 +75,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied.  Thanks!
+
 On Fri, Mar 17, 2023 at 4:23=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
 >
 > Fixes the following W=3D1 kernel build warning(s):
 >
->  drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:48:2=
-2: warning: =E2=80=98SYNAPTICS_DEVICE_ID=E2=80=99 defined but not used [-Wu=
-nused-const-variable=3D]
-
-CONFIG_DRM_AMD_DC_DCN was recently dropped so this patch is no longer relev=
-ant.
-
-Alex
-
-
+>  drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dmub_psr.c:257: warning: Th=
+is comment starts with '/**', but isn't a kernel-doc comment. Refer Documen=
+tation/doc-guide/kernel-doc.rst
 >
 > Cc: Harry Wentland <harry.wentland@amd.com>
 > Cc: Leo Li <sunpeng.li@amd.com>
@@ -100,39 +93,30 @@ Alex
 > Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
 > Cc: David Airlie <airlied@gmail.com>
 > Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: David Zhang <dingchen.zhang@amd.com>
 > Cc: amd-gfx@lists.freedesktop.org
 > Cc: dri-devel@lists.freedesktop.org
 > Signed-off-by: Lee Jones <lee@kernel.org>
 > ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/=
-drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> index 330ab036c830f..a8904184673f6 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> @@ -44,9 +44,6 @@
->  #include "dm_helpers.h"
->  #include "ddc_service_types.h"
->
-> -/* MST Dock */
-> -static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
-> -
->  /* dm_helpers_parse_edid_caps
->   *
->   * Parse edid caps
-> @@ -703,6 +700,9 @@ static void apply_synaptics_fifo_reset_wa(struct drm_=
-dp_aux *aux)
->         DC_LOG_DC("Done apply_synaptics_fifo_reset_wa\n");
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c b/drivers/gpu/=
+drm/amd/display/dc/dce/dmub_psr.c
+> index 27b8f3435d86f..9705d8f883825 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_psr.c
+> @@ -253,7 +253,7 @@ static void dmub_psr_set_level(struct dmub_psr *dmub,=
+ uint16_t psr_level, uint8_
+>         dc_dmub_srv_wait_idle(dc->dmub_srv);
 >  }
 >
-> +/* MST Dock */
-> +static const uint8_t SYNAPTICS_DEVICE_ID[] =3D "SYNA";
-> +
->  static uint8_t write_dsc_enable_synaptics_non_virtual_dpcd_mst(
->                 struct drm_dp_aux *aux,
->                 const struct dc_stream_state *stream,
+> -/**
+> +/*
+>   * Set PSR vtotal requirement for FreeSync PSR.
+>   */
+>  static void dmub_psr_set_sink_vtotal_in_psr_active(struct dmub_psr *dmub=
+,
 > --
 > 2.40.0.rc1.284.g88254d51c5-goog
 >
