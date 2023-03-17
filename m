@@ -2,157 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966CC6BE2B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D463A6BE422
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjCQIJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S231745AbjCQIor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjCQIJL (ORCPT
+        with ESMTP id S230290AbjCQIoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:09:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44EEF976
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:08:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AA52F21A1F;
-        Fri, 17 Mar 2023 08:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679040490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+VZ7DGUifPoFdS7x4xWZGvBjsSRhnA4uCmbOtAELKBw=;
-        b=dEIUnQ6mApp/C07e2GZQEX6F6yaoMboKlGVoXT0bGv6Tt8IvNWeKqKxqvjdfVlDeU7s/MY
-        BHO96pbFROe/hIZTbehGabdps0UCbmOZYjd3sFo4WIk6TeoAmbNA3GUkpzVs/Lu8BJErFo
-        uV2+EeZa/9hjQoXz7QO7N0EUKPehUK0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679040490;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+VZ7DGUifPoFdS7x4xWZGvBjsSRhnA4uCmbOtAELKBw=;
-        b=6WDYdhdhCqtZXU4j+4J6DzgTtQ9BiYvtR33Mn3dXpNbnMwUREThkqxKTVmVgpqLATY7yvS
-        mmgJ6zncFMKZXtBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E1BF1346F;
-        Fri, 17 Mar 2023 08:08:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yUewHeofFGQVJgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 17 Mar 2023 08:08:10 +0000
-Message-ID: <0a1a0765-8f9c-90f5-b848-2931904269a7@suse.de>
-Date:   Fri, 17 Mar 2023 09:08:09 +0100
+        Fri, 17 Mar 2023 04:44:14 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F5E10FD;
+        Fri, 17 Mar 2023 01:43:12 -0700 (PDT)
+Received: from maxwell.fritz.box ([109.42.112.148]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MqJyX-1qHd1p0FYx-00nSMH; Fri, 17 Mar 2023 09:08:54 +0100
+From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
+To:     netdev@vger.kernel.org
+Cc:     Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH net V3] net: stmmac: Fix for mismatched host/device DMA address width
+Date:   Fri, 17 Mar 2023 09:08:17 +0100
+Message-Id: <20230317080817.980517-1-jh@henneberg-systemdesign.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230316131503.738933-1-jh@henneberg-systemdesign.com>
+References: <20230316131503.738933-1-jh@henneberg-systemdesign.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm/format-helper: Use drm_format_info_min_pitch() in
- tests helper
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        David Gow <davidgow@google.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Arthur Grillo <arthurgrillo@riseup.net>
-References: <20230316223404.102806-1-javierm@redhat.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230316223404.102806-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------A9aa1GgMJw84gWsI0laIeOT5"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:zIoJpuAIc2RaYROb4REHRNji9yJMLQlQjzljv3ooHaPKIC/d54Y
+ RR+ndVgaV88jbIlJBPswakBKe/07hUsAPKiwA8zpbX7O8BjYcJzOyLTOQVdK2bBc4WFBKsr
+ P77wWSoe4p1fVVN4fOmPFOZ/n6isNz7PlghlsEH0ArqviK12vzz//drOyn4lzWLfJtWkozF
+ LIqmZsfN65duEv2a+8IqQ==
+UI-OutboundReport: notjunk:1;M01:P0:fPwTIYTih6A=;nFFeNs+I2qnCv9BZyVVWP9gDH7y
+ 9CjCqpSNFXp4oMLb7guvVQYOpOnTy7Xbz5n9r/TnvaT/dj2e80D5SHZphQuL0PylhJwazoR9V
+ mKoOsw7H3aeDUOiCIiWObxwEhPewdIQ8cIsQlllTMFOw+crP5IBzCjE9z3CnPR6/p74LPo2Or
+ Vnhd7/gbRTJ7KpMCkvltiqHbD6PhFN+UPbfyiBmKDsKUIDaeac/l0JWvUKo+E3o5fz0Ork+Ve
+ GcIbbk9MGYNoa3g51VvRr+hT00kHBthwIvGFNi9+rIfXeXuCjnVWq5lVHxBEfYh6N0EfABfBS
+ QfyY7uJcHLKIfCazB4IPQycQV1IMvnIG+m8Y/Hzt7i+YYwBaEcT7p4/craDJb8yAmnpBuFDnJ
+ N+PNh3iswe/qBqd/vRP7QPZkO1QIQxXEyYs5HhELYPxtBx2q6Y7xRYA2vCdhYxpiACDNIlcfe
+ zl3WTFeHdm70Sn3IW51tmsxqEDxGbKvslJOtNT/mzijqgaFrDJeJOT2kZYJdDFJkB5aV4fSPe
+ STKclY2wbkva4GI0dAVhQRa6Wj/tsFZImYSvgDqLCRm47AHoHeCgRVelJImlFyAy7z5TFGIUi
+ enAuD3LCrbDqtucjJ3nwYrgUtmr0KKpjstRR+9cvcvoFk1iG+uNBbLaI/1LbD5mfouSSL2WHw
+ eip0/2fC7tBsy9wWsufXmJ2s7SZ6ipl8JAnY5qdn7Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------A9aa1GgMJw84gWsI0laIeOT5
-Content-Type: multipart/mixed; boundary="------------wyNkPOX7YXVbiCkbcZTi0zz1";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org, =?UTF-8?Q?Ma=c3=adra_Canal?=
- <mairacanal@riseup.net>, Geert Uytterhoeven <geert@linux-m68k.org>,
- David Gow <davidgow@google.com>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?=
- <jose.exposito89@gmail.com>, Arthur Grillo <arthurgrillo@riseup.net>
-Message-ID: <0a1a0765-8f9c-90f5-b848-2931904269a7@suse.de>
-Subject: Re: [PATCH] drm/format-helper: Use drm_format_info_min_pitch() in
- tests helper
-References: <20230316223404.102806-1-javierm@redhat.com>
-In-Reply-To: <20230316223404.102806-1-javierm@redhat.com>
+Currently DMA address width is either read from a RO device register
+or force set from the platform data. This breaks DMA when the host DMA
+address width is <=32it but the device is >32bit.
 
---------------wyNkPOX7YXVbiCkbcZTi0zz1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Right now the driver may decide to use a 2nd DMA descriptor for
+another buffer (happens in case of TSO xmit) assuming that 32bit
+addressing is used due to platform configuration but the device will
+still use both descriptor addresses as one address.
 
-DQoNCkFtIDE2LjAzLjIzIHVtIDIzOjM0IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGVyZSdzIGEgbmljZSBtYWNybyB0byBjYWxjdWxhdGUgdGhlIGRlc3RpbmF0
-aW9uIHBpdGNoIHRoYXQgYWxyZWFkeSB0YWtlcw0KPiBpbnRvIGFjY291bnQgc3ViLWJ5dGUg
-cGl4ZWwgZm9ybWF0cy4gVXNlIHRoYXQgaW5zdGVhZCBvZiBvcGVuIGNvZGluZyBpdC4NCj4g
-DQo+IFN1Z2dlc3RlZC1ieTogR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydEBsaW51eC1tNjhr
-Lm9yZz4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZp
-ZXJtQHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
-bW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL3Rl
-c3RzL2RybV9mb3JtYXRfaGVscGVyX3Rlc3QuYyB8IDcgKystLS0tLQ0KPiAgIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9ncHUvZHJtL3Rlc3RzL2RybV9mb3JtYXRfaGVscGVyX3Rlc3QuYyBi
-L2RyaXZlcnMvZ3B1L2RybS90ZXN0cy9kcm1fZm9ybWF0X2hlbHBlcl90ZXN0LmMNCj4gaW5k
-ZXggYmZhNDdmOGZmZDA5Li40NzRiYjdhMWM0ZWUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
-Z3B1L2RybS90ZXN0cy9kcm1fZm9ybWF0X2hlbHBlcl90ZXN0LmMNCj4gKysrIGIvZHJpdmVy
-cy9ncHUvZHJtL3Rlc3RzL2RybV9mb3JtYXRfaGVscGVyX3Rlc3QuYw0KPiBAQCAtNDQwLDE1
-ICs0NDAsMTIgQEAgc3RhdGljIHNpemVfdCBjb252ZXJzaW9uX2J1Zl9zaXplKHUzMiBkc3Rf
-Zm9ybWF0LCB1bnNpZ25lZCBpbnQgZHN0X3BpdGNoLA0KPiAgIAkJCQkgIGNvbnN0IHN0cnVj
-dCBkcm1fcmVjdCAqY2xpcCkNCj4gICB7DQo+ICAgCWNvbnN0IHN0cnVjdCBkcm1fZm9ybWF0
-X2luZm8gKmRzdF9maSA9IGRybV9mb3JtYXRfaW5mbyhkc3RfZm9ybWF0KTsNCj4gLQl1bnNp
-Z25lZCBpbnQgYnBwOw0KPiAgIA0KPiAgIAlpZiAoIWRzdF9maSkNCj4gICAJCXJldHVybiAt
-RUlOVkFMOw0KPiAgIA0KPiAtCWlmICghZHN0X3BpdGNoKSB7DQo+IC0JCWJwcCA9IGRybV9m
-b3JtYXRfaW5mb19icHAoZHN0X2ZpLCAwKTsNCj4gLQkJZHN0X3BpdGNoID0gRElWX1JPVU5E
-X1VQKGRybV9yZWN0X3dpZHRoKGNsaXApICogYnBwLCA4KTsNCj4gLQl9DQo+ICsJaWYgKCFk
-c3RfcGl0Y2gpDQo+ICsJCWRzdF9waXRjaCA9IGRybV9mb3JtYXRfaW5mb19taW5fcGl0Y2go
-ZHN0X2ZpLCAwLCBkcm1fcmVjdF93aWR0aChjbGlwKSk7DQo+ICAgDQo+ICAgCXJldHVybiBk
-c3RfcGl0Y2ggKiBkcm1fcmVjdF9oZWlnaHQoY2xpcCk7DQo+ICAgfQ0KPiANCj4gYmFzZS1j
-b21taXQ6IDE2NWQ1MTMzNzMxYTJlMDQ1YWJkZDZkOWQzYzkyMjFmZGMyYTU1NmUNCg0KLS0g
-DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
-b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBO
-w7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6Rm
-dHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+This can be observed with the Intel EHL platform driver that sets
+32bit for addr64 but the MAC reports 40bit. The TX queue gets stuck in
+case of TCP with iptables NAT configuration on TSO packets.
 
---------------wyNkPOX7YXVbiCkbcZTi0zz1--
+The logic should be like this: Whatever we do on the host side (memory
+allocation GFP flags) should happen with the host DMA width, whenever
+we decide how to set addresses on the device registers we must use the
+device DMA address width.
 
---------------A9aa1GgMJw84gWsI0laIeOT5
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+This patch renames the platform address width field from addr64 (term
+used in device datasheet) to host_addr and uses this value exclusively
+for host side operations while all chip operations consider the device
+DMA width as read from the device register.
 
------BEGIN PGP SIGNATURE-----
+Fixes: 7cfc4486e7ea ("stmmac: intel: Configure EHL PSE0 GbE and PSE1 GbE to 32 bits DMA addressing")
+Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
+---
+V2: Fixes from checkpatch.pl for commit message
+V3: Rename private data and platform data fields to host_dma_width
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQUH+kFAwAAAAAACgkQlh/E3EQov+AL
-jBAAtkIBEHnsDlmsHMUadfWBb2mXHoIimp9OywEtZvf9EPO4olGBskF7nMc8B2SKlICQfG3Xa0LD
-kE2JASsa43hZ2QvcNVm2jxsuaWjechcitEwAhdzu/czAFBYzm+4Wy+2oxX9UJLkOGV/19sNdEEMd
-LOk4MF/4kXVJEvb8tt0wddZ9QVwUiU029kao3GJZzg2y2UXw/zu3q4tmO3/MNp9DV53EirZlv/74
-CeQVoniOeVnZLWrnqu8ZB/knNGhDhKK+PnPMLevH0jZGrRTf6q4cSw9FxV25K+ssYytgYpljgrD1
-JqyrXaN0BuDCXptTAlUL7QEfQu3NqqNrHxrg3PPu49ondIm95fjPUCKCsuw1v151oI9Q2gijHZeo
-QVbF6VGc90LMI7V/y7XBGTOdtWw5EyjkXzyEbY6Q4I3Qu0FEjoVH6lT7Yek9E7XbGT7lCycUzNWQ
-56e6XkWsdoPx6+yv11W9i/1jAzlDk+oqjZItcZzNdAbuAsQ0U/e41zisyhH+/yQApz8y3Wa9gz/R
-GahjumP5QbOlY3bt9imvPyiFGrVoZSuCLCz3CIZYcMaTeE8ikuVlQPKUta6rSHtreupWhiG348ix
-MUw6y+2LUGxlmu3PI+sQ2RqcvAL8Z5UyTvAlGwkr+oaVqoEB5aK4u2rY8+WpFD1sagDfjw5NNgaF
-3Uw=
-=Mlfg
------END PGP SIGNATURE-----
+ drivers/net/ethernet/stmicro/stmmac/common.h  |  1 +
+ .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |  2 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c |  4 +--
+ .../ethernet/stmicro/stmmac/dwmac-mediatek.c  |  2 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 30 ++++++++++---------
+ include/linux/stmmac.h                        |  2 +-
+ 6 files changed, 22 insertions(+), 19 deletions(-)
 
---------------A9aa1GgMJw84gWsI0laIeOT5--
+diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
+index 6b5d96bced47..ec9c130276d8 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/common.h
++++ b/drivers/net/ethernet/stmicro/stmmac/common.h
+@@ -418,6 +418,7 @@ struct dma_features {
+ 	unsigned int frpbs;
+ 	unsigned int frpes;
+ 	unsigned int addr64;
++	unsigned int host_dma_width;
+ 	unsigned int rssen;
+ 	unsigned int vlhash;
+ 	unsigned int sphen;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
+index ac8580f501e2..890846e764bd 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.c
+@@ -289,7 +289,7 @@ static int imx_dwmac_probe(struct platform_device *pdev)
+ 		goto err_parse_dt;
+ 	}
+ 
+-	plat_dat->addr64 = dwmac->ops->addr_width;
++	plat_dat->host_dma_width = dwmac->ops->addr_width;
+ 	plat_dat->init = imx_dwmac_init;
+ 	plat_dat->exit = imx_dwmac_exit;
+ 	plat_dat->clks_config = imx_dwmac_clks_config;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+index 7deb1f817dac..13aa919633b4 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -684,7 +684,7 @@ static int ehl_pse0_common_data(struct pci_dev *pdev,
+ 
+ 	intel_priv->is_pse = true;
+ 	plat->bus_id = 2;
+-	plat->addr64 = 32;
++	plat->host_dma_width = 32;
+ 
+ 	plat->clk_ptp_rate = 200000000;
+ 
+@@ -725,7 +725,7 @@ static int ehl_pse1_common_data(struct pci_dev *pdev,
+ 
+ 	intel_priv->is_pse = true;
+ 	plat->bus_id = 3;
+-	plat->addr64 = 32;
++	plat->host_dma_width = 32;
+ 
+ 	plat->clk_ptp_rate = 200000000;
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+index 2f7d8e4561d9..9ae31e3dc821 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+@@ -591,7 +591,7 @@ static int mediatek_dwmac_common_data(struct platform_device *pdev,
+ 	plat->use_phy_wol = priv_plat->mac_wol ? 0 : 1;
+ 	plat->riwt_off = 1;
+ 	plat->maxmtu = ETH_DATA_LEN;
+-	plat->addr64 = priv_plat->variant->dma_bit_mask;
++	plat->host_dma_width = priv_plat->variant->dma_bit_mask;
+ 	plat->bsp_priv = priv_plat;
+ 	plat->init = mediatek_dwmac_init;
+ 	plat->clks_config = mediatek_dwmac_clks_config;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 4886668a54c5..f2a98418ac23 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -1430,7 +1430,7 @@ static int stmmac_init_rx_buffers(struct stmmac_priv *priv,
+ 	struct stmmac_rx_buffer *buf = &rx_q->buf_pool[i];
+ 	gfp_t gfp = (GFP_ATOMIC | __GFP_NOWARN);
+ 
+-	if (priv->dma_cap.addr64 <= 32)
++	if (priv->dma_cap.host_dma_width <= 32)
+ 		gfp |= GFP_DMA32;
+ 
+ 	if (!buf->page) {
+@@ -4586,7 +4586,7 @@ static inline void stmmac_rx_refill(struct stmmac_priv *priv, u32 queue)
+ 	unsigned int entry = rx_q->dirty_rx;
+ 	gfp_t gfp = (GFP_ATOMIC | __GFP_NOWARN);
+ 
+-	if (priv->dma_cap.addr64 <= 32)
++	if (priv->dma_cap.host_dma_width <= 32)
+ 		gfp |= GFP_DMA32;
+ 
+ 	while (dirty-- > 0) {
+@@ -6204,7 +6204,7 @@ static int stmmac_dma_cap_show(struct seq_file *seq, void *v)
+ 	seq_printf(seq, "\tFlexible RX Parser: %s\n",
+ 		   priv->dma_cap.frpsel ? "Y" : "N");
+ 	seq_printf(seq, "\tEnhanced Addressing: %d\n",
+-		   priv->dma_cap.addr64);
++		   priv->dma_cap.host_dma_width);
+ 	seq_printf(seq, "\tReceive Side Scaling: %s\n",
+ 		   priv->dma_cap.rssen ? "Y" : "N");
+ 	seq_printf(seq, "\tVLAN Hash Filtering: %s\n",
+@@ -7177,20 +7177,22 @@ int stmmac_dvr_probe(struct device *device,
+ 		dev_info(priv->device, "SPH feature enabled\n");
+ 	}
+ 
+-	/* The current IP register MAC_HW_Feature1[ADDR64] only define
+-	 * 32/40/64 bit width, but some SOC support others like i.MX8MP
+-	 * support 34 bits but it map to 40 bits width in MAC_HW_Feature1[ADDR64].
+-	 * So overwrite dma_cap.addr64 according to HW real design.
++	/* Ideally our host DMA address width is the same as for the
++	 * device. However, it may differ and then we have to use our
++	 * host DMA width for allocation and the device DMA width for
++	 * register handling.
+ 	 */
+-	if (priv->plat->addr64)
+-		priv->dma_cap.addr64 = priv->plat->addr64;
++	if (priv->plat->host_dma_width)
++		priv->dma_cap.host_dma_width = priv->plat->host_dma_width;
++	else
++		priv->dma_cap.host_dma_width = priv->dma_cap.addr64;
+ 
+-	if (priv->dma_cap.addr64) {
++	if (priv->dma_cap.host_dma_width) {
+ 		ret = dma_set_mask_and_coherent(device,
+-				DMA_BIT_MASK(priv->dma_cap.addr64));
++				DMA_BIT_MASK(priv->dma_cap.host_dma_width));
+ 		if (!ret) {
+-			dev_info(priv->device, "Using %d bits DMA width\n",
+-				 priv->dma_cap.addr64);
++			dev_info(priv->device, "Using %d/%d bits DMA host/device width\n",
++				 priv->dma_cap.host_dma_width, priv->dma_cap.addr64);
+ 
+ 			/*
+ 			 * If more than 32 bits can be addressed, make sure to
+@@ -7205,7 +7207,7 @@ int stmmac_dvr_probe(struct device *device,
+ 				goto error_hw_init;
+ 			}
+ 
+-			priv->dma_cap.addr64 = 32;
++			priv->dma_cap.host_dma_width = 32;
+ 		}
+ 	}
+ 
+diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
+index a152678b82b7..a2414c187483 100644
+--- a/include/linux/stmmac.h
++++ b/include/linux/stmmac.h
+@@ -215,7 +215,7 @@ struct plat_stmmacenet_data {
+ 	int unicast_filter_entries;
+ 	int tx_fifo_size;
+ 	int rx_fifo_size;
+-	u32 addr64;
++	u32 host_dma_width;
+ 	u32 rx_queues_to_use;
+ 	u32 tx_queues_to_use;
+ 	u8 rx_sched_algorithm;
+-- 
+2.39.2
+
