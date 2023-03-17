@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0A36BF55E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 23:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A226BF561
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 23:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCQWxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 18:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S230296AbjCQWyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 18:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCQWxK (ORCPT
+        with ESMTP id S229517AbjCQWyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 18:53:10 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2C9D30B2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:53:08 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id l15so1976769ilv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679093588; x=1681685588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tZQKt8PEtqewJ6G+XTz4rdS+nQPMdiG14rkUN1r/CVQ=;
-        b=gMqOXd0bTw4YEjnZpmHxvcSTK+Jt6ubljQfAnP7h0+tG/Ri2ZPlywPCqXD2x9GdssH
-         iXKDhXh+qiwf2qrcr/syJjphlyrI3nZS/tN2Ox0AKnh5qxrGePPCeRIsTxtiarKHRyVU
-         i5u87187EG/8X4PT832d5VuUfkfgdkUkm0a2A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679093588; x=1681685588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tZQKt8PEtqewJ6G+XTz4rdS+nQPMdiG14rkUN1r/CVQ=;
-        b=lCCN3jhvJxipEDq4AL+v/0B42lrYUNVqGm9kiUv8TpmvTIhC8GvJ9cvbHgOKlXY8NK
-         h7AswfZQZYQEbByNMi2QJqizrJiT6NSXOsgSJj/dGJoiRr/QjHiU+IlQWIsdKTOHq1Q8
-         UzeHSddhc47f6OekBEHs/RFLmVi8gCUPm6Ob2PJs36RSd+7w8JsCJqR2dvj9SRdP5cvU
-         0zHBcjTJ+XKFV1+xCrlOvANHX+M+iCTnVYmJ3B8C014jVDMQlElq9sYYZ0we1Ful0IJM
-         aZeRMdbeWsdjQs914PYBIH/gtrBN72DyL7/PK+UKPy1l1FFfek8OUTE7Wu88OtNH/+4y
-         bUzA==
-X-Gm-Message-State: AO0yUKWuGCNPb36rOW80rIdk8qtSXtcKjvxt+ke/nfX00USlXiVPhTAW
-        U0JSMRkNKlRNe85m1JcnVUf/Gw==
-X-Google-Smtp-Source: AK7set/moJNFKwD/r58i9ms7d34NV3sMr/vetji1mhQmMNaRhRj5dNSSmlbXgRAn/i8tpm7gWmklKw==
-X-Received: by 2002:a05:6e02:1a88:b0:316:67be:1b99 with SMTP id k8-20020a056e021a8800b0031667be1b99mr7475616ilv.0.1679093588264;
-        Fri, 17 Mar 2023 15:53:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o3-20020a056e02114300b003158e48f1e9sm928296ill.60.2023.03.17.15.53.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 15:53:07 -0700 (PDT)
-Message-ID: <d05ae776-ee19-2ce0-c06b-9825e5cbea82@linuxfoundation.org>
-Date:   Fri, 17 Mar 2023 16:53:07 -0600
+        Fri, 17 Mar 2023 18:54:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500F725955;
+        Fri, 17 Mar 2023 15:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679093631; x=1710629631;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nm/onngr/hNyUfZ1KuqYPFOT9I1SZoxU4Q8GAtLmZnA=;
+  b=WB/mxvmRiPX/TA+UlJXUoL1lTVgqH+LA/wSmpt9Q6eCzLECqyFBxujvW
+   ZsjDwCtFl4jhVxIFbA7+zYuSYR7ZeHDVbtldBvPp4/S7AeM+lhMQ1iuJ0
+   bAtvUFMeJJ5k+KYZZcMJDKuScJ8xq4XdLlWc7jsqnpzEcXE5zYOiROd2P
+   fTz4dQ4ICJYvc5XsImIIGnIctT48jlKxIOPjjlqCuF3wSBFhTdDPQDZmk
+   fJ09ZxBOq8TNJAoLxB8l5q0HOj3/NlceomryfBzLTivdRjS4PeXdLJ5ui
+   S5VtnFnfYkJLpECDIGT/uxumYiZRnpknS+mrbFwSEtlVet+0gTbe3987B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="318778257"
+X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
+   d="scan'208";a="318778257"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 15:53:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673719714"
+X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
+   d="scan'208";a="673719714"
+Received: from mupadhya-mobl1.amr.corp.intel.com (HELO desk) ([10.209.15.93])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 15:53:50 -0700
+Date:   Fri, 17 Mar 2023 15:53:45 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Ben Serebrin <serebrin@google.com>,
+        Peter Shier <pshier@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] kvm: vmx: Add IA32_FLUSH_CMD guest support
+Message-ID: <20230317225345.z5chlrursjfbz52o@desk>
+References: <20230201132905.549148-1-eesposit@redhat.com>
+ <20230201132905.549148-2-eesposit@redhat.com>
+ <20230317190432.GA863767@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due
- to race condition
-Content-Language: en-US
-To:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230317100954.2626573-1-zyytlz.wz@163.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230317100954.2626573-1-zyytlz.wz@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317190432.GA863767@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 04:09, Zheng Wang wrote:
-> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
+On Fri, Mar 17, 2023 at 12:04:32PM -0700, Nathan Chancellor wrote:
+> Hi Emanuele,
 > 
-> When it calls usbip_sockfd_store, it will call v_start_timer to start the
-> timer work.
-> 
-> When we call vudc_remove to remove the driver, theremay be a sequence as
-> follows:
-> 
-> Fix it by shutdown the timer work before cleanup in vudc_remove.
-> 
-> Note that removing a driver is a root-only operation, and should never
-> happen. But the attacker can directly unplug the usb to trigger the remove
-> function.
-> 
-> CPU0                  CPU1
-> 
->                       |v_timer
-> vudc_remove          |
-> kfree(udc);          |
-> //free shost         |
->                       |udc->gadget
->                       |//use
-> 
-> The udc might be removed before v_timer finished, and UAF happens.
-> 
-> This bug was found by Codeql static analysis and might by false positive.
+> On Wed, Feb 01, 2023 at 08:29:03AM -0500, Emanuele Giuseppe Esposito wrote:
+> > Expose IA32_FLUSH_CMD to the guest if the guest CPUID enumerates
+> > support for this MSR. As with IA32_PRED_CMD, permission for
+> > unintercepted writes to this MSR will be granted to the guest after
+> > the first non-zero write.
+> > 
+> > Signed-off-by: Jim Mattson <jmattson@google.com>
+> > Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> > ---
+> >  arch/x86/kvm/vmx/nested.c |  3 ++
+> >  arch/x86/kvm/vmx/vmx.c    | 70 +++++++++++++++++++++++++--------------
+> >  2 files changed, 48 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> > index 557b9c468734..075b5ade7c80 100644
+> > --- a/arch/x86/kvm/vmx/nested.c
+> > +++ b/arch/x86/kvm/vmx/nested.c
+> > @@ -654,6 +654,9 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
+> >  	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
+> >  					 MSR_IA32_PRED_CMD, MSR_TYPE_W);
+> >  
+> > +	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
+> > +					 MSR_IA32_FLUSH_CMD, MSR_TYPE_W);
+> > +
+> >  	kvm_vcpu_unmap(vcpu, &vmx->nested.msr_bitmap_map, false);
+> >  
+> >  	vmx->nested.force_msr_bitmap_recalc = false;
+> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > index c788aa382611..9a78ea96a6d7 100644
+> > --- a/arch/x86/kvm/vmx/vmx.c
+> > +++ b/arch/x86/kvm/vmx/vmx.c
+> > @@ -2133,6 +2133,39 @@ static u64 vmx_get_supported_debugctl(struct kvm_vcpu *vcpu, bool host_initiated
+> >  	return debugctl;
+> >  }
+> >  
+> > +static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
+> > +				struct msr_data *msr_info,
+> > +				bool guest_has_feat, u64 cmd,
+> > +				int x86_feature_bit)
+> > +{
+> > +	if (!msr_info->host_initiated && !guest_has_feat)
+> > +		return 1;
+> > +
+> > +	if (!(msr_info->data & ~cmd))
 
-This statement that this could be a false positive makes me hesitate
-taking this patch.
+Looks like this is doing a reverse check. Shouldn't this be as below:
 
-What kind of testing have you done with this fix? Were you able to test
-the scenario of unplugging usb?
-
-thanks,
--- Shuah
+---
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index f88578407494..e8d9033559c4 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2141,7 +2141,7 @@ static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
+ 	if (!msr_info->host_initiated && !guest_has_feat)
+ 		return 1;
+ 
+-	if (!(msr_info->data & ~cmd))
++	if (msr_info->data & ~cmd)
+ 		return 1;
+ 	if (!boot_cpu_has(x86_feature_bit))
+ 		return 1;
