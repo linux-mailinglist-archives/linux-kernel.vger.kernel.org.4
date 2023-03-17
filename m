@@ -2,95 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7656BEFD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238996BEFD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjCQRiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S230234AbjCQRi3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 13:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjCQRiB (ORCPT
+        with ESMTP id S230232AbjCQRi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:38:01 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C2FC1BFC
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:37:52 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id r5so6442307qtp.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679074670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eQbg/9o4MTLAoU6v0TWceh9IquAie7qBLy1ESoDHYJQ=;
-        b=KOI1JmDLdym9kQfsUWrq2pvE3kOYrCkH9Ihr8MduZydaqniYNAJglj+mpP2UVDYn4+
-         kW5vSjlVk/DrcJcfkbuRbTALbdKId1jkdm0LAwxjBsd4XA6JlFrDR15+IUc3uRGu74Fz
-         KP5ouPkmyrAUKxy+0upMIGKBiEwN7+cqDSEX8=
+        Fri, 17 Mar 2023 13:38:27 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1B28E56;
+        Fri, 17 Mar 2023 10:38:24 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id z21so23384742edb.4;
+        Fri, 17 Mar 2023 10:38:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679074670;
+        d=1e100.net; s=20210112; t=1679074703;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eQbg/9o4MTLAoU6v0TWceh9IquAie7qBLy1ESoDHYJQ=;
-        b=VwyZf/mD5OpR5n3kgrnE+nqgM8Dm4Mg3E52nA2TmhiYp5T684yulBkzD4XNm5wReoH
-         o16E2TxqP3Rq796NIAKbMKULyPmvoKHfgNPiblIM1ALgpV53unjRxp8/oUiMH2FJbh8s
-         BiG13jHVmdoFqQhV/qUpm/UvwawhoeFo9rWNZKkjIrJKL0YH64oeQc88ON4gYRgiYZIS
-         bgNPAxrDlUGnJRrwmYL06akLaDr40ccwLm+NwMoJzZLAlLdeity+srTENXf/0eOlGOEf
-         Yhkt3HHZYyT/mWz7SzBQzNaYxx9ryLX0lR8kXt+6LA1HGmvDHxOvcjLHB23kJHxlWKDn
-         PcpA==
-X-Gm-Message-State: AO0yUKUB8o9GMbKKM+hafy1T12U5SSgBsIwlQgNXa/0UiyfA+ts5f/r1
-        7JV9MCqijB0tsvyaGJS2G2LoCM2MAojvk+eJyl4=
-X-Google-Smtp-Source: AK7set/AcJa6xNFq02dCroVPzZ+OMTTBYLjgOIvrrsd1stQQv7ZE1phTQGGdWWWzxKkOm55jYWwQGg==
-X-Received: by 2002:a05:622a:118b:b0:3bf:db54:b622 with SMTP id m11-20020a05622a118b00b003bfdb54b622mr14216002qtk.30.1679074670454;
-        Fri, 17 Mar 2023 10:37:50 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id h23-20020ac85157000000b003b848759ed8sm1622351qtn.47.2023.03.17.10.37.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 10:37:49 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5416698e889so107414727b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:37:49 -0700 (PDT)
-X-Received: by 2002:a81:a704:0:b0:544:bbd2:749c with SMTP id
- e4-20020a81a704000000b00544bbd2749cmr2114862ywh.2.1679074669295; Fri, 17 Mar
- 2023 10:37:49 -0700 (PDT)
+        bh=3VVTjDJmm2lzmDZ4EXfD/IuNUWCmUKCPv9+gvR5MmV0=;
+        b=i/iVzaZK7UeBh8+yveL6dXFByslzvLT+PBgoQVvtBIdnDseKBuzBGfZSjEre53TFmL
+         2y7hsx1XUZCZypCvj6h337gP0HhlgTQhieHAfSdVC3pEdKXYhxTfeCDyqbMD/gX6d8zW
+         pP3JAhNypGEhrn97H1ybLA5SyNghtnrIuZOwDfyZxASgs2M+ieDLkxGvQwqmaqVwrVlo
+         +ktCZenudMB5r48VBO+4QKSuw+rFo6MdW3YMJ4E7+S712S1Jc9HMkCRfgW8BECWreLfV
+         IaH0WlB/NDtYOHmABBqnhTUN+L488nsFWaFSFrNqYS89KbsZijdfRNXshZHTMPw6g7Ky
+         StWg==
+X-Gm-Message-State: AO0yUKVYUThX1wbJy3ep1XHhXRGKUFxL5hu9B2OqcrmdyWfAoiaCUnMZ
+        diNaYCPNThHfP83HjpcU2RzYv6E+QgVZNllX/n+EHpyf
+X-Google-Smtp-Source: AK7set8XGEdnu1BsUTauQyYoAVFdivlT+2sHVsQhz1UkxF2v5KcQy5eyHquCr4DrEfRmPLgJIDs+9X4k+b8ZfpMA1gw=
+X-Received: by 2002:a17:907:a649:b0:931:ce20:db82 with SMTP id
+ vu9-20020a170907a64900b00931ce20db82mr98584ejc.2.1679074702745; Fri, 17 Mar
+ 2023 10:38:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230317171943.941539-1-saravanak@google.com>
-In-Reply-To: <20230317171943.941539-1-saravanak@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 17 Mar 2023 10:37:37 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VM_0_7ymUTsyvXp5COnNN-k9cTN+sKHwRpy1o5PdXeNg@mail.gmail.com>
-Message-ID: <CAD=FV=VM_0_7ymUTsyvXp5COnNN-k9cTN+sKHwRpy1o5PdXeNg@mail.gmail.com>
-Subject: Re: [PATCH v3] driver core: Add CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
+References: <20230303041411.3161780-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230303041411.3161780-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Mar 2023 18:38:11 +0100
+Message-ID: <CAJZ5v0g6b0=daCgNnH6sh1WJfkQYUOnCUj1QSxPERnP8Sz=tOQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Enable HWP IO boost for all servers
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Mar 17, 2023 at 10:19=E2=80=AFAM Saravana Kannan <saravanak@google.=
-com> wrote:
+On Fri, Mar 3, 2023 at 5:14 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> Add a build time equivalent of fw_devlink.sync_state=3Dtimeout so that
-> board specific kernels could enable it and not have to deal with setting
-> or cluttering the kernel commandline.
+> The HWP IO boost results in slight improvements for IO performance on
+> both Ice Lake and Sapphire Rapid servers.
 >
-> Cc: Doug Anderson <dianders@chromium.org>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Currently there is a CPU model check for Skylake desktop and server along
+> with the ACPI PM profile for performance and enterprise servers to enable
+> IO boost.
+>
+> Remove the CPU model check, so that all current server models enable HWP
+> IO boost by default.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  drivers/base/Kconfig | 12 ++++++++++++
->  drivers/base/core.c  |  5 +++++
->  2 files changed, 17 insertions(+)
+>  drivers/cpufreq/intel_pstate.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index cb4beec27555..8edbc0856892 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2384,12 +2384,6 @@ static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[] = {
+>         {}
+>  };
+>
+> -static const struct x86_cpu_id intel_pstate_hwp_boost_ids[] = {
+> -       X86_MATCH(SKYLAKE_X,            core_funcs),
+> -       X86_MATCH(SKYLAKE,              core_funcs),
+> -       {}
+> -};
+> -
+>  static int intel_pstate_init_cpu(unsigned int cpunum)
+>  {
+>         struct cpudata *cpu;
+> @@ -2408,12 +2402,9 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
+>                 cpu->epp_default = -EINVAL;
+>
+>                 if (hwp_active) {
+> -                       const struct x86_cpu_id *id;
+> -
+>                         intel_pstate_hwp_enable(cpu);
+>
+> -                       id = x86_match_cpu(intel_pstate_hwp_boost_ids);
+> -                       if (id && intel_pstate_acpi_pm_profile_server())
+> +                       if (intel_pstate_acpi_pm_profile_server())
+>                                 hwp_boost = true;
+>                 }
+>         } else if (hwp_active) {
+> --
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Applied as 6.4 material, thanks!
