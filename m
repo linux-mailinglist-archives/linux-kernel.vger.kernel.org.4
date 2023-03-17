@@ -2,133 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5266BF0BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB2B6BF0BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjCQSap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 14:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S229850AbjCQSbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 14:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjCQSam (ORCPT
+        with ESMTP id S229517AbjCQSbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 14:30:42 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2F34D602;
-        Fri, 17 Mar 2023 11:30:40 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id b5so2716176iow.0;
-        Fri, 17 Mar 2023 11:30:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679077840;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Fri, 17 Mar 2023 14:31:44 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C6D4AFC2;
+        Fri, 17 Mar 2023 11:31:42 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id p203so6684938ybb.13;
+        Fri, 17 Mar 2023 11:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679077902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sgkvJWHBERZyI9ZrvVnjcfVqSbigpZwA/hgWkyiT5z8=;
-        b=CY7MDKi0csnPLPD2xX+r0VLmlTsM/g0Sa0IGiS6peyxGR1A2eALLujCulYCrBo7Mnq
-         Uo+KPKGioQLq80QyAN80Xhh9P08flTTPMc5EBKWJmNwn5LTO0CeqN5TnQEsI6i8wuqnc
-         w7j10O5gxphkBNIpVZ5IfUsLZDK7+c7dRy0Jl9vLaHb6mbgS9tD9AY3xzySr1InIaQD9
-         8TAPGzMG0zg7Kp+3xzRdmm1447ZbA84n6UGTXwHNW7vTWpjMv48PAXUd4fCdmMe6/YS6
-         2+KI0rxujk38mbNIAhiSVphvOeip89z8sfjbUiUpltnG3wJttLt7W7ILMs+qyANm/1Yk
-         TUbQ==
-X-Gm-Message-State: AO0yUKUnuJuFi6eAiBEFd3pB7iG6FY3FTWUDzhMgfffLCU4/E9JKlDX+
-        rObt3BpjmXk9wI2AswxxnQ==
-X-Google-Smtp-Source: AK7set888W8VrYdXLwryZbq2QFnCkjzeBscyk2PT/WSfT3V/hKTItdj690f1fK1WTP+4BIuCO0yLnw==
-X-Received: by 2002:a5e:a90f:0:b0:752:e9a2:1c5b with SMTP id c15-20020a5ea90f000000b00752e9a21c5bmr260158iod.14.1679077839913;
-        Fri, 17 Mar 2023 11:30:39 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id 6-20020a056e020ca600b00322f16e8906sm796106ilg.29.2023.03.17.11.30.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 11:30:39 -0700 (PDT)
-Received: (nullmailer pid 2585626 invoked by uid 1000);
-        Fri, 17 Mar 2023 18:30:37 -0000
-Date:   Fri, 17 Mar 2023 13:30:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Elad Nachman <enachman@marvell.com>
-Cc:     thomas.petazzoni@bootlin.com, bhelgaas@google.com,
-        lpieralisi@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/8] dt-bindings: PCI: dwc: Add dma-ranges, region mask
-Message-ID: <20230317183037.GB2445959-robh@kernel.org>
-References: <20230313124016.17102-1-enachman@marvell.com>
- <20230313124016.17102-5-enachman@marvell.com>
+        bh=YvJ70W31eDPBtGDHoN0dzmi83vmZajj1b0iRIfuS03Y=;
+        b=jmKdJM6f8PDERiOtpMu1id19q+4IxichfhRBZJesSGpYuNotT/6XnOnA+hgfrS4K1E
+         ltxutcIo5C4wdfTZ5FZs3+YP7V3YmUwF8BcGlRGPmrgAfqcvjspG896N+Co8W3DK4rwD
+         ouE6bo6drRML/2N7tb4fen267q7V+PzK7XFEKrVHWhoocWNOg80UKMNCazkA7p7nzzcj
+         NC0Bou7Dx9Gxd/VAlkZR1cIGjLuH83tEB21Rb5kd15ojz5ghHx3Tu86Gk9R3pqwEisq7
+         Qq5clh/wOIHlFF+aCnrur0mW3AgS0q9L2U2ghKzXOX8lg9yupKfN5WyjVtPDb2zQiAMb
+         /CPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679077902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YvJ70W31eDPBtGDHoN0dzmi83vmZajj1b0iRIfuS03Y=;
+        b=7mSUEQtZH7giLly/CArPdwPjF6io73BjszN2BONLgCDMu53BJNES0y0JnWa1bTYe+v
+         ImqUjS6ebodOS2MdZaWT3WrXshtddDpscEb7CoIgbe/4EY5kV258eYas9c6iXHrqfAxu
+         GYXtR9vgtIlhztzJrsuZejlPzaX6f0s9CFZhI/z4EmOVtIBcfI5dwQjCRUgJ+69RBKA+
+         rjRfLB/PZEJlEwmImbdOrwnlBxNbOlsJh/A8XSLD05Nh0p2QZspLJe2YwHmEUv+6vw1d
+         lvuvR6A3qLzLXKOo5JSrFiBy1boJxAH4tn6Ppzyuu7XrMvAetIHJQPFwAqSO08lnc5xw
+         1Zdg==
+X-Gm-Message-State: AO0yUKX3/b/qXGLT8S+YayMakM5lN1ZRBbTWXARxRdZpmlIOI7Bpa+J2
+        sS9ul6JcxZSrwizvXMmQFNmx1UxmYJWQLLsLMqE=
+X-Google-Smtp-Source: AK7set95lw36pV9wpSdvM3RdFH/9Jn4PZZTKxs7PXXkh5kb5tY7xddMq54lT1HoQZAOwfpcjtbFy30OHTjTSE1JNHEI=
+X-Received: by 2002:a25:d4e:0:b0:9fc:e3d7:d60f with SMTP id
+ 75-20020a250d4e000000b009fce3d7d60fmr320384ybn.5.1679077901938; Fri, 17 Mar
+ 2023 11:31:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313124016.17102-5-enachman@marvell.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230317123314.145121-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230317123314.145121-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <TYCPR01MB10588B29A18ABE00374AD07A3B7BD9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYCPR01MB10588B29A18ABE00374AD07A3B7BD9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 17 Mar 2023 18:31:15 +0000
+Message-ID: <CA+V-a8sOib64rA3YRkHa3X-SiSpnn70QJK6DDqg7pX05X2phFA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] arm64: dts: renesas: rzg2l-smarc: Enable CRU, CSI support
+To:     Chris Paterson <Chris.Paterson2@renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 02:40:12PM +0200, Elad Nachman wrote:
-> From: Elad Nachman <enachman@marvell.com>
-> 
-> Add properties to support configurable DMA mask bits and region mask bits:
-> 
->  1. configurable dma-ranges is needed for Marvell AC5/AC5X SOCs which
->     have their physical DDR memory start at address 0x2_0000_0000.
-> 
->  2. Configurable region mask bits is needed for the Marvell Armada
->     7020/7040/8040 SOCs when the DT file places the PCIe window above the 4GB region.
->     The Synopsis Designware PCIe IP in these SOCs is too old to specify the
->     highest memory location supported by the PCIe, but practically supports
->     such locations. Allow these locations to be specified in the DT file.
-> 
-> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> ---
-> v4:
->    1) Fix commit message and its formatting
-> 
->    2) Replace num-dmamask with dma-ranges
-> 
->  .../devicetree/bindings/pci/snps,dw-pcie-common.yaml        | 5 +++++
->  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml     | 6 ++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> index d87e13496834..3cb9af1aefeb 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> @@ -261,6 +261,11 @@ properties:
->  
->    dma-coherent: true
->  
-> +  num-regionmask:
-> +    description: |
-> +      number of region limit mask bits to use, if different than default 32
-> +    maximum: 64
+Hi Chris,
 
-This should be implied from the compatible string.
+Thank you for the review.
 
-> +
->  additionalProperties: true
->  
->  ...
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> index 1a83f0f65f19..ed7ae2a14804 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> @@ -197,6 +197,12 @@ properties:
->        - contains:
->            const: msi
->  
-> +  dma-ranges:
-> +    description:
-> +      Defines the DMA mask for devices which due to non-standard HW address
-> +      assignment have their RAM starting address above the lower 32-bit region.
-> +      Since this is a mask, only the size attribute of the dma-ranges is used.
-> +
+On Fri, Mar 17, 2023 at 6:03=E2=80=AFPM Chris Paterson
+<Chris.Paterson2@renesas.com> wrote:
+>
+> Hello Prabhakar,
+>
+> > From: Prabhakar <prabhakar.csengg@gmail.com>
+> > Sent: 17 March 2023 12:33
+> >
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Enable CRU, CSI on RZ/G2L SMARC EVK and tie the CSI to OV5645 sensor
+> > using Device Tree overlay. rz-smarc-cru-csi-ov5645.dtsi is created so
+> > that RZ/G2L alike EVKs can make use of it.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > setenv bootfile kernel_fdt.itb
+> > tftpboot ${bootfile}
+> > bootm ${fileaddr}#rzg2l-smarc#ov5645
+> >
+> > v1->v2
+> > * New patch
+> > ---
+> >  arch/arm64/boot/dts/renesas/Makefile          |  1 +
+> >  .../r9a07g044l2-smarc-cru-csi-ov5645.dtso     | 18 ++++
+> >  .../dts/renesas/rz-smarc-cru-csi-ov5645.dtsi  | 87 +++++++++++++++++++
+> >  3 files changed, 106 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-
+> > csi-ov5645.dtso
+> >  create mode 100644 arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-
+> > ov5645.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/renesas/Makefile
+> > b/arch/arm64/boot/dts/renesas/Makefile
+> > index 23b10c03091c..a553d99175cb 100644
+> > --- a/arch/arm64/boot/dts/renesas/Makefile
+> > +++ b/arch/arm64/boot/dts/renesas/Makefile
+> > @@ -79,6 +79,7 @@ dtb-$(CONFIG_ARCH_R9A07G043) +=3D r9a07g043u11-
+> > smarc.dtb
+> >
+> >  dtb-$(CONFIG_ARCH_R9A07G044) +=3D r9a07g044c2-smarc.dtb
+> >  dtb-$(CONFIG_ARCH_R9A07G044) +=3D r9a07g044l2-smarc.dtb
+> > +dtb-$(CONFIG_ARCH_R9A07G044) +=3D r9a07g044l2-smarc-cru-csi-
+> > ov5645.dtbo
+> >
+> >  dtb-$(CONFIG_ARCH_R9A07G054) +=3D r9a07g054l2-smarc.dtb
+> >
+> > diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-
+> > ov5645.dtso b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-
+> > ov5645.dtso
+> > new file mode 100644
+> > index 000000000000..40cece1491bb
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
+> > @@ -0,0 +1,18 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Device Tree overlay for the RZ/G2L SMARC EVK with OV5645 camera
+> > + * connected to CSI and CRU enabled.
+> > + *
+> > + * Copyright (C) 2023 Renesas Electronics Corp.
+> > + */
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +#define OV5645_PARENT_I2C i2c0
+> > +#include "rz-smarc-cru-csi-ov5645.dtsi"
+> > +
+> > +&ov5645 {
+> > +     enable-gpios =3D <&pinctrl RZG2L_GPIO(2, 0) GPIO_ACTIVE_HIGH>;
+> > +     reset-gpios =3D <&pinctrl RZG2L_GPIO(40, 2) GPIO_ACTIVE_LOW>;
+> > +};
+> > diff --git a/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
+> > b/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
+> > new file mode 100644
+> > index 000000000000..95286bf2066e
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
+> > @@ -0,0 +1,87 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Common Device Tree for the RZ/G2L SMARC EVK (and alike EVKs) with
+> > + * OV5645 camera connected to CSI and CRU enabled.
+> > + *
+> > + * Copyright (C) 2023 Renesas Electronics Corp.
+> > + */
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+The above two lines are not required here.
 
-No need for this, it is already defined in pci-bus.yaml.
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
+>
+> Are either of these includes used in this file?
+> Or should they move to the overlay?
+>
+Good catch, yes they need to be moved into the overlay file instead.
 
-The description is wrong here anyways. The purpose is to translate 
-inbound PCI addresses to parent bus addresses (and eventually CPU 
-addresses).
-
-Rob
+Cheers,
+Prabhakar
