@@ -2,143 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28496BFB29
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6886BFB2E
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjCRPUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 11:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S229747AbjCRPVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 11:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjCRPUK (ORCPT
+        with ESMTP id S229550AbjCRPVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 11:20:10 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2113.outbound.protection.outlook.com [40.107.101.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C53323C47;
-        Sat, 18 Mar 2023 08:20:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mb5yjzTqqrRRRbbDjFheyWm2G01awtxLqo0Y/Sq97xc3r56c/3i6u99rrmE77Mm1ldAiVkNqQIBrUqP/RGR3GveCV9odbH6DvG0HV2ZXN0Owfh0e6TMzaX0MOj94MeNuIHHLkyAzZeZrRGTVF8mk3THJxNKzldMTJKxw2ajhU4r4H3UHNqsEY7D7ftg6Ilxo/XC33UESzFnPN9BBKmfwmy34mFL84CFNQ+y6TmMqIqNQiJyhSHXba+OuA2FT6cZODdt7OLaoZ+IzOPN0fBg5YEoZO2+BUGDJUUh/nTXiMNGf14bsb+jWSXt+nm6Y2bxQncm1IhG0HEdiGrUuHYdU/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/3tK925NnJXlnrbMD7j2mmqOynithnthoOPugk9i6K8=;
- b=Q4uKrO9+yzY2AtZP/BbfWidfUbZzScjp58AIxBUNtdKtiU448HaptzZvAzKgIgpMpkScldNMkSaetVrpRDpw/9EPlOExLWwMc8VUznlNBwoN7qev/jjvEyVbgwQ6zI3w0tiKTGsl1JjIbWnR/wUGInTLaiHF5LaMsx5yB/EkawlfZRZiq8XT5/7CH4fUwiXcLh2ffLfarp582L9ZAq75wVYd6zw0upj99xGWPJJFrZxtvxYxxMNxP+beRorqoadEEkjQ1zT5NuQfPmPElD4Zz+NqYV15LZBBr1Obi45CuodkNQRE5YlndZvrfsCYU7he99F++FZPP1V9FyMKw02pXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 18 Mar 2023 11:21:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D726234EA;
+        Sat, 18 Mar 2023 08:21:09 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id h8so31137921ede.8;
+        Sat, 18 Mar 2023 08:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/3tK925NnJXlnrbMD7j2mmqOynithnthoOPugk9i6K8=;
- b=hHca+fLkTlC9+8VNhMSp4xZypyZe1jVd2PQe0vYynfGUoF7LY0+x47eFHeeoYSqxMmrOs+2mdRbDoXdRLhl62WlKQWdKJVS2K9ERbBEEFUYjLJgGBfdLBPm+L7MrYNYzpM3KcmuY4GcyyIBoqgD/hy2gUHDZBsWYfJkjkEYsoEk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY5PR13MB3763.namprd13.prod.outlook.com (2603:10b6:a03:22a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.36; Sat, 18 Mar
- 2023 15:19:58 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.036; Sat, 18 Mar 2023
- 15:19:58 +0000
-Date:   Sat, 18 Mar 2023 16:19:51 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Calvin Johnson <calvin.johnson@oss.nxp.com>,
-        Grant Likely <grant.likely@arm.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] net: mdio: fix owner field for mdio buses
- registered using ACPI
-Message-ID: <ZBXWl6AUtiuhKOPu@corigine.com>
-References: <20230316233317.2169394-1-f.fainelli@gmail.com>
- <20230316233317.2169394-3-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316233317.2169394-3-f.fainelli@gmail.com>
-X-ClientProxiedBy: AM0PR10CA0101.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1679152868;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MKsKjVODmTjzpUnEKj54Pvt3U2mzabRle7b25tXkzeQ=;
+        b=hwBdlY+KF5sgsSeZqZ/wxXKn8wxGaeBEet0zv97YCN/Gsp6lbN2E9nuMwLjPlWuUn3
+         IT/lbKgKviDUpp+10U+blkBAT8AXwd6AFJGw+C9jmjibvJmdmF+Fxwb7ULY0cTD5P2aM
+         ujT6t/4P7NjtjFQnoR+hrsCLXckbAwWXr+x0Ou08RgTA0D4EHeva5aKSEkbLWK+7IpZ+
+         QT5pbdxZpwbA9Us6ml2DHw1O8IJ2RlnJOWrU5cYeb4abfKcuaSpD2sOrlTcpsj2c5E77
+         9rDMXJnt6Quk16y4QrVaCF3IuCVGFDGtgUW6b73EowV8T+7YNhTFgW32AvfAS/45MzGq
+         JsSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679152868;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MKsKjVODmTjzpUnEKj54Pvt3U2mzabRle7b25tXkzeQ=;
+        b=l54sSNG4WQwXqJTWyBNr4Lq2oJ8aXrmdYU/EWqfj7cd8hbnxfFl8DABIxLU1ioGe8U
+         O+l2CwlPtbhD4eu8wPIkohy/zZ1C6uk/nxj+BB+793rshoDrsuz35O7GOV5W+xd8iUZ7
+         xs+ybf36qJvXedWTyXkfkcM8QfjyOYP1/fozpUprcgyGVwtGNXUlK1wDaiiWESZZtAJW
+         pDhz+QyNbeFJ9+v/jwzioRlRrxqSfKkacEtF0gKiTiMQkrPjp1tnMK+ETCqbOAu0qhkS
+         A/Jsw1tF0jX+Df8zynYvg77OjcfIS3CHPkCaAXjntvnuO66LOEsPg0vWs3uuUxK7nkbT
+         xCXw==
+X-Gm-Message-State: AO0yUKU3y/EileL39qcQOz/06+shAsoD4G/hIdTqIIakm84xCVN2EChj
+        V9MePdTRRUDMj9w5ANgML3dViaz4vkU=
+X-Google-Smtp-Source: AK7set9cmQ/3RYlETwit+jpCD+VnhwP5jiot1MRP/0MccFeTh6e5K1INTgt0Ub8ST5JH8d7w+3iHkg==
+X-Received: by 2002:a17:907:7669:b0:931:2f49:c040 with SMTP id kk9-20020a170907766900b009312f49c040mr3234959ejc.51.1679152867686;
+        Sat, 18 Mar 2023 08:21:07 -0700 (PDT)
+Received: from ninja ([2001:9e8:2bf0:6200:ae22:bff:fec3:bbcf])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170906694200b0092b546b57casm2262226ejs.195.2023.03.18.08.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 08:21:07 -0700 (PDT)
+Date:   Sat, 18 Mar 2023 16:21:06 +0100
+From:   Matthias Benkmann <matthias.benkmann@gmail.com>
+To:     linux-input@vger.kernel.org
+Cc:     dmitry.torokhov@gmail.com, Nate Yocom <nate@yocom.org>,
+        hadess@hadess.net, benjamin.tissoires@redhat.com,
+        linux-kernel@vger.kernel.org, Pavel Rojtberg <rojtberg@gmail.com>
+Subject: [PATCH v3] Fix incorrectly applied patch for MAP_PROFILE_BUTTON
+Message-ID: <20230318162106.0aef4ba5@ninja>
+In-Reply-To: <CAK4gqCCk7ipRbZ=LM8Nsj+nE2S6v6QN39ziYSr3d2NmVMHULYg@mail.gmail.com>
+References: <CAK4gqCCk7ipRbZ=LM8Nsj+nE2S6v6QN39ziYSr3d2NmVMHULYg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB3763:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb796dc7-94f4-4dac-5bba-08db27c43c2b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1pWuXnlqmRSS2uSO5pXgwg1hYBM0dGUnQgUd4HzmgJQQ1f1Tv5/gos2apZC+UUaXk7+TdcKMrUb67pIrQn43yGKEVKCT5jpn+8Cv3VNNxp3RAN7bsy9/i3dLIkFAAZN6+Pbgn7wtR2nnO1P9f5sF5WUBBaAfvhQYWT+/EzsetyJpvEI2BR9v5E36UgZTPohfojNOMlL64DmcOLIhiJtT0iX+qjd7k4KsOsVg/3bGmriAIR3IYn8nt/0zsDIRsRLJiVCWO7XzMhxsW49q7G9PWGBUco5I4GN+SL1VUllEYDSbeXdbfW/LWZ6tXzdoIQrzaJC21BMqf++G3qNJb9KB7qYiD9pdWADwvnD0c275XxgIMW8Ri1w9TS1fvjq+UyFjU7ErS4P3XkWFyshaaLhU8BdHtRRf1CtMK1YiS2/pvcczzwKPspvqTr/Ui2BRUf5rTld5/HsC8RYN7uSSR+wfTe0Db0zAng64tLzEi/MmA46DgHQj35Ku+RwUsiIfIGGkLEjkMtqC8TtBPrBtju7ECTro4yZS1cXkNbq+shpfFksthJyg/mjkAUrkIry0BO/yGqMUQL12hN9UcP6fQSv2icvHEzwLfhE9uGa6yZnbyMwNgGrzvgFRa93Z2AXk2lMbVdwfQ9YP5TWBZpEe9LcPqTO4YKkonxjj0y188N9TYitqvomgAL0YQjqO7QvK3WCd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39830400003)(136003)(366004)(396003)(346002)(451199018)(316002)(478600001)(6486002)(54906003)(186003)(8936002)(41300700001)(6512007)(6506007)(8676002)(4326008)(6666004)(6916009)(2906002)(7416002)(2616005)(4744005)(5660300002)(44832011)(38100700002)(66476007)(66946007)(66556008)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OZ4TXRNNpzdNbiBCoxIuH/sM27NaBMlXNCzF99kNxCOeJh8XgRx/5cxfeqkC?=
- =?us-ascii?Q?62vRN5a8dxQkSDTm3xViEI/K+HEXeapmzcva0Rb80qVRSouWOxkWNI1Yn3f+?=
- =?us-ascii?Q?e9TYm/WIUPS3+NW6+8iAxFyVeQ+bTBdfKBozu4ZLGkE6CHmV+WVQEFjJw+D7?=
- =?us-ascii?Q?ZPLgdovMk7pTVoZxuLTj2vFAnJyrDIBXcpGtW7AXChkO6Dek7OvtMBL1HyGt?=
- =?us-ascii?Q?cktFOU0cncnuzj2jbjz3X6drjQBTNr1JToZ5p+igv1snUaeIET8GY/LbP5Et?=
- =?us-ascii?Q?pvvuhk1++yue1ukO1NoNe1gDxP7kq/9+nEuq87tpaq4/zXhad8cIAnHpgfTb?=
- =?us-ascii?Q?aJszOqC7Ad6xEyNHx8bc2tjTyCh3RCC4FlCPoqRZuCsuBkLqN5RG/nqm9IwG?=
- =?us-ascii?Q?PznDeLs7fOPZALKd5S/Mhpd6AuE0plqGNbCmssjCme0JMWwEHfZO8gOkR61w?=
- =?us-ascii?Q?G+S3jwELrGBxwM/ccHs5/OCurNVSb+qUaBuTx7eTNe3ysk/Wacx3Neyk/ZR8?=
- =?us-ascii?Q?eRH3beGohsP8djYSTcwH5g0wJp4VIWYERLwjLCHALNuNWQkbZzrxf/ZjvJDL?=
- =?us-ascii?Q?bqwHelkUyM/7+mb9TlQGxq56WCRtSexjLcd+y5AAoQ1TkWGAKTKAwBycCAy2?=
- =?us-ascii?Q?CGKjNBmDacMSaDQHPCbFhwipxptSlRNvH+0EQKRDf478zPtqtWomwP+MWJOi?=
- =?us-ascii?Q?clSpieQXU5ZyEv8KKdbt0sD1zniH+WgM3Xa2w4cHuesRcmCVZcSZAUa0xzSD?=
- =?us-ascii?Q?gH8h2kNOMp4gddYvB7pfTxw8Mz+piP6N39zW3/wzHosp+CI+xHyF2sWbHV33?=
- =?us-ascii?Q?RewzmH0Y7AFVRyaALu8LgGKAS99b2IqJnPEotaPyZp99VYiFBOWpAFxO7wFJ?=
- =?us-ascii?Q?THYhL1QiCMIeNfIwiMySJawjZelqEZST0tFE8wYuJnUOor2h4jPsSVBeKJzo?=
- =?us-ascii?Q?1KhmBX8L4T+mz4NQ/wJ/ZYyHYWjWuCtGt3oVUGK9cq4TzFb7OCOxfpIntKIJ?=
- =?us-ascii?Q?QQWCymBsW1BYkDjnV7j1YtdJ0X6AdhfoxqrxwPLQdEVt/mZuXwN0G/Tv2DYM?=
- =?us-ascii?Q?y8pPkF5Q9lqFDbI00TbHwhgfUyYMmaDTfcURml/Ib8vqk8/EV6nYHHtMYSiu?=
- =?us-ascii?Q?Jfga6Vm5aZ8vdtcIiXgwtTo2sS6eJmC+EzjgCQwqpTF0dK9+NriYEZtl1ZY7?=
- =?us-ascii?Q?16cWI3mVcmU3654LvwdZhruGylvgjOb677lgv7IHAgJh5jlJ4ahI2genlqzS?=
- =?us-ascii?Q?J0V+WgM7W/KJbyPHqfkZ3140l6gO5d2hs3VoRZsVjy3CuDSg7bunai6ZYqg0?=
- =?us-ascii?Q?JhPJfNUOMYzo+q5ZQpc/rhmfxa5y/UDrozRUIPHGJpBxU/rBvzvrMpXRAx6D?=
- =?us-ascii?Q?JOnSX1JRnWWhtId0WWHWHDEc6WYbvFq1zRyOrUyNKmJKC+Y4hvlrJgnotkLq?=
- =?us-ascii?Q?lBbpLOatlalL/WDC/ZoeZXJc/SZVVHXxcgLw/lDRPsk/wRE4mQfxo2rEFua2?=
- =?us-ascii?Q?rek4fyKFF/SCeQpapxZlMWGG8vphH5B9AmFFatHEbNKRd2MqvqnRMEmDHxDm?=
- =?us-ascii?Q?sxYBfgGpL2ElTahA14u/mpn915LVgm655zgcGUduOzy4DIsWm/EiyVna1XeD?=
- =?us-ascii?Q?wdZEVZWbqbeUlD0X+HrifYut2pQ8aPJE2tMJp1LYS8EQfRQ14gyLXBm9XlI1?=
- =?us-ascii?Q?ltrXUg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb796dc7-94f4-4dac-5bba-08db27c43c2b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 15:19:58.1167
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SPpeGXvj7OVGMrIjHblCoj/rVJRhpBR/npGsjpUCFfTYB5csY+MuiC4dNF9hbK3B0mVf0pAZeQa4rkITn8hmcySoE0awgya827ZawlRj4b0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3763
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 04:33:17PM -0700, Florian Fainelli wrote:
-> Bus ownership is wrong when using acpi_mdiobus_register() to register an
-> mdio bus. That function is not inline, so when it calls
-> mdiobus_register() the wrong THIS_MODULE value is captured.
-> 
-> CC: Maxime Bizon <mbizon@freebox.fr>
-> Fixes: 803ca24d2f92 ("net: mdio: Add ACPI support code for mdio")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+When the linked patch was applied,
+one hunk ended up in the wrong function. This patch moves it to where
+it probably belongs.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Link: https://lore.kernel.org/all/20220908173930.28940-6-nate@yocom.org/
+Fixes: fff1011a26d6 (Input: xpad - add X-Box Adaptive Profile button)
+Signed-off-by: Matthias Benkmann <matthias.benkmann@gmail.com>
+
+---
+ drivers/input/joystick/xpad.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+index f642ec8e92dd..29131f1a2f06 100644
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -781,9 +781,6 @@ static void xpad_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char *d
+ 	input_report_key(dev, BTN_C, data[8]);
+ 	input_report_key(dev, BTN_Z, data[9]);
+ 
+-	/* Profile button has a value of 0-3, so it is reported as an axis */
+-	if (xpad->mapping & MAP_PROFILE_BUTTON)
+-		input_report_abs(dev, ABS_PROFILE, data[34]);
+ 
+ 	input_sync(dev);
+ }
+@@ -1061,6 +1058,10 @@ static void xpadone_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char
+ 					(__u16) le16_to_cpup((__le16 *)(data + 8)));
+ 		}
+ 
++		/* Profile button has a value of 0-3, so it is reported as an axis */
++		if (xpad->mapping & MAP_PROFILE_BUTTON)
++			input_report_abs(dev, ABS_PROFILE, data[34]);
++
+ 		/* paddle handling */
+ 		/* based on SDL's SDL_hidapi_xboxone.c */
+ 		if (xpad->mapping & MAP_PADDLES) {
+-- 
+2.25.1
 
