@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E0D6BF814
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 06:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A086BF81C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 06:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCRFkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 01:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S229599AbjCRFqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 01:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCRFkZ (ORCPT
+        with ESMTP id S229533AbjCRFqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 01:40:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E236233EE;
-        Fri, 17 Mar 2023 22:40:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50FD7CE1724;
-        Sat, 18 Mar 2023 05:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 510E9C433A4;
-        Sat, 18 Mar 2023 05:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679118019;
-        bh=lGnEy3znbXM9CBXGHEwiyH5hDhz3ikM7nnM9AgDmO6o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Nvfxizgs4pwekPOaEBXkvhXRaGpVIzTcLuepKnANcXyfWD1XCpZo/ImHOxF6YfLux
-         pBzmQoVkBdJMA+dCYn1mF3um3nKuAzHMhgzYUT3ExogEaLU+ZF3/B/zbXQdthbD+Ni
-         YFhmrWqhP24sedAEmWTCd8ZZaCjjv+ZJZi5ry08zgNgFbQd+OeAWwH4VBqFGEbHhTO
-         6dvKRyaPpNLBLx0xI0f1b916Ldw6t2Mp/ZBPmjsrjeIQkKvv2Aus2eGAXVrn5vgtOm
-         5ahLMQvP5mEjOOgfyUKw0+gEjlRC1w8oz48TEiEKC7DCI411rxSouRgx+RvIJMkkah
-         Vt/3bAjMuKUiQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34839E2A03D;
-        Sat, 18 Mar 2023 05:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 18 Mar 2023 01:46:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C6034F68
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 22:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679118396; x=1710654396;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v9eB5JkgWbfJRDOeGsFJR4NKDaaEpmYmAYqO21RbRDY=;
+  b=c06pCFblj2l3QTQHGkio0RYB9cmsZznYSTcswPEJehLOuSChg8nsWY4r
+   dPBRce+/9FPX2o67CutLdxv3ZON5t4JKbWl3RET781Gb1NUUtax9Uoab/
+   r2VlccDlW4HuVwykbQ/dr/JkNzLR6yvZ1oXA2HMpAUmuS+Gr7/Zgygemk
+   BgL9AvQBJ6ICNHRMGttxLlWcaBGVetrhk6eS23/7XHAIhUfjqBNdjNLll
+   Ndn0hXXSXd/HQKRe5ZTPinIuZARusnj4HaPuwgfmi/HIIZl3pWKTntaha
+   a5YZlurhiSnv87XvNFw6iNGgaapAiN8g4wAARsl/iXOcIvKTldXjDRSdD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="335905687"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="335905687"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 22:46:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="744788455"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="744788455"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Mar 2023 22:46:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdPOk-0009po-1G;
+        Sat, 18 Mar 2023 05:46:34 +0000
+Date:   Sat, 18 Mar 2023 13:46:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        John Keeping <john@metanate.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+Message-ID: <202303181348.8bLUUc1G-lkp@intel.com>
+References: <20230317195128.3911155-1-john@metanate.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: macb: Increase halt timeout to accommodate
- 10Mbps link
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167911801921.9150.17435609525495000288.git-patchwork-notify@kernel.org>
-Date:   Sat, 18 Mar 2023 05:40:19 +0000
-References: <20230316083050.2108-1-harini.katakam@amd.com>
-In-Reply-To: <20230316083050.2108-1-harini.katakam@amd.com>
-To:     Harini Katakam <harini.katakam@amd.com>
-Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
-        claudiu.beznea@microchip.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michal.simek@amd.com,
-        harinikatakamlinux@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317195128.3911155-1-john@metanate.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi John,
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Thank you for the patch! Yet something to improve:
 
-On Thu, 16 Mar 2023 14:00:50 +0530 you wrote:
-> From: Harini Katakam <harini.katakam@xilinx.com>
-> 
-> Increase halt timeout to accommodate for 16K SRAM at 10Mbps rounded.
-> 
-> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> 
-> [...]
+[auto build test ERROR on tiwai-sound/for-next]
+[also build test ERROR on tiwai-sound/for-linus linus/master v6.3-rc2 next-20230317]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is the summary with links:
-  - [net-next] net: macb: Increase halt timeout to accommodate 10Mbps link
-    https://git.kernel.org/netdev/net-next/c/ed0578a46c5f
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Keeping/ALSA-usb-audio-Fix-recursive-locking-on-XRUN/20230318-035430
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230317195128.3911155-1-john%40metanate.com
+patch subject: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+config: x86_64-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181348.8bLUUc1G-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/21bbf1266d22cbc0e1ec7c8d535738f66bbc9801
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review John-Keeping/ALSA-usb-audio-Fix-recursive-locking-on-XRUN/20230318-035430
+        git checkout 21bbf1266d22cbc0e1ec7c8d535738f66bbc9801
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You are awesome, thank you!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181348.8bLUUc1G-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "snd_pcm_stop_xrun_under_stream_lock" [sound/usb/snd-usb-audio.ko] undefined!
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
