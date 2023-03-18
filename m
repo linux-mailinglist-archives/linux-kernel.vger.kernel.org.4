@@ -2,112 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26276BF785
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00106BF789
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCRDVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 23:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S229784AbjCRD1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 23:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjCRDVf (ORCPT
+        with ESMTP id S229604AbjCRD1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 23:21:35 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEAD2E80A;
-        Fri, 17 Mar 2023 20:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679109694; x=1710645694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SttgIRjIQDYSInmOKqKuuVclgQPLem90fuqFtWSgOC8=;
-  b=heir2X45YLtjhd5WtzXuBTmj3kJqO/Jz/te6WifIp69mG622eWBMunry
-   C1NAyJ/DpGvjv+rFrWreB9AOjLr5gEC9Pg9ehPVNT+uBplsrnrlawU+B3
-   hjmwHov2yXwH0OLejk5aDYVoVfQT4lVSg89/lW9eX2leke9NsG6pUcuWj
-   dzP4SLyh0S60IO6p6Hrr2HSInk8aH+xePjGM49kCf8ON90PfEbAQ6iHEK
-   7mZrqdI7/oY01wHpwbGhSz7vSRNgzsbaYJWP3AoXVKhhF+GGkgRj1ECcG
-   8k7GPpL1+RNziyieZKrhuR13W/JW6YSJ5AQ0ox+K69P9OmN9wSL6LY0Yy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="337108394"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="337108394"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 20:21:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673782826"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="673782826"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2023 20:21:30 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdN8M-0009lo-03;
-        Sat, 18 Mar 2023 03:21:30 +0000
-Date:   Sat, 18 Mar 2023 11:21:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <202303181149.mdhwoup2-lkp@intel.com>
-References: <20230317082950.12738-3-zhuyinbo@loongson.cn>
+        Fri, 17 Mar 2023 23:27:15 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC203E635;
+        Fri, 17 Mar 2023 20:27:11 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id t9so7716859qtx.8;
+        Fri, 17 Mar 2023 20:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679110030;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CNIRkRl5zC8m2QTrPNecHQHCMYnZxZA1VwIYi9JlFGI=;
+        b=XGoNLpXRHc+GLJ851Rd5Loeqs1kXb33lR4NSprklyL3tgVauAtx6Wv69fuhDAwdiwZ
+         2xxThor2GrUH88kV+N/DnY8ey/wuUO//j+qUz2yKdf3q2wj1hJu5hQGf2aNTgqzrQG4s
+         ho5TdBycUwPZ5Ff+UbN3j0NO/zqa9Dgyc2/bsg/ek8QHN1KP9gwEFugI6XAeE9E2unpt
+         hHPwcIx6SGUKMgUuJqnpxgckp2ILG4SyhAF1Kfj2Oi16T96eHguq4rin5LhOFHrIykOO
+         614WP++BocVJ7yM5ApPXq62A3b0Vzp2s4whc7LRV/kSv9/DIqjuYKrZaRs0ZKvQelC2k
+         W0QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679110030;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CNIRkRl5zC8m2QTrPNecHQHCMYnZxZA1VwIYi9JlFGI=;
+        b=hmCjXExSvl6FCFd3MnmYNq0wEdz5ojDPHBC3Jo6HsS0WyjRshR8r1yf5oLTWlNGaCp
+         jeFhLGPCAHBsLDrNvxfMPo2Zvv41EZZ1usXPLRKHWSSaoKL8fFNshg5TyW3I1MU0w8mz
+         WCmELnLTDnv/64CtbMwqHXmfYRJs7lzhmt4sl6Xx+Vy42EZmZV4CxkEfyk/am1uxPrHW
+         McvkyEVjaruDspSxBb8vmG7VVMkOAeNHhdPQwmWj8sNTzvDbti6wnLxChQRtXzYpjC4a
+         Swuhu2ItDYMZkROK/yb37HcMnk2YR6GJFGNefmf2iVICC/3Ecjuk/5z6NitVUcrppfBf
+         eJTg==
+X-Gm-Message-State: AO0yUKW3QnrPdo3tt6EYe1/Jqw1zJkKK6Es3hBLkqMlzuhCSPWtLjIOJ
+        JnHVSVKlwi/KgqPs+wEoN/TE3ECL/YI=
+X-Google-Smtp-Source: AK7set+dNbdG709Jg4tWdvfgTxOCvAjjhrHkkOkiMVH0nRkPV7iwgdevC3nWV3zgsRp5wTcSISbGNQ==
+X-Received: by 2002:ac8:7d05:0:b0:3bf:d8ec:a9fc with SMTP id g5-20020ac87d05000000b003bfd8eca9fcmr15758705qtb.52.1679110030313;
+        Fri, 17 Mar 2023 20:27:10 -0700 (PDT)
+Received: from Gentoo ([154.16.192.34])
+        by smtp.gmail.com with ESMTPSA id c15-20020a37e10f000000b0071f0d0aaef7sm2869169qkm.80.2023.03.17.20.27.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 20:27:09 -0700 (PDT)
+Date:   Sat, 18 Mar 2023 08:56:45 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "nicolas@fjasle.eu" <nicolas@fjasle.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH] Kbuild: Elevate sha1sum to sha256sum for atomic headers
+ check
+Message-ID: <ZBUvddx7PkTZHj4Y@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "nicolas@fjasle.eu" <nicolas@fjasle.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
+References: <20230315130518.4496-1-unixbhaskar@gmail.com>
+ <0bbdd88ca0cb465a85d7b90ebacb5e83@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="n9V0ZVZceJnPTOYA"
 Content-Disposition: inline
-In-Reply-To: <20230317082950.12738-3-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0bbdd88ca0cb465a85d7b90ebacb5e83@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinbo,
 
-I love your patch! Yet something to improve:
+--n9V0ZVZceJnPTOYA
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 08:58 Fri 17 Mar 2023, David Laight wrote:
+>From: Bhaskar Chowdhury
+>> Sent: 15 March 2023 13:05
+>>
+>> Thought it would be a good idea to use a elevated mechanism i.e sha256sum
+>
+>How can this change possibly work.
+>It is just a list of definitions read by another makefile.
+>You've changed the name of a definition without changing where it is used.
+>Also if the code is looking for a change, you'd need to change
+>what it is compared against.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20230317082950.12738-3-zhuyinbo%40loongson.cn
-patch subject: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi controller
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230318/202303181149.mdhwoup2-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a532955fcee3d37eb4332cea2b868f74ace0bc72
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
-        git checkout a532955fcee3d37eb4332cea2b868f74ace0bc72
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Gotcha. Thanks for the heads-up , David. I missed it.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181149.mdhwoup2-lkp@intel.com/
+>In any case no one is worried about malicious attempts to change
+>things without being noticed, even sha1 is OTT.
+>
+>        David
+>
+>>
+>> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+>> ---
+>>  Kbuild | 10 +++++-----
+>>  1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/Kbuild b/Kbuild
+>> index 464b34a08f51..b74040346d76 100644
+>> --- a/Kbuild
+>> +++ b/Kbuild
+>> @@ -45,14 +45,14 @@ missing-syscalls: scripts/checksyscalls.sh $(offsets-file)
+>>
+>>  # Check the manual modification of atomic headers
+>>
+>> -quiet_cmd_check_sha1 = CHKSHA1 $<
+>> -      cmd_check_sha1 = \
+>> -     if ! command -v sha1sum >/dev/null; then \
+>> -             echo "warning: cannot check the header due to sha1sum missing"; \
+>> +quiet_cmd_check_sha256 = CHKSHA256 $<
+>> +      cmd_check_sha256 = \
+>> +     if ! command -v sha256sum >/dev/null; then \
+>> +             echo "warning: cannot check the header due to sha256sum missing"; \
+>>               exit 0; \
+>>       fi; \
+>>       if [ "$$(sed -n '$$s:// ::p' $<)" != \
+>> -          "$$(sed '$$d' $< | sha1sum | sed 's/ .*//')" ]; then \
+>> +          "$$(sed '$$d' $< | sha256sum | sed 's/ .*//')" ]; then \
+>>               echo "error: $< has been modified." >&2; \
+>>               exit 1; \
+>>       fi; \
+>> --
+>> 2.39.2
+>
+>-
+>Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+>Registration No: 1397386 (Wales)
+--
+Thanks,
+Bhaskar
 
-All errors (new ones prefixed by >>):
+"Here's looking at you kid"-- Casablanca
+https://about.me/unixbhaskar
 
-   arm-linux-gnueabi-ld: drivers/spi/spi-loongson.o: in function `loongson_spi_update_state':
->> spi-loongson.c:(.text+0x430): undefined reference to `__aeabi_uldivmod'
+--n9V0ZVZceJnPTOYA
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmQVL3UACgkQsjqdtxFL
+KRUCngf+PRAc7rGZQ7BkqHCHphzw5U9Tk+UrlbX+sv2yFbLG4tdYHazBbIcZNJSz
+PIxZN68OVY4K2WExYlZuUi+8GSy4xlF9nLoxMOLv9oCMHOaiGueGnzgQBjPmixet
+PKY4DKkw9qc2BDd7KsVaZQtsjfvjugnrvSYPqvyDPWFJnxRvF+/vY55xunVDPcQX
+NZ0xVMI/9vWhM9+ttKgO9SGjauNdhOQrNNgr5CLbXiMKkReT4ddsMy4d89HlJYbd
+pB0AOa1vclSW+4iWUgcyjj8qpzTHK84pRR03CqqdrmQgmzxiGH5O2BLXxxXpjPOT
+OONDb8Z1Ks65i5g+UXfMYwzhjxfzmw==
+=95ci
+-----END PGP SIGNATURE-----
+
+--n9V0ZVZceJnPTOYA--
