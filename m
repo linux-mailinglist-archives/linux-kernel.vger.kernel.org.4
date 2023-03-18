@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601956BFBC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3396BFBC3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjCRROV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 13:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S229943AbjCRROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 13:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjCRROS (ORCPT
+        with ESMTP id S229925AbjCRROV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 13:14:18 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82876149AA;
-        Sat, 18 Mar 2023 10:14:16 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id z42so8119502ljq.13;
-        Sat, 18 Mar 2023 10:14:16 -0700 (PDT)
+        Sat, 18 Mar 2023 13:14:21 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1829C1B314;
+        Sat, 18 Mar 2023 10:14:19 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s20so927857ljp.1;
+        Sat, 18 Mar 2023 10:14:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679159655;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=78t4Gb8Yu+T0jud32VqLBv00huqUTII4Y3HDon4R8gA=;
-        b=oPP/nfFO1Sd8LBwgrIVKfT0hFGeBU0w1rxnUCMETf98bw043tRqnuJm4srgBJdue5C
-         4dIhquqzzCqmvYgYHMSzzCJI5DHeqLozu0yqahD/YOMjMkZwHtV2v8iA1z1j5/0dWM6q
-         EprRqs3vTw9L6lMl+DwY7Kl7onPfpoLfpfUP5N1atUxIjnVBWEL0FPLfqC6b3T9Z4T6P
-         Xs+1ctpdXq6W4HE21Mf9elSQZtgQYfnePr4/zHHGYMP834r44VDbvth9Hn39IcWTCW6/
-         5azVZAgCJ04JuEA/8Y9RrMN/ISNgRyYHIbhbCgVWyh9/XfGyQbEFSX3pywJkwF8nzb4j
-         hFdg==
+        d=gmail.com; s=20210112; t=1679159657;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T9PdNIUkyOijxkm8lOstlC8GwZtZ2lt8a9Evhp9jHyY=;
+        b=dpH5VunWjpCn63iFcoDNWtxgyMVveYmI8v67tXbKoiIa/DfhM/on2j2ky4/cKk8HPC
+         lAxYE8b0J+wAUWmLrOLJ4D0o56TnkTaw2zmM5Zeo3yLTFsfEaHZf6SKrQiiODJC+wRYm
+         SJm+h8DnEODr34Lqtfm94BvIv6GInLXFhl/VOqtKma2Z9361PKm7w+eFQ2v5yWxP8YaQ
+         nAmSaedWvl5bF05m66BqHK6fEk2+V/gG39qJc01ZcleezpD3JWf278ZimIJ11TxUB2B1
+         KK7Ya9FOf6BtUg/I7Z6psaYiNnZ3wQp/6lHL0NFtAM/abAYtpjVXL2lscepAhz5a+6dO
+         5vFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679159655;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=78t4Gb8Yu+T0jud32VqLBv00huqUTII4Y3HDon4R8gA=;
-        b=vI6H0Cra/DVXp07xEepv/vi1zZEa8p37iyx4vMt5cYgXWxODmrCNKOyxQVWk2FM/Us
-         GrJoRQg7tqaTGS1ZtmgsB1FAzGlu4Es8K8j0wXeeO/2N/smFLAmBgExJYUoYcPOOpXIn
-         n6dyGF8SVU070ZOhG00K8AJG/aJ9FRBuetpvhpfdICZ8XWGA1Bf3qAG7opNtkQqrBAuj
-         pt01gRwNuw9vJFiKvhqIac3aP4/4Eib799bVeUWRZdS4q7PT5rtIiNVMZUPWTf8ob3Zg
-         ffsW7sXG3A8BvCoTA/QEBNI3fX7p78q6xVY4NnDhSpIF1wMwZPrMkTUplpQfa5Mi1EQu
-         z6LA==
-X-Gm-Message-State: AO0yUKWJC/ouYS4KmhU6r3fuc8Vkw8HYxpqqcYRn7R6dyNVV9UzfDQHN
-        rq6HCY8sd1yHhc6EdXadqOg=
-X-Google-Smtp-Source: AK7set9vm1kIBp2fvAvJ+Wyla2iE/3SWk1c3zwPjJ33Mj0VSwul0XYBD8qfWhLckUd1ANLuRaEt83g==
-X-Received: by 2002:a2e:9bc4:0:b0:29a:95d8:3e04 with SMTP id w4-20020a2e9bc4000000b0029a95d83e04mr2090020ljj.50.1679159654640;
-        Sat, 18 Mar 2023 10:14:14 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679159657;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T9PdNIUkyOijxkm8lOstlC8GwZtZ2lt8a9Evhp9jHyY=;
+        b=hhWs9YFZtm2/gVV4hXLeeK/SapVnxb4HazHI0p3IPi5MNEnOl9SgrOrtklHBlOxMg/
+         ZusrCYcV2KKCxNtXw/FkOrSC1TG8LCddDIyLe5tc+J4ieZ+EFB8RCedCNeZMPVpPud3M
+         NrNKownFrSJhxm3k6WXx8kOSGcu0GqggBqwiASFzUdq5iXjN8UBDju2xmOANTKJIA4IP
+         qNLEVLMLpX/V2OOUj4qvKFuWQNpI4PctKuiT6+DMIt+LjgfgqXb9e1EoHrcVNcayPu42
+         TJlyl3k34jt59jQJ7FNnOM14tQeCQAD5R3dvpjC92YJczxjBDPleSYnf6tQEEKUob5eb
+         m1Dg==
+X-Gm-Message-State: AO0yUKWtXxSCDw8HCPxzi0AfNPQmyktD9EroDufNS0w42OPwqGZenmf/
+        5I6HYPwhFnnh13pw/vXYNMA=
+X-Google-Smtp-Source: AK7set+ubWVjoJl1oeOHI9nP6gLMYPK66IIBurwMgzxnfjH97r8QI+YZvhy4zjtezMa0TBMw3nWSTQ==
+X-Received: by 2002:a05:651c:511:b0:295:93eb:e795 with SMTP id o17-20020a05651c051100b0029593ebe795mr6313453ljp.41.1679159656632;
+        Sat, 18 Mar 2023 10:14:16 -0700 (PDT)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id r9-20020a2e80c9000000b0029573844d03sm929221ljg.109.2023.03.18.10.14.12
+        by smtp.gmail.com with ESMTPSA id r9-20020a2e80c9000000b0029573844d03sm929221ljg.109.2023.03.18.10.14.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 10:14:13 -0700 (PDT)
+        Sat, 18 Mar 2023 10:14:16 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,11 +63,14 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 0/3] nvmem: support post read for U-Boot's "ethaddr"
-Date:   Sat, 18 Mar 2023 18:13:53 +0100
-Message-Id: <20230318171356.29515-1-zajec5@gmail.com>
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH V2 1/3] dt-bindings: nvmem: u-boot,env: add MAC's #nvmem-cell-cells
+Date:   Sat, 18 Mar 2023 18:13:54 +0100
+Message-Id: <20230318171356.29515-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230318171356.29515-1-zajec5@gmail.com>
+References: <20230318171356.29515-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -82,32 +86,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-This change is required for NVMEM consumers to get expected MAC address
-from U-Boot env data variable "ethaddr".
+U-Boot's "ethaddr" environment variable is very often used to store
+*base* MAC address. It's used as a base for calculating addresses for
+multiple interfaces. It's done by adding proper values. Actual offsets
+are picked by manufacturers and vary across devices.
 
-To address some previous concerns:
-1. Yes, U-Boot env binding & driver should be converted to NVMEM layout
-2. My priority is to get working MAC rather than fancy DT syntax
-3. I AM going to convert U-Boot env into layout later
-4. This work DOESN'T conflict with layout migration
-5. This code WILL stay during / after layout migration
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/nvmem/u-boot,env.yaml | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-My brain limitations don't allow me to handle everything at once, please
-let's review what I already have here.
-
-Rafał Miłecki (3):
-  dt-bindings: nvmem: u-boot,env: add MAC's #nvmem-cell-cells
-  nvmem: core: support specifying both: cell raw data & post read
-    lengths
-  nvmem: u-boot-env: post-process "ethaddr" env variable
-
- .../devicetree/bindings/nvmem/u-boot,env.yaml |  7 ++++-
- drivers/nvmem/Kconfig                         |  1 +
- drivers/nvmem/core.c                          | 11 +++++---
- drivers/nvmem/u-boot-env.c                    | 26 +++++++++++++++++++
- include/linux/nvmem-provider.h                |  2 ++
- 5 files changed, 42 insertions(+), 5 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+index cbc5c69fd405..36d97fb87865 100644
+--- a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
++++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
+@@ -50,7 +50,11 @@ properties:
+ 
+   ethaddr:
+     type: object
+-    description: Ethernet interface's MAC address
++    description: Ethernet interfaces base MAC address.
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
+ 
+ additionalProperties: false
+ 
+@@ -72,6 +76,7 @@ examples:
+             reg = <0x40000 0x10000>;
+ 
+             mac: ethaddr {
++                #nvmem-cell-cells = <1>;
+             };
+         };
+     };
 -- 
 2.34.1
 
