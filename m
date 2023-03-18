@@ -2,155 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0ED66BFB36
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2016BFB38
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjCRP2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 11:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S229837AbjCRP3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 11:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCRP2H (ORCPT
+        with ESMTP id S229559AbjCRP3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 11:28:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7A0168A5;
-        Sat, 18 Mar 2023 08:28:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 537C5B8015A;
-        Sat, 18 Mar 2023 15:28:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72901C433D2;
-        Sat, 18 Mar 2023 15:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679153282;
-        bh=TfkymS/0UtxxXLVQX0IAZAlCFa1g/qoFFz33Aw2cDP4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EYzi7k5Shpe1V/FX4jtI7ba2bvlLmXhkezcgjC3YlwSXarKkuA8EJFeS3md6T5+eG
-         K8WEKNdaN3Ai8k+mVF3zEHPnVwRv2usaOCwd1eziABm+jZpxm5enKmHqa4HnrfqmJU
-         lD8/M6dbLgTOY0fKaMubpYydknDb56kfooQLaVn4Tn9Z8Tzwqi9sdW5vvLq1vYnhiT
-         9OXBzJ9koG0owY1T7wAIY1rhgYRtNFFeXwL23uDw4stPuVgSeslEk0i3cTYQujyeMc
-         baPoJPjd6IsSxRSojAkfZl4UCVVR/hIiQ2RiKztLh5+LSRlB7F8p12ZcaVZWLnBQ1n
-         pWdkLH0Z8NMFw==
-Date:   Sun, 19 Mar 2023 00:27:58 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: selftests: ftrace: event filter function - test event filtering
- on functions [FAIL]
-Message-Id: <20230319002758.84a3893c88f6bfbf7ff9ad85@kernel.org>
-In-Reply-To: <CA+G9fYv5G5Hows6Ex=1NMgSW3wtieKNNsFPBTpaLcF-bzaUtrw@mail.gmail.com>
-References: <CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com>
-        <20230315173257.1311e50729c73e0cb6e0aa0d@kernel.org>
-        <CA+G9fYv5G5Hows6Ex=1NMgSW3wtieKNNsFPBTpaLcF-bzaUtrw@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 18 Mar 2023 11:29:15 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2053.outbound.protection.outlook.com [40.107.243.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8A1B57A;
+        Sat, 18 Mar 2023 08:29:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hyrE9LotM1RU+AQUJBk8LLr+cazL3N7md50/sW7KNOAGrFE2lUGs+y0txsCIF8PyNkRqE09AyKOmBuWrlg9Wv0VBszBQGijiV3zxRevC2BanobvEW8DC56WzDnqSq2YLQZPHVUU9fo2k1unDCkkxthfjBmTZmF1NktLAkgvP628IAc/EnmSiAJ+EExnVUUSYO9g2X5P4G/lxNSFyftmgjQ/6bGeer4AaR6auLfycW0l0EXTV1xzwMzHx6UAQIv8OjrI/8p+EJzHLoFYumcN2SsW+8rh/xdVOqh/izYwzxHltbiiRZ/HXshkzQwsSQbEn51UZiKJlytxTlDYUEqB+Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1dePX5Yq3kAtkLcaXiDpbBmD5DpnoLvtNYbT8jV0Pz4=;
+ b=V3erUpagOYR5zz8n+nCBq7kP7ndC/bKR9W3Hpj7DtD2CVzLS8B6OVD8Hx5LLh8Z5+2XlxTRiNtVn6Cw3RKieD0cAkJNhs1/DmPhO0mB1RAjb2/ICGkW57p/QeCEFnQm2HnxyffuVz1rMKDsZnoPrEBdbCXNcHJByn2hIKHeO8ho6d/ciUUut3yNC5EjVTsCSa6fbg98+kzssgGrNQOtk1hz8cVNQwk2pHg+0D+zg/tK6Iq94nn4iouTiqd11a3Y12CzOLuXxwOuviiIoGWgiB9Bb/3GvaCHc0K9+kxC38GnYNkvFqv+XUYRGxTmtYpsd0g9uQC2oIZGvb0cMMKI2Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1dePX5Yq3kAtkLcaXiDpbBmD5DpnoLvtNYbT8jV0Pz4=;
+ b=By+rox9zNKqKzyM1HOT6bAz6arGvAG08ZwApbZOd8P+dVVEj+d2EPACM04Ru3mrBX/VY0RSGK2BGptAYSYR/l1WFkejrheLzrOPZ/ZALsH8NdmqXoaFj+pxR5Ocq63X7QEZM9EJzaAo3Yf9NSqpArSOhHyWTMeHlpoJkze/JLj5hRNWo7OrH/hXd8gMpEmpQ1pMVzz3FHpumcmDpHfiCwAj5T2CPxY4kN3BijoDM8StETCLrV32pqHxgaxHcLceiyosTjXXBWL/79SlkxVg9LNp4FZtu6VHMjYRv5zj3uMUiv9BdltIRs1HGDKy53ve5lJ40/CjIWTahFM+XCMm11A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12)
+ by BY5PR12MB4257.namprd12.prod.outlook.com (2603:10b6:a03:20f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.36; Sat, 18 Mar
+ 2023 15:29:06 +0000
+Received: from MN0PR12MB5762.namprd12.prod.outlook.com
+ ([fe80::f3e4:c5a8:7103:8ef1]) by MN0PR12MB5762.namprd12.prod.outlook.com
+ ([fe80::f3e4:c5a8:7103:8ef1%3]) with mapi id 15.20.6178.036; Sat, 18 Mar 2023
+ 15:29:06 +0000
+Message-ID: <c61f63b6-662e-9c85-9135-50710fec79fc@nvidia.com>
+Date:   Sat, 18 Mar 2023 10:29:01 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4] irqchip/gicv3: Workaround for NVIDIA erratum
+ T241-FABRIC-4
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+References: <20230318045812.2043117-1-sdonthineni@nvidia.com>
+ <87wn3egzr8.wl-maz@kernel.org>
+From:   Shanker Donthineni <sdonthineni@nvidia.com>
+In-Reply-To: <87wn3egzr8.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0134.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::19) To MN0PR12MB5762.namprd12.prod.outlook.com
+ (2603:10b6:208:375::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB5762:EE_|BY5PR12MB4257:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0298b11e-f246-4aac-3fc6-08db27c582fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7cScbQvVkx3Hv8bH21w98QPA3olIRg+YGVc8htkVJg1Ag1blLhqER2vDALSbx3t6nvUAJ+9EeH5uL8pnxXH/q7UGAvtyevt1a8PyUy98Zx+LZWCns63ibHbPve0gpdKc6hpBwF9Iy/uHKpFVIuGVgRSx3uSKoceW7K1F7qbDka/7oyS8PRFK/1lgMPvdUJ4m7/FRR8j3At+T/gXRoyFcdF0tFIqWV6kk7mK0iN754TARGfthgSnNFbGnnHElSnMLsGI/gh905k3wPM78YV06X6yf5smy559qcos9x05iTQ1vcUvZ7MpCN3NRqfaRFlOXwFfVqCo6MQVsWiGgE+TMpSI/uPzYYWIdFYss2CsaJ+5dkcN6u2PpUKfUYqfkGzfIFxaerembWCH4BmDOGuvGhQG0P0SHgqUL5hnSKgA4wUzdIgIlXq3AZ5wBldSZ2hn29+b61eX97wPpzYGkxFGLH3Ma9eUabQiaMPEa9gORU542n2/dra3+jxWb6+Gd9ute4CgyIv12y7N9Pe7PG8BxbiGWGtN+UjKC0KqmV4NTS1vCcVf/pqbfpP10f7TKQ0E0n9irHcvOda5YdQIUIHBvhuSsgj3ECcYyExAaNdgwJToPOMiMyR17E9kgTvIbTHb9kLkYApqcT049DDvbF06oRkLdGF/P6K7Xs/15t+ds8+Pi/OL3tdmpz5qb6j0U6gQ0VB6+4b3n12nc46GOu0tocZgPboRj+/4g3j42cVX9iXjNBrcRBrF2PMX7x3/vmvef9qidDz/N0GUEdTwdSKoKAQnOzWEbR+S8GK5N6da+VKFU2tCZtscKkRrEb8sGl9LX
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5762.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39850400004)(346002)(136003)(376002)(451199018)(6666004)(107886003)(8676002)(7416002)(86362001)(31696002)(66946007)(5660300002)(66556008)(4326008)(6916009)(66476007)(316002)(54906003)(8936002)(41300700001)(2906002)(45080400002)(36756003)(478600001)(83380400001)(966005)(6486002)(2616005)(38100700002)(31686004)(26005)(186003)(6506007)(6512007)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmYzLys3ODlIM3R6Ky8xVnN2V1dyRlFTSFcwTHF2QkpqcW52UENMb000ak9S?=
+ =?utf-8?B?aVN4UEhKeHk4N2xqVTc4dE01NFR2K3RhVG1Yb2xObmJsWkg5L0czOEFGUzVH?=
+ =?utf-8?B?c0N4VS9XSHBJeEtIakdHdFdpZUEzK2tncDRYTmxJRTQ1Vk8wNVZDTjJERmhP?=
+ =?utf-8?B?VE9Fekw3cnBiQllXOGtPMTI4dUtqQXVuNVFXSHQxRXYyc2NLWFpFOW1UYUhW?=
+ =?utf-8?B?ZHdnN2wvdk1kUUxHWEV0LzkvbHRaMGFVUXhlUkJMYVpNc1dnYkwvV0VUVVpV?=
+ =?utf-8?B?L0JmMi9sZUowdUhFQTUxVGVweWg1NGRwQnQwOHZ5dGQwbHpTN01vbDlWdkVW?=
+ =?utf-8?B?dUxQcHVCV0k2emlzVThEc2ttb2FCaDQvSWxsUFUyVmlZVVozQjlUZUhkNFho?=
+ =?utf-8?B?U1RFRWxlbjBKem1DaDRpUHY1YWY1cFRPVlJKVWhzSlF1V3d4bS83NGdaNEpU?=
+ =?utf-8?B?Z3RybXpwbjNKeVpTbUNTNXBKSjNIZkFRbWUvL3FBa0lNZHozWUR1enNTRkhR?=
+ =?utf-8?B?QWoybmVOSlNkU21VcHNEOXZKbGpENUJnREIvN1J0eWJpVjdxUnc2VktFQjl3?=
+ =?utf-8?B?R2FUc1IraEo1MU5mZmMxLzNrd2JtMGJ3V2xwWGNMWW1adTV5M0FRZnRhdSt3?=
+ =?utf-8?B?bE0rMnZXMGhlWTliOUtVTm5OS0R4b1Vjc0szZXBNeWc0R1VqZGg4K3RwWlhy?=
+ =?utf-8?B?RHpGU0UveUVOVElWTlZnaWVJWDBQQ0FVUzZSaFA2elNFdnNEMlZoOFNLYVJK?=
+ =?utf-8?B?U0lvejNXM04yRWN4dkNnbnRYR3ZuU3ZCQ0RteTFxdXE5QWQ4dWZQbjByQWVS?=
+ =?utf-8?B?SEx2VlpEbHlBUHJyMk85aE5TeDZKbzZzRnVTd1JBRmhWdXI5Ny9OcGlZQkhs?=
+ =?utf-8?B?RUVjMTRKWHlvZjFOWEZKdU10Yzd5VXp1ZVdnaDc4OUdMN1R1T1hRWXAxajJu?=
+ =?utf-8?B?MXlqdFE1S0lqdk1ROTk1YlZhaVlkbnZHL1Zyc2pqcnp0ejNnZmpxZkpzVERo?=
+ =?utf-8?B?Z2dmSGw2d0EzTy9wek9SNnlEVVgvbjVZeE1hV01HbDh3UXkxZGxnNXRRa2VL?=
+ =?utf-8?B?eXE2clVad0lRa2Qxc0ppUEJ2V1o3S1VFTHdJUEZqaEhFWDFFQm1lREsxWEF6?=
+ =?utf-8?B?QWpybHBWa0xXWVhMTDNrMk5idVJBZ3VBd0NoM1FOelVXRTlWQU9UNjlBczBz?=
+ =?utf-8?B?SHd3WXBNdDJUc2NHMkdic0hoVytWd3dZN1R4cGRwOUJWNWtoN3dnNFVtZmRo?=
+ =?utf-8?B?WU9XOFErd1d6MXFXQXlyRkZJK0xISVNnNlZOeTEvNzBhMjBxUExJMFloTkE1?=
+ =?utf-8?B?bVlWR0hZQWpoaWc3YkhnT3JhcE9PaWQrRVpLWWY4cTBiTzJacW5YK09tMzFt?=
+ =?utf-8?B?UW80cnQ2SmQxQ1I2TUNkL3M2OEZCa2RVN01OSG9LU0NoZmlERHN0MjA3K2Js?=
+ =?utf-8?B?RXRrOTR2VG1RMVRGQ3VEZ1Fpdkp1U0REVkk2WGJqLytjT21VOHMwT3ZkTjJG?=
+ =?utf-8?B?THhPUDc1ZW9GRFlzdUhsL2hYdnk5cEJScWxUZU1TTjVJQWRkV2ZTc2FSLzV4?=
+ =?utf-8?B?R3hIQmg5a0Z5ZWxsK0J4V1dLZ01BVkRyWGtqaXpNdGZabmlUWjRpRlFCcGlC?=
+ =?utf-8?B?T1d2amdSUi9YUmdWTGJQQU5TR3ZVZlNsSUdTbFY2dUpRUFpEVWxrS21YdGgv?=
+ =?utf-8?B?OVc1a1k5c0JHbDVodjlENzFHZ0lvMWxaanVXWENOS2pITXVVK281dkZEc2JU?=
+ =?utf-8?B?Wkx1MmlYWFk4WTJvS0FQMnVsTFJpeERqTTA1ZjAwWmk5S25vdmJBbExtblVH?=
+ =?utf-8?B?cThBOFY5UDhqRVYrcjlUQm9uWEIvV0FVSUtrV1FpczFqVm4zckpxWkFhajBZ?=
+ =?utf-8?B?UkQxdlZwd3NnV25zQUJPbEhXTWR3UTRlQ0FQdU5JY3paYXZTWHQxcVhid1BT?=
+ =?utf-8?B?S2c2YXVBRC9FcWJlVE9CWU9ad0hscTVmNWhZU2pFMGloeWM5L21TR0RmK2hG?=
+ =?utf-8?B?V0VES21yODU2ZUhCY1RoWWpRNDJPaGRTaEs5bytWZzFFQWdvdGFmOVpJV21F?=
+ =?utf-8?B?MlRhQXZQSkVlaE5PTTl2RGhXRU00OHBrS2crUVpBY2NvbzRsWDdnTi8zbDhU?=
+ =?utf-8?B?ZmNodVk4Y3BoeHdSbGJkRHJSNGdSSFoveGpuK0c3NUIrcUVGZzRDbVF6WHBv?=
+ =?utf-8?B?WGc9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0298b11e-f246-4aac-3fc6-08db27c582fc
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5762.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 15:29:06.5179
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DdZevC+6yNIdKaA3JQY3ZoEcC58oK8cvio3B0nFdpKOrmeu52U4CLdtH1v6XHWcLX50rLtSXtatarkR12/gzRg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4257
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+Hi Marc,
 
-On Wed, 15 Mar 2023 14:41:51 +0530
-Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-
-> Hi Masami San,
+On 3/18/23 04:44, Marc Zyngier wrote:
+> External email: Use caution opening links or attachments
 > 
 > 
-> On Wed, 15 Mar 2023 at 14:03, Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Naresh,
-> >
-> > On Tue, 14 Mar 2023 15:52:44 +0530
-> > Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > > Results from Linaro’s test farm.
-> > >
-> > > selftests ftrace failed on qemu-x86_64 and qemu-arm64.
-> > > Please find the test log below.
-> >
-> > Thanks for reporting!
-> > Can you share the kernel config which you used for this build?
-> > And the kernel is "next-20230314", is that correct?
+> On Sat, 18 Mar 2023 04:58:12 +0000,
+> Shanker Donthineni <sdonthineni@nvidia.com> wrote:
+>>
+>> The T241 platform suffers from the T241-FABRIC-4 erratum which causes
+>> unexpected behavior in the GIC when multiple transactions are received
+>> simultaneously from different sources. This hardware issue impacts
+>> NVIDIA server platforms that use more than two T241 chips
+>> interconnected. Each chip has support for 320 {E}SPIs.
+>>
+>> This issue occurs when multiple packets from different GICs are
+>> incorrectly interleaved at the target chip. The erratum text below
+>> specifies exactly what can cause multiple transfer packets susceptible
+>> to interleaving and GIC state corruption. GIC state corruption can
+>> lead to a range of problems, including kernel panics, and unexpected
+>> behavior.
+>>
+>>  From the erratum text:
+>>    "In some cases, inter-socket AXI4 Stream packets with multiple
+>>    transfers, may be interleaved by the fabric when presented to ARM
+>>    Generic Interrupt Controller. GIC expects all transfers of a packet
+>>    to be delivered without any interleaving.
+>>
+>>    The following GICv3 commands may result in multiple transfer packets
+>>    over inter-socket AXI4 Stream interface:
+>>     - Register reads from GICD_I* and GICD_N*
+>>     - Register writes to 64-bit GICD registers other than GICD_IROUTERn*
+>>     - ITS command MOVALL
+>>
+>>    Multiple commands in GICv4+ utilize multiple transfer packets,
+>>    including VMOVP, VMOVI, VMAPP, and 64-bit register accesses."
+>>
+>>    This issue impacts system configurations with more than 2 sockets,
+>>    that require multi-transfer packets to be sent over inter-socket
+>>    AXI4 Stream interface between GIC instances on different sockets.
+>>    GICv4 cannot be supported. GICv3 SW model can only be supported
+>>    with the workaround. Single and Dual socket configurations are not
+>>    impacted by this issue and support GICv3 and GICv4."
+>>
+>> Link: https://developer.nvidia.com/docs/t241-fabric-4/nvidia-t241-fabric-4-errata.pdf
+>>
+>> Writing to the chip alias region of the GICD_In{E} registers except
+>> GICD_ICENABLERn has an equivalent effect as writing to the global
+>> distributor. The SPI interrupt deactivate path is not impacted by
+>> the erratum.
+>>
+>> To fix this problem, implement a workaround that ensures read accesses
+>> to the GICD_In{E} registers are directed to the chip that owns the
+>> SPI, and disables GICv4.x features for KVM. To simplify code changes,
+>> the gic_configure_irq() function uses the same alias region for both
+>> read and write operations to GICD_ICFGR.
+>>
+>> Co-developed-by: Vikram Sethi <vsethi@nvidia.com>
+>> Signed-off-by: Vikram Sethi <vsethi@nvidia.com>
+>> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
+>> ---
+>> Changes since v2:
+>>   - Fix the build issue for the 32bit arch
+>> Changes since v2:
+>>   - Add accessors for the SOC-ID version & revision
+>>   - Include "linux/bitfield.h" and "linux/bits.h" in irq-gic-v3.c
+>> Changes since v1:
+>>   - Use SMCCC SOC-ID API for detecting the T241 chip
+>>   - Implement Marc's suggestions
+>>   - Edit commit text
 > 
-> I have attached a test log file and Kconfig file.
-
-Thanks! I could reproduced.
-
-The error log is here.
-----
-+ . /mnt/ftrace/test.d/filter/event-filter-function.tc
-+ echo 'Test event filter function name'
-Test event filter function name
-+ echo 0
-+ echo 0
-+ echo
-+ echo 'call_site.function == exit_mmap'
-+ echo 1
-+ echo 1
-+ ls
-+ echo 0
-+ + wcgrep -l
- exit_mmap
-+ grep kmem_cache_free trace
-+ hitcnt=0
-+ + wcgrep -l
- -v+  exit_mmap
-grep kmem_cache_free trace
-+ misscnt=0
-+ '[' 0 -eq 0 ]
-+ exit_fail
-+ exit 1
-
-And the test case is here.
------
-echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
-echo 1 > events/kmem/kmem_cache_free/enable
-echo 1 > tracing_on
-ls > /dev/null
-echo 0 > events/kmem/kmem_cache_free/enable
-
-hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
-misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-
-if [ $hitcnt -eq 0 ]; then
-        exit_fail
-fi
------
-
-The test case expects the `ls > /dev/null` involves 'kmem_cache_free' trace
-event, but it doesn't.
-
-BTW, this code is a bit fragile because the function caller can be changed
-frequently. I think it should sample the events and use one of them.
-Let me fix that.
-
-Thank you,
-
-
+> You seem to have ignored most of my comments on v2[1] apart from the
+> SOC_ID stuff. I guess I'll wait for v5...
 > 
-> >
-> > >
-> > > Is this expected to fail ? Am I missing anything ?
-> >
-> > No, it should be a bug. I would like to reproduce it.
+>          M.
 > 
-> - Naresh
+> [1] https://lore.kernel.org/all/871qlqif9v.wl-maz@kernel.org/
+> 
 
+Sorry, I did not intentionally ignore your input, but unfortunately, lost
+this specific email in my outlook. Your feedback is valuable, and we will
+ensure that all of your review comments are addressed in the v5.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-Shanker
+
