@@ -2,77 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0306BF781
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26276BF785
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCRDKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 23:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S229784AbjCRDVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 23:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCRDKH (ORCPT
+        with ESMTP id S229533AbjCRDVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 23:10:07 -0400
-Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7B4D4F47
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 20:10:06 -0700 (PDT)
-Received: by ubuntu20 (Postfix, from userid 1003)
-        id E5F6CE02AB; Sat, 18 Mar 2023 03:10:04 +0000 (UTC)
-From:   Yang Yang <yang.yang29@zte.com.cn>
-To:     hannes@cmpxchg.org
-Cc:     akpm@linux-foundation.org, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        willy@infradead.org, yang.yang29@zte.com.cn
-Subject: Re: [PATCH linux-next] mm: workingset: simplify the calculation of workingset size
-Date:   Sat, 18 Mar 2023 03:10:04 +0000
-Message-Id: <20230318031004.19012-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230317140952.GA153257@cmpxchg.org>
-References: <20230317140952.GA153257@cmpxchg.org>
+        Fri, 17 Mar 2023 23:21:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEAD2E80A;
+        Fri, 17 Mar 2023 20:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679109694; x=1710645694;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SttgIRjIQDYSInmOKqKuuVclgQPLem90fuqFtWSgOC8=;
+  b=heir2X45YLtjhd5WtzXuBTmj3kJqO/Jz/te6WifIp69mG622eWBMunry
+   C1NAyJ/DpGvjv+rFrWreB9AOjLr5gEC9Pg9ehPVNT+uBplsrnrlawU+B3
+   hjmwHov2yXwH0OLejk5aDYVoVfQT4lVSg89/lW9eX2leke9NsG6pUcuWj
+   dzP4SLyh0S60IO6p6Hrr2HSInk8aH+xePjGM49kCf8ON90PfEbAQ6iHEK
+   7mZrqdI7/oY01wHpwbGhSz7vSRNgzsbaYJWP3AoXVKhhF+GGkgRj1ECcG
+   8k7GPpL1+RNziyieZKrhuR13W/JW6YSJ5AQ0ox+K69P9OmN9wSL6LY0Yy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="337108394"
+X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
+   d="scan'208";a="337108394"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 20:21:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673782826"
+X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
+   d="scan'208";a="673782826"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2023 20:21:30 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdN8M-0009lo-03;
+        Sat, 18 Mar 2023 03:21:30 +0000
+Date:   Sat, 18 Mar 2023 11:21:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <202303181149.mdhwoup2-lkp@intel.com>
+References: <20230317082950.12738-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_NON_FQDN_1,
-        HEADER_FROM_DIFFERENT_DOMAINS,HELO_NO_DOMAIN,NO_DNS_FOR_FROM,
-        RCVD_IN_PBL,RDNS_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL_NO_RDNS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317082950.12738-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Mar 17, 2023 at 01:59:03AM +0000, Yang Yang wrote:
->> I see in this patch "mm: vmscan: enforce inactive:active ratio at the
->> reclaim root", reclaim will be done in the combined workingset of
->> different workloads in different cgroups.
->>
->> So if current cgroup reach it's swap limit(mem_cgroup_get_nr_swap_pages(memcg) == 0),
->> but other cgroup still has swap slot, should we allow the refaulting page
->> to active and give pressure to other cgroup?
->
-> That's what we do today.
->
-> The shadow entry remembers the reclaim root, so that refaults can
-> later evaluated at the same level. So, say you have:
->
-> root - A - A1
->         `- A2
+Hi Yinbo,
 
-> and A1 and A2 are reclaimed due to a limit in A. The shadow entries of
-> evictions from A1 and A2 will actually refer to A.
->
-> When they refault later on, the distance is interpreted based on
-> whether A has swap (eviction_lruvec).
+I love your patch! Yet something to improve:
 
-Much appreciate to your patient explanation.
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc2 next-20230317]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Still a question:
-In the example above, if (NR_ACTIVE_FILE + NR_INACTIVE_FILE) <
-refault_distance < (NR_ACTIVE_FILE + NR_INACTIVE_FILE + NR_ACTIVE_ANON),
-and swap slot is full, the refault page is not set active. Then if some
-swap slots is freed, the newly refault page might be early reclaimed
-since it's inactive.
-And if we let the refault page be set active evenif swap slot is full,
-when swap slot is freed, the refault page is protected from being early
-relcaimed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230317082950.12738-3-zhuyinbo%40loongson.cn
+patch subject: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi controller
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230318/202303181149.mdhwoup2-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a532955fcee3d37eb4332cea2b868f74ace0bc72
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
+        git checkout a532955fcee3d37eb4332cea2b868f74ace0bc72
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181149.mdhwoup2-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arm-linux-gnueabi-ld: drivers/spi/spi-loongson.o: in function `loongson_spi_update_state':
+>> spi-loongson.c:(.text+0x430): undefined reference to `__aeabi_uldivmod'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
