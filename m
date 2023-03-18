@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD196BF7EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 06:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236646BF7F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 06:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjCRFKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 01:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        id S229963AbjCRFN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 01:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCRFKV (ORCPT
+        with ESMTP id S229517AbjCRFN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 01:10:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7E22F79C;
-        Fri, 17 Mar 2023 22:10:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A81F660A4D;
-        Sat, 18 Mar 2023 05:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2206C433D2;
-        Sat, 18 Mar 2023 05:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679116219;
-        bh=D/d22Njz3XOcBdSeTtWNfpjkqhDLL85p8xrZO06ZWbU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OF+OZby4SOWsqeHrleP0LCpee1eYNBl7m62NplStOoffcIqShSK60QnzdpVrn045d
-         P1HuU5k7tEzwLYCiGTWBfbGqi8A+vabe2tnwj2Fi7PokPYAIXidV9PDR6lwy0dAySf
-         CllkVXL4NUkaa4b3eVv5ECIlS6nyLIED0I0F4Krex5FEbN2Tkw5Z2a2Dh+DtJybd1/
-         bh8Dz4126SkerQxkIgwd0QBl2+su5KBCXB1pnieczbU7qhqeV+6GV7bsiTLGYLQeSD
-         4z3vr2U0SfiQANphIB4ef4v8O094joxc+pINbOH1N4lRjD9vinITlMFnGoA70TDgwY
-         7e/PzNjdT/2QA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5A06E21EE5;
-        Sat, 18 Mar 2023 05:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 18 Mar 2023 01:13:26 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2273455A4;
+        Fri, 17 Mar 2023 22:13:25 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id o11so7416158ple.1;
+        Fri, 17 Mar 2023 22:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679116404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vp4nrXm1X0DRjVSq3iwlTb4e7n7mV7oF4ktjLlYr7kI=;
+        b=bLjj9lGgZpmi+5FdHB64/F5xCOboYww86flECThggnpLYmZZA5HqQTRQcFCfg+10a9
+         gaz0V+wmOBm7A4cV7oLOCRDbxttum/0tzDarTuJxSZ6b0oQFZkkdZCaIn52+gfS9b2Yf
+         ts32C0rszSNrP3uxXG8IdM/ODszWZAHT7PALtVns+aiy/RgUeeDJACOY+FyFgOggJsCW
+         3jmRnpxXRZt66+1XPq+2yFozVuTkCwGg+SKIJkvcZ+kSuSwAEGRfREOmD8Z3OMxHC6Wp
+         ED2E75u8Bob8l5+LtugWgjavAYlz579OG/4/c6aVO+NkY3Xv6UcxQ0mOKdJ/I/g3GwRF
+         Zcow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679116404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vp4nrXm1X0DRjVSq3iwlTb4e7n7mV7oF4ktjLlYr7kI=;
+        b=eeRykUxBYJ4uCXDzh2z12yw0KqfONz6VrMRaRM80DS9tmGVb8pYksZjEJOuJ8YaZV3
+         syHlIOJMM7z4jl6URiAUfOAyui+Agt8fXvcvsFNprdQv2e9f6AtMs/mAuIyQntggs2T9
+         oE1xT22IJeBNYacrsSy7oCnZPUD9KIhRCV1KzrElYoGqAc6W1pXme2ss9T3nI5Twzs/M
+         cI04bwejD2ACjIkjduliYiOs+xUO/+MRUh6FkF/qNOf51Q/aICYimWJo3tEduGwLtAYp
+         L0mPy+EWyN7VGOoL2j1f45DSFrCT/XJtpBZS+qsXrerGSfTkIwGYQLqsb4oL2zrD+gEN
+         GIsw==
+X-Gm-Message-State: AO0yUKWYJX4Axz2VXbaLQN+MuUyvaiSY+VpIvunQ1zooNW808U/aiAsX
+        jIdg+5nDm83m2RnHSUVeUqw=
+X-Google-Smtp-Source: AK7set/soYLT1CHxH7Zm0HB+kkpyXNgNLr1rZsO1BZXpOWuxHpdfWc2Pxx1BGwMWxRV9sT22pll0Hw==
+X-Received: by 2002:a17:903:1d0:b0:19d:1d32:fc7 with SMTP id e16-20020a17090301d000b0019d1d320fc7mr11937833plh.51.1679116404399;
+        Fri, 17 Mar 2023 22:13:24 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id q20-20020a170902b11400b0019251e959b1sm2350530plr.262.2023.03.17.22.13.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 22:13:23 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 22:13:22 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, isaku.yamahata@gmail.com
+Subject: Re: [PATCH RFC v8 03/56] KVM: x86: Add platform hooks for private
+ memory invalidations
+Message-ID: <20230318051322.GF408922@ls.amr.corp.intel.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-4-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: usb: smsc95xx: Limit packet length to skb->len
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167911621880.29928.18096232901813385120.git-patchwork-notify@kernel.org>
-Date:   Sat, 18 Mar 2023 05:10:18 +0000
-References: <20230316101954.75836-1-szymon.heidrich@gmail.com>
-In-Reply-To: <20230316101954.75836-1-szymon.heidrich@gmail.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     kuba@kernel.org, steve.glendinning@shawell.net,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230220183847.59159-4-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Feb 20, 2023 at 12:37:54PM -0600,
+Michael Roth <michael.roth@amd.com> wrote:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 16 Mar 2023 11:19:54 +0100 you wrote:
-> Packet length retrieved from descriptor may be larger than
-> the actual socket buffer length. In such case the cloned
-> skb passed up the network stack will leak kernel memory contents.
+> In some cases, like with SEV-SNP, guest memory needs to be updated in a
+> platform-specific manner before it can be safely freed back to the host.
+> Add hooks to wire up handling of this sort to the invalidation notifiers
+> for restricted memory.
 > 
-> Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-> 
-> [...]
+> Also issue invalidations of all allocated pages during notifier/memslot
+> unbinding so that the pages are not left in an unusable state when
+> they eventually get freed back to the host upon FD release.
 
-Here is the summary with links:
-  - [v2] net: usb: smsc95xx: Limit packet length to skb->len
-    https://git.kernel.org/netdev/net/c/ff821092cf02
+I'm just curios. Could you please elaborate?
+Unbind is happen only when memory slot is delete or vm is destroyed.  In the
+case of memory slot deletion, the gpa region is zapped via
+kvm_arch_commit_memory_region().  In the case of VM destroy, we have
+kvm_flush_shadow_all() which calls
+kvm_arch_flush_shadow_all() =>kvm_mmu_zap_all().  Doesn't it work?
 
-You are awesome, thank you!
+Thanks,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
