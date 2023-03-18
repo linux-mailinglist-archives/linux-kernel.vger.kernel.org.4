@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21FD6BF981
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4071A6BF985
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjCRKgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 06:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S229808AbjCRK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 06:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRKf7 (ORCPT
+        with ESMTP id S229502AbjCRK7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 06:35:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA942820B;
-        Sat, 18 Mar 2023 03:35:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 351A360AE4;
-        Sat, 18 Mar 2023 10:35:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D91C433EF;
-        Sat, 18 Mar 2023 10:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679135757;
-        bh=QVJsjRJAwNHwH8iVNvT+bQuQJBExNnEPnTB1jL+hRDI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MjTUnc2blbPLs85oKFqFh0Wa2zaRs4pTlR9RYcqPn628YlvgK+S3C3pZKFXtgRqDT
-         1wxncg7c8wetL76FhjyOXXBrCMTk8XisbgSNpc/2vinVrQTn0Vn2494P5/qFbsbVHK
-         6WquODejie+a8uz8aV6yk5k2No6qoqJUbriTO9ef6Wey0PZwJ6iThmvlstI5Y62Dwn
-         MwcXUKHg5XnwSiueHiuFUF1txGIkbuw1VpPdEytFxiR3wXq9fZK9b27Sc+nEpkdpMh
-         /yeha5xLMs+APYtQlViyr/F40NGsUFSFdX8BZgU1sLcdlCbo6VJm8Vcclkwefjc33A
-         kvnIQBKA/+qgQ==
-Received: by mail-lj1-f170.google.com with SMTP id 20so334639lju.0;
-        Sat, 18 Mar 2023 03:35:57 -0700 (PDT)
-X-Gm-Message-State: AO0yUKVa5AGBm+FsOrXEWtaLUs9hT+pe8FR+FoMuMy8MK6yGhiznT7Ce
-        1vUPgTZsGLUzAOz/irU92R1CvYTzrG8A2Scn+W4=
-X-Google-Smtp-Source: AK7set/LB4GooqDQoabCQNg8ev9Zq3hzP1WJXBZcR30yWNqSFFqQAoyo5HdPAA9ft+oF9o8KSt0NoUcUuDjAHWpbHNk=
-X-Received: by 2002:a05:651c:337:b0:295:d460:5a2d with SMTP id
- b23-20020a05651c033700b00295d4605a2dmr4078456ljp.2.1679135755497; Sat, 18 Mar
- 2023 03:35:55 -0700 (PDT)
+        Sat, 18 Mar 2023 06:59:36 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E742F1721
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 03:59:34 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 88E275C01DC;
+        Sat, 18 Mar 2023 06:59:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sat, 18 Mar 2023 06:59:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679137172; x=1679223572; bh=Mk
+        W9Et+iVn3gfjQCXbUm+047kWOOU0mQsCtKGtd8bN4=; b=raIP+VWUD700k1vXKJ
+        eJP+SXTT+SKDfaVrW19tAAl3vrLtibws7dE+XVBClS2vYXIjZEiHbAVGEYCt98EG
+        hESGqFjOcIR5yhL+9fMrCvh6AXmZLArcF5CcKXoQi4Mw2lKSpzLpHLhhAlG+RrlO
+        2wxCZ4xMUCyyBwyXdUE0UkwbxMJvJGrdjbgnp2LG2RLsmGB0OlFV+ltPmX+5xIfW
+        Vy+rY/6TOvIiKVBQmCJDPbSDVXDRgQqEoWNY/rstoivamk5tFDaRSixT5AAhfmge
+        OdNEDdt+9ehSpG8P9Cf39t14kLTbRBppVZdMHwgTE9QI5te7aml6gy0m5kRPWdZi
+        iILQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679137172; x=1679223572; bh=MkW9Et+iVn3gf
+        jQCXbUm+047kWOOU0mQsCtKGtd8bN4=; b=Lvj+inqjcjiAy3NvrybjC+6jqaGjX
+        NKz89LpQ1paVc5eAjEZMDabm9vVGjEJZliBVq5txSY+ugEojnaQhr80JMtDs/s5Y
+        GsLbdAYceNbaIeKN+Eo0Ato1uZHdqFUl0PqZQK+ILReC4x31Be9VmsP9mAnel6it
+        zlzCE408Fdsph1Bb/f11sQjTWZQFmV4vzeVpE1nCGDX8ds9YrGl6+ECerBx4CnmA
+        +tgDuLkxeIUVWiDSHa0qB5C4pR5+VuXZm3UiLQcClRIEy5KIqhbiPpcM4j2HK/ap
+        G3DC/+4wkBHoH5U11JCHmC66wUldmhCvZmA3N1L4zUyx2F71pi7hb/9Fg==
+X-ME-Sender: <xms:lJkVZBFyFrH7SmXt6HVAicX6rl5JwydF_tnZZXNT0OGEQaBQohLG4w>
+    <xme:lJkVZGXzq75qlVmAdND60k1ZFX8Bx8YCztoq0iF6ARgF-MF7A8ztdD7oAd4dgKvqS
+    YhmdRJ0Orw_zYUF6iU>
+X-ME-Received: <xmr:lJkVZDK4X5oFWdyMYd3XBWKN-LOhKdalxR7roueV4kX07wdU_GhaUQWFY8feccjsee9vGtWKK5ofRvIWDyncU9uoXok>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefgedgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
+    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
+    hpqeenucggtffrrghtthgvrhhnpeelhfeugedvjefgjefgudekfedutedvtddutdeuieev
+    tddtgeetjeekvdefgeefhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:lJkVZHHFOSmIjSdjntSrc2NVIrVGqQ7kchc6rjXGgMe6buk15yD66w>
+    <xmx:lJkVZHVbbLMePPMIVQHKouyxT-O7TDl3T_nWw0lYMWy0s4osgGo3hA>
+    <xmx:lJkVZCOrEAZoz2wKKt8pQSEUyWDL0-lPUR7GgQkaVRvLw_gPpmV72w>
+    <xmx:lJkVZEiCeQ3P2lVfuZzqm3LNrujj363JvjW4YT-nih8Uqhz6Khuolg>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 18 Mar 2023 06:59:31 -0400 (EDT)
+Date:   Sat, 18 Mar 2023 19:59:28 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+Message-ID: <20230318105928.GA87969@workstation>
+Mail-Followup-To: John Keeping <john@metanate.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230317195128.3911155-1-john@metanate.com>
+ <20230318002005.GA84781@workstation>
 MIME-Version: 1.0
-References: <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
- <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390> <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
- <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390> <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
- <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390> <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
- <CAMj1kXHKkK+6TDLebZw=H-ZZLVnwPGSRpNNKSbJoPwwA2vhG+w@mail.gmail.com>
- <ZBNXaF32nIh3Ca49@righiandr-XPS-13-7390> <CAMj1kXFgmPp8TPDWePNN2wU_TQ87dL940SFEaMKAm4oVaB86+g@mail.gmail.com>
- <ZBOYBdJR00dOKPSx@fedora>
-In-Reply-To: <ZBOYBdJR00dOKPSx@fedora>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 18 Mar 2023 11:35:44 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF8G3G41cPt+5=nB2D_uEaB_iXh6=3ZcTFTHrpsVm5D5g@mail.gmail.com>
-Message-ID: <CAMj1kXF8G3G41cPt+5=nB2D_uEaB_iXh6=3ZcTFTHrpsVm5D5g@mail.gmail.com>
-Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     Andrea Righi <andrea.righi@canonical.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230318002005.GA84781@workstation>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 23:28, Darren Hart <darren@os.amperecomputing.com> wrote:
->
-> On Thu, Mar 16, 2023 at 07:55:36PM +0100, Ard Biesheuvel wrote:
-> > On Thu, 16 Mar 2023 at 18:52, Andrea Righi <andrea.righi@canonical.com> wrote:
-...
-> > >
-> > > Yay! Success! I just tested your latest efi/urgent (with the fixup) and
-> > > system completed the boot without any soft lockups.
-> > >
-> >
-> > Thanks for confirming. I'll take that as a tested-by
->
-> The solution in the current branch looks like the best approach we have to date
-> to address the broadest of affected systems. We could switch the eMAG test to an
-> MIDR test I believe (but this won't work for Altra as that would capture all the
-> Neoverse v1 cores beyond Altra). I can look into the MIDR test if you think it's
-> worthwhile - but since I don't think we can eliminate the SMBIOS string test, it
-> doesn't buy us much since we don't need a greedier eMAG test (there aren't more
-> of them to match).
->
-> Given that some OEM Altra platforms change the processor ID, I don't see a
-> better solution currently than adding their the "product name" to the smbios
-> string tests unfortunately.
->
+On Sat, Mar 18, 2023 at 09:20:05AM +0900, Takashi Sakamoto wrote:
+> 1. Failure at tasklet for URB completion
+> 
+> It is softIRQ context. The stream lock is not acquired. It doesn't
+> matter to call current XRUN API.
+> 
+> 2. Failure at PCM operation called by ALSA PCM application
+> 
+> It is process context. The stream lock is acquired before calling driver
+> code. When detecting any type of failure, driver code stores the state.
+> Then .pointer callback should return SNDRV_PCM_IOCTL_HWSYNC refering to
+> the state.
 
-Indeed. I spotted a Gigabyte system [0] with a different processor ID,
-but with a version we can test for.
-
-So for now, I'll go with
-
-        socid = (u32 *)record->processor_id;
-        switch (*socid & 0xffff000f) {
-                static char const altra[] = "Ampere(TM) Altra(TM) Processor";
-                static char const emag[] = "eMAG";
-        default:
-                version = efi_get_smbios_string(&record->header, 4,
-                                                processor_version);
-                if (!version || (strncmp(version, altra, sizeof(altra) - 1) &&
-                                 strncmp(version, emag, sizeof(emag) - 1)))
-                        break;
-
-                fallthrough;
-
-        case 0x0a160001:        // Altra
-        case 0x0a160002:        // Altra Max
-                efi_warn("Working around broken SetVirtualAddressMap()\n");
-...
-
-which should cover all the affected systems we encountered so far.
-
-I'll push this to linux-next to let it soak for a little bit, and then
-send it to Linus somewhere during the week
-
-Thanks,
-Ard.
+Oops. I did copy-and-paste mistake here... It should be
+SNDRV_PCM_POS_XRUN instead of SNDRV_PCM_IOCTL_HWSYNC...
 
 
-[0] https://pastebin.com/HQLE1yYv
+Regards
+
+Takashi Sakamoto
