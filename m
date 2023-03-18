@@ -2,127 +2,507 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05F66BF8F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C099C6BF8F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjCRIXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 04:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S229940AbjCRI3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 04:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCRIXa (ORCPT
+        with ESMTP id S229502AbjCRI32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:23:30 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2134.outbound.protection.outlook.com [40.107.223.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FCB55B4;
-        Sat, 18 Mar 2023 01:23:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HItTlbRlzIa9pty1VKRnzIoCJsOIklJ8a+oURJQSE4LfbzabBv6AmA9RsWkTnQTYdhA7TRadbmTwW2IyhcSFhBZY1+DUSSyxf7e2WrODrFxOpxQe9ZNXLTPLikO883A0bWDLKb/TYKXtDQ6vFmbgaXa/DyeULm7AlX3IcEonYAMxc7d2kZPB/cI0teGLHElvLd1HmiYYv35q5VmkpSqV/jAQh7wbFZBVgxQXr4BbBMAdEw5RrFkUB9/vgYu0k+0c/Bi379h+7cgQAWgDaFMGccrvZipPR4qQO/51QCqTWEjAgZyVsT+zykt6lHJoKemSTf0E8NtLxZXagpJ8E9hzeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=duty04dWpYVvzJllBy6v/F813BKg8Fvs4S0Yack++w0=;
- b=TrB9Fedm87iZI/tA7stzpRLwYAL8rOvliVizxYEuDa0fvNvQuCHJqbbWiuml/orld0iDqgbWSaRjJB9gxzw2a6p4sRxOfhWjNkdSrG0M7wPMSa/iMuGbfMWLOj+FkV6oTgS4pI4BECH0m5aCKwCZ8OoY5sxSXqdvMpFn4ZFUZRthltlxeWC0ZLG4f1+DKryFoTSTyRaow9Mq395FyeHFtj7njU8HCuslKSpIQcv0LlxLXwjqCtUbaUmgqu34ybYUitdtWL63YwyPNfUXuQ3wIE/8Kt9qZanyFoyYQhHkniWRWDWp9JhBQ8HKItdb7ZXrvejMHiXUMY+TgQU6Nh/S4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=duty04dWpYVvzJllBy6v/F813BKg8Fvs4S0Yack++w0=;
- b=lShkMagUIsahr1RL3sTYOppevA0N7FN53TWxtcUZBKCGHs9pbprTx7Gb9nz/yjz5RDwFgi3+dezatI+gxFk3JyZyHpQrt7C02xgKn5yPn5G8VUTbDpJpXZj2JgNuOakHVYshl0JpRoEyEqi/8/4EMZwzU2jg+QbMMBRYPNQ2BHI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA1PR13MB6147.namprd13.prod.outlook.com (2603:10b6:806:333::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Sat, 18 Mar
- 2023 08:23:25 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.036; Sat, 18 Mar 2023
- 08:23:25 +0000
-Date:   Sat, 18 Mar 2023 09:23:14 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 5/9] net: sunhme: Switch SBUS to devres
-Message-ID: <ZBV08tXa5g5PnSP5@corigine.com>
-References: <20230314003613.3874089-1-seanga2@gmail.com>
- <20230314003613.3874089-6-seanga2@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314003613.3874089-6-seanga2@gmail.com>
-X-ClientProxiedBy: AM0PR01CA0119.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:168::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Sat, 18 Mar 2023 04:29:28 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A68CDF7;
+        Sat, 18 Mar 2023 01:29:24 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (i6DFAE836.versanet.de [109.250.232.54])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1FE2DB6C;
+        Sat, 18 Mar 2023 09:29:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679128161;
+        bh=zvyk1O+k/MiKnGzSSMhQAc136ianMKlRnS+QvoVDz8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uh9CVtc0etzdTZAnPqFl4dcKzRQNP1GaQqRk4jwek5vqSIEepTaK01pwt4V1sVQ86
+         g8IlZlPenF7152NjH5cJfK7tkFDOTnVSnDGWMoTopFF1zU15T+sVrHGFwF23dsIqd+
+         +FDtAq8OrCqTXYozLBriyzKFsNODXxCCfqckYqF4=
+Date:   Sat, 18 Mar 2023 10:29:26 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: display: Drop unneeded quotes
+Message-ID: <20230318082926.GA10144@pendragon.ideasonboard.com>
+References: <20230317233626.3968358-1-robh@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB6147:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33106112-38d8-407b-5223-08db278a0b34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jhiYyCHxLVOsDKj/RV8y9w0x72pYZXHeMHYatWM9UeeB8U50rF32Ygteiy1LnQLxP9F40Y1xtxHvog4EGZ3wQGe5O8p2E6kdftZlXfOoBHgmNs5erQ9FWrhzuE50W8gPNculcpaTVVOiDv/R647YqrjSP0XkIqngNPktv5lsNxBTi11CEDYwWPHosB62RTkqNJx28de1Vpe/7Z8U0V7tCWv8oNFJMwK8ROIgv8OPHkutK7Is7Q2leuEdIaflGEDpG+9Wd6cYpAtOUFLjF/4su1j2VG3/9G+wRU5VbVwh4kJblrEFkQ8RKwRPsrKPUc4OJ+3HW5+6m5K27iKxNtzTxyXuVeDV6ITNsEq7k62UbMpyQgs3iTArN6fiPKIO7quxDgqBJSiGoEpfqNbfzgzWNy/YSH89xrRnXHmED2/dB5U225Mi9vBRTmQDTgy3EYh2oo0m5w50WGMQolKMSlqtLBNjUSvrI1JOtZQf+TviKQKEjlye/cz8uFPSpjE26GELpA9w4CI97a+KxQgGFw3gU3uXhmTfZLR8V1XHllBQEB3XezE2eSk4P4UpcKPnCoQICs85glCCj7ktuXAjqppEn1ZSFEkoruU62NNgHW9EqtoLdVhH2tgaoiLgztRPk/eenclkap7QF/s5C6jPMfjJgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(39840400004)(136003)(346002)(396003)(451199018)(41300700001)(2906002)(5660300002)(4326008)(66556008)(6916009)(66946007)(66476007)(38100700002)(8676002)(44832011)(8936002)(6506007)(6512007)(6666004)(558084003)(86362001)(2616005)(54906003)(186003)(36756003)(316002)(6486002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pF5alWuGAuMZ+O/tu9kDpJVvr30O95s5yGLSkZLwe+UE82+KcRONSqZPdqiG?=
- =?us-ascii?Q?hxzSJ1WodY0JgPIOwKLmVH2YxvqKSc70hGKBIKIRXPnTge1i78ZrKj5qDzUz?=
- =?us-ascii?Q?92ejLmzWutL796w9TOnZ7Olxh4O1UnYYPb/vcYtQhJJRsOJ7eqXKLznx5U2r?=
- =?us-ascii?Q?jSwJBj4j1d0yCddiCVBy6CttoJrPtAsHLVOuX71xvb7jb14GNwol1w+kBJ2q?=
- =?us-ascii?Q?ndgJj1HYacH2W+QNpwEb1JpNQMRmb3uwHs7qU3RMRoVO7i5GmGetkbgiK2Ko?=
- =?us-ascii?Q?7WPUA7df8cvOAwStakyHG2eEibMndcimSxYfYO2M9c6FxU3/7TrzLVNoH2Xo?=
- =?us-ascii?Q?ZVimn7wLbPyI0nIHDEPVVdR3Mxyr3s8fgUfyCOGj+sEFCSiixPCPjPJwO1bE?=
- =?us-ascii?Q?LF5chRGJm+POb5zqNLb/imqzjJ4LL3SO3fHAwVfc91DcQUHwFTLnJQeybyMg?=
- =?us-ascii?Q?jyZ0sADhBF8vG9lPcf1HwAM9+DYCvQD/dAoMadKCxXSL0E8bmNzWSJsTosn3?=
- =?us-ascii?Q?vQUX0MyyyNLo070hlgMTqDrvEsj6MqjEnMcVmlO74AjmtgK7/U5g3eFwzN7U?=
- =?us-ascii?Q?cHIbA3N+66Ko3eqnHHCTMnQpRWbwYfGgfNo8prQ4/qY/p6mWwPQqZSGcOCdK?=
- =?us-ascii?Q?fepz5yM2w+1sxuWCvW8hsssDo0kk+dxTUdK3ksqpoKZnYhQ7Sf5EFlNkZl0Y?=
- =?us-ascii?Q?wdc7EvEj/NDRil17n4yQi2StA8KdSbFgx7+2WuXBXpgX6FrKSqmTaz8zmk5x?=
- =?us-ascii?Q?VMQ5oBlim5vlwsCI0cSfSBIycH6wEt8lMw2PR01zhKzIPNWbJ/tXOdwgsN91?=
- =?us-ascii?Q?MJwWtITIQWrhRfWNat6YmknnWLs99ixS02cslzA3bg9bvN0+NMrDX5AzPThp?=
- =?us-ascii?Q?LO3zZrAHIHnIFp6BWqhQCzbOPt5KUvTsNiFeCP2OobL4lOfDpu+vzyYK3g4Z?=
- =?us-ascii?Q?6R7ub/XfB5v0IgDnDljltkKJTUYRagSgzSAb0uRPrHtIqlnmEHFxpzTWedoV?=
- =?us-ascii?Q?U0iYRM0Pbt2DrFGSWtPZ12eK/2DfjqJ1At3pcAwvPelk++TyQRYmTFzd/WZN?=
- =?us-ascii?Q?qfNc7Fz//okLgjx3cjPXgJy6qrI2YbpIz0/QmfotC6CMYuim694QTmdG7WzE?=
- =?us-ascii?Q?TgKuiZh1EBToEuNEOv9MPfZhPjJ/WbwI97E1UuNqUbpk8yDG45K14gKfcyO5?=
- =?us-ascii?Q?TAf5gDZR6TE6DBrEdMzpTQDB2C5U8egQa9LsurVraKWlhuPPLl4zlvPh9xx7?=
- =?us-ascii?Q?OkcnBPUqcIddSn5t6/mZQr4bhtFU0wX9kcTleufMk4S6MoqEVv4fpamdi0eX?=
- =?us-ascii?Q?LEaLdMQtG2nh4k3onzvq3/wWjYFPfoXcbj+1EthaugjTA2DXMHp0ja24qWzo?=
- =?us-ascii?Q?6w8j9YwMzAhURmKBzRLY+8jJUNkTs8idhyG0Vz1AJbJoF2mxfvZ9POy+N8lG?=
- =?us-ascii?Q?cH06J+bdGe8xI4vo0tjTwcnQyc5K8UYbuMfbCGhOG5TS3d5z8PzVygYIWd8/?=
- =?us-ascii?Q?Ypvbm/HH1DXkJJL0xTA90dFKM+FEAW2QlPKWcAkcsOg1PZ/bQHrjdSAZYra5?=
- =?us-ascii?Q?gsdTL8XCuAdfBMgS71nTD2W2VOHoiPjYu5HBCq8f3+YqZ12ziiAoy/YmAk8A?=
- =?us-ascii?Q?DSIx1UOFDwLc3xZ0vGBAQm0PkmWsk4PMalzBMwMoaU+CdIpBExSLBcoUtPAe?=
- =?us-ascii?Q?mmkXlQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33106112-38d8-407b-5223-08db278a0b34
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 08:23:25.1892
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y7CqIbxQffRU/Q/xa5zzy65Y7n2AHYBPqh99ux+WvDbaaUWfwgEmjanToaNjQVeRjeTz08lKrK04bg60H6Bv2v5UqD6Wk+Xw+lcA5uN682g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB6147
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230317233626.3968358-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 08:36:09PM -0400, Sean Anderson wrote:
-> The PCI half of this driver was converted in commit 914d9b2711dd ("sunhme:
-> switch to devres"). Do the same for the SBUS half.
+Hi Rob,
+
+Thank you for the patch.
+
+On Fri, Mar 17, 2023 at 06:36:24PM -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 > 
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml    |  2 +-
+>  .../bindings/display/bridge/nxp,ptn3460.yaml   |  2 +-
+>  .../display/bridge/toshiba,tc358767.yaml       |  2 +-
+>  .../bindings/display/dp-aux-bus.yaml           |  2 +-
+>  .../display/mediatek/mediatek,hdmi.yaml        |  2 +-
+>  .../display/msm/dsi-controller-main.yaml       |  8 ++++----
+>  .../bindings/display/msm/dsi-phy-10nm.yaml     |  2 +-
+>  .../bindings/display/panel/ronbo,rb070d30.yaml |  2 +-
+>  .../bindings/display/renesas,du.yaml           |  4 ++--
+>  .../display/tegra/nvidia,tegra114-mipi.yaml    |  2 +-
+>  .../display/tegra/nvidia,tegra124-sor.yaml     | 12 ++++++------
+>  .../display/tegra/nvidia,tegra186-dc.yaml      |  4 ++--
+>  .../tegra/nvidia,tegra186-dsi-padctl.yaml      |  2 +-
+>  .../display/tegra/nvidia,tegra20-dsi.yaml      | 12 ++++++------
+>  .../display/tegra/nvidia,tegra20-hdmi.yaml     |  6 +++---
+>  .../bindings/display/ti/ti,am65x-dss.yaml      |  2 +-
+>  .../display/xylon,logicvc-display.yaml         | 18 +++++++++---------
+>  17 files changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> index fc4873deb76f..4f6ffb8182a9 100644
+> --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Robin van der Gracht <robin@protonic.nl>
+>  
+>  allOf:
+> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  - $ref: /schemas/input/matrix-keymap.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml b/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml
+> index 107dd138e6c6..cdeb67bc05f0 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml
+> @@ -18,7 +18,7 @@ properties:
+>      maxItems: 1
+>  
+>    edid-emulation:
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+>        The EDID emulation entry to use
+>        Value  Resolution  Description
+> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml
+> index 140927884418..e1494b5007cb 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml
+> @@ -23,7 +23,7 @@ properties:
+>          i2c address of the bridge, 0x68 or 0x0f, depending on bootstrap pins
+>  
+>    clock-names:
+> -    const: "ref"
+> +    const: ref
+>  
+>    clocks:
+>      maxItems: 1
+> diff --git a/Documentation/devicetree/bindings/display/dp-aux-bus.yaml b/Documentation/devicetree/bindings/display/dp-aux-bus.yaml
+> index 5e4afe9f98fb..0ece7b01790b 100644
+> --- a/Documentation/devicetree/bindings/display/dp-aux-bus.yaml
+> +++ b/Documentation/devicetree/bindings/display/dp-aux-bus.yaml
+> @@ -26,7 +26,7 @@ description:
+>  
+>  properties:
+>    $nodename:
+> -    const: "aux-bus"
+> +    const: aux-bus
+>  
+>    panel:
+>      $ref: panel/panel-common.yaml#
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> index 8afdd67d6780..b90b6d18a828 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+> @@ -50,7 +50,7 @@ properties:
+>        - const: hdmi
+>  
+>    mediatek,syscon-hdmi:
+> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>      items:
+>        - items:
+>            - description: phandle to system configuration registers
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> index e75a3efe4dac..2188d7c9b0bb 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> @@ -74,7 +74,7 @@ properties:
+>  
+>    syscon-sfpb:
+>      description: A phandle to mmss_sfpb syscon node (only for DSIv2).
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    qcom,dual-dsi-mode:
+>      type: boolean
+> @@ -105,14 +105,14 @@ properties:
+>      type: object
+>  
+>    ports:
+> -    $ref: "/schemas/graph.yaml#/properties/ports"
+> +    $ref: /schemas/graph.yaml#/properties/ports
+>      description: |
+>        Contains DSI controller input and output ports as children, each
+>        containing one endpoint subnode.
+>  
+>      properties:
+>        port@0:
+> -        $ref: "/schemas/graph.yaml#/$defs/port-base"
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>          unevaluatedProperties: false
+>          description: |
+>            Input endpoints of the controller.
+> @@ -128,7 +128,7 @@ properties:
+>                    enum: [ 0, 1, 2, 3 ]
+>  
+>        port@1:
+> -        $ref: "/schemas/graph.yaml#/$defs/port-base"
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>          unevaluatedProperties: false
+>          description: |
+>            Output endpoints of the controller.
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+> index 3ec466c3ab38..e6b00d7387ce 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+> @@ -58,7 +58,7 @@ properties:
+>        maximum: 31
+>  
+>    qcom,phy-drive-ldo-level:
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+>        The PHY LDO has an amplitude tuning feature to adjust the LDO output
+>        for the HSTX drive. Use supported levels (mV) to offset the drive level
+> diff --git a/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml b/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml
+> index d67617f6f74a..95ce22c6787a 100644
+> --- a/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml
+> @@ -37,7 +37,7 @@ properties:
+>  
+>    backlight:
+>      description: Backlight used by the panel
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>  required:
+>    - compatible
+> diff --git a/Documentation/devicetree/bindings/display/renesas,du.yaml b/Documentation/devicetree/bindings/display/renesas,du.yaml
+> index d4830f52c512..c5b9e6812bce 100644
+> --- a/Documentation/devicetree/bindings/display/renesas,du.yaml
+> +++ b/Documentation/devicetree/bindings/display/renesas,du.yaml
+> @@ -76,7 +76,7 @@ properties:
+>      unevaluatedProperties: false
+>  
+>    renesas,cmms:
+> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>      items:
+>        maxItems: 1
+>      description:
+> @@ -84,7 +84,7 @@ properties:
+>        available DU channel.
+>  
+>    renesas,vsps:
+> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>      items:
+>        items:
+>          - description: phandle to VSP instance that serves the DU channel
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
+> index d5ca8cf86e8e..f448624dd779 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
+> @@ -38,7 +38,7 @@ properties:
+>      description: The number of cells in a MIPI calibration specifier.
+>        Should be 1. The single cell specifies a bitmask of the pads that
+>        need to be calibrated for a given device.
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      const: 1
+>  
+>  additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
+> index 907fb0baccae..70f0e45c71d6 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
+> @@ -69,12 +69,12 @@ properties:
+>    # Tegra186 and later
+>    nvidia,interface:
+>      description: index of the SOR interface
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>  
+>    nvidia,ddc-i2c-bus:
+>      description: phandle of an I2C controller used for DDC EDID
+>        probing
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    nvidia,hpd-gpio:
+>      description: specifies a GPIO used for hotplug detection
+> @@ -82,23 +82,23 @@ properties:
+>  
+>    nvidia,edid:
+>      description: supplies a binary EDID blob
+> -    $ref: "/schemas/types.yaml#/definitions/uint8-array"
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>  
+>    nvidia,panel:
+>      description: phandle of a display panel, required for eDP
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    nvidia,xbar-cfg:
+>      description: 5 cells containing the crossbar configuration.
+>        Each lane of the SOR, identified by the cell's index, is
+>        mapped via the crossbar to the pad specified by the cell's
+>        value.
+> -    $ref: "/schemas/types.yaml#/definitions/uint32-array"
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>  
+>    # optional when driving an eDP output
+>    nvidia,dpaux:
+>      description: phandle to a DispayPort AUX interface
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>  allOf:
+>    - if:
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
+> index 265a60d79d89..ce4589466a18 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
+> @@ -60,13 +60,13 @@ properties:
+>    nvidia,outputs:
+>      description: A list of phandles of outputs that this display
+>        controller can drive.
+> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>  
+>    nvidia,head:
+>      description: The number of the display controller head. This
+>        is used to setup the various types of output to receive
+>        video data from the given head.
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>  
+>  additionalProperties: false
+>  
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
+> index e5a6145c8c53..da75b71e8ece 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
+> @@ -29,7 +29,7 @@ properties:
+>        - const: dsi
+>  
+>  allOf:
+> -  - $ref: "/schemas/reset/reset.yaml"
+> +  - $ref: /schemas/reset/reset.yaml
+>  
+>  additionalProperties: false
+>  
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
+> index 511cbe74e729..59e1dc0813e7 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
+> @@ -59,12 +59,12 @@ properties:
+>      description: Should contain a phandle and a specifier specifying
+>        which pads are used by this DSI output and need to be
+>        calibrated. See nvidia,tegra114-mipi.yaml for details.
+> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>  
+>    nvidia,ddc-i2c-bus:
+>      description: phandle of an I2C controller used for DDC EDID
+>        probing
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    nvidia,hpd-gpio:
+>      description: specifies a GPIO used for hotplug detection
+> @@ -72,19 +72,19 @@ properties:
+>  
+>    nvidia,edid:
+>      description: supplies a binary EDID blob
+> -    $ref: "/schemas/types.yaml#/definitions/uint8-array"
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>  
+>    nvidia,panel:
+>      description: phandle of a display panel
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    nvidia,ganged-mode:
+>      description: contains a phandle to a second DSI controller to
+>        gang up with in order to support up to 8 data lanes
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>  allOf:
+> -  - $ref: "../dsi-controller.yaml#"
+> +  - $ref: ../dsi-controller.yaml#
+>    - if:
+>        properties:
+>          compatible:
+> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
+> index f65e59cfffa7..f77197e4869f 100644
+> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
+> @@ -68,7 +68,7 @@ properties:
+>    nvidia,ddc-i2c-bus:
+>      description: phandle of an I2C controller used for DDC EDID
+>        probing
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    nvidia,hpd-gpio:
+>      description: specifies a GPIO used for hotplug detection
+> @@ -76,11 +76,11 @@ properties:
+>  
+>    nvidia,edid:
+>      description: supplies a binary EDID blob
+> -    $ref: "/schemas/types.yaml#/definitions/uint8-array"
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>  
+>    nvidia,panel:
+>      description: phandle of a display panel
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>  
+>    "#sound-dai-cells":
+>      const: 0
+> diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> index 5c7d2cbc4aac..4247280d6c3c 100644
+> --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> @@ -88,7 +88,7 @@ properties:
+>            The DSS DPI output port node from video port 2
+>  
+>    ti,am65x-oldi-io-ctrl:
+> -    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+>        phandle to syscon device node mapping OLDI IO_CTRL registers.
+>        The mapped range should point to OLDI_DAT0_IO_CTRL, map it and
+> diff --git a/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml b/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
+> index fc02c5d50ce4..87404d72ea37 100644
+> --- a/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
+> +++ b/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
+> @@ -89,25 +89,25 @@ properties:
+>      description: Display output colorspace (C_DISPLAY_COLOR_SPACE).
+>  
+>    xylon,display-depth:
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description: Display output depth (C_PIXEL_DATA_WIDTH).
+>  
+>    xylon,row-stride:
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description: Fixed number of pixels in a framebuffer row (C_ROW_STRIDE).
+>  
+>    xylon,dithering:
+> -    $ref: "/schemas/types.yaml#/definitions/flag"
+> +    $ref: /schemas/types.yaml#/definitions/flag
+>      description: Dithering module is enabled (C_XCOLOR)
+>  
+>    xylon,background-layer:
+> -    $ref: "/schemas/types.yaml#/definitions/flag"
+> +    $ref: /schemas/types.yaml#/definitions/flag
+>      description: |
+>        The last layer is used to display a black background (C_USE_BACKGROUND).
+>        The layer must still be registered.
+>  
+>    xylon,layers-configurable:
+> -    $ref: "/schemas/types.yaml#/definitions/flag"
+> +    $ref: /schemas/types.yaml#/definitions/flag
+>      description: |
+>        Configuration of layers' size, position and offset is enabled
+>        (C_USE_SIZE_POSITION).
+> @@ -131,7 +131,7 @@ properties:
+>              maxItems: 1
+>  
+>            xylon,layer-depth:
+> -            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+>              description: Layer depth (C_LAYER_X_DATA_WIDTH).
+>  
+>            xylon,layer-colorspace:
+> @@ -151,19 +151,19 @@ properties:
+>              description: Alpha mode for the layer (C_LAYER_X_ALPHA_MODE).
+>  
+>            xylon,layer-base-offset:
+> -            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+>              description: |
+>                Offset in number of lines (C_LAYER_X_OFFSET) starting from the
+>                video RAM base (C_VMEM_BASEADDR), only for version 3.
+>  
+>            xylon,layer-buffer-offset:
+> -            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+>              description: |
+>                Offset in number of lines (C_BUFFER_*_OFFSET) starting from the
+>                layer base offset for the second buffer used in double-buffering.
+>  
+>            xylon,layer-primary:
+> -            $ref: "/schemas/types.yaml#/definitions/flag"
+> +            $ref: /schemas/types.yaml#/definitions/flag
+>              description: |
+>                Layer should be registered as a primary plane (exactly one is
+>                required).
+
+-- 
+Regards,
+
+Laurent Pinchart
