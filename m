@@ -2,157 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0921F6BF73A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 02:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14196BF740
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 02:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCRBgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 21:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S229648AbjCRBjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 21:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCRBgw (ORCPT
+        with ESMTP id S229478AbjCRBjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 21:36:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F02C833C;
-        Fri, 17 Mar 2023 18:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679103408; x=1710639408;
-  h=date:from:to:subject:message-id:references:in-reply-to:
-   mime-version;
-  bh=aLqYn3u30tKkWIID5YBseu3yjn26yN1pZ4/1eG84vcA=;
-  b=K/6pAh2FMTvcjwyTsxWq12CSI9d0ktzQRkgdW/+4Tp0FyAmvOUEH6tjY
-   Fb2JUxYmOCcBw2BkRS2wKoCnniKV3sI8ZX8JOeYqgf65r3pwH3ynqpwXS
-   hcqPY3IswWgAq3x5IcsBBk+PBtE852wpvD8hoH1PTd4ixLkQrXl2r4S3j
-   1C+Tv1F4Cdt0JHNhytWoR9955f6QoRm85O1QuxZNZJepoB/5Fl5Rr4USz
-   417XcQYJcP+2F45vUKk6Z3geavs8KaH5oqi03oUWbryPYM5ukBs1Q6UKF
-   oapoOQWFT/Xu0vA7p3csp5Ldxc040Q9H3BHcGpcxN52vT0IrcXtEIIlVF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="318796844"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="318796844"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 18:36:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="1009865824"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="1009865824"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Mar 2023 18:36:46 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 18:36:46 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 18:36:46 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 17 Mar 2023 18:36:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hluSKafRtG4/XE1c214pnBwe0WxO785ju2ZDHqUcVCb3cDcWf0nUXEAbYsafM3/9Jk/xyGPZ5Re7Fmuz0hKq6sFflGO5EoeZsqlJjF85qWsVY+by36+IW0SezPno5vZhU0PHkAwAVKv2V65sFWkHb9Sse40kA8yiIuOCbcmIqwbEZEkRD79KhZIlmTiTSfEEjlawJ3lqvtMX8EzSaTpT27iytFTtSFN7rMIO3RW3c4RRiL0arj8lp4cxh7pl+grRnthzghOGtpR5UKOJ1K/Cv6WU7eEc12uQhnyNyw/CcB5Q2Dp37EEaxZYthvF4X2+XuvTkvyWhf0Yhzf3yjB0q7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cEAO3aw4BGkCiE6PEEpP1WtiT5b36L/x93l7sU/zwRQ=;
- b=JvV4rB8PLNSZB5e+d999SIe6b0AT8LAiU0A7NpZJyW6vzaCzF5UWPyLxqgX/Ulr7w+qyzn3QYqLQ3/qEBiO/wgeLxiQJjOiQ6ss2wosThmspc7c1LAdCvJK4v168TaQkeUWxODetAwyWjFN8TrS048CeTTKbd0zf2UQAuTQEiB9+u5wKoDxflwtCn+dPMzypQ6hzWRbHHQuwJiMx9M/nOT96+Mt1kofUh8x4+curLThF36WEU17fq2KeS15omNJtCWdWEpjGYYjjx70I/MLVtjK5zvoGZGz6a8ZsuK0oxcWQIspJ/xERPuxk0XDi3fPtfl8emCYz0mczRV73MgPBJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by DS7PR11MB6272.namprd11.prod.outlook.com (2603:10b6:8:94::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Sat, 18 Mar
- 2023 01:36:38 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::84dd:d3f2:6d99:d7ff]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::84dd:d3f2:6d99:d7ff%7]) with mapi id 15.20.6178.024; Sat, 18 Mar 2023
- 01:36:38 +0000
-Date:   Fri, 17 Mar 2023 18:36:34 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>,
-        <outreachy@lists.linux.dev>, <manishc@marvell.com>,
-        <GR-Linux-NIC-Dev@marvell.com>, <coiby.xu@gmail.com>,
-        <gregkh@linuxfoundation.org>, <netdev@vger.kernel.org>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] Staging: qlge: Fix indentation in conditional
- statement
-Message-ID: <641515a2a7b8d_28ae522945f@iweiny-mobl.notmuch>
-References: <20230314121152.GA38979@sumitra.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230314121152.GA38979@sumitra.com>
-X-ClientProxiedBy: BYAPR07CA0061.namprd07.prod.outlook.com
- (2603:10b6:a03:60::38) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Fri, 17 Mar 2023 21:39:03 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49DC5CB061;
+        Fri, 17 Mar 2023 18:39:01 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8CxC9ozFhVkL6QNAA--.26043S3;
+        Sat, 18 Mar 2023 09:38:59 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_74zFhVkiH0EAA--.19414S3;
+        Sat, 18 Mar 2023 09:38:59 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add loongson spi
+To:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-2-zhuyinbo@loongson.cn>
+ <a736c6db-466a-12e4-8e22-c8dc900978d4@linaro.org>
+ <e944732b-9a2d-b6ff-8336-7363788809b9@loongson.cn>
+ <7469290a-0671-7d2f-b0ce-cdde2a9e66cc@linaro.org>
+ <c904c1ec-9080-0cc0-ae86-7d369d52e818@linaro.org>
+ <76c3a130-0413-4e56-8c97-b3697efd5a9e@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <d0f9f023-c010-9ddd-331c-f610b49782c2@loongson.cn>
+Date:   Sat, 18 Mar 2023 09:38:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|DS7PR11MB6272:EE_
-X-MS-Office365-Filtering-Correlation-Id: da9ef222-f594-42eb-f7a6-08db2751379d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BGD7hviDl+rrh9GqtQj/plu57Cs46mD/GSitPlEWLnFV5XFrMzIa2P0U+Gql4Mx3ajnFuqC56HgmFfimHNWpSbQT2uGJ2Q5P98ZZARjAbiaI8ngMJ1LZdtyW/5yj+42GOLVMIStR18vFNTDX4Obti8wpgT+injdZW+Bxh+oeHJYOj//PRQJR07WxPnefcHZVC2yXvOqbKQgm2PPaYkAsOnJLy8J/V/j51RI9co0tqJDbA8OkCEksQ1xgC/wjOxTXem3HMDEUewVJbI8KVUhrMbCDQg6a4pG0Ffp3xfc5bcU6cbptsK74myyB5ey4vMIA7D6phm7/HyhraS7dLWivAKz0tDqA1f4FynQBkdu1QrauSJI/d7bdq86WdM34R8T6iDzVtk/tmczjK88QBE2NxkKvd38GHnKc779vZ97OWNcq6GYVST18GSDCWaoF50uGydSYRiQ+iLH5ruQWatbetl30Dp7VlOofQAP+spNarKdD5XetqpfzPPPKNlf13X5EP1BxVYsstDpZGtJ5FaU1IQQuzeFi6OAaQf/rV3e/i5pcAXC1HL6PuTyvjWIFFdRvi3SzJHvGlvE48QvopnwrbKOm5KleU36QFLFYP9vIukBu14ST77PVy/V7USMn+qhv9u2FjKYk35XbqSUEcBS2Xw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(366004)(376002)(39860400002)(136003)(346002)(451199018)(41300700001)(66556008)(8676002)(66946007)(66476007)(38100700002)(82960400001)(86362001)(558084003)(44832011)(8936002)(2906002)(5660300002)(478600001)(186003)(6486002)(6512007)(6506007)(26005)(316002)(6666004)(9686003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xs47iYOQj4OKRjIalOTeGdH8cnettbpQPTnSLVxRb604IpB/r18FLlx/4a1A?=
- =?us-ascii?Q?pwYldajQ/aZP3LmdiCnaQx5d5wSK7/mKpOM5PdonL+ephBxZ9gds3jBeoXfU?=
- =?us-ascii?Q?16pCk+x2eEfYBgkgQcUvc/AFR2RC2wOMp061cGFf75E6suhQLFmlE7jeQhBr?=
- =?us-ascii?Q?C4EWKw6L+sU8VtYV/9QTuEu01PwieoGfDj4P0mM+N+XsNGQy4yFDo/H6ya+o?=
- =?us-ascii?Q?9Q289BQDi7/RJV2yIiGp8cieoIiQPyxqRljcfcYYJIs6mhlGEJp19qvI8fRX?=
- =?us-ascii?Q?O5tZ2sc6g2NM2bXgYpf8nbeSAvceHd/ONEh5E6KivNZFHCL+YBco0/keAflu?=
- =?us-ascii?Q?i9/2mn7Mj6N3iWd3Mg2C5sChOIz3r/cqrzh7odgpi68z4oKhIW3PFJztJ/He?=
- =?us-ascii?Q?JkJhHTdRAfvIUcIeZQZ1LorAeDkHt/2THqErkktorVapK17qUAOOIAwNmdPF?=
- =?us-ascii?Q?0SvuCdQTqwxQ1YQWmKFyR4r2z6mK+1yG3ZUCrgDbQWsYfkrQjYu8TTxHW408?=
- =?us-ascii?Q?OsqbXsVxklDGNxBLtrVCArD6DS03KHv7Je4z4ZV53bttHJQ7qUk5OIsTc8GU?=
- =?us-ascii?Q?zj5IR7u3OMrpA1wGavmSJ/lGVxmGKoVSmYYQFjqybIfQv6V/UPuShXeG4e4T?=
- =?us-ascii?Q?yzkRALWd3SadyByejF4BvG7m97z+C8cXe6DuDJ74IHf3b5KEClRNN4U6Wv+D?=
- =?us-ascii?Q?dWF0ec4KcGTq7hwOMtdzPrxLSp0yeG7Hv/HpikNnChDlItx7KqatgEeOlUC1?=
- =?us-ascii?Q?Kq/jo7mjKzXh/Q20CMLmO9uBqEbTFHlmcna0zLXttPGPd0MLGxgX+sBpuIFe?=
- =?us-ascii?Q?wWYu6JKESR2Xeq4tpqlc0BV1ySExFUabnDM1SalC85czpprN3qug4qBxsIG8?=
- =?us-ascii?Q?aW6hVc8IinwH+1frveQmJw2oikbPmiijvHU/8JfvOF8mu13aUczXITdkJtUi?=
- =?us-ascii?Q?WoWIHoW6RVw1wN4o9Vkqnkfn4L3kmBF4se46zjkPSB+d/clXadS0cftxYsOr?=
- =?us-ascii?Q?BdW2ybL0V6hOHBGp1rgrmjZzVmmDkrpLaQT+1/DHCO7YlXSXMc8LcIZb3o7I?=
- =?us-ascii?Q?M83+d1Vn+LSJH4JsBLSnE8I4n2wE50dtqcwDDdXN6E6z3g9SY5z4tquYYudO?=
- =?us-ascii?Q?CYi1dJhPs510zSDWQNsp3BAzC0GDmt/ic9F3vTRRlpXkUHNB5XFbmzsMIzvV?=
- =?us-ascii?Q?4/R114OummGrVnDMOaDlrjuWoDSsCb0pdacpDwfghuu/NvXgwC3nAAwuhRNs?=
- =?us-ascii?Q?5nQIX60F5zwwEVXybv9MfjOzSK2qj4DyLAEACiHCHsnS/aYMLeNjC8SiCK6Z?=
- =?us-ascii?Q?3PPm7nS5Da4p8zRyE2H9heVOK2Iex7vv6o2bCWipYrQvJzUhod92V0TmAb1W?=
- =?us-ascii?Q?Fov7X9rxam/m8Cz44wfnF8vJfcy8aTKatkWQzOHmTp9NMmA/7m/ACxzFkzF9?=
- =?us-ascii?Q?SzjBwxwVTmBCyyeKwIt6SNKGwxtJJ4u4Dd2jmqMz5KFegPj5TEf/wPOVOOxH?=
- =?us-ascii?Q?6m4KxC3xBMI03UsTvudyr7RPZWIuLzK6GPkGdzmcunkA1gZbOl5lX8CTHre+?=
- =?us-ascii?Q?L4r7Bs7hxZt70712MAkAV69LF9I0F/wUJmdiw5kB?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: da9ef222-f594-42eb-f7a6-08db2751379d
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 01:36:38.4495
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y5H3/mkxzfJTTRi48Qsmj1ivaMK/T3GtIIiqaEY7pD7h42gAI1jtA+zmWfVLNv4CGtLbbRIyA66q1x6paVxDkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6272
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <76c3a130-0413-4e56-8c97-b3697efd5a9e@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Cx_74zFhVkiH0EAA--.19414S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7GFW7KFW5Ary7Aw17KFW3ZFb_yoWfWrcEgr
+        sF9rZrCw17JFZxGw17GFyvqasxKw4DC34UJ3yFqr48Xr15urn3CrW5Gr9aqa43XF93tF9I
+        krn0vFWfK3sIqjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        g7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc80
+        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67
+        AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
+        cVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x8Erc
+        xFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E
+        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtV
+        W8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
+        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+        0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
+        U8c_-PUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sumitra Sharma wrote:
-> Add tabs/spaces in conditional statements in to fix the
-> indentation.
-> 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
 
-LGTM:
+在 2023/3/18 上午12:14, Mark Brown 写道:
+> On Fri, Mar 17, 2023 at 04:51:48PM +0100, Krzysztof Kozlowski wrote:
+>> On 17/03/2023 16:51, Krzysztof Kozlowski wrote:
+>>> minItems: 1 is not correct, so you cannot use incorrect code to suppress
+>>> some warning. This should be list the clocks or use maxItems: 1, if you
+>>> have only one clock.
+>> BTW, as Rob's bot reports, this wasn't even tested... Please test the
+>> patches before sending them.
+> If they're managing to see and try to fix warnings they're doing some
+> kinds of testing, obviously they've missed something you wanted doing
+> but there's clearly been some testing done.
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Thanks your understanding !    I had test it  and this patch need depend 
+on a clock patch, and I had added
+
+this depend on description on changelog,  but I don't know how do make 
+the robot can depend on my clock patch after testing.
+
+
+Thanks!
+
