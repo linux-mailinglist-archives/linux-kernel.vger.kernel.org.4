@@ -2,140 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39B86BF98B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76686BF998
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCRLPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 07:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S229651AbjCRL3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 07:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRLPN (ORCPT
+        with ESMTP id S229478AbjCRL3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 07:15:13 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E87630B0E
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:15:11 -0700 (PDT)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 32IBF9T1031716;
-        Sat, 18 Mar 2023 20:15:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Sat, 18 Mar 2023 20:15:09 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 32IBF9eW031712
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 18 Mar 2023 20:15:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1f41d750-d885-55e8-77a3-7bd9a95979e2@I-love.SAKURA.ne.jp>
-Date:   Sat, 18 Mar 2023 20:15:11 +0900
+        Sat, 18 Mar 2023 07:29:23 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910232B9C3;
+        Sat, 18 Mar 2023 04:29:19 -0700 (PDT)
+Received: from laboratory-MS-7D42.. ([10.12.190.56])
+        (user=jingfelix@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32IBSldC031417-32IBSldD031417
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 18 Mar 2023 19:28:53 +0800
+From:   Tianyi Jing <jingfelix@hust.edu.cn>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Tianyi Jing <jingfelix@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: hwmon: fix ioremap and memremap leak
+Date:   Sat, 18 Mar 2023 19:27:11 +0800
+Message-Id: <20230318112711.1803167-1-jingfelix@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>
-References: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
- <Y+oY3Xd43nNnkDSB@hirez.programming.kicks-ass.net>
- <274adab4-9922-1586-7593-08d9db5479a1@I-love.SAKURA.ne.jp>
- <Y+ox39WhgY/iaVsG@hirez.programming.kicks-ass.net>
- <393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp>
-In-Reply-To: <393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: jingfelix@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter?
+Smatch reports:
 
-On 2023/02/13 22:49, Tetsuo Handa wrote:
-> On 2023/02/13 21:49, Peter Zijlstra wrote:
->>>> And sched_show_task() being an utter piece of crap that will basically
->>>> print garbage for anything that's running (it doesn't have much
->>>> options).
->>>>
->>>> Should we try and do better? dump_cpu_task() prefers
->>>> trigger_single_cpu_backtrace(), which sends an interrupt in order to get
->>>> active registers for the CPU.
->>>
->>> What is the intent of using trigger_single_cpu_backtrace() here?
->>> check_hung_uninterruptible_tasks() is calling trigger_all_cpu_backtrace()
->>> if sysctl_hung_task_all_cpu_backtrace is set.
->>
->> Then have that also print the held locks for those tasks. And skip over
->> them again later.
->>
->>> Locks held and kernel backtrace are helpful for describing deadlock
->>> situation, but registers values are not.
->>
->> Register state is required to start the unwind. You can't unwind a
->> running task out of thin-air.
-> 
-> Excuse me. There are two types of TASK_RUNNING tasks, one is that a thread
-> is actually running on some CPU, and the other is that a thread is waiting
-> for CPU to become available for that thread, aren't there?
-> 
-> lockdep_print_held_locks() does not show locks held even if a thread is
-> waiting for CPU to become available for that thread, does it?
-> 
-> But sched_show_task() can show backtrace even if a thread is waiting for
-> CPU to become available for that thread, can't it?
-> 
-> Therefore, calling sched_show_task() helps understanding what that thread
-> is doing when lockdep_print_held_locks() did not show locks held.
-> 
->>
->>> What is important is that tasks which are not on CPUs are reported,
->>> for when a task is reported as hung, that task must be sleeping.
->>> Therefore, I think sched_show_task() is fine.
->>
->> The backtraces generated by sched_show_task() for a running task are
->> absolutely worthless, might as well not print them.
-> 
-> "a thread actually running on some CPU" or
-> "a thread waiting for CPU to become available for that thread",
-> which does this "running task" mean?
-> 
->>
->> And if I read your Changelog right, you explicitly wanted useful
->> backtraces for the running tasks -- such that you could see what they
->> were doing while holding the lock the other tasks were blocked on.
-> 
-> Yes, we can get useful backtraces for threads that are waiting for CPU
-> to become available for that thread. That's why sched_show_task() is chosen.
-> 
->>
->> The only way to do that is to send an interrupt, the interrupt will have
->> the register state for the interrupted task -- including the stack
->> pointer. By virtue of running the interrupt handler we know the stack
->> won't shrink, so we can then safely traverse the stack starting from the
->> given stack pointer.
-> 
-> But trigger_single_cpu_backtrace() is for a thread actually running on some CPU,
-> isn't it? While it would be helpful to get backtrace of a thread that is actually
-> running on some CPU, it would be helpless not getting backtrace of a thread
-> that is waiting for CPU to become available for that thread.
-> 
-> We can later get backtrace of threads actually running on some CPU using
-> trigger_all_cpu_backtrace() via sysctl_hung_task_all_cpu_backtrace setting,
-> though I seldom find useful backtraces via trigger_all_cpu_backtrace(); it is
-> likely that khungtaskd thread and some random workqueue thread (which are
-> irrelevant to hung task) are reported via trigger_all_cpu_backtrace()...
-> 
+drivers/hwmon/xgene-hwmon.c:757 xgene_hwmon_probe() warn:
+'ctx->pcc_comm_addr' from ioremap() not released on line: 757.
+
+This is because in drivers/hwmon/xgene-hwmon.c:701 xgene_hwmon_probe(),
+ioremap and memremap is not released, which may cause a leak.
+
+To fix this, iounmap and memunmap is added to line: 754. And the
+declaration of 'version' is moved to xgene-hwmon.c:620 to help simplify
+getting 'version' below.
+
+Signed-off-by: Tianyi Jing <jingfelix@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ drivers/hwmon/xgene-hwmon.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 5cde837bfd09..44d1004ddacb 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -617,6 +617,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 	struct xgene_hwmon_dev *ctx;
+ 	struct mbox_client *cl;
+ 	int rc;
++	int version;
+ 
+ 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+@@ -655,7 +656,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 	} else {
+ 		struct pcc_mbox_chan *pcc_chan;
+ 		const struct acpi_device_id *acpi_id;
+-		int version;
+ 
+ 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
+ 					    &pdev->dev);
+@@ -749,8 +749,15 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ out:
+ 	if (acpi_disabled)
+ 		mbox_free_channel(ctx->mbox_chan);
+-	else
++	else {
++		if (ctx->comm_base_addr && ctx->pcc_comm_addr) {
++			if (version == XGENE_HWMON_V2)
++				iounmap(ctx->pcc_comm_addr);
++			else
++				memunmap(ctx->pcc_comm_addr);
++		}
+ 		pcc_mbox_free_channel(ctx->pcc_chan);
++	}
+ out_mbox_free:
+ 	kfifo_free(&ctx->async_msg_fifo);
+ 
+@@ -765,9 +772,22 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
+ 	kfifo_free(&ctx->async_msg_fifo);
+ 	if (acpi_disabled)
+ 		mbox_free_channel(ctx->mbox_chan);
+-	else
+-		pcc_mbox_free_channel(ctx->pcc_chan);
++	else {
++		int version;
++		const struct acpi_device_id *acpi_id;
+ 
++		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
++					    &pdev->dev);
++
++		version = (int)acpi_id->driver_data;
++
++		if (version == XGENE_HWMON_V2)
++			iounmap(ctx->pcc_comm_addr);
++		else
++			memunmap(ctx->pcc_comm_addr);
++
++		pcc_mbox_free_channel(ctx->pcc_chan);
++	}
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
