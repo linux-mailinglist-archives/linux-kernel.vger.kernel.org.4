@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377246BFB03
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AEB6BFB00
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCROrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 10:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S229974AbjCROrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 10:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjCROq7 (ORCPT
+        with ESMTP id S229945AbjCROq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:46:59 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2109.outbound.protection.outlook.com [40.107.117.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4378DCA2F;
-        Sat, 18 Mar 2023 07:46:30 -0700 (PDT)
+        Sat, 18 Mar 2023 10:46:58 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2093.outbound.protection.outlook.com [40.107.117.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F59C144;
+        Sat, 18 Mar 2023 07:46:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JtighpnZeyUCP0N8ueMLoTWZmULKd0IcA8fPSyZC5IzwwebHBwzN31ySC/hUI4zXysm5traLREJNz1di3g/dFXUHRkjGG1FBjXGM3ChqpxPhdguCML6JTrej0OdsAdFhBA51ECHOui1dsNzFl9d9aKqwa17Ev+w2gIkEgtoyfBLMbJsRFVzxN4EKLsBTtyv+1ENowM2sZX5+oJHb6sBg7Pum5ytbKY0nz5dqP11Qb+j+5Dm/+CPOLrUEtEnl5DK/tLQY+FRW3WM3Ds9aCB0B+cH57WtOu3BGKJ2x3zXVLuRdxPSmbCyRxRP79WRw0nSIVZ5d+JDvcowUI3rgCAcLjA==
+ b=CWdsqJeYpHbr6iF4jtswJ4RcKNMRuJSjYpOebP6ipjGtkOx3Tx1UmUq/GIvnK8frjBcik08BxvjOFumOZY6/QQg4JBz0sNAthoZzCqL+jHYDTOweLqw0djnidnM5jSaM6/OUrv7b3VZVDtULtez9dVLvBMzWQokbKDnYwGN403b1Qx3ZrMKqg3bUqBmUwQkL1On346E+06uHXo2zPceZiEurDX8zfsxWQqdLBkyJ3HcIkOVhCTU+rzWzOB0wHMZCQF5B2HHhB+XcS/RnpvUTBrg1NnoNz3qHQJIECujbb1JIxYQfpzdTWgjXbfu8Z8/2ZFj5PvxXwjghUidIUZg53w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GE3MEtYd/t6m9uX7tsCrsm/xazH/HurMYPLnGfjf41A=;
- b=lSJC1M0lBOvH2H9Sb72AUiUkRFPaH+wkp6cEICkVsfPdgWgH643h4QbMNFiysPSTrfEveFE3Ez4aaOYLPIbsDKFkKfuIyFDdqF7X4Hul4vkstDTeMMTnzyXmggLxmw4fUrHhsaGO1CcTx2zlr9DpQ9xu6M1HKEnvyBa41kt7Ktqv7vmi/VQWXgQoqB/X/v4m5HcxBbhXUB9ZylcLI8C1MbuKUdHC08W50gHvP5crM3QqGFWTHIq3fYnKtWDvTKxA3Cgin4yNL/lyeBGMhz5o7HamisOd1dIVM78VK4tBzk5ocPUZ9w/sig+859Cr88xL+nZLQnXVYA4tLX8NHXf00A==
+ bh=5nIv0m6aN9A37vO7X82/QveyknUc3Kl6UAetm1E2t00=;
+ b=kKB00cQHRT9H/E9ozi+8qt1e2AaLkZLj/sYa9i+poeJbc52VWrPkOBzOG88Dn9tuyYciZkZHzCB6k9+0crTzOBbgCgKYT7xWSbSQxHjXZ35f2l8y9+lmTVSFmnfK+GNzAZtE2vlUfzuwjTA592olttWVxKa2wYD6ROsOPfgD2R6tYINACmtHJoA55iLoXMQyaxQm3QKmJEfxbt8wgEUqF0veZxpRtt/a6MURz6SVfjovm/BVdcOnVIDgJMjG1J2TgattitwruMtlrJzs/k9SHldBEOjjDmQeYWt5ReGtS7MBd6zRWkcBYLHKeS+8yKTNje0kUntfcUnf/3rvgQkC6w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GE3MEtYd/t6m9uX7tsCrsm/xazH/HurMYPLnGfjf41A=;
- b=BstLJmB5qBYfLuP5aQTUGTnLzwbl2c1DKu4G+Bu7rS6d1fcHEyUW5Bv5D2OMOrfcJqtmo5vk+5vTNkQwSYh1mDkM4b/ykwzmcBk4CACWgzK0TsxBQiIn2uoACTEscCWxSfRTK2YJXivhhqV83Rb2Iiyn+7OpzECIFhGuafelVYFy+Sa4WZhmunv2RchGr7YGUUcvQYIo3vy/tgBeYyqWDtZ+kK5dFcv2Ml+4k9Eattc1uFy1iCYiCLGPhi+7VDI+6pV6KWk8hZDcoPENjnDkzdAXTp9npv8ZH3HgI6A7c/aynj3EFb8OOXaOVBnuD5MuQ+GgJUWv69hgwFS190XoSg==
+ bh=5nIv0m6aN9A37vO7X82/QveyknUc3Kl6UAetm1E2t00=;
+ b=Rpsq/56eYGVVqQsGLV17yrogyAS1tKTyuxX4h9pkEUkWhFSAjKIQI3rHHgpoGgTt34vLx+ElYdN2LOmqiuF2+2zhm8sT+b263MvK+IXVRjwCrJecunRzbZZp5j2Nwai6Jukbq1PSbkr8HdmjDe92b3XV0W48zRVn6iKrk3gIFeg+xOr2nm9JlAa9v2u9ZlhEqX06DBYz1mZgzk8L6HTCuXHHGf6m8r5H89wi4r/zN1Zsv71sskVXADyXS51g/VaAyC+KIGLwyGmWlFZRTfpELQZWwbET2qofp7ozzA/XnrpQZSkRuI1StmAIf8i7c3Xw4kObb5yDFa6+ePf9h4AV9w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
  by TY0PR06MB5283.apcprd06.prod.outlook.com (2603:1096:400:210::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.36; Sat, 18 Mar
- 2023 14:45:16 +0000
+ 2023 14:45:19 +0000
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6178.036; Sat, 18 Mar 2023
- 14:45:16 +0000
+ 14:45:19 +0000
 From:   Yangtao Li <frank.li@vivo.com>
-To:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/9] thermal/drivers/ti-soc: remove redundant msg in ti_thermal_expose_sensor()
-Date:   Sat, 18 Mar 2023 22:44:11 +0800
-Message-Id: <20230318144412.75046-8-frank.li@vivo.com>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 9/9] thermal/drivers/qcom: remove redundant msg
+Date:   Sat, 18 Mar 2023 22:44:12 +0800
+Message-Id: <20230318144412.75046-9-frank.li@vivo.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230318144412.75046-1-frank.li@vivo.com>
 References: <20230318144412.75046-1-frank.li@vivo.com>
@@ -62,50 +65,50 @@ X-ClientProxiedBy: SI2PR02CA0032.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB5283:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d6364b3-69d4-46e8-16fa-08db27bf632c
+X-MS-Office365-Filtering-Correlation-Id: fbf9b63d-707e-4ad4-fa8f-08db27bf6546
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1BvdNsw6gt6DYeYjrdBU3QtxleLDOZJtls2m8i9BtdZoGolzwC3gtrcLZlCJ+LWEQOG6ibDIJT/RQVi0HEfh5SvfDGBE+q0vveMz7rm/d3aZrghXd+xXW90y+YlZhIpVSA0Vxuok5Voh+3Cd+Jwr3bLVnflM/BAQWcAN3k5XIEgM4jfzUSRDVxvqm0KYKCvZ+tPuulVnnL2h2RQYNWwH/b/UeKUatv2kdi+JubrB26/SyMdyS3etjzNHcMdcmS+WswWV0ZuYUuU9go6N3ODCr78Dde0G4xLQunrbKFQ7fn/QWi+2wEQIz3a06lXi7OIB8vidQ1mc5zH4HynYkOHb1NkPJdC1trHfK5pJYo0kH2kp/Cmf5gFctcg3TzD2Y9N16j2gwajNJ0Zl64Kp8wv+AXz/+6U4R4LYkYWECKjtCchmBbNQE7mItMplUvy5zQiEOqmCN8IoPQfWJblxRNCTPOD/HYhU17fDDrpd8ynU87VkD5DezAGUg5DEh5CHhdcfXISYtgpb+BajRtp84dzAwdbi9DSaVMcdUSk/c/liTp9Z8CDM2C5dnsYndy0Y5vzietQWrvnkTdSZfxYMtsXjg3Ax9EAAq/OVQho/3aIAlCM41ySmxxwR+1t2a9Fnk1oPYsGF/fpyVhINP0iJ4IJnuvfH/qqBqqcODJ0lO7k6hyExGJmIPXe52mn3hnMws/MPKyP5AIDDOEOO5iy6T/ntPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(451199018)(86362001)(36756003)(52116002)(316002)(66946007)(66556008)(66476007)(8676002)(4326008)(83380400001)(478600001)(110136005)(186003)(6512007)(6506007)(1076003)(26005)(2616005)(6486002)(6666004)(38100700002)(38350700002)(8936002)(41300700001)(4744005)(2906002)(5660300002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: c3UDln+th3ckpOA6mz7mgl0d7T7UcoLMrwKKqNiz7CZLfQxgQSqDrxtDnKSTY4KOywuTArS85gGDS6s0ciEq1FESGIIBgatByetyFOACG5s+9ef6y70occ35RpiIAaQvMKOntCdibzhc7GrjDbBbav+oLsuVKWvwUSSmY+SrsvbA75k7df3jsmBpxU2fKB5c1MxFootH8I/E6DLdI519ALFNWUOoWpsTcXL+b3NACiX2f2eSJI+seHC+Fl8Su9Au879dAdk3Pno67RmdAJxE3LDHmqHvuv7TFiq3NbDiebBLtfRSi+nOEQBr34CQp3KeOrG4S7xwg+VPq9vw9ty/bkoB5KQofZ6zQi+RT5Rjebch7407OcSoJqdNk04lBJHlneNXCZS22RnfRdJX0sIGpjXXKzHax+83DKGGBDwjxxsIAy+4/O7HE324N/7WBxpQmCayd9aaCbb4eD+QbieClJJHmgtMbRKrwxZiWg4sfobfpDBWScoRxgNTpnLy99NsEq4++rU8c4C12xeL7W5SiL0pc+4yWlpo+7nz1ZJUCRYcRU7SDoEpNxJa/25+J95QlijvMs5Z4/6S+5bQbVclLRJH/2zr3yyUBVVXSgvQR8VztlcBJ2pRQaORPzFqz0ZTUBNBhO6NRWfsiHibtXsDOs6dxpagpu2FltuiSqvJqwGenxa7f48+tcjMN7scgL6jn5eMjksVXrw5LoFZAtKFsA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(451199018)(86362001)(36756003)(52116002)(316002)(66946007)(66556008)(66476007)(8676002)(4326008)(83380400001)(478600001)(110136005)(186003)(6512007)(6506007)(1076003)(26005)(2616005)(6486002)(6666004)(38100700002)(38350700002)(8936002)(41300700001)(2906002)(5660300002)(7416002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X+e/OsTX4dDM+4MrTTTOyNlynD2MYhRnTYZXC62RGMWZNC6JpCGZBcAXnE5/?=
- =?us-ascii?Q?MRATcrH1+csMcmAhZXUmgwuvtJtmAeAZ6kfoEZeGYryMNDewWbWWy/F58SG9?=
- =?us-ascii?Q?Pj36WbKZN/5aP1iauhgGSMcIZIRX83hL4Jxir8k2zXb4K24sboHbcUcyDu5m?=
- =?us-ascii?Q?RvHYyUbDABEWv0+xippTXk3opk7Rh94ZTNVjozkgEMoU/1zNu+389BX8nSWj?=
- =?us-ascii?Q?J89PLnuKIMhlYXwAU3W3906ht3vVcmDBxwtmTCn3ox/z3QsCKR8TgEWxLNDP?=
- =?us-ascii?Q?XmxP3jnk84DDuD0DzbUDKdveQklDblzcrkB3954L6I1ijuodgdnBQNMPeknS?=
- =?us-ascii?Q?A57ZZRVdF1OSCJkP97hePZFicpj0Jd7fIpFzgsxafQMsEuJKxnvW671ORqQX?=
- =?us-ascii?Q?FYf6GhKkMFRFn7cYZ73+bcAtXKf1szRNsx20ioJDS2ree69WcbslvD52UTfa?=
- =?us-ascii?Q?h1kBLXZbR01CjusTdTTMkumlEOv8lkNMPa3/gmZgTFWZl7M1QzNemVhYSBK+?=
- =?us-ascii?Q?LXbC4CVGTXlopYaA1vJTzhCKro6BTR+nUCrpCL6+C6qMu+gTiX4Fh9LB/Wyz?=
- =?us-ascii?Q?MGk17/nYWioVeuUAHGTz1sPSWbOFLuSVPMjuuNhb2JDy5cimFZCTaQtEJ/21?=
- =?us-ascii?Q?7656YfE+YBJIJq5BpJb2OgHaWworiEe4mslguuWt9oEXG/GRgNC1S4avdo9w?=
- =?us-ascii?Q?E8bp1ie3rOAjD3zfEgoMApmn4kLN48U7WwXVtepNZdYov6eBEPvnAfkKiKLs?=
- =?us-ascii?Q?VbWP6xFXjjY6o1+WtDp/QK6Plx3HMwSdy6AuDeZUGnN5hZL/r2KzB0bVhR9v?=
- =?us-ascii?Q?h4jWoOs9CDVPtRQdz2VNjHeB+CQD4aYMtyf0VZl3hfHSdqhlUud9aBsB/HS1?=
- =?us-ascii?Q?8NETioCFM9u2Jd5BJykBC79Zf9KUtZkcV4gbhdA5IWFoZDpnE+B6kSR3qkoD?=
- =?us-ascii?Q?HXowRW59alpr+TUouWCWX5sfcKRBamnX0o8s4OP2xyjcsbRbM20p8i7UQyI0?=
- =?us-ascii?Q?j9LGrt/0bkbnpHn6CiQ9oUBnsyj469ITjItMGu0p4L5/V8CBI40wyICniFmc?=
- =?us-ascii?Q?VgipQ5LDzAJFuBgP81xzK+vjEZBXr/dg6WlJ9lToiIGdCAFPEeQoRkFeS0h8?=
- =?us-ascii?Q?VEcrYrJgiyv4RRut352S9mpBfKl8lA/EMlUEE2c1LwtGNGfwyhZZBhFPOgQt?=
- =?us-ascii?Q?0nMLivGqOchdUOPIZ94dbxjUHhiwc7z4+xX3eNn3qILONPm/DDB2c1rg2B7f?=
- =?us-ascii?Q?nMdWWxdY02uIAHAh0JMqy+qyhHjHrd+QozAJGRQxtXBOw0zpTnaDLPQXcRc0?=
- =?us-ascii?Q?3mnP5HATqGS1QL8LxHUPA6ch3/R1ngA+J50Ot4hqotFFE2GnqKJMiFZGn8Es?=
- =?us-ascii?Q?sB0oipEvnTBbYH7FKINNzlBHZQuoDiGjiYEE09PQYoiUrK6PPnJ66iaY8OA6?=
- =?us-ascii?Q?3hvBfCnTVYgymR4hESdvpB7Ha0f2dGYWZW5rUGEHVEmAWvfumvOpAArs7V7q?=
- =?us-ascii?Q?6nWR183hEed7ZoPtNaBWAIId9GAUzaIp1BdRK0brsP3qcDoHavlqiTa2hGDS?=
- =?us-ascii?Q?07rnYylvgY9Q7SvZGaL7z6I6bMKhHYI8MaHVtjjG?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W+NwwH8ekpB6ioEa9aZX+XzzjFFt/HjaraFKbxWHORcRYUE7SArOewx172mY?=
+ =?us-ascii?Q?1HiLGAmcgysI785O5Ft+z3fJvGYiG0MI9T+f5/V2Tfcd7YdIYRsdrpK30P1F?=
+ =?us-ascii?Q?U0vQWX8YsI/Fvrb2P0hL9PFBSGRWbJrkl3HRDFi0zXKM1VoflXZOYv32qbIx?=
+ =?us-ascii?Q?h8QT/ined9Z4eJkUlcAWmO2sMIc0SuNzoXgPcEylsGWVumDfyvXAYTtC9UQX?=
+ =?us-ascii?Q?xjtm3cfsZHHU0I3pBps3T9/TKieQLEDpLPevq8YgrmqdEZVk0Wg3UdfJYgrk?=
+ =?us-ascii?Q?AHHlPOmfLPiRilQQE3+XydRdQAMscnHDDuSBO1cWHMjV5kn3/yI+9u/+m195?=
+ =?us-ascii?Q?zpHqcxOA2N4VvQVHQS2XaIuYHr1uz8ysW/qQp5LUeqz22Vn5BlSnEYxt/POG?=
+ =?us-ascii?Q?Da6LE+UvbXQAddpyh9sb+O0COpg8l/KLi0tCM2DY2xo6rMQFm6zKpztdTZM3?=
+ =?us-ascii?Q?+1irfvlzbBhqtih81i2dtHl1u5wx0EMErDE6HXl+KM1v+dCGGuLgbjdxgIr7?=
+ =?us-ascii?Q?sPz7WP9Wful00LRVp1rFB57TAuFWy83rRXhIpjOOZ8kbnc9uW5Z5X4rYtGJ8?=
+ =?us-ascii?Q?5PJ9tHgpvotKhOcg0T72Cf3+9k8Qwxw5QX3kqRTBrltRvQYUjoe782a32F0D?=
+ =?us-ascii?Q?2FG74eXDqWM+8cEnw3TvDxwKZZ3VVkCy6+YGaYyX0kCBow59XTjBTFb6Ti2d?=
+ =?us-ascii?Q?9HnB2Fe9vw/QWR9bSgMdzRy9hEk0PvuHzlhUU0lADgcxPieOhM1nhQYwgmQG?=
+ =?us-ascii?Q?DyhpO84XKQqzwyJOIaMk1T1vfvM41Fn692vwc168gwuIaYGKrI883kkZC+BF?=
+ =?us-ascii?Q?jqPOpHYhfMxaXctpejAHEMg/6tcjXMjtQBpu8QJYXHxfmb+Rgtd4v4ENoHNj?=
+ =?us-ascii?Q?FPQRlFI8POhpUAcRdWqO6Lke+5i6S6yvL8lsdR//EE8tkty3d4jK5BeOe3vB?=
+ =?us-ascii?Q?v+Wocm3jtp+Z4UIlsgBqNNmPu3vmkp6mPnG5MpkI+eyASo61CXT3/ueTB/A7?=
+ =?us-ascii?Q?gORo3T3Rr/slJu2A0dsx8/9LYyvKZfukA7JuTY5o6Yusy6ZYrlZUxJcxkIyy?=
+ =?us-ascii?Q?jEb8+uGDj8AYK49fMk3kwFNrvInMVVPTSDJVZ2Zl16B2ClkD+QWxK2zW6Uet?=
+ =?us-ascii?Q?tVkxFIQkVo5y7tKzukb0Ir/C05G1nIkI1iYKmJXU6rvQKSKgNVTNykuHy+CS?=
+ =?us-ascii?Q?wMUtQkF6jc4F7uSqeLnumU9Km/tTnzp2OSaVPbCaDlbXOYRhrfXXpOok0QG8?=
+ =?us-ascii?Q?4asasrISmuz7UGC0x5socgP7pUERDBE9oA8UgIk0MMNI1CU9BURaVKsb3kRz?=
+ =?us-ascii?Q?Ci3Ii0m7ZAqQLelVJI3Y2pFUs20po9AP72y4UhiEOMeWRpxiXGPiHuaTmZHa?=
+ =?us-ascii?Q?t4Qs8T4+hH8xmGRUY+CVN6pgYeknJCmYYgKfUW7MRtxLQsyVp84Sr699d+0+?=
+ =?us-ascii?Q?4tPhEDlemRO4wizocIR4LjOE4AtF6xFoXtuEkcTWGNzxqG1tNUNnqeHCVXJ9?=
+ =?us-ascii?Q?EwtBZy8SydGOPowaURuj8uKsqw3j7D0iPLA7gTJK7af7FX5Ii4TYIeC302j7?=
+ =?us-ascii?Q?773Vjb0kWvxmFyc+6UTBfECkDc/LeOpkh6Ccnseu?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d6364b3-69d4-46e8-16fa-08db27bf632c
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbf9b63d-707e-4ad4-fa8f-08db27bf6546
 X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 14:45:16.1314
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 14:45:19.5694
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UwANLDm7LTWDQCiym2Jkf7Iy/bWdzdxntgJ1n9sTHLlbpH9P2eDsVL30HZeSBC5wcGXBEqYwrNh24KC2cymBJw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: lJffMyIrAL1HdutmE5dYT1W5VNCMEw0ryki/gMgt2ncHFcPZ7eBcHUP7OIoiZcSxl747FPpZfAgIfuk09CJv2A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5283
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -122,23 +125,56 @@ print error information.
 
 Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c    | 4 +---
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 4 +---
+ drivers/thermal/qcom/tsens.c                | 4 +---
+ 3 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-index 0c8914017c18..e39091f999d9 100644
---- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-@@ -182,8 +182,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
- 	ti_bandgap_set_sensor_data(bgp, id, data);
- 	ti_bandgap_write_update_interval(bgp, data->sensor_id, interval);
- 
--	if (devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal))
--		dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
-+	devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal);
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index 5749149ae2e4..5ddc39b2be32 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -689,9 +689,7 @@ static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
+ 			return PTR_ERR(tzd);
+ 		}
+ 		adc_tm->channels[i].tzd = tzd;
+-		if (devm_thermal_add_hwmon_sysfs(adc_tm->dev, tzd))
+-			dev_warn(adc_tm->dev,
+-				 "Failed to add hwmon sysfs attributes\n");
++		devm_thermal_add_hwmon_sysfs(adc_tm->dev, tzd);
+ 	}
  
  	return 0;
- }
+diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+index 0f88e98428ac..2a3b3e21260f 100644
+--- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
++++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+@@ -459,9 +459,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	if (devm_thermal_add_hwmon_sysfs(&pdev->dev, chip->tz_dev))
+-		dev_warn(&pdev->dev,
+-			 "Failed to add hwmon sysfs attributes\n");
++	devm_thermal_add_hwmon_sysfs(&pdev->dev, chip->tz_dev);
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, qpnp_tm_isr,
+ 					IRQF_ONESHOT, node->name, chip);
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index d3218127e617..f99b0539468b 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -1189,9 +1189,7 @@ static int tsens_register(struct tsens_priv *priv)
+ 		if (priv->ops->enable)
+ 			priv->ops->enable(priv, i);
+ 
+-		if (devm_thermal_add_hwmon_sysfs(priv->dev, tzd))
+-			dev_warn(priv->dev,
+-				 "Failed to add hwmon sysfs attributes\n");
++		devm_thermal_add_hwmon_sysfs(priv->dev, tzd);
+ 	}
+ 
+ 	/* VER_0 require to set MIN and MAX THRESH
 -- 
 2.35.1
 
