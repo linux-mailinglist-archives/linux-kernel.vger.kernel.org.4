@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7266BF899
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 08:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23DF6BF8A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 08:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjCRH4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 03:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S229778AbjCRH5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 03:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCRH4A (ORCPT
+        with ESMTP id S229473AbjCRH5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 03:56:00 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CD4193E7;
-        Sat, 18 Mar 2023 00:55:59 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z21so28615919edb.4;
-        Sat, 18 Mar 2023 00:55:59 -0700 (PDT)
+        Sat, 18 Mar 2023 03:57:12 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFADD325;
+        Sat, 18 Mar 2023 00:57:10 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so28594706edd.5;
+        Sat, 18 Mar 2023 00:57:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679126158;
+        d=gmail.com; s=20210112; t=1679126229;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a3mb1pjia0IgyxNYtGaBW063L8X9ZIfqHcxc0T2DSoE=;
-        b=fBX72+jPi22mNWR0n66lXXvwXHTQxcM41cjOKQOFBjpMqwvJXTQARhbixvvPdkkpyg
-         iRz5F1olqpPnPEhjzGsE8uRjUIq0KObfvNgQ33aXB16Xe4mdr88HqTAATKyBFPncUXHN
-         pAHvLgLybu/xG4qaqSDaGPMBl4snRJTmMwG7ZAjPV0ZmxqwZwUqiR0DLEKcbQ+k4MgFm
-         uLv/UFLAxju66WskNVs6KYpSK7pn8sxPIhpX3kVxZGAwHr4Yi+Sx1ojZX8mCwCAtaHdg
-         cFHHoFp3LRvH0s2K5dzSmzksNvnh5RF5z5TITUuf/CxXcgImrBy6REOAOt+P4G3p7ZrF
-         qT4A==
+        bh=wCrLidp4OVEXWIbXwYSJK83G0PQpXkPRHVsrJ8zeqyc=;
+        b=gn2IS9EeMuuN2iJYYd/yuXLOvz9qmg4U/sRPP40yWOvsWVZbeFifHw4f2weg80aGCC
+         tLvYsdGIoe+NWqDIrMT7h9Iv2tUJP028uUZtEOUI29xEqBu1bO17Ct98eRg5F4+E4PUo
+         BuwKY38VUfAMTJMzL9VL8IvtDVbj0aa8mdo677TtnT+9AitEy4hmWH81wjyW1DMSGCrf
+         45U5Uh8eTLf9neZoSFsOeXK30Za/TzDdtGT7GW7refAg45BgltukIbCQEQiSwCduEPPu
+         fY3XhiVCrA+Z4hjixcvvQGNcxGYuKKo04EgyflcVtlQFuOt7eF8zRwftYoAdGSAtjuZ4
+         Cv7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679126158;
+        d=1e100.net; s=20210112; t=1679126229;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a3mb1pjia0IgyxNYtGaBW063L8X9ZIfqHcxc0T2DSoE=;
-        b=zNgtb57nb9AKg6UaJdd8SB6tq7+GDsYMpxG+CdBmDx9Czhdp527J4+ch11vvYXVYz4
-         Q7i7U3IgIdI1eQg1NFGgsRiJRsaGt5hntAWRmhKp3yx3A90Eugrx5qAEc4Cx83IV2OWP
-         5h2mz1/hsU8CY/tQvGyXAYKYsuAiPrSlY0/ay0kFQCqaGmeakoXTuQ4D+N2+gNgU1xUU
-         rbjEh3k+KfbgiuUXQFDVSrVlx3bDwiubkCCchWAOCjV2oEjZAzyneWHGEZrUfoSExKg/
-         p3M6CfN9pZiKkN8pQHhbIeP9PK9a2m1VtUNvNN3N4aM0YsjoRaS+Z6hGDT5XksN5+uYe
-         86AQ==
-X-Gm-Message-State: AO0yUKWxjZfB5OdoJWlwO5n4AG/rL8qm5kS3RdW9p/9AtxekJZA+oT7N
-        t8cFMRZtPLj3S9U0t3n2BDaWZL0tyr4=
-X-Google-Smtp-Source: AK7set+YGRH+NdfCv25lT4gzGUwF+d+mhdcmW8UIiZ6tl7LF/5aTRoQ3LntLinj37gw5RiBcrUdU9w==
-X-Received: by 2002:a17:907:2bc8:b0:931:2306:f363 with SMTP id gv8-20020a1709072bc800b009312306f363mr2055699ejc.21.1679126157741;
-        Sat, 18 Mar 2023 00:55:57 -0700 (PDT)
+        bh=wCrLidp4OVEXWIbXwYSJK83G0PQpXkPRHVsrJ8zeqyc=;
+        b=pQxNEXGcpfN9Tno3SqFj317hk9F/SkN7qFnz/zG2hmew1IW6Zx7Edgxv2F4hjIk4E8
+         AupPMVE+BYrCEszdXSKuz+xtWkqCUwLgbeMofXR0kycmR1AiZIsk/gXsucpkuppZR7NJ
+         zOw90bmv5cNwvBv0pqzbU70LPiobxgIaGkLc9b44A1k3tSBu3rTdlCv8RWRGL6RL8Mst
+         6S406EaOY6poz9sY0uo+VVvT5MsQJzWbmopjifjjPhVQF2lmGxVaKDE+GMPr5G5NFTHc
+         v31vUtwSwapXngtA11vIL/X3dw/8BlJjwKqJTLK9yFGFmZE4insQUnmlCu3SyHqkXL3u
+         8/cw==
+X-Gm-Message-State: AO0yUKWrUXI4gvP6i+Z49FAn7j4uU3Nd4jX6FOneSNqSmEf6sm8z3Ir4
+        16ckl9QIqyieJI5eveO5m+g=
+X-Google-Smtp-Source: AK7set+ZpTCTkVBDtoYBzI61rbVWTHWDTXRpYAoEc8uSO+dGa58EHpp0+H/L9Ew3/QTlDkVyPDgPGw==
+X-Received: by 2002:aa7:c9d5:0:b0:4fb:e9b8:ca56 with SMTP id i21-20020aa7c9d5000000b004fbe9b8ca56mr4490833edt.41.1679126229004;
+        Sat, 18 Mar 2023 00:57:09 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id xo10-20020a170907bb8a00b008ec793ac3f4sm1850916ejc.192.2023.03.18.00.55.55
+        by smtp.gmail.com with ESMTPSA id c25-20020a50f619000000b004bd6e3ed196sm2002916edn.86.2023.03.18.00.57.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 00:55:57 -0700 (PDT)
+        Sat, 18 Mar 2023 00:57:08 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>,
         Hector Martin <marcan@marcan.st>,
         Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Rob Herring <robh@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: watchdog: Drop unneeded quotes
-Date:   Sat, 18 Mar 2023 08:55:54 +0100
-Message-ID: <2672483.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230317233643.3969019-1-robh@kernel.org>
-References: <20230317233643.3969019-1-robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: nvmem: Drop unneeded quotes
+Date:   Sat, 18 Mar 2023 08:57:06 +0100
+Message-ID: <5656590.DvuYhMxLoT@jernej-laptop>
+In-Reply-To: <20230317233640.3968821-1-robh@kernel.org>
+References: <20230317233640.3968821-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -99,33 +101,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 18. marec 2023 ob 00:36:42 CET je Rob Herring napisal(a):
+Dne sobota, 18. marec 2023 ob 00:36:39 CET je Rob Herring napisal(a):
 > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
 > checking for this can be enabled in yamllint.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 +-
+>  .../devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml      | 2 +-
 
-for allwinner:
+For Allwinner:
 Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
 
->  Documentation/devicetree/bindings/watchdog/apple,wdt.yaml       | 2 +-
->  Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml     | 2 +-
->  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml         | 2 +-
->  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml          | 2 +-
->  .../devicetree/bindings/watchdog/faraday,ftwdt010.yaml          | 2 +-
->  Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml | 2 +-
->  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml   | 2 +-
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml     | 2 +-
->  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml     | 2 +-
->  .../devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml    | 2 +-
->  Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml   | 2 +-
->  Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml      | 2 +-
->  13 files changed, 13 insertions(+), 13 deletions(-)
+>  Documentation/devicetree/bindings/nvmem/apple,efuses.yaml       | 2 +-
+>  Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml         | 2 +-
+>  Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml | 2 +-
+>  Documentation/devicetree/bindings/nvmem/imx-iim.yaml            | 2 +-
+>  Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml          | 2 +-
+>  .../devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml         | 2 +-
+>  Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml     | 2 +-
+>  .../devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml       | 2 +-
+>  Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml          | 2 +-
+>  Documentation/devicetree/bindings/nvmem/nintendo-otp.yaml       | 2 +-
+>  Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml        | 2 +-
+>  Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml     | 2 +-
+>  Documentation/devicetree/bindings/nvmem/rmem.yaml               | 2 +-
+>  Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml     | 2 +-
+>  .../devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml     | 2 +-
+>  Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml     | 2 +-
+>  .../devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml         | 2 +-
+>  18 files changed, 18 insertions(+), 18 deletions(-)
 
 
 
