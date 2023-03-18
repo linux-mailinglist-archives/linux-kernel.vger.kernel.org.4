@@ -2,182 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9208C6BFADF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7916BFAE3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCROb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 10:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S229799AbjCROcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 10:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjCRObZ (ORCPT
+        with ESMTP id S229778AbjCROcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:31:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6DF12077
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 07:31:22 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdXa6-0000Li-1H; Sat, 18 Mar 2023 15:30:50 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdXa3-0051TQ-TX; Sat, 18 Mar 2023 15:30:47 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdXa3-005thE-2m; Sat, 18 Mar 2023 15:30:47 +0100
-Date:   Sat, 18 Mar 2023 15:30:41 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Tom Rix <trix@redhat.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, nathan@kernel.org,
-        ndesaulniers@google.com, llvm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: imx: remove unused imx_uart_is_imx* functions
-Message-ID: <20230318143041.n6rymackf6p776rq@pengutronix.de>
-References: <20230317205710.1672232-1-trix@redhat.com>
+        Sat, 18 Mar 2023 10:32:00 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DB75B88;
+        Sat, 18 Mar 2023 07:31:50 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id h19so8615393qtn.1;
+        Sat, 18 Mar 2023 07:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679149910;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=omCnbS+/el6Gly59ONAmBPzqOmEUBWn8/iuc5jWJ1YQ=;
+        b=L2R/pBH1xsowFR2hmOG6tXoKiu793PrNxctl4YrquecUGvxll7o/4jX7faMLqVDj8V
+         RO2gZ6LVmfFgC2WTzX3EiMULshBzX1RoQsMbMfZz5ViDwZitplHGul8M7RmeU40FTz8y
+         rv1VzTM5ezwA05recgzoOYDhzA2I2foAISTgAmFLSPPqIYhem1XJi8VBMKcuDeevZPxR
+         HjpGuAh9in4fX15aIiJNwLMd6lcGa1Nv/ZEk2p8NvTtle68Ic3ZmK+q1JJl/g+G1gZ4x
+         KEdkIktgBz8U0F82mB2yLcBLKifnrXL0mc+mI4GORA5xQwfd/LyHTetRsoY1nKE3or4J
+         gGZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679149910;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=omCnbS+/el6Gly59ONAmBPzqOmEUBWn8/iuc5jWJ1YQ=;
+        b=5FiSmaUMHO/S04DmAA+0uXTTqROhglI6zvMi88ORIZ7yETnb7DnFDSN80Zv1HSYwr7
+         IR9kbCgmtCBlke4vu69rf3Kk0xQWstc/YaHgHfclqIxZ10vYJnLeRb5lJ0EtvO0k9cW4
+         fusxxUYPyMOeOO5lgu+9ljLPZ//7JbrNUqepsU0nH4cOX3Os6FafMz+KJLLoMhWxdsAd
+         WZcrfdE/EyyiTQWm4E1h26xlJg0t8Wfp2vZxwDjbbFGrEInCVKJ5YzBfO72HCCimltK1
+         9M2dHQdxGvEZYVjaIpja6Kmd/2+DW9nrvAglZkge5rcUkpv/FV9kHsmD/+OJUEu8giQo
+         UARg==
+X-Gm-Message-State: AO0yUKXBmJBlfV0rGZ1vTJ+h07w4NE52ngDyUz7evXPp8C7E5gNuDtrk
+        7Am77NaUS9IUZGDWqDYhr2U=
+X-Google-Smtp-Source: AK7set8G64Xq6FLgbzcP7GqrJFvNKbAeHHtLFIhn/5F9U5byCRAWghjBQ9ZW9xZegZXzRmnCe7TGIA==
+X-Received: by 2002:a05:622a:170c:b0:3b9:bc8c:c212 with SMTP id h12-20020a05622a170c00b003b9bc8cc212mr10993812qtk.29.1679149909883;
+        Sat, 18 Mar 2023 07:31:49 -0700 (PDT)
+Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with ESMTPSA id i62-20020a37b841000000b00742a252ba06sm3635115qkf.135.2023.03.18.07.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Mar 2023 07:31:49 -0700 (PDT)
+Message-ID: <ef07016f-fe3b-99d5-1f93-fc8e34baf18c@gmail.com>
+Date:   Sat, 18 Mar 2023 10:31:48 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nda7clsxlnhkzioz"
-Content-Disposition: inline
-In-Reply-To: <20230317205710.1672232-1-trix@redhat.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net-next v3 1/9] net: sunhme: Just restart autonegotiation
+ if we can't bring the link up
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230314003613.3874089-1-seanga2@gmail.com>
+ <20230314003613.3874089-2-seanga2@gmail.com> <ZBV4LSBOwEzSiAvA@corigine.com>
+From:   Sean Anderson <seanga2@gmail.com>
+In-Reply-To: <ZBV4LSBOwEzSiAvA@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/18/23 04:37, Simon Horman wrote:
+> On Mon, Mar 13, 2023 at 08:36:05PM -0400, Sean Anderson wrote:
+>> If we've tried regular autonegotiation and forcing the link mode, just
+>> restart autonegotiation instead of reinitializing the whole NIC.
+>>
+>> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> 
+> ...
+> 
+>> @@ -606,6 +604,124 @@ static int is_lucent_phy(struct happy_meal *hp)
+>>   	return ret;
+>>   }
+>>   
+>> +/* hp->happy_lock must be held */
+>> +static void
+>> +happy_meal_begin_auto_negotiation(struct happy_meal *hp,
+>> +				  void __iomem *tregs,
+>> +				  const struct ethtool_link_ksettings *ep)
+>> +{
+>> +	int timeout;
+>> +
+>> +	/* Read all of the registers we are interested in now. */
+>> +	hp->sw_bmsr      = happy_meal_tcvr_read(hp, tregs, MII_BMSR);
+>> +	hp->sw_bmcr      = happy_meal_tcvr_read(hp, tregs, MII_BMCR);
+>> +	hp->sw_physid1   = happy_meal_tcvr_read(hp, tregs, MII_PHYSID1);
+>> +	hp->sw_physid2   = happy_meal_tcvr_read(hp, tregs, MII_PHYSID2);
+>> +
+>> +	/* XXX Check BMSR_ANEGCAPABLE, should not be necessary though. */
+>> +
+>> +	hp->sw_advertise = happy_meal_tcvr_read(hp, tregs, MII_ADVERTISE);
+>> +	if (!ep || ep->base.autoneg == AUTONEG_ENABLE) {
+>> +		/* Advertise everything we can support. */
+>> +		if (hp->sw_bmsr & BMSR_10HALF)
+>> +			hp->sw_advertise |= (ADVERTISE_10HALF);
+>> +		else
+>> +			hp->sw_advertise &= ~(ADVERTISE_10HALF);
+>> +
+>> +		if (hp->sw_bmsr & BMSR_10FULL)
+>> +			hp->sw_advertise |= (ADVERTISE_10FULL);
+>> +		else
+>> +			hp->sw_advertise &= ~(ADVERTISE_10FULL);
+>> +		if (hp->sw_bmsr & BMSR_100HALF)
+>> +			hp->sw_advertise |= (ADVERTISE_100HALF);
+>> +		else
+>> +			hp->sw_advertise &= ~(ADVERTISE_100HALF);
+>> +		if (hp->sw_bmsr & BMSR_100FULL)
+>> +			hp->sw_advertise |= (ADVERTISE_100FULL);
+>> +		else
+>> +			hp->sw_advertise &= ~(ADVERTISE_100FULL);
+>> +		happy_meal_tcvr_write(hp, tregs, MII_ADVERTISE, hp->sw_advertise);
+>> +
+>> +		/* XXX Currently no Happy Meal cards I know off support 100BaseT4,
+>> +		 * XXX and this is because the DP83840 does not support it, changes
+>> +		 * XXX would need to be made to the tx/rx logic in the driver as well
+>> +		 * XXX so I completely skip checking for it in the BMSR for now.
+>> +		 */
+>> +
+>> +		ASD("Advertising [ %s%s%s%s]\n",
+>> +		    hp->sw_advertise & ADVERTISE_10HALF ? "10H " : "",
+>> +		    hp->sw_advertise & ADVERTISE_10FULL ? "10F " : "",
+>> +		    hp->sw_advertise & ADVERTISE_100HALF ? "100H " : "",
+>> +		    hp->sw_advertise & ADVERTISE_100FULL ? "100F " : "");
+>> +
+>> +		/* Enable Auto-Negotiation, this is usually on already... */
+>> +		hp->sw_bmcr |= BMCR_ANENABLE;
+>> +		happy_meal_tcvr_write(hp, tregs, MII_BMCR, hp->sw_bmcr);
+>> +
+>> +		/* Restart it to make sure it is going. */
+>> +		hp->sw_bmcr |= BMCR_ANRESTART;
+>> +		happy_meal_tcvr_write(hp, tregs, MII_BMCR, hp->sw_bmcr);
+>> +
+>> +		/* BMCR_ANRESTART self clears when the process has begun. */
+>> +
+>> +		timeout = 64;  /* More than enough. */
+>> +		while (--timeout) {
+>> +			hp->sw_bmcr = happy_meal_tcvr_read(hp, tregs, MII_BMCR);
+>> +			if (!(hp->sw_bmcr & BMCR_ANRESTART))
+>> +				break; /* got it. */
+>> +			udelay(10);
+> 
+> nit: Checkpatch tells me that usleep_range() is preferred over udelay().
+>       Perhaps it would be worth looking into that for a follow-up patch.
 
---nda7clsxlnhkzioz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This will be fixed in another series.
 
-On Fri, Mar 17, 2023 at 04:57:10PM -0400, Tom Rix wrote:
-> clang with W=3D1 reports
-> drivers/tty/serial/imx.c:292:19: error:
->   unused function 'imx_uart_is_imx21' [-Werror,-Wunused-function]
-> static inline int imx_uart_is_imx21(struct imx_port *sport)
->                   ^
-> drivers/tty/serial/imx.c:297:19: error:
->   unused function 'imx_uart_is_imx53' [-Werror,-Wunused-function]
-> static inline int imx_uart_is_imx53(struct imx_port *sport)
->                   ^
-> drivers/tty/serial/imx.c:302:19: error:
->   unused function 'imx_uart_is_imx6q' [-Werror,-Wunused-function]
-> static inline int imx_uart_is_imx6q(struct imx_port *sport)
->                   ^
-> These static functions are not used, so remove them.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
+>> +		}
+>> +		if (!timeout) {
+>> +			netdev_err(hp->dev,
+>> +				   "Happy Meal would not start auto negotiation BMCR=0x%04x\n",
+>> +				   hp->sw_bmcr);
+>> +			netdev_notice(hp->dev,
+>> +				      "Performing force link detection.\n");
+>> +			goto force_link;
+>> +		} else {
+>> +			hp->timer_state = arbwait;
+>> +		}
+>> +	} else {
+>> +force_link:
+>> +		/* Force the link up, trying first a particular mode.
+>> +		 * Either we are here at the request of ethtool or
+>> +		 * because the Happy Meal would not start to autoneg.
+>> +		 */
+>> +
+>> +		/* Disable auto-negotiation in BMCR, enable the duplex and
+>> +		 * speed setting, init the timer state machine, and fire it off.
+>> +		 */
+>> +		if (!ep || ep->base.autoneg == AUTONEG_ENABLE) {
+>> +			hp->sw_bmcr = BMCR_SPEED100;
+>> +		} else {
+>> +			if (ep->base.speed == SPEED_100)
+>> +				hp->sw_bmcr = BMCR_SPEED100;
+>> +			else
+>> +				hp->sw_bmcr = 0;
+>> +			if (ep->base.duplex == DUPLEX_FULL)
+>> +				hp->sw_bmcr |= BMCR_FULLDPLX;
+>> +		}
+>> +		happy_meal_tcvr_write(hp, tregs, MII_BMCR, hp->sw_bmcr);
+>> +
+>> +		if (!is_lucent_phy(hp)) {
+>> +			/* OK, seems we need do disable the transceiver for the first
+>> +			 * tick to make sure we get an accurate link state at the
+>> +			 * second tick.
+>> +			 */
+>> +			hp->sw_csconfig = happy_meal_tcvr_read(hp, tregs,
+>> +							       DP83840_CSCONFIG);
+>> +			hp->sw_csconfig &= ~(CSCONFIG_TCVDISAB);
+>> +			happy_meal_tcvr_write(hp, tregs, DP83840_CSCONFIG,
+>> +					      hp->sw_csconfig);
+>> +		}
+>> +		hp->timer_state = ltrywait;
+>> +	}
+>> +
+>> +	hp->timer_ticks = 0;
+>> +	hp->happy_timer.expires = jiffies + (12 * HZ)/10;  /* 1.2 sec. */
+> 
+> nit: as a follow-up perhaps you could consider something like this.
+>       (* completely untested! * )
+> 
+> 	hp->happy_timer.expires = jiffies + msecs_to_jiffies(1200);
 
-Funny, is_imx6q_uart() was introduced in
-a496e6284c482555db8078190bb689594d129fa9 and never used. Since that
-commit is_imx21_uart() also unused. And the imx53 variant was also never
-used.
+ditto.
 
-Looking at that a bit more, the following cleanup is also possible (only
-compile tested):
+>> +	add_timer(&hp->happy_timer);
+>> +}
+>> +
+> 
+> ...
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 8308a23c55a7..a38ee0ed2210 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -178,8 +178,6 @@
- enum imx_uart_type {
- 	IMX1_UART,
- 	IMX21_UART,
--	IMX53_UART,
--	IMX6Q_UART,
- };
-=20
- /* device type dependent stuff */
-@@ -241,30 +239,21 @@ struct imx_port_ucrs {
- 	unsigned int	ucr3;
- };
-=20
--static struct imx_uart_data imx_uart_devdata[] =3D {
--	[IMX1_UART] =3D {
--		.uts_reg =3D IMX1_UTS,
--		.devtype =3D IMX1_UART,
--	},
--	[IMX21_UART] =3D {
--		.uts_reg =3D IMX21_UTS,
--		.devtype =3D IMX21_UART,
--	},
--	[IMX53_UART] =3D {
--		.uts_reg =3D IMX21_UTS,
--		.devtype =3D IMX53_UART,
--	},
--	[IMX6Q_UART] =3D {
--		.uts_reg =3D IMX21_UTS,
--		.devtype =3D IMX6Q_UART,
--	},
-+static const struct imx_uart_data imx_uart_imx1_devdata =3D {
-+	.uts_reg =3D IMX1_UTS,
-+	.devtype =3D IMX1_UART,
-+};
-+
-+static const struct imx_uart_data imx_uart_imx21_devdata =3D {
-+	.uts_reg =3D IMX21_UTS,
-+	.devtype =3D IMX21_UART,
- };
-=20
- static const struct of_device_id imx_uart_dt_ids[] =3D {
--	{ .compatible =3D "fsl,imx6q-uart", .data =3D &imx_uart_devdata[IMX6Q_UAR=
-T], },
--	{ .compatible =3D "fsl,imx53-uart", .data =3D &imx_uart_devdata[IMX53_UAR=
-T], },
--	{ .compatible =3D "fsl,imx1-uart", .data =3D &imx_uart_devdata[IMX1_UART]=
-, },
--	{ .compatible =3D "fsl,imx21-uart", .data =3D &imx_uart_devdata[IMX21_UAR=
-T], },
-+	{ .compatible =3D "fsl,imx6q-uart", .data =3D &imx_uart_imx21_devdata, },
-+	{ .compatible =3D "fsl,imx53-uart", .data =3D &imx_uart_imx21_devdata, },
-+	{ .compatible =3D "fsl,imx1-uart", .data =3D &imx_uart_imx1_devdata, },
-+	{ .compatible =3D "fsl,imx21-uart", .data =3D &imx_uart_imx21_devdata, },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, imx_uart_dt_ids);
-
-If you feel like squashing that into your commit or put it into a
-separate commit with a nice commit log (after convincing yourself that
-the change is fine), feel free to do so.
-
-If you don't:
-
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nda7clsxlnhkzioz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQVywUACgkQj4D7WH0S
-/k7Ivgf8CqZoIR6dodHsIoOkq2Ry2yHVlphhFQqAPbMfm2XigGZChWQAtPdXHfjN
-cY/cjTOL8tG4PfggMmMKlc+NKawrhNamIRAyEEZEgI12iiLWsQBPcvPFZeXEq/0H
-cGOl1fHMoxGDznajEdiGJpFEsBTTS9L2MH23F04btZpR4rZZR9aX9yOsktBhXy1Z
-eaQOn7IaAY1fKeoaactX5N6ii4vJIOsiRVvNfyXePeOfg//FpDJdsFMmYS5qzjR7
-TE0mAe8xU7l/JgA0AtiYwGDzN6mpGh46g47CKMHjPf8PnWXWPegGWgL00TkL7t64
-1R3S34r1I6TZ+eIsCwM3EKY7JNiQCg==
-=mOyR
------END PGP SIGNATURE-----
-
---nda7clsxlnhkzioz--
+--Sean
