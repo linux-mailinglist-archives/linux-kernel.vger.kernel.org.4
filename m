@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8316BF6DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955E36BF6E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjCRAWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 20:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S230032AbjCRAYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 20:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCRAWW (ORCPT
+        with ESMTP id S230036AbjCRAYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 20:22:22 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FF4D5882;
-        Fri, 17 Mar 2023 17:22:21 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id d13so7056382pjh.0;
-        Fri, 17 Mar 2023 17:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679098941;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4yU+Z21I1n6ZTEcdAUJLZP5nCp1KnymrYky69QflvpE=;
-        b=UoRNMmWc3dTcvEUmRLVoYCCnpI7jyl3RWmla3Sm8tZ0TgYtW6yjUf6XFv6EE3uM6Ix
-         6GmdcplsrfFRcjx6VmEXx2OMZWi4FkOnP7SYijKtD6lfjlzTkjrAGE12jNdP0z7cSVJi
-         o07GNTSotKd4CUC5GDRK8Ct2JIsOyOHMV4oLhyvdhv9+tOwI6kvULU015Ga/6qSkgijG
-         qwk1e5rDwr4FAWzFg/bVtNNtvpsKwwVLUqJBTijbV5uKA0Ub5M1/60xnyoSi+zJCGLH0
-         1SQVjQnpAk+QuiSqv66jQQTQm3FpWGylgMGwQW00nDo42zPLxJdppXENPXnVa4Kzb1f8
-         pI5A==
+        Fri, 17 Mar 2023 20:24:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB81114988
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679099014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ro4nhrJ5Zq0SySOEipia8lU7rnzpGPE36NY88ytAvP4=;
+        b=LD5tbkn3wFgtb27/9xCrhzN2M64PdjALt5fgmX2kDr8LRyvk/7pRCIFJvDBYfoMcRwDCta
+        rqfFwua+BJEQDTTwwqfr7LVp6LSTV8G7oygBWi1NtC9QdUItvr+MbbAjACXgbatM/3UWp6
+        EJKUE7WFCVWiYzk+gCjxqZ9tLHFvUzk=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-108-7XuVZMpTOUSGJZ9FfXbebA-1; Fri, 17 Mar 2023 20:23:33 -0400
+X-MC-Unique: 7XuVZMpTOUSGJZ9FfXbebA-1
+Received: by mail-qt1-f199.google.com with SMTP id x5-20020ac86b45000000b003d59e5ef484so3349120qts.15
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:23:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679098941;
+        d=1e100.net; s=20210112; t=1679099012;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4yU+Z21I1n6ZTEcdAUJLZP5nCp1KnymrYky69QflvpE=;
-        b=WOAVhYSFbaT6UT+coyTGcFmXpOe54T9hFP/8QZa1Eaa2zTd5kgBJhdcs6Q0vk2ShJe
-         6LHx2QbmC8hR6zZMrpUhec+eLSdzwsWiQbIZlCakpfMsHk8h51lQBtGBiNl5ReN9nzDF
-         FnTwKn8SYxBRDZZMnVQkvJwA6AmiauU3L/4AOvMuKG/gjTrS/bFKAPojPs3KbLg+nCzu
-         56Uw4G6ecAmxyLaDAZeLFkjr0v6Gdtu4cQBBmtwup9Ud/VCBKSbIIcysME6XoV6NsFZz
-         HniXz8Z8RqYFv74dD3eSpzjw7rvxBP3HKUC3GDu9s2InToxYj9tcNHSSzdeiDLUT4Mba
-         VIyg==
-X-Gm-Message-State: AO0yUKWJ0+c+X3f1AUkfP1bXGezngzWKGqVZasQgFUbgbmmCB6pIp3Xp
-        cKIQzSXwezRwrPummk9akbw=
-X-Google-Smtp-Source: AK7set+KZPeJd6aNgYNo+BP1h4HTqppNCdeOA7X1jHxCgQChP0A5/yxBObMoVhZBji9oLqrScAkL3A==
-X-Received: by 2002:a05:6a20:4c1f:b0:d4:e6f:1ee2 with SMTP id fm31-20020a056a204c1f00b000d40e6f1ee2mr8084470pzb.56.1679098940561;
-        Fri, 17 Mar 2023 17:22:20 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:44b0:d54a:f8f3:872:5c2e])
-        by smtp.gmail.com with ESMTPSA id d10-20020a634f0a000000b0050f56964426sm137975pgb.54.2023.03.17.17.22.19
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ro4nhrJ5Zq0SySOEipia8lU7rnzpGPE36NY88ytAvP4=;
+        b=2+Iln1/QMzy1Sz86qxoR3bm3rgg9NYuFae6OIXKYr2vYuvLbBUxwGK14N+5eZ64+5F
+         EjJGj0SamEfVw8xmo74+iL4wbdfilYqgmmbI3j0/A0TWBAy41ekubcLNTraB7nP/krCg
+         9O8nj1lTpkoUBL9vhLC5vYxLVTVTIJULxoFO4b5W8ETvwGdeOfD+c01Daa1wX74o+xBA
+         WnFhYXpy/WIzEa24sRQduJsQPNPXHSR4lL0k6S727+EXnGyBYk+1WNMe4+/ccUrqPR9F
+         uGYPZ7wEz4ph1LrW6UXXyi2ox6+Y5jAJjBmDPgZql7wB63e7lj7nFqTWslc0xJHZKo2u
+         gMig==
+X-Gm-Message-State: AO0yUKUTYskLV2CmtEasp9m6r8sTabPXxrx+oIio1QhF8RReWezPR5Dz
+        lnpQfhqLlJYcHSE+WB2vjcyUtlePP9ZU+xDLTfkOTPQbH7LRe1UOk4bg8sFl9TgK9Du1bG0sbCd
+        GI7ohfx2g8i2yDX+OaRmCuyR+
+X-Received: by 2002:a05:6214:e62:b0:56e:9da4:831c with SMTP id jz2-20020a0562140e6200b0056e9da4831cmr39485349qvb.46.1679099012683;
+        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/fL421Kfl3tq1uEh7Q2OUg4WIgPPxO43SFyqSNmCb+PH/F1uG0zi5qpejfWxe5clSOu4VLzA==
+X-Received: by 2002:a05:6214:e62:b0:56e:9da4:831c with SMTP id jz2-20020a0562140e6200b0056e9da4831cmr39485337qvb.46.1679099012479;
+        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id a72-20020ae9e84b000000b00745a3b63569sm2623217qkg.107.2023.03.17.17.23.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 17:22:20 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] perf bpf filter: Add an error message for BPF filter
-Date:   Fri, 17 Mar 2023 17:22:18 -0700
-Message-Id: <20230318002218.2035109-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] gpu: drm: bridge: sii9234: remove unused bridge_to_sii9234 function
+Date:   Fri, 17 Mar 2023 20:23:21 -0400
+Message-Id: <20230318002321.1675181-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently there's no error message for filter (other than the help for
-the option) when it's built with NO_BPF_SKEL=1.  It should show the
-BPF filter is not supported like below:
+clang with W=1 reports
+drivers/gpu/drm/bridge/sii9234.c:870:31: error:
+  unused function 'bridge_to_sii9234' [-Werror,-Wunused-function]
+static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
+                              ^
+This static function is not used, so remove it.
 
-  $ sudo ./perf record -e cycles --filter ip==1 true
-  BPF filter is not supported        <------------------- added
-
-   Usage: perf record [<options>] [<command>]
-      or: perf record [<options>] -- <command> [<options>]
-
-          --filter <filter>
-                            event filter
-
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- tools/perf/util/parse-events.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/sii9234.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 6c5cf5244486..f1fa469712c4 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -2543,8 +2543,16 @@ static int set_filter(struct evsel *evsel, const void *arg)
- 		perf_pmu__scan_file(pmu, "nr_addr_filters",
- 				    "%d", &nr_addr_filters);
+diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
+index 099b510ff285..2d17f227867b 100644
+--- a/drivers/gpu/drm/bridge/sii9234.c
++++ b/drivers/gpu/drm/bridge/sii9234.c
+@@ -867,11 +867,6 @@ static int sii9234_init_resources(struct sii9234 *ctx,
+ 	return 0;
+ }
  
--	if (!nr_addr_filters)
--		return perf_bpf_filter__parse(&evsel->bpf_filters, str);
-+	if (!nr_addr_filters) {
-+		int ret = perf_bpf_filter__parse(&evsel->bpf_filters, str);
-+
-+		if (ret == -EOPNOTSUPP)
-+			fprintf(stderr, "BPF filter is not supported\n");
-+		else if (ret)
-+			fprintf(stderr, "failed to set the BPF filter\n");
-+
-+		return ret;
-+	}
- 
- 	if (evsel__append_addr_filter(evsel, str) < 0) {
- 		fprintf(stderr,
+-static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
+-{
+-	return container_of(bridge, struct sii9234, bridge);
+-}
+-
+ static enum drm_mode_status sii9234_mode_valid(struct drm_bridge *bridge,
+ 					 const struct drm_display_info *info,
+ 					 const struct drm_display_mode *mode)
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.27.0
 
