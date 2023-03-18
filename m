@@ -2,308 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9D46BF6E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C836BF6E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjCRAYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 20:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S229665AbjCRAYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 20:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjCRAYI (ORCPT
+        with ESMTP id S229616AbjCRAYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 20:24:08 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D760E4866;
-        Fri, 17 Mar 2023 17:23:56 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HN6ack006717;
-        Sat, 18 Mar 2023 00:23:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=YbJlbRd8JL1QZiWVWhmE/ZzDI8mZG6GyuQiWnEyG06s=;
- b=kETSDRgYjyYb7aGy0Nqd6EBy99LqQhJ6SLt5c4cTO9PO+/bJKIj9NC8DdcxW7u+gV3sh
- C7muKITMdS8aEl9BJKvjm19rea6BPqBaHsjz4S5Jrv11R1/MneYEPzo/tPibWDCrbhIf
- 8SZUykIfWPqnqHm+2IhRE+lwhDj+BXfT9nXtd6xHDOR2WMeLqau38BYdKWymm4t9jNeJ
- lleRlUCfROeIDf+Lkg59Jc4g89ghfzE0FZ4PE8GsRUdBpZASf1MMitlmpgzMrBqMxiLB
- 3sX1ld4ufVYKpmJ/a1Oc24KcLC7Mnpz6uNNSuQKDJ0dhUjHtrzJwtrIeLkAnH3tLol5v YQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pce6nkr81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Mar 2023 00:23:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32I0NeBA026158
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Mar 2023 00:23:40 GMT
-Received: from [10.110.60.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Mar
- 2023 17:23:39 -0700
-Message-ID: <2632a958-2750-c057-2606-c2541efff392@quicinc.com>
-Date:   Fri, 17 Mar 2023 17:23:28 -0700
+        Fri, 17 Mar 2023 20:24:35 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6276E7EE1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:24:16 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so10921721pjg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1679099056;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=aCIvgHkvum9lOFK8nJz2kt/7YAWyk9CjGByJA1h8nvA=;
+        b=Vw/dtAsfzHkazE4M5XxCQ22Wva9fDs5xWKdXGO3tG8rNPO9xF3Ox54WfGRDfgLwewU
+         PbB9f8cmtcUOMDEGEPyw3IkyIhWJ1he9Vbsd3Tv0nGLcBlEbgOYL4IjvZvJMTxoQUZ70
+         VZUuBXTewA8xkQlIP82VSPqT0RrUr6i4O90Uo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679099056;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aCIvgHkvum9lOFK8nJz2kt/7YAWyk9CjGByJA1h8nvA=;
+        b=m96FQ4ZxOO9OYbWl5RN6MQTj75afbpSO2aoJCaqleymImsABcb5ixi0AJeTnNuDtKP
+         gqt/2s+nt7Gjk6/uTDVXHsihOt0EGiUYI/HRvmhq4Q5zZu+Jng+QKkHqFIpHKQ23rs92
+         +mZ17yVB5s6FIN+TDrLJ/S6w3Q0TXbctrnNlKiEryK3zZgt5nauX73PuiZxwZvThGn5J
+         RiB8lXZAguZh4Z6UXyNFinR+/slAHtDOkQWBL8JJAT9B5uPnXukyfQ8hwN7N0ORTcthe
+         hig5xUoEz3Nam7aVS3ysm2MvluCCVGaK2cAWO7n5r+T+MQdv+QyNcTMwAm9I0kfwNT9R
+         CDHA==
+X-Gm-Message-State: AO0yUKULz5XiZMt8dNPUkwx+MIDOKlS9dQUj5cJUUctDpHJazWdLvdJY
+        mGFe2e8zKRHsGjD1oFrdcflDNw==
+X-Google-Smtp-Source: AK7set8dlsjaQzpr/5Hj9uU+qkR+aoGvfj9SZirH/xj53h2ft2+47WXR1i8jQNH2GwBbVy+ckyr/gA==
+X-Received: by 2002:a05:6a20:548f:b0:d5:10ca:5264 with SMTP id i15-20020a056a20548f00b000d510ca5264mr11242046pzk.59.1679099055933;
+        Fri, 17 Mar 2023 17:24:15 -0700 (PDT)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id c25-20020aa78c19000000b00623f72df4e2sm2062157pfd.203.2023.03.17.17.24.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Mar 2023 17:24:15 -0700 (PDT)
+Subject: Re: Probing devices by their less-specific "compatible" bindings
+ (here: brcmnand)
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>
+References: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
+ <0bbaa346-edbf-a1b9-3c95-5a1aacaf0c44@gmail.com>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <f9f3ab71-a3b3-2582-b841-8e8783d81817@broadcom.com>
+Date:   Fri, 17 Mar 2023 17:24:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v12 6/6] usb: gadget: f_ecm: Add suspend/resume and remote
- wakeup support
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1679009888-8239-1-git-send-email-quic_eserrao@quicinc.com>
- <1679009888-8239-7-git-send-email-quic_eserrao@quicinc.com>
- <20230317001149.nlvcj2y3fuvq32qt@synopsys.com>
- <0bf5bddd-515b-76b6-f22f-9da10a140d83@quicinc.com>
- <20230317212831.bcapq26jnuk2vkws@synopsys.com>
- <20230317231956.w3kr3zcy44odxdko@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230317231956.w3kr3zcy44odxdko@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hgVwyq6HDxT4RvMPC_OYm9ZzKv7mNncL
-X-Proofpoint-GUID: hgVwyq6HDxT4RvMPC_OYm9ZzKv7mNncL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-17_20,2023-03-16_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999 malwarescore=0
- suspectscore=0 bulkscore=0 phishscore=0 impostorscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303180001
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0bbaa346-edbf-a1b9-3c95-5a1aacaf0c44@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ce02c505f721b68a"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--000000000000ce02c505f721b68a
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 
 
-On 3/17/2023 4:20 PM, Thinh Nguyen wrote:
-> On Fri, Mar 17, 2023, Thinh Nguyen wrote:
->> On Fri, Mar 17, 2023, Elson Serrao wrote:
->>>
->>>
->>> On 3/16/2023 5:11 PM, Thinh Nguyen wrote:
->>>> On Thu, Mar 16, 2023, Elson Roy Serrao wrote:
->>>>> When host sends a suspend notification to the device, handle
->>>>> the suspend callbacks in the function driver. Enhanced super
->>>>> speed devices can support function suspend feature to put the
->>>>> function in suspend state. Handle function suspend callback.
->>>>>
->>>>> Depending on the remote wakeup capability the device can either
->>>>> trigger a remote wakeup or wait for the host initiated resume to
->>>>> start data transfer again.
->>>>>
->>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>>>> ---
->>>>>    drivers/usb/gadget/function/f_ecm.c   | 71 +++++++++++++++++++++++++++++++++++
->>>>>    drivers/usb/gadget/function/u_ether.c | 63 +++++++++++++++++++++++++++++++
->>>>>    drivers/usb/gadget/function/u_ether.h |  4 ++
->>>>>    3 files changed, 138 insertions(+)
->>>>>
->>>>> diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
->>>>> index a7ab30e..c43cd557 100644
->>>>> --- a/drivers/usb/gadget/function/f_ecm.c
->>>>> +++ b/drivers/usb/gadget/function/f_ecm.c
->>>>> @@ -633,6 +633,8 @@ static void ecm_disable(struct usb_function *f)
->>>>>    	usb_ep_disable(ecm->notify);
->>>>>    	ecm->notify->desc = NULL;
->>>>> +	f->func_suspended = false;
->>>>> +	f->func_wakeup_armed = false;
->>>>>    }
->>>>>    /*-------------------------------------------------------------------------*/
->>>>> @@ -885,6 +887,71 @@ static struct usb_function_instance *ecm_alloc_inst(void)
->>>>>    	return &opts->func_inst;
->>>>>    }
->>>>> +static void ecm_suspend(struct usb_function *f)
->>>>> +{
->>>>> +	struct f_ecm *ecm = func_to_ecm(f);
->>>>> +	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
->>>>> +
->>>>> +	if (f->func_suspended) {
->>>>> +		DBG(cdev, "Function already suspended\n");
->>>>> +		return;
->>>>> +	}
->>>>> +
->>>>> +	DBG(cdev, "ECM Suspend\n");
->>>>> +
->>>>> +	gether_suspend(&ecm->port);
->>>>> +}
->>>>> +
->>>>> +static void ecm_resume(struct usb_function *f)
->>>>> +{
->>>>> +	struct f_ecm *ecm = func_to_ecm(f);
->>>>> +	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
->>>>> +
->>>>> +	/*
->>>>> +	 * If the function is in USB3 Function Suspend state, resume is
->>>>> +	 * canceled. In this case resume is done by a Function Resume request.
->>>>> +	 */
->>>>> +	if (f->func_suspended)
->>>>> +		return;
->>>>> +
->>>>> +	DBG(cdev, "ECM Resume\n");
->>>>> +
->>>>> +	gether_resume(&ecm->port);
->>>>> +}
->>>>> +
->>>>> +static int ecm_get_status(struct usb_function *f)
->>>>> +{
->>>>> +	struct usb_configuration *c = f->config;
->>>>> +
->>>>> +	/* D0 and D1 bit set to 0 if device is not wakeup capable */
->>>>> +	if (!(USB_CONFIG_ATT_WAKEUP & c->bmAttributes))
->>>>> +		return 0;
->>>>> +
->>>>> +	return (f->func_wakeup_armed ? USB_INTRF_STAT_FUNC_RW : 0) |
->>>>> +		USB_INTRF_STAT_FUNC_RW_CAP;
->>>>> +}
->>>>
->>>> Why do we need to implement ecm_get_status if it's already handled in
->>>> composite.c now?
->>>>
->>>
->>> Yes this can be removed now. Will modify accordingly.
->>>>> +
->>>>> +static int ecm_func_suspend(struct usb_function *f, u8 options)
->>>>> +{
->>>>> +	struct usb_composite_dev *cdev = f->config->cdev;
->>>>> +
->>>>> +	DBG(cdev, "func susp %u cmd\n", options);
->>>>> +
->>>>> +	if (options & (USB_INTRF_FUNC_SUSPEND_LP >> 8)) {
->>>>
->>>> This feature selector doesn't indicate whether it's SetFeature or
->>>> ClearFeature request. ecm_func_suspend is supposed to be for
->>>> SetFeature(suspend) only. Perhaps we may have to define func_resume()
->>>> for ClearFeature(suspend)?
->>>>
->>
->>> Host uses the same feature selector FUNCTION_SUSPEND for function suspend
->>> and function resume and func_suspend() callback can be used to
->>> handle both the cases ? The distinction comes whether it is a
->>
->> How do you plan to handle that? Pass this info in some unused/reserved
->> bit of the "options" argument? Introduce a new parameter to the
->> func_suspend()?
->>
->> If that's the case, then you need to update the document on
->> func_suspend() to also support ClearFeature(suspend). Right now it's
->> documented for SetFeature only. Also, make sure that other existing
->> function drivers will not break because of the change of the
->> func_suspend behavior.
->>
->>> SetFeature(FUNCTION_SUSPEND) or ClearFeature(FUNCTION_SUSPEND) which can be
->>> easily done in the func_suspend callback itself. We can add another callback
->>> func_resume specific to ClearFeature(FUNCTION_SUSPEND) but wont that be
->>> redundant and more callback handling on function driver/composite side as
->>> well? Please let me know your opinion.
->>>
->>
->> We actually didn't properly define func_suspend and its counter part. It
->> seems cleaner to me to introduce func_resume as it seems more intuitive
->> and easier to read. Let me know how you plan to use func_suspend() for
->> both cases.
->>
+
+On 03/17/2023 02:54 PM, Florian Fainelli wrote:
+> +William,
 > 
-> How about we handle function suspend resume in composite also? I mean
-> something like this:
+> On 3/17/23 03:02, Rafał Miłecki wrote:
+>> Hi, I just spent few hours debugging hidden hw lockup and I need to
+>> consult driver core code behaviour.
+>>
+>> I have a BCM4908 SoC based board with a NAND controller on it.
+>>
+>>
+>> ### Hardware binding
+>>
+>> Hardware details:
+>> arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi
+>>
+>> Relevant part:
+>> nand-controller@1800 {
+>>      compatible = "brcm,nand-bcm63138", "brcm,brcmnand-v7.1", 
+>> "brcm,brcmnand";
+>>      reg = <0x1800 0x600>, <0x2000 0x10>;
+>>      reg-names = "nand", "nand-int-base";
+>> }:
+>>
+>> Above binding is based on the documentation:
+>> Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
+>>
+>>
+>> ### Linux drivers
+>>
+>> Linux has separated drivers for few Broadcom's NAND controller bindings:
+>>
+>> 1. drivers/mtd/nand/raw/brcmnand/bcm63138_nand.c for:
+>> brcm,nand-bcm63138
+>>
+>> 2. drivers/mtd/nand/raw/brcmnand/brcmnand.c for:
+>> brcm,brcmnand-v2.1
+>> brcm,brcmnand-v2.2
+>> brcm,brcmnand-v4.0
+>> brcm,brcmnand-v5.0
+>> brcm,brcmnand-v6.0
+>> brcm,brcmnand-v6.1
+>> brcm,brcmnand-v6.2
+>> brcm,brcmnand-v7.0
+>> brcm,brcmnand-v7.1
+>> brcm,brcmnand-v7.2
+>> brcm,brcmnand-v7.3
+>>
+>> 3. drivers/mtd/nand/raw/brcmnand/brcmstb_nand.c for:
+>> brcm,brcmnand
+>>
+>>
+>> ### Problem
+>>
+>> As first Linux probes my hardware using the "brcm,nand-bcm63138"
+>> compatibility string driver bcm63138_nand.c. That's good.
+>>
+>> It that fails however (.probe() returns an error) then Linux core starts
+>> probing using drivers for less specific bindings.
 > 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index 36add1879ed2..79dc055eb5f7 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -1948,9 +1948,18 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
->   		f = cdev->config->interface[intf];
->   		if (!f)
->   			break;
-> -		status = f->get_status ? f->get_status(f) : 0;
-> -		if (status < 0)
-> -			break;
-> +
-> +		if (f->get_status) {
-> +			status = f->get_status(f);
-> +			if (status < 0)
-> +				break;
-> +		} else {
-> +			if (f->config->bmAttributes & USB_CONFIG_ATT_WAKEUP) {
-> +				status |= USB_INTRF_STAT_FUNC_RW_CAP;
-> +				if (f->func_wakeup_armed)
-> +					status |= USB_INTRF_STAT_FUNC_RW;
-> +			}
-> +		}
->   		put_unaligned_le16(status & 0x0000ffff, req->buf);
->   		break;
->   	/*
-> @@ -1971,9 +1980,28 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
->   			f = cdev->config->interface[intf];
->   			if (!f)
->   				break;
-> +			if (w_index & USB_INTRF_FUNC_SUSPEND_RW) {
-> +				if (!(f->config->bmAttributes & USB_CONFIG_ATT_WAKEUP))
-> +					break;
-> +
-> +				f->func_wakeup_armed = (ctrl->bRequest == USB_REQ_SET_FEATURE);
-> +			}
-> +
->   			value = 0;
-> -			if (f->func_suspend)
-> +			if (f->func_suspend) {
->   				value = f->func_suspend(f, w_index >> 8);
-> +			} else if (w_index & USB_INTRF_FUNC_SUSPEND_LP) {
-> +				if (f->suspend && && !f->func_suspended &&
-> +				    ctrl->bRequest == USB_REQ_SET_FEATURE)) {
-> +					f->suspend(f);
-> +					f->func_suspended = true;
-> +				} else if (f->resume && f->func_suspended &&
-> +					   ctrl->bRequest == USB_REQ_CLEAR_FEATURE_FEATURE)) {
-> +					f->resume(f);
-> +					f->func_suspended = false;
-> +				}
-> +			}
-> +
->   			if (value < 0) {
->   				ERROR(cdev,
->   				      "func_suspend() returned error %d\n",
+> Why does it fail?
 > 
-At individual function driver level there is no need to differentiate 
-between suspend() and func_suspend() APIs, as both are intended to put 
-the function in suspend state. So your idea/implementation above makes 
-it much more clearer. Let composite also handle this and call either 
-f->suspend() or f->resume() callback based on the setup packet received. 
-Thank you for this suggestion.
+Same question here.  I just tried latest linux master code on my 4908 
+reference board and the Micron NAND on my board works fine. Can you post 
+the log from the brcmnand driver?
 
+>>
+>> In my case probing with the "brcm,brcmnand" string driver brcmstb_nand.c
+>> results in ignoring SoC specific bits and causes a hardware lockup. Hw
+>> isn't initialized properly and writel_relaxed(0x00000009, base + 0x04)
+>> just make it hang.
 > 
-> Also, do we need the f->func_suspended flag? we'd need the remote wakeup
-> flag for the status, but when do we need f->func_suspended? It seems
-> like it can be handled within the function driver's scope.
+> Well, the missing piece here is that brcmnand.c is a library driver, 
+> therefore it needs an entry point, the next one that matches is 
+> brcmstb_nand.c.
+> 
+>>
+>> That obviously isn't an acceptable behavior for me. So I'm wondering
+>> what's going on wrong here.
+>>
+>> Should Linux avoid probing with less-specific compatible strings?
+>> Or should I not claim hw to be "brcm,brcmnand" compatible if it REQUIRES
+>> SoC-specific handling?
+>>
+>> An extra note: that fallback probing happens even with .probe()
+>> returning -EPROBE_DEFER. This actually smells fishy for me on the Linux
+>> core part.
+>> I'm not an expect but I think core should wait for actual error without
+>> trying less-specific compatible strings & drivers.
+>>
+Are you saying the bcm63138_nand.c probe function return -EPROBE_DEFER 
+and late on kernel call brcmstb_nand.c probe instead of bcm63138_nand's 
+probe again?
 
-f->func_suspended flag I had added for below purposes
+>> ______________________________________________________
+>> Linux MTD discussion mailing list
+>> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+> 
 
-1.) Function drivers should know the right wakeup() op to be called.
-That is if they are in FUNC_SUSPEND then call usb_func_wakeup() and if 
-they are in device suspend then call usb_gadget_wakeup(). (we can use 
-f->func_wakeup_armed flag for this purpose as well)
+--000000000000ce02c505f721b68a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-2.) If a function is in USB3 FUNCTION_SUSPEND state then it shouldn't 
-allow f->resume() called through composite_resume() as the exit from 
-FUNCTION_SUSPEND state is via ClearFeature(FUNCTION_SUSPEND).
-
-So we need a way to tell function drivers if they are in USB3 
-FUNCTION_SUSPEND state OR device suspend.
-
-Please let me know if you see any alternative or better approach here.
-
-Thanks
-Elson
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICZQnE7WsWkosKCoNpZ86hEYk9rc
+SRDo75/9138OblfYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDMxODAwMjQxNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQB/mVBQHDcmynUhvUPoy8jTUwI7uWAr7ZXwBF38ePKOc9Cb
+kW5WnAE/5o/lbdTCcywSOL6WX/nukP1I7ZrluLwzqBfhT4y4OjbfzdfBlDYY5ynUYxSnM4EJ2lG5
+aCgk6pBdqu0atd6C4vNHC0mhEuome+nDVknjkZ48eUHYh69My00LKIFYekerODDUAzMUHnUf1kAR
+1wVw37uiO2fZjORDJ39oouauXChd4yQ0yWG/L3j/FlO17uLrJ/Iq4RvPjm3/bjCWGIN56tLsNQpK
+V2oEPDBleboe6hHP2HtefIChKiq/Ae5nH4W33W5j55m6HtHdFdhfPkhZM9f+nukiWJ3J
+--000000000000ce02c505f721b68a--
