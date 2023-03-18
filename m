@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC826BFBFE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26636BFC07
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjCRRlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 13:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S229731AbjCRRxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 13:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjCRRkv (ORCPT
+        with ESMTP id S229648AbjCRRw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 13:40:51 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4314F2213F;
-        Sat, 18 Mar 2023 10:40:50 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id p34so41759wms.3;
-        Sat, 18 Mar 2023 10:40:50 -0700 (PDT)
+        Sat, 18 Mar 2023 13:52:59 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBB9158A9;
+        Sat, 18 Mar 2023 10:52:58 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so12321502pjv.5;
+        Sat, 18 Mar 2023 10:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679161249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ev2W7AwgvE+3tr7BAXXjW37/uLiVAl5wqa5Vqup/X18=;
-        b=Yl7l77+G+vWuZBrzmXQxIW4PhdcbuiWftbjibBta14w9f+IW+cP4rAqaUOEf54VsBP
-         XXcfsI0nfYwJA26CqS7T9F2Or0MsGLRdgDyme5Bhatkxfkcj3tht1cJWu9TO+QDzTDNj
-         /+QwOVyIXX+kAOQ60wi/wjA2WoOlZiSPw/7SrmfgWl4W1SF52ThmMuN26J9efm9dsWZT
-         wsgOC23KF0f0mJ0gi83B9lDDLlXm8j+xgWzfOmoVixSjCIi/R2VS0ynCo0MaWodEYm7Y
-         HFFiy/qM9A7HDTs3Iizi2lRpDpkyc5F5Qu0y6qpkXshh+P2hNhr3cHN9B8b7g4ihnEOF
-         8tew==
+        d=gmail.com; s=20210112; t=1679161978;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5I26wPYmJo/oU92vbPVh5xMmJlwNRBuQUe5Qw0zvmBk=;
+        b=jSG57T5YZEWuLlDcSl/mqLJXWjPe/Rzdw5X+opAZMRPBpD68dP9BjfPNd1ezQNrcd0
+         nRRBUMFk7/4jIADtIgkVRsPJoTqEwEMzF2Jv7t6AmzsNiCozY91V2Fr4j+UFK6HCseAA
+         dcqFPxOUwM3foq3dsHdeTzDCBZLTt7f7Md+B9yXpqY6VdYikgkzwk1ATq81k+fWMuphA
+         lb+hPfakXqHLnMw1C7jsl/BIP6jjezlzuTK2AWKtckqvfi4m8x1JGpKed7t17a1TFuN5
+         ZImcKv0m+a6hF0FdLNBp2mBenBLhfgYeP5iQ9xas/apsW8fw7d0U/NvtOky7nQ2S7DJw
+         U7HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679161249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ev2W7AwgvE+3tr7BAXXjW37/uLiVAl5wqa5Vqup/X18=;
-        b=3LUngfb4BiFGfMgzvRGhmvVuBDqiroFnNS7Aom49uUkt3qR4x1QhoJCTZnbE5YwIda
-         Dh03Ar/PI3CrXIelvgTx+fL0yYdCUlxeByWrlrpzi/C2tGosU+VgeQ/b2WTi2JrCAVZW
-         jK4RKV2vNSJCawy88owdQ0/eTOLcTpwQzyLBKEFIFsaFDYsfZ3lab46HpyzkcEB/aQt8
-         BQ/oVPJh4DEc8gyJHM/F8U7fk0Ztq+9bhzuPNkZQcNrnkNibarVlQbUd5ljJcHC2gjG6
-         jLkdA73q6pWf0fG92Yo8LgLMfmXaVfu1BZY24v+8KGcE2gK3MVBGl2z81vCN22dDdfdU
-         BI/w==
-X-Gm-Message-State: AO0yUKXitvYhzq6k1ewfdbahaGHRwtkyLHr0ZwNajaXpRDLTuD+QiiiF
-        HMVmjyRmM31UcIX4jFXZ7/s=
-X-Google-Smtp-Source: AK7set9zXPa/ih+Bbwm7sQZOKAnG69++6aoehqPt/kHsTPtM2UGAPjvGCSsnG1ECr9Gokzh9oSseng==
-X-Received: by 2002:a05:600c:358e:b0:3ed:2a41:8525 with SMTP id p14-20020a05600c358e00b003ed2a418525mr17932303wmq.22.1679161249516;
-        Sat, 18 Mar 2023 10:40:49 -0700 (PDT)
-Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfe30f000000b002c706c754fesm4797373wrj.32.2023.03.18.10.40.47
+        d=1e100.net; s=20210112; t=1679161978;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5I26wPYmJo/oU92vbPVh5xMmJlwNRBuQUe5Qw0zvmBk=;
+        b=yPTKXtLTmIcHsqMAzAzCTZGpBVAKrlVvj303kdvUmKW/RVDGTM8819NWHbKg80LwEs
+         G0FzYE8mpS+54xU2MUY/uqcztAgAPCVFEEMNLOjlf9qdByAyyFd5WYQqWc7LtV3WYlzu
+         2BGXVk8hqQjhQRxmvLjRNCTEDzh9A3wzt+Pvmmtyfw5J39kPD3vpLB3BNitAj8/n0RHa
+         TKIPZHOhndRFSeCxTlFaYEMyJ3lUnAHQFCQHMpsrpIDHYx3Jzz01Gn/s82fVjJojtb0l
+         bijHdm5r3sPgtMmSomn5bLBxHC2zbFsTZ2w++ocixdyg4Dy+AWFv40QSvIjUfZr6V/cj
+         ZLjA==
+X-Gm-Message-State: AO0yUKVOgVy43NZGGbVKtD7AiT41BO4Y4Zwu6B91MA7UPz2B/RqNXNyT
+        PrO0JyQvD5PmIkSdvYqTmk0=
+X-Google-Smtp-Source: AK7set8jdYiLH1aQ2/GgeOAEtwd9CA0dkiVwaqW09Fb0RZwzNwSJWmFzwcPydo0UOuzKQ1WzAQQ/XA==
+X-Received: by 2002:a05:6a20:394e:b0:cb:9fcc:3f37 with SMTP id r14-20020a056a20394e00b000cb9fcc3f37mr15180975pzg.35.1679161978050;
+        Sat, 18 Mar 2023 10:52:58 -0700 (PDT)
+Received: from sumitra.com ([117.199.163.158])
+        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm3608549pfm.171.2023.03.18.10.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 10:40:49 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sat, 18 Mar 2023 18:40:45 +0100
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-Message-ID: <ZBX3nRWtc6+EI13W@krava>
-References: <20230316170149.4106586-1-jolsa@kernel.org>
- <ZBNTMZjEoETU9d8N@casper.infradead.org>
- <ZBV3beyxYhKv/kMp@krava>
- <ZBXV3crf/wX5D9lo@casper.infradead.org>
+        Sat, 18 Mar 2023 10:52:57 -0700 (PDT)
+Date:   Sat, 18 Mar 2023 10:52:50 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     Marc Dietrich <marvin24@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: [PATCH v2] Staging: nvec: Convert to_nvec_led from a macro to an
+ inline function
+Message-ID: <20230318175250.GA49618@sumitra.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBXV3crf/wX5D9lo@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 03:16:45PM +0000, Matthew Wilcox wrote:
-> On Sat, Mar 18, 2023 at 09:33:49AM +0100, Jiri Olsa wrote:
-> > On Thu, Mar 16, 2023 at 05:34:41PM +0000, Matthew Wilcox wrote:
-> > > On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
-> > > > hi,
-> > > > this patchset adds build id object pointer to struct file object.
-> > > > 
-> > > > We have several use cases for build id to be used in BPF programs
-> > > > [2][3].
-> > > 
-> > > Yes, you have use cases, but you never answered the question I asked:
-> > > 
-> > > Is this going to be enabled by every distro kernel, or is it for special
-> > > use-cases where only people doing a very specialised thing who are
-> > > willing to build their own kernels will use it?
-> > 
-> > I hope so, but I guess only time tell.. given the response by Ian and Andrii
-> > there are 3 big users already
-> 
-> So the whole "There's a config option to turn it off" shtick is just a
-> fig-leaf.  I won't ever see it turned off.  You're imposing the cost of
-> this on EVERYONE who runs a distro kernel.  And almost nobody will see
-> any benefits from it.  Thanks for admitting that.
-> 
+Convert to_nvec_led from a macro to a static inline function, to make the
+relevant types apparent in the definition and to benefit from the type
+checking performed by the compiler at call sites.
 
-sure, I understand that's legit way of looking at this
+Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+---
 
-I can imagine distros would have that enabled for debugging version of
-the kernel (like in fedora), and if that proves to be useful the standard
-kernel might take it, but yes, there's price (for discussion as pointed
-by Andrii) and it'd be for the distro maintainers to decide
+v2: Change patch subject and description, noted by 
+Julia Lawall <julia.lawall@inria.fr> 
 
-jirka
+ drivers/staging/nvec/nvec_paz00.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/nvec/nvec_paz00.c b/drivers/staging/nvec/nvec_paz00.c
+index 8b4da95081c8..9573ba762cdd 100644
+--- a/drivers/staging/nvec/nvec_paz00.c
++++ b/drivers/staging/nvec/nvec_paz00.c
+@@ -14,8 +14,10 @@
+ #include <linux/platform_device.h>
+ #include "nvec.h"
+ 
+-#define to_nvec_led(led_cdev) \
+-	container_of(led_cdev, struct nvec_led, cdev)
++static inline struct nvec_led *to_nvec_led(struct led_classdev *led_cdev)
++{
++	return container_of(led_cdev, struct nvec_led, cdev);
++}
+ 
+ #define NVEC_LED_REQ {'\x0d', '\x10', '\x45', '\x10', '\x00'}
+ 
+-- 
+2.25.1
+
