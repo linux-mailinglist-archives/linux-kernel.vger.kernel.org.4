@@ -2,507 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C099C6BF8F9
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58C06BF8FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjCRI3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 04:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S229913AbjCRId7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 04:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRI32 (ORCPT
+        with ESMTP id S229502AbjCRId5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:29:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A68CDF7;
-        Sat, 18 Mar 2023 01:29:24 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (i6DFAE836.versanet.de [109.250.232.54])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1FE2DB6C;
-        Sat, 18 Mar 2023 09:29:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679128161;
-        bh=zvyk1O+k/MiKnGzSSMhQAc136ianMKlRnS+QvoVDz8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uh9CVtc0etzdTZAnPqFl4dcKzRQNP1GaQqRk4jwek5vqSIEepTaK01pwt4V1sVQ86
-         g8IlZlPenF7152NjH5cJfK7tkFDOTnVSnDGWMoTopFF1zU15T+sVrHGFwF23dsIqd+
-         +FDtAq8OrCqTXYozLBriyzKFsNODXxCCfqckYqF4=
-Date:   Sat, 18 Mar 2023 10:29:26 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: display: Drop unneeded quotes
-Message-ID: <20230318082926.GA10144@pendragon.ideasonboard.com>
-References: <20230317233626.3968358-1-robh@kernel.org>
+        Sat, 18 Mar 2023 04:33:57 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6505A7B3BD;
+        Sat, 18 Mar 2023 01:33:55 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id k25-20020a7bc419000000b003ed23114fa7so6330204wmi.4;
+        Sat, 18 Mar 2023 01:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679128434;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x9sHt3Rf2cL+jGqcxr1xZgHTjHxy/0axlw587VfFCGU=;
+        b=Oxbk+qbijSRgbsf4+g1B7UlphopCGL9JBY9sDifpEa/AujSjF9Jym8YSdzErz4V7f1
+         gjo7qtaWoHqCu3fZVUWgLzP3aiXdXIHFJQoTru0PJj2njzYF6obI24Vnb3LX8qh32ngN
+         eMnTa9ScUv9Zy0lBcfUBMdonW43muUBCSX8Ih4k8A9Hor+TyxPeXiyWZJTA2fAjTtfu7
+         RNkPQKZrKDn35Cl1DktSmkM0CU4sIeRVXmovJrQxGYY7xHroqyG8WCa+TmskjOoTA/Dw
+         zhp2u2WkV8KusoLKpCzqczbsQwB67CgmTE5Dwde916xxMh8V6uvbTV2ZpK5pBPg77UXa
+         uy4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679128434;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x9sHt3Rf2cL+jGqcxr1xZgHTjHxy/0axlw587VfFCGU=;
+        b=GXYILhvJmLzHnsMX4Vpa53w5m4gw7f3t8qJH0AnzuMaRljL1D2Ld3hfDrjsCdWIw47
+         FDN2LLhYYyVW59aq2+8YgofOg7XLyV0jLMK+LBW0qYDc5JZ3UEJaxDm5ORxZSTEIZ/Id
+         K9aShhEmxCJr1vu0SU7GsiiU55lp0ocZnuWpGhn6MR8q5iVzja1okfQQBbWgDaHPwJF7
+         cwXIhhLideA5sM5ormFqBtNvgY7HqXlE0OjSugcfCD5EG6jvx13CxapvaCeNxRqs/Z4q
+         jEM5YwyEcw2qUrDSqcUP2mP+1oBfpjVk1+Gc6LtXEzUC8E8Rd30hA5APBZmJ54QzAKYA
+         n+Ew==
+X-Gm-Message-State: AO0yUKWnnFQNhcq37XhYKAVJ0fkcXMt/VIgvlQdRd7idaHpIRCXif4bD
+        0UkOWIDTxqAChQe55O7y0qs=
+X-Google-Smtp-Source: AK7set/XyqdLG67/Zy5aKz1TmxyiEeJC+xjLisH5ijGHWHZ2jctx9KBNchNoBHUBN5lkHY3q6/jNBg==
+X-Received: by 2002:a05:600c:3846:b0:3ea:f883:4ce with SMTP id s6-20020a05600c384600b003eaf88304cemr25803660wmr.20.1679128433612;
+        Sat, 18 Mar 2023 01:33:53 -0700 (PDT)
+Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
+        by smtp.gmail.com with ESMTPSA id z24-20020a7bc7d8000000b003dec22de1b1sm4463821wmk.10.2023.03.18.01.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 01:33:53 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sat, 18 Mar 2023 09:33:49 +0100
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
+Message-ID: <ZBV3beyxYhKv/kMp@krava>
+References: <20230316170149.4106586-1-jolsa@kernel.org>
+ <ZBNTMZjEoETU9d8N@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317233626.3968358-1-robh@kernel.org>
+In-Reply-To: <ZBNTMZjEoETU9d8N@casper.infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-Thank you for the patch.
-
-On Fri, Mar 17, 2023 at 06:36:24PM -0500, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
+On Thu, Mar 16, 2023 at 05:34:41PM +0000, Matthew Wilcox wrote:
+> On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
+> > hi,
+> > this patchset adds build id object pointer to struct file object.
+> > 
+> > We have several use cases for build id to be used in BPF programs
+> > [2][3].
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
-> ---
->  .../bindings/auxdisplay/holtek,ht16k33.yaml    |  2 +-
->  .../bindings/display/bridge/nxp,ptn3460.yaml   |  2 +-
->  .../display/bridge/toshiba,tc358767.yaml       |  2 +-
->  .../bindings/display/dp-aux-bus.yaml           |  2 +-
->  .../display/mediatek/mediatek,hdmi.yaml        |  2 +-
->  .../display/msm/dsi-controller-main.yaml       |  8 ++++----
->  .../bindings/display/msm/dsi-phy-10nm.yaml     |  2 +-
->  .../bindings/display/panel/ronbo,rb070d30.yaml |  2 +-
->  .../bindings/display/renesas,du.yaml           |  4 ++--
->  .../display/tegra/nvidia,tegra114-mipi.yaml    |  2 +-
->  .../display/tegra/nvidia,tegra124-sor.yaml     | 12 ++++++------
->  .../display/tegra/nvidia,tegra186-dc.yaml      |  4 ++--
->  .../tegra/nvidia,tegra186-dsi-padctl.yaml      |  2 +-
->  .../display/tegra/nvidia,tegra20-dsi.yaml      | 12 ++++++------
->  .../display/tegra/nvidia,tegra20-hdmi.yaml     |  6 +++---
->  .../bindings/display/ti/ti,am65x-dss.yaml      |  2 +-
->  .../display/xylon,logicvc-display.yaml         | 18 +++++++++---------
->  17 files changed, 42 insertions(+), 42 deletions(-)
+> Yes, you have use cases, but you never answered the question I asked:
 > 
-> diff --git a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> index fc4873deb76f..4f6ffb8182a9 100644
-> --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> @@ -10,7 +10,7 @@ maintainers:
->    - Robin van der Gracht <robin@protonic.nl>
->  
->  allOf:
-> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
-> +  - $ref: /schemas/input/matrix-keymap.yaml#
->  
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml b/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml
-> index 107dd138e6c6..cdeb67bc05f0 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/nxp,ptn3460.yaml
-> @@ -18,7 +18,7 @@ properties:
->      maxItems: 1
->  
->    edid-emulation:
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->      description:
->        The EDID emulation entry to use
->        Value  Resolution  Description
-> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml
-> index 140927884418..e1494b5007cb 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358767.yaml
-> @@ -23,7 +23,7 @@ properties:
->          i2c address of the bridge, 0x68 or 0x0f, depending on bootstrap pins
->  
->    clock-names:
-> -    const: "ref"
-> +    const: ref
->  
->    clocks:
->      maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/display/dp-aux-bus.yaml b/Documentation/devicetree/bindings/display/dp-aux-bus.yaml
-> index 5e4afe9f98fb..0ece7b01790b 100644
-> --- a/Documentation/devicetree/bindings/display/dp-aux-bus.yaml
-> +++ b/Documentation/devicetree/bindings/display/dp-aux-bus.yaml
-> @@ -26,7 +26,7 @@ description:
->  
->  properties:
->    $nodename:
-> -    const: "aux-bus"
-> +    const: aux-bus
->  
->    panel:
->      $ref: panel/panel-common.yaml#
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> index 8afdd67d6780..b90b6d18a828 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> @@ -50,7 +50,7 @@ properties:
->        - const: hdmi
->  
->    mediatek,syscon-hdmi:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->      items:
->        - items:
->            - description: phandle to system configuration registers
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> index e75a3efe4dac..2188d7c9b0bb 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> @@ -74,7 +74,7 @@ properties:
->  
->    syscon-sfpb:
->      description: A phandle to mmss_sfpb syscon node (only for DSIv2).
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    qcom,dual-dsi-mode:
->      type: boolean
-> @@ -105,14 +105,14 @@ properties:
->      type: object
->  
->    ports:
-> -    $ref: "/schemas/graph.yaml#/properties/ports"
-> +    $ref: /schemas/graph.yaml#/properties/ports
->      description: |
->        Contains DSI controller input and output ports as children, each
->        containing one endpoint subnode.
->  
->      properties:
->        port@0:
-> -        $ref: "/schemas/graph.yaml#/$defs/port-base"
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
->          unevaluatedProperties: false
->          description: |
->            Input endpoints of the controller.
-> @@ -128,7 +128,7 @@ properties:
->                    enum: [ 0, 1, 2, 3 ]
->  
->        port@1:
-> -        $ref: "/schemas/graph.yaml#/$defs/port-base"
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
->          unevaluatedProperties: false
->          description: |
->            Output endpoints of the controller.
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
-> index 3ec466c3ab38..e6b00d7387ce 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
-> @@ -58,7 +58,7 @@ properties:
->        maximum: 31
->  
->    qcom,phy-drive-ldo-level:
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->      description:
->        The PHY LDO has an amplitude tuning feature to adjust the LDO output
->        for the HSTX drive. Use supported levels (mV) to offset the drive level
-> diff --git a/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml b/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml
-> index d67617f6f74a..95ce22c6787a 100644
-> --- a/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml
-> +++ b/Documentation/devicetree/bindings/display/panel/ronbo,rb070d30.yaml
-> @@ -37,7 +37,7 @@ properties:
->  
->    backlight:
->      description: Backlight used by the panel
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/display/renesas,du.yaml b/Documentation/devicetree/bindings/display/renesas,du.yaml
-> index d4830f52c512..c5b9e6812bce 100644
-> --- a/Documentation/devicetree/bindings/display/renesas,du.yaml
-> +++ b/Documentation/devicetree/bindings/display/renesas,du.yaml
-> @@ -76,7 +76,7 @@ properties:
->      unevaluatedProperties: false
->  
->    renesas,cmms:
-> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->      items:
->        maxItems: 1
->      description:
-> @@ -84,7 +84,7 @@ properties:
->        available DU channel.
->  
->    renesas,vsps:
-> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->      items:
->        items:
->          - description: phandle to VSP instance that serves the DU channel
-> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
-> index d5ca8cf86e8e..f448624dd779 100644
-> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
-> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
-> @@ -38,7 +38,7 @@ properties:
->      description: The number of cells in a MIPI calibration specifier.
->        Should be 1. The single cell specifies a bitmask of the pads that
->        need to be calibrated for a given device.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->      const: 1
->  
->  additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
-> index 907fb0baccae..70f0e45c71d6 100644
-> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
-> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
-> @@ -69,12 +69,12 @@ properties:
->    # Tegra186 and later
->    nvidia,interface:
->      description: index of the SOR interface
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->  
->    nvidia,ddc-i2c-bus:
->      description: phandle of an I2C controller used for DDC EDID
->        probing
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    nvidia,hpd-gpio:
->      description: specifies a GPIO used for hotplug detection
-> @@ -82,23 +82,23 @@ properties:
->  
->    nvidia,edid:
->      description: supplies a binary EDID blob
-> -    $ref: "/schemas/types.yaml#/definitions/uint8-array"
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->  
->    nvidia,panel:
->      description: phandle of a display panel, required for eDP
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    nvidia,xbar-cfg:
->      description: 5 cells containing the crossbar configuration.
->        Each lane of the SOR, identified by the cell's index, is
->        mapped via the crossbar to the pad specified by the cell's
->        value.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->  
->    # optional when driving an eDP output
->    nvidia,dpaux:
->      description: phandle to a DispayPort AUX interface
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->  allOf:
->    - if:
-> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
-> index 265a60d79d89..ce4589466a18 100644
-> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
-> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
-> @@ -60,13 +60,13 @@ properties:
->    nvidia,outputs:
->      description: A list of phandles of outputs that this display
->        controller can drive.
-> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->  
->    nvidia,head:
->      description: The number of the display controller head. This
->        is used to setup the various types of output to receive
->        video data from the given head.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->  
->  additionalProperties: false
->  
-> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
-> index e5a6145c8c53..da75b71e8ece 100644
-> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
-> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
-> @@ -29,7 +29,7 @@ properties:
->        - const: dsi
->  
->  allOf:
-> -  - $ref: "/schemas/reset/reset.yaml"
-> +  - $ref: /schemas/reset/reset.yaml
->  
->  additionalProperties: false
->  
-> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-> index 511cbe74e729..59e1dc0813e7 100644
-> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-> @@ -59,12 +59,12 @@ properties:
->      description: Should contain a phandle and a specifier specifying
->        which pads are used by this DSI output and need to be
->        calibrated. See nvidia,tegra114-mipi.yaml for details.
-> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->  
->    nvidia,ddc-i2c-bus:
->      description: phandle of an I2C controller used for DDC EDID
->        probing
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    nvidia,hpd-gpio:
->      description: specifies a GPIO used for hotplug detection
-> @@ -72,19 +72,19 @@ properties:
->  
->    nvidia,edid:
->      description: supplies a binary EDID blob
-> -    $ref: "/schemas/types.yaml#/definitions/uint8-array"
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->  
->    nvidia,panel:
->      description: phandle of a display panel
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    nvidia,ganged-mode:
->      description: contains a phandle to a second DSI controller to
->        gang up with in order to support up to 8 data lanes
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->  allOf:
-> -  - $ref: "../dsi-controller.yaml#"
-> +  - $ref: ../dsi-controller.yaml#
->    - if:
->        properties:
->          compatible:
-> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-> index f65e59cfffa7..f77197e4869f 100644
-> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-> @@ -68,7 +68,7 @@ properties:
->    nvidia,ddc-i2c-bus:
->      description: phandle of an I2C controller used for DDC EDID
->        probing
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    nvidia,hpd-gpio:
->      description: specifies a GPIO used for hotplug detection
-> @@ -76,11 +76,11 @@ properties:
->  
->    nvidia,edid:
->      description: supplies a binary EDID blob
-> -    $ref: "/schemas/types.yaml#/definitions/uint8-array"
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->  
->    nvidia,panel:
->      description: phandle of a display panel
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->  
->    "#sound-dai-cells":
->      const: 0
-> diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> index 5c7d2cbc4aac..4247280d6c3c 100644
-> --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> @@ -88,7 +88,7 @@ properties:
->            The DSS DPI output port node from video port 2
->  
->    ti,am65x-oldi-io-ctrl:
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->      description:
->        phandle to syscon device node mapping OLDI IO_CTRL registers.
->        The mapped range should point to OLDI_DAT0_IO_CTRL, map it and
-> diff --git a/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml b/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
-> index fc02c5d50ce4..87404d72ea37 100644
-> --- a/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
-> +++ b/Documentation/devicetree/bindings/display/xylon,logicvc-display.yaml
-> @@ -89,25 +89,25 @@ properties:
->      description: Display output colorspace (C_DISPLAY_COLOR_SPACE).
->  
->    xylon,display-depth:
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->      description: Display output depth (C_PIXEL_DATA_WIDTH).
->  
->    xylon,row-stride:
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->      description: Fixed number of pixels in a framebuffer row (C_ROW_STRIDE).
->  
->    xylon,dithering:
-> -    $ref: "/schemas/types.yaml#/definitions/flag"
-> +    $ref: /schemas/types.yaml#/definitions/flag
->      description: Dithering module is enabled (C_XCOLOR)
->  
->    xylon,background-layer:
-> -    $ref: "/schemas/types.yaml#/definitions/flag"
-> +    $ref: /schemas/types.yaml#/definitions/flag
->      description: |
->        The last layer is used to display a black background (C_USE_BACKGROUND).
->        The layer must still be registered.
->  
->    xylon,layers-configurable:
-> -    $ref: "/schemas/types.yaml#/definitions/flag"
-> +    $ref: /schemas/types.yaml#/definitions/flag
->      description: |
->        Configuration of layers' size, position and offset is enabled
->        (C_USE_SIZE_POSITION).
-> @@ -131,7 +131,7 @@ properties:
->              maxItems: 1
->  
->            xylon,layer-depth:
-> -            $ref: "/schemas/types.yaml#/definitions/uint32"
-> +            $ref: /schemas/types.yaml#/definitions/uint32
->              description: Layer depth (C_LAYER_X_DATA_WIDTH).
->  
->            xylon,layer-colorspace:
-> @@ -151,19 +151,19 @@ properties:
->              description: Alpha mode for the layer (C_LAYER_X_ALPHA_MODE).
->  
->            xylon,layer-base-offset:
-> -            $ref: "/schemas/types.yaml#/definitions/uint32"
-> +            $ref: /schemas/types.yaml#/definitions/uint32
->              description: |
->                Offset in number of lines (C_LAYER_X_OFFSET) starting from the
->                video RAM base (C_VMEM_BASEADDR), only for version 3.
->  
->            xylon,layer-buffer-offset:
-> -            $ref: "/schemas/types.yaml#/definitions/uint32"
-> +            $ref: /schemas/types.yaml#/definitions/uint32
->              description: |
->                Offset in number of lines (C_BUFFER_*_OFFSET) starting from the
->                layer base offset for the second buffer used in double-buffering.
->  
->            xylon,layer-primary:
-> -            $ref: "/schemas/types.yaml#/definitions/flag"
-> +            $ref: /schemas/types.yaml#/definitions/flag
->              description: |
->                Layer should be registered as a primary plane (exactly one is
->                required).
+> Is this going to be enabled by every distro kernel, or is it for special
+> use-cases where only people doing a very specialised thing who are
+> willing to build their own kernels will use it?
 
--- 
-Regards,
+I hope so, but I guess only time tell.. given the response by Ian and Andrii
+there are 3 big users already
 
-Laurent Pinchart
+> 
+> Saying "hubble/tetragon" doesn't answer that question.  Maybe it does
+> to you, but I have no idea what that software is.
+> 
+> Put it another way: how does this make *MY* life better?  Literally me.
+> How will it affect my life?
+
+sorry, I'm  not sure how to answer this.. there're possible users of the
+feature and the price seems to be reasonable to me, but of course I understand
+file/inode objects are tricky to mess with
+
+jirka
