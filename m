@@ -2,244 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE9A6BFCC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 21:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A566BFCD1
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 21:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCRUfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 16:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S229878AbjCRUrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 16:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCRUfB (ORCPT
+        with ESMTP id S229738AbjCRUrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 16:35:01 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597452DE7C
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 13:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679171700; x=1710707700;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6y8LFFRF3tMIFwo9AMznWXbdSQtpcBHpc7OlfhPf4qE=;
-  b=kqvSJVX1TcakFFG6NCAQhvodsmCAuVMj6Zimh67CZU8NuTSpTR2vr6XD
-   HZdHC/NBg8stmTi7hb0Z6Pirqh1Spbz+FD3oagHFfkv7p0PeEN2/Ykx44
-   Ymvafkk5EnvUp49rTRA/fQQOWCRrGXZAJ05HytZrLc/y7Cwui7vM5EHsH
-   bG6k7nb5bDm6Oxlxfdx8ye+l7K361B2sPIhYALS7aIi3I8ElmAohYn9sy
-   C1kV8NjymJlkcgpMB7hvGNbecvCAOqb/0NCHnuGturOyHRknhgzBdt4Lm
-   JEUWl7BG5cpo+mCWB90JDy5TCkNLgUw2blempZTlXlSU0SYB0aFzAs+um
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="401036619"
-X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="401036619"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 13:34:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="854828093"
-X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="854828093"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.197.194])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 13:34:59 -0700
-Date:   Sat, 18 Mar 2023 13:34:57 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Kloudifold <cloudifold.3125@gmail.com>
-Cc:     outreachy@lists.linux.dev, teddy.wang@siliconmotion.com,
-        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: sm750: Rename sm750_hw_cursor_* functions to
- snake_case
-Message-ID: <ZBYgccw+QH+5UKgW@aschofie-mobl2>
-References: <ZBW+NX4SLaCyEnJd@CloudiRingWorld>
+        Sat, 18 Mar 2023 16:47:15 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F9426590;
+        Sat, 18 Mar 2023 13:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1679172428; i=deller@gmx.de;
+        bh=1HjTuRzgTKsrnPjhjt8XeV4HoazsL1+nGL/2BdFTIiI=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=qpnANUjcMG4IgqtLuIZoi7vvsF6a379OnN3Ntx2X+AKhSYCGOsrJBSOsxvtmHlNYl
+         Z71RFOajcPNNYfhEy69heUQ2BAIfHlhU7hGdaGnW9jYFFkbzgOuWM3Xkz5lOLDNuAJ
+         ixqmqQ6CBMe+zUeq9PNUpCAJTBOO+4dEAzRV9y+nonHEeGr+DR5LLtfVw9oLV9s36e
+         lnxKWuonTHpgwOMleG+3tyKKn8XxWrX8CXEjRjeJ580ooo6QaEWZCwgN7BBbmrzOLw
+         yv6GeAo0CnufkSlkEZrAo173G/M1AwMffkxfcmqzYvfDb1bX4i1Uy7uYBDK+5CC6fx
+         SsMA8BtrkS9Sg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([94.134.158.13]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M9Wuk-1pY9oO1KeS-005VZt; Sat, 18
+ Mar 2023 21:47:08 +0100
+Date:   Sat, 18 Mar 2023 21:47:06 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev fixes for v6.3-rc3
+Message-ID: <ZBYjSkFz/FEobQmk@ls3530>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBW+NX4SLaCyEnJd@CloudiRingWorld>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:q2HkSi1s9T/tlurqxCWfKZ6lutmsY9NP7W8sUGrLYFF3WFOWwCz
+ +3QFXNnjKyukEb47ovofqeCZ3xaCETmAYKvTiMahaY2FkUPvNvy3u+7qLyxET4v4ivi5Rje
+ mgGf1MF/NkePAazmBsZAyzkBoiBanDGUJYP4Eh2tgfo2loXH0R7k+WNhcyM6HRDvjAGocRH
+ ba5f9DFbZrytiwVFwuEXA==
+UI-OutboundReport: notjunk:1;M01:P0:w4ebJttOrcU=;K2/CDTqavHztEie+3DfTskx3p6Q
+ 1SGAfmg7/v4VvUCb1y4BChTV07xAk+QgGyA/tcnMK0I7MzIRzDqzYYKPUvz9bPRifs2qUtG6Q
+ GDrdoInv2YtxZfBiZK3olyBB/K/wFszfccocR3+h0rdUsEeFZjRfXpw1uey3jE1fYou1pzAL9
+ 8Y+xI8t6+OE1aQ+8OUR5OBYQWgVPhYGsPYB8SkRoV9gZqTigGciQ073il20HoX2feYoJik591
+ rkZT/U7ZjCjfvystPFliQfYrV6E7p1ld6Q+5jcC5CMPvAwcx31PXN773Ub73HyzyI+lwfPlA7
+ Sk1oXnDW0DeEh5i9qgRmQP323NbmiwlULyDsXKv4f4rCf2z8GT8SMP5E5LfxZRdJ4h56gEF5M
+ TDZgsNroDRsSiC1P1yBDvGe9jc8xKIbqWDZORWOG/INEmLd55mwgsg/Nb0okCBIM1Y2hYGFdB
+ cG4LFT3VzKaWF73HtphgSOkxw0vSpIz6srUIl/iBxZpk8wn/F3iRkBsIi93DxygAknMF0oYtI
+ cYcYGdImi6x7VrLqz74B1CD5uwHxjfOJzrcgZA73KEHjkfBDjdGGqyroeH576VRM+MIcNaeJ0
+ iCqRhbDu3HMNSwIvNl1gHJzDlC6cyLVwUQWzK50ZgayN15zY5y9NomlphsOBtB3ldF9kRm5aJ
+ /8qzydrjbhug5V1uB0zTnBgX17lm8m8NoM1YSzCL1J1RbTzT7/VUepEnTZBb2xj9wIpQ9f4HS
+ CRadtpOSmG3lVZDizlROYNDlbZ+cegL5nMc2R/MoZFNJTwnecCPBMRavPoiHm3QbubNBO5ANw
+ crnuKDKnQr8ndh4YgVoGdNAfBtsAu5kP1sx8qnNklxKGNfszFGAQZbTCBKTqp9u7Jv+FpSAFg
+ oZ75+rJI5tlZhxACnE5S/alXzKDktikEslSnqX4mgI+wPKM3qHttZOOvCgZLq03xv+p7Kvl1J
+ aVZRBASaf86rL/9N0LytCui8j3g=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 09:35:49PM +0800, Kloudifold wrote:
-> sm750 driver has sm750_hw_cursor_* functions, which are named in
-> camelcase. Rename them to snake case to follow the function naming
-> convention.
-> 
-> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
-> 
-> ---
-> Changes in v3:
-> - Add this changelog (Philipp)
-> - Move lkp tags and link to the correct location in commit log (Alison)
+Hi Linus,
 
-Hi Kloudifold,
+please pull the latest fbdev updates and fixes.
 
-Good to include tags, but let's get them to the 'TAG' location.
+The majority of lines changed is due to a code style cleanup in the
+pnmtologo helper program.
 
-The message you received from lkp is:
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303171454.sScrVVOh-lkp@intel.com/
+Arnd removed the omap1 osk driver and the SIS fb driver is now orphaned.
 
-So, you take those 2 lines, and put them above your Signed-off-by:
+Other than that it's the usual bunch of small fixes and cleanups, e.g.
+prevent possible divide-by-zero in various fb drivers if the pixclock is
+zero and various conversions to devm_platform*() and of_property*()
+functions.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303171454.sScrVVOh-lkp@intel.com/
-Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+Thanks!
+Helge
 
-This is documented, but it's also a pattern that you can search for in
-the lore archives to see how folks before you did it.
+--------------
 
 
-> - Update the commit msg (Philip)
-> - Update the commit log (Bagas, Julia)
-> 
-> Changes in v2:
-> - Use new function names in call sites (LKP)
-> 
-> This v2 patch was prompted by an error reported by the Linux test
-> robot, which detected the compile error.
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
 
-So - the above lines, starting with 'This v2 patch...' can be removed,
-since you've stated it as a Change in v2.
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
 
-wrt the other feedback about checkpatch failing - test you git commit
-hook (per the first patch tutorial) and be sure you're doing a final
-checkpatch on the formatted patch.
+are available in the Git repository at:
 
-Keep at it Kloudifold :)
-Alison
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.3-rc3
 
-> ---
-> ---
->  drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
->  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
->  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
->  3 files changed, 24 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-> index effc7fcc3..a1254f693 100644
-> --- a/drivers/staging/sm750fb/sm750.c
-> +++ b/drivers/staging/sm750fb/sm750.c
-> @@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
->  
->  	sm750_hw_cursor_disable(cursor);
->  	if (fbcursor->set & FB_CUR_SETSIZE)
-> -		sm750_hw_cursor_setSize(cursor,
-> -					fbcursor->image.width,
-> -					fbcursor->image.height);
-> +		sm750_hw_cursor_set_size(cursor,
-> +					 fbcursor->image.width,
-> +					 fbcursor->image.height);
->  
->  	if (fbcursor->set & FB_CUR_SETPOS)
-> -		sm750_hw_cursor_setPos(cursor,
-> -				       fbcursor->image.dx - info->var.xoffset,
-> -				       fbcursor->image.dy - info->var.yoffset);
-> +		sm750_hw_cursor_set_pos(cursor,
-> +				       	fbcursor->image.dx - info->var.xoffset,
-> +				       	fbcursor->image.dy - info->var.yoffset);
->  
->  	if (fbcursor->set & FB_CUR_SETCMAP) {
->  		/* get the 16bit color of kernel means */
-> @@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
->  		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
->  		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
->  
-> -		sm750_hw_cursor_setColor(cursor, fg, bg);
-> +		sm750_hw_cursor_set_color(cursor, fg, bg);
->  	}
->  
->  	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
-> -		sm750_hw_cursor_setData(cursor,
-> -					fbcursor->rop,
-> -					fbcursor->image.data,
-> -					fbcursor->mask);
-> +		sm750_hw_cursor_set_data(cursor,
-> +					 fbcursor->rop,
-> +					 fbcursor->image.data,
-> +					 fbcursor->mask);
->  	}
->  
->  	if (fbcursor->enable)
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-> index 43e6f52c2..ff643e33f 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.c
-> +++ b/drivers/staging/sm750fb/sm750_cursor.c
-> @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
->  	poke32(HWC_ADDRESS, 0);
->  }
->  
-> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
->  {
->  	cursor->w = w;
->  	cursor->h = h;
->  }
->  
-> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
->  {
->  	u32 reg;
->  
-> @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
->  	poke32(HWC_LOCATION, reg);
->  }
->  
-> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
->  {
->  	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
->  		HWC_COLOR_12_2_RGB565_MASK;
-> @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
->  	poke32(HWC_COLOR_3, 0xffe0);
->  }
->  
-> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
-> -			     const u8 *pcol, const u8 *pmsk)
-> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-> +			      const u8 *pcol, const u8 *pmsk)
->  {
->  	int i, j, count, pitch, offset;
->  	u8 color, mask, opr;
-> @@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
->  	}
->  }
->  
-> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-> -			      const u8 *pcol, const u8 *pmsk)
-> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-> +			       const u8 *pcol, const u8 *pmsk)
->  {
->  	int i, j, count, pitch, offset;
->  	u8 color, mask;
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-> index b59643dd6..88fa02f63 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.h
-> +++ b/drivers/staging/sm750fb/sm750_cursor.h
-> @@ -5,11 +5,11 @@
->  /* hw_cursor_xxx works for voyager,718 and 750 */
->  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
->  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
-> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
-> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
-> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
-> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
-> -			     const u8 *data, const u8 *mask);
-> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
->  			      const u8 *data, const u8 *mask);
-> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-> +			       const u8 *data, const u8 *mask);
->  #endif
-> -- 
-> 2.40.0
-> 
+for you to fetch changes up to 29413f05fe34e8824551b91f660fde781249417d:
+
+  fbdev: Use of_property_present() for testing DT property presence (2023-03-16 16:18:17 +0100)
+
+----------------------------------------------------------------
+fbdev updates for kernel 6.3-rc3:
+
+- Drop omap1 osk driver
+- Various potential divide by zero pixclock fixes
+- Add pixelclock and fb_check_var() to stifb
+- Code style cleanups and indenting fixes
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      fbdev: omapfb: remove omap1 osk driver
+
+Helge Deller (1):
+      fbdev: stifb: Provide valid pixelclock and add fb_check_var() checks
+
+Lucy Mielke (1):
+      fbdev: omapfb: cleanup inconsistent indentation
+
+Lukas Bulwahn (1):
+      MAINTAINERS: orphan SIS FRAMEBUFFER DRIVER
+
+Nikita Romanyuk (2):
+      drivers: video: logo: fix code style issues in pnmtologo.c
+      drivers: video: logo: add SPDX comment, remove GPL notice in pnmtologo.c
+
+Rob Herring (2):
+      fbdev: Use of_property_read_bool() for boolean properties
+      fbdev: Use of_property_present() for testing DT property presence
+
+Wei Chen (5):
+      fbdev: tgafb: Fix potential divide by zero
+      fbdev: nvidia: Fix potential divide by zero
+      fbdev: intelfb: Fix potential divide by zero
+      fbdev: lxfb: Fix potential divide by zero
+      fbdev: au1200fb: Fix potential divide by zero
+
+Yang Li (4):
+      fbdev: clps711x-fb: Use devm_platform_get_and_ioremap_resource()
+      fbdev: pxa3xx-gcu: Use devm_platform_get_and_ioremap_resource()
+      fbdev: wm8505fb: Use devm_platform_ioremap_resource()
+      fbdev: xilinxfb: Use devm_platform_get_and_ioremap_resource()
+
+ MAINTAINERS                                        |   4 +-
+ drivers/video/fbdev/amba-clcd.c                    |   2 +-
+ drivers/video/fbdev/au1200fb.c                     |   3 +
+ drivers/video/fbdev/bw2.c                          |   2 +-
+ drivers/video/fbdev/cg3.c                          |   2 +-
+ drivers/video/fbdev/clps711x-fb.c                  |   3 +-
+ drivers/video/fbdev/geode/lxfb_core.c              |   3 +
+ drivers/video/fbdev/intelfb/intelfbdrv.c           |   3 +
+ drivers/video/fbdev/nvidia/nvidia.c                |   2 +
+ drivers/video/fbdev/offb.c                         |   4 +-
+ drivers/video/fbdev/omap/Makefile                  |   1 -
+ drivers/video/fbdev/omap/lcd_osk.c                 |  86 ---
+ drivers/video/fbdev/omap/omapfb_main.c             |  30 +-
+ .../fbdev/omap2/omapfb/dss/omapdss-boot-init.c     |   2 +-
+ drivers/video/fbdev/pxa3xx-gcu.c                   |   3 +-
+ drivers/video/fbdev/sm501fb.c                      |   4 +-
+ drivers/video/fbdev/stifb.c                        |  27 +
+ drivers/video/fbdev/tcx.c                          |   3 +-
+ drivers/video/fbdev/tgafb.c                        |   3 +
+ drivers/video/fbdev/wm8505fb.c                     |   4 +-
+ drivers/video/fbdev/xilinxfb.c                     |   6 +-
+ drivers/video/logo/pnmtologo.c                     | 674 ++++++++++-----------
+ 22 files changed, 409 insertions(+), 462 deletions(-)
+ delete mode 100644 drivers/video/fbdev/omap/lcd_osk.c
