@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC57F6BF8DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399D86BF8DC
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCRIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 04:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S229962AbjCRIJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 04:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCRIHW (ORCPT
+        with ESMTP id S229516AbjCRIJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:07:22 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B244817CEC;
-        Sat, 18 Mar 2023 01:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=NLgcl
-        pVGg+cj1T9ME4V3k2q3Xxe+gHdjdWnzy/lpn/8=; b=RkUQVr9EoeST5XJK0HoEL
-        25x2KFnRDyRV4gc87XIFyD3t7ntfFZ40mcm9nmKYfgRxdPC7DMKFxU8tktEOLuOY
-        eb6yMmURljEWspXllwyn43I0BiIcgUaJUQn/gh+Gcbu2jSWk2+6HeAAISZLzNqu9
-        o/YvN2j+a6DhO82uBa2Ra8=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g1-3 (Coremail) with SMTP id _____wBn1unHcBVkXCVqAQ--.22021S2;
-        Sat, 18 Mar 2023 16:05:27 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     timur@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH net v2] net: qcom/emac: Fix use after free bug in emac_remove due to  race condition
-Date:   Sat, 18 Mar 2023 16:05:26 +0800
-Message-Id: <20230318080526.785457-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 18 Mar 2023 04:09:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307EE18B39
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 01:08:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D62701FE56;
+        Sat, 18 Mar 2023 08:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679126937; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tUccHJYRpgH4e/3wFNqwUj50i3i9i3teajxIX8WxbAA=;
+        b=ADNw4VxB5SAx+7vXXMK9Pyn6geo/Baw2FyCWsBVkdye1eHYkKaOohrvkLFRWz+NWOsVsIx
+        Jg1RdrHmczlApVXMI07rOInCDqIBCcCrGhR397FWDwomvZt8OVCcoJRSpLNSNpN9osxUgx
+        407Ilmq2k4L3fyLY2Y/EAiffkPEqR+w=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B71B013A00;
+        Sat, 18 Mar 2023 08:08:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mxBfKplxFWQUOwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Sat, 18 Mar 2023 08:08:57 +0000
+Date:   Sat, 18 Mar 2023 09:08:57 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Frederic Weisbecker <fweisbecker@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 2/2] memcg: do not drain charge pcp caches on remote
+ isolated cpus
+Message-ID: <ZBVxmV78EyfDhvn/@dhcp22.suse.cz>
+References: <20230317134448.11082-1-mhocko@kernel.org>
+ <20230318032350.2078-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBn1unHcBVkXCVqAQ--.22021S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CF4DZrWrCr4ktFWkXr1rtFb_yoW8Wr4kpa
-        yDWa4xu34ktF17KF4kJr47tFyUGw4DK34ag3y3Cw4rZ3Z8Cry7KryrKFyrXryfZFZ8Ar4Y
-        qr18Z343Ca1kJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAg2U1Xl5+MwYQAAsU
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230318032350.2078-1-hdanton@sina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In emac_probe, &adpt->work_thread is bound with
-emac_work_thread. Then it will be started by timeout
-handler emac_tx_timeout or a IRQ handler emac_isr.
+On Sat 18-03-23 11:23:50, Hillf Danton wrote:
+> On 17 Mar 2023 14:44:48 +0100 Michal Hocko <mhocko@suse.com>
+> > Leonardo Bras has noticed that pcp charge cache draining might be
+> > disruptive on workloads relying on 'isolated cpus', a feature commonly
+> > used on workloads that are sensitive to interruption and context
+> > switching such as vRAN and Industrial Control Systems.
+> > 
+> > There are essentially two ways how to approach the issue. We can either
+> > allow the pcp cache to be drained on a different rather than a local cpu
+> > or avoid remote flushing on isolated cpus.
+> > 
+> > The current pcp charge cache is really optimized for high performance
+> > and it always relies to stick with its cpu. That means it only requires
+> > local_lock (preempt_disable on !RT) and draining is handed over to pcp
+> > WQ to drain locally again.
+> > 
+> > The former solution (remote draining) would require to add an additional
+> > locking to prevent local charges from racing with the draining. This
+> > adds an atomic operation to otherwise simple arithmetic fast path in the
+> > try_charge path. Another concern is that the remote draining can cause a
+> > lock contention for the isolated workloads and therefore interfere with
+> > it indirectly via user space interfaces.
+> > 
+> > Another option is to avoid draining scheduling on isolated cpus
+> > altogether. That means that those remote cpus would keep their charges
+> > even after drain_all_stock returns. This is certainly not optimal either
+> > but it shouldn't really cause any major problems. In the worst case
+> > (many isolated cpus with charges - each of them with MEMCG_CHARGE_BATCH
+> > i.e 64 page) the memory consumption of a memcg would be artificially
+> > higher than can be immediately used from other cpus.
+> > 
+> > Theoretically a memcg OOM killer could be triggered pre-maturely.
+> > Currently it is not really clear whether this is a practical problem
+> > though. Tight memcg limit would be really counter productive to cpu
+> > isolated workloads pretty much by definition because any memory
+> > reclaimed induced by memcg limit could break user space timing
+> > expectations as those usually expect execution in the userspace most of
+> > the time.
+> > 
+> > Also charges could be left behind on memcg removal. Any future charge on
+> > those isolated cpus will drain that pcp cache so this won't be a
+> > permanent leak.
+> > 
+> > Considering cons and pros of both approaches this patch is implementing
+> > the second option and simply do not schedule remote draining if the
+> > target cpu is isolated. This solution is much more simpler. It doesn't
+> > add any new locking and it is more more predictable from the user space
+> > POV. Should the pre-mature memcg OOM become a real life problem, we can
+> > revisit this decision.
+> 
+> JFYI feel free to take a look at the non-housekeeping CPUs [1].
+> 
+> [1] https://lore.kernel.org/lkml/20230223150624.GA29739@lst.de/
 
-If we remove the driver which will call emac_remove
-  to make cleanup, there may be a unfinished work.
+Such an approach would require remote draining and I hope I have
+explained why that is not a preferred way in this case. Other than that
+I do agree with Christoph that a generic approach would be really nice.
 
-The possible sequence is as follows:
-
-Fix it by finishing the work before cleanup in the emac_remove
-and disable timeout response.
-
-CPU0                  CPU1
-
-                    |emac_work_thread
-emac_remove         |
-free_netdev         |
-kfree(netdev);      |
-                    |emac_reinit_locked
-                    |emac_mac_down
-                    |//use netdev
-Fixes: b9b17debc69d ("net: emac: emac gigabit ethernet controller driver")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- cancel the work after unregister_netdev suggested by Jakub
----
- drivers/net/ethernet/qualcomm/emac/emac.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/net/ethernet/qualcomm/emac/emac.c b/drivers/net/ethernet/qualcomm/emac/emac.c
-index 3115b2c12898..eaa50050aa0b 100644
---- a/drivers/net/ethernet/qualcomm/emac/emac.c
-+++ b/drivers/net/ethernet/qualcomm/emac/emac.c
-@@ -724,9 +724,15 @@ static int emac_remove(struct platform_device *pdev)
- 	struct net_device *netdev = dev_get_drvdata(&pdev->dev);
- 	struct emac_adapter *adpt = netdev_priv(netdev);
- 
-+	netif_carrier_off(netdev);
-+	netif_tx_disable(netdev);
-+
- 	unregister_netdev(netdev);
- 	netif_napi_del(&adpt->rx_q.napi);
- 
-+	free_irq(adpt->irq.irq, &adpt->irq);
-+	cancel_work_sync(&adpt->work_thread);
-+
- 	emac_clks_teardown(adpt);
- 
- 	put_device(&adpt->phydev->mdio.dev);
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs
