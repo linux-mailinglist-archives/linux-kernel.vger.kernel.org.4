@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E826BFA9B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29926BFAA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCROA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 10:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
+        id S229784AbjCROF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 10:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCROAz (ORCPT
+        with ESMTP id S229570AbjCROF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:00:55 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD132CE6
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 07:00:52 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s20so604041ljp.1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 07:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679148050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pq1grktIZUaFTq6y9zAYI6jqVJHwlACogyMHxjKxw0E=;
-        b=g1KLQFh26D5iGPpjd1G/eLz/Y0XGhNxEFdpNUp76JndWYhTBQ3KOkUgpIwwOxfal2b
-         /HXMQhpWt5snVr8RNE2Lr3csDUIg93q6JkoppyFIWg7wfx2RRdvqUVSI95PFzIS4NN2b
-         X8fgot6FdidtEH1NKhlSdQ6x7R+R/NdzJyJsVsabEM4JcP5gYDMyT1AsltcudcfGHOqf
-         ezLt2Xb956gymARhIZcknXaFc/0hkX6W3uaTvvAI9KKb9RS5bO/3CodqTTEIW85zApzK
-         4XtaZiocPbzoJQPKx8npL3/9p+ukUmyk8d3BG4zL0JtbR+/QXXPT3LCG4lk+1QExD7b9
-         +i2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679148050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pq1grktIZUaFTq6y9zAYI6jqVJHwlACogyMHxjKxw0E=;
-        b=yTwuxB4BVqmXRG0XI8GUtulXq9d8yq68KsiEXlV4y6R94xd9uObEHe8Gx7p5Owu1aJ
-         NnvAAZMP9wp7FBJt1wsdnN6mVc+4fB2gxPYifKMHuX05gH8TERrIAjDBycPI8l070qPV
-         cDqC7FkjWobaTK22h/UbXBAI7VfN+j2I6qVuc2euxmPyKF022qD2VFoxXHtVBi9itCin
-         w9OxDuPGsEIfBof53+b7DKpxChGp1Jg7owsb6PrqwgtpuvYrlTJCqe2HK2ImNwzzu6rG
-         ArUdXRn1YZ/5abUvV/byexOykO4sHu/I3l32SF9aG9g4UWo40IMwBrchiL68OoAurb4j
-         IerQ==
-X-Gm-Message-State: AO0yUKVbtnqh3BrH29mImjTGKAD3K0z1mXZweFeUj+CDvx10F2Da3RdZ
-        OAn9vKQrNlQ27Vy1FQDKQ/dOJg==
-X-Google-Smtp-Source: AK7set9n3jWRCyaEW5qHt+5N4JBeEQQ0u3VT7jFsk+GHueILW9QUIk7NEXxfqsKIUjYohI9zdk9MTQ==
-X-Received: by 2002:a2e:be92:0:b0:295:b0cd:517 with SMTP id a18-20020a2ebe92000000b00295b0cd0517mr5832408ljr.35.1679148050075;
-        Sat, 18 Mar 2023 07:00:50 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id l22-20020a2e8696000000b002947028ae7csm893920lji.72.2023.03.18.07.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Mar 2023 07:00:49 -0700 (PDT)
-Message-ID: <af8cd242-2a78-cac3-d307-ce6ab0810308@linaro.org>
-Date:   Sat, 18 Mar 2023 15:00:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 09/12] arm64: dts: qcom: sm8350-hdk: add pmic glink
- node
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v4-9-38bf0f5d07bd@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v4-9-38bf0f5d07bd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        Sat, 18 Mar 2023 10:05:27 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C4D1EBC0;
+        Sat, 18 Mar 2023 07:05:23 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id C16325C01D9;
+        Sat, 18 Mar 2023 10:05:20 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 18 Mar 2023 10:05:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1679148320; x=1679234720; bh=ne/ZkURyOBnvQZJfA/dZ5P1GHL8xeaXDuo7
+        2X96mUAI=; b=PWikUWM3nRrwrVKDkhGUG4yZLKM+qv3w0qRH8+aP7kRH0GCOXso
+        x5/MwfoaRCPs+GSEE64L3II+XIY5u0api+BlU23UP7NEdV6YwrBxtpCVsmC7PwL8
+        KIIPmUVDa2cSrq9xVNaQ0TFFMQthZJKbzSTTlhDnqH7FUDHRqjGv/TWO1+C3sTmK
+        FqP6rOAiLT/xXWXU5ouibhWu0MPxHCYxjL9dZD1sILy9v11+udYxqTTSE5VBAV1a
+        12CmZpql/aowC44Ikmdu0an3RYUFJT0OqcSE3h0WiKBBbJGOlYKnGNdYkGksQA2I
+        HngjLuZ5SNSx9NzlPmqV7UG6JZyQuJCsQpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1679148320; x=1679234720; bh=ne/ZkURyOBnvQZJfA/dZ5P1GHL8xeaXDuo7
+        2X96mUAI=; b=n2roBARfoflGRnl+aYU+hQ9zC7+YjssGLD9gcVAxfhISvUNwI9P
+        0R9Smd4ErRI5sWHRgsQQgg4Zm9leBCSlOI6bnCAKJQtT1mzT0wn8aOgx5JJj/nSS
+        cMPq5Xm4hDIxWL/XYk/kx8nxSO18g3WRLDKGjC6ntxJp0s1aL6YzZKOdikFLOHI6
+        ADKeoHSpJo/IAlDsXfiQxzVxt9o0faH+FqlWJq7D6A9p4FOdKzX1+O8msnJNk9Ho
+        +c9xndLcxLIrcI8AeercVpKUrL819JfskKtE+2UYbfu8wM98BtYaH84Vg8iBwPqQ
+        UetYHJM07UueJI/UV1w1HhlOHW2SfGyM0Kg==
+X-ME-Sender: <xms:H8UVZKO5hsePPBXygggc8Se1Mc17WDUEan853sWl8vGRPZWY1LuYbA>
+    <xme:H8UVZI-YX8PoBNdK14Hb22aPkgbDV3OLFKKXnLRridBDQIB2JP2XD5aLC-Jap7Jlx
+    MGPCEIdOgpOX72RHEE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefgedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:H8UVZBTH-K8trWBZHXlwQI6WJ_h5tYCXamdoN-EXBElRubJRjCZcRQ>
+    <xmx:H8UVZKsnHJMHCk7mQgtMJfnf3oyTFZfAOnXSTJf_Oqq9G5jzuz6JLQ>
+    <xmx:H8UVZCdKiAaM_7T-eIkluqlpzhN5E81HI07nO5mU73A9Wpm3R7zvpA>
+    <xmx:IMUVZI22ozlqtFOxaEyopgNB_2_sLPE_g6q-hUAUMIdAb3vD5FLm4Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6A542B60086; Sat, 18 Mar 2023 10:05:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <12298b67-3012-4902-9dcc-61c3c9907a47@app.fastmail.com>
+In-Reply-To: <7cc8258c-3a77-5387-aaa4-658761fbb0ae@gmail.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-12-ychuang570808@gmail.com>
+ <2063c6d1-85ed-43d9-b572-a762b6ce18c1@app.fastmail.com>
+ <7cc8258c-3a77-5387-aaa4-658761fbb0ae@gmail.com>
+Date:   Sat, 18 Mar 2023 15:04:58 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jacky Huang" <ychuang570808@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jiri Slaby" <jirislaby@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH 11/15] arm64: dts: nuvoton: Add initial ma35d1 device tree
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,55 +97,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 18, 2023, at 14:17, Jacky Huang wrote:
+> On 2023/3/16 =E4=B8=8B=E5=8D=88 10:17, Arnd Bergmann wrote:
+>> On Wed, Mar 15, 2023, at 08:28, Jacky Huang wrote:
+>>> +	mem: memory@80000000 {
+>>> +		device_type =3D "memory";
+>>> +		reg =3D <0x00000000 0x80000000 0 0x20000000>; /* 512M DRAM */
+>>> +	};
+>>> +};
+>> In most machines, the memory size is detected by the boot loader
+>> and filled in the dtb in memory before starting the kernel, so
+>> you should not need two separate files here for the two common
+>> memory configurations.
+>
+>
+> On ma35d1, memory size is determined early before uboot.
+>
+> BL1 (MaskROM boot code) -> BL2 (arm-trust-firmware) -> BL32 (op-tee) &=20
+> BL33 (uboot).
+> The DDR was initialized in BL2 stage with a selected DDR setting, which
+> is hard coded, including DDR size.
+>
+> We searched the arm64 dts and found that almost all vendors claimed
+> memory size in board level dtsi/dts. This seems to be common.
+>
+> So, can we have it unchanged?
 
+I see the memory size encoded in about one out of three .dts files,
+which is more than I expected. It's clearly not harmful to have it
+listed in the dts, it just shouldn't be necessary.
 
-On 17.03.2023 16:04, Neil Armstrong wrote:
-> Add the pmic glink node linked with the DWC3 USB controller
-> switched to OTG mode and tagged with usb-role-switch.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
+If it helps you with your current u-boot, then leave it in, but
+consider adding detection logic into u-boot so it can override
+the value in the dtb file at boot time.
 
-[...]
+>> Since the machine is called 'som', I would assume that this is a
+>> module that is integrated on another board, so more commonly one
+>> would have a dtsi file for the som in addition to the one for the
+>> soc, and have all the components of the module listed in this
+>> file, while the dts file that includes the som.dtsi lists the
+>> devices on the carrier board and enables the on-chip devices
+>> that are connected to the outside.
+>>
+>
+> You are right, ma35d1 som have a base board, and a cpu board on it.
+>
+> It is a good suggestion that we should have a dtsi for som base board.
+>
+> Consider that we are in the initial submit, and such a dtsi will be an=
+ empty
+> file at this stage. So, I would like to do it when peripheral drivers
+> upstream started. Is it ok?
 
->  &usb_1_dwc3 {
-> -	/* TODO: Define USB-C connector properly */
-> -	dr_mode = "peripheral";
-> +	dr_mode = "otg";
-> +	usb-role-switch;
-> +
-> +	ports {
-You created these in patch [6/12]!
+It's not a big deal either way. I if you want to keep it only with
+one dts file and one dtsi file, that's fine, but maybe rename the dts
+file based on the name of the carrier rather than the SoM in this
+case.
 
-Konrad
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@0 {
-> +			reg = <0>;
-> +
-> +			usb_1_dwc3_hs: endpoint {
-> +				remote-endpoint = <&pmic_glink_hs_in>;
-> +			};
-> +		};
-> +
-> +		port@1 {
-> +			reg = <1>;
-> +
-> +			usb_1_dwc3_ss: endpoint {
-> +				remote-endpoint = <&pmic_glink_ss_in>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&usb_1_dwc3_hs {
-> +	remote-endpoint = <&pmic_glink_hs_in>;
-> +};
-> +
-> +&usb_1_dwc3_ss {
-> +	remote-endpoint = <&pmic_glink_ss_in>;
->  };
->  
->  &usb_1_hsphy {
-> 
+     Arnd
