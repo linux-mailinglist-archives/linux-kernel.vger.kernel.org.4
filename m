@@ -2,137 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EA36BFCF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 22:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579246BFD09
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 23:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCRVbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 17:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S229579AbjCRWYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 18:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCRVbd (ORCPT
+        with ESMTP id S229488AbjCRWY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 17:31:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129DA211DC
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 14:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679175052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KJ/cpwwTOsiNZoK2Zi5I+mzUQqbpVfRXw3dozXcgP1o=;
-        b=A/KSMpJXur74bgzITJCj64m+fz3DUHm0IvG06WS/cAHcnjBGlDozVKStXgAVZJCb4zZRVD
-        zWDVN7sahEJjKQ2B+vWvPvKAqCBRgdhatbGENbdb4D9I/Q3okF4qlB3qeBl7JKQh35knDt
-        muACqwjM1nDi7Y1bAgKdyC2fa6TRg7w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-fNv3JSNRMjKx3ATWG4qSPQ-1; Sat, 18 Mar 2023 17:30:48 -0400
-X-MC-Unique: fNv3JSNRMjKx3ATWG4qSPQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 70EDD8533A2;
-        Sat, 18 Mar 2023 21:30:47 +0000 (UTC)
-Received: from [10.22.8.46] (unknown [10.22.8.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A0325C15BA0;
-        Sat, 18 Mar 2023 21:30:46 +0000 (UTC)
-Message-ID: <2e71c2bf-9ee3-4ada-e9d9-acb6e422e9af@redhat.com>
-Date:   Sat, 18 Mar 2023 17:30:46 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] cpuset: Clean up cpuset_node_allowed
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
- <20230228083537.102665-1-haifeng.xu@shopee.com>
- <299c9c34-0c07-ae52-61d7-6332f35c6245@redhat.com>
-In-Reply-To: <299c9c34-0c07-ae52-61d7-6332f35c6245@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sat, 18 Mar 2023 18:24:28 -0400
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com (mail-yqbcan01on2136.outbound.protection.outlook.com [40.107.116.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2D1A250;
+        Sat, 18 Mar 2023 15:24:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ngfnS2JpwGIzWj9uRYZOIchWw/OC29UMz8B+zI+z0pWFInOKKwfyDydFHzSGVqtbktWfb5RPBLS+yFlqZ3YKjKgpt8jLBGQwyx5AiCwAi4DDTEPuh7zWknjxUHgLI9jVh1u4RpQuLp+F8Vsyl1gvYrdrre4Ph0cMqV+okVayBhZy4NgFqXuyMcWER7Wxk2d8OIvl951pDFpPId7+rlhhF4kPjKQWwk3cLrAlkmiw2a4/llh2DDXA4ZKFq5paaAh+Re7ucSyFKdtnXQmUV35fhATY0qPsIuuSSjlGbsUaUEIIx7r09h1RqnGdT785coSHHKadhggog0QbuXanySnNpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JTN5HJxtJJIUp/ridiU6Q9SHJ8OSJ/mXZR9pfYDLZ/o=;
+ b=admoI/f1IgCKhHF8d8E4O4V/5zvT9/igCCiCSYmezuzSFgHHTNY4epvDgUgxAvP2NrkrfRKjchQfI6p4UBE7ETJeZTituYmd0fShB3injyoggd1IiWTqKjyw+LdTjB8WIoWIBeLC+Bpb4JM/4lC3S/ckCu+D+eFfAegBNdH9itzLan1ikGdIMC05IT6gt+T4XJnN6loMNqIT0/KqwOA3oRDlmp7bAP72UQYJx3MKi4mQebVqp56dpVt7TOyX3d8ZVbQuhJQz7rhy1F44HsceUmslw9kKbuHr4PU6R2ERyGivwtJCBK3tqCDO5b4gv3lcRjU+E4b0QzxJZz7rwkJLjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=lenbrook.com; dmarc=pass action=none header.from=lenbrook.com;
+ dkim=pass header.d=lenbrook.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenbrook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JTN5HJxtJJIUp/ridiU6Q9SHJ8OSJ/mXZR9pfYDLZ/o=;
+ b=PuK5zLAbz5uvTyZD8BonKYO4Q396FAZRZTYJL1mWsk00o5NUHFvFYygKLA67UteRMDkjgNkGCaTTokw9ubP4nh+RcPz14jg0Tsdj/5TIrNfSiIj0PNMp4PYANwJTqeOQDvyX/FvXrEzAGyFpyARg0rW18TQVDjMMLKhZjxpgH/s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=lenbrook.com;
+Received: from YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::12)
+ by YT2PR01MB8807.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:ba::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.36; Sat, 18 Mar
+ 2023 22:24:23 +0000
+Received: from YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::2a76:b922:37e2:e1d2]) by YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::2a76:b922:37e2:e1d2%3]) with mapi id 15.20.6178.036; Sat, 18 Mar 2023
+ 22:24:23 +0000
+From:   Kevin Groeneveld <kgroeneveld@lenbrook.com>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Subject: [PATCH] spi: spi-imx: fix MX51_ECSPI_* macros when cs > 3
+Date:   Sat, 18 Mar 2023 18:21:32 -0400
+Message-Id: <20230318222132.3373-1-kgroeneveld@lenbrook.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YT4PR01CA0050.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:111::10) To YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:e8::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB9670:EE_|YT2PR01MB8807:EE_
+X-MS-Office365-Filtering-Correlation-Id: e75526e7-2994-4a57-44f4-08db27ff869a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K36BTOPI+y0sdYRZ/FoSSBmMsDRizkiwAd1eXYIsWtFyoOQDIYLVBk9pVxiOKvYyZplsmSLi1XzTJmWNgsfrmNW8gZyhZzxszeLt9WQhA1LKlUnE4i2QwEkKKN14aRbcva+6fHkHDfHnUyE9PohguTuyBqkvNgbTL3swuTAtJkQFkaWUakub5Pat1aKpPyWhP3RSvFf8vh/PgkPRU/oJdS3pe9pmZtbY5Rlhwn8hVCb7tUIc2hpBocAjgfkr6L9o1fZnauGEBO2YQJ46746ygjq6gpN9NLqRF8UGg6Agm0mcQiNorZVC8Rao3fPaoO/O4iprLD9vQSEOisRAKqvCu/Vy6UUVh+NLuQ12IFOYN9OqLqFMNIb+YkK8NxcKRJIqkhLhhsqJ3kur6p7ufieugFXaTMIJA9qSZl+VJG1c+C8SU8HuuCEaNQuCuedpVdnEoDot00Cz94BYiuEUte7ick6+strw1yxpb9XuTs/+oPWk49GJ8hsg7jbunghHIJ5bcjvpRkVZIDokZhziiGPjdNkcthkEuQTezi+cMDzBxbMFT5qckeyGqsouzsnpDbnmpbXh97sd2spQm1FqrySMmvUT524pLQmAXK1ZoegKLYOerMl3j9gJ6Ei72Dk+ejQk3OZ8pvs61sfPD9BfL7lSpQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(376002)(39840400004)(366004)(396003)(451199018)(2616005)(6666004)(107886003)(186003)(6506007)(1076003)(26005)(6512007)(6486002)(316002)(110136005)(4326008)(66946007)(66556008)(66476007)(478600001)(83380400001)(41300700001)(8936002)(5660300002)(2906002)(8676002)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OVBNV0ZodFZEK3FVb3Z2Nmgwcm1CV1czSlVqSmdqc2w1enhWTUF0U3czS2lj?=
+ =?utf-8?B?bTA3TVMxUWY3aWFjbk5IMkVzRGJ4TFlIRFk2NHV6Q3hmRU93YUhlMjROYmI2?=
+ =?utf-8?B?NzlJVk96MEhNTlJQemJjOVR4OFh6dURpVStSSGpCYkF6aWNlYkF5YlJJNzJQ?=
+ =?utf-8?B?RDkxOFRpd2x6dFJBYVBFTDZKcTFuSEM0TDdPeFhDTVhSQkozeHZUMWttQUJT?=
+ =?utf-8?B?UjBJZFZpdElwY2tkQzlxVjU0RTh3S2MwK3BuZHMrSnQ2bFFKUGZCMXNWbGtT?=
+ =?utf-8?B?VEo1SHZHWTVvb1F4R2hCbnpyOFhIZVJ2S2tOajdvcVRNdDlqYlhMUTJkMkpk?=
+ =?utf-8?B?cllLSVNXaU1WOVRxQjRDSG9XS0IwclkzU3J1aVdNOS9VN3R4QWRYTGE0bkNR?=
+ =?utf-8?B?MzVNdjk3U2JobCtGbWtwdm5nLzFudmI0MEtaMGs2ZWFrUUtxdFk4eG9GMFVE?=
+ =?utf-8?B?S3FUNU9OOUtMZi9OYUVIWTVnREE1Kyt1TnpSR21LazJMMXVnSDhoWDVwT2xD?=
+ =?utf-8?B?citSSXlFU3BJeVMvTXVSSDhHMkR6YVI3cjhIanRKeTFuNldSalp3eUhVOXM3?=
+ =?utf-8?B?dWdKTHpzL0FTMEV3cGdvVmsybmFsUXdURWRnVko3emtRQi8xNDVwSEtkNk5B?=
+ =?utf-8?B?SHBQUi9GVm14WWdHU2NRSFpNZGxSU1RadFZyVjkraWt0N2hLZnZDd0xhZHkr?=
+ =?utf-8?B?eFpTRGFJMlNmaGVFSTZoYkE5TitDeENEaFRxek5zcFI5ZlZFZXdKNFlYNVMy?=
+ =?utf-8?B?Wi9KQUI0QkQyMzhqZTkwVTFqL2xUODBpRlRNMWE2c2ZGZ1dUNUV3YndoWitw?=
+ =?utf-8?B?NlVUOVg4Zmx5amw0YkswTEEyd3JyQm5zWkRBaTlYdGtFZHZLYk1kWmZ6blZ3?=
+ =?utf-8?B?TGx0VmxIZ1M0WUR3U1k3dS9HMG9UVGNDNEx0V1BMdWtPcElXUHVpNGNndkt0?=
+ =?utf-8?B?VGpMU3lYWmlJcnkxTUVMODR5dTJ1RUZhTjVsUEtDOW1aTnk0U3QxV2R5K3J3?=
+ =?utf-8?B?TXB3U0ZRbEtDMmlDNmppQjh1OU5yNkcvVUNvNC9sRzRUdkI2NEI2WGJyVnJz?=
+ =?utf-8?B?dnpMMDBTanNJRzY5K1JVRzJoQ3FVamFveEpON1A3WjgrM3RGU09NNjlCNU1T?=
+ =?utf-8?B?NGEwZC9zV3NKZ3I4Nlc5QU5icVZCYW0vK2JUR2xxRnNpa2RsbjBWMFk1Vkk0?=
+ =?utf-8?B?ZFdrelBxc1VJTTI2aUU0c01UVTZ6Vzh4MHl4dnA4bzY5aXRKQ2RoYzFwSmNp?=
+ =?utf-8?B?azZzamJZMzRodndVWEhuNWovWnhrbHg0c1lIY1dTNkZIS2UvTW1SbFBKbzl5?=
+ =?utf-8?B?aDRJSk5IU3VoaGlVR29rRW1qL1gycHhWRlBIczRGaXdQWmlaM0VlWEtQYkRU?=
+ =?utf-8?B?NURUalkyd3hNQWhIeXJBQmtlOVJHRVBSVWsyWm9HK1FxZXM4VThad202cUVm?=
+ =?utf-8?B?ME8zeGVMTmZpOHhTOUtqOVV4aTV3cU4xTzdmMHk1djRUbkNDRzhXeURRMWo0?=
+ =?utf-8?B?cWxCbU9oSlFLNnpBZ0Q3SWtSZ285M2Zta1dKU0RreDZ4QmJJNGM2WU9Rd0l0?=
+ =?utf-8?B?VHBzbDFXY3NKdDFSMTlDenZFTk1WMkxoS2pTeTgya0c4T3A4OWwyYmYvdVQ1?=
+ =?utf-8?B?ZzNHejhNNmQwdlVUdDI0Y1dkN2pSOHUvSzBmUmVBdmE4ak5LYkpxbTc5QXMx?=
+ =?utf-8?B?Nk1lOERuTDhBZXZGenUrZ2hPWHQrVy9scGRTWFFMTTdxaWxNWm05YnhsYTFN?=
+ =?utf-8?B?L1BOTWc2Tnk4K3pUS1QycmMvdWZ0dVFCU2JLQkp6M3F2L0tCNWlOaDl4eit3?=
+ =?utf-8?B?VitUQ25JRnExbFY0eXJHcTNlTEE4MEpJck9lUkpXb0g0TzhVM2RXTWppUTNP?=
+ =?utf-8?B?UUZadXU0RVh1STBwbDdROXcvbkZ2Ukpob2ZVR29VdTdoNElqUFpaMDFCYVdF?=
+ =?utf-8?B?WDE5TnI0WUpvbHZmYnpkbGRKcStUL2hkM1llSkFUTXIrUGN3UmhYMVk2ZzRr?=
+ =?utf-8?B?Q3AzMUhEKzQyL0dFRXYwbVV3L3MwUWdJSzhtTVVTMmxFZ3p0S2JVK2tmeXYv?=
+ =?utf-8?B?bi9abXpjcWs5UFh0Z2c2dDlOTlJ3V1I1Z2NUdGNTVFhqSkdrOXNKTFpFTWtT?=
+ =?utf-8?B?VmZETzZGdjRsMTkyb1QyZDh2c0VPSW4xRGFJTEdxL0pJMHpGTEFKUW5uMnpG?=
+ =?utf-8?B?SFE9PQ==?=
+X-OriginatorOrg: lenbrook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e75526e7-2994-4a57-44f4-08db27ff869a
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 22:24:23.2563
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3089fb55-f9f3-4ac8-ba44-52ac0e467cb6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f1HQouJl0/clkvMF7u9kdZps4DqhrhEmpYnB2LFPl2q4VnsTKh/DK2hYBl2r/7IfDay3IsF+8Hrh3YL57cU7EtUEsOqsLedQTRIXO2qtb+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB8807
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 21:35, Waiman Long wrote:
-> On 2/28/23 03:35, Haifeng Xu wrote:
->> Commit 002f290627c2 ("cpuset: use static key better and convert to 
->> new API")
->> has used __cpuset_node_allowed() instead of cpuset_node_allowed() to 
->> check
->> whether we can allocate on a memory node. Now this function isn't 
->> used by
->> anyone, so we can do the follow things to clean up it.
->>
->> 1. remove unused codes
->> 2. rename __cpuset_node_allowed() to cpuset_node_allowed()
->> 3. update comments in mm/page_alloc.c
->>
->> Suggested-by: Waiman Long <longman@redhat.com>
->> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
->> ---
->>   include/linux/cpuset.h | 16 ++--------------
->>   kernel/cgroup/cpuset.c |  4 ++--
->>   mm/page_alloc.c        |  4 ++--
->>   3 files changed, 6 insertions(+), 18 deletions(-)
->>
->> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
->> index d58e0476ee8e..980b76a1237e 100644
->> --- a/include/linux/cpuset.h
->> +++ b/include/linux/cpuset.h
->> @@ -80,18 +80,11 @@ extern nodemask_t cpuset_mems_allowed(struct 
->> task_struct *p);
->>   void cpuset_init_current_mems_allowed(void);
->>   int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask);
->>   -extern bool __cpuset_node_allowed(int node, gfp_t gfp_mask);
->> -
->> -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
->> -{
->> -    if (cpusets_enabled())
->> -        return __cpuset_node_allowed(node, gfp_mask);
->> -    return true;
->> -}
->> +extern bool cpuset_node_allowed(int node, gfp_t gfp_mask);
->>     static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t 
->> gfp_mask)
->>   {
->> -    return __cpuset_node_allowed(zone_to_nid(z), gfp_mask);
->> +    return cpuset_node_allowed(zone_to_nid(z), gfp_mask);
->>   }
->>     static inline bool cpuset_zone_allowed(struct zone *z, gfp_t 
->> gfp_mask)
->> @@ -223,11 +216,6 @@ static inline int 
->> cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask)
->>       return 1;
->>   }
->>   -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
->> -{
->> -    return true;
->> -}
->> -
->
-> Sorry for the late reply as I apparently drop the ball.
->
-> You need to keep the above cpuset_node_allowed() inline function or 
-> you will get compilation error when compiling with a config without 
-> CONFIG_CPUSETS. Other than that, the other changes look good.
->
-It turns out that cpuset_node_allowed() isn't used anywhere except in 
-cpuset.h. So it should be OK to remove the alternate 
-cpuset_node_allowed() function.
+When using gpio based chip select the cs value can go outside the range
+0 – 3. The various MX51_ECSPI_* macros did not take this into consideration
+resulting in possible corruption of the configuration.
 
-Acked-by: Waiman Long <longman@redhat.com>
+For example for any cs value over 3 the SCLKPHA bits would not be set and
+other values in the register possibly corrupted.
+
+One way to fix this is to just mask the cs bits to 2 bits. This still
+allows all 4 native chip selects to work as well as gpio chip selects
+(which can use any of the 4 chip select configurations).
+
+Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+---
+ drivers/spi/spi-imx.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index e4ccd0c329d0..c61c7ac4c70c 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -252,6 +252,18 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ 	return true;
+ }
+ 
++/*
++ * Note the number of natively supported chip selects for MX51 is 4. Some
++ * devices may have less actual SS pins but the register map supports 4. When
++ * using gpio chip selects the cs values passed into the macros below can go
++ * outside the range 0 - 3. We therefore need to limit the cs value to avoid
++ * corrupting bits outside the allocated locations.
++ *
++ * The simplest way to do this is to just mask the cs bits to 2 bits. This
++ * still allows all 4 native chip selects to work as well as gpio chip selects
++ * (which can use any of the 4 chip select configurations).
++ */
++
+ #define MX51_ECSPI_CTRL		0x08
+ #define MX51_ECSPI_CTRL_ENABLE		(1 <<  0)
+ #define MX51_ECSPI_CTRL_XCH		(1 <<  2)
+@@ -260,16 +272,16 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ #define MX51_ECSPI_CTRL_DRCTL(drctl)	((drctl) << 16)
+ #define MX51_ECSPI_CTRL_POSTDIV_OFFSET	8
+ #define MX51_ECSPI_CTRL_PREDIV_OFFSET	12
+-#define MX51_ECSPI_CTRL_CS(cs)		((cs) << 18)
++#define MX51_ECSPI_CTRL_CS(cs)		((cs & 3) << 18)
+ #define MX51_ECSPI_CTRL_BL_OFFSET	20
+ #define MX51_ECSPI_CTRL_BL_MASK		(0xfff << 20)
+ 
+ #define MX51_ECSPI_CONFIG	0x0c
+-#define MX51_ECSPI_CONFIG_SCLKPHA(cs)	(1 << ((cs) +  0))
+-#define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs) +  4))
+-#define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs) +  8))
+-#define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs) + 12))
+-#define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs) + 20))
++#define MX51_ECSPI_CONFIG_SCLKPHA(cs)	(1 << ((cs & 3) +  0))
++#define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
++#define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
++#define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
++#define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
+ 
+ #define MX51_ECSPI_INT		0x10
+ #define MX51_ECSPI_INT_TEEN		(1 <<  0)
+-- 
+2.34.1
 
