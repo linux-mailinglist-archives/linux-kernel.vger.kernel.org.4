@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221996BF77A
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A6A6BF780
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCRDAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 23:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S230078AbjCRDHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 23:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCRDAP (ORCPT
+        with ESMTP id S229488AbjCRDHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 23:00:15 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CDF7BA2D;
-        Fri, 17 Mar 2023 20:00:13 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id cn6so7252988pjb.2;
-        Fri, 17 Mar 2023 20:00:13 -0700 (PDT)
+        Fri, 17 Mar 2023 23:07:16 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05C0D2966;
+        Fri, 17 Mar 2023 20:07:11 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso7198006pjb.2;
+        Fri, 17 Mar 2023 20:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679108413;
+        d=gmail.com; s=20210112; t=1679108831;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aBvrljxOKkoB1S/4mky0NJx5RgxtZPsZg+SYz9qBDkI=;
-        b=ZTA7hjr5SMxU5D2pu0T73SoZw4wL0d+OvP9pqVRJ4rADjAyIOyFcz/ZuVq/K28fVj5
-         LGSiVcRblvHv1mdVGdAV2bCwLkpuWbpNvwUhySCyPRyll3QxMNAi6BE55hOAoqYrWlO2
-         rDIbgCa8sWsWwlsEN1JmPgv2n2MggNeYp+AT6pjd013YwEkbto8YxvcRwyAyEx2EP/2N
-         jTZVZxXy6InOZA3uH9W5sLc/HU0yz/hXBlICkdTtSpn5hKtCag2ROIQ4JJkt/h5uZ+Qk
-         iw8bbNNqXhKL3P7V1j6jvktBLCoZiGxIPRvUtGG3bTr6Id1sc7HXtlVXbv2JYSXpFsx5
-         breg==
+        bh=URZQ3gLDJKimA8H5HfP/flcS8+UR77bug41nYZUBjAI=;
+        b=bhwRich09gdEYZiFJBIfMyaJ6k3QyBPx6nzUio9WiZ0/0Hfs+tjFSzj+mSkwZxGuCo
+         UJrNcQdlkZYOtCDpH/kLCzXxXneA+/DRkw2ctPU/4ndciIMtsP7ngsRYaWa+nEf87Azh
+         arXIhLdZt/SyGCeHaNN5enFbpnDUcqCbTUbMBsSZsyPx6lGUp9gGr3RndtnHlSnsjPrk
+         FGZk2hLl4LnqWk8sr2QSU0W/ZfYKi9Z4UOFYcwAJkWk9H0afyQRBoIpDHCogsB7H6cg+
+         oYOeSydk0CNBwU0FFfHPI2rxfh+HIiZ+Kt3dFnAq2OJRBoN+uYkDcLB/uSdVSLLtgu6S
+         S0+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679108413;
+        d=1e100.net; s=20210112; t=1679108831;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aBvrljxOKkoB1S/4mky0NJx5RgxtZPsZg+SYz9qBDkI=;
-        b=Dn2GvS+j0eqIRrx/iOhCn2wuPhRD5fVSbw2/zSEoQCS+BbhdEnPCb1GVlT4p+Z0WNp
-         cnQXLkriwv6T5qwlHvxl86kBT3JHZZL8HWCsqP7AwBo5iq6FYOUQytKNvH/H8WC1iLpY
-         uLTPrWPH0fOSwbmOEcYa04gnLiC5eywWF0Dew0tD0ogqWArwCLO/Ycwd/+VKfaiwnjIr
-         2VmThk/g4w8HZv//bMzDpWl+S9Ju7N0qs1bjMNGZwkLBF9cPpGXvztWSzD1yQ8UvDKxe
-         sB5INgjVDIBREAo8ZODCSxgoUYlT4fbcdohAktMx8fmvEMjC5YYqSC9Zvx0BScWgsOp4
-         6AZA==
-X-Gm-Message-State: AO0yUKVmTjbjPv+pR7x0Jj/VczNUHbMTh3yZCVeerwq4lOEkP6OiVKpD
-        c8hLA74CHg1CqOePrAWoIBmNCrPJ0A8=
-X-Google-Smtp-Source: AK7set955FdxbubOsGGFEmj1xjrvvZcsclhhg6hbhiVSISWIqaTrYEExC+Y3X0cxEGBOEyNZdFV0VQ==
-X-Received: by 2002:a05:6a20:548f:b0:d5:10ca:5264 with SMTP id i15-20020a056a20548f00b000d510ca5264mr11715819pzk.59.1679108412612;
-        Fri, 17 Mar 2023 20:00:12 -0700 (PDT)
+        bh=URZQ3gLDJKimA8H5HfP/flcS8+UR77bug41nYZUBjAI=;
+        b=R6Prp5pGc8iCYIQP+Bf2ZVfk+T0Fk5hvjyobF/MEKyLwDlOz0elzysrhcXGg8YzNbU
+         +52EZnZv3dHTpz9fnpvehnFd9Pbo5h94Mxq4jqG/by2NAbcy73oYFjISya4GrMjgGbqi
+         XzjeeYx1xFwtiQVhyN+QBH1hZChkH5LuiIzakGqEdYw16RJyyXo+euOSA4T+RKHDbmGf
+         Wp+GuLigWpZHrsC0SWYDr/itObenSfmZgnkAyCER5tKrFKR/Sp74xEoNb7aPeUSyEPH1
+         TiXyj8u96dfVu3xBnE2cIh694+YWfNKmmjU6+4r3FDuUcoffQ2t0viGXPBlUXdbIaQyA
+         FcHQ==
+X-Gm-Message-State: AO0yUKVIXUOX7T5+AGImrQiuB1j5imDlQRPXkKcPqtUW5t8Q9qZl1YfL
+        hdVkQREMOg043UWL52VUBJcN2EHP4Qs=
+X-Google-Smtp-Source: AK7set+sXpYsxgs1XShPfJfOrXFTCTdYJJnhtA8rWOmBQsIn0vb+NQ9X4koH/HjXIFY9cncCFmaTYA==
+X-Received: by 2002:a05:6a20:2444:b0:bc:96bd:d701 with SMTP id t4-20020a056a20244400b000bc96bdd701mr13140312pzc.13.1679108831008;
+        Fri, 17 Mar 2023 20:07:11 -0700 (PDT)
 Received: from [192.168.1.101] (1-160-164-133.dynamic-ip.hinet.net. [1.160.164.133])
-        by smtp.gmail.com with ESMTPSA id a7-20020a62bd07000000b006222a261188sm2216915pff.62.2023.03.17.20.00.09
+        by smtp.gmail.com with ESMTPSA id w6-20020aa78586000000b0061949fe3be8sm2218319pfn.106.2023.03.17.20.07.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 20:00:12 -0700 (PDT)
-Message-ID: <ab2b31a3-d6e0-71fa-9e91-37add8df55be@gmail.com>
-Date:   Sat, 18 Mar 2023 11:00:08 +0800
+        Fri, 17 Mar 2023 20:07:10 -0700 (PDT)
+Message-ID: <f21df56b-43b8-a48e-ab8f-e0cf2b163976@gmail.com>
+Date:   Sat, 18 Mar 2023 11:07:07 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
 Subject: Re: [PATCH 00/15] Introduce Nuvoton ma35d1 SoC
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
         krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -71,8 +73,9 @@ References: <20230315072902.9298-1-ychuang570808@gmail.com>
  <f2699aa1-4d8a-48c0-b332-484db0b04252@app.fastmail.com>
  <1a1277ac-4ae5-eaab-01c3-0242c12be76b@gmail.com>
  <6ed7e89f-2d2c-4134-9c6f-a9d18e2fc8a8@app.fastmail.com>
+ <a90fc6f6-df95-3a4f-da5b-ebdafbe7dd34@linaro.org>
 From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <6ed7e89f-2d2c-4134-9c6f-a9d18e2fc8a8@app.fastmail.com>
+In-Reply-To: <a90fc6f6-df95-3a4f-da5b-ebdafbe7dd34@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,58 +88,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Arnd,
 
-
-Thanks for you advice.
-
-
-On 2023/3/17 下午 09:21, Arnd Bergmann wrote:
-> On Fri, Mar 17, 2023, at 07:30, Jacky Huang wrote:
->> On 2023/3/16 下午 10:05, Arnd Bergmann wrote:
->>
->> Thank you very much for your kind help. You explained it so well,
->> I have understood the process. We got a lot of suggestions for this
->> patchset, and there are a lot of issues to fix. When most of the
->> problems get solved and acknowledged by the reviewers, I will
->> add you and soc@kernel.org to Cc.
-> Ok, sounds good. Two more clarifications from me:
+On 2023/3/18 上午 12:06, Krzysztof Kozlowski wrote:
+> On 17/03/2023 14:21, Arnd Bergmann wrote:
+>> I only now saw that you had already submitted this several times
+>> at the beginning of last year, and this is technically 'v5'
+>> of the series, and it would make sense to add 'v6' to the subject
+>> next time and link back to the previous [1] and this[2] submission
+>> on lore.kernel.org.
+> ... and address previous feedback. Or at least make it clear in
+> changelog that you addressed it, so our review was not ignored.
 >
-> 1. I expect you will have to go through two or three submissions
-> that get more feedback before everyone is happy. Please include
-> my arnd@arndb.de on Cc on all the submissions, but only include
-> the soc@kernel.org address when all patches have an Acked-by
-> or Reviewed-by from the respective subsystem maintainer.
+> Best regards,
+> Krzysztof
 
 
-Sure, I will add you on Cc. Thank you.
+Dear Krzysztof,
 
 
-> 2. I think the series looks very good at this point, and most of the
-> feedback was about minor details, so I am optimistic that we can
-> actually merge it soon.
->
-> I only now saw that you had already submitted this several times
-> at the beginning of last year, and this is technically 'v5'
-> of the series, and it would make sense to add 'v6' to the subject
-> next time and link back to the previous [1] and this[2] submission
-> on lore.kernel.org.
->
->
->      Arnd
->
-> [1] https://lore.kernel.org/all/20220510032558.10304-1-ychuang3@nuvoton.com/
-> [2] https://lore.kernel.org/all/20230315072902.9298-1-ychuang570808@gmail.com/
+Thank you.
 
+Of course, I will add back the changelog.
 
-In fact, I was thinking about this before submitting the patch. Looks 
-like this is causing
+And, I have a question. If subsequent modifications made to a patch, 
+should the
 
-confusion for reviewers, so thanks for the suggestion. I will submit the 
-next version as v6,
-
-and add the history of v1 ~ v4, and this version will be regarded as v5.
-
+"Reviewed-by" still be valid? Can we keep it?
 
 Best regards,
 
