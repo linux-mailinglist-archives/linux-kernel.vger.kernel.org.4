@@ -2,144 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A31B6BFC0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AA56BFC16
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 19:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCRRzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 13:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        id S229756AbjCRSAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 14:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjCRRzo (ORCPT
+        with ESMTP id S229550AbjCRSAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 13:55:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D141F5F1;
-        Sat, 18 Mar 2023 10:55:41 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id h8so8416289plf.10;
-        Sat, 18 Mar 2023 10:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679162141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=81qaQdBcBEP2jHfYRJB7eE244mJTlBVviRI7USBuECw=;
-        b=AK7708FUtr5f/inCfiB0yMc0/h3V8fqEYmQnW0dtGVhFsTxuLGkAXuxMFjDK3z3PSh
-         SFbLz2DmNOczUkpncbTl8uftF4cQ7yThClmt3P/70TNVlcG2XF+SW+/gv49pnuDbecE8
-         sGgk6zihg2H2Oh4BdHDi436izZltHaRKiOrN1ta9V2h5aYoa1pcmCfG6XPE28VhuIg0P
-         7AeG2IkR24bqU+uG3Qk4tBO2nIUlO3VYmdovXyKpbZae5w2ur7BA3pjNG+mb9yv6PhBT
-         3dxAULCVXyXEM6lTAQI+e2YvTIX1RtF5gQH4K22JQE2dNClQkdXE9Oy9kLok/olDMb9d
-         6ORg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679162141;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=81qaQdBcBEP2jHfYRJB7eE244mJTlBVviRI7USBuECw=;
-        b=O5eLim1OC3zsv/uoXCJx8iPOA/j2GuAaTJd7MPaJW08fFN/guptEcFEo9YZrjNKUWG
-         i2sl3+JOkvj23eLk7WyjLUFp1OKC/R9cf+cHNZPFPwxDRyd/jDSxCpPphspT2Z1txkGz
-         Ke6gj7WM3haaiiiForCbaYPul1ORMGxp9W2MuthMvq7QPxV4LqmcULuFtKdGQfxFA34V
-         G60ho+TBlcyWJ+EqHjc5yguyz57684Q8c8L2uKpMkXIIiKTsJ5+yQUaW/2vfasdXdwYO
-         By78k8rEYkjTbPsD5s8QEgKZ/3Qah4LAr8j8VM4DndGZSApGnVs9O1nrah5dD4o5ltrT
-         aCxA==
-X-Gm-Message-State: AO0yUKVAYDvK3w2Lc9tZ/piKI6qAgRDKOWgNVWlsEViscQ+6/IJV4rMy
-        drriNSBYn1pvoc0r3QdVTrs=
-X-Google-Smtp-Source: AK7set/hbzhTcYbmFLhKb0SHtB97paH+z56ao+FfTyjpzr2In6PrTz9qj8HLnFeT69UAeY0frWIJkw==
-X-Received: by 2002:a17:90a:1903:b0:23b:2963:ec94 with SMTP id 3-20020a17090a190300b0023b2963ec94mr12832199pjg.29.1679162141142;
-        Sat, 18 Mar 2023 10:55:41 -0700 (PDT)
-Received: from sumitra.com ([117.199.163.158])
-        by smtp.gmail.com with ESMTPSA id b17-20020a631b51000000b004e28be19d1csm3439677pgm.32.2023.03.18.10.55.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 10:55:40 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 10:55:32 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Marc Dietrich <marvin24@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] Staging: nvec: Change container_of macro to an inline
- function.
-Message-ID: <20230318175532.GA49651@sumitra.com>
-References: <20230318170514.GA49181@sumitra.com>
- <alpine.DEB.2.22.394.2303181811260.2914@hadrien>
+        Sat, 18 Mar 2023 14:00:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B9D1F918;
+        Sat, 18 Mar 2023 11:00:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 110E0B8010F;
+        Sat, 18 Mar 2023 18:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2FB9C433EF;
+        Sat, 18 Mar 2023 18:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679162450;
+        bh=iQv2UWT4vp+zaZRW7O18XPD/QQoMvERRM+QNrfGepGQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TAYcje2tV8zG2FX9OfYDEBiijUSQbXspknLvLpc1EVQ7Cd2I1a8QS5PP6jYT48tLu
+         qgpfHEoAMMpF/sNVwusHmFhY4xgcS+v1nOQqyZWnYc0+CFZFSDccnwNKUZbssrACZE
+         pJlYK+B7K/wQc+5o8OINig2YeBUv/SyEIYskuqfKm3MP5SZSlm7xUKOCu9lPUF1fLf
+         e/Se8Zu9pN0uG1uRvR1BZZW3MnzQU5kfqykPLmvyYLM2YVQpGx3ERQ0mSNxYI8GXE1
+         fRxGz38+Oz5naX5qvQ7eKeRp3vWL6Kb1WTzblLKPpOwEe6ipdtCJ5wRKZcuN8K9wL/
+         CSHsWnlSX972g==
+Date:   Sat, 18 Mar 2023 19:00:47 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Matthias Benkmann <matthias.benkmann@gmail.com>
+Cc:     linux-input@vger.kernel.org, dmitry.torokhov@gmail.com,
+        Nate Yocom <nate@yocom.org>, hadess@hadess.net,
+        benjamin.tissoires@redhat.com, linux-kernel@vger.kernel.org,
+        Pavel Rojtberg <rojtberg@gmail.com>
+Subject: Re: [PATCH v3] Fix incorrectly applied patch for MAP_PROFILE_BUTTON
+Message-ID: <20230318180047.3pzcep5roaon3nph@intel.intel>
+References: <CAK4gqCCk7ipRbZ=LM8Nsj+nE2S6v6QN39ziYSr3d2NmVMHULYg@mail.gmail.com>
+ <20230318162106.0aef4ba5@ninja>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2303181811260.2914@hadrien>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230318162106.0aef4ba5@ninja>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 06:14:50PM +0100, Julia Lawall wrote:
-> 
-> 
-> On Sat, 18 Mar 2023, Sumitra Sharma wrote:
-> 
-> > The macro has the drawback that one cannot determine
-> > what type it applies to by looking at the definition.
-> > Hence this macro definition is not type-safe.
-> >
-> > The inline function gives the same benefits as the
-> > macro and only accepts the specific type of arguments.
-> > Use static because the definition only requires it to be
-> > visible in the current file.
-> 
-> Sumitra,
-> 
-> The subject line and log message could be a little less generic.  For the
-> subject line, one has the impression that you are changing the definition
-> of container_of itself.
-> 
-> The log message is also a bit wordy.  Something like the following would
-> be more concise and still present the issue:
->
+On Sat, Mar 18, 2023 at 04:21:06PM +0100, Matthias Benkmann wrote:
+> When the linked patch was applied,
 
-Okay. I will focus more on writing better patch subject and description.
+Please refer to the patch as "commit fff1011a26d6 ("Input: xpad -
+add X-Box Adaptive Profile button")" and not as "linked patch".
 
-Thanks.
+> one hunk ended up in the wrong function. This patch moves it to where
+> it probably belongs.
 
-Regards,
+probably? We need to be sure here :)
 
-Sumitra
+Besides, please, use the imperative form, not "this patch moves"
+but "move what where", please be more specific.
 
-> Convert to_nvec_led from a macro to an inline function, to make the
-> relevant types apparent in the definition and to benefit from the type
-> checking performed by the compiler at call sites.
+Andi
+
+> Link: https://lore.kernel.org/all/20220908173930.28940-6-nate@yocom.org/
+> Fixes: fff1011a26d6 (Input: xpad - add X-Box Adaptive Profile button)
+> Signed-off-by: Matthias Benkmann <matthias.benkmann@gmail.com>
 > 
-> julia
+> ---
+>  drivers/input/joystick/xpad.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
+> diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+> index f642ec8e92dd..29131f1a2f06 100644
+> --- a/drivers/input/joystick/xpad.c
+> +++ b/drivers/input/joystick/xpad.c
+> @@ -781,9 +781,6 @@ static void xpad_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char *d
+>  	input_report_key(dev, BTN_C, data[8]);
+>  	input_report_key(dev, BTN_Z, data[9]);
+>  
+> -	/* Profile button has a value of 0-3, so it is reported as an axis */
+> -	if (xpad->mapping & MAP_PROFILE_BUTTON)
+> -		input_report_abs(dev, ABS_PROFILE, data[34]);
+>  
+>  	input_sync(dev);
+>  }
+> @@ -1061,6 +1058,10 @@ static void xpadone_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char
+>  					(__u16) le16_to_cpup((__le16 *)(data + 8)));
+>  		}
+>  
+> +		/* Profile button has a value of 0-3, so it is reported as an axis */
+> +		if (xpad->mapping & MAP_PROFILE_BUTTON)
+> +			input_report_abs(dev, ABS_PROFILE, data[34]);
+> +
+>  		/* paddle handling */
+>  		/* based on SDL's SDL_hidapi_xboxone.c */
+>  		if (xpad->mapping & MAP_PADDLES) {
+> -- 
+> 2.25.1
 > 
-> >
-> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> > ---
-> >  drivers/staging/nvec/nvec_paz00.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/staging/nvec/nvec_paz00.c b/drivers/staging/nvec/nvec_paz00.c
-> > index 8b4da95081c8..9573ba762cdd 100644
-> > --- a/drivers/staging/nvec/nvec_paz00.c
-> > +++ b/drivers/staging/nvec/nvec_paz00.c
-> > @@ -14,8 +14,10 @@
-> >  #include <linux/platform_device.h>
-> >  #include "nvec.h"
-> >
-> > -#define to_nvec_led(led_cdev) \
-> > -	container_of(led_cdev, struct nvec_led, cdev)
-> > +static inline struct nvec_led *to_nvec_led(struct led_classdev *led_cdev)
-> > +{
-> > +	return container_of(led_cdev, struct nvec_led, cdev);
-> > +}
-> >
-> >  #define NVEC_LED_REQ {'\x0d', '\x10', '\x45', '\x10', '\x00'}
-> >
-> > --
-> > 2.25.1
-> >
-> >
-> >
