@@ -2,133 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003546BF9C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 13:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15E16BFA0A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 13:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjCRMIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 08:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S229588AbjCRM2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 08:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCRMIS (ORCPT
+        with ESMTP id S229478AbjCRM2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 08:08:18 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060B430182;
-        Sat, 18 Mar 2023 05:08:14 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pdVM4-00054s-Tt; Sat, 18 Mar 2023 13:08:13 +0100
-Message-ID: <e20db4c4-b2a8-bc88-232f-d1213733d20c@leemhuis.info>
-Date:   Sat, 18 Mar 2023 13:08:12 +0100
+        Sat, 18 Mar 2023 08:28:03 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FEB367CC;
+        Sat, 18 Mar 2023 05:28:02 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id bf15so3465053iob.7;
+        Sat, 18 Mar 2023 05:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679142481;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kMfWrNyQ1D1ri91TyZtrmDYPVhJFlZsofnqJcHljYU=;
+        b=m/SVzELGlViEe/y2fWFpWGDBi6pII2bdmW35mfBP5gQiQOj7OxqwuLsSx+o0kx9XCg
+         4skdyfUAaxY+keEvGlgFo5k+g/aU3nEXjWrRpcj2Oc3uOdtjp4pvka6tnNyHsM8+aKZQ
+         BecboiuPmtmVcLT8Qd5TN7tip5El1unUjVox/kTDwsYCTC8xlrgAm80wEmrc512Mphy0
+         e919atQU3cKlTzTHxhB/7THeNm4K77XHp4CLpMz+m8tX3rrXof1OGUCJK7zSK5xYLePZ
+         SUWrIc/mVC4YQyXUudcxvWAIAffu7s3tu1vI9Ye0CWh5jxcAt/ZgeHV6ya8c+I0KohEz
+         LsFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679142481;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1kMfWrNyQ1D1ri91TyZtrmDYPVhJFlZsofnqJcHljYU=;
+        b=T70yTqf+wIa6YlPoUqN73jnw9E0solS8b1We3Gz4DJx+lgu741qmeEo5mjC7vdSPko
+         r+ICCeh9IwOzf4x99ekbM4iFoqBklwuYS1smx7HMSlCwUEFooDu+dcIkwqt7zXWcj+4W
+         NzmoMF/hD+wvu579ALJwVU9JiOt/bV3KzMmU6xK9PJoG5XeGPt6+CCz1ely1eTAMqlQp
+         ywqEb3QYAE/DULcVbe9TN4j+dIcDDvLJCsT41uR4Tt037x6oVPbhEcskl/c3ri7vDms9
+         CDjFgL295jUfpW4/beHmJidEw/R/TtabMKKv02zThzjqc5nvy+D0VrtmvR94DU3OjVFP
+         +b2g==
+X-Gm-Message-State: AO0yUKU9HoVshXCN60TlWBBMZN34UFeSZBzsEYXSTdh3TecUfsASjfkh
+        0SG6W1MpB9YDqHqa1QHkkLdp/dvgGCw=
+X-Google-Smtp-Source: AK7set+gexTdc8Ur8d0cBb13JbFlkR9KoLhYjq0ZsExpcwtv9WVby4JVQUfX9t5RKEwJiJacnFqUSQ==
+X-Received: by 2002:a6b:da18:0:b0:71f:8124:de52 with SMTP id x24-20020a6bda18000000b0071f8124de52mr1206427iob.9.1679142481331;
+        Sat, 18 Mar 2023 05:28:01 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056602130b00b007535c8726c7sm1323317iov.38.2023.03.18.05.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 05:28:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.3-rc3
+Date:   Sat, 18 Mar 2023 05:27:58 -0700
+Message-Id: <20230318122758.2140868-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        barry@messagefor.me.uk
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] focaltech touchpad driver misbehaves due to "kbuild:
- treat char as always unsigned"
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679141295;ab4bbee5;
-X-HE-SMSGID: 1pdVM4-00054s-Tt
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
+Hi Linus,
 
-I noticed a regression report in bugzilla.kernel.org. Jason, apparently
-it's caused by a change of yours (3bc753c06dd0 ("kbuild: treat char as
-always unsigned")), which apparently caused a problem in
-drivers/input/mouse/focaltech.c to surface. Someone provided a patch
-already to fix it here: https://bugs.archlinux.org/task/77733?getfile=22498
+Please pull hwmon fixes for Linux v6.3-rc3 from signed tag:
 
-Back to the bug. As many (most?) kernel developer don't keep an eye on
-bugzilla, I decided to forward it by mail. Quoting from
-https://bugzilla.kernel.org/show_bug.cgi?id=217211 :
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.3-rc3
 
-> Barry 2023-03-17 13:51:10 UTC
-> 
-> Created attachment 303972 [details] Kernel bisect result
-> 
-> O/S: Archlinux.
-> 
-> On any kernel release from 6.2 onwards I have found that the touchpad
-> doesn't respond to multi finger touches properly. The pad works fine for
-> single finger movement and single finger tap to click. If I click and
-> hold the pad button and then use another finger to move such as for text
-> selection, drag and drop, moving or resizing a window etc. Or if I try
-> to use 2 finger scrolling then the mouse pointer jumps to the top or
-> right or into the top right of the screen. All of this functionality
-> worked as expected up to kernel 6.1.19.
-> 
-> I have bisected the kernel and got the attached result.
-> 
-> 
-> I have checked out kernel 6.2.6 and removed the `-funsigned-char` from
-> the Makefile. Kernel 6.2.6 built with the modified Makefile restores the
-> correct functionality. I believe the touchpad uses the psmouse driver so
-> maybe the new build option has broken this driver.>
-> I have bisected the kernel and got the attached result.
-> 
-> 
-> I have checked out kernel 6.2.6 and removed the `-funsigned-char`
-> from the Makefile. Kernel 6.2.6 built with the modified Makefile
-> restores the correct functionality. I believe the touchpad uses the
-> psmouse driver so maybe the new build option has broken this driver.
-> 
-> [...]
-> 
-> barry@messagefor.me.uk 2023-03-18 11:49:27 UTC
-> 
-> Hi. If you check this link which is my report of the same bug on the
-> arch bug tracker there is a patch attached which fixes the issue.
-> 
-> https://bugs.archlinux.org/task/77733#comment216336
+Thanks,
+Guenter
+------
 
-See the ticket for more details.
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+are available in the Git repository at:
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.3-rc3
 
-#regzbot introduced: 3bc753c06dd0
-https://bugzilla.kernel.org/show_bug.cgi?id=217211
-#regzbot title: kbuild/input: focaltech touchpad driver misbehaves due
-to a checke how to treat char
-#regzbot ignore-activity
+for you to fetch changes up to ab00709310eedcd8dae0df1f66d332f9bc64c99e:
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+  hwmon: (ltc2992) Set `can_sleep` flag for GPIO chip (2023-03-15 19:15:00 -0700)
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
+----------------------------------------------------------------
+hwmon fixes for v6.3-rc3
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+- ltc2992, adm1266: Set missing can_sleep flag
+
+- tmp512/tmp513: Drop of_match_ptr for ID table to fix build with !CONFIG_OF
+
+- ucd90320: Fix back-to-back access problem
+
+- ina3221: Fix bad error return from probe function
+
+- xgene: Fix use-after-free bug in remove function
+
+- adt7475: Fix hysteresis register bit masks, and fix association
+  of 'smoothing' attributes
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      hwmon: tmp512: drop of_match_ptr for ID table
+
+Lars-Peter Clausen (3):
+      hwmon: (ucd90320) Add minimum delay between bus accesses
+      hwmon: (adm1266) Set `can_sleep` flag for GPIO chip
+      hwmon: (ltc2992) Set `can_sleep` flag for GPIO chip
+
+Marcus Folkesson (1):
+      hwmon: (ina3221) return prober error code
+
+Tony O'Brien (2):
+      hwmon: (adt7475) Display smoothing attributes in correct order
+      hwmon: (adt7475) Fix masking of hysteresis registers
+
+Zheng Wang (1):
+      hwmon: (xgene) Fix use after free bug in xgene_hwmon_remove due to race condition
+
+ drivers/hwmon/adt7475.c       |  8 ++---
+ drivers/hwmon/ina3221.c       |  2 +-
+ drivers/hwmon/ltc2992.c       |  1 +
+ drivers/hwmon/pmbus/adm1266.c |  1 +
+ drivers/hwmon/pmbus/ucd9000.c | 75 +++++++++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/tmp513.c        |  2 +-
+ drivers/hwmon/xgene-hwmon.c   |  1 +
+ 7 files changed, 84 insertions(+), 6 deletions(-)
