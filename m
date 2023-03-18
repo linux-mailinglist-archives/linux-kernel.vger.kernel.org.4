@@ -2,219 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C836BFA45
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 14:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881866BFA4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 14:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCRNf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 09:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
+        id S229747AbjCRNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 09:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCRNfz (ORCPT
+        with ESMTP id S229516AbjCRNiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 09:35:55 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE2FD337
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 06:35:53 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so11921483pjg.4
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 06:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679146553;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xFodAt8hICojWsebZxoHRfdgjioP9zm42Y5GErUuaC4=;
-        b=jh/KQLV+QmmTvXYai1/XdSMAj3OGj+IrxBl04pPMMYTSlZvPYJPXTbnpBPAObzga0a
-         9592/qURjndvPZr75xZU7t/F6zs+KUMUlesTU3uJoBYCaz9/bIoNWrHvH9xi8m+48E03
-         f/zAYEIY+0NmkpwoQSmuyrmbB44uSq/e/oDCCcrfvQEC13gzNCqUnTt/25e23GKipfRb
-         4h9mcW243DaAQMqGC8zsWLRvnXctp2JMhEdexbOLJlhH0swl1Rqb0y/aXwVn9LbMYjb6
-         3ZPSuXRq5yD3G8yi+iQiDIuEz7NpjgkbpwIwUuXKX5o0s3GsoT/bRezCJec51P0sSXJt
-         1U7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679146553;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xFodAt8hICojWsebZxoHRfdgjioP9zm42Y5GErUuaC4=;
-        b=Z28h7532UoE8MrpIIF86jnkZSuGLcKFd36oDuvLaHgwJytgcOaFKTzFhqZ8ztJij7T
-         ieviAnknNPHo3vmJ0ismI9Yo/cI0EJSYpveFg11IITIY7BMwxEf3AMGGtH3a7DY7nRNy
-         ILojQoUkGj4CFAGPYR8ghWqw7z/GwtUIAHQyAUJvLP0e1B5Q0Y0J8MpaujwL+qM5zIJI
-         2FGDxOxRQ1cx1wJiPNEjuS4BhVrBxVNEQFBdc+k0TB/vyQde7mh1KTvkZ8Etp1Lm+/ND
-         lsUjeume///5aO+vYVAB+j+I8uBO+b4VqtjRyQvhwI3XJFLhYMYEr066+7qgleIJgLga
-         vqnw==
-X-Gm-Message-State: AO0yUKUsK7GeU0FSyqQ+Fc85tuz/AZtfbK3sTJh9YTAsYQbv0pPeo3VP
-        7/u6jVPKwukegM8fZz6oxso=
-X-Google-Smtp-Source: AK7set+JQRi7cvADV/xUAu+/4x/73hxwJoQ8a73ZbdHjvkaMJJVV1alrtvK9WDbRFCmp/x0mpF6j1g==
-X-Received: by 2002:a05:6a20:ba90:b0:cd:2aa6:94d6 with SMTP id fb16-20020a056a20ba9000b000cd2aa694d6mr7326440pzb.21.1679146553305;
-        Sat, 18 Mar 2023 06:35:53 -0700 (PDT)
-Received: from CloudiRingWorld ([60.188.201.163])
-        by smtp.gmail.com with ESMTPSA id q27-20020a63505b000000b0050bebfe464dsm3163482pgl.53.2023.03.18.06.35.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 06:35:52 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 21:35:49 +0800
-From:   Kloudifold <cloudifold.3125@gmail.com>
-To:     outreachy@lists.linux.dev, teddy.wang@siliconmotion.com,
-        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        alison.schofield@intel.com
-Subject: [PATCH v3] staging: sm750: Rename sm750_hw_cursor_* functions to
- snake_case
-Message-ID: <ZBW+NX4SLaCyEnJd@CloudiRingWorld>
+        Sat, 18 Mar 2023 09:38:24 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EFBD2821E;
+        Sat, 18 Mar 2023 06:38:22 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pdWlD-0005NA-00; Sat, 18 Mar 2023 14:38:15 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 642E9C1B07; Sat, 18 Mar 2023 14:38:07 +0100 (CET)
+Date:   Sat, 18 Mar 2023 14:38:07 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
+Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mips: bmips: BCM6358: disable RAC flush for TP1
+Message-ID: <20230318133807.GA4619@alpha.franken.de>
+References: <20230316180518.783613-1-noltari@gmail.com>
+ <20230317102004.235879-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317102004.235879-1-noltari@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sm750 driver has sm750_hw_cursor_* functions, which are named in
-camelcase. Rename them to snake case to follow the function naming
-convention.
+On Fri, Mar 17, 2023 at 11:20:04AM +0100, Álvaro Fernández Rojas wrote:
+> RAC flush causes kernel panics on BCM6358 with EHCI/OHCI when booting from TP1:
+> [    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
+> [    3.895011] Reserved instruction in kernel code[#1]:
+> [    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
+> [    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
+> [    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
+> [    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
+> [    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
+> [    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
+> [    3.932848] $20   : 00000000 00000000 55590000 77d70000
+> [    3.938251] $24   : 00000018 00000010
+> [    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
+> [    3.949058] Hi    : 00000000
+> [    3.952013] Lo    : 00000000
+> [    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
+> [    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
+> [    3.965913] Status: 10008703	KERNEL EXL IE
+> [    3.970216] Cause : 00800028 (ExcCode 0a)
+> [    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
+> [    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
+> [    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
+> [    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
+> [    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
+> [    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
+> [    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
+> [    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
+> [    4.044196]         ...
+> [    4.046706] Call Trace:
+> [    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
+> [    4.054356] [<80015c70>] setup_frame+0xdc/0x124
+> [    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
+> [    4.064207] [<80011b50>] work_notifysig+0x10/0x18
+> [    4.069036]
+> [    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
+> [    4.080686]
+> [    4.082517] ---[ end trace 22a8edb41f5f983b ]---
+> [    4.087374] Kernel panic - not syncing: Fatal exception
+> [    4.092753] Rebooting in 1 seconds..
+> 
+> Because the bootloader (CFE) is not initializing the Read-ahead cache properly
+> on the second thread (TP1). Since the RAC was not initialized properly, we
+> should avoid flushing it at the risk of corrupting the instruction stream as
+> seen in the trace above.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>  v3: add changes suggested by Florian:
+>    - Switch to a bool and remove unneeded initialization.
+>    - Remove if from bcm6358_quirks().
+>    - Improve commit description and bcm6358_quirks() comment.
+>  v2: check if we're running on TP1 and invert logic.
+> 
+>  arch/mips/bmips/dma.c   | 5 +++++
+>  arch/mips/bmips/setup.c | 8 ++++++++
+>  2 files changed, 13 insertions(+)
 
-Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+applied to mips-fixes with the Fixes tag added.
 
----
-Changes in v3:
-- Add this changelog (Philipp)
-- Move lkp tags and link to the correct location in commit log (Alison)
-- Update the commit msg (Philip)
-- Update the commit log (Bagas, Julia)
+Thomas.
 
-Changes in v2:
-- Use new function names in call sites (LKP)
-
-This v2 patch was prompted by an error reported by the Linux test
-robot, which detected the compile error.
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
----
----
- drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
- drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
- drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
- 3 files changed, 24 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index effc7fcc3..a1254f693 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 
- 	sm750_hw_cursor_disable(cursor);
- 	if (fbcursor->set & FB_CUR_SETSIZE)
--		sm750_hw_cursor_setSize(cursor,
--					fbcursor->image.width,
--					fbcursor->image.height);
-+		sm750_hw_cursor_set_size(cursor,
-+					 fbcursor->image.width,
-+					 fbcursor->image.height);
- 
- 	if (fbcursor->set & FB_CUR_SETPOS)
--		sm750_hw_cursor_setPos(cursor,
--				       fbcursor->image.dx - info->var.xoffset,
--				       fbcursor->image.dy - info->var.yoffset);
-+		sm750_hw_cursor_set_pos(cursor,
-+				       	fbcursor->image.dx - info->var.xoffset,
-+				       	fbcursor->image.dy - info->var.yoffset);
- 
- 	if (fbcursor->set & FB_CUR_SETCMAP) {
- 		/* get the 16bit color of kernel means */
-@@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
- 		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
- 
--		sm750_hw_cursor_setColor(cursor, fg, bg);
-+		sm750_hw_cursor_set_color(cursor, fg, bg);
- 	}
- 
- 	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
--		sm750_hw_cursor_setData(cursor,
--					fbcursor->rop,
--					fbcursor->image.data,
--					fbcursor->mask);
-+		sm750_hw_cursor_set_data(cursor,
-+					 fbcursor->rop,
-+					 fbcursor->image.data,
-+					 fbcursor->mask);
- 	}
- 
- 	if (fbcursor->enable)
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2..ff643e33f 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
- 	poke32(HWC_ADDRESS, 0);
- }
- 
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
- {
- 	cursor->w = w;
- 	cursor->h = h;
- }
- 
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
- {
- 	u32 reg;
- 
-@@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
- 	poke32(HWC_LOCATION, reg);
- }
- 
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
- {
- 	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
- 		HWC_COLOR_12_2_RGB565_MASK;
-@@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
- 	poke32(HWC_COLOR_3, 0xffe0);
- }
- 
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-+			      const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask, opr;
-@@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
- 	}
- }
- 
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
--			      const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask;
-diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-index b59643dd6..88fa02f63 100644
---- a/drivers/staging/sm750fb/sm750_cursor.h
-+++ b/drivers/staging/sm750fb/sm750_cursor.h
-@@ -5,11 +5,11 @@
- /* hw_cursor_xxx works for voyager,718 and 750 */
- void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
- void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *data, const u8 *mask);
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
- 			      const u8 *data, const u8 *mask);
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *data, const u8 *mask);
- #endif
 -- 
-2.40.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
