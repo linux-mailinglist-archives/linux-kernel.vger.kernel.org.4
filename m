@@ -2,125 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D9C6BF90E
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443666BF913
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCRIiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 04:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S229747AbjCRIvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 04:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjCRIiH (ORCPT
+        with ESMTP id S229473AbjCRIvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:38:07 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4E5AFBB7;
-        Sat, 18 Mar 2023 01:37:56 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id d14so448715ion.9;
-        Sat, 18 Mar 2023 01:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679128676;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6ieG7L9msYA/7lhUnPh05XbQYvh9ea1Tc8rd619ZsgQ=;
-        b=d5Jmz/4FBL6d+7r7Y7GwenCb+4EgG6JMg97ed/mqotPa/wVddpfWwlNAkkvWrtgpbW
-         phAlK1urY3kUsWzeTCQA6CfaKd+WEwt/MZ5e0TOFEXGbIlZaTE70UeNoUTnLsWNmgIU6
-         MI7QafQ8P8ccnOpFQpWJdgS1vlotiYEIRV+U8nkZWphxdDzr2EgfPKxcDbBgFGOvqoJw
-         WYWCr0J0N4g0i4iTaetmBrV4OQZ8XQA6rrRXIVCc4syJI7nVjTtP6Pgy3uy2eINzn202
-         mhl8tXl7aIGe9SKhQnPkHsRX3hPwByXriNw3MC6oK/D/oqwsYPcTUe7DZqtujWULD8aA
-         Pp1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679128676;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ieG7L9msYA/7lhUnPh05XbQYvh9ea1Tc8rd619ZsgQ=;
-        b=Hshd0YzyViJoocYAlGvSWTq71SVs7KmTrAEVINoe1DD8w0lLEVNr5sH002v9XCWyuD
-         75y3bocc+pGpIUAS2W3lEjoTHMkV+GjNgXn762zf7dCsVpZFttK+eFK7SRHhko47l1tr
-         QO1qD7N4yTYZxdbGSk1TFOdu3IckUeiyTHxwL7tBQArMok4JRXhvggEZiub3ziGgTU78
-         EKzBwMhz5jz1+BqCC0bFeS20jM6iO4h5telqp0+8TZtvkZC9ZHoaOP0qJAHKvH0NsvoE
-         AaeDYdS8z2sYuK/x8fGNe/EPIMTapoF6/SB2m0Iuln0TrAnZL7WjVnz6F+fOdUiebia5
-         brLQ==
-X-Gm-Message-State: AO0yUKUmhhJhWGO301E+qrmYERSOtiunGHLZBhV0G6mDTdoqMyaof8rv
-        xNCY0Kn4GpA4+1vryrNsgAI=
-X-Google-Smtp-Source: AK7set9FGB4F1uRNXAX0Pk/2KXzDRt5VIXEaOZtMbjLEJaLnLm3z4gatwEwLDItxcVLd8R8Up8yo5Q==
-X-Received: by 2002:a05:6602:1c4:b0:74c:8dc7:aa1 with SMTP id w4-20020a05660201c400b0074c8dc70aa1mr1012004iot.17.1679128676172;
-        Sat, 18 Mar 2023 01:37:56 -0700 (PDT)
-Received: from localhost.localdomain (tunnel785484-pt.tunnel.tserv9.chi1.ipv6.he.net. [2001:470:1f10:aed::2])
-        by smtp.googlemail.com with ESMTPSA id h8-20020a6b7a08000000b00746041ecbf9sm1174834iom.39.2023.03.18.01.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 01:37:55 -0700 (PDT)
-From:   Tianling Shen <cnsztl@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
-        Tianling Shen <cnsztl@gmail.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Andrew Powers-Holmes <aholmes@omnom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] arm64: dts: rockchip: remove I2S1 TDM node for the NanoPi R5 series
-Date:   Sat, 18 Mar 2023 16:37:45 +0800
-Message-Id: <20230318083745.6181-6-cnsztl@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230318083745.6181-1-cnsztl@gmail.com>
-References: <20230318083745.6181-1-cnsztl@gmail.com>
+        Sat, 18 Mar 2023 04:51:06 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA3738B71;
+        Sat, 18 Mar 2023 01:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=e2K1s
+        tAkZBMfErG++SlUbeC1nvxtK/csvq7dYD3khQM=; b=Hxi1LaVS7kkXBX976oXwz
+        lsAa8grThqsAxqUd4OYG2nAnEsrz6Ls380AAlXWuiXQ3W9nD1hDa+FboyhjxEyFv
+        jp2iXh+Wdn+hXuuMHxfw5dyO1BYtIDbZ7GCmx0gng0XfZBlTD60itjQL4aI9QeeY
+        aKKdJUaH3sG0pES1qQeoBk=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wBnb8dQexVkv0urAQ--.15549S2;
+        Sat, 18 Mar 2023 16:50:25 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     mchehab@kernel.org
+Cc:     hverkuil-cisco@xs4all.nl, tasos@tasossah.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] media: saa7134: fix use after free bug in saa7134_finidev  due to race condition
+Date:   Sat, 18 Mar 2023 16:50:23 +0800
+Message-Id: <20230318085023.832510-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBnb8dQexVkv0urAQ--.15549S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCFy5Zr1xAw4fWrW5Aw4fKrg_yoW5GF4DpF
+        WUtF93Aw1UJr4UJa1xXa1UCFySgrZ5XFy3Wasru34Fgr15Gay8Jr1Yq34UKF9xJrsrZa43
+        Kr18urnrJrykuaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiGhc2U1aEEnbMxwAAsV
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is for the audio output which does not exist on the boards.
-Also disable regulator-always-on for vccio_acodec since it's only
-used by the audio output.
+In saa7134_initdev, it will call saa7134_hwinit1. There are three
+function invoking here: saa7134_video_init1, saa7134_ts_init1 
+and saa7134_vbi_init1.
 
-Fixes: c6629b9a6738 ("arm64: dts: rockchip: Add FriendlyElec Nanopi R5S")
+All of them will init a timer with same function. Take 
+saa7134_video_init1 as an example. It'll bound &dev->video_q.timeout
+with saa7134_buffer_timeout.
 
-Signed-off-by: Tianling Shen <cnsztl@gmail.com>
+In buffer_activate, the timer funtcion is started.
+
+If we remove the module or device which will call saa7134_finidev
+to make cleanup, there may be a unfinished work. The
+possible sequence is as follows, which will cause a
+typical UAF bug.
+
+Fix it by canceling the timer works accordingly before cleanup in 
+saa7134_finidev.
+
+CPU0                  CPU1
+
+                    |saa7134_buffer_timeout
+saa7134_finidev     |
+  kfree(dev);       |
+                    |
+                    | saa7134_buffer_next
+                    | //use dev
+
+Fixes: 1e7126b4a86a ("media: saa7134: Convert timers to use timer_setup()")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/media/pci/saa7134/saa7134-ts.c    | 1 +
+ drivers/media/pci/saa7134/saa7134-vbi.c   | 1 +
+ drivers/media/pci/saa7134/saa7134-video.c | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi
-index dd9a7907a1c5..58ba328ea782 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi
-@@ -330,7 +330,6 @@ regulator-state-mem {
+diff --git a/drivers/media/pci/saa7134/saa7134-ts.c b/drivers/media/pci/saa7134/saa7134-ts.c
+index 6a5053126237..437dbe5e75e2 100644
+--- a/drivers/media/pci/saa7134/saa7134-ts.c
++++ b/drivers/media/pci/saa7134/saa7134-ts.c
+@@ -300,6 +300,7 @@ int saa7134_ts_start(struct saa7134_dev *dev)
  
- 			vccio_acodec: LDO_REG4 {
- 				regulator-name = "vccio_acodec";
--				regulator-always-on;
- 				regulator-min-microvolt = <3300000>;
- 				regulator-max-microvolt = <3300000>;
+ int saa7134_ts_fini(struct saa7134_dev *dev)
+ {
++	del_timer_sync(&dev->ts_q.timeout);
+ 	saa7134_pgtable_free(dev->pci, &dev->ts_q.pt);
+ 	return 0;
+ }
+diff --git a/drivers/media/pci/saa7134/saa7134-vbi.c b/drivers/media/pci/saa7134/saa7134-vbi.c
+index 3f0b0933eed6..3e773690468b 100644
+--- a/drivers/media/pci/saa7134/saa7134-vbi.c
++++ b/drivers/media/pci/saa7134/saa7134-vbi.c
+@@ -185,6 +185,7 @@ int saa7134_vbi_init1(struct saa7134_dev *dev)
+ int saa7134_vbi_fini(struct saa7134_dev *dev)
+ {
+ 	/* nothing */
++	del_timer_sync(&dev->vbi_q.timeout);
+ 	return 0;
+ }
  
-@@ -441,11 +440,6 @@ &i2s0_8ch {
- 	status = "okay";
- };
+diff --git a/drivers/media/pci/saa7134/saa7134-video.c b/drivers/media/pci/saa7134/saa7134-video.c
+index 4d8974c9fcc9..29124756a62b 100644
+--- a/drivers/media/pci/saa7134/saa7134-video.c
++++ b/drivers/media/pci/saa7134/saa7134-video.c
+@@ -2146,6 +2146,7 @@ int saa7134_video_init1(struct saa7134_dev *dev)
  
--&i2s1_8ch {
--	rockchip,trcm-sync-tx-only;
--	status = "okay";
--};
--
- &pcie30phy {
- 	data-lanes = <1 2>;
- 	status = "okay";
+ void saa7134_video_fini(struct saa7134_dev *dev)
+ {
++	del_timer_sync(&dev->video_q.timeout);
+ 	/* free stuff */
+ 	saa7134_pgtable_free(dev->pci, &dev->video_q.pt);
+ 	saa7134_pgtable_free(dev->pci, &dev->vbi_q.pt);
 -- 
-2.40.0
+2.25.1
 
