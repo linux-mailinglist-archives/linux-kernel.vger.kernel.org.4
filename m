@@ -2,109 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AA56BFC16
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 19:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73B76BFC18
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 19:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjCRSAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 14:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S229778AbjCRSFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 14:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCRSAy (ORCPT
+        with ESMTP id S229502AbjCRSFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 14:00:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B9D1F918;
-        Sat, 18 Mar 2023 11:00:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 110E0B8010F;
-        Sat, 18 Mar 2023 18:00:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2FB9C433EF;
-        Sat, 18 Mar 2023 18:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679162450;
-        bh=iQv2UWT4vp+zaZRW7O18XPD/QQoMvERRM+QNrfGepGQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TAYcje2tV8zG2FX9OfYDEBiijUSQbXspknLvLpc1EVQ7Cd2I1a8QS5PP6jYT48tLu
-         qgpfHEoAMMpF/sNVwusHmFhY4xgcS+v1nOQqyZWnYc0+CFZFSDccnwNKUZbssrACZE
-         pJlYK+B7K/wQc+5o8OINig2YeBUv/SyEIYskuqfKm3MP5SZSlm7xUKOCu9lPUF1fLf
-         e/Se8Zu9pN0uG1uRvR1BZZW3MnzQU5kfqykPLmvyYLM2YVQpGx3ERQ0mSNxYI8GXE1
-         fRxGz38+Oz5naX5qvQ7eKeRp3vWL6Kb1WTzblLKPpOwEe6ipdtCJ5wRKZcuN8K9wL/
-         CSHsWnlSX972g==
-Date:   Sat, 18 Mar 2023 19:00:47 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Matthias Benkmann <matthias.benkmann@gmail.com>
-Cc:     linux-input@vger.kernel.org, dmitry.torokhov@gmail.com,
-        Nate Yocom <nate@yocom.org>, hadess@hadess.net,
-        benjamin.tissoires@redhat.com, linux-kernel@vger.kernel.org,
-        Pavel Rojtberg <rojtberg@gmail.com>
-Subject: Re: [PATCH v3] Fix incorrectly applied patch for MAP_PROFILE_BUTTON
-Message-ID: <20230318180047.3pzcep5roaon3nph@intel.intel>
-References: <CAK4gqCCk7ipRbZ=LM8Nsj+nE2S6v6QN39ziYSr3d2NmVMHULYg@mail.gmail.com>
- <20230318162106.0aef4ba5@ninja>
+        Sat, 18 Mar 2023 14:05:16 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7156629E30;
+        Sat, 18 Mar 2023 11:05:14 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id E55A45FD02;
+        Sat, 18 Mar 2023 21:05:11 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679162711;
+        bh=RK17QzVXykYBnYoqQh++O3MjjBZp9+6b1s3viHZyeFA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=c+c4Lo7vsROAfqJod5stuKa05wHrrpH2/2JCMUJVp1rr/dh30rqmChFPY6hKPB4R0
+         hbfK/2vclR8+KyVNNg/9uVc53O8x19oiBbgNEn3ulzAnV2ru6Z4vL18wa+y+aPlfHd
+         JmTuHNMwzqkZ0VhAdkY1u4eKSBtyhJ/DqIQo+WXSTgGmcDBcKUXAuG3L705Ryz8jUX
+         jXwWq8SqZl5zN8LHnFiWA+S6bkC/AAPa/dFozWwUC2t4yKO9p3NBWkI3kIBEiaVY22
+         D8IeUR+xDD2EyYrjiggPVoldKUD1KjsTWUaMtubI7Hbo2EOaqTDC0iWVk9mIxqKiao
+         ijAZOUMw/Gmpg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sat, 18 Mar 2023 21:05:07 +0300 (MSK)
+Message-ID: <07f4fb07-6a3b-4916-4e55-20ca7a866a8f@sberdevices.ru>
+Date:   Sat, 18 Mar 2023 21:01:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318162106.0aef4ba5@ninja>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v1] virtio/vsock: allocate multiple skbuffs on tx
+Content-Language: en-US
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru>
+ <ZBThOG/nISvqbllq@bullseye>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <ZBThOG/nISvqbllq@bullseye>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/18 14:21:00 #20969333
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 04:21:06PM +0100, Matthias Benkmann wrote:
-> When the linked patch was applied,
 
-Please refer to the patch as "commit fff1011a26d6 ("Input: xpad -
-add X-Box Adaptive Profile button")" and not as "linked patch".
 
-> one hunk ended up in the wrong function. This patch moves it to where
-> it probably belongs.
-
-probably? We need to be sure here :)
-
-Besides, please, use the imperative form, not "this patch moves"
-but "move what where", please be more specific.
-
-Andi
-
-> Link: https://lore.kernel.org/all/20220908173930.28940-6-nate@yocom.org/
-> Fixes: fff1011a26d6 (Input: xpad - add X-Box Adaptive Profile button)
-> Signed-off-by: Matthias Benkmann <matthias.benkmann@gmail.com>
+On 18.03.2023 00:52, Bobby Eshleman wrote:
+> On Fri, Mar 17, 2023 at 01:38:39PM +0300, Arseniy Krasnov wrote:
+>> This adds small optimization for tx path: instead of allocating single
+>> skbuff on every call to transport, allocate multiple skbuffs until
+>> credit space allows, thus trying to send as much as possible data without
+>> return to af_vsock.c.
 > 
-> ---
->  drivers/input/joystick/xpad.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Hey Arseniy, I really like this optimization. I have a few
+> questions/comments below.
 > 
-> diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
-> index f642ec8e92dd..29131f1a2f06 100644
-> --- a/drivers/input/joystick/xpad.c
-> +++ b/drivers/input/joystick/xpad.c
-> @@ -781,9 +781,6 @@ static void xpad_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char *d
->  	input_report_key(dev, BTN_C, data[8]);
->  	input_report_key(dev, BTN_Z, data[9]);
->  
-> -	/* Profile button has a value of 0-3, so it is reported as an axis */
-> -	if (xpad->mapping & MAP_PROFILE_BUTTON)
-> -		input_report_abs(dev, ABS_PROFILE, data[34]);
->  
->  	input_sync(dev);
->  }
-> @@ -1061,6 +1058,10 @@ static void xpadone_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char
->  					(__u16) le16_to_cpup((__le16 *)(data + 8)));
->  		}
->  
-> +		/* Profile button has a value of 0-3, so it is reported as an axis */
-> +		if (xpad->mapping & MAP_PROFILE_BUTTON)
-> +			input_report_abs(dev, ABS_PROFILE, data[34]);
-> +
->  		/* paddle handling */
->  		/* based on SDL's SDL_hidapi_xboxone.c */
->  		if (xpad->mapping & MAP_PADDLES) {
-> -- 
-> 2.25.1
+>>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  net/vmw_vsock/virtio_transport_common.c | 45 +++++++++++++++++--------
+>>  1 file changed, 31 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>> index 6564192e7f20..cda587196475 100644
+>> --- a/net/vmw_vsock/virtio_transport_common.c
+>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>  	const struct virtio_transport *t_ops;
+>>  	struct virtio_vsock_sock *vvs;
+>>  	u32 pkt_len = info->pkt_len;
+>> -	struct sk_buff *skb;
+>> +	u32 rest_len;
+>> +	int ret;
+>>  
+>>  	info->type = virtio_transport_get_type(sk_vsock(vsk));
+>>  
+>> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>  
+>>  	vvs = vsk->trans;
+>>  
+>> -	/* we can send less than pkt_len bytes */
+>> -	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+>> -		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
+>> -
+>>  	/* virtio_transport_get_credit might return less than pkt_len credit */
+>>  	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
+>>  
+>> @@ -227,17 +224,37 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>  	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
+>>  		return pkt_len;
+>>  
+>> -	skb = virtio_transport_alloc_skb(info, pkt_len,
+>> -					 src_cid, src_port,
+>> -					 dst_cid, dst_port);
+>> -	if (!skb) {
+>> -		virtio_transport_put_credit(vvs, pkt_len);
+>> -		return -ENOMEM;
+>> -	}
+>> +	rest_len = pkt_len;
+>>  
+>> -	virtio_transport_inc_tx_pkt(vvs, skb);
+>> +	do {
+>> +		struct sk_buff *skb;
+>> +		size_t skb_len;
+>> +
+>> +		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
+>> +
+>> +		skb = virtio_transport_alloc_skb(info, skb_len,
+>> +						 src_cid, src_port,
+>> +						 dst_cid, dst_port);
+>> +		if (!skb) {
+>> +			ret = -ENOMEM;
+>> +			goto out;
+>> +		}
 > 
+> In this case, if a previous round of the loop succeeded with send_pkt(),
+> I think that we may still want to return the number of bytes that have
+> successfully been sent so far?
+> 
+Hello! Thanks for review!
+
+Yes, You are right, seems this patch breaks partial send return value. For example for the
+following iov (suppose each '.iov_len' is 64Kb, e.g. max packet length):
+
+[0] = { .iov_base = ptr0, .iov_len = len0 },
+[1] = { .iov_base = NULL, .iov_len = len1 },
+[2] = { .iov_base = ptr2, .iov_len = len2 }
+
+transport callback will send element 0, but NULL iov_base of element 1 will cause tx failure.
+Transport callback returns error (no information about transmitted skbuffs), but element 0 was
+already passed to virtio/vhost path.
+
+Current logic will return length of element 0 (it will be accounted to return from send syscall),
+then calls transport again with invalid element 1 which triggers error.
+
+I'm not sure that it is correct (at least in this single patch) to return number of bytes sent,
+because tx loop in af_vsock.c compares length of user's buffer and number of bytes sent to break
+tx loop (or loop is terminated when transport returns error). For above iov, we return length of
+element 0 without length of invalid element 1, but not error (so loop exit condition never won't
+be true). Moreover, with this approach only first failed to tx skbuff will return error. For second,
+third, etc. skbuffs we get only number of bytes.
+
+I think may be we can use socket's 'sk_err' field here: when tx callback failed to send data(no
+matter it is first byte or last byte of middle byte), it returns number of bytes sent (it will be
+0 if first skbuff was failed to sent) and sets 'sk_err'. Good thing here is that tx loop in af_vsock.c
+already has check for 'sk_err' value and break loop if error occurred. This way looks like 'errno'
+concept a little bit: transport returns number of bytes, 'sk_err' contains error. So in current
+patch it will look like this: instead of setting 'ret' with error, i set 'sk_err' with error,
+but callback returns number of bytes transmitted.
+
+May be we need review from some more experienced guy, Stefano Garzarella, what do You think?
+
+Thanks, Arseniy
+>>  
+>> -	return t_ops->send_pkt(skb);
+>> +		virtio_transport_inc_tx_pkt(vvs, skb);
+>> +
+>> +		ret = t_ops->send_pkt(skb);
+>> +
+>> +		if (ret < 0)
+>> +			goto out;
+> 
+> Ditto here.
+> 
+>> +
+>> +		rest_len -= skb_len;
+>> +	} while (rest_len);
+>> +
+>> +	return pkt_len;
+>> +
+>> +out:
+>> +	virtio_transport_put_credit(vvs, rest_len);
+>> +	return ret;
+>>  }
+>>  
+>>  static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
+>> -- 
+>> 2.25.1
