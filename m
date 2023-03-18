@@ -2,126 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4E36BF939
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 10:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D6A6BF941
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjCRJ0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 05:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S229817AbjCRJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 05:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCRJ0J (ORCPT
+        with ESMTP id S229681AbjCRJ7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 05:26:09 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD496A64;
-        Sat, 18 Mar 2023 02:26:07 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eg48so28896677edb.13;
-        Sat, 18 Mar 2023 02:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679131566;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tdMMiIkP0lyseh6vtywDFhyO8m69k1VlrdTiLhNzm4U=;
-        b=VwDy5bfT7RmUhazDHzWYdV+oe6pMKzPF8C/D9UCvA66JK7CixE20HRw1+eh5KgRsh0
-         ICUei7A5QkE93D+YpqxU38Qkus2iU9DMA+lC2jRjm9ftnzeEXn+ZGtZRCsaJwyfZwlFk
-         AZl5CEl99kMlhv0ozBg87AxlEWhk0oEmAILTX2q+j0WiVuSmfLl48u44YJy/6I65tkFD
-         z272e72TsR7b89WYuTJGB8u1AqLaqF2WWaRA0PWmrxGEb7efy9ummgYl0qerc7BImpwL
-         C6o6uGZRCM+UjEyhk5L+v5/ZX5D/UY52CivT78QoWWWTtixZ/3bvDQVzcuFQA6yX0skK
-         /qbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679131566;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tdMMiIkP0lyseh6vtywDFhyO8m69k1VlrdTiLhNzm4U=;
-        b=B+moqCC1yEZl8Hhbkx0tDLSyuup5fnJ5Y8nw+SPTURfqrNE+LYwFCUpk5tzR+KyJvq
-         dOcknyQkMjKFE5ntQ7IPnrYYQAHw8vr036qMsoetT9CcMdRz7A6gQegtfwR4SqIAadMS
-         Oau5cJJrER+WlFVsSaAzywAryn2bSix9MwZKt4IB3IO17hz7Oyy8aWnItDaVbcOIXb0I
-         XTKUjkM1Vpl3ALBfxh2rbLkARBQnO7fYupyR8+ZT1wm1E5q0pj3oKUQfXCFzqoK97IMq
-         BBAF0czZZESLYiOOjNjPf79Fukp0WMjxC3yfRnGqWMkfTYbblft0byqBw7s05pZpJNiF
-         EaTQ==
-X-Gm-Message-State: AO0yUKWwZZiOW8HIgx2xcpM15QgEOt6/B5AvgWgCFfWu1gOXifLYUqWv
-        7NmkGuZ7jg0+9rDPylacteRwcsk0x/pzxA==
-X-Google-Smtp-Source: AK7set+OjN2BAFW2aH/J5J5bydqcNtmjtkMCKLQFry6lNKvTeygQSbzluQYu68Mx6AlMm+W5BE5tvQ==
-X-Received: by 2002:a17:906:4909:b0:925:a734:a012 with SMTP id b9-20020a170906490900b00925a734a012mr2107913ejq.12.1679131566295;
-        Sat, 18 Mar 2023 02:26:06 -0700 (PDT)
-Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
-        by smtp.googlemail.com with ESMTPSA id la18-20020a170907781200b00914001c91fcsm1953000ejc.86.2023.03.18.02.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 02:26:05 -0700 (PDT)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        kuba@kernel.org, davem@davemloft.net, edumazet@google.com
-Cc:     pabeni@redhat.com, szymon.heidrich@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] net: usb: lan78xx: Limit packet length to skb->len
-Date:   Sat, 18 Mar 2023 10:25:52 +0100
-Message-Id: <20230318092552.93145-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Sat, 18 Mar 2023 05:59:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E431367E2;
+        Sat, 18 Mar 2023 02:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679133594; x=1710669594;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rqzxt1VGupOEfYGONcYiToQW8wfRtVs/qcIF0suXze8=;
+  b=P55ym5g7WeZnFEABgFdls/g7Rrbl6KC4QPnehVqtE6a9wGSEaTOSqmNl
+   /F5+blLpHhdVl3vZLo0HeRQs0qyfo2gFJF8w8pV0np8t9TJAG6PJMAEZE
+   u5rtEahKpQgWCia0inLokBNM01W+ZzAaQt9aEBclZkZHF7ghhydL317Ct
+   RxFw4a4dnpRYmlx0ZhKVDk5h/XRBP/FlrOaQNzjM/pJgxuERZUdSTAu6D
+   SmCnwuShRHNg4Gd76HIGNglM0VjgsxDOq3+gsLYWfQEAmO7IBGx8MX8jj
+   wO4S2BMM4LvMaXwqaQTHvU3VF6tNc7yd3Kxxy4RXZ1uUuAj5tIsi7vue3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="326786538"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="326786538"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 02:59:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="804381771"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="804381771"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2023 02:59:50 -0700
+Date:   Sat, 18 Mar 2023 17:48:29 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: zynq: Add parse_header ops support
+Message-ID: <ZBWI7TrwssjjRsc9@yilunxu-OptiPlex-7050>
+References: <20230314121754.297264-1-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314121754.297264-1-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Packet length retrieved from descriptor may be larger than
-the actual socket buffer length. In such case the cloned
-skb passed up the network stack will leak kernel memory contents.
+On 2023-03-14 at 17:47:54 +0530, Nava kishore Manne wrote:
+> The commit 3cc624beba63 ("fpga: fpga-mgr: support bitstream offset in
+> image buffer") added a new parse_header ops to handle the header related
+> stuff in the fpga framework. So moved the header validation logic from
+> write_init() to parse_header().
+> 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+>  drivers/fpga/zynq-fpga.c | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index ae0da361e6c6..6e5df0193028 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -248,6 +248,21 @@ static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
+>  	return false;
+>  }
+>  
+> +static int zynq_fpga_ops_parse_header(struct fpga_manager *mgr,
+> +				      struct fpga_image_info *info,
+> +				      const char *buf, size_t count)
+> +{
+> +	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
+> +		if (!zynq_fpga_has_sync(buf, count)) {
 
-Additionally prevent integer underflow when size is less than
-ETH_FCS_LEN.
+FPGA manager may pass in the whole image if it is already mapped, maybe
+only info->header_size should be checked?
 
-Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
-V1 -> V2: Fix ISO C90 forbids mixed declarations and code
-V2 -> V3: Removed the Reported-by tag
+Thanks,
+Yilun
 
- drivers/net/usb/lan78xx.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 068488890..c458c030f 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -3579,13 +3579,29 @@ static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb,
- 		size = (rx_cmd_a & RX_CMD_A_LEN_MASK_);
- 		align_count = (4 - ((size + RXW_PADDING) % 4)) % 4;
- 
-+		if (unlikely(size > skb->len)) {
-+			netif_dbg(dev, rx_err, dev->net,
-+				  "size err rx_cmd_a=0x%08x\n",
-+				  rx_cmd_a);
-+			return 0;
-+		}
-+
- 		if (unlikely(rx_cmd_a & RX_CMD_A_RED_)) {
- 			netif_dbg(dev, rx_err, dev->net,
- 				  "Error rx_cmd_a=0x%08x", rx_cmd_a);
- 		} else {
--			u32 frame_len = size - ETH_FCS_LEN;
-+			u32 frame_len;
- 			struct sk_buff *skb2;
- 
-+			if (unlikely(size < ETH_FCS_LEN)) {
-+				netif_dbg(dev, rx_err, dev->net,
-+					  "size err rx_cmd_a=0x%08x\n",
-+					  rx_cmd_a);
-+				return 0;
-+			}
-+
-+			frame_len = size - ETH_FCS_LEN;
-+
- 			skb2 = napi_alloc_skb(&dev->napi, frame_len);
- 			if (!skb2)
- 				return 0;
--- 
-2.40.0
-
+> +			dev_err(&mgr->dev,
+> +				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  				    struct fpga_image_info *info,
+>  				    const char *buf, size_t count)
+> @@ -275,13 +290,6 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+>  
+>  	/* don't globally reset PL if we're doing partial reconfig */
+>  	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
+> -		if (!zynq_fpga_has_sync(buf, count)) {
+> -			dev_err(&mgr->dev,
+> -				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
+> -			err = -EINVAL;
+> -			goto out_err;
+> -		}
+> -
+>  		/* assert AXI interface resets */
+>  		regmap_write(priv->slcr, SLCR_FPGA_RST_CTRL_OFFSET,
+>  			     FPGA_RST_ALL_MASK);
+> @@ -545,6 +553,7 @@ static enum fpga_mgr_states zynq_fpga_ops_state(struct fpga_manager *mgr)
+>  static const struct fpga_manager_ops zynq_fpga_ops = {
+>  	.initial_header_size = 128,
+>  	.state = zynq_fpga_ops_state,
+> +	.parse_header = zynq_fpga_ops_parse_header,
+>  	.write_init = zynq_fpga_ops_write_init,
+>  	.write_sg = zynq_fpga_ops_write,
+>  	.write_complete = zynq_fpga_ops_write_complete,
+> -- 
+> 2.25.1
+> 
