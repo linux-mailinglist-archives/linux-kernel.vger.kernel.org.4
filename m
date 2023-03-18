@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C2C6BFAC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9208C6BFADF
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjCROWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 10:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S229754AbjCROb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 10:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjCROWm (ORCPT
+        with ESMTP id S229533AbjCRObZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:22:42 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B43D32CE3
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 07:22:41 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h17so6702891wrt.8
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 07:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679149359;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkmwpvH9sgPVQtlzvbDDavt+3mGPIiqy12zSddkmIqk=;
-        b=EvuVqEeNdmsExAcKsIECfZDPx7X1EeANvP/Nn6StcDA4dLDkMgIps62snjPCwQyeXa
-         aDGRMhs5h2P91E4EIrwUijYIA5PYCKnyKie2SriqcEdJs4qQO246M93QVbgTCs35kfiB
-         ykaYUbHmt43QKKtFKfTwL+QXlVEOwbR6QqMPR5CktbLbY2M3KeBl87mh9HVUVK9EJWN2
-         z9KC6gmWavTds4RFDWZkFSbO5aazyG9Wc/OPljT0LnnzdwfPbZ8t53O/fza0MjCC0L57
-         8SHImX4KteuyRpkz3qjA5mtXyPkeAV5YoZBmWNJlXKHZ/lKuFW5CyCGaCnupWpAdQl/v
-         eFOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679149359;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lkmwpvH9sgPVQtlzvbDDavt+3mGPIiqy12zSddkmIqk=;
-        b=74sYECPMALPdEVHg7UrFJOshZfJ3dlbC7WC6DAQfV2Bxx/u0BRK+qbWkpE199X5Uki
-         wviPVwAcyMJEVKziy2y7SCb+Ve1RWkneqmF/ajGeZbQBKPcXhuIiRvidHF9CyS2LVl9/
-         wh1xIpyQwnXnOJBxtrkOv8scL8kiu8cdjEruJK6hSreeS2hWumtJwhfM9prTzR7fyJ6U
-         Chvir3odeX5hWkDFZ7/UU0buy82IHog5Uh+WoDoSjjaGudWYpMtK7kxrDC+ss7YR2GpW
-         Nrbl2IXLmEb2qM7wQVYvgcRNnKm6zHhgrU3RVjMwZIpki6cR/MqwO+etuA6nkYWsctcE
-         EJjg==
-X-Gm-Message-State: AO0yUKXBeMobshfnFF+Whqgu8TCgJRJ+3L0Y/blYo+h+2jKSaIRW/Z6d
-        x4qCoRsfXiRxb6zdxRRujfxO86rNqsE=
-X-Google-Smtp-Source: AK7set96I+f1RiZ6VzzeJJiw6TgJMv6fYtwvIdEEzyOihGdPog32kXCkLDJTfSButzQ2zohLA+h/YQ==
-X-Received: by 2002:a5d:6944:0:b0:2c5:4c9d:2dab with SMTP id r4-20020a5d6944000000b002c54c9d2dabmr5525774wrw.10.1679149359470;
-        Sat, 18 Mar 2023 07:22:39 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056000100600b002c8ed82c56csm4439375wrx.116.2023.03.18.07.22.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 07:22:39 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 17:22:35 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Kloudifold <cloudifold.3125@gmail.com>
-Cc:     outreachy@lists.linux.dev, teddy.wang@siliconmotion.com,
-        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        alison.schofield@intel.com
-Subject: Re: [PATCH v3] staging: sm750: Rename sm750_hw_cursor_* functions to
- snake_case
-Message-ID: <dd1e1fcc-2a4e-438f-ad61-ef7640b8e423@kili.mountain>
-References: <ZBW+NX4SLaCyEnJd@CloudiRingWorld>
+        Sat, 18 Mar 2023 10:31:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6DF12077
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 07:31:22 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pdXa6-0000Li-1H; Sat, 18 Mar 2023 15:30:50 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pdXa3-0051TQ-TX; Sat, 18 Mar 2023 15:30:47 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pdXa3-005thE-2m; Sat, 18 Mar 2023 15:30:47 +0100
+Date:   Sat, 18 Mar 2023 15:30:41 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Tom Rix <trix@redhat.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, nathan@kernel.org,
+        ndesaulniers@google.com, llvm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: imx: remove unused imx_uart_is_imx* functions
+Message-ID: <20230318143041.n6rymackf6p776rq@pengutronix.de>
+References: <20230317205710.1672232-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nda7clsxlnhkzioz"
 Content-Disposition: inline
-In-Reply-To: <ZBW+NX4SLaCyEnJd@CloudiRingWorld>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230317205710.1672232-1-trix@redhat.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,73 +57,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 09:35:49PM +0800, Kloudifold wrote:
-> sm750 driver has sm750_hw_cursor_* functions, which are named in
-> camelcase. Rename them to snake case to follow the function naming
-> convention.
-> 
-> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
-> 
-Delete this blank line before the ---.
 
-> ---
-> Changes in v3:
-> - Add this changelog (Philipp)
-> - Move lkp tags and link to the correct location in commit log (Alison)
-> - Update the commit msg (Philip)
-> - Update the commit log (Bagas, Julia)
-> 
-> Changes in v2:
-> - Use new function names in call sites (LKP)
-> 
-> This v2 patch was prompted by an error reported by the Linux test
-> robot, which detected the compile error.
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
-> ---
-> ---
+--nda7clsxlnhkzioz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Delete these two --- lines.
+On Fri, Mar 17, 2023 at 04:57:10PM -0400, Tom Rix wrote:
+> clang with W=3D1 reports
+> drivers/tty/serial/imx.c:292:19: error:
+>   unused function 'imx_uart_is_imx21' [-Werror,-Wunused-function]
+> static inline int imx_uart_is_imx21(struct imx_port *sport)
+>                   ^
+> drivers/tty/serial/imx.c:297:19: error:
+>   unused function 'imx_uart_is_imx53' [-Werror,-Wunused-function]
+> static inline int imx_uart_is_imx53(struct imx_port *sport)
+>                   ^
+> drivers/tty/serial/imx.c:302:19: error:
+>   unused function 'imx_uart_is_imx6q' [-Werror,-Wunused-function]
+> static inline int imx_uart_is_imx6q(struct imx_port *sport)
+>                   ^
+> These static functions are not used, so remove them.
+>=20
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
->  drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
->  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
->  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
->  3 files changed, 24 insertions(+), 24 deletions(-)
+Funny, is_imx6q_uart() was introduced in
+a496e6284c482555db8078190bb689594d129fa9 and never used. Since that
+commit is_imx21_uart() also unused. And the imx53 variant was also never
+used.
 
-I would have ignored the issues above but when I went to apply the patch
-git complained about whitespace problems.  So then I ran checkpatch on
-the patch and it complains a lot.
+Looking at that a bit more, the following cleanup is also possible (only
+compile tested):
 
-ERROR: code indent should use tabs where possible
-#61: FILE: drivers/staging/sm750fb/sm750.c:130:
-+^I^I^I^I       ^Ifbcursor->image.dx - info->var.xoffset,$
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 8308a23c55a7..a38ee0ed2210 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -178,8 +178,6 @@
+ enum imx_uart_type {
+ 	IMX1_UART,
+ 	IMX21_UART,
+-	IMX53_UART,
+-	IMX6Q_UART,
+ };
+=20
+ /* device type dependent stuff */
+@@ -241,30 +239,21 @@ struct imx_port_ucrs {
+ 	unsigned int	ucr3;
+ };
+=20
+-static struct imx_uart_data imx_uart_devdata[] =3D {
+-	[IMX1_UART] =3D {
+-		.uts_reg =3D IMX1_UTS,
+-		.devtype =3D IMX1_UART,
+-	},
+-	[IMX21_UART] =3D {
+-		.uts_reg =3D IMX21_UTS,
+-		.devtype =3D IMX21_UART,
+-	},
+-	[IMX53_UART] =3D {
+-		.uts_reg =3D IMX21_UTS,
+-		.devtype =3D IMX53_UART,
+-	},
+-	[IMX6Q_UART] =3D {
+-		.uts_reg =3D IMX21_UTS,
+-		.devtype =3D IMX6Q_UART,
+-	},
++static const struct imx_uart_data imx_uart_imx1_devdata =3D {
++	.uts_reg =3D IMX1_UTS,
++	.devtype =3D IMX1_UART,
++};
++
++static const struct imx_uart_data imx_uart_imx21_devdata =3D {
++	.uts_reg =3D IMX21_UTS,
++	.devtype =3D IMX21_UART,
+ };
+=20
+ static const struct of_device_id imx_uart_dt_ids[] =3D {
+-	{ .compatible =3D "fsl,imx6q-uart", .data =3D &imx_uart_devdata[IMX6Q_UAR=
+T], },
+-	{ .compatible =3D "fsl,imx53-uart", .data =3D &imx_uart_devdata[IMX53_UAR=
+T], },
+-	{ .compatible =3D "fsl,imx1-uart", .data =3D &imx_uart_devdata[IMX1_UART]=
+, },
+-	{ .compatible =3D "fsl,imx21-uart", .data =3D &imx_uart_devdata[IMX21_UAR=
+T], },
++	{ .compatible =3D "fsl,imx6q-uart", .data =3D &imx_uart_imx21_devdata, },
++	{ .compatible =3D "fsl,imx53-uart", .data =3D &imx_uart_imx21_devdata, },
++	{ .compatible =3D "fsl,imx1-uart", .data =3D &imx_uart_imx1_devdata, },
++	{ .compatible =3D "fsl,imx21-uart", .data =3D &imx_uart_imx21_devdata, },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, imx_uart_dt_ids);
 
-WARNING: please, no space before tabs
-#61: FILE: drivers/staging/sm750fb/sm750.c:130:
-+^I^I^I^I       ^Ifbcursor->image.dx - info->var.xoffset,$
+If you feel like squashing that into your commit or put it into a
+separate commit with a nice commit log (after convincing yourself that
+the change is fine), feel free to do so.
 
-CHECK: Alignment should match open parenthesis
-#61: FILE: drivers/staging/sm750fb/sm750.c:130:
-+               sm750_hw_cursor_set_pos(cursor,
-+                                       fbcursor->image.dx - info->var.xoffset,
+If you don't:
 
-ERROR: code indent should use tabs where possible
-#62: FILE: drivers/staging/sm750fb/sm750.c:131:
-+^I^I^I^I       ^Ifbcursor->image.dy - info->var.yoffset);$
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-WARNING: please, no space before tabs
-#62: FILE: drivers/staging/sm750fb/sm750.c:131:
-+^I^I^I^I       ^Ifbcursor->image.dy - info->var.yoffset);$
+Best regards
+Uwe
 
-total: 2 errors, 2 warnings, 1 checks, 99 lines checked
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-NOTE: For some of the reported defects, checkpatch may be able to
-      mechanically convert to the typical style using --fix or --fix-inplace.
+--nda7clsxlnhkzioz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-NOTE: Whitespace errors detected.
-      You may wish to use scripts/cleanpatch or scripts/cleanfile
+-----BEGIN PGP SIGNATURE-----
 
-"[PATCH v3] staging: sm750: Rename sm750_hw_cursor_* functions to" has style problems, please review.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQVywUACgkQj4D7WH0S
+/k7Ivgf8CqZoIR6dodHsIoOkq2Ry2yHVlphhFQqAPbMfm2XigGZChWQAtPdXHfjN
+cY/cjTOL8tG4PfggMmMKlc+NKawrhNamIRAyEEZEgI12iiLWsQBPcvPFZeXEq/0H
+cGOl1fHMoxGDznajEdiGJpFEsBTTS9L2MH23F04btZpR4rZZR9aX9yOsktBhXy1Z
+eaQOn7IaAY1fKeoaactX5N6ii4vJIOsiRVvNfyXePeOfg//FpDJdsFMmYS5qzjR7
+TE0mAe8xU7l/JgA0AtiYwGDzN6mpGh46g47CKMHjPf8PnWXWPegGWgL00TkL7t64
+1R3S34r1I6TZ+eIsCwM3EKY7JNiQCg==
+=mOyR
+-----END PGP SIGNATURE-----
 
-regards,
-dan carpenter
+--nda7clsxlnhkzioz--
