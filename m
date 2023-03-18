@@ -2,116 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CF46BFB92
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 17:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51D26BFBA6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 17:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCRQeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 12:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S229823AbjCRQtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 12:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCRQeV (ORCPT
+        with ESMTP id S229590AbjCRQtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 12:34:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02ABA35ED2;
-        Sat, 18 Mar 2023 09:34:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A773B8010F;
-        Sat, 18 Mar 2023 16:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6846FC433EF;
-        Sat, 18 Mar 2023 16:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679157256;
-        bh=P83LJcLdhyh1KSfLVhNDG8VtTGDadRLfj8sYgOvrXV4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gvy55D3aIms95994EJPnIxuC5Z08gcrSdRUZKl6JZySBmeVjV/2hgSoSSClhVtWx3
-         xeqyka2sWSKR5ukT36yDxQQK35wrGW/gEoCW4EC9kwKV3ojk5GnuYFJG+qrx0azseF
-         CUTmXt/DVWflU3nbti6SD/ZPZ4lxFmouuIoR3MId25hIT2FWO1j5SvC3+KM82EUHED
-         XiJ3w2aV9i7s51JMSCAZRspOzwL1IKAafmn3B+GAWwVCsna7d7aJXPR3n2VXMEO7+S
-         mi5Lf7yyr5EogTSUNqaVrTf5gThPPDgbC8eK2YJawR+gDHPf0AGlRUs3MsvzHI2bCR
-         NBX5IgL4H2Ggw==
-Date:   Sat, 18 Mar 2023 16:49:09 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <20230318164909.06123384@jic23-huawei>
-In-Reply-To: <9d63c161-0449-7e56-5873-2909587f17af@gmail.com>
-References: <cover.1677750859.git.mazziesaccount@gmail.com>
-        <9895826669118a1aa1db3f85c2610fa759426c33.1677750859.git.mazziesaccount@gmail.com>
-        <ZAC7L8NQYgBcBTCF@smile.fi.intel.com>
-        <7e537200-37ab-f6e6-c4e0-c3997128c01b@fi.rohmeurope.com>
-        <ZAXK9Hn2NuQPJ7eo@smile.fi.intel.com>
-        <1dbfc336-7d09-cd44-dfa2-9c4bedf257e1@gmail.com>
-        <ZA81rpWgwvP2bigt@smile.fi.intel.com>
-        <9d63c161-0449-7e56-5873-2909587f17af@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 18 Mar 2023 12:49:18 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B915560;
+        Sat, 18 Mar 2023 09:49:16 -0700 (PDT)
+Date:   Sat, 18 Mar 2023 16:49:12 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679158155;
+        bh=jUndyEGI41yuBBLinBp9JUiyX98HMOvPekqhJDwQZs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gudItqpjoDfkhJAXjmfgVh5IcLprEj1gdeGDqrF/OyrJBC0j2QCLorb/XZS46cILP
+         F/7dOuVG1++BurHRvV0RG4cfR//I7+mc0tAndyBRIcA+WJSBLALaFRKPulzPqM7tpG
+         WN4MRbVCnmm7Stmwh6qnCDVTF2zj7w4dndemseos=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
+ -fstack-protector
+Message-ID: <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+ <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+ <ZA3OhLBmUz3fui+f@1wt.eu>
+ <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
+ <ZA6TmjtAJ5lvFCeF@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZA6TmjtAJ5lvFCeF@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 12:28:43 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-
-> On 3/13/23 16:39, Andy Shevchenko wrote:
-> > On Mon, Mar 13, 2023 at 01:31:42PM +0200, Matti Vaittinen wrote:  
-> >> On 3/6/23 13:13, Andy Shevchenko wrote:  
-> >>> On Fri, Mar 03, 2023 at 07:54:22AM +0000, Vaittinen, Matti wrote:  
-> >>>> On 3/2/23 17:05, Andy Shevchenko wrote:  
-> >>>>> On Thu, Mar 02, 2023 at 12:57:54PM +0200, Matti Vaittinen wrote:  
+On Mon, Mar 13, 2023 at 04:08:10AM +0100, Willy Tarreau wrote:
+> On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
+> > FYI there is also another patch to make nolibc-test buildable with
+> > compilers that enable -fstack-protector by default.
+> > Maybe this can be picked up until the proper stack-protector support is
+> > hashed out.
+> > Maybe even for 6.3:
 > > 
-> > ...
-> >   
-> >>>>>> +		for (i = 0; !ret && i < gts->num_avail_all_scales; i++)  
-> >>>>>
-> >>>>> Much easier to read if you move this...
-> >>>>>  
-> >>>>>> +			ret = iio_gts_total_gain_to_scale(gts, all_gains[i],
-> >>>>>> +					&gts->avail_all_scales_table[i * 2],
-> >>>>>> +					&gts->avail_all_scales_table[i * 2 + 1]);  
-> >>>>>
-> >>>>> ...here as
-> >>>>>
-> >>>>> 		if (ret)
-> >>>>> 			break;  
-> >>>>
-> >>>> I think the !ret in loop condition is obvious. Adding break and brackets
-> >>>> would not improve this.  
-> >>>
-> >>> It moves it to the regular pattern. Yours is not so distributed in the kernel.  
-> >>
-> >> I believe we can find examples of both patterns in kernel. I don't think the
-> >> "many people use different pattern" is a great reason to add break +
-> >> brackets which (in my eyes) give no additional value to code I am planning
-> >> to keep reading also in the future...  
-> > 
-> > The problem is that your pattern is not so standard (distributed) and hence
-> > less maintainable.  
+> > https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
 > 
-> I am sorry but I can't really agree with you on this one. For me adding 
-> the break and brackets would just complicate the flow and thus decrease 
-> the maintainability.
+> Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
 
-I'm with the if (ret) break;
-school of thought on this one.  Never like for loops with complex conditions,
-I guess because I've trained my eyes to ignore them ;)
+Do you have a tree with this published?
+So I can make sure the next revision of this patchset does not lead to
+conflicts.
+ 
+> > > > +int run_stackprotector(int min, int max)
+> > > > +{
+> > > > +	int llen = 0;
+> > > > +
+> > > > +	llen += printf("0 ");
+> > > > +
+> > > > +#if !defined(NOLIBC_STACKPROTECTOR)
+> > > > +	llen += printf("stack smashing detection not supported");
+> > > > +	pad_spc(llen, 64, "[SKIPPED]\n");
+> > > > +	return 0;
+> > > > +#endif
+> > > 
+> > > Shouldn't the whole function be enclosed instead ? I know it's more of
+> > > a matter of taste, but avoiding to build and link it for archs that
+> > > will not use it may be better.
+> > 
+> > The goal was to print a [SKIPPED] message if it's not supported.
+> 
+> Ah indeed makes sense.
+> 
+> > The overhead of doing this should be neglectable.
+> 
+> It was not the overhead (that's only a regtest program after all), I
+> was more thinking about the difficulty to maintain this function over
+> time for other archs if it starts to rely on optional support. But for
+> now it's not a problem, it it would ever become one we could simply
+> change that to have a function just print SKIPPED. So I'm fine with
+> your option.
+> 
+> > > > @@ -719,8 +784,11 @@ int prepare(void)
+> > > >  /* This is the definition of known test names, with their functions */
+> > > >  static const struct test test_names[] = {
+> > > >  	/* add new tests here */
+> > > > -	{ .name = "syscall",   .func = run_syscall  },
+> > > > -	{ .name = "stdlib",    .func = run_stdlib   },
+> > > > +	{ .name = "syscall",        .func = run_syscall         },
+> > > > +	{ .name = "stdlib",         .func = run_stdlib          },
+> > > > +	{ .name = "stackprotector", .func = run_stackprotector, },
+> > > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
+> > > 
+> > > I think it would be better to keep the number of categories low
+> > > and probably you should add just one called "protection" or so,
+> > > and implement your various tests in it as is done for other
+> > > categories. The goal is to help developers quickly spot and select
+> > > the few activities they're interested in at a given moment. 
+> > 
+> > I'm not sure how this would be done. The goal here is that
+> > "stackprotector" is the user-visible category. It can be changed to
+> > "protection".
+> > "_smash_stack" however is just an entrypoint that is used by the forked
+> > process to call the crashing code.
+> 
+> Ah I didn't realize that, I now understand how that can be useful,
+> indeed. Then maybe just rename your .skip_by_default field to .hidden
+> so that it becomes more generic (i.e. if one day we permit enumeration
+> we don't want such tests to be listed either), and assign the field on
+> the same line so that it's easily visible with a grep.
 
-
+Actually this works fine with a plain fork() and the exec() is not
+needed. So the dedicated entrypoint is not needed anymore.
+No idea what I tested before.
