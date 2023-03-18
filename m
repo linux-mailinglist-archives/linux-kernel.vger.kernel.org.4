@@ -2,87 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801B96BF847
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 07:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA2C6BF850
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 07:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjCRGJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 02:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S229671AbjCRGXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 02:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCRGJD (ORCPT
+        with ESMTP id S229470AbjCRGXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 02:09:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D489F3B664;
-        Fri, 17 Mar 2023 23:08:59 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y4so28161216edo.2;
-        Fri, 17 Mar 2023 23:08:59 -0700 (PDT)
+        Sat, 18 Mar 2023 02:23:03 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B7B132E6;
+        Fri, 17 Mar 2023 23:23:02 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso9567654pjf.0;
+        Fri, 17 Mar 2023 23:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679119738;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679120582;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kV6D6PWuyY+pzJCeIR0JhzUrH+GgDghjB9uU7AntUqA=;
-        b=ohCbefDAyCpU7VGBYqZpzJHtlEkbOY7Acj9MBcGEFIKZQ02InFEathyokeRbr/+LRi
-         5OaU4RFGmzKS4u7JBelbcT1IDEaXUuEjStkFDpvE45mo2RD1IUSwzC974CU2MgIGXnkI
-         g643/nyEUBUMu0xbJDTEJAUR9Syt+GIoMIYgaWga7pFQzMb4AALVIKcH1d+GVExOoZI5
-         /jdWvi8OKRx5/UJNVM8SBBJLg2oqE5HHWAS70YjOskmsToTtt2yzbeG7Djhfjm7XlIyk
-         qABY68h9/bSktn/pRHowHwANI2c2+bSCdHgZMJa/jupIa6QCDgMnP2IndATSAsbk3CN9
-         3Hzg==
+        bh=ngDoAe2SMF8O9JG38OYK9h6kTvKqSQulQP0C6GqWh/Q=;
+        b=e2pQqreq7rkm52RLzPxDS3uNVqdQLahxPO1muWuYQZQgyQ54svwC4aU0VCGlGFneLj
+         DQ2yHyqweqV9sPjmDLB+UW0wBaBSvyO9k+36htJIUzYc1I5gf0EiQPXcnLBGaYCo6+Si
+         HJoX2RntExcDQN+HnrbWITFrO6PKu/QL9YBalQmcJKje3G772pIv4mbjsva4alDfxP19
+         JCMie1oVzDa4n0nQgHhZFXiG6YG6v2J0B33ZkNaNcpoYZjiaN+YhrC7b/3w/EnF9u0vU
+         RpGrK3cjy0RRcaO1bhhr2+szznRCbwxmZ5e04kLHFQswh8qtCnj+iNmxlCvKKkL1lDd7
+         Qddg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679119738;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679120582;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kV6D6PWuyY+pzJCeIR0JhzUrH+GgDghjB9uU7AntUqA=;
-        b=YRMX72YZBCOo+q0UY+4owasXSqitlBxmAKMIljc6TkJOHX+Eu/8hFcIt2/jkVLoPg2
-         WMeFNLwrVUfWCK5N0ORSWlhwNkY2jTKhzxt9O8iGnOOEaA4HQ4/7q5i/gc38iB5LdYfP
-         otSrwGL+aCwwa9E3SJer7S70jUhPOVvu1lBBt9XNOG7yXLDHeDBhfYTReOW3drE1dTja
-         BXnhgfih+7eBE0ZK1AdYjDdtbn87oD4ona3xJfZPYGmt++ila7ol/ZIxMabv6AradPta
-         3i9ArrT5OotD7AbWJFbYT0tYpbFD3AVTzV450KzsqUX/BhqCLGPWt45TN5JqiNsXlaFR
-         68hA==
-X-Gm-Message-State: AO0yUKXgASohUg1A8Tz7HoNJ/BXkasfXOvxzt51q88pOTii5EZhzwn0Q
-        SeUeb/i6yI+cKbHafiqml+KCUCVh9SdAKUwbB0E=
-X-Google-Smtp-Source: AK7set9vNfDYTp13qC3VLlkv2NKrpoWodSQ81WtPPKmcZNYmxSE0tQmMZA6FKAfCBAih1aFLohvSXIcdvr4MosOWD90=
-X-Received: by 2002:a17:906:b4b:b0:931:c1a:b526 with SMTP id
- v11-20020a1709060b4b00b009310c1ab526mr814048ejg.5.1679119738091; Fri, 17 Mar
- 2023 23:08:58 -0700 (PDT)
+        bh=ngDoAe2SMF8O9JG38OYK9h6kTvKqSQulQP0C6GqWh/Q=;
+        b=q4lfVhQxe+qFNIJDZyPQD95UGKQKUIxwT8n6WZlgzpw2L4HiWjOJ/qeiKWDpY5nwCY
+         9B0aC7h2YkXAhz1RYEzcWN4Lz3lpUCZDT9XeFauVw+v16Tf9FTkMzCsiNmvPSDGxiWWi
+         1PhpAi+ZJDRHX1Ox7lyW12CxNWeUnAppGCKWp5xfmbPcfSHEQKsEG+u0OzfWF5PsSX0F
+         fAQYdeZ+kQCDE68u9TyD7WadQNL4gckh5jncBBv1/EGCjGIMrGn7Doi5t2iYbFO/JLfu
+         finVeqpEtVGiOsDxDWQLXBSPCX+pQc8MHrBZDk3jFY0TChjhnQ9SnMMcQg27MpLMDtLg
+         +kgQ==
+X-Gm-Message-State: AO0yUKVwkaPKqEIC85tDSPKu/Z+KgVRHQla3JqwJE3IfNRUO9jVJA6Jb
+        c65B9hDuco3c/uDwiWE/T2Z8rO7Ni6cGcw==
+X-Google-Smtp-Source: AK7set9Apsyg0sCnkb7f2s8fWryv7QSWnxLCvkc3B9H3iqN3lLZtTlLctNJiovC7B05SypnJN2f0bQ==
+X-Received: by 2002:a17:903:234a:b0:19e:6e29:2a8c with SMTP id c10-20020a170903234a00b0019e6e292a8cmr11290347plh.5.1679120581746;
+        Fri, 17 Mar 2023 23:23:01 -0700 (PDT)
+Received: from DESKTOP-HHR6EMI.localdomain ([143.244.50.165])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170902aa9200b001a1add0d616sm1471208plr.161.2023.03.17.23.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 23:23:01 -0700 (PDT)
+From:   void0red <void0red@gmail.com>
+To:     vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter.ujfalusi@gmail.com, void0red@gmail.com
+Subject: [PATCH v2 1/2] dmaengine: ti: add null check of devm_kasprintf in udma_probe
+Date:   Sat, 18 Mar 2023 14:22:54 +0800
+Message-Id: <20230318062255.76-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZBSj/0kIGVROIGi7@matsya>
+References: <ZBSj/0kIGVROIGi7@matsya>
 MIME-Version: 1.0
-References: <20230316170149.4106586-1-jolsa@kernel.org> <ZBNTMZjEoETU9d8N@casper.infradead.org>
- <CAP-5=fVYriALLwF2FU1ZUtLuHndnvPw=3SctVqY6Uwex8JfscA@mail.gmail.com>
- <CAEf4BzYgyGTVv=cDwaW+DBke1uk_aLCg3CB_9W6+9tkS8Nyn_Q@mail.gmail.com>
- <ZBPjs1b8crUv4ur6@casper.infradead.org> <CAEf4BzbPa-5b9uU0+GN=iaMGc6otje3iNQd+MOg_byTSYU8fEQ@mail.gmail.com>
- <20230317211403.GZ3390869@ZenIV> <20230317212125.GA3390869@ZenIV>
-In-Reply-To: <20230317212125.GA3390869@ZenIV>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 17 Mar 2023 23:08:44 -0700
-Message-ID: <CAEf4BzYQ-bktO9s8yhBk7xUoz=2NFrgdGviWsN2=HWPBaGv6hA@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,120 +72,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 2:21=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
-rote:
->
-> On Fri, Mar 17, 2023 at 09:14:03PM +0000, Al Viro wrote:
-> > On Fri, Mar 17, 2023 at 09:33:17AM -0700, Andrii Nakryiko wrote:
-> >
-> > > > But build IDs are _generally_ available.  The only problem (AIUI)
-> > > > is when you're trying to examine the contents of one container from
-> > > > another container.  And to solve that problem, you're imposing a co=
-st
-> > > > on everybody else with (so far) pretty vague justifications.  I rea=
-lly
-> > > > don't like to see you growing struct file for this (nor struct inod=
-e,
-> > > > nor struct vm_area_struct).  It's all quite unsatisfactory and I do=
-n't
-> > > > have a good suggestion.
-> > >
-> > > There is a lot of profiling, observability and debugging tooling buil=
-t
-> > > using BPF. And when capturing stack traces from BPF programs, if the
-> > > build ID note is not physically present in memory, fetching it from
-> > > the BPF program might fail in NMI (and other non-faultable contexts).
-> > > This patch set is about making sure we always can fetch build ID, eve=
-n
-> > > from most restrictive environments. It's guarded by Kconfig to avoid
-> > > adding 8 bytes of overhead to struct file for environment where this
-> > > might be unacceptable, giving users and distros a choice.
-> >
-> > Lovely.  As an exercise you might want to collect the stats on the
-> > number of struct file instances on the system vs. the number of files
-> > that happen to be ELF objects and are currently mmapped anywhere.
+From: Kang Chen <void0red@gmail.com>
 
-That's a good suggestion. I wrote a simple script that uses the drgn
-tool ([0]), it enables nice introspection of the state of the kernel
-memory for the running kernel. The script is at the bottom ([1]) for
-anyone to sanity check. I didn't try to figure out which file is
-mmaped as executable and which didn't, so let's do worst case and
-assume that none of the file is executable, and thus that 8 byte
-pointer is a waste for all of them.
+devm_kasprintf may fails, uc->name might be null and wrong irq
+name will be used in request.
 
-On my devserver I got:
+Fixes: 25dcb5dd7b7c ("dmaengine: ti: New driver for K3 UDMA")
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+v2 -> v1: split into two patches and add some tags
 
-task_cnt=3D15984 uniq_file_cnt=3D56780
+ drivers/dma/ti/k3-udma.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On randomly chosen production host I got:
+diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+index 7e23a6fdef95..692d1d25c70a 100644
+--- a/drivers/dma/ti/k3-udma.c
++++ b/drivers/dma/ti/k3-udma.c
+@@ -5494,6 +5494,8 @@ static int udma_probe(struct platform_device *pdev)
+ 		uc->config.dir = DMA_MEM_TO_MEM;
+ 		uc->name = devm_kasprintf(dev, GFP_KERNEL, "%s chan%d",
+ 					  dev_name(dev), i);
++		if (!uc->name)
++			return -ENOMEM;
+ 
+ 		vchan_init(&uc->vc, &ud->ddev);
+ 		/* Use custom vchan completion handling */
+-- 
+2.34.1
 
-task_cnt=3D6387 uniq_file_cnt=3D22514
-
-So it seems like my devserver is "busier" than the production host. :)
-
-Above numbers suggest that my devserver's kernel has about 57000
-*unique* `struct file *` instances. That's 450KB of overhead. That's
-not much by any modern standard.
-
-But let's say I'm way off, and we have 1 million struct files. That's
-8MB overhead. I'd argue that those 8MB is not a big deal even on a
-normal laptop, even less so on production servers. Especially if you
-have 1 million active struct file instances created in the system, as
-way more will be used for application-specific needs.
-
-
-> > That does depend upon the load, obviously, but it's not hard to collect=
- -
-> > you already have more than enough hooks inserted in the relevant places=
-.
-> > That might give a better appreciation of the reactions...
->
-> One possibility would be a bit stolen from inode flags + hash keyed by
-> struct inode address (middle bits make for a decent hash function);
-> inode eviction would check that bit and kick the corresponding thing
-> from hash if the bit is set.
->
-> Associating that thing with inode =3D> hash lookup/insert + set the bit.
-
-This is an interesting idea, but now we are running into a few
-unnecessary problems. We need to have a global dynamically sized hash
-map in the system. If we fix the number of buckets, we risk either
-wasting memory on an underutilized system (if we oversize), or
-performance problems due to collisions (if we undersize) if we have a
-busy system with lots of executables mapped in memory. If we don't
-pre-size, then we are talking about reallocations, rehashing, and
-doing that under global lock or something like that. Further, we'd
-have to take locks on buckets, which causes further problems for
-looking up build ID from this hashmap in NMI context for perf events
-and BPF programs, as locks can't be safely taken under those
-conditions, and thus fetching build ID would still be unreliable
-(though less so than it is today, of course).
-
-All of this is solvable to some degree (but not perfectly and not with
-simple and elegant approaches), but seems like an unnecessarily
-overcomplication compared to the amount of memory that we hope to
-save. It still feels like a Kconfig-guarded 8 byte field per struct
-file is a reasonable price for gaining reliable build ID information
-for profiling/tracing tools.
-
-
-  [0] https://drgn.readthedocs.io/en/latest/index.html
-
-  [1] Script I used:
-
-from drgn.helpers.linux.pid import for_each_task
-from drgn.helpers.linux.fs import for_each_file
-
-task_cnt =3D 0
-file_set =3D set()
-
-for task in for_each_task(prog):
-    task_cnt +=3D 1
-    try:
-        for (fd, file) in for_each_file(task):
-            file_set.add(file.value_())
-    except:
-        pass
-
-uniq_file_cnt =3D len(file_set)
-print(f"task_cnt=3D{task_cnt} uniq_file_cnt=3D{uniq_file_cnt}")
