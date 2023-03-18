@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EE26BF946
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A9E6BF943
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCRKKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 06:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S229808AbjCRKCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 06:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCRKKx (ORCPT
+        with ESMTP id S229630AbjCRKCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 06:10:53 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C567EF2;
-        Sat, 18 Mar 2023 03:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679134244; x=1710670244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i/ijir56tdBUgAEBFOFtWVndt9Fv/1cvvyoH3zkEQNA=;
-  b=WfUSsNV7h9ioLldJGQywXHj53wxsbaLAz0zcBNrzQuffVBmekef/ZvSi
-   8AU9wGt6LiOrU5Ta6H1tMdHYHN/WZen1yNkykKMF8GOVqXJZRIMFAa0xN
-   FbFMM0oIlHeJg03jxXqicY4fIklZVMogJf1BrqW+PaUra70U4/x/QpYUO
-   0TYVfYJPt2tjz+jYSWBqKlbg6/JPOiW6pHq1Ll7nJeje8FOOmslKsP+dp
-   ovL4k4wLdocoRFUhPAxCNYGX+iW6ekZU5/0WdsBGoJ/+N/S50Mnj+A6kz
-   8vhQOaV7gch5HDJpkDKVjWLFUtxlykFyp1h6kMpADuLD74rm01mS91ikL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="322271179"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="322271179"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 03:10:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="769655413"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="769655413"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Mar 2023 03:10:41 -0700
-Date:   Sat, 18 Mar 2023 17:59:20 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
- xlnx_pr_decouple_read function
-Message-ID: <ZBWLeC7UuDf+4dJE@yilunxu-OptiPlex-7050>
-References: <20230317230617.1673923-1-trix@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317230617.1673923-1-trix@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 18 Mar 2023 06:02:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9A11165C;
+        Sat, 18 Mar 2023 03:02:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F335B60B4C;
+        Sat, 18 Mar 2023 10:02:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5181EC433EF;
+        Sat, 18 Mar 2023 10:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679133757;
+        bh=SdAwA+yHmCjXzJB/aenMpFVAdyQsRtXN1tQ01msm5Cs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RqY6KopL7ppyQlvW6i3ZwxS+hbTy+fvymdMHSNtaF+v3LemFtoyinunkzxynSnDVR
+         tBjblgW/mYpTyycNu0X36cBD7+EUgc2fisTzcDj8wXIi4mOOipZIjIGphqHoxKiZGZ
+         ABI80Aeg0LzIYPPM+3WrUAxi2RlNpn6kuht5rcIfMCnUTJGWZ16vFesqiGGI2aqqlO
+         K9LbFETxjc9LHXK93QRT7k/liOfpqJNdMu4NVkRR6TuU3Hj8Pcpnz/lVG0EbN/tDOw
+         YZTEm1OuKFyDmu1nt/Zdwyi4fugx0fKBph9xJdCP/MtJp2SxPxrNzksgcNOxfH5hGy
+         WR2tNkEkWMHdQ==
+Received: from [89.213.33.168] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pdTOU-001Anm-NT;
+        Sat, 18 Mar 2023 10:02:34 +0000
+Date:   Sat, 18 Mar 2023 10:02:33 +0000
+Message-ID: <87v8iygyx2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zaid Al-Bassam <zalbassam@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, f.fainelli@gmail.com
+Subject: Re: [PATCH v4 0/8] perf: arm: Make PMUv3 driver available for aarch32
+In-Reply-To: <20230317195027.3746949-1-zalbassam@google.com>
+References: <20230317195027.3746949-1-zalbassam@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 89.213.33.168
+X-SA-Exim-Rcpt-To: zalbassam@google.com, mark.rutland@arm.com, will@kernel.org, jesussanp@google.com, linux@armlinux.org.uk, catalin.marinas@arm.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, f.fainelli@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-17 at 19:06:17 -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
-> static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
->                   ^
-> This static function is not used, so remove it.
-
-I prefer to move the description as the first section. If you agree, I
-could do it before apply.
-
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-
+On Fri, 17 Mar 2023 19:50:19 +0000,
+Zaid Al-Bassam <zalbassam@google.com> wrote:
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/fpga/xilinx-pr-decoupler.c | 6 ------
->  1 file changed, 6 deletions(-)
+> Currently, PMUv3 driver is only available for ARMv8 aarch64 platforms,
+> ARMv8 platorms running in aarch32 mode dont have access to the driver.
+> This is, especially, a problem for ARMv8 platforms that only have
+> aarch32 support, like the Cortex-A32.
 > 
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 2d9c491f7be9..b6f18c07c752 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
->  	writel(val, d->io_base + offset);
->  }
->  
-> -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> -					u32 offset)
-> -{
-> -	return readl(d->io_base + offset);
-> -}
-> -
->  static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
->  {
->  	int err;
-> -- 
-> 2.27.0
+> Make the PMUv3 driver available to arm arch (ARMv8 aarch32) by moving
+> the PMUv3 driver from arm64 to drivers, that makes the driver common
+> to both arm and arm64 architectures, then add PMUv3 arm Support.
 > 
+> The main work in this patchset was made a while back by Marc Zyngier
+> in [1]. Patchset version 1 [v1] rebases Marc's patches to the latest
+> kernel revision and adds additional patches to accommodate the changes
+> in the kernel since Marc wrote the patches.
+> 
+> version 2 [v2] of the patchset was created by Marc Zyngier and I
+> picked it up from [2].
+
+The SoB chain is now a bit off as you picked it from my tree. Nothing
+that we can't fix, but please be careful in the future. You also
+failed to pick Florian's Tested-by: tags, which is worse. Please make
+sure to pick these things as people reply to your series.
+
+Will, Mark: any objection to the general shape of this series? I've
+been using it again to test the 32bit PMU support in KVM, and would
+rather see something merged while the architecture still has some
+relevance.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
