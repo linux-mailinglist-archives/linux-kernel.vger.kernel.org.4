@@ -2,116 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369EA6BF869
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 08:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD486BF86B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 08:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCRHDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 03:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S229770AbjCRHGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 03:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCRHDj (ORCPT
+        with ESMTP id S229478AbjCRHGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 03:03:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E5930B12;
-        Sat, 18 Mar 2023 00:03:35 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PdsMf1PrnznX9d;
-        Sat, 18 Mar 2023 15:00:30 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 18 Mar 2023 15:03:31 +0800
-Subject: Re: [PATCH] ext4: Fix i_disksize exceeding i_size problem in
- paritally written case
-To:     Jan Kara <jack@suse.cz>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.com>,
-        <tudor.ambarus@linaro.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20230317013553.1009553-1-chengzhihao1@huawei.com>
- <20230317124513.drx3wywcjnap5jme@quack3>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <884950ac-e60a-d331-9f68-310ab81ee595@huawei.com>
-Date:   Sat, 18 Mar 2023 15:03:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Sat, 18 Mar 2023 03:06:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D774FCDD;
+        Sat, 18 Mar 2023 00:06:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59A5FB80E8D;
+        Sat, 18 Mar 2023 07:06:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52137C433EF;
+        Sat, 18 Mar 2023 07:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679123179;
+        bh=49KA3iNvSyleR2UVuJjsn11DXyb3q1V2rfZ2s1YjuCg=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=PGVY03EK8gdnEB1pOuQ9qT81m5rreHG+0YJsainUKyEGrqiuh0GPB1hf7iA7qXRCP
+         4mRQavKUVsh5I04bxF70f9qjj+a/vJ1867uGlJ4zPaV2ObclItHfLCXE5GZmJxJ4s/
+         zeCtWZCg+rvMtuXLzWK6STUZwzqJH/o520nHUdjdDEXNxbYCkSmE0ELE5a9WHAxi2W
+         cgnR/vHgs6Q9NAkBXIWPrcu0Y1xbLWU3u5gXsiamDETdL69OsScc1yDl8Bqnbh/7d4
+         UsAyiUskYk7Ru7GkEv9NcvzVXzNyGC6Jm2Av6jliMEa1hXHlG43KcaL/W9U9+AwyFS
+         0d7Rw40oSnF9w==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Nick Morrow <morrownr@gmail.com>
+Cc:     Reese Russell <git@qrsnap.io>, Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Deren Wu <deren.wu@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        Ben Greear <greearb@candelatech.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Added Netgear AXE3000 (A8000) usb_device_id to mt7921u_device_table[]
+References: <20230123090555.21415-1-git@qrsnap.io>
+        <CAFktD2eFdaCAdE=zxVx05QYWPRcr5StompKr+ehn7piYpQHjzA@mail.gmail.com>
+Date:   Sat, 18 Mar 2023 09:06:09 +0200
+In-Reply-To: <CAFktD2eFdaCAdE=zxVx05QYWPRcr5StompKr+ehn7piYpQHjzA@mail.gmail.com>
+        (Nick Morrow's message of "Fri, 17 Mar 2023 14:49:56 -0500")
+Message-ID: <87wn3ev8ri.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20230317124513.drx3wywcjnap5jme@quack3>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jan
-> On Fri 17-03-23 09:35:53, Zhihao Cheng wrote:
->> Following process makes i_disksize exceed i_size:
->>
->> generic_perform_write
->>   copied = iov_iter_copy_from_user_atomic(len) // copied < len
->>   ext4_da_write_end
->>   | ext4_update_i_disksize
->>   |  new_i_size = pos + copied;
->>   |  WRITE_ONCE(EXT4_I(inode)->i_disksize, newsize) // update i_disksize
->>   | generic_write_end
->>   |  copied = block_write_end(copied, len) // copied = 0
->>   |   if (unlikely(copied < len))
->>   |    if (!PageUptodate(page))
->>   |     copied = 0;
->>   |  if (pos + copied > inode->i_size) // return false
->>   if (unlikely(copied == 0))
->>    goto again;
->>   if (unlikely(iov_iter_fault_in_readable(i, bytes))) {
->>    status = -EFAULT;
->>    break;
->>   }
->>
->> We get i_disksize greater than i_size here, which could trigger WARNING
->> check 'i_size_read(inode) < EXT4_I(inode)->i_disksize' while doing dio:
->>
->> ext4_dio_write_iter
->>   iomap_dio_rw
->>    __iomap_dio_rw // return err, length is not aligned to 512
->>   ext4_handle_inode_extension
->>    WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize) // Oops
->>
->>   WARNING: CPU: 2 PID: 2609 at fs/ext4/file.c:319
->>   CPU: 2 PID: 2609 Comm: aa Not tainted 6.3.0-rc2
->>   RIP: 0010:ext4_file_write_iter+0xbc7
->>   Call Trace:
->>    vfs_write+0x3b1
->>    ksys_write+0x77
->>    do_syscall_64+0x39
->>
->> Fix it by putting block_write_end() before i_disksize updating just
->> like ext4_write_end() does.
->>
->> Fetch a reproducer in [Link].
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217209
->> Fixes: 64769240bd07f ("ext4: Add delayed allocation support in data=writeback mode")
->> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> 
-> Good catch (although practically this will hardly have any negative
-> effect). But rather than opencoding generic_write_end() I'd do:
-> 
->          if (unlikely(copied < len) && !PageUptodate(page))
->                  copied = 0;
-> 
-> at the beginning of ext4_da_write_end() and that should solve these
-> problems as well?
-> 
+Nick Morrow <morrownr@gmail.com> writes:
 
-Yes, your suggestion looks good, and I think we can put the checking 
-just after ext4_write_inline_data_end(Line 3150)? On the one hand, we 
-can pass original 'copied' value in trace_ext4_da_write_end(), one the 
-other hand, ext4_write_inline_data_end() already has this checking.
+>> Issue: Though the Netgear AXE3000 (A8000) is based on the mt7921
+>> chipset because of the unique USB VID:PID combination this device
+>> does not initialize/register. Thus making it not plug and play.
+>>
+>> Fix: Adds support for the Netgear AXE3000 (A8000) based on the Mediatek
+>> mt7921au chipset. The method of action is adding the USD VID/PID
+>> pair to the mt7921u_device_table[] array.
+>>
+>> Notes: A retail sample of the Netgear AXE3000 (A8000) yeilds the following
+>> from lsusb D 0846:9060 NetGear, Inc. Wireless_Device. This pair
+>> 0846:9060 VID:PID has been reported by other users on Github.
+>>
+>> Signed-off-by: Reese Russell <git@qrsnap.io>
+>> ---
+>>  drivers/net/wireless/mediatek/mt76/mt7921/usb.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
+>> index 5321d20dcdcb..62e9728588f8 100644
+>> --- a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
+>> +++ b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
+>> @@ -15,6 +15,8 @@
+>>  static const struct usb_device_id mt7921u_device_table[] = {
+>>         { USB_DEVICE_AND_INTERFACE_INFO(0x0e8d, 0x7961, 0xff, 0xff, 0xff),
+>>                 .driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
+>> +       { USB_DEVICE_AND_INTERFACE_INFO(0x0846, 0x9060, 0xff, 0xff, 0xff),
+>> +               .driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
+>>         { },
+>>  };
+>>
+>> --
+>> 2.37.2
+>
+>
+> I can confirm this VID/PID needs to go into 6.1 LTS and the current
+> testing version of the kernel as I am getting an increasing amount of
+> traffic from users that have purchased the Netgear A8000.
+>
+> My site is github.com/morrownr/USB-WiFi
+>
+> Helping Linux users with USB WiFi is what we do.
+>
+> The OP could have added a comment to the patch showing the adapter
+> that is causing this patch to be submitted. Maybe he can submit a v2
+> that can be expedited?
+>
+> Guidance?
+
+I assigned this to me on patchwork, I'll queue this for v6.3 and change
+the commit log to below. Felix&Lorenzo, ack?
+
+wifi: mt76: mt7921: add Netgear AXE3000 (A8000)
+
+Add support for the Netgear AXE3000 (A8000) based on the Mediatek
+mt7921au chipset. A retail sample of the Netgear AXE3000 (A8000) yeilds
+the following from lsusb D 0846:9060 NetGear, Inc. Wireless_Device. This
+has been reported by other users on Github.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
