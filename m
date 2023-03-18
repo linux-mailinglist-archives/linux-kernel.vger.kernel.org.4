@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE29B6BF78C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD196BF7EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 06:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCRDbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 23:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S229839AbjCRFKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 01:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjCRDbm (ORCPT
+        with ESMTP id S229542AbjCRFKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 23:31:42 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E243E1E3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 20:31:40 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id DE4961A00AE2;
-        Sat, 18 Mar 2023 11:31:40 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id I47z3DFNmwEc; Sat, 18 Mar 2023 11:31:40 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id A5BDC1A0091E;
-        Sat, 18 Mar 2023 11:31:39 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] sched: core: Optimize the structure of 'tg_cfs_schedulable_down' function
-Date:   Mon, 20 Mar 2023 04:02:55 +0800
-Message-Id: <20230319200255.3640-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
+        Sat, 18 Mar 2023 01:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7E22F79C;
+        Fri, 17 Mar 2023 22:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A81F660A4D;
+        Sat, 18 Mar 2023 05:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2206C433D2;
+        Sat, 18 Mar 2023 05:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679116219;
+        bh=D/d22Njz3XOcBdSeTtWNfpjkqhDLL85p8xrZO06ZWbU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OF+OZby4SOWsqeHrleP0LCpee1eYNBl7m62NplStOoffcIqShSK60QnzdpVrn045d
+         P1HuU5k7tEzwLYCiGTWBfbGqi8A+vabe2tnwj2Fi7PokPYAIXidV9PDR6lwy0dAySf
+         CllkVXL4NUkaa4b3eVv5ECIlS6nyLIED0I0F4Krex5FEbN2Tkw5Z2a2Dh+DtJybd1/
+         bh8Dz4126SkerQxkIgwd0QBl2+su5KBCXB1pnieczbU7qhqeV+6GV7bsiTLGYLQeSD
+         4z3vr2U0SfiQANphIB4ef4v8O094joxc+pINbOH1N4lRjD9vinITlMFnGoA70TDgwY
+         7e/PzNjdT/2QA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5A06E21EE5;
+        Sat, 18 Mar 2023 05:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Subject: Re: [PATCH v2] net: usb: smsc95xx: Limit packet length to skb->len
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167911621880.29928.18096232901813385120.git-patchwork-notify@kernel.org>
+Date:   Sat, 18 Mar 2023 05:10:18 +0000
+References: <20230316101954.75836-1-szymon.heidrich@gmail.com>
+In-Reply-To: <20230316101954.75836-1-szymon.heidrich@gmail.com>
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc:     kuba@kernel.org, steve.glendinning@shawell.net,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Optimize if branches and define  in the branch statement
-block　parent_quota variable.
+Hello:
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- kernel/sched/core.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 488655f2319f..7e8535d2e36d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -10915,15 +10915,12 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
- {
- 	struct cfs_schedulable_data *d = data;
- 	struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
--	s64 quota = 0, parent_quota = -1;
-+	s64 quota = RUNTIME_INF;
- 
--	if (!tg->parent) {
--		quota = RUNTIME_INF;
--	} else {
-+	if (tg->parent) {
- 		struct cfs_bandwidth *parent_b = &tg->parent->cfs_bandwidth;
--
-+		s64 parent_quota = parent_b->hierarchical_quota;
- 		quota = normalize_cfs_quota(tg, d);
--		parent_quota = parent_b->hierarchical_quota;
- 
- 		/*
- 		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
+On Thu, 16 Mar 2023 11:19:54 +0100 you wrote:
+> Packet length retrieved from descriptor may be larger than
+> the actual socket buffer length. In such case the cloned
+> skb passed up the network stack will leak kernel memory contents.
+> 
+> Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
+> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] net: usb: smsc95xx: Limit packet length to skb->len
+    https://git.kernel.org/netdev/net/c/ff821092cf02
+
+You are awesome, thank you!
 -- 
-2.18.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
