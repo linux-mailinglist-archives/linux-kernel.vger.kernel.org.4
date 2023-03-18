@@ -2,162 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D3B6BF6BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903936BF6C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCRAAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 20:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        id S229961AbjCRAGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 20:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCRAAL (ORCPT
+        with ESMTP id S229879AbjCRAGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 20:00:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BAE1D923;
-        Fri, 17 Mar 2023 17:00:10 -0700 (PDT)
+        Fri, 17 Mar 2023 20:06:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8582C67D;
+        Fri, 17 Mar 2023 17:06:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679097610; x=1710633610;
+  t=1679097988; x=1710633988;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=54+9w11FyBycDMrEZnRqQoNXdQMiD2O9yYzVr/7CDsE=;
-  b=E1CRz8qVrHkWcSzqfkYt8BYbuc/94A28XjDBKhF9AAyCjWGbyDklAgYo
-   U84iq5HS7Zyeq2MurMN0JaCDPn7/UtHWvuy+DxgZctLn0CErCl2GxkArN
-   3FmiISFGq3bw3ttDakddI1neuU/+QZGTG/ErxhJ+uWNLN4ARr9ezyzWTX
-   3DuLoWSNRgp82ChV8bHk2wFGRd8//hemY1bo0C3Ab6GCaS2MRv0/3tRR1
-   QS5/OkXlqlbDFmI4B+imiNUoItjkcxobn8nVlKeb1nHFU5kUpOP4T9jPY
-   Iw6VNFCC9iXqWx9JXVMmjsWdB2ZQZ02LwOJ2tIcwNhjwi9MNl1zBhFSp7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="400964714"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ReMNAetjuziIagyWXWP1NZ5E1cfEyOq4UIZ1mhXddqs=;
+  b=JKQMSYSsENq1ypATxGGrxDdUMZvCxUQZPpWPlGc52qEwTl780b2X+cfU
+   xwDX7xWsWmOxHz1aIV7PB1zFsDgrKmqe7YSt7u/IPwGfXrQc33J9IY7KZ
+   Heay1chKPpbENH/ZElS/0OUuDFKDQZvD6+gQhYAO0AlUMH1WK1TQWIjXe
+   ckEYiNYr8Kd6WpCPY372egcV7OmRCxBwWHlvbCnZQnovcZLdRx5mGfIUq
+   40Ia1dODW4pO/lG515786DNE0UrrEKOud0HdHV8qv/26+0jmmAneiJcIa
+   qf3/45jrOrZ/6cMuw429k9OK3KZpneq1Fsa+SUtTCGaluCUpU3asmIic0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="339926935"
 X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="400964714"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 17:00:09 -0700
+   d="scan'208";a="339926935"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 17:06:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="712932148"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="744734167"
 X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="712932148"
-Received: from mupadhya-mobl1.amr.corp.intel.com (HELO desk) ([10.209.15.93])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 17:00:09 -0700
-Date:   Fri, 17 Mar 2023 16:59:59 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Ben Serebrin <serebrin@google.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] kvm: vmx: Add IA32_FLUSH_CMD guest support
-Message-ID: <20230317235959.buk3y25iwllscrbe@desk>
-References: <20230201132905.549148-1-eesposit@redhat.com>
- <20230201132905.549148-2-eesposit@redhat.com>
- <20230317190432.GA863767@dev-arch.thelio-3990X>
- <20230317225345.z5chlrursjfbz52o@desk>
- <20230317231401.GA4100817@dev-arch.thelio-3990X>
+   d="scan'208";a="744734167"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Mar 2023 17:06:24 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdK5Y-0009fu-00;
+        Sat, 18 Mar 2023 00:06:24 +0000
+Date:   Sat, 18 Mar 2023 08:06:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V4 3/4] nvmem: core: export nvmem_add_cells_from_of()
+Message-ID: <202303180709.WSD6mSsu-lkp@intel.com>
+References: <20230317132620.31142-4-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230317231401.GA4100817@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317132620.31142-4-zajec5@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 04:14:01PM -0700, Nathan Chancellor wrote:
-> On Fri, Mar 17, 2023 at 03:53:45PM -0700, Pawan Gupta wrote:
-> > On Fri, Mar 17, 2023 at 12:04:32PM -0700, Nathan Chancellor wrote:
-> > > Hi Emanuele,
-> > > 
-> > > On Wed, Feb 01, 2023 at 08:29:03AM -0500, Emanuele Giuseppe Esposito wrote:
-> > > > Expose IA32_FLUSH_CMD to the guest if the guest CPUID enumerates
-> > > > support for this MSR. As with IA32_PRED_CMD, permission for
-> > > > unintercepted writes to this MSR will be granted to the guest after
-> > > > the first non-zero write.
-> > > > 
-> > > > Signed-off-by: Jim Mattson <jmattson@google.com>
-> > > > Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-> > > > ---
-> > > >  arch/x86/kvm/vmx/nested.c |  3 ++
-> > > >  arch/x86/kvm/vmx/vmx.c    | 70 +++++++++++++++++++++++++--------------
-> > > >  2 files changed, 48 insertions(+), 25 deletions(-)
-> > > > 
-> > > > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > > > index 557b9c468734..075b5ade7c80 100644
-> > > > --- a/arch/x86/kvm/vmx/nested.c
-> > > > +++ b/arch/x86/kvm/vmx/nested.c
-> > > > @@ -654,6 +654,9 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
-> > > >  	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-> > > >  					 MSR_IA32_PRED_CMD, MSR_TYPE_W);
-> > > >  
-> > > > +	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-> > > > +					 MSR_IA32_FLUSH_CMD, MSR_TYPE_W);
-> > > > +
-> > > >  	kvm_vcpu_unmap(vcpu, &vmx->nested.msr_bitmap_map, false);
-> > > >  
-> > > >  	vmx->nested.force_msr_bitmap_recalc = false;
-> > > > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > > > index c788aa382611..9a78ea96a6d7 100644
-> > > > --- a/arch/x86/kvm/vmx/vmx.c
-> > > > +++ b/arch/x86/kvm/vmx/vmx.c
-> > > > @@ -2133,6 +2133,39 @@ static u64 vmx_get_supported_debugctl(struct kvm_vcpu *vcpu, bool host_initiated
-> > > >  	return debugctl;
-> > > >  }
-> > > >  
-> > > > +static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
-> > > > +				struct msr_data *msr_info,
-> > > > +				bool guest_has_feat, u64 cmd,
-> > > > +				int x86_feature_bit)
-> > > > +{
-> > > > +	if (!msr_info->host_initiated && !guest_has_feat)
-> > > > +		return 1;
-> > > > +
-> > > > +	if (!(msr_info->data & ~cmd))
-> > 
-> > Looks like this is doing a reverse check. Shouldn't this be as below:
-> 
-> That diff on top of next-20230317 appears to resolve the issue for me
-> and my L1 guest can spawn an L2 guest without any issues (which is the
-> extent of my KVM testing).
+Hi Rafał,
 
-Great!
+I love your patch! Yet something to improve:
 
-> Is this a problem for the SVM version? It has the same check it seems,
-> although I did not have any issues on my AMD test platform (but I guess
-> that means that the system has the support?).
+[auto build test ERROR on next-20230317]
+[cannot apply to robh/for-next krzk-dt/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.3-rc2 v6.3-rc1 v6.2 v6.3-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IIUC, SVM version also needs to be fixed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rafa-Mi-ecki/dt-bindings-nvmem-layouts-add-fixed-layout/20230317-212948
+patch link:    https://lore.kernel.org/r/20230317132620.31142-4-zajec5%40gmail.com
+patch subject: [PATCH V4 3/4] nvmem: core: export nvmem_add_cells_from_of()
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230318/202303180709.WSD6mSsu-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/70d21b7988db0cad28a2cb4b0d7f5d77d587a51f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rafa-Mi-ecki/dt-bindings-nvmem-layouts-add-fixed-layout/20230317-212948
+        git checkout 70d21b7988db0cad28a2cb4b0d7f5d77d587a51f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
 
-> I assume this will just be squashed into the original change but if not:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303180709.WSD6mSsu-lkp@intel.com/
 
-Thats what I think, and if its too late to be squashed I will send a
-formal patch. Maintainers?
+All errors (new ones prefixed by >>):
 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Cheers,
-> Nathan
-> 
-> > ---
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index f88578407494..e8d9033559c4 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -2141,7 +2141,7 @@ static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
-> >  	if (!msr_info->host_initiated && !guest_has_feat)
-> >  		return 1;
-> >  
-> > -	if (!(msr_info->data & ~cmd))
-> > +	if (msr_info->data & ~cmd)
-> >  		return 1;
-> >  	if (!boot_cpu_has(x86_feature_bit))
-> >  		return 1;
+   In file included from include/linux/rtc.h:18,
+                    from arch/powerpc/kernel/time.c:48:
+>> include/linux/nvmem-provider.h:230:12: error: 'nvmem_add_cells_from_of' defined but not used [-Werror=unused-function]
+     230 | static int nvmem_add_cells_from_of(struct nvmem_device *nvmem, struct device_node *np)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/nvmem_add_cells_from_of +230 include/linux/nvmem-provider.h
+
+   229	
+ > 230	static int nvmem_add_cells_from_of(struct nvmem_device *nvmem, struct device_node *np)
+   231	{
+   232		return -EOPNOTSUPP;
+   233	}
+   234	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
