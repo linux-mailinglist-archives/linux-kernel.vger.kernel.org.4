@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC336BF772
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 03:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221996BF77A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjCRCwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 22:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S230058AbjCRDAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 23:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCRCwI (ORCPT
+        with ESMTP id S229488AbjCRDAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 22:52:08 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B337F34008;
-        Fri, 17 Mar 2023 19:52:05 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxE4RUJxVkC6kNAA--.19766S3;
-        Sat, 18 Mar 2023 10:52:04 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxsOROJxVkn4kEAA--.20675S3;
-        Sat, 18 Mar 2023 10:51:58 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230317082950.12738-3-zhuyinbo@loongson.cn>
- <202303180159.1qAKqnp9-lkp@intel.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <804d327e-57e0-4183-79c6-f9650ac59a8f@loongson.cn>
-Date:   Sat, 18 Mar 2023 10:51:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 17 Mar 2023 23:00:15 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CDF7BA2D;
+        Fri, 17 Mar 2023 20:00:13 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id cn6so7252988pjb.2;
+        Fri, 17 Mar 2023 20:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679108413;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aBvrljxOKkoB1S/4mky0NJx5RgxtZPsZg+SYz9qBDkI=;
+        b=ZTA7hjr5SMxU5D2pu0T73SoZw4wL0d+OvP9pqVRJ4rADjAyIOyFcz/ZuVq/K28fVj5
+         LGSiVcRblvHv1mdVGdAV2bCwLkpuWbpNvwUhySCyPRyll3QxMNAi6BE55hOAoqYrWlO2
+         rDIbgCa8sWsWwlsEN1JmPgv2n2MggNeYp+AT6pjd013YwEkbto8YxvcRwyAyEx2EP/2N
+         jTZVZxXy6InOZA3uH9W5sLc/HU0yz/hXBlICkdTtSpn5hKtCag2ROIQ4JJkt/h5uZ+Qk
+         iw8bbNNqXhKL3P7V1j6jvktBLCoZiGxIPRvUtGG3bTr6Id1sc7HXtlVXbv2JYSXpFsx5
+         breg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679108413;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBvrljxOKkoB1S/4mky0NJx5RgxtZPsZg+SYz9qBDkI=;
+        b=Dn2GvS+j0eqIRrx/iOhCn2wuPhRD5fVSbw2/zSEoQCS+BbhdEnPCb1GVlT4p+Z0WNp
+         cnQXLkriwv6T5qwlHvxl86kBT3JHZZL8HWCsqP7AwBo5iq6FYOUQytKNvH/H8WC1iLpY
+         uLTPrWPH0fOSwbmOEcYa04gnLiC5eywWF0Dew0tD0ogqWArwCLO/Ycwd/+VKfaiwnjIr
+         2VmThk/g4w8HZv//bMzDpWl+S9Ju7N0qs1bjMNGZwkLBF9cPpGXvztWSzD1yQ8UvDKxe
+         sB5INgjVDIBREAo8ZODCSxgoUYlT4fbcdohAktMx8fmvEMjC5YYqSC9Zvx0BScWgsOp4
+         6AZA==
+X-Gm-Message-State: AO0yUKVmTjbjPv+pR7x0Jj/VczNUHbMTh3yZCVeerwq4lOEkP6OiVKpD
+        c8hLA74CHg1CqOePrAWoIBmNCrPJ0A8=
+X-Google-Smtp-Source: AK7set955FdxbubOsGGFEmj1xjrvvZcsclhhg6hbhiVSISWIqaTrYEExC+Y3X0cxEGBOEyNZdFV0VQ==
+X-Received: by 2002:a05:6a20:548f:b0:d5:10ca:5264 with SMTP id i15-20020a056a20548f00b000d510ca5264mr11715819pzk.59.1679108412612;
+        Fri, 17 Mar 2023 20:00:12 -0700 (PDT)
+Received: from [192.168.1.101] (1-160-164-133.dynamic-ip.hinet.net. [1.160.164.133])
+        by smtp.gmail.com with ESMTPSA id a7-20020a62bd07000000b006222a261188sm2216915pff.62.2023.03.17.20.00.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 20:00:12 -0700 (PDT)
+Message-ID: <ab2b31a3-d6e0-71fa-9e91-37add8df55be@gmail.com>
+Date:   Sat, 18 Mar 2023 11:00:08 +0800
 MIME-Version: 1.0
-In-Reply-To: <202303180159.1qAKqnp9-lkp@intel.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 00/15] Introduce Nuvoton ma35d1 SoC
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <f2699aa1-4d8a-48c0-b332-484db0b04252@app.fastmail.com>
+ <1a1277ac-4ae5-eaab-01c3-0242c12be76b@gmail.com>
+ <6ed7e89f-2d2c-4134-9c6f-a9d18e2fc8a8@app.fastmail.com>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <6ed7e89f-2d2c-4134-9c6f-a9d18e2fc8a8@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8CxsOROJxVkn4kEAA--.20675S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZw1xGr18AF17Xw18Ar4xZwb_yoW5GFy8p3
-        y8CFsxKryFqr18GaykGayDWF4jqrs8XwnrXFyDZF4UuFZxZFyjqrs29r1YgrnI9F4vgFy8
-        ZrWfXF9Y9a4UAaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxV
-        WUAVWUtwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcCzuDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Arnd,
 
-在 2023/3/18 上午2:07, kernel test robot 写道:
-> Hi Yinbo,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on broonie-spi/for-next]
-> [also build test ERROR on robh/for-next krzk-dt/for-next linus/master v6.3-rc2 next-20230317]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> patch link:    https://lore.kernel.org/r/20230317082950.12738-3-zhuyinbo%40loongson.cn
-> patch subject: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson spi controller
-> config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230318/202303180159.1qAKqnp9-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/a532955fcee3d37eb4332cea2b868f74ace0bc72
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Yinbo-Zhu/dt-bindings-spi-add-loongson-spi/20230317-163907
->          git checkout a532955fcee3d37eb4332cea2b868f74ace0bc72
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303180159.1qAKqnp9-lkp@intel.com/
->
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->
->>> ERROR: modpost: "__udivdi3" [drivers/spi/spi-loongson.ko] undefined!
 
-This "__udivdi3" undefined!" ERROR that due to u64 / u32 and not use do_div, I think add following change
-that can fix this ERROR.
+Thanks for you advice.
 
--               div = DIV_ROUND_UP(loongson_spi->clk_rate, hz);
 
-+               div = DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz);
+On 2023/3/17 下午 09:21, Arnd Bergmann wrote:
+> On Fri, Mar 17, 2023, at 07:30, Jacky Huang wrote:
+>> On 2023/3/16 下午 10:05, Arnd Bergmann wrote:
+>>
+>> Thank you very much for your kind help. You explained it so well,
+>> I have understood the process. We got a lot of suggestions for this
+>> patchset, and there are a lot of issues to fix. When most of the
+>> problems get solved and acknowledged by the reviewers, I will
+>> add you and soc@kernel.org to Cc.
+> Ok, sounds good. Two more clarifications from me:
+>
+> 1. I expect you will have to go through two or three submissions
+> that get more feedback before everyone is happy. Please include
+> my arnd@arndb.de on Cc on all the submissions, but only include
+> the soc@kernel.org address when all patches have an Acked-by
+> or Reviewed-by from the respective subsystem maintainer.
+
+
+Sure, I will add you on Cc. Thank you.
+
+
+> 2. I think the series looks very good at this point, and most of the
+> feedback was about minor details, so I am optimistic that we can
+> actually merge it soon.
+>
+> I only now saw that you had already submitted this several times
+> at the beginning of last year, and this is technically 'v5'
+> of the series, and it would make sense to add 'v6' to the subject
+> next time and link back to the previous [1] and this[2] submission
+> on lore.kernel.org.
+>
+>
+>      Arnd
+>
+> [1] https://lore.kernel.org/all/20220510032558.10304-1-ychuang3@nuvoton.com/
+> [2] https://lore.kernel.org/all/20230315072902.9298-1-ychuang570808@gmail.com/
+
+
+In fact, I was thinking about this before submitting the patch. Looks 
+like this is causing
+
+confusion for reviewers, so thanks for the suggestion. I will submit the 
+next version as v6,
+
+and add the history of v1 ~ v4, and this version will be regarded as v5.
+
+
+Best regards,
+
+Jacky Huang
 
