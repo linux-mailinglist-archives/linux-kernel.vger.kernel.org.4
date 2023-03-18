@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D616BFCB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 21:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8EF6BFCB3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 21:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjCRUVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 16:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S229737AbjCRUWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 16:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjCRUVr (ORCPT
+        with ESMTP id S229587AbjCRUWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 16:21:47 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD9B21A36
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 13:21:45 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id 9-20020a5ea509000000b0074ca36737d2so4030159iog.7
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 13:21:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679170904;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WhVjyP1hMBd0iICsWNn1VxSyGjwlHQtVMdZ+C73RvI=;
-        b=Ami3Efg0KAMQrQfSsBcIla1kn/GXkU91PWHE3hXpN7/FjH+hpfwsnrgSRVLlMRqo5M
-         XM0i12ArdEC5cAW0/s89v0DO4v7UqzVmgo663bOBk/MYbvqb0cdjo+yjBb6AKvy+SAK8
-         eSlgbkBCep9K6Cs1CgBDNWeoKlLntPr6ufFw6Ek0LSLmLrWNJmb7E/o96hygYiuL3OPD
-         BfvGmPk+czMPpBF1VdU8UpFNhUghYQjxQpdKXJibbPQHoN0S1YdC726aWRJ9K8eNw9Bx
-         5zndL3PMAFuvb8rZAD1tW/WHmIftV/DcCB2lIj3OV5zGdss4hYUMX7m8xVlXcimZ3liY
-         RSmA==
-X-Gm-Message-State: AO0yUKUd7HNyj7YsQ3vWsR9Qu/+83/Rsez72722sWWIu0hr7fnvcHgsv
-        YFWq5277gF8ofdHQ2ZsOoUs+P534uVjYGnoNLtSiM0Bt2p3k
-X-Google-Smtp-Source: AK7set8Mk9mQS09Kny5mmYe4novIvdDn7A0KJuJ65IZQWBoEvGD3gR43fDzVJW3U93v8zxNBIjDVvbql/uiRgEpWIT9y+FBxNMtV
+        Sat, 18 Mar 2023 16:22:13 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DEA22004;
+        Sat, 18 Mar 2023 13:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=xFXhaQf6JpWKig7JkREJsKBA82IcfYS06RE3F9uwjf4=; b=xkUPHYmrQ7A1b/3vWnvDqj2nOM
+        D64NjmcmMybH473nMnzB9PmjCWUa27NaKKtnC6L37fAimQWJo0guGzAgrqLdxM30YOaUVeA/zwNyr
+        s9yxgCClnhc+IdWLRh88fz63MksDYPBnbT6TgH+i9ICkEcVKigEK+Kq1EJP3iLP24Rrwo3ktDll/3
+        1FTONu3MJq74w/McIjtXdFBeolp+bTCYPMKgsIWCK0GwfVTOCWt3IvmBOBKfbeMlIk3MoBbMRAgB0
+        CzPWxGWImEYL6EXIdhotRqQGEe9ZhTfaLOD7myKNI/pWY1knIGrwuwktl6ivvIiAZ0MmtDpUxCruJ
+        Cd8J99kQ==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pdd46-005KsS-2g;
+        Sat, 18 Mar 2023 20:22:10 +0000
+Message-ID: <7f51bb57-3adc-47f3-023f-008886c62dea@infradead.org>
+Date:   Sat, 18 Mar 2023 13:22:08 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a92:c5a5:0:b0:315:8f6c:50a6 with SMTP id
- r5-20020a92c5a5000000b003158f6c50a6mr1082275ilt.1.1679170904569; Sat, 18 Mar
- 2023 13:21:44 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 13:21:44 -0700
-In-Reply-To: <000000000000a3818b05f18916e0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000048c13c05f732717f@google.com>
-Subject: Re: [syzbot] [reiserfs?] BUG: unable to handle kernel paging request
- in reiserfs_readdir_inode
-From:   syzbot <syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, shaggy@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Issues with applying patch to Linux 6.2.1-060201-generic x86_64 -
+ HP Omen - Zorin OS 16.2 based on Ubuntu 20.04 LTS (Focal Fossa)
+Content-Language: en-US
+To:     "Alan O." <aj.owens.001@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-laptop@vger.kernel.org
+References: <CALSL_1ehW6nu5YtAWJp92_k_BrQsaKf8paMmjta0Dk=vGqexZQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CALSL_1ehW6nu5YtAWJp92_k_BrQsaKf8paMmjta0Dk=vGqexZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,129 +54,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi--
 
-HEAD commit:    6f08c1de13a9 Add linux-next specific files for 20230317
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1103fed2c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8cdb12af294ab55
-dashboard link: https://syzkaller.appspot.com/bug?extid=3f6ef04b7cf85153b528
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12fc4481c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b4df26c80000
+On 3/18/23 11:18, Alan O. wrote:
+> Hello and Good Day!
+> 
+> Please understand that I am by no means proficient with patching *anything,*
+> nor do I have much experience with Linux compared to most.  That said, I
+> have been working on this for a good while with no success at patching the
+> kernel to achieve my needs for better thermal control.  I have been
+> desperately searching for a way to *lower the temperature threshold at
+> which my fans are activated or increase RPM.   *Please help.
+> 
+> I am trying to apply this patch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?h=for-next&id=286e937efbc7177c114e80aae9b402131e3886c1
+> 
+> To my Linux 6.2.1-060201-generic x86_64 kernel:
+> 
+> *`cat /proc/version`*
+>> Linux version 6.2.1-060201-generic (buildd@lcy02-amd64-016)
+> (x86_64-linux-gnu-gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, GNU ld (GNU
+> Binutils for Ubuntu) 2.34) #202302260629-Ubuntu SMP PREEMPT_DYNAMIC
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/300a30f8157b/disk-6f08c1de.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7cad5b8b07a2/vmlinux-6f08c1de.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/eded56f08b63/bzImage-6f08c1de.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/6a74fc0a1124/mount_0.gz
+I don't have that exact kernel since I an not using Ubuntu.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com
+When I try to apply this patch to plain vanilla 6.2.1 from kernel.org,
+'patch' tells me:
 
-REISERFS (device loop0): Using r5 hash to sort names
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:68 [inline]
-BUG: KASAN: use-after-free in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-BUG: KASAN: use-after-free in test_bit_le include/asm-generic/bitops/le.h:21 [inline]
-BUG: KASAN: use-after-free in reiserfs_readdir_inode+0xb0d/0x13b0 fs/reiserfs/dir.c:147
-Read of size 8 at addr ffff88807384d000 by task syz-executor532/5096
+Using Plan A...
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+Hunk #1 ignored at 57.
+Hunk #2 ignored at 117.
+Hunk #3 ignored at 151.
+Hunk #4 ignored at 407.
+Hunk #5 ignored at 431.
+Hunk #6 ignored at 1053.
+Hunk #7 ignored at 1072.
+7 out of 7 hunks ignored
 
-CPU: 0 PID: 5096 Comm: syz-executor532 Not tainted 6.3.0-rc2-next-20230317-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
- print_report mm/kasan/report.c:462 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:572
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:68 [inline]
- _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
- test_bit_le include/asm-generic/bitops/le.h:21 [inline]
- reiserfs_readdir_inode+0xb0d/0x13b0 fs/reiserfs/dir.c:147
- iterate_dir+0x56e/0x6f0 fs/readdir.c:65
- __do_sys_getdents64 fs/readdir.c:369 [inline]
- __se_sys_getdents64 fs/readdir.c:354 [inline]
- __x64_sys_getdents64+0x13e/0x2c0 fs/readdir.c:354
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc13aaf8939
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe499b2a68 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
-RAX: ffffffffffffffda RBX: 0000000000012701 RCX: 00007fc13aaf8939
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 00007ffe499b2a90 R09: 00007ffe499b2a90
-R10: 0000000000001131 R11: 0000000000000246 R12: 00007ffe499b2a8c
-R13: 00007ffe499b2ac0 R14: 00007ffe499b2aa0 R15: 0000000000000005
- </TASK>
+so it appears that 6.2.1 already has this patch merged into it.
+Can you check your kernel source tree for that?
 
-The buggy address belongs to the physical page:
-page:ffffea0001ce1340 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x7384d
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000000000 ffffea0001ce1388 ffff8880b9943620 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 0, migratetype Movable, gfp_mask 0x140cca(GFP_HIGHUSER_MOVABLE|__GFP_COMP), pid 5086, tgid 5086 (udevd), ts 77632421048, free_ts 77634242475
- prep_new_page mm/page_alloc.c:2472 [inline]
- get_page_from_freelist+0xf75/0x2ab0 mm/page_alloc.c:4236
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5502
- __folio_alloc+0x16/0x40 mm/page_alloc.c:5534
- vma_alloc_folio+0x155/0x850 mm/mempolicy.c:2244
- shmem_alloc_folio+0x119/0x1e0 mm/shmem.c:1557
- shmem_alloc_and_acct_folio+0x15e/0x5d0 mm/shmem.c:1581
- shmem_get_folio_gfp+0xa86/0x1a80 mm/shmem.c:1926
- shmem_get_folio mm/shmem.c:2057 [inline]
- shmem_write_begin+0x14a/0x380 mm/shmem.c:2663
- generic_perform_write+0x256/0x570 mm/filemap.c:3921
- __generic_file_write_iter+0x2ae/0x500 mm/filemap.c:4049
- generic_file_write_iter+0xe3/0x350 mm/filemap.c:4081
- call_write_iter include/linux/fs.h:1854 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x9f6/0xe20 fs/read_write.c:584
- ksys_write+0x12b/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1468 [inline]
- free_unref_page_prepare+0x4d1/0xb60 mm/page_alloc.c:3298
- free_unref_page_list+0xe3/0xa70 mm/page_alloc.c:3439
- release_pages+0xcd7/0x1380 mm/swap.c:1042
- __pagevec_release+0x77/0xe0 mm/swap.c:1062
- pagevec_release include/linux/pagevec.h:63 [inline]
- folio_batch_release include/linux/pagevec.h:132 [inline]
- shmem_undo_range+0x5c0/0x1350 mm/shmem.c:929
- shmem_truncate_range mm/shmem.c:1027 [inline]
- shmem_evict_inode+0x32f/0xb60 mm/shmem.c:1142
- evict+0x2ed/0x6b0 fs/inode.c:665
- iput_final fs/inode.c:1748 [inline]
- iput fs/inode.c:1774 [inline]
- iput+0x4a7/0x7a0 fs/inode.c:1760
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- dentry_kill fs/dcache.c:745 [inline]
- dput+0x6ac/0xe10 fs/dcache.c:913
- do_renameat2+0xb72/0xc90 fs/namei.c:4925
- __do_sys_rename fs/namei.c:4969 [inline]
- __se_sys_rename fs/namei.c:4967 [inline]
- __x64_sys_rename+0x81/0xa0 fs/namei.c:4967
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+(more below)
 
-Memory state around the buggy address:
- ffff88807384cf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88807384cf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88807384d000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                   ^
- ffff88807384d080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88807384d100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
+> *`lsb_release -a`*
+>> No LSB modules are available.
+> Distributor ID: Zorin
+> Description: Zorin OS 16.2
+> Release: 16
+> Codename: focal
+> 
+> Reason:
+> To Fix Thermal Policy Handling For Select Newer HP Omen Laptops
+> <https://www.phoronix.com/news/Linux-5.18-HP-Omen-Thermal>
+> 
+> 
+> Command issued:
+> `patch -p1 --verbose --dry-run -d
+> /usr/src/linux-headers-6.2.1-060201-generic -i
+> '/home/aj/Downloads/platform-drivers-x86/0001-platform-x86-hp-wmi-support-omen-thermal-profile-pol.patch'
+> 
+> Terminal output:
+> ```
+> Hmm... Looks like a unified diff to me...
+> can't find file to patch at input line 27 Perhaps you used the wrong
+> -p or --strip option? The text leading up to this was:
+> --------------------------
+> |From 286e937efbc7177c114e80aae9b402131e3886c1 Mon Sep 17 00:00:00 2001
+> |From: Enver Balalic <balalic.enver@gmail.com>
+> |Date: Mon, 14 Mar 2022 13:14:53 +0100
+> |Subject: [PATCH] platform/x86: hp-wmi: support omen thermal profile policy v1
+> |
+> |As it turns out, these laptops have 2 thermal profile versions.
+> |A previous patch added support for v0, this patch adds support
+> |for v1 thermal policies that are in use on some devices.
+> |We obtain the thermal policy version by querying the get system
+> |design data WMI call and looking at the fourth byte it returns,
+> |except if the system board DMI Board ID is in a specific array
+> |that the windows command center app overrides to thermal policy
+> |v0 for some reason.
+> |
+> |Signed-off-by: Enver Balalic <balalic.enver@gmail.com>
+> |Link: https://lore.kernel.org/r/20220314121453.kjszdciymtg6ctbq@omen
+> |Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> |Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> |---
+> | drivers/platform/x86/hp-wmi.c | 81 +++++++++++++++++++++++++++++------
+> | 1 file changed, 67 insertions(+), 14 deletions(-)
+> |
+> |diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+> |index 1f9d6e1de5af..0e9a25b56e0e 100644
+> |--- a/drivers/platform/x86/hp-wmi.c
+> |+++ b/drivers/platform/x86/hp-wmi.c
+> --------------------------
+> File to patch:
+> ```
+> 
+> From my understanding, it is asking me to enter the name(s) of the
+> file(s) that the patch is supposed to modify. This information should be
+> included in the patch file itself, typically in the header section, but I
+> don't see it unless I'm missing something. I opened up the patch file with
+> a text editor to check which file is being patched and I see some *paths*
+> that look to be pointing to a file named `hp-wmi.c`, but I don't know if that
+> is true or not.
+> 
+> It also occurs to me that this patch is meant to modify many files in
+> different directories within the kernel's source directory, in which
+> case, I would be required to enter each and every single one in that
+> prompt.  Probably not the way this patch command was meant to be run,
+> which leads me to believe that my kernel's source directory at
+> /usr/src/linux-headers-6.2.1-060201-generic
+> needs a whole new directory with the same structure as seen in this
+> path in the patch file: a/drivers/platform/x86/hp-wmi.c
+> 
+> Would this imply that I need to have something like:
+> usr/src/linux-headers-6.2.1-060201-generic/a/drivers/platform/x86 and
+> then create a blank .TXT named hp-wmi.c?
+> 
+> Without creating the "a" directory, I did try to navigate into the
+> .../linux-headers-6.2.1-060201-generic/drivers/platform/x86
+> folder and create this file I mentioned above, then entered that
+> file in the Terminal prompt via drag/drop, but it still says that the
+> directory or file does not exist.
+> 
+> I assume that once I know the file name or have a working directory,
+> I just enter it at the prompt and press enter - but I just don't know what I'm
+> supposed to do to get the file *OR* directory I need, that will
+> satisfy the `patch` command so that the patch files can be moved into the
+> kernel directory that is being patched.
+> 
+> Requesting some kind of guidance or input on what I might be doing
+> wrong and how I might be able to fix this so I can better control my thermals.
+> 
+> If this is a known issue or something which your team can confirm is
+> an issue, requesting to know any helpful information regarding the plan
+> of action moving forward.
+> 
+> If the issue is that I just need to apply a specific kernel which has
+> this fix already included in it, please
+> 
+> let me know which kernel it is, and any relevant steps to take in
+> order to apply that kernel.
+> 
+> 
+> Please let me know if I can provide any further information and I will
+> get back to you ASAP.
 
+Somewhere along the way the hp drivers were moved into
+drivers/platform/x86/hp/ (likewise for the dell drivers into
+drivers/platform/x86/dell/).
+
+What I did to test applying this patch to my 6.2.1 kernel tree
+is modify the patch file's filenames by inserting "hp/"
+just before hp-wmi.c, like this:
+
+diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+index 1f9d6e1de5afe..0e9a25b56e0e4 100644
+--- a/drivers/platform/x86/hp/hp-wmi.c
++++ b/drivers/platform/x86/hp/hp-wmi.c
+
+then at least 'patch' can find the correct file to patch,
+although it reports that the patch has already been applied.
+
+-- 
+~Randy
