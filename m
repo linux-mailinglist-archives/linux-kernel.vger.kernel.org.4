@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEA86BF836
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 07:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7CB6BF838
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 07:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCRGDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 02:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S230156AbjCRGDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 02:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjCRGDD (ORCPT
+        with ESMTP id S230060AbjCRGDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 02:03:03 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E81252BC;
-        Fri, 17 Mar 2023 23:03:01 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso11212275pjb.3;
-        Fri, 17 Mar 2023 23:03:01 -0700 (PDT)
+        Sat, 18 Mar 2023 02:03:04 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0604D408
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 23:03:02 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id e71so7848782ybc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 23:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679119381;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1679119382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Tq6dfXGjTtC2KxTe9xblOPYZ48A2UaTNEMDb5IYA2zQ=;
-        b=hu/KLFvFI8MJ+sdDJxKTbHznkpv0LcyD2DeuEMhXykIUyXkkatIZT/IrCRhCwQwdX0
-         eU0ExWqchVTXwtIt2QgVlEf4p5NTB7FOef8JuQulAGV/J/txiHL4hUBLwmOBCvKgTywW
-         mC2cG73+6oEOjZVJNofxcA7u3mbJvfNIOUWApvR18XVQ8pn01OwSErnrupQSBvtak3Vb
-         AcIBu8x7FPRnXw+GAusjACwUIfKnV6XBMviKITfVr7uMUZ8dqe5tYy1kft80RRhrOt/R
-         Zp9N3GS5x8a5oAmEPq+6UAYzdpZT6TbYdjvwZF1hC2qeTXFxDYLqY0mFv0tX35maZ9DG
-         OjIw==
+        bh=4wDUMthQ6l3BQ57KAyFT6dJbioFNIhKz4dPPNgbs71k=;
+        b=hmbn9kZynJ7wWCvaFKgcWtSIS/IqjJ0RlFqfGvusn7u2OI9W3O4wryK9UYbnFFRdJu
+         +X8oL/9WxXEADgNU7zXdQ8rEhMNQ4xAKuRHCV7HE3d7Ilt9j2az8CMPJwXLMA7Y1i3Vk
+         aiQKaFBcIvL2CdChcsjdwzic2n8plmf+WRgV2hmclSgaemmXNYiDK9mqXexcgmahYCLK
+         13r2DWH0CqS2uAGjHSKNVEeqrWPEOZu9Xkl2Vd2zIvVbmzum7LXEc/shb98FK3GK8kvz
+         uAyNO5Loytvt3fMM5GYiqsZAx4xP4xJUweIqJNhncQ/SGUTln70H4QD6ga6nv7wCxsVA
+         L+CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679119381;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679119382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Tq6dfXGjTtC2KxTe9xblOPYZ48A2UaTNEMDb5IYA2zQ=;
-        b=Eflm1FvsQhFWatG2Malct0Ooi2N8kBRtrJiNo7EtFmc3FH7ubDMmq049GKj2SMVuLa
-         debQTSgeJ9tSfYTmPw0HzYS5yOewE27cnF9Ymr+recnwjZnADs5u0wdV9NwK46vluCyl
-         coHkICLmeUTtgKjZ8gXbkw9ZKTMFVqqqo0B6VjbFyrMQ6ia7OnCcrQrDYES3Z2eKJFzV
-         xeqcQQ9dBTQ2YSLjbH2elQdsU8b3vOlF94ECkeRJ8H0mwrboN4ysIXZrWm0k0q+WShFR
-         dnwnpdgakR2wC0FJRPU8tEk97LKaB9IUcka4SEqPJm+g4PShJzKSA+aZXf0+1/JDcMYY
-         q9fQ==
-X-Gm-Message-State: AO0yUKUErevOp7vNopVjO8VEE6mQSZ6pODJweMLlQWNEGptkFzerpnq/
-        3CgaypCMa/U0TbX1YFr1XCo=
-X-Google-Smtp-Source: AK7set/raPcHy5ZaoBhtyxBUzGdsyUo4Csevesa8DZdHY5qlp74dGsvzwB7aeBK9G8vkcflG4o9SlQ==
-X-Received: by 2002:a05:6a20:7f8c:b0:d7:3c1a:6caf with SMTP id d12-20020a056a207f8c00b000d73c1a6cafmr8401834pzj.2.1679119380728;
-        Fri, 17 Mar 2023 23:03:00 -0700 (PDT)
-Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
-        by smtp.gmail.com with ESMTPSA id w23-20020a17090a15d700b00233b5d6b4b5sm5775920pjd.16.2023.03.17.23.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 23:03:00 -0700 (PDT)
-From:   aloktiagi <aloktiagi@gmail.com>
-To:     viro@zeniv.linux.org.uk, David.Laight@ACULAB.COM,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     keescook@chromium.org, hch@infradead.org,
-        aloktiagi <aloktiagi@gmail.com>,
-        Tycho Andersen <tycho@tycho.pizza>
-Subject: [RFC v2 3/3] file, epoll: Implement do_replace() and eventpoll_replace()
-Date:   Sat, 18 Mar 2023 06:02:48 +0000
-Message-Id: <20230318060248.848099-3-aloktiagi@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230318060248.848099-1-aloktiagi@gmail.com>
-References: <20230318060248.848099-1-aloktiagi@gmail.com>
+        bh=4wDUMthQ6l3BQ57KAyFT6dJbioFNIhKz4dPPNgbs71k=;
+        b=aDR2asoHK29WPSd64VWh4dpk/BlXNxo68gz5tAUdNuak9L68/RTPqysQzCPMsPeD8U
+         axlB3RTrKinnu7ncCgd4ePEAE4wtAxZD7FRu5WG1ED2/NqW/s2L30ncMclzVGO+qlds+
+         htkYF76SAI0rkFBzYDcRhaUbQyuZxxfJeRql4m5PT8et4bJS+6qncW2YLsJeGePxW4wD
+         RmCjLWQPpHell3P8TZGpmnr7t3shU/jRWSpHciNU87qeftIVjTeq96JmUaJowX4ZJtng
+         bKtmqzfTo0f6M53XE1c9v4YARcR2jdhHwuOfix//nptMnslAlgZ1YbtJ7zl491HuT8GR
+         gn5A==
+X-Gm-Message-State: AO0yUKVIQ6P7c/VC7HPRyIojHCBYIAvaWks/hMnpnt++mjFE9k3LI2Mw
+        3ED2+1cxo/F4SilmuSCxiynLQEr5r5X2UO5JUZ+Q
+X-Google-Smtp-Source: AK7set8ORN8xJX9jFTVsUfzG8imm0dkFu5gM6DQzl5I8f7lrIzOgSd4LRrImVGPEGR3k/Q56fDkkXO6rG5/cRYtkaZI=
+X-Received: by 2002:a5b:152:0:b0:b3d:c59:4d26 with SMTP id c18-20020a5b0152000000b00b3d0c594d26mr700475ybp.5.1679119381666;
+ Fri, 17 Mar 2023 23:03:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-3-kan.liang@linux.intel.com> <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+ <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com> <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
+ <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com> <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
+ <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com>
+ <568b09ce-dc6a-8d2a-13ca-6df045236449@linux.intel.com> <CANDhNCrooGXFvW6DDuRJHtM2K8wCbqajSP0KDVn+wkEcTNHJZA@mail.gmail.com>
+ <77f1ac9f-0acd-1b70-c19e-3564caa45f41@linux.intel.com> <CANDhNCpnoRjrX7k7spDdnUgwzygVUoaF5u7A2-heQfCuokcN6Q@mail.gmail.com>
+ <44422a27-081b-0722-58c4-ace1b7e871f8@linux.intel.com> <CANDhNCq7a7DBhb83veKtVOOkGpHLssgd4JpQ552B40YK51cLsg@mail.gmail.com>
+ <76362685-0250-ef03-e6b9-e905a1bfd942@linux.intel.com>
+In-Reply-To: <76362685-0250-ef03-e6b9-e905a1bfd942@linux.intel.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Fri, 17 Mar 2023 23:02:50 -0700
+Message-ID: <CANDhNComKRDdZJ8SJECNdoAzQhmR3vu9yKAtp7NKDmECxff=fg@mail.gmail.com>
+Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
+ monotonic raw conversion
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
+        adrian.hunter@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,344 +80,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a mechanism to replace a file linked in the epoll interface or a file
-that has been dup'ed by a file received via the replace_fd() interface.
+On Mon, Mar 13, 2023 at 2:19=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.c=
+om> wrote:
+>
+>
+>
+> On 2023-03-11 12:55 a.m., John Stultz wrote:
+> > On Thu, Mar 9, 2023 at 8:56=E2=80=AFAM Liang, Kan <kan.liang@linux.inte=
+l.com> wrote:
+> >> On 2023-03-08 8:17 p.m., John Stultz wrote:
+> >>> So I spent a little bit of time today adding some trace_printks to th=
+e
+> >>> timekeeping code so I could record the actual TSC and timestamps bein=
+g
+> >>> calculated from CLOCK_MONOTONIC_RAW.
+> >>>
+> >>> I did catch one error in the test code, which unfortunately I'm to bl=
+ame for:
+> >>>   mid =3D start + (delta +(delta/2))/2; //round-closest
+> >>>
+> >>> That should be
+> >>>   mid =3D start + (delta +(2/2))/2  //round-closest
+> >>> or more simply
+> >>>   mid =3D start + (delta +1)/2; //round-closest
+> >>>
+> >>> Generalized rounding should be: (value + (DIV/2))/DIV), but I'm
+> >>> guessing with two as the divisor, my brain mixed it up and typed
+> >>> "delta". My apologies!
+> >>>
+> >>> With that fix, I'm seeing closer to ~500ns of error in the
+> >>> interpolation, just using the userland sampling.   Now, I've also
+> >>> disabled vsyscalls for this (otherwise I wouldn't be able to
+> >>> trace_printk), so the error likely would be higher than with
+> >>> vsyscalls.
+> >>>
+> >>> Now, part of the error is that:
+> >>>   start=3D rdtsc();
+> >>>   clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+> >>>   end =3D rdtsc();
+> >>>
+> >>> Ends up looking like
+> >>>   start=3D rdtsc();
+> >>>   clock_gettime() {
+> >>>      now =3D rdtsc();
+> >>>      delta =3D now - last;
+> >>>      ns =3D (delta * mult) >> shift
+> >>> [~midpoint~]
+> >>>      ts->nsec =3D base_ns + ns;
+> >>>      ts->sec =3D base_sec;
+> >>>      normalize_ts(ts)
+> >>>   }
+> >>>   end =3D rdtsc();
+> >>>
+> >>> And so by taking the mid-point we're always a little skewed from wher=
+e
+> >>> the tsc was actually read.  Looking at the data for my case the tsc
+> >>> read seems to be ~12% in, so you could instead try:
+> >>>
+> >>> delta =3D end - start;
+> >>> p12 =3D start + ((delta * 12) + (100/2))/100;
+> >>>
+> >>> With that adjustment, I'm seeing error around ~40ns.
+> >>>
+> >>> Mind giving that a try?
+> >>
+> >> I tried both the new mid and p12. The error becomes even larger.
+> >>
+> >> With new mid (start + (delta +1)/2), the error is now ~3800ns
+> >> With p12 adjustment, the error is ~6700ns.
+> >>
+> >>
+> >> Here is how I run the test.
+> >> $./time
+> >> $perf record -e cycles:upp --clockid monotonic_raw $some_workaround
+> >> $./time
+> >>
+> >> Here are some raw data.
+> >>
+> >> For the first ./time,
+> >> start: 961886196018
+> >> end: 961886215603
+> >> MONO_RAW: 341485848531
+> >>
+> >> For the second ./time,
+> >> start: 986870117783
+> >> end: 986870136152
+> >> MONO_RAW: 351495432044
+> >>
+> >> Here is the time generated from one PEBS record.
+> >> TSC: 968210217271
+> >> PEBS_MONO_RAW (calculated via kernel conversion information): 34401950=
+3072
+> >>
+> >> Using new mid (start + (delta +1)/2), the guessed PEBS_MONO_RAW is
+> >> 344019506897. The error is 3825ns.
+> >> Using p12 adjustment, the guessed PEBS_MONO_RAW is 344019509831.
+> >> The error is 6759ns
+> >
+> > Huh. I dunno. That seems wild that the error increased.
+> >
+> > Just in case something is going astray with the PEBS_MONO_RAW logic,
+> > can you apply the hack patch I was using to display the MONOTONIC_RAW
+> > values the kernel calculates?
+> >   https://github.com/johnstultz-work/linux-dev/commit/8d7896b078965b059=
+ea5e8cc21841580557f6df6
+> >
+> > It uses trace_printk, so you'll have to cat /sys/kernel/tracing/trace
+> > to get the output.
+> >
+>
+>
+> $ ./time_3
+> start: 7358368893806 end: 7358368902944 delta: 9138
+> MONO_RAW: 2899739790738
+> MID: 7358368898375
+> P12: 7358368894903
+> $ sudo cat /sys/kernel/tracing/trace | grep time_3
+>           time_3-1443    [002] .....  2899.858936: ktime_get_raw_ts64:
+> JDB: timekeeping_get_delta cycle_now: 7358368897679
+>           time_3-1443    [002] .....  2899.858937: ktime_get_raw_ts64:
+> JDB: ktime_get_raw_ts64: 2899739790738
+>
+> The error between MID and cycle_now is -696ns
+> The error between P12 and cycle_now is 2776ns
 
-eventpoll_replace() is called from do_replace() and finds all instances of the
-file to be replaced and replaces them with the new file.
+Hey Kan,
+  So I'm terribly sorry, I'm a bit underwater right now and haven't
+had time to look deeper at this. The MID case you have above looks
+closer to what I was seeing but I can't explain why the 12% case is
+worse.
 
-do_replace() also replaces the file in the file descriptor table for all fd
-numbers referencing it with the new file.
+Since I feel it's not really fair to object to your patch but not have
+the time to work through an alternative with you, I'm going to
+withdraw my objection (though others may persist!).
+I'd still really prefer if we avoided exposing internal timekeeping
+state directly to userland, and it would be good to see some further
+exploration in other directions, but there is the existing perf mmap
+precedence (even if I dislike it).   Sorry I can't be of more help to
+find a better approach here. :(
 
-We have a use case where multiple IPv6 only network namespaces can use a single
-IPv4 network namespace for IPv4 only egress connectivity by switching their
-sockets from IPv6 to IPv4 network namespace. This allows for migration of
-systems to IPv6 only while keeping their connectivity to IPv4 only destinations
-intact.
-
-Today, we achieve this by setting up seccomp filter to intercept network system
-calls like connect() from a container in a container manager which runs in an
-IPv4 only network namespace. The container manager creates a new IPv4 connection
-and injects the new file descriptor through SECCOMP_NOTIFY_IOCTL_ADDFD replacing
-the original file descriptor from the connect() call. This does not work for
-cases where the original file descriptor is handed off to a system like epoll
-before the connect() call. After a new file descriptor is injected the original
-file descriptor being referenced by the epoll fd is not longer valid leading to
-failures. As a workaround the container manager when intercepting connect()
-loops through all open socket file descriptors to check if they are referencing
-the socket attempting the connect() and replace the reference with the to be
-injected file descriptor. This workaround is cumbersome and makes the solution
-prone to similar yet to be discovered issues.
-
-The above change will enable us remove the workaround in the container manager
-and let the kernel handle the replacement correctly.
-
-Signed-off-by: aloktiagi <aloktiagi@gmail.com>
----
- fs/eventpoll.c                                | 38 ++++++++
- fs/file.c                                     | 54 +++++++++++
- include/linux/eventpoll.h                     | 18 ++++
- include/linux/file.h                          |  1 +
- tools/testing/selftests/seccomp/seccomp_bpf.c | 97 +++++++++++++++++++
- 5 files changed, 208 insertions(+)
-
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 64659b110973..958ad995fd45 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -935,6 +935,44 @@ void eventpoll_release_file(struct file *file)
- 	mutex_unlock(&epmutex);
- }
- 
-+static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
-+			struct file *tfile, int fd, int full_check);
-+
-+/*
-+ * This is called from eventpoll_replace() to replace a linked file in the epoll
-+ * interface with a new file received from another process. This is useful in
-+ * cases where a process is trying to install a new file for an existing one
-+ * that is linked in the epoll interface
-+ */
-+void eventpoll_replace_file(struct file *toreplace, struct file *file)
-+{
-+	int fd;
-+	struct eventpoll *ep;
-+	struct epitem *epi;
-+	struct hlist_node *next;
-+	struct epoll_event event;
-+
-+	if (!file_can_poll(file))
-+		return;
-+
-+	mutex_lock(&epmutex);
-+	if (unlikely(!toreplace->f_ep)) {
-+		mutex_unlock(&epmutex);
-+		return;
-+	}
-+
-+	hlist_for_each_entry_safe(epi, next, toreplace->f_ep, fllink) {
-+		ep = epi->ep;
-+		mutex_lock(&ep->mtx);
-+		fd = epi->ffd.fd;
-+		event = epi->event;
-+		ep_remove(ep, epi);
-+		ep_insert(ep, &event, file, fd, 1);
-+		mutex_unlock(&ep->mtx);
-+	}
-+	mutex_unlock(&epmutex);
-+}
-+
- static int ep_alloc(struct eventpoll **pep)
- {
- 	int error;
-diff --git a/fs/file.c b/fs/file.c
-index 1716f07103d8..ce691dae1f0e 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -20,10 +20,18 @@
- #include <linux/spinlock.h>
- #include <linux/rcupdate.h>
- #include <linux/close_range.h>
-+#include <linux/eventpoll.h>
- #include <net/sock.h>
- 
- #include "internal.h"
- 
-+struct replace_filefd {
-+        struct files_struct *files;
-+        unsigned fd;
-+        struct file *fdfile;
-+        struct file *file;
-+};
-+
- unsigned int sysctl_nr_open __read_mostly = 1024*1024;
- unsigned int sysctl_nr_open_min = BITS_PER_LONG;
- /* our min() is unusable in constant expressions ;-/ */
-@@ -1133,6 +1141,50 @@ __releases(&files->file_lock)
- 	return -EBUSY;
- }
- 
-+static int do_replace_fd_array(const void *v, struct file *tofree, unsigned int n)
-+{
-+	struct replace_filefd *ffd = (void *)v;
-+	struct fdtable *fdt;
-+
-+	fdt = files_fdtable(ffd->files);
-+
-+	if ((n != ffd->fd) && (tofree == ffd->fdfile)) {
-+		get_file(ffd->file);
-+		rcu_assign_pointer(fdt->fd[n], ffd->file);
-+		tofree = pick_file(ffd->files, n);
-+		filp_close(tofree, ffd->files);
-+	}
-+	return 0;
-+}
-+
-+static void do_replace(struct files_struct *files,
-+        struct file *file, unsigned fd, struct file *fdfile)
-+{
-+	unsigned n = 0;
-+	struct replace_filefd ffd = {
-+		.files = files,
-+		.fd = fd,
-+		.fdfile = fdfile,
-+		.file = file
-+	};
-+
-+	/*
-+	 * Check if the file referenced by the fd number is linked to the epoll
-+	 * interface. If yes, replace the reference with the received file in
-+	 * the epoll interface.
-+	 */
-+	if (fdfile && fdfile->f_ep) {
-+		eventpoll_replace(fdfile, file);
-+	}
-+	/*
-+	 * Install the received file in the file descriptor table for all fd
-+	 * numbers referencing the same file as the one we are trying to
-+	 * replace. Do not install it for the fd number received since that is
-+	 * handled in do_dup2()
-+	 */
-+	iterate_fd_locked(files, n, do_replace_fd_array, &ffd);
-+}
-+
- int replace_fd(unsigned fd, struct file *file, unsigned flags)
- {
- 	int err;
-@@ -1150,8 +1202,10 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
- 	if (unlikely(err < 0))
- 		goto out_unlock;
- 	err = do_dup2(files, file, fd, &fdfile, flags);
-+	do_replace(files, file, fd, fdfile);
- 	if (fdfile)
- 		filp_close(fdfile, files);
-+
- 	return err;
- 
- out_unlock:
-diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
-index 3337745d81bd..38904fce3840 100644
---- a/include/linux/eventpoll.h
-+++ b/include/linux/eventpoll.h
-@@ -25,6 +25,8 @@ struct file *get_epoll_tfile_raw_ptr(struct file *file, int tfd, unsigned long t
- /* Used to release the epoll bits inside the "struct file" */
- void eventpoll_release_file(struct file *file);
- 
-+void eventpoll_replace_file(struct file *toreplace, struct file *file);
-+
- /*
-  * This is called from inside fs/file_table.c:__fput() to unlink files
-  * from the eventpoll interface. We need to have this facility to cleanup
-@@ -53,6 +55,22 @@ static inline void eventpoll_release(struct file *file)
- 	eventpoll_release_file(file);
- }
- 
-+
-+/*
-+ * This is called from fs/file.c:do_replace() to replace a linked file in the
-+ * epoll interface with a new file received from another process. This is useful
-+ * in cases where a process is trying to install a new file for an existing one
-+ * that is linked in the epoll interface
-+ */
-+static inline void eventpoll_replace(struct file *toreplace, struct file *file)
-+{
-+	/*
-+	 * toreplace is the file being replaced. Install the new file for the
-+	 * existing one that is linked in the epoll interface
-+	 */
-+	eventpoll_replace_file(toreplace, file);
-+}
-+
- int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 		 bool nonblock);
- 
-diff --git a/include/linux/file.h b/include/linux/file.h
-index 39704eae83e2..80e56b2b44fb 100644
---- a/include/linux/file.h
-+++ b/include/linux/file.h
-@@ -36,6 +36,7 @@ struct fd {
- 	struct file *file;
- 	unsigned int flags;
- };
-+
- #define FDPUT_FPUT       1
- #define FDPUT_POS_UNLOCK 2
- 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 61386e499b77..caf68682519c 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -47,6 +47,7 @@
- #include <linux/kcmp.h>
- #include <sys/resource.h>
- #include <sys/capability.h>
-+#include <sys/epoll.h>
- 
- #include <unistd.h>
- #include <sys/syscall.h>
-@@ -4179,6 +4180,102 @@ TEST(user_notification_addfd)
- 	close(memfd);
- }
- 
-+TEST(user_notification_addfd_with_epoll_replace)
-+{
-+	char c;
-+	pid_t pid;
-+	long ret;
-+	int status, listener, fd;
-+	int efd, sfd[4];
-+	struct epoll_event e;
-+	struct seccomp_notif_addfd addfd = {};
-+	struct seccomp_notif req = {};
-+	struct seccomp_notif_resp resp = {};
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+
-+	/* Create two socket pairs sfd[0] <-> sfd[1] and sfd[2] <-> sfd[3] */
-+	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, &sfd[0]), 0);
-+	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, &sfd[2]), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		efd = epoll_create(1);
-+		if (efd == -1)
-+			exit(1);
-+
-+		e.events = EPOLLIN;
-+		if (epoll_ctl(efd, EPOLL_CTL_ADD, sfd[0], &e) != 0)
-+			exit(1);
-+
-+		/*
-+		 * fd will be added here to replace an existing one linked
-+		 * in the epoll interface.
-+		 */
-+		if (syscall(__NR_getppid) != USER_NOTIF_MAGIC)
-+			exit(1);
-+
-+		/*
-+		 * Write data to the sfd[3] connected to sfd[2], but due to
-+		 * the swap, we should see data on sfd[0]
-+		 */
-+		if (write(sfd[3], "w", 1) != 1)
-+			exit(1);
-+
-+		if (epoll_wait(efd, &e, 1, 0) != 1)
-+			exit(1);
-+
-+		if (read(sfd[0], &c, 1) != 1)
-+			exit(1);
-+
-+		if ('w' != c)
-+			exit(1);
-+
-+		if (epoll_ctl(efd, EPOLL_CTL_DEL, sfd[0], &e) != 0)
-+			exit(1);
-+
-+		close(efd);
-+		close(sfd[0]);
-+		close(sfd[1]);
-+		close(sfd[2]);
-+		close(sfd[3]);
-+		exit(0);
-+	}
-+
-+	ASSERT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+
-+	addfd.srcfd = sfd[2];
-+	addfd.newfd = sfd[0];
-+	addfd.id = req.id;
-+	addfd.flags = SECCOMP_ADDFD_FLAG_SETFD;
-+	addfd.newfd_flags = O_CLOEXEC;
-+
-+	/*
-+	 * Verfiy we can install and replace a file that is linked in the
-+	 * epoll interface. Replace the socket sfd[0] with sfd[2]
-+	 */
-+	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
-+	EXPECT_EQ(fd, sfd[0]);
-+
-+	resp.id = req.id;
-+	resp.error = 0;
-+	resp.val = USER_NOTIF_MAGIC;
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+
-+	/* Wait for child to finish. */
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+}
-+
- TEST(user_notification_addfd_rlimit)
- {
- 	pid_t pid;
--- 
-2.34.1
-
+thanks
+-john
