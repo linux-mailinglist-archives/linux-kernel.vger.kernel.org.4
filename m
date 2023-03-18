@@ -2,78 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464516BF8D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC57F6BF8DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 09:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCRIFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 04:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S229879AbjCRIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 04:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjCRIFE (ORCPT
+        with ESMTP id S229516AbjCRIHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:05:04 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C45D11B
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 01:04:43 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pdRYO-0003hE-Mv; Sat, 18 Mar 2023 09:04:40 +0100
-Message-ID: <9a174e48-5cd6-535f-4f01-4e81398e772f@leemhuis.info>
-Date:   Sat, 18 Mar 2023 09:04:40 +0100
+        Sat, 18 Mar 2023 04:07:22 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B244817CEC;
+        Sat, 18 Mar 2023 01:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=NLgcl
+        pVGg+cj1T9ME4V3k2q3Xxe+gHdjdWnzy/lpn/8=; b=RkUQVr9EoeST5XJK0HoEL
+        25x2KFnRDyRV4gc87XIFyD3t7ntfFZ40mcm9nmKYfgRxdPC7DMKFxU8tktEOLuOY
+        eb6yMmURljEWspXllwyn43I0BiIcgUaJUQn/gh+Gcbu2jSWk2+6HeAAISZLzNqu9
+        o/YvN2j+a6DhO82uBa2Ra8=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g1-3 (Coremail) with SMTP id _____wBn1unHcBVkXCVqAQ--.22021S2;
+        Sat, 18 Mar 2023 16:05:27 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     timur@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH net v2] net: qcom/emac: Fix use after free bug in emac_remove due to  race condition
+Date:   Sat, 18 Mar 2023 16:05:26 +0800
+Message-Id: <20230318080526.785457-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [FIRMWARE] Regression on rtw89/rtw8852b_fw.bin by the latest
- update
-Content-Language: en-US, de-DE
-To:     Takashi Iwai <tiwai@suse.de>, Ping-Ke Shih <pkshih@realtek.com>
-Cc:     linux-firmware@kernel.org, linux-kernel@vger.kernel.org,
-        Josh Boyer <jwboyer@kernel.org>
-References: <878rfuo67a.wl-tiwai@suse.de>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <878rfuo67a.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679126684;3a5205e8;
-X-HE-SMSGID: 1pdRYO-0003hE-Mv
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBn1unHcBVkXCVqAQ--.22021S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF4DZrWrCr4ktFWkXr1rtFb_yoW8Wr4kpa
+        yDWa4xu34ktF17KF4kJr47tFyUGw4DK34ag3y3Cw4rZ3Z8Cry7KryrKFyrXryfZFZ8Ar4Y
+        qr18Z343Ca1kJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAg2U1Xl5+MwYQAAsU
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In emac_probe, &adpt->work_thread is bound with
+emac_work_thread. Then it will be started by timeout
+handler emac_tx_timeout or a IRQ handler emac_isr.
 
-On 18.03.23 08:43, Takashi Iwai wrote:
-> 
-> we've received a regression report on openSUSE Tumbleweed about the
-> Realtek WiFi, and the culprit was spotted to be the latest firmware
-> update of rtw89/rtw8852b_fw.bin.  The former working linux-firmware
-> tree was at the commit 5c11a3742947, while broken at 5bc279fb161d.
-> 
-> The details are found in:
->   https://bugzilla.opensuse.org/show_bug.cgi?id=1209449
-> 
-> Could you check the problem?
-> (Or feel free to join to the bugzilla entry above.)
+If we remove the driver which will call emac_remove
+  to make cleanup, there may be a unfinished work.
 
-FWIW, I already CCed Josh on the following bug yesterday in a comment
-where I suggested the updated firmware should be reverted:
+The possible sequence is as follows:
 
-https://bugzilla.kernel.org/show_bug.cgi?id=217207
+Fix it by finishing the work before cleanup in the emac_remove
+and disable timeout response.
 
-But it's likely a good idea to write a normal mail, so thx for that!
+CPU0                  CPU1
 
-FWIW, the issue is also discussed here:
+                    |emac_work_thread
+emac_remove         |
+free_netdev         |
+kfree(netdev);      |
+                    |emac_reinit_locked
+                    |emac_mac_down
+                    |//use netdev
+Fixes: b9b17debc69d ("net: emac: emac gigabit ethernet controller driver")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v2:
+- cancel the work after unregister_netdev suggested by Jakub
+---
+ drivers/net/ethernet/qualcomm/emac/emac.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-https://lore.kernel.org/all/df1ce994-3368-a57e-7078-8bdcccf4a1fd@gmail.com/#t
+diff --git a/drivers/net/ethernet/qualcomm/emac/emac.c b/drivers/net/ethernet/qualcomm/emac/emac.c
+index 3115b2c12898..eaa50050aa0b 100644
+--- a/drivers/net/ethernet/qualcomm/emac/emac.c
++++ b/drivers/net/ethernet/qualcomm/emac/emac.c
+@@ -724,9 +724,15 @@ static int emac_remove(struct platform_device *pdev)
+ 	struct net_device *netdev = dev_get_drvdata(&pdev->dev);
+ 	struct emac_adapter *adpt = netdev_priv(netdev);
+ 
++	netif_carrier_off(netdev);
++	netif_tx_disable(netdev);
++
+ 	unregister_netdev(netdev);
+ 	netif_napi_del(&adpt->rx_q.napi);
+ 
++	free_irq(adpt->irq.irq, &adpt->irq);
++	cancel_work_sync(&adpt->work_thread);
++
+ 	emac_clks_teardown(adpt);
+ 
+ 	put_device(&adpt->phydev->mdio.dev);
+-- 
+2.25.1
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
