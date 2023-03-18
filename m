@@ -2,122 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3376BFC6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 20:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61016BFC68
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 20:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjCRTao convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 18 Mar 2023 15:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S229753AbjCRT2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 15:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCRTam (ORCPT
+        with ESMTP id S229502AbjCRT2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 15:30:42 -0400
-X-Greylist: delayed 453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Mar 2023 12:30:38 PDT
-Received: from pio-pvt-msa2.bahnhof.se (pio-pvt-msa2.bahnhof.se [79.136.2.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83A4126C2;
-        Sat, 18 Mar 2023 12:30:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 69E743F5E2;
-        Sat, 18 Mar 2023 20:23:03 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Score: -1.899
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_FAIL,SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3A7BtjkLRbWz; Sat, 18 Mar 2023 20:23:02 +0100 (CET)
-Received: by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 827B33F5C8;
-        Sat, 18 Mar 2023 20:23:02 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTP id 9F8388EA6E;
-        Sat, 18 Mar 2023 19:22:56 +0000 (UTC)
-Received: from zimbra.dalakolonin.se ([127.0.0.1])
-        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id AqFeWma4NS-3; Sat, 18 Mar 2023 19:22:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTP id 744628EA68;
-        Sat, 18 Mar 2023 19:22:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at dalakolonin.se
-Received: from zimbra.dalakolonin.se ([127.0.0.1])
-        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VpF76MdvOTDk; Sat, 18 Mar 2023 19:22:50 +0000 (UTC)
-Received: from dalakolonin.se (unknown [172.17.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id E7AB28EA63;
-        Sat, 18 Mar 2023 19:22:49 +0000 (UTC)
-Date:   Sat, 18 Mar 2023 20:22:53 +0100
-From:   Patrik =?iso-8859-1?Q?Dahlstr=F6m?= <risca@dalakolonin.se>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hns@goldelico.com
-Subject: Re: [PATCH] iio: adc: palmas_gpadc: fix NULL dereference on rmmod
-Message-ID: <20230318192253.GB3605556@dalakolonin.se>
-References: <20230313205029.1881745-1-risca@dalakolonin.se>
- <20230318163033.161d6fd5@jic23-huawei>
+        Sat, 18 Mar 2023 15:28:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146F56A58;
+        Sat, 18 Mar 2023 12:28:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00EED60AE2;
+        Sat, 18 Mar 2023 19:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1FAC4339C;
+        Sat, 18 Mar 2023 19:27:58 +0000 (UTC)
+Date:   Sat, 18 Mar 2023 15:27:56 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: Improve integration with kselftest
+ runner
+Message-ID: <20230318152756.13600e98@rorschach.local.home>
+In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20230318163033.161d6fd5@jic23-huawei>
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 04:30:33PM +0000, Jonathan Cameron wrote:
-> On Mon, 13 Mar 2023 21:50:29 +0100
-> Patrik Dahlström <risca@dalakolonin.se> wrote:
-> 
-> > Calling dev_to_iio_dev() on a platform device pointer is undefined and
-> > will make adc NULL.
-> > 
-> > Signed-off-by: Patrik Dahlström <risca@dalakolonin.se>
-> 
-> Hi Patrik,
-> 
-> Looks good so applied to the fixes-togreg branch of iio.git.
-> 
-> Whilst we are here, this would be a trivial driver to take fully device
-> managed.  The only slightly messy bit is that it would need
-> a devm_add_action_or_reset() + custom callback to handle the
-> device_wakeup_enable().
-> 
-> On the off chance you can test it I'll send a patch in a few mins.
-> Note that will depend on this one going up stream first and that
-> I haven't done more than build test it.
-I got the patch and it looks good, but it will take a few days before I
-have the time to test it.
+On Mon, 06 Mar 2023 15:35:10 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
-I have some more patches coming for this driver to configure the adc
-thresholds from userspace, employing the iio channel event subsystem, but
-they need a bit more work. In particular, to ensure backwards compatibility
-with the adc_wakeupX_data platform data. However, I don't see this platform
-data being used by anyone.
-How important is it to retain support for adc_wakeupX_data?
+> The ftrace selftests do not currently produce KTAP output, they produce a
+> custom format much nicer for human consumption. This means that when run in
+> automated test systems we just get a single result for the suite as a whole
+> rather than recording results for individual test cases, making it harder
+> to look at the test data and masking things like inappropriate skips.
 > 
-> Thanks,
+> Address this by adding support for KTAP output to the ftracetest script and
+> providing a trivial wrapper which will be invoked by the kselftest runner
+> to generate output in this format by default, users using ftracetest
+> directly will continue to get the existing output.
 > 
-> Jonathan
+> This is not the most elegant solution but it is simple and effective. I
+> did consider implementing this by post processing the existing output
+> format but that felt more complex and likely to result in all output being
+> lost if something goes seriously wrong during the run which would not be
+> helpful. I did also consider just writing a separate runner script but
+> there's enough going on with things like the signal handling for that to
+> seem like it would be duplicating too much.
+> 
 
-Thank you for going the extra mile :)
+This looks all OK to me, but I would feel more comfortable if Masami
+acks it, as he's written most of the selftests.
+
+Shuah, could you take this after Masami gives his ack?
+
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/ftrace/Makefile        |  3 +-
+>  tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
+>  tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
+>  3 files changed, 70 insertions(+), 4 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+> index d6e106fbce11..a1e955d2de4c 100644
+> --- a/tools/testing/selftests/ftrace/Makefile
+> +++ b/tools/testing/selftests/ftrace/Makefile
+> @@ -1,7 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  all:
+>  
+> -TEST_PROGS := ftracetest
+> +TEST_PROGS_EXTENDED := ftracetest
+> +TEST_PROGS := ftracetest-ktap
+>  TEST_FILES := test.d settings
+>  EXTRA_CLEAN := $(OUTPUT)/logs/*
+>  
+> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> index c3311c8c4089..539c8d6d5d71 100755
+> --- a/tools/testing/selftests/ftrace/ftracetest
+> +++ b/tools/testing/selftests/ftrace/ftracetest
+> @@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+>  echo " Options:"
+>  echo "		-h|--help  Show help message"
+>  echo "		-k|--keep  Keep passed test logs"
+> +echo "		-K|--KTAP  Output in KTAP format"
+>  echo "		-v|--verbose Increase verbosity of test messages"
+>  echo "		-vv        Alias of -v -v (Show all results in stdout)"
+>  echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+> @@ -85,6 +86,10 @@ parse_opts() { # opts
+>        KEEP_LOG=1
+>        shift 1
+>      ;;
+> +    --ktap|-K)
+> +      KTAP=1
+> +      shift 1
+> +    ;;
+>      --verbose|-v|-vv|-vvv)
+>        if [ $VERBOSE -eq -1 ]; then
+>  	usage "--console can not use with --verbose"
+> @@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+>  TEST_CASES=`find_testcases $TEST_DIR`
+>  LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+>  KEEP_LOG=0
+> +KTAP=0
+>  DEBUG=0
+>  VERBOSE=0
+>  UNSUPPORTED_RESULT=0
+> @@ -229,7 +235,7 @@ prlog() { # messages
+>      newline=
+>      shift
+>    fi
+> -  printf "$*$newline"
+> +  [ "$KTAP" != "1" ] && printf "$*$newline"
+>    [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+>  }
+>  catlog() { #file
+> @@ -260,11 +266,11 @@ TOTAL_RESULT=0
+>  
+>  INSTANCE=
+>  CASENO=0
+> +CASENAME=
+>  
+>  testcase() { # testfile
+>    CASENO=$((CASENO+1))
+> -  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+> -  prlog -n "[$CASENO]$INSTANCE$desc"
+> +  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+>  }
+>  
+>  checkreq() { # testfile
+> @@ -277,40 +283,68 @@ test_on_instance() { # testfile
+>    grep -q "^#[ \t]*flags:.*instance" $1
+>  }
+>  
+> +ktaptest() { # result comment
+> +  if [ "$KTAP" != "1" ]; then
+> +    return
+> +  fi
+> +
+> +  local result=
+> +  if [ "$1" = "1" ]; then
+> +    result="ok"
+> +  else
+> +    result="not ok"
+> +  fi
+> +  shift
+> +
+> +  local comment=$*
+> +  if [ "$comment" != "" ]; then
+> +    comment="# $comment"
+> +  fi
+> +
+> +  echo $CASENO $result $INSTANCE$CASENAME $comment
+> +}
+> +
+>  eval_result() { # sigval
+>    case $1 in
+>      $PASS)
+>        prlog "	[${color_green}PASS${color_reset}]"
+> +      ktaptest 1
+>        PASSED_CASES="$PASSED_CASES $CASENO"
+>        return 0
+>      ;;
+>      $FAIL)
+>        prlog "	[${color_red}FAIL${color_reset}]"
+> +      ktaptest 0
+>        FAILED_CASES="$FAILED_CASES $CASENO"
+>        return 1 # this is a bug.
+>      ;;
+>      $UNRESOLVED)
+>        prlog "	[${color_blue}UNRESOLVED${color_reset}]"
+> +      ktaptest 0 UNRESOLVED
+>        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+>        return $UNRESOLVED_RESULT # depends on use case
+>      ;;
+>      $UNTESTED)
+>        prlog "	[${color_blue}UNTESTED${color_reset}]"
+> +      ktaptest 1 SKIP
+>        UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+>        return 0
+>      ;;
+>      $UNSUPPORTED)
+>        prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
+> +      ktaptest 1 SKIP
+>        UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+>        return $UNSUPPORTED_RESULT # depends on use case
+>      ;;
+>      $XFAIL)
+>        prlog "	[${color_green}XFAIL${color_reset}]"
+> +      ktaptest 1 XFAIL
+>        XFAILED_CASES="$XFAILED_CASES $CASENO"
+>        return 0
+>      ;;
+>      *)
+>        prlog "	[${color_blue}UNDEFINED${color_reset}]"
+> +      ktaptest 0 error
+>        UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+>        return 1 # this must be a test bug
+>      ;;
+> @@ -371,6 +405,7 @@ __run_test() { # testfile
+>  run_test() { # testfile
+>    local testname=`basename $1`
+>    testcase $1
+> +  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+>    if [ ! -z "$LOG_FILE" ] ; then
+>      local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+>    else
+> @@ -405,6 +440,17 @@ run_test() { # testfile
+>  # load in the helper functions
+>  . $TEST_DIR/functions
+>  
+> +if [ "$KTAP" = "1" ]; then
+> +  echo "TAP version 13"
+> +
+> +  casecount=`echo $TEST_CASES | wc -w`
+> +  for t in $TEST_CASES; do
+> +    test_on_instance $t || continue
+> +    casecount=$((casecount+1))
+> +  done
+> +  echo "1..${casecount}"
+> +fi
+> +
+>  # Main loop
+>  for t in $TEST_CASES; do
+>    run_test $t
+> @@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+>  prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+>  prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+>  
+> +if [ "$KTAP" = "1" ]; then
+> +  echo -n "# Totals:"
+> +  echo -n " pass:"`echo $PASSED_CASES | wc -w`
+> +  echo -n " faii:"`echo $FAILED_CASES | wc -w`
+> +  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
+> +  echo -n " xpass:0"
+> +  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
+> +  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
+> +  echo
+> +fi
+> +
+>  cleanup
+>  
+>  # if no error, return 0
+> diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+> new file mode 100755
+> index 000000000000..b3284679ef3a
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh -e
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
+> +#
+> +# Copyright (C) Arm Ltd., 2023
+> +
+> +./ftracetest -K
 > 
-> > ---
-> >  drivers/iio/adc/palmas_gpadc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iio/adc/palmas_gpadc.c b/drivers/iio/adc/palmas_gpadc.c
-> > index 61e80bf3d05e..6db6f3bc768a 100644
-> > --- a/drivers/iio/adc/palmas_gpadc.c
-> > +++ b/drivers/iio/adc/palmas_gpadc.c
-> > @@ -638,7 +638,7 @@ static int palmas_gpadc_probe(struct platform_device *pdev)
-> >  
-> >  static int palmas_gpadc_remove(struct platform_device *pdev)
-> >  {
-> > -	struct iio_dev *indio_dev = dev_to_iio_dev(&pdev->dev);
-> > +	struct iio_dev *indio_dev = dev_get_drvdata(&pdev->dev);
-> >  	struct palmas_gpadc *adc = iio_priv(indio_dev);
-> >  
-> >  	if (adc->wakeup1_enable || adc->wakeup2_enable)
+> ---
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
 > 
+> Best regards,
+
