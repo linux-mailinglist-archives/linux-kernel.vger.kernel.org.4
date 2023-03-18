@@ -2,173 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E94B6BF7AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 05:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AD66BF7AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 05:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjCRELp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 00:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S229974AbjCREQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 00:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCRELm (ORCPT
+        with ESMTP id S229473AbjCREQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 00:11:42 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288D737B50;
-        Fri, 17 Mar 2023 21:11:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V4vU99XCbC1hM7VpD9ua3LwgYZPqyxb/A9ZrzCkGLVuczghw7TCpftKit6V+RoX8NOFbYYzX7p1LdeWqEi+ZH6O/BPtgLuu15Wu/+Lyt/pkt/CrhKalzC633oJ+ZFTYy4RLfxpTUPI0APJEC0jHjjOVjRM1hWWsIqIpzD4ExOwdy8XA8dNM9xDOXW1K4f5J6n8CCqI9D1IJhDooLdE0SRI9QFMLmfN03dAABqGydWX7MUFePBCUfJjDUwruO0l+6xL+f9rBDhw4vofyOQ+WEsxUx6JfW1ZYiALrhXuhCncergvLLLV53fJ+i3Y83HqJ0YYxsLP4fMK+lT2kVE0xRiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8frYpDVHeTmX7sYH5rWXp+f/UibjoJNYXZz1TYWcdzY=;
- b=GDb5mF0LopRHzMSeEacTbxx7MYHvenQz91smgoqSbrz/M7ryeEWj/tvh8FXpUxTnimq3GSOYr8CQJGVw/1mE3nVq5+TTjuN57xGX+TXU/L5uy+uVTEpPa3xE1U7Y+VLukXlxjL47dKVn0yaAaRN9jyjz9AVJAMpaWXVy5KW8EeU3bdKu4ZSKPY3kVuPWE9v/x7DPVWe5QqFmSx5AQVDX5x9EU34XiECCc/mpwX4FZV0tSFpD/Xz+PM864QVRtujUACRTI8VDW7eRCvf2gX7KmDtR2kTdRVQu4WV8hdmFU9XTiQZ8yJhVx1p0bLOWchh0iDmJbBmzgjT0T+DF63H9gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8frYpDVHeTmX7sYH5rWXp+f/UibjoJNYXZz1TYWcdzY=;
- b=oEQb4AeG/FyCv2hgqupLj/BQcfcKSMTy2v+phoN4JYj1m9+kREe6RLlrYqteFrnq+q6e9LFz+C66sfyUr0vVcOlASF88C2wT3Df3o59cv5ZjjjTzCZFt+5qa/7BB6JTLklN7FyfkxfUCG5bNXBng9uOdBVce7dfuIACONLNgVNvPFQ0WnwGnh5mxQb9kd3BuQHuURk0xeeEI/jCo1myQfIR6ib2VYq6kj+6UrTRaY4SZeR73vicRaYkRshwmUWIVZ8HSXDLFoZfl4zsMwRUbGBcK5oVGssAw6SykdtRTMIr9rC63M11/M3UZvE0gQl9Hlm8Km1g6yprCT2EIIjxZ4A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12)
- by DS0PR12MB7584.namprd12.prod.outlook.com (2603:10b6:8:13b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Sat, 18 Mar
- 2023 04:11:38 +0000
-Received: from MN0PR12MB5762.namprd12.prod.outlook.com
- ([fe80::f3e4:c5a8:7103:8ef1]) by MN0PR12MB5762.namprd12.prod.outlook.com
- ([fe80::f3e4:c5a8:7103:8ef1%3]) with mapi id 15.20.6178.026; Sat, 18 Mar 2023
- 04:11:37 +0000
-Message-ID: <9af4b672-29e9-0208-83f8-b10504186727@nvidia.com>
-Date:   Fri, 17 Mar 2023 23:11:32 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3] irqchip/gicv3: Workaround for NVIDIA erratum
- T241-FABRIC-4
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        Sat, 18 Mar 2023 00:16:19 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B252BF01
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 21:16:18 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-541942bfdccso66408287b3.14
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 21:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679112977;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=39Fefym6R4RrQjQOXnUkj5Wbs7EvPing/MjHK7t/Lyw=;
+        b=lSAzuBmFZ+h8hiSzVh0biFlm455SUKogAcvaf1DponXDVrVupq8TYodfl/wuKq3+lG
+         StIer+QGQznxUabXcz2df43r3hGbTAZmZFmuhtEuptxU9lRGI2GQfhVMjBHn7E6oe9rY
+         EIEg8HGk++eNcDMhd150EGX8kmfrSXpRDtZ1Jmj+5TpUC1UhlNjrE5Qm5qB076rcW5nX
+         b0mnyKdlSuPrmiRCFOmpwbvvLCp+sq/Z0vpQkfDRC0evcIRZsN6hp5UqmpznRXafyYp7
+         1YcVKN2gtFUK/BfZcoLNkgVX91sNHKGVoiuKcaydIFpibjnyQfWUE+qS+w6SRTh1CNuN
+         gAeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679112977;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=39Fefym6R4RrQjQOXnUkj5Wbs7EvPing/MjHK7t/Lyw=;
+        b=X5F+9VY2xwi3uGAF3pd/MBuw2iz3cehcAx6jSCkRJ2WzEytWz0dhfJxnPaNx9WLxZe
+         +aUyNfqiW1OkCpONo/rEUnadVHkHVF3fhRclEdSSpZHbPeFezlFWdq040OZtJvsPCmps
+         3TVijwgUP6OHTxbX3LN1KHuDhYg/dzLSvc5SbI5hUu8wTRg5Uz0uYgtMVLdzOys/zjZG
+         wYtgJjMSigFB0QC5GpPrQ4SmYTzCcSTfBl6sf082cpL8RNYNs5k6ADf8dpDZ9c/z7UG+
+         KDL3enW3dawRW4j26XP/IdWGAQ0hmyDZSzc1Lsim0H+MIAtuUuKmIPf2Cb8DZOPOL6ED
+         5CsQ==
+X-Gm-Message-State: AO0yUKV0n/kpX0CTLICHLdevD/7K1+K24k6baP+CdWLk/P+9qrqDp5fv
+        VTjkXs1TBkKFcLQVCMKha9qPcj4eipspRg==
+X-Google-Smtp-Source: AK7set8R2hY7ySptFbksr8tOnpVYxuTWiaaKxkqJCvC0czQRuIKj/2zJ7wSxtFdQ8Yte+Avdjdb73Hxrct/0kw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:af4d:0:b0:544:b7ff:b0df with SMTP id
+ x13-20020a81af4d000000b00544b7ffb0dfmr3997390ywj.2.1679112977179; Fri, 17 Mar
+ 2023 21:16:17 -0700 (PDT)
+Date:   Sat, 18 Mar 2023 12:15:54 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230318041555.4192172-1-davidgow@google.com>
+Subject: [PATCH] arch:um: Only disable SSE on clang to work around old GCC bugs
+From:   David Gow <davidgow@google.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        SeongJae Park <sj@kernel.org>
+Cc:     David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        x86@kernel.org, llvm@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org
-Cc:     Vikram Sethi <vsethi@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>
-References: <20230317162636.851085-1-sdonthineni@nvidia.com>
-From:   Shanker Donthineni <sdonthineni@nvidia.com>
-In-Reply-To: <20230317162636.851085-1-sdonthineni@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0015.namprd05.prod.outlook.com
- (2603:10b6:a03:33b::20) To MN0PR12MB5762.namprd12.prod.outlook.com
- (2603:10b6:208:375::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB5762:EE_|DS0PR12MB7584:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d936004-bb05-42d4-d265-08db2766de22
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FogbaudSrJ/QKAIYe0+mPEJYyigxEFnOYMrvFqDGaVtxkQOc0h7YB1Db+l9NQtd3TuNR44F+9Gr+BNcNqGW9WW5JmrqW44lPS1dDrvanIDGbO8hMwZWFV3GYCXoUPSyJ53/rWjIENoVPARQarQ4m41I7NedC7AiBHv5O3VjOOB0naz1JYPL4eW2/N4kfntyzrH594fTE2Fr+r9cdydnBHarMWS4ZMPsVohbHbcPKiQhtAhSSVbGvF/qPILd+ffW633hR05Smbzodh3UIFils4gv2M7AeHTyHFjdpFf87T0QiY3LmdnpywjN9a92NUKDvDxYH9G+WTRjO7RJVOxeXbBZScb0EDGY7uNe71pN1RxGMPPnEsVUvlpC9Ez9/AaL3xcjGJIGAxuJ0iDrqnGuKqlDucj66SSI3cbKoEjuvoP32vqSsyo2QTFqaVaVyTlB0ndaRHSIGDbFTRK/rEGdftJmLU70YXsKRh2+vsoriZ50rkE3VvvxhFZRu1Xq1ZX8ZLsEQDDhL6W+MoNVBVewXh7pK8v4Q0d3/zjlvurxBFFvYlm6iG6JL9Kq/H56pOZObKmxY1tRSz3a0SVtbwKje3buzwpNslAwfDFthgQLYw2yFsq/kz9Du3KKSH7nNjjC0s1XNChygMJFp0PPJgr/NbQW+EG/py5KpwqJ/DYVCpuV5A4/yBG4pFn+IBAiheEnpDpVS9AQqLDQ+6IPGQB8a6GAlJZXR7CxK4Xk1O4vouMndQJmF98XEn8vP3h5phVTC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5762.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(366004)(136003)(346002)(396003)(451199018)(31686004)(6486002)(36756003)(31696002)(6506007)(26005)(6512007)(921005)(53546011)(186003)(2616005)(38100700002)(66476007)(107886003)(6666004)(478600001)(316002)(110136005)(8676002)(66556008)(2906002)(54906003)(4326008)(8936002)(86362001)(66946007)(7416002)(5660300002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OS9MSnFMZU1hZlZpMW9rU2h4cDNIem5WMDlPTUZuUVQvUFMxWElLVFp5aHh2?=
- =?utf-8?B?aXRScWdmdElZdGV0cS9iYjRzSDZnQ2VIRVcvaE1SRkJsQ2FMR0VFY1pIUHY5?=
- =?utf-8?B?TDJqUE44dVhweXRXaVl1OE5ER1dWMGZlQWN0ZnV3d2JtZm1Dbll6alRFQW5s?=
- =?utf-8?B?UG1oUHlUSWYyWEJTVnh2bXU1Wm02YlZwVlJscjB1RW1yNmdiNE1Fb09OWUhD?=
- =?utf-8?B?SnJuTXZiZ1p3cXpRczczOGttRUpnRVBXOGdldFlveU9RdUNqN1hMTVgvSUYz?=
- =?utf-8?B?MlpENHMvYlBObk9XNmo3YWQ0NkRYdkhYSU1KYjlzU0JyWjF4MjhPR29BcTMz?=
- =?utf-8?B?cjNTMHhDUU9IbVVZR2Iva3hISVYwT29MdnZhQURhdTVwZFN1bGVYaTFtN3lH?=
- =?utf-8?B?Qmk3VkFnL1RFT05pd2ZnZjBnTHlrcklyYzZBcDFCaXJ5UFovK0s4M0g4ZGlG?=
- =?utf-8?B?b0RiT1hQeE4vQW5NeFpZODNRMWZmWnE4S3Z4ZzRvWXhoQUd0OHJnWE1YVkVk?=
- =?utf-8?B?bEM5KzB2S3pvNlJWNmMwNWRPWGdzL0NMR0dkTWd0NGtqbVFia0t4MzRhdzF4?=
- =?utf-8?B?ZzJyaG00NTlla3pvWDl1ak53VFFZaHpNSmI2UWlZOGtuelZxMDUyVG5FOHlZ?=
- =?utf-8?B?Q1kyNXpLZjl2blc4dkVFaE1SYjZTQ3pYcUdqSVlMRTFzRDR3R0NqaVpuZnBU?=
- =?utf-8?B?U0o3R3lpMkJuaE5LVjl4MXBKT0NtVkpDWGlwVHoxUVdjNFd6cVd6dmowZ0ln?=
- =?utf-8?B?STUyRmNjYUs2YXZJWWlHWk5xR3RtbDBobSt5RUt2WXhIRHZmUUtQNVlRLzdK?=
- =?utf-8?B?VitBZ29pY2ZjN3g5MktCZ29hc2FYUTl5K1hteE5WUkZGbWhPRTNuYVF4R250?=
- =?utf-8?B?S3M1bU1MVUtsZWFPdi9qZ1RmbDFxYnZWazlXanVyYjlIeEVNME50cU9CZXdV?=
- =?utf-8?B?b1VmMEp5dC9TN2g5T1FlVGViZ2p6bW9xRlVaZHY5K1RvNk1ER2lyQUhBVXBt?=
- =?utf-8?B?dUZiUlRGcUdZWkhOZzhVZFUwcHE2L0Jra3J5bVR3YUl0a28raE94alEvWVVP?=
- =?utf-8?B?TkFUblorVUVENE1mclk1WkwwdlZWZkJmQ2hDNSsxczBOL3IvQ0tNazMrWGtQ?=
- =?utf-8?B?Y2FMNE5mRW9UR214WG1tQ2tZT2xLZ2h1WjRFQmk2ZWJJZUY3VlBGamRibHE3?=
- =?utf-8?B?Qk4yVTZCbStRZlQxc0taNUFoeENsTENUUlczRGhZRDR4MjErdkdwdDRaTERO?=
- =?utf-8?B?bkZHc3RaTkFMejVmNGVpWnZ3N1JmNU1XWmFWVmlhSUYxdVkzKzFmdVl1WElq?=
- =?utf-8?B?R1B6Skx4b3JXSGhVUVk1VGFNbW5XMFNmNndRUlA5emJHVHY1L1FIamJyL1Zi?=
- =?utf-8?B?WWgxSjdxSlQzN2dYaTU3RVp5MUdMckJaQWxQa2lrSzQ5Qi8wb25zdXhaZyta?=
- =?utf-8?B?VmVzVW5sNW9jaXBydDlEY1A1QmszTEM1WVQ4ZUx1eU9wVnJDdXpueXB4am05?=
- =?utf-8?B?REhXZ2tDQXZmSGZsaE53em1LK1IvdksvZ0xSY1pnOW9vMDNNQTJKWVdieFZx?=
- =?utf-8?B?QVBNYjRhVEdYZnV6bU02bGhBMU5WdGMzeExrYi91WmZKcmxTUTRZeUF3K2hs?=
- =?utf-8?B?cjBFSGpXaTFwS0hZWEFNNGdhNWg4UkQ1WjdJV2pyVFdIM0EyNWpkdFh3V09P?=
- =?utf-8?B?d3pwam53TlNXaEhOZ0RTeHFNOHBWUW91a09RbU9DcFprWmxyTUlQWWFVQjkv?=
- =?utf-8?B?VDRZYU05Mk9qSm9mWHNzRy90Q2tSUWVrUGE5TTBkTC9ocG1iYkVVTENKMmdi?=
- =?utf-8?B?T2hiZ2Q4Smw2LzBpcEdTMnpxWmxrR3drYVpaM3VsaWRxTW9nRzRuc0V5anA0?=
- =?utf-8?B?OU5ERXN1VklYbHY5RzM5Y3dXUVVybnh5LzA0YmZaelRtZklzSVI3THl5NEd3?=
- =?utf-8?B?STdvY3F1OGRzSFZTQXlsT3o3c0ZNZWxUUU1tUDRURGpsNGNzN253TTVpMWxt?=
- =?utf-8?B?R0c4bkJyd2xTdWxlMEhBQTlmQVZheVByRHpvQzh5RVBQeVMvbmxwVUJxWTEv?=
- =?utf-8?B?NnpSeDRKLzFDMVR5WmVkMnllNForaFNFbnJXZk80RktGUnBqZ2t6K3lnSE5n?=
- =?utf-8?B?end0dWJPa1h2eWVWZFRtSWRWejdIRGl5Vlo0K0FJK2VlMG1aMktHN3p6UExZ?=
- =?utf-8?B?amc9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d936004-bb05-42d4-d265-08db2766de22
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5762.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2023 04:11:37.3010
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZDRuS94Cz0RPQ41XVZs3QBWYfj8yAMPiLjBSKLpScEYzEOxuW0qbirtEWtVWTqO0z4HQJhIzK3RkfkQlujrnMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7584
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+As part of the Rust support for UML, we disable SSE (and similar flags)
+to match the normal x86 builds. This both makes sense (we ideally want a
+similar configuration to x86), and works around a crash bug with SSE
+generation under Rust with LLVM.
 
-On 3/17/23 11:26, Shanker Donthineni wrote:
-> #define T241_CHIPN_MASK		GENMASK_ULL(45, 44)
-> +#define T241_CHIP_GICDA_OFFSET	0x1580000
-> +#define SMCCC_SOC_ID_T241	0x036b0241
-> +
-> +static bool gic_enable_quirk_nvidia_t241(void *data)
-> +{
-> +	s32 soc_id = arm_smccc_get_soc_id_version();
-> +	unsigned long chip_bmask = 0;
-> +	phys_addr_t phys;
-> +	u32 i;
-> +
-> +	/* Check JEP106 code for NVIDIA T241 chip (036b:0241) */
-> +	if ((soc_id < 0) || (soc_id != SMCCC_SOC_ID_T241))
-> +		return false;
-> +
-> +	/* Find the chips based on GICR regions PHYS addr */
-> +	for (i = 0; i < gic_data.nr_redist_regions; i++) {
-> +		chip_bmask |= BIT(FIELD_GET(T241_CHIPN_MASK,
-> +				  gic_data.redist_regions[i].phys_base));
-> +	}
+However, this breaks compiling stdlib.h under gcc < 11, as the x86_64
+ABI requires floating-point return values be stored in an SSE register.
+gcc 11 fixes this by only doing register allocation when a function is
+actually used, and since we never use atof(), it shouldn't be a problem:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
 
-Apologies for the oversight on my part, I failed to address the build issue
-for the 32-bit architecture and mistakenly submitted an incorrect patch.
+Nevertheless, only disable SSE on clang setups, as that's a simple way
+of working around everyone's bugs.
 
-Please ignore this patch and review v4 patch.
+Fixes: 884981867947 ("rust: arch/um: Disable FP/SIMD instruction to match x86")
+Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Link: https://lore.kernel.org/linux-um/6df2ecef9011d85654a82acd607fdcbc93ad593c.camel@huaweicloud.com/
+Tested-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Tested-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ arch/x86/Makefile.um | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Correct change:
-         for (i = 0; i < gic_data.nr_redist_regions; i++) {
-                 chip_bmask |= BIT(FIELD_GET(T241_CHIPN_MASK,
--                                 gic_data.redist_regions[i].phys_base));
-+                                 (u64)gic_data.redist_regions[i].phys_base));
+diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
+index b70559b821df..2106a2bd152b 100644
+--- a/arch/x86/Makefile.um
++++ b/arch/x86/Makefile.um
+@@ -3,9 +3,14 @@ core-y += arch/x86/crypto/
+ 
+ #
+ # Disable SSE and other FP/SIMD instructions to match normal x86
++# This is required to work around issues in older LLVM versions, but breaks
++# GCC versions < 11. See:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
+ #
++ifeq ($(CONFIG_CC_IS_CLANG),y)
+ KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
+ KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
++endif
+ 
+ ifeq ($(CONFIG_X86_32),y)
+ START := 0x8048000
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
--Shaker
