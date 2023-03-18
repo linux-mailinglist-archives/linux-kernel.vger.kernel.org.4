@@ -2,191 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB176BF6ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6BF6BF6F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 01:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCRAbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 20:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        id S229943AbjCRAhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 20:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRAbI (ORCPT
+        with ESMTP id S229679AbjCRAhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 20:31:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678DC3C7B5;
-        Fri, 17 Mar 2023 17:31:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E47C660EDD;
-        Sat, 18 Mar 2023 00:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E48C433D2;
-        Sat, 18 Mar 2023 00:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679099465;
-        bh=MfEFtAhXnCXN3yXbojWZKf2XyT2w1O8pFFHNP09wb3g=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=sVW18bjKf7Tg2NPuE3Y9OjFOiu7CbCSiJ82nUHzN5P2eMyiFqvPB4kSkZMhjLE/uj
-         ScI7dZRvuBTv8/QG6ITVNTJsHCvnNJJYSi8C2ElbYUYF6mOg4b1cf22fDQSh7ladkN
-         H6uSKPJDZcR2wWh8571jyUh+zcGiScFshODH1flJVCt/0aEeAHYw8dwX0BWRiTBqFq
-         ufof641Otn81g4Aah2aMi3BPDhx2Karelxz0P2ziaVUMW5TreKdCKiQyM6DGXsrL76
-         G+8NlGCRE/gc2ejnz7Hi+Zs66IZm1fvkRBXG7aaWihiU9IPQsww+Q7hFxMyYy9CpIY
-         ygLktB2eMT2IA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id D124D1540381; Fri, 17 Mar 2023 17:31:04 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 17:31:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        RCU <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-ext4@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Subject: Re: [PATCH 1/1] ext4: Replace ext4_kvfree_array_rcu() by
- kvfree_rcu_mightsleep()
-Message-ID: <28e1585c-7062-49c2-b08e-a5d33ca06577@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230317071558.335645-1-urezki@gmail.com>
+        Fri, 17 Mar 2023 20:37:05 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D29B298C3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:37:02 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso6997985pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679099822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=os6ePIEHmP798yvFxpKjy1znOP2oGPeyXknmdif5JHU=;
+        b=a5xtF12hkvnghsPvDuTuK348fpZSXALnGIbl9mESd55HVB81z0tqHcsOpNkPU+s7e3
+         SgM/1VJ9dNzTcMfEewhNEPCA7g70f189gJZFhB8Tdjy6Tga6ODWmN1n+0cc/I/WU91HX
+         EpE587pzcVBrjQbeeFphibG9cv4sWkR0nFR/jP3q40el0wuUOgBgP2J1Zs7kVpXQfCTU
+         FDKbrpJcl4ZBRoh/ImMIzOYK5tpNTJeAuPNqid1VnzayGs/z47AMfQbYzfG77sm6KszG
+         ef4WyYKllhioNDf6zzLdsyvxHsMbDh27+MEZujltTX11Lgw/XZn1yHkDZSNd+s9pjfZG
+         MWCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679099822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=os6ePIEHmP798yvFxpKjy1znOP2oGPeyXknmdif5JHU=;
+        b=mgEo3k4DNw0xEcaCl116xiiA2qwFTwCYKkFffQTEGlE4TRFx04blNjtX9bKa/83Duw
+         ubW9vI05Uz/T/AS02PF+5oCoQC8pDb8JFov4tP8po9nu/SGouAdcbjhoS+NyUsKUIjUP
+         i7FUe45Cek00gOViW1MVP093ZHx9R7RkOzE8ewh83AZ0NmyGDlpX/2+QCp8XUupK6Mfe
+         Em8KAw+ay/Yk4VwKXbb2N6SxahTCz8r1Wg0GNIh0HWc5SXKh4oZfHGNPV9VfflCfA0/X
+         t+jBnBiImktNtTzhBacfeZDvrCHTWMnE0Di+cOEEuu7Rz34PAz+8oKh9/Hq4OyzZn6tF
+         P4lw==
+X-Gm-Message-State: AO0yUKVgc3dSKXd+5KGBB0kTRNLPuTMP90bxY8/3KV0EBJCAqw2yPq5c
+        Z97ukj/oxSfIO6gVbDncp72rs9m9hYoQZAJ3tnZ2HA==
+X-Google-Smtp-Source: AK7set/+lJKTdHw1xZK9DEl7C5giuxqHvkjsLLOb5yxjG+GWItax0LbcmZRuOR9nVaD7OG9442T0m+tAHXMDVL9Xxfs=
+X-Received: by 2002:a17:90a:e502:b0:237:5e4c:7d78 with SMTP id
+ t2-20020a17090ae50200b002375e4c7d78mr2702737pjy.9.1679099821549; Fri, 17 Mar
+ 2023 17:37:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317071558.335645-1-urezki@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <328e557aaee9d3f5f1bcaf2b8ac2de0e04c4fbb8.1679049188.git.geert+renesas@glider.be>
+In-Reply-To: <328e557aaee9d3f5f1bcaf2b8ac2de0e04c4fbb8.1679049188.git.geert+renesas@glider.be>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 17 Mar 2023 17:36:25 -0700
+Message-ID: <CAGETcx_oYrhjo0C3zJ57gt7HGuiY_=9xEq+TvQU8R5zW6OiQCw@mail.gmail.com>
+Subject: Re: [PATCH/RFC] treewide: Fix instantiation of devices in DT overlay
+To:     geert+renesas@glider.be
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 08:15:58AM +0100, Uladzislau Rezki (Sony) wrote:
-> The ext4_kvfree_array_rcu() function was introduced in order to
-> release some memory after a grace period during resizing of a
-> partition. An object that is freed does not contain any rcu_head
-> filed.
-> 
-> To do so, it requires to allocate some extra memory for a special
-> structure that has an rcu_head filed and pointer one where a freed
-> memory is attached. Finally call_rcu() API is invoked.
-> 
-> Since we have a single argument of kvfree_rcu() API, we can easily
-> replace all that tricky code by one single call that does the same
-> but in more efficient way.
-> 
-> Cc: linux-ext4@vger.kernel.org
-> Cc: Lukas Czerner <lczerner@redhat.com>
-> Cc: Andreas Dilger <adilger.kernel@dilger.ca>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+On Fri, Mar 17, 2023 at 3:33=E2=80=AFAM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> When loading a DT overlay that creates a device, the device is not
+> instantiated, unless the DT overlay is unloaded and reloaded again.
+>
+> Saravana explains:
+>   Basically for all overlays (I hope the function is only used for
+>   overlays) we assume all nodes are NOT devices until they actually
+>   get added as a device. Don't review the code, it's not meant to be :)
+>
+> Based on a hacky patch by Saravana Kannan, which covered only platform
+> and spi devices.
+>
+> Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+> Link: https://lore.kernel.org/all/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=3DrWYn=
+kCZ6z5bGX-wj4w@mail.gmail.com
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Marked RFC as Saravana said this is an ugly hack.
+> Still, this is a regression in v6.3-rc1 that should be fixed.
 
-From an RCU perspective:
+Thanks for making sure this isn't forgotten.
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+I thought about this a bit more and I've decided what I gave earlier
+isn't really too much of a hack. The other option is to handle the
+clearing of the flag at the driver core level, but we incur these
+additional instructions for all devices instead of just the overlay
+case. But the benefit is that if more busses add overlay support in
+the future, they won't need to remember to clear the flag in those
+instances too. But they'll probably start off by looking at the
+existing platform bus case, so they'll get it right.
+
+I'll continue the pondering next week and maybe test it on my device
+to make sure it's not doing anything weird for non-overlay cases.
+
+-Saravana
+
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3611,6 +3611,15 @@ int device_add(struct device *dev)
+         */
+        if (dev->fwnode && !dev->fwnode->dev) {
+                dev->fwnode->dev =3D dev;
++               /*
++                * If a fwnode was initially marked as not a device, but we
++                * clearly have a device added for it that can probe, then =
+clear
++                * the flag so fw_devlink will continue linking consumers t=
+o
++                * this device. This code path is really expected to run on=
+ly
++                * for DT overlays.
++                */
++               if (dev->bus)
++                       dev->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE
+                fw_devlink_link_device(dev);
+        }
+
+diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+index 07d93753b12f..f715b59d9bf3 100644
+--- a/drivers/of/dynamic.c
++++ b/drivers/of/dynamic.c
+@@ -226,6 +226,11 @@ static void __of_attach_node(struct device_node *np)
+        np->sibling =3D np->parent->child;
+        np->parent->child =3D np;
+        of_node_clear_flag(np, OF_DETACHED);
++       /*
++        * Ask fw_devlink to assume any new node is not a device. Driver co=
+re
++        * will clear this flag if the assumption turns out to be wrong.
++        */
++       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
+ }
+
+
+
 
 > ---
->  fs/ext4/ext4.h    |  1 -
->  fs/ext4/mballoc.c |  2 +-
->  fs/ext4/resize.c  | 31 ++-----------------------------
->  fs/ext4/super.c   |  2 +-
->  4 files changed, 4 insertions(+), 32 deletions(-)
-> 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 140e1eb300d1..e43d1a2d175e 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -3057,7 +3057,6 @@ extern int ext4_generic_delete_entry(struct inode *dir,
->  extern bool ext4_empty_dir(struct inode *inode);
->  
->  /* resize.c */
-> -extern void ext4_kvfree_array_rcu(void *to_free);
->  extern int ext4_group_add(struct super_block *sb,
->  				struct ext4_new_group_data *input);
->  extern int ext4_group_extend(struct super_block *sb,
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 5b2ae37a8b80..96b4e3317640 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -3055,7 +3055,7 @@ int ext4_mb_alloc_groupinfo(struct super_block *sb, ext4_group_t ngroups)
->  	rcu_assign_pointer(sbi->s_group_info, new_groupinfo);
->  	sbi->s_group_info_size = size / sizeof(*sbi->s_group_info);
->  	if (old_groupinfo)
-> -		ext4_kvfree_array_rcu(old_groupinfo);
-> +		kvfree_rcu_mightsleep(old_groupinfo);
->  	ext4_debug("allocated s_groupinfo array for %d meta_bg's\n",
->  		   sbi->s_group_info_size);
->  	return 0;
-> diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-> index 6b91443d6bf3..330b81f36e10 100644
-> --- a/fs/ext4/resize.c
-> +++ b/fs/ext4/resize.c
-> @@ -18,33 +18,6 @@
->  
->  #include "ext4_jbd2.h"
->  
-> -struct ext4_rcu_ptr {
-> -	struct rcu_head rcu;
-> -	void *ptr;
-> -};
-> -
-> -static void ext4_rcu_ptr_callback(struct rcu_head *head)
-> -{
-> -	struct ext4_rcu_ptr *ptr;
-> -
-> -	ptr = container_of(head, struct ext4_rcu_ptr, rcu);
-> -	kvfree(ptr->ptr);
-> -	kfree(ptr);
-> -}
-> -
-> -void ext4_kvfree_array_rcu(void *to_free)
-> -{
-> -	struct ext4_rcu_ptr *ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
-> -
-> -	if (ptr) {
-> -		ptr->ptr = to_free;
-> -		call_rcu(&ptr->rcu, ext4_rcu_ptr_callback);
-> -		return;
-> -	}
-> -	synchronize_rcu();
-> -	kvfree(to_free);
-> -}
-> -
->  int ext4_resize_begin(struct super_block *sb)
->  {
->  	struct ext4_sb_info *sbi = EXT4_SB(sb);
-> @@ -931,7 +904,7 @@ static int add_new_gdb(handle_t *handle, struct inode *inode,
->  	n_group_desc[gdb_num] = gdb_bh;
->  	rcu_assign_pointer(EXT4_SB(sb)->s_group_desc, n_group_desc);
->  	EXT4_SB(sb)->s_gdb_count++;
-> -	ext4_kvfree_array_rcu(o_group_desc);
-> +	kvfree_rcu_mightsleep(o_group_desc);
->  
->  	lock_buffer(EXT4_SB(sb)->s_sbh);
->  	le16_add_cpu(&es->s_reserved_gdt_blocks, -1);
-> @@ -994,7 +967,7 @@ static int add_new_gdb_meta_bg(struct super_block *sb,
->  
->  	rcu_assign_pointer(EXT4_SB(sb)->s_group_desc, n_group_desc);
->  	EXT4_SB(sb)->s_gdb_count++;
-> -	ext4_kvfree_array_rcu(o_group_desc);
-> +	kvfree_rcu_mightsleep(o_group_desc);
->  	return err;
+>  drivers/bus/imx-weim.c    | 1 +
+>  drivers/i2c/i2c-core-of.c | 1 +
+>  drivers/of/dynamic.c      | 1 +
+>  drivers/of/platform.c     | 1 +
+>  drivers/spi/spi.c         | 1 +
+>  5 files changed, 5 insertions(+)
+>
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 2a6b4f676458612e..71d8807170fa9f29 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -329,6 +329,7 @@ static int of_weim_notify(struct notifier_block *nb, =
+unsigned long action,
+>                                  "Failed to setup timing for '%pOF'\n", r=
+d->dn);
+>
+>                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> +                       rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
+;
+>                         if (!of_platform_device_create(rd->dn, NULL, &pde=
+v->dev)) {
+>                                 dev_err(&pdev->dev,
+>                                         "Failed to create child device '%=
+pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index bce6b796e04c2ca0..79a0d47010ba0b20 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -178,6 +178,7 @@ static int of_i2c_notify(struct notifier_block *nb, u=
+nsigned long action,
+>                         return NOTIFY_OK;
+>                 }
+>
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 client =3D of_i2c_register_device(adap, rd->dn);
+>                 if (IS_ERR(client)) {
+>                         dev_err(&adap->dev, "failed to create client for =
+'%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 07d93753b12f5f4d..e311d406b1705306 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -226,6 +226,7 @@ static void __of_attach_node(struct device_node *np)
+>         np->sibling =3D np->parent->child;
+>         np->parent->child =3D np;
+>         of_node_clear_flag(np, OF_DETACHED);
+> +       np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
 >  }
->  
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 87aa23d047c9..34d802848d6d 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -3108,7 +3108,7 @@ int ext4_alloc_flex_bg_array(struct super_block *sb, ext4_group_t ngroup)
->  	rcu_assign_pointer(sbi->s_flex_groups, new_groups);
->  	sbi->s_flex_groups_allocated = size;
->  	if (old_groups)
-> -		ext4_kvfree_array_rcu(old_groups);
-> +		kvfree_rcu_mightsleep(old_groups);
->  	return 0;
->  }
->  
-> -- 
-> 2.30.2
-> 
+>
+>  /**
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index b2bd2e783445dd78..17c92cbfb62ee3ef 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -737,6 +737,7 @@ static int of_platform_notify(struct notifier_block *=
+nb,
+>                 if (of_node_check_flag(rd->dn, OF_POPULATED))
+>                         return NOTIFY_OK;
+>
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 /* pdev_parent may be NULL when no bus platform device */
+>                 pdev_parent =3D of_find_device_by_node(rd->dn->parent);
+>                 pdev =3D of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 1a65f96fe2aff591..7bd053a32fad1a3c 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4480,6 +4480,7 @@ static int of_spi_notify(struct notifier_block *nb,=
+ unsigned long action,
+>                         return NOTIFY_OK;
+>                 }
+>
+> +               rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+>                 spi =3D of_register_spi_device(ctlr, rd->dn);
+>                 put_device(&ctlr->dev);
+>
+> --
+> 2.34.1
+>
