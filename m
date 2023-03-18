@@ -2,167 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6038C6BF990
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39B86BF98B
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCRLPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 07:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
+        id S229738AbjCRLPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 07:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjCRLPj (ORCPT
+        with ESMTP id S229502AbjCRLPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 07:15:39 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762BE366A3
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:15:34 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id w11so3671756wmo.2
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679138133;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zGH+7XD9CZf7riiQs7tokzcrN5LQH5VfpFAGRw9yBzQ=;
-        b=TNBn6zG1hdBUOTzqqLTQiTtEN0JRMCO/ZKWzRMNFgj98uLt+q4k8ghjew+1pvNNue0
-         WwuBPWByIjGO6uz6yW0hfU/p/UBnFVzOKoUSjnAJjKSqgICoaJmKntHF+CK5laaQom3b
-         1s/U5zrnWwkkTUXUeSuRY3AQEcLUewaUMMA+mlEsxedaVkkwOotRV04GT9Lo+B5HTSnS
-         WEHauh80WAubtJWn7pTBHLj2ioyNwyVm3yLeSNxz7YYMVYY3uIoL9rZGI8ai495/0CVU
-         jNKdhGVgyJ0bjR8u3rwu4aVVaVpzSZg9TPbaRJ2RZbZ2iRsUekHAW24kpm90Ip/zFoXW
-         ubfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679138133;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zGH+7XD9CZf7riiQs7tokzcrN5LQH5VfpFAGRw9yBzQ=;
-        b=sTYHkpCUfnY7dYWOmDsvNfJloMKlUHzLGpq4/wefccoYLP2Yv41rOOTpf9o77lUsKQ
-         pYlN5+wknw2nGVnx1fcIBk17qY241BmTi9XQ3UyB4jY8Po4Kl7n+LtQ89Spk2CYErRqf
-         iOwLZ5D62UDX2zSxAz7TQnDASinWggCSwMjFd7fZHryb/eaH+NqFfcqRJ0qhEQpX3AEW
-         Of79oduYT7pCVahYqvPXti74z0nL2WeVag5EOGCiQopWjbUNgg2xUH2ZLjWM55bEdtoq
-         yPAAGUOsTpIgEF68rf6HCtM1gFbVWI08YbkwExrRzW3S8WcxOEhsSvymPprWVpekT99y
-         euOQ==
-X-Gm-Message-State: AO0yUKVP6cwewdqpn99Ur5SK5k5audXYslAUWENkyZ0H39KpZsAEpD8c
-        MKh7U/Bwmnl3dezoWEobTSWr/kugvlE=
-X-Google-Smtp-Source: AK7set8EFNhOT1+VWTHfriGxmv6FTPoHw/mhcihpxX6H7XQbmsH1Imd3c4T2RUMnWGoOhIvwMJ06xw==
-X-Received: by 2002:a1c:ed16:0:b0:3ed:a45d:aee9 with SMTP id l22-20020a1ced16000000b003eda45daee9mr1705649wmh.39.1679138132644;
-        Sat, 18 Mar 2023 04:15:32 -0700 (PDT)
-Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.googlemail.com with ESMTPSA id n23-20020a1c7217000000b003eb68bb61c8sm4849965wmc.3.2023.03.18.04.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 04:15:31 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        maple-tree@lists.infradead.org,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH 4/4] mm/mmap/vma_merge: be explicit about the non-mergeable case
-Date:   Sat, 18 Mar 2023 11:13:21 +0000
-Message-Id: <d5fae254dc394e96860f41327f24b6ffd20cdf22.1679137163.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1679137163.git.lstoakes@gmail.com>
-References: <cover.1679137163.git.lstoakes@gmail.com>
+        Sat, 18 Mar 2023 07:15:13 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E87630B0E
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:15:11 -0700 (PDT)
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 32IBF9T1031716;
+        Sat, 18 Mar 2023 20:15:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Sat, 18 Mar 2023 20:15:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 32IBF9eW031712
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 18 Mar 2023 20:15:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <1f41d750-d885-55e8-77a3-7bd9a95979e2@I-love.SAKURA.ne.jp>
+Date:   Sat, 18 Mar 2023 20:15:11 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+References: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
+ <Y+oY3Xd43nNnkDSB@hirez.programming.kicks-ass.net>
+ <274adab4-9922-1586-7593-08d9db5479a1@I-love.SAKURA.ne.jp>
+ <Y+ox39WhgY/iaVsG@hirez.programming.kicks-ass.net>
+ <393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp>
+In-Reply-To: <393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than setting err = -1 and only resetting if we hit merge cases,
-explicitly check the non-mergeable case to make it abundantly clear that we
-only proceed with the rest if something is mergeable, default err to 0 and
-only update if an error might occur.
+Peter?
 
-Additionally set merge_next directly as there is no need for an if() {}
-statement assigning a boolean.
-
-This has no functional impact.
-
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- mm/mmap.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index e60c637f4e49..2ac43b2b9a00 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -913,7 +913,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 	pgoff_t vma_pgoff;
- 	struct vm_area_struct *curr, *next, *res;
- 	struct vm_area_struct *vma, *adjust, *remove, *remove2;
--	int err = -1;
-+	int err = 0;
- 	bool merge_prev = false;
- 	bool merge_next = false;
- 	bool vma_expanded = false;
-@@ -1002,12 +1002,15 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 	}
- 
- 	/* Can we merge the successor? */
--	if (next && mpol_equal(policy, vma_policy(next)) &&
--	    can_vma_merge_before(next, vm_flags,
--				 anon_vma, file, pgoff+pglen,
--				 vm_userfaultfd_ctx, anon_name)) {
--		merge_next = true;
--	}
-+	merge_next = next &&
-+		mpol_equal(policy, vma_policy(next)) &&
-+		can_vma_merge_before(next, vm_flags,
-+				     anon_vma, file, pgoff+pglen,
-+				     vm_userfaultfd_ctx, anon_name);
-+
-+	/* Not mergeable. */
-+	if (!merge_prev && !merge_next)
-+		return NULL;
- 
- 	remove = remove2 = adjust = NULL;
- 	/* Can we merge both the predecessor and the successor? */
-@@ -1023,7 +1026,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 				err = dup_anon_vma(prev, curr);
- 		}
- 	} else if (merge_prev) {
--		err = 0;				/* case 2 */
-+							/* case 2 */
- 		if (curr) {
- 			err = dup_anon_vma(prev, curr);
- 			if (end == curr->vm_end) {	/* case 7 */
-@@ -1033,7 +1036,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 				adj_start = (end - curr->vm_start);
- 			}
- 		}
--	} else if (merge_next) {
-+	} else { /* merge_next */
- 		res = next;
- 		if (prev && addr < prev->vm_end) {	/* case 4 */
- 			vma_end = addr;
-@@ -1049,7 +1052,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 			vma_start = addr;
- 			vma_end = next->vm_end;
- 			vma_pgoff = next->vm_pgoff;
--			err = 0;
-+
- 			if (curr) {			/* case 8 */
- 				vma_pgoff = curr->vm_pgoff;
- 				remove = curr;
-@@ -1058,7 +1061,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 		}
- 	}
- 
--	/* Cannot merge or error in anon_vma clone */
-+	/* Error in anon_vma clone. */
- 	if (err)
- 		return NULL;
- 
--- 
-2.39.2
+On 2023/02/13 22:49, Tetsuo Handa wrote:
+> On 2023/02/13 21:49, Peter Zijlstra wrote:
+>>>> And sched_show_task() being an utter piece of crap that will basically
+>>>> print garbage for anything that's running (it doesn't have much
+>>>> options).
+>>>>
+>>>> Should we try and do better? dump_cpu_task() prefers
+>>>> trigger_single_cpu_backtrace(), which sends an interrupt in order to get
+>>>> active registers for the CPU.
+>>>
+>>> What is the intent of using trigger_single_cpu_backtrace() here?
+>>> check_hung_uninterruptible_tasks() is calling trigger_all_cpu_backtrace()
+>>> if sysctl_hung_task_all_cpu_backtrace is set.
+>>
+>> Then have that also print the held locks for those tasks. And skip over
+>> them again later.
+>>
+>>> Locks held and kernel backtrace are helpful for describing deadlock
+>>> situation, but registers values are not.
+>>
+>> Register state is required to start the unwind. You can't unwind a
+>> running task out of thin-air.
+> 
+> Excuse me. There are two types of TASK_RUNNING tasks, one is that a thread
+> is actually running on some CPU, and the other is that a thread is waiting
+> for CPU to become available for that thread, aren't there?
+> 
+> lockdep_print_held_locks() does not show locks held even if a thread is
+> waiting for CPU to become available for that thread, does it?
+> 
+> But sched_show_task() can show backtrace even if a thread is waiting for
+> CPU to become available for that thread, can't it?
+> 
+> Therefore, calling sched_show_task() helps understanding what that thread
+> is doing when lockdep_print_held_locks() did not show locks held.
+> 
+>>
+>>> What is important is that tasks which are not on CPUs are reported,
+>>> for when a task is reported as hung, that task must be sleeping.
+>>> Therefore, I think sched_show_task() is fine.
+>>
+>> The backtraces generated by sched_show_task() for a running task are
+>> absolutely worthless, might as well not print them.
+> 
+> "a thread actually running on some CPU" or
+> "a thread waiting for CPU to become available for that thread",
+> which does this "running task" mean?
+> 
+>>
+>> And if I read your Changelog right, you explicitly wanted useful
+>> backtraces for the running tasks -- such that you could see what they
+>> were doing while holding the lock the other tasks were blocked on.
+> 
+> Yes, we can get useful backtraces for threads that are waiting for CPU
+> to become available for that thread. That's why sched_show_task() is chosen.
+> 
+>>
+>> The only way to do that is to send an interrupt, the interrupt will have
+>> the register state for the interrupted task -- including the stack
+>> pointer. By virtue of running the interrupt handler we know the stack
+>> won't shrink, so we can then safely traverse the stack starting from the
+>> given stack pointer.
+> 
+> But trigger_single_cpu_backtrace() is for a thread actually running on some CPU,
+> isn't it? While it would be helpful to get backtrace of a thread that is actually
+> running on some CPU, it would be helpless not getting backtrace of a thread
+> that is waiting for CPU to become available for that thread.
+> 
+> We can later get backtrace of threads actually running on some CPU using
+> trigger_all_cpu_backtrace() via sysctl_hung_task_all_cpu_backtrace setting,
+> though I seldom find useful backtraces via trigger_all_cpu_backtrace(); it is
+> likely that khungtaskd thread and some random workqueue thread (which are
+> irrelevant to hung task) are reported via trigger_all_cpu_backtrace()...
+> 
 
