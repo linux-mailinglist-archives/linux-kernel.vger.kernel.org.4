@@ -2,357 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDE46BFB6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 17:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45196BFB5A
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCRQHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 12:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S229798AbjCRPxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 11:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRQHu (ORCPT
+        with ESMTP id S229842AbjCRPxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 12:07:50 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89A7298CC
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 09:07:46 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id w133so5978656oib.1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 09:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679155666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SRd8rMIKBhZVRtYAEJZJKErtUMesSi+Qq3quQoKizSc=;
-        b=K0fe5QN6EwCE4L5tsvTwoqD8NAUsQuAs82LxK64mfIHjIPw+1RfOCbmgbss+vZQ3kG
-         hnjsvg48F2sR7CBr8wbU2Ria1kZfUEo9ixTuCR8G54bljq4uaXWeGpx+ZliTpbUv88EF
-         AU/xaqMrtLx8MfTIXm2yPCM7FZLMKX/tADZsUFtAw8BjxzPPteKA/fFiJM8ZPy83R8xT
-         /YZ4eiR9qYY5sjcy8hqeeQ8q0FE9XUouXATvYT1NuxurD0ziDQizmOzPJM/UVLmWqWhq
-         Gv4xV1BIkcGIZhVQzCUR6bll3q871he5HoaEmmON2knVYCyZDfHgmvJZQSkNE9L97OM+
-         bI9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679155666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SRd8rMIKBhZVRtYAEJZJKErtUMesSi+Qq3quQoKizSc=;
-        b=Kw2B66eT1u++qAGv8x9AsDDiTgLmyVtebLvTy2HgHSN7cwW/K49Z+UqdOkaLX6WmDM
-         iaDfFmE5MiJqAEyx94zhUS6dWukwKkeHLrjF+mQp4CSrKjJ1yCjtfZQ0Rcj9qh8QeI57
-         dV0Ml/oHxQOUs0qLWeMt0aARzRG/QtiSaXYTfZT18gkwZplmOfifTkr0BxntL7gItzC/
-         qkQzmT6a6sTuk1Z6KpvxwSzV2DgmDJYxE854HzyPxfGn09khuYz+iHwhahk/Iq4Ui4S1
-         /uwrC7xqSgGEb6WUZr158g8XlgM/C1/095Q9lOwRQFW97nsh/KO/qpWwb6EM38IjgqyY
-         W44Q==
-X-Gm-Message-State: AO0yUKWRgft0Gn6MiC8pJNCeNErVqLagsLJ1ABdHYdOIXNCMj3oyDwZO
-        Xg03Y//sYllS1pEGtvaW50+PNA0KwriNS1bIhX4=
-X-Google-Smtp-Source: AK7set/g2cBdSlkSL6yFkgoFNK4mVOZBj/6q3tfTUhQUfIwTLvYEcOGKTGOqV7w2a9EpEFATaG2pHAXSd8gu9s8eOPU=
-X-Received: by 2002:aca:654b:0:b0:384:1cf9:912e with SMTP id
- j11-20020aca654b000000b003841cf9912emr4262735oiw.5.1679155665989; Sat, 18 Mar
- 2023 09:07:45 -0700 (PDT)
+        Sat, 18 Mar 2023 11:53:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06032B2BE;
+        Sat, 18 Mar 2023 08:53:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A802B8074D;
+        Sat, 18 Mar 2023 15:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F873C433EF;
+        Sat, 18 Mar 2023 15:53:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679154793;
+        bh=VIC8yNIF5gb8H4Ss/veeFWQBDBzRAUYMI7xaHoyLXNI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g1/XvBucTyM/JnLrfOELRPJPtmSKDTeJRTmatUDoM8fO5ATOgavaQY5wFYWEQvfIA
+         y3u/5DCZkGN5iwFbY0zdAdIpTfKsnrIOH1pyg37/TjWwZDWHKaFj9in0Wtkrgt7ZUB
+         99oHWm5JpQdMJEDxltGQAhcec+9YW/9CgKfZE9oMMPY0ZD1uXVTeQP/MHBQY2Zxru4
+         xQXfUhh0HJmv81l4sk1Z3ke6MbFrfmV8T6bjH/p6ZA+uPJtVwx1QmqL84btdWaFf+G
+         WfrHYefnyf5jQsf8ak0j3jsUlJUIGYh9E9nw2aMvytKDgvhLd2rw8l7+iemGfhdgeP
+         YqlHISFdlZTCQ==
+Date:   Sat, 18 Mar 2023 16:08:06 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <Claudiu.Beznea@microchip.com>
+Cc:     <chengziqiu@hust.edu.cn>, <eugen.hristev@collabora.com>,
+        <lars@metafoo.de>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <dzm91@hust.edu.cn>,
+        <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] iio: adc: at91-sama5d2_adc: remove dead code in
+ `at91_adc_probe`
+Message-ID: <20230318160806.7943aba4@jic23-huawei>
+In-Reply-To: <f1afaf48-e884-4902-8cff-41da234df9e9@microchip.com>
+References: <20230314070130.60581-1-chengziqiu@hust.edu.cn>
+        <f1afaf48-e884-4902-8cff-41da234df9e9@microchip.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230308155322.344664-1-robdclark@gmail.com> <20230308155322.344664-10-robdclark@gmail.com>
- <CAOFGe944_xJOJ3a-uJDVyca_1_+aYTqat4=Qc3CC1wUubxw3XQ@mail.gmail.com>
-In-Reply-To: <CAOFGe944_xJOJ3a-uJDVyca_1_+aYTqat4=Qc3CC1wUubxw3XQ@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Sat, 18 Mar 2023 09:07:35 -0700
-Message-ID: <CAF6AEGuE3hP=QTVS01PxndnC6kWW3HJe8JfPHZ3C6K6kkip5pQ@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v10 09/15] drm/syncobj: Add deadline support
- for syncobj waits
-To:     Faith Ekstrand <faith@gfxstrand.net>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        intel-gfx@lists.freedesktop.org,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        open list <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 12:08=E2=80=AFPM Faith Ekstrand <faith@gfxstrand.ne=
-t> wrote:
->
->
-> On Wed, Mar 8, 2023 at 9:54=E2=80=AFAM Rob Clark <robdclark@gmail.com> wr=
-ote:
->>
->> From: Rob Clark <robdclark@chromium.org>
->>
->> Add a new flag to let userspace provide a deadline as a hint for syncobj
->> and timeline waits.  This gives a hint to the driver signaling the
->> backing fences about how soon userspace needs it to compete work, so it
->> can addjust GPU frequency accordingly.  An immediate deadline can be
->> given to provide something equivalent to i915 "wait boost".
->>
->> v2: Use absolute u64 ns value for deadline hint, drop cap and driver
->>     feature flag in favor of allowing count_handles=3D=3D0 as a way for
->>     userspace to probe kernel for support of new flag
->> v3: More verbose comments about UAPI
->>
->> Signed-off-by: Rob Clark <robdclark@chromium.org>
->> ---
->>  drivers/gpu/drm/drm_syncobj.c | 64 ++++++++++++++++++++++++++++-------
->>  include/uapi/drm/drm.h        | 17 ++++++++++
->>  2 files changed, 68 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj=
-.c
->> index 0c2be8360525..a85e9464f07b 100644
->> --- a/drivers/gpu/drm/drm_syncobj.c
->> +++ b/drivers/gpu/drm/drm_syncobj.c
->> @@ -126,6 +126,11 @@
->>   * synchronize between the two.
->>   * This requirement is inherited from the Vulkan fence API.
->>   *
->> + * If &DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE is set, the ioctl will also=
- set
->> + * a fence deadline hint on the backing fences before waiting, to provi=
-de the
->> + * fence signaler with an appropriate sense of urgency.  The deadline i=
-s
->> + * specified as an absolute &CLOCK_MONOTONIC value in units of ns.
->> + *
->>   * Similarly, &DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT takes an array of syncob=
-j
->>   * handles as well as an array of u64 points and does a host-side wait =
-on all
->>   * of syncobj fences at the given points simultaneously.
->> @@ -973,7 +978,8 @@ static signed long drm_syncobj_array_wait_timeout(st=
-ruct drm_syncobj **syncobjs,
->>                                                   uint32_t count,
->>                                                   uint32_t flags,
->>                                                   signed long timeout,
->> -                                                 uint32_t *idx)
->> +                                                 uint32_t *idx,
->> +                                                 ktime_t *deadline)
->>  {
->>         struct syncobj_wait_entry *entries;
->>         struct dma_fence *fence;
->> @@ -1053,6 +1059,15 @@ static signed long drm_syncobj_array_wait_timeout=
-(struct drm_syncobj **syncobjs,
->>                         drm_syncobj_fence_add_wait(syncobjs[i], &entries=
-[i]);
->>         }
->>
->> +       if (deadline) {
->> +               for (i =3D 0; i < count; ++i) {
->> +                       fence =3D entries[i].fence;
->> +                       if (!fence)
->> +                               continue;
->> +                       dma_fence_set_deadline(fence, *deadline);
->> +               }
->> +       }
->> +
->>         do {
->>                 set_current_state(TASK_INTERRUPTIBLE);
->>
->> @@ -1151,7 +1166,8 @@ static int drm_syncobj_array_wait(struct drm_devic=
-e *dev,
->>                                   struct drm_file *file_private,
->>                                   struct drm_syncobj_wait *wait,
->>                                   struct drm_syncobj_timeline_wait *time=
-line_wait,
->> -                                 struct drm_syncobj **syncobjs, bool ti=
-meline)
->> +                                 struct drm_syncobj **syncobjs, bool ti=
-meline,
->> +                                 ktime_t *deadline)
->>  {
->>         signed long timeout =3D 0;
->>         uint32_t first =3D ~0;
->> @@ -1162,7 +1178,8 @@ static int drm_syncobj_array_wait(struct drm_devic=
-e *dev,
->>                                                          NULL,
->>                                                          wait->count_han=
-dles,
->>                                                          wait->flags,
->> -                                                        timeout, &first=
-);
->> +                                                        timeout, &first=
-,
->> +                                                        deadline);
->>                 if (timeout < 0)
->>                         return timeout;
->>                 wait->first_signaled =3D first;
->> @@ -1172,7 +1189,8 @@ static int drm_syncobj_array_wait(struct drm_devic=
-e *dev,
->>                                                          u64_to_user_ptr=
-(timeline_wait->points),
->>                                                          timeline_wait->=
-count_handles,
->>                                                          timeline_wait->=
-flags,
->> -                                                        timeout, &first=
-);
->> +                                                        timeout, &first=
-,
->> +                                                        deadline);
->>                 if (timeout < 0)
->>                         return timeout;
->>                 timeline_wait->first_signaled =3D first;
->> @@ -1243,17 +1261,22 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, v=
-oid *data,
->>  {
->>         struct drm_syncobj_wait *args =3D data;
->>         struct drm_syncobj **syncobjs;
->> +       unsigned possible_flags;
->> +       ktime_t t, *tp =3D NULL;
->>         int ret =3D 0;
->>
->>         if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
->>                 return -EOPNOTSUPP;
->>
->> -       if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
->> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
->> +       possible_flags =3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
->> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
->> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
->> +
->> +       if (args->flags & ~possible_flags)
->>                 return -EINVAL;
->>
->>         if (args->count_handles =3D=3D 0)
->> -               return -EINVAL;
->> +               return 0;
->
->
-> Did you intend this change? If so, why? What does waiting with no handles=
- gain us? I mean, it's probably fine but it seems unrelated to this change.
->
->>         ret =3D drm_syncobj_array_find(file_private,
->>                                      u64_to_user_ptr(args->handles),
->> @@ -1262,8 +1285,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, vo=
-id *data,
->>         if (ret < 0)
->>                 return ret;
->>
->> +       if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
->> +               t =3D ns_to_ktime(args->deadline_ns);
->> +               tp =3D &t;
->> +       }
->> +
->>         ret =3D drm_syncobj_array_wait(dev, file_private,
->> -                                    args, NULL, syncobjs, false);
->> +                                    args, NULL, syncobjs, false, tp);
->>
->>         drm_syncobj_array_free(syncobjs, args->count_handles);
->>
->> @@ -1276,18 +1304,23 @@ drm_syncobj_timeline_wait_ioctl(struct drm_devic=
-e *dev, void *data,
->>  {
->>         struct drm_syncobj_timeline_wait *args =3D data;
->>         struct drm_syncobj **syncobjs;
->> +       unsigned possible_flags;
->> +       ktime_t t, *tp =3D NULL;
->>         int ret =3D 0;
->>
->>         if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
->>                 return -EOPNOTSUPP;
->>
->> -       if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
->> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
->> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
->> +       possible_flags =3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
->> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
->> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE |
->> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
->> +
->> +       if (args->flags & ~possible_flags)
->>                 return -EINVAL;
->>
->>         if (args->count_handles =3D=3D 0)
->> -               return -EINVAL;
->> +               return -0;
->
->
-> Did you intend this change? -0 is a pretty weird integer.
+On Tue, 14 Mar 2023 10:12:23 +0000
+<Claudiu.Beznea@microchip.com> wrote:
 
-It balances out the positive zero in the other ioctl :-P
+> On 14.03.2023 09:01, Cheng Ziqiu wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >   
+> >>From the comment of platform_get_irq, it only returns non-zero IRQ  
+> > number and negative error number, other than zero.
+> > 
+> > Fix this by removing the if condition.
+> > 
+> > Signed-off-by: Cheng Ziqiu <chengziqiu@hust.edu.cn>
+> > Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>  
+> 
+> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Applied to the togreg branch of iio.git - initially pushed out as testing for 0-day to
+take a look at it.
 
-j/k .. I've fixed that typo locally, and renamed deadline_ns to
-deadline_nsec to better match timeout_nsec.  But will hold off
-re-sending for now unless there are any less cosmetic changes
+Thanks,
 
-BR,
--R
+Jonathan
 
->>
->>         ret =3D drm_syncobj_array_find(file_private,
->>                                      u64_to_user_ptr(args->handles),
->> @@ -1296,8 +1329,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device=
- *dev, void *data,
->>         if (ret < 0)
->>                 return ret;
->>
->> +       if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
->> +               t =3D ns_to_ktime(args->deadline_ns);
->> +               tp =3D &t;
->> +       }
->> +
->>         ret =3D drm_syncobj_array_wait(dev, file_private,
->> -                                    NULL, args, syncobjs, true);
->> +                                    NULL, args, syncobjs, true, tp);
->>
->>         drm_syncobj_array_free(syncobjs, args->count_handles);
->>
->> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
->> index 642808520d92..bff0509ac8b6 100644
->> --- a/include/uapi/drm/drm.h
->> +++ b/include/uapi/drm/drm.h
->> @@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
->>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
->>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
->>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time=
- point to become available */
->> +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence dead=
-line based to deadline_ns */
->>  struct drm_syncobj_wait {
->>         __u64 handles;
->>         /* absolute timeout */
->> @@ -895,6 +896,14 @@ struct drm_syncobj_wait {
->>         __u32 flags;
->>         __u32 first_signaled; /* only valid when not waiting all */
->>         __u32 pad;
->> +       /**
->> +        * @deadline_ns - fence deadline hint
->> +        *
->> +        * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
->> +        * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
->> +        * set.
->> +        */
->> +       __u64 deadline_ns;
->>  };
->>
->>  struct drm_syncobj_timeline_wait {
->> @@ -907,6 +916,14 @@ struct drm_syncobj_timeline_wait {
->>         __u32 flags;
->>         __u32 first_signaled; /* only valid when not waiting all */
->>         __u32 pad;
->> +       /**
->> +        * @deadline_ns - fence deadline hint
->> +        *
->> +        * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
->> +        * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
->> +        * set.
->> +        */
->> +       __u64 deadline_ns;
->>  };
->>
->>
->> --
->> 2.39.2
->>
+> 
+> 
+> > ---
+> > v2->v3: Change subject to make it regular.
+> > v1->v2: Change commit message from SoB to Reviewed-by.
+> >  drivers/iio/adc/at91-sama5d2_adc.c | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> > index 50d02e5fc6fc..168399092590 100644
+> > --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> > +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> > @@ -2400,12 +2400,8 @@ static int at91_adc_probe(struct platform_device *pdev)
+> >         st->dma_st.phys_addr = res->start;
+> > 
+> >         st->irq = platform_get_irq(pdev, 0);
+> > -       if (st->irq <= 0) {
+> > -               if (!st->irq)
+> > -                       st->irq = -ENXIO;
+> > -
+> > +       if (st->irq < 0)
+> >                 return st->irq;
+> > -       }
+> > 
+> >         st->per_clk = devm_clk_get(&pdev->dev, "adc_clk");
+> >         if (IS_ERR(st->per_clk))
+> > --
+> > 2.34.1
+> >   
+> 
+
