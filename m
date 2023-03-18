@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EFC6BFB30
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677256BFB21
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 16:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCRPZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 11:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S229787AbjCRPRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 11:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjCRPZJ (ORCPT
+        with ESMTP id S229553AbjCRPRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 11:25:09 -0400
-X-Greylist: delayed 555 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Mar 2023 08:25:07 PDT
-Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [IPv6:2001:41d0:203:375::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE6F18A96
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 08:25:06 -0700 (PDT)
-Message-ID: <e872037e88af46ee4a329a2bee39806533365018.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679152549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vR0CuRyOezUnFd4VADqINnV0NjCLi52z5JOf95rttMc=;
-        b=nkBTJv/plWRp2yCy0P23isJwXeNfkbNbENfU8+lTZkCIW+dwnF7+QREz9rFYCuCEkV+JJo
-        czxTLKhE4R3uCvLVTZGgfDgp3g/JwpnLAemWp1UH4Wb6osoXt1SxWQSZEy9EwdtXa6Yd9K
-        XXuW91zDtpaqstTSIH2YGt4dF4xdHoc=
-Subject: Re: [RFC PATCH v1] usb/phy add sprd ums512 usbphy
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cixi Geng <cixi.geng@linux.dev>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, arnd@arndb.de, tony@atomide.com,
-        felipe.balbi@linux.intel.com, paul@crapouillou.net,
-        linus.walleij@linaro.org, cixi.geng1@unisoc.com,
-        gengcixi@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Sat, 18 Mar 2023 23:15:33 +0800
-In-Reply-To: <ZA7DUH+qJyMmWBq5@kroah.com>
-References: <20230312171438.177952-1-cixi.geng@linux.dev>
-         <ZA7DUH+qJyMmWBq5@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 18 Mar 2023 11:17:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A7D303E9;
+        Sat, 18 Mar 2023 08:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RQqhoBxESfjz0MrhZuxEnWRoFia7U0MNzcHrY8Fhlv0=; b=d6ccJIc0boouKz1RgK4pvpGHi8
+        4ZkGSh7ToGcaKfREyF2r2iGLEPicussMx8K0l2Li2ra249nXJO7hUZf38itouaruulqS1aOFTKTqN
+        jJMx2gb8RC+xEru4EMEUbXlbziGm+fW8Fml8xSUcNodEmfqS15SK8uCirMJIR9JVRKxZaBwPAD74R
+        K9n/THstFMW9NglqvNtSQmYgeP646r9HesxPdRri63hl3iM8CtBAdvbnwf953h05nlX4Ap9z9DTvP
+        3+UTf5Zp5V2ZQKQBjwv/jwj26batJCHJXAy8GoUDqoSLOsLOteidAWyQR8ImH4PUgpewvrOdjbLIg
+        85rR280A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pdYIX-00Gudm-D6; Sat, 18 Mar 2023 15:16:45 +0000
+Date:   Sat, 18 Mar 2023 15:16:45 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
+Message-ID: <ZBXV3crf/wX5D9lo@casper.infradead.org>
+References: <20230316170149.4106586-1-jolsa@kernel.org>
+ <ZBNTMZjEoETU9d8N@casper.infradead.org>
+ <ZBV3beyxYhKv/kMp@krava>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBV3beyxYhKv/kMp@krava>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-13 at 07:31 +0100, Greg KH wrote:
-> On Mon, Mar 13, 2023 at 01:14:38AM +0800, Cixi Geng wrote:
-> > From: Cixi Geng <cixi.geng1@unisoc.com>
-> >=20
-> > This driver is support USB2 phy for Spreadtrum UMS512 SOC's,
-> >=20
-> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
->=20
-> Why is this "RFC"?=C2=A0 What is left to do on it to be accepted?
-this is just the driver code, lack of dt-bindings=20
->=20
-> > ---
-> > =C2=A0drivers/usb/phy/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0 10 +
-> > =C2=A0drivers/usb/phy/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > =C2=A0drivers/usb/phy/phy-sprd-ums512.c | 511
-> > ++++++++++++++++++++++++++++++
-> > =C2=A0drivers/usb/phy/phy-sprd-ums512.h |=C2=A0 39 +++
->=20
-> Why do you need a .h file for a single .c file?=C2=A0 Please just put the=
-m
-> all together into one file.
->=20
-> thanks,
->=20
-> greg k-h
+On Sat, Mar 18, 2023 at 09:33:49AM +0100, Jiri Olsa wrote:
+> On Thu, Mar 16, 2023 at 05:34:41PM +0000, Matthew Wilcox wrote:
+> > On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
+> > > hi,
+> > > this patchset adds build id object pointer to struct file object.
+> > > 
+> > > We have several use cases for build id to be used in BPF programs
+> > > [2][3].
+> > 
+> > Yes, you have use cases, but you never answered the question I asked:
+> > 
+> > Is this going to be enabled by every distro kernel, or is it for special
+> > use-cases where only people doing a very specialised thing who are
+> > willing to build their own kernels will use it?
+> 
+> I hope so, but I guess only time tell.. given the response by Ian and Andrii
+> there are 3 big users already
+
+So the whole "There's a config option to turn it off" shtick is just a
+fig-leaf.  I won't ever see it turned off.  You're imposing the cost of
+this on EVERYONE who runs a distro kernel.  And almost nobody will see
+any benefits from it.  Thanks for admitting that.
 
