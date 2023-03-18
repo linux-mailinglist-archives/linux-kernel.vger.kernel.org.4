@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AD66BF7AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 05:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8046BF7B3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 05:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjCREQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 00:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S230011AbjCREUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 00:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCREQT (ORCPT
+        with ESMTP id S229473AbjCREUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 00:16:19 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B252BF01
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 21:16:18 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-541942bfdccso66408287b3.14
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 21:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679112977;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=39Fefym6R4RrQjQOXnUkj5Wbs7EvPing/MjHK7t/Lyw=;
-        b=lSAzuBmFZ+h8hiSzVh0biFlm455SUKogAcvaf1DponXDVrVupq8TYodfl/wuKq3+lG
-         StIer+QGQznxUabXcz2df43r3hGbTAZmZFmuhtEuptxU9lRGI2GQfhVMjBHn7E6oe9rY
-         EIEg8HGk++eNcDMhd150EGX8kmfrSXpRDtZ1Jmj+5TpUC1UhlNjrE5Qm5qB076rcW5nX
-         b0mnyKdlSuPrmiRCFOmpwbvvLCp+sq/Z0vpQkfDRC0evcIRZsN6hp5UqmpznRXafyYp7
-         1YcVKN2gtFUK/BfZcoLNkgVX91sNHKGVoiuKcaydIFpibjnyQfWUE+qS+w6SRTh1CNuN
-         gAeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679112977;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=39Fefym6R4RrQjQOXnUkj5Wbs7EvPing/MjHK7t/Lyw=;
-        b=X5F+9VY2xwi3uGAF3pd/MBuw2iz3cehcAx6jSCkRJ2WzEytWz0dhfJxnPaNx9WLxZe
-         +aUyNfqiW1OkCpONo/rEUnadVHkHVF3fhRclEdSSpZHbPeFezlFWdq040OZtJvsPCmps
-         3TVijwgUP6OHTxbX3LN1KHuDhYg/dzLSvc5SbI5hUu8wTRg5Uz0uYgtMVLdzOys/zjZG
-         wYtgJjMSigFB0QC5GpPrQ4SmYTzCcSTfBl6sf082cpL8RNYNs5k6ADf8dpDZ9c/z7UG+
-         KDL3enW3dawRW4j26XP/IdWGAQ0hmyDZSzc1Lsim0H+MIAtuUuKmIPf2Cb8DZOPOL6ED
-         5CsQ==
-X-Gm-Message-State: AO0yUKV0n/kpX0CTLICHLdevD/7K1+K24k6baP+CdWLk/P+9qrqDp5fv
-        VTjkXs1TBkKFcLQVCMKha9qPcj4eipspRg==
-X-Google-Smtp-Source: AK7set8R2hY7ySptFbksr8tOnpVYxuTWiaaKxkqJCvC0czQRuIKj/2zJ7wSxtFdQ8Yte+Avdjdb73Hxrct/0kw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:af4d:0:b0:544:b7ff:b0df with SMTP id
- x13-20020a81af4d000000b00544b7ffb0dfmr3997390ywj.2.1679112977179; Fri, 17 Mar
- 2023 21:16:17 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 12:15:54 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230318041555.4192172-1-davidgow@google.com>
-Subject: [PATCH] arch:um: Only disable SSE on clang to work around old GCC bugs
-From:   David Gow <davidgow@google.com>
-To:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
+        Sat, 18 Mar 2023 00:20:04 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE017CF6;
+        Fri, 17 Mar 2023 21:20:00 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3B4F224DB8C;
+        Sat, 18 Mar 2023 12:19:58 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 18 Mar
+ 2023 12:19:58 +0800
+Received: from [172.16.16.231] (113.72.144.193) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 18 Mar
+ 2023 12:19:56 +0800
+Message-ID: <069c0483-d536-7e66-659f-c6816fc65453@starfivetech.com>
+Date:   Sat, 18 Mar 2023 12:19:57 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 04/21] clk: starfive: Rename "jh7100" to "jh71x0" for
+ the common code
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        SeongJae Park <sj@kernel.org>
-Cc:     David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
-        x86@kernel.org, llvm@lists.linux.dev,
-        rust-for-linux@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230311090733.56918-1-hal.feng@starfivetech.com>
+ <20230311090733.56918-5-hal.feng@starfivetech.com>
+ <ZBNoaGd9l0HjFv2l@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <ZBNoaGd9l0HjFv2l@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.193]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +71,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of the Rust support for UML, we disable SSE (and similar flags)
-to match the normal x86 builds. This both makes sense (we ideally want a
-similar configuration to x86), and works around a crash bug with SSE
-generation under Rust with LLVM.
+On Thu, 16 Mar 2023 20:05:12 +0100, Tommaso Merciai wrote:
+> Hello Hal,
+> Patcht itself looks good to me, btw I have some style issue applying
+> this:
+> 
+> On Sat, Mar 11, 2023 at 05:07:16PM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>> 
+>> Rename some variables from "jh7100" or "JH7100" to "jh71x0"
+>> or "JH71X0".
+>> 
+>> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>> ---
+>>  .../clk/starfive/clk-starfive-jh7100-audio.c  |  74 ++--
+>>  drivers/clk/starfive/clk-starfive-jh7100.c    | 388 +++++++++---------
+>>  drivers/clk/starfive/clk-starfive-jh71x0.c    | 284 ++++++-------
+>>  drivers/clk/starfive/clk-starfive-jh71x0.h    |  72 ++--
+>>  4 files changed, 409 insertions(+), 409 deletions(-)
+>> 
+[...]
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh71x0.h b/drivers/clk/starfive/clk-starfive-jh71x0.h
+>> index a8ba6e25b5ce..baf4b5cb4b8a 100644
+>> --- a/drivers/clk/starfive/clk-starfive-jh71x0.h
+>> +++ b/drivers/clk/starfive/clk-starfive-jh71x0.h
+>> @@ -1,6 +1,6 @@
+>>  /* SPDX-License-Identifier: GPL-2.0 */
+>> -#ifndef __CLK_STARFIVE_JH7100_H
+>> -#define __CLK_STARFIVE_JH7100_H
+>> +#ifndef __CLK_STARFIVE_JH71X0_H
+>> +#define __CLK_STARFIVE_JH71X0_H
+>>  
+>>  #include <linux/bits.h>
+>>  #include <linux/clk-provider.h>
+>> @@ -8,107 +8,107 @@
+>>  #include <linux/spinlock.h>
+>>  
+>>  /* register fields */
+>> -#define JH7100_CLK_ENABLE	BIT(31)
+>> -#define JH7100_CLK_INVERT	BIT(30)
+>> -#define JH7100_CLK_MUX_MASK	GENMASK(27, 24)
+>> -#define JH7100_CLK_MUX_SHIFT	24
+>> -#define JH7100_CLK_DIV_MASK	GENMASK(23, 0)
+>> -#define JH7100_CLK_FRAC_MASK	GENMASK(15, 8)
+>> -#define JH7100_CLK_FRAC_SHIFT	8
+>> -#define JH7100_CLK_INT_MASK	GENMASK(7, 0)
+>> +#define JH71X0_CLK_ENABLE	BIT(31)
+>> +#define JH71X0_CLK_INVERT	BIT(30)
+>> +#define JH71X0_CLK_MUX_MASK	GENMASK(27, 24)
+>> +#define JH71X0_CLK_MUX_SHIFT	24
+>> +#define JH71X0_CLK_DIV_MASK	GENMASK(23, 0)
+>> +#define JH71X0_CLK_FRAC_MASK	GENMASK(15, 8)
+>> +#define JH71X0_CLK_FRAC_SHIFT	8
+>> +#define JH71X0_CLK_INT_MASK	GENMASK(7, 0)
+>>  
+>>  /* fractional divider min/max */
+>> -#define JH7100_CLK_FRAC_MIN	100UL
+>> -#define JH7100_CLK_FRAC_MAX	25599UL
+>> +#define JH71X0_CLK_FRAC_MIN	100UL
+>> +#define JH71X0_CLK_FRAC_MAX	25599UL
+>>  
+>>  /* clock data */
+>> -struct jh7100_clk_data {
+>> +struct jh71x0_clk_data {
+>>  	const char *name;
+>>  	unsigned long flags;
+>>  	u32 max;
+>>  	u8 parents[4];
+>>  };
+>>  
+>> -#define JH7100_GATE(_idx, _name, _flags, _parent) [_idx] = {			\
+>> +#define JH71X0_GATE(_idx, _name, _flags, _parent) [_idx] = {			\
+>>  	.name = _name,								\
+>>  	.flags = CLK_SET_RATE_PARENT | (_flags),				\
+>> -	.max = JH7100_CLK_ENABLE,						\
+>> +	.max = JH71X0_CLK_ENABLE,						\
+>>  	.parents = { [0] = _parent },						\
+>>  }
+> 
+> 
+> ERROR: space prohibited before open square bracket '['
+> #1155: FILE: drivers/clk/starfive/clk-starfive-jh71x0.h:32:
+> +#define JH71X0_GATE(_idx, _name, _flags, _parent) [_idx] = {			\
+> 
+> Same for others define.
+> I would suggest this style.
+> Hope this can help you:
+> 
+> #define JH71X0_GATE(_idx, _name, _flags, _parent)		\
+> 	[_idx] = {						\
+> 		.name = _name,					\
+> 		.flags = CLK_SET_RATE_PARENT | (_flags),	\
+> 		.max = JH71X0_CLK_ENABLE,			\
+> 		.parents = { [0] = _parent },			\
+> }
+> 
+> tested using:
+> 
+> scripts/checkpatch.pl -f drivers/clk/starfive/clk-starfive-jh71x0.h
 
-However, this breaks compiling stdlib.h under gcc < 11, as the x86_64
-ABI requires floating-point return values be stored in an SSE register.
-gcc 11 fixes this by only doing register allocation when a function is
-actually used, and since we never use atof(), it shouldn't be a problem:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
+I will fix the errors reported by checkpatch.pl in v6. Thanks.
 
-Nevertheless, only disable SSE on clang setups, as that's a simple way
-of working around everyone's bugs.
+Best regards,
+Hal
 
-Fixes: 884981867947 ("rust: arch/um: Disable FP/SIMD instruction to match x86")
-Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Link: https://lore.kernel.org/linux-um/6df2ecef9011d85654a82acd607fdcbc93ad593c.camel@huaweicloud.com/
-Tested-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Tested-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: David Gow <davidgow@google.com>
----
- arch/x86/Makefile.um | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
-index b70559b821df..2106a2bd152b 100644
---- a/arch/x86/Makefile.um
-+++ b/arch/x86/Makefile.um
-@@ -3,9 +3,14 @@ core-y += arch/x86/crypto/
- 
- #
- # Disable SSE and other FP/SIMD instructions to match normal x86
-+# This is required to work around issues in older LLVM versions, but breaks
-+# GCC versions < 11. See:
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
- #
-+ifeq ($(CONFIG_CC_IS_CLANG),y)
- KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
- KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
-+endif
- 
- ifeq ($(CONFIG_X86_32),y)
- START := 0x8048000
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+> 
+> 
+> Thanks for your work,
+> Tommaso
+> 
+> 
+>>  
+>> -#define JH7100__DIV(_idx, _name, _max, _parent) [_idx] = {			\
+>> +#define JH71X0__DIV(_idx, _name, _max, _parent) [_idx] = {			\
+>>  	.name = _name,								\
+>>  	.flags = 0,								\
+>>  	.max = _max,								\
+>>  	.parents = { [0] = _parent },						\
+>>  }
+>>  
+>> -#define JH7100_GDIV(_idx, _name, _flags, _max, _parent) [_idx] = {		\
+>> +#define JH71X0_GDIV(_idx, _name, _flags, _max, _parent) [_idx] = {		\
+>>  	.name = _name,								\
+>>  	.flags = _flags,							\
+>> -	.max = JH7100_CLK_ENABLE | (_max),					\
+>> +	.max = JH71X0_CLK_ENABLE | (_max),					\
+>>  	.parents = { [0] = _parent },						\
+>>  }
+>>  
+>> -#define JH7100_FDIV(_idx, _name, _parent) [_idx] = {				\
+>> +#define JH71X0_FDIV(_idx, _name, _parent) [_idx] = {				\
+>>  	.name = _name,								\
+>>  	.flags = 0,								\
+>> -	.max = JH7100_CLK_FRAC_MAX,						\
+>> +	.max = JH71X0_CLK_FRAC_MAX,						\
+>>  	.parents = { [0] = _parent },						\
+>>  }
+>>  
+>> -#define JH7100__MUX(_idx, _name, _nparents, ...) [_idx] = {			\
+>> +#define JH71X0__MUX(_idx, _name, _nparents, ...) [_idx] = {			\
+>>  	.name = _name,								\
+>>  	.flags = 0,								\
+>> -	.max = ((_nparents) - 1) << JH7100_CLK_MUX_SHIFT,			\
+>> +	.max = ((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT,			\
+>>  	.parents = { __VA_ARGS__ },						\
+>>  }
+>>  
+>> -#define JH7100_GMUX(_idx, _name, _flags, _nparents, ...) [_idx] = {		\
+>> +#define JH71X0_GMUX(_idx, _name, _flags, _nparents, ...) [_idx] = {		\
+>>  	.name = _name,								\
+>>  	.flags = _flags,							\
+>> -	.max = JH7100_CLK_ENABLE |						\
+>> -		(((_nparents) - 1) << JH7100_CLK_MUX_SHIFT),			\
+>> +	.max = JH71X0_CLK_ENABLE |						\
+>> +		(((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT),			\
+>>  	.parents = { __VA_ARGS__ },						\
+>>  }
+>>  
+>> -#define JH7100_MDIV(_idx, _name, _max, _nparents, ...) [_idx] = {		\
+>> +#define JH71X0_MDIV(_idx, _name, _max, _nparents, ...) [_idx] = {		\
+>>  	.name = _name,								\
+>>  	.flags = 0,								\
+>> -	.max = (((_nparents) - 1) << JH7100_CLK_MUX_SHIFT) | (_max),		\
+>> +	.max = (((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT) | (_max),		\
+>>  	.parents = { __VA_ARGS__ },						\
+>>  }
+>>  
+>> -#define JH7100__GMD(_idx, _name, _flags, _max, _nparents, ...) [_idx] = {	\
+>> +#define JH71X0__GMD(_idx, _name, _flags, _max, _nparents, ...) [_idx] = {	\
+>>  	.name = _name,								\
+>>  	.flags = _flags,							\
+>> -	.max = JH7100_CLK_ENABLE |						\
+>> -		(((_nparents) - 1) << JH7100_CLK_MUX_SHIFT) | (_max),		\
+>> +	.max = JH71X0_CLK_ENABLE |						\
+>> +		(((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT) | (_max),		\
+>>  	.parents = { __VA_ARGS__ },						\
+>>  }
+>>  
+>> -#define JH7100__INV(_idx, _name, _parent) [_idx] = {				\
+>> +#define JH71X0__INV(_idx, _name, _parent) [_idx] = {				\
+>>  	.name = _name,								\
+>>  	.flags = CLK_SET_RATE_PARENT,						\
+>> -	.max = JH7100_CLK_INVERT,						\
+>> +	.max = JH71X0_CLK_INVERT,						\
+>>  	.parents = { [0] = _parent },						\
+>>  }
+>>  
+>> -struct jh7100_clk {
+>> +struct jh71x0_clk {
+>>  	struct clk_hw hw;
+>>  	unsigned int idx;
+>>  	unsigned int max_div;
+>>  };
+>>  
+>> -struct jh7100_clk_priv {
+>> +struct jh71x0_clk_priv {
+>>  	/* protect clk enable and set rate/parent from happening at the same time */
+>>  	spinlock_t rmw_lock;
+>>  	struct device *dev;
+>>  	void __iomem *base;
+>>  	struct clk_hw *pll[3];
+>> -	struct jh7100_clk reg[];
+>> +	struct jh71x0_clk reg[];
+>>  };
+>>  
+>> -const struct clk_ops *starfive_jh7100_clk_ops(u32 max);
+>> +const struct clk_ops *starfive_jh71x0_clk_ops(u32 max);
+>>  
+>>  #endif
+>> -- 
+>> 2.38.1
+>> 
 
