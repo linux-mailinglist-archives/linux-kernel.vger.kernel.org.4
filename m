@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592C66BF9B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C116BF9B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCRL4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 07:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S229826AbjCRL4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 07:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCRL4o (ORCPT
+        with ESMTP id S229772AbjCRL4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Mar 2023 07:56:44 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFDA48E07
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1F748E0A
         for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:56:42 -0700 (PDT)
 Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CD3401EC0752;
-        Sat, 18 Mar 2023 12:56:40 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 591961EC0754;
+        Sat, 18 Mar 2023 12:56:41 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679140600;
+        t=1679140601;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Z1yiM+ZywEJs0y5jqWHyyn+4SPJ+MJX1vROyNi47MfE=;
-        b=c+BdjKJ+8Cylyi91kR2v+v2UnI2QaAd4q6fkyyOduXowDXnRVy6cGy6yHJ27AFreRlmJMf
-        rQQvjl4Of/ZiqeoBMBxkkgdeXEnfsd0vTKAXUpPtVqXX/MvUyt89DzbSnhI1fS8TrhNeKn
-        AdKmLjGkW9BVJXjW4vDrg/N4ogdodG0=
+        bh=82g7Dmd0UABgWvJnfHsCsiNT2CdpiGkwWTIS0RC8fuU=;
+        b=OTXegHxNDgtAmNZU/gkgcsDsQfTpnbSj0ZsNigwQ4aA97IN5i631IVEtsZS0VoX47veaot
+        Zy2pOdVN6Ii7NwMGiINMYi1SIDs3ot8jA5CRAdXRZ45bRNWCW1FiQgJAwj4vmKgCXnkHKV
+        p6SsLXTSCbOKEvZAU15yMz0Zu38RTz8=
 From:   Borislav Petkov <bp@alien8.de>
 To:     Joerg Roedel <joro@8bytes.org>,
         Tom Lendacky <thomas.lendacky@amd.com>
 Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] x86/coco: Export cc_vendor
-Date:   Sat, 18 Mar 2023 12:56:33 +0100
-Message-Id: <20230318115634.9392-2-bp@alien8.de>
+Subject: [PATCH 2/2] x86/sev: Get rid of special sev_es_enable_key
+Date:   Sat, 18 Mar 2023 12:56:34 +0100
+Message-Id: <20230318115634.9392-3-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230318115634.9392-1-bp@alien8.de>
 References: <20230318115634.9392-1-bp@alien8.de>
@@ -53,124 +53,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-It will be used in different checks in future changes. Export it
-directly and drop the setter as it is a __ro_after_init variable.
+A SEV-ES guest is active on AMD when CC_ATTR_GUEST_STATE_ENCRYPT is set.
+I.e., MSR_AMD64_SEV, bit 1, SEV_ES_Enabled. So no need for a special
+static key.
 
 No functional changes.
 
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 ---
- arch/x86/coco/core.c               | 13 ++++---------
- arch/x86/coco/tdx/tdx.c            |  2 +-
- arch/x86/include/asm/coco.h        |  2 +-
- arch/x86/kernel/cpu/mshyperv.c     |  2 +-
- arch/x86/mm/mem_encrypt_identity.c |  2 +-
- 5 files changed, 8 insertions(+), 13 deletions(-)
+ arch/x86/coco/core.c       |  2 +-
+ arch/x86/include/asm/sev.h | 11 +++++++----
+ arch/x86/kernel/sev.c      |  5 -----
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index 49b44f881484..684f0a910475 100644
+index 684f0a910475..17f2b690a485 100644
 --- a/arch/x86/coco/core.c
 +++ b/arch/x86/coco/core.c
-@@ -13,7 +13,7 @@
- #include <asm/coco.h>
- #include <asm/processor.h>
- 
--static enum cc_vendor vendor __ro_after_init;
-+enum cc_vendor cc_vendor __ro_after_init;
- static u64 cc_mask __ro_after_init;
- 
- static bool intel_cc_platform_has(enum cc_attr attr)
-@@ -83,7 +83,7 @@ static bool hyperv_cc_platform_has(enum cc_attr attr)
- 
- bool cc_platform_has(enum cc_attr attr)
- {
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return amd_cc_platform_has(attr);
- 	case CC_VENDOR_INTEL:
-@@ -105,7 +105,7 @@ u64 cc_mkenc(u64 val)
- 	 * - for AMD, bit *set* means the page is encrypted
- 	 * - for Intel *clear* means encrypted.
- 	 */
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return val | cc_mask;
- 	case CC_VENDOR_INTEL:
-@@ -118,7 +118,7 @@ u64 cc_mkenc(u64 val)
- u64 cc_mkdec(u64 val)
- {
- 	/* See comment in cc_mkenc() */
--	switch (vendor) {
-+	switch (cc_vendor) {
- 	case CC_VENDOR_AMD:
- 		return val & ~cc_mask;
- 	case CC_VENDOR_INTEL:
-@@ -129,11 +129,6 @@ u64 cc_mkdec(u64 val)
+@@ -81,7 +81,7 @@ static bool hyperv_cc_platform_has(enum cc_attr attr)
+ 	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
  }
- EXPORT_SYMBOL_GPL(cc_mkdec);
  
--__init void cc_set_vendor(enum cc_vendor v)
--{
--	vendor = v;
--}
--
- __init void cc_set_mask(u64 mask)
+-bool cc_platform_has(enum cc_attr attr)
++bool noinstr cc_platform_has(enum cc_attr attr)
  {
- 	cc_mask = mask;
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 055300e08fb3..bab29cbc6680 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -852,7 +852,7 @@ void __init tdx_early_init(void)
+ 	switch (cc_vendor) {
+ 	case CC_VENDOR_AMD:
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index ebc271bb6d8e..1335781e4976 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -12,6 +12,7 @@
+ #include <asm/insn.h>
+ #include <asm/sev-common.h>
+ #include <asm/bootparam.h>
++#include <asm/coco.h>
  
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+ #define GHCB_PROTOCOL_MIN	1ULL
+ #define GHCB_PROTOCOL_MAX	2ULL
+@@ -134,24 +135,26 @@ struct snp_secrets_page_layout {
+ } __packed;
  
--	cc_set_vendor(CC_VENDOR_INTEL);
-+	cc_vendor = CC_VENDOR_INTEL;
- 	tdx_parse_tdinfo(&cc_mask);
- 	cc_set_mask(cc_mask);
- 
-diff --git a/arch/x86/include/asm/coco.h b/arch/x86/include/asm/coco.h
-index 3d98c3a60d34..84fbf419989f 100644
---- a/arch/x86/include/asm/coco.h
-+++ b/arch/x86/include/asm/coco.h
-@@ -11,7 +11,7 @@ enum cc_vendor {
- 	CC_VENDOR_INTEL,
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+-extern struct static_key_false sev_es_enable_key;
+ extern void __sev_es_ist_enter(struct pt_regs *regs);
+ extern void __sev_es_ist_exit(void);
+ static __always_inline void sev_es_ist_enter(struct pt_regs *regs)
+ {
+-	if (static_branch_unlikely(&sev_es_enable_key))
++	if (cc_vendor == CC_VENDOR_AMD &&
++	    cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+ 		__sev_es_ist_enter(regs);
+ }
+ static __always_inline void sev_es_ist_exit(void)
+ {
+-	if (static_branch_unlikely(&sev_es_enable_key))
++	if (cc_vendor == CC_VENDOR_AMD &&
++	    cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+ 		__sev_es_ist_exit();
+ }
+ extern int sev_es_setup_ap_jump_table(struct real_mode_header *rmh);
+ extern void __sev_es_nmi_complete(void);
+ static __always_inline void sev_es_nmi_complete(void)
+ {
+-	if (static_branch_unlikely(&sev_es_enable_key))
++	if (cc_vendor == CC_VENDOR_AMD &&
++	    cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+ 		__sev_es_nmi_complete();
+ }
+ extern int __init sev_es_efi_map_ghcbs(pgd_t *pgd);
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 679026a640ef..4fdba49b6e38 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -111,8 +111,6 @@ struct ghcb_state {
  };
  
--void cc_set_vendor(enum cc_vendor v);
-+extern enum cc_vendor cc_vendor;
- void cc_set_mask(u64 mask);
+ static DEFINE_PER_CPU(struct sev_es_runtime_data*, runtime_data);
+-DEFINE_STATIC_KEY_FALSE(sev_es_enable_key);
+-
+ static DEFINE_PER_CPU(struct sev_es_save_area *, sev_vmsa);
  
- #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index f36dc2f796c5..9f3fad3e69d5 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -412,7 +412,7 @@ static void __init ms_hyperv_init_platform(void)
- 		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
- 		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
- 			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
--				cc_set_vendor(CC_VENDOR_HYPERV);
-+				cc_vendor = CC_VENDOR_HYPERV;
- 		}
+ struct sev_config {
+@@ -1393,9 +1391,6 @@ void __init sev_es_init_vc_handling(void)
+ 			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
  	}
  
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index 88cccd65029d..f54497b8be4b 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -611,7 +611,7 @@ void __init sme_enable(struct boot_params *bp)
- out:
- 	if (sme_me_mask) {
- 		physical_mask &= ~sme_me_mask;
--		cc_set_vendor(CC_VENDOR_AMD);
-+		cc_vendor = CC_VENDOR_AMD;
- 		cc_set_mask(sme_me_mask);
- 	}
- }
+-	/* Enable SEV-ES special handling */
+-	static_branch_enable(&sev_es_enable_key);
+-
+ 	/* Initialize per-cpu GHCB pages */
+ 	for_each_possible_cpu(cpu) {
+ 		alloc_runtime_data(cpu);
 -- 
 2.35.1
 
