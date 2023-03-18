@@ -2,148 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063DA6BF97B
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21FD6BF981
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjCRKZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 06:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S229737AbjCRKgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 06:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCRKZq (ORCPT
+        with ESMTP id S229502AbjCRKf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 06:25:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230EE17CFF
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 03:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679135145; x=1710671145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k/a9KYhXQNuIxFL6TrcT9LhlRJ4YY/wA8BeatkOgj/I=;
-  b=UPrQsFCmlfJWHXTDwKnxWhSA2DsSgsysUCTimCYkZ8ZnW90cUAVvZelr
-   UXojWRuABLX9sjHPaKOwXApHjaXZ3QeEsLhW91j9bnLdNCauRvWzV2RrV
-   dgYKtNmfm7BDjbdHreyVCSMScZXOeL56LkpWmMKJYLgIz8cvlf52O1vQS
-   F7w0CH4NStvDmC3y8thmUJO4r5JdWfhUKWz8kXeu2CWkTOHT+PkGEF7xx
-   wCcy9woBeY1scKb8GydwTj3d6tUFWC4koG1likKSA5L1xSe3tuDuBwIcz
-   31eFnojF/Vcgz6MCD4V4r7tsgAo1Fpk3dUgUUPORpSUwEN5gOZC6IMfGE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="403295465"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="403295465"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 03:25:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="926440545"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="926440545"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Mar 2023 03:25:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdTkr-000A0I-0x;
-        Sat, 18 Mar 2023 10:25:41 +0000
-Date:   Sat, 18 Mar 2023 18:24:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zheng Wang <zyytlz.wz@163.com>, arnd@arndb.de
-Cc:     oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: Re: [PATCH RESEND] misc: ti-st: st_kim: Fix use after free bug in
- kim_remove due to race condition
-Message-ID: <202303181850.RI6iAAhO-lkp@intel.com>
-References: <20230318081743.797531-1-zyytlz.wz@163.com>
+        Sat, 18 Mar 2023 06:35:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA942820B;
+        Sat, 18 Mar 2023 03:35:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 351A360AE4;
+        Sat, 18 Mar 2023 10:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D91C433EF;
+        Sat, 18 Mar 2023 10:35:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679135757;
+        bh=QVJsjRJAwNHwH8iVNvT+bQuQJBExNnEPnTB1jL+hRDI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MjTUnc2blbPLs85oKFqFh0Wa2zaRs4pTlR9RYcqPn628YlvgK+S3C3pZKFXtgRqDT
+         1wxncg7c8wetL76FhjyOXXBrCMTk8XisbgSNpc/2vinVrQTn0Vn2494P5/qFbsbVHK
+         6WquODejie+a8uz8aV6yk5k2No6qoqJUbriTO9ef6Wey0PZwJ6iThmvlstI5Y62Dwn
+         MwcXUKHg5XnwSiueHiuFUF1txGIkbuw1VpPdEytFxiR3wXq9fZK9b27Sc+nEpkdpMh
+         /yeha5xLMs+APYtQlViyr/F40NGsUFSFdX8BZgU1sLcdlCbo6VJm8Vcclkwefjc33A
+         kvnIQBKA/+qgQ==
+Received: by mail-lj1-f170.google.com with SMTP id 20so334639lju.0;
+        Sat, 18 Mar 2023 03:35:57 -0700 (PDT)
+X-Gm-Message-State: AO0yUKVa5AGBm+FsOrXEWtaLUs9hT+pe8FR+FoMuMy8MK6yGhiznT7Ce
+        1vUPgTZsGLUzAOz/irU92R1CvYTzrG8A2Scn+W4=
+X-Google-Smtp-Source: AK7set/LB4GooqDQoabCQNg8ev9Zq3hzP1WJXBZcR30yWNqSFFqQAoyo5HdPAA9ft+oF9o8KSt0NoUcUuDjAHWpbHNk=
+X-Received: by 2002:a05:651c:337:b0:295:d460:5a2d with SMTP id
+ b23-20020a05651c033700b00295d4605a2dmr4078456ljp.2.1679135755497; Sat, 18 Mar
+ 2023 03:35:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318081743.797531-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+ <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390> <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
+ <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390> <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+ <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390> <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
+ <CAMj1kXHKkK+6TDLebZw=H-ZZLVnwPGSRpNNKSbJoPwwA2vhG+w@mail.gmail.com>
+ <ZBNXaF32nIh3Ca49@righiandr-XPS-13-7390> <CAMj1kXFgmPp8TPDWePNN2wU_TQ87dL940SFEaMKAm4oVaB86+g@mail.gmail.com>
+ <ZBOYBdJR00dOKPSx@fedora>
+In-Reply-To: <ZBOYBdJR00dOKPSx@fedora>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 18 Mar 2023 11:35:44 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF8G3G41cPt+5=nB2D_uEaB_iXh6=3ZcTFTHrpsVm5D5g@mail.gmail.com>
+Message-ID: <CAMj1kXF8G3G41cPt+5=nB2D_uEaB_iXh6=3ZcTFTHrpsVm5D5g@mail.gmail.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+To:     Darren Hart <darren@os.amperecomputing.com>
+Cc:     Andrea Righi <andrea.righi@canonical.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zheng,
+On Thu, 16 Mar 2023 at 23:28, Darren Hart <darren@os.amperecomputing.com> wrote:
+>
+> On Thu, Mar 16, 2023 at 07:55:36PM +0100, Ard Biesheuvel wrote:
+> > On Thu, 16 Mar 2023 at 18:52, Andrea Righi <andrea.righi@canonical.com> wrote:
+...
+> > >
+> > > Yay! Success! I just tested your latest efi/urgent (with the fixup) and
+> > > system completed the boot without any soft lockups.
+> > >
+> >
+> > Thanks for confirming. I'll take that as a tested-by
+>
+> The solution in the current branch looks like the best approach we have to date
+> to address the broadest of affected systems. We could switch the eMAG test to an
+> MIDR test I believe (but this won't work for Altra as that would capture all the
+> Neoverse v1 cores beyond Altra). I can look into the MIDR test if you think it's
+> worthwhile - but since I don't think we can eliminate the SMBIOS string test, it
+> doesn't buy us much since we don't need a greedier eMAG test (there aren't more
+> of them to match).
+>
+> Given that some OEM Altra platforms change the processor ID, I don't see a
+> better solution currently than adding their the "product name" to the smbios
+> string tests unfortunately.
+>
 
-Thank you for the patch! Perhaps something to improve:
+Indeed. I spotted a Gigabyte system [0] with a different processor ID,
+but with a version we can test for.
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus soc/for-next v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So for now, I'll go with
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Wang/misc-ti-st-st_kim-Fix-use-after-free-bug-in-kim_remove-due-to-race-condition/20230318-161853
-patch link:    https://lore.kernel.org/r/20230318081743.797531-1-zyytlz.wz%40163.com
-patch subject: [PATCH RESEND] misc: ti-st: st_kim: Fix use after free bug in kim_remove due to race condition
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230318/202303181850.RI6iAAhO-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ecbe190b970112b4b10e2a1766da933168ae5fdd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zheng-Wang/misc-ti-st-st_kim-Fix-use-after-free-bug-in-kim_remove-due-to-race-condition/20230318-161853
-        git checkout ecbe190b970112b4b10e2a1766da933168ae5fdd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+        socid = (u32 *)record->processor_id;
+        switch (*socid & 0xffff000f) {
+                static char const altra[] = "Ampere(TM) Altra(TM) Processor";
+                static char const emag[] = "eMAG";
+        default:
+                version = efi_get_smbios_string(&record->header, 4,
+                                                processor_version);
+                if (!version || (strncmp(version, altra, sizeof(altra) - 1) &&
+                                 strncmp(version, emag, sizeof(emag) - 1)))
+                        break;
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181850.RI6iAAhO-lkp@intel.com/
+                fallthrough;
 
-All warnings (new ones prefixed by >>):
+        case 0x0a160001:        // Altra
+        case 0x0a160002:        // Altra Max
+                efi_warn("Working around broken SetVirtualAddressMap()\n");
+...
 
-   drivers/misc/ti-st/st_kim.c: In function 'kim_remove':
->> drivers/misc/ti-st/st_kim.c:788:27: warning: 'kim_gdata' is used uninitialized [-Wuninitialized]
-     788 |         struct st_data_s *st_gdata = kim_gdata->core_data;
-         |                           ^~~~~~~~
-   drivers/misc/ti-st/st_kim.c:787:34: note: 'kim_gdata' was declared here
-     787 |         struct kim_data_s       *kim_gdata;
-         |                                  ^~~~~~~~~
+which should cover all the affected systems we encountered so far.
+
+I'll push this to linux-next to let it soak for a little bit, and then
+send it to Linus somewhere during the week
+
+Thanks,
+Ard.
 
 
-vim +/kim_gdata +788 drivers/misc/ti-st/st_kim.c
-
-   782	
-   783	static int kim_remove(struct platform_device *pdev)
-   784	{
-   785		/* free the GPIOs requested */
-   786		struct ti_st_plat_data	*pdata = pdev->dev.platform_data;
-   787		struct kim_data_s	*kim_gdata;
- > 788		struct st_data_s *st_gdata = kim_gdata->core_data;
-   789	
-   790		kim_gdata = platform_get_drvdata(pdev);
-   791	
-   792		cancel_work_sync(&st_gdata->work_write_wakeup);
-   793	
-   794		/*
-   795		 * Free the Bluetooth/FM/GPIO
-   796		 * nShutdown gpio from the system
-   797		 */
-   798		gpio_free(pdata->nshutdown_gpio);
-   799		pr_info("nshutdown GPIO Freed");
-   800	
-   801		debugfs_remove_recursive(kim_debugfs_dir);
-   802		sysfs_remove_group(&pdev->dev.kobj, &uim_attr_grp);
-   803		pr_info("sysfs entries removed");
-   804	
-   805		kim_gdata->kim_pdev = NULL;
-   806		st_core_exit(st_gdata);
-   807	
-   808		kfree(kim_gdata);
-   809		kim_gdata = NULL;
-   810		return 0;
-   811	}
-   812	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+[0] https://pastebin.com/HQLE1yYv
