@@ -2,218 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577536BFCEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 22:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EA36BFCF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 22:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjCRV0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 17:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S229697AbjCRVbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 17:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCRV0a (ORCPT
+        with ESMTP id S229541AbjCRVbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 17:26:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828104ECA;
-        Sat, 18 Mar 2023 14:26:27 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 39ADF5FD24;
-        Sun, 19 Mar 2023 00:26:24 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679174784;
-        bh=dWSa4bwyQemtEean8HgIJ6sjw1ffk6G9m2buRd3i+9I=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type;
-        b=IAYG1oXlYtgV3NLSqotsng9Pno2jOEcHhYv1MbPU7R+EI2Ldrs3olxyfbr9BNpnq/
-         jB33Vi5NBjL5pP32V7HPV2t6lWvwYT6upNzEmzRBwMeu8Is97epbynJY/IEzcQE0+8
-         pSHYxFF8M6bExF+o+BkIWiwEMFM+Wo2B6KzWmQhbmIokI0jCuKt4Weu4eX6sfEyqI0
-         fctHXvCPfxLs0FtbnUgGz56TaPbh3XTmEpWRK31Mg6F9eBoI4PjMCn8boBAf5DPfrF
-         KPa+7EIUvX2ZZFKDVnadcE20rXeA/FpJIqquSMx0b27HeTYNmw8m7R0f5jFhbv2/L4
-         Qym3NsAlM34YA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun, 19 Mar 2023 00:26:20 +0300 (MSK)
-Message-ID: <64b44879-11ae-b5c5-3a1a-cb51de00c304@sberdevices.ru>
-Date:   Sun, 19 Mar 2023 00:23:03 +0300
+        Sat, 18 Mar 2023 17:31:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129DA211DC
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 14:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679175052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KJ/cpwwTOsiNZoK2Zi5I+mzUQqbpVfRXw3dozXcgP1o=;
+        b=A/KSMpJXur74bgzITJCj64m+fz3DUHm0IvG06WS/cAHcnjBGlDozVKStXgAVZJCb4zZRVD
+        zWDVN7sahEJjKQ2B+vWvPvKAqCBRgdhatbGENbdb4D9I/Q3okF4qlB3qeBl7JKQh35knDt
+        muACqwjM1nDi7Y1bAgKdyC2fa6TRg7w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-270-fNv3JSNRMjKx3ATWG4qSPQ-1; Sat, 18 Mar 2023 17:30:48 -0400
+X-MC-Unique: fNv3JSNRMjKx3ATWG4qSPQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 70EDD8533A2;
+        Sat, 18 Mar 2023 21:30:47 +0000 (UTC)
+Received: from [10.22.8.46] (unknown [10.22.8.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0325C15BA0;
+        Sat, 18 Mar 2023 21:30:46 +0000 (UTC)
+Message-ID: <2e71c2bf-9ee3-4ada-e9d9-acb6e422e9af@redhat.com>
+Date:   Sat, 18 Mar 2023 17:30:46 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v1] virtio/vsock: allocate multiple skbuffs on tx
+Subject: Re: [PATCH] cpuset: Clean up cpuset_node_allowed
 Content-Language: en-US
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru>
- <ZBThOG/nISvqbllq@bullseye>
- <07f4fb07-6a3b-4916-4e55-20ca7a866a8f@sberdevices.ru>
-In-Reply-To: <07f4fb07-6a3b-4916-4e55-20ca7a866a8f@sberdevices.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/18 14:21:00 #20969333
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Waiman Long <longman@redhat.com>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
+ <20230228083537.102665-1-haifeng.xu@shopee.com>
+ <299c9c34-0c07-ae52-61d7-6332f35c6245@redhat.com>
+In-Reply-To: <299c9c34-0c07-ae52-61d7-6332f35c6245@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/17/23 21:35, Waiman Long wrote:
+> On 2/28/23 03:35, Haifeng Xu wrote:
+>> Commit 002f290627c2 ("cpuset: use static key better and convert to 
+>> new API")
+>> has used __cpuset_node_allowed() instead of cpuset_node_allowed() to 
+>> check
+>> whether we can allocate on a memory node. Now this function isn't 
+>> used by
+>> anyone, so we can do the follow things to clean up it.
+>>
+>> 1. remove unused codes
+>> 2. rename __cpuset_node_allowed() to cpuset_node_allowed()
+>> 3. update comments in mm/page_alloc.c
+>>
+>> Suggested-by: Waiman Long <longman@redhat.com>
+>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>> ---
+>>   include/linux/cpuset.h | 16 ++--------------
+>>   kernel/cgroup/cpuset.c |  4 ++--
+>>   mm/page_alloc.c        |  4 ++--
+>>   3 files changed, 6 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+>> index d58e0476ee8e..980b76a1237e 100644
+>> --- a/include/linux/cpuset.h
+>> +++ b/include/linux/cpuset.h
+>> @@ -80,18 +80,11 @@ extern nodemask_t cpuset_mems_allowed(struct 
+>> task_struct *p);
+>>   void cpuset_init_current_mems_allowed(void);
+>>   int cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask);
+>>   -extern bool __cpuset_node_allowed(int node, gfp_t gfp_mask);
+>> -
+>> -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>> -{
+>> -    if (cpusets_enabled())
+>> -        return __cpuset_node_allowed(node, gfp_mask);
+>> -    return true;
+>> -}
+>> +extern bool cpuset_node_allowed(int node, gfp_t gfp_mask);
+>>     static inline bool __cpuset_zone_allowed(struct zone *z, gfp_t 
+>> gfp_mask)
+>>   {
+>> -    return __cpuset_node_allowed(zone_to_nid(z), gfp_mask);
+>> +    return cpuset_node_allowed(zone_to_nid(z), gfp_mask);
+>>   }
+>>     static inline bool cpuset_zone_allowed(struct zone *z, gfp_t 
+>> gfp_mask)
+>> @@ -223,11 +216,6 @@ static inline int 
+>> cpuset_nodemask_valid_mems_allowed(nodemask_t *nodemask)
+>>       return 1;
+>>   }
+>>   -static inline bool cpuset_node_allowed(int node, gfp_t gfp_mask)
+>> -{
+>> -    return true;
+>> -}
+>> -
+>
+> Sorry for the late reply as I apparently drop the ball.
+>
+> You need to keep the above cpuset_node_allowed() inline function or 
+> you will get compilation error when compiling with a config without 
+> CONFIG_CPUSETS. Other than that, the other changes look good.
+>
+It turns out that cpuset_node_allowed() isn't used anywhere except in 
+cpuset.h. So it should be OK to remove the alternate 
+cpuset_node_allowed() function.
 
+Acked-by: Waiman Long <longman@redhat.com>
 
-On 18.03.2023 21:01, Arseniy Krasnov wrote:
-> 
-> 
-> On 18.03.2023 00:52, Bobby Eshleman wrote:
->> On Fri, Mar 17, 2023 at 01:38:39PM +0300, Arseniy Krasnov wrote:
->>> This adds small optimization for tx path: instead of allocating single
->>> skbuff on every call to transport, allocate multiple skbuffs until
->>> credit space allows, thus trying to send as much as possible data without
->>> return to af_vsock.c.
->>
->> Hey Arseniy, I really like this optimization. I have a few
->> questions/comments below.
->>
->>>
->>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>> ---
->>>  net/vmw_vsock/virtio_transport_common.c | 45 +++++++++++++++++--------
->>>  1 file changed, 31 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->>> index 6564192e7f20..cda587196475 100644
->>> --- a/net/vmw_vsock/virtio_transport_common.c
->>> +++ b/net/vmw_vsock/virtio_transport_common.c
->>> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->>>  	const struct virtio_transport *t_ops;
->>>  	struct virtio_vsock_sock *vvs;
->>>  	u32 pkt_len = info->pkt_len;
->>> -	struct sk_buff *skb;
->>> +	u32 rest_len;
->>> +	int ret;
->>>  
->>>  	info->type = virtio_transport_get_type(sk_vsock(vsk));
->>>  
->>> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->>>  
->>>  	vvs = vsk->trans;
->>>  
->>> -	/* we can send less than pkt_len bytes */
->>> -	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
->>> -		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
->>> -
->>>  	/* virtio_transport_get_credit might return less than pkt_len credit */
->>>  	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
->>>  
->>> @@ -227,17 +224,37 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->>>  	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
->>>  		return pkt_len;
->>>  
->>> -	skb = virtio_transport_alloc_skb(info, pkt_len,
->>> -					 src_cid, src_port,
->>> -					 dst_cid, dst_port);
->>> -	if (!skb) {
->>> -		virtio_transport_put_credit(vvs, pkt_len);
->>> -		return -ENOMEM;
->>> -	}
->>> +	rest_len = pkt_len;
->>>  
->>> -	virtio_transport_inc_tx_pkt(vvs, skb);
->>> +	do {
->>> +		struct sk_buff *skb;
->>> +		size_t skb_len;
->>> +
->>> +		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
->>> +
->>> +		skb = virtio_transport_alloc_skb(info, skb_len,
->>> +						 src_cid, src_port,
->>> +						 dst_cid, dst_port);
->>> +		if (!skb) {
->>> +			ret = -ENOMEM;
->>> +			goto out;
->>> +		}
->>
->> In this case, if a previous round of the loop succeeded with send_pkt(),
->> I think that we may still want to return the number of bytes that have
->> successfully been sent so far?
->>
-> Hello! Thanks for review!
-> 
-> Yes, You are right, seems this patch breaks partial send return value. For example for the
-> following iov (suppose each '.iov_len' is 64Kb, e.g. max packet length):
-> 
-> [0] = { .iov_base = ptr0, .iov_len = len0 },
-> [1] = { .iov_base = NULL, .iov_len = len1 },
-> [2] = { .iov_base = ptr2, .iov_len = len2 }
-> 
-> transport callback will send element 0, but NULL iov_base of element 1 will cause tx failure.
-> Transport callback returns error (no information about transmitted skbuffs), but element 0 was
-> already passed to virtio/vhost path.
-> 
-> Current logic will return length of element 0 (it will be accounted to return from send syscall),
-> then calls transport again with invalid element 1 which triggers error.
-> 
-> I'm not sure that it is correct (at least in this single patch) to return number of bytes sent,
-> because tx loop in af_vsock.c compares length of user's buffer and number of bytes sent to break
-> tx loop (or loop is terminated when transport returns error). For above iov, we return length of
-> element 0 without length of invalid element 1, but not error (so loop exit condition never won't
-> be true). Moreover, with this approach only first failed to tx skbuff will return error. For second,
-> third, etc. skbuffs we get only number of bytes.
-> 
-> I think may be we can use socket's 'sk_err' field here: when tx callback failed to send data(no
-> matter it is first byte or last byte of middle byte), it returns number of bytes sent (it will be
-> 0 if first skbuff was failed to sent) and sets 'sk_err'. Good thing here is that tx loop in af_vsock.c
-> already has check for 'sk_err' value and break loop if error occurred. This way looks like 'errno'
-> concept a little bit: transport returns number of bytes, 'sk_err' contains error. So in current
-> patch it will look like this: instead of setting 'ret' with error, i set 'sk_err' with error,
-> but callback returns number of bytes transmitted.
-> 
-> May be we need review from some more experienced guy, Stefano Garzarella, what do You think?
-
-Ahhhh, i see, sorry, my misunderstanding. Don't read long text above :) I can return error if nothing
-was sent, otherwise return number of bytes. I'll prepare v2.
-
-Thanks, Arseniy
-> 
-> Thanks, Arseniy
->>>  
->>> -	return t_ops->send_pkt(skb);
->>> +		virtio_transport_inc_tx_pkt(vvs, skb);
->>> +
->>> +		ret = t_ops->send_pkt(skb);
->>> +
->>> +		if (ret < 0)
->>> +			goto out;
->>
->> Ditto here.
->>
->>> +
->>> +		rest_len -= skb_len;
->>> +	} while (rest_len);
->>> +
->>> +	return pkt_len;
->>> +
->>> +out:
->>> +	virtio_transport_put_credit(vvs, rest_len);
->>> +	return ret;
->>>  }
->>>  
->>>  static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
->>> -- 
->>> 2.25.1
