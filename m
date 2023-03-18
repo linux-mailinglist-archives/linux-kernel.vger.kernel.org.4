@@ -2,109 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4071A6BF985
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 11:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4AC6BF98C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 12:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjCRK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 06:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
+        id S229839AbjCRLPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 07:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCRK7g (ORCPT
+        with ESMTP id S229502AbjCRLPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 06:59:36 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E742F1721
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 03:59:34 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 88E275C01DC;
-        Sat, 18 Mar 2023 06:59:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sat, 18 Mar 2023 06:59:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1679137172; x=1679223572; bh=Mk
-        W9Et+iVn3gfjQCXbUm+047kWOOU0mQsCtKGtd8bN4=; b=raIP+VWUD700k1vXKJ
-        eJP+SXTT+SKDfaVrW19tAAl3vrLtibws7dE+XVBClS2vYXIjZEiHbAVGEYCt98EG
-        hESGqFjOcIR5yhL+9fMrCvh6AXmZLArcF5CcKXoQi4Mw2lKSpzLpHLhhAlG+RrlO
-        2wxCZ4xMUCyyBwyXdUE0UkwbxMJvJGrdjbgnp2LG2RLsmGB0OlFV+ltPmX+5xIfW
-        Vy+rY/6TOvIiKVBQmCJDPbSDVXDRgQqEoWNY/rstoivamk5tFDaRSixT5AAhfmge
-        OdNEDdt+9ehSpG8P9Cf39t14kLTbRBppVZdMHwgTE9QI5te7aml6gy0m5kRPWdZi
-        iILQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679137172; x=1679223572; bh=MkW9Et+iVn3gf
-        jQCXbUm+047kWOOU0mQsCtKGtd8bN4=; b=Lvj+inqjcjiAy3NvrybjC+6jqaGjX
-        NKz89LpQ1paVc5eAjEZMDabm9vVGjEJZliBVq5txSY+ugEojnaQhr80JMtDs/s5Y
-        GsLbdAYceNbaIeKN+Eo0Ato1uZHdqFUl0PqZQK+ILReC4x31Be9VmsP9mAnel6it
-        zlzCE408Fdsph1Bb/f11sQjTWZQFmV4vzeVpE1nCGDX8ds9YrGl6+ECerBx4CnmA
-        +tgDuLkxeIUVWiDSHa0qB5C4pR5+VuXZm3UiLQcClRIEy5KIqhbiPpcM4j2HK/ap
-        G3DC/+4wkBHoH5U11JCHmC66wUldmhCvZmA3N1L4zUyx2F71pi7hb/9Fg==
-X-ME-Sender: <xms:lJkVZBFyFrH7SmXt6HVAicX6rl5JwydF_tnZZXNT0OGEQaBQohLG4w>
-    <xme:lJkVZGXzq75qlVmAdND60k1ZFX8Bx8YCztoq0iF6ARgF-MF7A8ztdD7oAd4dgKvqS
-    YhmdRJ0Orw_zYUF6iU>
-X-ME-Received: <xmr:lJkVZDK4X5oFWdyMYd3XBWKN-LOhKdalxR7roueV4kX07wdU_GhaUQWFY8feccjsee9vGtWKK5ofRvIWDyncU9uoXok>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefgedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
-    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
-    hpqeenucggtffrrghtthgvrhhnpeelhfeugedvjefgjefgudekfedutedvtddutdeuieev
-    tddtgeetjeekvdefgeefhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:lJkVZHHFOSmIjSdjntSrc2NVIrVGqQ7kchc6rjXGgMe6buk15yD66w>
-    <xmx:lJkVZHVbbLMePPMIVQHKouyxT-O7TDl3T_nWw0lYMWy0s4osgGo3hA>
-    <xmx:lJkVZCOrEAZoz2wKKt8pQSEUyWDL0-lPUR7GgQkaVRvLw_gPpmV72w>
-    <xmx:lJkVZEiCeQ3P2lVfuZzqm3LNrujj363JvjW4YT-nih8Uqhz6Khuolg>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 18 Mar 2023 06:59:31 -0400 (EDT)
-Date:   Sat, 18 Mar 2023 19:59:28 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
-Message-ID: <20230318105928.GA87969@workstation>
-Mail-Followup-To: John Keeping <john@metanate.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230317195128.3911155-1-john@metanate.com>
- <20230318002005.GA84781@workstation>
+        Sat, 18 Mar 2023 07:15:31 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478B652F55
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:15:28 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m35so4722174wms.4
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 04:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679138126;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gAMkUBmCN5X3r9kQm0uq8aZ07PDcKdoRSeFhCE7Nwzc=;
+        b=oJlevLsej7ONWhGMXP1jpMP9Rg/PeQtbFPG4kE0U4DQvnk2+/FuXnGGyj43qJxJLFI
+         CAdJ1UUutiXpDPrOQCzGpm/1rxyWKN69Vvg0hkSWZOMCSHyam5/NveP3dMKTVMUZ6mGN
+         9jwTFaFalUmqfWib5uFG/ZA4il+IAGOJeiW3FaR6ZQPiJYTkHNfrybEmjMsowAxdAqwJ
+         yOXD5sN/QiWTi+tN29VdoFi6AlWib+WfsZ6sDuAXauV3B5uzowRB2OjLgjjdop0kiA7w
+         P01LF+kMU9pDtKSoRlF9TLPA28Z3y3yLzE9967WkKMF/Ag5hK9LV/LKs7pNi16OCM5ge
+         FU/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679138126;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gAMkUBmCN5X3r9kQm0uq8aZ07PDcKdoRSeFhCE7Nwzc=;
+        b=tvlaU2acSF8MazZOBANbU7hEn4J2vIs7FwWGq9pkBgiH4N+hlQno1MSM/bTamicvJP
+         pZ6CnMu3igYHq6fSMBgEz+foU5Q8M37+JNRAYRCskJctko89p2GnnlmAL0BEhcQWrfNX
+         8TNPUZlXjW9BxMFURJ75HmZuORfQfVXPrYWH/b9XmTwfI/27fZECY2306s+N8RTTn04G
+         l5MjGFZaZCMQUK3/A1q+1iEe5QP/Bwt3+Jn5QUh3N4ol9N0mLuF2q9ZL8YvKrvnXg5E9
+         Zd2yy6uLqAtAIQdKkBXSiaRlCq+/2rpPnyo/JtmZyhTOghRi+v+89F6pEn7oEbl2Oi1D
+         Qy7w==
+X-Gm-Message-State: AO0yUKWUneyT8cwZygVEY2Kl8gnPraz9jmtaQFvH7XXRfrDWjQDSUhxK
+        hjpeIJhSj8N8hzzRY1EVjFw=
+X-Google-Smtp-Source: AK7set+m/2ZPNjyCcJsdIdEHcdktjiSMXPMjWYZjOWW4p0HAFsK5LwUTnqP6V4m6krhRKntwbzdw8A==
+X-Received: by 2002:a05:600c:4f50:b0:3ed:4b0f:5378 with SMTP id m16-20020a05600c4f5000b003ed4b0f5378mr9061075wmq.27.1679138126468;
+        Sat, 18 Mar 2023 04:15:26 -0700 (PDT)
+Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.googlemail.com with ESMTPSA id n23-20020a1c7217000000b003eb68bb61c8sm4849965wmc.3.2023.03.18.04.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 04:15:25 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH 0/4] further cleanup of vma_merge()
+Date:   Sat, 18 Mar 2023 11:13:17 +0000
+Message-Id: <cover.1679137163.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318002005.GA84781@workstation>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 09:20:05AM +0900, Takashi Sakamoto wrote:
-> 1. Failure at tasklet for URB completion
-> 
-> It is softIRQ context. The stream lock is not acquired. It doesn't
-> matter to call current XRUN API.
-> 
-> 2. Failure at PCM operation called by ALSA PCM application
-> 
-> It is process context. The stream lock is acquired before calling driver
-> code. When detecting any type of failure, driver code stores the state.
-> Then .pointer callback should return SNDRV_PCM_IOCTL_HWSYNC refering to
-> the state.
+Following on from Vlastimil Babka's patch series "cleanup vma_merge() and
+improve mergeability tests" which was in turn based on Liam's prior
+cleanups, this patch series introduces changes discussed in review of
+Vlastimil's series and goes further in attempting to make the logic as
+clear as possible.
 
-Oops. I did copy-and-paste mistake here... It should be
-SNDRV_PCM_POS_XRUN instead of SNDRV_PCM_IOCTL_HWSYNC...
+Nearly all of this should have absolutely no functional impact, however it
+does add a singular VM_WARN_ON() case.
 
+Lorenzo Stoakes (4):
+  mm/mmap/vma_merge: further improve prev/next VMA naming
+  mm/mmap/vma_merge: set next to NULL if not applicable
+  mm/mmap/vma_merge: extend invariants, avoid invalid res, vma
+  mm/mmap/vma_merge: be explicit about the non-mergeable case
 
-Regards
+ mm/mmap.c | 165 +++++++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 107 insertions(+), 58 deletions(-)
 
-Takashi Sakamoto
+--
+2.39.2
