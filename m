@@ -2,154 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641C36BFACD
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303CB6BFABA
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 15:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjCROYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 10:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S229767AbjCROPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 10:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCROYd (ORCPT
+        with ESMTP id S229867AbjCROO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:24:33 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608F34F74;
-        Sat, 18 Mar 2023 07:24:29 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E41D018839C7;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id DB0C325002BC;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id D13B49B403E2; Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 1B3E49B403E1;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-From:   "Hans J. Schultz" <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com (maintainer:MICROCHIP KSZ SERIES ETHERNET
-        SWITCH DRIVER), Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-renesas-soc@vger.kernel.org (open list:RENESAS RZ/N1 A5PSW SWITCH
-        DRIVER),
-        bridge@lists.linux-foundation.org (moderated list:ETHERNET BRIDGE),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB test
-Date:   Sat, 18 Mar 2023 15:10:10 +0100
-Message-Id: <20230318141010.513424-7-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230318141010.513424-1-netdev@kapio-technology.com>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
+        Sat, 18 Mar 2023 10:14:57 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52B846AE;
+        Sat, 18 Mar 2023 07:14:55 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso12018575pjb.0;
+        Sat, 18 Mar 2023 07:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679148895;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ie63cbXEy8BAbd5KVjjijgBU9GTxqxjV4iB878fCIoI=;
+        b=TfrtD2Sabn81lmn99KSIbRlFfr7VGeREmmqCcR+Z/a08xn1SbXAoRoN02J5uT+Ypmm
+         BsflJgryeaHIPgVbZbHwjebUUMVpRy34EmyTLIWfS3lGi6DGjKL2Kiyvr3vC2FZ9b6jc
+         5KQxSKDgGtSRsdimRDN11A1Z6TXEiFBocRIh6NqzOoiwd0nLXaeXAOdNPpgISyMMSWb8
+         Cr7opaM0p/FSMX0HXN3rxaOoNqpk//20hOEzvCVbOIddkSO2vZbylVceq1MyVQlE0GLq
+         HMBf0d0IRCY3Fv5GfaHuEX2N/Uf3En6BMgj5gDSoUovqr9wVddB6p8M88K9tNXWjQ4fc
+         D4ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679148895;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ie63cbXEy8BAbd5KVjjijgBU9GTxqxjV4iB878fCIoI=;
+        b=Q5+hCwTqNDscLVYy1mrzjAZvGfkr/zgyVzdE4e78XzxQSxp6sWXSuQ4OP8P/DLTykH
+         4F1F8IJhmIiSDq4mU1qiy6WBzED+5AJcI2+ZlO7GDB8kyyxuYcB5I/oxMP0iyWu+qYxE
+         WKUjin6RKf4EJUCRUCOBTUhHwPCUydrhkDf3McXkKtpxeV1n3C8XNjlSFGZYK+5/oS+2
+         pLIcVa/XCjNX2q6CnIK+VJwtFJjEwwykUi9epV39K61iyXa67rKpY43j7PNaOOZFbaJK
+         T3TNSFXnpQs1Og19F5x+n+gxciq1iWTdYhsRrri010hnVZZOxT1frXoDCxDXQ0THeF8x
+         lMkw==
+X-Gm-Message-State: AO0yUKUo1CAXQ5DnijtHXnUwpFq08O3cML//09UuTg9zUs9qp0+f+0cW
+        5GVgmIT3gYRDpEX4oCVBDoU=
+X-Google-Smtp-Source: AK7set9pDaIiV5oyE+oL92o3+T7xCiiXmh4zYO6MPB75EV4hMWBAHzzfCK4y75iVUth2tqOTfklfYg==
+X-Received: by 2002:a17:902:f28d:b0:19a:ad2f:2df9 with SMTP id k13-20020a170902f28d00b0019aad2f2df9mr8286493plc.55.1679148895214;
+        Sat, 18 Mar 2023 07:14:55 -0700 (PDT)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id jh17-20020a170903329100b0019a96a6543esm3345867plb.184.2023.03.18.07.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 07:14:54 -0700 (PDT)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH] ASoC: cs35l41: Add 12288000 clk freq to cs35l41_fs_mon clk config
+Date:   Sat, 18 Mar 2023 22:14:39 +0800
+Message-Id: <20230318141440.29023-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test FDB ageing of user entry created by
+There are 8 cs35l41 speaker amplifier connected to TDM
+in my Xiaomi Mi Pad 5 Pro tablet. In this case, it's necessary
+to set 12288000 (48000 * 32 * 8) clk freq for it.
 
-bridge fdb replace ADDR dev <DEV> master dynamic
+rate=48000, slot_width=32, slots=8.
 
-Use LOW_AGEING_TIME variable in forwarding.config to set a low ageing time.
-Beware, DSA might not accept the ageing time you want. Check the
-age_time_coeff value for your driver.
-
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 ---
- .../net/forwarding/bridge_locked_port.sh      | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ sound/soc/codecs/cs35l41.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index dc92d32464f6..dbc7017fd45d 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -14,6 +14,7 @@ ALL_TESTS="
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-+source tc_common.sh
+diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+index 9ec01a5f09ca..6ac501f008ec 100644
+--- a/sound/soc/codecs/cs35l41.c
++++ b/sound/soc/codecs/cs35l41.c
+@@ -150,6 +150,7 @@ static const struct cs35l41_fs_mon_config cs35l41_fs_mon[] = {
+ 	{ 5644800,	16,	24 },
+ 	{ 6000000,	16,	24 },
+ 	{ 6144000,	16,	24 },
++	{ 12288000,	0,	0 },
+ };
  
- h1_create()
- {
-@@ -319,6 +320,41 @@ locked_port_mab_flush()
- 	log_test "Locked port MAB FDB flush"
- }
- 
-+# Test of dynamic FDB entries.
-+locked_port_dyn_fdb()
-+{
-+	local mac=00:01:02:03:04:05
-+	local ageing_time
-+
-+	RET=0
-+	ageing_time=$(bridge_ageing_time_get br0)
-+	tc qdisc add dev $swp2 clsact
-+	ip link set dev br0 type bridge ageing_time $LOW_AGEING_TIME
-+	bridge link set dev $swp1 learning on locked on
-+
-+	bridge fdb replace $mac dev $swp1 master dynamic
-+	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
-+		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
-+
-+	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet not seen on egress after adding dynamic FDB"
-+
-+	sleep $((LOW_AGEING_TIME / 100 + 10))
-+
-+	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_fail $? "Dynamic FDB entry did not age out"
-+
-+	ip link set dev br0 type bridge ageing_time $ageing_time
-+	bridge link set dev $swp1 learning off locked off
-+	tc qdisc del dev $swp2 clsact
-+
-+	log_test "Locked port dyn FDB"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
+ static int cs35l41_get_fs_mon_config_index(int freq)
 -- 
-2.34.1
+2.39.2
 
