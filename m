@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910696BFA0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 13:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2936BFA11
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 13:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjCRMbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 08:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S229590AbjCRMkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 08:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCRMb2 (ORCPT
+        with ESMTP id S229478AbjCRMkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 08:31:28 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0B239CD9;
-        Sat, 18 Mar 2023 05:31:26 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id o14so3480700ioa.3;
-        Sat, 18 Mar 2023 05:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679142685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tuuhWqM52yUbART6GQd7rB0mc4mEDKGLzARz87TDztY=;
-        b=Hyi2z5Uo0uZRcM00fORNt4Him0EUFNQE8eOU6bWJnmrD8QQjGPdy932c2qqOm7dKNF
-         ijgeYLcYlzlIucaCE3Y7iJ1Kbcv3Avx+QLi2Hmd6Dde+zFZ3yh8UX0KGRhy9AHyoepzW
-         6VMXIGYVETj5IbbRjMLdsgtkYlMN/aj2gcK5OYI+SF2Vqhc2N7kH6xKx9xhxDkixwhb1
-         wGddnN+xmi188dH4asEua4PbgyV4XBysJSIrVsXIYMXRUfgIfeLaDmZP+vSUsuvfsgt0
-         H2NK1KkBd2SfAR3Bj6G9obeOeuFc8AWfJq5w/KFFIuJOvDgNcKn6TipfjJ59aPtvkmr8
-         CUmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679142685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tuuhWqM52yUbART6GQd7rB0mc4mEDKGLzARz87TDztY=;
-        b=sHcRvJDJHgRmy7Sc0BjeGupuUcHUt/wgrJaMt2g3zWFe+M+b+CyfvPEC7w6Fuvkyt0
-         lwgtAqk1cYgX82yya7WgwqtRLR5BUj+sxUK4BYztN4smSqOelw4QTFOztlO+583dhIwB
-         QPr6RpNH/+PJbiH/yJ4A6M1VGFOJhmCkL1pUZ1KatPIyZnZtYgEgA/Z2u6ScIByIwyG7
-         oJB4KRHzu3jjXIKMq4HBOpz7QYTTdI74EaGlG98Y76YebYJmwQKKWeHxFZ8DZu+Kesoq
-         rJ38I8I1M5A8vatgKRcgQYQ72zUOuw28qRWgIPFT0bkWltwJtulmhCUDbEnXHh2n2k4U
-         FX9w==
-X-Gm-Message-State: AO0yUKWoRSEao21v5Nuirm7y+nXlUATC1RBF/XJQc3lBAykn2WVP47tZ
-        ASqJUOOTHNBxzTo7QbWif1g=
-X-Google-Smtp-Source: AK7set/atEcgQLXFE6mT4gP/KnPpU0c7sEgKvH9r2cNq0fyx3DLvVNeZ3hnOSt6fOoWzOo7Ju4CGiA==
-X-Received: by 2002:a5e:8c01:0:b0:753:4e0:1cf5 with SMTP id n1-20020a5e8c01000000b0075304e01cf5mr1314548ioj.5.1679142685553;
-        Sat, 18 Mar 2023 05:31:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c11-20020a023f4b000000b003c449a192cdsm1483590jaf.73.2023.03.18.05.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 05:31:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 18 Mar 2023 05:31:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tianyi Jing <jingfelix@hust.edu.cn>
-Cc:     Jean Delvare <jdelvare@suse.com>, Dongliang Mu <dzm91@hust.edu.cn>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: hwmon: fix ioremap and memremap leak
-Message-ID: <332fc348-40c3-4471-9571-fc3fc0fe927e@roeck-us.net>
-References: <20230318112711.1803167-1-jingfelix@hust.edu.cn>
+        Sat, 18 Mar 2023 08:40:08 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494429426
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 05:40:06 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-275-lYTWO18YOr6zRMPC2d8q3w-1; Sat, 18 Mar 2023 12:40:03 +0000
+X-MC-Unique: lYTWO18YOr6zRMPC2d8q3w-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Sat, 18 Mar
+ 2023 12:40:01 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Sat, 18 Mar 2023 12:40:01 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'richard clark' <richard.xnu.clark@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: Question about select and poll system call
+Thread-Topic: Question about select and poll system call
+Thread-Index: AQHZWKoj15NaHXL3bku7XbgbJ/Iq0a8AePAA
+Date:   Sat, 18 Mar 2023 12:40:01 +0000
+Message-ID: <7a0033e7db3f4acb9d70b173d063b4d2@AcuMS.aculab.com>
+References: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
+ <CAHk-=wh0foAi-kPgNOq6qSHPgsfekT8N9_--usjiTynpQbqvRA@mail.gmail.com>
+ <CAJNi4rO+gdRH4Hsx3gOOBS3m=wiH=uroPh7iJ5QgP1iqvNEd_Q@mail.gmail.com>
+In-Reply-To: <CAJNi4rO+gdRH4Hsx3gOOBS3m=wiH=uroPh7iJ5QgP1iqvNEd_Q@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318112711.1803167-1-jingfelix@hust.edu.cn>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 07:27:11PM +0800, Tianyi Jing wrote:
-> Smatch reports:
-> 
-> drivers/hwmon/xgene-hwmon.c:757 xgene_hwmon_probe() warn:
-> 'ctx->pcc_comm_addr' from ioremap() not released on line: 757.
-> 
-> This is because in drivers/hwmon/xgene-hwmon.c:701 xgene_hwmon_probe(),
-> ioremap and memremap is not released, which may cause a leak.
-> 
-> To fix this, iounmap and memunmap is added to line: 754. And the
-> declaration of 'version' is moved to xgene-hwmon.c:620 to help simplify
-> getting 'version' below.
-> 
-> Signed-off-by: Tianyi Jing <jingfelix@hust.edu.cn>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+PiBPbiBGcmksIE1hciAxNywgMjAyMyBhdCAyOjE14oCvQU0gTGludXMgVG9ydmFsZHMNCj4gPHRv
+cnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPiB3cm90ZToNCj4gPg0KLi4uDQo+ID4gQW5kIGJh
+Y2sgdGhlbiwgd2UgaGFkIHRoaXM6DQo+ID4NCj4gPiAgIHR5cGVkZWYgdW5zaWduZWQgbG9uZyBm
+ZF9zZXQ7DQo+ID4NCj4gPiB3aGljaCBtYXkgc2VlbSBhIGJpdCBsaW1pdGluZyB0b2RheSAoIk9u
+bHkgMzIgYml0cz8/IT8iKSwgYnV0IHRvIHB1dA0KPiA+IHRoYXQgaW4gcGVyc3BlY3RpdmUsIGJh
+Y2sgdGhlbiB3ZSBhbHNvIGhhZCB0aGlzOg0KPiA+DQo+ID4gICAjZGVmaW5lIE5SX09QRU4gMjAN
+Cg0KVGhhdCBpcyB0aGUgaGlzdG9yaWMgbGltaXQgZm9yIFNZU1YgKGFuZCBwcm9iYWJseSBCU0Qp
+Lg0KSSBzdXNwZWN0IHlvdSBqdXN0IGNvcGllZCBpdC4NClF1aXRlIHdoeSBpdCB3YXMgMjAgYW5k
+IG5vdCAxNiBvciAzMiBJIGRvbid0IGtub3cuDQpCdXQgMjAgb3BlbiBmaWxlcyB3YXMgYXNzdW1l
+ZCB0byBiZSAncGxlbnR5JyENCg0KVGhlIGZpcnN0IFNZU1Yga2VybmVsIHRoYXQgc3VwcG9ydGVk
+IGZkID49IDIwIGFjdHVhbGx5IHVzZWQNCmEgbGlua2VkIGxpc3QgdG8gaG9sZCB0aGUgaW50ZXJu
+YWwgZGF0YSAobW9zdGx5IGEgcG9pbnRlcikuDQoNClNvIGFjY2Vzc2luZyBhIGJpZyBmZCBudW1i
+ZXIgd2FzIE8oZmQpLg0KQ2FsbGluZyBwb2xsKCkgTyhudW1mZCoqMikgYW5kIGdldHRpbmcgdGhh
+dCBtYW55IG9wZW4gc29ja2V0cw0KaW4gYSBuZXR3b3JrIHNlcnZlciBwcm9jZXNzIE8obioqMyku
+DQoNCkRvbid0IGV2ZW4gdGhpbmsgYWJvdXQgaG93IHNsb3dseSBhIHByb2Nlc3MgdHJ5aW5nIHRv
+DQp1c2UgMjAwMCBzb2NrZXRzIHdhcyENCg0KVGhlIDIwIGZkIGxpbWl0IGFsc28gbWFkZSB0aGVt
+IGEgbGltaXRlZCByZXNvdXJjZS4NCkRlbW9ucyBjb3VsZG4ndCByZWFsbHkgYWZmb3JkIHRvIGR1
+cCgpIC9kZXYvbnVsbCBvbnRvIDAsIDEgYW5kIDIsDQppbnN0ZWFkIHRoZXknZCBqdXN0IGNsb3Nl
+IHRoZSBmZC4NCkFuIGFjY2lkZW50YWwgcHJpbnRmKCkgdGhhdCBzaG91bGQgaGF2ZSBiZWVuIHNw
+cmludGYoKSB0aGVuDQpzbG93bHkgZmlsbHMgdGhlIHN0ZG91dCBidWZmZXIsIHdoZW4gdGhhdCBl
+dmVudHVhbGx5IGZpbGxzDQp0aGUgd3JpdGUgdG8gZmQgMSBoYXMgc2lkZSBlZmZlY3RzIHRoYXQg
+YXJlIHJhdGhlciBkaWZmaWN1bHQNCnRvIGRlYnVnLg0KKFNvbWVvbmUgc2hvdWxkIGhhdmUgbm90
+aWNlZCB0aGF0IHRoZSB0cmFjaW5nIHdhcyBpbmNvcnJlY3QpDQoNCglEYXZpZA0KDQotDQpSZWdp
+c3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9u
+IEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Please just use devm_ioremap() and devm_memremap().
-
-Thanks,
-Guenter
