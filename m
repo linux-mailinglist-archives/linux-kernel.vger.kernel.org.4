@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9467D6BF765
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 03:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E766BF768
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 03:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjCRCaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 22:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S230047AbjCRCcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 22:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCRCad (ORCPT
+        with ESMTP id S229769AbjCRCcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 22:30:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BDE298C4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 19:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679106631; x=1710642631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GvmzAJef4m3BJVSEAGAssA83vtoA9QXJ2aaMijbn1ok=;
-  b=S5hERZF5NcaG6H7nEDTTnFtLkoS/O5Xby8iy1LrEpCV2z4rRPhd7m40R
-   uyVnDf1JB9FQo1ABvvxe6UQaYWimnO2WtJxOvwj/HXriH+Wp3diiDZ8WX
-   JTcl2NvKb5Sj+Zw8ww/xVDCFlBnl8iU6RhndW34Em/Tn3Ao6zwzgKrIGT
-   3Ih0Hu/PybaliiNrwYjlL5E2Xy9iWegHV6HF1GBqz1/K1TgX58zski+jE
-   4BVZ76R/Nk6PydCtrqrbk6/szUKfNEJjXLCTcDkNx10uDWsnKCwsTpKac
-   EObU/8q06ObSWucFZdkqsLMTem4O0enOZgzTtCUcillqdA0FQB7s8Si+i
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="335894894"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="335894894"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 19:30:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673775340"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="673775340"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2023 19:30:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdMKy-0009js-2F;
-        Sat, 18 Mar 2023 02:30:28 +0000
-Date:   Sat, 18 Mar 2023 10:29:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>
-Cc:     oe-kbuild-all@lists.linux.dev, John Keeping <john@metanate.com>,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
-Message-ID: <202303181006.qGZbdrAN-lkp@intel.com>
-References: <20230317195128.3911155-1-john@metanate.com>
+        Fri, 17 Mar 2023 22:32:01 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF57E8BB;
+        Fri, 17 Mar 2023 19:31:59 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PdlPk5lsSz4f3jXk;
+        Sat, 18 Mar 2023 10:31:54 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+YIhVkDZF0FA--.28358S3;
+        Sat, 18 Mar 2023 10:31:54 +0800 (CST)
+Subject: Re: [PATCH v2 3/5] md: use md_thread api to wake up sync_thread
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com, linux-raid@vger.kernel.org,
+        agk@redhat.com, snitzer@kernel.org, song@kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, logang@deltatee.com, guoqing.jiang@linux.dev,
+        pmenzel@molgen.mpg.de, "yukuai (C)" <yukuai3@huawei.com>
+References: <202303170904.640a8ece-oliver.sang@intel.com>
+ <3e171048-060f-af7c-35ec-76fad4fb6f08@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <89b8377c-e953-f5c5-0ad9-d7b426f1a371@huaweicloud.com>
+Date:   Sat, 18 Mar 2023 10:31:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317195128.3911155-1-john@metanate.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3e171048-060f-af7c-35ec-76fad4fb6f08@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R+YIhVkDZF0FA--.28358S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruw4kKr17GF1Duw1rtr4xZwb_yoWkuFcEgr
+        45uryfWFy3Cw13Kr1vy34avrsxtw15AFy8XrWxJFW7tr12gF98WFs3Zr90y3Z3Z3ykCryj
+        yryrZrZruws8ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+Hi,
 
-Thank you for the patch! Yet something to improve:
+在 2023/03/17 11:30, Yu Kuai 写道:
+> Hi,
+> 
+> 在 2023/03/17 10:30, kernel test robot 写道:
+>>
+>> Greeting,
+>>
+>> FYI, we noticed INFO:task_blocked_for_more_than#seconds due to commit 
+>> (built with gcc-11):
+>>
+>> commit: af2203c7e88c00d3ce072f18c18a36e2936372fd ("[PATCH v2 3/5] md: 
+>> use md_thread api to wake up sync_thread")
+>> url: 
+>> https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/md-pass-a-md_thread-pointer-to-md_register_thread/20230315-142018 
+>>
+>> base: git://git.kernel.org/cgit/linux/kernel/git/song/md.git md-next
+>> patch link: 
+>> https://lore.kernel.org/all/20230315061810.653263-4-yukuai1@huaweicloud.com/ 
+>>
+>> patch subject: [PATCH v2 3/5] md: use md_thread api to wake up 
+>> sync_thread
+>>
+> 
+> I don't expect there is any difference between:
+> 
+> if (mddev->sync_thread)
+>      wake_up_process(mddev->sync_thread->tsk);
+> 
+> and:
+> 
+> md_wakeup_thread(mddev->sync_thread);
 
-[auto build test ERROR on tiwai-sound/for-next]
-[also build test ERROR on tiwai-sound/for-linus v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I understand that they are different now.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Keeping/ALSA-usb-audio-Fix-recursive-locking-on-XRUN/20230318-035430
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230317195128.3911155-1-john%40metanate.com
-patch subject: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230318/202303181006.qGZbdrAN-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/21bbf1266d22cbc0e1ec7c8d535738f66bbc9801
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Keeping/ALSA-usb-audio-Fix-recursive-locking-on-XRUN/20230318-035430
-        git checkout 21bbf1266d22cbc0e1ec7c8d535738f66bbc9801
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+md_wakeup_thread() only wakeup wait_event() from md_thread(), it will
+not wake up 'md_thread->tsk' if it's runing.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181006.qGZbdrAN-lkp@intel.com/
+Hence this patch is wrong.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thanks,
+Kuai
 
->> ERROR: modpost: "snd_pcm_stop_xrun_under_stream_lock" [sound/usb/snd-usb-audio.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
