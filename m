@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3396BFBC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E971B6BFBC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 18:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjCRROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 13:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S229981AbjCRRO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 13:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjCRROV (ORCPT
+        with ESMTP id S229926AbjCRROV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 18 Mar 2023 13:14:21 -0400
 Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1829C1B314;
-        Sat, 18 Mar 2023 10:14:19 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s20so927857ljp.1;
-        Sat, 18 Mar 2023 10:14:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD98149AA;
+        Sat, 18 Mar 2023 10:14:20 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 20so999521lju.0;
+        Sat, 18 Mar 2023 10:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679159657;
+        d=gmail.com; s=20210112; t=1679159658;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T9PdNIUkyOijxkm8lOstlC8GwZtZ2lt8a9Evhp9jHyY=;
-        b=dpH5VunWjpCn63iFcoDNWtxgyMVveYmI8v67tXbKoiIa/DfhM/on2j2ky4/cKk8HPC
-         lAxYE8b0J+wAUWmLrOLJ4D0o56TnkTaw2zmM5Zeo3yLTFsfEaHZf6SKrQiiODJC+wRYm
-         SJm+h8DnEODr34Lqtfm94BvIv6GInLXFhl/VOqtKma2Z9361PKm7w+eFQ2v5yWxP8YaQ
-         nAmSaedWvl5bF05m66BqHK6fEk2+V/gG39qJc01ZcleezpD3JWf278ZimIJ11TxUB2B1
-         KK7Ya9FOf6BtUg/I7Z6psaYiNnZ3wQp/6lHL0NFtAM/abAYtpjVXL2lscepAhz5a+6dO
-         5vFw==
+        bh=OHNZ4cJK3nDs1ydwUCLlZnjoqV5tGqCoWiDTUvwcqRM=;
+        b=WkZKmx6klWxMG9Yhh6CNKVShzb8jM9M8AVTmW4QGOw49tN/DI+rUgtiFzLe4A4ARq5
+         je81EJy0/oXIQFj6lsrgco/A1NyrlwXB0mW4VIoVKIEc2i+WGn6ZPTnpk4DJY7qDkaGj
+         kYpFndkBxTGgLvXoAQkp1LhU8Vi4tdyg+Xxnc3R+D1TB/rAbLImqZcSIKBNnzOuFaneR
+         KqeIRdkKye4gxP3tyUJlKxYDhpkyJE0yrZ4iSEy+bS/cFYK8oO5BDrL1RqUWrkTdqHO9
+         2iWrSRbGtitCmfIIPsUWFwAeqg8/5rh1lVXqDGHVjuHOAE/9SBJtKFltr+mjTajbz1U8
+         Xn2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679159657;
+        d=1e100.net; s=20210112; t=1679159658;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=T9PdNIUkyOijxkm8lOstlC8GwZtZ2lt8a9Evhp9jHyY=;
-        b=hhWs9YFZtm2/gVV4hXLeeK/SapVnxb4HazHI0p3IPi5MNEnOl9SgrOrtklHBlOxMg/
-         ZusrCYcV2KKCxNtXw/FkOrSC1TG8LCddDIyLe5tc+J4ieZ+EFB8RCedCNeZMPVpPud3M
-         NrNKownFrSJhxm3k6WXx8kOSGcu0GqggBqwiASFzUdq5iXjN8UBDju2xmOANTKJIA4IP
-         qNLEVLMLpX/V2OOUj4qvKFuWQNpI4PctKuiT6+DMIt+LjgfgqXb9e1EoHrcVNcayPu42
-         TJlyl3k34jt59jQJ7FNnOM14tQeCQAD5R3dvpjC92YJczxjBDPleSYnf6tQEEKUob5eb
-         m1Dg==
-X-Gm-Message-State: AO0yUKWtXxSCDw8HCPxzi0AfNPQmyktD9EroDufNS0w42OPwqGZenmf/
-        5I6HYPwhFnnh13pw/vXYNMA=
-X-Google-Smtp-Source: AK7set+ubWVjoJl1oeOHI9nP6gLMYPK66IIBurwMgzxnfjH97r8QI+YZvhy4zjtezMa0TBMw3nWSTQ==
-X-Received: by 2002:a05:651c:511:b0:295:93eb:e795 with SMTP id o17-20020a05651c051100b0029593ebe795mr6313453ljp.41.1679159656632;
-        Sat, 18 Mar 2023 10:14:16 -0700 (PDT)
+        bh=OHNZ4cJK3nDs1ydwUCLlZnjoqV5tGqCoWiDTUvwcqRM=;
+        b=Ad4oW3JKLuZBf7wDl20g5h87BN2vNCJEHb4dzzg2qq1kA/ATZDZd1dmqsnKuy0WRmm
+         hR1SCsc5Y0RXoa55Nu8Yf6hxDqG1lc2z0P9JeIobMLXGTdA1Re+sIPnRrQxy0b+Xpb4K
+         WLqgM39P3WTiXQNrzrOCXsgk6nbNf6lUrmot+Vi0koXX7lFcx0NoInmggnOtgdpYkyJE
+         KUkX9JrJh/EggKYPAE8qkLB3KZIKC7hKnQ05RFTUkUI218CSndNRoRbM2U03lFBZSY6H
+         Fgs1b1aDR1K18vp6PaYYEkLj9n6fgTwdXSrXI6v+qHixSExfjKDRVWMbKnRwF1WJjOsh
+         2IQA==
+X-Gm-Message-State: AO0yUKXr2bbpyUBtU4m+VdhMkavtzfxRYAVRzbn3dcAgUB+DZZDSpi0I
+        z5Jm6P4NazFw2ItHv+w7DMo=
+X-Google-Smtp-Source: AK7set/Al0LN4OHWbI9yra477vbTqV3Ei5RvLaohUdA4IP6+DO1j48nhcE19Pco6txBWopNJt4iN+w==
+X-Received: by 2002:a2e:b895:0:b0:295:a958:2bca with SMTP id r21-20020a2eb895000000b00295a9582bcamr5373412ljp.6.1679159658495;
+        Sat, 18 Mar 2023 10:14:18 -0700 (PDT)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id r9-20020a2e80c9000000b0029573844d03sm929221ljg.109.2023.03.18.10.14.15
+        by smtp.gmail.com with ESMTPSA id r9-20020a2e80c9000000b0029573844d03sm929221ljg.109.2023.03.18.10.14.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 10:14:16 -0700 (PDT)
+        Sat, 18 Mar 2023 10:14:18 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -63,11 +63,10 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH V2 1/3] dt-bindings: nvmem: u-boot,env: add MAC's #nvmem-cell-cells
-Date:   Sat, 18 Mar 2023 18:13:54 +0100
-Message-Id: <20230318171356.29515-2-zajec5@gmail.com>
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2 2/3] nvmem: core: support specifying both: cell raw data & post read lengths
+Date:   Sat, 18 Mar 2023 18:13:55 +0100
+Message-Id: <20230318171356.29515-3-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230318171356.29515-1-zajec5@gmail.com>
 References: <20230318171356.29515-1-zajec5@gmail.com>
@@ -86,42 +85,113 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-U-Boot's "ethaddr" environment variable is very often used to store
-*base* MAC address. It's used as a base for calculating addresses for
-multiple interfaces. It's done by adding proper values. Actual offsets
-are picked by manufacturers and vary across devices.
+Callback .read_post_process() is designed to modify raw cell content
+before providing it to the consumer. So far we were dealing with
+modifications that didn't affect cell size (length). In some cases
+however cell content needs to be reformatted and resized.
+
+It's required e.g. to provide properly formatted MAC address in case
+it's stored in a non-binary format (e.g. using ASCII).
+
+There were few discussions how to optimally handle that. Following
+possible solutions were considered:
+1. Allow .read_post_process() to realloc (resize) content buffer
+2. Allow .read_post_process() to adjust (decrease) just buffer length
+3. Register NVMEM cells using post-read sizes
+
+The preferred solution was the last one. The problem is that simply
+adjusting "bytes" in NVMEM providers would result in core code NOT
+passing whole raw data to .read_post_process() callbacks. It means
+callback functions couldn't do their job without somehow manually
+reading original cell content on their own.
+
+This patch deals with that by registering NVMEM cells with both lengths:
+raw content one and post read one. It allows:
+1. Core code to read whole raw cell content
+2. Callbacks to return content they want
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/nvmem/u-boot,env.yaml | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/nvmem/core.c           | 11 +++++++----
+ include/linux/nvmem-provider.h |  2 ++
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-index cbc5c69fd405..36d97fb87865 100644
---- a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-@@ -50,7 +50,11 @@ properties:
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 212c5ba5789f..a62973d010ff 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -50,6 +50,7 @@ struct nvmem_device {
+ struct nvmem_cell_entry {
+ 	const char		*name;
+ 	int			offset;
++	size_t			raw_len;
+ 	int			bytes;
+ 	int			bit_offset;
+ 	int			nbits;
+@@ -469,6 +470,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
+ {
+ 	cell->nvmem = nvmem;
+ 	cell->offset = info->offset;
++	cell->raw_len = info->raw_len ?: info->bytes;
+ 	cell->bytes = info->bytes;
+ 	cell->name = info->name;
+ 	cell->read_post_process = info->read_post_process;
+@@ -1560,7 +1562,7 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+ {
+ 	int rc;
  
-   ethaddr:
-     type: object
--    description: Ethernet interface's MAC address
-+    description: Ethernet interfaces base MAC address.
-+    properties:
-+      "#nvmem-cell-cells":
-+        description: The first argument is a MAC address offset.
-+        const: 1
+-	rc = nvmem_reg_read(nvmem, cell->offset, buf, cell->bytes);
++	rc = nvmem_reg_read(nvmem, cell->offset, buf, cell->raw_len);
  
- additionalProperties: false
+ 	if (rc)
+ 		return rc;
+@@ -1571,7 +1573,7 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
  
-@@ -72,6 +76,7 @@ examples:
-             reg = <0x40000 0x10000>;
+ 	if (cell->read_post_process) {
+ 		rc = cell->read_post_process(cell->priv, id, index,
+-					     cell->offset, buf, cell->bytes);
++					     cell->offset, buf, cell->raw_len);
+ 		if (rc)
+ 			return rc;
+ 	}
+@@ -1594,14 +1596,15 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+  */
+ void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len)
+ {
+-	struct nvmem_device *nvmem = cell->entry->nvmem;
++	struct nvmem_cell_entry *entry = cell->entry;
++	struct nvmem_device *nvmem = entry->nvmem;
+ 	u8 *buf;
+ 	int rc;
  
-             mac: ethaddr {
-+                #nvmem-cell-cells = <1>;
-             };
-         };
-     };
+ 	if (!nvmem)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	buf = kzalloc(cell->entry->bytes, GFP_KERNEL);
++	buf = kzalloc(max_t(size_t, entry->raw_len, entry->bytes), GFP_KERNEL);
+ 	if (!buf)
+ 		return ERR_PTR(-ENOMEM);
+ 
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index 0cf9f9490514..8ffb42ba0f62 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -51,6 +51,7 @@ struct nvmem_keepout {
+  * struct nvmem_cell_info - NVMEM cell description
+  * @name:	Name.
+  * @offset:	Offset within the NVMEM device.
++ * @raw_len:	Length of raw data (without post processing).
+  * @bytes:	Length of the cell.
+  * @bit_offset:	Bit offset if cell is smaller than a byte.
+  * @nbits:	Number of bits.
+@@ -62,6 +63,7 @@ struct nvmem_keepout {
+ struct nvmem_cell_info {
+ 	const char		*name;
+ 	unsigned int		offset;
++	size_t			raw_len;
+ 	unsigned int		bytes;
+ 	unsigned int		bit_offset;
+ 	unsigned int		nbits;
 -- 
 2.34.1
 
