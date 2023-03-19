@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DE06C06A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 00:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6A86C06A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 00:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCSXd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 19:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S229665AbjCSXex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 19:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCSXdz (ORCPT
+        with ESMTP id S229483AbjCSXeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 19:33:55 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC70E19687;
-        Sun, 19 Mar 2023 16:33:53 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 289A11449;
-        Mon, 20 Mar 2023 00:33:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679268832;
-        bh=l2p4ZDBneAwEGOLjso6EkHUNvJxzex1xBmjmxf7QRGk=;
+        Sun, 19 Mar 2023 19:34:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFCC10C0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 16:34:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1939CB80CA3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 652A6C433D2;
+        Sun, 19 Mar 2023 23:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679268886;
+        bh=OHFIkS02PBwwN4tDVa9bwFIXVHAnsp7dEnx4o7xqt/k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aLcAv49AFw0OYSHbmnljKSRWyI2EloW7N3ryboN/dLV3MR3iF00oAyaxNlPwAjbTA
-         TRmqA5Cwa86orRcNH7geU2YfHVDB4sIM45GO+ZPVBETuvTSCzeVyunEXiZOfr0a/Jr
-         GPXVEd+Pz7pKmMVUVySEGmPANB3jS0kMSWW6MFxo=
-Date:   Mon, 20 Mar 2023 01:33:58 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "ming.qian@nxp.com" <ming.qian@nxp.com>,
-        "shijie.qin@nxp.com" <shijie.qin@nxp.com>,
-        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
-        "bin.liu@mediatek.com" <bin.liu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "tiffany.lin@mediatek.com" <tiffany.lin@mediatek.com>,
-        "andrew-ct.chen@mediatek.com" <andrew-ct.chen@mediatek.com>,
-        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
-        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
-        "quic_vgarodia@quicinc.com" <quic_vgarodia@quicinc.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
-        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel.almeida@collabora.com" <daniel.almeida@collabora.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [RFC 2/4] media: videobuf2: Replace bufs array by a list
-Message-ID: <20230319233358.GD20234@pendragon.ideasonboard.com>
-References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
- <20230313135916.862852-3-benjamin.gaignard@collabora.com>
- <20230313181155.GC22646@pendragon.ideasonboard.com>
- <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
- <e704b505-86d8-c6f2-8546-adccdab72622@xs4all.nl>
- <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
- <cbf34cf1-e065-8136-8344-89ca1864f637@xs4all.nl>
+        b=uWS+q1/L6zMGmM54AkIQYlVjdUqomwxLOUxhh5bAA1qlRYSVcSb6zn8PU6mU8PhVP
+         ZAIvUAJMkimSaOiK/gxicLqQhubfng5yZfvFzXxfg18Q/x7lDJCwdZR/cQcpHb1uvO
+         SSk3FHfWhGTeFU2vXTZRw19TeowFt2kxewwPKlOO9jJHpB5Vcy46IjUBe00d2CFS+3
+         0ZpR1G6R5SAeqoizt5d+wBItTLpPlnbccdeNT+NPaIzTS9Zs2z3TPO6WQS1QzX080m
+         fPB/FqFyXk8vxidUm7Zx7iYQlnKg69M1PDcTMrDLp2OuMfVi1f1al7/JtPqqe4V8d2
+         1ZDg7Zc2ZTxIA==
+Date:   Sun, 19 Mar 2023 16:34:44 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Tom Rix <trix@redhat.com>, perex@perex.cz, tiwai@suse.com,
+        ndesaulniers@google.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ALSA: ymfpci: remove unused snd_ymfpci_readb function
+Message-ID: <20230319233444.GA12415@dev-arch.thelio-3990X>
+References: <20230318132708.1684504-1-trix@redhat.com>
+ <87mt49mabx.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cbf34cf1-e065-8136-8344-89ca1864f637@xs4all.nl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87mt49mabx.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
-
-On Tue, Mar 14, 2023 at 11:42:46AM +0100, Hans Verkuil wrote:
-> On 3/14/23 11:11, David Laight wrote:
-> > From: Hans Verkuil
-> >> Sent: 14 March 2023 08:55
-> > ...
-> >> Why not start with a dynamically allocated array of 32 vb2_buffer pointers?
-> >> And keep doubling the size (reallocing) whenever more buffers are needed,
-> >> up to some maximum (1024 would be a good initial value for that, I think).
-> >> This max could be even a module option.
-
-The kernel has IDR and IDA APIs, why not use them instead of reinventing
-the wheel ?
-
-> > I don't know the typical uses (or the code at all).
-> > But it might be worth having a small array in the structure itself.
-> > Useful if there are typically always (say) less than 8 buffers.
-> > For larger sizes use the (IIRC) kmalloc_size() to find the actual
-> > size of the structure that will be allocate and set the array
-> > size appropriately.
+On Sun, Mar 19, 2023 at 09:09:22AM +0100, Takashi Iwai wrote:
+> On Sat, 18 Mar 2023 14:27:08 +0100,
+> Tom Rix wrote:
+> > 
+> > clang with W=1 reports
+> > sound/pci/ymfpci/ymfpci_main.c:34:18: error:
+> >   unused function 'snd_ymfpci_readb' [-Werror,-Wunused-function]
+> > static inline u8 snd_ymfpci_readb(struct snd_ymfpci *chip, u32 offset)
+> >                  ^
+> > This static function is not used, so remove it.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>
 > 
-> The typical usage is that applications allocate N buffers with the
-> VIDIOC_REQBUFS ioctl, and in most cases that's all they use.
+> I applied now, but still wondering why it warns at all even if it's a
+> static inline function...
 
-Note that once we get DELETE_BUF (or DELETE_BUFS) support I'd like to
-encourage applications to use the new API, and deprecate REQBUFS
-(dropping it isn't on my radar, as it would take forever before no
-userspace uses it anymore).
+See commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build") for some more information. The key part
+of the commit message is 'with W=1', this will not happen with a normal
+clang build.
 
-> The
-> current max is 32 buffers, so allocating that initially (usually
-> during probe()) will cover all current cases with a single one-time
-> kzalloc.
+Cheers,
+Nathan
 
-Pre-allocating for the most common usage patterns is fine with me.
-
-> Only if the application wants to allocate more than 32 buffers will
-> there be a slight overhead.
-
--- 
-Regards,
-
-Laurent Pinchart
+> > ---
+> >  sound/pci/ymfpci/ymfpci_main.c | 5 -----
+> >  1 file changed, 5 deletions(-)
+> > 
+> > diff --git a/sound/pci/ymfpci/ymfpci_main.c b/sound/pci/ymfpci/ymfpci_main.c
+> > index c80114c0ad7b..2858736ed20a 100644
+> > --- a/sound/pci/ymfpci/ymfpci_main.c
+> > +++ b/sound/pci/ymfpci/ymfpci_main.c
+> > @@ -31,11 +31,6 @@
+> >  
+> >  static void snd_ymfpci_irq_wait(struct snd_ymfpci *chip);
+> >  
+> > -static inline u8 snd_ymfpci_readb(struct snd_ymfpci *chip, u32 offset)
+> > -{
+> > -	return readb(chip->reg_area_virt + offset);
+> > -}
+> > -
+> >  static inline void snd_ymfpci_writeb(struct snd_ymfpci *chip, u32 offset, u8 val)
+> >  {
+> >  	writeb(val, chip->reg_area_virt + offset);
+> > -- 
+> > 2.27.0
+> > 
