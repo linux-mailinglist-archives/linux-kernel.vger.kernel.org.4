@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF8A6C02C7
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EF76C02C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjCSP1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 11:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S230505AbjCSP31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 11:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjCSP1r (ORCPT
+        with ESMTP id S230150AbjCSP3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 11:27:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92C11EFFA
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 08:27:45 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x3so37778723edb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 08:27:45 -0700 (PDT)
+        Sun, 19 Mar 2023 11:29:25 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08B1B447;
+        Sun, 19 Mar 2023 08:29:23 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eh3so37783290edb.11;
+        Sun, 19 Mar 2023 08:29:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679239664;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=btf04DuiQhB9X18hLvJQP2+uq59G2JcTyG4E+evpdrk=;
-        b=jZ86PcRXCyuvFtD4O4YDLdPXc6UStKeJVz8B2x5LqEnIkFbT5VEDaeV9kE1TgwrW3S
-         8PPjp546vUnF9qyqL/IfReOc/upuSIE5QCqBRj5fc9LpdNrNuSyJxUiIcDMxhX+ulVMQ
-         Vj+N4+pZdcsVwrPD3bOZvwewnRO2uiUTUPOQmeVp67prf4pUBCtn7C94Xp1CtCsOn1E3
-         OefiJ7QW0RB3mmpSjVDrFkOEUIL+kH15yezkvLqfmdTI3pkKgNgGuKWMEE4xSpFVZr7P
-         DyvIDN2xIWPu1nPAnRznCz+YqcF2vMUjlyPkQXpLKqjNfE+1HBacr9JP2Zm0pee0dazI
-         BR7Q==
+        d=gmail.com; s=20210112; t=1679239762;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hHi5+GWz44QI22N2lgNwAXCVNfgTvzls3W9uzDI9R7I=;
+        b=A1K3LhmqfNVSEcgbGX/WGPLi+QBohjU8Z5DHP0patvexQ8cftYKkbJ0n6EBImk5HW6
+         UG3Od9lWQz+pdUobR1WT79K1Vth47r61AMt5plC/fO7k98OkymeUkG/FFpi3yruiXLLe
+         ek6/f+cxrtMdNf5pnqpcJsWYFXATIQYRAncu/xu52HpXK9FuAAQXTfnHVp1sVshk39/y
+         SPzLTA2qgsb1aGWZcI4ESPkW/aT5UpUj3upvbNV4IbukUgevuZXKWukaWhAtA1KxT2sx
+         +a4++/3MBnpA0HcQAhqoI8jBEeOWvRnAORLhu2VmIvl2V6VnzNEL2TjKv5Djdq5OfNfZ
+         HQcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679239664;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=btf04DuiQhB9X18hLvJQP2+uq59G2JcTyG4E+evpdrk=;
-        b=tyaoq6RrIVxWac9WQSglTqmLl0w1xDWVljP8eNsT4XOkt5/87TJM566wNJOTDdGM9p
-         8W77Qfs+u8yTeRMtRI92+CEHzZGmdZhwtxpC1TjHeojU7Z35Ct/O86PX6kuftZVeXkRS
-         3P6ckYMsPZAyvz61PG5cofDsa8oZcNvTol/RkO71UbZAHreXW8UhpW38hELdMOrXpj41
-         vJabuRtpKYRJcLbdiDrSOeI+Gm+rV/FL9rQr2mnibOx1UTWtW811VmLmnJGh0Rt1ZymC
-         5GdlSKAv8mtkFJ46L34nPyd3ftW3DKEP0Tiv8xthVMXEuJsbwWtc8k1LZnGzvgANhZZF
-         cAqQ==
-X-Gm-Message-State: AO0yUKXToCQWi+p5Xwc68H7axwFgEsaTzMfIZK55BzfH4qEH6Rh/mbr6
-        Kpk9qiesEeYUck+KH/KL13IG5YOrk/HZYAY4dHA=
-X-Google-Smtp-Source: AK7set8dTQz+GK5qZqXqshzMDzIkzel/SC4URpp1ZrQOXGslo8nsuHaUFu055ExOlc0D6tTx8CSwlw==
-X-Received: by 2002:a17:907:175b:b0:92d:591f:6586 with SMTP id lf27-20020a170907175b00b0092d591f6586mr5811607ejc.34.1679239664162;
-        Sun, 19 Mar 2023 08:27:44 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm3340857eju.193.2023.03.19.08.27.43
+        d=1e100.net; s=20210112; t=1679239762;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hHi5+GWz44QI22N2lgNwAXCVNfgTvzls3W9uzDI9R7I=;
+        b=dF10iT5VJn+isCkSZUQkHmUlPuxeUByJRWlKWXSL7SL/hFDPICmaLxyH/u8gMEB7BB
+         8ACiItVruyr1sF1p44YZSOeBpRIHfuqztetM2VJwk//ZfRSO/MjUax96+0FGq8owm2X0
+         hRRCRRdk8hV9pOe9lXlkZ7MJ1KZn6H1fTneDOO5j6SPexDgn3pycw6xXrvp+1uogEZya
+         KdEPyZwunanh1M4yVczu/i0RHZjZQ+e5pbTtby4kB67i/bSBv4buL9QLP6Ezy4dmBd0Q
+         t5qcffIGzt54d3QOW5PW16MX38sfagpbQ3YGksR0fo9228uxW8jPLY+9oiek8UciJ5Qo
+         b4Tw==
+X-Gm-Message-State: AO0yUKX8gUc3Ae9nFUI2duLqpKg7U5nWXPkwgSDvB9nM7KSnl/8wI9r2
+        PSfRFBuQaHhMfQKPAll8t54=
+X-Google-Smtp-Source: AK7set/E0e+CI78tJzcFXyh5kyZx43f/wgftRrGinMc5pR7pChEra9ob+MPRBBpdNINOjJ8OqOz06g==
+X-Received: by 2002:a17:906:8415:b0:930:3916:df19 with SMTP id n21-20020a170906841500b009303916df19mr5737952ejx.5.1679239762248;
+        Sun, 19 Mar 2023 08:29:22 -0700 (PDT)
+Received: from alaa-emad.. ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id ia9-20020a170907a06900b00932b3e2c015sm2425429ejc.51.2023.03.19.08.29.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 08:27:43 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [GIT PULL] ARM: dts: few cleanups for v6.4
-Date:   Sun, 19 Mar 2023 16:27:40 +0100
-Message-Id: <20230319152740.34551-2-krzysztof.kozlowski@linaro.org>
+        Sun, 19 Mar 2023 08:29:21 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        greybus-dev@lists.linaro.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        eng.mennamahmoud.mm@gmail.com
+Subject: [PATCH] staging: greybus: remove unnecessary blank line
+Date:   Sun, 19 Mar 2023 17:29:09 +0200
+Message-Id: <20230319152909.163598-1-eng.mennamahmoud.mm@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
-References: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Remove unnecessary blank line before struct as reported
+by checkpatch:
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+" CHECK: Please don't use multiple blank lines "
 
-are available in the Git repository at:
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+ drivers/staging/greybus/pwm.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.4
+diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+index 3fda172239d2..26d39e08c3b6 100644
+--- a/drivers/staging/greybus/pwm.c
++++ b/drivers/staging/greybus/pwm.c
+@@ -24,7 +24,6 @@ struct gb_pwm_chip {
+ #define pwm_chip_to_gb_pwm_chip(chip) \
+ 	container_of(chip, struct gb_pwm_chip, chip)
+ 
+-
+ static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
+ {
+ 	struct gb_pwm_count_response response;
+-- 
+2.34.1
 
-for you to fetch changes up to aff750faa5ac699df7ade5a31b6ba52ab1072d8a:
-
-  ARM: dts: hisilicon: use "okay" for status (2023-03-12 18:01:00 +0100)
-
-----------------------------------------------------------------
-Minor improvements in ARM DTS for v6.4
-
-1. TI, Marvell, HiSilicon: "okay" over "ok" is preferred for status
-   property.
-2. OMAP: align UART node name with bindings.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (4):
-      ARM: dts: omap: align UART node name with bindings
-      ARM: dts: marvell: use "okay" for status
-      ARM: dts: ti: use "okay" for status
-      ARM: dts: hisilicon: use "okay" for status
-
- arch/arm/boot/dts/armada-388-db.dts     |  2 +-
- arch/arm/boot/dts/da850-evm.dts         |  2 +-
- arch/arm/boot/dts/dove.dtsi             |  2 +-
- arch/arm/boot/dts/hi3620-hi4511.dts     | 12 ++++++------
- arch/arm/boot/dts/hip04-d01.dts         |  2 +-
- arch/arm/boot/dts/keystone-k2e-evm.dts  |  2 +-
- arch/arm/boot/dts/keystone-k2g-evm.dts  |  2 +-
- arch/arm/boot/dts/keystone-k2hk-evm.dts |  2 +-
- arch/arm/boot/dts/keystone-k2l-evm.dts  |  2 +-
- arch/arm/boot/dts/omap-zoom-common.dtsi |  8 ++++----
- 10 files changed, 18 insertions(+), 18 deletions(-)
