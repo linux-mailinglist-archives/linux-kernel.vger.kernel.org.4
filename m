@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949176C0380
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 18:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6299E6C0384
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 18:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjCSRh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 13:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
+        id S229676AbjCSRmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 13:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCSRhY (ORCPT
+        with ESMTP id S229483AbjCSRmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 13:37:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830E230D6;
-        Sun, 19 Mar 2023 10:37:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F047B80AB6;
-        Sun, 19 Mar 2023 17:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BAEDC433EF;
-        Sun, 19 Mar 2023 17:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679247441;
-        bh=upZcKMU7+DARFBX3E6Uc9RmcizJx5/0XM13Bn3C1u9o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gp/UY7wUWiE4dCNZuyDu9CYQLvVeAZa+RMcv8KH65JfRJYu5Z3gk6DI+YPaOsv6De
-         dHHJYNxXZyzifWfhoMdIVD7m2YMlCiYI1mq4LogR/Qpcv/bcfyl0/I3N6hzcfb+mgv
-         keBDBWXYbTCtucguhuUu2Ggm2cLX86+hp3OMGHJaatBuYXL6XwyGqj4zU68+tfvG3I
-         loR48IuuM1Z+G05ivUGgy/trf+m8zJeSZRn/P7yPZNqKbhKK7QNfG7XrutUdI30dBN
-         03V2Ze7mxH/T2i+3fGakoVjNvuD1kIezWUHYWR3YE+xkrkdQ/Msvv7Pc41PNfSxyAg
-         mXAuL253DwA0w==
-Date:   Sun, 19 Mar 2023 19:37:16 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: RDMA/siw: Fix exception handling in siw_accept_newconn()
-Message-ID: <20230319173716.GF36557@unreal>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <afe30fc6-04c9-528c-f84a-67902b5a6ed8@web.de>
- <20230319114048.GB36557@unreal>
- <1c06e86d-1468-c11a-8344-9563ad6047b5@web.de>
- <20230319141145.GE36557@unreal>
- <a03c1d04-a41e-7722-c36a-bd6f61094702@web.de>
+        Sun, 19 Mar 2023 13:42:09 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BD51C594;
+        Sun, 19 Mar 2023 10:42:08 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id t129so4503514iof.12;
+        Sun, 19 Mar 2023 10:42:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679247727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dcI4BBLYtEvhPbu+xjdZvkfgUtEKrU3F0hXnGswV/Ug=;
+        b=rRXEqAYEezh5J0LaA5GuJCDOm0q2BLyqsi/c5VGUO3vtMITDdDkMrMyi1PL9faIEpW
+         llTE3UCik8RdZCcSSU4C7t36juiixG96gFVwMQFDKUMxKLitX1fVSbxiZbAwfAsV7+89
+         D7OtgHNbInyWtVdt/SS4ETD0SeoqW0WrunQxLcxcdnRf6vMk8ggllRRj7T+E5ehWsU5v
+         ZrnFWm1EEM0WHocn4CpEmtQRjF5zp+pS0A+ySLNvcEClIRLbBCJz10GxBivjpfL//S+s
+         1T1+y7yhCNVVNy/MdBZiykOFaQfdGNorXQR2eOF2+8UEsim1pIp5z5mq0GDnCzNbx4r6
+         HBfg==
+X-Gm-Message-State: AO0yUKVLVmGpuSgvLJgOFEGyJgoggkcR7vMwCxQcGnEHpnH2KGtGjWYY
+        fVoMRhaMv04Yc7BjDLKgyg==
+X-Google-Smtp-Source: AK7set//n98nJ9+FQb0BtZHd7Da1WEWuL+VuV6QwEqnbAqyime0B6gw0uRYnbo/zcfdtajUZCIApqw==
+X-Received: by 2002:a5e:da4b:0:b0:74c:b180:c5db with SMTP id o11-20020a5eda4b000000b0074cb180c5dbmr4082518iop.20.1679247726909;
+        Sun, 19 Mar 2023 10:42:06 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80c2:711:b843:6628:3fd6:ded4])
+        by smtp.gmail.com with ESMTPSA id l9-20020a5d8f89000000b00740710c0a65sm2288038iol.47.2023.03.19.10.42.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 10:42:06 -0700 (PDT)
+Received: (nullmailer pid 44793 invoked by uid 1000);
+        Sun, 19 Mar 2023 17:41:55 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64/arm: dts: rockchip: Fix DSI node names
+Date:   Sun, 19 Mar 2023 12:41:05 -0500
+Message-Id: <20230319174105.43978-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a03c1d04-a41e-7722-c36a-bd6f61094702@web.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 04:40:17PM +0100, Markus Elfring wrote:
-> >>>> Date: Sat, 18 Mar 2023 20:30:12 +0100
-> >>>>
-> >>>> The label “error” was used to jump to another pointer check despite of
-> >>>> the detail in the implementation of the function “siw_accept_newconn”
-> >>>> that it was determined already that corresponding variables contained
-> >>>> still null pointers.
-> >>>>
-> >>>> 1. Use more appropriate labels instead.
-> >>>>
-> >>>> 2. Delete two questionable checks.
-> >>>>
-> >>>> 3. Omit extra initialisations (for the variables “new_cep” and “new_s”)
-> >>>>    which became unnecessary with this refactoring.
-> >>>>
-> >>>> This issue was detected by using the Coccinelle software.
-> >>>>
-> >>>> Fixes: 6c52fdc244b5ccc468006fd65a504d4ee33743c7 ("rdma/siw: connection management")
-> >>>> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> >>>> ---
-> >>>>  drivers/infiniband/sw/siw/siw_cm.c | 32 ++++++++++++++----------------
-> >>>>  1 file changed, 15 insertions(+), 17 deletions(-)
-> >>> Please read Documentation/process/submitting-patches.rst and resubmit.
-> >>> Your patch is not valid.
-> >>
-> >> What do you find improvable here?
-> > Did you read the guide above?
-> 
-> Yes, of course (several times before).
+DSI bus/controller nodes should be named 'dsi' rather than 'mipi'.
 
-ok, I'm taking my request to resubmit back.
-Please retain from posting to RDMA ML. I'm not going to apply any of
-your patches.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/arm/boot/dts/rk3288.dtsi            | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 2ca76b69add7..d401b850583c 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -1114,7 +1114,7 @@ vopl_mmu: iommu@ff940300 {
+ 		status = "disabled";
+ 	};
+ 
+-	mipi_dsi: mipi@ff960000 {
++	mipi_dsi: dsi@ff960000 {
+ 		compatible = "rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi";
+ 		reg = <0x0 0xff960000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index 1881b4b71f91..e44e1c40c0ba 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1954,7 +1954,7 @@ hdmi_in_vopl: endpoint@1 {
+ 		};
+ 	};
+ 
+-	mipi_dsi: mipi@ff960000 {
++	mipi_dsi: dsi@ff960000 {
+ 		compatible = "rockchip,rk3399-mipi-dsi", "snps,dw-mipi-dsi";
+ 		reg = <0x0 0xff960000 0x0 0x8000>;
+ 		interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -1990,7 +1990,7 @@ mipi_in_vopl: endpoint@1 {
+ 		};
+ 	};
+ 
+-	mipi_dsi1: mipi@ff968000 {
++	mipi_dsi1: dsi@ff968000 {
+ 		compatible = "rockchip,rk3399-mipi-dsi", "snps,dw-mipi-dsi";
+ 		reg = <0x0 0xff968000 0x0 0x8000>;
+ 		interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH 0>;
+-- 
+2.39.2
+
