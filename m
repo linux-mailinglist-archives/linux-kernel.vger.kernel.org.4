@@ -2,104 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D9B6C0265
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1C36C0267
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjCSOYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S230387AbjCSOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjCSOYe (ORCPT
+        with ESMTP id S230417AbjCSOYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:24:34 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F42D113E4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:24:30 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-162-78-nat.elisa-mobile.fi [85.76.162.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4900A1858;
-        Sun, 19 Mar 2023 15:24:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679235868;
-        bh=w+dkC9MWnejOzS6P8ye/zUNBDJBYdWNlGyEoaQz3niE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQuAAfQ8aiKPzhFhBF5zEauCz3mIDghGKUoDXgAMHIz03NE261MD4vl2NbUXmSJ/K
-         vLSdT8cI2KzAAhc4itHT/+ovC7JutO6FuJw+jjRS8ZEet4ePymC63YZUP2ILHYmyMo
-         TuB56T+AvBSXkjWEbVHA7UwSnXWIF98rfmK9TYqQ=
-Date:   Sun, 19 Mar 2023 16:24:32 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 02/37] drm/xlnx/zynqmp_disp: Use correct kerneldoc
- formatting in zynqmp_disp
-Message-ID: <20230319142432.GM10144@pendragon.ideasonboard.com>
-References: <20230317081718.2650744-1-lee@kernel.org>
- <20230317081718.2650744-3-lee@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230317081718.2650744-3-lee@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 19 Mar 2023 10:24:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1553F1421B;
+        Sun, 19 Mar 2023 07:24:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96467B80B8A;
+        Sun, 19 Mar 2023 14:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EBD3C433AA;
+        Sun, 19 Mar 2023 14:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679235882;
+        bh=IrpEa9OGG9NfUm7EFpWhzaFL6PqZH8Ie8jNrifNhhO0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d0GJUJEYJXTRgxnbWG0eLbOw/dvyT/qiqmaaDkdOUmwvmQectDYbeSSdQirtOXFN+
+         KLi/EuJkn5eFtvUvpBPTR+o9ePUP95+XRtx4m3o9gHWNMk5vm9xekdvLYnvZIwHwZI
+         rnAGE0eXv7nSUNAu8PL/9buaPmujg/JrE6M/UZ8WpXY7TJBVKAiYtM5LYBBBUE1Wsz
+         Uq+mhLAdA1xZv4c6qKJBf+0H0YXkxpavPMXd3F0rOuJzYsuZ0ETTg7sCD8AE9vMxQu
+         gw6PRdmaLcdI53yTfh/a37dpVPJ2G/M1nNBb9fpGy189BErzVWctjzv4EEUaeAyvGk
+         ItKqemmq5M0XQ==
+Date:   Sun, 19 Mar 2023 23:24:38 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Improve integration with kselftest
+ runner
+Message-Id: <20230319232438.786c46feaf9bb7ddcb78a731@kernel.org>
+In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+Hi Mark,
 
-Thank you for the patch.
+On Mon, 06 Mar 2023 15:35:10 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
-On Fri, Mar 17, 2023 at 08:16:43AM +0000, Lee Jones wrote:
-> Fixes the following W=1 kernel build warning(s):
+> The ftrace selftests do not currently produce KTAP output, they produce a
+> custom format much nicer for human consumption. This means that when run in
+> automated test systems we just get a single result for the suite as a whole
+> rather than recording results for individual test cases, making it harder
+> to look at the test data and masking things like inappropriate skips.
 > 
->  drivers/gpu/drm/xlnx/zynqmp_disp.c:151: warning: Function parameter or member 'blend' not described in 'zynqmp_disp'
->  drivers/gpu/drm/xlnx/zynqmp_disp.c:151: warning: Function parameter or member 'avbuf' not described in 'zynqmp_disp'
->  drivers/gpu/drm/xlnx/zynqmp_disp.c:151: warning: Function parameter or member 'audio' not described in 'zynqmp_disp'
+> Address this by adding support for KTAP output to the ftracetest script and
+> providing a trivial wrapper which will be invoked by the kselftest runner
+> to generate output in this format by default, users using ftracetest
+> directly will continue to get the existing output.
 > 
-> Cc: Hyun Kwon <hyun.kwon@xilinx.com>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Lee Jones <lee@kernel.org>
+> This is not the most elegant solution but it is simple and effective. I
+> did consider implementing this by post processing the existing output
+> format but that felt more complex and likely to result in all output being
+> lost if something goes seriously wrong during the run which would not be
+> helpful. I did also consider just writing a separate runner script but
+> there's enough going on with things like the signal handling for that to
+> seem like it would be duplicating too much.
+
+This looks great! and is what we need.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you!
+
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  drivers/gpu/drm/xlnx/zynqmp_disp.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/ftrace/Makefile        |  3 +-
+>  tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
+>  tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
+>  3 files changed, 70 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/xlnx/zynqmp_disp.c b/drivers/gpu/drm/xlnx/zynqmp_disp.c
-> index 3b87eebddc979..63358f4898625 100644
-> --- a/drivers/gpu/drm/xlnx/zynqmp_disp.c
-> +++ b/drivers/gpu/drm/xlnx/zynqmp_disp.c
-> @@ -128,9 +128,9 @@ struct zynqmp_disp_layer {
->   * struct zynqmp_disp - Display controller
->   * @dev: Device structure
->   * @dpsub: Display subsystem
-> - * @blend.base: Register I/O base address for the blender
-> - * @avbuf.base: Register I/O base address for the audio/video buffer manager
-> - * @audio.base: Registers I/O base address for the audio mixer
-> + * @blend: .base: Register I/O base address for the blender
-> + * @avbuf: .base: Register I/O base address for the audio/video buffer manager
-> + * @audio: .base: Registers I/O base address for the audio mixer
+> diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+> index d6e106fbce11..a1e955d2de4c 100644
+> --- a/tools/testing/selftests/ftrace/Makefile
+> +++ b/tools/testing/selftests/ftrace/Makefile
+> @@ -1,7 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  all:
+>  
+> -TEST_PROGS := ftracetest
+> +TEST_PROGS_EXTENDED := ftracetest
+> +TEST_PROGS := ftracetest-ktap
+>  TEST_FILES := test.d settings
+>  EXTRA_CLEAN := $(OUTPUT)/logs/*
+>  
+> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> index c3311c8c4089..539c8d6d5d71 100755
+> --- a/tools/testing/selftests/ftrace/ftracetest
+> +++ b/tools/testing/selftests/ftrace/ftracetest
+> @@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+>  echo " Options:"
+>  echo "		-h|--help  Show help message"
+>  echo "		-k|--keep  Keep passed test logs"
+> +echo "		-K|--KTAP  Output in KTAP format"
+>  echo "		-v|--verbose Increase verbosity of test messages"
+>  echo "		-vv        Alias of -v -v (Show all results in stdout)"
+>  echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+> @@ -85,6 +86,10 @@ parse_opts() { # opts
+>        KEEP_LOG=1
+>        shift 1
+>      ;;
+> +    --ktap|-K)
+> +      KTAP=1
+> +      shift 1
+> +    ;;
+>      --verbose|-v|-vv|-vvv)
+>        if [ $VERBOSE -eq -1 ]; then
+>  	usage "--console can not use with --verbose"
+> @@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+>  TEST_CASES=`find_testcases $TEST_DIR`
+>  LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+>  KEEP_LOG=0
+> +KTAP=0
+>  DEBUG=0
+>  VERBOSE=0
+>  UNSUPPORTED_RESULT=0
+> @@ -229,7 +235,7 @@ prlog() { # messages
+>      newline=
+>      shift
+>    fi
+> -  printf "$*$newline"
+> +  [ "$KTAP" != "1" ] && printf "$*$newline"
+>    [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+>  }
+>  catlog() { #file
+> @@ -260,11 +266,11 @@ TOTAL_RESULT=0
+>  
+>  INSTANCE=
+>  CASENO=0
+> +CASENAME=
+>  
+>  testcase() { # testfile
+>    CASENO=$((CASENO+1))
+> -  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+> -  prlog -n "[$CASENO]$INSTANCE$desc"
+> +  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+>  }
+>  
+>  checkreq() { # testfile
+> @@ -277,40 +283,68 @@ test_on_instance() { # testfile
+>    grep -q "^#[ \t]*flags:.*instance" $1
+>  }
+>  
+> +ktaptest() { # result comment
+> +  if [ "$KTAP" != "1" ]; then
+> +    return
+> +  fi
+> +
+> +  local result=
+> +  if [ "$1" = "1" ]; then
+> +    result="ok"
+> +  else
+> +    result="not ok"
+> +  fi
+> +  shift
+> +
+> +  local comment=$*
+> +  if [ "$comment" != "" ]; then
+> +    comment="# $comment"
+> +  fi
+> +
+> +  echo $CASENO $result $INSTANCE$CASENAME $comment
+> +}
+> +
+>  eval_result() { # sigval
+>    case $1 in
+>      $PASS)
+>        prlog "	[${color_green}PASS${color_reset}]"
+> +      ktaptest 1
+>        PASSED_CASES="$PASSED_CASES $CASENO"
+>        return 0
+>      ;;
+>      $FAIL)
+>        prlog "	[${color_red}FAIL${color_reset}]"
+> +      ktaptest 0
+>        FAILED_CASES="$FAILED_CASES $CASENO"
+>        return 1 # this is a bug.
+>      ;;
+>      $UNRESOLVED)
+>        prlog "	[${color_blue}UNRESOLVED${color_reset}]"
+> +      ktaptest 0 UNRESOLVED
+>        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+>        return $UNRESOLVED_RESULT # depends on use case
+>      ;;
+>      $UNTESTED)
+>        prlog "	[${color_blue}UNTESTED${color_reset}]"
+> +      ktaptest 1 SKIP
+>        UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+>        return 0
+>      ;;
+>      $UNSUPPORTED)
+>        prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
+> +      ktaptest 1 SKIP
+>        UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+>        return $UNSUPPORTED_RESULT # depends on use case
+>      ;;
+>      $XFAIL)
+>        prlog "	[${color_green}XFAIL${color_reset}]"
+> +      ktaptest 1 XFAIL
+>        XFAILED_CASES="$XFAILED_CASES $CASENO"
+>        return 0
+>      ;;
+>      *)
+>        prlog "	[${color_blue}UNDEFINED${color_reset}]"
+> +      ktaptest 0 error
+>        UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+>        return 1 # this must be a test bug
+>      ;;
+> @@ -371,6 +405,7 @@ __run_test() { # testfile
+>  run_test() { # testfile
+>    local testname=`basename $1`
+>    testcase $1
+> +  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+>    if [ ! -z "$LOG_FILE" ] ; then
+>      local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+>    else
+> @@ -405,6 +440,17 @@ run_test() { # testfile
+>  # load in the helper functions
+>  . $TEST_DIR/functions
+>  
+> +if [ "$KTAP" = "1" ]; then
+> +  echo "TAP version 13"
+> +
+> +  casecount=`echo $TEST_CASES | wc -w`
+> +  for t in $TEST_CASES; do
+> +    test_on_instance $t || continue
+> +    casecount=$((casecount+1))
+> +  done
+> +  echo "1..${casecount}"
+> +fi
+> +
+>  # Main loop
+>  for t in $TEST_CASES; do
+>    run_test $t
+> @@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+>  prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+>  prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+>  
+> +if [ "$KTAP" = "1" ]; then
+> +  echo -n "# Totals:"
+> +  echo -n " pass:"`echo $PASSED_CASES | wc -w`
+> +  echo -n " faii:"`echo $FAILED_CASES | wc -w`
+> +  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
+> +  echo -n " xpass:0"
+> +  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
+> +  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
+> +  echo
+> +fi
+> +
+>  cleanup
+>  
+>  # if no error, return 0
+> diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+> new file mode 100755
+> index 000000000000..b3284679ef3a
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh -e
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
+> +#
+> +# Copyright (C) Arm Ltd., 2023
+> +
+> +./ftracetest -K
+> 
+> ---
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+> 
+> Best regards,
+> -- 
+> Mark Brown <broonie@kernel.org>
+> 
 
-This is a hack, it won't work properly if the nested structures get
-extended with more fields.
-
-Is there a correct kerneldoc syntax for this code construct ?
-
->   * @layers: Layers (planes)
->   */
->  struct zynqmp_disp {
 
 -- 
-Regards,
-
-Laurent Pinchart
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
