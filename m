@@ -2,201 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6538D6C048D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 20:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473006C0498
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 20:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjCSTuM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 15:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S229925AbjCST6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 15:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjCSTuK (ORCPT
+        with ESMTP id S229596AbjCST6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 15:50:10 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6DEB2;
-        Sun, 19 Mar 2023 12:50:09 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pdz2d-002G7P-EO; Sun, 19 Mar 2023 20:50:07 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pdz2d-002va9-7C; Sun, 19 Mar 2023 20:50:07 +0100
-Message-ID: <27d711b9b3012d42fe9e6f11bc89a35920fe397e.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org
-Date:   Sun, 19 Mar 2023 20:50:06 +0100
-In-Reply-To: <20230306040037.20350-6-rdunlap@infradead.org>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
-         <20230306040037.20350-6-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Sun, 19 Mar 2023 15:58:25 -0400
+Received: from mail-wm1-x363.google.com (mail-wm1-x363.google.com [IPv6:2a00:1450:4864:20::363])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05B717143
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 12:58:23 -0700 (PDT)
+Received: by mail-wm1-x363.google.com with SMTP id iw17so896955wmb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 12:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1679255902;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=abRcz3XMi0GgKPQl9NoVpoEpO1DCAm+/vastKVGPdUM=;
+        b=jUeGxuoKEis7X6tM3d2k70zt8CX2tQeCjh/bigA346Ii1D2JB3y2LuXRZTjXAn17gq
+         BO2zqG8SA+yMFtrZyEPQ3oWK6qWa5z+5K7g5BPpMppOyXtTtGSBqJME8DQ02dth+LqKw
+         1LS+ZHrXZb0wL5eJxXFktjU7m/7wlYu9IAQy0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679255902;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=abRcz3XMi0GgKPQl9NoVpoEpO1DCAm+/vastKVGPdUM=;
+        b=4HljzxkihJQvRlGua7gH3RHPgazP81WPk7GhgDtjZ5EU8dFtizsyrIc3tWSmjiEDxu
+         dawchCoKH146iKVZjUFCJ96LV6KAqrq3c7BpZpYwZSR8Bl8c7BCrOQSeT4MeUI6RyzlP
+         oXvWh2FGHCDN7zySWyqUJBG70yg9IfnUYfBx3z7i6f7OOIAw3XWNg8fLW3D2nKHwSnzp
+         TeJBKJzZSSwOhS0+ksKB+JjKSLGdTJBFOlZcYAlKO8hIkmfEZzHjlEjPQ4/K2/hsrtpp
+         g2BHSgklh7LyTVNQELl83wHew+epRhdnf9Q2cK0W9mKCn1yQ3Ik3RyDkBYIzYlb3wrwl
+         qYwA==
+X-Gm-Message-State: AO0yUKUIvkwMt3NfC4uRw0rQwejxGPabYVWgfcpmG/e+IzFcUts8L9gS
+        0AwsYI5QTAccY1MrSzKe/XFduEBmPUZV5ZZOxhSsZHMTlvoE
+X-Google-Smtp-Source: AK7set/DN9xxUEx5wEgzB7dwur7/S25REoP2WaWGDAHuCDp+6bZ/rEzWCMCwSgPpfv13XqVbadwWRr+ebyoO
+X-Received: by 2002:a05:600c:a49:b0:3ed:2dc4:c6cb with SMTP id c9-20020a05600c0a4900b003ed2dc4c6cbmr18877086wmq.6.1679255902150;
+        Sun, 19 Mar 2023 12:58:22 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id m26-20020a7bca5a000000b003b499f88f52sm2728807wml.7.2023.03.19.12.58.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 12:58:22 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+Date:   Sun, 19 Mar 2023 20:56:54 +0100
+Message-Id: <20230319195656.326701-2-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230319195656.326701-1-kal.conley@dectris.com>
+References: <20230319195656.326701-1-kal.conley@dectris.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
-> A previous patch removed most of the sh5 (sh64) support from the
-> kernel tree. Now remove the last stragglers.
-> 
-> Fixes: 37744feebc08 ("sh: remove sh5 support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
-> Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> ---
-> v2: update after adding the parisc64 alias to kbuild.rst
-> v3: skipped
-> v4: refresh & resend
-> 
->  Documentation/kbuild/kbuild.rst                           |    1 -
->  Documentation/scheduler/sched-arch.rst                    |    2 --
->  Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
->  scripts/checkstack.pl                                     |    7 -------
->  tools/perf/arch/common.c                                  |    2 --
->  tools/scripts/Makefile.arch                               |    5 -----
->  tools/testing/selftests/mm/Makefile                       |    2 +-
->  tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
->  8 files changed, 2 insertions(+), 21 deletions(-)
-> 
-> diff -- a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> --- a/Documentation/kbuild/kbuild.rst
-> +++ b/Documentation/kbuild/kbuild.rst
-> @@ -161,7 +161,6 @@ But some architectures such as x86 and s
->  
->  - x86: i386 for 32 bit, x86_64 for 64 bit
->  - parisc: parisc64 for 64 bit
-> -- sh: sh for 32 bit, sh64 for 64 bit
->  - sparc: sparc32 for 32 bit, sparc64 for 64 bit
->  
->  CROSS_COMPILE
-> diff -- a/Documentation/scheduler/sched-arch.rst b/Documentation/scheduler/sched-arch.rst
-> --- a/Documentation/scheduler/sched-arch.rst
-> +++ b/Documentation/scheduler/sched-arch.rst
-> @@ -70,7 +70,5 @@ Possible arch problems I found (and eith
->  
->  ia64 - is safe_halt call racy vs interrupts? (does it sleep?) (See #4a)
->  
-> -sh64 - Is sleeping racy vs interrupts? (See #4a)
-> -
->  sparc - IRQs on at this point(?), change local_irq_save to _disable.
->        - TODO: needs secondary CPUs to disable preempt (See #1)
-> diff -- a/Documentation/translations/zh_CN/scheduler/sched-arch.rst b/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-> --- a/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-> +++ b/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-> @@ -70,7 +70,5 @@ 我发现的可能的arch问题（并试
->  
->  ia64 - safe_halt的调用与中断相比，是否很荒谬？ (它睡眠了吗) (参考 #4a)
->  
-> -sh64 - 睡眠与中断相比，是否很荒谬？ (参考 #4a)
-> -
->  sparc - 在这一点上，IRQ是开着的（？），把local_irq_save改为_disable。
->        - 待办事项: 需要第二个CPU来禁用抢占 (参考 #1)
-> diff -- a/scripts/checkstack.pl b/scripts/checkstack.pl
-> --- a/scripts/checkstack.pl
-> +++ b/scripts/checkstack.pl
-> @@ -10,7 +10,6 @@
->  #	Mips port by Juan Quintela <quintela@mandrakesoft.com>
->  #	IA64 port via Andreas Dilger
->  #	Arm port by Holger Schurig
-> -#	sh64 port by Paul Mundt
->  #	Random bits by Matt Mackall <mpm@selenic.com>
->  #	M68k port by Geert Uytterhoeven and Andreas Schwab
->  #	AArch64, PARISC ports by Kyle McMartin
-> @@ -100,12 +99,6 @@ my (@stack, $re, $dre, $sub, $x, $xs, $f
->  		#  100092:	 e3 f0 ff c8 ff 71	 lay	 %r15,-56(%r15)
->  		$re = qr/.*(?:lay|ag?hi).*\%r15,-(([0-9]{2}|[3-9])[0-9]{2})
->  		      (?:\(\%r15\))?$/ox;
-> -	} elsif ($arch =~ /^sh64$/) {
-> -		#XXX: we only check for the immediate case presently,
-> -		#     though we will want to check for the movi/sub
-> -		#     pair for larger users. -- PFM.
-> -		#a00048e0:       d4fc40f0        addi.l  r15,-240,r15
-> -		$re = qr/.*addi\.l.*r15,-(([0-9]{2}|[3-9])[0-9]{2}),r15/o;
->  	} elsif ($arch eq 'sparc' || $arch eq 'sparc64') {
->  		# f0019d10:       9d e3 bf 90     save  %sp, -112, %sp
->  		$re = qr/.*save.*%sp, -(([0-9]{2}|[3-9])[0-9]{2}), %sp/o;
-> diff -- a/tools/perf/arch/common.c b/tools/perf/arch/common.c
-> --- a/tools/perf/arch/common.c
-> +++ b/tools/perf/arch/common.c
-> @@ -51,9 +51,7 @@ const char *const s390_triplets[] = {
->  
->  const char *const sh_triplets[] = {
->  	"sh-unknown-linux-gnu-",
-> -	"sh64-unknown-linux-gnu-",
->  	"sh-linux-gnu-",
-> -	"sh64-linux-gnu-",
->  	NULL
->  };
->  
-> diff -- a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
-> --- a/tools/scripts/Makefile.arch
-> +++ b/tools/scripts/Makefile.arch
-> @@ -29,11 +29,6 @@ ifeq ($(ARCH),sparc64)
->         SRCARCH := sparc
->  endif
->  
-> -# Additional ARCH settings for sh
-> -ifeq ($(ARCH),sh64)
-> -       SRCARCH := sh
-> -endif
-> -
->  # Additional ARCH settings for loongarch
->  ifeq ($(ARCH),loongarch32)
->         SRCARCH := loongarch
-> diff -- a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -90,7 +90,7 @@ endif
->  
->  endif
->  
-> -ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
-> +ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
->  TEST_GEN_FILES += va_128TBswitch
->  TEST_GEN_FILES += virtual_address_range
->  TEST_GEN_FILES += write_to_hugetlbfs
-> diff -- a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -132,7 +132,7 @@ else
->  fi
->  
->  # filter 64bit architectures
-> -ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
-> +ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
->  if [ -z "$ARCH" ]; then
->  	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
->  fi
+Add core AF_XDP support for chunk sizes larger than PAGE_SIZE. This
+enables sending/receiving jumbo ethernet frames up to the theoretical
+maxiumum of 64 KiB. For chunk sizes > PAGE_SIZE, the UMEM is required
+to consist of HugeTLB VMAs (and be hugepage aligned). Initially, only
+XDP_COPY mode is usuable pending future driver work.
 
-Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+For consistency, check for HugeTLB pages during UMEM registration. This
+implies that hugepages are required for XDP_COPY mode despite DMA not
+being used. This restriction is desirable since it ensures user software
+can take advantage of future driver support.
 
+Even in HugeTLB mode, continue to do page accounting using order-0
+(4 KiB) pages. This minimizes the size of this change and reduces the
+risk of impacting driver code. Taking full advantage of hugepages for
+accounting should improve XDP performance in the general case.
+
+No significant change in RX/TX performance was observed with this patch.
+A few data points are reproduced below:
+
+Machine : Dell PowerEdge R940
+CPU     : Intel(R) Xeon(R) Platinum 8168 CPU @ 2.70GHz
+NIC     : MT27700 Family [ConnectX-4]
+
++-----+------------+-------------+---------------+
+|     | frame size | packet size | rxdrop (Mpps) |
++-----+------------+-------------+---------------+
+| old |       4000 |         320 |          15.7 |
+| new |       4000 |         320 |          15.8 |
++-----+------------+-------------+---------------+
+| old |       4096 |         320 |          16.4 |
+| new |       4096 |         320 |          16.3 |
++-----+------------+-------------+---------------+
+| new |       9000 |         320 |           6.3 |
+| new |      10240 |        9000 |           0.4 |
++-----+------------+-------------+---------------+
+
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+---
+ include/net/xdp_sock.h      |  1 +
+ include/net/xdp_sock_drv.h  |  6 +++++
+ include/net/xsk_buff_pool.h |  4 +++-
+ net/xdp/xdp_umem.c          | 46 +++++++++++++++++++++++++++++--------
+ net/xdp/xsk.c               |  3 +++
+ net/xdp/xsk_buff_pool.c     | 16 +++++++++----
+ 6 files changed, 61 insertions(+), 15 deletions(-)
+
+diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+index 3057e1a4a11c..e562ac3f5295 100644
+--- a/include/net/xdp_sock.h
++++ b/include/net/xdp_sock.h
+@@ -28,6 +28,7 @@ struct xdp_umem {
+ 	struct user_struct *user;
+ 	refcount_t users;
+ 	u8 flags;
++	bool hugetlb;
+ 	bool zc;
+ 	struct page **pgs;
+ 	int id;
+diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+index 9c0d860609ba..eb630d17f994 100644
+--- a/include/net/xdp_sock_drv.h
++++ b/include/net/xdp_sock_drv.h
+@@ -12,6 +12,12 @@
+ #define XDP_UMEM_MIN_CHUNK_SHIFT 11
+ #define XDP_UMEM_MIN_CHUNK_SIZE (1 << XDP_UMEM_MIN_CHUNK_SHIFT)
+ 
++/* Allow chunk sizes up to the maximum size of an ethernet frame (64 KiB).
++ * Larger chunks are not guaranteed to fit in a single SKB.
++ */
++#define XDP_UMEM_MAX_CHUNK_SHIFT 16
++#define XDP_UMEM_MAX_CHUNK_SIZE (1 << XDP_UMEM_MAX_CHUNK_SHIFT)
++
+ #ifdef CONFIG_XDP_SOCKETS
+ 
+ void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries);
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index 3e952e569418..69e3970da092 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -78,6 +78,7 @@ struct xsk_buff_pool {
+ 	u8 cached_need_wakeup;
+ 	bool uses_need_wakeup;
+ 	bool dma_need_sync;
++	bool hugetlb;
+ 	bool unaligned;
+ 	void *addrs;
+ 	/* Mutual exclusion of the completion ring in the SKB mode. Two cases to protect:
+@@ -175,7 +176,8 @@ static inline void xp_dma_sync_for_device(struct xsk_buff_pool *pool,
+ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+ 						 u64 addr, u32 len)
+ {
+-	bool cross_pg = (addr & (PAGE_SIZE - 1)) + len > PAGE_SIZE;
++	bool cross_pg = pool->hugetlb ? (addr & (HPAGE_SIZE - 1)) + len > HPAGE_SIZE :
++					(addr & (PAGE_SIZE - 1)) + len > PAGE_SIZE;
+ 
+ 	if (likely(!cross_pg))
+ 		return false;
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 02207e852d79..c96eefb9f5ae 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -10,6 +10,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/slab.h>
+ #include <linux/bpf.h>
++#include <linux/hugetlb_inline.h>
+ #include <linux/mm.h>
+ #include <linux/netdevice.h>
+ #include <linux/rtnetlink.h>
+@@ -19,6 +20,9 @@
+ #include "xdp_umem.h"
+ #include "xsk_queue.h"
+ 
++_Static_assert(XDP_UMEM_MIN_CHUNK_SIZE <= PAGE_SIZE);
++_Static_assert(XDP_UMEM_MAX_CHUNK_SIZE <= HPAGE_SIZE);
++
+ static DEFINE_IDA(umem_ida);
+ 
+ static void xdp_umem_unpin_pages(struct xdp_umem *umem)
+@@ -91,7 +95,26 @@ void xdp_put_umem(struct xdp_umem *umem, bool defer_cleanup)
+ 	}
+ }
+ 
+-static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
++/* Returns true if the UMEM contains HugeTLB pages exclusively, false otherwise.
++ *
++ * The mmap_lock must be held by the caller.
++ */
++static bool xdp_umem_is_hugetlb(struct xdp_umem *umem, unsigned long address)
++{
++	unsigned long end = address + umem->npgs * PAGE_SIZE;
++	struct vm_area_struct *vma;
++	struct vma_iterator vmi;
++
++	vma_iter_init(&vmi, current->mm, address);
++	for_each_vma_range(vmi, vma, end) {
++		if (!is_vm_hugetlb_page(vma))
++			return false;
++	}
++
++	return true;
++}
++
++static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address, bool hugetlb)
+ {
+ 	unsigned int gup_flags = FOLL_WRITE;
+ 	long npgs;
+@@ -102,8 +125,17 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
+ 		return -ENOMEM;
+ 
+ 	mmap_read_lock(current->mm);
++
++	umem->hugetlb = IS_ALIGNED(address, HPAGE_SIZE) && xdp_umem_is_hugetlb(umem, address);
++	if (hugetlb && !umem->hugetlb) {
++		mmap_read_unlock(current->mm);
++		err = -EINVAL;
++		goto out_pgs;
++	}
++
+ 	npgs = pin_user_pages(address, umem->npgs,
+ 			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
++
+ 	mmap_read_unlock(current->mm);
+ 
+ 	if (npgs != umem->npgs) {
+@@ -152,20 +184,14 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ {
+ 	bool unaligned_chunks = mr->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
+ 	u32 chunk_size = mr->chunk_size, headroom = mr->headroom;
++	bool hugetlb = chunk_size > PAGE_SIZE;
+ 	u64 addr = mr->addr, size = mr->len;
+ 	u32 chunks_rem, npgs_rem;
+ 	u64 chunks, npgs;
+ 	int err;
+ 
+-	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+-		/* Strictly speaking we could support this, if:
+-		 * - huge pages, or*
+-		 * - using an IOMMU, or
+-		 * - making sure the memory area is consecutive
+-		 * but for now, we simply say "computer says no".
+-		 */
++	if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > XDP_UMEM_MAX_CHUNK_SIZE)
+ 		return -EINVAL;
+-	}
+ 
+ 	if (mr->flags & ~XDP_UMEM_UNALIGNED_CHUNK_FLAG)
+ 		return -EINVAL;
+@@ -215,7 +241,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 	if (err)
+ 		return err;
+ 
+-	err = xdp_umem_pin_pages(umem, (unsigned long)addr);
++	err = xdp_umem_pin_pages(umem, (unsigned long)addr, hugetlb);
+ 	if (err)
+ 		goto out_account;
+ 
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 2ac58b282b5e..3899a2d235bb 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -421,6 +421,9 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+ 	sock_wfree(skb);
+ }
+ 
++/* Chunks must fit in the SKB `frags` array. */
++_Static_assert(XDP_UMEM_MAX_CHUNK_SIZE / PAGE_SIZE <= MAX_SKB_FRAGS);
++
+ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+ 					      struct xdp_desc *desc)
+ {
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index b2df1e0f8153..777e8a38a232 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -80,6 +80,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+ 	pool->headroom = umem->headroom;
+ 	pool->chunk_size = umem->chunk_size;
+ 	pool->chunk_shift = ffs(umem->chunk_size) - 1;
++	pool->hugetlb = umem->hugetlb;
+ 	pool->unaligned = unaligned;
+ 	pool->frame_len = umem->chunk_size - umem->headroom -
+ 		XDP_PACKET_HEADROOM;
+@@ -369,16 +370,23 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
+ }
+ EXPORT_SYMBOL(xp_dma_unmap);
+ 
+-static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map)
++/* HugeTLB pools consider contiguity at hugepage granularity only. Hence, all
++ * order-0 pages within a hugepage have the same contiguity value.
++ */
++static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map, bool hugetlb)
+ {
++	u32 page_size = hugetlb ? HPAGE_SIZE : PAGE_SIZE;
++	u32 n = page_size >> PAGE_SHIFT;
+ 	u32 i;
+ 
+-	for (i = 0; i < dma_map->dma_pages_cnt - 1; i++) {
+-		if (dma_map->dma_pages[i] + PAGE_SIZE == dma_map->dma_pages[i + 1])
++	for (i = 0; i + n < dma_map->dma_pages_cnt; i++) {
++		if (dma_map->dma_pages[i] + page_size == dma_map->dma_pages[i + n])
+ 			dma_map->dma_pages[i] |= XSK_NEXT_PG_CONTIG_MASK;
+ 		else
+ 			dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
+ 	}
++	for (; i < dma_map->dma_pages_cnt; i++)
++		dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
+ }
+ 
+ static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_map *dma_map)
+@@ -441,7 +449,7 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+ 	}
+ 
+ 	if (pool->unaligned)
+-		xp_check_dma_contiguity(dma_map);
++		xp_check_dma_contiguity(dma_map, pool->hugetlb);
+ 
+ 	err = xp_init_dma_info(pool, dma_map);
+ 	if (err) {
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.39.2
+
