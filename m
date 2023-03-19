@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF75F6C01BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5D26C01C2
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCSMqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 08:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S230266AbjCSMw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 08:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjCSMql (ORCPT
+        with ESMTP id S229676AbjCSMw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 08:46:41 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D493719C41
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:46:38 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ek18so36985576edb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:46:38 -0700 (PDT)
+        Sun, 19 Mar 2023 08:52:26 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFCE1C5BC;
+        Sun, 19 Mar 2023 05:52:25 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c18so9796446ple.11;
+        Sun, 19 Mar 2023 05:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679229997;
+        d=gmail.com; s=20210112; t=1679230345;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aX/YeQGgHd0456a6H5fsx+RISKk9ZZ2G4hOQPozPTkI=;
-        b=Te59JibYL/qoQDCIkmW2t8pe1bQlMbhzl6Xoms/H+ogiJy6JDjXn8YmCWxi8sf0nGB
-         FOt/JXWFJmeNdfxNlqjYkj+sicr1aSLrGrEokEAybpf6wb1xHm7BZt+97xUrpNXf9M43
-         hmTGrIHeXxQwlXzZyVu1P+v/0Qs2+KeQWh+6Dtr6Mu1UOuh155JuN1/pJi7X6RAyiZQ0
-         eUSJmNn0iW3gWMu+xiEotQ3beFO3HhvZ+o+haPa6KmfWm3DfwTNkPs7d7XZ+ybGWh0Rm
-         9bo40vtpk2mCXIpvs5Az5pYm/2nTfm4fcoZCBTlElM1imrG8ItbSeyOv+gzCdjh8UbV+
-         y8ew==
+        bh=sx3R8+4eXcBfWk/kEKY5/xAPakgQR9ddZb5g/YyPWv4=;
+        b=I37KCPzSG6H64xonNrJ5rCOPsuWrec4JBJpTWx/Az/+IfD4RfvpFyP2LzK//35QaD7
+         4/2rAJdFpKMA5bkNMF6V/Te0ShH7GojvxpRjFS7CoCIjzdwkm9HZguldFOSYrqca7ASC
+         bZkHZNKEif/i/rGWhBoVHJFX/cN/59TzP+Dju3XaXsnem8Bz82gM0b8l9kSyYhCNlcZn
+         ZBMvtdca3PI1BNlz6fjFwsSxKskoOCQzyPIiAMgpDtkf/KPqLlZHX8o2oTE7KKVCKxu8
+         2TQTO1J6rM2dGIPh5ghjvVnoBVTxbCmCUGJvDmFzaWyf4Bzzn4rsdoCQfg7/adh8f58c
+         B0EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679229997;
+        d=1e100.net; s=20210112; t=1679230345;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aX/YeQGgHd0456a6H5fsx+RISKk9ZZ2G4hOQPozPTkI=;
-        b=NyReRdpUvlrVq4A5pIjL3iy0/7DDK3HgcPb2M0giWqMv5sDYCp26CKeAWyegsu95Cr
-         Wh/RuGRbXhaGEm+GUiUf5p9lTn1q02Co4sCKwR7T5abqp8R08RWaFR95P3iWlfjgjWmD
-         RfgmaL0Qlxm5h6PSRZov8upEZom/z/a/i9GVSF/qgZrJ19kRJHWopUrmFMwXmRCyXbEJ
-         FnGfazl4/BYX02rLtIdnsdOhh0epFbcxFfbHVclsaiNj7a7qtGPbftdZx1POrZpxHX9x
-         x4byADf+vLjz5yLTQVQTYvfSaISXF3Ye9YYc5byd+UL4J90Tcl/57myBPeo1TeOy66Vh
-         4OWw==
-X-Gm-Message-State: AO0yUKWTINbDTd+B073J9lrNHlFLN0YVEqbVaFg6QGIoIP2ukXgFohJn
-        tFBNHyO8KAqiwoXmIi+26W13ifoVXPqNjIp9QhE=
-X-Google-Smtp-Source: AK7set8ApphT38usrEVGYXhPZOu3dlpfU3bXpQy6stxSX7OCaWycVBm6wf6OkEStwf++Bb7ofY4DLg==
-X-Received: by 2002:a17:906:e52:b0:930:8714:6739 with SMTP id q18-20020a1709060e5200b0093087146739mr6284227eji.30.1679229997278;
-        Sun, 19 Mar 2023 05:46:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id s26-20020a170906169a00b009200601ea12sm3167403ejd.208.2023.03.19.05.46.36
+        bh=sx3R8+4eXcBfWk/kEKY5/xAPakgQR9ddZb5g/YyPWv4=;
+        b=fXNwtw8233yMFR9h7CpazUmzCPKIqhg8VwftHstuJSmbkhot2JxsErW260irpYorhA
+         vDpolBoxjSfH4vQJ0tQPbNpQS/YZrZHImXGe+OQZEvHbPR6az6D3OfDgPcze8NQe2Qpm
+         Qs9lu9RVLuHjsH8BwAJfSyXdm/jAaNcILfAxZcKrSLUafxmGQg5QDjxxN+aMs/tTJuDv
+         mpfKhN5AwOJ58+wAo+VubkQhXEPyawhMVFmqlhwdjhTyYOYunYlusQDetS6eHDaH6bvz
+         s0AOC0OQPlA6UwiasYdrA+cuMw/GkxmGhrQwMzksFgbdcjB88faZ++GxWFAVfrNx4Ugh
+         qh0A==
+X-Gm-Message-State: AO0yUKVj62zMf8yk+3DH3lWGcGfxcI3aVVhqIZTOO1ttEJ6U8qLk7XhC
+        6IJ5QrUMad2c9o0kDAoTyYk=
+X-Google-Smtp-Source: AK7set8rbtsa+y0IukuFAqizrLvWMnwirw/hWnmcny3Y9VWHyk7GL5IOCRZkTM34Z0vhJLZtoUeCqQ==
+X-Received: by 2002:a17:902:fac3:b0:19e:76b7:c7d2 with SMTP id ld3-20020a170902fac300b0019e76b7c7d2mr12248682plb.26.1679230345011;
+        Sun, 19 Mar 2023 05:52:25 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-58.three.co.id. [116.206.28.58])
+        by smtp.gmail.com with ESMTPSA id w13-20020a1709029a8d00b0019a9436d2a0sm4713018plp.89.2023.03.19.05.52.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 05:46:36 -0700 (PDT)
-Message-ID: <253d874f-3949-bc94-e97a-69ed8fc929f4@linaro.org>
-Date:   Sun, 19 Mar 2023 13:46:35 +0100
+        Sun, 19 Mar 2023 05:52:24 -0700 (PDT)
+Message-ID: <df9e53ac-be69-60a6-9782-73165873d28b@gmail.com>
+Date:   Sun, 19 Mar 2023 19:52:21 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v8 01/14] dt-bindings: arm: msm: Update the maintainers
- for LLCC
+Subject: Re: [PATCH] ELF: document some de-facto PT_* ABI quirks
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org
-References: <20230314080443.64635-1-manivannan.sadhasivam@linaro.org>
- <20230314080443.64635-2-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230314080443.64635-2-manivannan.sadhasivam@linaro.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
+ <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
+ <ZBQjRLiXOwfmoIs+@debian.me> <cc449f31-071c-48b8-a6a8-7b91f205c3c6@p183>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <cc449f31-071c-48b8-a6a8-7b91f205c3c6@p183>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 09:04, Manivannan Sadhasivam wrote:
-> Both Rishabh and Sai have left Qualcomm, and there is no evidence of them
-> maintaining with a new identity. So their entry needs to be removed.
+On 3/17/23 23:53, Alexey Dobriyan wrote:
+>> The current doc path is Documentation/ELF/ELF.rst, which means that
+>> readers expect to find general info about the executable format, not
+>> some sort of trivia/niche like this.
 > 
-> Listed Bjorn as the interim maintainer until someone volunteers to maintain
-> this binding.
+> General info is in ELF spec. This document is intended to be Linux
+> specific stuff you won't find anywhere but source.
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
+> I'll write down overmapping rules as well.
 
+In the same Documentation/ELF/ELF.rst?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+And thus, the doc title should be "Linux-specific ELF notes", right?
 
-Best regards,
-Krzysztof
+-- 
+An old man doll... just what I always wanted! - Clara
 
