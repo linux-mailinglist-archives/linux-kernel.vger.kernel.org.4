@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149196C04DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCD26C04ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCSUra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 16:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S230046AbjCSUtO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 16:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjCSUr1 (ORCPT
+        with ESMTP id S229632AbjCSUtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 16:47:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17347136DB;
-        Sun, 19 Mar 2023 13:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uLso9CqfYCyg061D5wJXbbp0BELJ+NatQ0Cb1mhb6E0=; b=n6sHupCPJxrkAJx1Ff2AslPhMX
-        084FCS4Y17DPH/qXsaDHcvkxd9TPgzoWbdz+sHBOqVljZNwfJFHyctiBMA+L0FDyEqKXVrCMpqjTt
-        SRK9Sa75H3UZEwxTGDb8e13ar8PY09qC0HTUBANpcVae2t4/BWvqwJMaTDw5LmdlJMN6kSHT7oj8m
-        Hr+zkhVUlqTdUM8bKXCfdJOfCoOeTsLSZy2fwglwz2Vov/ncnV15K6mcitMUI/LANIl0Tl4VrgBEo
-        LtS9oaaV0LFVUR/lB0Cpaj9c4SYFqC4bBF8dT9MQxc+Q40BfwzNHr7qLPkJEAgNunDmm5V+O+QkQH
-        vwbTe0+Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pdzvu-000O0l-D0; Sun, 19 Mar 2023 20:47:14 +0000
-Date:   Sun, 19 Mar 2023 20:47:14 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBd00i7fvwrMX/FY@casper.infradead.org>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <20230319131047.174fa4e29cabe4371b298ed0@linux-foundation.org>
- <fadd8558-8917-4012-b5ea-c6376c835cc8@lucifer.local>
+        Sun, 19 Mar 2023 16:49:11 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B783714981;
+        Sun, 19 Mar 2023 13:49:10 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pdzxj-002O59-JZ; Sun, 19 Mar 2023 21:49:07 +0100
+Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pdzxj-003Bpe-CW; Sun, 19 Mar 2023 21:49:07 +0100
+Message-ID: <056df6d548ad0e4f7f4ccb2782744b165ce20578.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not
+ enabled
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        stable@vger.kernel.org
+Date:   Sun, 19 Mar 2023 21:49:06 +0100
+In-Reply-To: <20230306040037.20350-8-rdunlap@infradead.org>
+References: <20230306040037.20350-1-rdunlap@infradead.org>
+         <20230306040037.20350-8-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fadd8558-8917-4012-b5ea-c6376c835cc8@lucifer.local>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.155.194
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 08:29:16PM +0000, Lorenzo Stoakes wrote:
-> The basis for saying asynchronous was based on Documentation/filesystems/vfs.rst
-> describing read_iter() as 'possibly asynchronous read with iov_iter as
-> destination', and read_iter() is what is (now) invoked when accessing
-> /proc/kcore.
+On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> Fix a build error in mcount.S when CONFIG_PRINTK is not enabled.
+> Fixes this build error:
 > 
-> However I agree this is vague and it is clearer to refer to the fact that we are
-> now directly writing to user memory and thus wish to avoid spinlocks as we may
-> need to fault in user memory in doing so.
+> sh2-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
+> (.text+0xec): undefined reference to `dump_stack'
 > 
-> Would it be ok for you to go ahead and replace that final paragraph with the
-> below?:-
+> Fixes: e460ab27b6c3 ("sh: Fix up stack overflow check with ftrace disabled.")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: stable@vger.kernel.org
+> ---
+> v2: add PRINTK to STACK_DEBUG dependency (thanks, Geert)
+> v3: skipped
+> v4: refresh & resend
 > 
-> The reason for making this change is to build a basis for vread() to write
-> to user memory directly via an iterator; as a result we may cause page
-> faults during which we must not hold a spinlock. Doing this eliminates the
-> need for a bounce buffer in read_kcore() and thus permits that to be
-> converted to also use an iterator, as a read_iter() handler.
+>  arch/sh/Kconfig.debug |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff -- a/arch/sh/Kconfig.debug b/arch/sh/Kconfig.debug
+> --- a/arch/sh/Kconfig.debug
+> +++ b/arch/sh/Kconfig.debug
+> @@ -15,7 +15,7 @@ config SH_STANDARD_BIOS
+>  
+>  config STACK_DEBUG
+>  	bool "Check for stack overflows"
+> -	depends on DEBUG_KERNEL
+> +	depends on DEBUG_KERNEL && PRINTK
+>  	help
+>  	  This option will cause messages to be printed if free stack space
+>  	  drops below a certain limit. Saying Y here will add overhead to
 
-I'd say the purpose of the iterator is to abstract whether we're
-accessing user memory, kernel memory or a pipe, so I'd suggest:
+I can't really test this change as the moment I am enabling CONFIG_STACK_DEBUG,
+the build fails with:
 
-   The reason for making this change is to build a basis for vread() to
-   write to memory via an iterator; as a result we may cause page faults
-   during which we must not hold a spinlock. Doing this eliminates the
-   need for a bounce buffer in read_kcore() and thus permits that to be
-   converted to also use an iterator, as a read_iter() handler.
+  CC      scripts/mod/devicetable-offsets.s
+sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
+make[1]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
+make[1]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+make: *** [Makefile:1286: prepare0] Error 2
 
-I'm still undecided whether this change is really a good thing.  I
-think we have line-of-sight to making vmalloc (and thus kvmalloc)
-usable from interrupt context, and this destroys that possibility.
+So, I assume we need to strip -fomit-frame-pointer from KBUILD_CFLAGS, correct?
 
-I wonder if we can't do something like prefaulting the page before
-taking the spinlock, then use copy_page_to_iter_atomic()
+I tried this change, but that doesn't fix it for me:
+
+diff --git a/arch/sh/Makefile b/arch/sh/Makefile
+index 5c8776482530..83f535b73835 100644
+--- a/arch/sh/Makefile
++++ b/arch/sh/Makefile
+@@ -173,6 +173,7 @@ KBUILD_AFLAGS               += $(cflags-y)
+ 
+ ifeq ($(CONFIG_MCOUNT),y)
+   KBUILD_CFLAGS += -pg
++  KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS))
+ endif
+ 
+ ifeq ($(CONFIG_DWARF_UNWINDER),y)
+
+Any ideas?
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
