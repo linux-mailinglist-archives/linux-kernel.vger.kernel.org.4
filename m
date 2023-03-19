@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079B36C05A2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48AF6C05A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCSVfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S230161AbjCSVfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 17:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCSVfp (ORCPT
+        with ESMTP id S229824AbjCSVfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Mar 2023 17:35:45 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35CC6584;
-        Sun, 19 Mar 2023 14:35:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2F11164B;
+        Sun, 19 Mar 2023 14:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=8m8F125vs28BNQfwZCFnodLMrX3W0w1T4J8QWupY5ig=; b=GTtlsuGbgsuAp8vwH33WEU2s/U
-        4y007i5AhtjQCDMMtVpRq/ANNqlTYRm/yBTZa2fHfP+0O6GR957zE8L6ey3wWPLxdqRQFzmlrGxtG
-        KwOXw5mehMbNhyhAnDViSSCSVNfQMuuD1Jxd40ZzYorqEd+4WSrx8fCcM4MVpmU+UiBK3oUJTEKTF
-        C9P8phKz1aHFKqBeYgDPbfQYJrBftrMxsoWNNPpySFQCbznQ8wXwu+v4y+IutVMqcnFTLFGKA6w6y
-        wooGsJZOBEzoGC9NbtzupCQrRV4ugwEqHRLyYMdTOSo7Jd7qO5rX+Bx9o5L4oPhs0obg/nUtxl4+3
-        34RDozdg==;
+        bh=o7Go1puxe90FGMktwOjmsLknRJd3vVFjG7iQj4FUx+M=; b=XqMEHnA1Jxvrrb245/gV9tQJgM
+        CKTzB8jqsj/Mrc4jQJulJjjvW6eSvvhDRJQbLLthWWGxdgzs8e4f8/HMftBfDxSu3htw9yjyqzbdn
+        MR52AsAZ+FOCvqmkf3us3iGzPp8CH+PEQK+DCAV8CtKbtMXpwUtFC3Q5RqOOhcf6fmJpRuP60BIwR
+        ibr7FJGZ1bxgKq3OkApLjLhfFPS9w9R58snlxbcBxwgpL2XLyrlavSNCIGS39tMMMP4bvuhMAGk2D
+        fCdcpy95A7nX+nt+i6POnJs0gt71a61x82dcm/xEwhub3LSs3OSQbCghkvUjXi9XJIEmxXQC8b/jA
+        MjmDTuVg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0gp-007Vmx-1k;
+        id 1pe0gp-007Vmz-1r;
         Sun, 19 Mar 2023 21:35:43 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [PATCH 4/5] module: merge remnants of setup_load_info() to elf validation
-Date:   Sun, 19 Mar 2023 14:35:41 -0700
-Message-Id: <20230319213542.1790479-5-mcgrof@kernel.org>
+Subject: [PATCH 5/5] module: fold usermode helper kmod into modules directory
+Date:   Sun, 19 Mar 2023 14:35:42 -0700
+Message-Id: <20230319213542.1790479-6-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230319213542.1790479-1-mcgrof@kernel.org>
 References: <20230319213542.1790479-1-mcgrof@kernel.org>
@@ -52,116 +52,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The setup_load_info() was actually had ELF validation checks of its
-own. To later cache useful variables as an secondary step just means
-looping again over the ELF sections we just validated. We can simply
-keep tabs of the key sections of interest as we validate the module
-ELF section in one swoop, so do that and merge the two routines
-together.
-
-Expand a bit on the documentation / intent / goals.
+The kernel/kmod.c is already only built if we enabled modules, so
+just stuff it under kernel/module/kmod.c and unify the MAINTAINERS
+file for it.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 60 ++++++++++++++++++++------------------------
- 1 file changed, 27 insertions(+), 33 deletions(-)
+ MAINTAINERS                | 13 +++----------
+ kernel/Makefile            |  1 -
+ kernel/module/Makefile     |  4 +++-
+ kernel/{ => module}/kmod.c |  0
+ 4 files changed, 6 insertions(+), 12 deletions(-)
+ rename kernel/{ => module}/kmod.c (100%)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 84a7f96cf35a..929644d79d38 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1647,12 +1647,26 @@ static int validate_section_offset(struct load_info *info, Elf_Shdr *shdr)
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8d5bc223f305..1ca0e26aa9f8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11522,16 +11522,6 @@ F:	include/linux/kmemleak.h
+ F:	mm/kmemleak.c
+ F:	samples/kmemleak/kmemleak-test.c
  
- /*
-- * Sanity checks against invalid binaries, wrong arch, weird elf version.
-+ * Check userspace passed ELF module against our expectations, and cache
-+ * useful variables for further processing as we go.
-  *
-- * Also do basic validity checks against section offsets and sizes, the
-+ * This does basic validity checks against section offsets and sizes, the
-  * section name string table, and the indices used for it (sh_name).
-+ *
-+ * As a last step, since we're already checking the ELF sections we cache
-+ * useful variables which will be used later for our convenience:
-+ *
-+ * 	o pointers to section headers
-+ * 	o cache the modinfo symbol section
-+ * 	o cache the string symbol section
-+ * 	o cache the module section
-+ *
-+ * As a last step we set info->mod to the temporary copy of the module in
-+ * info->hdr. The final one will be allocated in move_module(). Any
-+ * modifications we make to our copy of the module will be carried over
-+ * to the final minted module.
-  */
--static int elf_validity_check(struct load_info *info)
-+static int elf_validity_cache_copy(struct load_info *info, int flags)
- {
- 	unsigned int i;
- 	Elf_Shdr *shdr, *strhdr;
-@@ -1872,6 +1886,13 @@ static int elf_validity_check(struct load_info *info)
- 	if (!info->name)
- 		info->name = info->mod->name;
- 
-+	if (flags & MODULE_INIT_IGNORE_MODVERSIONS)
-+		info->index.vers = 0; /* Pretend no __versions section! */
-+	else
-+		info->index.vers = find_sec(info, "__versions");
-+
-+	info->index.pcpu = find_pcpusec(info);
-+
- 	return 0;
- 
- no_exec:
-@@ -1984,26 +2005,6 @@ static int rewrite_section_headers(struct load_info *info, int flags)
- 	return 0;
- }
- 
--/*
-- * Set up our basic convenience variables (pointers to section headers,
-- * search for module section index etc), and do some basic section
-- * verification.
-- *
-- * Set info->mod to the temporary copy of the module in info->hdr. The final one
-- * will be allocated in move_module().
-- */
--static int setup_load_info(struct load_info *info, int flags)
--{
--	if (flags & MODULE_INIT_IGNORE_MODVERSIONS)
--		info->index.vers = 0; /* Pretend no __versions section! */
--	else
--		info->index.vers = find_sec(info, "__versions");
+-KMOD KERNEL MODULE LOADER - USERMODE HELPER
+-M:	Luis Chamberlain <mcgrof@kernel.org>
+-L:	linux-kernel@vger.kernel.org
+-L:	linux-modules@vger.kernel.org
+-S:	Maintained
+-F:	include/linux/kmod.h
+-F:	kernel/kmod.c
+-F:	lib/test_kmod.c
+-F:	tools/testing/selftests/kmod/
 -
--	info->index.pcpu = find_pcpusec(info);
--
--	return 0;
--}
--
- /*
-  * These calls taint the kernel depending certain module circumstances */
- static void module_augment_kernel_taints(struct module *mod, struct load_info *info)
-@@ -2809,17 +2810,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ KMSAN
+ M:	Alexander Potapenko <glider@google.com>
+ R:	Marco Elver <elver@google.com>
+@@ -14083,8 +14073,11 @@ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+ F:	include/linux/module.h
++F:	include/linux/kmod.h
+ F:	kernel/module/
+ F:	scripts/module*
++F:	lib/test_kmod.c
++F:	tools/testing/selftests/kmod/
  
- 	/*
- 	 * Do basic sanity checks against the ELF header and
--	 * sections.
--	 */
--	err = elf_validity_check(info);
--	if (err)
--		goto free_copy;
--
--	/*
--	 * Everything checks out, so set up the section info
--	 * in the info structure.
-+	 * sections. Cache useful sections and set the
-+	 * info->mod to the userspace passed struct module.
- 	 */
--	err = setup_load_info(info, flags);
-+	err = elf_validity_cache_copy(info, flags);
- 	if (err)
- 		goto free_copy;
+ MONOLITHIC POWER SYSTEM PMIC DRIVER
+ M:	Saravanan Sekar <sravanhome@gmail.com>
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 10ef068f598d..3dd4ea433ee9 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -13,7 +13,6 @@ obj-y     = fork.o exec_domain.o panic.o \
+ 	    async.o range.o smpboot.o ucount.o regset.o
  
+ obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o
+-obj-$(CONFIG_MODULES) += kmod.o
+ obj-$(CONFIG_MULTIUSER) += groups.o
+ 
+ ifdef CONFIG_FUNCTION_TRACER
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index 948efea81e85..5b1d26b53b8d 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -7,7 +7,9 @@
+ # and produce insane amounts of uninteresting coverage.
+ KCOV_INSTRUMENT_module.o := n
+ 
+-obj-y += main.o strict_rwx.o
++obj-y += main.o
++obj-y += strict_rwx.o
++obj-y += kmod.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
+ obj-$(CONFIG_LIVEPATCH) += livepatch.o
+diff --git a/kernel/kmod.c b/kernel/module/kmod.c
+similarity index 100%
+rename from kernel/kmod.c
+rename to kernel/module/kmod.c
 -- 
 2.39.1
 
