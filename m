@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C1C6C0558
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 958766C0563
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjCSVQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        id S230238AbjCSVSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 17:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjCSVQV (ORCPT
+        with ESMTP id S229806AbjCSVSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:16:21 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1DB45E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:16:20 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id y5so10878314ybu.3
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:16:20 -0700 (PDT)
+        Sun, 19 Mar 2023 17:18:33 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A2113C3;
+        Sun, 19 Mar 2023 14:18:31 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso6351334wmq.5;
+        Sun, 19 Mar 2023 14:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679260579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=umIKUZ29cWxRGLpplScGRMR85hsAlE3Adfx/LlasVhM=;
-        b=CPgf7pIk/Lnkd8dmhIq8WFWJ6BLyq6+kGzIfKmtwXfzlt6kxOq+vyAL8X4bCK1iR3Q
-         iI3bTgb55U+aMHk1J0DgzxXKaavtjILeOujbhHokL2gZ/DGhvklPkLQorKzCM8cKXNSX
-         mH8IdtmZzoE0UjJlfkmvQ5ZzynMQW3xYlqNCjEGJbb5nfq6GYkbuiRcPcc3AutwclR21
-         FSxDUsCtHWw9ulreB79I49s9OO/yykd220i5H/7eLfkuJeFqCB78ZslFFxwGWUtQIAMu
-         7ttFNZM+NUfJoUwRduR6Iu0sohA7gqSwv+/dkMrlBLqqPMcaBKKmLc3GgvjMI3QRK3fD
-         JC/Q==
+        d=gmail.com; s=20210112; t=1679260710;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xnsyvP8JbNs+veqAm6StM8UbBoUAPhLOI3XAytwZeZo=;
+        b=qVhoiiNy51oSxFQEw23uh1HQRMG+qJploZdK1vaziW+lejF1UsQqj7JzeNQSGMucoo
+         8XPMnjHtu3XJNkHppDZc6Fo/OfJTmfVkMoy1dMicXzE7vPJamVY1sqJz6jnKoMr7R1ay
+         tHqo7M7cQ372T/zX8ngHz0iCtP8ULEAIJbj1zSze80K6c7hihh2+9vfuEi1TMemZB3G6
+         C6x++ua1/dDaj9pNMgCunWevzPYKKTUnKs7TGRf0gtRqrhne1NEHo4/95Jt3J7fOYKa+
+         0E/D+SGMp0doyEV2wxEr56RRBIiNNzDdraA2CvJwm+ilyy84cXoDezGMUBE7pSngPGN+
+         8neg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679260579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=umIKUZ29cWxRGLpplScGRMR85hsAlE3Adfx/LlasVhM=;
-        b=zd6vv8dqzYnUkg0KfckMQqHC6hl1WAJQm1JAv7I8/VrLMspz7xi3E6b86HjDFjC/uB
-         4eV+xY2mpP9JIgUztXrRxEi9g6woZRPWKCkju4WyC9HswCBaEoFUsLyKs4sQBqC0cfvk
-         T1VcDvWGI870wOxj15AbNf3J5xveXfmtyUZbHrz0JNHfgfaCqQ7F8mUOPOd8N/pAXkRu
-         SK/r9v8yIJO1NVDoRkVHtNR1/ZReiukkdY7i8Pk1HvrBSVArb5HwSGZsE/a6KxBDRrra
-         71DY5Y+Xl1B+3593NYtQ7UKjJt5uSScuif9cVdyhGcNJvXLQkQ3MfSVTw+2ihNAYTRFT
-         54Zg==
-X-Gm-Message-State: AO0yUKUY14NLBMRq7cUHxHnZNAQ6PTO85jKN8xFfdZzz8j68uV/aDUsd
-        xGI1yYS6tkZDfQi30P2vvdtOSzvK7xxfZVDNXm8O2A==
-X-Google-Smtp-Source: AK7set/LQSqDHQohlcpzt0xizcE65fZwUUP3xQclwBlvRoXqfTwlv5UpIYbuGW13MOMcV9w5zxaHwatEJucTRxSnE5c=
-X-Received: by 2002:a25:9786:0:b0:b61:14c8:90fd with SMTP id
- i6-20020a259786000000b00b6114c890fdmr4033253ybo.4.1679260579212; Sun, 19 Mar
- 2023 14:16:19 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679260710;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xnsyvP8JbNs+veqAm6StM8UbBoUAPhLOI3XAytwZeZo=;
+        b=sR5noHL0PIQ1I+i1tES8w978wUxGSSsM/X8W7b+RmBj5orzvZQ3Ooogo5Nv58lgald
+         X3JZfah2AS5t191Iqa+M8vFWSjDtF015JNujgc7EHUb356ncTdGrQAOna4jtPc/gF7CZ
+         V509x/YpiIjJC/weNp0MGIXuJHAFOQL590VhmsgpTmg9aRFli3mZpczSvu5KlpSnQibM
+         Hll4PEU0dbrRe96ou1hfa86RVkpk5ycVzllCPpcFWevhHC6kMVaZlMa+ZZOt2Ta1KCmG
+         2TY83FkHq4/yuTC82dEdbaAC3+M281wXzDGXQ3UemkrCJBIMPt4Qv1LXKIG+KmrzP0LW
+         89bw==
+X-Gm-Message-State: AO0yUKXjSYuukDW0K4as/t5oqiTFiswpWUcp6nxmQTpSr43k72p79dmx
+        PzNT8f9J9IH4lWQM5RUH2u8=
+X-Google-Smtp-Source: AK7set/tW/8C0xY/SSAu8Z2l3XOOV0YeweYmNiztltrsp6dMlMz2iIEqWHop066JFj2JpYd1xAM+ng==
+X-Received: by 2002:a05:600c:2185:b0:3ed:8780:f27b with SMTP id e5-20020a05600c218500b003ed8780f27bmr8062758wme.16.1679260709651;
+        Sun, 19 Mar 2023 14:18:29 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003eddf20ed5bsm2477581wmq.18.2023.03.19.14.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 14:18:28 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 21:16:18 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <b4233383-2c87-422f-9f66-3815a6c77372@lucifer.local>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <20230319131047.174fa4e29cabe4371b298ed0@linux-foundation.org>
+ <fadd8558-8917-4012-b5ea-c6376c835cc8@lucifer.local>
+ <ZBd00i7fvwrMX/FY@casper.infradead.org>
 MIME-Version: 1.0
-References: <20230317233634.3968656-1-robh@kernel.org>
-In-Reply-To: <20230317233634.3968656-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 19 Mar 2023 22:16:07 +0100
-Message-ID: <CACRpkdbn=B1O2AyOq9DhgQ4Kw-mSytkj0rpJCKVGC51_rTeAHA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: rtc: Drop unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBd00i7fvwrMX/FY@casper.infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 12:36=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
-e:
-
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
+On Sun, Mar 19, 2023 at 08:47:14PM +0000, Matthew Wilcox wrote:
+> On Sun, Mar 19, 2023 at 08:29:16PM +0000, Lorenzo Stoakes wrote:
+> > The basis for saying asynchronous was based on Documentation/filesystems/vfs.rst
+> > describing read_iter() as 'possibly asynchronous read with iov_iter as
+> > destination', and read_iter() is what is (now) invoked when accessing
+> > /proc/kcore.
+> >
+> > However I agree this is vague and it is clearer to refer to the fact that we are
+> > now directly writing to user memory and thus wish to avoid spinlocks as we may
+> > need to fault in user memory in doing so.
+> >
+> > Would it be ok for you to go ahead and replace that final paragraph with the
+> > below?:-
+> >
+> > The reason for making this change is to build a basis for vread() to write
+> > to user memory directly via an iterator; as a result we may cause page
+> > faults during which we must not hold a spinlock. Doing this eliminates the
+> > need for a bounce buffer in read_kcore() and thus permits that to be
+> > converted to also use an iterator, as a read_iter() handler.
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> I'd say the purpose of the iterator is to abstract whether we're
+> accessing user memory, kernel memory or a pipe, so I'd suggest:
+>
+>    The reason for making this change is to build a basis for vread() to
+>    write to memory via an iterator; as a result we may cause page faults
+>    during which we must not hold a spinlock. Doing this eliminates the
+>    need for a bounce buffer in read_kcore() and thus permits that to be
+>    converted to also use an iterator, as a read_iter() handler.
+>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks, sorry I missed the detail about iterators abstacting the three
+different targets there, that is definitely better!
 
-Yours,
-Linus Walleij
+> I'm still undecided whether this change is really a good thing.  I
+> think we have line-of-sight to making vmalloc (and thus kvmalloc)
+> usable from interrupt context, and this destroys that possibility.
+>
+> I wonder if we can't do something like prefaulting the page before
+> taking the spinlock, then use copy_page_to_iter_atomic()
+
+There are a number of aspects of vmalloc that are not atomic-safe,
+e.g. alloc_vmap_area() and vmap_range_noflush() are designated
+might_sleep(), equally vfree().
+
+So I feel that making it safe for atomic context requires a bit more of a
+general rework. Given we would be able to revisit lock types at the point
+we do that (something that would fit very solidly into the context of any
+such change), and given that this patch series establishes that we use an
+iterator, I think it is useful to keep this as-is as defer that change
+until later.
