@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8216C024C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259326C0250
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCSOOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S229889AbjCSOQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjCSOOB (ORCPT
+        with ESMTP id S229472AbjCSOQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:14:01 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98753196BE
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:13:59 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eh3so37379499edb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679235238;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5P8vV5SdTC8v0eY1KGmdi5SpQmO/V0KvzXuxG5KBGwI=;
-        b=eLvpMkifkBIdXQ7UetfEpMemmF379+5kf09TjY2d6rTkkpv4pDW1mMCQDGrxV2UeqB
-         L9Zkmufygw4svPq9s6pFUWnRJFdd0NCbX+51vy5mJ0HHWmDIdZmS6ipebhtaY6mOBUMR
-         hmGNamy0stqDW6xt9o0t+pctMP3GvmKgYWajnzQFj94SYMy8ayD+lhv7D0by3bSN0dwN
-         9HxXuqqg53hJB20+esXKlhckwnC4AZAept26uMo1QXE/kP6eXVjHxOJSa83pn983O0Xd
-         K9Y39t2cNChcd67fPjQUPnCnX/HDXzOB3PceXqxM5fNmKGGiIcpSB/ahkwGBtloVPTpM
-         oQeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679235238;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5P8vV5SdTC8v0eY1KGmdi5SpQmO/V0KvzXuxG5KBGwI=;
-        b=sTAFwobfhk5RUfeHoBFWluAwgSXDvw5ZcB4nbjOCFWhz06kj8oYwoquurnmA7x9bmn
-         X/gATLbD538a0T9DRsgbiGg43fhkIM3t/OxUoxxmSt1ZN19e492YeRD5ZAkLAKhdS8qd
-         wyndpf8wt6L1EIJmpzdBG1KlTeWicmjunAHg7LHgez46p3ugeRU7Om3sxduzCZlgOVun
-         w2pfiLTcHnJ9TMZ77E+zBFFyRT+VsSaiC3H03KiyHcDXlQ2Eo6uddA5TwE3U+FXEcHv/
-         dDoGdJHnCDBqgNqDsPFvKVuNLeWaTJzklzrmFWY98OxmGbetQ7zrKBYcP4Fo/UdVVfTa
-         n87Q==
-X-Gm-Message-State: AO0yUKXDgBi8Uhu3Ms4ly8VatRqcTowhv+3CeBLRXJYsqG6KCTG+hUe4
-        Coti4LjPsnzpSPGz9++nvqt79AJ4gXmKezgmp/I=
-X-Google-Smtp-Source: AK7set+7F5xYj57Uc7OdJB7x1zl+UTYlUcK21nOpfQqu9S3MJ+xiyrr4s/wKj3rZ3zx7povZD0tcJQ==
-X-Received: by 2002:aa7:c043:0:b0:500:2a15:f86b with SMTP id k3-20020aa7c043000000b005002a15f86bmr8791029edo.42.1679235238119;
-        Sun, 19 Mar 2023 07:13:58 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id t21-20020a50d715000000b004af7191fe35sm3540689edi.22.2023.03.19.07.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 07:13:57 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 2/2] tpm: tpm_tis_spi: Mark ACPI and OF related data as maybe unused
-Date:   Sun, 19 Mar 2023 15:13:54 +0100
-Message-Id: <20230319141354.22907-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230319141354.22907-1-krzysztof.kozlowski@linaro.org>
-References: <20230319141354.22907-1-krzysztof.kozlowski@linaro.org>
+        Sun, 19 Mar 2023 10:16:20 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A3E210B
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:16:19 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id EDF615C00CB;
+        Sun, 19 Mar 2023 10:16:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 19 Mar 2023 10:16:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679235371; x=
+        1679321771; bh=e4XiFtwAT6qOdumm8rj6fJDInrJFt0F6aGuIqwJiZCQ=; b=K
+        zFPsKalNb7AhDZ164VkpZ1aQ1q4Y0qYgtuDmK5nUY1R7Q+9BFddQW3k1zL/7xZ/a
+        dSysvcmG45KLrgF/9addNNMFs+2aAPl6WoTiYiHpmtN6c+rcv/NIJYEXo4cBorBp
+        f21cGPmrjZKZnlHai8PaD0nMXDXlN2Ly854Iu5QBSIVJQabiK8fOZo6m+1x/vSAH
+        kkvvtPv/0T5e85ctwMIzVDu4dd1I68rurCL4vsN5leQdtmXyKpILg+lPVxYDTCWD
+        587sP8BG6tYTj5+pX3tDYvKvfmWJAQ4EDifJ6m+iyZeBZ91ki8hwVwhYYrnTZrh1
+        xf/FsDzh2Y+q25dR1vzng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679235371; x=1679321771; bh=e4XiFtwAT6qOd
+        umm8rj6fJDInrJFt0F6aGuIqwJiZCQ=; b=DnoJvtLdvtJjdkZSWLg90KBWQR+Mk
+        +qENFW5ZKgDW+dYcNAcpcG28fQdWGofCWHHesRq8iyT/yxNWymM6DTtm3UyKByjO
+        Cbm8P011yaXrlrEwEADBn98VWO1l7z1vSERXO/lTkejEt5iw1TCo9oBnVuyDI1p3
+        hSvOLJryjyF/zKhoRCPV+MiMCVEYlipVdQQ+2YNFtsWvHnPdo6IKCo6Lr/91QLyg
+        K1BLWxZ7tCpJhyG4IipL6gOvSEMPiqdXnjcG+2BP5nNRC0BXRFc3PzGZji/OvIEu
+        bAOfwA0YZNXL6wC1s/yaN3bYmfv6Ei165LVuR/qcRWGxrT79TrMlLEZoA==
+X-ME-Sender: <xms:KxkXZNlvLQlWyvfRGT26IiRtOXCf_A9j148vXh0_1cwveKQspW6Erg>
+    <xme:KxkXZI2x10xwlnzmf59yAS3eZwDx4PXPkHV--JAH0PL_gA4ga0TmRGiR75y254EEj
+    XxSOpa_254talNi_E8>
+X-ME-Received: <xmr:KxkXZDqft2zs4LUFO9Bzdeik3t7qOWftaQgnGGdNckK8UfdnnyVCtOk0T3QT4u5r2ndwWg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefiedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    dttddttddvnecuhfhrohhmpedfmfhirhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehk
+    ihhrihhllhesshhhuhhtvghmohhvrdhnrghmvgeqnecuggftrfgrthhtvghrnhephfeige
+    fhtdefhedtfedthefghedutddvueehtedttdehjeeukeejgeeuiedvkedtnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehshh
+    huthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:KxkXZNlTmJ0bTeM_1kZlsMmOxrctuecWMx8Fm3aRumOXVUl68hZbnA>
+    <xmx:KxkXZL1tgKsjR26yzN5Cg8EdKZ9Z3LhfpyPU1maCGz4lF3v85aOr3A>
+    <xmx:KxkXZMsjafmCY_AgfTBdHDERq3vgxe7TPVzsHHUfKLCQVWzZloSZjA>
+    <xmx:KxkXZJCV0tvB57K8CoYfgSvX1wVGRHo3ttL5HLZxq4ql6MO6uoM0kQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 19 Mar 2023 10:16:11 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id D114610D7B6; Sun, 19 Mar 2023 17:16:08 +0300 (+03)
+Date:   Sun, 19 Mar 2023 17:16:08 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: move get_page_from_free_area() to mm/page_alloc.c
+Message-ID: <20230319141608.gu2gwet75fdbxnkr@box.shutemov.name>
+References: <20230319114214.2133332-1-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319114214.2133332-1-rppt@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
-unused.  This fixes compile tests with W=1 by annotating device ID table
-as possibly unused:
+On Sun, Mar 19, 2023 at 01:42:14PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> The get_page_from_free_area() helper is only used in mm/page_alloc.c so
+> move it there to reduce noise in include/linux/mmzone.h
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-  drivers/char/tpm/tpm_tis_spi_main.c:234:34: error: ‘of_tis_spi_match’ defined but not used [-Werror=unused-const-variable=]
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-
-Changes since v1:
-1. Enhance commit msg.
----
- drivers/char/tpm/tpm_tis_spi_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index a0963a3e92bd..1f5207974a17 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -231,7 +231,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
- };
- MODULE_DEVICE_TABLE(spi, tpm_tis_spi_id);
- 
--static const struct of_device_id of_tis_spi_match[] = {
-+static const struct of_device_id of_tis_spi_match[] __maybe_unused = {
- 	{ .compatible = "st,st33htpm-spi", .data = tpm_tis_spi_probe },
- 	{ .compatible = "infineon,slb9670", .data = tpm_tis_spi_probe },
- 	{ .compatible = "tcg,tpm_tis-spi", .data = tpm_tis_spi_probe },
-@@ -240,7 +240,7 @@ static const struct of_device_id of_tis_spi_match[] = {
- };
- MODULE_DEVICE_TABLE(of, of_tis_spi_match);
- 
--static const struct acpi_device_id acpi_tis_spi_match[] = {
-+static const struct acpi_device_id acpi_tis_spi_match[] __maybe_unused = {
- 	{"SMO0768", 0},
- 	{}
- };
 -- 
-2.34.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
