@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0845A6C0348
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394F56C0346
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCSQsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 12:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S230526AbjCSQsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 12:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjCSQrx (ORCPT
+        with ESMTP id S229448AbjCSQrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:47:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8351E9F2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:47:52 -0700 (PDT)
+        Sun, 19 Mar 2023 12:47:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E0C1E9FC
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:47:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FC6EB80C8C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 16:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3A2C433B0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 579F261137
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 16:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34220C433B3;
         Sun, 19 Mar 2023 16:47:50 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pdwCD-000JZV-0I;
+        id 1pdwCD-000Ja5-0z;
         Sun, 19 Mar 2023 12:47:49 -0400
-Message-ID: <20230319164748.909374812@goodmis.org>
+Message-ID: <20230319164749.115087761@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sun, 19 Mar 2023 12:46:49 -0400
+Date:   Sun, 19 Mar 2023 12:46:50 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Sung-hun Kim <sfoon.kim@samsung.com>
-Subject: [for-linus][PATCH 6/8] tracing: Make splice_read available again
+        Ingo Molnar <mingo@elte.hu>,
+        Mike Rapoport <mike.rapoport@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [for-linus][PATCH 7/8] ring-buffer: remove obsolete comment for free_buffer_page()
 References: <20230319164643.513018619@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,37 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sung-hun Kim <sfoon.kim@samsung.com>
+From: Vlastimil Babka <vbabka@suse.cz>
 
-Since the commit 36e2c7421f02 ("fs: don't allow splice read/write
-without explicit ops") is applied to the kernel, splice() and
-sendfile() calls on the trace file (/sys/kernel/debug/tracing
-/trace) return EINVAL.
+The comment refers to mm/slob.c which is being removed. It comes from
+commit ed56829cb319 ("ring_buffer: reset buffer page when freeing") and
+according to Steven the borrowed code was a page mapcount and mapping
+reset, which was later removed by commit e4c2ce82ca27 ("ring_buffer:
+allocate buffer page pointer"). Thus the comment is not accurate anyway,
+remove it.
 
-This patch restores these system calls by initializing splice_read
-in file_operations of the trace file. This patch only enables such
-functionalities for the read case.
+Link: https://lore.kernel.org/linux-trace-kernel/20230315142446.27040-1-vbabka@suse.cz
 
-Link: https://lore.kernel.org/linux-trace-kernel/20230314013707.28814-1-sfoon.kim@samsung.com
-
-Signed-off-by: Sung-hun Kim <sfoon.kim@samsung.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Ingo Molnar <mingo@elte.hu>
+Reported-by: Mike Rapoport <mike.rapoport@gmail.com>
+Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: e4c2ce82ca27 ("ring_buffer: allocate buffer page pointer")
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/ring_buffer.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index fbb602a8b64b..4e9a7a952025 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5164,6 +5164,8 @@ loff_t tracing_lseek(struct file *file, loff_t offset, int whence)
- static const struct file_operations tracing_fops = {
- 	.open		= tracing_open,
- 	.read		= seq_read,
-+	.read_iter	= seq_read_iter,
-+	.splice_read	= generic_file_splice_read,
- 	.write		= tracing_write_stub,
- 	.llseek		= tracing_lseek,
- 	.release	= tracing_release,
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 071184324d18..3c7cd135333f 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -354,10 +354,6 @@ static void rb_init_page(struct buffer_data_page *bpage)
+ 	local_set(&bpage->commit, 0);
+ }
+ 
+-/*
+- * Also stolen from mm/slob.c. Thanks to Mathieu Desnoyers for pointing
+- * this issue out.
+- */
+ static void free_buffer_page(struct buffer_page *bpage)
+ {
+ 	free_page((unsigned long)bpage->page);
 -- 
 2.39.1
