@@ -2,109 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B7E6C0065
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A0B6C006D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCSJg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 05:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S229898AbjCSJpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 05:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCSJgw (ORCPT
+        with ESMTP id S229468AbjCSJpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 05:36:52 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2115.outbound.protection.outlook.com [40.107.255.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214D010432
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 02:36:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BlHf3sqe1RYY7rXm47EEfiKadHC8DPGxHTBEXNYJUfLcZ9I93DTJvYQCnREs4tmgVATjG9Jblu9M5OMSHzefOqEj/qUGf7nECW1JCOjfQY+xXk3Qea2jPTdZCO1vfwFfszYqyp36Bla49WPZ+VO3Ow547vvtn+zK/Bg0rS/0GvhJLrrLoJQ2IRJ4CPXq1BT6PFaxjNhq5jgy1MhX6zZGY3u53wU796DoetisOj4wYqI4hrri/WqHWtzwfgNH8qr82oedByva9tMM0rsvz6AeWJ8fweueuXM1h4pK/LjCzXS4VW8e4uzmTft3HQXA4HAcut4I3ONk0zsDlul00hbm7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aIIaa5x7Apat8LoxVKaudakporoOCiCDjp8kkBVkcvU=;
- b=PQXHa9iRw6LYUGF5+BzeUKwekr4kK3Edil2J2FI6N1J+yjmD8CQjix2Vwks+SsQwfwwaAwn22pjt84sUmiYfZNdBC2RYSH2jnL8bO+lXov+uWtxxnnnXIZlLKwJiezqSp2gTXhEHSPFLBioQKYQ68uBg5rGZhKJqbFPHEuOBO59ZcVB7vyIlGorELP8YKqYpShUHjHqXhiBcTRpNXR2OmnDHwJa4QVJ0qoHeOcSWVZzC0xDl7Lh5BkgJcpQBBKL22fV4i6KQUCtYxWBtax4gHRT6c94cXblsN78kucYDtKdjgd6nnuScKJFxj/Im74Lky5uAWHbSr5BSrsaqHW89wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aIIaa5x7Apat8LoxVKaudakporoOCiCDjp8kkBVkcvU=;
- b=Egbo4RdRd/uFnwyThLDaIYSmYgMCSa+mt9HRMNAgHDkxCSUOtv8BmFx5hwk7kcWwh8ut7EooI1eh9h7wGZsVqN4KD6srkELIroTaiUQcWVpHMXMAcAEJf+2s+7eDaSUSkjUHpNPWzNYvKbFEzZlxntaK2zBZA6CdKdlK3fzW5KcPzBnFmMOU21g+XURX74dIcjRt0pnARr/eivTc350NQyW21r08yYhzr2w9wayh+2HqjE7JZv8NKa68sSVW+tyk1sVQ/kn9voWbsm7/hpJFckVWumQZAZr/gG8qUBOigWf1fJCLpbuDlo+JLJ2p1KHfCk4GVccztwcRfj1G7ypKQA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB4020.apcprd06.prod.outlook.com (2603:1096:820:23::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Sun, 19 Mar
- 2023 09:36:44 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6178.037; Sun, 19 Mar 2023
- 09:36:44 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     gregkh@linuxfoundation.org
-Cc:     frank.li@vivo.com, linux-kernel@vger.kernel.org, rafael@kernel.org
-Subject: Re: kobject: introduce kobject_del_and_put()
-Date:   Sun, 19 Mar 2023 17:36:36 +0800
-Message-Id: <20230319093636.7166-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <ZBbRDl4OYGZIlx7E@kroah.com>
-References: <ZBbRDl4OYGZIlx7E@kroah.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
- (2603:1096:4:196::10) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Sun, 19 Mar 2023 05:45:19 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352AB76E;
+        Sun, 19 Mar 2023 02:45:17 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5416b0ab0ecso175237167b3.6;
+        Sun, 19 Mar 2023 02:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679219116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l9ErGVM/hPJOD1E20KyBCgnADtZeDKXRPbZaHTW4/PE=;
+        b=CzBJDD2FSVZavpJFebtB5oF+WFA6zF/re9tl/IvuSJaPJqWeuhqu+LvP6hLmgxYxF5
+         2hygZQ7rWf0sMPqoUpfdrtUXXIJPu4FgXc1H7iYzydDNGSPu+vaKJyWYkhrECl6Bryo+
+         NkU9MMvoQInrv+nEImCNplGOyzEHfGijKSw8hRdw8wGCkpym5ybL3Hi3F2G8yhFcwSRg
+         DiAyPScNXbAgcX+1A6twm0auRdf5jXeM2cyenuUBCZf6wmn5UDdu7bnDo0XlCpk9DUxy
+         4GHq+N7u+JQ+TLhb0/oW1WLiyeLtXzEtJAe4+iU5FRBaVHd73BK4qOQ/gohmSgXvEVGQ
+         cgQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679219116;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l9ErGVM/hPJOD1E20KyBCgnADtZeDKXRPbZaHTW4/PE=;
+        b=MaN+mdIk3ozgU68xoaCaSjI8KHOKEiA1UhNaMWA0DQHcAqMLaWkTpkARHbOJxMqv+e
+         w/S/yDn9hZ0jL2Gj+IBLLMHYypTGwyj07sQGXV5RYwnDvS5IoSSRfwd+OiWYvIAx6prV
+         uvWJD2MA2J9m2Go9oIqILNpDFoyiSJkCwIbN8jD9a82ZHZYNFnk+F9mxF4eap+Hk56YA
+         lhWTGmZi/7otfVW2l5pg4VKeVKbald4T2IQzf4EbhSTf5ZIrMFHQEIHL1qqVJ7NFyArA
+         ONpFSx3lakTOnE/PAzZZWOJ8vEmOvctMl6uF4S9lBbBkunpTfBvuBi5kDH9hr07qIPXG
+         rcJw==
+X-Gm-Message-State: AO0yUKUaQ5Jh+8hB8g6HJZhPNEb9X35RaeH5AtmWfFN1kIChXHeAW8VC
+        H+4yCA298371lFqbHlAu2ZoL/uMBdkV0twHz3kE=
+X-Google-Smtp-Source: AK7set+EGp1KAUzIsksQqm3UaoiKBZEg0DwDH6V0AqzeAJpGiRwATHmXpvi5o4QqVI1RfI4EudqXqDo6RbMrOe8e11Q=
+X-Received: by 2002:a81:b617:0:b0:541:8ce6:b9ad with SMTP id
+ u23-20020a81b617000000b005418ce6b9admr7866486ywh.2.1679219115994; Sun, 19 Mar
+ 2023 02:45:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4020:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9da4db56-6004-42e5-9845-08db285d73a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nVvq8ifkPzovllkfiJkI1TTufISiAG6MEeBe9xVhcBkmoMXHcE8L1xSsyKMzMwgafX/w3nhmUdOfbW9IJ9xS3l2R+ORmtZwDR2DKOaFKbkbZviGv4I1w6guu3uCc0NamplTr4aLSwly252+j7GsJwF6KvTtl1pPVYiHTitOWLjbjDZ2aGiGSNhg1a4KnEGtBIX+r+Q8KpxpeLq6m5NgZMr0iQiTPRhsSNBUk0yo8Psf/yz334lvuKvcQkxeyA3j2pMTq+mhOQF7sxFOGlkMG0DTc7Z+OMTu4eCGsJ7soKxEoCtoWYwXxhhNbxkJRBqBEs9L0V8efQ9zGEGw+oB7sD77JaSYcNZ3KkzK5bitkVmbD+yPNQ98OdWDozkKcPSP2ePmKSj2zCh9CcvEVzMnpMnsrVuZWkn3x51veUxy9nQeMU3a5eFzgeMAJPaEjQTayIQZNiD2TSR5Law6FKtLToDd5Zrvh6k3d+rl5hikXRkNflWGvQ9JfMrFWhUsaU7hB3+mH+dLtId2Ovx7RR7lPzzkfourOQ4PIT9iRbnFvv73oTmyk4tBM8W2rZAZE5VjmjYPcucEmYG9d26i6w5J17BhNo8MwWcpTeSrOCUeX7BrZrwvmCMA2gO18/r6o/4mtq5TIYP1ayrGPVd7Z8CFgx1fbqXFwb/9fj2eWVHxSwYf2e7qIigp7yklX5obIg5hBAVlyr3MufFsHAnRLXmU8UA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(136003)(39850400004)(346002)(396003)(451199018)(86362001)(36756003)(52116002)(316002)(6916009)(4326008)(8676002)(66476007)(66946007)(66556008)(478600001)(186003)(26005)(1076003)(6512007)(6506007)(2616005)(6666004)(6486002)(38100700002)(38350700002)(5660300002)(8936002)(4744005)(41300700001)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/mKPeNkJiUv6uROPXGnT47Y/AkIkaTIWdSERDsLx9E43opPdaWHctPst8rHy?=
- =?us-ascii?Q?zYZIgAPkR4eoAz48x9dkD8kN0S7AFLylYNZ93ldrRRo990qd3CCILpgZh8Rg?=
- =?us-ascii?Q?yCmiVJxo6uoCP8bXScNQNYNmM6blo4kW6cP1qGUCbEIABuHRExzmV+AxGPzg?=
- =?us-ascii?Q?7OX6oDG0vamcutyyC5n1yjZRF6dr4WNdlcahnLSpE9/q9NTVAeMQX+Tt45uX?=
- =?us-ascii?Q?q2lsyJSi4YlzrHr9uEN5iNOAL4Yy+KOcnFqIHAoslTAHsyLGs6RLx+V0y+YQ?=
- =?us-ascii?Q?w1zNN4cfANRNigJZbd+6T018Jo3X6RJ0xHDCeWNv7IA++0n30ho8sEqS9KO/?=
- =?us-ascii?Q?p9ha4yAgnRSBIdy5Jq5dmN/kEznIawiIVAD8bIQkD2mrypWOAuEvsA6BBkGw?=
- =?us-ascii?Q?ZJOSBatwa7/qv+P1fzmBXFv/IBEnsU0uhoO/CAqWrRti0MdDHxqnyMZ14tm1?=
- =?us-ascii?Q?pzaYyAXNnYE/8AxGy4Uxv3n8qW/Q1Sh41YajISBl7EWg1L7SZnqYzssfoVcA?=
- =?us-ascii?Q?f45qDoLqakA8qfY5Dqr5yKDCa+x2xEmhAROvHqlMcYk1EHOzacsWPsSc04jN?=
- =?us-ascii?Q?TeltcIw3FdgJsoArbtJcgYdLJ9SCeltdFn5RWX5So29b7bY8N8HTom4+owto?=
- =?us-ascii?Q?xuJpRzxJThAPOASQEpe6P+Tl0K6d/27juqYkcT8/K7Bb0wxxQbVzZ44jCZNt?=
- =?us-ascii?Q?tDKW6dF986KAUpIzkwfJSHXpEggCqVWQAuaE4M9XL2zHf1IykouInZjUnkrt?=
- =?us-ascii?Q?KWQoOtp4MnT1Ofca78vVR39yualobwLmhD4OMqCR1euC6VtjGVKA7qw3BxGV?=
- =?us-ascii?Q?giLskrIw+lOpy8D0Dk32/exHJRsTQ5oqy7QWmNjT/P+lyubLrQ115GHd+G3n?=
- =?us-ascii?Q?PlAhHp6H6TfMe45V4hnQf+e9Ma5QyhTBYzgbovJArrDncUyrf9ogi3C4NGxl?=
- =?us-ascii?Q?gwPcjoqY8XvnETn4D3OF3BEAGEtLc8oao6Yp4xRPiTnjLlku/SxSKzzwqoo0?=
- =?us-ascii?Q?A2b1FoUblWHDT5rDFx/ItzY5hb22GDepViafeadilVBbObcKzcUw4l+Gnyev?=
- =?us-ascii?Q?6bn6Q8MaNEcJ6gaTDwWptvxf66eiRLrWSAHdGTmOjtPEjKCnjyUP7cD9A6hQ?=
- =?us-ascii?Q?pdc1HCq71ilkTGC2jtY3NDdjnKvXPYDklWTze8X/N4rnhGyGQjt/3jW2wAmx?=
- =?us-ascii?Q?9/rFE6KVLNKEaf+U5rROvMOpOvjZ9f44GhzxNpQ/o5XfkkWHuUFV1WpJRV99?=
- =?us-ascii?Q?/XMufCQBRfxrGKgIZwenSH4yihKGz8N8jh9KyDfc8wvA9sCLt+Cvfe/M8m4e?=
- =?us-ascii?Q?/31wcM46Q9P2kxeQ+55hp2M4mNStSlvmxSFOKHHCOSdxYp/eaXarP3RYsKKu?=
- =?us-ascii?Q?GAjbU/jloDjFWXFH2n+LIXIBBMMJhfA3+kl5/0QFDe0fZRpjL6jk8umzUMeU?=
- =?us-ascii?Q?VOjHEZB245XJ6tz+XpQgPJ4xpjZ3bOqGi5RpS4biqj94cYtFACu8MplyuVi+?=
- =?us-ascii?Q?0vi7XSFRL1i7MRWR2XqWlrKuTvX7856WlEfunMP0uUo8EVNInunsRxOH/xtd?=
- =?us-ascii?Q?rTctBsVDSjgdoHHDs3zkFT4mSzQE17HnsIXkoa4X?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9da4db56-6004-42e5-9845-08db285d73a6
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2023 09:36:44.2142
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /9oz4bkZ99P/isWwjSzctbXPNLk0bGzqb/yL+WDNZ17LmBN8lXDpMfI2q7BA0aC3CiJuLgLGuak6Yomie+9BFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4020
+References: <20230317113427.302162-1-noltari@gmail.com> <20230317113427.302162-3-noltari@gmail.com>
+ <20230317115115.s32r52rz3svuj4ed@skbuf> <CAKR-sGe3xHkN-1+aLn0ixnskctPK4GTzfXu8O_dkFhHyY1nTeg@mail.gmail.com>
+ <20230317130434.7cbzk5gxx5guarcz@skbuf> <CAKR-sGeFZLnuqH=4Gok1URJEvrQKxbk203Q8zdMd9830G_XD7A@mail.gmail.com>
+ <20230317142919.hhjd64juws35j47o@skbuf> <CAKR-sGc7u346XqoihOuDse3q=d8HG6er3H6R1NCm_pQeNW7edA@mail.gmail.com>
+ <4d669474-59b6-b0e9-09cb-8278734fa3a2@gmail.com>
+In-Reply-To: <4d669474-59b6-b0e9-09cb-8278734fa3a2@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Sun, 19 Mar 2023 10:45:05 +0100
+Message-ID: <CAKR-sGck2hqc5CpQQS_4WHm4bPzXJRg4aokd-8EporvUJ8UtbQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] net: dsa: b53: mmap: register MDIO Mux bus controller
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jonas.gorski@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,17 +77,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Any reason you only sent me one patch?  I guess you don't want me to
-> review them?  :(
+El vie, 17 mar 2023 a las 17:41, Florian Fainelli
+(<f.fainelli@gmail.com>) escribi=C3=B3:
+>
+> On 3/17/23 09:23, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+> > El vie, 17 mar 2023 a las 15:29, Vladimir Oltean (<olteanv@gmail.com>) =
+escribi=C3=B3:
+> >>
+> >> On Fri, Mar 17, 2023 at 03:17:12PM +0100, =C3=81lvaro Fern=C3=A1ndez R=
+ojas wrote:
+> >>>> The proposed solution is too radical for a problem that was not prop=
+erly
+> >>>> characterized yet, so this patch set has my temporary NACK.
+> >>>
+> >>> Forgive me, but why do you consider this solution too radical?
+> >>
+> >> Because it involves changing device tree bindings (stable ABI) in an
+> >> incompatible way.
+> >>
+> >>>>
+> >>>>> But maybe Florian or Jonas can give some more details about the iss=
+ue...
+> >>>>
+> >>>> I think you also have the tools necessary to investigate this furthe=
+r.
+> >>>> We need to know what resource belonging to the switch is it that the
+> >>>> MDIO mux needs. Where is the earliest place you can add the call to
+> >>>> b53_mmap_mdiomux_init() such that your board works reliably? Note th=
+at
+> >>>> b53_switch_register() indirectly calls b53_setup(). By placing this
+> >>>> function where you have, the entirety of b53_setup() has finished
+> >>>> execution, and we don't know exactly what is it from there that is
+> >>>> needed.
+> >>>
+> >>> In the following link you will find different bootlogs related to
+> >>> different scenarios all of them with the same result: any attempt of
+> >>> calling b53_mmap_mdiomux_init() earlier than b53_switch_register()
+> >>> will either result in a kernel panic or a device hang:
+> >>> https://gist.github.com/Noltari/b0bd6d5211160ac7bf349d998d21e7f7
+> >>>
+> >>> 1. before b53_switch_register():
+> >>>
+> >>> 2. before dsa_register_switch():
+> >>>
+> >>> 3. before b53_switch_init():
+> >>
+> >> Did you read what I said?
+> >
+> > Yes, but I didn't get your point, sorry for that.
+> >
+> >>
+> >> | Note that b53_switch_register() indirectly calls b53_setup(). By pla=
+cing
+> >> | this function where you have, the entirety of b53_setup() has finish=
+ed
+> >> | execution, and we don't know exactly what is it from there that is
+> >> | needed.
+> >>
+> >> Can you place the b53_mmap_mdiomux_init() in various places within
+> >> b53_setup() to restrict the search further?
+> >
+> > I tried and these are the results:
+> > https://gist.github.com/Noltari/d5bdba66b8f2e392c9e4c2759661d862
+> >
+> > All of them hang when dsa_tree_setup() is called for DSA tree 1
+> > (external switch) without having completely setup DSA tree 0 (internal
+> > switch):
+> > [ 1.471345] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+> > [ 1.481099] bcm6368-enetsw 1000d800.ethernet: IRQ tx not found
+> > [ 1.506752] bcm6368-enetsw 1000d800.ethernet: mtd mac 4c:60:de:86:52:12
+> > [ 1.594365] bcm7038-wdt 1000005c.watchdog: Registered BCM7038 Watchdog
+> > [ 1.612008] NET: Registered PF_INET6 protocol family
+> > [ 1.645617] Segment Routing with IPv6
+> > [ 1.649547] In-situ OAM (IOAM) with IPv6
+> > [ 1.653948] NET: Registered PF_PACKET protocol family
+> > [ 1.659984] 8021q: 802.1Q VLAN Support v1.8
+> > [ 1.699193] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+> > [ 2.124257] bcm53xx 0.1:1e: found switch: BCM53125, rev 4
+> > *** Device hang ***
+> >
+> > I don't know if there's a way to defer the probe of DSA tree 1 (the
+> > external switch) until DSA tree 0 (the internal switch) is completely
+> > setup, because that would probably be the only alternative way of
+> > fixing this.
+>
+> Could you find out which part is hanging? It looks like there is a busy
+> waiting operation that we never complete?
 
-Sorry, I used the following git configuration to send emails, so it was
-not sent to you.
+After many tests I was able to find the part that was hanging the device.
+It turns out that if the MDIO bus controller is registered soon
+enough, b53_phy_read16 will be called for the RGMII port on the
+internal switch:
+[ 4.042698] b53-switch 10e00000.switch: b53_phy_read16: ds=3D81fede80
+phy_read16=3D00000000 addr=3D4 reg=3D2
+It turns out that the device is hanging on the following line of
+b53_phy_read16():
+    b53_read16(priv, B53_PORT_MII_PAGE(addr), reg * 2, &value);
+Maybe it's not safe to access B53_PORT_MII_PAGE() on MMAP switches?
 
-[sendemail]
-    tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
-    cccmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom"
+Only in one specific image in which I had a lot of debugging this
+access didn't hang, but it just returned 0:
+[ 5.129715] b53_mmap_write16: dev=3D83547680 page=3D0 reg=3D3c val=3D100
+[ 5.135914] b53_mmap_write16: dev=3D83547680 page=3D0 reg=3D3c val=3D100 do=
+ne!
+[ 5.143721] b53-switch 10e00000.switch: b53_phy_read16: ds=3D83547580
+phy_read16=3D00000000 addr=3D4 reg=3D2
+[ 5.153204] b53-switch 10e00000.switch: b53_phy_read16: ds=3D83547580
+phy_read16=3D00000000 addr=3D4 reg=3D2 val=3D0
+[ 5.163171] b53-switch 10e00000.switch: b53_phy_read16: ds=3D83547580
+phy_read16=3D00000000 addr=3D4 reg=3D3
+[ 5.172560] b53-switch 10e00000.switch: b53_phy_read16: ds=3D83547580
+phy_read16=3D00000000 addr=3D4 reg=3D3 val=3D0
+[ 5.218764] b53-switch 10e00000.switch: Using legacy PHYLIB callbacks.
+Please migrate to PHYLINK!
 
-I amended the resent patch, the patch body states cc to you and Rafael.
+However, if I implement b53_mmap_phy_read16() and
+b53_mmap_phy_write16() in MMAP it seems to solve the issue and the
+device doesn't hang anymore:
+[ 2.783407] b53-switch 10e00000.switch: found switch: BCM63xx, rev 0
+[ 2.951877] b53-switch 10e00000.switch: b53_phy_read16: addr=3D4 reg=3D2
+[ 2.958393] b53_mmap_phy_read16: dev=3D836f6580 phy_id=3D4 loc=3D2
+[ 2.964367] b53_mmap_phy_read16: dev=3D836f6580 phy_id=3D4 loc=3D2 val=3D36=
+2
+[ 2.970923] b53-switch 10e00000.switch: b53_phy_read16: addr=3D4 reg=3D3
+[ 2.977420] b53_mmap_phy_read16: dev=3D836f6580 phy_id=3D4 loc=3D3
+[ 2.983315] b53_mmap_phy_read16: dev=3D836f6580 phy_id=3D4 loc=3D3 val=3D5e=
+80
+[ 3.026253] b53-switch 10e00000.switch: Using legacy PHYLIB callbacks.
+Please migrate to PHYLINK!
+[ 3.072584] b53-switch 10e00000.switch: Configured port 8 for internal
+[ 3.082850] DSA: tree 0 setup
 
-Thx,
-Yangtao
+However, what I did is just replicating mdio-mux-bcm6368 source code
+in MMAP (for the internal PHY only):
+static int b53_mmap_phy_read16(struct b53_device *dev, int phy_id, int
+loc, u16 *val)
+{
+        uint32_t reg;
+
+        b53_mmap_write32(dev, 0, REG_MDIOC, 0);
+
+        reg =3D REG_MDIOC_RD_MASK |
+        (phy_id << REG_MDIOC_PHYID_SHIFT) |
+        (loc << REG_MDIOC_REG_SHIFT);
+
+        b53_mmap_write32(dev, 0, REG_MDIOC, reg);
+        udelay(50);
+        b53_mmap_read16(dev, 0, REG_MDIOD, val);
+
+        return 0;
+}
+
+static int b53_mmap_phy_write16(struct b53_device *dev, int phy_id,
+int loc, u16 val)
+{
+        uint32_t reg;
+
+        b53_mmap_write32(dev, 0, REG_MDIOC, 0);
+
+        reg =3D REG_MDIOC_WR_MASK |
+        (phy_id << REG_MDIOC_PHYID_SHIFT) |
+        (loc << REG_MDIOC_REG_SHIFT) |
+        val;
+
+        b53_mmap_write32(dev, 0, REG_MDIOC, reg);
+        udelay(50);
+
+        return 0;
+}
+
+Is it safe to add those functions in MMAP or is there a way of forcing
+the use of mdio-mux-bcm6368 for those PHY accesses?
+
+>
+> DSA should be perfectly capable of dealing with disjoint trees being
+> cascaded to one another, as this is entirely within how the framework is
+> designed.
+>
+> What I suspect might be happening is a "double programming" effect,
+> similar or identical to what was described in this commit:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3Db8c6cd1d316f3b01ae578d8e29179f6396c0eaa2
+>
+> using the MDIO mux would properly isolate the pseudo PHYs of the switch
+> such that a given MDIO write does not end up programming *both* the
+> internal and external switches. It could also be a completely different
+> problem.
+> --
+> Florian
+>
+
+--
+=C3=81lvaro
