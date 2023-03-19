@@ -2,85 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB2C6C0570
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE3D6C0574
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjCSVXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S230225AbjCSV1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 17:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCSVXf (ORCPT
+        with ESMTP id S229619AbjCSV1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:23:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AFA11E8C;
-        Sun, 19 Mar 2023 14:23:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfrSt3vSPz4xDh;
-        Mon, 20 Mar 2023 08:23:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679261006;
-        bh=XkS7pprV68cGMowEZ+ra4Y4qjCJrNuxnxjTHRouwXtc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sjYPMmYLY1wQolMzmjeBuVebkcD25MQOhflUX+7z6NLltcf6+78UQ6UXaKBip+KfK
-         L3eugIc0ueQC4IlUU9yjA5fuHveThMp/fQZzrnpJbSnHWBASioZ8hUjOoDwYaPu1/U
-         vW23NVALdA33AkHn+cXezl5uYEGupnEiyOif86ob08sa1gFuY4wWicW9/PELYBBaJq
-         HeEr/VtRtQunzAkKC0q7jXC90yA3s8wFDUxYp2pEibTB3CUzwpH2dlzPD76EHGtISk
-         pbEWkQFZEKfYJWe0y3eoqdT7IglEHu7GpvAJ7wnGWq9+FcCA/jsE4uBN0zxYKwNTW7
-         bshXl+30cwaKw==
-Date:   Mon, 20 Mar 2023 08:23:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
-Message-ID: <20230320082323.61889e67@canb.auug.org.au>
+        Sun, 19 Mar 2023 17:27:02 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CDA1B2D3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=bHkK5UpAZVkY+gcKkmir9zpMkeQ6gmLHJ5QWOlgDrs0=;
+  b=DX/U08CL1QHKWrI/6256ttDq9yKPnt+j3lDlcRxV7lo05afZvxGxmrne
+   1glFA9a2GVR74MzchG4Tw/HkMA0JQTlHCpA6mVW60kCDLgS/LAKFwpZZW
+   1QMdlQEowac11xFJxyNLMEUqmSZXtgDUKSD0MVvnBf4YEEKkbUjmRHYGt
+   g=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,274,1673910000"; 
+   d="scan'208";a="50622383"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 22:26:59 +0100
+Date:   Sun, 19 Mar 2023 22:26:58 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: greybus: use inline function for macros
+In-Reply-To: <402ffcbe-bb29-7035-68f4-2741532a6d67@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2303192225590.2867@hadrien>
+References: <20230319201324.253874-1-eng.mennamahmoud.mm@gmail.com> <alpine.DEB.2.22.394.2303192121170.2867@hadrien> <0f02a3ff-801b-1e1f-5c03-009a05708709@gmail.com> <alpine.DEB.2.22.394.2303192151330.2867@hadrien>
+ <402ffcbe-bb29-7035-68f4-2741532a6d67@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7dNVcUZ2iI/1zWk=87VNLFw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1603913763-1679261219=:2867"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/7dNVcUZ2iI/1zWk=87VNLFw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Hi all,
+--8323329-1603913763-1679261219=:2867
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Commit
 
-  41341224e4fd ("ARM: mmp: remove obsolete config USB_EHCI_MV_U2O")
 
-is missing a Signed-off-by from its committer.
+On Sun, 19 Mar 2023, Menna Mahmoud wrote:
 
---=20
-Cheers,
-Stephen Rothwell
+>
+> On ١٩/٣/٢٠٢٣ ٢٢:٥٥, Julia Lawall wrote:
+> >
+> > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+> >
+> > > On ١٩/٣/٢٠٢٣ ٢٢:٢١, Julia Lawall wrote:
+> > > > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+> > > >
+> > > > > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> > > > > static inline functions.
+> > > > >
+> > > > > it is not great to have macro that use `container_of` macro,
+> > > > > because from looking at the definition one cannot tell what type
+> > > > > it applies to.
+> > > > >
+> > > > > One can get the same benefit from an efficiency point of view
+> > > > > by making an inline function.
+> > > > >
+> > > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> > > > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> > > > > ---
+> > > > >    drivers/staging/greybus/gbphy.h | 10 ++++++++--
+> > > > >    1 file changed, 8 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/staging/greybus/gbphy.h
+> > > > > b/drivers/staging/greybus/gbphy.h
+> > > > > index 1de510499480..42c4e3fe307c 100644
+> > > > > --- a/drivers/staging/greybus/gbphy.h
+> > > > > +++ b/drivers/staging/greybus/gbphy.h
+> > > > > @@ -16,7 +16,10 @@ struct gbphy_device {
+> > > > >    	struct device dev;
+> > > > >    };
+> > > > >
+> > > > You have made the patch against your previous patch that added a newline
+> > > > here.  It should be against Greg's tree.
+> > > >
+> > > > julia
+> > > you mean I should remove this newline, right?
+> > You should apply your change to the state of Greg's tree, not the state
+> > after your patch.
+> >
+> > Assuming that you have committed both the patch adding the new line and
+> > the patch changing the macro to a function, and have made no other
+> > changes, you can do git rebase -i HEAD~2 and the put a d at the beginning
+> > of the line related to the patch adding the newline.
+>
+>
+> you mean drop this patch "staging: greybus: remove unnecessary blank line"?
 
---Sig_/7dNVcUZ2iI/1zWk=87VNLFw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+No, the one that removes the blank line looks fine.
 
------BEGIN PGP SIGNATURE-----
+At some point, you added a blank line below the two structure definitions.
+That blank line is not in Greg's tree, so you shoulsn't send a patch that
+assumes that it is there.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXfUwACgkQAVBC80lX
-0Gz63Qf8CZv7XpPwiosE7ejDdQaWC1B0XO1cyfMzaTZISJkKoXdJgoBCJVfiztUp
-9PMI//KhMSaETYLBUJyfcCbLErSlJ1O6KUO+3kak48jbo1Tk94rP3Xeg3yAWsZRy
-gwV3GG12vGDrOpxntNIMnyLIIjRKZIA8abu72gZRnlYtmp07UlvBlK3mFJ/wJV4Z
-zvmqeR4TNh6QQoS2ZEHi0kGVwNP0onz0fBO716xDFC2M7NXW73ztSccMALUdr+8d
-hJPXDDXp/2dgefrjZBw2bzycMwCsxcz5Rcu2MKDThqTdO5q3nji9tn/D7V8iWahx
-MZ3FVA7InDNs1sGDgNv1c+j+BiPSQg==
-=B3gN
------END PGP SIGNATURE-----
+julia
 
---Sig_/7dNVcUZ2iI/1zWk=87VNLFw--
+>
+> Menna
+>
+>
+> > If you have made
+> > more changes, you can adapt the HEAD~ part accordingly.
+> >
+> > julia
+> >
+> >
+> > >
+> > > Menna
+> > >
+> > > > > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> > > > > +static inline struct gbphy_device *to_gbphy_dev(const struct device
+> > > > > *d)
+> > > > > +{
+> > > > > +	return container_of(d, struct gbphy_device, dev);
+> > > > > +}
+> > > > >
+> > > > >    static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+> > > > >    {
+> > > > > @@ -45,7 +48,10 @@ struct gbphy_driver {
+> > > > >    	struct device_driver driver;
+> > > > >    };
+> > > > >
+> > > > > -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver,
+> > > > > driver)
+> > > > > +static inline struct gbphy_driver *to_gbphy_driver(struct
+> > > > > device_driver
+> > > > > *d)
+> > > > > +{
+> > > > > +	return container_of(d, struct gbphy_driver, driver);
+> > > > > +}
+> > > > >
+> > > > >    int gb_gbphy_register_driver(struct gbphy_driver *driver,
+> > > > >    			     struct module *owner, const char
+> > > > > *mod_name);
+> > > > > --
+> > > > > 2.34.1
+> > > > >
+> > > > >
+> > >
+>
+--8323329-1603913763-1679261219=:2867--
