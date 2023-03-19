@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9506C034F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E186C0353
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjCSQwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 12:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S230357AbjCSQyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 12:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCSQwE (ORCPT
+        with ESMTP id S229496AbjCSQyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:52:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23689EEA;
-        Sun, 19 Mar 2023 09:52:02 -0700 (PDT)
+        Sun, 19 Mar 2023 12:54:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9141284A;
+        Sun, 19 Mar 2023 09:54:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78018B80C88;
-        Sun, 19 Mar 2023 16:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09386C433D2;
-        Sun, 19 Mar 2023 16:52:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73F4D61126;
+        Sun, 19 Mar 2023 16:54:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8655C433EF;
+        Sun, 19 Mar 2023 16:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679244720;
-        bh=jyYS3GJ/aW+lYyizBjOxRkQkb6yrUyO89tl2RA9/JlY=;
+        s=k20201202; t=1679244875;
+        bh=SNwnAkp9FIpdByyHEqUkysZv9TxOIb/dW6tgBK0r9CU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HeeVkxFDGXC7Wn9Q5k+tqRo6+JO85Y4mlVURyf8GOp51/iIyVsFWa59Tuc2kaq0PG
-         eCWG5VCnBIJbxTZmoyxPs9/lOAXhRF59S64xYCl4smaAVtb60sSJTOIsL65V0SZLgK
-         7CG2pyLFFCVRLwQyC6L12Ie60H284jBFgtWmmLNvDPl4IF79GXCLPmoj+ByLkrAMyk
-         1j2eMb3zkIU2HLw9iqckEVgvpEnkXf+ewrf465nrX9k/HDo4nv/SOuS+CiYFidwY0l
-         L43kmXbyD3ItWNbE0bedW+EQ6VtbPPfgvFSqUeIAMId/aQSEEcFLYkjgrM836nanJ/
-         fgvfLUZIIxr8g==
+        b=JHzvUAYis2jlgBQ8tr+UAzUqkuLT595pLzybvfTk5ovqpXriyARIgOSecsF5qBg4u
+         HV3u7a4Ws7AbN8eb5rXDaaxq7RjTyqZKNjXvwF6AtVwSamafYlYbwEfiwrZXIli3s9
+         nqq9RIiYR2FY3YKWmzeTxwMzxdKmegzVBDnJPEFSG9z0eRgLsJMfvGLjZQcF0a1pxs
+         xXjKmXE06x/OKjIfaaSVpK1AhxNPFyu2VI4GFb6AGJs6zOjsU8HhLsRk/7XhIQcdwJ
+         chn4BojQFgR97Ye2SEjosNK3444BLvztcIyvzFS6j3uvbq21sYs4l5lTlH2W+K24+y
+         Jeuiv9/v3ZJ+Q==
 Received: by pali.im (Postfix)
-        id 4F3F9622; Sun, 19 Mar 2023 17:51:57 +0100 (CET)
-Date:   Sun, 19 Mar 2023 17:51:57 +0100
+        id 149D2622; Sun, 19 Mar 2023 17:54:33 +0100 (CET)
+Date:   Sun, 19 Mar 2023 17:54:32 +0100
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Steffen <wiesenbergsteffen+lxkernel@gmail.com>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lanelone@gmail.com
-Subject: Re: [regression] Bug 217182 - Dell Latitude E7450 Trackpoint not
- working as expected
-Message-ID: <20230319165157.xyaxo3wlziqrjurx@pali>
-References: <6625ee0a-31a7-9fef-d299-457c0f98f5a0@leemhuis.info>
- <b7de0060-8555-65f7-c687-1326a5762929@leemhuis.info>
+To:     msizanoen <msizanoen@qtmlabs.xyz>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>, stable@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] input: alps: fix compatibility with -funsigned-char
+Message-ID: <20230319165432.5dj3stwgz4aoluf2@pali>
+References: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
+ <1fd818c2-4e68-8760-9123-de4fa1920c6b@qtmlabs.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b7de0060-8555-65f7-c687-1326a5762929@leemhuis.info>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1fd818c2-4e68-8760-9123-de4fa1920c6b@qtmlabs.xyz>
 User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -61,55 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 15 March 2023 10:50:46 Thorsten Leemhuis wrote:
-> On 13.03.23 11:20, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > 
-> > Hi, Thorsten here, the Linux kernel's regression tracker.
-> > 
-> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> > kernel developer don't keep an eye on it, I decided to forward it by
-> > mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217182 :
-> > 
-> >>  Steffen 2023-03-12 11:17:02 UTC
-> >>
-> >> Hi,
-> >> I'm new to this bug tracking system and just a user, not a developer.
-> >>
-> >> I use a Dell Latitude E7450 running with the Debian unstable based
-> >> distribution Siduction.
-> >> After upgrading to Linux kernel 6.2.x the Trackpoint does not work
-> >> anymore as expected. It uses an Alps PS/2 DualPoint Stick.
-> >> Even slight touches in any direction send the cursor to the top right
-> >> corner of the screen where it stays regardless of actual pointer
-> >> movement. This also appears in console mode. One can retrieve the
-> >> pointer again with the touchpad, but I'm more precise with the
-> >> Trackpoint and prefer using that.
-> >> The Trackpoint works well in kernel 6.1.14
-> >> Can somebody help?
-> > 
-> > See the ticket for more details.
+On Sunday 19 March 2023 16:56:11 msizanoen wrote:
+> Patch confirmed working as expected on real hardware.
 > 
-> FWIW, another user reported seeing the same problem on a different machine:
-> 
-> ```
->  Radek 2023-03-14 08:00:31 UTC
-> 
-> I am experiencing the same issue with kernel >6.2.x on Toshiba Z30
-> with Alps PS/2 DualPoint trackpoint / touchpad. The cursor jumps top
-> right even with the lowest sensitivity settings. It works just fine
-> with 6.1 or lower.
-> ```
-> 
-> Pali, or anybody else: anyone any idea what's might be wrong there?
-> There afaics is only one recent commit to the alps driver (292a089d78d3
-> ("treewide: Convert del_timer*() to timer_shutdown*()")); it it maybe
-> worth trying to revert it?
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
+> Tested-by: msizanoen <msizanoen@qtmlabs.xyz>
 
-Could you try following patch?
-https://lore.kernel.org/linux-input/20230318144206.14309-1-msizanoen@qtmlabs.xyz/
+Thank you for testing. Patch looks good, you can add my:
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+
+Anyway, for future, what do you think about using of s8 and u8 types?
+It could prevent this signdness char nightmare.
+
+> On 3/18/23 21:42, msizanoen wrote:
+> > The AlpsPS/2 code previously relied on the assumption that `char` is a
+> > signed type, which was true on x86 platforms (the only place where this
+> > driver is used) before kernel 6.2. However, on 6.2 and later, this
+> > assumption is broken due to the introduction of -funsigned-char as a new
+> > global compiler flag.
+> > 
+> > Fix this by explicitly specifying the signedness of `char` when sign
+> > extending the values received from the device.
+> > 
+> > Fixes: f3f33c677699 ("Input: alps - Rushmore and v7 resolution support")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: msizanoen <msizanoen@qtmlabs.xyz>
+> > ---
+> >   drivers/input/mouse/alps.c | 8 ++++----
+> >   1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/input/mouse/alps.c b/drivers/input/mouse/alps.c
+> > index 989228b5a0a4..1c570d373b30 100644
+> > --- a/drivers/input/mouse/alps.c
+> > +++ b/drivers/input/mouse/alps.c
+> > @@ -2294,20 +2294,20 @@ static int alps_get_v3_v7_resolution(struct psmouse *psmouse, int reg_pitch)
+> >   	if (reg < 0)
+> >   		return reg;
+> > -	x_pitch = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+> > +	x_pitch = (signed char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+> >   	x_pitch = 50 + 2 * x_pitch; /* In 0.1 mm units */
+> > -	y_pitch = (char)reg >> 4; /* sign extend upper 4 bits */
+> > +	y_pitch = (signed char)reg >> 4; /* sign extend upper 4 bits */
+> >   	y_pitch = 36 + 2 * y_pitch; /* In 0.1 mm units */
+> >   	reg = alps_command_mode_read_reg(psmouse, reg_pitch + 1);
+> >   	if (reg < 0)
+> >   		return reg;
+> > -	x_electrode = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+> > +	x_electrode = (signed char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+> >   	x_electrode = 17 + x_electrode;
+> > -	y_electrode = (char)reg >> 4; /* sign extend upper 4 bits */
+> > +	y_electrode = (signed char)reg >> 4; /* sign extend upper 4 bits */
+> >   	y_electrode = 13 + y_electrode;
+> >   	x_phys = x_pitch * (x_electrode - 1); /* In 0.1 mm units */
