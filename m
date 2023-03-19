@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806F26C0547
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139EB6C054C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjCSVLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S230204AbjCSVNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 17:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjCSVLh (ORCPT
+        with ESMTP id S229734AbjCSVNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:11:37 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD1619C41
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:11:35 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54184571389so192969557b3.4
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:11:35 -0700 (PDT)
+        Sun, 19 Mar 2023 17:13:40 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D1EF767
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:13:38 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id k17so105733ybm.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679260295;
+        d=linaro.org; s=google; t=1679260418;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SCBEWFUqo3M96ruap0XiCnD1dPN396JYXN1LMBXdah8=;
-        b=pOjxIZDoSDxyVInpoSqZXwsMbabZiUEZT3+EDL7W+xgvxOyEX/uufNI8tTNpbCR6Pg
-         OYWApboi8gAEfnmHQkt07klSWsI0FkuJFiE0uQdS6wFNxMnDOu/f/t3hz8V6gkiEXaOR
-         99NS3izj6qEZJFOnBUCrxNCcbbdhKZYzY60pm5WcHrf2MtIlRGC8FPqqLKUr+p4LXGon
-         vqIB/8KNapD+i9gvh+BmFTNY9D/jtZXuVnsZeg170eD5NRXXzu1bb0skFibrY9dBeypH
-         61jmczK6+sa8WmkodzmiFDNPSzAnljSJGXsn/Wn04yDeGFHWqo522JNio014R6vZde/f
-         gfJQ==
+        bh=KDsxhFGQnrKrjnXFLksqI9RFcjP3CDq8jfhz8h9Wr4k=;
+        b=ZdQSPuWs56fqmvCrh/sVSJhIdOkQ/vQvikm5awGY8UqvL+vTlxnU7Yl4k9rvtp/EJB
+         yuTE9puWeJM8UfKx5edktDqlgs7tAJL48eNgASjUAtKGsY+ZEonkFRbwlE3xUHj9Jr0I
+         SScI4dQ/Hug570KWic10lwDSbNvVTmut2buQnk6PbpD1u1jtb95TsOIDYyix9nZuNwNY
+         1xdavpVvCaBCx/pjak00VEn5/zJXHX5aXdEHfLiMswnazUFc9LiM+uDW2nwXFjKvX84A
+         Lth7ycY4T6w9pDYNQqgtZPYq1pdHDC1Hx6llziPN88LTGl/FcrjgT5CBfLJMJsM99aEh
+         VARQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679260295;
+        d=1e100.net; s=20210112; t=1679260418;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SCBEWFUqo3M96ruap0XiCnD1dPN396JYXN1LMBXdah8=;
-        b=xB7OBtFER4Qqk65IPQw1ew2+jTmkCUQFc4TZVi0w8Yr+5rGPG52Bfnq2Vi99DaliT5
-         mJi7PEs4or3MuNELuGhtZ2LYoP1p7r1utG5g4Y6gunUS/rDXRFlHjIjWqg4+si8KS3+k
-         PcGX2LjzFSYAefqC3sZXDSg+aIYTnoq9O9E2G32mYK50VOBSz0JU+eItnCRVD4rIv+LW
-         RSlF2iHErgMwXQcr8K7lp0bB5bAyXQZobeM1kqt5wG8S1T69viqa5H82buaBqqXIW6bk
-         KvoitMUcxEKm7NZ/ldxymAvFsQdCFbPzQ9BkTts01eKAFcW+3si9GP3qNUPEqHrGLTUc
-         KrlQ==
-X-Gm-Message-State: AO0yUKWBCd9Kyfmv/qkQ5e8iBt5sMDaKc87VHI8T7IR7IFb92cKU4X+K
-        KxO39iLa0NL8OTr8rNa8GlMLw5bV4DuSJOrpFm6S6ETnynBXXwgL
-X-Google-Smtp-Source: AK7set9eoUx7qgIYRZRoQCSpRHlHZQ5KezzMNsl9Zc45m72hUWSJSztTdC3yGlgg0FCpvBoeJvPtM20Z2A1axVFf7sw=
-X-Received: by 2002:a05:690c:d88:b0:544:bbd2:74be with SMTP id
- da8-20020a05690c0d8800b00544bbd274bemr6686965ywb.4.1679260294949; Sun, 19 Mar
- 2023 14:11:34 -0700 (PDT)
+        bh=KDsxhFGQnrKrjnXFLksqI9RFcjP3CDq8jfhz8h9Wr4k=;
+        b=vbaByV3UOIVvET7IISTla7PbA9IH+rra+s39xzXUaRHihfXs6zGh+8dLocNa90OljX
+         INUuPBbg1ZLiKOJcXkHHCvLeHUHdBcGWBBa/7F4amH32cdEHM1X6QzzgFEwMwNe9xnHw
+         Q4bfoUCI40ZwtUhv2Ekl2yeyXyJA4mIrev9T8dG77NQR5TK7TmxQmPNcGImRJfGDU6JG
+         EopIK4WojKw6FapGARTJxj1PUxfwnQ4cMSiABFEsllQaj/Ci1CM21wEdEh89thk1yeL6
+         H5bkjB8f1kwIYRiaSUB5CO50jEH6bOzBfexIMc7Yl2WGM94L4x8oPFWJ4bwsyBnRbFM3
+         q5Fw==
+X-Gm-Message-State: AO0yUKV76lg9qLQJK5c3ukyjmFZBTkrLsd44cG9v1UlXYt1Q8CR7JtQp
+        uqUU2ZyG32qgyajwnzxXCDWehMZGEp7Lkr6bHlaDNg==
+X-Google-Smtp-Source: AK7set9LbcgMEdxORgs5g5mPDevC1ogGsWLboK9Gf1+bew26UUN+HynMywHt5ABAKSIUCh4+qK5sXs34SUSRcLRaIsY=
+X-Received: by 2002:a25:4241:0:b0:b6b:6a39:9494 with SMTP id
+ p62-20020a254241000000b00b6b6a399494mr1178014yba.4.1679260418235; Sun, 19 Mar
+ 2023 14:13:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230317225707.1552512-1-sre@kernel.org> <20230317225707.1552512-3-sre@kernel.org>
-In-Reply-To: <20230317225707.1552512-3-sre@kernel.org>
+References: <20230317225707.1552512-1-sre@kernel.org> <20230317225707.1552512-14-sre@kernel.org>
+In-Reply-To: <20230317225707.1552512-14-sre@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 19 Mar 2023 22:11:23 +0100
-Message-ID: <CACRpkdbm+4K5H5mcFH8K-TZ-m0Y=EA3wjdRc_S1EgCjgKeVYJA@mail.gmail.com>
-Subject: Re: [PATCHv3 02/14] power: supply: core: auto-exposure of
- simple-battery data
+Date:   Sun, 19 Mar 2023 22:13:26 +0100
+Message-ID: <CACRpkdYWWwTu5x5iR_Gco-N+dOWGLmQQ=1p1gnznKC8ovZaS+Q@mail.gmail.com>
+Subject: Re: [PATCHv3 13/14] power: supply: generic-adc-battery: improve error message
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -76,12 +75,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Fri, Mar 17, 2023 at 11:57=E2=80=AFPM Sebastian Reichel <sre@kernel.org>=
  wrote:
 
-> Automatically expose data from the simple-battery firmware
-> node for all battery drivers.
+> Add device context and error code to the error messages to make it
+> useful.
 >
 > Signed-off-by: Sebastian Reichel <sre@kernel.org>
 
-Looks good to me!
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
