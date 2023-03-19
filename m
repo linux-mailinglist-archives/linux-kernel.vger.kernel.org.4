@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E053D6C022D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFD46C0231
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjCSNz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 09:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S230385AbjCSN6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 09:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCSNzW (ORCPT
+        with ESMTP id S229486AbjCSN6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 09:55:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F848B744
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 06:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679234077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SE+hbc2PpdOm6jFmUnfn7gxJd8fzcxI50vFrTMNLyGw=;
-        b=hCMHkqzGmIxg0gcAXnKqWvE5oIj3uvG3Jz/8U+oiNxs7KcCbTmqrp44hGXT2gLPNCyvIew
-        EetIAmMeMPYxOap5qdYUa4YwR5aDR3b7eyTzIL3WlKt67vLfV2ZkV3LYdt5cx3SI+319Dy
-        kQSV/OyVxKGbHUxub+RpQs90C2U4aJU=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-266-hs1Rz0_xP5SnoKie4AyqjQ-1; Sun, 19 Mar 2023 09:54:35 -0400
-X-MC-Unique: hs1Rz0_xP5SnoKie4AyqjQ-1
-Received: by mail-qt1-f199.google.com with SMTP id t22-20020ac86a16000000b003bd1c0f74cfso5313249qtr.20
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 06:54:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679234075;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SE+hbc2PpdOm6jFmUnfn7gxJd8fzcxI50vFrTMNLyGw=;
-        b=th+Noa32q3Yys+YoKdUF6I1UVm19sLdiRTd2Bg69vD+U2sWyml06mtJf3h1Rqs1JzC
-         ls+814EI6L5XT+jtcrSA+zb4HnuoiDtxAauw+jgKisJeoY9wODkyP5t61d1Qf81KYSMq
-         +j2Wbod5i7vCvFHw7fRSfpebOJcLlBYjGMfM7ZWO0e/W1lt+FVZ2WJwCKyrOSkmVzFFv
-         MmG7kC+tZm5sKimdJ8bsUORFqbuFCezSBB36mHrfhzzkCdmBJQ5CyOaqM8KzPaX1x2zL
-         r/F0AASjK/MIq41aZyQRLS25btQe0nP5JMvKRCTzO+EAroiRVpZsH/0L/eBeTjsjlV4d
-         NjDg==
-X-Gm-Message-State: AO0yUKUPP+MRrFf0wnXOVgk15G31XBBw8Vn/ajhi+IWGXMxteM2+LMHq
-        sezEzZx52Ux2peB6AOmaeF2tiA4baHZcWZtALZxMSVA7SLFcZn3MShlJVtd+JRcmX8apiDUbvjp
-        F38l8UK9iIre5DeVtO5yUMy1L
-X-Received: by 2002:a05:622a:1387:b0:3bf:daae:7ee6 with SMTP id o7-20020a05622a138700b003bfdaae7ee6mr22103389qtk.18.1679234075266;
-        Sun, 19 Mar 2023 06:54:35 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/SUf1dS9D3NGgKWgB9272dqTQaCIgVClcOcHUMHiPQbfT/rPxkVqzfjAoOoL29N2AJV31JPQ==
-X-Received: by 2002:a05:622a:1387:b0:3bf:daae:7ee6 with SMTP id o7-20020a05622a138700b003bfdaae7ee6mr22103366qtk.18.1679234075026;
-        Sun, 19 Mar 2023 06:54:35 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x26-20020ac86b5a000000b003bfa2c512e6sm4859344qts.20.2023.03.19.06.54.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 06:54:34 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     stas.yakovlev@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] ipw2x00: remove unused _ipw_read16 function
-Date:   Sun, 19 Mar 2023 09:54:18 -0400
-Message-Id: <20230319135418.1703380-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 19 Mar 2023 09:58:10 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF8B919C65;
+        Sun, 19 Mar 2023 06:58:08 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32JDw3SE031207;
+        Sun, 19 Mar 2023 14:58:03 +0100
+Date:   Sun, 19 Mar 2023 14:58:03 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
+ -fstack-protector
+Message-ID: <ZBcU63x/bXih3vTm@1wt.eu>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+ <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+ <ZA3OhLBmUz3fui+f@1wt.eu>
+ <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
+ <ZA6TmjtAJ5lvFCeF@1wt.eu>
+ <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/net/wireless/intel/ipw2x00/ipw2200.c:381:19: error:
-  unused function '_ipw_read16' [-Werror,-Wunused-function]
-static inline u16 _ipw_read16(struct ipw_priv *ipw, unsigned long ofs)
-                  ^
-This function and its wrapping marco are not used, so remove them.
+Hi Thomas,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/wireless/intel/ipw2x00/ipw2200.c | 13 -------------
- 1 file changed, 13 deletions(-)
+On Sat, Mar 18, 2023 at 04:49:12PM +0000, Thomas Weißschuh wrote:
+> On Mon, Mar 13, 2023 at 04:08:10AM +0100, Willy Tarreau wrote:
+> > On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
+> > > FYI there is also another patch to make nolibc-test buildable with
+> > > compilers that enable -fstack-protector by default.
+> > > Maybe this can be picked up until the proper stack-protector support is
+> > > hashed out.
+> > > Maybe even for 6.3:
+> > > 
+> > > https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
+> > 
+> > Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
+> 
+> Do you have a tree with this published?
 
-diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2200.c b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
-index b91b1a2d0be7..dfe0f74369e6 100644
---- a/drivers/net/wireless/intel/ipw2x00/ipw2200.c
-+++ b/drivers/net/wireless/intel/ipw2x00/ipw2200.c
-@@ -377,19 +377,6 @@ static inline u8 _ipw_read8(struct ipw_priv *ipw, unsigned long ofs)
- 	_ipw_read8(ipw, ofs); \
- })
- 
--/* 16-bit direct read (low 4K) */
--static inline u16 _ipw_read16(struct ipw_priv *ipw, unsigned long ofs)
--{
--	return readw(ipw->hw_base + ofs);
--}
--
--/* alias to 16-bit direct read (low 4K of SRAM/regs), with debug wrapper */
--#define ipw_read16(ipw, ofs) ({ \
--	IPW_DEBUG_IO("%s %d: read_direct16(0x%08X)\n", __FILE__, __LINE__, \
--			(u32)(ofs)); \
--	_ipw_read16(ipw, ofs); \
--})
--
- /* 32-bit direct read (low 4K) */
- static inline u32 _ipw_read32(struct ipw_priv *ipw, unsigned long ofs)
- {
--- 
-2.27.0
+No, it was only on my local machine waiting for me to retest all archs
+with it (in the past I've met build issues due to some variables being
+preset by some included files so I'm extra careful). I've just rebased
+it on latest master and just passed it to Paul for inclusion now.
 
+> So I can make sure the next revision of this patchset does not lead to
+> conflicts.
+
+Do not worry too much for this, just tell me upfront whether your next
+series is based on it or not and I'll adjust accordingly based on what
+is already merged when I take it.
+
+> > > > > @@ -719,8 +784,11 @@ int prepare(void)
+> > > > >  /* This is the definition of known test names, with their functions */
+> > > > >  static const struct test test_names[] = {
+> > > > >  	/* add new tests here */
+> > > > > -	{ .name = "syscall",   .func = run_syscall  },
+> > > > > -	{ .name = "stdlib",    .func = run_stdlib   },
+> > > > > +	{ .name = "syscall",        .func = run_syscall         },
+> > > > > +	{ .name = "stdlib",         .func = run_stdlib          },
+> > > > > +	{ .name = "stackprotector", .func = run_stackprotector, },
+> > > > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
+> > > > 
+> > > > I think it would be better to keep the number of categories low
+> > > > and probably you should add just one called "protection" or so,
+> > > > and implement your various tests in it as is done for other
+> > > > categories. The goal is to help developers quickly spot and select
+> > > > the few activities they're interested in at a given moment. 
+> > > 
+> > > I'm not sure how this would be done. The goal here is that
+> > > "stackprotector" is the user-visible category. It can be changed to
+> > > "protection".
+> > > "_smash_stack" however is just an entrypoint that is used by the forked
+> > > process to call the crashing code.
+> > 
+> > Ah I didn't realize that, I now understand how that can be useful,
+> > indeed. Then maybe just rename your .skip_by_default field to .hidden
+> > so that it becomes more generic (i.e. if one day we permit enumeration
+> > we don't want such tests to be listed either), and assign the field on
+> > the same line so that it's easily visible with a grep.
+> 
+> Actually this works fine with a plain fork() and the exec() is not
+> needed. So the dedicated entrypoint is not needed anymore.
+
+Ah, even better!
+
+> No idea what I tested before.
+
+No worries. I've yet to find a single occurrence of a test being created
+straight without exploring various approaches ;-)
+
+Thanks!
+Willy
