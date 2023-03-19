@@ -2,129 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCD26C04ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836866C04F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjCSUtO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 16:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S230104AbjCSUtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 16:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjCSUtL (ORCPT
+        with ESMTP id S229632AbjCSUtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 16:49:11 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B783714981;
-        Sun, 19 Mar 2023 13:49:10 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pdzxj-002O59-JZ; Sun, 19 Mar 2023 21:49:07 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pdzxj-003Bpe-CW; Sun, 19 Mar 2023 21:49:07 +0100
-Message-ID: <056df6d548ad0e4f7f4ccb2782744b165ce20578.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not
- enabled
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        stable@vger.kernel.org
-Date:   Sun, 19 Mar 2023 21:49:06 +0100
-In-Reply-To: <20230306040037.20350-8-rdunlap@infradead.org>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
-         <20230306040037.20350-8-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Sun, 19 Mar 2023 16:49:47 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED3310418
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:49:46 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z21so39551660edb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679258985;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L5CLt5l4TCz1CmnxOdt+WgUKYgrA3LVqAot+WuRXqlA=;
+        b=HTciBLqcsxjQsKrrZaKrQBKJb05epJEzu/YvZe7+r1jdosOareVKQQRXiSteVVTGVL
+         5ttb0pAiDAH/EjxTKEgTdoIADo5HUncf+YAIy5+L6xfw6Pf42lQZHYRqBUYXigVyD38p
+         qfFtGR2NrCH+U7UJMlKUFlnVZmCoc4IPkWIoChJHwrwBQaIHVoTTejZevp4hQQN2/pfb
+         f/wRDsetcWyFgfTTseaG4G2794tTGmLl953N+ey0uqCjuKwR7Ci13ywEKOr0yBUepLHq
+         dmflQ2e5vcDebYxsDBUveVkl5DjN87Td5RjuCRU+ek9H1gLvG/ekC24mnMHOW6PcdX38
+         22GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679258985;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L5CLt5l4TCz1CmnxOdt+WgUKYgrA3LVqAot+WuRXqlA=;
+        b=toOmhiZOLtG0eLVOlFI76WS6ZnqS6Ji+ThlA9CHqFJrfAyQnrBkR0uzHnKHWeDcTmK
+         1xRmKmnqe7LbbPnUL8HKYico7+skz6abNwuz2GUd2NcVbsl8zpphajatgRjklwaTQ3Np
+         u8djERLfxLOmzV1hU0PKCK22YKBuJWVo+9uPwsp2hxQkUvoskMrw93rY3i+qhw70cLwD
+         DS97ZG9U2PR1IfPYAButfCV9JBRTEvuRWaUaalY6oJ3j8ef36RZfeAH/j/AXOMWtXzBR
+         RA8zrvIN5dxJneN+zomjf1oxnZhi+CrfctHmccAwnls034GfeKGiefSBvfQ/qFelgI6i
+         VerA==
+X-Gm-Message-State: AO0yUKU3n6/cGPisbPX0ICZuhd4JQusjenCInB+otJnnXzOMs4VynLKh
+        6r2crPdmab6/OSuZ2O6Atbo=
+X-Google-Smtp-Source: AK7set+hOHTt0i9nlpUrmYUdJsFFLqBmF7VGZ3UHdlitwTFKimwuNTjzvOGv6RkYHNWLm3T5+3EzFg==
+X-Received: by 2002:a05:6402:4ca:b0:4ad:738b:6706 with SMTP id n10-20020a05640204ca00b004ad738b6706mr10982836edw.2.1679258984926;
+        Sun, 19 Mar 2023 13:49:44 -0700 (PDT)
+Received: from alaa-emad.. ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id v6-20020a50d086000000b004fb00831851sm3882901edd.66.2023.03.19.13.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 13:49:44 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        eng.mennamahmoud.mm@gmail.com, Julia Lawall <julia.lawall@inria.fr>
+Subject: [PATCH v2] staging: greybus: use inline function for macros
+Date:   Sun, 19 Mar 2023 22:49:35 +0200
+Message-Id: <20230319204935.259217-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
-> Fix a build error in mcount.S when CONFIG_PRINTK is not enabled.
-> Fixes this build error:
-> 
-> sh2-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
-> (.text+0xec): undefined reference to `dump_stack'
-> 
-> Fixes: e460ab27b6c3 ("sh: Fix up stack overflow check with ftrace disabled.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: stable@vger.kernel.org
-> ---
-> v2: add PRINTK to STACK_DEBUG dependency (thanks, Geert)
-> v3: skipped
-> v4: refresh & resend
-> 
->  arch/sh/Kconfig.debug |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff -- a/arch/sh/Kconfig.debug b/arch/sh/Kconfig.debug
-> --- a/arch/sh/Kconfig.debug
-> +++ b/arch/sh/Kconfig.debug
-> @@ -15,7 +15,7 @@ config SH_STANDARD_BIOS
->  
->  config STACK_DEBUG
->  	bool "Check for stack overflows"
-> -	depends on DEBUG_KERNEL
-> +	depends on DEBUG_KERNEL && PRINTK
->  	help
->  	  This option will cause messages to be printed if free stack space
->  	  drops below a certain limit. Saying Y here will add overhead to
+Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+static inline function.
 
-I can't really test this change as the moment I am enabling CONFIG_STACK_DEBUG,
-the build fails with:
+it is not great to have macro that use `container_of` macro,
+because from looking at the definition one cannot tell what type
+it applies to.
 
-  CC      scripts/mod/devicetable-offsets.s
-sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
-make[1]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
-make[1]: *** Waiting for unfinished jobs....
-sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
-make[1]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
-make: *** [Makefile:1286: prepare0] Error 2
+One can get the same benefit from an efficiency point of view
+by making an inline function.
 
-So, I assume we need to strip -fomit-frame-pointer from KBUILD_CFLAGS, correct?
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+changes in v2:
+	remove newlines added in previous patch.
+---
+ drivers/staging/greybus/gbphy.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-I tried this change, but that doesn't fix it for me:
-
-diff --git a/arch/sh/Makefile b/arch/sh/Makefile
-index 5c8776482530..83f535b73835 100644
---- a/arch/sh/Makefile
-+++ b/arch/sh/Makefile
-@@ -173,6 +173,7 @@ KBUILD_AFLAGS               += $(cflags-y)
+diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+index 1de510499480..03a977056637 100644
+--- a/drivers/staging/greybus/gbphy.h
++++ b/drivers/staging/greybus/gbphy.h
+@@ -15,8 +15,10 @@ struct gbphy_device {
+ 	struct list_head list;
+ 	struct device dev;
+ };
+-
+-#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
++static inline struct gbphy_device *to_gbphy_dev(const struct device *d)
++{
++	return container_of(d, struct gbphy_device, dev);
++}
  
- ifeq ($(CONFIG_MCOUNT),y)
-   KBUILD_CFLAGS += -pg
-+  KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS))
- endif
+ static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+ {
+@@ -44,8 +46,10 @@ struct gbphy_driver {
  
- ifeq ($(CONFIG_DWARF_UNWINDER),y)
-
-Any ideas?
-
-Adrian
-
+ 	struct device_driver driver;
+ };
+-
+-#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
++static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *d)
++{
++	return container_of(d, struct gbphy_driver, driver);
++}
+ 
+ int gb_gbphy_register_driver(struct gbphy_driver *driver,
+ 			     struct module *owner, const char *mod_name);
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.34.1
+
