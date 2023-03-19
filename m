@@ -2,51 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60AA6C05F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2506C05F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjCSWGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 18:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S230281AbjCSWIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 18:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjCSWGM (ORCPT
+        with ESMTP id S229565AbjCSWIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 18:06:12 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63E21993
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 15:06:09 -0700 (PDT)
+        Sun, 19 Mar 2023 18:08:12 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D3E062;
+        Sun, 19 Mar 2023 15:08:10 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h17so8695188wrt.8;
+        Sun, 19 Mar 2023 15:08:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=sKpc8UoVYkRRATUnZs9aTMR9xUcAPTL6ZVyrzuk+Ees=;
-  b=COZEUTvl3savPYtWmuDlyMbuqMWrIgkndWs/gEWYduLxV1T0D2oduLLP
-   VNI3MY2OyuOQoskDspGvfqfQCg1nol2ZL4tVFgy5x987oO8zbK7WJzgoq
-   nJzrZwisqVHfMjEgMQi9awfeAtI4wxRlTO7LCe5oeIe3aFFDfmBsyffpw
-   Y=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,274,1673910000"; 
-   d="scan'208";a="50623142"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 23:06:08 +0100
-Date:   Sun, 19 Mar 2023 23:06:07 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: greybus: use inline function for macros
-In-Reply-To: <649afe06-e069-e046-21ec-0d86243a4bfa@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303192303130.2867@hadrien>
-References: <20230319201324.253874-1-eng.mennamahmoud.mm@gmail.com> <alpine.DEB.2.22.394.2303192121170.2867@hadrien> <0f02a3ff-801b-1e1f-5c03-009a05708709@gmail.com> <alpine.DEB.2.22.394.2303192151330.2867@hadrien> <402ffcbe-bb29-7035-68f4-2741532a6d67@gmail.com>
- <alpine.DEB.2.22.394.2303192225590.2867@hadrien> <649afe06-e069-e046-21ec-0d86243a4bfa@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112; t=1679263689;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GmPK75Q9ZD3h3IYflWYuDwS99V2e532KgDlnNucAoJg=;
+        b=PSdrywW48P4Lq8z9wOSPXFB/ZdO/JfuyiGlw3Gz1Iriy+Smo/cBnJ0Ve9zKkX3AKTO
+         Tr7/g8xhSQX8sU5WAOEPC13uVjKpO4VZsamXHTmMKL4mmfII3K/piAsQcMQkkNpgouab
+         Ci9yr+7ASSmqEUHIbYTM6sl6a47rPwqk3b3DcTIE2CwJsPPNXnpQ/aSVbJAcEdhcZICc
+         X4rAmjrYjcsl8coFIGHHPlrMH9ShekQWxB84vEb6bO1nXOORNPizOHuY1vJ3wa3WgXsx
+         YwlvutMFVIUXfgL2ZwCmQAKWJPiAaFk+CCk3oxSeOYoAzkjcbMyapz9VnooStfvR2aV3
+         k+2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679263689;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GmPK75Q9ZD3h3IYflWYuDwS99V2e532KgDlnNucAoJg=;
+        b=NGjqrGERyaxRwINtevHaY97h9X9W+1UY62YYwotqwv5+cfvB8myjBbD3WH2WzaqMes
+         o9MMER9RE8/arW3jIVlBv4ORDUuEZ7AeGgy5UbFyQZIPHlp+hJ/sxFrGvYUwamg4Qrr9
+         ojargh8ORsEiMeqaf+5AkmEagNhrrV3ax0pUuWDzbJ3vXGoHjfCetHz5xyNL46dvXBfb
+         l/OZqjv9IYob552uUoUmCy/TbEQDqvmjkFrROFK9gtBNxgxUJkwbyiWIOVsf6RR8OarP
+         f7bbvSJYkvTvzx2u/g0Up7NW5ZyihMGBmDs377M3yW6AnSxW6jlfl30QmMU1aEigYXvy
+         v3mA==
+X-Gm-Message-State: AO0yUKUm1PYmYa4xlHuVD23mZcZm83a+xbhcbs0Xryi3yF/+UnjM4Cho
+        GAfqSh5MZ/rlOAm3Vnpn//9hOG5Lc8vLYg==
+X-Google-Smtp-Source: AK7set+5pTahGGgk1hF/mHGkGBhsMf0//oQjZd4QFHx+HaeSgP5f6q7g0bRUcTX8kRtgHH0T7l1/hQ==
+X-Received: by 2002:a5d:474f:0:b0:2d6:2ae8:70d with SMTP id o15-20020a5d474f000000b002d62ae8070dmr2382593wrs.39.1679263688549;
+        Sun, 19 Mar 2023 15:08:08 -0700 (PDT)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id d6-20020a5d6dc6000000b002c53f6c7599sm7354727wrz.29.2023.03.19.15.08.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 15:08:07 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v2] net: dsa: b53: add support for BCM63xx RGMIIs
+Date:   Sun, 19 Mar 2023 23:08:05 +0100
+Message-Id: <20230319220805.124024-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230319183330.761251-1-noltari@gmail.com>
+References: <20230319183330.761251-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-184533773-1679263568=:2867"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,147 +77,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+BCM63xx RGMII ports require additional configuration in order to work.
 
---8323329-184533773-1679263568=:2867
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ v2: add changes suggested by Andrew:
+  - Use a switch statement.
+  - Use dev_dbg() instead of dev_info().
 
+ drivers/net/dsa/b53/b53_common.c | 46 ++++++++++++++++++++++++++++++++
+ drivers/net/dsa/b53/b53_priv.h   |  1 +
+ 2 files changed, 47 insertions(+)
 
+diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
+index 59cdfc51ce06..6e212f6f1cb9 100644
+--- a/drivers/net/dsa/b53/b53_common.c
++++ b/drivers/net/dsa/b53/b53_common.c
+@@ -1209,6 +1209,46 @@ static void b53_force_port_config(struct b53_device *dev, int port,
+ 	b53_write8(dev, B53_CTRL_PAGE, off, reg);
+ }
+ 
++static void b53_adjust_63xx_rgmii(struct dsa_switch *ds, int port,
++				  phy_interface_t interface)
++{
++	struct b53_device *dev = ds->priv;
++	u8 rgmii_ctrl = 0, off;
++
++	if (port == dev->imp_port)
++		off = B53_RGMII_CTRL_IMP;
++	else
++		off = B53_RGMII_CTRL_P(port);
++
++	b53_read8(dev, B53_CTRL_PAGE, off, &rgmii_ctrl);
++
++	switch (interface) {
++	case PHY_INTERFACE_MODE_RGMII_ID:
++		rgmii_ctrl |= (RGMII_CTRL_DLL_RXC | RGMII_CTRL_DLL_TXC);
++		break;
++	case PHY_INTERFACE_MODE_RGMII_RXID:
++		rgmii_ctrl &= ~(RGMII_CTRL_DLL_TXC);
++		rgmii_ctrl |= RGMII_CTRL_DLL_RXC;
++		break;
++	case PHY_INTERFACE_MODE_RGMII_TXID:
++		rgmii_ctrl &= ~(RGMII_CTRL_DLL_RXC);
++		rgmii_ctrl |= RGMII_CTRL_DLL_TXC;
++		break;
++	case PHY_INTERFACE_MODE_RGMII:
++	default:
++		rgmii_ctrl &= ~(RGMII_CTRL_DLL_RXC | RGMII_CTRL_DLL_TXC);
++		break;
++	}
++
++	if (port != dev->imp_port)
++		rgmii_ctrl |= RGMII_CTRL_ENABLE_GMII;
++
++	b53_write8(dev, B53_CTRL_PAGE, off, rgmii_ctrl);
++
++	dev_dbg(ds->dev, "Configured port %d for %s\n", port,
++		phy_modes(interface));
++}
++
+ static void b53_adjust_link(struct dsa_switch *ds, int port,
+ 			    struct phy_device *phydev)
+ {
+@@ -1235,6 +1275,9 @@ static void b53_adjust_link(struct dsa_switch *ds, int port,
+ 			      tx_pause, rx_pause);
+ 	b53_force_link(dev, port, phydev->link);
+ 
++	if (is63xx(dev) && port >= B53_63XX_RGMII0)
++		b53_adjust_63xx_rgmii(ds, port, phydev->interface);
++
+ 	if (is531x5(dev) && phy_interface_is_rgmii(phydev)) {
+ 		if (port == dev->imp_port)
+ 			off = B53_RGMII_CTRL_IMP;
+@@ -1402,6 +1445,9 @@ void b53_phylink_mac_link_up(struct dsa_switch *ds, int port,
+ {
+ 	struct b53_device *dev = ds->priv;
+ 
++	if (is63xx(dev) && port >= B53_63XX_RGMII0)
++		b53_adjust_63xx_rgmii(ds, port, interface);
++
+ 	if (mode == MLO_AN_PHY)
+ 		return;
+ 
+diff --git a/drivers/net/dsa/b53/b53_priv.h b/drivers/net/dsa/b53/b53_priv.h
+index 795cbffd5c2b..4cf9f540696e 100644
+--- a/drivers/net/dsa/b53/b53_priv.h
++++ b/drivers/net/dsa/b53/b53_priv.h
+@@ -211,6 +211,7 @@ static inline int is58xx(struct b53_device *dev)
+ 		dev->chip_id == BCM7278_DEVICE_ID;
+ }
+ 
++#define B53_63XX_RGMII0	4
+ #define B53_CPU_PORT_25	5
+ #define B53_CPU_PORT	8
+ 
+-- 
+2.30.2
 
-On Mon, 20 Mar 2023, Menna Mahmoud wrote:
-
->
-> On ١٩/٣/٢٠٢٣ ٢٣:٢٦, Julia Lawall wrote:
-> >
-> > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
-> >
-> > > On ١٩/٣/٢٠٢٣ ٢٢:٥٥, Julia Lawall wrote:
-> > > > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
-> > > >
-> > > > > On ١٩/٣/٢٠٢٣ ٢٢:٢١, Julia Lawall wrote:
-> > > > > > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
-> > > > > >
-> > > > > > > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-> > > > > > > static inline functions.
-> > > > > > >
-> > > > > > > it is not great to have macro that use `container_of` macro,
-> > > > > > > because from looking at the definition one cannot tell what type
-> > > > > > > it applies to.
-> > > > > > >
-> > > > > > > One can get the same benefit from an efficiency point of view
-> > > > > > > by making an inline function.
-> > > > > > >
-> > > > > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> > > > > > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> > > > > > > ---
-> > > > > > >     drivers/staging/greybus/gbphy.h | 10 ++++++++--
-> > > > > > >     1 file changed, 8 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/staging/greybus/gbphy.h
-> > > > > > > b/drivers/staging/greybus/gbphy.h
-> > > > > > > index 1de510499480..42c4e3fe307c 100644
-> > > > > > > --- a/drivers/staging/greybus/gbphy.h
-> > > > > > > +++ b/drivers/staging/greybus/gbphy.h
-> > > > > > > @@ -16,7 +16,10 @@ struct gbphy_device {
-> > > > > > >     	struct device dev;
-> > > > > > >     };
-> > > > > > >
-> > > > > > You have made the patch against your previous patch that added a
-> > > > > > newline
-> > > > > > here.  It should be against Greg's tree.
-> > > > > >
-> > > > > > julia
-> > > > > you mean I should remove this newline, right?
-> > > > You should apply your change to the state of Greg's tree, not the state
-> > > > after your patch.
-> > > >
-> > > > Assuming that you have committed both the patch adding the new line and
-> > > > the patch changing the macro to a function, and have made no other
-> > > > changes, you can do git rebase -i HEAD~2 and the put a d at the
-> > > > beginning
-> > > > of the line related to the patch adding the newline.
-> > >
-> > > you mean drop this patch "staging: greybus: remove unnecessary blank
-> > > line"?
-> > No, the one that removes the blank line looks fine.
-> >
-> > At some point, you added a blank line below the two structure definitions.
-> > That blank line is not in Greg's tree, so you shoulsn't send a patch that
-> > assumes that it is there.
->
->
-> I'm sorry I mean this patch "staging: greybus: add blank line after struct",
-> Julia I understood the issue
->
-> but I am confused about how to fix it, should I drop the patch that added the
-> newline? then what should I do?
-
-If the git rebase solution is not clear to you, then another simple
-solution is just to clone Greg's tree again somewhere else, and make your
-changes.
-
-> and version that I have submitted, should I do anything about it as you said
-> it is wrong solution?
-
-My concern was the blank line after each of the structure definitions,
-which is not in Greg's tree, so he can't apply the patch.  Other than
-that, if the code compiles it is at least going in the right direction.
-
-Please fix the newlines issue, and then send the patch again.
-
-julia
-
-
->
->
-> Menna
->
-> > julia
-> >
-> > > Menna
-> > >
-> > >
-> > > > If you have made
-> > > > more changes, you can adapt the HEAD~ part accordingly.
-> > > >
-> > > > julia
-> > > >
-> > > >
-> > > > > Menna
-> > > > >
-> > > > > > > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> > > > > > > +static inline struct gbphy_device *to_gbphy_dev(const struct
-> > > > > > > device
-> > > > > > > *d)
-> > > > > > > +{
-> > > > > > > +	return container_of(d, struct gbphy_device, dev);
-> > > > > > > +}
-> > > > > > >
-> > > > > > >     static inline void *gb_gbphy_get_data(struct gbphy_device
-> > > > > > > *gdev)
-> > > > > > >     {
-> > > > > > > @@ -45,7 +48,10 @@ struct gbphy_driver {
-> > > > > > >     	struct device_driver driver;
-> > > > > > >     };
-> > > > > > >
-> > > > > > > -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver,
-> > > > > > > driver)
-> > > > > > > +static inline struct gbphy_driver *to_gbphy_driver(struct
-> > > > > > > device_driver
-> > > > > > > *d)
-> > > > > > > +{
-> > > > > > > +	return container_of(d, struct gbphy_driver, driver);
-> > > > > > > +}
-> > > > > > >
-> > > > > > >     int gb_gbphy_register_driver(struct gbphy_driver *driver,
-> > > > > > >     			     struct module *owner, const char
-> > > > > > > *mod_name);
-> > > > > > > --
-> > > > > > > 2.34.1
-> > > > > > >
-> > > > > > >
-> > >
->
---8323329-184533773-1679263568=:2867--
