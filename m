@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7906C0179
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FD66C017B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjCSMLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 08:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S230192AbjCSMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 08:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCSMLo (ORCPT
+        with ESMTP id S230094AbjCSMNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 08:11:44 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9318011147
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:11:37 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id h8so36780776ede.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:11:37 -0700 (PDT)
+        Sun, 19 Mar 2023 08:13:49 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17503149B7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:13:47 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id t5so866edd.7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679227896;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zjQK98wMTvC2q3E7fdiQTGy4CfE9nib0P1aeqr32BDM=;
-        b=D1fP3GN2Ho75ugMAWO87ldGgGppe72Z3Y/fiWx4nspzwK7rloaOBoF9R19b0JbiRD3
-         /mLXqx0QXb4f0L0ilB3j1w+e9Fwq4+LAGzNO+pIUKuu81K+Dhs2nyPPhOdR1hF6bDzbu
-         0y3KFtdlTTRo3LySMTaY9gOhQSMrBFk88A8n+//C69MZejED+xn55zfOI7TYqDszOPc+
-         fKWW/risjXSXRSuUrm5fQoJv/1hToGx7tQSgd3glFjr0Y54XW8bJZTY/vYLNslJ4g9T4
-         gGptc50sPXOMaTIvYxS6fPpQP0vMqlYdWsQdm9P5lE+f6mWTqVQd8o0LR1x8SVnpFN1o
-         NnGQ==
+        d=gmail.com; s=20210112; t=1679228024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dyewVLoHn/OD7IovUzCtvgn7e3sbYgzUB2xMrii4Ha8=;
+        b=aKbRGsPOzFHq2HPqDFkbU00Bw0idRYStbsMzsnmiX6AO0WyOoZEqbinCCWwcOpc24o
+         si6LwIe9/Bp5IS2tMfogdnf+c9as9K3qSnh+NGQKElmf2rF2TWyvahmWaY1U/JZEgWvL
+         N803CdQFPuIhqY1PGFYnIvqqRssV+Jv6B4Zh4JCLRGz/SCLUmK34Wltz/FudVzqOvFMt
+         xzwwu/hbMPg4ijFESHdtsCtq4Bx+Z45Scxmt6F2iXXZFf6uzaYs+Qs935Rm/nGxFsyYR
+         ANoOZ5GNSDPTpu+ajsSsBjkIVOvBfDE25We5Szay8+/UF5kTDipxUt/3hoeqtOKjH0Zd
+         x8MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679227896;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjQK98wMTvC2q3E7fdiQTGy4CfE9nib0P1aeqr32BDM=;
-        b=iSf2XhHesVpdNVnGp+LvqdvcLRtDwKRSsDwP2Uzx6pipBNL0cnwU+o4Q1/mRfGSOTp
-         eC6kPd2v2DdQ1AXVj3fYmkp7m/w5hQ6621mCupy6fcMlTXxgLI1OezHWSWTKpOkp+FeH
-         dmYfEdxA1HzoJsYWSf6EfUeV6lhK9UXSj1Y9XeRbpJWQbJGIiFC+hBrr3Mp4OFDMXrRM
-         73hCaLz4Zf6nDswlOFzXtBU3ATddDPkCo1b1CsFk0AxMbCB/3Fb4RgSys6xj+1KQoQ0X
-         8jqEzEm+unWBCiqZ3F5xYHz3bpjFk1itmdIt8pauVq+++Ws2iT+bx9yflyv8RZcbruYH
-         Bi6g==
-X-Gm-Message-State: AO0yUKUEMTyGTxDNed9mlnIguGxsJfDXiNmE0iqQr5NSVl4iskoGqFtt
-        Q7EHuVzLQPQ9MlY0nZp97dVf4w==
-X-Google-Smtp-Source: AK7set8iy8PHLbwswKclQFdAmwnEMv+GMXgczERgugb4jIY36ndBXldESO9YpLHBZGsBIL348OtAog==
-X-Received: by 2002:a17:906:35d6:b0:932:be78:a728 with SMTP id p22-20020a17090635d600b00932be78a728mr5583291ejb.68.1679227896102;
-        Sun, 19 Mar 2023 05:11:36 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id ja21-20020a170907989500b0093338259b2bsm1635711ejc.207.2023.03.19.05.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 05:11:35 -0700 (PDT)
-Message-ID: <652a5f5e-6f01-4e5b-d1e3-4161b58d5ae5@linaro.org>
-Date:   Sun, 19 Mar 2023 13:11:34 +0100
+        d=1e100.net; s=20210112; t=1679228024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dyewVLoHn/OD7IovUzCtvgn7e3sbYgzUB2xMrii4Ha8=;
+        b=AcS2b+Wyy1KusdPxADdqZP57hR4vzbObxfkE32e6aB4TOYXOvOrtcTa3CnRmirqYrk
+         BTVsZRD83cSUa8O+IcLzvdU51jACDYxAzT4PIKpD2avRns4lHJPcaPQ5tIZXhXTq947m
+         Y9RmxKqZwBMr9PUsURagE57dBu+diayQxOA2s2jzjIK5NOP/aOCztWGy2UnTm2+LuEvx
+         OJp2C0cxA2Gl5ixzz0mdAi3C+ZhSx37w+40CRn4c27vQq7R0MRC45llMJLpW2M+0eDxd
+         vFnJl9sLqENa77/9eCEgedxlUPFiTZjlz9gd2QK6ta3ZfAvy6YWEnCpBDQJRfbwk2wbL
+         c2KA==
+X-Gm-Message-State: AO0yUKVdWdM5+B4npm9kJBvNksISDqSc9Cz9ZmBIwuIMbjzT7Iy/KQu5
+        IxLEnKtoZm7xlVHFweo8HUiIJyDf3pY=
+X-Google-Smtp-Source: AK7set/eF4uh0SoaDwQZ6lfYjvsX41Tdegqm/WPSW3SPm6Dl9TL9MmtjwvsGdFLl9jbWQ980uQj7Hg==
+X-Received: by 2002:a17:907:d491:b0:933:3aa7:57a6 with SMTP id vj17-20020a170907d49100b009333aa757a6mr4369349ejc.12.1679228024465;
+        Sun, 19 Mar 2023 05:13:44 -0700 (PDT)
+Received: from localhost ([2a00:23ee:1938:1bcd:c6e1:42ba:ae87:772e])
+        by smtp.gmail.com with ESMTPSA id b1-20020a1709065e4100b008ca52f7fbcbsm3187759eju.1.2023.03.19.05.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 05:13:43 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 12:13:42 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Hildenbrand <david@redhat.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] mm: prefer xxx_page() alloc/free functions for order-0
+ pages
+Message-ID: <37a0a866-b7df-4cf1-9d0a-02f04c06a21d@lucifer.local>
+References: <50c48ca4789f1da2a65795f2346f5ae3eff7d665.1678710232.git.lstoakes@gmail.com>
+ <ZBQjz9vzFaLjW0MM@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] regulator: dt-bindings: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com
-References: <20230317233616.3968003-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230317233616.3968003-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBQjz9vzFaLjW0MM@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2023 00:36, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+On Fri, Mar 17, 2023 at 10:24:47AM +0200, Mike Rapoport wrote:
+> On Mon, Mar 13, 2023 at 12:27:14PM +0000, Lorenzo Stoakes wrote:
+> > Update instances of alloc_pages(..., 0), __get_free_pages(..., 0) and
+> > __free_pages(..., 0) to use alloc_page(), __get_free_page() and
+> > __free_page() respectively in core code.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+>
+> Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+>
+> But why limit this only to mm?
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+I wanted to keep things 'polite' and within mm to begin with, I may follow up
+with a scout around other areas of the kernel.
