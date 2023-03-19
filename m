@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0704C6BFFC1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502CC6BFFC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjCSHVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 03:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S229713AbjCSHW6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 03:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjCSHVG (ORCPT
+        with ESMTP id S229481AbjCSHW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 03:21:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671AE132DB;
-        Sun, 19 Mar 2023 00:21:05 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pdnLf-0005MO-Hj; Sun, 19 Mar 2023 08:20:59 +0100
-Message-ID: <53e8b4db-e8dd-4dfa-f873-7dcbeac09149@leemhuis.info>
-Date:   Sun, 19 Mar 2023 08:20:59 +0100
+        Sun, 19 Mar 2023 03:22:56 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436562331A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 00:22:54 -0700 (PDT)
+Received: from dggpemm100001.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PfTpc39qjz9tTN;
+        Sun, 19 Mar 2023 15:22:32 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sun, 19 Mar 2023 15:22:50 +0800
+Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
+ dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2507.021;
+ Sun, 19 Mar 2023 15:22:50 +0800
+From:   "chenjun (AM)" <chenjun102@huawei.com>
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+CC:     "xuqiang (M)" <xuqiang36@huawei.com>,
+        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
+Thread-Topic: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
+Thread-Index: AQHZVnGyqCLx+d0GeECeM+z9zE2Dsg==
+Date:   Sun, 19 Mar 2023 07:22:50 +0000
+Message-ID: <aeb2bd3990004b9eb4f151aa833ddcf2@huawei.com>
+References: <20230314123403.100158-1-chenjun102@huawei.com>
+ <0cad1ff3-8339-a3eb-fc36-c8bda1392451@suse.cz>
+ <344c7521d72e4107b451c19b329e9864@huawei.com>
+ <8c700468-245d-72e9-99e7-b99d4547e6d8@suse.cz>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.43]
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bob Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        acpica-devel@lists.linuxfoundation.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [regression] Bug 217069 - Wake on Lan is broken on r8169 since
- 6.2
-In-Reply-To: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679210465;b172227a;
-X-HE-SMSGID: 1pdnLf-0005MO-Hj
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
-
-On 22.02.23 08:57, Thorsten Leemhuis wrote:
+在 2023/3/17 20:06, Vlastimil Babka 写道:
+> On 3/17/23 12:32, chenjun (AM) wrote:
+>> 在 2023/3/14 22:41, Vlastimil Babka 写道:
+>>>>    	pc.flags = gfpflags;
+>>>> +
+>>>> +	/*
+>>>> +	 * when (node != NUMA_NO_NODE) && (gfpflags & __GFP_THISNODE)
+>>>> +	 * 1) try to get a partial slab from target node with __GFP_THISNODE.
+>>>> +	 * 2) if 1) failed, try to allocate a new slab from target node with
+>>>> +	 *    __GFP_THISNODE.
+>>>> +	 * 3) if 2) failed, retry 1) and 2) without __GFP_THISNODE constraint.
+>>>> +	 */
+>>>> +	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+>>>> +			pc.flags |= __GFP_THISNODE;
+>>>
+>>> Hmm I'm thinking we should also perhaps remove direct reclaim possibilities
+>>> from the attempt 2). In your qemu test it should make no difference, as it
+>>> fills everything with kernel memory that is not reclaimable. But in practice
+>>> the target node might be filled with user memory, and I think it's better to
+>>> quickly allocate on a different node than spend time in direct reclaim. So
+>>> the following should work I think?
+>>>
+>>> pc.flags = GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
+>>>
+>>
+>> Hmm, Should it be that:
+>>
+>> pc.flags |= GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
 > 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217069 :
+> No, we need to ignore the other reclaim-related flags that the caller
+> passed, or it wouldn't work as intended.
+> The danger is that we ignore some flag that would be necessary to pass, but
+> I don't think there's any?
+> 
+> 
 
-An issue that looked like a network bug was now bisected and it turns
-out it's cause by 5c62d5aab875 ("ACPICA: Events: Support fixed PCIe wake
-event") which Huacai Chen provided. Could you take a look at the ticket
-linked above?
+If we ignore __GFP_ZERO passed by kzalloc， kzalloc will not work.
+Could we just unmask __GFP_RECLAIMABLE | __GFP_RECLAIM?
 
-FWIW, the whole story started like this:
-
->> Ivan Ivanich 2023-02-22 00:51:52 UTC
->>
->> After upgrade to 6.2 having issues with wake on lan on 2 systems: -
->> first is an old lenovo laptop from 2012(Ivy Bridge) with realtek
->> network adapter - second is a PC(Haswell refresh) with PCIE realtek
->> network adapter
->>
->> Both uses r8169 driver for network.
->>
->> On laptop it's not possible to wake on lan after poweroff On PC it's
->> not possible to wake on lan up after hibernate but works after
->> poweroff
->>
->> In both cases downgrade to 6.1.x kernel fixes the issue.
-
-Meanwhile a few others that ran into the same problem with NICs from
-different vendors joined the ticket
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+pc.flags &= ~(__GFP_RECLAIMABLE | __GFP_RECLAIM)
+pc.flags |= __GFP_THISNODE
