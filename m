@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D276C0288
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B39B6C0285
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjCSPAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 11:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S230243AbjCSPAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 11:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCSPAP (ORCPT
+        with ESMTP id S229448AbjCSPAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 11:00:15 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EED14EA2;
-        Sun, 19 Mar 2023 08:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1679237954; i=frank-w@public-files.de;
-        bh=FaY0Xl4jfnqhSvRMHOlCX3MBxMkltd1/bLTF73k4weg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=DKFNt2WZoREtt+jN1ck1xolqt6Qiz6THIkpIfPuXTRq/Uc2Abd6AVHAGEKUFA9/89
-         mDb2dUp8omXPHSnEqsDO4Jg4+9/KA/w8LGg/x7jyHmLWKbd0MT9t6HHS6N4o+fbAIo
-         6ToGjm0KteUH2KrWCh6YAzXSwt0wgQuR1Q0KxiE9qC2oR1J6Fhz7v9C0AM7pTc8wT8
-         fdY8DslxjZSMD9zrQXZURZDOotWTQz87LR2VyIfy1ZbYU3ZydesjbWMNNQ/JFLARkE
-         Zd4Tw3q0DnX5kTQGDYh9WtCtu48YS0Zfe0oeIaIWSoLF9wiJTh0G5V42Fved085/gg
-         f28dTjnZCv1lA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.158.68] ([217.61.158.68]) by web-mail.gmx.net
- (3c-app-gmx-bs27.server.lan [172.19.170.79]) (via HTTP); Sun, 19 Mar 2023
- 15:59:14 +0100
+        Sun, 19 Mar 2023 11:00:08 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0271912055
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 08:00:05 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id h83so4398972iof.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 08:00:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679238004;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DWTyC8q9bW9WXhCIYgpFi1ioer+rKbia0nk+iCnDLaE=;
+        b=zrPhGgUPuhZTiE1GMvapYi+TQg+461FY2zP7scWaxHqr4Qb1r7FfATm1kn1reyh+/W
+         TYoQplNA5mwqe5kwLiXPd7jUn8UMYgpYS5kbBesz2UI0tfScwqigaumWPfeJscJS1t7c
+         kNVWqwjAunedLSiTbm0YwDLjtIyvDZpsawRX48gqXlaN4HbWJPlY7eCsJ4u6b15geU89
+         pW+3o38oFHsmE42OBAJMDWNvFh1IKne5NrXG3+eSOq7KrKZX7OvANwxyRyjHnuNMfzyG
+         JDLsoX0VTvnL+QqGGtVM7DDygme4lzjNeB+qmUuANUoEk+SvCgqjK6Ek4MXaW8u9iF6l
+         GR0w==
+X-Gm-Message-State: AO0yUKUs12s3vtJrdZ0F5GUVqHb4U2UrCJPsiTHDrZbMxaDaIVeRC6Bo
+        t7UZ/N4bjedRnZJEsx1Zcw==
+X-Google-Smtp-Source: AK7set+Y1iJKzRGZc9BSQKQB0EEZD5p/DugJm0DBFRNc1/Aez3ovfGKN1LTYRbcO/uIRcg+nZwHtCA==
+X-Received: by 2002:a05:6602:2d48:b0:74c:aa8f:1f4c with SMTP id d8-20020a0566022d4800b0074caa8f1f4cmr2975100iow.8.1679238004161;
+        Sun, 19 Mar 2023 08:00:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80c4:7b93:58f2:478b:84fd:941e])
+        by smtp.gmail.com with ESMTPSA id w71-20020a025d4a000000b003a2a167e7d9sm2428367jaa.96.2023.03.19.08.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 08:00:03 -0700 (PDT)
+Received: (nullmailer pid 66044 invoked by uid 1000);
+        Sun, 19 Mar 2023 15:00:01 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: powermac: Use of_get_cpu_hwid() to read CPU node 'reg'
+Date:   Sun, 19 Mar 2023 09:59:31 -0500
+Message-Id: <20230319145931.65499-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <trinity-a9f91337-a6df-4c4d-86ba-f5ff5118c3cd-1679237954332@3c-app-gmx-bs27>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Aw: [PATCH net-next v14 7/9] net: pcs: add driver for MediaTek
- SGMII PCS
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 19 Mar 2023 15:59:14 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <cf8a52216cfe4651695669936bd4bb1b9500c57b.1679230025.git.daniel@makrotopia.org>
-References: <cover.1679230025.git.daniel@makrotopia.org>
- <cf8a52216cfe4651695669936bd4bb1b9500c57b.1679230025.git.daniel@makrotopia.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:QlaKsSUYzhoHNVHDU4Rq0bkFMZFnwpaPu5MLgsBtp8NUsWc9o5S8LdeCQ2xzWzeAFwRt4
- Mxc17gdJOEOGXzEsWcJo6EZGPoMqwW0V1U3GeuO4/Z3SJzOql+e3/TBcCdOl7ocqDQckGIofFMMg
- 3NFdoHc56LvqaiWj9Fh3f0NxCmZzPeIKfy5rbdVf/OC1ZYe/xa4tHtlGCYGHeD0NIj9VAJXJCXGV
- 10Q2a3270UkO09xLwG9GMB1QW5JC+XRdTnC4+GAAjp53h3eL4e+Z9Qn/Ex1nrdoRI3WEn+uj18cS
- 6s=
-UI-OutboundReport: notjunk:1;M01:P0:eznMuFIIR60=;TcBxrqYLL8IXUHWdmSvm7sSx/yF
- klFeVRm/A0/rGq75P4jMohykpfRmQu+2ALaAOa3bZwmBn2mmTg7EbnW31GiYPZKTTK/OXwmte
- i6jI3k856t7uBjZ2/Ow0CWz8kctXTcAP5pvb7nlSLpRI8gEwu7q7OLweDs6JCNdVCutHR2cK6
- BvRCjnj4nHV+8tUDVxN/9jma+ruVIfhAfq6s47UjEmF0q8txpN3kl6c7uRGuCS25GT94PoGsJ
- YJikkrCtnxWJhKbfmODBjtpb5NxPDttiCmspJOVzqEMfYHZDpBQHtoDmMMbVgLfJP8HtdnSuX
- j1MBV3b1qujWoxgn6bYcWNgggB3BQhkoNhn4JTaFGJqogbcb/UgxGuPdr3jK1bfcv7clyIsIB
- og00aDaCWKv6QPj3rYgPZFGE/rEkunnVxTmCYK1GXZiFruHEOGfZ0iKXw3tYKEK8mZ7XtDsD8
- y0I6y82h4nLMHKpd7PSA6Uxmj2JaMnm9Pbf8eFfGiFmxHirQVUp+NkkGGe5ynTGO2XbLta4YK
- oQswLwvbhxPJ7nMo8urh1zgga8HJr9d/c237oduv+CWbLbjX++y3ugeMr03dH2jtj5gYCLNCu
- nUOeEbao8xek3yAbDGG//Wd0DSJZgCAcIlRWekai9264JvYYZqnQcKc2VeD+hOHc/vqBZ+CxW
- 0vjxH/RoASEFfmiF/RgJExNW2f8TuQljfXEZFHj0seGiKiUblwKBgrUwb4nEUKinDOb3/0YDF
- i58Clg6jjcTcj/4H0oiT8GF1DWIr5nSPOzR8kV8Owol1ZEd+sWEuUAICL7DJLgk2YTqorPoNB
- qxzuVLOiT1e2eGOsRbC7JoOQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-as Patches are the same as v13
+Replace open coded reading of CPU nodes' "reg" properties with
+of_get_cpu_hwid() dedicated for this purpose.
 
-Tested-By: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/powerpc/platforms/powermac/feature.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-regards Frank
+diff --git a/arch/powerpc/platforms/powermac/feature.c b/arch/powerpc/platforms/powermac/feature.c
+index 0382d20b5619..dd508c2fcb5a 100644
+--- a/arch/powerpc/platforms/powermac/feature.c
++++ b/arch/powerpc/platforms/powermac/feature.c
+@@ -1053,11 +1053,11 @@ core99_reset_cpu(struct device_node *node, long param, long value)
+ 		return -ENODEV;
+ 
+ 	for_each_of_cpu_node(np) {
+-		const u32 *num = of_get_property(np, "reg", NULL);
+ 		const u32 *rst = of_get_property(np, "soft-reset", NULL);
+-		if (num == NULL || rst == NULL)
++		if (!rst)
+ 			continue;
+-		if (param == *num) {
++		if (param == of_get_cpu_hwid(np, 0)) {
++			of_node_put(np);
+ 			reset_io = *rst;
+ 			break;
+ 		}
+@@ -1499,11 +1499,11 @@ static long g5_reset_cpu(struct device_node *node, long param, long value)
+ 		return -ENODEV;
+ 
+ 	for_each_of_cpu_node(np) {
+-		const u32 *num = of_get_property(np, "reg", NULL);
+ 		const u32 *rst = of_get_property(np, "soft-reset", NULL);
+-		if (num == NULL || rst == NULL)
++		if (!rst)
+ 			continue;
+-		if (param == *num) {
++		if (param == of_get_cpu_hwid(np, 0)) {
++			of_node_put(np);
+ 			reset_io = *rst;
+ 			break;
+ 		}
+-- 
+2.39.2
+
