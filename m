@@ -2,129 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798D56C05F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3B56C05FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjCSWKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 18:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S230306AbjCSWRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 18:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjCSWKb (ORCPT
+        with ESMTP id S229913AbjCSWR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 18:10:31 -0400
-Received: from ocelot.miegl.cz (ocelot.miegl.cz [195.201.216.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ADF6E99;
-        Sun, 19 Mar 2023 15:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=miegl.cz; s=dkim;
-        t=1679263826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XTvG4gYKA+YtluD3rBPX47zu84nIB9zKoJOoRegJkSU=;
-        b=awqSNRPCO3mfVrNW8/NG4mFu3alZvoi3MpisRoNdWbKkhIKj3lB9phr1imFbWCkfCrvjnR
-        4pIs22omzhH2tDbydmp7UIdpd5ObP1tak/01T+UbJJXTiGW55LBXN0aeN8iJPjT//j/UeR
-        HnSo2lM/w8NKNmGLB97rJ6KdsNJX2jz4Q7RYuNV0RlBuDh/JiZwiJWlrxUozDMjFY8mWY+
-        Nv8xbsKCwn7dzr7Nr/YDBTap14/QvIlauyUswTgq4uL9tf+HoPMiygggeIXKKXLZKJZGIJ
-        Wp0vftxoyowiNTLWBfkCVMv7qx4hrHxj9mWqvQbGjIVKt7si0MFTHJaCPArE0w==
-From:   Josef Miegl <josef@miegl.cz>
-Cc:     Eyal Birger <eyal.birger@gmail.com>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Josef Miegl <josef@miegl.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2] net: geneve: accept every ethertype
-Date:   Sun, 19 Mar 2023 23:09:54 +0100
-Message-Id: <20230319220954.21834-1-josef@miegl.cz>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Sun, 19 Mar 2023 18:17:26 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876CF166DB
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 15:17:24 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id t5so3138311edd.7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 15:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679264243;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CVy2G3SF8lZXkIybrDraAoXDYSJJCjoWvYCpyBKYDUY=;
+        b=VPfIuNhvPMHz6+stzUwdKPPkBMph20dX7ogWPqHkAkUFPYWAONYngoBKRxZNo6/kmk
+         B/FptYlPhbVh5+9DVCKAk5l3RQODjOC4W4axVmkxSgOe/6twu0kg5jxG7Xv9d8Ciw3AJ
+         UMJgI6WjVf/jZ5RGfgAVELeQeVul1+6900nCiWZZvQc/EcgYEN4wc65k3dP8UfXQmXSG
+         UqCQL8FS/KzhdYn9NCP3ggy2GelQOlxcEP8zcegLr9RV8b786Qg2Ns6vmXLNf+NjDnxz
+         0ifklrgI7mq9B/FiYemL199vtxdgW3iWF6MOufvAWsXxy9gl+BD7ug4jzkyD8t4D1kQP
+         CuYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679264243;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CVy2G3SF8lZXkIybrDraAoXDYSJJCjoWvYCpyBKYDUY=;
+        b=XClFQh1Annb5Ku2GfDLxcN+dKIWnHvPhAWDy2sq2qoN4QsQfNY6TW9qE1W0Ntso+Cd
+         i4lSz/O0INg0xdjy8QggcdvaUqzwHSbdx3cu2220s/ILZroRDnyhAFfFNkmYMbiUCaYB
+         lt8v1yH0YhMzfR2zA2nFpJHSczj1h2jsfn4qgBx1R7TgqNqA1Qe7OJuwLnNkTeYRYzuI
+         XFlt9W9zvLJgOlsyIT3351V0HrZ+KDMOFPQ5ZZNRrrlQi+5h54sVIgo9153dDTnsrep5
+         /LwZMm8q1b2bhOHmJPww4GICqcfTg7LYqVNTMVAhj0lUvzEtsfwRRDVOaT9zOXI6YT8A
+         TQwg==
+X-Gm-Message-State: AO0yUKV3mkoDe5eeJ7n5I/ExacjOBASIw8juJQnEOc6o86oN8Qx5TrKQ
+        4by5ZVNI+CMulzIqh7I3i0o=
+X-Google-Smtp-Source: AK7set+ddYLBNSELTms5vvW+xnnhYfyJ2l6J0SkGFd4krMvDOrgU3OljWSUE3iexrieUEaQkxDtrLg==
+X-Received: by 2002:a17:907:9482:b0:933:130e:e81a with SMTP id dm2-20020a170907948200b00933130ee81amr6564533ejc.32.1679264242842;
+        Sun, 19 Mar 2023 15:17:22 -0700 (PDT)
+Received: from [192.168.1.16] ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id k7-20020a1709062a4700b008b176df2899sm3620112eje.160.2023.03.19.15.17.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Mar 2023 15:17:22 -0700 (PDT)
+Message-ID: <8e9724a0-226d-eb81-69c3-d59889e37e1f@gmail.com>
+Date:   Mon, 20 Mar 2023 00:17:20 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] staging: greybus: use inline function for macros
+Content-Language: en-US
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+References: <20230319201324.253874-1-eng.mennamahmoud.mm@gmail.com>
+ <alpine.DEB.2.22.394.2303192121170.2867@hadrien>
+ <0f02a3ff-801b-1e1f-5c03-009a05708709@gmail.com>
+ <alpine.DEB.2.22.394.2303192151330.2867@hadrien>
+ <402ffcbe-bb29-7035-68f4-2741532a6d67@gmail.com>
+ <alpine.DEB.2.22.394.2303192225590.2867@hadrien>
+ <649afe06-e069-e046-21ec-0d86243a4bfa@gmail.com>
+ <alpine.DEB.2.22.394.2303192303130.2867@hadrien>
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+In-Reply-To: <alpine.DEB.2.22.394.2303192303130.2867@hadrien>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Geneve encapsulation, as defined in RFC 8926, has a Protocol Type
-field, which states the Ethertype of the payload appearing after the
-Geneve header.
 
-Commit 435fe1c0c1f7 ("net: geneve: support IPv4/IPv6 as inner protocol")
-introduced a new IFLA_GENEVE_INNER_PROTO_INHERIT flag that allowed the
-use of other Ethertypes than Ethernet. However, it did not get rid of a
-restriction that prohibits receiving payloads other than Ethernet,
-instead the commit white-listed additional Ethertypes, IPv4 and IPv6.
-
-This patch removes this restriction, making it possible to receive any
-Ethertype as a payload, if the IFLA_GENEVE_INNER_PROTO_INHERIT flag is
-set.
-
-The restriction was set in place back in commit 0b5e8b8eeae4
-("net: Add Geneve tunneling protocol driver"), which implemented a
-protocol layer driver for Geneve to be used with Open vSwitch. The
-relevant discussion about introducing the Ethertype white-list can be
-found here:
-https://lore.kernel.org/netdev/CAEP_g=_1q3ACX5NTHxLDnysL+dTMUVzdLpgw1apLKEdDSWPztw@mail.gmail.com/
-
-<quote>
->> +       if (unlikely(geneveh->proto_type != htons(ETH_P_TEB)))
+On ٢٠‏/٣‏/٢٠٢٣ ٠٠:٠٦, Julia Lawall wrote:
 >
-> Why? I thought the point of geneve carrying protocol field was to
-> allow protocols other than Ethernet... is this temporary maybe?
+> On Mon, 20 Mar 2023, Menna Mahmoud wrote:
+>
+>> On ١٩/٣/٢٠٢٣ ٢٣:٢٦, Julia Lawall wrote:
+>>> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+>>>
+>>>> On ١٩/٣/٢٠٢٣ ٢٢:٥٥, Julia Lawall wrote:
+>>>>> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+>>>>>
+>>>>>> On ١٩/٣/٢٠٢٣ ٢٢:٢١, Julia Lawall wrote:
+>>>>>>> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+>>>>>>>
+>>>>>>>> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+>>>>>>>> static inline functions.
+>>>>>>>>
+>>>>>>>> it is not great to have macro that use `container_of` macro,
+>>>>>>>> because from looking at the definition one cannot tell what type
+>>>>>>>> it applies to.
+>>>>>>>>
+>>>>>>>> One can get the same benefit from an efficiency point of view
+>>>>>>>> by making an inline function.
+>>>>>>>>
+>>>>>>>> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+>>>>>>>> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+>>>>>>>> ---
+>>>>>>>>      drivers/staging/greybus/gbphy.h | 10 ++++++++--
+>>>>>>>>      1 file changed, 8 insertions(+), 2 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/staging/greybus/gbphy.h
+>>>>>>>> b/drivers/staging/greybus/gbphy.h
+>>>>>>>> index 1de510499480..42c4e3fe307c 100644
+>>>>>>>> --- a/drivers/staging/greybus/gbphy.h
+>>>>>>>> +++ b/drivers/staging/greybus/gbphy.h
+>>>>>>>> @@ -16,7 +16,10 @@ struct gbphy_device {
+>>>>>>>>      	struct device dev;
+>>>>>>>>      };
+>>>>>>>>
+>>>>>>> You have made the patch against your previous patch that added a
+>>>>>>> newline
+>>>>>>> here.  It should be against Greg's tree.
+>>>>>>>
+>>>>>>> julia
+>>>>>> you mean I should remove this newline, right?
+>>>>> You should apply your change to the state of Greg's tree, not the state
+>>>>> after your patch.
+>>>>>
+>>>>> Assuming that you have committed both the patch adding the new line and
+>>>>> the patch changing the macro to a function, and have made no other
+>>>>> changes, you can do git rebase -i HEAD~2 and the put a d at the
+>>>>> beginning
+>>>>> of the line related to the patch adding the newline.
+>>>> you mean drop this patch "staging: greybus: remove unnecessary blank
+>>>> line"?
+>>> No, the one that removes the blank line looks fine.
+>>>
+>>> At some point, you added a blank line below the two structure definitions.
+>>> That blank line is not in Greg's tree, so you shoulsn't send a patch that
+>>> assumes that it is there.
+>>
+>> I'm sorry I mean this patch "staging: greybus: add blank line after struct",
+>> Julia I understood the issue
+>>
+>> but I am confused about how to fix it, should I drop the patch that added the
+>> newline? then what should I do?
+> If the git rebase solution is not clear to you, then another simple
+> solution is just to clone Greg's tree again somewhere else, and make your
+> changes.
+>
+>> and version that I have submitted, should I do anything about it as you said
+>> it is wrong solution?
+> My concern was the blank line after each of the structure definitions,
+> which is not in Greg's tree, so he can't apply the patch.  Other than
+> that, if the code compiles it is at least going in the right direction.
+>
+> Please fix the newlines issue, and then send the patch again.
+>
+> julia
 
-Yes, it is temporary. Currently OVS only handles Ethernet packets but
-this restriction can be lifted once we have a consumer that is capable
-of handling other protocols.
-</quote>
 
-This white-list was then ported to a generic Geneve netdevice in commit
-371bd1061d29 ("geneve: Consolidate Geneve functionality in single
-module."). Preserving the Ethertype white-list at this point made sense,
-as the Geneve device could send out only Ethernet payloads anyways.
+Okay I will fix it, but will send it as a new patch not v3, right?
 
-However, now that the Geneve netdevice supports encapsulating other
-payloads with IFLA_GENEVE_INNER_PROTO_INHERIT and we have a consumer
-capable of other protocols, it seems appropriate to lift the restriction
-and allow any Geneve payload to be received.
 
-Signed-off-by: Josef Miegl <josef@miegl.cz>
----
- drivers/net/geneve.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Menna
 
-diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
-index 89ff7f8e8c7e..32684e94eb4f 100644
---- a/drivers/net/geneve.c
-+++ b/drivers/net/geneve.c
-@@ -365,13 +365,6 @@ static int geneve_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
- 	if (unlikely(geneveh->ver != GENEVE_VER))
- 		goto drop;
- 
--	inner_proto = geneveh->proto_type;
--
--	if (unlikely((inner_proto != htons(ETH_P_TEB) &&
--		      inner_proto != htons(ETH_P_IP) &&
--		      inner_proto != htons(ETH_P_IPV6))))
--		goto drop;
--
- 	gs = rcu_dereference_sk_user_data(sk);
- 	if (!gs)
- 		goto drop;
-@@ -380,6 +373,8 @@ static int geneve_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
- 	if (!geneve)
- 		goto drop;
- 
-+	inner_proto = geneveh->proto_type;
-+
- 	if (unlikely((!geneve->cfg.inner_proto_inherit &&
- 		      inner_proto != htons(ETH_P_TEB)))) {
- 		geneve->dev->stats.rx_dropped++;
--- 
-2.37.1
-
+>
+>>
+>> Menna
+>>
+>>> julia
+>>>
+>>>> Menna
+>>>>
+>>>>
+>>>>> If you have made
+>>>>> more changes, you can adapt the HEAD~ part accordingly.
+>>>>>
+>>>>> julia
+>>>>>
+>>>>>
+>>>>>> Menna
+>>>>>>
+>>>>>>>> -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+>>>>>>>> +static inline struct gbphy_device *to_gbphy_dev(const struct
+>>>>>>>> device
+>>>>>>>> *d)
+>>>>>>>> +{
+>>>>>>>> +	return container_of(d, struct gbphy_device, dev);
+>>>>>>>> +}
+>>>>>>>>
+>>>>>>>>      static inline void *gb_gbphy_get_data(struct gbphy_device
+>>>>>>>> *gdev)
+>>>>>>>>      {
+>>>>>>>> @@ -45,7 +48,10 @@ struct gbphy_driver {
+>>>>>>>>      	struct device_driver driver;
+>>>>>>>>      };
+>>>>>>>>
+>>>>>>>> -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver,
+>>>>>>>> driver)
+>>>>>>>> +static inline struct gbphy_driver *to_gbphy_driver(struct
+>>>>>>>> device_driver
+>>>>>>>> *d)
+>>>>>>>> +{
+>>>>>>>> +	return container_of(d, struct gbphy_driver, driver);
+>>>>>>>> +}
+>>>>>>>>
+>>>>>>>>      int gb_gbphy_register_driver(struct gbphy_driver *driver,
+>>>>>>>>      			     struct module *owner, const char
+>>>>>>>> *mod_name);
+>>>>>>>> --
+>>>>>>>> 2.34.1
+>>>>>>>>
+>>>>>>>>
+> >
