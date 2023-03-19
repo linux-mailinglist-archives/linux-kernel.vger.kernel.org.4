@@ -2,108 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB736C0083
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 11:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8A96C0092
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 11:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjCSKJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 06:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S229987AbjCSKu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 06:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCSKJF (ORCPT
+        with ESMTP id S229561AbjCSKuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 06:09:05 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B721557F;
-        Sun, 19 Mar 2023 03:09:03 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso13590299pjb.0;
-        Sun, 19 Mar 2023 03:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679220543;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qrjBDcKLWIFWkd8qN7MihPIUroki0Vzxj+3swazicxU=;
-        b=hohI0YcG4+0isHLMPAL9dGkOFQKa9TvXM6JW0ERGkG6g9LluWmBx/UTVBn4SPjsLl8
-         BNR//nBzHctwOdjAev8ihqPGVaHZjCngbbWQ6e419r/pN2CkT50Z11XAebA5Q5qgyjVb
-         UAUno3Y9w1wRLSrcv/wobidW76SG89IQucl8uggIXvFgq/IbNlikiy4+LskrxhKHFMRE
-         17xvc0cUsOIIFx5/Cn8rKi1m9EzNcL+skPZyxgMBbdrtoT13f4YX5OSLorCMg7tbucFD
-         pVsPedYHWMXz8yHuItHa8OFh7jBPYw7Jm1O8eisvpsxlgn4da0lN91nIPh2uPmD318q2
-         wXnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679220543;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qrjBDcKLWIFWkd8qN7MihPIUroki0Vzxj+3swazicxU=;
-        b=2B7Mp45DfWNS9s4OB8+jAPA656sRfdK9sZ7vHq3s2x0+/nu6xpiUDKOx9VW+u7JVdO
-         7Mk6IdLz3IbMQT8fWXVyb1w+ZHS0NEDK7ZhGK0fJrUNmJolHXPYb2POZNfT3979X3aYQ
-         aFdrrip/vayV95Yy4b/yhq6gtDYA5jQ8vqAjoCxmAjOeGHTo+yc2LNMrFsqw3ADPJFg4
-         5gfHBMZaT+js1XoKTSimE+iPImpe/gHJ9/wdeyb7gxWHWKU0qbuxkn9CyUbiXkYVl6qW
-         yC8YN6ezYvUqhjGYpfKZwsd4kC2PznlN6a2ouh/sauNECpWbeMOsdNAr+eauxfolkF17
-         0LWg==
-X-Gm-Message-State: AO0yUKWYTWOMF0Zy04qGOWyexb4KkzHHnI7qwWkMlZRq/1c91KdAJawI
-        6s4chBN0RqxRJsg4cdLs7Ec=
-X-Google-Smtp-Source: AK7set+WDm4v30L09kvk11uVxiHpUxvMPRro7LDrqOz6eKhJ8U1OZJVlK1BVRc/YV1Yuq4aTuZNYlQ==
-X-Received: by 2002:a05:6a20:7b16:b0:d9:2cef:949a with SMTP id s22-20020a056a207b1600b000d92cef949amr1150958pzh.28.1679220542824;
-        Sun, 19 Mar 2023 03:09:02 -0700 (PDT)
-Received: from XHD-CHAVAN-L1.amd.com ([103.115.201.92])
-        by smtp.gmail.com with ESMTPSA id g16-20020aa78190000000b0058d9058fe8asm4369441pfi.103.2023.03.19.03.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 03:09:02 -0700 (PDT)
-From:   Rohit Chavan <roheetchavan@gmail.com>
-To:     Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rohit Chavan <roheetchavan@gmail.com>
-Subject: [PATCH] RDMA/mlx5: Coding style fix reported by checkpatch
-Date:   Sun, 19 Mar 2023 15:38:47 +0530
-Message-Id: <20230319100847.5566-1-roheetchavan@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 19 Mar 2023 06:50:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661A5136DA;
+        Sun, 19 Mar 2023 03:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B22A560F9A;
+        Sun, 19 Mar 2023 10:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A209C433A0;
+        Sun, 19 Mar 2023 10:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679223019;
+        bh=453PK2PCxTyZSXXMXs81JsNYdPM7EbZLWZB1pEswKJs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Xhdvqv2yxNVRDMjMhXQS6d2H1ba4qZr0lf7cpGNpooq4qOZxBvUHUzlxqXBB+cJ2b
+         ooIcD/dlGKWCaztXjku9VRGC7xyDdhk8Tg5Oc4nZhpjJIirXwgHVH2NtB6zllHkJAj
+         xa8LATJJPrDKjbsf3WnfYvEULo3s2tDf0sOayDrRzqHmbJQ9ZFDiAC3jCD4q/48ylK
+         3BvAvn3w6pujIZNMdVrl98GxVm9aEBQB1JCMDK7dbg0urjL/ewoYmpYqa5uBWiHy9X
+         8SW52vZrGU3/q9t+XdFOKtJueBaPNRMTwnYtav0pKoFuyiUN31ZP0427ntW8zzRDSD
+         43vHDj5CrQx0Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7BA6E21EE9;
+        Sun, 19 Mar 2023 10:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net: phy: Ensure state transitions are processed from
+ phy_stop()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167922301888.22899.1199680876721811339.git-patchwork-notify@kernel.org>
+Date:   Sun, 19 Mar 2023 10:50:18 +0000
+References: <20230316203325.2026217-1-f.fainelli@gmail.com>
+In-Reply-To: <20230316203325.2026217-1-f.fainelli@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Block comments should align the * on each line on line 2849
-Avoid line continuations in quoted strings on line 3848
+Hello:
 
-Signed-off-by: Rohit Chavan <roheetchavan@gmail.com>
----
- drivers/infiniband/hw/mlx5/qp.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/infiniband/hw/mlx5/qp.c b/drivers/infiniband/hw/mlx5/qp.c
-index 7cc3b973dec7..2bad38cb39fe 100644
---- a/drivers/infiniband/hw/mlx5/qp.c
-+++ b/drivers/infiniband/hw/mlx5/qp.c
-@@ -2846,9 +2846,9 @@ static void process_vendor_flag(struct mlx5_ib_dev *dev, int *flags, int flag,
- 	case MLX5_QP_FLAG_SCATTER_CQE:
- 	case MLX5_QP_FLAG_ALLOW_SCATTER_CQE:
- 		/*
--			 * We don't return error if these flags were provided,
--			 * and mlx5 doesn't have right capability.
--			 */
-+		 * We don't return error if these flags were provided,
-+		 * and mlx5 doesn't have right capability.
-+		 */
- 		*flags &= ~(MLX5_QP_FLAG_SCATTER_CQE |
- 			    MLX5_QP_FLAG_ALLOW_SCATTER_CQE);
- 		return;
-@@ -5592,8 +5592,7 @@ int mlx5_ib_modify_wq(struct ib_wq *wq, struct ib_wq_attr *wq_attr,
- 		if (wq_attr->flags_mask & IB_WQ_FLAGS_CVLAN_STRIPPING) {
- 			if (!(MLX5_CAP_GEN(dev->mdev, eth_net_offloads) &&
- 			      MLX5_CAP_ETH(dev->mdev, vlan_cap))) {
--				mlx5_ib_dbg(dev, "VLAN offloads are not "
--					    "supported\n");
-+				mlx5_ib_dbg(dev, "VLAN offloads are not supported\n");
- 				err = -EOPNOTSUPP;
- 				goto out;
- 			}
+On Thu, 16 Mar 2023 13:33:24 -0700 you wrote:
+> In the phy_disconnect() -> phy_stop() path, we will be forcibly setting
+> the PHY state machine to PHY_HALTED. This invalidates the old_state !=
+> phydev->state condition in phy_state_machine() such that we will neither
+> display the state change for debugging, nor will we invoke the
+> link_change_notify() callback.
+> 
+> Factor the code by introducing phy_process_state_change(), and ensure
+> that we process the state change from phy_stop() as well.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net: phy: Ensure state transitions are processed from phy_stop()
+    https://git.kernel.org/netdev/net/c/4203d84032e2
+
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
