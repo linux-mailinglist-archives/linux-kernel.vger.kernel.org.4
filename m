@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C3F6C0277
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D8C6C0278
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjCSOov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S230319AbjCSOrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCSOot (ORCPT
+        with ESMTP id S229441AbjCSOrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:44:49 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417151CBC6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:44:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id er8so25873664edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679237085;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wW0qmeq/XE/BS6QmstxltBCzT+Jl3DqWsgHErkJk2t4=;
-        b=ZhlRshRBEeF/ffBl7mjoVExBy1LfUW86EngFn+0SoXLDONYnFeB0RjOhvD740DDdAq
-         JiSAJjwb4kJ2Gg1MNMAr7Yyt/P8un0+y6PgqLhYkF4y5G4XC5Yl+O2vLHkHJ1NsiuEi6
-         m3+E+ocdJ7X3Q0VM1iCfXmtc1F0YNyXt29IMQEL9VlQ58NeLCQfKJ8HRcfugC3lphXKO
-         97ZOsbKI5k93f1iaVtpSgV3eu+AgDvQycjzPYCR4rZnsEGkIFfNuTAnnZS3EIyFUDF7k
-         Q+QzYf8F08tq7D5hITFBmi11FLRyGxJgEQOxrK0mjWV14KpUzoADlhh8h71votf0T5ud
-         4EZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679237085;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wW0qmeq/XE/BS6QmstxltBCzT+Jl3DqWsgHErkJk2t4=;
-        b=IECJ9ZAwzMASD4+TLZPVHQWRTS9NqUmHSPHdAJWaUyNiy3x7guZjv78BWEI74iBocJ
-         WDqfOSf3KAjMLyjZ5HFdpFT7BprBaNQc8mf7xqf08dO9ji73dK1Cr8n4gi9GyPAnWTlA
-         D8LcxlFVTxoMrjAq1QssRY9beim1tA06bbL7ktRs9h/gT41WR1nKw/GFAU/Vy65zwFUn
-         ZmaMj+1oy0EcocEPwyDYKSDgKmlNDbBQKkhw0jZdfM9IljzweS5ldOo9eL6CP81Dwvjv
-         m7NJCWItYoxu1Llko2/NDDqy+jcuV2XGYUbqvjo8AcSthhCO5TV5DAOxMPIENymlI6Xb
-         vugQ==
-X-Gm-Message-State: AO0yUKUfAa5dA5bT8IKfpfsPYPU27PIKdzMJXtoOeEryK0Ypmc1pGEgd
-        SHIQwjq6p/r4FIK8L8L2WC85vbcpSVUElL2+e9A=
-X-Google-Smtp-Source: AK7set/pmi9WCvGGmALTUjSWYkn5du0UgMhSPpbj8Do3+1D2jofLLlk23MQcoCW8cchbqZBOkChFpw==
-X-Received: by 2002:a17:906:b349:b0:878:6b39:6d2a with SMTP id cd9-20020a170906b34900b008786b396d2amr6835060ejb.46.1679237084757;
-        Sun, 19 Mar 2023 07:44:44 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id t14-20020a508d4e000000b004d8287c775fsm3583165edt.8.2023.03.19.07.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 07:44:44 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] crypto - img-hash: Depend on OF and silence compile test warning
-Date:   Sun, 19 Mar 2023 15:44:39 +0100
-Message-Id: <20230319144439.31399-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 19 Mar 2023 10:47:13 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF32318B3C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:47:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679237231; x=1710773231;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S3To/L9hGP4vnvBmUVIHCo+t7DM/+Rf+c6vyW0RzeDU=;
+  b=Kj6J61EODC4f8/Ahy5bS7Tl7Z3ZM9z1ipc7r0WensSIhXWSg0fMfbZQx
+   rVOLmoDv1LnVMfjbzaoJHgTej0k4AybMpMz0jRUiQrBb878p9DYmBwvkC
+   jASB3VPqzwtaTzBbYZYmK5x6Ks9gIui9EoDbLX0CeCwzxq9PYYasursDu
+   aLxFg1bEtlDT43CkiGoaba2bDvvXhltHbRhPJap6+czEEzwyBVYNmxmW4
+   6mJqKKwTHowYOK8E/eUevK42/DiArzW9E39s5qU41hHzK/ub+G/2gLAAO
+   aNtQUXINSm7byo6zqFjRrw3cKzWYDQzowRA5/x6J5eTaxI9EvoirzKSLm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="340052154"
+X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
+   d="scan'208";a="340052154"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 07:47:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="680813634"
+X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
+   d="scan'208";a="680813634"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Mar 2023 07:47:09 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pduJQ-000AYQ-1o;
+        Sun, 19 Mar 2023 14:47:08 +0000
+Date:   Sun, 19 Mar 2023 22:46:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: arch/riscv/include/asm/atomic.h:317 arch_atomic_dec_if_positive()
+ warn: inconsistent indenting
+Message-ID: <202303192200.CcBA7bZy-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is specific to OF platforms (can match only via OF table),
-thus add dependency on CONFIG_OF.  Mark the of_device_id table as
-unused.  This also fixes W=1 warning:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a3671bd86a9770e34969522d29bb30a1b66fd88a
+commit: 1d7f6932c522ea95668e14265175ce3d753d0c24 riscv: atomic: Optimize dec_if_positive functions
+date:   10 months ago
+config: riscv-randconfig-m031-20230319 (https://download.01.org/0day-ci/archive/20230319/202303192200.CcBA7bZy-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 12.1.0
 
-  drivers/crypto/img-hash.c:930:34: error: ‘img_hash_match’ defined but not used [-Werror=unused-const-variable=]
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303192200.CcBA7bZy-lkp@intel.com/
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+New smatch warnings:
+arch/riscv/include/asm/atomic.h:317 arch_atomic_dec_if_positive() warn: inconsistent indenting
+arch/riscv/include/asm/atomic.h:317 arch_atomic_dec_if_positive() warn: inconsistent indenting
 
----
+Old smatch warnings:
+drivers/block/mtip32xx/mtip32xx.c:2264 mtip_hw_read_device_status() warn: check sign expansion for 'size'
+drivers/block/mtip32xx/mtip32xx.c:2328 mtip_hw_read_registers() warn: check sign expansion for 'size'
+drivers/block/mtip32xx/mtip32xx.c:3638 mtip_block_initialize() warn: missing error code? 'rv'
+drivers/block/mtip32xx/mtip32xx.c:4131 mtip_pci_remove() warn: '&dd->remove_list' not removed from list
 
-Changes since v1:
-1. Rework - depend on OF and add maybe_unused.
----
- drivers/crypto/Kconfig    | 1 +
- drivers/crypto/img-hash.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+vim +317 arch/riscv/include/asm/atomic.h
 
-diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-index 3b2516d1433f..4a4aff8b16f0 100644
---- a/drivers/crypto/Kconfig
-+++ b/drivers/crypto/Kconfig
-@@ -647,6 +647,7 @@ source "drivers/crypto/vmx/Kconfig"
- config CRYPTO_DEV_IMGTEC_HASH
- 	tristate "Imagination Technologies hardware hash accelerator"
- 	depends on MIPS || COMPILE_TEST
-+	depends on OF || COMPILE_TEST
- 	select CRYPTO_MD5
- 	select CRYPTO_SHA1
- 	select CRYPTO_SHA256
-diff --git a/drivers/crypto/img-hash.c b/drivers/crypto/img-hash.c
-index fe93d19e3044..2be364d9f592 100644
---- a/drivers/crypto/img-hash.c
-+++ b/drivers/crypto/img-hash.c
-@@ -927,7 +927,7 @@ static void img_hash_done_task(unsigned long data)
- 	img_hash_finish_req(hdev->req, err);
- }
- 
--static const struct of_device_id img_hash_match[] = {
-+static const struct of_device_id img_hash_match[] __maybe_unused = {
- 	{ .compatible = "img,hash-accelerator" },
- 	{}
- };
+fab957c11efe2f Palmer Dabbelt 2017-07-10  312  
+1d7f6932c522ea Guo Ren        2022-05-05  313  static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+fab957c11efe2f Palmer Dabbelt 2017-07-10  314  {
+fab957c11efe2f Palmer Dabbelt 2017-07-10  315         int prev, rc;
+fab957c11efe2f Palmer Dabbelt 2017-07-10  316  
+fab957c11efe2f Palmer Dabbelt 2017-07-10 @317  	__asm__ __volatile__ (
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  318  		"0:	lr.w     %[p],  %[c]\n"
+1d7f6932c522ea Guo Ren        2022-05-05  319  		"	addi     %[rc], %[p], -1\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  320  		"	bltz     %[rc], 1f\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  321  		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  322  		"	bnez     %[rc], 0b\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  323  		"	fence    rw, rw\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  324  		"1:\n"
+fab957c11efe2f Palmer Dabbelt 2017-07-10  325  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+1d7f6932c522ea Guo Ren        2022-05-05  326  		:
+fab957c11efe2f Palmer Dabbelt 2017-07-10  327  		: "memory");
+1d7f6932c522ea Guo Ren        2022-05-05  328  	return prev - 1;
+fab957c11efe2f Palmer Dabbelt 2017-07-10  329  }
+fab957c11efe2f Palmer Dabbelt 2017-07-10  330  
+
+:::::: The code at line 317 was first introduced by commit
+:::::: fab957c11efe2f405e08b9f0d080524bc2631428 RISC-V: Atomic and Locking Code
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
