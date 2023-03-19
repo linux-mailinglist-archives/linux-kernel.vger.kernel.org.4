@@ -2,117 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED406C0334
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DA36C033C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjCSQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 12:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S229612AbjCSQpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 12:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjCSQiJ (ORCPT
+        with ESMTP id S229448AbjCSQpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:38:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519AE12585
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:38:06 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdw2h-0007Tl-Hm; Sun, 19 Mar 2023 17:37:59 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdw2b-005GT3-6P; Sun, 19 Mar 2023 17:37:53 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdw2a-006C3R-D9; Sun, 19 Mar 2023 17:37:52 +0100
-Date:   Sun, 19 Mar 2023 17:37:49 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     lizhe <sensor1010@163.com>
-Cc:     TheSven73@gmail.com, ulf.hansson@linaro.org, fthain@linux-m68k.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, kernel@pengutronix.de,
-        srinivas.pandruvada@linux.intel.com, lznuaa@gmail.com,
-        pali@kernel.org
-Subject: Re: [PATCH] drivers/mmc/core/bus: Delete redundant match function
-Message-ID: <20230319163749.cmdyak2mhsetjt6e@pengutronix.de>
-References: <20211206165038.123107-1-sensor1010@163.com>
- <20211207072322.37dljknm24nk5vk4@pengutronix.de>
- <2447b32c.1d53.186fa5703d8.Coremail.sensor1010@163.com>
+        Sun, 19 Mar 2023 12:45:32 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21C1168BF
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:45:29 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso13940286pjb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679244329;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wmtLzAp7TAfFzU4Wal3aHOCAS9vHX2uOg0KnFqhgfOg=;
+        b=LXs9nIjHeLGc4vvNlmA23A/cSABl8I0XqAC1aUqw4CUby9pvLsTuK+E/TA3D3Bz5a9
+         3iBf1J/ArqNespEhEmmrBwb444AgD9APc8yDQD/YiU/+E7/9CqeSgSIpE2bb/pZPTp7B
+         wOOh6SiAnC7qlePvsPYEk7H6nmZqnYJy/3vtJhd31RFDVkHgXhAptaQhgsLadb+W5IhE
+         A8MNpfPa1HdDhAHNTK6BN6qKHHBc/L3qWrLpK8BVbtWJov/xFFcxWOihgu44cA736mo1
+         5LeUWymaryZOHNVb6weW14aeEn+feYT7V4VMYlavnQB/0pEGMJ5jXxx6P6VpsU0zt3oo
+         Lcbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679244329;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wmtLzAp7TAfFzU4Wal3aHOCAS9vHX2uOg0KnFqhgfOg=;
+        b=GIDtux7ZlUsh9/zwaCJlLrF9vMKPDawjGrBKww3uIds+30i20sra2nq0TIQXlMWJg2
+         JzFAJGHNNQuqscVqQIESee/IAvTEM44qVTHF6GGUnPf7RmZfCG2HEkDyTIyhmCm8NDXT
+         9xQtn2dTbmz3Sv0MiFye0/2DkYdD0DVbkbVFjq/nKfOEgLOxqkyvKkhL9MBNnFHVJZik
+         4NcvZ6F0tvQANf4C3ro7Xteut1PczchYUA0RCzhnZmAx1w4xZ6WW86DL7kdIzztB2mBS
+         lw3WsnQ3LJ1yepQIGGKAhrjtlQI/UsG9Zlx9nIQKnAbYt5lsI8rr8Moa5xCn431Rycq7
+         ziVQ==
+X-Gm-Message-State: AO0yUKVDzvxBX8cwVjKuTP2Rbgx42b7joPb6UGixeEyOGY0AUzKFv3Gg
+        kXHIPKDYys9cIHfnkJs965EmhcYawuKa4Q==
+X-Google-Smtp-Source: AK7set89cJ4rq6OJEYq0Uljx9YEOr8CfmsGk8+Y5TyoZookPRhjaGAooHa6/vi5uZaiShmz6OVcAzQ==
+X-Received: by 2002:a05:6a20:7aa2:b0:d9:1ec8:e9bb with SMTP id u34-20020a056a207aa200b000d91ec8e9bbmr2242327pzh.28.1679244329269;
+        Sun, 19 Mar 2023 09:45:29 -0700 (PDT)
+Received: from sumitra.com ([117.209.117.91])
+        by smtp.gmail.com with ESMTPSA id m5-20020aa79005000000b00627f1efd470sm1091128pfo.135.2023.03.19.09.45.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 09:45:28 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 09:45:20 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     Vaibhav Agarwal <vaibhav.sr@gmail.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     outreachy@lists.linux.dev
+Subject: [PATCH] Staging: greybus: Fix lines ending with '('
+Message-ID: <20230319164520.GA125117@sumitra.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="57nfhufrbw27cwsp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2447b32c.1d53.186fa5703d8.Coremail.sensor1010@163.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The coding style used to limit lines to 80 characters,
+which led to splitting of these function headers into multiple
+lines and ends the first line with a '('.
+Such splits causes checks reported by the checkpatch.
 
---57nfhufrbw27cwsp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Place the function parameters of each function immediately after
+'(' in a single line to align the function headers.
 
-Hello Lizhe,
+Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+---
+ .../staging/greybus/audio_manager_module.c    | 40 +++++++++----------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
-On Sun, Mar 19, 2023 at 10:47:32PM +0800, lizhe wrote:
-> HI : u.kleine-koenig
->     1.=20
->     This is the earliest submission record for this patch.
->     you were also involved and gave good advice.=20
->=20
->=20
->     2.=20
->    in may 2022,  i submitted the pach again.
->=20
->=20
->    i discovered and submitted this issue twice.
->    i did the discovery and submission.
->=20
->=20
->   please consider receiving my patch. thanks.
+diff --git a/drivers/staging/greybus/audio_manager_module.c b/drivers/staging/greybus/audio_manager_module.c
+index 0a0f0a394c84..81b4ba607a0e 100644
+--- a/drivers/staging/greybus/audio_manager_module.c
++++ b/drivers/staging/greybus/audio_manager_module.c
+@@ -70,9 +70,8 @@ static void gb_audio_module_release(struct kobject *kobj)
+ 	kfree(module);
+ }
+ 
+-static ssize_t gb_audio_module_name_show(
+-	struct gb_audio_manager_module *module,
+-	struct gb_audio_manager_module_attribute *attr, char *buf)
++static ssize_t gb_audio_module_name_show(struct gb_audio_manager_module *module,
++					 struct gb_audio_manager_module_attribute *attr, char *buf)
+ {
+ 	return sprintf(buf, "%s", module->desc.name);
+ }
+@@ -80,9 +79,8 @@ static ssize_t gb_audio_module_name_show(
+ static struct gb_audio_manager_module_attribute gb_audio_module_name_attribute =
+ 	__ATTR(name, 0664, gb_audio_module_name_show, NULL);
+ 
+-static ssize_t gb_audio_module_vid_show(
+-	struct gb_audio_manager_module *module,
+-	struct gb_audio_manager_module_attribute *attr, char *buf)
++static ssize_t gb_audio_module_vid_show(struct gb_audio_manager_module *module,
++					struct gb_audio_manager_module_attribute *attr, char *buf)
+ {
+ 	return sprintf(buf, "%d", module->desc.vid);
+ }
+@@ -90,9 +88,8 @@ static ssize_t gb_audio_module_vid_show(
+ static struct gb_audio_manager_module_attribute gb_audio_module_vid_attribute =
+ 	__ATTR(vid, 0664, gb_audio_module_vid_show, NULL);
+ 
+-static ssize_t gb_audio_module_pid_show(
+-	struct gb_audio_manager_module *module,
+-	struct gb_audio_manager_module_attribute *attr, char *buf)
++static ssize_t gb_audio_module_pid_show(struct gb_audio_manager_module *module,
++					struct gb_audio_manager_module_attribute *attr, char *buf)
+ {
+ 	return sprintf(buf, "%d", module->desc.pid);
+ }
+@@ -100,9 +97,9 @@ static ssize_t gb_audio_module_pid_show(
+ static struct gb_audio_manager_module_attribute gb_audio_module_pid_attribute =
+ 	__ATTR(pid, 0664, gb_audio_module_pid_show, NULL);
+ 
+-static ssize_t gb_audio_module_intf_id_show(
+-	struct gb_audio_manager_module *module,
+-	struct gb_audio_manager_module_attribute *attr, char *buf)
++static ssize_t gb_audio_module_intf_id_show(struct gb_audio_manager_module *module,
++					    struct gb_audio_manager_module_attribute *attr,
++					    char *buf)
+ {
+ 	return sprintf(buf, "%d", module->desc.intf_id);
+ }
+@@ -111,9 +108,9 @@ static struct gb_audio_manager_module_attribute
+ 					gb_audio_module_intf_id_attribute =
+ 	__ATTR(intf_id, 0664, gb_audio_module_intf_id_show, NULL);
+ 
+-static ssize_t gb_audio_module_ip_devices_show(
+-	struct gb_audio_manager_module *module,
+-	struct gb_audio_manager_module_attribute *attr, char *buf)
++static ssize_t gb_audio_module_ip_devices_show(struct gb_audio_manager_module *module,
++					       struct gb_audio_manager_module_attribute *attr,
++					       char *buf)
+ {
+ 	return sprintf(buf, "0x%X", module->desc.ip_devices);
+ }
+@@ -122,9 +119,9 @@ static struct gb_audio_manager_module_attribute
+ 					gb_audio_module_ip_devices_attribute =
+ 	__ATTR(ip_devices, 0664, gb_audio_module_ip_devices_show, NULL);
+ 
+-static ssize_t gb_audio_module_op_devices_show(
+-	struct gb_audio_manager_module *module,
+-	struct gb_audio_manager_module_attribute *attr, char *buf)
++static ssize_t gb_audio_module_op_devices_show(struct gb_audio_manager_module *module,
++					       struct gb_audio_manager_module_attribute *attr,
++					       char *buf)
+ {
+ 	return sprintf(buf, "0x%X", module->desc.op_devices);
+ }
+@@ -181,10 +178,9 @@ static void send_add_uevent(struct gb_audio_manager_module *module)
+ 	kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
+ }
+ 
+-int gb_audio_manager_module_create(
+-	struct gb_audio_manager_module **module,
+-	struct kset *manager_kset,
+-	int id, struct gb_audio_manager_module_descriptor *desc)
++int gb_audio_manager_module_create(struct gb_audio_manager_module **module,
++				   struct kset *manager_kset,
++				   int id, struct gb_audio_manager_module_descriptor *desc)
+ {
+ 	int err;
+ 	struct gb_audio_manager_module *m;
+-- 
+2.25.1
 
-it's unclear to me, why you address me here. For the patch under
-discussion it's not me who is responsible to judge and apply your patch.
-
-If you check the output of
-
-	scripts/get_maintainer.pl -f drivers/mmc/core/bus.c=20
-
-you'll see that Ulf Hansson is the right one to nag.
-
-Best regards
-Uwe
-
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---57nfhufrbw27cwsp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQXOlwACgkQj4D7WH0S
-/k7z+Qf+J+J3TZyttAyGr55dzmAYowOEX/4G6MtCZkc3/cEo0rZj5Fug6O+627ew
-s5184bgcYqLS2FdStoCiTr6bpYre9gH7pdsYJi3tHeSvn62WmfIeHq8qVh5pct5T
-Ra1BNOrOfrtXNlCHI7rD7UOrgxoWa7m+dWfsUV/oMuBE0xbj4N9MS+EaiUNu78v3
-IfwJHbCev4gLL8e1Zuz9M/KvMn5x4otYUqmd7wwUCudLHjUtZ2JlTNFHjj3PVUjb
-3t1tyKjZOER8sydO5zNPQ9U0kXHBh9RehEdIyzR9y8IvWjpJIRLifRZzRpAczk6R
-OQcHawH5+0MxOeFDIDbGkuB3WNoKfw==
-=+VhL
------END PGP SIGNATURE-----
-
---57nfhufrbw27cwsp--
