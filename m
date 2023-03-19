@@ -2,85 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134FA6C0090
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 11:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937B76C0097
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 11:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjCSKud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 06:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S229898AbjCSKxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 06:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjCSKuZ (ORCPT
+        with ESMTP id S229468AbjCSKxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 06:50:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6180C13D7C;
-        Sun, 19 Mar 2023 03:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5CF5B80B26;
-        Sun, 19 Mar 2023 10:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60BDBC433AF;
-        Sun, 19 Mar 2023 10:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679223019;
-        bh=ya14NSVjLlqfvq5SendpcQMNOmiH43rD0cHiDc5r2UU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WaiZep4EAdjZiO5jjbDWmcE4qZq4c2YMl0DRL3bqAdzEAGQpE9j+7RiqMJvQXO+04
-         eHfacOKhtga96ET6293yIumXGO5t55UqfR300lDxDaUCQcnTEE+ubCTJeW9wxqa7zK
-         1Pyv0rE7S5OR0ElaaMJxi2nAfl+uhLdDAVdDg4KEcuYzuDUWfpxAPh8PlZgn6rrv2i
-         6YVlvr8R/fxLIRe5wOA9VdlRol9P6t3hKA6dcRYgDR8V1QIN+Opzrlj73jk0kMmPh4
-         47+Co4+mHkF9RC2UljhXL++N8WQVsuE1NH2v7G2t/eyPe50EM2ZCQBZtJzFyUyxGzA
-         5M7i3cJihAqVQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E233C43161;
-        Sun, 19 Mar 2023 10:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 19 Mar 2023 06:53:47 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB1C113C1;
+        Sun, 19 Mar 2023 03:53:45 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id h8so36375854ede.8;
+        Sun, 19 Mar 2023 03:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679223224;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Axr9HywQ8790Sf7fL41EwtcJKBQNRMV++khYmiO6pMY=;
+        b=FKErBK/J5YZ1SHDs0/gRY2D7JYHymUeNY1lH62w/oXxGRw4ipAZuiDOgfK2YTfcc+7
+         Um86xrWCxHKlUX0hHwuhrWIOYKAtvG9y0hh/1AR685XKjIPK0IJregwDWKFMSd9Rp1Dp
+         fUYsLSNqRCicJsdzbCAFoU4Zrb8Rz24+3uv+9qG3h8GCawq6rg7uT84PdQMtj/6Hxb4f
+         dkBWV6cdZ2pbwMsH80W5m5VM430uVECuy1ejVsGClwgwvKanAr541gfL/WU9fbYwXrVu
+         GcJzOb/X6+NhUVvqOWqTLoufDhh+6C873ydeUj8VnuJdqqNFIKynJ5RpxdcqwJUVaUY8
+         AAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679223224;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Axr9HywQ8790Sf7fL41EwtcJKBQNRMV++khYmiO6pMY=;
+        b=RIr0vkazzMfjWqZOKfbt9vxW1XocPCAwDScS10agzTtbzey6K81BTH+nUgiWcX0ZHU
+         cFcQXAuZxHEKSaQdPkOxsX3kwMpq6Jc1UX0mhiIrcVJ0J1N1fXmYzlIZycBTYwHhWwNK
+         TC2BfnGna1LQh1sVd5sxHFfB14zSaZ0uv5aE7n2Nizs8tsU5sgViuJF95AQPETQXRvNE
+         XqbYTx3ue+CrFEMqoncZNUuYQwQ65iKYr2WYpN2Waa02qxmmJO9hOifliLFdu9tC0AFB
+         nLGzDbFeJR1AwvqqXs85mXllav7vG4I2qiXheO8O6oHxKEx9EKZxJGaz/0A/Zdtk8dir
+         SLiw==
+X-Gm-Message-State: AO0yUKXlypBe7gRSVKvPG+XyX/GG1WHGe73gOVYmARnlEzRoUJYNWKkU
+        UsnGgoJIDmW3itVBNed3yBFVlnD0VjE=
+X-Google-Smtp-Source: AK7set8BDxJTy8SUkvQ0u1q74EE1PzlYcZscYrHYugoj8oObY73BX86JvyTg38WSog3yNhcK3YAYzA==
+X-Received: by 2002:a17:907:20af:b0:924:7f98:7c55 with SMTP id pw15-20020a17090720af00b009247f987c55mr5148820ejb.48.1679223223623;
+        Sun, 19 Mar 2023 03:53:43 -0700 (PDT)
+Received: from pc636 ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id yj8-20020a170907708800b00930170bc292sm3110020ejb.22.2023.03.19.03.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 03:53:43 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Sun, 19 Mar 2023 11:53:40 +0100
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        RCU <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-ext4@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Subject: Re: [PATCH 1/1] ext4: Replace ext4_kvfree_array_rcu() by
+ kvfree_rcu_mightsleep()
+Message-ID: <ZBbptCj8j3gWVesY@pc636>
+References: <20230317071558.335645-1-urezki@gmail.com>
+ <28e1585c-7062-49c2-b08e-a5d33ca06577@paulmck-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1 1/1] net: phy: at803x: Replace of_gpio.h with what
- indeed is used
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167922301931.22899.3145867356894965208.git-patchwork-notify@kernel.org>
-Date:   Sun, 19 Mar 2023 10:50:19 +0000
-References: <20230316120826.14242-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230316120826.14242-1-andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28e1585c-7062-49c2-b08e-a5d33ca06577@paulmck-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 16 Mar 2023 14:08:26 +0200 you wrote:
-> of_gpio.h in this driver is solely used as a proxy to other headers.
-> This is incorrect usage of the of_gpio.h. Replace it .h with what
-> indeed is used in the code.
+On Fri, Mar 17, 2023 at 05:31:04PM -0700, Paul E. McKenney wrote:
+> On Fri, Mar 17, 2023 at 08:15:58AM +0100, Uladzislau Rezki (Sony) wrote:
+> > The ext4_kvfree_array_rcu() function was introduced in order to
+> > release some memory after a grace period during resizing of a
+> > partition. An object that is freed does not contain any rcu_head
+> > filed.
+> > 
+> > To do so, it requires to allocate some extra memory for a special
+> > structure that has an rcu_head filed and pointer one where a freed
+> > memory is attached. Finally call_rcu() API is invoked.
+> > 
+> > Since we have a single argument of kvfree_rcu() API, we can easily
+> > replace all that tricky code by one single call that does the same
+> > but in more efficient way.
+> > 
+> > Cc: linux-ext4@vger.kernel.org
+> > Cc: Lukas Czerner <lczerner@redhat.com>
+> > Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/net/phy/at803x.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> From an RCU perspective:
+> 
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+Thank you!
 
-Here is the summary with links:
-  - [net-next,v1,1/1] net: phy: at803x: Replace of_gpio.h with what indeed is used
-    https://git.kernel.org/netdev/net-next/c/a593a2fcfdfb
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--
+Uladzislau Rezki
