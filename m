@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7895F6BF7E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 06:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE29B6BF78C
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 04:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjCRFA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 01:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S229798AbjCRDbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 23:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjCRFAW (ORCPT
+        with ESMTP id S229604AbjCRDbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 01:00:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1143113DE6;
-        Fri, 17 Mar 2023 22:00:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3581B826CF;
-        Sat, 18 Mar 2023 05:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E911C433A4;
-        Sat, 18 Mar 2023 05:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679115618;
-        bh=FZnujrGCp1B1CEc+INX4HbI+DIg2aKML9zdPExFTr2Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rQ22Acr2mLqdmI68YY2zGJnc0xxq+GDrBto5oASbFEdkJRbrBkOPoN/3G1m0FkqC1
-         TPuPoDI+Y3vtT1en2Qa3y/Si2OVaxcuZwsdgjzjUtibjzTKqgrgp6YX5Kygd8/EMpv
-         H1Kh5f9uxFLyT7WeqiB10Iv/jCJ+OddmnlQVwMAruCWfZpds0PFPsDe4UsmZcx+VkC
-         JagCrVZ4ZJS0+5k3GOaUbGowFOxvTv5BIWd/xl22wO6mZgwc6GreA9EEDGlxDH5RjD
-         /pXrCXVrq6uklTRlkM9EorQ21FpTAK/bDW6uIDg5jchSsFDG8GGlO6hG4hVDbUqyMs
-         /gBqUOfFx+5TQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5A73FE21EE5;
-        Sat, 18 Mar 2023 05:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Mar 2023 23:31:42 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E243E1E3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 20:31:40 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id DE4961A00AE2;
+        Sat, 18 Mar 2023 11:31:40 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id I47z3DFNmwEc; Sat, 18 Mar 2023 11:31:40 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id A5BDC1A0091E;
+        Sat, 18 Mar 2023 11:31:39 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] sched: core: Optimize the structure of 'tg_cfs_schedulable_down' function
+Date:   Mon, 20 Mar 2023 04:02:55 +0800
+Message-Id: <20230319200255.3640-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 RESEND] ptp: kvm: Use decrypted memory in confidential
- guest on x86
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167911561836.25115.1462637997047748542.git-patchwork-notify@kernel.org>
-Date:   Sat, 18 Mar 2023 05:00:18 +0000
-References: <20230308150531.477741-1-jpiotrowski@linux.microsoft.com>
-In-Reply-To: <20230308150531.477741-1-jpiotrowski@linux.microsoft.com>
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        richardcochran@gmail.com, hch@lst.de
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Optimize if branches and define  in the branch statement
+block　parent_quota variable.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ kernel/sched/core.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-On Wed,  8 Mar 2023 15:05:31 +0000 you wrote:
-> KVM_HC_CLOCK_PAIRING currently fails inside SEV-SNP guests because the
-> guest passes an address to static data to the host. In confidential
-> computing the host can't access arbitrary guest memory so handling the
-> hypercall runs into an "rmpfault". To make the hypercall work, the guest
-> needs to explicitly mark the memory as decrypted. Do that in
-> kvm_arch_ptp_init(), but retain the previous behavior for
-> non-confidential guests to save us from having to allocate memory.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,RESEND] ptp: kvm: Use decrypted memory in confidential guest on x86
-    https://git.kernel.org/netdev/net-next/c/6365ba64b4db
-
-You are awesome, thank you!
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 488655f2319f..7e8535d2e36d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -10915,15 +10915,12 @@ static int tg_cfs_schedulable_down(struct task_group *tg, void *data)
+ {
+ 	struct cfs_schedulable_data *d = data;
+ 	struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
+-	s64 quota = 0, parent_quota = -1;
++	s64 quota = RUNTIME_INF;
+ 
+-	if (!tg->parent) {
+-		quota = RUNTIME_INF;
+-	} else {
++	if (tg->parent) {
+ 		struct cfs_bandwidth *parent_b = &tg->parent->cfs_bandwidth;
+-
++		s64 parent_quota = parent_b->hierarchical_quota;
+ 		quota = normalize_cfs_quota(tg, d);
+-		parent_quota = parent_b->hierarchical_quota;
+ 
+ 		/*
+ 		 * Ensure max(child_quota) <= parent_quota.  On cgroup2,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.18.2
 
