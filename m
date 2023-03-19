@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9271D6C020B
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2AF6C020C
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCSN2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 09:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S230254AbjCSN22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 09:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjCSN2Q (ORCPT
+        with ESMTP id S230208AbjCSN2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 09:28:16 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB819029;
-        Sun, 19 Mar 2023 06:28:12 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 43CB624DC09;
-        Sun, 19 Mar 2023 21:28:07 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 19 Mar
- 2023 21:28:07 +0800
-Received: from [172.16.16.231] (183.27.96.84) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 19 Mar
- 2023 21:28:06 +0800
-Message-ID: <6294ffee-3c66-5287-59b4-068a7f4e84ba@starfivetech.com>
-Date:   Sun, 19 Mar 2023 21:28:04 +0800
+        Sun, 19 Mar 2023 09:28:22 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321DF1E5D9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 06:28:21 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id g18so9561986ljl.3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 06:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679232499;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U085WPx3PknCWGTgV9CLiUBDPWZ8nYvt3NwSvqgQP74=;
+        b=kKErUWuVOAp+eU+Q3rPtmRHwXtPKcSh8qeHsr+smCIUgzc1C3C0sM6jb8Cfomt7pWA
+         xysNCniommKH3IEtiKdSFAuZffJ9fnZjlU67pg9y9qciMWHIT/CUf4GSgO7HMrmwTt/I
+         KekKtw728GS99NO4u+ao3MOGdlqntbG5TtugLuQKwK0c+wS5+HaLiKHWNkHBL8vSmH8D
+         Ijm2zDOCbRDYZADLjLXlJ7gmqqBDS1ZuDfsZSFWWJ3gjD8x1CWeSoB11ZtyYOSjJwyEN
+         JcPk9R0rVp8rp43N7hlVQPfEzuA1EnmuAdHVPtKRSe5hfwxHi73wrCqTdSYnElBYSQMi
+         TthA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679232499;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U085WPx3PknCWGTgV9CLiUBDPWZ8nYvt3NwSvqgQP74=;
+        b=JESiceCqHP4Umx7UZ9VYjYVxJ0y2iqisGdCAPXKioPdKMuS61rF7K8lGRCWBDHQf1T
+         Ne0T2a2MwLHwE+4+brDLbo+jGYRVN+gXUVTjjVxdgeDRxgEiYG3AEZYZBcpx6tAQEqnM
+         qNKjjHskRf9Vk8cGOqK/JP3fXJ6Klg6RhJRXk0mhp15KJZEVDrJabpFsAhYPA4Ku5sOr
+         yD12zHg2yqun+OswinhQ08Qyxra4Eo9C9HFEcSv7ODlKcRrSWK9ffSlThvfI2bMIvQ1S
+         ABaTiDOyp1I5/zL7L0CwgnxQFf+v2epdP0TbE2XbSEgicPz1lZc2/AkWItpT/gshr1RA
+         ss9g==
+X-Gm-Message-State: AO0yUKU3hgBfRHSZeeM0EmV6DOlUo9tv6uU/OD0gotCAFiQiIpocZamg
+        bYRjTqA1RCZnCA6WwhHcMDA=
+X-Google-Smtp-Source: AK7set83/08Uv/NUXTqhHUk+kE83ctIswsRw4sGFfd9eI4zVL19Hw/HfkCnjns2zGGKxiMjwDZJVcw==
+X-Received: by 2002:a2e:9c46:0:b0:293:2bc6:d50b with SMTP id t6-20020a2e9c46000000b002932bc6d50bmr4683277ljj.18.1679232499131;
+        Sun, 19 Mar 2023 06:28:19 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id u14-20020a2e854e000000b00299ab2475ebsm1297793ljj.1.2023.03.19.06.28.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Mar 2023 06:28:18 -0700 (PDT)
+Message-ID: <e32ae8d1-f0e4-5434-49e0-c19701967b24@gmail.com>
+Date:   Sun, 19 Mar 2023 15:28:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 12/21] dt-bindings: clock: Add StarFive JH7110
- always-on clock and reset generator
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230311090733.56918-1-hal.feng@starfivetech.com>
- <20230311090733.56918-13-hal.feng@starfivetech.com>
- <b9a421c0-85df-4c8c-a3cb-8286328c5ed0@spud>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <b9a421c0-85df-4c8c-a3cb-8286328c5ed0@spud>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Douglas Anderson <dianders@chromium.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     mka@chromium.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Saravana Kannan <saravanak@google.com>,
+        dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, briannorris@chromium.org
+References: <20230316195444.3946980-1-dianders@chromium.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH 0/7] regulator: Set PROBE_PREFER_ASYNCHRONOUS for
+ everything in drivers/regulator
+In-Reply-To: <20230316195444.3946980-1-dianders@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.84]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,111 +79,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 13:14:45 +0000, Conor Dooley wrote:
-> On Sat, Mar 11, 2023 at 05:07:24PM +0800, Hal Feng wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->> 
->> Add bindings for the always-on clock and reset generator (AONCRG) on the
->> JH7110 RISC-V SoC by StarFive Ltd.
->> 
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
->> @@ -0,0 +1,107 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-aoncrg.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive JH7110 Always-On Clock and Reset Generator
->> +
->> +maintainers:
->> +  - Emil Renner Berthing <kernel@esmil.dk>
->> +
->> +properties:
->> +  compatible:
->> +    const: starfive,jh7110-aoncrg
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    oneOf:
->> +      - items:
->> +          - description: Main Oscillator (24 MHz)
->> +          - description: GMAC0 RMII reference or GMAC0 RGMII RX
->> +          - description: STG AXI/AHB
->> +          - description: APB Bus
->> +          - description: GMAC0 GTX
->> +
->> +      - items:
->> +          - description: Main Oscillator (24 MHz)
->> +          - description: GMAC0 RMII reference or GMAC0 RGMII RX
->> +          - description: STG AXI/AHB or GMAC0 RGMII RX
->> +          - description: APB Bus or STG AXI/AHB
->> +          - description: GMAC0 GTX or APB Bus
->> +          - description: RTC Oscillator (32.768 kHz) or GMAC0 GTX
+Hi dee Ho peeps,
+
+On 3/16/23 21:54, Douglas Anderson wrote:
+> This series directly follows from the discussion when I tried to turn
+> on PROBE_PREFER_ASYNCHRONOUS just for the fixed-regulator [1] and
+> attempts to switch everything in drivers/regulator over to async
+> probe.
 > 
-> Something tells me that the use of "or" means we're not doing this
-> correctly.
-> Otherwise,
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-There are two possible cases when the number of clock inputs is 6:
-
-Main Oscillator
-GMAC0 RMII reference or GMAC0 RGMII RX
-STG AXI/AHB
-APB Bus
-GMAC0 GTX
-RTC Oscillator
-
-and
-
-Main Oscillator
-GMAC0 RMII reference
-GMAC0 RGMII RX
-STG AXI/AHB
-APB Bus
-GMAC0 GTX
-
-So I used the "or" in the items descriptions. Thanks.
-
-Best regards,
-Hal
-
+> Like the similar patch series I did for the MMC subsystem a few years
+> ago [2], I've split this patch series into batches corresponding to
+> drivers corresponding to actively maintained stable kernel trees with
+> the idea to break the patch series up somewhat.
 > 
->> +      - items:
->> +          - description: Main Oscillator (24 MHz)
->> +          - description: GMAC0 RMII reference
->> +          - description: GMAC0 RGMII RX
->> +          - description: STG AXI/AHB
->> +          - description: APB Bus
->> +          - description: GMAC0 GTX
->> +          - description: RTC Oscillator (32.768 kHz)
->> +
->> +  clock-names:
->> +    oneOf:
->> +      - minItems: 5
->> +        items:
->> +          - const: osc
->> +          - enum:
->> +              - gmac0_rmii_refin
->> +              - gmac0_rgmii_rxin
->> +          - const: stg_axiahb
->> +          - const: apb_bus
->> +          - const: gmac0_gtxclk
->> +          - const: rtc_osc
->> +
->> +      - minItems: 6
->> +        items:
->> +          - const: osc
->> +          - const: gmac0_rmii_refin
->> +          - const: gmac0_rgmii_rxin
->> +          - const: stg_axiahb
->> +          - const: apb_bus
->> +          - const: gmac0_gtxclk
->> +          - const: rtc_osc
+> Most of the description of this series is contained in the first patch
+> of the series and then the further patches simply refer back to the
+> first one. The logic and reasoning behind all the patches is exactly
+> the same.
 > 
+> As talked about in the first patch, it wouldn't be at all shocking if
+> this broke someone. Hopefully this doesn't cause too much of a
+> problem. Most of the problems expected would be real underlying bugs
+> that already existed and were just tickled by this change. If you're
+> facing a problem, it's fairly easy to force individual drivers back to
+> "synchronous" probing while the problem is tracked down and fixed.
+> 
+> I am opting _not_ to CC every single person involved in each of these
+> regulators on this patch series because I suspect that the mailing
+> lists couldn't handle CCing that many people. This should be on LKML
+> so hopefully people can find it there and respond to it that
+> way. Anyone who responds will get CCed on future versions, if there
+> are any.
+
+The ROHM bd71837/47 (which is included in this series) as well as for 
+the ROHM bd71815, bd71828, bd9576 and bd9573 (which are included in the 
+other series) - there should be no PMIC internal dependencies to 
+regulators. So, from my perspective this looks good.
+
+Right after saying this - I don't have access to most of the boards 
+using these PMICs - nor do I know what kind of system level issues there 
+may be - hence my ack is not really worth much - but at least I can say: 
+"Yes, bring em on - I am mentally prepared for the bug reports" :)
+
+Thanks!
+
+Yours,
+	-- Matti
+
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
