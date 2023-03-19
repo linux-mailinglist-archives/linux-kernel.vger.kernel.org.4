@@ -2,199 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA606BFFAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2556BFFAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjCSHHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 03:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S230014AbjCSHJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 03:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjCSHHk (ORCPT
+        with ESMTP id S229635AbjCSHJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 03:07:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1492F1DBB7;
-        Sun, 19 Mar 2023 00:07:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A680B80AB7;
-        Sun, 19 Mar 2023 07:07:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3039DC433A1;
-        Sun, 19 Mar 2023 07:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679209654;
-        bh=x2ckgXe/VMFCve+dLKlMZh0Ge0RZ/3dY7M7VjjDQppE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=URTpQwqVogCvV5hSx2uHRW697PUb8o/h/EWJ0VVM7DF+V679H0EmNrV881g7fi813
-         wy/tchTuZ85RMID1Qji5oBnePt7d6rJndv1G/8SKY5XVd1kxec5Ka8WxPfUcx3av9q
-         MinYJ3IvI5JYWCSvXOMthbujtsH/j7KCFAih+j1DVXh8nK9N8uAhT8kvyLZ4IzKl3L
-         WW0iWoQQvozEOqcMGZdJ8OhKQoItyrL7ZY3jxPQOqARhmZQsjCFt6koxmlnKZcqVKc
-         K1+679QUVhcn8vUiTTWRxDbRBsCn8FgWNYCKHZ5MU//u1P6MBAM3m3PHM2dzPNDm14
-         CpT3mvXPsP2WQ==
-Received: by mail-oi1-f169.google.com with SMTP id bf30so155975oib.12;
-        Sun, 19 Mar 2023 00:07:34 -0700 (PDT)
-X-Gm-Message-State: AO0yUKXXu3+FYE9YRObh9RA00ng/+A0YfN3LHGXu6Pzmzzsbu7i5vrrP
-        rJWrNI4H+1bxPYjERme0CknsmQwUrabwNkClTGU=
-X-Google-Smtp-Source: AK7set/IW2HwWu4XbpjJXheXD0A+tFuVNATr9Qd/g+ckamdHEFZLqFbDavLn3QZTwo+JKDOIi3ehK9cuTpqpO7wUpzM=
-X-Received: by 2002:a05:6808:295:b0:386:bb7a:5c85 with SMTP id
- z21-20020a056808029500b00386bb7a5c85mr3606346oic.11.1679209653393; Sun, 19
- Mar 2023 00:07:33 -0700 (PDT)
+        Sun, 19 Mar 2023 03:09:40 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A35C5B93;
+        Sun, 19 Mar 2023 00:09:39 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id o12so35399009edb.9;
+        Sun, 19 Mar 2023 00:09:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679209778;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h7CWAvSEY2TydX64pSxRJDmGgnmPbocGy/UbjjMMCMo=;
+        b=bvHAjrvZeVHCFpT6C21GJEBkh64oyOiWKAEW6g437+AAjXVbxgtn6a2VBqW+bTjTX4
+         g+mix3ktiYBfYozJwhsdakbwyl0JpWu1+btjJ2G3qaT7Q1fePW2moy5gWQU8dbVouKoa
+         Ru71nCX9aipl2GAW58MVQu4wnUXr4xri4E9s6eJo7DfdAjw4t6zcNGqIGp1X8hr2xkG3
+         qKvI42XXzOL8C47Gyf99en3XyCojwP4Y4YSos/qOV+Ke1T3WZ8Rv+mYXTbApfK6jIbeB
+         vaOTQCkuD7D0To2mA9ptXXIZI7R7BimpFDrr68WvSR25MtbQAzjEz00gNGBG12+83U4/
+         s9GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679209778;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h7CWAvSEY2TydX64pSxRJDmGgnmPbocGy/UbjjMMCMo=;
+        b=AWoZOzaGD+GMbUDIFv8rzvrzGAppVWqd4PhBC7SuMvdPUaEDApjFk3kZtCUl+tkrfs
+         ttHl4Im2mIFhHGsigFDeD0IZuUXhkHjMclBFROrq8r0HE4S8wn8U8ka7nHb8xnYnXHod
+         PBh853NndPZpebIcRsP1wv5XAjsRMfdoybC5Imm+xzxIs4sDgXx+CIIve/ZVIxv2tEJQ
+         ZHNzE3SrITx+mRLuUOig4uRUhu5XDsgVA44qfbYLwj8wZucDBQ6Zdg79Q4FTiI9RL1N/
+         bWdir0YBcK6C/hmJQRZfa8taH1SX4GZ6dcawMitZU5LfaT0tWf5lWwJ++iOx8Bho/KJ5
+         orWA==
+X-Gm-Message-State: AO0yUKWbAO3KBIk3DW7SRN4HicP6PZECRMJFSnfGh+ea9AaWj2TOTrRM
+        iDTq5/QvReOG5zvcE7EYEH9hSXddT3E=
+X-Google-Smtp-Source: AK7set9ZN+6uFMowb9J0E6bteotuhvTBs9uIxHBv3SH3j1p97abVzqScTMPB0+fmCXdaFw5LvkZb+Q==
+X-Received: by 2002:a17:906:884:b0:878:61d8:d7c2 with SMTP id n4-20020a170906088400b0087861d8d7c2mr4831312eje.39.1679209777677;
+        Sun, 19 Mar 2023 00:09:37 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:23ee:1938:1bcd:c6e1:42ba:ae87:772e])
+        by smtp.googlemail.com with ESMTPSA id u8-20020a170906b10800b008c9b44b7851sm2943920ejy.182.2023.03.19.00.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 00:09:36 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v2 0/4] convert read_kcore(), vread() to use iterators
+Date:   Sun, 19 Mar 2023 07:09:29 +0000
+Message-Id: <cover.1679209395.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CAK7LNATXqPy6F+gB8-1Zqh8hooXh3U_5+3xeMFZDZwYsUi=aeg@mail.gmail.com>
- <20230312200731.599706-1-masahiroy@kernel.org> <20230319011217.147183-1-steev@kali.org>
- <CAK7LNATrzAWiu36=-JXXjSt48O12OAQG4ZAtLABd_PyiE2f_VQ@mail.gmail.com> <CAKXuJqjWORL0GmyOg9_NFUCjUH3Jd7yrNbTYpnQiTk7AptMZMw@mail.gmail.com>
-In-Reply-To: <CAKXuJqjWORL0GmyOg9_NFUCjUH3Jd7yrNbTYpnQiTk7AptMZMw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 19 Mar 2023 16:06:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQKV9HD-ZJrqiHq5aGOmZZ=spgqM-Aw+X4hYuGF1Ntriw@mail.gmail.com>
-Message-ID: <CAK7LNAQKV9HD-ZJrqiHq5aGOmZZ=spgqM-Aw+X4hYuGF1Ntriw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] kbuild: fix some packaging issues, and use
- git-archive for source package
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
-        terrelln@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 12:21=E2=80=AFPM Steev Klimaszewski <steev@kali.org=
-> wrote:
->
-> Hi Masahiro,
->
-> On Sat, Mar 18, 2023 at 9:19=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > On Sun, Mar 19, 2023 at 10:12=E2=80=AFAM Steev Klimaszewski <steev@kali=
-.org> wrote:
-> > >
-> > > Hi Masahiro,
-> > >
-> > > On Sun, Mar 12, 2023 at 1:07=E2=80=AFPM Masahiro Yamada <masahiroy@ke=
-rnel.org> wrote:
-> > > >
-> > > > This series fixes some bugs, then switch to 'git archive'
-> > > > for source package creation as suggested by Linus.
-> > >
-> > > I apologize if this is a stupid question, but it's not immediately ap=
-parent to
-> > > me...
-> > >
-> > > Previously, I was overriding the deb file output name by the setting =
-of
-> > > LOCALVERSION_AUTO; but with this series applied, that seems to be ign=
-ored?
-> > >
-> > > Now if I pass LOCALVERSION=3D"" I end up with e.g. linux-image-6.3.0-=
-rc2_6.3.0-rc2-00575-g46c71cad996d-100_arm64.deb
-> > > whereas previously, I would end up with linux-image-6.3.0-rc2_6.3.0-r=
-c2-100_arm64.deb
-> > >
-> > > How would I restore the old naming behaviour?
-> > >
-> > > -- steev
-> >
-> > The same string "6.3.0-rc2" is repeated in the file name.
-> > The first one is what Debian calls the ABI version, and the
-> > second one is the version of the package.
-> > They are usually different on real Debian kernels.
-> >
-> > LOCALVERSION affects the former, and KDEB_PKGVERSION
-> > the second.
-> >
-> >
-> > My recommendation is "just let it be"
-> > because "linux-upstream_6.3.0-rc2.orig.tar.gz"
-> > you would generate is not the real 6.3.0-rc2.
-> >
-> >
-> > If you want to restore what you previously did,
-> >
-> >  make deb-pkg KDEB_PKGVERSION=3D6.3.0-rc2-100
-> >
-> > will create such a file name.
-> >
-> My apologies, my text editor seemed to swallow up half of my previous
-> email as what I was trying to say wasn't all in there...
-> What I meant to say is that, prior to this patchset, if
-> LOCALVERSION_AUTO=3Dy we would end up with
->
-> linux-image-6.3.0-rc2_6.3.0-rc2-00575-g46c71cad996d-100_arm64.deb
->
-> where
-> LOCALVERSION_AUTO=3D"00575-g46c71cad996d"
-> NUMBEROFBUILDS=3D"100" (i'm not sure where this number was stored previou=
-sly)
->
-> Assuming the above 2 are what the current settings are...
->
-> And if you turned LOCALVERSION_AUTO off, and had changes on top of the
-> git repo, you would end up with
->
-> linux-image-6.3.0-rc2_6.3.0-rc2+-100_arm64.deb
->
-> Then if you would pass LOCALVERSION=3D"", on top of LOCALVERSION_AUTO
-> being unset, you would end up with
->
-> linux-image-6.3.0-rc2_6.3.0-rc2-100_arm64.deb
->
-> Now with your patchset applied, with LOCALVERSION_AUTO being unset,
-> you end up with
->
-> linux-image-6.3.0-rc2_6.3.0-rc2-00575-g46c71cad996d-100_arm64.deb
->
-> Which means that LOCALVERSION_AUTO goes away?
+While reviewing Baoquan's recent changes to permit vread() access to
+vm_map_ram regions of vmalloc allocations, Willy pointed out [1] that it
+would be nice to refactor vread() as a whole, since its only user is
+read_kcore() and the existing form of vread() necessitates the use of a
+bounce buffer.
+
+This patch series does exactly that, as well as adjusting how we read the
+kernel text section to avoid the use of a bounce buffer in this case as
+well.
+
+This patch series necessarily changes the locking used in vmalloc, however
+tests indicate that this has very little impact on allocation performance
+(test results are shown in the relevant patch).
+
+This has been tested against the test case which motivated Baoquan's
+changes in the first place [2] which continues to function correctly, as
+do the vmalloc self tests.
+
+[1] https://lore.kernel.org/all/Y8WfDSRkc%2FOHP3oD@casper.infradead.org/
+[2] https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
+
+v2:
+- Fix ordering of vread_iter() parameters
+- Fix nommu vread() -> vread_iter()
+
+v1:
+https://lore.kernel.org/all/cover.1679183626.git.lstoakes@gmail.com/
+
+Lorenzo Stoakes (4):
+  fs/proc/kcore: Avoid bounce buffer for ktext data
+  mm: vmalloc: use rwsem, mutex for vmap_area_lock and vmap_block->lock
+  fs/proc/kcore: convert read_kcore() to read_kcore_iter()
+  mm: vmalloc: convert vread() to vread_iter()
+
+ fs/proc/kcore.c         |  84 +++++++------------
+ include/linux/vmalloc.h |   3 +-
+ mm/nommu.c              |  10 +--
+ mm/vmalloc.c            | 178 +++++++++++++++++++++-------------------
+ 4 files changed, 130 insertions(+), 145 deletions(-)
 
 
-It did not go away.
-LOCALVERSION_AUTO is meant to set kernelrelease,
-which will result in 'uname -r' in the installed system.
-
-LOCALVERSION_AUTO should not affect the Debian package version,
-which is a different thing.
-
-
-
-
->  I'm not sure why the
-> package version overrides what I'm trying to set in the first place in
-> the kernel config?
->
-> Your workaround is mostly fine, but that "-100" on the end means I
-> have to now personally track how many builds I've done?
-
-"-100" is the build revision, which will go into the .version file
-while building the kernel.
-It is not so important, you can set whatever number.
-
-
-
-If you leave the revision auto-incremented,
-this is equivalent to what Kbuild is doing internally.
-
-make KDEB_PKGVERSION=3D$(make kernelversion)-$(init/build-version) bindeb-p=
-kg
-
-
-
->
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+base-commit: 4018ab1f7cec061b8425737328edefebdc0ab832
+--
+2.39.2
