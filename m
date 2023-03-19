@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6349A6C0302
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820ED6C0295
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjCSQKZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 12:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S230178AbjCSPF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 11:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCSQKW (ORCPT
+        with ESMTP id S229448AbjCSPFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:10:22 -0400
-X-Greylist: delayed 8760 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Mar 2023 09:10:16 PDT
-Received: from 19.mo582.mail-out.ovh.net (19.mo582.mail-out.ovh.net [188.165.56.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3DD144AC
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:10:15 -0700 (PDT)
-Received: from director10.ghost.mail-out.ovh.net (unknown [10.109.156.39])
-        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 74488243F7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:44:13 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-vk2nn (unknown [10.110.103.232])
-        by director10.ghost.mail-out.ovh.net (Postfix) with ESMTPS id A395D1FE33;
-        Sun, 19 Mar 2023 13:44:09 +0000 (UTC)
-Received: from sk2.org ([37.59.142.105])
-        by ghost-submission-6684bf9d7b-vk2nn with ESMTPSA
-        id IxRwI6kRF2SLKQEA5A//1w
-        (envelope-from <steve@sk2.org>); Sun, 19 Mar 2023 13:44:09 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-105G006adb33e03-d5be-4371-a698-f6a54d8109e0,
-                    9CCC51F2D7DAB1FB7350B438D1071C8867680B66) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-Date:   Sun, 19 Mar 2023 14:44:08 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Helge Deller <deller@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
+        Sun, 19 Mar 2023 11:05:54 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBD7B744;
+        Sun, 19 Mar 2023 08:05:52 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pdubU-000246-2r;
+        Sun, 19 Mar 2023 16:05:49 +0100
+Date:   Sun, 19 Mar 2023 15:05:35 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH 12/15] auxdisplay: ht16k33: Introduce
- backlight_get_brightness()
-Message-ID: <20230319144408.03045c50@heffalump.sk2.org>
-In-Reply-To: <2857575f6ec206f79cc21d423fde7d17@protonic.nl>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
-        <20230107-sam-video-backlight-drop-fb_blank-v1-12-1bd9bafb351f@ravnborg.org>
-        <CANiq72mFMJuec+r=T6xYtLpuU+a1rOrAhrHiecy_1Jpj2m4J=g@mail.gmail.com>
-        <Y7qM+ZlG5gQiOW4K@ravnborg.org>
-        <2857575f6ec206f79cc21d423fde7d17@protonic.nl>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        John Crispin <john@phrozen.org>
+Subject: Re: [PATCH RESEND] dt-bindings: pwm: mediatek: add mediatek,mt7986
+ compatible
+Message-ID: <ZBckvw5NMihHx0Ja@makrotopia.org>
+References: <Y+zfb2uQyKHng0kS@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Ovh-Tracer-Id: 1273674272938165894
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefiedgheejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfofggtgfgsehtqhertdertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeeludetkeehffejieetveeltddttdeftedtvdegkeffueefvefgieetvddtieehfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshhtvghvvgesshhkvddrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+zfb2uQyKHng0kS@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, 09 Jan 2023 11:12:02 +0100, Robin van der Gracht <robin@protonic.nl>
-wrote:
-> On 2023-01-08 10:29, Sam Ravnborg wrote:
-> > On Sat, Jan 07, 2023 at 10:02:38PM +0100, Miguel Ojeda wrote:  
-> >> On Sat, Jan 7, 2023 at 7:26 PM Sam Ravnborg via B4 Submission Endpoint
-> >> <devnull+sam.ravnborg.org@kernel.org> wrote:  
-> >> >
-> >> > Introduce backlight_get_brightness() to simplify logic
-> >> > and avoid direct access to backlight properties.  
-> >> 
-> >> Note: Stephen sent this one too a while ago (with some more details in
-> >> the commit message, which is always nice); and then he sent yesterday
-> >> v2 [1] (to mention the functional change with `BL_CORE_SUSPENDED`
-> >> [2]).  
-> > Thanks for the pointers. I will try to move forward with Stephen's
-> > patches.  
-> >> 
-> >> Anyway, if it goes via drm-misc, feel free to have my:
-> >> 
-> >>     Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> >> 
-> >> Though it would be nice to have Robin test the change.  
-> > 
-> > Robin - can I get your ack to apply Stephen's original v2 patch to
-> > drm-misc?  
+On Wed, Feb 15, 2023 at 01:34:51PM +0000, Daniel Golle wrote:
+> Since commit 241eab76657f ("pwm: mediatek: Add support for MT7986")
+> support for the 2 PWM channels implemented in MediaTek MT7986 SoCs has
+> been added. Also add the compatible string to dt-bindings now that
+> they have been converted to YAML.
 > 
-> done! see: 
-> https://lore.kernel.org/lkml/0b16391f997e6ed005a326e4e48f2033@protonic.nl/
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-As far as I can tell, this never got applied to drm-misc, and I donâ€™t see it
-anywhere else. I guess it slipped through the cracks ;-)
+May I kindly call your attention to this patch please.
 
-Regards,
+It has received reviews and no further comments for more than a month
+now:
+https://patchwork.kernel.org/project/linux-mediatek/patch/Y+zfb2uQyKHng0kS@makrotopia.org/
 
-Stephen
+Follow-up patches adding support for MT7981 are already waiting and to
+avoid conflicts it would be good to have this one merged before.
+
+Thank you!
+
+> ---
+> Resending this patch as I missed sending it to linux-pwm when first
+> submitted. See also
+> https://patchwork.ozlabs.org/comment/3049442/
+> 
+>  Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml b/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+> index dbc974bff9e9..8e176ba7a525 100644
+> --- a/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/mediatek,mt2712-pwm.yaml
+> @@ -22,6 +22,7 @@ properties:
+>            - mediatek,mt7623-pwm
+>            - mediatek,mt7628-pwm
+>            - mediatek,mt7629-pwm
+> +          - mediatek,mt7986-pwm
+>            - mediatek,mt8183-pwm
+>            - mediatek,mt8365-pwm
+>            - mediatek,mt8516-pwm
+> 
+> base-commit: 9d9019bcea1aac7eed64a1a4966282b6b7b141c8
+> -- 
+> 2.39.1
+> 
