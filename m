@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2946C0374
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 18:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0336C0375
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 18:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjCSRZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 13:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
+        id S229579AbjCSR0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 13:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjCSRZ3 (ORCPT
+        with ESMTP id S229448AbjCSR0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 13:25:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5041025C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 10:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679246680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WYm22h0FZEjzDnur0SvUWRtWO3WPGs/nZ3mlQqCc8gk=;
-        b=CPKyCROQbtXfnQgKDw46LYwzOdrRVD0M0XnIIoFt4uYmN0Lukv2x+umNmetGv2v5Wfe3gs
-        x845rX8EhP6UbK0p9SrmwDhIE3WSlwl39jIog0+BL8s7ZBC8ruH9KkStQxcwoS4Fp5vZcn
-        j+KS7QnbQMWFg2g5x4areZPpfsI/E6U=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-161-M01EA0viPJWWZSscXASXnA-1; Sun, 19 Mar 2023 13:24:38 -0400
-X-MC-Unique: M01EA0viPJWWZSscXASXnA-1
-Received: by mail-qt1-f197.google.com with SMTP id ga17-20020a05622a591100b003bfdf586476so5558462qtb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 10:24:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679246678;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WYm22h0FZEjzDnur0SvUWRtWO3WPGs/nZ3mlQqCc8gk=;
-        b=H7bPzhOPDzCAv2OOdrBT+9XQRgOJDfn2p08nXFE5svcf5AmVAANkHTVJWjcVtDWhdo
-         iB3A2OYdOM74ZTkpsrDc1N61Duym6dsknJNEcz1vHayRpdhsmpYfXRSVGC/fGnGuzX1B
-         j513/4fmVNRPyPMMv1QBpBlRxvmI0/JWDMGJJgxZhg2IyGZmpputhmJmiyU3RvfLHPIc
-         /KgUiva0PTb8UZJWhWZPpMD3IHO4KTS8xnCMDicpSzUgXOZaZG5nUt8sA+Qjoj+78ImK
-         BkYl5ebOVdij9TceJEzMUyYmztmlxqMiOlNbGt3wd9Bbs96J0LPE1EnFa2Ah+YXiep/S
-         i/uA==
-X-Gm-Message-State: AO0yUKUsV3ur9WJyqIpWYJTKRHf+Gl3LOw6QRN6tDW/geqhPBi6pIdOv
-        8kZ4GKr2Pzf0ulcHP1tyj4k+KwBv+bSR8l2ReoUc7pMXErdNbtbT+weie3hoYqTu/U0BWh5TUuN
-        MqEMo5GMM4oOt2GgkXY7/6U8Z
-X-Received: by 2002:ac8:7f8c:0:b0:3bf:dc2e:ce5d with SMTP id z12-20020ac87f8c000000b003bfdc2ece5dmr22196963qtj.4.1679246678268;
-        Sun, 19 Mar 2023 10:24:38 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8Yug+NOU+/B0nf5Ys4tKHcVGq8qmgqxjRscDDR3teSxftfURGyZtdjxvhppM9zckFSgDcZLQ==
-X-Received: by 2002:ac8:7f8c:0:b0:3bf:dc2e:ce5d with SMTP id z12-20020ac87f8c000000b003bfdc2ece5dmr22196945qtj.4.1679246678019;
-        Sun, 19 Mar 2023 10:24:38 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id l5-20020ac87245000000b003d3b9f79b4asm4926103qtp.68.2023.03.19.10.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 10:24:37 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: cxgb3: remove unused fl_to_qset function
-Date:   Sun, 19 Mar 2023 13:24:33 -0400
-Message-Id: <20230319172433.1708161-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 19 Mar 2023 13:26:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4341025C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 10:26:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C7F0B80C9C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 17:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50344C433EF;
+        Sun, 19 Mar 2023 17:26:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679246787;
+        bh=4oAmGtme2U4KToos8gPVYRpJj6p0LqbdTtw+RcWeIpQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=UPrMfo+EycH4JahQKM13t+opxJIZekeZqJ01p9XWwqQZ+1lZ+fTLCYcLfEonZuj+i
+         FZo3shunRpqNE5FImj0sPkTe0soUw3odKm+vMVkdCRSNMJMeADovzbOHX0X7/fMRrq
+         CQpQKcItrhq/6SONUIt+S39zX+m0avkN7Rc8wnCgWvEkSzGZ8S0HCTZEGShCwywoew
+         D65rH0dEZeWvzv/jf02fAlHPkMqJWp5PkbIDFrOGpYQo7a8veKWYgbn5oQkZvAbfLQ
+         ILc+B6Mi4R9K8eG0yIvnHfvjeiPw8PBhul48sZsbyVYCthyJfRUMFGpRJux0QEjS1O
+         /rJXzg+j+QOuQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id CCD301540381; Sun, 19 Mar 2023 10:26:26 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 10:26:26 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:dev.2023.03.17a 33/38] kernel/rcu/tasks.h:140:20:
+ warning: 'tasks_rcu_exit_srcu' defined but not used
+Message-ID: <0dfe1c60-0167-45b1-80fb-5f5400c2b1fe@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202303191536.XzMSyzTl-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303191536.XzMSyzTl-lkp@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/net/ethernet/chelsio/cxgb3/sge.c:169:32: error: unused function
-  'fl_to_qset' [-Werror,-Wunused-function]
-static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
-                               ^
-This function is not used, so remove it.
+On Sun, Mar 19, 2023 at 03:05:43PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.17a
+> head:   19d218a4b125a4dce12eb88097a9c55f7126ce8c
+> commit: 61eea4556e8cf92d4c9b483110a679d2652aa451 [33/38] srcu: Move work-scheduling fields from srcu_struct to srcu_usage
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230319/202303191536.XzMSyzTl-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=61eea4556e8cf92d4c9b483110a679d2652aa451
+>         git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+>         git fetch --no-tags paulmck-rcu dev.2023.03.17a
+>         git checkout 61eea4556e8cf92d4c9b483110a679d2652aa451
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303191536.XzMSyzTl-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from include/linux/srcu.h:49,
+>                     from include/linux/notifier.h:16,
+>                     from arch/x86/include/asm/uprobes.h:13,
+>                     from include/linux/uprobes.h:49,
+>                     from include/linux/mm_types.h:16,
+>                     from include/linux/sched/signal.h:13,
+>                     from kernel/rcu/update.c:26:
+> >> kernel/rcu/tasks.h:140:20: warning: 'tasks_rcu_exit_srcu' defined but not used [-Wunused-variable]
+>      140 | DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+>          |                    ^~~~~~~~~~~~~~~~~~~
+>    include/linux/srcutree.h:184:38: note: in definition of macro '__DEFINE_SRCU'
+>      184 |         is_static struct srcu_struct name =                                                     \
+>          |                                      ^~~~
+>    kernel/rcu/tasks.h:140:1: note: in expansion of macro 'DEFINE_STATIC_SRCU'
+>      140 | DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+>          | ^~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/chelsio/cxgb3/sge.c | 5 -----
- 1 file changed, 5 deletions(-)
+It is true that if you build a kernel with CONFIG_TASKS_RCU_GENERIC=y and
+CONFIG_TASKS_RCU=n, you will get this warning.  I am at a loss as to why
+this commit would have changed that, but in any case it does need a fix.
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb3/sge.c b/drivers/net/ethernet/chelsio/cxgb3/sge.c
-index 62dfbdd33365..efa7f401529e 100644
---- a/drivers/net/ethernet/chelsio/cxgb3/sge.c
-+++ b/drivers/net/ethernet/chelsio/cxgb3/sge.c
-@@ -166,11 +166,6 @@ static u8 flit_desc_map[] = {
- #endif
- };
- 
--static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
--{
--	return container_of(q, struct sge_qset, fl[qidx]);
--}
--
- static inline struct sge_qset *rspq_to_qset(const struct sge_rspq *q)
- {
- 	return container_of(q, struct sge_qset, rspq);
--- 
-2.27.0
+Thank you for catching it!
 
+							Thanx, Paul
+
+> vim +/tasks_rcu_exit_srcu +140 kernel/rcu/tasks.h
+> 
+> 07e105158d97b4 Paul E. McKenney 2020-03-02  138  
+> eacd6f04a13331 Paul E. McKenney 2020-03-02  139  /* Track exiting tasks in order to allow them to be waited for. */
+> eacd6f04a13331 Paul E. McKenney 2020-03-02 @140  DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+> eacd6f04a13331 Paul E. McKenney 2020-03-02  141  
+> 
+> :::::: The code at line 140 was first introduced by commit
+> :::::: eacd6f04a1333187dd3e96e5635c0edce0a2e354 rcu-tasks: Move Tasks RCU to its own file
+> 
+> :::::: TO: Paul E. McKenney <paulmck@kernel.org>
+> :::::: CC: Paul E. McKenney <paulmck@kernel.org>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
