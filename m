@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E3A6C01A4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBE26C01A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCSM3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 08:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S229968AbjCSMfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 08:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjCSM3t (ORCPT
+        with ESMTP id S229524AbjCSMfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 08:29:49 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7F8144A2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:29:48 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ek18so36903033edb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679228986;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UsUw48AeQfsuxhASleLQv/pMcvboLL7epplAN7QGvnA=;
-        b=e11tqFxkO2vEWgK/fYt4JNN1jqJ6BmE7iiWx1OBXuupEzGzzxx73gK6UmKgZNqO3lM
-         b///VqVZaAouyjcn1bsy8R+vZ10Y0XsnW5FtYRXvOeG3E2hmpF5CTDpZvWCVCtjgUYHT
-         A99eDabjw7KHBjfYOibtRWRYNlEf575FSChx0SHbSDs0G6/ucCQ33tMdqZECj5g+x8zZ
-         rvGwfHMdgVAR6azQzWh256MWjgnJmMz8q6UPhjPc8IBbyha11ahGMu0JoXvxQ7Gr8lM8
-         nLQNX5t0SJ7lmjISDuw8eSlLx4V2FVojXb+a/YYVbTzb90sng5xVh0tPDUbKtq+M4ObH
-         HEfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679228986;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UsUw48AeQfsuxhASleLQv/pMcvboLL7epplAN7QGvnA=;
-        b=uD+a8Orm222viNOM4r69QZUA0s9PZd07r8oaviWtR0N4FJRHMhGgtt5AzH+JGj13jj
-         eW3hfWWQQQXIXdeQxTUD6h/X3JLJNh4hnvx25f/9j/PeN1cdTJ9OTRZkFygIs8tzJH9G
-         6aN8N4967oQE/+4VaAg5Xp4umNqXQVC0UixIEf9mLOnzeP7KmEq3tRmzGDXWn/jH0Qku
-         yQcGgzKYZRVDMomWCId2KBstxw5OGHQpvazleTB3kLa3W7I99V72XL1GqOdKzs2dB+SB
-         uWin9L/kCSr0yvA6lYJEPiEi96riTIzooQaRY8ksx0P2AJj+COPlXXTC05oSm9TKj4gH
-         h/1A==
-X-Gm-Message-State: AO0yUKWJMxSTIeEfIJoxQVpLiTF3k8TWip9LpURk5xNnp2tS3rRHrmbm
-        QQg59wGXMPCORjIOrM46nN+Mzg==
-X-Google-Smtp-Source: AK7set/sIqucjJzsdjLw5anFET0hlUfDmKmuGp8IZBJkYMcu3uNQirYCo+/8Hw66VbUsFcgrAUJkKg==
-X-Received: by 2002:a17:906:36d4:b0:932:d2bb:507 with SMTP id b20-20020a17090636d400b00932d2bb0507mr6793730ejc.24.1679228986490;
-        Sun, 19 Mar 2023 05:29:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id r10-20020a1709063d6a00b00930e95446d0sm3185334ejf.120.2023.03.19.05.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 05:29:46 -0700 (PDT)
-Message-ID: <9dfc752b-7ae9-5e45-e9e2-50b87dabbca6@linaro.org>
-Date:   Sun, 19 Mar 2023 13:29:45 +0100
+        Sun, 19 Mar 2023 08:35:40 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1201B326
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:35:37 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E10BF1EC067D;
+        Sun, 19 Mar 2023 13:35:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679229335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=eyaEB2KdmaExV+3fZ3dx11YTBavO8jrgST1ZjzsZgMg=;
+        b=CMjWmL9Q/F/3Y8we9HVJSFsKjrPnMHEmJMjT05o+evFQbuzY61T40hX2AXtSTqNVVkzeES
+        4C1Q6r20AEWpJd0UK2RqwrlKc9oSUuGQC38Od5gW4w5gqPsamwhkrrZUVWTBFhz568E10y
+        ecUZ8GxO4wQfjXfm6SmTnOKA5VIFFws=
+Date:   Sun, 19 Mar 2023 13:35:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for v6.3-rc3
+Message-ID: <20230319123528.GAZBcBkJKPZCwVKnBl@fat_crate.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RESEND v6 1/2] dt-bindings: soc: starfive: Add StarFive syscon
- doc
-Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-References: <20230315055813.94740-1-william.qiu@starfivetech.com>
- <20230315055813.94740-2-william.qiu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315055813.94740-2-william.qiu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 06:58, William Qiu wrote:
-> Add documentation to describe StarFive System Controller Registers.
-> 
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> ---
->  .../soc/starfive/starfive,jh7110-syscon.yaml  | 41 +++++++++++++++++++
->  MAINTAINERS                                   |  5 +++
->  2 files changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-> new file mode 100644
-> index 000000000000..ae7f1d6916af
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 SoC system controller
+Hi Linus,
 
-OK, I found the patch changing this. So basically you add knowingly
-incomplete bindings and a second later you fix them.
+please pull the urgent x86 lineup for 6.3. There's a little bit more
+"movement" in there for my taste but it needs to happen and should make
+the code better after it.
 
-Add complete bindings.
+Thx.
 
-Best regards,
-Krzysztof
+---
 
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.3_rc3
+
+for you to fetch changes up to cbebd68f59f03633469f3ecf9bea99cd6cce3854:
+
+  x86/mm: Fix use of uninitialized buffer in sme_enable() (2023-03-16 12:22:25 +0100)
+
+----------------------------------------------------------------
+- Check cmdline_find_option()'s return value before further processing
+
+- Clear temporary storage in the resctrl code to prevent access to an
+  unexistent MSR
+
+- Add a simple throttling mechanism to protect the hypervisor from potentially
+  malicious SEV guests issuing requests in rapid succession.
+
+  In order to not jeopardize the sanity of everyone involved in
+  maintaining this code, the request issuing side has received
+  a cleanup, split in more or less trivial, small and digestible pieces.
+  Otherwise, the code was threatening to become an unmaintainable mess.
+
+  Therefore, that cleanup is marked indirectly also for stable so that
+  there's no differences between the upstream code and the stable
+  variant when it comes down to backporting more there.
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (6):
+      virt/coco/sev-guest: Check SEV_SNP attribute at probe time
+      virt/coco/sev-guest: Simplify extended guest request handling
+      virt/coco/sev-guest: Remove the disable_vmpck label in handle_guest_request()
+      virt/coco/sev-guest: Carve out the request issuing logic into a helper
+      virt/coco/sev-guest: Do some code style cleanups
+      virt/coco/sev-guest: Convert the sw_exit_info_2 checking to a switch-case
+
+Dionna Glaze (1):
+      virt/coco/sev-guest: Add throttling awareness
+
+Nikita Zhandarovich (1):
+      x86/mm: Fix use of uninitialized buffer in sme_enable()
+
+Shawn Wang (1):
+      x86/resctrl: Clear staged_config[] before and after it is used
+
+ arch/x86/include/asm/sev-common.h         |   3 +-
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c |   7 +-
+ arch/x86/kernel/cpu/resctrl/internal.h    |   1 +
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    |  25 +++++-
+ arch/x86/kernel/sev.c                     |  26 +++---
+ arch/x86/mm/mem_encrypt_identity.c        |   3 +-
+ drivers/virt/coco/sev-guest/sev-guest.c   | 128 ++++++++++++++++++------------
+ 7 files changed, 123 insertions(+), 70 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
