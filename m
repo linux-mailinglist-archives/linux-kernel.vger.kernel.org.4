@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EE16C032E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1197C6C0332
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCSQfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 12:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        id S230285AbjCSQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 12:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCSQe4 (ORCPT
+        with ESMTP id S231220AbjCSQgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:34:56 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8153D53F;
-        Sun, 19 Mar 2023 09:34:18 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD3F91EC067D;
-        Sun, 19 Mar 2023 17:34:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679243654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oQqxL3BHw5WjuWqun2syN57FSJzoyI2jQrk/HbbPWhs=;
-        b=pqEwETfaj31dpAz2SEYSWfvU3WeBzG4lX8oZzUyb/EtHCHrnN4e+cfPaekUjGZ8SBiLJJd
-        d1DJ2QpKdRIeoydJx+SuRzEIaZ2w3eBxtrIhSGGgWTcRelmavWlZ7879Seb5jaxbE6Z+Qm
-        +GMiBj8HPxvSZjAvuffKs7s8PsJaneU=
-Date:   Sun, 19 Mar 2023 17:34:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Usama Arif <usama.arif@bytedance.com>
-Cc:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        brgerst@gmail.com, piotrgorski@cachyos.org,
-        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [PATCH v15 02/12] cpu/hotplug: Move idle_thread_get() to
- <linux/smpboot.h>
-Message-ID: <20230319163409.GBZBc5gTU94IdrucNL@fat_crate.local>
-References: <20230316222109.1940300-1-usama.arif@bytedance.com>
- <20230316222109.1940300-3-usama.arif@bytedance.com>
+        Sun, 19 Mar 2023 12:36:51 -0400
+Received: from sender11-op-o11.zoho.eu (sender11-op-o11.zoho.eu [31.186.226.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCED0CC38;
+        Sun, 19 Mar 2023 09:36:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679243770; cv=none; 
+        d=zohomail.eu; s=zohoarc; 
+        b=TWvfcLdvxEd52WkBg3U/j4DiJl8lCvHmTYCTaXaxvuLIFEsK1Q2CGu2adphLmTN3yuniACFaUGp8ZvE2yd3uxm4l6yOIAUT9NJx+hY+qaF+AQFU5jWn1JKS46A/g3m3+P60M6480Hgu2dYvox0ULTfc/gHigU3EQsbGQjJWOJy4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+        t=1679243770; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=1+gnTKfJVBMgMmDYlGD4RzHzJLRW5Xx60pBV+z1t9SQ=; 
+        b=fNlvK8g85iV6YtYscore9bLeYEttHcK0wE66ybbzFU/tBEwXEM1AYvdIZKds8+oQaMZoOmWK0JngX5VzeXZgmU/Xn3AQ/J1dU6YVQIczZICHJ5dJ1NV1Eowsy79wCQK1Dx4Mn5f0x3q/SxH02tWJJSoUrdlCv2+Fpi41bVNMp8U=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+        spf=pass  smtp.mailfrom=jes@trained-monkey.org;
+        dmarc=pass header.from=<jes@trained-monkey.org>
+Received: from [192.168.99.50] (pool-98-113-67-206.nycmny.fios.verizon.net [98.113.67.206]) by mx.zoho.eu
+        with SMTPS id 16792437681711020.1266679224117; Sun, 19 Mar 2023 17:36:08 +0100 (CET)
+Message-ID: <318ff554-0694-64e1-72bd-d941a775a16f@trained-monkey.org>
+Date:   Sun, 19 Mar 2023 12:36:06 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230316222109.1940300-3-usama.arif@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH - mdadm] mdopen: always try create_named_array()
+Content-Language: en-US
+To:     NeilBrown <neilb@suse.de>
+Cc:     Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nikolay Kichukov <hijacker@oldum.net>
+References: <167875238571.8008.9808655454439667586@noble.neil.brown.name>
+From:   Jes Sorensen <jes@trained-monkey.org>
+In-Reply-To: <167875238571.8008.9808655454439667586@noble.neil.brown.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,45 +56,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 10:20:59PM +0000, Usama Arif wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+On 3/13/23 20:06, NeilBrown wrote:
 > 
-> Instead of relying purely on the special-case wrapper in bringup_cpu()
-> to pass the idle thread to __cpu_up(), expose idle_thread_get() so that
-> the architecture code can obtain it directly when necessary.
+> mdopen() will use create_named_array() to ask the kernel to create the
+> given md array, but only if it is given a number or name.
+> If it is NOT given a name and is required to choose one itself using
+> find_free_devnm() it does NOT use create_named_array().
 > 
-> This will be useful when the existing __cpu_up() is split into multiple
-> phases, only *one* of which will actually need the idle thread.
+> On kernels with CONFIG_BLOCK_LEGACY_AUTOLOAD not set, this can result in
+> failure to assemble an array.  This can particularly seen when the
+> "name" of the array begins with a host name different to the name of the
+> host running the command.
 > 
-> If the architecture code is to register its new pre-bringup states with
-> the cpuhp core, having a special-case wrapper to pass extra arguments is
-> non-trivial and it's easier just to let the arch register its function
-> pointer to be invoked with the standard API.
+> So add the missing call to create_named_array().
 > 
-> To reduce duplication, move the shadow stack reset and kasan unpoisoning
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217074
+> Signed-off-by: NeilBrown <neilb@suse.de>
 
-I was wondering what "shadow stack" as that set is not upstream yet. You mean
-"shadow call stack" which is apparently something else,
-compiler-generated, purely software thing.
+Applied!
 
-> into idle_thread_get() too.
+Thanks,
+Jes
 
-Frankly, I don't think resetting shadow call stack and kasan state
-belongs in a function which returns the idle thread. Even more so if you
-have to add an @unpoison param which is false sometimes and sometimes
-true, depending on where you call the function.
 
-I think you should have a helper
-
-	tsk_reset_stacks(struct task_struct *tsk);
-
-or so which is called where @unpoison == true instead of having a getter
-function do something unrelated too.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
