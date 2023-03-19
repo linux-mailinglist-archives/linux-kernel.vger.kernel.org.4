@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F29F6C049D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 20:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8046C04A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 20:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCST6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 15:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S229928AbjCST6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 15:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjCST62 (ORCPT
+        with ESMTP id S229819AbjCST6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 15:58:28 -0400
-Received: from mail-wm1-x364.google.com (mail-wm1-x364.google.com [IPv6:2a00:1450:4864:20::364])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23279193FF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 12:58:27 -0700 (PDT)
-Received: by mail-wm1-x364.google.com with SMTP id w11so5176157wmo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 12:58:27 -0700 (PDT)
+        Sun, 19 Mar 2023 15:58:31 -0400
+Received: from mail-wm1-x362.google.com (mail-wm1-x362.google.com [IPv6:2a00:1450:4864:20::362])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF2117CE7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 12:58:29 -0700 (PDT)
+Received: by mail-wm1-x362.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so7950396wmb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 12:58:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1679255905;
+        d=dectris.com; s=google; t=1679255908;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9nzhJU6njL7XEZj6il8iXiFFoFqCcRBJtzWCK3ymWFE=;
-        b=cJAdwoiDxME6HDr6jd1AxR2oZQEsNJV4S0psy5LKclGbV1dvk5+kYjYQzmZy2yTUhA
-         RnyUZTMVi5F8rBsdR7iFOOOL2h7vVSwpTb2jSslnN4PNXiR7Uc1by5jdqIj6NnNVw4Ek
-         ypNh9e/6qUOu7emSPdH1fT7s91auCywmFYEEs=
+        bh=Ugxvd8UKF7NxIIzphZkT6ey/EusNfyQo98VW+VJFOiI=;
+        b=KVi2bUlaxkySvVdD7fhFj3qNpgz5FCFnpwYkhvQvB+1g/8EtZhSYaen0b7yYjGGYuF
+         NL0NWeX+eOgD6zmL90OXF54N7JhNozKky3ouuw3FVLEWT+DtvaQIE+/cqM2OPjCaqy2V
+         FHmk9p2o9CBGvChm+kdqqvbXoFs5/aQnY3voQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679255905;
+        d=1e100.net; s=20210112; t=1679255908;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9nzhJU6njL7XEZj6il8iXiFFoFqCcRBJtzWCK3ymWFE=;
-        b=mDRLNnCIcQsXnzeycsv8/zsnfg2hq1ZsW5UvB6fsOyzMm4egSwKAmk3a6QUEyWgzwS
-         s7M5Os47MM7s84+u/dw40ZNs6xl7rvJlGpHFJNMrrObdBXTZbIiY4OMRngIOqzx0Kz78
-         71avUjvX6fTyvWjUbzbsCh205mzUH5vAY8GA1UwltXq93Q+O6UVu2wraOKYqyC3nti6T
-         rkcsZgi5NTzCBeos3Xv+PyHGKXzNpI5eVA9A+IPKxwZD7jOVU0U6Nn7jbGfCZcuZInis
-         SbA1D1gVa0+tO2BCP0O9SfxfBMRIlj+9StIphP3tKh6qQAHU1T75BNTqIebPuty26o97
-         7Pjw==
-X-Gm-Message-State: AO0yUKWX6uJRshN/cB+ZZykly2ITn1kJvNojm4iGQ9jUFHuGC+AIaDVG
-        ijdA5xiLxoDYh/ucqaDgWjX49wmxWxEnJnSUVJsYB0VMm+X2
-X-Google-Smtp-Source: AK7set93xBMvfuoZl5+kZfN9Qov/ysd+IKiWOR4q5Wxkq9SBMcH4oabsNRORdj7xcE5vrQk7sX8Y/z8FPuv6
-X-Received: by 2002:a05:600c:3d95:b0:3eb:5990:aea4 with SMTP id bi21-20020a05600c3d9500b003eb5990aea4mr7646047wmb.12.1679255905592;
-        Sun, 19 Mar 2023 12:58:25 -0700 (PDT)
+        bh=Ugxvd8UKF7NxIIzphZkT6ey/EusNfyQo98VW+VJFOiI=;
+        b=ZnupFd/bMvtTyj6pwxzrTbKPXds8Iu7/oCfx3i5NVZNL60ZXl+J4hybtPXhhxtl29U
+         G8n+h/xteL0yE7ztuuLlwRQB5Ne9zXIa1yM/48UOp0mVmxT4bh90RIT5yYbZ3NNFFyuR
+         pmNknLM5Cf9ww/lA0f9xYTXJgG/+DL79+wfZ20i9KaM7pPEkoQUom8up+BvQMOnPvuwY
+         RqPcNzfFUR5FpPIfnXqnH6jB2raU5do+HXL6QK7XUvihjKGlFSKcIlJAhvx5r0OQ4NxU
+         qDRXC01LPigj/4fCc6CJC0O1T0bYTn+ho6eQKucJLfvWlfzk72Oe7NGKIf6LdaJOF8KV
+         FKAg==
+X-Gm-Message-State: AO0yUKWE4XJ+dBK7Uvp7xv2C34NyVh34dIS0aOaYRY+hwMq6Qp8N0d1U
+        5I/TShhSsSMQXJJ9OcfQr8GlCVaHsgUeDcsdYek6727chZv9
+X-Google-Smtp-Source: AK7set+3PKHJJmz3XmMQAw6iCJpB6/q2hhXE/qAPOBhgn9qUnFXl5SWdKtZpa8Pn+dkZw+C8wHGU2K+Wzh2w
+X-Received: by 2002:a1c:ed16:0:b0:3ed:a45d:aee9 with SMTP id l22-20020a1ced16000000b003eda45daee9mr4993314wmh.39.1679255908000;
+        Sun, 19 Mar 2023 12:58:28 -0700 (PDT)
 Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id m26-20020a7bca5a000000b003b499f88f52sm2728807wml.7.2023.03.19.12.58.25
+        by smtp-relay.gmail.com with ESMTPS id m26-20020a7bca5a000000b003b499f88f52sm2728807wml.7.2023.03.19.12.58.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 12:58:25 -0700 (PDT)
+        Sun, 19 Mar 2023 12:58:27 -0700 (PDT)
 X-Relaying-Domain: dectris.com
 From:   Kal Conley <kal.conley@dectris.com>
 To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
@@ -66,9 +66,9 @@ To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/3] selftests: xsk: Use hugepages when umem->frame_size > PAGE_SIZE
-Date:   Sun, 19 Mar 2023 20:56:55 +0100
-Message-Id: <20230319195656.326701-3-kal.conley@dectris.com>
+Subject: [PATCH bpf-next 3/3] selftests: xsk: Add tests for 8K and 9K frame sizes
+Date:   Sun, 19 Mar 2023 20:56:56 +0100
+Message-Id: <20230319195656.326701-4-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230319195656.326701-1-kal.conley@dectris.com>
 References: <20230319195656.326701-1-kal.conley@dectris.com>
@@ -84,27 +84,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HugeTLB UMEMs now support chunk_size > PAGE_SIZE. Set MAP_HUGETLB when
-frame_size > PAGE_SIZE for future tests.
+Add tests:
+- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
+- RUN_TO_COMPLETION_9K_FRAME_SIZE: frame_size=9000 (unaligned)
 
 Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
+ tools/testing/selftests/bpf/xskxceiver.h |  2 ++
+ 2 files changed, 26 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index a17655107a94..7a47ef28fbce 100644
+index 7a47ef28fbce..f10ff8c5e9c5 100644
 --- a/tools/testing/selftests/bpf/xskxceiver.c
 +++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1265,7 +1265,7 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
- 	void *bufs;
- 	int ret;
- 
--	if (ifobject->umem->unaligned_mode)
-+	if (ifobject->umem->frame_size > sysconf(_SC_PAGESIZE) || ifobject->umem->unaligned_mode)
- 		mmap_flags |= MAP_HUGETLB;
- 
- 	if (ifobject->shared_umem)
+@@ -1789,6 +1789,30 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+ 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
+ 		testapp_validate_traffic(test);
+ 		break;
++	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
++		if (!hugepages_present(test->ifobj_tx)) {
++			ksft_test_result_skip("No 2M huge pages present.\n");
++			return;
++		}
++		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
++		test->ifobj_tx->umem->frame_size = 8192;
++		test->ifobj_rx->umem->frame_size = 8192;
++		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
++		testapp_validate_traffic(test);
++		break;
++	case TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME:
++		if (!hugepages_present(test->ifobj_tx)) {
++			ksft_test_result_skip("No 2M huge pages present.\n");
++			return;
++		}
++		test_spec_set_name(test, "RUN_TO_COMPLETION_9K_FRAME_SIZE");
++		test->ifobj_tx->umem->frame_size = 9000;
++		test->ifobj_rx->umem->frame_size = 9000;
++		test->ifobj_tx->umem->unaligned_mode = true;
++		test->ifobj_rx->umem->unaligned_mode = true;
++		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
++		testapp_validate_traffic(test);
++		break;
+ 	case TEST_TYPE_RX_POLL:
+ 		test->ifobj_rx->use_poll = true;
+ 		test_spec_set_name(test, "POLL_RX");
+diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
+index 3e8ec7d8ec32..ff723b6d7852 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.h
++++ b/tools/testing/selftests/bpf/xskxceiver.h
+@@ -70,6 +70,8 @@ enum test_mode {
+ enum test_type {
+ 	TEST_TYPE_RUN_TO_COMPLETION,
+ 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
++	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
++	TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME,
+ 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
+ 	TEST_TYPE_RX_POLL,
+ 	TEST_TYPE_TX_POLL,
 -- 
 2.39.2
 
