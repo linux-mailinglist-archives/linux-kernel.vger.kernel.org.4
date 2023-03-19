@@ -2,117 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635196C050C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9323D6C0511
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCSU4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 16:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S229610AbjCSU6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 16:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCSU4u (ORCPT
+        with ESMTP id S229665AbjCSU6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 16:56:50 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78ACE1A4BE
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:56:48 -0700 (PDT)
+        Sun, 19 Mar 2023 16:58:38 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE6616AD3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:58:36 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id z83so10849320ybb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=8yW3l+zoteRKLP1DJcoOgBiT683IGyZbqjmmCXqwoN4=;
-  b=eYw9UF4or3D6rGM1eTgP7DCKitqNo4K2q4c2p7rRyvVwRmAefSB+wFdk
-   Nqcan21mi0R0MQvw9AuZdWex7oH2R4mTzXnGejToJw6bcEv4rHrA+sHh+
-   PQg9vrMOgr4wfOKl1GgFkdviP3Ft0NtyU0RvtYOA2Js3PpXZgXQHQDdE+
-   w=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,274,1673910000"; 
-   d="scan'208";a="50621659"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 21:56:47 +0100
-Date:   Sun, 19 Mar 2023 21:56:46 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
-In-Reply-To: <20230319204935.259217-1-eng.mennamahmoud.mm@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303192156060.2867@hadrien>
-References: <20230319204935.259217-1-eng.mennamahmoud.mm@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=linaro.org; s=google; t=1679259516;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=slTlotxx3fcOIiVEZmXgPk8gsXyMX9Tm5yjiLh1yu78=;
+        b=Esl4BDoUuM2GdiJWGFjVzUqn6XsO4j+Vy23XiW1cYGU7/3p294trptkJ/Ohnf7DKjt
+         St61+kvqCPtQnB/W/OkK38195AvIe/FGFLCu6mchGB7UT1LPeEwNwl7YCOH5YgQ2aeBG
+         3Ya5xRIKCUWOgKs/AdaObSzyOGS3GUmZxCXb7xg0BQTQZ9q6x5Id/ef/mv5AW1A0j577
+         hxKxTUiXN9dX8iGAP3azmX05ZuDIKH2UcD+nAVnn++yZXVe8Lid7l2TUtQKQrFFKL8/C
+         hfEo00yLT5ppwMmbHALhrxhS1Hz5d6fz4Xf6jD28Xt/z5BfunnCI615t3L6AAGGJEFIu
+         asfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679259516;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=slTlotxx3fcOIiVEZmXgPk8gsXyMX9Tm5yjiLh1yu78=;
+        b=i6q2cshj5KH+ex87rRS0T3CBOJtnZDKrlDshe55g40xEchYDosFOrjmxkpyQlmrrKq
+         6FOKCesRBJ+ud4MoVZBu64v7A5tHpbfgDE+vNaf2NImDlf7yEsVzi9//OM8VJJYja2tB
+         Q0B0f8HQMSwMXBGwetOJtA5F40BUL7jYAUmzzSA8fu/c3gbyxFKD5gPNt3XyD9xaBbHK
+         GXWoH0+zj3z24hHQikycelDXCZ9zJAZj0nYbHnuqo9LdgLJZrg3kv5rksoZR5VgYKtSO
+         7bSzwo1cIj4B+kaDoh353f1MbbpflWKJ7HlOnioEDIwEolnMcjDf+rKRDsdWVcIW3HMx
+         3Z6w==
+X-Gm-Message-State: AO0yUKXKYiRqhGYISNmIh1Wux9bF6iEJNOB4AZD/vSmORN20vN8SIKLR
+        TIkHDKZS5s4szIDGy3B2/DoEzTA+WHsyCME+mXSUQQ==
+X-Google-Smtp-Source: AK7set9N7HBHhQUfyexxk65xztbNCbM/NotsRK4cg8qus2nO+Zgi2xnzAgTVdxSDjoFozWKrNI49lPoh5u52J04PEhQ=
+X-Received: by 2002:a05:6902:110e:b0:b26:47f3:6cb with SMTP id
+ o14-20020a056902110e00b00b2647f306cbmr3225716ybu.4.1679259515943; Sun, 19 Mar
+ 2023 13:58:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20230315155228.1566883-1-nm@ti.com>
+In-Reply-To: <20230315155228.1566883-1-nm@ti.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 19 Mar 2023 21:58:25 +0100
+Message-ID: <CACRpkdYPZ6CROjdta2_3dSuoiT_7FJDAqvTD1LpKCyUB05U91w@mail.gmail.com>
+Subject: Re: [PATCH V2 0/3] pinctrl/arm: dt-bindings: k3: Deprecate header
+ with register constants
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sekhar Nori <nsekhar@ti.com>, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 15, 2023 at 4:52=E2=80=AFPM Nishanth Menon <nm@ti.com> wrote:
 
+> This is an updated series to move the pinctrl bindings over to arch as
+> the definitions are hardware definitions without driver usage.
+>
+> This series was triggered by the discussion in [1]
 
-On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-> static inline function.
->
-> it is not great to have macro that use `container_of` macro,
-> because from looking at the definition one cannot tell what type
-> it applies to.
->
-> One can get the same benefit from an efficiency point of view
-> by making an inline function.
->
-> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
-> changes in v2:
-> 	remove newlines added in previous patch.
+As mentioned by the DT maintainer I think this best all go
+into the same tree as the DTS files, so let's merge it all
+through the TI SoC tree.
 
-This is not the right solution.  Greg is supposed to ignore your previous
-patch, so he won't have the newlines that you are removing.
-
-julia
-
-> ---
->  drivers/staging/greybus/gbphy.h | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
-> index 1de510499480..03a977056637 100644
-> --- a/drivers/staging/greybus/gbphy.h
-> +++ b/drivers/staging/greybus/gbphy.h
-> @@ -15,8 +15,10 @@ struct gbphy_device {
->  	struct list_head list;
->  	struct device dev;
->  };
-> -
-> -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> +static inline struct gbphy_device *to_gbphy_dev(const struct device *d)
-> +{
-> +	return container_of(d, struct gbphy_device, dev);
-> +}
->
->  static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
->  {
-> @@ -44,8 +46,10 @@ struct gbphy_driver {
->
->  	struct device_driver driver;
->  };
-> -
-> -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
-> +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *d)
-> +{
-> +	return container_of(d, struct gbphy_driver, driver);
-> +}
->
->  int gb_gbphy_register_driver(struct gbphy_driver *driver,
->  			     struct module *owner, const char *mod_name);
-> --
-> 2.34.1
->
->
+Yours,
+Linus Walleij
