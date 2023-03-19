@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F6F6C0030
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 09:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D706C003A
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjCSIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S229635AbjCSJIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 05:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjCSIuY (ORCPT
+        with ESMTP id S229490AbjCSJIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 04:50:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975AE1A969;
-        Sun, 19 Mar 2023 01:50:20 -0700 (PDT)
+        Sun, 19 Mar 2023 05:08:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02D412CDB
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 02:08:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9759FB80AD9;
-        Sun, 19 Mar 2023 08:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5021CC433A7;
-        Sun, 19 Mar 2023 08:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679215817;
-        bh=NCVUJ3Va8Kno8VRwUEU+c26vQrHi8E8gDD37BwunRTA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=L4zfoY02ni07YvsZWLOnybUdedP4E2oIrxaK5QBgLXYRLquKNd2EYtysQyAWLWNA7
-         ycdn/Hs6TnjeQoIGsT9SdMwhBWIWZUFcdCjGbFZwHjnqleWdf3ogfUCiQjQmd8oWCz
-         4tmh4yx/0WK0GcEDMjZzgFvVY1/MpCIKqIDbUTIOV1/9bZFUu8RflnNOWCbvL/PZXX
-         AIMjLx/kIy8d6af5kgwMLsjNnNX8/rFY/nEHlHuZWkDM5gQawkR0lNCDWAptW+SlaI
-         mP5L44h/8YugdM4zlkeQkD71e9KVu7WnQeyxZNoXlwEoZhQ3fq5gBbX6otLEdeDgnY
-         wObu4PMbBKlTw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3AEA0E21EE6;
-        Sun, 19 Mar 2023 08:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E2CD60F56
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4881AC433EF;
+        Sun, 19 Mar 2023 09:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679216913;
+        bh=muQIyS8L0u+wQYk7fHuS9Tv5nL+xkWTZyobwqrXUzPM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mDJQV9ZvXoMtD+VHedCLXDysgjyX6XK17CG6ZqVp2mUeZvlIEJ1tM2HJeTvoXyISV
+         zhJCtPNBhQY5figas78NE4HiIVw1L7yo9qyc0CJcRmzrhmGKK2iodCRcjI2nS98BGP
+         7V1uqqnPJ4xNqyiSM3AqPcDFNX/ZS34emfzQOcMs=
+Date:   Sun, 19 Mar 2023 10:08:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] kobject: introduce kobject_del_and_put()
+Message-ID: <ZBbRDl4OYGZIlx7E@kroah.com>
+References: <20230319084134.11804-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: macb: Set MDIO clock divisor for pclk higher than 160MHz
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167921581723.28457.7163593490569442150.git-patchwork-notify@kernel.org>
-Date:   Sun, 19 Mar 2023 08:50:17 +0000
-References: <20230316100339.1302212-1-bwawrzyn@cisco.com>
-In-Reply-To: <20230316100339.1302212-1-bwawrzyn@cisco.com>
-To:     Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xe-linux-external@cisco.com,
-        danielwa@cisco.com, olicht@cisco.com, mawierzb@cisco.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319084134.11804-1-frank.li@vivo.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,29 +50,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 16 Mar 2023 10:03:39 +0000 you wrote:
-> Currently macb sets clock divisor for pclk up to 160 MHz.
-> Function gem_mdc_clk_div was updated to enable divisor
-> for higher values of pclk.
+On Sun, Mar 19, 2023 at 04:41:24PM +0800, Yangtao Li wrote:
+> There are plenty of using kobject_del() and kobject_put() together
+> in the kernel tree. This patch wraps these two calls in a single helper.
 > 
-> Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->  drivers/net/ethernet/cadence/macb.h      | 2 ++
->  drivers/net/ethernet/cadence/macb_main.c | 6 +++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
+> v2:
+> -add kobject_del_and_put() users
+>  include/linux/kobject.h |  1 +
+>  lib/kobject.c           | 17 +++++++++++++++--
+>  2 files changed, 16 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - net: macb: Set MDIO clock divisor for pclk higher than 160MHz
-    https://git.kernel.org/netdev/net-next/c/b31587feaa01
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Any reason you only sent me one patch?  I guess you don't want me to
+review them?  :(
 
