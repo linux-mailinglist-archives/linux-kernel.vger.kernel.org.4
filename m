@@ -2,82 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BBF6C023D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8016C0242
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjCSOHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S229906AbjCSOKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCSOHC (ORCPT
+        with ESMTP id S229441AbjCSOKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:07:02 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E4C166D2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:07:00 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pdtgX-0002ug-6Z; Sun, 19 Mar 2023 15:06:57 +0100
-Message-ID: <73b7867a-8a1f-d521-d290-77bc7fcb2226@leemhuis.info>
-Date:   Sun, 19 Mar 2023 15:06:55 +0100
+        Sun, 19 Mar 2023 10:10:11 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39741DBB6
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:10:09 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-162-78-nat.elisa-mobile.fi [85.76.162.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 768511858;
+        Sun, 19 Mar 2023 15:10:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679235006;
+        bh=mBJ11yJThAY/zmZqpHU8Kit1cAiQGJcBvelHvN5yj8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v0LcAiXemtB3632HaJTrN8WEX4OEyxwbZQkbtvwLqJPVSaQeDFjxQy44z2plpHO4d
+         M35TVH0meT0uoX/DlRf1GW3sl24los5389ri+c2/Mb8NY6vsaCkqrYTeWAYkCPwrix
+         H4QFGtKpCCO5oruxqz74V1xZIvykvSRD7wEmEQm0=
+Date:   Sun, 19 Mar 2023 16:10:09 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 04/37] drm/xlnx/zynqmp_dp: Fix function name
+ zynqmp_dp_link_train() -> zynqmp_dp_train()
+Message-ID: <20230319141009.GL10144@pendragon.ideasonboard.com>
+References: <20230317081718.2650744-1-lee@kernel.org>
+ <20230317081718.2650744-5-lee@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Linux 6.3-rc2
-Content-Language: en-US, de-DE
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
- <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
-From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679234820;e07b0f17;
-X-HE-SMSGID: 1pdtgX-0002ug-6Z
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230317081718.2650744-5-lee@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
+Hi Lee,
 
-On 13.03.23 16:53, Guenter Roeck wrote:
-> On Sun, Mar 12, 2023 at 04:45:57PM -0700, Linus Torvalds wrote:
->
-> Runtime:
+Thank you for the patch.
+
+On Fri, Mar 17, 2023 at 08:16:45AM +0000, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
 > 
-> Warning backtraces in calls from ct_nmi_enter(),
-> seen randomly.
->
+>  drivers/gpu/drm/xlnx/zynqmp_dp.c:793: warning: expecting prototype for zynqmp_dp_link_train(). Prototype was for zynqmp_dp_train() instead
+> 
+> Cc: Hyun Kwon <hyun.kwon@xilinx.com>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Lee Jones <lee@kernel.org>
 
-I had expected this would be quickly resolved, but as the fix is not yet
-heading towards mainline, lets better ensure this regression is tracked:
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-#regzbot ^introduced 62b95a7b44d1
-#regzbot title arm: vfp: random Warning backtraces in calls from
-ct_nmi_enter()
-#regzbot fix: ARM: vfp: Fix broken softirq handling with instrumentation
-enabled
-#regzbot ignore-activity
+> ---
+>  drivers/gpu/drm/xlnx/zynqmp_dp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/xlnx/zynqmp_dp.c b/drivers/gpu/drm/xlnx/zynqmp_dp.c
+> index 0a7b466446fb6..a0606fab0e22c 100644
+> --- a/drivers/gpu/drm/xlnx/zynqmp_dp.c
+> +++ b/drivers/gpu/drm/xlnx/zynqmp_dp.c
+> @@ -784,7 +784,7 @@ static int zynqmp_dp_link_train_ce(struct zynqmp_dp *dp)
+>  }
+>  
+>  /**
+> - * zynqmp_dp_link_train - Train the link
+> + * zynqmp_dp_train - Train the link
+>   * @dp: DisplayPort IP core structure
+>   *
+>   * Return: 0 if all trains are done successfully, or corresponding error code.
 
-FWIW, latest patchset to fix it afaics is here:
+-- 
+Regards,
 
-https://lore.kernel.org/all/20230316082007.652669-1-ardb@kernel.org/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Laurent Pinchart
