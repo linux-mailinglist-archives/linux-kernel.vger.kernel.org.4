@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9206D6C032C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EE16C032E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjCSQdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 12:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S230119AbjCSQfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 12:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjCSQdO (ORCPT
+        with ESMTP id S229486AbjCSQe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:33:14 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A1A211D9;
-        Sun, 19 Mar 2023 09:32:48 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id s7so5395371ilv.12;
-        Sun, 19 Mar 2023 09:32:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679243567;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rE9pu/DRfAdXm95rr3VepAwA/+9JYYjjkqTbdSZh0/k=;
-        b=Yw6gBHVQxFSAzAwO3Ftwxn1teQ52tS7RTbnRv7AqvZtX/C0/wsa0p+5rrCD0HswzJT
-         IudppGTWSkZRpaFxlqsJuxGvfCc3Mc08j9QTv6V4KmnXflqWDjl2QKapulH1K+cju2Uy
-         lFWyv5lDAqx8yKpC1vlERTgrGKkYKtTGWQYBaW6qFggMd20v75Di6JjyyOaREAdKdA3j
-         rdp+hY18aVzu1F/loX1ls3x5Fm2DatwZPCYb4FvRCXlQQ6HWTaL1NQoB+fzidfVSmkkk
-         6FYzIX4uG6+XyO1lsAT3wywMFg9EM5Yza+j2kXtOMzBQ5fDapMuyA5NWTiOKQ3hLULqa
-         SyRw==
-X-Gm-Message-State: AO0yUKUDL4jjD3JGS0xbPLd/BtpI0zt0FmTTAM2wkWIrtzbH/7cPNgvP
-        0EC7AioYvpaAgZRQwDa97g==
-X-Google-Smtp-Source: AK7set8TmV5UVPTkReQlgL09w24MdyyWUQneS0fdD4520jOIVQTiqM8e0NB/f35ify8j+9IAH9zL9A==
-X-Received: by 2002:a92:ce50:0:b0:31a:1554:b0a with SMTP id a16-20020a92ce50000000b0031a15540b0amr3905365ilr.10.1679243567618;
-        Sun, 19 Mar 2023 09:32:47 -0700 (PDT)
-Received: from robh_at_kernel.org ([2605:ef80:80c7:2689:137d:d795:47e4:3de1])
-        by smtp.gmail.com with ESMTPSA id n18-20020a922612000000b00316dc3afe57sm2150373ile.86.2023.03.19.09.32.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 09:32:47 -0700 (PDT)
-Received: (nullmailer pid 227058 invoked by uid 1000);
-        Sun, 19 Mar 2023 16:32:44 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>, Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] video: ARM CLCD: Use of_address_to_resource()
-Date:   Sun, 19 Mar 2023 11:32:41 -0500
-Message-Id: <20230319163241.226984-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sun, 19 Mar 2023 12:34:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8153D53F;
+        Sun, 19 Mar 2023 09:34:18 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD3F91EC067D;
+        Sun, 19 Mar 2023 17:34:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679243654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=oQqxL3BHw5WjuWqun2syN57FSJzoyI2jQrk/HbbPWhs=;
+        b=pqEwETfaj31dpAz2SEYSWfvU3WeBzG4lX8oZzUyb/EtHCHrnN4e+cfPaekUjGZ8SBiLJJd
+        d1DJ2QpKdRIeoydJx+SuRzEIaZ2w3eBxtrIhSGGgWTcRelmavWlZ7879Seb5jaxbE6Z+Qm
+        +GMiBj8HPxvSZjAvuffKs7s8PsJaneU=
+Date:   Sun, 19 Mar 2023 17:34:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com, piotrgorski@cachyos.org,
+        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [PATCH v15 02/12] cpu/hotplug: Move idle_thread_get() to
+ <linux/smpboot.h>
+Message-ID: <20230319163409.GBZBc5gTU94IdrucNL@fat_crate.local>
+References: <20230316222109.1940300-1-usama.arif@bytedance.com>
+ <20230316222109.1940300-3-usama.arif@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230316222109.1940300-3-usama.arif@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace of_get_address() and of_translate_address() with single call
-to of_address_to_resource(). With this, use ioremap() instead of
-of_iomap() which would parse "reg" a second time.
+On Thu, Mar 16, 2023 at 10:20:59PM +0000, Usama Arif wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> Instead of relying purely on the special-case wrapper in bringup_cpu()
+> to pass the idle thread to __cpu_up(), expose idle_thread_get() so that
+> the architecture code can obtain it directly when necessary.
+> 
+> This will be useful when the existing __cpu_up() is split into multiple
+> phases, only *one* of which will actually need the idle thread.
+> 
+> If the architecture code is to register its new pre-bringup states with
+> the cpuhp core, having a special-case wrapper to pass extra arguments is
+> non-trivial and it's easier just to let the arch register its function
+> pointer to be invoked with the standard API.
+> 
+> To reduce duplication, move the shadow stack reset and kasan unpoisoning
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/video/fbdev/amba-clcd.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+I was wondering what "shadow stack" as that set is not upstream yet. You mean
+"shadow call stack" which is apparently something else,
+compiler-generated, purely software thing.
 
-diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
-index f65c96d1394d..1289bfe6e872 100644
---- a/drivers/video/fbdev/amba-clcd.c
-+++ b/drivers/video/fbdev/amba-clcd.c
-@@ -759,7 +759,7 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
- {
- 	int err;
- 	struct device_node *memory;
--	u64 size;
-+	struct resource res;
- 
- 	err = clcdfb_of_init_display(fb);
- 	if (err)
-@@ -769,18 +769,20 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
- 	if (!memory)
- 		return -ENODEV;
- 
--	fb->fb.screen_base = of_iomap(memory, 0);
--	if (!fb->fb.screen_base) {
--		of_node_put(memory);
--		return -ENOMEM;
--	}
- 
--	fb->fb.fix.smem_start = of_translate_address(memory,
--			of_get_address(memory, 0, &size, NULL));
--	fb->fb.fix.smem_len = size;
--	of_node_put(memory);
-+	err = of_address_to_resource(memory, 0, &res);
-+	if (err)
-+		goto out;
- 
--	return 0;
-+	fb->fb.screen_base = ioremap(res.start, resource_size(&res));
-+	if (!fb->fb.screen_base)
-+		goto out;
-+
-+	fb->fb.fix.smem_start = res.start;
-+	fb->fb.fix.smem_len = resource_size(&res);
-+out:
-+	of_node_put(memory);
-+	return err;
- }
- 
- static int clcdfb_of_vram_mmap(struct clcd_fb *fb, struct vm_area_struct *vma)
+> into idle_thread_get() too.
+
+Frankly, I don't think resetting shadow call stack and kasan state
+belongs in a function which returns the idle thread. Even more so if you
+have to add an @unpoison param which is false sometimes and sometimes
+true, depending on where you call the function.
+
+I think you should have a helper
+
+	tsk_reset_stacks(struct task_struct *tsk);
+
+or so which is called where @unpoison == true instead of having a getter
+function do something unrelated too.
+
+Thx.
+
 -- 
-2.39.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
