@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE386BFFD9
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A49E6BFFDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCSHtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 03:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
+        id S230176AbjCSHta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 03:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCSHtN (ORCPT
+        with ESMTP id S229652AbjCSHtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Mar 2023 03:49:13 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDD317CDE;
-        Sun, 19 Mar 2023 00:49:12 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id le6so9470774plb.12;
-        Sun, 19 Mar 2023 00:49:12 -0700 (PDT)
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A738917CD9;
+        Sun, 19 Mar 2023 00:49:11 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id y2so9317181pjg.3;
+        Sun, 19 Mar 2023 00:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679212152;
+        d=gmail.com; s=20210112; t=1679212151;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sZrlTZviMosYAdumBp1C/rmRwTbY5dbobt3fhT7ZNq4=;
-        b=X+pg4c0mOXxK6FOIAMJ5fIB0gUD19QJRsJpkZldO9Lvj0mN7+oG+QuoGQFkwZzu0AE
-         z6Pk40GIptJ47b76evr2q89mo1zasK44X2GEeyHo/DjnL/v+es7GMBIRMFNbiDLLd5RU
-         TY6p58uv1vcDHdR+I5de5R33053JXpFEKFpv4vRwnBs7NDWQVW0X0sBcAxfT/OlLvEaU
-         TqwT0dBWYoCuB2P0M9Vi69eyt0dMCTjS81umiOiHeZn8JJgfe39PbDe1+rmuuq4I0cjj
-         RupnZ8ukauNxGZ69lbokRo0zrWGdqvYlKa72Js7wLe+wHfUB6KiqaT16y92CpMf7upfL
-         /JKQ==
+        bh=v05rQQaGlo1pyl376I/VtsiDWSss2IkaTyB0UDJtjm0=;
+        b=ciLgT5fY5cTZIJLgLAwox4Aa/6J1AK6tg44G4ZB0dGIjqjYFMKBK5Bk4beuTI0gyC0
+         79gOIRQ5fU2fELyZ9bfu1K6eGx99f+TX2eYafwWCtl/jlcP67NR7ApMZkPXkYpKjh5P5
+         M9JXdZtlU/FrQz2LJWxvXMDwzshLnN/jWzwT3Wu24sx0aq53n854TGo1hA3Bh53x3Ytd
+         t2q4ItydT4gQX0rjB65C21LDpkBMRPG2vum4JAqBClXGVKoU3uh4Ikxbe2ufYZpVApYV
+         utTZbY7ULSmQNR59uDTjY53KSKDkxNh9HPWHURfQrbm5W0pGlYtQ0GbmDa32igY4dSYk
+         zGgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679212152;
+        d=1e100.net; s=20210112; t=1679212151;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sZrlTZviMosYAdumBp1C/rmRwTbY5dbobt3fhT7ZNq4=;
-        b=18D1EzuRr++BFuAp1WbtzcYQ+tD2ErrqoopK3sy+UHgkgFu4HjvmHKDfR02hUl8M22
-         bKM1YWe5ElThCbHZgHpcsZfEcLTaYFEKyqBsbUWQfWjoMfOr0eoOtiMKBh9RWioUbpje
-         XWpmRSBx3oGmUZSk886BGXSK1G4QHnW3XPk4pRh3y1uwAYxiq0xs26o4goel9hVpnUn+
-         yz25+jPkYYMc+a89O1kK0baTD1Ycv0UvU0a3OmZHNsqHfsv7Zuzj4JtdI9UuzF8f/znk
-         PzwY/QpZ8j6XfAkpucbWHyEGtLI3vD7Q1V6NKWaa3iq2t7qaeKBLaSDfAXnWJSFw0RV8
-         2eYA==
-X-Gm-Message-State: AO0yUKUSKXwi6B/GhaFc+p9xot4/GgPlaCvP1dQ4/EeCBIVBFpkurkgH
-        TX79frK8dCz+E1OerJWTUps=
-X-Google-Smtp-Source: AK7set+WLYRvVX9PN/cMN/rjPLFOr21daQFrwvEIa9L6A5+kHYsJszqEgnUoW+fDdfm5HpJYypHBZQ==
-X-Received: by 2002:a05:6a20:6a20:b0:d5:4ae5:b01c with SMTP id p32-20020a056a206a2000b000d54ae5b01cmr16518677pzk.8.1679212151856;
+        bh=v05rQQaGlo1pyl376I/VtsiDWSss2IkaTyB0UDJtjm0=;
+        b=bpd6j2/UbhCM40mFIqBHv/rpoLQ3NQhXUx3L3dwZO959v+CorvK/kOTUDjyuN+0C8h
+         FCDx3FOawalrkup13AR6d1rgwukZ/sx9LT0BgvnW2p44H4BU3yVhnDvMA25yrZsq9/Jw
+         eKZ6QqclIa0BHtbOUSJVHKpwAEBWQVDs4nT6sLVlUNUxv6GJlWbykniXF7sCtd/UDKEv
+         gTYrIijTrYGT6j8W1xqazZOaWSrjrWDeoeZdrhusm4HWl9zGOj4AAFRq6yN/DyAwwc5j
+         85DdOHsaP41+bLEpUvRYIqjGLISWH5uuiEJjmOPwopF2w8ogWwUPbbKt5VoinRKUUsdW
+         f31g==
+X-Gm-Message-State: AO0yUKW7va6u8fJRLdunyuthKqKZgw9tpSs7TVEA00FxIwyThhd+lIJn
+        P7uRgwjmLCqnlAY7vwTNAoQ=
+X-Google-Smtp-Source: AK7set9Tg0zxbyUAYIOpLktcG+E6CTcXT48PPu0KmZnyA413iHs4uzzxBhLAT8t4aQgI8NimPdFm2g==
+X-Received: by 2002:a05:6a20:1bdf:b0:d9:4c19:fe69 with SMTP id cv31-20020a056a201bdf00b000d94c19fe69mr588049pzb.25.1679212151098;
         Sun, 19 Mar 2023 00:49:11 -0700 (PDT)
 Received: from debian.me (subs03-180-214-233-29.three.co.id. [180.214.233.29])
-        by smtp.gmail.com with ESMTPSA id v15-20020a62a50f000000b00592eb6f239fsm4176967pfm.40.2023.03.19.00.49.10
+        by smtp.gmail.com with ESMTPSA id m15-20020a638c0f000000b0050bf6f246edsm4062983pgd.3.2023.03.19.00.49.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 19 Mar 2023 00:49:10 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 1EE99103593; Sun, 19 Mar 2023 14:49:06 +0700 (WIB)
+        id 3F9B210667A; Sun, 19 Mar 2023 14:49:06 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Linux Documentation <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -67,14 +67,14 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         ChiaEn Wu <chiaen_wu@richtek.com>, Lee Jones <lee@kernel.org>,
         ChiYuan Huang <cy_huang@richtek.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/3] Documentation: leds: MT6370: Properly wrap hw_pattern chart
-Date:   Sun, 19 Mar 2023 14:49:02 +0700
-Message-Id: <20230319074903.13075-3-bagasdotme@gmail.com>
+Subject: [PATCH 3/3] Documentation: leds: MT6370: Use bullet lists for timing variables
+Date:   Sun, 19 Mar 2023 14:49:03 +0700
+Message-Id: <20230319074903.13075-4-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230319074903.13075-1-bagasdotme@gmail.com>
 References: <20230319074903.13075-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2990; i=bagasdotme@gmail.com; h=from:subject; bh=swN8Gr8RwqV1p16l7dEo74K7Y92x/GvHgKTiCdSiseE=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCli+/Kbpi1xN1Z88Inlx8HfUsJHkudlrbK7vitb+2pJV XYft0dSRykLgxgXg6yYIsukRL6m07uMRC60r3WEmcPKBDKEgYtTACbCJcLIsIVb6NmFG2x9BVN1 ZX3ez9xnnVFy+Za290H+CN5ZzxJ+hTIynNw+86Ax40apCc7njojf3GlXniBcG33do7HBtu7FybJ dbAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1990; i=bagasdotme@gmail.com; h=from:subject; bh=Ho6JS/QsaewELgY3oj9F2/RDEMc+m0oRO+h4IFBGt1I=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCli+/Idutvs9ILKXzTH+c2Sb2KXPrQkNupbx4KdPBv3H Zz1j/9IRykLgxgXg6yYIsukRL6m07uMRC60r3WEmcPKBDKEgYtTACbiHcnwz8D8CPfLs7vZTl+x 2By96GB8l9jLuGInr+LA951T8q/89mFkeKh1tlf6//VFFp2Lly17tv7be4YjnRMlO95l7/o8mf2 8PC8A
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,61 +87,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pattern diagram (chart) of /sys/class/leds/<led>/hw_pattern is
-wrapped in literal code block. However, the block indentation is
-interrupted by Icurr axis label, hence below warnings:
+The timing description contains list of timing pattern variables, but it
+uses code block without indentation instead. Switch to bullet list as it
+is better fit for this purpose.
 
-Documentation/leds/leds-mt6370-rgb.rst:39: WARNING: Literal block ends without a blank line; unexpected unindent.
-Documentation/leds/leds-mt6370-rgb.rst:41: WARNING: Line block ends without a blank line.
-Documentation/leds/leds-mt6370-rgb.rst:46: WARNING: Unexpected indentation.
-Documentation/leds/leds-mt6370-rgb.rst:44: WARNING: Inline substitution_reference start-string without end-string.
-
-Fix the chart indentation by adding 4 more spaces so that the axis label
-is in the code block.
+While at it, substitute "load" for "duty" because the variables control
+timing for current load into the device.
 
 Link: https://lore.kernel.org/oe-kbuild-all/202303182310.tB1mUzU7-lkp@intel.com/
 Fixes: 4ba9df04b7ac66 ("docs: leds: Add MT6370 RGB LED pattern document")
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/leds/leds-mt6370-rgb.rst | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ Documentation/leds/leds-mt6370-rgb.rst | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/Documentation/leds/leds-mt6370-rgb.rst b/Documentation/leds/leds-mt6370-rgb.rst
-index abf739e448428e..ea782797a06df0 100644
+index ea782797a06df0..152a2e5921724b 100644
 --- a/Documentation/leds/leds-mt6370-rgb.rst
 +++ b/Documentation/leds/leds-mt6370-rgb.rst
-@@ -31,19 +31,19 @@ depending on the current brightness setting.
+@@ -45,17 +45,17 @@ Pattern diagram::
+           +----------------------------------============------------> Time
+           < Tr1><Tr2><   Ton    ><Tf1><Tf2 ><  Toff    >< Tr1><Tr2>
  
- Pattern diagram::
+-Timing description::
++Timing description:
  
--     "0 Tr1 0 Tr2 0 Tf1 0 Tf2 0 Ton 0 Toff" --> '0' for dummy brightness code
-+         "0 Tr1 0 Tr2 0 Tf1 0 Tf2 0 Ton 0 Toff" --> '0' for dummy brightness code
+-Tr1:    First rising time for duty 0 to 30%.
+-Tr2:    Second rising time for duty 31% to 100%.
+-Ton:    On time for duty 100%.
+-Tf1:    First falling time for duty 100% to 31%.
+-Tf2:    Second falling time for duty 30% to 0%.
+-Toff:   Off time for duty 0%.
++  * Tr1:    First rising time for 0% - 30% load.
++  * Tr2:    Second rising time for 31% - 100% load.
++  * Ton:    On time for 100% load.
++  * Tf1:    First falling time for 100% - 31% load.
++  * Tf2:    Second falling time for 30% to 0% load.
++  * Toff:   Off time for 0% load.
  
--      ^
--      |           ============
--      |          /            \                                /
--Icurr |         /              \                              /
--      |        /                \                            /
--      |       /                  \                          /   .....repeat
--      |      /                    \                        /
--      |   ---                      ---                  ---
--      |---                            ---            ---
--      +----------------------------------============------------> Time
--       < Tr1><Tr2><   Ton    ><Tf1><Tf2 ><  Toff    >< Tr1><Tr2>
-+          ^
-+          |           ============
-+          |          /            \                                /
-+    Icurr |         /              \                              /
-+          |        /                \                            /
-+          |       /                  \                          /   .....repeat
-+          |      /                    \                        /
-+          |   ---                      ---                  ---
-+          |---                            ---            ---
-+          +----------------------------------============------------> Time
-+          < Tr1><Tr2><   Ton    ><Tf1><Tf2 ><  Toff    >< Tr1><Tr2>
+-Tr1/Tr2/Tf1/Tf2/Ton: 125ms to 3125ms, 200ms per step.
+-Toff: 250ms to 6250ms, 400ms per step.
++  * Tr1/Tr2/Tf1/Tf2/Ton: 125ms to 3125ms, 200ms per step.
++  * Toff: 250ms to 6250ms, 400ms per step.
  
- Timing description::
+ Pattern example::
  
 -- 
 An old man doll... just what I always wanted! - Clara
