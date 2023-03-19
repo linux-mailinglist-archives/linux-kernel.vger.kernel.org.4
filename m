@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C126C0070
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772136C0074
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCSJz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 05:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S229901AbjCSJ4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 05:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCSJzv (ORCPT
+        with ESMTP id S229621AbjCSJ4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 05:55:51 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BCD23A6E;
-        Sun, 19 Mar 2023 02:55:49 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso5776403wmq.5;
-        Sun, 19 Mar 2023 02:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679219748;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yaNuTTfeHI1WnGa3QC7carZ37ibM4EyUyUnDDBSr6nM=;
-        b=bTf0pdvAUXMqrJw4A+PLFfwONMAaXL3S4GDMJH3tYgRz/0Vpy7FkmgpWveMhjrqiDM
-         O6v17DizCYtzUrLXC9z9mMD3F8tl0SETaor8aE/MtvnxVq/Yq80WT5xnEh0iJBhWnRP1
-         0ZKyuoqWZQPnQ9vXbctEu3ZPxub9szdfmxWCtutESvAIvY7Y1qt4ZGg4ZDexov88P4lN
-         pgP6KaBNSVKSsVlDL4ukHqWyrkzpPtcOmDrPC8/HUTsraFnQ4iOL8vVR2Q26qKf2JI6m
-         yKwAd88ZKSnFRAyGdXAoXqiAKkcmDW5523samaxmBI23gxG5ryD3JnZBlo5r55gnPGo9
-         C0uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679219748;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yaNuTTfeHI1WnGa3QC7carZ37ibM4EyUyUnDDBSr6nM=;
-        b=buUr8oNY3Rb4YRuvXOFLPRXT0v9e8f87X1i1bsLfYPL/CokAJIhwAaChGjvMN1l3zP
-         YCfM9Xynl3tF3k4nrb1xKGmc7LuHONe8KjOgFgFuvtepBg7uvBdwi7A3UmbznhgUpzlo
-         HE7X3S5dfDNX/LLwpOyWM34Hk+w6i6pXP2FD7CB/1TwvdZFjnPHbhDhQTnJQNFaFmXz2
-         d4WxBzxqU6k+4PC4AHRhGkn8QunICQ90MDk9NgNtuT5E1tTh5Bz4ykQ95sKKeTih3OBO
-         sx0mBrCqsTwpteTweNvnMuoOxmyKbM8Ca8cwS1QpfIWI0ASy+j7j2SiTG7nrKl2hUJTW
-         heAQ==
-X-Gm-Message-State: AO0yUKWVY0SzDxRYNSJrKpnV6m176lCPK8B2N12aX56FfpuGNCuaPAmf
-        wYaBrXYVORDSYFVtNsY7gc3xMZp1z+ba7A==
-X-Google-Smtp-Source: AK7set8q+UMyrNpNNfcRo8o3ynviTGRk1oKu2CmzwYJVZxCAYYvXmLtyXvhcnqpBROVi7Kj+1rKDuw==
-X-Received: by 2002:a05:600c:4f50:b0:3ed:4b0f:5378 with SMTP id m16-20020a05600c4f5000b003ed4b0f5378mr11519857wmq.27.1679219747816;
-        Sun, 19 Mar 2023 02:55:47 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id i26-20020a1c541a000000b003ed246f76a2sm13390609wmb.1.2023.03.19.02.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 02:55:47 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     andrew@lunn.ch, f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Subject: [PATCH v2] net: dsa: tag_brcm: legacy: fix daisy-chained switches
-Date:   Sun, 19 Mar 2023 10:55:40 +0100
-Message-Id: <20230319095540.239064-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230317120815.321871-1-noltari@gmail.com>
-References: <20230317120815.321871-1-noltari@gmail.com>
+        Sun, 19 Mar 2023 05:56:33 -0400
+Received: from hyperium.qtmlabs.xyz (hyperium.qtmlabs.xyz [194.163.182.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D285423A7E;
+        Sun, 19 Mar 2023 02:56:23 -0700 (PDT)
+Received: from dong.kernal.eu (unknown [222.254.17.84])
+        by hyperium.qtmlabs.xyz (Postfix) with ESMTPSA id B253C820068;
+        Sun, 19 Mar 2023 10:56:21 +0100 (CET)
+Received: from [172.20.10.2] (unknown [27.67.137.222])
+        by dong.kernal.eu (Postfix) with ESMTPSA id 37D4044496AC;
+        Sun, 19 Mar 2023 16:56:17 +0700 (+07)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=syka;
+        t=1679219777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJI5NqP+7UPBiESx9Y6xUHlCLtPOkNMX1Uu0kNfBbrk=;
+        b=B+LOu8hbwgyeI82gMu/DdcpT2Wmc2CB+RCXcIDMGqCsecbSWz7233uAXkwYDs5RWsFKx0I
+        Bke44w9C2XuiBbJfeIkanCfJT3Twdw2qGuhhhcjSUFjWXJ2SYJiKpiCW8BJFNTy2sSts0D
+        hYkpGvFaTmijfE7lzUSCjWg9uDQgRarkiNLCx3MXtdnlsoHYpCCuNUKmpjcdlunaWz8FgQ
+        ymhmD6hmYbdeoV3RviqLx7Q7w5nKJYmtCXBMEvkXfD556QxTkNYbmJAtJientZhLo5LzQc
+        ZHPdIMuxgig9Qa47WgIPxUfb2LEg/hZ6+HnxYhHxOv7Rem4Jhf5PVOyuPV1yFw==
+Message-ID: <1fd818c2-4e68-8760-9123-de4fa1920c6b@qtmlabs.xyz>
+Date:   Sun, 19 Mar 2023 16:56:11 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] input: alps: fix compatibility with -funsigned-char
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     stable@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
+From:   msizanoen <msizanoen@qtmlabs.xyz>
+In-Reply-To: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When BCM63xx internal switches are connected to switches with a 4-byte
-Broadcom tag, it does not identify the packet as VLAN tagged, so it adds one
-based on its PVID (which is likely 0).
-Right now, the packet is received by the BCM63xx internal switch and the 6-byte
-tag is properly processed. The next step would to decode the corresponding
-4-byte tag. However, the internal switch adds an invalid VLAN tag after the
-6-byte tag and the 4-byte tag handling fails.
-In order to fix this we need to remove the invalid VLAN tag after the 6-byte
-tag before passing it to the 4-byte tag decoding.
+Patch confirmed working as expected on real hardware.
 
-Fixes: 964dbf186eaa ("net: dsa: tag_brcm: add support for legacy tags")
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
----
- v2: add missing fixes tag.
+Tested-by: msizanoen <msizanoen@qtmlabs.xyz>
 
- net/dsa/tag_brcm.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/net/dsa/tag_brcm.c b/net/dsa/tag_brcm.c
-index 10239daa5745..cacdafb41200 100644
---- a/net/dsa/tag_brcm.c
-+++ b/net/dsa/tag_brcm.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/dsa/brcm.h>
- #include <linux/etherdevice.h>
-+#include <linux/if_vlan.h>
- #include <linux/list.h>
- #include <linux/slab.h>
- 
-@@ -252,6 +253,7 @@ static struct sk_buff *brcm_leg_tag_xmit(struct sk_buff *skb,
- static struct sk_buff *brcm_leg_tag_rcv(struct sk_buff *skb,
- 					struct net_device *dev)
- {
-+	int len = BRCM_LEG_TAG_LEN;
- 	int source_port;
- 	u8 *brcm_tag;
- 
-@@ -266,12 +268,16 @@ static struct sk_buff *brcm_leg_tag_rcv(struct sk_buff *skb,
- 	if (!skb->dev)
- 		return NULL;
- 
-+	/* VLAN tag is added by BCM63xx internal switch */
-+	if (netdev_uses_dsa(skb->dev))
-+		len += VLAN_HLEN;
-+
- 	/* Remove Broadcom tag and update checksum */
--	skb_pull_rcsum(skb, BRCM_LEG_TAG_LEN);
-+	skb_pull_rcsum(skb, len);
- 
- 	dsa_default_offload_fwd_mark(skb);
- 
--	dsa_strip_etype_header(skb, BRCM_LEG_TAG_LEN);
-+	dsa_strip_etype_header(skb, len);
- 
- 	return skb;
- }
--- 
-2.30.2
-
+On 3/18/23 21:42, msizanoen wrote:
+> The AlpsPS/2 code previously relied on the assumption that `char` is a
+> signed type, which was true on x86 platforms (the only place where this
+> driver is used) before kernel 6.2. However, on 6.2 and later, this
+> assumption is broken due to the introduction of -funsigned-char as a new
+> global compiler flag.
+>
+> Fix this by explicitly specifying the signedness of `char` when sign
+> extending the values received from the device.
+>
+> Fixes: f3f33c677699 ("Input: alps - Rushmore and v7 resolution support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: msizanoen <msizanoen@qtmlabs.xyz>
+> ---
+>   drivers/input/mouse/alps.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/input/mouse/alps.c b/drivers/input/mouse/alps.c
+> index 989228b5a0a4..1c570d373b30 100644
+> --- a/drivers/input/mouse/alps.c
+> +++ b/drivers/input/mouse/alps.c
+> @@ -2294,20 +2294,20 @@ static int alps_get_v3_v7_resolution(struct psmouse *psmouse, int reg_pitch)
+>   	if (reg < 0)
+>   		return reg;
+>   
+> -	x_pitch = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+> +	x_pitch = (signed char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+>   	x_pitch = 50 + 2 * x_pitch; /* In 0.1 mm units */
+>   
+> -	y_pitch = (char)reg >> 4; /* sign extend upper 4 bits */
+> +	y_pitch = (signed char)reg >> 4; /* sign extend upper 4 bits */
+>   	y_pitch = 36 + 2 * y_pitch; /* In 0.1 mm units */
+>   
+>   	reg = alps_command_mode_read_reg(psmouse, reg_pitch + 1);
+>   	if (reg < 0)
+>   		return reg;
+>   
+> -	x_electrode = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+> +	x_electrode = (signed char)(reg << 4) >> 4; /* sign extend lower 4 bits */
+>   	x_electrode = 17 + x_electrode;
+>   
+> -	y_electrode = (char)reg >> 4; /* sign extend upper 4 bits */
+> +	y_electrode = (signed char)reg >> 4; /* sign extend upper 4 bits */
+>   	y_electrode = 13 + y_electrode;
+>   
+>   	x_phys = x_pitch * (x_electrode - 1); /* In 0.1 mm units */
