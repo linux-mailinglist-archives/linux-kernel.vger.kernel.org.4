@@ -2,76 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF3E6C04BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7133D6C04C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCSUQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 16:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S229964AbjCSUU5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 16:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjCSUQj (ORCPT
+        with ESMTP id S229805AbjCSUU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 16:16:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407151B552;
-        Sun, 19 Mar 2023 13:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wRqe5vhNuDvhiga63gy5h46j0EPNOE641nmmHAf6FaI=; b=pCUH/YZz/lU+SgEhgoEzLz+lLj
-        /Qm5GtTRnpRcdY1BxLzMRD3AEnxa5FXFcW+vN1e4cvj8ONuA5cgs4/4VVIj0K/1OyyI2Xg4HJHJwr
-        NpTE8hnH70C8TPXWhBxKDCUi7H8jD/PXMPEhjlpkrMGD7l+y3KWBFAYdoJpr9w2oyXl78pMo9A+B1
-        QNCUZUDNAE97Uc+aeahPuGJG61pV+jsiGY5HRO3DIiY8sieV8LV4Sq0v3egSK8lAoJjTnqZd86dmj
-        0Ws/GeNb2zzXk3IVFyD9/mRTYQoPQ1umqi1+NhDIDil+By5ywmrm7HyzlcSkmqB6bc2RdiQE41cNp
-        FwjoJQ4w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pdzSG-000MRs-5r; Sun, 19 Mar 2023 20:16:36 +0000
-Date:   Sun, 19 Mar 2023 20:16:36 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 16/36] mips: Implement the new page table range API
-Message-ID: <ZBdtpHnGFIpwpo6D@casper.infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-17-willy@infradead.org>
- <20230315105022.GA9850@alpha.franken.de>
- <ZBIrkW5EB/uHj4sm@casper.infradead.org>
- <20230317152920.GA11653@alpha.franken.de>
- <20230319184536.GA6491@alpha.franken.de>
+        Sun, 19 Mar 2023 16:20:56 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251D415C88;
+        Sun, 19 Mar 2023 13:20:55 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pdzWO-002KDy-Vi; Sun, 19 Mar 2023 21:20:53 +0100
+Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pdzWO-0034jb-H0; Sun, 19 Mar 2023 21:20:52 +0100
+Message-ID: <2186c0e97e6747e71ebceade317f88a7cc016772.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
+Date:   Sun, 19 Mar 2023 21:20:51 +0100
+In-Reply-To: <20230306040037.20350-7-rdunlap@infradead.org>
+References: <20230306040037.20350-1-rdunlap@infradead.org>
+         <20230306040037.20350-7-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319184536.GA6491@alpha.franken.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.155.194
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 07:45:36PM +0100, Thomas Bogendoerfer wrote:
-> On Fri, Mar 17, 2023 at 04:29:20PM +0100, Thomas Bogendoerfer wrote:
-> > hmm, not sure if that would help. R4k style TLB has two PTEs mapped
-> > per TLB entry. So by advancing per page __update_tlb() is called more
-> > often than needed.
+On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+> SYS_SUPPORTS_SMP and SMP.
 > 
-> btw. how big is nr going to be ? There are MIPS SoCs out there, which
-> just have 16 TLBs...
+> kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
+> code + data inside topology.c is only built when CONFIG_NUMA is
+> set/enabled, so these arch/sh/ configs need to select SMP and
+> SYS_SUPPORTS_SMP to build the NUMA support.
+> 
+> Fixes this build error in multiple SUPERH configs:
+> 
+> mm/page_alloc.o: In function `get_page_from_freelist':
+> page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
+> 
+> Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
+> Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: linux-sh@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> ---
+> v2: skipped
+> v3: skipped
+> v4: refresh & resend
+> 
+>  arch/sh/Kconfig |    4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff -- a/arch/sh/Kconfig b/arch/sh/Kconfig
+> --- a/arch/sh/Kconfig
+> +++ b/arch/sh/Kconfig
+> @@ -477,6 +477,8 @@ config CPU_SUBTYPE_SH7722
+>  	select CPU_SHX2
+>  	select ARCH_SHMOBILE
+>  	select ARCH_SPARSEMEM_ENABLE
+> +	select SYS_SUPPORTS_SMP
+> +	select SMP
+>  	select SYS_SUPPORTS_NUMA
+>  	select SYS_SUPPORTS_SH_CMT
+>  	select PINCTRL
+> @@ -487,6 +489,8 @@ config CPU_SUBTYPE_SH7366
+>  	select CPU_SHX2
+>  	select ARCH_SHMOBILE
+>  	select ARCH_SPARSEMEM_ENABLE
+> +	select SYS_SUPPORTS_SMP
+> +	select SMP
+>  	select SYS_SUPPORTS_NUMA
+>  	select SYS_SUPPORTS_SH_CMT
+>  
 
-Oof.  The biggest we're going to see for now is one less than PTRS_PER_PMD
-(that'd be a PMD-sized allocation that's mapped askew with 1 page in
-one PMD and n-1 pages in the adjacent PMD).  That'd be 511 on x86 and
-I presume something similar on MIPS.  More than 16, for sure.
+It seems that we need this change for these configurations as well:
 
-Now, this isn't a new problem with this patchset.  With fault-around,
-we already call set_pte_at() N times.  And we don't say which ones are
-speculative entries vs the one actually faulted in.
+- config CPU_SHX3
+- config CPU_SUBTYPE_SH7785
 
-But let's see if we can fix it.  What if we passed in the vmf?  That would
-give you the actual faulting address, so you'd know to only put the PTE
-into the Linux page tables and not go as far as putting it into the TLB.
-Open to other ideas.
+Although I can trigger a build failure for CPU_SUBTYPE_SH7785 only when
+setting CONFIG_NUMA=y:
+
+  CC      net/ipv6/addrconf_core.o
+mm/slab.c: In function 'slab_memory_callback':
+mm/slab.c:1127:23: error: implicit declaration of function 'init_cache_node_node'; did you mean 'drain_cache_node_node'? [-Werror=implicit-function-declaration]
+ 1127 |                 ret = init_cache_node_node(nid);
+      |                       ^~~~~~~~~~~~~~~~~~~~
+      |                       drain_cache_node_node
+
+I would expect this error to be reproducible for CPU_SHX3 as well when
+CONFIG_NUMA=y but CONFIG_SMP=n. But for some reason, I am not seeing
+the error then.
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
