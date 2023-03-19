@@ -2,80 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D716C0212
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A386C0215
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCSNfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 09:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S230420AbjCSNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjCSNfp (ORCPT
+        with ESMTP id S230320AbjCSNg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 09:35:45 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F12D213D;
-        Sun, 19 Mar 2023 06:35:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r11so37250447edd.5;
-        Sun, 19 Mar 2023 06:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679232942;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OONIH1D7qhWXmBLsQSfk+4Z7i5B3RC/IvZy6Bcubp2A=;
-        b=Npf9iEDWWvQ5MGBmJdUO1PLLTxfKmG7zkXlCzIsqV91a2j668WG3XyaYgArWmjYYZe
-         uYqcp1kTOKvk/LT6BgiyW4trh5AI0TXHRa2ySeAUwlu3qkJC9JAEKc2Tf5pPkKRu7Hev
-         GEI7qbwpcLVP+rMn/qis2Wszq49Co8mMxF7T8M0Zg282slbZ253QZK5pvSVB6hqq1J8P
-         7WBlF2rFKm47uVIJyQzY0KGzt8aQGCfNM3Efm2Gy8fvAHBtVTjPNLCnbfs00cCjzMbIv
-         YBOivUhrz5gf2EKxp4/vUY6nbgFLhs48dQuSg/vnhull26vjOna46wlSVwAXsZFaFPwa
-         0rTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679232942;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OONIH1D7qhWXmBLsQSfk+4Z7i5B3RC/IvZy6Bcubp2A=;
-        b=tSNtU0mkzKhwCCG3effS4OpsT1ikbE+KyjtADs+gk19AcJEmN5/So3kmnYOUvKZCzw
-         cXaU6nSkw4hPoS/Uauw+6Opy2FY7ZgkjvpULaRWcumao+jWkx9jAobdFwwuhZtyE++aD
-         TBCXNDcieT/FXyf/y8T/q+/nSuPlw2Z5I6HqUv8wlCUllUuhA+EHdAuVRRtNlMHyivd1
-         t1Pd6m1C0JZ4Zve1hMm9NMtynFMRigXf2NMoaP2uQodjCG9FrQyrQaWBYRYyc7chwZZD
-         9PvjhLCNHu9U1FJokbG2TzNTNq75CUTl6TeIWPKSfGcd9ViEdl5184iAwXZ7U9JIGuou
-         m3aA==
-X-Gm-Message-State: AO0yUKVIrNO4KuFURarYRl/ctlQ/lGSY3oBKxYZVANmwj78/UdUH0bso
-        LgmxMQf96U5lI9Kqr4AzF2w=
-X-Google-Smtp-Source: AK7set+B8LPEKjULFdvHlWgYfG6M20ZKjWli5A0+zCb2CEo7sCX+Go+G4oJf1/FZ/tbGoC+s/1sp6A==
-X-Received: by 2002:a17:906:361b:b0:932:35b1:47fa with SMTP id q27-20020a170906361b00b0093235b147famr5760948ejb.64.1679232941960;
-        Sun, 19 Mar 2023 06:35:41 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm3250587eju.193.2023.03.19.06.35.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 06:35:41 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 15:35:39 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marek =?utf-8?B?QmVow7pu?= <marek.behun@nic.cz>
-Cc:     Klaus Kudielka <klaus.kudielka@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 4/4] net: dsa: mv88e6xxx: mask apparently
- non-existing phys during probing
-Message-ID: <20230319133539.qc24xztkwfuadrn7@skbuf>
-References: <20230315163846.3114-1-klaus.kudielka@gmail.com>
- <20230315163846.3114-5-klaus.kudielka@gmail.com>
- <20230319110606.23e30050@thinkpad>
+        Sun, 19 Mar 2023 09:36:28 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842BD10B;
+        Sun, 19 Mar 2023 06:36:25 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Ve8VpRZ_1679232982;
+Received: from 30.0.143.175(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0Ve8VpRZ_1679232982)
+          by smtp.aliyun-inc.com;
+          Sun, 19 Mar 2023 21:36:22 +0800
+Message-ID: <167179d0-e1ea-39a8-4143-949ad57294c2@linux.alibaba.com>
+Date:   Sun, 19 Mar 2023 21:36:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH] RDMA/erdma: Fix exception handling in
+ erdma_accept_newconn()
+Content-Language: en-US
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kai Shen <kaishen@linux.alibaba.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>
+Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <f0f96f74-21d1-f5bf-1086-1c3ce0ea18f5@web.de>
+From:   Cheng Xu <chengyou@linux.alibaba.com>
+In-Reply-To: <f0f96f74-21d1-f5bf-1086-1c3ce0ea18f5@web.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230319110606.23e30050@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,8 +50,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 11:06:06AM +0100, Marek Beh�n wrote:
->   ~GENMASK(chip->info->phy_base_addr + mv88e6xxx_num_ports(chip),
->            chip->info->phy_base_addr)
 
-But it needs to be ~GENMASK(base + num - 1, base), no?
+
+On 3/19/23 4:15 AM, Markus Elfring wrote:
+> Date: Sat, 18 Mar 2023 21:08:58 +0100
+> 
+
+<...>
+
+> +disassoc_socket:
+> +    erdma_socket_disassoc(new_s);
+> +    sock_release(new_s);
+> +    new_cep->state = ERDMA_EPSTATE_CLOSED;
+> +    erdma_cancel_mpatimer(new_cep);
+> +put_cep:
+> +    erdma_cep_put(new_cep);> +    new_cep->sock = NULL;
+
+Thanks, but this causes an use-after-free issue because new_cep will be
+released after last erdma_cep_put being called.
+
+Cheng Xu
+
+>  }
+>  
+>  static int erdma_newconn_connected(struct erdma_cep *cep)
