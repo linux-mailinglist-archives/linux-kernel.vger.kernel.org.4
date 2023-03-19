@@ -2,104 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E186C00F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8ABA6C00F8
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjCSLmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 07:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S230280AbjCSLqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 07:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjCSLma (ORCPT
+        with ESMTP id S230098AbjCSLqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 07:42:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EB823647
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:42:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B32FE60FCF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 11:42:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9254C433D2;
-        Sun, 19 Mar 2023 11:42:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679226146;
-        bh=3Ae5b1cM6n8dUopEW2/hVH5kWClmHMJCBK1/s5YMwP0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jpHhyinUPVEMDa7Bt5tUDUQt7uPQvb5YR+li6BaYImkNbTNB9nCB17Bc0d6npSG7H
-         cmuw83vRra+IXFNs0Wqb44B2bvoXZPRrXSYHsAd3pxaPTiElPKRNCc2QXRWak00OPG
-         8Y/AsZ7gmwKX65vkZsOeQPWF4A6bF89ey4ZNC3UxGjcq9PDJw3bENhEoq/xJurnf3+
-         bXxrB5OqDODukOS0mC75E0s/JjNPD7oMTH5899IMPU4mYDmhJudZtojJrCFwmlX8W9
-         M5QPhU7GYiVABKK6xnM86y+cCsrT0O6H+SJh33AL77vAXcuTsFt7p1bkqTQdkRJ3e+
-         WYDqYPiWMnK5Q==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: move get_page_from_free_area() to mm/page_alloc.c
-Date:   Sun, 19 Mar 2023 13:42:14 +0200
-Message-Id: <20230319114214.2133332-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 19 Mar 2023 07:46:45 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A7919116
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=1IZ/KAw5saCbQvg06OT7S25vtZZN9V8w6z1PpAAdwxc=;
+  b=KEtefP0PNcPwq6E4Xc+0+EplzDXLqBzyHWTGunZyFXUPMQgB1noFZhYN
+   tQmHHISy8FVu4FBYovEGleWX+PGdQhtYckggzdwh8t0pk3jHObWi+Nt5m
+   yNLxK+V/XkmYyEZkFE9Msnbpdv6mFOPr1USw788p888LYAwQa74cNeO/l
+   s=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,273,1673910000"; 
+   d="scan'208";a="50605869"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 12:46:42 +0100
+Date:   Sun, 19 Mar 2023 12:46:41 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, greybus-dev@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: greybus: add blank line after struct
+In-Reply-To: <6cc1e2f7-e971-b195-acba-9b4c136aa16b@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2303191246190.2867@hadrien>
+References: <20230319110831.39931-1-eng.mennamahmoud.mm@gmail.com> <alpine.DEB.2.22.394.2303191216240.2867@hadrien> <15e81411-e40f-43c5-bb7f-907d6d5f93c5@gmail.com> <alpine.DEB.2.22.394.2303191235580.2867@hadrien>
+ <6cc1e2f7-e971-b195-acba-9b4c136aa16b@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-996529056-1679226402=:2867"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The get_page_from_free_area() helper is only used in mm/page_alloc.c so
-move it there to reduce noise in include/linux/mmzone.h
+--8323329-996529056-1679226402=:2867
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- include/linux/mmzone.h | 7 -------
- mm/page_alloc.c        | 7 +++++++
- 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 96599cb9eb62..8f5a9e2c722a 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -108,13 +108,6 @@ struct free_area {
- 	unsigned long		nr_free;
- };
- 
--static inline struct page *get_page_from_free_area(struct free_area *area,
--					    int migratetype)
--{
--	return list_first_entry_or_null(&area->free_list[migratetype],
--					struct page, lru);
--}
--
- static inline bool free_area_empty(struct free_area *area, int migratetype)
- {
- 	return list_empty(&area->free_list[migratetype]);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 87d760236dba..2e72fdbdd8db 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1048,6 +1048,13 @@ static inline void del_page_from_free_list(struct page *page, struct zone *zone,
- 	zone->free_area[order].nr_free--;
- }
- 
-+static inline struct page *get_page_from_free_area(struct free_area *area,
-+					    int migratetype)
-+{
-+	return list_first_entry_or_null(&area->free_list[migratetype],
-+					struct page, lru);
-+}
-+
- /*
-  * If this is not the largest possible page, check if the buddy
-  * of the next-highest order is free. If it is, it's possible
 
-base-commit: 4018ab1f7cec061b8425737328edefebdc0ab832
--- 
-2.35.1
+On Sun, 19 Mar 2023, Menna Mahmoud wrote:
 
+>
+> On ١٩/٣/٢٠٢٣ ١٣:٣٦, Julia Lawall wrote:
+> >
+> > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+> >
+> > > On ١٩/٣/٢٠٢٣ ١٣:١٩, Julia Lawall wrote:
+> > > > On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+> > > >
+> > > > > add blank line after struct for readability as
+> > > > The log message should start with a capital letter, so "Add".
+> > >
+> > > Okay, I will fix it.
+> > >
+> > > > > reported by checkpatch script
+> > > > "reported by checkpatch" or "reported by the checkpatch script".
+> > > > The first is more concise, and it doesn't really matter whether
+> > > > checkpatch
+> > > > is a script or something else.
+> > >
+> > > got it.
+> > >
+> > > > > " CHECK: Please use a blank line after function/struct/union/enum
+> > > > > declarations"
+> > > > I guess the #define was concatenated to the end of the definition to
+> > > > show
+> > > > that it is closely related to the definition.  With the #define, it
+> > > > seems
+> > > > rather natural, but the better soltution would be to make a static
+> > > > inline
+> > > > function in both cases.  There would naturally be a blank line before a
+> > > > function definition as well.
+> > >
+> > > got your point, so, should i ignore this?
+> > Not sure what you mean by ignore.  If you rewrite the #define as a
+> > function, an use the natural placement for a function definition, then the
+> > checkpatch warning will go away as a side effect.
+>
+>
+> I mean ignore this patch and make another patch with rewrite #define as you
+> suggested.
+
+Yes :)  That's fine ("drop" would be better than "ignore").
+
+julia
+
+>
+>
+> Menna
+>
+> >
+> > julia
+> >
+> > >
+> > > Menna
+> > >
+> > > > julia
+> > > >
+> > > > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> > > > > ---
+> > > > >    drivers/staging/greybus/gbphy.h | 2 ++
+> > > > >    1 file changed, 2 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/staging/greybus/gbphy.h
+> > > > > b/drivers/staging/greybus/gbphy.h
+> > > > > index d4a225b76338..1de510499480 100644
+> > > > > --- a/drivers/staging/greybus/gbphy.h
+> > > > > +++ b/drivers/staging/greybus/gbphy.h
+> > > > > @@ -15,6 +15,7 @@ struct gbphy_device {
+> > > > >    	struct list_head list;
+> > > > >    	struct device dev;
+> > > > >    };
+> > > > > +
+> > > > >    #define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> > > > >
+> > > > >    static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+> > > > > @@ -43,6 +44,7 @@ struct gbphy_driver {
+> > > > >
+> > > > >    	struct device_driver driver;
+> > > > >    };
+> > > > > +
+> > > > >    #define to_gbphy_driver(d) container_of(d, struct gbphy_driver,
+> > > > > driver)
+> > > > >
+> > > > >    int gb_gbphy_register_driver(struct gbphy_driver *driver,
+> > > > > --
+> > > > > 2.34.1
+> > > > >
+> > > > >
+> > > > >
+> > >
+>
+--8323329-996529056-1679226402=:2867--
