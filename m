@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B08F6BFF59
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 06:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF11F6BFF5B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 06:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCSFCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 01:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S230015AbjCSFJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 01:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjCSFCJ (ORCPT
+        with ESMTP id S229553AbjCSFJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 01:02:09 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4160F24128;
-        Sat, 18 Mar 2023 22:02:07 -0700 (PDT)
+        Sun, 19 Mar 2023 01:09:44 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC38A12BD3;
+        Sat, 18 Mar 2023 22:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=RPdxJ
-        +mggNVvNyWTw6rxBmgJTkEjs/LtozH8QDPxzBM=; b=fe/7kvXIGCRazXfVwolvG
-        xWZjeYN8MJFLRFx5zVfk4n821yTO/vQ6ioQTF1Z5rwB/mUK61i8w88U2pV5OH44S
-        Sp42MW8l67kD4jctPbmzY6/jCgDATrEhntnSibVOgiJQDq5hEmygsdfRmJeLkP0N
-        XAxH4T7V9MqgXobEQ0fryI=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EV8Co
+        y6UpeuOXMoDGXrNwPbs5KH0GOFsMnyQWDyA7a0=; b=CtY/mmYq1ri7zfUThaGP3
+        p/JicKlzuTo1dDD3O7lrqyO+ld0b+OQ+fpYdzoRaQqGBCbTF+kJMxtq29q+mb/3c
+        WKsKSeN6vbN2k9xcFn9wUbr+BFXdx1L4OiefvKiE4/9uljOqSaIlQwHKRmubbz7L
+        SH3VRSLzoP0hYVzojUX4KI=
 Received: from lizhe.. (unknown [120.245.132.192])
-        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wBXhbYrlxZkv1DwAQ--.18069S4;
-        Sun, 19 Mar 2023 13:01:55 +0800 (CST)
+        by zwqz-smtp-mta-g1-1 (Coremail) with SMTP id _____wC3bLHZmBZkflf2AQ--.3614S4;
+        Sun, 19 Mar 2023 13:09:00 +0800 (CST)
 From:   Lizhe <sensor1010@163.com>
-To:     kwankhede@nvidia.com, alex.williamson@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lizhe <sensor1010@163.com>
-Subject: [PATCH v1] vfio/mdev: Remove redundant driver match function
-Date:   Sun, 19 Mar 2023 13:01:30 +0800
-Message-Id: <20230319050130.360515-1-sensor1010@163.com>
+To:     wintera@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lizhe <sensor1010@163.com>
+Subject: [PATCH v1] net/iucv: Remove redundant driver match function
+Date:   Sun, 19 Mar 2023 13:08:40 +0800
+Message-Id: <20230319050840.377727-1-sensor1010@163.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXhbYrlxZkv1DwAQ--.18069S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jr1kAr4DtrW7ZF4rXr1kZrb_yoWDtFX_Ca
-        4UZFZ7Wry5Gr1rtFnaqFWIvr9Fk3WDXrsYqF4Fqasayr1xX3WrZF4qqrsFqw1UZ34rAan8
-        ur15Xr4IvrWUWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRNZ2-DUUUUU==
+X-CM-TRANSID: _____wC3bLHZmBZkflf2AQ--.3614S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jr1kAr4DGr47Kr1kXrW5ZFb_yoW3ZFXE93
+        4xZFn7Wrn2k3Z7Jan7Z395ArnFka1kGF4rWw4Sqasayw18W348Xw4vqrsxta4YgrWrCFZ8
+        C3srJr4UA347WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKSdyUUUUUU==
 X-Originating-IP: [120.245.132.192]
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdAg3q1gi5motTgAAs1
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiKBA3q17WMXDXKAAAsS
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,38 +56,32 @@ If there is no driver match function, the driver core assumes that each
 candidate pair (driver, device) matches, see driver_match_device().
 
 Drop the bus's match function that always returned 1 and so
-implements the same behaviour as when there is no match function.
+implements the same behaviour as when there is no match function
 
 Signed-off-by: Lizhe <sensor1010@163.com>
 ---
- drivers/vfio/mdev/mdev_driver.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ net/iucv/iucv.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/vfio/mdev/mdev_driver.c b/drivers/vfio/mdev/mdev_driver.c
-index 7825d83a55f8..fafa4416aad9 100644
---- a/drivers/vfio/mdev/mdev_driver.c
-+++ b/drivers/vfio/mdev/mdev_driver.c
-@@ -31,20 +31,10 @@ static void mdev_remove(struct device *dev)
- 		drv->remove(to_mdev_device(dev));
- }
+diff --git a/net/iucv/iucv.c b/net/iucv/iucv.c
+index fc3fddeb6f36..7dd15dead88e 100644
+--- a/net/iucv/iucv.c
++++ b/net/iucv/iucv.c
+@@ -62,14 +62,8 @@
+ #define IUCV_IPNORPY	0x10
+ #define IUCV_IPALL	0x80
  
--static int mdev_match(struct device *dev, struct device_driver *drv)
+-static int iucv_bus_match(struct device *dev, struct device_driver *drv)
 -{
--	/*
--	 * No drivers automatically match. Drivers are only bound by explicit
--	 * device_driver_attach()
--	 */
 -	return 0;
 -}
 -
- struct bus_type mdev_bus_type = {
- 	.name		= "mdev",
- 	.probe		= mdev_probe,
- 	.remove		= mdev_remove,
--	.match		= mdev_match,
+ struct bus_type iucv_bus = {
+ 	.name = "iucv",
+-	.match = iucv_bus_match,
  };
+ EXPORT_SYMBOL(iucv_bus);
  
- /**
 -- 
 2.34.1
 
