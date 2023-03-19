@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF8C6C00B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429DD6C00B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjCSLGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 07:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S229911AbjCSLIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 07:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCSLGS (ORCPT
+        with ESMTP id S229441AbjCSLIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 07:06:18 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B999D1A94E
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:06:16 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b20so3519778edd.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:06:16 -0700 (PDT)
+        Sun, 19 Mar 2023 07:08:39 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D0E3A8E
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:08:37 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w9so36536872edc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:08:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679223975;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nBClyZjqzsvX4XcfHoxPbXuLX0hX3wAS1PzOKSKD6qY=;
-        b=ceb14UefHIQse6qb+4nApgrCDxC15oK3YeIPm2+MmmsGD8IwI0epyP4s1DrZRVh4+z
-         tDMNWO8qp2S/FF3ZEHUiYhrXpnGblatsi3NTCkdn2zlwft/GR2xbZZAmP5MKQilvO+YL
-         iYMiFFzQZeMdlJBZEevViB0gbnkaXeorGwfdenxCnmIzAiu263JG/VKI5Ww2jCcSKYHS
-         fOkJZBuu8JZE2tKdnGw15pq8s5nNQMcuHm+C6TEi+aJ+j3C0spIAt0wP4OQFrSNV6lV4
-         atEKzpj+jSIZ35pcza41zU6NmuZ0H0qp/cakvd5pgYJJQXICgZlF4lekabXndN2ijX2H
-         bGpw==
+        d=gmail.com; s=20210112; t=1679224116;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KvKtR1SyAlL8ZclsQUDCqvyh4Wf6MUHzliuNE/yYx4s=;
+        b=EWqzApqKGHadxWZtuIft3/9k1Z/U4tnCN8u/aqfrNv6utosGaFw523fJ6leRaqEll4
+         EQ28CbfFXGQMNlxErCoLR+Qk5RC/HUMST2x7w6ufa6xR/Xo1z0LJM3VfO/JgBUrCEvso
+         FTyn+GRt1ath2vas19mi3uVsa9U11EzxEPdR/ZwUw/WaQaV1mELNtTGWjT4q0euhB9i/
+         rC36xSR3eVmaTVjGyeUUfk0Aja3WyroUNB+dVS8kdiMfVjFOkL6GqeN1gef7vJO9Dd2E
+         qnCkh9xFyemZ1n+yg03sgw0m633doI8TJyS3h1BdE+4u7pnuI4oRPMKDyEIBe3twjMSf
+         yU5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679223975;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBClyZjqzsvX4XcfHoxPbXuLX0hX3wAS1PzOKSKD6qY=;
-        b=VpZoVL8KEfCNtR9fzfZ4pHGf+kd6woz1068fB6BL+9UFsE+cy/i8wnNGCMjB9bAk+Z
-         /2FxM1RXOPbWdzyWNK2GPJYQ4u3nuIXR0nUvepmlwwfHxn5V/dipdD4vdzOi+FLy1L4U
-         r8ewXdVm+nREU8ISXStHiai9vqXXewDQlnWg1/hp8oiTEvepEU8sKZMVtFMrsUMR8x6/
-         edoe0fCPOciWzM7zTgMVZcJbzbfm7ItC/18VsQsSgOMh8K6+B98Uh9nQ1smJebfT7W1i
-         uLliaJuYL6pFGB5HaAxLdQgnafJ65pW5dRZaYcdzpm2VAaZ+4ptZoms2pIaOhSiRaeWg
-         i8rw==
-X-Gm-Message-State: AO0yUKXneF8CFCuAjE22j9fUmZXW8Jseqvl9RFMSzXQEBLcSJl44ADt0
-        TaElCk6nt3mLPUoAJUGalmZzGA==
-X-Google-Smtp-Source: AK7set+09rHLmfBFB8O9udJ+850QNdD95CbOHTD0fZ1NophhDuk/Rlf/ZKLukSxggEy5xfDNzUMgfw==
-X-Received: by 2002:a50:ff17:0:b0:4fa:b302:84d9 with SMTP id a23-20020a50ff17000000b004fab30284d9mr9364725edu.14.1679223975316;
-        Sun, 19 Mar 2023 04:06:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id s29-20020a50d49d000000b004fc2a75c6b3sm3376851edi.23.2023.03.19.04.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 04:06:14 -0700 (PDT)
-Message-ID: <87171ab8-9c6d-3978-6d34-4ae922361307@linaro.org>
-Date:   Sun, 19 Mar 2023 12:06:13 +0100
+        d=1e100.net; s=20210112; t=1679224116;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KvKtR1SyAlL8ZclsQUDCqvyh4Wf6MUHzliuNE/yYx4s=;
+        b=JWkEWUx0soUE8vtCOWLcxI7g9NVq2EG7teFKEnSYecz+ME+rd+GtnS4+FM3F9l+ZXh
+         0W33THcqjujHT/e59ur381BfGDi2XEOjOwVyqmGLCuz1+LRbYkaHUHPnMN3FfsZeM07k
+         ofvdfHTXiRG5UO3EY4tlRaradHyA29//oaJOABoqZr+AhanCPhMF4Ao5/n6wVUzg0NFc
+         jSQ7eIKDK3QSx9gogUdVi7P+OncIURFL4XbTJDVkVzgIom1o9yL0e1hBoVpsI+5UMd5N
+         iSZ26sd2/oxydtut2B+ofmC0iQNQjUhnkD7oq0blN4iCG/YLn164LztAhedPaJeU6PYU
+         gc9Q==
+X-Gm-Message-State: AO0yUKWo6z8dnkD3CsRZ49NYWOhKQXOrAcsH1RvK1+n5Fh2F/MN9Q1Rw
+        hEGvygma5fNxxuq3rNrVO0s=
+X-Google-Smtp-Source: AK7set+M2KsLZ2J+fCSTK7GAzj2ZqhFqHG2PxlB63b1Ee3POlZ7DfjOfSQV70skSwAKtdTXkkftrew==
+X-Received: by 2002:a17:906:1991:b0:92e:c4c9:7a43 with SMTP id g17-20020a170906199100b0092ec4c97a43mr5679412ejd.25.1679224116271;
+        Sun, 19 Mar 2023 04:08:36 -0700 (PDT)
+Received: from alaa-emad.. ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id m20-20020a170906259400b0092b8c1f41ebsm3122889ejb.24.2023.03.19.04.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 04:08:35 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, eng.mennamahmoud.mm@gmail.com
+Subject: [PATCH] staging: greybus: add blank line after struct
+Date:   Sun, 19 Mar 2023 13:08:31 +0200
+Message-Id: <20230319110831.39931-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 11/15] arm64: dts: nuvoton: Add initial ma35d1 device tree
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-12-ychuang570808@gmail.com>
- <fb4f60a7-011e-3745-cc40-631247735f2b@linaro.org>
- <c902606e-8a1b-6673-02c7-7beea5477795@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c902606e-8a1b-6673-02c7-7beea5477795@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2023 07:07, Jacky Huang wrote:
-> 
->>
->>> +		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
->>> +			      IRQ_TYPE_LEVEL_HIGH)>;
->>> +	};
->>> +
->>> +	uart0:serial@40700000 {
->>> +		compatible = "nuvoton,ma35d1-uart";
->>> +		reg = <0x0 0x40700000 0x0 0x100>;
->>> +		interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
->>> +		clocks = <&clk UART0_GATE>;
->>> +		status = "okay";
->> Why? Drop the line... or convert it to disabled. Otherwise, why every
->> SoC has serial0 enabled? Is it used internally?
-> 
-> 
-> uart0 is on all the way since this SoC booting from the MaskROM boot code,
-> 
-> load arm-trusted-firmware, load bootloader, and finally load linux  kernel.
-> 
-> uart0 is also the Linux console.
+add blank line after struct for readability as
+reported by checkpatch script
 
-Are you sure? Maybe my board has UART0 disconnected.
+" CHECK: Please use a blank line after function/struct/union/enum
+declarations"
 
-Best regards,
-Krzysztof
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+ drivers/staging/greybus/gbphy.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+index d4a225b76338..1de510499480 100644
+--- a/drivers/staging/greybus/gbphy.h
++++ b/drivers/staging/greybus/gbphy.h
+@@ -15,6 +15,7 @@ struct gbphy_device {
+ 	struct list_head list;
+ 	struct device dev;
+ };
++
+ #define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+ 
+ static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+@@ -43,6 +44,7 @@ struct gbphy_driver {
+ 
+ 	struct device_driver driver;
+ };
++
+ #define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
+ 
+ int gb_gbphy_register_driver(struct gbphy_driver *driver,
+-- 
+2.34.1
 
