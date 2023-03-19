@@ -2,171 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460AE6C0120
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295E06C0128
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjCSLxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 07:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S230335AbjCSLy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 07:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjCSLxo (ORCPT
+        with ESMTP id S230311AbjCSLy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 07:53:44 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA54E23A4B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:53:00 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eh3so36637768edb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679226760;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLj0P1lq2bvFo+/6zRlEm0LLZrtFvTkebdhPbz6tAow=;
-        b=RF3a/GCx8fBvZKTPgsUV9XVNsAJagR0XmHOKMLH2StTNeRbv7PAry1esWVwyj7Se9T
-         +GbeuXz4rDcnxFRQ0ifEtFNi4SpGrzAoB3bpSgPJwEOqGY0tTTMd35kRSm1+1c7GKq3y
-         Jh2ImdKHcRbqYZnSOdsTMYpq7WltsBVpxxXu2dC+n7zycw27CYXu9tZV1J/sMKHbccec
-         XlvsZq9FZ3ByGW9L/KVF1DXWMQcAfUm2l5ZHZBvet3Z6sKAMrN95wPeK/Agdohdd7B9m
-         Xa2u8aEVBsIKxN3tVJ8f4o/qE4vRTTV20C0OonkYqLet9VphEZfTkiLXg0SEL2VnPxXN
-         8ytg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679226760;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLj0P1lq2bvFo+/6zRlEm0LLZrtFvTkebdhPbz6tAow=;
-        b=cb0PKIPe6JMAlA3LTCK6Zdng7+oI+7xY0dDjKvvpzxEWBknA2+t3QHzAH38RDS6iG9
-         aJRfhPDmP8QmAeuuemFnJVpmnqw2rhth0afA5Ecjn26jYdCCOxcLk08FXcPDYMcZz+Sz
-         GHPflg4aggSXeeIbsKVhNilb8JZDQG4kO6N7JCI9vM9+F1NBxrt7gOpbRSjD4UQsJjVo
-         /QGwMAe2S7HTTJRjR5BkUyE6+u00SwTsmt2wuyrJjlEsLdYgPpc/ZxF6wCKK9oUxljps
-         3GfyyatyFKwI4uqdiItiARuN1uR6Hz+CVdllc4+63EkCcUHyoW8eTkgvl22hYxf2/P80
-         RHPg==
-X-Gm-Message-State: AO0yUKWmPFCAyHYyJ+GIEBicnD6O266PzAOpmq+gLSMXBfbXXprQtYzf
-        cTLnUXqbTiEtIhhxGkbcS0E=
-X-Google-Smtp-Source: AK7set9h4sX9QnfNlzB8p4fQlOOvU+gnT/OTj9SGs/mAADG3tXujvXMnY8dX/DqRFM5xOPh71P9wGw==
-X-Received: by 2002:aa7:d48b:0:b0:4ac:bcf9:6d6c with SMTP id b11-20020aa7d48b000000b004acbcf96d6cmr8217438edr.36.1679226759954;
-        Sun, 19 Mar 2023 04:52:39 -0700 (PDT)
-Received: from [192.168.1.16] ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id v6-20020a50d086000000b004fb00831851sm3379178edd.66.2023.03.19.04.52.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 04:52:39 -0700 (PDT)
-Message-ID: <c82427af-dc37-734b-348c-371103a4ff90@gmail.com>
-Date:   Sun, 19 Mar 2023 13:52:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] staging: greybus: add blank line after struct
-Content-Language: en-US
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, greybus-dev@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20230319110831.39931-1-eng.mennamahmoud.mm@gmail.com>
- <alpine.DEB.2.22.394.2303191216240.2867@hadrien>
- <15e81411-e40f-43c5-bb7f-907d6d5f93c5@gmail.com>
- <alpine.DEB.2.22.394.2303191235580.2867@hadrien>
- <6cc1e2f7-e971-b195-acba-9b4c136aa16b@gmail.com>
- <alpine.DEB.2.22.394.2303191246190.2867@hadrien>
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-In-Reply-To: <alpine.DEB.2.22.394.2303191246190.2867@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 19 Mar 2023 07:54:57 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975D423C71
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:54:22 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 4B58AC009; Sun, 19 Mar 2023 12:54:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1679226848; bh=hUkpQYX6FPbHROaRClNRBhcGdvpGKHhE07K6SZ+ej8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=4saFNJu/dyVz7/ZJ3AgtW1h+dpqdSN9pLzQT1bY58NJcHTilSbRgID+PJTEbJisVD
+         I9AGsalDYB2C42ZajS592H1w11urO/ukTjRJy3oslqSjebp34K3AQScduQPMYlDbZb
+         Hx5s/TIf8X3BTX3IMbZ3pN1XHgJZPaFkDghN1oKmqNtXXhT8P2tKw0wUFQJUy4Xw2U
+         MPvtrtL52ibviQKPajtCGTpCX78uL9PimsJgUz6BKnPoWovfejZloHhlpJKsLQB7k2
+         Gl/3RFXzDUQnmQCFlsudFetzJBvRfZXumREU4xes6dZRPPWKZVRrECN06T2VI4m0Pp
+         csp1oZqEUFWyg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 8E85CC009;
+        Sun, 19 Mar 2023 12:54:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1679226846; bh=hUkpQYX6FPbHROaRClNRBhcGdvpGKHhE07K6SZ+ej8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G+N8gE/osiXg9+nhDZhsyAVaGQPptayRIoxjsd8/+0dle2IuZzQ/xCNTWangClAgC
+         Y8to+5J7Ii+/zoS+ft2xiMVBT5NaQY11okLnQk3CO928AnAi3grC2LGT9i6iQgqN2N
+         VcTtynNyoNxYeHqTcpkqOamIAZLSyegNm/HRUsEu8mSlAiwEcbXaJmMTjw5s0Hqy6p
+         DIUlpwZioJPKBhQPvHpG+vqqhSZbaULTaZZxXmfuVDhrJxu4Cu5dFTT/Q8v6ao7tDq
+         juPuwzd5V38NWooVutcMqBEbjfOUcXCWXgkAPaI3pgAg49dtfZFWb96dcLX9b/DyWc
+         EsLjHCh4JlNXw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 2cc1ba83;
+        Sun, 19 Mar 2023 11:54:01 +0000 (UTC)
+Date:   Sun, 19 Mar 2023 20:53:46 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Latchesar Ionkov <lucho@ionkov.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        linux-kernel@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        v9fs-developer@lists.sourceforge.net
+Subject: Re: [V9fs-developer] [PATCH 0/5] Take 3 at async RPCs and no longer
+ looping forever on signals
+Message-ID: <ZBb3ynXntaom/0hg@codewreck.org>
+References: <20230211075023.137253-1-asmadeus@codewreck.org>
+ <2973654.udxrvWzM6v@silver>
+ <Y+q7vvc2Sek8d7wG@codewreck.org>
+ <2526146.SOovFYVi4y@silver>
+ <Y+ttlog6sth3vPHJ@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+ttlog6sth3vPHJ@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It's been a while but I didn't forget...
 
-On ١٩‏/٣‏/٢٠٢٣ ١٣:٤٦, Julia Lawall wrote:
->
-> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
->
->> On ١٩/٣/٢٠٢٣ ١٣:٣٦, Julia Lawall wrote:
->>> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
->>>
->>>> On ١٩/٣/٢٠٢٣ ١٣:١٩, Julia Lawall wrote:
->>>>> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
->>>>>
->>>>>> add blank line after struct for readability as
->>>>> The log message should start with a capital letter, so "Add".
->>>> Okay, I will fix it.
->>>>
->>>>>> reported by checkpatch script
->>>>> "reported by checkpatch" or "reported by the checkpatch script".
->>>>> The first is more concise, and it doesn't really matter whether
->>>>> checkpatch
->>>>> is a script or something else.
->>>> got it.
->>>>
->>>>>> " CHECK: Please use a blank line after function/struct/union/enum
->>>>>> declarations"
->>>>> I guess the #define was concatenated to the end of the definition to
->>>>> show
->>>>> that it is closely related to the definition.  With the #define, it
->>>>> seems
->>>>> rather natural, but the better soltution would be to make a static
->>>>> inline
->>>>> function in both cases.  There would naturally be a blank line before a
->>>>> function definition as well.
->>>> got your point, so, should i ignore this?
->>> Not sure what you mean by ignore.  If you rewrite the #define as a
->>> function, an use the natural placement for a function definition, then the
->>> checkpatch warning will go away as a side effect.
->>
->> I mean ignore this patch and make another patch with rewrite #define as you
->> suggested.
-> Yes :)  That's fine ("drop" would be better than "ignore").
->
-> julia
->
-Okay :D, Thanks Julia.
+Dominique Martinet wrote on Tue, Feb 14, 2023 at 08:16:38PM +0900:
+> > Yes, apparently it tries to write dirty pages of the mapped file and keeps
+> > hanging there [fs/9p/vfs_inode_dotl.c:586]:
+> 
+> Yeah, it'd help to get the trace of the thread actually trying to do the
+> IO, if it still exists.
+> I had some hangs in the check that there are no flush in flight at some
+> point, and I thought I fixed that, but I can't really see anywhere else
+> that'd start hanging with this... it'll be clearer if I can reproduce.
 
-Menna
+I couldn't reproduce this one, but manually inspecting
+p9_client_wait_flush again I noticed the wait_event_interruptible was
+waiting on req->flushed_req->wq but looking at req->status in the
+condition; that was an error.
+Also, we have a ref on req->flushed_req but not on req, so
+req->flushed_req wasn't safe.
 
->>
->> Menna
->>
->>> julia
->>>
->>>> Menna
->>>>
->>>>> julia
->>>>>
->>>>>> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
->>>>>> ---
->>>>>>     drivers/staging/greybus/gbphy.h | 2 ++
->>>>>>     1 file changed, 2 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/staging/greybus/gbphy.h
->>>>>> b/drivers/staging/greybus/gbphy.h
->>>>>> index d4a225b76338..1de510499480 100644
->>>>>> --- a/drivers/staging/greybus/gbphy.h
->>>>>> +++ b/drivers/staging/greybus/gbphy.h
->>>>>> @@ -15,6 +15,7 @@ struct gbphy_device {
->>>>>>     	struct list_head list;
->>>>>>     	struct device dev;
->>>>>>     };
->>>>>> +
->>>>>>     #define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
->>>>>>
->>>>>>     static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
->>>>>> @@ -43,6 +44,7 @@ struct gbphy_driver {
->>>>>>
->>>>>>     	struct device_driver driver;
->>>>>>     };
->>>>>> +
->>>>>>     #define to_gbphy_driver(d) container_of(d, struct gbphy_driver,
->>>>>> driver)
->>>>>>
->>>>>>     int gb_gbphy_register_driver(struct gbphy_driver *driver,
->>>>>> --
->>>>>> 2.34.1
->>>>>>
->>>>>>
->>>>>>
-> >
+I've changed the code to add a variable directly on req->flushed_req and
+use it consistently, I'm not sure that's the problem you ran into but it
+might help.
+It's been a while but do you remember if that hang was consistently
+happening on shutdown, or was it a one time thing?
+
+Either way, I'd appreciate if you could try my 9p-test branch again:
+https://github.com/martinetd/linux/commits/9p-test
+
+
+With that said, I expect that p9_client_wait_req will cause hangs on
+broken servers.
+If connection drops hopefully the reqs will just be marked as error and
+free the thread, but I can see syzbot complaining about yet another
+thread stuck.. Well it's interruptible at least, and bails out on
+ERESTARTSYS.
+
+
+> Anyway, I found another bug, just running ./configure on a random project
+> (picked coreutils tarball) fails with interrupted system call ?!
+
+That other bug was weird, I could reproduce it reliably until I rebooted
+the host because of an unrelated nfs bug on the host, and after reboot I
+couldn't reproduce anymore.
+I'll chalk it down to buggy host/weird happenstance, but something to
+watch for if random EINTR happen again :/
+
+-- 
+Dominique
