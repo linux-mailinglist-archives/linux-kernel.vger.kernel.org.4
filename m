@@ -2,164 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2396BFFE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89FF6BFFE7
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 08:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjCSH5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 03:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S229898AbjCSH5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 03:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCSH5J (ORCPT
+        with ESMTP id S229490AbjCSH5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 19 Mar 2023 03:57:09 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AA0EF93
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 00:56:51 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id p20so9477949plw.13
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 00:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679212611;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZUnST3j21m9F9a4UvCxqzWQ39NSngcoRf1fNjlPMo0=;
-        b=FCcBCCENooJi8ff/XjxTocVx4aMrEp949GQloXOFJwFmaSniqIumwl/FfGil8QZoBS
-         VjFYllNxi0mhg52pG17LuMdNRyvkt69qvEEpEI71390aK9ugaiwnbjacM1SDOcvCUDVS
-         JLHte1i/kvKD5Dxf7G/WvCUrkChH5CCAuWlxryrWo8Gk1CpOAm/q/JXtsJ7bKRrshpJH
-         hxrs/MDFqDQjy/Bh/Sr9Ov55FYgDp9HsLo1AIHU7+EhmHxQFD/5rqoGHX84hmT+ldCX0
-         OJ150t+Y6ZISDY2aOXRlLdmVZbFnSkg62AHQ2hp10K3Wj8k1QFHk957f1peVB0VfK1sW
-         v4LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679212611;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pZUnST3j21m9F9a4UvCxqzWQ39NSngcoRf1fNjlPMo0=;
-        b=aZJQkHIKjpr9sgf/VUmxqf1ZIP/cLWwEkXSnIuxDU9ZDgcddcTlaa0wSwM0WphsaQm
-         fjjb/0lqQYYR7DQgM2qrszE+D+pc3lb3Otc+8q3gOWyPlZsheTpw++KU8FhnoaiVxCjO
-         bOrEegmQfccDGeQAq/HNeO4GvpFebcau7qLIFsPQNX+e1vOFIHWBU3tLsRJqnOv0k26U
-         rqJyIjw/aTDtHpKuJY5RVk+UsKyRASYC0A7DrXNtzIniqvAg8D7HiYzfZI9NJPzt/nNC
-         H/PkZbdrcoklzkJC/5cuQFwLlXChNZRHY35uCEDo+5kQT1P767nlSsaGeqkSb96BcPpp
-         FipA==
-X-Gm-Message-State: AO0yUKXUHQieh6MqB5TjqRO5I7RbYCI+z82H1GQEfbn4l3RlPnPJ1Zg6
-        Ke3Wul4K2evXvoN3XkVciH7Tb1FFhJayNw==
-X-Google-Smtp-Source: AK7set8FVshNuXDGzOJ9FodmCA2DqcnrLDDTSitfbXn4m9bUvd/g5hLKtxWYh+uZRLP/aHIPlXwbig==
-X-Received: by 2002:a17:902:f681:b0:19e:8076:9bd2 with SMTP id l1-20020a170902f68100b0019e80769bd2mr15021430plg.17.1679212610839;
-        Sun, 19 Mar 2023 00:56:50 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.237])
-        by smtp.gmail.com with ESMTPSA id p11-20020a170902bd0b00b001994e74c094sm4307797pls.275.2023.03.19.00.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 00:56:50 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] sched/core: Reduce cost of sched_move_task when config autogroup
-Date:   Sun, 19 Mar 2023 15:56:43 +0800
-Message-Id: <20230319075643.28312-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574DAF75F
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 00:57:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E7B3F1F388;
+        Sun, 19 Mar 2023 07:57:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679212623; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MZIje2MGkQasAnDwe+lGxoM281WtiZUNHfjZEISTKrQ=;
+        b=Q4Jg3xIZVQKSZVtO5OsofG6pub7aYjsE8f+JsXPcLO0g6lhbrCUuyr/2MkT1TUkM6E0rec
+        asxPPdOyYuIdbxHALn4xo2I13g3WUm01VpLVBtHeqVFFO+YThekJ+EKe3LogjFFaT3DiBE
+        7/txvDE8VlesXa7NrWFbnfCl8A8Qo5g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679212623;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MZIje2MGkQasAnDwe+lGxoM281WtiZUNHfjZEISTKrQ=;
+        b=LAMvh2ixJ1jRylNQ3kRmCMuMC/MU0Co9skIZ1+8c2Qxo6hZMDHIsIbqVmmTbjfHLaNTONO
+        Sd6Rh+KOVHh3wCDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD658133E6;
+        Sun, 19 Mar 2023 07:57:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w+xeLU/AFmS2OAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 19 Mar 2023 07:57:03 +0000
+Date:   Sun, 19 Mar 2023 08:57:03 +0100
+Message-ID: <87sfe1mawg.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+In-Reply-To: <20230319032853.GA99783@workstation>
+References: <20230317195128.3911155-1-john@metanate.com>
+        <20230318002005.GA84781@workstation>
+        <20230319032853.GA99783@workstation>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some sched_move_task calls of autogroup is useless when the
-task_struct->sched_task_group isn't changed because of task_group
-of cpu_cgroup overlay task_group of autogroup. The overlay key codes
-are as follows:
+On Sun, 19 Mar 2023 04:28:53 +0100,
+Takashi Sakamoto wrote:
+> 
+> Hi,
+> 
+> On Sat, Mar 18, 2023 at 09:20:05AM +0900, Takashi Sakamoto wrote:
+> > On Fri, Mar 17, 2023 at 07:51:27PM +0000, John Keeping wrote:
+> > > snd_usb_queue_pending_output_urbs() may be called from
+> > > snd_pcm_ops::ack() which means the PCM stream is locked.
+> > > 
+> > > For the normal case where the call back into the PCM core is via
+> > > prepare_output_urb() the "_under_stream_lock" variant of
+> > > snd_pcm_period_elapsed() is called, but when an error occurs and the
+> > > stream is stopped as XRUN then snd_pcm_xrun() tries to recursively lock
+> > > the stream which results in deadlock.
+> > > 
+> > > Follow the example of snd_pcm_period_elapsed() by adding
+> > > snd_pcm_xrun_under_stream_lock() and use this when the PCM substream
+> > > lock is already held.
+> > > 
+> > > Signed-off-by: John Keeping <john@metanate.com>
+> > > ---
+> > >  include/sound/pcm.h     |  1 +
+> > >  sound/core/pcm_native.c | 28 ++++++++++++++++++++++++----
+> > >  sound/usb/endpoint.c    | 18 +++++++++++-------
+> > >  3 files changed, 36 insertions(+), 11 deletions(-)
+> >  
+> > The name of added kernel API implies me that you refer to existent
+> > 'snd_pcm_period_elapsed_under_stream_lock()' which I added to Linux
+> > v5.14.
+> > 
+> > In my opinion, unlike the version of period elapsed API, the version of
+> > XRUN API seems not to be necessarily required to ALSA PCM core, since PCM
+> > device drivers can implement .pointer callback in the part of PCM operation.
+> > When the callback returns SNDRV_PCM_POS_XRUN, ALSA PCM application get
+> > occurence of XRUN as a result of any operation relevant to hwptr movement
+> > (e.g. SNDRV_PCM_IOCTL_HWSYNC).
+> > 
+> > Therefore I think it possible to fix the issue without the proposed
+> > kernel API. I can assume some scenario:
+> > 
+> > 1. Failure at tasklet for URB completion
+> > 
+> > It is softIRQ context. The stream lock is not acquired. It doesn't
+> > matter to call current XRUN API.
+> > 
+> > 2. Failure at PCM operation called by ALSA PCM application
+> > 
+> > It is process context. The stream lock is acquired before calling driver
+> > code. When detecting any type of failure, driver code stores the state.
+> > Then .pointer callback should return SNDRV_PCM_POS_XRUNrefering to
+> > the state.
+> 
+> Although being inexperienced to hack driver for USB audio device class,
+> I attempt to post the patch to fix the issue of recursive stream lock.
+> I apologies in advance since the patch is not tested yet...
+> 
+> The 'in_xrun' member is newly added to 'struct snd_usb_substream'. When
+> detecting any failure, false is assigned to the member. The assignment
+> is expected to be done in both softIRQ context, and process context with
+> stream lock, thus no need to take care of cocurrent access (e.g. by usage
+> of WRITE_ONCE/READ_ONCE).
+> 
+> Typical ALSA PCM application periodically calls PCM operation which calls
+> .pointer in driver code. As I described, returning SNDRV_PCM_POS_XRUN
+> takes ALSA PCM core to handle XRUN state of PCM substream in the timing.
+> 
+> The negative point of the patch is the delay of XRUN notification to user
+> space application. In the point, I think the new kernel API introduced by
+> your patch has advantage.
+> 
+> The in_xrun member can be replaced with a kind of EP_STATE_
+> enumerations; i.e. EP_STATE_XRUN. In the case, we need some care so that
+> the state should be referred from pcm.c.
 
-sched_cgroup_fork->autogroup_task_group->task_wants_autogroup
-sched_change_group->autogroup_task_group->autogroup_task_group
+Thanks for the patch.  That would work, but the shortcoming side of
+this implementation is that it misses stopping / reporting the error
+immediately but waiting for the next pointer update.
 
-sched_move_task eg:
-task A belongs to cpu_cgroup0 and autogroup0, it will always to
-cpu_cgroup0 when doing exit. So there is no need to do {de|en}queue.
-The call graph is as follow.
+It might be simpler if we perform the xrun handling in the caller
+side, i.e. a change like below:
 
-do_exit
-  sched_autogroup_exit_task
-    sched_move_task
-      dequeue_task
-        sched_change_group
-	  A.sched_task_group = sched_get_task_group
-      enqueue_task
-
-So do some check before dequeue task in sched_move_task.
-
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- kernel/sched/core.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a380f34789a2..acc9a0e391f4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -10330,7 +10330,7 @@ void sched_release_group(struct task_group *tg)
- 	spin_unlock_irqrestore(&task_group_lock, flags);
- }
- 
--static void sched_change_group(struct task_struct *tsk)
-+static struct task_group *sched_get_task_group(struct task_struct *tsk)
- {
- 	struct task_group *tg;
- 
-@@ -10342,7 +10342,28 @@ static void sched_change_group(struct task_struct *tsk)
- 	tg = container_of(task_css_check(tsk, cpu_cgrp_id, true),
- 			  struct task_group, css);
- 	tg = autogroup_task_group(tsk, tg);
--	tsk->sched_task_group = tg;
-+
-+	return tg;
-+}
-+
-+static bool sched_task_group_changed(struct task_struct *tsk)
-+{
-+	/*
-+	 * Some sched_move_task calls of autogroup is useless when the
-+	 * task_struct->sched_task_group isn't changed because of task_group
-+	 * of cpu_cgroup overlay task_group of autogroup. so do some check
-+	 * before dequeue task in sched_move_task.
-+	 */
-+#ifdef CONFIG_SCHED_AUTOGROUP
-+	return sched_get_task_group(tsk) != tsk->sched_task_group;
-+#else
-+	return true;
-+#endif /* CONFIG_SCHED_AUTOGROUP */
-+}
-+
-+static void sched_change_group(struct task_struct *tsk)
-+{
-+	tsk->sched_task_group = sched_get_task_group(tsk);
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 	if (tsk->sched_class->task_change_group)
-@@ -10369,6 +10390,9 @@ void sched_move_task(struct task_struct *tsk)
- 	rq = task_rq_lock(tsk, &rf);
- 	update_rq_clock(rq);
- 
-+	if (!sched_task_group_changed(tsk))
-+		goto unlock;
-+
- 	running = task_current(rq, tsk);
- 	queued = task_on_rq_queued(tsk);
- 
-@@ -10391,6 +10415,7 @@ void sched_move_task(struct task_struct *tsk)
- 		resched_curr(rq);
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -2155,6 +2155,8 @@ int pcm_lib_apply_appl_ptr(struct snd_pcm_substream *substream,
+ 		ret = substream->ops->ack(substream);
+ 		if (ret < 0) {
+ 			runtime->control->appl_ptr = old_appl_ptr;
++			if (ret == -EPIPE)
++				__snd_pcm_xrun(substream);
+ 			return ret;
+ 		}
  	}
+
+... and let the caller returning -EPIPE for XRUN:
+
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -455,8 +455,8 @@ static void push_back_to_ready_list(struct snd_usb_endpoint *ep,
+  * This function is used both for implicit feedback endpoints and in low-
+  * latency playback mode.
+  */
+-void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+-				       bool in_stream_lock)
++int snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
++				      bool in_stream_lock)
+ {
+ 	bool implicit_fb = snd_usb_endpoint_implicit_feedback_sink(ep);
  
-+unlock:
- 	task_rq_unlock(rq, tsk, &rf);
+@@ -480,7 +480,7 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 		spin_unlock_irqrestore(&ep->lock, flags);
+ 
+ 		if (ctx == NULL)
+-			return;
++			return 0;
+ 
+ 		/* copy over the length information */
+ 		if (implicit_fb) {
+@@ -495,11 +495,11 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 			break;
+ 		if (err < 0) {
+ 			/* push back to ready list again for -EAGAIN */
+-			if (err == -EAGAIN)
++			if (err == -EAGAIN) {
+ 				push_back_to_ready_list(ep, ctx);
+-			else
+-				notify_xrun(ep);
+-			return;
++				return 0;
++			}
++			return -EPIPE;
+ 		}
+ 
+ 		err = usb_submit_urb(ctx->urb, GFP_ATOMIC);
+@@ -507,8 +507,7 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 			usb_audio_err(ep->chip,
+ 				      "Unable to submit urb #%d: %d at %s\n",
+ 				      ctx->index, err, __func__);
+-			notify_xrun(ep);
+-			return;
++			return -EPIPE;
+ 		}
+ 
+ 		set_bit(ctx->index, &ep->active_mask);
+--- a/sound/usb/endpoint.h
++++ b/sound/usb/endpoint.h
+@@ -52,7 +52,7 @@ int snd_usb_endpoint_implicit_feedback_sink(struct snd_usb_endpoint *ep);
+ int snd_usb_endpoint_next_packet_size(struct snd_usb_endpoint *ep,
+ 				      struct snd_urb_ctx *ctx, int idx,
+ 				      unsigned int avail);
+-void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+-				       bool in_stream_lock);
++int snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
++				      bool in_stream_lock);
+ 
+ #endif /* __USBAUDIO_ENDPOINT_H */
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -1639,7 +1639,7 @@ static int snd_usb_pcm_playback_ack(struct snd_pcm_substream *substream)
+ 	 * outputs here
+ 	 */
+ 	if (!ep->active_mask)
+-		snd_usb_queue_pending_output_urbs(ep, true);
++		return snd_usb_queue_pending_output_urbs(ep, true);
+ 	return 0;
  }
  
--- 
-2.20.1
 
+thanks,
+
+Takashi
