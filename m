@@ -2,168 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6A26BFF36
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 04:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390E56BFF38
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 04:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjCSDVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 23:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S229799AbjCSD3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 23:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCSDVr (ORCPT
+        with ESMTP id S229514AbjCSD3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 23:21:47 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF2B1A940
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 20:21:46 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id eg48so34485624edb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 20:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1679196104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YBz9k12p8pVuGJXShL857aw4AxHCc154WrN7zFH8CzM=;
-        b=agzmHgPX3Jla+ZbFSASkvD63a6/R4emYExbM2TQMovUsYEj5AOQjKlEqw48xWR2Z98
-         T280prz6pqyalQPVcWlUNUyPIzM0P4lpdTJKbHued2ki58pHM7QpW3Eum1fHlNHLq0gz
-         SxlFPXVtdcNq6Y2sXdQwef/Hgqu8xWYW0t0vR8AMTiyhZunilv+HjqncW0Zerl1Ag+oK
-         /rGb8TCzN9Z6+YevZq8S4/bIiUzVp2NkEzS3joADMcfd1eib17BF4FosfLDSUbLcdF+B
-         ZuJRca3KIKDkNHfrJ1ICWzzQsoo6VWnARZgKxW5UhjVuLXiGvlPrltrGl6t5dNGxZeC6
-         CViQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679196104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YBz9k12p8pVuGJXShL857aw4AxHCc154WrN7zFH8CzM=;
-        b=KCaJPjS5hlhRTXHqD59FA9DOR52IGUwCNwSgnev8nIHPOhfMbGi7oiiUW9EOXIgKpN
-         WveWKmkaxHpgSZGgV1BVhlqVJgCJ8wRPCR1V6M995jDRMPDBRFGidjPx1qNvSJNHDAA+
-         arglu1+EcR4PGpkK7XHJ76b9U2e5H7EOI78KpbY9tAeW+TJB9k8MRrEX4TzYzfMD6DRQ
-         y+ySnk8ylRr8tcp7aD60eWHnw32IFCKYQd+FNjCYtgpSipHnj292qSbD5e6WFC3M9PeJ
-         371Ir58E8RQELh9/fojNSRPq0D8kstOEIu7SN6ZegNal7ZGfQSQ8MDMqIkl3ag0rmzEU
-         7yRA==
-X-Gm-Message-State: AO0yUKVl0kq1Lln8Cc1RV5GD/Hr6mH767e5b49tlt7vhC33ppZqcrPsq
-        ghOEe7OLaRKrKETgvBaDlBbhU8Q/D3ViWfSyjvUBcA==
-X-Google-Smtp-Source: AK7set8u6RB2cfGId0yTlYiaqUpdz3tV6bZKuDYEk9G+jqwLG9c3uB1Qn0K3A6SJwVkVDirnh5x7WoBKbdILO3NzSZI=
-X-Received: by 2002:a50:d749:0:b0:4fb:9735:f917 with SMTP id
- i9-20020a50d749000000b004fb9735f917mr4309053edj.8.1679196103892; Sat, 18 Mar
- 2023 20:21:43 -0700 (PDT)
+        Sat, 18 Mar 2023 23:29:00 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B0712BE3
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 20:28:57 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4C3895C00AD;
+        Sat, 18 Mar 2023 23:28:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 18 Mar 2023 23:28:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679196537; x=1679282937; bh=yb
+        43XnCzfmY5w8Ey4NgZVvKQTRQXTHa6Ivrvr4trbyw=; b=BiIp/CeP8sPbjRjOdZ
+        KoJRnfSHc4nd3L+QLojhbTPIx+wOp7vVHLjJABBC89XAPqi+vedtuhywlFgQwXlC
+        iFWuEKtLJhyvuecKcNE+zBggxMWkiLdg6YRf/LYiNGiBpYbgK1KOZBd3zBYiG1fU
+        Scy0+ClGBkFmtoFcDOGF7UQYK2HOVmXD85hWbgCEEGv0CFEasSpqVgKWQKz3bJm4
+        JkUsdjXY37ZW+/oKIhy3jzNQrTzplrOePfydqk4jt20F5EYI2lhd5QcTD5Jf6IBz
+        lp07l/ZjhCuT+Dg9NIPDxNA9SVUblsWacotENYLo5QqSRTcx5/1kGc9jZKD9VZH2
+        veAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679196537; x=1679282937; bh=yb43XnCzfmY5w
+        8Ey4NgZVvKQTRQXTHa6Ivrvr4trbyw=; b=iz9AP39ARsL/vJOLBpOeKNbJp7fKQ
+        QGxn3VUtvcUh/Sf8/u6Kh0AXpzG2Xnr5H6zg0DienitRJGMWmEpZWBa860Qazc1R
+        JBtjf5hnhvCfVh+WIW4FhvbTmogdw+nAoysEjQ7wdbXZLaKseTYM97RBQeRQv/3d
+        235D1ZUr1f+IPkJSWNqWw0Gf4PMx+TU4Zhnj4yQGhDjgYm/25nU03r+TV4cfYNoN
+        WTAqrMOEzBwNZH8oQUXB8aJr29HJ30kjTCALAhorLARrrCkPJfUi6qf2Rmir27qn
+        fsh08BVe3t/q2tYyHGPWzsGhkmgzfTNRgE+GYoraKYPRcEkn8DGwKfVTA==
+X-ME-Sender: <xms:eYEWZOn2A7vqwrrV1sSHWH7EHbXkHxpCvUtBsI3nVeaRUahfEwW6bg>
+    <xme:eYEWZF2TRyVkBt0cNpUcFU4g-pU4FW4F6nSPLcVN-O2lPZ4V_VAsPBqs5xr0KbxIz
+    m87alHT4hVYmpwzOfY>
+X-ME-Received: <xmr:eYEWZMqk-6R4Dv9TyB4aO-mb5V160FB2QsVh6PyLkS4LC_39feqJtPoK_lW1MRlFmwdQMdFU_mlG2TCj-ccPGk3hTlc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefhedgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
+    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
+    hpqeenucggtffrrghtthgvrhhnpeegjeefheevfefgvdfgtdfftdevgeetieffieefudei
+    udduleegveehiedtffekheenucffohhmrghinhepudegrdhinhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghk
+    rghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:eYEWZCkSTrDg2Vazbj7DMm_ck1p1HL6GKu8rAKWxTD-UYrmcr_wFeA>
+    <xmx:eYEWZM1Vnr2Sai-oqktG44JXtLTMRWtaynjfKlmaWvgXaxWzcaPEbQ>
+    <xmx:eYEWZJtSY10JF09IgcDVMn-ESsfwXamf64RI6Y5xc8secakpC4SRcw>
+    <xmx:eYEWZKBvHz8GPpkRH5Zu5GDGRlIAVdVOM2oBHO40nm8rgjwL_ogMnw>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 18 Mar 2023 23:28:55 -0400 (EDT)
+Date:   Sun, 19 Mar 2023 12:28:53 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+Message-ID: <20230319032853.GA99783@workstation>
+Mail-Followup-To: John Keeping <john@metanate.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230317195128.3911155-1-john@metanate.com>
+ <20230318002005.GA84781@workstation>
 MIME-Version: 1.0
-References: <CAK7LNATXqPy6F+gB8-1Zqh8hooXh3U_5+3xeMFZDZwYsUi=aeg@mail.gmail.com>
- <20230312200731.599706-1-masahiroy@kernel.org> <20230319011217.147183-1-steev@kali.org>
- <CAK7LNATrzAWiu36=-JXXjSt48O12OAQG4ZAtLABd_PyiE2f_VQ@mail.gmail.com>
-In-Reply-To: <CAK7LNATrzAWiu36=-JXXjSt48O12OAQG4ZAtLABd_PyiE2f_VQ@mail.gmail.com>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Sat, 18 Mar 2023 22:21:32 -0500
-Message-ID: <CAKXuJqjWORL0GmyOg9_NFUCjUH3Jd7yrNbTYpnQiTk7AptMZMw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] kbuild: fix some packaging issues, and use
- git-archive for source package
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
-        terrelln@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230318002005.GA84781@workstation>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+Hi,
 
-On Sat, Mar 18, 2023 at 9:19=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> On Sun, Mar 19, 2023 at 10:12=E2=80=AFAM Steev Klimaszewski <steev@kali.o=
-rg> wrote:
-> >
-> > Hi Masahiro,
-> >
-> > On Sun, Mar 12, 2023 at 1:07=E2=80=AFPM Masahiro Yamada <masahiroy@kern=
-el.org> wrote:
-> > >
-> > > This series fixes some bugs, then switch to 'git archive'
-> > > for source package creation as suggested by Linus.
-> >
-> > I apologize if this is a stupid question, but it's not immediately appa=
-rent to
-> > me...
-> >
-> > Previously, I was overriding the deb file output name by the setting of
-> > LOCALVERSION_AUTO; but with this series applied, that seems to be ignor=
-ed?
-> >
-> > Now if I pass LOCALVERSION=3D"" I end up with e.g. linux-image-6.3.0-rc=
-2_6.3.0-rc2-00575-g46c71cad996d-100_arm64.deb
-> > whereas previously, I would end up with linux-image-6.3.0-rc2_6.3.0-rc2=
--100_arm64.deb
-> >
-> > How would I restore the old naming behaviour?
-> >
-> > -- steev
->
-> The same string "6.3.0-rc2" is repeated in the file name.
-> The first one is what Debian calls the ABI version, and the
-> second one is the version of the package.
-> They are usually different on real Debian kernels.
->
-> LOCALVERSION affects the former, and KDEB_PKGVERSION
-> the second.
->
->
-> My recommendation is "just let it be"
-> because "linux-upstream_6.3.0-rc2.orig.tar.gz"
-> you would generate is not the real 6.3.0-rc2.
->
->
-> If you want to restore what you previously did,
->
->  make deb-pkg KDEB_PKGVERSION=3D6.3.0-rc2-100
->
-> will create such a file name.
->
-My apologies, my text editor seemed to swallow up half of my previous
-email as what I was trying to say wasn't all in there...
-What I meant to say is that, prior to this patchset, if
-LOCALVERSION_AUTO=3Dy we would end up with
+On Sat, Mar 18, 2023 at 09:20:05AM +0900, Takashi Sakamoto wrote:
+> On Fri, Mar 17, 2023 at 07:51:27PM +0000, John Keeping wrote:
+> > snd_usb_queue_pending_output_urbs() may be called from
+> > snd_pcm_ops::ack() which means the PCM stream is locked.
+> > 
+> > For the normal case where the call back into the PCM core is via
+> > prepare_output_urb() the "_under_stream_lock" variant of
+> > snd_pcm_period_elapsed() is called, but when an error occurs and the
+> > stream is stopped as XRUN then snd_pcm_xrun() tries to recursively lock
+> > the stream which results in deadlock.
+> > 
+> > Follow the example of snd_pcm_period_elapsed() by adding
+> > snd_pcm_xrun_under_stream_lock() and use this when the PCM substream
+> > lock is already held.
+> > 
+> > Signed-off-by: John Keeping <john@metanate.com>
+> > ---
+> >  include/sound/pcm.h     |  1 +
+> >  sound/core/pcm_native.c | 28 ++++++++++++++++++++++++----
+> >  sound/usb/endpoint.c    | 18 +++++++++++-------
+> >  3 files changed, 36 insertions(+), 11 deletions(-)
+>  
+> The name of added kernel API implies me that you refer to existent
+> 'snd_pcm_period_elapsed_under_stream_lock()' which I added to Linux
+> v5.14.
+> 
+> In my opinion, unlike the version of period elapsed API, the version of
+> XRUN API seems not to be necessarily required to ALSA PCM core, since PCM
+> device drivers can implement .pointer callback in the part of PCM operation.
+> When the callback returns SNDRV_PCM_POS_XRUN, ALSA PCM application get
+> occurence of XRUN as a result of any operation relevant to hwptr movement
+> (e.g. SNDRV_PCM_IOCTL_HWSYNC).
+> 
+> Therefore I think it possible to fix the issue without the proposed
+> kernel API. I can assume some scenario:
+> 
+> 1. Failure at tasklet for URB completion
+> 
+> It is softIRQ context. The stream lock is not acquired. It doesn't
+> matter to call current XRUN API.
+> 
+> 2. Failure at PCM operation called by ALSA PCM application
+> 
+> It is process context. The stream lock is acquired before calling driver
+> code. When detecting any type of failure, driver code stores the state.
+> Then .pointer callback should return SNDRV_PCM_POS_XRUNrefering to
+> the state.
 
-linux-image-6.3.0-rc2_6.3.0-rc2-00575-g46c71cad996d-100_arm64.deb
+Although being inexperienced to hack driver for USB audio device class,
+I attempt to post the patch to fix the issue of recursive stream lock.
+I apologies in advance since the patch is not tested yet...
 
-where
-LOCALVERSION_AUTO=3D"00575-g46c71cad996d"
-NUMBEROFBUILDS=3D"100" (i'm not sure where this number was stored previousl=
-y)
+The 'in_xrun' member is newly added to 'struct snd_usb_substream'. When
+detecting any failure, false is assigned to the member. The assignment
+is expected to be done in both softIRQ context, and process context with
+stream lock, thus no need to take care of cocurrent access (e.g. by usage
+of WRITE_ONCE/READ_ONCE).
 
-Assuming the above 2 are what the current settings are...
+Typical ALSA PCM application periodically calls PCM operation which calls
+.pointer in driver code. As I described, returning SNDRV_PCM_POS_XRUN
+takes ALSA PCM core to handle XRUN state of PCM substream in the timing.
 
-And if you turned LOCALVERSION_AUTO off, and had changes on top of the
-git repo, you would end up with
+The negative point of the patch is the delay of XRUN notification to user
+space application. In the point, I think the new kernel API introduced by
+your patch has advantage.
 
-linux-image-6.3.0-rc2_6.3.0-rc2+-100_arm64.deb
+The in_xrun member can be replaced with a kind of EP_STATE_
+enumerations; i.e. EP_STATE_XRUN. In the case, we need some care so that
+the state should be referred from pcm.c.
 
-Then if you would pass LOCALVERSION=3D"", on top of LOCALVERSION_AUTO
-being unset, you would end up with
+For your information.
 
-linux-image-6.3.0-rc2_6.3.0-rc2-100_arm64.deb
+```
+---
+ sound/usb/card.h     |  1 +
+ sound/usb/endpoint.c | 18 +++++++++++-------
+ sound/usb/pcm.c      |  3 ++-
+ 3 files changed, 14 insertions(+), 8 deletions(-)
 
-Now with your patchset applied, with LOCALVERSION_AUTO being unset,
-you end up with
+diff --git a/sound/usb/card.h b/sound/usb/card.h
+index 6ec95b2edf86..cb07d5eb09ad 100644
+--- a/sound/usb/card.h
++++ b/sound/usb/card.h
+@@ -172,6 +172,7 @@ struct snd_usb_substream {
+ 	unsigned int hwptr_done;	/* processed byte position in the buffer */
+ 	unsigned int transfer_done;	/* processed frames since last period update */
+ 	unsigned int frame_limit;	/* limits number of packets in URB */
++	bool in_xrun;
+ 
+ 	/* data and sync endpoints for this stream */
+ 	unsigned int ep_num;		/* the endpoint number */
+diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
+index 1e0af1179ca8..41266c169404 100644
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -400,13 +400,17 @@ static int prepare_inbound_urb(struct snd_usb_endpoint *ep,
+ }
+ 
+ /* notify an error as XRUN to the assigned PCM data substream */
+-static void notify_xrun(struct snd_usb_endpoint *ep)
++static void notify_xrun(struct snd_usb_endpoint *ep, bool in_stream_lock)
+ {
+ 	struct snd_usb_substream *data_subs;
+ 
+ 	data_subs = READ_ONCE(ep->data_subs);
+-	if (data_subs && data_subs->pcm_substream)
+-		snd_pcm_stop_xrun(data_subs->pcm_substream);
++	if (data_subs && data_subs->pcm_substream && !data_subs->in_xrun) {
++		if (in_stream_lock)
++			data_subs->in_xrun = true;
++		else
++			snd_pcm_stop_xrun(data_subs->pcm_substream);
++	}
+ }
+ 
+ static struct snd_usb_packet_info *
+@@ -498,7 +502,7 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 			if (err == -EAGAIN)
+ 				push_back_to_ready_list(ep, ctx);
+ 			else
+-				notify_xrun(ep);
++				notify_xrun(ep, in_stream_lock);
+ 			return;
+ 		}
+ 
+@@ -507,7 +511,7 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 			usb_audio_err(ep->chip,
+ 				      "Unable to submit urb #%d: %d at %s\n",
+ 				      ctx->index, err, __func__);
+-			notify_xrun(ep);
++			notify_xrun(ep, in_stream_lock);
+ 			return;
+ 		}
+ 
+@@ -574,7 +578,7 @@ static void snd_complete_urb(struct urb *urb)
+ 		return;
+ 
+ 	usb_audio_err(ep->chip, "cannot submit urb (err = %d)\n", err);
+-	notify_xrun(ep);
++	notify_xrun(ep, false);
+ 
+ exit_clear:
+ 	clear_bit(ctx->index, &ep->active_mask);
+@@ -1762,7 +1766,7 @@ static void snd_usb_handle_sync_urb(struct snd_usb_endpoint *ep,
+ 			usb_audio_err(ep->chip,
+ 				      "next package FIFO overflow EP 0x%x\n",
+ 				      ep->ep_num);
+-			notify_xrun(ep);
++			notify_xrun(ep, false);
+ 			return;
+ 		}
+ 
+diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+index d959da7a1afb..8889c81297db 100644
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -75,7 +75,7 @@ static snd_pcm_uframes_t snd_usb_pcm_pointer(struct snd_pcm_substream *substream
+ 	struct snd_usb_substream *subs = runtime->private_data;
+ 	unsigned int hwptr_done;
+ 
+-	if (atomic_read(&subs->stream->chip->shutdown))
++	if (atomic_read(&subs->stream->chip->shutdown) || subs->in_xrun)
+ 		return SNDRV_PCM_POS_XRUN;
+ 	spin_lock(&subs->lock);
+ 	hwptr_done = subs->hwptr_done;
+@@ -671,6 +671,7 @@ static int snd_usb_pcm_prepare(struct snd_pcm_substream *substream)
+ 	subs->transfer_done = 0;
+ 	subs->last_frame_number = 0;
+ 	subs->period_elapsed_pending = 0;
++	subs->in_xrun = false;
+ 	runtime->delay = 0;
+ 
+ 	subs->lowlatency_playback = lowlatency_playback_available(runtime, subs);
+```
 
-linux-image-6.3.0-rc2_6.3.0-rc2-00575-g46c71cad996d-100_arm64.deb
 
-Which means that LOCALVERSION_AUTO goes away?  I'm not sure why the
-package version overrides what I'm trying to set in the first place in
-the kernel config?
-
-Your workaround is mostly fine, but that "-100" on the end means I
-have to now personally track how many builds I've done?
-
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+Takashi Sakamoto
