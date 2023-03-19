@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B324C6BFFF1
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 09:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045346BFFF5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 09:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjCSIGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 04:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S230049AbjCSIJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 04:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCSIGI (ORCPT
+        with ESMTP id S229468AbjCSIJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 04:06:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E30420695
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 01:06:07 -0700 (PDT)
+        Sun, 19 Mar 2023 04:09:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9E517CFB
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 01:09:24 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DDD0C1F750;
-        Sun, 19 Mar 2023 08:06:05 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D3CA121B2E;
+        Sun, 19 Mar 2023 08:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679213165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679213362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xFKWt9KQWhS2S1maXxTMinUcU6Mmw6qrSA/tjsky0tI=;
-        b=fHKhRZhBqAx8n2iXs7fVswRbPQK79/VZf7etwIBqhGN7vY5qKWImWkUcRk6Y/gzz2Iglmu
-        JSNoUcayr79A+zac27KYmZpxf7uPKITFeSWyNxkLSZBCd8iclNl4tI1wHdP3suUj4tDyy0
-        9NWlcPp052TnSnQHYGjTzVPE4HMry8Q=
+        bh=yoETdTeuND9ldvOcXzmMhGiK0BDp7Be58boItZsg/PM=;
+        b=YePp2UfzB0g1aqcamYZKNdFvx0ZKjlHTxALI48bKT64h2QoByrZIqijBsGMDjoko0QyNcQ
+        P0TwcRiFOYHzf2U2/nigqFYvP1NiUaHXudTVad3qwZXMEOFBjJSxLzzxDiMx8yyF2fE05+
+        2QxzFvBMlLGegLP3NX1cjXG1x52sNZM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679213165;
+        s=susede2_ed25519; t=1679213362;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xFKWt9KQWhS2S1maXxTMinUcU6Mmw6qrSA/tjsky0tI=;
-        b=x+n82/tacPX0D5lwBFqmNoDck2kkZvBw7fxXc6C0kRlyC++O26Q6xHGo+T/HqwJKtbCizM
-        /1u3yJzyEmx/A4DA==
+        bh=yoETdTeuND9ldvOcXzmMhGiK0BDp7Be58boItZsg/PM=;
+        b=FezKLi7OxPweGEvMagGn0WUcKuLwPPmQmPtoDi1L7NT9y/goRBIxf7GpZqLnu1HeRTjtOx
+        YOQwiKwtu94IfeDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD8D6133E6;
-        Sun, 19 Mar 2023 08:06:05 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A81F3133E6;
+        Sun, 19 Mar 2023 08:09:22 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id ks6jLW3CFmTpOwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Sun, 19 Mar 2023 08:06:05 +0000
-Date:   Sun, 19 Mar 2023 09:06:05 +0100
-Message-ID: <87pm95mahe.wl-tiwai@suse.de>
+        id WuJMKDLDFmQQPQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 19 Mar 2023 08:09:22 +0000
+Date:   Sun, 19 Mar 2023 09:09:22 +0100
+Message-ID: <87mt49mabx.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ALSA: drivers: Remove the unused variable portman_read_data
-In-Reply-To: <20230317063338.18029-1-jiapeng.chong@linux.alibaba.com>
-References: <20230317063338.18029-1-jiapeng.chong@linux.alibaba.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     perex@perex.cz, tiwai@suse.com, nathan@kernel.org,
+        ndesaulniers@google.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ALSA: ymfpci: remove unused snd_ymfpci_readb function
+In-Reply-To: <20230318132708.1684504-1-trix@redhat.com>
+References: <20230318132708.1684504-1-trix@redhat.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,18 +69,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Mar 2023 07:33:38 +0100,
-Jiapeng Chong wrote:
+On Sat, 18 Mar 2023 14:27:08 +0100,
+Tom Rix wrote:
 > 
-> Variable portman_read_data is not effectively used, so delete it.
+> clang with W=1 reports
+> sound/pci/ymfpci/ymfpci_main.c:34:18: error:
+>   unused function 'snd_ymfpci_readb' [-Werror,-Wunused-function]
+> static inline u8 snd_ymfpci_readb(struct snd_ymfpci *chip, u32 offset)
+>                  ^
+> This static function is not used, so remove it.
 > 
-> sound/drivers/portman2x4.c:195:18: warning: unused function 'portman_read_data'.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4557
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks, applied now.
+I applied now, but still wondering why it warns at all even if it's a
+static inline function...
 
+
+thanks,
 
 Takashi
+
+> ---
+>  sound/pci/ymfpci/ymfpci_main.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/sound/pci/ymfpci/ymfpci_main.c b/sound/pci/ymfpci/ymfpci_main.c
+> index c80114c0ad7b..2858736ed20a 100644
+> --- a/sound/pci/ymfpci/ymfpci_main.c
+> +++ b/sound/pci/ymfpci/ymfpci_main.c
+> @@ -31,11 +31,6 @@
+>  
+>  static void snd_ymfpci_irq_wait(struct snd_ymfpci *chip);
+>  
+> -static inline u8 snd_ymfpci_readb(struct snd_ymfpci *chip, u32 offset)
+> -{
+> -	return readb(chip->reg_area_virt + offset);
+> -}
+> -
+>  static inline void snd_ymfpci_writeb(struct snd_ymfpci *chip, u32 offset, u8 val)
+>  {
+>  	writeb(val, chip->reg_area_virt + offset);
+> -- 
+> 2.27.0
+> 
