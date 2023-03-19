@@ -2,111 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135286C0161
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419EE6C0165
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 13:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCSMGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 08:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S229497AbjCSMHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 08:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjCSMGq (ORCPT
+        with ESMTP id S229605AbjCSMG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 08:06:46 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A02211B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:06:35 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b20so3836196edd.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:06:34 -0700 (PDT)
+        Sun, 19 Mar 2023 08:06:57 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F87722A23
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:06:54 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id cy23so36693736edb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 05:06:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679227593;
+        d=linaro.org; s=google; t=1679227612;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
         bh=3GQ0kuX+CANTyKsciGzMU4Vb8Jeilt6T7QwH/C5HtcI=;
-        b=q/Wwmwtmi5ctcH6j5K3nCXBiz9uR0+OP/odaZ0yeLNMn0P9OkvfGw11VAgRnOyicjD
-         dRjK50152RNnjgjge6gAAt5Oam85/MTmtLQltFikeLXblNNntYLDxeIl/jxH7cl6DlQU
-         sY4XtUDCoocxbk8uJ7HOQfu1jUXU17C+IKRJby/o8bWFg/PmAAU/fafUO6CqreFLjueK
-         aMRfAOGK16sg24DvYuSU3+cwAV/ypTXHaiO1E7FzvjPIDtQxYYpxTuvdJPLO5wV+DQCA
-         oFGeTeBYPJtHdqLfLxMfW+FmzXsQe40biKcOOPKt9peVzMslgC29+L/CA9QbxDf/a150
-         Ne3g==
+        b=wyyRNf1RVCSmVWy3uIQD6gbqmoxHXa4hhnuxOXFy5DSK6KoJMRW/7snBe+hAcOuLSh
+         4Lil0xPsXtCAFbTqAzDdtCyDhPRNI/pweLUmN6KTonFGYaLFKA2c641IjtNvE0333K/0
+         iwf8OUVV6CImiDOkzXbLoQxSXxGLT1pNVgzmz8rjCC4TtF0xRkBnaw2J6Q6fsDn6B3vO
+         qGuzkd5xHcL84vTvayPMp0BjhvSj1BaD45jc37kce8oQ795+M7hlUkz5iakVRZLdUngL
+         KVKgU5E9wG7BR2kQZUT4ObnjiJ9P0zF028UvVcHQPrlM6HIR4Yc/BHO1sVUHHif7PQzP
+         va2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679227593;
+        d=1e100.net; s=20210112; t=1679227612;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=3GQ0kuX+CANTyKsciGzMU4Vb8Jeilt6T7QwH/C5HtcI=;
-        b=W8eP97joJDXE7O9h62JClyTqA8GFwBeUduivTcW28f7aq8bI9ehaVSEuhgMacagufc
-         0/qe6217oaxKwNlUbZCfCQ6M+Qitg7w570okUMG41hU6NFe2wo3d+xPbw/kyVTBCR9J8
-         tI0096EIKnme4blHdJhFAiYA1WenRNKksp5+OLu2fB/dGJcowVubGpkMOSQi/MU9VwdB
-         toq+v/mobu0yJwhsTc3xDymdHtBuY7OO3c82cjsSgwgiWAtbF0eSSkdMOPqkl3L+ohRh
-         d3zUeI44IrPt4K9TL8ZQ9qS5L9sdAc0634L1Xe6UIRhkrlzOp81hbWYE0f94NaJ4OrO1
-         RUPQ==
-X-Gm-Message-State: AO0yUKX2KTjm1qCf/LkjCS9xb6TQWgolLgwZhvIvMLDgwjmB2XUYISFB
-        6LD9t1k/r5GfVo40naNOi1wRFw==
-X-Google-Smtp-Source: AK7set9NHq4wBQYJWJ/ZRlVN9Tlxwe4UcNKkxGkrS38jM5S1VezeVO4DSvYLo/+tr/EvFNS6LaAQbQ==
-X-Received: by 2002:a17:907:2101:b0:8d6:626d:7e03 with SMTP id qn1-20020a170907210100b008d6626d7e03mr5390303ejb.40.1679227593238;
-        Sun, 19 Mar 2023 05:06:33 -0700 (PDT)
+        b=4w1vDrjElPAFz9yYs7LXWzeDIJ1BzwSVQBnyXsrw61SHLB5RXb+TJ4RruP68Nhn9ey
+         8M2vjgjWKCf1LG9Fka61A9yETtPtP9aR0WtMyx1tpucdifsd78bU08onaotE8nBZ2F5f
+         BqTJK04VOHqOiE4tW8Wp3Lsq4LD+9X9MVNDCY7e6a5Y9RwERbrR8v22TErlkDna2pNqV
+         Yanzr8IpdsyrzRTCqlA6YZL36FPtV8V8X872HTUB1Kwu+MsXX+PxSdTAwTXLb2PQJhQO
+         LJdGZ7P3kslvlo2pTRA0RHfpSrF3DAZ6GfwFJhwbyXwQdzxKUTs3lfsV15JgxOZl79W+
+         6c1w==
+X-Gm-Message-State: AO0yUKUdg8DiYZZYCdUw05Q8Ct4SlDw/u5YzPR4ih8V6SlgO5SAJd02z
+        a3pW1q7wB/mKDMYipEeAm2/SaA==
+X-Google-Smtp-Source: AK7set80QOZ+DV1BMmqsy+GIRzW1eJc2fyUakkB2BmV/dLpU+3H5MSHjgo5dvspVJM8r1tWCDkHtFw==
+X-Received: by 2002:a05:6402:4d2:b0:501:c120:6e90 with SMTP id n18-20020a05640204d200b00501c1206e90mr1103738edw.3.1679227612697;
+        Sun, 19 Mar 2023 05:06:52 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id i3-20020a508703000000b004fbd365fb33sm3468506edb.38.2023.03.19.05.06.31
+        by smtp.gmail.com with ESMTPSA id qx20-20020a170906fcd400b008eaf99be56esm3244862ejb.170.2023.03.19.05.06.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 05:06:32 -0700 (PDT)
-Message-ID: <efc29278-b1b6-c30c-5c89-294e5198b80a@linaro.org>
-Date:   Sun, 19 Mar 2023 13:06:30 +0100
+        Sun, 19 Mar 2023 05:06:52 -0700 (PDT)
+Message-ID: <a4d6ef37-77a4-bdf7-9281-681864b901d3@linaro.org>
+Date:   Sun, 19 Mar 2023 13:06:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: net: Drop unneeded quotes
+Subject: Re: [PATCH] dt-bindings: rtc: Drop unneeded quotes
 Content-Language: en-US
 To:     Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-aspeed@lists.ozlabs.org,
-        linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-References: <20230317233605.3967621-1-robh@kernel.org>
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230317233634.3968656-1-robh@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230317233605.3967621-1-robh@kernel.org>
+In-Reply-To: <20230317233634.3968656-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
