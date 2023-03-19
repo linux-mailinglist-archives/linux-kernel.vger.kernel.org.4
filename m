@@ -2,184 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EFE6C03F4
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2151D6C03EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCSS5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 14:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S229885AbjCSSzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 14:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCSS5Q (ORCPT
+        with ESMTP id S229881AbjCSSzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 14:57:16 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0905EF749;
-        Sun, 19 Mar 2023 11:57:15 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5A8B35FD08;
-        Sun, 19 Mar 2023 21:57:13 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679252233;
-        bh=Ur4jg6uAteONoMZU6lu41Y3TNMOYC8XZYn3Gott3yvA=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=hYExZj62rdKq/kQoxBw7vhVqZHzrMPXS1mzbZUM2WEuHSuQ/bJRIYnObuLlGDJCWE
-         RprVYm7OatuydeKkYwb//Xd/1WrhwHmxOtE/vb2wOroGtpRHfJDkmz17mSaZh5MMF0
-         Rn3QFlZpThxJTfYYb26aF1dYPinMORmCLDncowCImhUZZeT4LvlBA2IsV4B7Vr0Nqt
-         Xr6fg0FEAj0bPrEyYshWwA/7Znku/iattGIP8hLcIMSLejHJw54W70PevOQ9s4OeJw
-         088jv1DKn99uKPCMdv5/OidUKYx8v+ek+1SECxKtSnqcMW7fQKhKd288HOCaQ4BPYH
-         y2Eh1Vt8bJXJQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun, 19 Mar 2023 21:57:13 +0300 (MSK)
-Message-ID: <14ca87d1-3e07-85e9-d11c-39789a9d17d4@sberdevices.ru>
-Date:   Sun, 19 Mar 2023 21:53:54 +0300
+        Sun, 19 Mar 2023 14:55:13 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E31FE3;
+        Sun, 19 Mar 2023 11:55:02 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id i9so8502657wrp.3;
+        Sun, 19 Mar 2023 11:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679252100;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8FuFglnsRTgM0DFJejxa4YeSyCwH93jBqxU8rr/8OI=;
+        b=PCodkK3x5ukl2M4K3OGErs9joY41dIBSVutIJPRdvjcJ3PiZ39lPDqawUMepncr5Tt
+         ZCyyl9oK4ulMjV+UItVFbLvQmx84kVsUWN1EIWvKmQfeH1gQKCXe0yYf2vewISAES1oM
+         hfb85ywP1iPPPkuCSsovZG0jQEqMXNmZUsQ9vjx1y7QuJciGh8/535NBrHj9mBZcnzxd
+         e0bnad28cQHTQJYcQxYO+8b5Xen4b0HsHK+TjnduIPwGduyOG3zzey7quU3/6n+C1lfD
+         huzOGJdtaBuinUFX5VIW1H9FgE6lHK1QVXn5H7MAuMbkizyBpp0D1O2tJgOUAJKd7lDY
+         F6Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679252100;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T8FuFglnsRTgM0DFJejxa4YeSyCwH93jBqxU8rr/8OI=;
+        b=U71U+1eTuojLioD/45QkdyU3NENIGTaIhfk7XGHzKWYKma9563wTAQPXyON/OnCW0T
+         0/vvL5oBkX6Lo6n87ZFrNdhyAClU02ueB743Fcac7h32aE8aYA0UuPPXCg4Y2SubGoG0
+         DeOqpVJOK386WK1XvETdcjhwc8NyB6WRcGj51V6Iae7SakYRkrdJeAc1Ar/CGNH7dSQQ
+         8Ro4mjstW6KP2gByaqRRdskEXO4G9R3qBJ0hgnagumoEij0QGQcrQWf9tjYQuYjNPvWC
+         QTfXWwoFScCRlU5eWcVLxphX+xVJRve9VfbKJ/BWWwwy/Sgu6EKBqEviupj6bltxdUgL
+         D4vQ==
+X-Gm-Message-State: AO0yUKXbWOzGnvtZhpw2DZlVDBLoko0CdZzhdR7zy9wOFMhpB+MhKVBH
+        26HHahzJFR82/CULVrcRV54=
+X-Google-Smtp-Source: AK7set/6qugdrP+lP+37lsKec2suWsOgRB5q7oQUIoTp8ZmqaX7YJXSI6HexDporJ8igGdBY4jRi2w==
+X-Received: by 2002:a5d:4985:0:b0:2cf:f140:52e3 with SMTP id r5-20020a5d4985000000b002cff14052e3mr12201175wrq.9.1679252099627;
+        Sun, 19 Mar 2023 11:54:59 -0700 (PDT)
+Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
+        by smtp.gmail.com with ESMTPSA id c8-20020adfe708000000b002cde626cd96sm7067347wrm.65.2023.03.19.11.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 11:54:59 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 19 Mar 2023 19:54:56 +0100
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
+        daniel@iogearbox.net, kpsingh@kernel.org
+Subject: Re: [PATCH 5/7] ftrace: Store direct called addresses in their ops
+Message-ID: <ZBdagJQFA/Z7Phj5@krava>
+References: <20230316173811.1223508-1-revest@chromium.org>
+ <20230316173811.1223508-6-revest@chromium.org>
+ <ZBcqUoUTZSNyIjLx@krava>
+ <20230319135443.1d29db2d@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-In-Reply-To: <e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v1 3/3] test/vsock: skbuff merging test
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/19 16:43:00 #20974059
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319135443.1d29db2d@rorschach.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds test which checks case when data of newly received skbuff is
-appended to the last skbuff in the socket's queue.
+On Sun, Mar 19, 2023 at 01:54:43PM -0400, Steven Rostedt wrote:
+> On Sun, 19 Mar 2023 16:29:22 +0100
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > > +++ b/kernel/trace/ftrace.c
+> > > @@ -2582,9 +2582,8 @@ ftrace_add_rec_direct(unsigned long ip, unsigned long addr,
+> > >  static void call_direct_funcs(unsigned long ip, unsigned long pip,
+> > >  			      struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> > >  {
+> > > -	unsigned long addr;
+> > > +	unsigned long addr = ops->direct_call;  
+> > 
+> > nice, should it be read with READ_ONCE ?
+> 
+> Is there a "read tearing" too?
 
-This test is actual only for virtio transport.
+don't know, saw the comment in __modify_ftrace_direct and got curious
+why it's not in here.. feel free to ignore, I'll look it up
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- tools/testing/vsock/vsock_test.c | 81 ++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+jirka
 
-diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
-index 3de10dbb50f5..00216c52d8b6 100644
---- a/tools/testing/vsock/vsock_test.c
-+++ b/tools/testing/vsock/vsock_test.c
-@@ -968,6 +968,82 @@ static void test_seqpacket_inv_buf_server(const struct test_opts *opts)
- 	test_inv_buf_server(opts, false);
- }
- 
-+static void test_stream_virtio_skb_merge_client(const struct test_opts *opts)
-+{
-+	ssize_t res;
-+	int fd;
-+
-+	fd = vsock_stream_connect(opts->peer_cid, 1234);
-+	if (fd < 0) {
-+		perror("connect");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	res = send(fd, "HELLO", strlen("HELLO"), 0);
-+	if (res != strlen("HELLO")) {
-+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("SEND0");
-+	/* Peer reads part of first packet. */
-+	control_expectln("REPLY0");
-+
-+	/* Send second skbuff, it will be merged. */
-+	res = send(fd, "WORLD", strlen("WORLD"), 0);
-+	if (res != strlen("WORLD")) {
-+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("SEND1");
-+	/* Peer reads merged skbuff packet. */
-+	control_expectln("REPLY1");
-+
-+	close(fd);
-+}
-+
-+static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
-+{
-+	unsigned char buf[64];
-+	ssize_t res;
-+	int fd;
-+
-+	fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
-+	if (fd < 0) {
-+		perror("accept");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_expectln("SEND0");
-+
-+	/* Read skbuff partially. */
-+	res = recv(fd, buf, 2, 0);
-+	if (res != 2) {
-+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("REPLY0");
-+	control_expectln("SEND1");
-+
-+	res = recv(fd, buf, sizeof(buf), 0);
-+	if (res != 8) {
-+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	res = recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
-+	if (res != -1) {
-+		fprintf(stderr, "expected recv(2) success, got %zi\n", res);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	control_writeln("REPLY1");
-+
-+	close(fd);
-+}
-+
- static struct test_case test_cases[] = {
- 	{
- 		.name = "SOCK_STREAM connection reset",
-@@ -1038,6 +1114,11 @@ static struct test_case test_cases[] = {
- 		.run_client = test_seqpacket_inv_buf_client,
- 		.run_server = test_seqpacket_inv_buf_server,
- 	},
-+	{
-+		.name = "SOCK_STREAM virtio skb merge",
-+		.run_client = test_stream_virtio_skb_merge_client,
-+		.run_server = test_stream_virtio_skb_merge_server,
-+	},
- 	{},
- };
- 
--- 
-2.25.1
+> 
+> -- Steve
+> 
+> > 
+> > jirka
+> > 
+> > >  
+> > > -	addr = ftrace_find_rec_direct(ip);
+> > >  	if (!addr)
+> > >  		return;
+> > >  
+> > > @@ -5380,6 +5379,7 @@ int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+> > >  	ops->func = call_direct_funcs;
+> > >  	ops->flags = MULTI_FLAGS;
+> > >  	ops->trampoline = FTRACE_REGS_ADDR;
+> > > +	ops->direct_call = addr;
+> > >  
+> > >  	err = register_ftrace_function_nolock(ops);
+> > >  
+> > > @@ -5454,6 +5454,7 @@ __modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+> > >  	/* Enable the tmp_ops to have the same functions as the direct ops */
+> > >  	ftrace_ops_init(&tmp_ops);
+> > >  	tmp_ops.func_hash = ops->func_hash;
+> > > +	tmp_ops.direct_call = addr;
+> > >  
+> > >  	err = register_ftrace_function_nolock(&tmp_ops);
+> > >  	if (err)
+> > > @@ -5475,6 +5476,8 @@ __modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+> > >  			entry->direct = addr;
+> > >  		}
+> > >  	}
+> > > +	/* Prevent store tearing if a trampoline concurrently accesses the value */
+> > > +	WRITE_ONCE(ops->direct_call, addr);
+> > >  
+> > >  	mutex_unlock(&ftrace_lock);
