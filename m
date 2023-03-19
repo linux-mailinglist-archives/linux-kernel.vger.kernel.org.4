@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253336C00DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0216C00DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjCSLhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 07:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S230242AbjCSLhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 07:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjCSLhi (ORCPT
+        with ESMTP id S230126AbjCSLho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 07:37:38 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BBC2364D
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:37:19 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y4so36696260edo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:37:19 -0700 (PDT)
+        Sun, 19 Mar 2023 07:37:44 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8BB20A1A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:37:35 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id er8so24898568edb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679225838;
+        d=linaro.org; s=google; t=1679225853;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3GQ0kuX+CANTyKsciGzMU4Vb8Jeilt6T7QwH/C5HtcI=;
-        b=D00+NhyYkKydBEbINUkLHKWGHGCpBkp/v2jQXmxjRv/PR6O1KzPoAfGXvqXlBDooLw
-         MDFhqQJBmoM8e0aMQlOPM1snaeCnDase6u1YX06J1yJn3jOcq8kY8pSv+Z2tHI0Bn8jG
-         PSI+eRufB8QEQUlU2Gki2Ya73RQoA/20yzg9Y+Ja5tNE+hG5GZR+HoF45JfcXg9JoB/k
-         j+ltjUtUS2dErsGsR3X6YwIbE2VvJibb1xva5SsX7lU6AfNraU+Q58J6z5Br7IEJDilp
-         eLRbTXyYU5E/EXS566kszMZH8tnrZ/mtdK2Ys1e7HjnnwoGz/phODt2Ql//XUs2joiqt
-         W7qw==
+        bh=zjQK98wMTvC2q3E7fdiQTGy4CfE9nib0P1aeqr32BDM=;
+        b=CNN+BQW1qwnIWDvTxDCdF3J/x2g//K0JqhfSGQ0F1o+DOFxtJMpexG7Zg2xkstrcG3
+         N+bDvSoc3N+PX8xxyOpd4P5FQyhLI7jmL6DiHr17l04ctANkt/h/obwznW6Ey2lYYQQU
+         eP2I596H+O3bmLUf6p+46nb/f7yBcuo7lzxfgySwO2BcdcVmDv45qTT7YshpQk33z034
+         C3rS/NaL3yaQbNCXzcGPGc5C4/FRf1ebAXvgljWLU1fDQSFe8a8q04Z4NFFYizrr+uiC
+         AYnUZxGFufy4sIdurjFrVZbDayiYAgPBKzWOFy1RXzaONpIXOOt6Ffh7VM4DM14tCvBD
+         itHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679225838;
+        d=1e100.net; s=20210112; t=1679225853;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GQ0kuX+CANTyKsciGzMU4Vb8Jeilt6T7QwH/C5HtcI=;
-        b=WEvtnJsedugakbnp0vYYNqHjs6xAyV75jTyfDWpMwlxHPyAANjIGgAsnLSMVHg35U5
-         871wBaLAuDc+2jAU5Bx8jdZRz7dKqmKwSeAJTSVyYq+UF31F1s49sLSmYoAGh3BpU+qo
-         f8imWb0i459iUljCMLxBjailaXVZzASFgXthoYFGboJmimLefphANOFxG4rFP0DCxexO
-         4QoYvp0rKt64H5JSXGp0YXlQU1BsRaXnpomrDmBxqfT3it06uoZcgiGzi+VbdfLoSUFY
-         MvrG6PNiL2oq+ewMRdk7VFwtf62db8MeZnDTlh1/HJskb5ILHPhPs3vLJ2xYXqx2k2ON
-         Z91w==
-X-Gm-Message-State: AO0yUKUisoF0LWSxz4k4ws5uaq9RiSkC4idAPcyjfg7bpSSFneZN5L9x
-        BUYKiMZcJQeHd4l4kC6OHOUyaw==
-X-Google-Smtp-Source: AK7set+v8lgMBbotLK7i5EuslBypcEkfi/Fu+fPXJdbgw87inJZ/klcBJwVzuNGiRec4HuUe5I8AaA==
-X-Received: by 2002:a17:907:2bd2:b0:92f:bef6:7843 with SMTP id gv18-20020a1709072bd200b0092fbef67843mr5238447ejc.22.1679225838160;
-        Sun, 19 Mar 2023 04:37:18 -0700 (PDT)
+        bh=zjQK98wMTvC2q3E7fdiQTGy4CfE9nib0P1aeqr32BDM=;
+        b=hXEsIm0vFmKJm4SHHSz0qE+Dd34CPZtoiTr/LPE5/45aZ4psE6NQtvskvqJEAFMsCj
+         Ta0s2wiY/Iyd3nCXivlbgidusygF1zbOWode9YuDG9XiCcS/qY8MvUSIbLAMs3YZS7ai
+         uSataDcC8QV9bDVIYsHkQNYjDCNvky45599uAQwNTO6rosTwD4q1T9MtoLrgkVgQz2YA
+         nWLQiZ7fEFlvZBA1eQNN0nciqX7Kyp9kbVqcYP/AwDqUJZUti1DVAptLWDdmGX3aXCZN
+         Rf4MDCNZBMmMgRvBEOCjDwx/4KhVucNU7Hyqe0a5tKYLq/mz4YyNuPqPeK6qhTJOboQQ
+         ALkA==
+X-Gm-Message-State: AO0yUKVsBlzSZ82EIV/AP3CmCjpYRpnDE68+ulL1PMpgiVf07wUDF3cd
+        qTsNSuO1Vn4CWKCon+Jl2liXoA==
+X-Google-Smtp-Source: AK7set9U0AOSAuCrrvQlU6ITw/snJRIJElKkSVMThrbqvxYqk0NpWETXKzJ097yOzmwdgjDNpq92Zg==
+X-Received: by 2002:a05:6402:c2:b0:4fe:94a2:81be with SMTP id i2-20020a05640200c200b004fe94a281bemr8384168edu.7.1679225853579;
+        Sun, 19 Mar 2023 04:37:33 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id v19-20020a17090651d300b0092b86d41dbasm3178595ejk.114.2023.03.19.04.37.16
+        by smtp.gmail.com with ESMTPSA id s29-20020a50d49d000000b004fc2a75c6b3sm3408547edi.23.2023.03.19.04.37.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 04:37:17 -0700 (PDT)
-Message-ID: <de919fd2-898b-f8a2-cc13-c66995e787c3@linaro.org>
-Date:   Sun, 19 Mar 2023 12:37:16 +0100
+        Sun, 19 Mar 2023 04:37:33 -0700 (PDT)
+Message-ID: <7098b2cb-eba9-ebae-1edc-f4c934bbd898@linaro.org>
+Date:   Sun, 19 Mar 2023 12:37:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: nvmem: Drop unneeded quotes
+Subject: Re: [PATCH] dt-bindings: watchdog: Drop unneeded quotes
 Content-Language: en-US
 To:     Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -66,38 +67,36 @@ To:     Rob Herring <robh@kernel.org>,
         Hector Martin <marcan@marcan.st>,
         Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-References: <20230317233640.3968821-1-robh@kernel.org>
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230317233643.3969019-1-robh@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230317233640.3968821-1-robh@kernel.org>
+In-Reply-To: <20230317233643.3969019-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -110,6 +109,7 @@ On 18/03/2023 00:36, Rob Herring wrote:
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
+
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
