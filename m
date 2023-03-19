@@ -2,122 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889146C03D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE626C03D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjCSSo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 14:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S229842AbjCSSpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 14:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjCSSoZ (ORCPT
+        with ESMTP id S229612AbjCSSpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 14:44:25 -0400
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620941632B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 11:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=55TQw3vmH2ewB+u+Nx+NoaqSvHlaHxAFdFOoflwM9FY=;
-        b=cFGyvjChe1mTdtFdX6pdqz0ATMgdpW3fT1KkwUrUkpNalQQDaqFU5vN7VKBddGpYLXta2DpkFI55w
-         MogWKlXdSXzNrrC5bGiSlpq5Do4A2sQNeWaCmqIlEimeq9x1gl80wZc6zJUzkUhAOW1N6R5wz8ZVPd
-         leZt4y4mpQn+ssBwEd/MBYswMDehgShJ7ooPBMIBmdbptpzJcDOW8EWJG0l7LOHAdSdye4j/hTjl2J
-         OAiIf/mCrmSOrSub6eIq5J9qMPc36zFTeLyCvrYO7OvVztiKoy8rmG/+Gwak6H+EiJ+PByU8MKo+X5
-         +j1pgZ4jnJU00weICutVZqABC1PMCAw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=55TQw3vmH2ewB+u+Nx+NoaqSvHlaHxAFdFOoflwM9FY=;
-        b=z5JZS1uRC8yuO9NKyeQdfLOOcdSuevOdrmWZPSc3Ui+aGG0zuuit9OrsPex0yW9dEql1YHNHq7Q2U
-         ZbTuEn0DQ==
-X-HalOne-ID: 0b8d9806-c686-11ed-a42d-11abd97b9443
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id 0b8d9806-c686-11ed-a42d-11abd97b9443;
-        Sun, 19 Mar 2023 18:44:15 +0000 (UTC)
-Date:   Sun, 19 Mar 2023 19:44:13 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Helge Deller <deller@gmx.de>, Lee Jones <lee@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Antonino Daplas <adaplas@gmail.com>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        linuxppc-dev@lists.ozlabs.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 12/15] auxdisplay: ht16k33: Introduce
- backlight_get_brightness()
-Message-ID: <ZBdX/YlexhyVzIRf@ravnborg.org>
-References: <20230107-sam-video-backlight-drop-fb_blank-v1-0-1bd9bafb351f@ravnborg.org>
- <20230107-sam-video-backlight-drop-fb_blank-v1-12-1bd9bafb351f@ravnborg.org>
- <CANiq72mFMJuec+r=T6xYtLpuU+a1rOrAhrHiecy_1Jpj2m4J=g@mail.gmail.com>
- <Y7qM+ZlG5gQiOW4K@ravnborg.org>
- <2857575f6ec206f79cc21d423fde7d17@protonic.nl>
- <20230319144408.03045c50@heffalump.sk2.org>
+        Sun, 19 Mar 2023 14:45:51 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8759011150;
+        Sun, 19 Mar 2023 11:45:49 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pdy2J-0000Vs-00; Sun, 19 Mar 2023 19:45:43 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9B5CAC1B09; Sun, 19 Mar 2023 19:45:36 +0100 (CET)
+Date:   Sun, 19 Mar 2023 19:45:36 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 16/36] mips: Implement the new page table range API
+Message-ID: <20230319184536.GA6491@alpha.franken.de>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-17-willy@infradead.org>
+ <20230315105022.GA9850@alpha.franken.de>
+ <ZBIrkW5EB/uHj4sm@casper.infradead.org>
+ <20230317152920.GA11653@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230319144408.03045c50@heffalump.sk2.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230317152920.GA11653@alpha.franken.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 02:44:08PM +0100, Stephen Kitt wrote:
-> Hi,
-> 
-> On Mon, 09 Jan 2023 11:12:02 +0100, Robin van der Gracht <robin@protonic.nl>
-> wrote:
-> > On 2023-01-08 10:29, Sam Ravnborg wrote:
-> > > On Sat, Jan 07, 2023 at 10:02:38PM +0100, Miguel Ojeda wrote:  
-> > >> On Sat, Jan 7, 2023 at 7:26 PM Sam Ravnborg via B4 Submission Endpoint
-> > >> <devnull+sam.ravnborg.org@kernel.org> wrote:  
-> > >> >
-> > >> > Introduce backlight_get_brightness() to simplify logic
-> > >> > and avoid direct access to backlight properties.  
-> > >> 
-> > >> Note: Stephen sent this one too a while ago (with some more details in
-> > >> the commit message, which is always nice); and then he sent yesterday
-> > >> v2 [1] (to mention the functional change with `BL_CORE_SUSPENDED`
-> > >> [2]).  
-> > > Thanks for the pointers. I will try to move forward with Stephen's
-> > > patches.  
-> > >> 
-> > >> Anyway, if it goes via drm-misc, feel free to have my:
-> > >> 
-> > >>     Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> > >> 
-> > >> Though it would be nice to have Robin test the change.  
+On Fri, Mar 17, 2023 at 04:29:20PM +0100, Thomas Bogendoerfer wrote:
+> On Wed, Mar 15, 2023 at 08:33:21PM +0000, Matthew Wilcox wrote:
+> > On Wed, Mar 15, 2023 at 11:50:22AM +0100, Thomas Bogendoerfer wrote:
+> > > On Wed, Mar 15, 2023 at 05:14:24AM +0000, Matthew Wilcox (Oracle) wrote:
+> > > > Rename _PFN_SHIFT to PFN_PTE_SHIFT.  Convert a few places
+> > > > to call set_pte() instead of set_pte_at().  Add set_ptes(),
+> > > > update_mmu_cache_range(), flush_icache_pages() and flush_dcache_folio().
 > > > 
-> > > Robin - can I get your ack to apply Stephen's original v2 patch to
-> > > drm-misc?  
+> > > /local/tbogendoerfer/korg/linux/mm/memory.c: In function ‘set_pte_range’:
+> > > /local/tbogendoerfer/korg/linux/mm/memory.c:4290:2: error: implicit declaration of function ‘update_mmu_cache_range’ [-Werror=implicit-function-declaration]
+> > >   update_mmu_cache_range(vma, addr, vmf->pte, nr);
+> > > 
+> > > update_mmu_cache_range() is missing in this patch.
 > > 
-> > done! see: 
-> > https://lore.kernel.org/lkml/0b16391f997e6ed005a326e4e48f2033@protonic.nl/
+> > Oops.  And mips was one of the arches I did a test build for!
+> > 
+> > Looks like we could try to gain some efficiency by passing 'nr' to
+> > __update_tlb(), but as far as I can tell, that's only called for r3k and
+> > r4k, so maybe it's not worth optimising at this point?
 > 
-> As far as I can tell, this never got applied to drm-misc, and I don’t see it
-> anywhere else. I guess it slipped through the cracks ;-)
+> hmm, not sure if that would help. R4k style TLB has two PTEs mapped
+> per TLB entry. So by advancing per page __update_tlb() is called more
+> often than needed.
 
-Yes, I have been busy with a lot of other stuff lately, and cannot
-promise when I get back to do Linux work.
-So if someone else could pick it up that would be nice.
+btw. how big is nr going to be ? There are MIPS SoCs out there, which
+just have 16 TLBs...
 
-	Sam
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
