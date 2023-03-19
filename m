@@ -2,188 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260066BFF41
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 04:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A476BFF45
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 05:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjCSDiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 23:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S229937AbjCSEDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 00:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCSDiO (ORCPT
+        with ESMTP id S229481AbjCSEDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 23:38:14 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EB51C33E
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 20:38:07 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1679197076tawonyos
-Received: from localhost.localdomain ( [60.186.52.194])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 19 Mar 2023 11:37:52 +0800 (CST)
-X-QQ-SSF: 01000000006000101000B00A0000000
-X-QQ-FEAT: PXtIlpCZyqct4D9A6UijQTb/of6mMAcUFFGfIr9JXjdhBQPb6LhUTp6o5fZpi
-        zPo0BEnuM3Vrq7aTWcaITofmY07dr+PAk/rGBrE82G7CvJjxC0BNcAv96c9+YFsAP5iH+91
-        0wcOlPG1Cj8kJObOJiJyBOoOboJQ68dxkhblpS5CLpnmtIbtPi8ACMQE270ZUJSpqUZe+xr
-        A8Yf8+rvCbqnGHPyV71H8GD3bIdYn6J+bm8LUSq0nKLuaJVl0o63gRnX+uQVrCzFdk84nfW
-        Kxw27yyJcDAyhx1VzQCm8FqwRJVCbxK32SxFTaGMr1fuCNnr4ez+6PmqPj/ALcdg52yf1/3
-        zBcW2y3
-X-QQ-GoodBg: 0
-From:   "buddy.zhang" <buddy.zhang@biscuitos.cn>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "buddy.zhang" <buddy.zhang@biscuitos.cn>
-Subject: [PATCH] mm: Keep memory type same on DEVMEM Page-Fault
-Date:   Sun, 19 Mar 2023 11:37:50 +0800
-Message-Id: <20230319033750.475200-1-buddy.zhang@biscuitos.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 19 Mar 2023 00:03:13 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7F8F12588
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 21:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=M3F5c
+        23yEAb6RmFCWHC++naieRb90y1zO1aTuCoWokQ=; b=D5yDxSKvkru507DhW69CM
+        pOiVjrtxnzgWP/ZlpUmI7xjIyXpo9Zr+qLtixLa741N7zDYYoe6Gbu6MVJuptvUa
+        dVkaqDdkwL2IWHCvI9GdnYfr4WmeBQB/G2F2f8w/yOhhxMNdUlFqHMGDnU/RsDRn
+        JCob0OuuYXw0sjwAqG3/rI=
+Received: from lizhe.. (unknown [120.245.132.192])
+        by zwqz-smtp-mta-g1-3 (Coremail) with SMTP id _____wAXvegviRZksTGxAQ--.36162S4;
+        Sun, 19 Mar 2023 12:02:48 +0800 (CST)
+From:   Lizhe <sensor1010@163.com>
+To:     lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Lizhe <sensor1010@163.com>
+Subject: [PATCH v1] mfd:mcp-core.c : Remove redundant driver match function
+Date:   Sun, 19 Mar 2023 12:01:49 +0800
+Message-Id: <20230319040149.216919-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:biscuitos.cn:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wAXvegviRZksTGxAQ--.36162S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jr1kZF4kWr1kGFyUWw1kGrg_yoWDXrc_ua
+        4Yvr97Wrs8G3WfKan7Xrn7Zr97trsFqr4rKa10q393A34xWF1Uuw4DZry3J34rurWkZFZr
+        Z3yDXr4xuFW7tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRCxRh5UUUUU==
+X-Originating-IP: [120.245.132.192]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiSAU3q1+FhPxjlAAAsE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On X86 architecture, supports memory type on Page-table, such as
-PTE is PAT/PCD/PWD, which can setup up Memory Type as WC/WB/WT/UC etc.
-Then, Virtual address from userspace or kernel space can map to
-same physical page, if each page table has different memory type,
-then it's confused to have more memory type for same physical page.
+If there is no driver_match function, the driver core assumes that each
+candidate pair (driver, device)matches, see driver_match_device()
 
-On DEVMEM, the 'remap_pfn_range()' keep memory type same on different
-mapping. But if it happen on Page-Fault route, such as code:
-
- 19 static vm_fault_t vm_fault(struct vm_fault *vmf)
- 20 {
- 21         struct vm_area_struct *vma = vmf->vma;
- 22         unsigned long address = vmf->address;
- 23         struct page *fault_page;
- 24         unsigned long pfn;
- 25         int r;
- 26
- 27         /* Allocate Page as DEVMEM */
- 28         fault_page = alloc_page(GFP_KERNEL);
- 29         if (!fault_page) {
- 30                 printk("ERROR: NO Free Memory from DEVMEM.\n");
- 31                 r = -ENOMEM;
- 32                 goto err_alloc;
- 33         }
- 34         pfn = page_to_pfn(fault_page);
- 35
- 36         /* Clear PAT Attribute */
- 37         pgprot_val(vma->vm_page_prot) &= ~(_PAGE_PCD | _PAGE_PWT | _PAGE_PAT);
- 38
- 39         /* Change Memory Type for Direct-Mapping Area */
- 40         arch_io_reserve_memtype_wc(PFN_PHYS(pfn), PAGE_SIZE);
- 41         pgprot_val(vma->vm_page_prot) |= cachemode2protval(_PAGE_CACHE_MODE_WT);
- 42
- 43         /* Establish pte and INC _mapcount for page */
- 44         vm_flags_set(vma, VM_MIXEDMAP);
- 45         if (vm_insert_page(vma, address, fault_page))
- 46                 return -EAGAIN;
- 47
- 48         /* Add refcount for page */
- 49         atomic_inc(&fault_page->_refcount);
- 50         /* bind fault page */
- 51         vmf->page = fault_page;
- 52
- 53         return 0;
- 54
- 55 err_alloc:
- 56         return r;
- 57 }
- 58
- 59 static const struct vm_operations_struct BiscuitOS_vm_ops = {
- 60         .fault  = vm_fault,
- 61 };
- 62
- 63 static int BiscuitOS_mmap(struct file *filp, struct vm_area_struct *vma)
- 64 {
- 65         /* setup vm_ops */
- 66         vma->vm_ops = &BiscuitOS_vm_ops;
- 67
- 68         return 0;
- 69 }
-
-If invoke arch_io_reserve_memtype_wc() on Line-40, and modify memory type
-as WC for Direct-Mapping area, and then setup meory type as WT on Line-41,
-then invoke 'vm_insert_page()' to create mapping, so you can see:
-
-    | <----- Usespace -----> | <- Kernel space -> |
-----+------+---+-------------+---+---+------------+--
-    |      |   |             |   |   |            |
-----+------+---+-------------+---+---+------------+--
-           WT|                     |WC
-             o-------o    o--------o
-                   WT|    |WC
-                     V    V
--------------------+--------+------------------------
-                   | DEVMEM |
--------------------+--------+------------------------
-Physical Address Space
-
-For this case, OS should check memory type before mapping on 'vm_insert_page()',
-and keep memory type same, so add check on function:
-
-07 int vm_insert_page(struct vm_area_struct *vma, unsigned long addr,
-08                         struct page *page)
-09 {
-10         if (addr < vma->vm_start || addr >= vma->vm_end)
-11                 return -EFAULT;
-12         if (!page_count(page))
-13                 return -EINVAL;
-14         if (!(vma->vm_flags & VM_MIXEDMAP)) {
-15                 BUG_ON(mmap_read_trylock(vma->vm_mm));
-16                 BUG_ON(vma->vm_flags & VM_PFNMAP);
-17                 vm_flags_set(vma, VM_MIXEDMAP);
-18         }
-19         if (track_pfn_remap(vma, &vma->vm_page_prot,
-20                         page_to_pfn(page), addr, PAGE_SIZE))
-21                 return -EINVAL;
-22         return insert_page(vma, addr, page, vma->vm_page_prot);
-23 }
-
-And line 19 to 21, when mapping different memory type on this route, the
-'track_pfn_remap()' will notify error and change request as current, e.g.
-
-x86/PAT: APP:88 map pfn RAM range req write-through for [mem 0x025c1000-0x025c1fff], got write-combining
-
-And then, we can keep memory type same on Page-fault route for DEVMEM, the end:
-
-    | <----- Usespace -----> | <- Kernel space -> |
-----+------+---+-------------+---+---+------------+--
-    |      |   |             |   |   |            |
-----+------+---+-------------+---+---+------------+--
-           WT|                     |WC
-             o---(X)----o----------o
-                        |WC
-                        V
--------------------+--------+------------------------
-                   | DEVMEM |
--------------------+--------+------------------------
-
-Signed-off-by: buddy.zhang@biscuitos.cn
+Signed-off-by: Lizhe <sensor1010@163.com>
 ---
- mm/memory.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mfd/mcp-core.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index f456f3b5049c..ed3d09f513f1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1989,6 +1989,9 @@ int vm_insert_page(struct vm_area_struct *vma, unsigned long addr,
- 		BUG_ON(vma->vm_flags & VM_PFNMAP);
- 		vm_flags_set(vma, VM_MIXEDMAP);
- 	}
-+	if (track_pfn_remap(vma, &vma->vm_page_prot,
-+			page_to_pfn(page), addr, PAGE_SIZE))
-+		return -EINVAL;
- 	return insert_page(vma, addr, page, vma->vm_page_prot);
- }
- EXPORT_SYMBOL(vm_insert_page);
+diff --git a/drivers/mfd/mcp-core.c b/drivers/mfd/mcp-core.c
+index 2fa592c37c6f..281a9369f2b3 100644
+--- a/drivers/mfd/mcp-core.c
++++ b/drivers/mfd/mcp-core.c
+@@ -20,11 +20,6 @@
+ #define to_mcp(d)		container_of(d, struct mcp, attached_device)
+ #define to_mcp_driver(d)	container_of(d, struct mcp_driver, drv)
+ 
+-static int mcp_bus_match(struct device *dev, struct device_driver *drv)
+-{
+-	return 1;
+-}
+-
+ static int mcp_bus_probe(struct device *dev)
+ {
+ 	struct mcp *mcp = to_mcp(dev);
+@@ -43,7 +38,6 @@ static void mcp_bus_remove(struct device *dev)
+ 
+ static struct bus_type mcp_bus_type = {
+ 	.name		= "mcp",
+-	.match		= mcp_bus_match,
+ 	.probe		= mcp_bus_probe,
+ 	.remove		= mcp_bus_remove,
+ };
 -- 
-2.25.1
+2.34.1
 
