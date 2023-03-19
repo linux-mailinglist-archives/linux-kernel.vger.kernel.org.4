@@ -2,274 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5D16BFF7F
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 07:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E509A6BFF87
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 07:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCSGBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 02:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S230032AbjCSGGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 02:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCSGBJ (ORCPT
+        with ESMTP id S229697AbjCSGF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 02:01:09 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404BF22119
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 23:01:05 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-3184514d31eso213835ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 23:01:05 -0700 (PDT)
+        Sun, 19 Mar 2023 02:05:59 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61334144B3;
+        Sat, 18 Mar 2023 23:05:58 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h17so7636725wrt.8;
+        Sat, 18 Mar 2023 23:05:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679205664;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7jtobE7mdQ684Q9rpZyR9ThE+UBXlRxaYkXSGk1qWzI=;
-        b=Uv/GGmwuWmKmuai9ob/LIugQoqxPKWFQ7VQPGsUzDsFDNBg7szlIlGrjo7Wy6dUE5+
-         m5CLuuE8SgR+boruhHSQ2QGYMbhG+txFqoW37ungZHOAuhIlBH27W24o1IjrNdQOUGDn
-         rOBRSjw07ZsARNdte4ehKRi0jjkPaHBpLfkx4=
+        d=gmail.com; s=20210112; t=1679205957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L5o68Y8GxB7MxRzoWxahZl5WtNvv6X9nSD+g9jbql38=;
+        b=Le7DYoOL7Bf4hL3Wv77hhmKQmt3mp9QMEGnS2cejl83vA+gQs3Zt0efk+/VsSiHbXR
+         MIjLqginf428dvCLxTIKPF3mnB3uWPSRuqJiMBkZopl2GXlLQoKXljWSctOiiF4574oZ
+         kKf1mFlZutMKc5karnkdUfJzwvBejCegZUpZ+bfiMwJqd+z6OeOoOAnGwMuHfBpYBKol
+         c/JzPz6QEXXTYRgG6JGabibK1A6GzyFf0UspPlESgKNe4bnHExMLcKOaWV5z0GQOcTjJ
+         ZaeVlu+HWocBTeKIKptCqRnnPl3gLCS3lIp2joShP2UMzcudCNNQ0jLJ1vQud6O/vto2
+         Fp7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679205664;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7jtobE7mdQ684Q9rpZyR9ThE+UBXlRxaYkXSGk1qWzI=;
-        b=ue80OsxeXPNEP+zcn4Yoeb/CINndXonPhc2FcVIExA6glOhNqg2yO9+ES/W2wIbnFn
-         YxNNzv6GtuJrrpStS+HgOyKlE+1f2Y5M9SmVUEk41QY4FgWB1KH+90A2DGMoOxST+wHg
-         DPVPpsrPKW1DSu0nV6JFpgYGEAghw9PUcPPPSB3O9WYnvmq8+NJXRiE/uwOuGsnK1E8w
-         DvbvUP5oUi7oZrJMj1DM4yZbAyN2vXaFuf/qkmYrY3/vfFD8yvMqrb0zevMCUNxHWnKc
-         5o/8ipyOpBPMFT/bI30XmIB2W3EQnnKRibIULtTOBM31jYofgasTgvdPNDQZ33TiXMkA
-         8gwg==
-X-Gm-Message-State: AO0yUKW5Fp+CN8r0sDaA8Ya1piCEtCnIY2UdNkuPeFG2dHBIGAFpKGHr
-        dwAXpvlBmoUiUpHWZjRL0DmQuA95gILVDyXsKLUVDA==
-X-Google-Smtp-Source: AK7set8cLZYljQLpMgQgrBxrBo0UkMYzaidGYl/tBvUtvNEHoq8IQWEs2fBEX/GlE8CDFvEikWcBJNSxSYDOktq1GmA=
-X-Received: by 2002:a05:6e02:1d9b:b0:317:6591:95dd with SMTP id
- h27-20020a056e021d9b00b00317659195ddmr224882ila.9.1679205664302; Sat, 18 Mar
- 2023 23:01:04 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679205957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L5o68Y8GxB7MxRzoWxahZl5WtNvv6X9nSD+g9jbql38=;
+        b=PJc5/VvmGEP8mlsSpG0BOTYnyAej1vdd2meTQrT60TYOaoRd8lgTqywpv+M5vIJ127
+         va8KohaBcdMWNsS9bKr74rwyqfqL2PuShdd+9BVSYF7gsKPydzoFSvpyB52TrHX2UGSv
+         UonNQjRGNRzB0EPhQ8WDDeaDklHYj0bC2keqJf/6nNGPwLCM3khL9+socnutkEVLYKno
+         HjqftLj0RMCoy9hKnijiiD/QdjOA2Kypb5NRYfBz7bmW9OurrA7YApy3J0OmvPNdKZDz
+         7E9YS+3xrCw9IzSzGxxDVv3A3mLqEIPF14dPDUuq4pbcFnWjYcbfHPWhsEOibVZqkMX1
+         zyKw==
+X-Gm-Message-State: AO0yUKVSfJ85ulsUsHfFH87eLXD4q5Xhq0lZ5zinkYx2IcfoOekoK/Uy
+        smwDb7QCeiax4CYcnMdQoK8=
+X-Google-Smtp-Source: AK7set/518R9yursdpHA1wGwkdPSPJfwg60pyTGSqBIuce0FsEV/Czwz1hRsgEVvtD1i08fwY26OLA==
+X-Received: by 2002:adf:f1d1:0:b0:2cf:e8b2:4f76 with SMTP id z17-20020adff1d1000000b002cfe8b24f76mr10630878wro.66.1679205956681;
+        Sat, 18 Mar 2023 23:05:56 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id m23-20020a056000181700b002c5694aef92sm5815133wrh.21.2023.03.18.23.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Mar 2023 23:05:56 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 06:03:45 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        oe-kbuild-all@lists.linux.dev, Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH 4/4] mm: vmalloc: convert vread() to vread_iter()
+Message-ID: <ba07db21-04a3-462d-b5e1-e098799b89e0@lucifer.local>
+References: <119871ea9507eac7be5d91db38acdb03981e049e.1679183626.git.lstoakes@gmail.com>
+ <202303191017.vsaaDpyw-lkp@intel.com>
 MIME-Version: 1.0
-References: <bd48a3f0-138d-9c48-27d6-a5133f054c96@linux.intel.com> <20230317193056.GA1963022@bhelgaas>
-In-Reply-To: <20230317193056.GA1963022@bhelgaas>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Sat, 18 Mar 2023 23:00:52 -0700
-Message-ID: <CANEJEGuVTWTkFmnK0m-4Tn1OUvQQBLjCQ-fxL24jXAWaafQ9cw@mail.gmail.com>
-Subject: Re: [PATCHv2 pci-next 1/2] PCI/AER: correctable error message as KERN_INFO
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Grant Grundler <grundler@chromium.org>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O 'Halloran" <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rajat Jain <rajatja@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303191017.vsaaDpyw-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 12:31=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
- wrote:
+On Sun, Mar 19, 2023 at 10:16:59AM +0800, kernel test robot wrote:
+> Hi Lorenzo,
 >
-> On Fri, Mar 17, 2023 at 11:50:22AM -0700, Sathyanarayanan Kuppuswamy wrot=
-e:
-> > On 3/17/23 10:51 AM, Grant Grundler wrote:
-> > > Since correctable errors have been corrected (and counted), the dmesg=
- output
-> > > should not be reported as a warning, but rather as "informational".
-> > >
-> > > Otherwise, using a certain well known vendor's PCIe parts in a USB4 d=
-ocking
-> > > station, the dmesg buffer can be spammed with correctable errors, 717=
- bytes
-> > > per instance, potentially many MB per day.
-> >
-> > Why don't you investigate why you are getting so many correctable error=
-s?
-
-It's a bit difficult to insert a PCIe logic analyzer on someone else's
-soldered down parts. Intel is the only party with all the HW in a form
-that allows that level of debugging.
-
-> > Isn't solving the problem preferable to hiding the logs?
-
-Of course! But note that spamming the logs with low priority messages
-isn't acceptable either. So we should be doing both.
-
-> I hope there's some effort to find the cause of the errors, too.
-
-Rajat (from Intel) has told me that Intel is investigating this.
-
-I was told the devices are reporting two kinds of correctable
-errors:replay rollover and replay timeout.
-
-This may be related to a replay timer value (PCIERTP1) in the PCI
-device is too short for PCIe tunneling (USB4).  It's not clear to me
-if this value is hardcoded in the Intel NIC or if it's configurable.
-But I've been waiting since last December for Intel to give me
-guidance on what is implemented in their NIC.
-
-> But I do think KERN_INFO is a reasonable level for errors that have
-> already been corrected.  KERN_ERR seems a little bit too severe to me.
+> Thank you for the patch! Perhaps something to improve:
 >
-> Does changing to KERN_INFO keep the messages out of the dmesg log?  I
-> don't think it does, because *most* kernel messages are at KERN_INFO.
-> This may be just a commit log clarification.
-
-True. I'm not sure why I thought KERN_INFO would not show up.  If they
-do, I'll depend on the rate limiting patch to not spam the system
-logs.
-
-> I would like to know *which* devices are involved.
-> Is there some reason for weasel-wording this?
-
-I don't think there is. Rajat previously mentioned this was for the HP
-TBT4 docking station. The two USB4 docking station vendors I'm
-familiar with are both using Intel i225 NIC (foxville). This appears
-to be a problem only with the NIC behind a PCIe tunnel and not a HW
-problem with the docking station overall (which is what I previously
-assumed.)
-
-FTR, this same NIC works and does not report correctable errors when
-directly connected to a PCI host controller. It's not as happy on the
-other side of a USB4 PCIe tunnel but still appears to work correctly
-(retries are succeeding). I'm not able to point at any NIC failures
-(yet). But I'm certainly not very happy that the same company which is
-the primary backer of thunderbolt and USB4 isn't able to
-design/configure parts so they play well together.
-
->  Knowing which devices are involved
-> helps in triaging issue reports.  If there are any public reports on
-> mailing lists, etc, we could also cite those here to help users find
-> this solution.
-
-Yup - that's exactly how I've been helped so often in the past as well.
-
-
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on linus/master v6.3-rc2 next-20230317]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
-> > > Given the "WARN" priority, these messages have already confused the t=
-ypical
-> > > user that stumbles across them, support staff (triaging feedback repo=
-rts),
-> > > and more than a few linux kernel devs. Changing to INFO will hide the=
-se
-> > > messages from most audiences.
-> > >
-> > > Signed-off-by: Grant Grundler <grundler@chromium.org>
-> > > ---
-> > >  drivers/pci/pcie/aer.c | 29 +++++++++++++++++++----------
-> > >  1 file changed, 19 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > > index f6c24ded134c..cb6b96233967 100644
-> > > --- a/drivers/pci/pcie/aer.c
-> > > +++ b/drivers/pci/pcie/aer.c
-> > > @@ -687,23 +687,29 @@ static void __aer_print_error(struct pci_dev *d=
-ev,
-> > >  {
-> > >     const char **strings;
-> > >     unsigned long status =3D info->status & ~info->mask;
-> > > -   const char *level, *errmsg;
-> > >     int i;
-> > >
-> > >     if (info->severity =3D=3D AER_CORRECTABLE) {
-> > >             strings =3D aer_correctable_error_string;
-> > > -           level =3D KERN_WARNING;
-> > > +           pci_info(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-> > > +                   info->status, info->mask);
-> > >     } else {
-> > >             strings =3D aer_uncorrectable_error_string;
-> > > -           level =3D KERN_ERR;
-> > > +           pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-> > > +                   info->status, info->mask);
-> > >     }
-> > >
-> > >     for_each_set_bit(i, &status, 32) {
-> > > -           errmsg =3D strings[i];
-> > > +           const char *errmsg =3D strings[i];
-> > > +
-> > >             if (!errmsg)
-> > >                     errmsg =3D "Unknown Error Bit";
-> > >
-> > > -           pci_printk(level, dev, "   [%2d] %-22s%s\n", i, errmsg,
-> > > +           if (info->severity =3D=3D AER_CORRECTABLE)
-> > > +                   pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> > > +                           info->first_error =3D=3D i ? " (First)" :=
- "");
-> > > +           else
-> > > +                   pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> > >                             info->first_error =3D=3D i ? " (First)" :=
- "");
+> url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/fs-proc-kcore-Avoid-bounce-buffer-for-ktext-data/20230319-082147
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/119871ea9507eac7be5d91db38acdb03981e049e.1679183626.git.lstoakes%40gmail.com
+> patch subject: [PATCH 4/4] mm: vmalloc: convert vread() to vread_iter()
+> config: sh-randconfig-r013-20230319 (https://download.01.org/0day-ci/archive/20230319/202303191017.vsaaDpyw-lkp@intel.com/config)
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/a28f374d35bd294a529fcba0b69c8b0e2b66fa6c
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Lorenzo-Stoakes/fs-proc-kcore-Avoid-bounce-buffer-for-ktext-data/20230319-082147
+>         git checkout a28f374d35bd294a529fcba0b69c8b0e2b66fa6c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
 >
-> The - 5 lines, + 11 lines diff and repetition of the printk strings
-> doesn't seem like an improvement compared to the -1, +1 in the v1
-> patch:
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303191017.vsaaDpyw-lkp@intel.com/
 >
->   @@ -692,7 +692,7 @@ static void __aer_print_error(struct pci_dev *dev,
+> All warnings (new ones prefixed by >>):
 >
->           if (info->severity =3D=3D AER_CORRECTABLE) {
->                   strings =3D aer_correctable_error_string;
->   -               level =3D KERN_WARNING;
->   +               level =3D KERN_INFO;
->           } else {
+> >> mm/nommu.c:201:6: warning: no previous prototype for 'vread' [-Wmissing-prototypes]
+>      201 | long vread(char *buf, char *addr, unsigned long count)
+>          |      ^~~~~
 >
-> But maybe there's a reason?
 
-Not intentionally - but Yes - the next patch is simpler when changing
-to pci_info_ratelimit. This change will show up in either the first or
-second patch.
-
-I can switch that hunk back to V1 code if you prefer that for this patch.
-
-cheers,
-grant
-
+Ah sorry, I forgot to update the nommu stub, will respin with a fix.
 >
-> > >     }
-> > >     pci_dev_aer_stats_incr(dev, info);
-> > > @@ -724,7 +730,7 @@ void aer_print_error(struct pci_dev *dev, struct =
-aer_err_info *info)
-> > >     layer =3D AER_GET_LAYER_ERROR(info->severity, info->status);
-> > >     agent =3D AER_GET_AGENT(info->severity, info->status);
-> > >
-> > > -   level =3D (info->severity =3D=3D AER_CORRECTABLE) ? KERN_WARNING =
-: KERN_ERR;
-> > > +   level =3D (info->severity =3D=3D AER_CORRECTABLE) ? KERN_INFO : K=
-ERN_ERR;
-> > >
-> > >     pci_printk(level, dev, "PCIe Bus Error: severity=3D%s, type=3D%s,=
- (%s)\n",
-> > >                aer_error_severity_string[info->severity],
-> > > @@ -797,14 +803,17 @@ void cper_print_aer(struct pci_dev *dev, int ae=
-r_severity,
-> > >     info.mask =3D mask;
-> > >     info.first_error =3D PCI_ERR_CAP_FEP(aer->cap_control);
-> > >
-> > > -   pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n", status, ma=
-sk);
-> > >     __aer_print_error(dev, &info);
-> > > -   pci_err(dev, "aer_layer=3D%s, aer_agent=3D%s\n",
-> > > -           aer_error_layer[layer], aer_agent_string[agent]);
-> > >
-> > > -   if (aer_severity !=3D AER_CORRECTABLE)
-> > > +   if (aer_severity =3D=3D AER_CORRECTABLE) {
-> > > +           pci_info(dev, "aer_layer=3D%s, aer_agent=3D%s\n",
-> > > +                   aer_error_layer[layer], aer_agent_string[agent]);
-> > > +   } else {
-> > > +           pci_err(dev, "aer_layer=3D%s, aer_agent=3D%s\n",
-> > > +                   aer_error_layer[layer], aer_agent_string[agent]);
-> > >             pci_err(dev, "aer_uncor_severity: 0x%08x\n",
-> > >                     aer->uncor_severity);
-> > > +   }
-> > >
-> > >     if (tlp_header_valid)
-> > >             __print_tlp_header(dev, &aer->header_log);
-> >
-> > --
-> > Sathyanarayanan Kuppuswamy
-> > Linux Kernel Developer
+> vim +/vread +201 mm/nommu.c
+>
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16  200
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16 @201  long vread(char *buf, char *addr, unsigned long count)
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16  202  {
+> 9bde916bc73255 Chen Gang      2013-07-03  203  	/* Don't allow overflow */
+> 9bde916bc73255 Chen Gang      2013-07-03  204  	if ((unsigned long) buf + count < count)
+> 9bde916bc73255 Chen Gang      2013-07-03  205  		count = -(unsigned long) buf;
+> 9bde916bc73255 Chen Gang      2013-07-03  206
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16  207  	memcpy(buf, addr, count);
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16  208  	return count;
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16  209  }
+> ^1da177e4c3f41 Linus Torvalds 2005-04-16  210
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
