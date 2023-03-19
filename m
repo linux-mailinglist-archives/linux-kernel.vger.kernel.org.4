@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5C86C0248
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A338A6C024B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjCSONN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S230347AbjCSOOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCSONK (ORCPT
+        with ESMTP id S229548AbjCSOOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:13:10 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744E814497
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:13:06 -0700 (PDT)
+        Sun, 19 Mar 2023 10:14:00 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B653812053
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:13:58 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id w9so37495880edc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=+bB39nUXZUXpT8dmSspChqOQmmtdTybwZ09z47fWgHc=;
-  b=YrWcZpXE2w+Hk0Eew9gV7SHYeUUQuy0nTGdgtp6Pdjc6Z0qUMGKJ9X2G
-   8KZNdI/nQ8mF55xcfC+qH6/AZ/CrXnqqI0X0WpI9PkKxLz2fCJN50jBiF
-   rGRPqkgK5p+U4IJFAvd44e3ThNmwI7oUrBfa53dtgIiagFwLEyrUSTLBY
-   o=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,273,1673910000"; 
-   d="scan'208";a="50609676"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 15:13:05 +0100
-Date:   Sun, 19 Mar 2023 15:13:04 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        namcaov@gmail.com, straube.linux@gmail.com, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: include: use inline functions for
- dvobj_to_dev
-In-Reply-To: <20230319131030.151170-3-eng.mennamahmoud.mm@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303191509330.2867@hadrien>
-References: <20230319131030.151170-3-eng.mennamahmoud.mm@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=linaro.org; s=google; t=1679235237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5h5ofl9KKUhrjR7negFQ4f5ler/o7Dhg36fLIrhRAc=;
+        b=Ai7++6+aY05cVSDp59+T7LeeF+Cun1dhLEcqFosyhAc7I034fOOznPXcVIQlrfl1D4
+         lqnGnSZewjrygIFJxoPDi4H16xWzFCfbg30AeW0+AJo8B9uIl2uzFpcIAFX6+lD8mCgr
+         Z+C9Yhe032vSB9NsHf4MN7kipOjbk/BYbrYb+lKlAWW7ZX6HlVRUilNo1n2JZ+CB+mI0
+         /p7S0TugbN6YdU3J0DwzDmDHioac3LQMqturckMbbK9K/kaS5PKuE77wi5bZEscaHoYz
+         l891EVtKKQC47NR/0FBw5g1zsziJ6hkSXRjWJ6++bR3vygzJlmhuXimU9aTFf7DF62lW
+         zNJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679235237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q5h5ofl9KKUhrjR7negFQ4f5ler/o7Dhg36fLIrhRAc=;
+        b=TS0F4Jqh+vLEWtg6dgu7hkmDEx96v6ULCS/yZqI55J9mwW7IKKJp38PGdM+FbJL2ec
+         52xr22Tb6rMMKAql+iVIPAWi//xJBaenens96uG91SwqRoxuaYNgrLdVRQZi8mFr6GaO
+         uP5hNfddJuBK4/EX5+nAbvmHvf4wBsmUwMJGyi6f/WBALrz+HYSY9EmShIZe64hKAUsF
+         DUaRaY8JY6olfEIftPreLz6ZKPgjt3dkFKdIA79XP/+gi0h260in2gb4W9deT9al0PLd
+         VVfbopprZmCxjDMcaKMLz88UZS8hCruNVMitb/zUuey1UflMJHkLmOgYwIWx+ZwphV2C
+         RaJA==
+X-Gm-Message-State: AO0yUKVNzgczRzHZZ+cKnPsTip8I/iUhM4BdI73qmbCit/DqQswPY0X5
+        OkeRKexTc3C7WEzM/NnlZaeR6Q==
+X-Google-Smtp-Source: AK7set9VLgLOFLpI9k8tMUp+EUnJsYP+QKe0Ps442caQ2pD4i0SM2QXtqQduQ+MgDAWL/o+RJWkYfQ==
+X-Received: by 2002:aa7:cc09:0:b0:4fc:e605:556a with SMTP id q9-20020aa7cc09000000b004fce605556amr9678786edt.5.1679235237279;
+        Sun, 19 Mar 2023 07:13:57 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
+        by smtp.gmail.com with ESMTPSA id t21-20020a50d715000000b004af7191fe35sm3540689edi.22.2023.03.19.07.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 07:13:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] tpm: st33zp24: Mark ACPI and OF related data as maybe unused
+Date:   Sun, 19 Mar 2023 15:13:53 +0100
+Message-Id: <20230319141354.22907-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-How have you chosen the names at the beginning of the subject line?  The
-other patches on this file don't have the word "include:" in the subject.
-Please see the section "Following the Driver commit style" of the tutorial
-to see what to do.
+The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+unused.  This fixes compile tests with W=1 by annotating device ID table
+as possibly unused:
 
+  drivers/char/tpm/st33zp24/i2c.c:141:34: error: ‘of_st33zp24_i2c_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/char/tpm/st33zp24/spi.c:258:34: error: ‘of_st33zp24_spi_match’ defined but not used [-Werror=unused-const-variable=]
 
-On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Convert `dvobj_to_dev` macro into static inline function,
+---
 
-"into a static inline function"
+Changes since v1:
+1. Enhance commit msg.
+---
+ drivers/char/tpm/st33zp24/i2c.c | 4 ++--
+ drivers/char/tpm/st33zp24/spi.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-But the message is a bit too verbose.  Please see my suggestion on another
-similar patch that was recently proposed.
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index c4d0b744e3cc..2d28f55ef490 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -138,13 +138,13 @@ static const struct i2c_device_id st33zp24_i2c_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
+ 
+-static const struct of_device_id of_st33zp24_i2c_match[] = {
++static const struct of_device_id of_st33zp24_i2c_match[] __maybe_unused = {
+ 	{ .compatible = "st,st33zp24-i2c", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, of_st33zp24_i2c_match);
+ 
+-static const struct acpi_device_id st33zp24_i2c_acpi_match[] = {
++static const struct acpi_device_id st33zp24_i2c_acpi_match[] __maybe_unused = {
+ 	{"SMO3324"},
+ 	{}
+ };
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index 2154059f0235..f5811b301d3b 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -255,13 +255,13 @@ static const struct spi_device_id st33zp24_spi_id[] = {
+ };
+ MODULE_DEVICE_TABLE(spi, st33zp24_spi_id);
+ 
+-static const struct of_device_id of_st33zp24_spi_match[] = {
++static const struct of_device_id of_st33zp24_spi_match[] __maybe_unused = {
+ 	{ .compatible = "st,st33zp24-spi", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, of_st33zp24_spi_match);
+ 
+-static const struct acpi_device_id st33zp24_spi_acpi_match[] = {
++static const struct acpi_device_id st33zp24_spi_acpi_match[] __maybe_unused = {
+ 	{"SMO3324"},
+ 	{}
+ };
+-- 
+2.34.1
 
-julia
-
-> because it is not great to have macro that use `container_of` macro,
-> because from looking at the definition one cannot tell what type it applies to.
->
-> One can get the same benefit from an efficiency point of view by making an
-> inline function (concretely, typically a static inline function, because
-> the definition only needs to be visible in the current file, or in the
-> case of a header file in the file that includes the header file).
->
-> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
->  drivers/staging/rtl8723bs/include/drv_types.h | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/staging/rtl8723bs/include/drv_types.h b/drivers/staging/rtl8723bs/include/drv_types.h
-> index 82159e1c7f9b..ea6bb44c5e1d 100644
-> --- a/drivers/staging/rtl8723bs/include/drv_types.h
-> +++ b/drivers/staging/rtl8723bs/include/drv_types.h
-> @@ -305,7 +305,11 @@ struct sdio_data intf_data;
->  };
->
->  #define dvobj_to_pwrctl(dvobj) (&(dvobj->pwrctl_priv))
-> -#define pwrctl_to_dvobj(pwrctl) container_of(pwrctl, struct dvobj_priv, pwrctl_priv)
-> +
-> +static inline struct dvobj_priv *pwrctl_to_dvobj(struct pwrctrl_priv *pwrctl_priv)
-> +{
-> +	return container_of(pwrctl_priv, struct dvobj_priv, pwrctl_priv);
-> +}
->
->  static inline struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
->  {
-> --
-> 2.34.1
->
->
