@@ -2,250 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129FE6C04B5
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C056C04B7
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjCSUNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 16:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S229959AbjCSUNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 16:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCSUNe (ORCPT
+        with ESMTP id S229995AbjCSUNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 16:13:34 -0400
-Received: from out-9.mta0.migadu.com (out-9.mta0.migadu.com [91.218.175.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678E11ADEF
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:13:29 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 21:13:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1679256807;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fgsBwcro5107gronfcMaX+jKKEq+takEuwMD5ulYJ18=;
-        b=g9uTKUcCPwLgCEmggQlCn9qy0Vz6Q5f/cIFC+UclVOv5kPURUQpcdjpsgD49klcW5cNz6a
-        CiuOZCbtRn5plt4YY3f6iK7/fjFH6Ord0Z9ipw7f6L0z9LN7ZkDNAswBr0HD/veVPFaey0
-        VCMY5hg8cRxZPMwGCSrQiNWs7mEo1/A=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alim.akhtar@samsung.com, m.szyprowski@samsung.com,
-        jenneron@protonmail.com, markuss.broks@gmail.com,
-        martin.juecker@gmail.com, virag.david003@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Valentine Iourine <iourine@iourine.msk.su>
-Subject: Re: [PATCH v5 2/2] ARM: dts: exynos: add mmc aliases
-Message-ID: <ZBds5NFv1Lr8k0jk@L14.lan>
-References: <20230316211558.8526-1-henrik@grimler.se>
- <20230316211558.8526-3-henrik@grimler.se>
- <216262b8-fe48-6696-17a4-eaa82e776db7@linaro.org>
+        Sun, 19 Mar 2023 16:13:44 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6E71B33B
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:13:37 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id cy23so39244032edb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679256816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hgnQ+h5zd1AueyynbINK8XAtTpd+QQVfh8Mi4U0c3Fo=;
+        b=ZliHulYrzEg7jMD7jC/tO8w/HGO57r9H3GDrGhhnO/uCQ9/YKgngMPBLGTxBp817vA
+         qHPN1g9gNFzEpQasqLqSmcc5I63MkWEtEE1JIc7p9BI45DNDLFXGn7Owssp5Sx5xTrW1
+         EYxbyfUdvyifu/v9Fbp2AaONaWffg2GUHBmo0Irpjy+oXoCyWL0beQbdkvAyPJH1QQlY
+         f/+pTmoMm544mnN9GfYM3WMIl2qpOMtRR26rxWqnf4lmRkB4haGAm717IIojkW7Y0ynQ
+         IKCko+W+o/u6xTHwjezZAF+tmwbUvzaPnRc6Y+n3gsH9YTdGEGWvzyH5AwzJ2KtGqtki
+         QIHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679256816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hgnQ+h5zd1AueyynbINK8XAtTpd+QQVfh8Mi4U0c3Fo=;
+        b=kfRSAO5REvkuiY5CGCjJQQbTqjm1sKAuBWo3Vssq6DYRBXSSFq4Tzt+XXG3IwxIx/v
+         RhJevNgLo4EO84WAqCikJ6bWxWNYEpQrYMAxxAsWAza7EQXX+Mmm5b7QlvL+4uYvss/Z
+         pzopPczjhA66KI+mcAabE1PU6YmWTqf5qe4qfYiUzZdVFAkrajS6S1+uR6mqUfG1oo6A
+         C0ENNiD5u6oWZuRJJiuS/lOIch6Y/QS9jow7ysiEmKXIJAgVsVT1lg5v0pL+UbDw+gMU
+         /R6cBNEVEVYNa2z6lUWRl4zLbJMgYyCPzY/n0OqQF3WJzufg+NH1FgHr11xu/WVZt1i9
+         wBZQ==
+X-Gm-Message-State: AO0yUKWgsId74Ii++orrqXgj73K90ohHlAISIMgs0HQLpxQ8yEwqvCZN
+        jK5qjm+wluhF5i5MEcgQJT4=
+X-Google-Smtp-Source: AK7set+ODMQXplVES5UGk7JyY6zEtWt49I9FbAbBtYNQcQF3NOBn8tHA0lQmBHVOZkDBvYPTghdH/Q==
+X-Received: by 2002:aa7:cb4f:0:b0:4fb:1b0d:9f84 with SMTP id w15-20020aa7cb4f000000b004fb1b0d9f84mr10307130edt.6.1679256815931;
+        Sun, 19 Mar 2023 13:13:35 -0700 (PDT)
+Received: from alaa-emad.. ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906199600b008b1797b77b2sm3511654ejd.221.2023.03.19.13.13.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 13:13:35 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        eng.mennamahmoud.mm@gmail.com, Julia Lawall <julia.lawall@inria.fr>
+Subject: [PATCH] staging: greybus: use inline function for macros
+Date:   Sun, 19 Mar 2023 22:13:24 +0200
+Message-Id: <20230319201324.253874-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <216262b8-fe48-6696-17a4-eaa82e776db7@linaro.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+static inline functions.
 
-On Fri, Mar 17, 2023 at 01:28:02PM +0100, Krzysztof Kozlowski wrote:
-> On 16/03/2023 22:15, Henrik Grimler wrote:
-> > Add aliases for eMMC, SD card and WiFi where applicable, so that
-> > assigned mmc indeces are always the same.
-> > 
-> > Co-developed-by: Anton Bambura <jenneron@protonmail.com>
-> > Signed-off-by: Anton Bambura <jenneron@protonmail.com>
-> > [ Tested on exynos5800-peach-pi ]
-> > Tested-by: Valentine Iourine <iourine@iourine.msk.su>
-> > Signed-off-by: Henrik Grimler <henrik@grimler.se>
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > 
-> 
-> 
-> 
-> >  	chosen {
-> > diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
-> > index bba85011ecc9..7051e2c4b391 100644
-> > --- a/arch/arm/boot/dts/exynos4210-i9100.dts
-> > +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
-> > @@ -25,6 +25,12 @@ memory@40000000 {
-> >  		reg = <0x40000000 0x40000000>;
-> >  	};
-> >  
-> > +	aliases {
-> > +		mmc0 = &sdhci_0;
-> > +		mmc2 = &sdhci_2;
-> > +		mmc3 = &sdhci_3;
-> 
-> Here...
-> 
-> > +	};
-> > +
-> >  	chosen {
-> >  		stdout-path = "serial2:115200n8";
-> >  	};
-> > diff --git a/arch/arm/boot/dts/exynos4210-origen.dts b/arch/arm/boot/dts/exynos4210-origen.dts
-> > index 1103e7f92b57..1970c31410e5 100644
-> > --- a/arch/arm/boot/dts/exynos4210-origen.dts
-> > +++ b/arch/arm/boot/dts/exynos4210-origen.dts
-> > @@ -30,6 +30,11 @@ memory@40000000 {
-> >  		       0x70000000 0x10000000>;
-> >  	};
-> >  
-> > +	aliases {
-> > +		mmc0 = &sdhci_0;
-> 
-> here ....
-> 
-> > +		mmc2 = &sdhci_2;
-> > +	};
-> > +
-> >  	chosen {
-> >  		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
-> >  		stdout-path = "serial2:115200n8";
-> > diff --git a/arch/arm/boot/dts/exynos4210-smdkv310.dts b/arch/arm/boot/dts/exynos4210-smdkv310.dts
-> > index 181c99eca675..cb74af41e17c 100644
-> > --- a/arch/arm/boot/dts/exynos4210-smdkv310.dts
-> > +++ b/arch/arm/boot/dts/exynos4210-smdkv310.dts
-> > @@ -25,6 +25,10 @@ memory@40000000 {
-> >  		reg = <0x40000000 0x80000000>;
-> >  	};
-> >  
-> > +	aliases {
-> > +		mmc2 = &sdhci_2;
-> > +	};
-> > +
-> >  	chosen {
-> >  		bootargs = "root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M init=/linuxrc";
-> >  		stdout-path = "serial1:115200n8";
-> > diff --git a/arch/arm/boot/dts/exynos4210-trats.dts b/arch/arm/boot/dts/exynos4210-trats.dts
-> > index b8e9dd23fc51..b6b0c116016c 100644
-> > --- a/arch/arm/boot/dts/exynos4210-trats.dts
-> > +++ b/arch/arm/boot/dts/exynos4210-trats.dts
-> > @@ -26,6 +26,12 @@ memory@40000000 {
-> >  			0x70000000 0x10000000>;
-> >  	};
-> >  
-> > +	aliases {
-> > +		mmc0 = &sdhci_0;
-> > +		mmc2 = &sdhci_2;
-> > +		mmc3 = &sdhci_3;
-> > +	};
-> > +
-> >  	chosen {
-> >  		bootargs = "root=/dev/mmcblk0p5 rootwait earlyprintk panic=5";
-> >  		stdout-path = "serial2:115200n8";
-> > diff --git a/arch/arm/boot/dts/exynos4210-universal_c210.dts b/arch/arm/boot/dts/exynos4210-universal_c210.dts
-> > index 140abfb38e1d..f42cfcbcdcfa 100644
-> > --- a/arch/arm/boot/dts/exynos4210-universal_c210.dts
-> > +++ b/arch/arm/boot/dts/exynos4210-universal_c210.dts
-> > @@ -24,6 +24,12 @@ memory@40000000 {
-> >  			0x50000000 0x10000000>;
-> >  	};
-> >  
-> > +	aliases {
-> > +		mmc0 = &sdhci_0;
-> > +		mmc2 = &sdhci_2;
-> 
-> 
-> Why this is 2? Aliases are continues and match the board. For example
-> Universal calls this mmc1 and the next mmc2, not 3.
+it is not great to have macro that use `container_of` macro,
+because from looking at the definition one cannot tell what type
+it applies to.
 
-Not sure I follow, Universal calls sdhci_2 mmc1 in schematics? (I have tried searching for
-schematics but cannot really find anything about this board)
+One can get the same benefit from an efficiency point of view
+by making an inline function.
 
-> I bet it is the same on Trats and all other boards.
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+ drivers/staging/greybus/gbphy.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Sure, I can change to mmc0, mmc1 for all 4210 devices.
+diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+index 1de510499480..42c4e3fe307c 100644
+--- a/drivers/staging/greybus/gbphy.h
++++ b/drivers/staging/greybus/gbphy.h
+@@ -16,7 +16,10 @@ struct gbphy_device {
+ 	struct device dev;
+ };
+ 
+-#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
++static inline struct gbphy_device *to_gbphy_dev(const struct device *d)
++{
++	return container_of(d, struct gbphy_device, dev);
++}
+ 
+ static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+ {
+@@ -45,7 +48,10 @@ struct gbphy_driver {
+ 	struct device_driver driver;
+ };
+ 
+-#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
++static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *d)
++{
++	return container_of(d, struct gbphy_driver, driver);
++}
+ 
+ int gb_gbphy_register_driver(struct gbphy_driver *driver,
+ 			     struct module *owner, const char *mod_name);
+-- 
+2.34.1
 
-> > +		mmc3 = &sdhci_3;
-> > +	};
-> > +
-> >  	chosen {
-> >  		bootargs = "root=/dev/mmcblk0p5 rw rootwait earlyprintk panic=5 maxcpus=1";
-> >  		stdout-path = "serial2:115200n8";
-> > diff --git a/arch/arm/boot/dts/exynos4412-itop-elite.dts b/arch/arm/boot/dts/exynos4412-itop-elite.dts
-> > index 6260da187e92..0e5419c0eaff 100644
-> > --- a/arch/arm/boot/dts/exynos4412-itop-elite.dts
-> > +++ b/arch/arm/boot/dts/exynos4412-itop-elite.dts
-> > @@ -20,6 +20,10 @@ / {
-> >  	model = "TOPEET iTop 4412 Elite board based on Exynos4412";
-> >  	compatible = "topeet,itop4412-elite", "samsung,exynos4412", "samsung,exynos4";
-> >  
-> > +	aliases {
-> > +		mmc2 = &sdhci_2;
-> 
-> mmc1
-
-Ok, will change.
-
-> > +	};
-> > +
-> >  	chosen {
-> >  		bootargs = "root=/dev/mmcblk0p2 rw rootfstype=ext4 rootdelay=1 rootwait";
-> >  		stdout-path = "serial2:115200n8";
-> > diff --git a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-> > index ca8d42b2ce3b..7bc6968af9c3 100644
-> > --- a/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-> > +++ b/arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi
-> > @@ -23,6 +23,10 @@ memory@40000000 {
-> >  		reg = <0x40000000 0x40000000>;
-> >  	};
-> >  
-> > +	aliases {
-> > +		mmc0 = &mshc_0;
-> > +	};
-> > +
-> >  	firmware@203f000 {
-> >  		compatible = "samsung,secure-firmware";
-> >  		reg = <0x0203f000 0x1000>;
-> > diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
-> > index 82aed59cba7c..e6b949c1a00f 100644
-> > --- a/arch/arm/boot/dts/exynos4412-midas.dtsi
-> > +++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
-> > @@ -25,6 +25,9 @@ / {
-> >  	aliases {
-> >  		i2c11 = &i2c_max77693;
-> >  		i2c12 = &i2c_max77693_fuel;
-> > +		mmc0 = &mshc_0;
-> > +		mmc2 = &sdhci_2;
-> > +		mmc3 = &sdhci_3;
-> 
-> This is actually correct.
-> 
-> >  	};
-> >  
-> >  	chosen {
-> > diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > index 25e082fda955..45ef7b7ba7e0 100644
-> > --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-> > @@ -13,6 +13,11 @@
-> >  #include "exynos-mfc-reserved-memory.dtsi"
-> >  
-> >  / {
-> > +	aliases {
-> > +		mmc0 = &mshc_0;
-> > +		mmc2 = &sdhci_2;
-> 
-> This is also correct.
-> 
-> > +	};
-> 
-> For all other cases, where schematics are missing, just make them linear.
-
-Alright, will do in next version, thanks for the feedback!
-
-> Krzysztof
-
-Best regards,
-Henrik Grimler
