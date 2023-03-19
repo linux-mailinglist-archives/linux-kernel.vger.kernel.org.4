@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2636C0527
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B6C6C053B
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjCSVDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S230180AbjCSVGr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 19 Mar 2023 17:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjCSVDL (ORCPT
+        with ESMTP id S229821AbjCSVGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:03:11 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DAD1E5CC
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:02:48 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id n125so10839753ybg.7
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679259762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gbV6Bh/cNsY2Io1y10SkZjIuZK4TmLVqW2b5h9GtPaE=;
-        b=VXyRZOPszvrTh2/++fTwBNasGeYcc1YN2g1XQGu+wGihL5XAh1HWL6miXKYetReFlt
-         e+mgaizYtW5gS157vS8n93LRFEj2Ah3ZbZoohAjU3TNPEaCLDcYiFuN05UhBOzXV30mJ
-         XRHuBT4ATsajKjivNpLh5PNHcBKcChZ2qjDjwijKtZpHIKVSMiQFjwD7zqt8phrj6qgu
-         gcv6ijOUMWWHFH+Mh93Ozd0dBP2TLL25g2uZuPkfck9I5o9Cdwg5JbKZ2SJx0zzV9QUY
-         qjnebF/7bIKXS3COEBYQSb2JOaexBEQb1wVDPDNNUoZ1Y5vtm5wVUKNai6hCRWcruo1I
-         uxgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679259762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gbV6Bh/cNsY2Io1y10SkZjIuZK4TmLVqW2b5h9GtPaE=;
-        b=d/qx907lwDPLoT4DJdLxcrJFSfs/4wIN3SpJcUWQC405MyhdX5iRzuKWbVKUIs0bkE
-         kx5AR09pMSZhOI3Z1sdDYrQb8LSNN9tEpDXYOezvaIgDIuV/tJwYUAUFfYDoXRw4gLBd
-         NKn6EnfK88uCDv9xD0IRB1rkUdmZHimQmcSvL01fIf5jlnufT/VwtTW6U7OIKoS1837a
-         Cc7mUxOT0qusPtmCjIVI4i6Dxh+y0JpeLDbhXiGk1inCSxpu1nXXvAjcZ+kCiLXX2tmW
-         9KjEnE421aRZu9E7hQhTCwnPuPfWWl/b1f+W5VPOSPHdyqrmYP34cwCs1Gpdl2RkWza9
-         cejQ==
-X-Gm-Message-State: AO0yUKWre2pvIu1Gimor+xX1DZD6lHhS4cv+r3lQEgG6s6XnileG7hbK
-        O1TaUUEigjBzORF3VH2MpXGEluLeIUhA2Aww+Eh9Jw==
-X-Google-Smtp-Source: AK7set9mxeFO57SGruCJH6C1TZj973V2SQLNunHNOaC44Y5XLUJPP+RqdyW12BliuWYUYiE6coMhTxlkWHzd16pXggk=
-X-Received: by 2002:a05:6902:110e:b0:b26:47f3:6cb with SMTP id
- o14-20020a056902110e00b00b2647f306cbmr3231733ybu.4.1679259762548; Sun, 19 Mar
- 2023 14:02:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230316072940.29137-1-quic_devipriy@quicinc.com> <20230316072940.29137-5-quic_devipriy@quicinc.com>
-In-Reply-To: <20230316072940.29137-5-quic_devipriy@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 19 Mar 2023 22:02:31 +0100
-Message-ID: <CACRpkdZYOQ6JvQvg5gcUb1x+FOeTn-H5rOnK=8EgDBmZh9DYig@mail.gmail.com>
-Subject: Re: [PATCH V9 4/6] pinctrl: qcom: Add IPQ9574 pinctrl driver
-To:     Devi Priya <quic_devipriy@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
-        marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
+        Sun, 19 Mar 2023 17:06:40 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D29015896;
+        Sun, 19 Mar 2023 14:06:38 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pe0Ed-002QJo-U4; Sun, 19 Mar 2023 22:06:35 +0100
+Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pe0Ed-003H0e-Jv; Sun, 19 Mar 2023 22:06:35 +0100
+Message-ID: <056df6d548ad0e4f7f4ccb2782744b165ce20578.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is
+ not enabled
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        stable@vger.kernel.org
+Date:   Sun, 19 Mar 2023 21:49:06 +0100
+In-Reply-To: <20230306040037.20350-8-rdunlap@infradead.org>
+References: <20230306040037.20350-1-rdunlap@infradead.org>
+         <20230306040037.20350-8-rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.155.194
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 8:31=E2=80=AFAM Devi Priya <quic_devipriy@quicinc.c=
-om> wrote:
-
-> Add pinctrl definitions for the TLMM of IPQ9574
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> Fix a build error in mcount.S when CONFIG_PRINTK is not enabled.
+> Fixes this build error:
+> 
+> sh2-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
+> (.text+0xec): undefined reference to `dump_stack'
+> 
+> Fixes: e460ab27b6c3 ("sh: Fix up stack overflow check with ftrace disabled.")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: stable@vger.kernel.org
 > ---
->  Changes in V9:
->         - Added COMPILE_TEST for non-OF configurations in config PINCTRL_=
-IPQ9574
->         - Unwrapped the lines for PINGROUP 34 & 62 in ipq9574_groups
->         - Removed the comma from terminator line in ipq9574_pinctrl_of_ma=
-tch[] array
->         - Moved the MODULE_DEVICE_TABLE entry just below the array
->           ipq9574_pinctrl_of_match[]
+> v2: add PRINTK to STACK_DEBUG dependency (thanks, Geert)
+> v3: skipped
+> v4: refresh & resend
+> 
+>  arch/sh/Kconfig.debug |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff -- a/arch/sh/Kconfig.debug b/arch/sh/Kconfig.debug
+> --- a/arch/sh/Kconfig.debug
+> +++ b/arch/sh/Kconfig.debug
+> @@ -15,7 +15,7 @@ config SH_STANDARD_BIOS
+>  
+>  config STACK_DEBUG
+>  	bool "Check for stack overflows"
+> -	depends on DEBUG_KERNEL
+> +	depends on DEBUG_KERNEL && PRINTK
+>  	help
+>  	  This option will cause messages to be printed if free stack space
+>  	  drops below a certain limit. Saying Y here will add overhead to
 
-Looks good to me but I would like Bjorns ACK on this patch before I merge i=
-t
-if possible.
+I can't really test this change as the moment I am enabling CONFIG_STACK_DEBUG,
+the build fails with:
 
-Yours,
-Linus Walleij
+  CC      scripts/mod/devicetable-offsets.s
+sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
+make[1]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
+make[1]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+make: *** [Makefile:1286: prepare0] Error 2
+
+So, I assume we need to strip -fomit-frame-pointer from KBUILD_CFLAGS, correct?
+
+I tried this change, but that doesn't fix it for me:
+
+diff --git a/arch/sh/Makefile b/arch/sh/Makefile
+index 5c8776482530..83f535b73835 100644
+--- a/arch/sh/Makefile
++++ b/arch/sh/Makefile
+@@ -173,6 +173,7 @@ KBUILD_AFLAGS               += $(cflags-y)
+ 
+ ifeq ($(CONFIG_MCOUNT),y)
+   KBUILD_CFLAGS += -pg
++  KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS))
+ endif
+ 
+ ifeq ($(CONFIG_DWARF_UNWINDER),y)
+
+Any ideas?
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
