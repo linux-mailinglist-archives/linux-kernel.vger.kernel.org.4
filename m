@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC1B6C00CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434266C00CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 12:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjCSLXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 07:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S230185AbjCSL2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 07:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCSLXq (ORCPT
+        with ESMTP id S229550AbjCSL2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 07:23:46 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CAB211E5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:23:44 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so36467177edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:23:44 -0700 (PDT)
+        Sun, 19 Mar 2023 07:28:11 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF465FF5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:28:09 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id h8so36548826ede.8
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 04:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679225023;
+        d=gmail.com; s=20210112; t=1679225288;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Uhjd68zfF5UiWTfwOfNThe6SqbXCr8qYgQuqxBosLCQ=;
-        b=y6pV4LwjyTHZWDZScr3dOeB0HT/Oexu7LE0PgThaO6GiZE//I7wPbu+Az3u670gqRL
-         Z6qQwJuwyfylluWvYqT0jfmpST/4LaYuWZJw2Blbejxm9kGDP2fgTKzW/lG0jZtGp2bF
-         yXbKUvSG8CN/vTOSKaJU+SktSLYqChOUkZFsARTUPTo9GTaA6kSIl1ua5mvNByk1lA6D
-         S5F3U4FLPVb/g9q0WT10r71JoJHV1YbsBgH67CI5w1D03vBETuFJ7hJdwc1eEWR8N0CG
-         Dgzf4BRYZjD9iQ/nPVr0d8wVBtV1aohdPS9bG0epM++7muuhCut/O9z2+itOft7TQrdd
-         9bYA==
+        bh=NYsg9F+fh9pRcm/YTvI/Kc7XzT0BxNXellA2GuZX/uQ=;
+        b=XDPrlwEPBlN7/obEoEn0fWejalXZPRR5CrXIf6T4nh5usgxUiqNUzIvenLcNZkQ/Z0
+         kfcM8l8EccH45qkXNZiIZDW5ugR08lF9A5V6ANBTGpLxeVC+vny0RvwSZkvEbC/FNrlv
+         XDP1TfcVTa4+0WJcoce7XrWLvhFDAI5rkWmHtQfgrogwT/ctprtuvDalkTzymNz+JfIW
+         irYSpwUs0YL19Qkf/K5POvvVAFHhu71hNqW9uaga5BFz2ATHcTXE04YZPui8hOKTLjr5
+         Ptm3YJzRlzDBHa4QWNtvlVq8Lccph/TtKe43CbbPc5Oq4Wv+dcwW2Xjk1DY/u7kH2yfH
+         lygw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679225023;
+        d=1e100.net; s=20210112; t=1679225288;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uhjd68zfF5UiWTfwOfNThe6SqbXCr8qYgQuqxBosLCQ=;
-        b=7la5ORVSU52ldUptHIF4gPu7xItdiU101++MQT8101WmdXCjCsGykkrANy6iliXfSc
-         qDF/IksiE8BOhixcNE3lDMeIlPbLqA4m6ak9ywFjbEOjpBgORFpQh/3FgGYnLJXNqWq7
-         LvtmRLWJg4J0LqpH3ahjBM//2+JCRz+NwUIEKNRqKLxmlRC6y2/Nolcw5h3E2H3StwsW
-         zLwQztlklwrLPx7+ZyQj6/+b76+N7QE9plsaM5SFTlOF9KYoTqaUCy+7lGJg+kL28dzO
-         qanHzYWiQDBPBvlhucOXVAvDNQTcOKY8VydIV4keuHJbMnMooF/VlpgqOE+xhGSKdJTE
-         VKUg==
-X-Gm-Message-State: AO0yUKVgLUfj2/Je+EL+0CYJj48ylFjldsep3z3DrkwKa/zFZBj+sUfz
-        fYR56IZRc5PPnmHAjmIlQGipKQ==
-X-Google-Smtp-Source: AK7set9DH7t9vbYttxzDn2t+uwPKGFFb6IpYIdpWB85V46GlocLw+bx1xwjNNTedM94sH/tCTCze1w==
-X-Received: by 2002:aa7:d744:0:b0:4fd:2b05:aa2 with SMTP id a4-20020aa7d744000000b004fd2b050aa2mr9563909eds.42.1679225023065;
-        Sun, 19 Mar 2023 04:23:43 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id t17-20020a508d51000000b004fa012332ecsm3416669edt.1.2023.03.19.04.23.41
+        bh=NYsg9F+fh9pRcm/YTvI/Kc7XzT0BxNXellA2GuZX/uQ=;
+        b=WBpI5F5vW+db6ZQsYnzlmn2s3m2q08OmIK8OPMJ86ZgNd5STO/SpWTP5QxLz2+JRxq
+         MxU8HDExHAZ0EHYySY19t9cJirz518bXE9nt4J1AR1rgQMF8xvvt7pTI7PripZB5YjtP
+         yfCxA+zIt3+1JzPLt//NFC4lCqMI+ff95Jy4A3qBn3PmMXbNp5IQtH1RVw/RpytE/TQJ
+         MAxXqLvgarUqISB0xgNBj4eiug7r3DQyR8o02yf/pJXP+LLB9qUApW/VSRJKE5XB9JUF
+         /dLT5mM5QfEexx3262DSsNimOGZtAYJBzUSXZJAzV/BnhniA5hOiE+9GPuhuL1Zn8aSl
+         GjSA==
+X-Gm-Message-State: AO0yUKXt4T7BEVDVHJhOCYWWUoeAPQHUdk6BGtCogcPuaZK0SOHwnKeS
+        Tso71fkN3m2nBfjY4L7YpMbc8nQl+sU=
+X-Google-Smtp-Source: AK7set9V99OLguKmluFKrH1BCT7mhfTeuklPoimct+I6fOTgV2yniFwkXZAY/LQpTTrC/CGvDumXfg==
+X-Received: by 2002:a05:6402:b0d:b0:4fb:5607:6a24 with SMTP id bm13-20020a0564020b0d00b004fb56076a24mr9496773edb.8.1679225288158;
+        Sun, 19 Mar 2023 04:28:08 -0700 (PDT)
+Received: from [192.168.1.16] ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id mm24-20020a170906cc5800b009336687cf77sm788368ejb.85.2023.03.19.04.28.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 04:23:42 -0700 (PDT)
-Message-ID: <64d0dffd-a5ce-4667-9d56-1c109ec73866@linaro.org>
-Date:   Sun, 19 Mar 2023 12:23:41 +0100
+        Sun, 19 Mar 2023 04:28:07 -0700 (PDT)
+Message-ID: <15e81411-e40f-43c5-bb7f-907d6d5f93c5@gmail.com>
+Date:   Sun, 19 Mar 2023 13:28:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v11 1/5] dt-bindings: PCI: ti,j721e-pci-*: add checks for
- num-lanes
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] staging: greybus: add blank line after struct
 Content-Language: en-US
-To:     Achal Verma <a-verma1@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Dhananjay Vilasrao Kangude <dkangude@cadence.com>,
-        Anindita Das <dasa@cadence.com>,
-        Yuan Zhao <yuanzhao@cadence.com>,
-        Milind Parab <mparab@cadence.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230317075120.506267-1-a-verma1@ti.com>
- <20230317075120.506267-2-a-verma1@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230317075120.506267-2-a-verma1@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, greybus-dev@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <20230319110831.39931-1-eng.mennamahmoud.mm@gmail.com>
+ <alpine.DEB.2.22.394.2303191216240.2867@hadrien>
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+In-Reply-To: <alpine.DEB.2.22.394.2303191216240.2867@hadrien>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 08:51, Achal Verma wrote:
-> From: Matt Ranostay <mranostay@ti.com>
-> 
-> Add num-lanes schema checks based on compatible string on available lanes
-> for that platform.
-> 
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Achal Verma <a-verma1@ti.com>
+
+On ١٩‏/٣‏/٢٠٢٣ ١٣:١٩, Julia Lawall wrote:
+>
+> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
+>
+>> add blank line after struct for readability as
+> The log message should start with a capital letter, so "Add".
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Okay, I will fix it.
 
-Best regards,
-Krzysztof
+>
+>> reported by checkpatch script
+> "reported by checkpatch" or "reported by the checkpatch script".
+> The first is more concise, and it doesn't really matter whether checkpatch
+> is a script or something else.
 
+
+got it.
+
+>> " CHECK: Please use a blank line after function/struct/union/enum
+>> declarations"
+> I guess the #define was concatenated to the end of the definition to show
+> that it is closely related to the definition.  With the #define, it seems
+> rather natural, but the better soltution would be to make a static inline
+> function in both cases.  There would naturally be a blank line before a
+> function definition as well.
+
+
+got your point, so, should i ignore this?
+
+
+Menna
+
+>
+> julia
+>
+>> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+>> ---
+>>   drivers/staging/greybus/gbphy.h | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+>> index d4a225b76338..1de510499480 100644
+>> --- a/drivers/staging/greybus/gbphy.h
+>> +++ b/drivers/staging/greybus/gbphy.h
+>> @@ -15,6 +15,7 @@ struct gbphy_device {
+>>   	struct list_head list;
+>>   	struct device dev;
+>>   };
+>> +
+>>   #define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+>>
+>>   static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+>> @@ -43,6 +44,7 @@ struct gbphy_driver {
+>>
+>>   	struct device_driver driver;
+>>   };
+>> +
+>>   #define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
+>>
+>>   int gb_gbphy_register_driver(struct gbphy_driver *driver,
+>> --
+>> 2.34.1
+>>
+>>
+>>
