@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFD46C0231
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 14:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA956C0237
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjCSN6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 09:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S230397AbjCSOBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCSN6K (ORCPT
+        with ESMTP id S229486AbjCSOA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 09:58:10 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF8B919C65;
-        Sun, 19 Mar 2023 06:58:08 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32JDw3SE031207;
-        Sun, 19 Mar 2023 14:58:03 +0100
-Date:   Sun, 19 Mar 2023 14:58:03 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
- -fstack-protector
-Message-ID: <ZBcU63x/bXih3vTm@1wt.eu>
-References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
- <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
- <ZA3OhLBmUz3fui+f@1wt.eu>
- <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
- <ZA6TmjtAJ5lvFCeF@1wt.eu>
- <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
+        Sun, 19 Mar 2023 10:00:58 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B056E15167;
+        Sun, 19 Mar 2023 07:00:56 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3D09A1EC058B;
+        Sun, 19 Mar 2023 15:00:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679234455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=08wb2BaJoY/XVDaHupNryXzATVqPgXkBLa+gDTXa+E4=;
+        b=b+twr4atfKgJSerQfWNi1DLsSBHEOxMXeIeuxbJE9GBI8bYD3cL1D4hz+KZesAVUrcM392
+        gWmDsW5ROl00zVp4u4PbBmHt/hOOKP9xLmOh3nB0OdfaIaN3BqMRc1neCt6DnhWziuxxZ8
+        nwh5C+lEFx0NjCXrTrfYPJqy7M7U/Ok=
+Date:   Sun, 19 Mar 2023 15:00:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com
+Subject: Re: [PATCH v8 00/40] Shadow stacks for userspace
+Message-ID: <20230319140051.GDZBcVkwgbwqAQZd20@fat_crate.local>
+References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Sat, Mar 18, 2023 at 05:14:55PM -0700, Rick Edgecombe wrote:
+> At this point, I think we have a pretty good initial shadow stack implementation
+> here. I'd like to start with the basics and let real world usage inform the
+> enhancements if we can.
 
-On Sat, Mar 18, 2023 at 04:49:12PM +0000, Thomas Weißschuh wrote:
-> On Mon, Mar 13, 2023 at 04:08:10AM +0100, Willy Tarreau wrote:
-> > On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
-> > > FYI there is also another patch to make nolibc-test buildable with
-> > > compilers that enable -fstack-protector by default.
-> > > Maybe this can be picked up until the proper stack-protector support is
-> > > hashed out.
-> > > Maybe even for 6.3:
-> > > 
-> > > https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
-> > 
-> > Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
-> 
-> Do you have a tree with this published?
+Yes, finally!
 
-No, it was only on my local machine waiting for me to retest all archs
-with it (in the past I've met build issues due to some variables being
-preset by some included files so I'm extra careful). I've just rebased
-it on latest master and just passed it to Paul for inclusion now.
+That was loooong in the making. Thanks for the persistence and
+patience.
 
-> So I can make sure the next revision of this patchset does not lead to
-> conflicts.
+For the whole set:
 
-Do not worry too much for this, just tell me upfront whether your next
-series is based on it or not and I'll adjust accordingly based on what
-is already merged when I take it.
+Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
 
-> > > > > @@ -719,8 +784,11 @@ int prepare(void)
-> > > > >  /* This is the definition of known test names, with their functions */
-> > > > >  static const struct test test_names[] = {
-> > > > >  	/* add new tests here */
-> > > > > -	{ .name = "syscall",   .func = run_syscall  },
-> > > > > -	{ .name = "stdlib",    .func = run_stdlib   },
-> > > > > +	{ .name = "syscall",        .func = run_syscall         },
-> > > > > +	{ .name = "stdlib",         .func = run_stdlib          },
-> > > > > +	{ .name = "stackprotector", .func = run_stackprotector, },
-> > > > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
-> > > > 
-> > > > I think it would be better to keep the number of categories low
-> > > > and probably you should add just one called "protection" or so,
-> > > > and implement your various tests in it as is done for other
-> > > > categories. The goal is to help developers quickly spot and select
-> > > > the few activities they're interested in at a given moment. 
-> > > 
-> > > I'm not sure how this would be done. The goal here is that
-> > > "stackprotector" is the user-visible category. It can be changed to
-> > > "protection".
-> > > "_smash_stack" however is just an entrypoint that is used by the forked
-> > > process to call the crashing code.
-> > 
-> > Ah I didn't realize that, I now understand how that can be useful,
-> > indeed. Then maybe just rename your .skip_by_default field to .hidden
-> > so that it becomes more generic (i.e. if one day we permit enumeration
-> > we don't want such tests to be listed either), and assign the field on
-> > the same line so that it's easily visible with a grep.
-> 
-> Actually this works fine with a plain fork() and the exec() is not
-> needed. So the dedicated entrypoint is not needed anymore.
+> Unless anyone sees any likely ABI trap we are walking into.
 
-Ah, even better!
+Yeah, dhansen, let's queue this and run it on everything and as much as
+possible before the MW comes so that we can have a chance to catch any
+potential showstopper snafus we've missed.
 
-> No idea what I tested before.
+Thx.
 
-No worries. I've yet to find a single occurrence of a test being created
-straight without exploring various approaches ;-)
+-- 
+Regards/Gruss,
+    Boris.
 
-Thanks!
-Willy
+https://people.kernel.org/tglx/notes-about-netiquette
