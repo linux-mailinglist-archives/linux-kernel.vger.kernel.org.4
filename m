@@ -2,317 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64ECC6BFF2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 03:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A786BFF33
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 04:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjCSCz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 22:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S229925AbjCSDJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 23:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjCSCz4 (ORCPT
+        with ESMTP id S229514AbjCSDJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 22:55:56 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D95218B1F;
-        Sat, 18 Mar 2023 19:55:53 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id t83so4859671pgb.11;
-        Sat, 18 Mar 2023 19:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679194552;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0PtZRbdqZnLpXZl8fukP7Y6q+KTufVstJv4cmcSFX80=;
-        b=Ve+ZCQPiUJ843UAhYFg+/UWCgoBFWkn5LJ3ztK/mSo4qgIMXXwfU5h60N2g+yBkUaq
-         J9hRlOdLXaB+FIIpFPiTmIOyXZARIoThEG0ue00brVwqv+aFnGQre2cqKCB6h+N7LQwo
-         H0DtUDDnBCkbUHjV5P4ZW3ElOIDbMo6twRElIv1E1eFM9PlJwHt2/TV1KnRBrH5aiBDt
-         2IbiY5wDn7jc1RC27hIBbaA3dwAoE425Of8vjt9vEC+qYEJL0Z9+RyXNtcJg/x1hbVnA
-         f1+Ifxpj0J8rUoW+ZtLBIbC8u7nJeL14zEIztLIA/RPFi5FF4610OtpkPSDlVDnbyoR3
-         zHvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679194552;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0PtZRbdqZnLpXZl8fukP7Y6q+KTufVstJv4cmcSFX80=;
-        b=RQi+dlNWlC93H6Wb5N6m4fh8GWQad1HikzPfeJMO9II25UanRMrprKN292i3GzWWWf
-         gbtkgl4un/HXJAhE2RgHOTZrw5kmFRFGHTqdZ9TtECAZ598kdJhyx9+Z5i34R2lH6mSJ
-         +A3hj4skofrP79lJDK7SqI0KSwqQicBakrDVkzKKKox2rzqtE3DoRX8KCNjeUn1Zb09y
-         w7LyZmJXC66573XjUcBcyY7AvyPq7fAN8989QrfpK+/YX+95kqtmHsxYdnuB5vK7Jiqa
-         4xrd5Fgux4ZoNjW4ZnWBEllu4/bGKVxf7jkYBiHMxWRP14e/7gUx4t4N0hmugtX1/f/o
-         xb4Q==
-X-Gm-Message-State: AO0yUKXdAz3I/HXxYuu4YOVmjZV9sTn0aP0Lgf+4mKmse24uQUcAj9eV
-        XGUPW5xTDwi1V8mFjbt+YXER47mqJy8=
-X-Google-Smtp-Source: AK7set88GxBcPJyP5g9MNh9Pe2mwU/odxKGYQq018AMBE0O8NH5BK9OB3gRl7K0qKZGfaXh3tAwHnQ==
-X-Received: by 2002:a62:7910:0:b0:625:e77b:93b2 with SMTP id u16-20020a627910000000b00625e77b93b2mr11337018pfc.5.1679194552347;
-        Sat, 18 Mar 2023 19:55:52 -0700 (PDT)
-Received: from [192.168.1.101] (1-160-164-133.dynamic-ip.hinet.net. [1.160.164.133])
-        by smtp.gmail.com with ESMTPSA id g11-20020a62e30b000000b005ac419804d5sm3958094pfh.98.2023.03.18.19.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Mar 2023 19:55:52 -0700 (PDT)
-Message-ID: <822dc1c0-f2c8-def1-c5fe-a1d03a0f9c8c@gmail.com>
-Date:   Sun, 19 Mar 2023 10:55:48 +0800
+        Sat, 18 Mar 2023 23:09:04 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226C4166E0
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 20:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679195342; x=1710731342;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HNjvJl06yhlFaoNEfHQUZd+1diw2aZquboGeYkpulTY=;
+  b=FwlGpWlKWNBF0yF/jlg4kxvlyEdJVjqKchm4dwfX0avYrPskmCxW+/3h
+   vGPPifSiNI0/0H7XGK6Qt2SuwbEK3YAAaDRO6VHZCDak2qAcQBkXNIOLx
+   7KIDiRVGHlRC+XR9y0sin2lLg6i/B3Y95GDAtvSYHaiKQsSbhILGoGtD7
+   emOIsBJHY0v7U1y3Iaz9qQP3JFWx1p3TvDWr88zcvCpKo2XVb0//rlVwK
+   LqOFkCeNK9HVQGQZ05qyvoQ2R3Em1PEiSUinKdnx7IO5Nt1JzXR7q6mOP
+   TcBsudPGIr5ZeIdJEv4vu5V2ugTNFhsda301NsfxquUIYCFMw3Fmx/axf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="335973216"
+X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
+   d="scan'208";a="335973216"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 20:09:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="1010088182"
+X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
+   d="scan'208";a="1010088182"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Mar 2023 20:09:00 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdjPn-000AMk-0f;
+        Sun, 19 Mar 2023 03:08:59 +0000
+Date:   Sun, 19 Mar 2023 11:08:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tanmay Shah <tanmay.shah@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ben Levinsky <ben.levinsky@amd.com>
+Subject: drivers/remoteproc/xlnx_r5_remoteproc.c:209:20: sparse: sparse: cast
+ removes address space '__iomem' of expression
+Message-ID: <202303191110.k1cqaaz4-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-From:   Jacky Huang <ychuang570808@gmail.com>
-Subject: Re: [PATCH 12/15] clk: nuvoton: Add clock driver for ma35d1 clock
- controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-13-ychuang570808@gmail.com>
- <764f9105-e888-4776-bd49-efec72bd409d@linaro.org>
-Content-Language: en-US
-In-Reply-To: <764f9105-e888-4776-bd49-efec72bd409d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a3671bd86a9770e34969522d29bb30a1b66fd88a
+commit: 6b291e8020a8bd90e94ee13d61f251040425c90d drivers: remoteproc: Add Xilinx r5 remoteproc driver
+date:   4 months ago
+config: arm64-randconfig-s052-20230319 (https://download.01.org/0day-ci/archive/20230319/202303191110.k1cqaaz4-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6b291e8020a8bd90e94ee13d61f251040425c90d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6b291e8020a8bd90e94ee13d61f251040425c90d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bluetooth/ drivers/remoteproc/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303191110.k1cqaaz4-lkp@intel.com/
 
-On 2023/3/16 下午 03:51, Krzysztof Kozlowski wrote:
-> On 15/03/2023 08:28, Jacky Huang wrote:
->> From: Jacky Huang<ychuang3@nuvoton.com>
->>
->> The clock controller generates clocks for the whole chip, including
->> system clocks and all peripheral clocks. This driver support ma35d1
->> clock gating, divider, and individual PLL configuration.
->>
->> There are 6 PLLs in ma35d1 SoC:
->>    - CA-PLL for the two Cortex-A35 CPU clock
->>    - SYS-PLL for system bus, which comes from the companion MCU
->>      and cannot be programmed by clock controller.
->>    - DDR-PLL for DDR
->>    - EPLL for GMAC and GFX, Display, and VDEC IPs.
->>    - VPLL for video output pixel clock
->>    - APLL for SDHC, I2S audio, and other IPs.
->> CA-PLL has only one operation mode.
->> DDR-PLL, EPLL, VPLL, and APLL are advanced PLLs which have 3
->> operation modes: integer mode, fraction mode, and spread specturm mode.
->>
->> Signed-off-by: Jacky Huang<ychuang3@nuvoton.com>
->> ---
->>   drivers/clk/Makefile                     |   1 +
->>   drivers/clk/nuvoton/Makefile             |   4 +
->>   drivers/clk/nuvoton/clk-ma35d1-divider.c | 144 ++++
->>   drivers/clk/nuvoton/clk-ma35d1-pll.c     | 534 +++++++++++++
->>   drivers/clk/nuvoton/clk-ma35d1.c         | 970 +++++++++++++++++++++++
->>   drivers/clk/nuvoton/clk-ma35d1.h         | 198 +++++
->>   6 files changed, 1851 insertions(+)
->>   create mode 100644 drivers/clk/nuvoton/Makefile
->>   create mode 100644 drivers/clk/nuvoton/clk-ma35d1-divider.c
->>   create mode 100644 drivers/clk/nuvoton/clk-ma35d1-pll.c
->>   create mode 100644 drivers/clk/nuvoton/clk-ma35d1.c
->>   create mode 100644 drivers/clk/nuvoton/clk-ma35d1.h
->>
->> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
->> index e3ca0d058a25..2e7916d269e1 100644
->> --- a/drivers/clk/Makefile
->> +++ b/drivers/clk/Makefile
->> @@ -103,6 +103,7 @@ endif
->>   obj-y					+= mstar/
->>   obj-y					+= mvebu/
->>   obj-$(CONFIG_ARCH_MXS)			+= mxs/
->> +obj-$(CONFIG_ARCH_NUVOTON)		+= nuvoton/
-> Missing compile test.
->
-> (...)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/xlnx_r5_remoteproc.c:209:20: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/remoteproc/xlnx_r5_remoteproc.c:315:20: sparse: sparse: cast removes address space '__iomem' of expression
 
+vim +/__iomem +209 drivers/remoteproc/xlnx_r5_remoteproc.c
 
-Thank you. We should have a Kconfig file in nuvoton directory.
+   190	
+   191	/*
+   192	 * zynqmp_r5_mem_region_map()
+   193	 * @rproc: single R5 core's corresponding rproc instance
+   194	 * @mem: mem descriptor to map reserved memory-regions
+   195	 *
+   196	 * Callback to map va for memory-region's carveout.
+   197	 *
+   198	 * return 0 on success, otherwise non-zero value on failure
+   199	 */
+   200	static int zynqmp_r5_mem_region_map(struct rproc *rproc,
+   201					    struct rproc_mem_entry *mem)
+   202	{
+   203		void __iomem *va;
+   204	
+   205		va = ioremap_wc(mem->dma, mem->len);
+   206		if (IS_ERR_OR_NULL(va))
+   207			return -ENOMEM;
+   208	
+ > 209		mem->va = (void *)va;
+   210	
+   211		return 0;
+   212	}
+   213	
 
-I will a Kconfig file including COMPILE_TEST.
-
-
->> +
->> +MODULE_AUTHOR("Chi-Fang Li<cfli0@nuvoton.com>");
->> +MODULE_DESCRIPTION("NUVOTON MA35D1 Clock Driver");
->> +MODULE_LICENSE("GPL v2");
->> diff --git a/drivers/clk/nuvoton/clk-ma35d1.h b/drivers/clk/nuvoton/clk-ma35d1.h
->> new file mode 100644
->> index 000000000000..faae5a17e425
->> --- /dev/null
->> +++ b/drivers/clk/nuvoton/clk-ma35d1.h
->> @@ -0,0 +1,198 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (C) 2023 Nuvoton Technology Corp.
->> + * Author: Chi-Fang Li<cfli0@nuvoton.com>
->> + */
->> +
->> +#ifndef __DRV_CLK_NUVOTON_MA35D1_H
->> +#define __DRV_CLK_NUVOTON_MA35D1_H
->> +
->> +#include <linux/clk.h>
->> +#include <linux/clkdev.h>
->> +#include <linux/clk-provider.h>
->> +#include <linux/spinlock.h>
->> +#include <linux/regmap.h>
->> +#include <linux/mfd/syscon.h>
->> +#include <linux/mfd/ma35d1-sys.h>
->> +
->> +enum ma35d1_pll_type {
->> +	MA35D1_CAPLL,
->> +	MA35D1_DDRPLL,
->> +	MA35D1_APLL,
->> +	MA35D1_EPLL,
->> +	MA35D1_VPLL,
->> +};
->> +
->> +enum ma35d1_pll_mode {
->> +	VSIPLL_INTEGER_MODE,
->> +	VSIPLL_FRACTIONAL_MODE,
->> +	VSIPLL_SS_MODE,
->> +};
->> +
->> +/* VSI-PLL CTL0~2 */
->> +#define VSIPLL_CTL0			0x0
->> +#define VSIPLL_CTL1			0x4
->> +#define VSIPLL_CTL2			0x8
->> +
->> +/* VSI-PLL Specification limits */
->> +#define VSIPLL_FREF_MAX_FREQ		200000000UL
->> +#define VSIPLL_FREF_MIN_FREQ		1000000UL
->> +#define VSIPLL_FREFDIVM_MAX_FREQ	40000000UL
->> +#define VSIPLL_FREFDIVM_MIN_FREQ0	1000000UL
->> +#define VSIPLL_FREFDIVM_MIN_FREQ1	10000000UL
->> +#define VSIPLL_FCLK_MAX_FREQ		2400000000UL
->> +#define VSIPLL_FCLK_MIN_FREQ		600000000UL
->> +#define VSIPLL_FCLKO_MAX_FREQ		2400000000UL
->> +#define VSIPLL_FCLKO_MIN_FREQ		85700000UL
->> +#define VSIPLL_SPREAD_RANGE		194
->> +#define VSIPLL_MODULATION_FREQ		50000
->> +
->> +/* Clock Control Registers Offset */
->> +#define REG_CLK_PWRCTL			(0x00)
->> +#define REG_CLK_SYSCLK0			(0x04)
->> +#define REG_CLK_SYSCLK1			(0x08)
->> +#define REG_CLK_APBCLK0			(0x0C)
->> +#define REG_CLK_APBCLK1			(0x10)
->> +#define REG_CLK_APBCLK2			(0x14)
->> +#define REG_CLK_CLKSEL0			(0x18)
->> +#define REG_CLK_CLKSEL1			(0x1C)
->> +#define REG_CLK_CLKSEL2			(0x20)
->> +#define REG_CLK_CLKSEL3			(0x24)
->> +#define REG_CLK_CLKSEL4			(0x28)
->> +#define REG_CLK_CLKDIV0			(0x2C)
->> +#define REG_CLK_CLKDIV1			(0x30)
->> +#define REG_CLK_CLKDIV2			(0x34)
->> +#define REG_CLK_CLKDIV3			(0x38)
->> +#define REG_CLK_CLKDIV4			(0x3C)
->> +#define REG_CLK_CLKOCTL			(0x40)
->> +#define REG_CLK_STATUS			(0x50)
->> +#define REG_CLK_PLL0CTL0		(0x60)
->> +#define REG_CLK_PLL2CTL0		(0x80)
->> +#define REG_CLK_PLL2CTL1		(0x84)
->> +#define REG_CLK_PLL2CTL2		(0x88)
->> +#define REG_CLK_PLL3CTL0		(0x90)
->> +#define REG_CLK_PLL3CTL1		(0x94)
->> +#define REG_CLK_PLL3CTL2		(0x98)
->> +#define REG_CLK_PLL4CTL0		(0xA0)
->> +#define REG_CLK_PLL4CTL1		(0xA4)
->> +#define REG_CLK_PLL4CTL2		(0xA8)
->> +#define REG_CLK_PLL5CTL0		(0xB0)
->> +#define REG_CLK_PLL5CTL1		(0xB4)
->> +#define REG_CLK_PLL5CTL2		(0xB8)
->> +#define REG_CLK_CLKDCTL			(0xC0)
->> +#define REG_CLK_CLKDSTS			(0xC4)
->> +#define REG_CLK_CDUPB			(0xC8)
->> +#define REG_CLK_CDLOWB			(0xCC)
->> +#define REG_CLK_CKFLTRCTL		(0xD0)
->> +#define REG_CLK_TESTCLK			(0xF0)
->> +#define REG_CLK_PLLCTL			(0x40)
->> +
->> +/* Constant Definitions for Clock Controller */
->> +#define SMICPLLCTL0_FBDIV_POS		(0)
->> +#define SMICPLLCTL0_FBDIV_MSK		(0xfful << SMICPLLCTL0_FBDIV_POS)
->> +#define SMICPLLCTL0_INDIV_POS		(8)
->> +#define SMICPLLCTL0_INDIV_MSK		(0xful << SMICPLLCTL0_INDIV_POS)
->> +#define SMICPLLCTL0_OUTDIV_POS		(12)
->> +#define SMICPLLCTL0_OUTDIV_MSK		(0x3ul << SMICPLLCTL0_OUTDIV_POS)
->> +#define SMICPLLCTL0_PD_POS		(16)
->> +#define SMICPLLCTL0_PD_MSK		(0x1ul << SMICPLLCTL0_PD_POS)
->> +#define SMICPLLCTL0_BP_POS		(17)
->> +#define SMICPLLCTL0_BP_MSK		(0x1ul << SMICPLLCTL0_BP_POS)
->> +#define VSIPLLCTL0_FBDIV_POS		(0)
->> +#define VSIPLLCTL0_FBDIV_MSK		(0x7fful << VSIPLLCTL0_FBDIV_POS)
->> +#define VSIPLLCTL0_INDIV_POS		(12)
->> +#define VSIPLLCTL0_INDIV_MSK		(0x3ful << VSIPLLCTL0_INDIV_POS)
->> +#define VSIPLLCTL0_MODE_POS		(18)
->> +#define VSIPLLCTL0_MODE_MSK		(0x3ul << VSIPLLCTL0_MODE_POS)
->> +#define VSIPLLCTL0_SSRATE_POS		(20)
->> +#define VSIPLLCTL0_SSRATE_MSK		(0x7fful << VSIPLLCTL0_SSRATE_POS)
->> +#define VSIPLLCTL1_PD_POS		(0)
->> +#define VSIPLLCTL1_PD_MSK		(0x1ul << VSIPLLCTL1_PD_POS)
->> +#define VSIPLLCTL1_BP_POS		(1)
->> +#define VSIPLLCTL1_BP_MSK		(0x1ul << VSIPLLCTL1_BP_POS)
->> +#define VSIPLLCTL1_OUTDIV_POS		(4)
->> +#define VSIPLLCTL1_OUTDIV_MSK		(0x7ul << VSIPLLCTL1_OUTDIV_POS)
->> +#define VSIPLLCTL1_FRAC_POS		(8)
->> +#define VSIPLLCTL1_FRAC_MSK		(0xfffffful << VSIPLLCTL1_FRAC_POS)
->> +#define VSIPLLCTL2_SLOPE_POS		(0)
->> +#define VSIPLLCTL2_SLOPE_MSK		(0xfffffful << VSIPLLCTL2_SLOPE_POS)
->> +
->> +struct clk_hw *ma35d1_reg_clk_pll(enum ma35d1_pll_type type, u8 u8mode,
->> +				 const char *name, const char *parent,
->> +				 unsigned long targetFreq,
->> +				 void __iomem *base,
->> +				 struct regmap *regmap);
->> +
->> +struct clk_hw *ma35d1_reg_adc_clkdiv(struct device *dev,
->> +				    const char *name,
->> +				    const char *parent_name,
->> +				    unsigned long flags,
->> +				    void __iomem *reg, u8 shift,
->> +				    u8 width, u32 mask_bit);
->> +
->> +extern spinlock_t ma35d1_lock;
-> Why this is here?
-
-
-We will remove it and use "static DEFINE_SPINLOCK(ma35d1_lock);"
-
-and have it used in clk-ma35d1-divider.c only.
-
-
->> +
->> +static inline struct clk_hw *ma35d1_clk_fixed(const char *name, int rate)
->> +{
->> +	return clk_hw_register_fixed_rate(NULL, name, NULL, 0, rate);
->> +}
->> +
-> Why all these are here?
-
-
-These should be static functions in clk-ma35d1.c.
-
-We will move these function to the C file in next version.
-
-
->> +
->> +#endif /* __DRV_CLK_NUVOTON_MA35D1_H */
-> Best regards,
-> Krzysztof
-
-
-Best regards,
-
-Jacky Huang
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
