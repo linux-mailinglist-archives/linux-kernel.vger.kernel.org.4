@@ -2,176 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2506C05F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677AB6C05F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCSWIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 18:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S230285AbjCSWKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 18:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjCSWIM (ORCPT
+        with ESMTP id S230336AbjCSWJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 18:08:12 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D3E062;
-        Sun, 19 Mar 2023 15:08:10 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id h17so8695188wrt.8;
-        Sun, 19 Mar 2023 15:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679263689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GmPK75Q9ZD3h3IYflWYuDwS99V2e532KgDlnNucAoJg=;
-        b=PSdrywW48P4Lq8z9wOSPXFB/ZdO/JfuyiGlw3Gz1Iriy+Smo/cBnJ0Ve9zKkX3AKTO
-         Tr7/g8xhSQX8sU5WAOEPC13uVjKpO4VZsamXHTmMKL4mmfII3K/piAsQcMQkkNpgouab
-         Ci9yr+7ASSmqEUHIbYTM6sl6a47rPwqk3b3DcTIE2CwJsPPNXnpQ/aSVbJAcEdhcZICc
-         X4rAmjrYjcsl8coFIGHHPlrMH9ShekQWxB84vEb6bO1nXOORNPizOHuY1vJ3wa3WgXsx
-         YwlvutMFVIUXfgL2ZwCmQAKWJPiAaFk+CCk3oxSeOYoAzkjcbMyapz9VnooStfvR2aV3
-         k+2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679263689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GmPK75Q9ZD3h3IYflWYuDwS99V2e532KgDlnNucAoJg=;
-        b=NGjqrGERyaxRwINtevHaY97h9X9W+1UY62YYwotqwv5+cfvB8myjBbD3WH2WzaqMes
-         o9MMER9RE8/arW3jIVlBv4ORDUuEZ7AeGgy5UbFyQZIPHlp+hJ/sxFrGvYUwamg4Qrr9
-         ojargh8ORsEiMeqaf+5AkmEagNhrrV3ax0pUuWDzbJ3vXGoHjfCetHz5xyNL46dvXBfb
-         l/OZqjv9IYob552uUoUmCy/TbEQDqvmjkFrROFK9gtBNxgxUJkwbyiWIOVsf6RR8OarP
-         f7bbvSJYkvTvzx2u/g0Up7NW5ZyihMGBmDs377M3yW6AnSxW6jlfl30QmMU1aEigYXvy
-         v3mA==
-X-Gm-Message-State: AO0yUKUm1PYmYa4xlHuVD23mZcZm83a+xbhcbs0Xryi3yF/+UnjM4Cho
-        GAfqSh5MZ/rlOAm3Vnpn//9hOG5Lc8vLYg==
-X-Google-Smtp-Source: AK7set+5pTahGGgk1hF/mHGkGBhsMf0//oQjZd4QFHx+HaeSgP5f6q7g0bRUcTX8kRtgHH0T7l1/hQ==
-X-Received: by 2002:a5d:474f:0:b0:2d6:2ae8:70d with SMTP id o15-20020a5d474f000000b002d62ae8070dmr2382593wrs.39.1679263688549;
-        Sun, 19 Mar 2023 15:08:08 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id d6-20020a5d6dc6000000b002c53f6c7599sm7354727wrz.29.2023.03.19.15.08.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 15:08:07 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v2] net: dsa: b53: add support for BCM63xx RGMIIs
-Date:   Sun, 19 Mar 2023 23:08:05 +0100
-Message-Id: <20230319220805.124024-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230319183330.761251-1-noltari@gmail.com>
-References: <20230319183330.761251-1-noltari@gmail.com>
+        Sun, 19 Mar 2023 18:09:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F2D6E99;
+        Sun, 19 Mar 2023 15:09:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2BD2B1FFD4;
+        Sun, 19 Mar 2023 22:09:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679263789; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UcKLt9U/8xQce8s4ATm4ybC+SdRvSBXCW4Wo7iUVV4Y=;
+        b=xOhX2Fn3Rz0w79oprPw6eDEjcxfpAAdKSGioQy3Eua+t4gyUGYOPjd+kNDvvxW2K7uFQoL
+        o/lipuAkByPwD2f0KnfQQi+CK65h25DLTXQZ+zgh5/zQ5J/HJ0Izg2NaJ9f/bF+TJ9UA1A
+        vobz0qK6NTIm9Eeh4CZzGz6gGqFFmjk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679263789;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UcKLt9U/8xQce8s4ATm4ybC+SdRvSBXCW4Wo7iUVV4Y=;
+        b=8E6F9s1CZxZzY3OwRJdytAQJH8uxScPdOzRAFxP1klgfgnCCdKdIIhPNP82cX3zVzGrURD
+        LP0Mw2FkwYugcRAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A9CB1133E6;
+        Sun, 19 Mar 2023 22:09:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BUPYFyqIF2SVZgAAMHmgww
+        (envelope-from <neilb@suse.de>); Sun, 19 Mar 2023 22:09:46 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jes Sorensen" <jes@trained-monkey.org>
+Cc:     "Mariusz Tkaczyk" <mariusz.tkaczyk@linux.intel.com>,
+        "Song Liu" <song@kernel.org>,
+        "Linux regressions mailing list" <regressions@lists.linux.dev>,
+        "linux-raid" <linux-raid@vger.kernel.org>,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        "Nikolay Kichukov" <hijacker@oldum.net>
+Subject: Re: [PATCH - mdadm] mdopen: always try create_named_array()
+In-reply-to: <318ff554-0694-64e1-72bd-d941a775a16f@trained-monkey.org>
+References: <167875238571.8008.9808655454439667586@noble.neil.brown.name>,
+ <318ff554-0694-64e1-72bd-d941a775a16f@trained-monkey.org>
+Date:   Mon, 20 Mar 2023 09:09:43 +1100
+Message-id: <167926378352.8008.3450187952660050637@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BCM63xx RGMII ports require additional configuration in order to work.
+On Mon, 20 Mar 2023, Jes Sorensen wrote:
+> On 3/13/23 20:06, NeilBrown wrote:
+> > 
+> > mdopen() will use create_named_array() to ask the kernel to create the
+> > given md array, but only if it is given a number or name.
+> > If it is NOT given a name and is required to choose one itself using
+> > find_free_devnm() it does NOT use create_named_array().
+> > 
+> > On kernels with CONFIG_BLOCK_LEGACY_AUTOLOAD not set, this can result in
+> > failure to assemble an array.  This can particularly seen when the
+> > "name" of the array begins with a host name different to the name of the
+> > host running the command.
+> > 
+> > So add the missing call to create_named_array().
+> > 
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217074
+> > Signed-off-by: NeilBrown <neilb@suse.de>
+> 
+> Applied!
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- v2: add changes suggested by Andrew:
-  - Use a switch statement.
-  - Use dev_dbg() instead of dev_info().
+Thanks.
 
- drivers/net/dsa/b53/b53_common.c | 46 ++++++++++++++++++++++++++++++++
- drivers/net/dsa/b53/b53_priv.h   |  1 +
- 2 files changed, 47 insertions(+)
+Do you have plans for releasing 4.3?  I'd like this patch to be in a
+numbered release for at least a few months before we change the kernel
+Kconfig to allow md to be built without CONFIG_BLOCK_LEGACY_AUTOLOAD.
 
-diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
-index 59cdfc51ce06..6e212f6f1cb9 100644
---- a/drivers/net/dsa/b53/b53_common.c
-+++ b/drivers/net/dsa/b53/b53_common.c
-@@ -1209,6 +1209,46 @@ static void b53_force_port_config(struct b53_device *dev, int port,
- 	b53_write8(dev, B53_CTRL_PAGE, off, reg);
- }
- 
-+static void b53_adjust_63xx_rgmii(struct dsa_switch *ds, int port,
-+				  phy_interface_t interface)
-+{
-+	struct b53_device *dev = ds->priv;
-+	u8 rgmii_ctrl = 0, off;
-+
-+	if (port == dev->imp_port)
-+		off = B53_RGMII_CTRL_IMP;
-+	else
-+		off = B53_RGMII_CTRL_P(port);
-+
-+	b53_read8(dev, B53_CTRL_PAGE, off, &rgmii_ctrl);
-+
-+	switch (interface) {
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+		rgmii_ctrl |= (RGMII_CTRL_DLL_RXC | RGMII_CTRL_DLL_TXC);
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_RXID:
-+		rgmii_ctrl &= ~(RGMII_CTRL_DLL_TXC);
-+		rgmii_ctrl |= RGMII_CTRL_DLL_RXC;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_TXID:
-+		rgmii_ctrl &= ~(RGMII_CTRL_DLL_RXC);
-+		rgmii_ctrl |= RGMII_CTRL_DLL_TXC;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII:
-+	default:
-+		rgmii_ctrl &= ~(RGMII_CTRL_DLL_RXC | RGMII_CTRL_DLL_TXC);
-+		break;
-+	}
-+
-+	if (port != dev->imp_port)
-+		rgmii_ctrl |= RGMII_CTRL_ENABLE_GMII;
-+
-+	b53_write8(dev, B53_CTRL_PAGE, off, rgmii_ctrl);
-+
-+	dev_dbg(ds->dev, "Configured port %d for %s\n", port,
-+		phy_modes(interface));
-+}
-+
- static void b53_adjust_link(struct dsa_switch *ds, int port,
- 			    struct phy_device *phydev)
- {
-@@ -1235,6 +1275,9 @@ static void b53_adjust_link(struct dsa_switch *ds, int port,
- 			      tx_pause, rx_pause);
- 	b53_force_link(dev, port, phydev->link);
- 
-+	if (is63xx(dev) && port >= B53_63XX_RGMII0)
-+		b53_adjust_63xx_rgmii(ds, port, phydev->interface);
-+
- 	if (is531x5(dev) && phy_interface_is_rgmii(phydev)) {
- 		if (port == dev->imp_port)
- 			off = B53_RGMII_CTRL_IMP;
-@@ -1402,6 +1445,9 @@ void b53_phylink_mac_link_up(struct dsa_switch *ds, int port,
- {
- 	struct b53_device *dev = ds->priv;
- 
-+	if (is63xx(dev) && port >= B53_63XX_RGMII0)
-+		b53_adjust_63xx_rgmii(ds, port, interface);
-+
- 	if (mode == MLO_AN_PHY)
- 		return;
- 
-diff --git a/drivers/net/dsa/b53/b53_priv.h b/drivers/net/dsa/b53/b53_priv.h
-index 795cbffd5c2b..4cf9f540696e 100644
---- a/drivers/net/dsa/b53/b53_priv.h
-+++ b/drivers/net/dsa/b53/b53_priv.h
-@@ -211,6 +211,7 @@ static inline int is58xx(struct b53_device *dev)
- 		dev->chip_id == BCM7278_DEVICE_ID;
- }
- 
-+#define B53_63XX_RGMII0	4
- #define B53_CPU_PORT_25	5
- #define B53_CPU_PORT	8
- 
--- 
-2.30.2
-
+Thanks,
+NeilBrown
