@@ -2,195 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6406BFECE
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 02:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A076BFEDC
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 02:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCSBQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 18 Mar 2023 21:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S229876AbjCSBbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 18 Mar 2023 21:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCSBQC (ORCPT
+        with ESMTP id S229508AbjCSBbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 18 Mar 2023 21:16:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E05E233F0
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 18:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679188560; x=1710724560;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IbvM9Er9tkWwchvy5FbS4aQrulJQtQdhzo+eGOwWUGs=;
-  b=TnDQB3X7OGr7Yp19tfOzxx0+ZBmG4k0eWtGST3b5eX118Es/sPLNBaPq
-   uBCwAqdBvDkGUyP0SnMXE/HBQ7FdTnePjoH1fEWpeFGKubUg7zsbc24Qy
-   NuggXB+939pqCYS5tJZvEmnqX27qb9kwMLbv5gb0WHS1Zc4bhznD+a3xV
-   7rnbJ341B2he5PZgL4GjpG4jTAkI1mKqSnGysOrIcq9KAMXwbwket0DkH
-   oso09RNQVbzJEtr0ifU1NZo8pH4X1kwWQz0GOFTdc0dJmIANfKD5BhBFI
-   o7DQASb7FZyuRbiXbbRzV5s5bb/+QlZpIL/KApARSEOAShx/nvoJGJxVR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="340009079"
-X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="340009079"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 18:15:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="824068723"
-X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="824068723"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Mar 2023 18:15:58 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdheP-000AK6-0f;
-        Sun, 19 Mar 2023 01:15:57 +0000
-Date:   Sun, 19 Mar 2023 09:15:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Lyude Paul <lyude@redhat.com>
-Subject: drivers/gpu/drm/nouveau/nouveau_dmem.c:205:13: sparse: sparse:
- incorrect type in assignment (different base types)
-Message-ID: <202303190929.sOBSJIb5-lkp@intel.com>
+        Sat, 18 Mar 2023 21:31:22 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BA925E27
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 18:31:20 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5418c2b8ef2so164980147b3.5
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 18:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1679189479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oWYTMFokx+FNmYyt2BQcwEvITYQbjiIZnBOvRZhHf74=;
+        b=ReZB9+hDzODkVMI7vtYYve2y5YGP1qn/3M3mT6hA2xbi0ynkKReA0xV6GHGEDUZROA
+         8yPYCyE9tf4BUBw6tEY5Bo10l5aW9Yrffz9ADkGlzDQqt1n7tUVr1THula6uawR2S9Pm
+         edMbocAX6NRYzXhpo0Idf+GcqVYdPxvL//H5w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679189479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oWYTMFokx+FNmYyt2BQcwEvITYQbjiIZnBOvRZhHf74=;
+        b=0KMALlkx7Lny9tqFxmyYtkgIoCAN3pyWXp9Ve578SlH2r9MjSwS1xCQGk54WC5OdaQ
+         yTguZbpkSxTV/+rSMQJGYyKNLlS4cguYk4DhOdZ4rcfUKrMjrFReI1qQOJYwxiAASNZg
+         WDnb4wXUG8cDSjg9W4AlwGnkJ+2otSl3Zh/bxWdajN0bp25LWro8U6t1WkzWYhLEjJtn
+         jtAG5Xf/vmt+lRqZCBhdsJwLNAYSn6r/AwonfWqqhczTXGW2JiYFTvmAK20yOsNQfoGj
+         OcQZT1OcyF+1Brm3l0ZyHJL5Uqe3I5Cqrhnh4mjLmSwPhmDfuETVL8R5XbX3T2O5aQQJ
+         0MXg==
+X-Gm-Message-State: AO0yUKWzez7rcGvjhvWXOucdKYhQKvazmaFynl4wD8wl2ovqbYWIFj/k
+        0zAim5e6MjFX+AHz0MjnBnQSpIxr/Gwk8T7Fw4y4sA==
+X-Google-Smtp-Source: AK7set+BXp2lPY3xn6HeGoNMyVz+m9NQ3WAzBAuBfmTqwW7nwI+D5XxOtjby5ZYeKbFcoiw+p7JP9VJvcsNV7T2Zbx4=
+X-Received: by 2002:a81:ac10:0:b0:544:b8c2:3cf4 with SMTP id
+ k16-20020a81ac10000000b00544b8c23cf4mr4892294ywh.1.1679189479679; Sat, 18 Mar
+ 2023 18:31:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230318132435.3671003-1-qiang1.zhang@intel.com>
+In-Reply-To: <20230318132435.3671003-1-qiang1.zhang@intel.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sat, 18 Mar 2023 21:31:08 -0400
+Message-ID: <CAEXW_YQ2xGuy4ebPjyVAp4SJQUo=Wr8uAw9BnUsjgvozzhuUeg@mail.gmail.com>
+Subject: Re: [PATCH] rcu: Fix incorrect trace string in rcu_boost_kthread()
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a3671bd86a9770e34969522d29bb30a1b66fd88a
-commit: d9b719394a1147614351961ac454589111c76e76 nouveau/dmem: refactor nouveau_dmem_fault_copy_one()
-date:   5 months ago
-config: arm64-randconfig-s052-20230319 (https://download.01.org/0day-ci/archive/20230319/202303190929.sOBSJIb5-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d9b719394a1147614351961ac454589111c76e76
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d9b719394a1147614351961ac454589111c76e76
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bluetooth/ drivers/gpu/drm/ drivers/remoteproc/
+On Sat, Mar 18, 2023 at 9:20=E2=80=AFAM Zqiang <qiang1.zhang@intel.com> wro=
+te:
+>
+> Currently, the trace string information before and after rcu_wait()
+> and schedule_timeout_idle() are reversed, this commit therefore
+> switches these strings in order to correctly trace.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303190929.sOBSJIb5-lkp@intel.com/
+I suggest provide more details of how this affects your tracing. One
+commit to draw inspiration from could be:
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/nouveau/nouveau_dmem.c:205:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted vm_fault_t [usertype] ret @@     got int @@
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:205:13: sparse:     expected restricted vm_fault_t [usertype] ret
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:205:13: sparse:     got int
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:409:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:409:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:413:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:413:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:426:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:426:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:430:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:430:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:440:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:454:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:454:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:481:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:481:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:485:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:485:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:494:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:494:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:494:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:494:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:503:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:503:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:503:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:508:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:508:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:510:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/nouveau_dmem.c:510:9: sparse: sparse: cast removes address space '__iomem' of expression
+f7f7bac9cb1c ("rcu: Have the RCU tracepoints use the tracepoint_string
+infrastructure")
 
-vim +205 drivers/gpu/drm/nouveau/nouveau_dmem.c
+Which also modifies the same code.
 
-   161	
-   162	static vm_fault_t nouveau_dmem_migrate_to_ram(struct vm_fault *vmf)
-   163	{
-   164		struct nouveau_drm *drm = page_to_drm(vmf->page);
-   165		struct nouveau_dmem *dmem = drm->dmem;
-   166		struct nouveau_fence *fence;
-   167		struct nouveau_svmm *svmm;
-   168		struct page *spage, *dpage;
-   169		unsigned long src = 0, dst = 0;
-   170		dma_addr_t dma_addr = 0;
-   171		vm_fault_t ret = 0;
-   172		struct migrate_vma args = {
-   173			.vma		= vmf->vma,
-   174			.start		= vmf->address,
-   175			.end		= vmf->address + PAGE_SIZE,
-   176			.src		= &src,
-   177			.dst		= &dst,
-   178			.pgmap_owner	= drm->dev,
-   179			.flags		= MIGRATE_VMA_SELECT_DEVICE_PRIVATE,
-   180		};
-   181	
-   182		/*
-   183		 * FIXME what we really want is to find some heuristic to migrate more
-   184		 * than just one page on CPU fault. When such fault happens it is very
-   185		 * likely that more surrounding page will CPU fault too.
-   186		 */
-   187		if (migrate_vma_setup(&args) < 0)
-   188			return VM_FAULT_SIGBUS;
-   189		if (!args.cpages)
-   190			return 0;
-   191	
-   192		spage = migrate_pfn_to_page(src);
-   193		if (!spage || !(src & MIGRATE_PFN_MIGRATE))
-   194			goto done;
-   195	
-   196		dpage = alloc_page_vma(GFP_HIGHUSER, vmf->vma, vmf->address);
-   197		if (!dpage)
-   198			goto done;
-   199	
-   200		dst = migrate_pfn(page_to_pfn(dpage));
-   201	
-   202		svmm = spage->zone_device_data;
-   203		mutex_lock(&svmm->mutex);
-   204		nouveau_svmm_invalidate(svmm, args.start, args.end);
- > 205		ret = nouveau_dmem_copy_one(drm, spage, dpage, &dma_addr);
-   206		mutex_unlock(&svmm->mutex);
-   207		if (ret) {
-   208			ret = VM_FAULT_SIGBUS;
-   209			goto done;
-   210		}
-   211	
-   212		nouveau_fence_new(dmem->migrate.chan, false, &fence);
-   213		migrate_vma_pages(&args);
-   214		nouveau_dmem_fence_done(&fence);
-   215		dma_unmap_page(drm->dev->dev, dma_addr, PAGE_SIZE, DMA_BIDIRECTIONAL);
-   216	done:
-   217		migrate_vma_finalize(&args);
-   218		return ret;
-   219	}
-   220	
+>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tree_plugin.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index 7b0fe741a088..7b622b5196a8 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -1114,10 +1114,10 @@ static int rcu_boost_kthread(void *arg)
+>         trace_rcu_utilization(TPS("Start boost kthread@init"));
+>         for (;;) {
+>                 WRITE_ONCE(rnp->boost_kthread_status, RCU_KTHREAD_WAITING=
+);
+> -               trace_rcu_utilization(TPS("End boost kthread@rcu_wait"));
+> +               trace_rcu_utilization(TPS("Start boost kthread@rcu_wait")=
+);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Doesn't that look weird because now you will have 2 "Start boost
+kthread@" messages in succession (one of them coming before the for
+loop) ?
+
+>                 rcu_wait(READ_ONCE(rnp->boost_tasks) ||
+>                          READ_ONCE(rnp->exp_tasks));
+> -               trace_rcu_utilization(TPS("Start boost kthread@rcu_wait")=
+);
+> +               trace_rcu_utilization(TPS("End boost kthread@rcu_wait"));
+>                 WRITE_ONCE(rnp->boost_kthread_status, RCU_KTHREAD_RUNNING=
+);
+>                 more2boost =3D rcu_boost(rnp);
+
+Also, it is weird here that you are calling rcu_boost() right after
+printing "End boost kthread".
+
+thanks,
+
+ - Joel
+
+
+
+>                 if (more2boost)
+> @@ -1126,9 +1126,9 @@ static int rcu_boost_kthread(void *arg)
+>                         spincnt =3D 0;
+>                 if (spincnt > 10) {
+>                         WRITE_ONCE(rnp->boost_kthread_status, RCU_KTHREAD=
+_YIELDING);
+> -                       trace_rcu_utilization(TPS("End boost kthread@rcu_=
+yield"));
+> -                       schedule_timeout_idle(2);
+>                         trace_rcu_utilization(TPS("Start boost kthread@rc=
+u_yield"));
+> +                       schedule_timeout_idle(2);
+> +                       trace_rcu_utilization(TPS("End boost kthread@rcu_=
+yield"));
+>                         spincnt =3D 0;
+>                 }
+>         }
+> --
+> 2.25.1
+>
