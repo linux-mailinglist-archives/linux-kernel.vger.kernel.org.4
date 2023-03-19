@@ -2,101 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246B56C028C
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD326C028E
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 16:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjCSPAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 11:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S230383AbjCSPBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 11:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjCSPAX (ORCPT
+        with ESMTP id S230474AbjCSPBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 11:00:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC781F4AC;
-        Sun, 19 Mar 2023 08:00:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1679237989; i=frank-w@public-files.de;
-        bh=FaY0Xl4jfnqhSvRMHOlCX3MBxMkltd1/bLTF73k4weg=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=tZJsnxpbx8mj1ojXRBCtyzKk/vRDE8bWU8MjIVkvmjWpFfcIpABLv21lwVAASEuRm
-         TzPiGxRYLFGFuqIqF0JT11RTJfWqbIQXwAmgD0EtdXjPqnSnVYONfXR/vdGCGLyXxq
-         XzgHAPHK/SCjuqyJvy85wwhEVkfEdS118OSbVAhP/ZsrbvMPpMuDE2RgH6z3WaBXPV
-         aSjIT3Suz8GO3ApN+Tn/SkzJUMdDj3rlxyi4G7CsRGUQ9fpj8CC4FZCht0Gb8FzKtw
-         DufBNMp2t8B1oVcjq0O/Bs+E8qEHyxjsMhoKhSJdi4fiYaxBopuIH+h1oKGm7tKKse
-         VR6ZOWNOznA2Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.158.68] ([217.61.158.68]) by web-mail.gmx.net
- (3c-app-gmx-bs27.server.lan [172.19.170.79]) (via HTTP); Sun, 19 Mar 2023
- 15:59:48 +0100
+        Sun, 19 Mar 2023 11:01:05 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E0422DD5;
+        Sun, 19 Mar 2023 08:00:43 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id o14so4416022ioa.3;
+        Sun, 19 Mar 2023 08:00:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679238038;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4+yh1Iwz6GpGxVzG6CeG24b3aBWigOqdkkBWntDGMZY=;
+        b=Ld9vF1oHcAIi4KliY9F6FzThVspjx+oRwr9S7EiwTWTWBnv7n7yh0tPNV9kZXlSuBz
+         sNWLWPG5PgK/WRIE3DfTdnUOUOviN9FN7bnyWUoOoQ+gxH7QYwHgXZ3SekLC2LlyR9BO
+         eT9SQu4iZ3nSwLuKGalwtn12cgqPZXQ3Xc0fC83LE6PzG6cih60FuzAjQmHK6XQrU/Lz
+         6TY+S+6y2soJxPIH4zUXdKM2ntc/k1ZOlJw4nADRBDcvsL1OEFnmEnyrk0AiB7LG+6PC
+         Ute+bKxqDITs0Ay7JJWd2QVPcyltM/CmM0bzpCV8zQpE3k00RrW0QG/RtGRHRF8i7jIm
+         /SMA==
+X-Gm-Message-State: AO0yUKWVjnbGMe6rDgGg/pVkjGlQTivvJpOzfVeqqgfry5QqPcQjZmGk
+        LrEp3zbk/0Wx/xeOAYN+WQ==
+X-Google-Smtp-Source: AK7set82e+A0Ra5xDg3iEg6mu505pJCKDywkfHvsolgYRYnvyKJbL7mZG6I7riL0gg+UZolbTIBVyQ==
+X-Received: by 2002:a5d:8616:0:b0:755:7b0c:604a with SMTP id f22-20020a5d8616000000b007557b0c604amr3278553iol.2.1679238038667;
+        Sun, 19 Mar 2023 08:00:38 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80c4:7b93:58f2:478b:84fd:941e])
+        by smtp.gmail.com with ESMTPSA id w29-20020a056638379d00b0040630f8625asm2486356jal.13.2023.03.19.08.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 08:00:38 -0700 (PDT)
+Received: (nullmailer pid 66655 invoked by uid 1000);
+        Sun, 19 Mar 2023 15:00:36 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: sh-mobile: Use of_cpu_node_to_id() to read CPU node 'reg'
+Date:   Sun, 19 Mar 2023 10:00:27 -0500
+Message-Id: <20230319150027.66475-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <trinity-74490009-c9ba-4ac4-bc4b-8f613902f698-1679237988949@3c-app-gmx-bs27>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Aw: [PATCH net-next v14 9/9] net: dsa: mt7530: use external PCS
- driver
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 19 Mar 2023 15:59:48 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <a770f39662182c5dd494d98717820f5bd98a47e2.1679230025.git.daniel@makrotopia.org>
-References: <cover.1679230025.git.daniel@makrotopia.org>
- <a770f39662182c5dd494d98717820f5bd98a47e2.1679230025.git.daniel@makrotopia.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:+v+uKNdg0PstN/8SJfDHeTZE6Mum0N2MMgrG6r9wnuu8npcGDS19dKHlr+4z910/kn4ha
- p6ZPtCdf0TmZg3E4qK5FcBtPlzrS/N4eAyK2lS2/GChhhBvhEq7zy9dfsQ5wjonj/O621mnX2nVW
- P6HnC17Z69WOF/6ZH8BLhr6d4itqShstcAC7fDzPiPn9HUoM+fqE4wADrnvqK9vL+pMKIHcn1gay
- cmahC8uh31l+ugPj/wP/8BqXU0JSEmsw0/8awGqQG9XOivmDQwplpaHFCOSKmsNYbxf8OvAF6s0K
- uY=
-UI-OutboundReport: notjunk:1;M01:P0:Mv/Q0HQ28M8=;N2EnFaqiI3lWUB7Lb5ETkVJmKfb
- z4DGVQB44ibOLG7T5GpqgysxIbH4Oo5kinSx2P523Poyc++ir05S/w6xo71JzHtgLB1JLUr90
- zo/ujXaL/Hz7RhGywZE6IQ1yvtBhbnlbm8zu/wSeQfja3x/tSo3FpbEGL31cuhfYLaM5b2DWM
- p2vi3EyM21CLncvkSqho2R3Pqb78UIy5ZmwicqxBRvZQj75YDHaDyqQg6AAbx+Cv1tIz/rAwt
- ZhUXbNKe2RjlgugZv9m+msihYstPWMQG52Wbr9xZYcpA7kOnC+NkuPE078rWa1Ek8kBH+3BiR
- lEZ5VDCpwfzH2i5c5G/yivHTALvYMemTL5NRb8zlXWT8GGZzyRQlda1gTr4G8KLPhUL9Ek5T6
- uDrRMi33dYOiFyYVpVNIG7SPlX4lScbnGS1rtTbuUPlOgvpRrGDIBod5fEoFQf1s1upGIZY5f
- PCLvwaifHi8evBzNue7o9pyFJ+fEbFE/EetldsNN/JF/yP1yWkpX1MolED4eaQbjrEzrm+Xm1
- tM3BXU24wSDFekXHXNfA4GXtuncTERQyJnY1JArkkfQXg4sttwo01lbOGhRJdzhEz+ioARfv8
- 6B7CA292RmUD4BGFRu3shaLzsu/3+RdhfiSgZxZbW+GLagh9wO9Ue6wFOLifCja7yAeKSehRE
- PiLSPL3ZkiPbbqQl9GCBbehJsr/0+JE/MfL1yDqFU3s776r8HjtnsrNzuB1cbCqryFxrqAPe/
- gniwuNT1hQojgeV2Zxdoh2aXlZMyZ8XP0DapQM/yIHHNWLCzi02sgQ+Y21vaqEXEzBSKfAIWO
- PqEQQlut0h/iiAWrT86ovVPILuK2tZ/evTWRSOBSvuvzo=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-as Patches are the same as v13
+Replace open coded CPU nodes reading of "reg" and translation to logical
+ID with of_cpu_node_to_id().
 
-Tested-By: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/arm/mach-shmobile/platsmp-apmu.c | 34 +++++++++++----------------
+ 1 file changed, 14 insertions(+), 20 deletions(-)
 
-regards Frank
+diff --git a/arch/arm/mach-shmobile/platsmp-apmu.c b/arch/arm/mach-shmobile/platsmp-apmu.c
+index e771ce70e132..27cfe753c467 100644
+--- a/arch/arm/mach-shmobile/platsmp-apmu.c
++++ b/arch/arm/mach-shmobile/platsmp-apmu.c
+@@ -10,6 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/ioport.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/smp.h>
+ #include <linux/suspend.h>
+@@ -210,7 +211,6 @@ static void apmu_parse_dt(void (*fn)(struct resource *res, int cpu, int bit))
+ 	struct device_node *np_apmu, *np_cpu;
+ 	struct resource res;
+ 	int bit, index;
+-	u32 id;
+ 
+ 	for_each_matching_node(np_apmu, apmu_ids) {
+ 		/* only enable the cluster that includes the boot CPU */
+@@ -218,33 +218,27 @@ static void apmu_parse_dt(void (*fn)(struct resource *res, int cpu, int bit))
+ 
+ 		for (bit = 0; bit < CONFIG_NR_CPUS; bit++) {
+ 			np_cpu = of_parse_phandle(np_apmu, "cpus", bit);
+-			if (np_cpu) {
+-				if (!of_property_read_u32(np_cpu, "reg", &id)) {
+-					if (id == cpu_logical_map(0)) {
+-						is_allowed = true;
+-						of_node_put(np_cpu);
+-						break;
+-					}
+-
+-				}
++			if (np_cpu && of_cpu_node_to_id(np_cpu) == 0) {
++				is_allowed = true;
+ 				of_node_put(np_cpu);
++				break;
+ 			}
++			of_node_put(np_cpu);
+ 		}
+ 		if (!is_allowed)
+ 			continue;
+ 
+ 		for (bit = 0; bit < CONFIG_NR_CPUS; bit++) {
+ 			np_cpu = of_parse_phandle(np_apmu, "cpus", bit);
+-			if (np_cpu) {
+-				if (!of_property_read_u32(np_cpu, "reg", &id)) {
+-					index = get_logical_index(id);
+-					if ((index >= 0) &&
+-					    !of_address_to_resource(np_apmu,
+-								    0, &res))
+-						fn(&res, index, bit);
+-				}
+-				of_node_put(np_cpu);
+-			}
++			if (!np_cpu)
++				continue;
++
++			index = of_cpu_node_to_id(np_cpu);
++			if ((index >= 0) &&
++			    !of_address_to_resource(np_apmu, 0, &res))
++				fn(&res, index, bit);
++
++			of_node_put(np_cpu);
+ 		}
+ 	}
+ }
+-- 
+2.39.2
+
