@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DC56C05ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEBB6C05EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 23:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCSWCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 18:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S230446AbjCSWCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 18:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjCSWB7 (ORCPT
+        with ESMTP id S230296AbjCSWCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 18:01:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2620F1EBF8;
-        Sun, 19 Mar 2023 15:01:14 -0700 (PDT)
+        Sun, 19 Mar 2023 18:02:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558601DBAE;
+        Sun, 19 Mar 2023 15:01:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B7B8611A7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E19E4B80D29;
+        Sun, 19 Mar 2023 22:01:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9914FC433A0;
         Sun, 19 Mar 2023 22:01:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEBEC4339B;
-        Sun, 19 Mar 2023 22:01:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679263273;
-        bh=PogP7wRngXQiUqmQnWvQozicSIVShAdtUNbeYC8wpS8=;
+        s=k20201202; t=1679263276;
+        bh=76mqBcXOclj70wK6vJnPXYiLxzzEBqv+7zktuDN4On8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BbRrG7/No3s+Wxn35WykZgqumgAtgA71gdQ5J12dxWsQy8T8UYZ0xOfDgvafCU0gU
-         juKoeAAlcxDYKBZj7ANUaIDhkirDSSOn9GQHrhjrlBMAH632EHvpMIDKl/8mm6psIy
-         x4E9jus7CN4xPRD62XXDkHy6wYmKhH/Rrkc6uE9Pi+lX/HLxmCNzPlOAfx4mQDCypg
-         0IKAP5boUvNjsBQkM3+RA309/oZJHntXBHJ5Xor9n1MvaJQAHrzbMA0bHab61TmasX
-         l+NN5p1t3GG1PEDp6Sv0t7ytroVh+moRTc2smV8hZ2vuDxm+xP/p1KRVuZ4d2A2bEy
-         5G44pgtQ35qMQ==
+        b=VUXzADYnvUt8jvBwlLbVomIIwpWr3m/fWNfNtQVriQSqwUkj2ZQ+OlQip8jRy+3ow
+         aggOLR+nBPstDeDYoCVDuML8MQZLa3SSC2CwN/E0vJj4yzNurI9Il7fULzcWCisbra
+         c7yB8r9CFGkQKDwiNPZKiJcPeWXDbrN/71RMaDACWGeE8j2JER9CcCCibhgZKC8/Ai
+         kbrHlM/EvN/6IV6er2DGjJCzH+6Z1ob66/8rM3N6IqLfI81LXX3uHQGJVWw+sgkSHV
+         J9v5GLpbpWEkXzeGh4WuYYJSZn6QLtRjsE1mebhfEDeaoxlsshPaZKo0qbGN9N4NbW
+         c0B/T0aRKxRqQ==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -41,16 +41,16 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 14/15] mm: move vmalloc_init() declaration to mm/internal.h
-Date:   Mon, 20 Mar 2023 00:00:07 +0200
-Message-Id: <20230319220008.2138576-15-rppt@kernel.org>
+Subject: [PATCH 15/15] MAINTAINERS: extend memblock entry to include MM initialization
+Date:   Mon, 20 Mar 2023 00:00:08 +0200
+Message-Id: <20230319220008.2138576-16-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230319220008.2138576-1-rppt@kernel.org>
 References: <20230319220008.2138576-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,53 +60,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-vmalloc_init() is called only from mm_core_init(), there is no need to
-declare it in include/linux/vmalloc.h
-
-Move vmalloc_init() declaration to mm/internal.h
+and add mm/mm_init.c to memblock entry in MAINTAINERS
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- include/linux/vmalloc.h | 4 ----
- mm/internal.h           | 5 +++++
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 69250efa03d1..351fc7697214 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -131,12 +131,8 @@ extern void *vm_map_ram(struct page **pages, unsigned int count, int node);
- extern void vm_unmap_aliases(void);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7002a5d3eb62..b79463ea1049 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13368,13 +13368,14 @@ F:	arch/powerpc/include/asm/membarrier.h
+ F:	include/uapi/linux/membarrier.h
+ F:	kernel/sched/membarrier.c
  
- #ifdef CONFIG_MMU
--extern void __init vmalloc_init(void);
- extern unsigned long vmalloc_nr_pages(void);
- #else
--static inline void vmalloc_init(void)
--{
--}
- static inline unsigned long vmalloc_nr_pages(void) { return 0; }
- #endif
+-MEMBLOCK
++MEMBLOCK AND MEMORY MANAGEMENT INITIALIZATION
+ M:	Mike Rapoport <rppt@kernel.org>
+ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	Documentation/core-api/boot-time-mm.rst
+ F:	include/linux/memblock.h
+ F:	mm/memblock.c
++F:	mm/mm_init.c
+ F:	tools/testing/memblock/
  
-diff --git a/mm/internal.h b/mm/internal.h
-index 1be4278d7913..7e22137b4e86 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -895,9 +895,14 @@ size_t splice_folio_into_pipe(struct pipe_inode_info *pipe,
-  * mm/vmalloc.c
-  */
- #ifdef CONFIG_MMU
-+void __init vmalloc_init(void);
- int vmap_pages_range_noflush(unsigned long addr, unsigned long end,
-                 pgprot_t prot, struct page **pages, unsigned int page_shift);
- #else
-+static inline void vmalloc_init(void)
-+{
-+}
-+
- static inline
- int vmap_pages_range_noflush(unsigned long addr, unsigned long end,
-                 pgprot_t prot, struct page **pages, unsigned int page_shift)
+ MEMORY CONTROLLER DRIVERS
 -- 
 2.35.1
 
