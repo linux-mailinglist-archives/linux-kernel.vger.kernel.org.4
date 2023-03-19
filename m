@@ -2,114 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADE26C0263
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D9B6C0265
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjCSOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S230419AbjCSOYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjCSOYM (ORCPT
+        with ESMTP id S230372AbjCSOYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:24:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A015FF9
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679235805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=T/hIkiUkQpnPgtTLze7otKxFbigf/WOsrX7aDGKl4Xk=;
-        b=KkUtUpdHXO+7h2eBPf4+EP3z7q5C3kTdJp6XlMJjmTD8ynbn5XbpDlum79DKB3MRAN2z1b
-        F2ldkMFnTwCTi3MrjGS45/iwjZZE1SWhaIVcN5Sow8mOjZWIp87Tb+uTRX7tsrMprEkZtd
-        CvbBwR9bn1IDMRJ7PQ21YgZnV7ad9/M=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-536-siGBLCgvPWqFEptQfvYPgw-1; Sun, 19 Mar 2023 10:23:24 -0400
-X-MC-Unique: siGBLCgvPWqFEptQfvYPgw-1
-Received: by mail-qt1-f197.google.com with SMTP id f36-20020a05622a1a2400b003deb2fa544bso1428618qtb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:23:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679235804;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T/hIkiUkQpnPgtTLze7otKxFbigf/WOsrX7aDGKl4Xk=;
-        b=ayLvNYPyJNf4iUhpCLtlkH0OWDqy/lIONIVqri8Krz/uwnpwMWh4T0O8jkIw8tbv8o
-         VHXfrOK7NuE0v21VfsWCn9pCgA4XsXyNKk9bBTzQoQ2AMaYKQqHPZj63mjpMY7cPGI+h
-         V/2JD9PMhAdTsZqcayJAQKAqJCaoXZdCZ7O2GzffHMLZ9dpEA1xl1VvqTCC8Cc6aevoR
-         0m4J4KTUnQ+sjodnSYu0Q9evJ5ekiglf6PPMW7D3IcU2GwN03oUn4k7PxbV3LdLnyqeH
-         zqoJYk9Ka40z/JHzHZrOVoEhf1wpYoqx80Tm04ir4DvIxNYF3/lGXutS7wnqj/BqVzfV
-         m1pg==
-X-Gm-Message-State: AO0yUKU2CESkWiF7CmfqVP7UyeZIv8ohvnaEXwWDjd8g1mGmTf374wYR
-        qMWTYe02/R001ir3YhTkhcXwB2jBa5KvDYQlTgB9GggmDkY6ARIhuPH64KtQAO0C2QKxAnhOvs+
-        ViB8wUfNDI1x17ZMcop47bSw6
-X-Received: by 2002:ac8:5c81:0:b0:3b8:2504:e90a with SMTP id r1-20020ac85c81000000b003b82504e90amr14481139qta.3.1679235803805;
-        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+VdKmYQdrgrfLXblYozKf6KZb4B0tCRITCJXTgRYRA6AKoIA4AB44uaiwX/F6ze/obzO3pzQ==
-X-Received: by 2002:ac8:5c81:0:b0:3b8:2504:e90a with SMTP id r1-20020ac85c81000000b003b82504e90amr14481124qta.3.1679235803572;
-        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o8-20020ac841c8000000b003de4e646d63sm2103047qtm.32.2023.03.19.07.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     patrik.r.jakobsson@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        nathan@kernel.org, ndesaulniers@google.com
+        Sun, 19 Mar 2023 10:24:34 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F42D113E4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:24:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-162-78-nat.elisa-mobile.fi [85.76.162.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4900A1858;
+        Sun, 19 Mar 2023 15:24:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679235868;
+        bh=w+dkC9MWnejOzS6P8ye/zUNBDJBYdWNlGyEoaQz3niE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NQuAAfQ8aiKPzhFhBF5zEauCz3mIDghGKUoDXgAMHIz03NE261MD4vl2NbUXmSJ/K
+         vLSdT8cI2KzAAhc4itHT/+ovC7JutO6FuJw+jjRS8ZEet4ePymC63YZUP2ILHYmyMo
+         TuB56T+AvBSXkjWEbVHA7UwSnXWIF98rfmK9TYqQ=
+Date:   Sun, 19 Mar 2023 16:24:32 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Lee Jones <lee@kernel.org>
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/gma500: remove unused gma_pipe_event function
-Date:   Sun, 19 Mar 2023 10:23:20 -0400
-Message-Id: <20230319142320.1704336-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 02/37] drm/xlnx/zynqmp_disp: Use correct kerneldoc
+ formatting in zynqmp_disp
+Message-ID: <20230319142432.GM10144@pendragon.ideasonboard.com>
+References: <20230317081718.2650744-1-lee@kernel.org>
+ <20230317081718.2650744-3-lee@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230317081718.2650744-3-lee@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/gpu/drm/gma500/psb_irq.c:35:19: error: unused function
-  'gma_pipe_event' [-Werror,-Wunused-function]
-static inline u32 gma_pipe_event(int pipe)
-                  ^
-This function is not used, so remove it.
+Hi Lee,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/gma500/psb_irq.c | 11 -----------
- 1 file changed, 11 deletions(-)
+Thank you for the patch.
 
-diff --git a/drivers/gpu/drm/gma500/psb_irq.c b/drivers/gpu/drm/gma500/psb_irq.c
-index d421031462df..343c51250207 100644
---- a/drivers/gpu/drm/gma500/psb_irq.c
-+++ b/drivers/gpu/drm/gma500/psb_irq.c
-@@ -32,17 +32,6 @@ static inline u32 gma_pipestat(int pipe)
- 	BUG();
- }
- 
--static inline u32 gma_pipe_event(int pipe)
--{
--	if (pipe == 0)
--		return _PSB_PIPEA_EVENT_FLAG;
--	if (pipe == 1)
--		return _MDFLD_PIPEB_EVENT_FLAG;
--	if (pipe == 2)
--		return _MDFLD_PIPEC_EVENT_FLAG;
--	BUG();
--}
--
- static inline u32 gma_pipeconf(int pipe)
- {
- 	if (pipe == 0)
+On Fri, Mar 17, 2023 at 08:16:43AM +0000, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/gpu/drm/xlnx/zynqmp_disp.c:151: warning: Function parameter or member 'blend' not described in 'zynqmp_disp'
+>  drivers/gpu/drm/xlnx/zynqmp_disp.c:151: warning: Function parameter or member 'avbuf' not described in 'zynqmp_disp'
+>  drivers/gpu/drm/xlnx/zynqmp_disp.c:151: warning: Function parameter or member 'audio' not described in 'zynqmp_disp'
+> 
+> Cc: Hyun Kwon <hyun.kwon@xilinx.com>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/gpu/drm/xlnx/zynqmp_disp.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/xlnx/zynqmp_disp.c b/drivers/gpu/drm/xlnx/zynqmp_disp.c
+> index 3b87eebddc979..63358f4898625 100644
+> --- a/drivers/gpu/drm/xlnx/zynqmp_disp.c
+> +++ b/drivers/gpu/drm/xlnx/zynqmp_disp.c
+> @@ -128,9 +128,9 @@ struct zynqmp_disp_layer {
+>   * struct zynqmp_disp - Display controller
+>   * @dev: Device structure
+>   * @dpsub: Display subsystem
+> - * @blend.base: Register I/O base address for the blender
+> - * @avbuf.base: Register I/O base address for the audio/video buffer manager
+> - * @audio.base: Registers I/O base address for the audio mixer
+> + * @blend: .base: Register I/O base address for the blender
+> + * @avbuf: .base: Register I/O base address for the audio/video buffer manager
+> + * @audio: .base: Registers I/O base address for the audio mixer
+
+This is a hack, it won't work properly if the nested structures get
+extended with more fields.
+
+Is there a correct kerneldoc syntax for this code construct ?
+
+>   * @layers: Layers (planes)
+>   */
+>  struct zynqmp_disp {
+
 -- 
-2.27.0
+Regards,
 
+Laurent Pinchart
