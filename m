@@ -2,162 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9ECE6C03BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01366C03C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCSSUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 14:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S229806AbjCSSXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 14:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCSSUV (ORCPT
+        with ESMTP id S229460AbjCSSXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 14:20:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C6F1A64E;
-        Sun, 19 Mar 2023 11:20:19 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 18:20:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679250017;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ngFhnr01P3Dr81BS8BYHsS6q4bPxhbfDf5kYIc9VYuE=;
-        b=gIO0PA5YxIdWaQJdU9tI/V4FhJn6qdBakj4qAaxy+SeciWzLvrBFnec30itITaEE5iA1Yy
-        lTthOr01+AC95MpQxcVuSN8CMIQo1K0Z6y+/HwIFodeiWgRTqKnCnwwZMSmThxZSOGrbXJ
-        iVDPoGS9mwZQ7QRxYe0ouGqJPonknOG1SZAEeA1baqDX93nvZqJJNmxEhDNBRLU1XU8lj6
-        kb//fxXPPjpZD9O8g1C0g4yh6+OUPK2SJZ1FcbqENP7SxvsnGzkUc/bw9tQC8bfIbyYvWG
-        Dc1SOa/4l6axfQeH+MxhyM6D2A1UDvz+9M/ozD62DEjmbBGp/dCaFrDnSsLCkw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679250017;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ngFhnr01P3Dr81BS8BYHsS6q4bPxhbfDf5kYIc9VYuE=;
-        b=0XPb3qjDMq8q5kdakNOC8xQKpBd8tMKSOLqmRfZeFoxbySXLI4t6i1ZQGBgjJbbe/SMHJ2
-        kAG5vNpyrF6myKAw==
-From:   "tip-bot2 for Muralidhara M K" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/MCE/AMD: Use an u64 for bank_map
-Cc:     Muralidhara M K <muralimk@amd.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230127151601.1068324-1-muralimk@amd.com>
-References: <20230127151601.1068324-1-muralimk@amd.com>
+        Sun, 19 Mar 2023 14:23:05 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0B18693;
+        Sun, 19 Mar 2023 11:23:03 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id o40-20020a05600c512800b003eddedc47aeso804326wms.3;
+        Sun, 19 Mar 2023 11:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679250182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lSlmso6KkBwBklxSLJ75f8Ha+gCZQtySj8JbPBjFDek=;
+        b=RJ5EyvENhicDdyJ8u4kBtkLgOG7blSSpE2ZeS1AZBwp3+mpSZWBC84pWpRfTqUpxyL
+         PCgJzWu4u2ir4NkajumTPbsNUZuXXLkJunZyegIyesvFLzA8jbflEcPUMysMbyiP491X
+         Cy9KOg/kd9E44C9cvkzmWov7KMJCu7C+bD7RA4K37ud/svjLyym0tBn95Ku52HDouHJc
+         je76VmevGV071YHhdPL/of6EH/BZckyG6wFFTwXaaW53tL8UCfDroQPIoiz3HpWp5G4B
+         wn1JZTVgxwOj8DmD7DgHk4ApQNEE101BA99/RIvbmKKbYLuC7A/Au7D3bD6FKrP4q82D
+         XYjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679250182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lSlmso6KkBwBklxSLJ75f8Ha+gCZQtySj8JbPBjFDek=;
+        b=wVPIKbp/ZNx+dgTqk774luEgKYQ2RWtmg8t6p3BtAwJbJPQcciVpZANvaEcCbb7vki
+         S0qtdqH+mSS1810ZaQMdw/vz2qaA6+HaSdnXzYP+1zwtYWk8D9+MhU1V96JuDsKgszLs
+         p21qsekrngDV3dpCBmSz2aj6DI24ysq6w3RqtOIfVdODQldyVo70r6xYCOPsJvoPqfTw
+         RqICDoiNvspInjzdjgYoQ9gbHDEgCbQvMjCeJwVNzvHchmiFTHViHQ/QyrIAkq7GM3zb
+         4uMWv7HHh94ttLGmKpyV/YYIwiOrG+z6sYLpjGdxViLWv02OhAQuP8Esac230FFlJrdd
+         w+Iw==
+X-Gm-Message-State: AO0yUKWMY1X7/A+JlL8k+XrK8SmlYXwCXyTFTEwYRj48iOhA1iUl+Ova
+        sEFL7NIpQyLoDmaJh/sRCOGCtSty2altZgPNu+w=
+X-Google-Smtp-Source: AK7set+8PK8WzQdWYQnVV4eGQct12+K+dhBfQvg6I/KNECs5hAlQxWqYAfkve4BhnwqumFr/YbeZqg==
+X-Received: by 2002:a05:600c:4fc9:b0:3ed:3d5a:ac99 with SMTP id o9-20020a05600c4fc900b003ed3d5aac99mr12965796wmq.5.1679250182451;
+        Sun, 19 Mar 2023 11:23:02 -0700 (PDT)
+Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c4e8e00b003ede178677csm2007680wmq.45.2023.03.19.11.23.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 11:23:02 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 19 Mar 2023 19:22:59 +0100
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
+        daniel@iogearbox.net, kpsingh@kernel.org
+Subject: Re: [PATCH 4/7] ftrace: Rename _ftrace_direct_multi APIs to
+ _ftrace_direct APIs
+Message-ID: <ZBdTA0gKh2xAk5Ay@krava>
+References: <20230316173811.1223508-1-revest@chromium.org>
+ <20230316173811.1223508-5-revest@chromium.org>
+ <ZBcqWqWyq0uW/wj7@krava>
+ <20230319135550.22aaa04b@rorschach.local.home>
 MIME-Version: 1.0
-Message-ID: <167925001631.5837.3904039518860616672.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319135550.22aaa04b@rorschach.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+On Sun, Mar 19, 2023 at 01:55:50PM -0400, Steven Rostedt wrote:
+> On Sun, 19 Mar 2023 16:29:30 +0100
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > On Thu, Mar 16, 2023 at 06:38:08PM +0100, Florent Revest wrote:
+> > 
+> > SNIP
+> > 
+> > > diff --git a/samples/Kconfig b/samples/Kconfig
+> > > index 30ef8bd48ba3..fd24daa99f34 100644
+> > > --- a/samples/Kconfig
+> > > +++ b/samples/Kconfig
+> > > @@ -38,7 +38,7 @@ config SAMPLE_FTRACE_DIRECT
+> > >  	  that hooks to wake_up_process and prints the parameters.
+> > >  
+> > >  config SAMPLE_FTRACE_DIRECT_MULTI  
+> > 
+> > nit, we could perhaps remove this config option as well
+> > and use SAMPLE_FTRACE_DIRECT_MULTI
+> 
+> Remove SAMPLE_FTRACE_DIRECT_MULTI for SAMPLE_FTRACE_DIRECT_MULTI?
+> 
 
-Commit-ID:     4c1cdec319b9aadb65737c3eb1f5cb74bd6aa156
-Gitweb:        https://git.kernel.org/tip/4c1cdec319b9aadb65737c3eb1f5cb74bd6aa156
-Author:        Muralidhara M K <muralimk@amd.com>
-AuthorDate:    Fri, 27 Jan 2023 15:16:01 
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Sun, 19 Mar 2023 19:07:04 +01:00
+sorry typo, I meant SAMPLE_FTRACE_DIRECT
 
-x86/MCE/AMD: Use an u64 for bank_map
+jirka
 
-Thee maximum number of MCA banks is 64 (MAX_NR_BANKS), see
-
-  a0bc32b3cacf ("x86/mce: Increase maximum number of banks to 64").
-
-However, the bank_map which contains a bitfield of which banks to
-initialize is of type unsigned int and that overflows when those bit
-numbers are >= 32, leading to UBSAN complaining correctly:
-
-  UBSAN: shift-out-of-bounds in arch/x86/kernel/cpu/mce/amd.c:1365:38
-  shift exponent 32 is too large for 32-bit type 'int'
-
-Change the bank_map to a u64 and use the proper BIT_ULL() macro when
-modifying bits in there.
-
-  [ bp: Rewrite commit message. ]
-
-Fixes: a0bc32b3cacf ("x86/mce: Increase maximum number of banks to 64")
-Signed-off-by: Muralidhara M K <muralimk@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230127151601.1068324-1-muralimk@amd.com
----
- arch/x86/kernel/cpu/mce/amd.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 4881893..0b971f9 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -235,10 +235,10 @@ static DEFINE_PER_CPU(struct threshold_bank **, threshold_banks);
-  * A list of the banks enabled on each logical CPU. Controls which respective
-  * descriptors to initialize later in mce_threshold_create_device().
-  */
--static DEFINE_PER_CPU(unsigned int, bank_map);
-+static DEFINE_PER_CPU(u64, bank_map);
- 
- /* Map of banks that have more than MCA_MISC0 available. */
--static DEFINE_PER_CPU(u32, smca_misc_banks_map);
-+static DEFINE_PER_CPU(u64, smca_misc_banks_map);
- 
- static void amd_threshold_interrupt(void);
- static void amd_deferred_error_interrupt(void);
-@@ -267,7 +267,7 @@ static void smca_set_misc_banks_map(unsigned int bank, unsigned int cpu)
- 		return;
- 
- 	if (low & MASK_BLKPTR_LO)
--		per_cpu(smca_misc_banks_map, cpu) |= BIT(bank);
-+		per_cpu(smca_misc_banks_map, cpu) |= BIT_ULL(bank);
- 
- }
- 
-@@ -530,7 +530,7 @@ static u32 smca_get_block_address(unsigned int bank, unsigned int block,
- 	if (!block)
- 		return MSR_AMD64_SMCA_MCx_MISC(bank);
- 
--	if (!(per_cpu(smca_misc_banks_map, cpu) & BIT(bank)))
-+	if (!(per_cpu(smca_misc_banks_map, cpu) & BIT_ULL(bank)))
- 		return 0;
- 
- 	return MSR_AMD64_SMCA_MCx_MISCy(bank, block - 1);
-@@ -574,7 +574,7 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
- 	int new;
- 
- 	if (!block)
--		per_cpu(bank_map, cpu) |= (1 << bank);
-+		per_cpu(bank_map, cpu) |= BIT_ULL(bank);
- 
- 	memset(&b, 0, sizeof(b));
- 	b.cpu			= cpu;
-@@ -878,7 +878,7 @@ static void amd_threshold_interrupt(void)
- 		return;
- 
- 	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
--		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
-+		if (!(per_cpu(bank_map, cpu) & BIT_ULL(bank)))
- 			continue;
- 
- 		first_block = bp[bank]->blocks;
-@@ -1356,7 +1356,7 @@ int mce_threshold_create_device(unsigned int cpu)
- 		return -ENOMEM;
- 
- 	for (bank = 0; bank < numbanks; ++bank) {
--		if (!(this_cpu_read(bank_map) & (1 << bank)))
-+		if (!(this_cpu_read(bank_map) & BIT_ULL(bank)))
- 			continue;
- 		err = threshold_create_bank(bp, cpu, bank);
- 		if (err) {
+> -- Steve
+> 
+> > 
+> > jirka
+> > 
+> > > -	tristate "Build register_ftrace_direct_multi() example"
+> > > +	tristate "Build register_ftrace_direct() on multiple ips example"
+> > >  	depends on DYNAMIC_FTRACE_WITH_DIRECT_CALLS && m
+> > >  	depends on HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+> > >  	help  
+> 
