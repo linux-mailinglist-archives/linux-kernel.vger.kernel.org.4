@@ -2,66 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D706C003A
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0786C003D
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 10:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjCSJIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 05:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S229561AbjCSJQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 05:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjCSJIg (ORCPT
+        with ESMTP id S229481AbjCSJP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 05:08:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02D412CDB
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 02:08:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 19 Mar 2023 05:15:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15CA13DC1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 02:15:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E2CD60F56
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 09:08:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4881AC433EF;
-        Sun, 19 Mar 2023 09:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679216913;
-        bh=muQIyS8L0u+wQYk7fHuS9Tv5nL+xkWTZyobwqrXUzPM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mDJQV9ZvXoMtD+VHedCLXDysgjyX6XK17CG6ZqVp2mUeZvlIEJ1tM2HJeTvoXyISV
-         zhJCtPNBhQY5figas78NE4HiIVw1L7yo9qyc0CJcRmzrhmGKK2iodCRcjI2nS98BGP
-         7V1uqqnPJ4xNqyiSM3AqPcDFNX/ZS34emfzQOcMs=
-Date:   Sun, 19 Mar 2023 10:08:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] kobject: introduce kobject_del_and_put()
-Message-ID: <ZBbRDl4OYGZIlx7E@kroah.com>
-References: <20230319084134.11804-1-frank.li@vivo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319084134.11804-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7ABE01F88F;
+        Sun, 19 Mar 2023 09:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679217356; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=odLMN5aQwImYH/bb8uGAKmhtRKkHu4ubSrCgI/nIhno=;
+        b=wKA2vt/Otmm5mnOeY68SNiQASmWe+F9ktlCr1WrHKCTAcoFUaXytZNEXZLWZR1F14UgUnI
+        I72csxmEBM42uHtnuMxGfKZtadEFshLKwzyWuwSjZZQkDoFdiOcVjUJGwlDC4xvMlXEwOT
+        niv4YpX84xWwjRzTilKFcNSPc/OI6Ws=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679217356;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=odLMN5aQwImYH/bb8uGAKmhtRKkHu4ubSrCgI/nIhno=;
+        b=x1cJYFJd/0l5YQk+tEFKO8h/kdw/ukYpIh1dIE6tMJM6VrA5qyNHRc5TOcim//D6vLtA5n
+        6u6EKYLFpml7yBAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 47FAE138E9;
+        Sun, 19 Mar 2023 09:15:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 06q7EMzSFmTjVAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 19 Mar 2023 09:15:56 +0000
+Date:   Sun, 19 Mar 2023 10:15:55 +0100
+Message-ID: <878rftm790.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc:     John Keeping <john@metanate.com>, Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+In-Reply-To: <87sfe1mawg.wl-tiwai@suse.de>
+References: <20230317195128.3911155-1-john@metanate.com>
+        <20230318002005.GA84781@workstation>
+        <20230319032853.GA99783@workstation>
+        <87sfe1mawg.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 04:41:24PM +0800, Yangtao Li wrote:
-> There are plenty of using kobject_del() and kobject_put() together
-> in the kernel tree. This patch wraps these two calls in a single helper.
+On Sun, 19 Mar 2023 08:57:03 +0100,
+Takashi Iwai wrote:
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v2:
-> -add kobject_del_and_put() users
->  include/linux/kobject.h |  1 +
->  lib/kobject.c           | 17 +++++++++++++++--
->  2 files changed, 16 insertions(+), 2 deletions(-)
+> On Sun, 19 Mar 2023 04:28:53 +0100,
+> Takashi Sakamoto wrote:
+> > 
+> > Hi,
+> > 
+> > On Sat, Mar 18, 2023 at 09:20:05AM +0900, Takashi Sakamoto wrote:
+> > > On Fri, Mar 17, 2023 at 07:51:27PM +0000, John Keeping wrote:
+> > > > snd_usb_queue_pending_output_urbs() may be called from
+> > > > snd_pcm_ops::ack() which means the PCM stream is locked.
+> > > > 
+> > > > For the normal case where the call back into the PCM core is via
+> > > > prepare_output_urb() the "_under_stream_lock" variant of
+> > > > snd_pcm_period_elapsed() is called, but when an error occurs and the
+> > > > stream is stopped as XRUN then snd_pcm_xrun() tries to recursively lock
+> > > > the stream which results in deadlock.
+> > > > 
+> > > > Follow the example of snd_pcm_period_elapsed() by adding
+> > > > snd_pcm_xrun_under_stream_lock() and use this when the PCM substream
+> > > > lock is already held.
+> > > > 
+> > > > Signed-off-by: John Keeping <john@metanate.com>
+> > > > ---
+> > > >  include/sound/pcm.h     |  1 +
+> > > >  sound/core/pcm_native.c | 28 ++++++++++++++++++++++++----
+> > > >  sound/usb/endpoint.c    | 18 +++++++++++-------
+> > > >  3 files changed, 36 insertions(+), 11 deletions(-)
+> > >  
+> > > The name of added kernel API implies me that you refer to existent
+> > > 'snd_pcm_period_elapsed_under_stream_lock()' which I added to Linux
+> > > v5.14.
+> > > 
+> > > In my opinion, unlike the version of period elapsed API, the version of
+> > > XRUN API seems not to be necessarily required to ALSA PCM core, since PCM
+> > > device drivers can implement .pointer callback in the part of PCM operation.
+> > > When the callback returns SNDRV_PCM_POS_XRUN, ALSA PCM application get
+> > > occurence of XRUN as a result of any operation relevant to hwptr movement
+> > > (e.g. SNDRV_PCM_IOCTL_HWSYNC).
+> > > 
+> > > Therefore I think it possible to fix the issue without the proposed
+> > > kernel API. I can assume some scenario:
+> > > 
+> > > 1. Failure at tasklet for URB completion
+> > > 
+> > > It is softIRQ context. The stream lock is not acquired. It doesn't
+> > > matter to call current XRUN API.
+> > > 
+> > > 2. Failure at PCM operation called by ALSA PCM application
+> > > 
+> > > It is process context. The stream lock is acquired before calling driver
+> > > code. When detecting any type of failure, driver code stores the state.
+> > > Then .pointer callback should return SNDRV_PCM_POS_XRUNrefering to
+> > > the state.
+> > 
+> > Although being inexperienced to hack driver for USB audio device class,
+> > I attempt to post the patch to fix the issue of recursive stream lock.
+> > I apologies in advance since the patch is not tested yet...
+> > 
+> > The 'in_xrun' member is newly added to 'struct snd_usb_substream'. When
+> > detecting any failure, false is assigned to the member. The assignment
+> > is expected to be done in both softIRQ context, and process context with
+> > stream lock, thus no need to take care of cocurrent access (e.g. by usage
+> > of WRITE_ONCE/READ_ONCE).
+> > 
+> > Typical ALSA PCM application periodically calls PCM operation which calls
+> > .pointer in driver code. As I described, returning SNDRV_PCM_POS_XRUN
+> > takes ALSA PCM core to handle XRUN state of PCM substream in the timing.
+> > 
+> > The negative point of the patch is the delay of XRUN notification to user
+> > space application. In the point, I think the new kernel API introduced by
+> > your patch has advantage.
+> > 
+> > The in_xrun member can be replaced with a kind of EP_STATE_
+> > enumerations; i.e. EP_STATE_XRUN. In the case, we need some care so that
+> > the state should be referred from pcm.c.
+> 
+> Thanks for the patch.  That would work, but the shortcoming side of
+> this implementation is that it misses stopping / reporting the error
+> immediately but waiting for the next pointer update.
+> 
+> It might be simpler if we perform the xrun handling in the caller
+> side, i.e. a change like below:
+> 
+> --- a/sound/core/pcm_lib.c
+> +++ b/sound/core/pcm_lib.c
+> @@ -2155,6 +2155,8 @@ int pcm_lib_apply_appl_ptr(struct snd_pcm_substream *substream,
+>  		ret = substream->ops->ack(substream);
+>  		if (ret < 0) {
+>  			runtime->control->appl_ptr = old_appl_ptr;
+> +			if (ret == -EPIPE)
+> +				__snd_pcm_xrun(substream);
+>  			return ret;
+>  		}
+>  	}
+> 
+> ... and let the caller returning -EPIPE for XRUN:
 
-Any reason you only sent me one patch?  I guess you don't want me to
-review them?  :(
+and that misses the XRUN in the case of non-stream-lock.
+A revised version is below.
 
+
+Takashi
+
+-- 8< --
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -2155,6 +2155,8 @@ int pcm_lib_apply_appl_ptr(struct snd_pcm_substream *substream,
+ 		ret = substream->ops->ack(substream);
+ 		if (ret < 0) {
+ 			runtime->control->appl_ptr = old_appl_ptr;
++			if (ret == -EPIPE)
++				__snd_pcm_xrun(substream);
+ 			return ret;
+ 		}
+ 	}
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -455,8 +455,8 @@ static void push_back_to_ready_list(struct snd_usb_endpoint *ep,
+  * This function is used both for implicit feedback endpoints and in low-
+  * latency playback mode.
+  */
+-void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+-				       bool in_stream_lock)
++int snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
++				      bool in_stream_lock)
+ {
+ 	bool implicit_fb = snd_usb_endpoint_implicit_feedback_sink(ep);
+ 
+@@ -480,7 +480,7 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 		spin_unlock_irqrestore(&ep->lock, flags);
+ 
+ 		if (ctx == NULL)
+-			return;
++			break;
+ 
+ 		/* copy over the length information */
+ 		if (implicit_fb) {
+@@ -495,11 +495,14 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 			break;
+ 		if (err < 0) {
+ 			/* push back to ready list again for -EAGAIN */
+-			if (err == -EAGAIN)
++			if (err == -EAGAIN) {
+ 				push_back_to_ready_list(ep, ctx);
+-			else
++				break;
++			}
++
++			if (!in_stream_lock)
+ 				notify_xrun(ep);
+-			return;
++			return -EPIPE;
+ 		}
+ 
+ 		err = usb_submit_urb(ctx->urb, GFP_ATOMIC);
+@@ -507,13 +510,16 @@ void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+ 			usb_audio_err(ep->chip,
+ 				      "Unable to submit urb #%d: %d at %s\n",
+ 				      ctx->index, err, __func__);
+-			notify_xrun(ep);
+-			return;
++			if (!in_stream_lock)
++				notify_xrun(ep);
++			return -EPIPE;
+ 		}
+ 
+ 		set_bit(ctx->index, &ep->active_mask);
+ 		atomic_inc(&ep->submitted_urbs);
+ 	}
++
++	return 0;
+ }
+ 
+ /*
+--- a/sound/usb/endpoint.h
++++ b/sound/usb/endpoint.h
+@@ -52,7 +52,7 @@ int snd_usb_endpoint_implicit_feedback_sink(struct snd_usb_endpoint *ep);
+ int snd_usb_endpoint_next_packet_size(struct snd_usb_endpoint *ep,
+ 				      struct snd_urb_ctx *ctx, int idx,
+ 				      unsigned int avail);
+-void snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
+-				       bool in_stream_lock);
++int snd_usb_queue_pending_output_urbs(struct snd_usb_endpoint *ep,
++				      bool in_stream_lock);
+ 
+ #endif /* __USBAUDIO_ENDPOINT_H */
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -1639,7 +1639,7 @@ static int snd_usb_pcm_playback_ack(struct snd_pcm_substream *substream)
+ 	 * outputs here
+ 	 */
+ 	if (!ep->active_mask)
+-		snd_usb_queue_pending_output_urbs(ep, true);
++		return snd_usb_queue_pending_output_urbs(ep, true);
+ 	return 0;
+ }
+ 
