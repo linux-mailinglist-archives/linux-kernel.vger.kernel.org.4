@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94ADB6C025E
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADE26C0263
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjCSOVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S230336AbjCSOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjCSOVT (ORCPT
+        with ESMTP id S229605AbjCSOYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:21:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2837C1D906
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:21:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdtuK-0001j9-50; Sun, 19 Mar 2023 15:21:12 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdtuB-005FIQ-4t; Sun, 19 Mar 2023 15:21:03 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pdtuA-006A3C-E9; Sun, 19 Mar 2023 15:21:02 +0100
-Date:   Sun, 19 Mar 2023 15:20:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     lizhe <sensor1010@163.com>
-Cc:     Finn Thain <fthain@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] nubus: Remove redunant driver match function
-Message-ID: <20230319142058.cfu3ftjfaut3pqzt@pengutronix.de>
-References: <20230319040816.232446-1-sensor1010@163.com>
- <3d77744b-ea67-a5bd-8126-f3d56e608add@linux-m68k.org>
- <4cd5783e.1665.186f9882231.Coremail.sensor1010@163.com>
+        Sun, 19 Mar 2023 10:24:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A015FF9
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679235805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T/hIkiUkQpnPgtTLze7otKxFbigf/WOsrX7aDGKl4Xk=;
+        b=KkUtUpdHXO+7h2eBPf4+EP3z7q5C3kTdJp6XlMJjmTD8ynbn5XbpDlum79DKB3MRAN2z1b
+        F2ldkMFnTwCTi3MrjGS45/iwjZZE1SWhaIVcN5Sow8mOjZWIp87Tb+uTRX7tsrMprEkZtd
+        CvbBwR9bn1IDMRJ7PQ21YgZnV7ad9/M=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-536-siGBLCgvPWqFEptQfvYPgw-1; Sun, 19 Mar 2023 10:23:24 -0400
+X-MC-Unique: siGBLCgvPWqFEptQfvYPgw-1
+Received: by mail-qt1-f197.google.com with SMTP id f36-20020a05622a1a2400b003deb2fa544bso1428618qtb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:23:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679235804;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T/hIkiUkQpnPgtTLze7otKxFbigf/WOsrX7aDGKl4Xk=;
+        b=ayLvNYPyJNf4iUhpCLtlkH0OWDqy/lIONIVqri8Krz/uwnpwMWh4T0O8jkIw8tbv8o
+         VHXfrOK7NuE0v21VfsWCn9pCgA4XsXyNKk9bBTzQoQ2AMaYKQqHPZj63mjpMY7cPGI+h
+         V/2JD9PMhAdTsZqcayJAQKAqJCaoXZdCZ7O2GzffHMLZ9dpEA1xl1VvqTCC8Cc6aevoR
+         0m4J4KTUnQ+sjodnSYu0Q9evJ5ekiglf6PPMW7D3IcU2GwN03oUn4k7PxbV3LdLnyqeH
+         zqoJYk9Ka40z/JHzHZrOVoEhf1wpYoqx80Tm04ir4DvIxNYF3/lGXutS7wnqj/BqVzfV
+         m1pg==
+X-Gm-Message-State: AO0yUKU2CESkWiF7CmfqVP7UyeZIv8ohvnaEXwWDjd8g1mGmTf374wYR
+        qMWTYe02/R001ir3YhTkhcXwB2jBa5KvDYQlTgB9GggmDkY6ARIhuPH64KtQAO0C2QKxAnhOvs+
+        ViB8wUfNDI1x17ZMcop47bSw6
+X-Received: by 2002:ac8:5c81:0:b0:3b8:2504:e90a with SMTP id r1-20020ac85c81000000b003b82504e90amr14481139qta.3.1679235803805;
+        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+VdKmYQdrgrfLXblYozKf6KZb4B0tCRITCJXTgRYRA6AKoIA4AB44uaiwX/F6ze/obzO3pzQ==
+X-Received: by 2002:ac8:5c81:0:b0:3b8:2504:e90a with SMTP id r1-20020ac85c81000000b003b82504e90amr14481124qta.3.1679235803572;
+        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o8-20020ac841c8000000b003de4e646d63sm2103047qtm.32.2023.03.19.07.23.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     patrik.r.jakobsson@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/gma500: remove unused gma_pipe_event function
+Date:   Sun, 19 Mar 2023 10:23:20 -0400
+Message-Id: <20230319142320.1704336-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6yuzzdzry6sztqir"
-Content-Disposition: inline
-In-Reply-To: <4cd5783e.1665.186f9882231.Coremail.sensor1010@163.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/gpu/drm/gma500/psb_irq.c:35:19: error: unused function
+  'gma_pipe_event' [-Werror,-Wunused-function]
+static inline u32 gma_pipe_event(int pipe)
+                  ^
+This function is not used, so remove it.
 
---6yuzzdzry6sztqir
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/gma500/psb_irq.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-Hello Lizhe,
+diff --git a/drivers/gpu/drm/gma500/psb_irq.c b/drivers/gpu/drm/gma500/psb_irq.c
+index d421031462df..343c51250207 100644
+--- a/drivers/gpu/drm/gma500/psb_irq.c
++++ b/drivers/gpu/drm/gma500/psb_irq.c
+@@ -32,17 +32,6 @@ static inline u32 gma_pipestat(int pipe)
+ 	BUG();
+ }
+ 
+-static inline u32 gma_pipe_event(int pipe)
+-{
+-	if (pipe == 0)
+-		return _PSB_PIPEA_EVENT_FLAG;
+-	if (pipe == 1)
+-		return _MDFLD_PIPEB_EVENT_FLAG;
+-	if (pipe == 2)
+-		return _MDFLD_PIPEC_EVENT_FLAG;
+-	BUG();
+-}
+-
+ static inline u32 gma_pipeconf(int pipe)
+ {
+ 	if (pipe == 0)
+-- 
+2.27.0
 
-On Sun, Mar 19, 2023 at 07:01:33PM +0800, lizhe wrote:
->       Fthain.
->       I was the first to submit this patch,
-
-You sent a patch doing this conversion to several drivers at once[1]
-back in May 2022. You were asked to split up by subsystem and I cannot
-find anything more recent; neither in my inbox nor on
-lore.kernel.org[2]. So unless I missed something I wouldn't claim you
-already sent this patch.
-
-> u.kleline-koenig, please
->       delete the path you  submitted, this patch does not belong to
->       you
-
-Even if I'd agree, I couldn't. That's up to Finn (I think) to drop this
-patch again from his queue and then accept a similar patch from you. If
-that's what Finn want's to do and it makes you happy, I won't oppose for
-the sake of resolving that argument.
-
-Having said that I didn't even remember your patch. I just stumbled over
-this patch opportunity while doing some treewide cleanups.
-
-Best regards
-Uwe
-
-[1] https://lore.kernel.org/linux-kernel/20220506045952.136290-1-sensor1010=
-@163.com
-[2] https://lore.kernel.org/all/?q=3Ddrivers%2Fnubus%2Fbus.c
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6yuzzdzry6sztqir
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQXGkoACgkQj4D7WH0S
-/k7CaQf9HQmGYLu7JLJnM/pOMKBhOQ7vR9IUB87LaD064XcX5coS61AJnLfhnQYi
-SlfE/J0qdMNMCTIMhhBdfgcc3juDQDkVDZUN69EKCIbIUsjaDfGqW9E5K+pXvKp0
-rVoH9OgHG67sbZKYxJMmjEgxfAboNoBtVhNOYPkPbouzYuNB2wtssHAN6yFZbQ2O
-vuR4ZTabxkSP4PBNR4LJejxd6/J6x0TiVAFrilbBoYDUC/Z1m9uoQRMDoIOIcdYZ
-Y7tZJQlSzVdurHLPQmsf7bZb2y0Y+ixNjHc0LhfUPZYfqLA4BSa6Vd2OGklrNYhP
-dc4wXQvCW67wX6Et4HWKx2BYhY2AeQ==
-=3HW7
------END PGP SIGNATURE-----
-
---6yuzzdzry6sztqir--
