@@ -2,118 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01366C03C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1CA6C03C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 19:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCSSXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 14:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S229821AbjCSSYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 14:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCSSXF (ORCPT
+        with ESMTP id S229460AbjCSSYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 14:23:05 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0B18693;
-        Sun, 19 Mar 2023 11:23:03 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o40-20020a05600c512800b003eddedc47aeso804326wms.3;
-        Sun, 19 Mar 2023 11:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679250182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSlmso6KkBwBklxSLJ75f8Ha+gCZQtySj8JbPBjFDek=;
-        b=RJ5EyvENhicDdyJ8u4kBtkLgOG7blSSpE2ZeS1AZBwp3+mpSZWBC84pWpRfTqUpxyL
-         PCgJzWu4u2ir4NkajumTPbsNUZuXXLkJunZyegIyesvFLzA8jbflEcPUMysMbyiP491X
-         Cy9KOg/kd9E44C9cvkzmWov7KMJCu7C+bD7RA4K37ud/svjLyym0tBn95Ku52HDouHJc
-         je76VmevGV071YHhdPL/of6EH/BZckyG6wFFTwXaaW53tL8UCfDroQPIoiz3HpWp5G4B
-         wn1JZTVgxwOj8DmD7DgHk4ApQNEE101BA99/RIvbmKKbYLuC7A/Au7D3bD6FKrP4q82D
-         XYjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679250182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lSlmso6KkBwBklxSLJ75f8Ha+gCZQtySj8JbPBjFDek=;
-        b=wVPIKbp/ZNx+dgTqk774luEgKYQ2RWtmg8t6p3BtAwJbJPQcciVpZANvaEcCbb7vki
-         S0qtdqH+mSS1810ZaQMdw/vz2qaA6+HaSdnXzYP+1zwtYWk8D9+MhU1V96JuDsKgszLs
-         p21qsekrngDV3dpCBmSz2aj6DI24ysq6w3RqtOIfVdODQldyVo70r6xYCOPsJvoPqfTw
-         RqICDoiNvspInjzdjgYoQ9gbHDEgCbQvMjCeJwVNzvHchmiFTHViHQ/QyrIAkq7GM3zb
-         4uMWv7HHh94ttLGmKpyV/YYIwiOrG+z6sYLpjGdxViLWv02OhAQuP8Esac230FFlJrdd
-         w+Iw==
-X-Gm-Message-State: AO0yUKWMY1X7/A+JlL8k+XrK8SmlYXwCXyTFTEwYRj48iOhA1iUl+Ova
-        sEFL7NIpQyLoDmaJh/sRCOGCtSty2altZgPNu+w=
-X-Google-Smtp-Source: AK7set+8PK8WzQdWYQnVV4eGQct12+K+dhBfQvg6I/KNECs5hAlQxWqYAfkve4BhnwqumFr/YbeZqg==
-X-Received: by 2002:a05:600c:4fc9:b0:3ed:3d5a:ac99 with SMTP id o9-20020a05600c4fc900b003ed3d5aac99mr12965796wmq.5.1679250182451;
-        Sun, 19 Mar 2023 11:23:02 -0700 (PDT)
-Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c4e8e00b003ede178677csm2007680wmq.45.2023.03.19.11.23.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 11:23:02 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 19 Mar 2023 19:22:59 +0100
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org
-Subject: Re: [PATCH 4/7] ftrace: Rename _ftrace_direct_multi APIs to
- _ftrace_direct APIs
-Message-ID: <ZBdTA0gKh2xAk5Ay@krava>
-References: <20230316173811.1223508-1-revest@chromium.org>
- <20230316173811.1223508-5-revest@chromium.org>
- <ZBcqWqWyq0uW/wj7@krava>
- <20230319135550.22aaa04b@rorschach.local.home>
+        Sun, 19 Mar 2023 14:24:12 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7CA1ADF7;
+        Sun, 19 Mar 2023 11:24:08 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 39C2940002;
+        Sun, 19 Mar 2023 18:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679250247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UxKJ5DqiHIKx6uJVgysoPzQWoYyFGH7gsA6iqa5x6zM=;
+        b=lnJmxOVr1SeA5dJXwWhxXkKpUi16Mz6Gga2nftt9alNqQztJWa9xF8CpzrHFkHWuL9MwS7
+        0d4lMp3VOfUs/F2UdbXdLu4iXnfy14Ic199tawTfU0adAg/pQFt6UvOy64vy3GdWdjTYL7
+        AVSEo8Y5N37fY+9R2gbO7QU5T9CoyllK1VtyiAUDl7UbzP+6Dpq4cb24SD1TF0MQcsOsxh
+        DfOQZ7T+RMZg9SC2TD9KwSbY7tN2zOLOWKUb1uIPQsQrMr3HWAE5QMOWtK/xgaqESfb94J
+        aiqNeQcgk21/VIrdICiCbQlMlWcqeFuPYKE8FoLb1Kc+K/ej5ivP9hRxNdJviQ==
+Date:   Sun, 19 Mar 2023 19:24:05 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, linux-renesas-soc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] usb: gadget: udc: remove unused usbf_ep_dma_reg_clrset
+ function
+Message-ID: <20230319192405.6202ea2b@bootlin.com>
+In-Reply-To: <20230319155910.1706294-1-trix@redhat.com>
+References: <20230319155910.1706294-1-trix@redhat.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319135550.22aaa04b@rorschach.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 01:55:50PM -0400, Steven Rostedt wrote:
-> On Sun, 19 Mar 2023 16:29:30 +0100
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > On Thu, Mar 16, 2023 at 06:38:08PM +0100, Florent Revest wrote:
-> > 
-> > SNIP
-> > 
-> > > diff --git a/samples/Kconfig b/samples/Kconfig
-> > > index 30ef8bd48ba3..fd24daa99f34 100644
-> > > --- a/samples/Kconfig
-> > > +++ b/samples/Kconfig
-> > > @@ -38,7 +38,7 @@ config SAMPLE_FTRACE_DIRECT
-> > >  	  that hooks to wake_up_process and prints the parameters.
-> > >  
-> > >  config SAMPLE_FTRACE_DIRECT_MULTI  
-> > 
-> > nit, we could perhaps remove this config option as well
-> > and use SAMPLE_FTRACE_DIRECT_MULTI
-> 
-> Remove SAMPLE_FTRACE_DIRECT_MULTI for SAMPLE_FTRACE_DIRECT_MULTI?
-> 
+Hi Tom,
 
-sorry typo, I meant SAMPLE_FTRACE_DIRECT
+On Sun, 19 Mar 2023 11:59:10 -0400
+Tom Rix <trix@redhat.com> wrote:
 
-jirka
+> clang with W=3D1 reports
+> drivers/usb/gadget/udc/renesas_usbf.c:548:20: error: unused function
+>   'usbf_ep_dma_reg_clrset' [-Werror,-Wunused-function]
+> static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offset,
+>                    ^
+> This function is not used, so remove it.
+>=20
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/usb/gadget/udc/renesas_usbf.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/u=
+dc/renesas_usbf.c
+> index cb23e62e8a87..84ac9fe4ce7f 100644
+> --- a/drivers/usb/gadget/udc/renesas_usbf.c
+> +++ b/drivers/usb/gadget/udc/renesas_usbf.c
+> @@ -545,17 +545,6 @@ static inline void usbf_ep_dma_reg_bitclr(struct usb=
+f_ep *ep, uint offset,
+>  	usbf_ep_dma_reg_writel(ep, offset, tmp);
+>  }
+> =20
+> -static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offse=
+t,
+> -					  u32 clr, u32 set)
+> -{
+> -	u32 tmp;
+> -
+> -	tmp =3D usbf_ep_dma_reg_readl(ep, offset);
+> -	tmp &=3D ~clr;
+> -	tmp |=3D set;
+> -	usbf_ep_dma_reg_writel(ep, offset, tmp);
+> -}
+> -
+>  static void usbf_ep0_send_null(struct usbf_ep *ep0, bool is_data1)
+>  {
+>  	u32 set;
 
-> -- Steve
-> 
-> > 
-> > jirka
-> > 
-> > > -	tristate "Build register_ftrace_direct_multi() example"
-> > > +	tristate "Build register_ftrace_direct() on multiple ips example"
-> > >  	depends on DYNAMIC_FTRACE_WITH_DIRECT_CALLS && m
-> > >  	depends on HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-> > >  	help  
-> 
+Yes, indeed.
+
+Acked-by: Herve Codina <herve.codina@bootlin.com>
+
+Thanks for the patch.
+Regards,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
