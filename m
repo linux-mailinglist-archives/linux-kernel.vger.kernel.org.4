@@ -2,67 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C056C04B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA1C6C04BE
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 21:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCSUNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 16:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S229986AbjCSUQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 16:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCSUNo (ORCPT
+        with ESMTP id S229663AbjCSUQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 16:13:44 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6E71B33B
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:13:37 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cy23so39244032edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 13:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679256816;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hgnQ+h5zd1AueyynbINK8XAtTpd+QQVfh8Mi4U0c3Fo=;
-        b=ZliHulYrzEg7jMD7jC/tO8w/HGO57r9H3GDrGhhnO/uCQ9/YKgngMPBLGTxBp817vA
-         qHPN1g9gNFzEpQasqLqSmcc5I63MkWEtEE1JIc7p9BI45DNDLFXGn7Owssp5Sx5xTrW1
-         EYxbyfUdvyifu/v9Fbp2AaONaWffg2GUHBmo0Irpjy+oXoCyWL0beQbdkvAyPJH1QQlY
-         f/+pTmoMm544mnN9GfYM3WMIl2qpOMtRR26rxWqnf4lmRkB4haGAm717IIojkW7Y0ynQ
-         IKCko+W+o/u6xTHwjezZAF+tmwbUvzaPnRc6Y+n3gsH9YTdGEGWvzyH5AwzJ2KtGqtki
-         QIHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679256816;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hgnQ+h5zd1AueyynbINK8XAtTpd+QQVfh8Mi4U0c3Fo=;
-        b=kfRSAO5REvkuiY5CGCjJQQbTqjm1sKAuBWo3Vssq6DYRBXSSFq4Tzt+XXG3IwxIx/v
-         RhJevNgLo4EO84WAqCikJ6bWxWNYEpQrYMAxxAsWAza7EQXX+Mmm5b7QlvL+4uYvss/Z
-         pzopPczjhA66KI+mcAabE1PU6YmWTqf5qe4qfYiUzZdVFAkrajS6S1+uR6mqUfG1oo6A
-         C0ENNiD5u6oWZuRJJiuS/lOIch6Y/QS9jow7ysiEmKXIJAgVsVT1lg5v0pL+UbDw+gMU
-         /R6cBNEVEVYNa2z6lUWRl4zLbJMgYyCPzY/n0OqQF3WJzufg+NH1FgHr11xu/WVZt1i9
-         wBZQ==
-X-Gm-Message-State: AO0yUKWgsId74Ii++orrqXgj73K90ohHlAISIMgs0HQLpxQ8yEwqvCZN
-        jK5qjm+wluhF5i5MEcgQJT4=
-X-Google-Smtp-Source: AK7set+ODMQXplVES5UGk7JyY6zEtWt49I9FbAbBtYNQcQF3NOBn8tHA0lQmBHVOZkDBvYPTghdH/Q==
-X-Received: by 2002:aa7:cb4f:0:b0:4fb:1b0d:9f84 with SMTP id w15-20020aa7cb4f000000b004fb1b0d9f84mr10307130edt.6.1679256815931;
-        Sun, 19 Mar 2023 13:13:35 -0700 (PDT)
-Received: from alaa-emad.. ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id g22-20020a170906199600b008b1797b77b2sm3511654ejd.221.2023.03.19.13.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 13:13:35 -0700 (PDT)
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        eng.mennamahmoud.mm@gmail.com, Julia Lawall <julia.lawall@inria.fr>
-Subject: [PATCH] staging: greybus: use inline function for macros
-Date:   Sun, 19 Mar 2023 22:13:24 +0200
-Message-Id: <20230319201324.253874-1-eng.mennamahmoud.mm@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 19 Mar 2023 16:16:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6FF1B562;
+        Sun, 19 Mar 2023 13:16:48 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32JJKeDi017015;
+        Sun, 19 Mar 2023 20:16:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=QsNK0y+OZ5hfzlKGYoDx1EuihX8vnlV+zb8ND0pxAUE=;
+ b=ookfmLgj4M4JRTennkxkwEmUbgTjW57FZzK5dl2WnefGGpYktGCroJpEEyLWMGJpD97h
+ /q6jP0YAOMvbeBxQ1hc4Yz0KWjQ57DOlQuTkmiLu1JRVVhF8e/mhlEnIK5qRtgLzrZ3Y
+ InLV8zFfTmT6k3p4tOacFzcLT89NNHKQksPAgfrM8TxAR8YRf/7YLjJRuZH2hIYSS9pQ
+ X9lRV15N4L+uR+c3VMar5Fyo2dvoW2vwvExT3RcYBUVY6se3e3Gb21qq4AYSIZksDTXP
+ R3vs4v1h8uWKCTDcHJlh33oGz3uKryVx4I4pTdDRPFzTjgMpIcflvcDAjBRSME6g6VwW Gg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pdq3t6fjb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 19 Mar 2023 20:16:39 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32JKDNnm024808;
+        Sun, 19 Mar 2023 20:16:39 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pdq3t6fj1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 19 Mar 2023 20:16:39 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32JAdZS6017248;
+        Sun, 19 Mar 2023 20:16:36 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6a8c7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 19 Mar 2023 20:16:36 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32JKGX9P26280546
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 19 Mar 2023 20:16:33 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0131D2004B;
+        Sun, 19 Mar 2023 20:16:33 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A69E20040;
+        Sun, 19 Mar 2023 20:16:32 +0000 (GMT)
+Received: from osiris (unknown [9.179.4.200])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Sun, 19 Mar 2023 20:16:32 +0000 (GMT)
+Date:   Sun, 19 Mar 2023 21:16:31 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Lizhe <sensor1010@163.com>
+Cc:     wintera@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] net/iucv: Remove redundant driver match function
+Message-ID: <ZBdtn0wFunrkvml9@osiris>
+References: <20230319050840.377727-1-sensor1010@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319050840.377727-1-sensor1010@163.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: IZBm3U_8tAbuInu_Z0ce4ePC1SQhvhbD
+X-Proofpoint-GUID: vjYhpcrARTDgGuTF_PmVJJeUWsnh78qJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-19_10,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=810 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303150002 definitions=main-2303190172
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,50 +91,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-static inline functions.
+On Sun, Mar 19, 2023 at 01:08:40PM +0800, Lizhe wrote:
+> If there is no driver match function, the driver core assumes that each
+> candidate pair (driver, device) matches, see driver_match_device().
+> 
+> Drop the bus's match function that always returned 1 and so
+> implements the same behaviour as when there is no match function
+...
+> 
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> ---
+>  net/iucv/iucv.c | 6 ------
+>  1 file changed, 6 deletions(-)
+...
+> -static int iucv_bus_match(struct device *dev, struct device_driver *drv)
+> -{
+> -	return 0;
+        ^^^^^^^^
 
-it is not great to have macro that use `container_of` macro,
-because from looking at the definition one cannot tell what type
-it applies to.
-
-One can get the same benefit from an efficiency point of view
-by making an inline function.
-
-Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
----
- drivers/staging/greybus/gbphy.h | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
-index 1de510499480..42c4e3fe307c 100644
---- a/drivers/staging/greybus/gbphy.h
-+++ b/drivers/staging/greybus/gbphy.h
-@@ -16,7 +16,10 @@ struct gbphy_device {
- 	struct device dev;
- };
- 
--#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-+static inline struct gbphy_device *to_gbphy_dev(const struct device *d)
-+{
-+	return container_of(d, struct gbphy_device, dev);
-+}
- 
- static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
- {
-@@ -45,7 +48,10 @@ struct gbphy_driver {
- 	struct device_driver driver;
- };
- 
--#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
-+static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *d)
-+{
-+	return container_of(d, struct gbphy_driver, driver);
-+}
- 
- int gb_gbphy_register_driver(struct gbphy_driver *driver,
- 			     struct module *owner, const char *mod_name);
--- 
-2.34.1
-
+If I'm not wrong then 0 != 1.
