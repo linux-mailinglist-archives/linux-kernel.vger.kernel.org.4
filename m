@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD246C0698
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 00:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A746C069A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 00:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjCSX0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 19:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S229611AbjCSXch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 19:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCSX0X (ORCPT
+        with ESMTP id S229448AbjCSXcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 19:26:23 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC718A9D;
-        Sun, 19 Mar 2023 16:26:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 19 Mar 2023 19:32:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF56119688
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 16:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679268709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=/0axrHMSXDjg2C1CC/vsX8eLd+F8Hj2Y/pL1QGxJv9E=;
+        b=Gejn18netRWfNY/EQFLPDkKqRaGIbeqURO8ZRMKsztdvrrSxX0B2Die0phisHD/xBwXSZv
+        9rxzaxCAZRIr5VX244fp5AKeT8BwnAZ0aiYV6a7fNClTWN+ukKg6MjA+YOFxGj2SJWEeiu
+        OQBtPgC1ytsy3tQtjvg6ea7+vrBjER8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-Ztbdl2HEMrCK4-6G4XBsLA-1; Sun, 19 Mar 2023 19:31:47 -0400
+X-MC-Unique: Ztbdl2HEMrCK4-6G4XBsLA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfvBh0kMYz4x7v;
-        Mon, 20 Mar 2023 10:26:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679268380;
-        bh=fiRI2j4JNgYg2e5UcM6zUXiHtu7sFp98oVTTEl+NmGM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LXjC5bIq5HZUJDV0Q5SMzU5JvtC4zXKuXGiDDY9zxh0YZoMfTpY/zOiNWe/q+zgCz
-         0kHuyZWriNFtGs3ILqjFUPjcWQcX00oX0TKAL7tdWE3shWHtvzUGJ64GrqoJEfKowU
-         qU8/Ce+aOB40DcfAWOvjmNnvgsNc1nHsLcJRJ4V/nZf1xbOXGwwoJX4JavLnkOGLAS
-         03KJFdmBinxITywX/JXleRSQG/QX7V+fmDhyM+HqElNbFYYB/ciM8HJiRAqYXFPdBz
-         TU1rfjjuNrzDaBPS7Gspwgvt3u4GIOCnntrwpNKgmta2C0hBIIPLdK37QBlcCxI7qd
-         kersRLwGqoTaQ==
-Date:   Mon, 20 Mar 2023 10:26:19 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20230320102619.05b80a98@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D36318533DC;
+        Sun, 19 Mar 2023 23:31:46 +0000 (UTC)
+Received: from localhost (unknown [10.22.16.83])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CA1E735454;
+        Sun, 19 Mar 2023 23:31:45 +0000 (UTC)
+Date:   Sun, 19 Mar 2023 20:31:44 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 5.10.175-rt84
+Message-ID: <ZBebYGllb3f9sOOS@uudg.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WemvQLbiQPTRyAAQ3uipdGc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WemvQLbiQPTRyAAQ3uipdGc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello RT-list!
 
-Hi all,
+I'm pleased to announce the 5.10.175-rt84 stable release.
 
-After merging the bpf-next tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+You can get this release via the git tree at:
 
-net/bpf/test_run.c: In function 'frame_was_changed':
-net/bpf/test_run.c:224:22: error: 'const struct xdp_page_head' has no membe=
-r named 'frm'; did you mean 'frame'?
-  224 |         return head->frm.data !=3D head->orig_ctx.data ||
-      |                      ^~~
-      |                      frame
-net/bpf/test_run.c:225:22: error: 'const struct xdp_page_head' has no membe=
-r named 'frm'; did you mean 'frame'?
-  225 |                head->frm.flags !=3D head->orig_ctx.flags;
-      |                      ^~~
-      |                      frame
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Caused by commit
+  branch: v5.10-rt
+  Head SHA1: 1c5659f2537a53385ff1504414f2535ae12f477b
 
-  e5995bc7e2ba ("bpf, test_run: fix crashes due to XDP frame overwriting/co=
-rruption")
+Or to build 5.10.175-rt84 directly, the following patches should be applied:
 
-I have used the bpf-next tree from next-20230317 for today.
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
 
---=20
-Cheers,
-Stephen Rothwell
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.175.xz
 
---Sig_/WemvQLbiQPTRyAAQ3uipdGc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.175-rt84.patch.xz
 
------BEGIN PGP SIGNATURE-----
+Signing key fingerprint:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXmhsACgkQAVBC80lX
-0GxcUQf+JcY5gyg2PpbRTN7oF+fzPcLL2UCJF+iFiWLewPMOgYvcFuM3lBkGJuQ2
-l6MT3VoSQqO6nGg7Hf0NOgIQQvVJiKUMM6IL8SYe9V2deE/9/cfpIlba12sxuIzM
-FXRgLCfDi9Fiev5DZRwg4JykU/TPQdabQeeYn2FqC71AxVNGNfFcJd5SJ8wzS5hP
-wHc4MYeozuaoqOnCSoAgGpOvlR0oA08ucIIT6D5EujYIzMNV02Clm64ecAk6hI2C
-zcDBLvJWMcWRK+UhmU8HuDs3PXxzRxscmpwwJT9MjYoff1klVdEaVO5AC9Sq7xi1
-P58EsuznZZzK9rtt32z/GD+CG0p1kg==
-=Nw/B
------END PGP SIGNATURE-----
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
 
---Sig_/WemvQLbiQPTRyAAQ3uipdGc--
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
+
