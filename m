@@ -2,125 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF996BFF6D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 06:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED97D6BFF71
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 06:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCSFnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 01:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S229974AbjCSFn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 01:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCSFnG (ORCPT
+        with ESMTP id S229817AbjCSFn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 01:43:06 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721E31ADD1
-        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 22:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679204584; x=1710740584;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lzL42OaqQrtFfc8bT2UJ/PTeWUK4RO0Lv9BXhWjzuH8=;
-  b=cXi2R1mXldBi7Ab8/gODk9Z0r4VrMFY+8VxQm7yRadUM2K9ZtGQ6AZKn
-   ZGfYGri4mWiFRId2mKxS3eYhiIZXVkrAcHe99xzaRzHaGnmX7xOsmR7tQ
-   N9WouVAAPJlWEJCgXnEvPlG9Vs3cCEjvy5EbT89d6ijRjszba30W4iWZM
-   xKnPEsxKFFlas1Tmm5mRQR+SvWL4Ilw0y0vwzkO4IFOX8UHuvn8HKuGnl
-   AXvGsLoI423azle7O+5/LC44nnnn6b8zgW8CalpjknACP8bYf6NQt8zyT
-   XkRDH1hFf52Zx/yfxi4VmfQJc6ae4Z7+8cjwe9Xz+eq+/OnXLjl1HUkKo
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="424759211"
-X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="424759211"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 22:43:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="713185430"
-X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="713185430"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 18 Mar 2023 22:43:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdlor-000APq-1t;
-        Sun, 19 Mar 2023 05:43:01 +0000
-Date:   Sun, 19 Mar 2023 13:42:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: drivers/irqchip/irq-ftintc010.c:165:12: warning: no previous
- prototype for function 'ft010_of_init_irq'
-Message-ID: <202303191313.6WHJJhVD-lkp@intel.com>
+        Sun, 19 Mar 2023 01:43:56 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6E186AD;
+        Sat, 18 Mar 2023 22:43:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id AD8FF426FC;
+        Sun, 19 Mar 2023 05:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1679204630; bh=84MOaiyVp1I295Lym01yKlMptuceSpHgF0iohhd12CQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=HyZ7B58EnY35cal+hIqu11M/hPwZh9NCy90YPkREhETJ291Y52e5qk0l8fjJfEahl
+         5qetA9I4LA44I5W1vCmrIlqr8C8nrDkgLiWCgpSpcPAN6EV1G7LR/Uixq5zciYbF2I
+         RQU+zXG26yJDVdW4Fe6b/s5hBew8aebAbEKdUzgYHR17SQf734odA0IzcIbgnCfnu8
+         dHN61hpnCYJQEChAiTC3eTpK53XKemwuOMhgd2vVGpiH9sN+Kwk883oWLIWYShqd5d
+         AbbndVd2zlEs/cV6WEG99rRE3COgVNHCZaqm8g1/AOywrcSmR7UrU/1hSFbbLzZk8W
+         fK7XZ4+jcSl/w==
+Message-ID: <fca00ce8-3b56-9641-9eb9-f25382f29675@marcan.st>
+Date:   Sun, 19 Mar 2023 14:43:38 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dt-bindings: watchdog: Drop unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230317233643.3969019-1-robh@kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20230317233643.3969019-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+On 18/03/2023 08.36, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 +-
+>  Documentation/devicetree/bindings/watchdog/apple,wdt.yaml       | 2 +-
+>  Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml     | 2 +-
+>  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml         | 2 +-
+>  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml          | 2 +-
+>  .../devicetree/bindings/watchdog/faraday,ftwdt010.yaml          | 2 +-
+>  Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml | 2 +-
+>  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml   | 2 +-
+>  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml     | 2 +-
+>  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml     | 2 +-
+>  .../devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml    | 2 +-
+>  Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml   | 2 +-
+>  Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml      | 2 +-
+>  13 files changed, 13 insertions(+), 13 deletions(-)
 
-First bad commit (maybe != root cause):
+For apple:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a3671bd86a9770e34969522d29bb30a1b66fd88a
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-date:   7 weeks ago
-config: arm-moxart_defconfig (https://download.01.org/0day-ci/archive/20230319/202303191313.6WHJJhVD-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/irqchip/
+Acked-by: Hector Martin <marcan@marcan.st>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303191313.6WHJJhVD-lkp@intel.com/
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> index 026c2e5e77aa..274519fc24fd 100644
+> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Allwinner A10 Watchdog
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  maintainers:
+>    - Chen-Yu Tsai <wens@csie.org>
+> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> index e58c56a6fdf6..20435a77e079 100644
+> --- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Apple SoC Watchdog
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  maintainers:
+>    - Sven Peter <sven@svenpeter.dev>
+> diff --git a/Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml b/Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+> index e3a1d79574e2..fa05d6252982 100644
+> --- a/Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ARM Secure Monitor Call based watchdog
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  maintainers:
+>    - Julius Werner <jwerner@chromium.org>
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+> index a9635c03761c..b28f7b57c36b 100644
+> --- a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Eugen Hristev <eugen.hristev@microchip.com>
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> index a926809352b8..428004e7f0c3 100644
+> --- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: BCM63xx and BCM7038 watchdog timer
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  maintainers:
+>    - Florian Fainelli <f.fainelli@gmail.com>
+> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> index 6ecd429f76b5..6e135f48b3ba 100644
+> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> @@ -15,7 +15,7 @@ description: |
+>    SoCs and others.
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> index 8562978aa0c8..d3790f1a96a2 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Anson Huang <Anson.Huang@nxp.com>
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> index 38079e1b6a44..1a6490c43d89 100644
+> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Maxim 63xx Watchdog Timers
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>    - $ref: /schemas/memory-controllers/mc-peripheral-props.yaml#
+>  
+>  maintainers:
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index e2c9bf1aec38..50c5c48ee6fb 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -115,7 +115,7 @@ required:
+>    - clocks
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>    - if:
+>        not:
+> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> index 92df6e453f64..9387e4caa0fd 100644
+> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Synopsys Designware Watchdog Timer
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  maintainers:
+>    - Jamie Iles <jamie@jamieiles.com>
+> diff --git a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
+> index 70c005fdd197..ba0709314360 100644
+> --- a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Keiji Hayashibara <hayashibara.keiji@socionext.com>
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> index a8e266f80c20..2cb1a2ed0f7b 100644
+> --- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> @@ -11,7 +11,7 @@ maintainers:
+>    - Christophe Roullier <christophe.roullier@foss.st.com>
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> index 2f33635876ff..fc553211e42d 100644
+> --- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> @@ -18,7 +18,7 @@ description:
+>    to directly reset the SoC.
+>  
+>  allOf:
+> -  - $ref: "watchdog.yaml#"
+> +  - $ref: watchdog.yaml#
+>  
+>  properties:
+>    compatible:
 
-All warnings (new ones prefixed by >>):
 
-   drivers/irqchip/irq-ftintc010.c:128:39: warning: no previous prototype for function 'ft010_irqchip_handle_irq' [-Wmissing-prototypes]
-   asmlinkage void __exception_irq_entry ft010_irqchip_handle_irq(struct pt_regs *regs)
-                                         ^
-   drivers/irqchip/irq-ftintc010.c:128:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void __exception_irq_entry ft010_irqchip_handle_irq(struct pt_regs *regs)
-              ^
-              static 
->> drivers/irqchip/irq-ftintc010.c:165:12: warning: no previous prototype for function 'ft010_of_init_irq' [-Wmissing-prototypes]
-   int __init ft010_of_init_irq(struct device_node *node,
-              ^
-   drivers/irqchip/irq-ftintc010.c:165:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init ft010_of_init_irq(struct device_node *node,
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/ft010_of_init_irq +165 drivers/irqchip/irq-ftintc010.c
-
-6ee532e2faa997 Linus Walleij 2017-03-18  164  
-6ee532e2faa997 Linus Walleij 2017-03-18 @165  int __init ft010_of_init_irq(struct device_node *node,
-
-:::::: The code at line 165 was first introduced by commit
-:::::: 6ee532e2faa9979f0ee00afbfd39cbc034b99153 irqchip/gemini: Refactor Gemini driver to reflect Faraday origin
-
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+- Hector
