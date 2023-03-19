@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25BA6C0587
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13B06C0579
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjCSV2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
+        id S230285AbjCSV1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 17:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjCSV1x (ORCPT
+        with ESMTP id S229619AbjCSV1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:27:53 -0400
+        Sun, 19 Mar 2023 17:27:52 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA1B1B2F1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACB21B2F4;
         Sun, 19 Mar 2023 14:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=psuLoCB7yMo0lQ1qK6AoFWy0yUy3JveB/SBuC3I8l14=; b=JqNqxtSTJBKuFUjhNtyLe1tRpu
-        REERQ0T2uRXb/KuQjDj2q+827LAgGqwwcdDo0UwlK6lSdwkJoctjxJDYjaf/oFcHZXHpNVPtKByDo
-        MJzwa7JQm2W9qjCFA5+MV1MhGv/dj+gPO5xz+AoB69YYfDY87Nf1VqFG4BCKbghs4hLMdo/UG3u1q
-        j5AL7curNFHa6ODUxQkodxSKykBVgwLiHw36cSc+97+SghEcJPcUC21Eg1rV9vz97Jl/FylW1utBo
-        ofsyEu+uViWLN1waouyNIqZw2ufh/Q6474CYzO4Rm+uhf5v9RzL68eHiREitIQpi/t9aOoNw/nkBv
-        vahukfig==;
+        bh=TgcmLQQdyElaRgOFKPmxQnBZLdzQrkkBcxBFD4PRGHw=; b=bxpbjCtQm1SSlUhuFd6bmJaWap
+        nJqLlxA+Igeo4aloU/snQFDDS9j9szPzmaX1hzCc/e+QMsLiXj7y3eOqpR24lRfOTxDp8IrBvx2Jy
+        q4Y8qLW4R40q05IHiZoe4fJ6z378s73dN9JlSQt8QZogNm7Qlri8ssBXfAZNmXGDulI6Ez1eCBVUs
+        X4CRskRlYQBGZnueynO2TVWktXG/b5FIZW6FfsnkN7TSTS7E51feFJh2s6XFej3LWOb4Pnu+x6Nt8
+        cpFKVulK8o7aymcFwkGi9IMf670+BJVE+tQmtz5gwbkzjAK7yM5ZPwBve3Zix4H/E7bnnatGnM0v7
+        kVkV6idg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0Z9-007Tr5-2W;
+        id 1pe0Z9-007Tr7-2d;
         Sun, 19 Mar 2023 21:27:47 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [PATCH 04/12] module: move early sanity checks into a helper
-Date:   Sun, 19 Mar 2023 14:27:38 -0700
-Message-Id: <20230319212746.1783033-5-mcgrof@kernel.org>
+Subject: [PATCH 05/12] module: move check_modinfo() early to early_mod_check()
+Date:   Sun, 19 Mar 2023 14:27:39 -0700
+Message-Id: <20230319212746.1783033-6-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230319212746.1783033-1-mcgrof@kernel.org>
 References: <20230319212746.1783033-1-mcgrof@kernel.org>
@@ -52,82 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move early sanity checkers for the module into a helper.
-This let's us make it clear when we are working with the
-local copy of the module prior to allocation.
+This moves check_modinfo() to early_mod_check(). This
+doesn't make any functional changes either, as check_modinfo()
+was the first call on layout_and_allocate(), so we're just
+moving it back one routine and at the end.
 
-This produces no functional changes, it just makes subsequent
-changes easier to read.
+This let's us keep separate the checkers from the allocator.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 43 ++++++++++++++++++++++++++-----------------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+ kernel/module/main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 427284ab31f1..933cef72ae13 100644
+index 933cef72ae13..95fd705328ac 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2668,6 +2668,31 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
- 	return 0;
- }
+@@ -2273,10 +2273,6 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	unsigned int ndx;
+ 	int err;
  
-+/* Module within temporary copy, this doesn't do any allocation  */
-+static int early_mod_check(struct load_info *info, int flags)
-+{
-+	int err;
+-	err = check_modinfo(info->mod, info, flags);
+-	if (err)
+-		return ERR_PTR(err);
+-
+ 	/* Allow arches to frob section contents and sizes.  */
+ 	err = module_frob_arch_sections(info->hdr, info->sechdrs,
+ 					info->secstrings, info->mod);
+@@ -2688,7 +2684,11 @@ static int early_mod_check(struct load_info *info, int flags)
+ 
+ 	/* Check module struct version now, before we try to use module. */
+ 	if (!check_modstruct_version(info, info->mod))
+-		return ENOEXEC;
++		return -ENOEXEC;
 +
-+	/*
-+	 * Now that we know we have the correct module name, check
-+	 * if it's blacklisted.
-+	 */
-+	if (blacklisted(info->name)) {
-+		pr_err("Module %s is blacklisted\n", info->name);
-+		return -EPERM;
-+	}
-+
-+	err = rewrite_section_headers(info, flags);
++	err = check_modinfo(info->mod, info, flags);
 +	if (err)
 +		return err;
-+
-+	/* Check module struct version now, before we try to use module. */
-+	if (!check_modstruct_version(info, info->mod))
-+		return ENOEXEC;
-+
-+	return 0;
-+}
-+
- /*
-  * Allocate and load the module: note that size of section 0 is always
-  * zero, and we rely on this for optional sections.
-@@ -2711,26 +2736,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	if (err)
- 		goto free_copy;
  
--	/*
--	 * Now that we know we have the correct module name, check
--	 * if it's blacklisted.
--	 */
--	if (blacklisted(info->name)) {
--		err = -EPERM;
--		pr_err("Module %s is blacklisted\n", info->name);
--		goto free_copy;
--	}
--
--	err = rewrite_section_headers(info, flags);
-+	err = early_mod_check(info, flags);
- 	if (err)
- 		goto free_copy;
- 
--	/* Check module struct version now, before we try to use module. */
--	if (!check_modstruct_version(info, info->mod)) {
--		err = -ENOEXEC;
--		goto free_copy;
--	}
--
- 	/* Figure out module layout, and allocate all the memory. */
- 	mod = layout_and_allocate(info, flags);
- 	if (IS_ERR(mod)) {
+ 	return 0;
+ }
 -- 
 2.39.1
 
