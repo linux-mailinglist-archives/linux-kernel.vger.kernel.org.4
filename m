@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B876BFF92
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 07:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD2A6BFF98
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 07:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjCSGS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 02:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        id S229927AbjCSGg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 02:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCSGS1 (ORCPT
+        with ESMTP id S229621AbjCSGg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 02:18:27 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1204E1B5;
-        Sat, 18 Mar 2023 23:18:25 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id m35so5567079wms.4;
-        Sat, 18 Mar 2023 23:18:25 -0700 (PDT)
+        Sun, 19 Mar 2023 02:36:26 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE59B199F8
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 23:36:24 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id x36so9043369ljq.7
+        for <linux-kernel@vger.kernel.org>; Sat, 18 Mar 2023 23:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679206704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xhqo9SbWO6qq+Q6ia+mS1H3WpBHGnRuwtscD7xGcrHs=;
-        b=hjWICnSUfd0FkUjbaUaU1k+9N+t8FYxO+nuJ9xLlmVvPlAECNGAK9WTDaxxMKjd9m5
-         wYwSJ3RMS5bM4TYXF5vkL/6Lxg9regvlkqPvb5Hm29Zx8AF/XFWoMaYDABSM8o1h9EpA
-         wIL0wqxOlvspIY47Fi+6nAi4bWher6S0Vp/4eKy6q2i+c2dnLN9M+uMI1sNx+fX0W/e7
-         eksq1Hlo9g4x1yhs+DHG/s1c+kUO9dCgpePvrtJmPoBEspRFt2TGOjd0/72bxtN1ZbBU
-         B1x99P0gFZDJPcRGYNaNqyvykcUY3iSMAQUIXHnLRhl03BNIbErH2QTncAeiKsH7TOUI
-         KoFw==
+        d=gmail.com; s=20210112; t=1679207783;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vZWIx9U6pneRg2Ew/6L/XNCQb7yH+hTum0rQo8LW28Y=;
+        b=ozXCkQYxbJCx4hxt+FWW20al0Wlzi9pE13I093kv+oZhfu2y1HOVRL6a5K+UIi2AmS
+         2CJ/asWtGuQA1PrgqzMaLCSitnmmysK2r3PBVhKOvfrEI3roI7mVzYcXWoXhksgtZc1g
+         F1m74Whfpyc0CrieqBboECACL8bjFcZihYLYZe7zP+4oefY4synp0US5IZei30+KIgzH
+         bJrAuGPF66ooCsZvo8ay0A+uI2N0T4mig9oOx5e4E5jLYHI4Mc1i8tm86OWB8Pw+xEAP
+         4H0sPLcGZLgjwgr1YijAPxoL/tOqUwH+Xmb3Ahm1gg+yBhPRKjP4W6zIBqpmwFfI89T3
+         v7rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679206704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xhqo9SbWO6qq+Q6ia+mS1H3WpBHGnRuwtscD7xGcrHs=;
-        b=wKXoSrwBBraN5mJV6ZaYyDDaS7rvnpVoIYZk/tAHBj6RHE0mEdfFPlDV/+80FKwxXK
-         QswP1zvNz3aiBBoDkRyjIJU+uFYiAq6OUIVbn0JYiGOkw8/f8VuFhJHa5pzZoFGUUsBy
-         Jxz7YCBTNW9pR+hXw/0rRl/HVxAb/srayvdm3DliQTawyrbodIN5bbvzZ95n0KaZejrd
-         sTk3w9OXGnabjM8v01ojUB+tHO2xP0FDpawahmJYQQSvcz0ja6dsanJ61iIQ5STCMX2h
-         X1T05L8Zz4dc1jz7ui/fUQnVLQ00P+ElForW8oMizzDCAallT5TcXhjUVr68ICIgpwFS
-         QFZA==
-X-Gm-Message-State: AO0yUKWt0mIwV7rw5xEZimjmJXZcVuLy0SVdePvX1NPP+DvZGdHM5+dk
-        zkNag3AFyOeDdKh/uXRRwsk=
-X-Google-Smtp-Source: AK7set9KqR9HZ0+RJIp4qsI7IbQOymXJCYcLZalOuh1caFBzureR/W9BTPBITqoJSweFKvxCR3hhuQ==
-X-Received: by 2002:a05:600c:190c:b0:3e1:fc61:e0e5 with SMTP id j12-20020a05600c190c00b003e1fc61e0e5mr27919904wmq.33.1679206704320;
-        Sat, 18 Mar 2023 23:18:24 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id e8-20020adffd08000000b002c592535839sm5868560wrr.17.2023.03.18.23.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 23:18:23 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 06:16:13 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 4/4] mm: vmalloc: convert vread() to vread_iter()
-Message-ID: <d3582147-707d-4d8d-b062-3de7aa898928@lucifer.local>
-References: <cover.1679183626.git.lstoakes@gmail.com>
- <119871ea9507eac7be5d91db38acdb03981e049e.1679183626.git.lstoakes@gmail.com>
- <ZBZ4kLnFz9MEiyhM@casper.infradead.org>
+        d=1e100.net; s=20210112; t=1679207783;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vZWIx9U6pneRg2Ew/6L/XNCQb7yH+hTum0rQo8LW28Y=;
+        b=icXvOennBlxMk8e6ze9epmaxgV15KafXjrvTmn0WwdfD/+VYYWqIJViwXeFWBByQVo
+         +JTT23BmZxTCKVmcj+TyRhQTq6nb3giMAF9gU6wHOXelZrxRFvYOH8sINtAoRvklcV/q
+         IPe+ETyAQXGOi9T/MnoiratWi4y/1fzh8gJT2H1EHPiF5c4vXvfGE4bwjoHWRFtAwMn1
+         XPXvfVgSWU91YnW2+UtFbibCYXgaX4/7PWdDriullwkRw9N77Pv88qzpWJLGDx/O5gIH
+         ZyLeu/i3pd+II1zWyDKp8Tx6ARFP10+23w1oqxkXbrr8H8tyY+A4Kw+L7mC7pDx+Ahg+
+         sKEQ==
+X-Gm-Message-State: AO0yUKWTImFZBthA5kpF6eMshgtrNTknMKRWONHzij+U3YgGAS3PqeJK
+        ZZblsqLgQ5AQLlDSeXYHLPjPnKGWDXo=
+X-Google-Smtp-Source: AK7set/qckqThQaZftTP+TnEDek292O/hhYo6YRpJBNT4zPkusuvtckI4Mw/GR7MZhDeYUzhu94Plg==
+X-Received: by 2002:a2e:bea0:0:b0:295:9d9c:24aa with SMTP id a32-20020a2ebea0000000b002959d9c24aamr6231418ljr.11.1679207782735;
+        Sat, 18 Mar 2023 23:36:22 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id h25-20020a2e3a19000000b00295b2e08b9dsm1141880lja.116.2023.03.18.23.36.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Mar 2023 23:36:22 -0700 (PDT)
+Message-ID: <e8f50fe8-bad3-e59e-4d80-e2f7db9c9933@gmail.com>
+Date:   Sun, 19 Mar 2023 08:36:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBZ4kLnFz9MEiyhM@casper.infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 2/8] kunit: drm/tests: move generic helpers
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Stephen Boyd <sboyd@kernel.org>
+References: <cover.1679062529.git.mazziesaccount@gmail.com>
+ <1abd47784b08939ff08ff03d3d4f60449e87625f.1679062529.git.mazziesaccount@gmail.com>
+ <20230317150916.a3xrh25ywe5k77yp@houat>
+Content-Language: en-US, en-GB
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230317150916.a3xrh25ywe5k77yp@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,20 +89,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 02:50:56AM +0000, Matthew Wilcox wrote:
-> On Sun, Mar 19, 2023 at 12:20:12AM +0000, Lorenzo Stoakes wrote:
-> >  /* for /proc/kcore */
-> > -extern long vread(char *buf, char *addr, unsigned long count);
-> > +extern long vread_iter(char *addr, size_t count, struct iov_iter *iter);
->
-> I don't love the order of the arguments here.  Usually we follow
-> memcpy() and have (dst, src, len).  This sometimes gets a bit more
-> complex when either src or dst need two arguments, but that's not the
-> case here.
+Hi Maxime & All
 
-Indeed it's not delightful, I did this purely to mimic the order of
-copy_to_iter() and friends which place iter last, however on second thoughts I
-think placing iter first would be better here where we have the freedom to order
-things more sensibly.
+First of all - I am sorry. During the last minute rebase I accidentally 
+dropped the header file from this series. Will fix that for v5. (Also 
+the build bot pointed this mistake).
 
-I'll respin with a fix.
+On 3/17/23 17:09, Maxime Ripard wrote:
+> Hi Matti,
+> 
+> On Fri, Mar 17, 2023 at 04:42:25PM +0200, Matti Vaittinen wrote:
+>> The creation of a dummy device in order to test managed interfaces is a
+>> generally useful test feature. The drm test helpers
+>> test_kunit_helper_alloc_device() and test_kunit_helper_free_device()
+>> are doing exactly this. It makes no sense that each and every component
+>> which intends to be testing managed interfaces will create similar
+>> helpers.
+>>
+>> Move these functions to place where it is more obvious they can be used
+>> also by other subsystems but drm.
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
+>> ---
+>>
+>> Please note that there's something similat ongoing in the CCF:
+>> https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
+>>
+>> I do like the simplicity of these DRM-originated helpers so I think
+>> they're worth. I do equally like the Stephen's idea of having the
+>> "dummy platform device" related helpers under drivers/base and the
+>> header being in include/kunit/platform_device.h which is similar to real
+>> platform device under include/linux/platform_device.h - so, in the end
+>> of the day I hope Stephen's changes as well as the changes this patch
+>> introduces to end up in those files. This, however, will require some
+>> co-operation to avoid conflicts.
+> 
+> I think you would have an easier time if you just copied and renamed
+> them into the kunit folder as an preparation series.
+
+Yes. That would simplify the syncing between the trees. It slightly bugs 
+me to add dublicate code in kernel-but the clean-up series for DRM users 
+could be prepared at the same time. It would be even possible to just 
+change the drm-helper to be a wrapper for the generic one - and leave 
+the callers intact - although it leaves some seemingly unnecessary 
+"onion code" there.
+
+> That way, you wouldn't have to coordinate DRM, CCF and IIO, you'd just
+> create new helpers that can be reused/converted to by everyone eventually
+
+Yes. Thanks - I think I may go with this approach for the v5 :)
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
