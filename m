@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A926C031D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58456C0322
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 17:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjCSQcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 12:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S230514AbjCSQcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 12:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjCSQcm (ORCPT
+        with ESMTP id S230483AbjCSQcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 12:32:42 -0400
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5011DBAE;
-        Sun, 19 Mar 2023 09:32:19 -0700 (PDT)
-Received: by mail-il1-f182.google.com with SMTP id h11so5391536ild.11;
-        Sun, 19 Mar 2023 09:32:19 -0700 (PDT)
+        Sun, 19 Mar 2023 12:32:46 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D6720060;
+        Sun, 19 Mar 2023 09:32:24 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id d14so1590387ion.9;
+        Sun, 19 Mar 2023 09:32:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679243539;
+        d=1e100.net; s=20210112; t=1679243542;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HZnfxLrdbXqpdX0ft3ryjeGmAE4ImDQE/rDMFgstwgA=;
-        b=LZrMjQuyS/4voPDRaNLxI+Vouim1o9gs3z2Do2uBKklq0ab7v3d/Sa2Sp02LjP74PN
-         Ip7L4zqTwcWAgwDxnWLDT4JlAPVjiHPvXchzHG7zOSMmCMmQIgyYVjHTfRJ6BR83/OsK
-         3wwZE3DxlnpfmOvfufRO4iGDFBU4TXgzoILx5cwb6ItDEaxmPaymyvPw2bEce53BPrZw
-         S01R1EZAT0gqb3h2sc5KJ2nwEo59htFQetzQaJ2FFdESl8RMxVFaTvohiQ4WmbEXg+5n
-         PcxKIAXSkWFAv+p2kM3l7eVSF2wcfUnVHkekFB8lNKp6qAvfFBTpe5dlDp9ZYYpBRh4A
-         rxWQ==
-X-Gm-Message-State: AO0yUKXCUFPyYSvGmx8AgSoj1yCf1FgzT+y4ErUe2XiZ5B+0TIY4/Ziv
-        j2BBgT1ynGFKcr1/POQZdVO4UFWt0A==
-X-Google-Smtp-Source: AK7set8BLLld/Z/b4kvohDSLmveai33RDRpJFpw0QXJHWgoZ1IVdQzCuOwVTmoqGE0cZhn49K+9Udg==
-X-Received: by 2002:a92:c8c6:0:b0:310:c1b3:9906 with SMTP id c6-20020a92c8c6000000b00310c1b39906mr2682144ilq.25.1679243538990;
-        Sun, 19 Mar 2023 09:32:18 -0700 (PDT)
+        bh=oOo8FyF7jwRP0L0/DCsqOtLfD9IQ2Dgjo9DgIapHOWc=;
+        b=uXQ0h2PXFFUToEQYwe1CLRPpbenlLmvujEZ0LQLC9qtjkM9ZaNszJn3a89qYdetJrH
+         HOgt4O3v6aPqyHnzsmYwv272pvOxhSmJ0cPXaOLiXR4NvdbA/1QBOy0W6+TYiEPBYUb2
+         yMne02lgdA25NSk7r85jAv0bOxj1DXDR20ftlrloyI81aBT+JQk3zYBzkDFPCQjWKSsS
+         AA7LG/oIcgxhowCMTFxpfAClFcOYX5U4T6v6BlXAk8FQeXpNM7/hhYrEM5sc/X5uLct4
+         bwgCTv/RRjUkUDadkJAvi876TWCL+uTXILGQJ7VL/QZs104w29xSY/uc/4app8RcRAiP
+         SW3Q==
+X-Gm-Message-State: AO0yUKXjvLsZBrKB3etisBtXcOSYGcdbEYZ2WBdpNPtrYa1gIpn28XDT
+        ZcifW4lCHfla/MJ6Jcmw5ovkuHMfQA==
+X-Google-Smtp-Source: AK7set/h6vpCslX6rjxzrWpAO3XN3jPyrb7izBUOhcXggLs7QMgyyrivJJ9IlFuZ3bUgBfMkIoRvPg==
+X-Received: by 2002:a6b:f01a:0:b0:743:7742:1bc2 with SMTP id w26-20020a6bf01a000000b0074377421bc2mr3523486ioc.16.1679243542321;
+        Sun, 19 Mar 2023 09:32:22 -0700 (PDT)
 Received: from robh_at_kernel.org ([2605:ef80:80c7:2689:137d:d795:47e4:3de1])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05663814ca00b00406237f0752sm2530091jak.1.2023.03.19.09.32.18
+        by smtp.gmail.com with ESMTPSA id a6-20020a5d9ec6000000b0074ca5ac5037sm2262348ioe.26.2023.03.19.09.32.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 09:32:18 -0700 (PDT)
-Received: (nullmailer pid 226101 invoked by uid 1000);
-        Sun, 19 Mar 2023 16:32:16 -0000
+        Sun, 19 Mar 2023 09:32:21 -0700 (PDT)
+Received: (nullmailer pid 226230 invoked by uid 1000);
+        Sun, 19 Mar 2023 16:32:19 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bcma: Use of_address_to_resource()
-Date:   Sun, 19 Mar 2023 11:31:59 -0500
-Message-Id: <20230319163159.225773-1-robh@kernel.org>
+To:     Tero Kristo <kristo@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: ti: Use of_address_to_resource()
+Date:   Sun, 19 Mar 2023 11:32:17 -0500
+Message-Id: <20230319163217.226144-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -64,36 +67,33 @@ call to of_address_to_resource().
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/bcma/main.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/clk/ti/clkctrl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bcma/main.c b/drivers/bcma/main.c
-index 7b39f010bbb3..5e438f74ee4c 100644
---- a/drivers/bcma/main.c
-+++ b/drivers/bcma/main.c
-@@ -140,17 +140,17 @@ static struct device_node *bcma_of_find_child_device(struct device *parent,
- 						     struct bcma_device *core)
- {
- 	struct device_node *node;
--	u64 size;
--	const __be32 *reg;
-+	int ret;
+diff --git a/drivers/clk/ti/clkctrl.c b/drivers/clk/ti/clkctrl.c
+index f73f402ff7de..b6fce916967c 100644
+--- a/drivers/clk/ti/clkctrl.c
++++ b/drivers/clk/ti/clkctrl.c
+@@ -512,16 +512,16 @@ static void __init _ti_omap4_clkctrl_setup(struct device_node *node)
+ 	struct clk_hw_omap *hw;
+ 	struct clk *clk;
+ 	struct omap_clkctrl_clk *clkctrl_clk = NULL;
+-	const __be32 *addrp;
+ 	bool legacy_naming;
+ 	const char *clkctrl_name;
+ 	u32 addr;
+ 	int ret;
+ 	char *c;
+ 	u16 soc_mask = 0;
++	struct resource res;
  
- 	if (!parent->of_node)
- 		return NULL;
+-	addrp = of_get_address(node, 0, NULL, NULL);
+-	addr = (u32)of_translate_address(node, addrp);
++	of_address_to_resource(node, 0, &res);
++	addr = (u32)res.start;
  
- 	for_each_child_of_node(parent->of_node, node) {
--		reg = of_get_address(node, 0, &size, NULL);
--		if (!reg)
-+		struct resource res;
-+		ret = of_address_to_resource(node, 0, &res);
-+		if (ret)
- 			continue;
--		if (of_translate_address(node, reg) == core->addr)
-+		if (res.start == core->addr)
- 			return node;
- 	}
- 	return NULL;
+ #ifdef CONFIG_ARCH_OMAP4
+ 	if (of_machine_is_compatible("ti,omap4"))
 -- 
 2.39.2
 
