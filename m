@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6286C026D
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 557006C026F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 15:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjCSOe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 10:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S230451AbjCSOhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 10:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjCSOe5 (ORCPT
+        with ESMTP id S229472AbjCSOhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 10:34:57 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385A619C7C
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:34:56 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b20so4606625edd.1
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679236494;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=13RptpPwU9CeIgu972ZARQHg4l6hn6RYakrP4lUSAIE=;
-        b=jhidRbbQnrEJ7yOVgGoL3BUqzLX6xT2MlTC3071eYARrvKpnEGBHbcz8PYAkVPQ+8h
-         QyqIC20VPp49BjMuxWMVOafio5J1yVwKC1bGist5t/s0/u8jUSJCrEi28nmugNocClJ7
-         7WjzsCx/HhfIgELuP5q3mXDsP/crTubf6RjJEs0DSg8eBeitR8zeymfVf536NwlAXPhk
-         3NnVCTpNxMJOsnAly1DM2JeG/7gsgyh2qtKIOMvvvLdFTyw1973agxDXLOCMhSTG2nUY
-         HDbrz+iCo1Ka5L6KlOKEKQaY1qJAcnUoTvPo+S1AXFzLoniKnT3r9iZAo+HJht+3E2q6
-         KalA==
+        Sun, 19 Mar 2023 10:37:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F68019C7C
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679236611;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XWzHgiL2NSowgeGQA1tqAXRb6Sm60VFytFuHZjvfdfI=;
+        b=h70IEDBi77PgyqbVVAJ8It/6ZIk1MxM/v3MDXEfYRNygqt89XrnNiBb8THjrHmyOH7xp3g
+        x4f0aEzuqywrQRsbelkE/K95FW/aEEwL9rqQsTtfMbfd3O/1JvDy0brT3rqkfZ9Ml00O2x
+        ev3kpN6IUyE7llwjfV9aaYaNhhw6IB4=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-379-CykQgJy6N1aZsuA1i4ZTWQ-1; Sun, 19 Mar 2023 10:36:44 -0400
+X-MC-Unique: CykQgJy6N1aZsuA1i4ZTWQ-1
+Received: by mail-qt1-f199.google.com with SMTP id j5-20020ac85c45000000b003d81e3fe559so5281606qtj.16
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 07:36:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679236494;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=13RptpPwU9CeIgu972ZARQHg4l6hn6RYakrP4lUSAIE=;
-        b=yBDhqwGh7pQ8+28nYcEM8k8BlYFKmLSU3dIM1d1bZIkLZh+2icArTOdl5NSFH9M824
-         nQC1Jxsb38LZv6NNZ96cN/6rxTqyl/edkPhC4jfnMZ/9pCkhEqWG7a8GdzxkzUvArBBO
-         aEwKjcTtFi49blqzRRNefl7L+4TYtszhjI5+PKIXj0mVlWNuvTB7+NIvNwdCtAmtpLe9
-         3Xl4RrSHcxv9cKBhKvWGNEL13BIQJak8LofTuy4a+AKmBcK2iCNG5pVqRCn4TXQ+a1y5
-         dFNrNWFI4KCzb9BbRLcIwxrxYRP2io+B5W5Djp8zyzsopxTPFMfaboLxUNQdQeoPG4Pm
-         e+fA==
-X-Gm-Message-State: AO0yUKX/9qUeADm4stGIn7bjdNL6F3lYU1O4WwK5D6GXJecCvN+vUdcQ
-        nzJplRZ63Dy4Og2RbaEkCUw=
-X-Google-Smtp-Source: AK7set+oNEI5AB+Y6WRuVS4gibvoEWkUa8W7ULuy6tVY+CD196jC9edB8c62cUbgWPEN8DM8ylUDJA==
-X-Received: by 2002:a17:907:2da5:b0:92b:eefb:b966 with SMTP id gt37-20020a1709072da500b0092beefbb966mr7966700ejc.0.1679236494588;
-        Sun, 19 Mar 2023 07:34:54 -0700 (PDT)
-Received: from [192.168.1.16] ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id w11-20020a1709067c8b00b009231714b3d4sm3242978ejo.151.2023.03.19.07.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 07:34:54 -0700 (PDT)
-Message-ID: <54840613-5382-2aaa-acdc-2e28470913c4@gmail.com>
-Date:   Sun, 19 Mar 2023 16:34:50 +0200
+        d=1e100.net; s=20210112; t=1679236604;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XWzHgiL2NSowgeGQA1tqAXRb6Sm60VFytFuHZjvfdfI=;
+        b=nX3AoA93Ng82yGkg+fFQnsz5cweUzCh0z/VoH7F/UEoDN3CUSD/mEszg6lastwDN06
+         ItbuMsISqp1MJuN+78hmuOESDXJAwttex1ZvBXUlo0thWsDARwOcUR8h56gHBFzHPYui
+         CMnX2YB5aY2Mv+8rnjmNL4Z1+jXkjNmVSKbNXybGwWXDbH2t4mNquZlw1VZ00u6dIHV7
+         UK00wDXV8/YRKOxK00ve5+Im3wI0R0Qp/I097+Cbojf2HSlADlNisVTtFbBFNKITNEWG
+         wIDQ4ztiZfqOswSqJsQcw4XmosnNT7FdRMFa2RXLwOs/37FXIUyMlG5iaktpz+OdWQJA
+         jEDQ==
+X-Gm-Message-State: AO0yUKXDzpvjaYbZCFSQfDf53dL7+JyTBkYQxVZXySELtoECn7A6Vid4
+        Du62zCO2DPcy0fdMqWj412vww3AB+wD4fExwBAYtmlJIYrFfRCiMKTQNi5tRBEH5w51rb5scN/W
+        P1kmQ0qzvUDi86xqd4oyTpc7E
+X-Received: by 2002:a05:622a:1214:b0:3e0:98f3:6cec with SMTP id y20-20020a05622a121400b003e098f36cecmr1856194qtx.44.1679236603786;
+        Sun, 19 Mar 2023 07:36:43 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+97Dibvhqhg/Ulk6oZwTmlmWDnkiUm3S+2qMc0ntf5rUqQTbBuvGEsBgE3pdJyCZ+fZ2xf9g==
+X-Received: by 2002:a05:622a:1214:b0:3e0:98f3:6cec with SMTP id y20-20020a05622a121400b003e098f36cecmr1856174qtx.44.1679236603549;
+        Sun, 19 Mar 2023 07:36:43 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id l16-20020ac84a90000000b003d4ee7879d0sm2756qtq.56.2023.03.19.07.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 07:36:43 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     robert.jarzmik@free.fr, linus.walleij@linaro.org, brgl@bgdev.pl,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] gpio: pxa: remove unused gpio_is_pxa_type function
+Date:   Sun, 19 Mar 2023 10:36:40 -0400
+Message-Id: <20230319143640.1704735-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] staging: rtl8723bs: include: use inline functions for
- dvobj_to_dev
-Content-Language: en-US
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        namcaov@gmail.com, straube.linux@gmail.com, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20230319131030.151170-3-eng.mennamahmoud.mm@gmail.com>
- <alpine.DEB.2.22.394.2303191509330.2867@hadrien>
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-In-Reply-To: <alpine.DEB.2.22.394.2303191509330.2867@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,65 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/gpio/gpio-pxa.c:174:19: error: unused function
+  'gpio_is_pxa_type' [-Werror,-Wunused-function]
+static inline int gpio_is_pxa_type(int type)
+                  ^
+This function is not used, so remove it.
 
-On ١٩‏/٣‏/٢٠٢٣ ١٦:١٣, Julia Lawall wrote:
-> How have you chosen the names at the beginning of the subject line?  The
-> other patches on this file don't have the word "include:" in the subject.
-> Please see the section "Following the Driver commit style" of the tutorial
-> to see what to do.
-Okay, I will check it.
->
-> On Sun, 19 Mar 2023, Menna Mahmoud wrote:
->
->> Convert `dvobj_to_dev` macro into static inline function,
-> "into a static inline function"
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpio/gpio-pxa.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-I will fix it.
+diff --git a/drivers/gpio/gpio-pxa.c b/drivers/gpio/gpio-pxa.c
+index 1198ab0305d0..a1630ed4b741 100644
+--- a/drivers/gpio/gpio-pxa.c
++++ b/drivers/gpio/gpio-pxa.c
+@@ -171,11 +171,6 @@ static inline struct pxa_gpio_bank *gpio_to_pxabank(struct gpio_chip *c,
+ 	return chip_to_pxachip(c)->banks + gpio / 32;
+ }
+ 
+-static inline int gpio_is_pxa_type(int type)
+-{
+-	return (type & MMP_GPIO) == 0;
+-}
+-
+ static inline int gpio_is_mmp_type(int type)
+ {
+ 	return (type & MMP_GPIO) != 0;
+-- 
+2.27.0
 
->
-> But the message is a bit too verbose.  Please see my suggestion on another
-> similar patch that was recently proposed.
->
-> julia
-
-
-I will to rework on it, thanks Julia appreciate your help.
-
-
-Menna
-
->> because it is not great to have macro that use `container_of` macro,
->> because from looking at the definition one cannot tell what type it applies to.
->>
->> One can get the same benefit from an efficiency point of view by making an
->> inline function (concretely, typically a static inline function, because
->> the definition only needs to be visible in the current file, or in the
->> case of a header file in the file that includes the header file).
->>
->> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
->> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
->> ---
->>   drivers/staging/rtl8723bs/include/drv_types.h | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/rtl8723bs/include/drv_types.h b/drivers/staging/rtl8723bs/include/drv_types.h
->> index 82159e1c7f9b..ea6bb44c5e1d 100644
->> --- a/drivers/staging/rtl8723bs/include/drv_types.h
->> +++ b/drivers/staging/rtl8723bs/include/drv_types.h
->> @@ -305,7 +305,11 @@ struct sdio_data intf_data;
->>   };
->>
->>   #define dvobj_to_pwrctl(dvobj) (&(dvobj->pwrctl_priv))
->> -#define pwrctl_to_dvobj(pwrctl) container_of(pwrctl, struct dvobj_priv, pwrctl_priv)
->> +
->> +static inline struct dvobj_priv *pwrctl_to_dvobj(struct pwrctrl_priv *pwrctl_priv)
->> +{
->> +	return container_of(pwrctl_priv, struct dvobj_priv, pwrctl_priv);
->> +}
->>
->>   static inline struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
->>   {
->> --
->> 2.34.1
->>
->>
