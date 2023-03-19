@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958766C0563
-	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251B66C055F
+	for <lists+linux-kernel@lfdr.de>; Sun, 19 Mar 2023 22:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCSVSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 17:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S230223AbjCSVRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 17:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjCSVSd (ORCPT
+        with ESMTP id S229806AbjCSVRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:18:33 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A2113C3;
-        Sun, 19 Mar 2023 14:18:31 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso6351334wmq.5;
-        Sun, 19 Mar 2023 14:18:31 -0700 (PDT)
+        Sun, 19 Mar 2023 17:17:08 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2994DB758
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:17:07 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id r1so10882941ybu.5
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 14:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679260710;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xnsyvP8JbNs+veqAm6StM8UbBoUAPhLOI3XAytwZeZo=;
-        b=qVhoiiNy51oSxFQEw23uh1HQRMG+qJploZdK1vaziW+lejF1UsQqj7JzeNQSGMucoo
-         8XPMnjHtu3XJNkHppDZc6Fo/OfJTmfVkMoy1dMicXzE7vPJamVY1sqJz6jnKoMr7R1ay
-         tHqo7M7cQ372T/zX8ngHz0iCtP8ULEAIJbj1zSze80K6c7hihh2+9vfuEi1TMemZB3G6
-         C6x++ua1/dDaj9pNMgCunWevzPYKKTUnKs7TGRf0gtRqrhne1NEHo4/95Jt3J7fOYKa+
-         0E/D+SGMp0doyEV2wxEr56RRBIiNNzDdraA2CvJwm+ilyy84cXoDezGMUBE7pSngPGN+
-         8neg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679260710;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1679260626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xnsyvP8JbNs+veqAm6StM8UbBoUAPhLOI3XAytwZeZo=;
-        b=sR5noHL0PIQ1I+i1tES8w978wUxGSSsM/X8W7b+RmBj5orzvZQ3Ooogo5Nv58lgald
-         X3JZfah2AS5t191Iqa+M8vFWSjDtF015JNujgc7EHUb356ncTdGrQAOna4jtPc/gF7CZ
-         V509x/YpiIjJC/weNp0MGIXuJHAFOQL590VhmsgpTmg9aRFli3mZpczSvu5KlpSnQibM
-         Hll4PEU0dbrRe96ou1hfa86RVkpk5ycVzllCPpcFWevhHC6kMVaZlMa+ZZOt2Ta1KCmG
-         2TY83FkHq4/yuTC82dEdbaAC3+M281wXzDGXQ3UemkrCJBIMPt4Qv1LXKIG+KmrzP0LW
-         89bw==
-X-Gm-Message-State: AO0yUKXjSYuukDW0K4as/t5oqiTFiswpWUcp6nxmQTpSr43k72p79dmx
-        PzNT8f9J9IH4lWQM5RUH2u8=
-X-Google-Smtp-Source: AK7set/tW/8C0xY/SSAu8Z2l3XOOV0YeweYmNiztltrsp6dMlMz2iIEqWHop066JFj2JpYd1xAM+ng==
-X-Received: by 2002:a05:600c:2185:b0:3ed:8780:f27b with SMTP id e5-20020a05600c218500b003ed8780f27bmr8062758wme.16.1679260709651;
-        Sun, 19 Mar 2023 14:18:29 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003eddf20ed5bsm2477581wmq.18.2023.03.19.14.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 14:18:28 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 21:16:18 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <b4233383-2c87-422f-9f66-3815a6c77372@lucifer.local>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <20230319131047.174fa4e29cabe4371b298ed0@linux-foundation.org>
- <fadd8558-8917-4012-b5ea-c6376c835cc8@lucifer.local>
- <ZBd00i7fvwrMX/FY@casper.infradead.org>
+        bh=umIKUZ29cWxRGLpplScGRMR85hsAlE3Adfx/LlasVhM=;
+        b=odOHan5KodgnZmQYP5bE+Zx5oWuObSka+JlAj9+I+PEuls9mRUte5Fd1E9WehPEH0v
+         ZEUouTX/UvXXQBiT/SNrO1n/f3o+kSQlfaYmdNK4DAR8Ejqf2fhzotkFgCdRQtcs1CVC
+         t5VLMfDqC+6dzZCRc67iIWhzpcy/Pk8gir+iKkECVK6wCNHZH2ZDuC5lvdh7tZq5DQuj
+         ObQBbb4TSLQVxE7XBRQy+d8Lbb9XjTL/2eJtfomhereizk9tghsCcrHhrXpWlcA+TL2p
+         v61FtSAq1/yzKQz5Qm+nbB//3YVMqfY7U/pGKdm4qJTu9FwuezpIoi2MADQXjrLIWQlB
+         6CZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679260626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=umIKUZ29cWxRGLpplScGRMR85hsAlE3Adfx/LlasVhM=;
+        b=CVu8MVo/Qj0pnNi+pXT2nM4GaQy7mHiMi52YSYnInDNhQkoMqAmdIkQSrEzSJZeN8K
+         UyxzQP34HQCl/vH0Y0SbtRfvbFbBUW65I8zNh6ZXK7yT7ZrIA3sPELqZ/GGYrWMqPnp6
+         Ymbr9nIQZTEu1DVp1f0Y2djTQnVrRHzcBvMqoQd9ziKj9HGYnqV3ICbWoXNh1bUxyrmb
+         xmGrQighuaiSEwmOV1tY9VsWgzTCrZk5x36dYi7mQp+6Zd/3vIovb3lthEXNvVfAVjXt
+         lnWfFuZcQubZ2nBMOjf9imWl1ctHSJ0Jw77fn2CehuKnh5CZwYyGrKc/Eri32J1hJr8i
+         6UTQ==
+X-Gm-Message-State: AO0yUKWnQ2Tn0z+LagZm1CsHdtngQK7Iq8YfUQHBCy2JjXwNsI/zszsr
+        YJrUtxu8P0RAdSLXQpIcV9rqrAwyuV0yp4GjsJ1U7g==
+X-Google-Smtp-Source: AK7set9Y0TmDGARQ0tonQqRCQHdH+03X2NR6qq22FebqKohfKPMVp4wrMtKTGiLfsl0XoE3P/cG/TeF1FO39PIanZTY=
+X-Received: by 2002:a05:6902:1143:b0:aa9:bd2e:3746 with SMTP id
+ p3-20020a056902114300b00aa9bd2e3746mr2999493ybu.4.1679260626301; Sun, 19 Mar
+ 2023 14:17:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBd00i7fvwrMX/FY@casper.infradead.org>
+References: <20230317233631.3968509-1-robh@kernel.org>
+In-Reply-To: <20230317233631.3968509-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 19 Mar 2023 22:16:55 +0100
+Message-ID: <CACRpkdY0twhF1+ipbV0DuWUdeCyq09uZidyVSNr7eW=K6ecnkw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mtd: Drop unneeded quotes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Naga Sureshkumar Relli <nagasure@xilinx.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 08:47:14PM +0000, Matthew Wilcox wrote:
-> On Sun, Mar 19, 2023 at 08:29:16PM +0000, Lorenzo Stoakes wrote:
-> > The basis for saying asynchronous was based on Documentation/filesystems/vfs.rst
-> > describing read_iter() as 'possibly asynchronous read with iov_iter as
-> > destination', and read_iter() is what is (now) invoked when accessing
-> > /proc/kcore.
-> >
-> > However I agree this is vague and it is clearer to refer to the fact that we are
-> > now directly writing to user memory and thus wish to avoid spinlocks as we may
-> > need to fault in user memory in doing so.
-> >
-> > Would it be ok for you to go ahead and replace that final paragraph with the
-> > below?:-
-> >
-> > The reason for making this change is to build a basis for vread() to write
-> > to user memory directly via an iterator; as a result we may cause page
-> > faults during which we must not hold a spinlock. Doing this eliminates the
-> > need for a bounce buffer in read_kcore() and thus permits that to be
-> > converted to also use an iterator, as a read_iter() handler.
->
-> I'd say the purpose of the iterator is to abstract whether we're
-> accessing user memory, kernel memory or a pipe, so I'd suggest:
->
->    The reason for making this change is to build a basis for vread() to
->    write to memory via an iterator; as a result we may cause page faults
->    during which we must not hold a spinlock. Doing this eliminates the
->    need for a bounce buffer in read_kcore() and thus permits that to be
->    converted to also use an iterator, as a read_iter() handler.
->
+On Sat, Mar 18, 2023 at 12:36=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+e:
 
-Thanks, sorry I missed the detail about iterators abstacting the three
-different targets there, that is definitely better!
-
-> I'm still undecided whether this change is really a good thing.  I
-> think we have line-of-sight to making vmalloc (and thus kvmalloc)
-> usable from interrupt context, and this destroys that possibility.
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 >
-> I wonder if we can't do something like prefaulting the page before
-> taking the spinlock, then use copy_page_to_iter_atomic()
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-There are a number of aspects of vmalloc that are not atomic-safe,
-e.g. alloc_vmap_area() and vmap_range_noflush() are designated
-might_sleep(), equally vfree().
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-So I feel that making it safe for atomic context requires a bit more of a
-general rework. Given we would be able to revisit lock types at the point
-we do that (something that would fit very solidly into the context of any
-such change), and given that this patch series establishes that we use an
-iterator, I think it is useful to keep this as-is as defer that change
-until later.
+Yours,
+Linus Walleij
