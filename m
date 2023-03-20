@@ -2,189 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEC56C210C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F086A6C210D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjCTTPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S230476AbjCTTP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbjCTTOr (ORCPT
+        with ESMTP id S231537AbjCTTOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:14:47 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBE743470;
-        Mon, 20 Mar 2023 12:06:50 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id r16so14406359qtx.9;
-        Mon, 20 Mar 2023 12:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679339200;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8rA4K62vUtfLOsNz63o59Uk51gIjIGDhfOV9BqrV4Bg=;
-        b=FDW2ZiGuwmiOMk4l7k0YK5xZ2eaAf1TT4GP8CE1uinDsZ61BBdovBVpj6ag9R+l8Xf
-         GRuuFzFy1a8kT4rkSByme/HemQoVjZEGUMTeOpFCQzkfujK86+SrLMwhEaz4VY5GAc9T
-         NZQkt0AYHSG2qMALCCeGV0GlMOohC3bYH7KJFoZGmIwgaJTZU5FWndiU8IyeggHgvR5Y
-         YbMdMGl+PrTUoAaK8cIC0/YJbyy9UXn79qd4eaF0ha3L19pcM7ER5HTV+iUmZPqAz82c
-         BpLmRX/mXF7d4ZCAJq6AQNfWjONQ4rcY38pWE9yG+QmcNIpsrbcRBjeH4OcMR9npv4IX
-         Yf+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679339200;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rA4K62vUtfLOsNz63o59Uk51gIjIGDhfOV9BqrV4Bg=;
-        b=pDeZ0ng9UOgif5ucMcNgKWv26CFun0rjt73YnymGdca3YUoTdhannT1DtHmasYmPr7
-         iJTMulnt/d220KO27Vfk/M4djyW9QgvL6BnPjAZtq2mqNalF9wKQ3pwQ3aVx3iTNKj+7
-         R+jZ+Yo8TkSxxBJGv84vrlUUT0QG1hc80B8uw+FDSqq42cMOXZVqfc55N8cBkKdm7niP
-         B7aGHMypmjauLfR9sf4PErLVJu5socSd75piv4MM9Xj7Egx+sMy+xEW9J3mLTDN8svor
-         uRjfJZwSeuj7vQ0KwiTeH2vTykjv/smNbY0GUq9p+hUS5PxE/HNyWEqFla+eiamCSJd4
-         sPmA==
-X-Gm-Message-State: AO0yUKWpCifi/ecgvtTrWorih4vjRQLCmmgw7TXwTbtmkAKDsgiizCzx
-        GS3A2/t0TspLlGTWVvE3pV0=
-X-Google-Smtp-Source: AK7set+bTnMHCeMn5JO2toWQ4ji2Mngz9l/qr/TnKi5TufFGnDIUSH+2sJQ3zlNNbo42eGgUOivP2w==
-X-Received: by 2002:a05:622a:1108:b0:3bf:bdb8:c64a with SMTP id e8-20020a05622a110800b003bfbdb8c64amr344144qty.49.1679339199747;
-        Mon, 20 Mar 2023 12:06:39 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id s20-20020a374514000000b00742bc037f29sm7808825qka.120.2023.03.20.12.06.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 12:06:39 -0700 (PDT)
-Message-ID: <95e106fd-d1ce-b9d4-a4f7-03fb69bd4aaa@gmail.com>
-Date:   Mon, 20 Mar 2023 12:06:31 -0700
+        Mon, 20 Mar 2023 15:14:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C4147805;
+        Mon, 20 Mar 2023 12:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679339216; x=1710875216;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rOfjKAAWxv0XMnzWuGIfCrmikj+4etpj1/XdDsgGUfQ=;
+  b=W0ekHHkGpHS5iAeYlB8EiiUxW9B4EUmwEOy8KUv7yEcQ2+QAGtAddvI/
+   htlred8gxHkf5R0YOwno+wwWLeEZqGlJ+2bIZU1IZzlV0jJ69XLE/svYb
+   JYp+/vC6NewpWEkdQYdNRteylzAKxxSLkNLPS6XWv1seTI0nxRk6lQpeX
+   qMw5bW+5NgSZIAoA+HqtPQUy+7LtNaZMpTsgqviPvzEmSottO5m8sQAbY
+   FrUqEU081iWVP/poxmWco77tbqsUBDEHwWM9Rv6LKpvYTVysrOIXQw7BQ
+   pKsFw4yTPm9eL6CZzEUDXGTWPJVU9EvnjjwCvYOpW67J6NOHRlW0BNWVT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="338780132"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="338780132"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 12:06:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="713665718"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="713665718"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.60.228])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 12:06:37 -0700
+Date:   Mon, 20 Mar 2023 12:06:36 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 5/6] cxl/trace: Add an HPA to cxl_poison trace events
+Message-ID: <ZBiuvHx8otTLnOM5@aschofie-mobl2>
+References: <cover.1679284567.git.alison.schofield@intel.com>
+ <00b34ab93ffd2737b33d4f1c74fbd98968a58a60.1679284567.git.alison.schofield@intel.com>
+ <20230320163059.00003b7a@Huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH] drivers: net: dsa: b53: mmap: add phy ops
-Content-Language: en-US
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        jonas.gorski@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230320182813.963508-1-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230320182813.963508-1-noltari@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320163059.00003b7a@Huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 11:28, Álvaro Fernández Rojas wrote:
-> Currently, B53 MMAP BCM63xx devices with an external switch hang when
-> performing PHY read and write operations due to invalid registers access.
-> This adds support for PHY ops by using the internal bus from mdio-mux-bcm6368
-> when probed by device tree and also falls back to direct MDIO registers if not.
+On Mon, Mar 20, 2023 at 04:30:59PM +0000, Jonathan Cameron wrote:
+> On Sun, 19 Mar 2023 21:31:50 -0700
+> alison.schofield@intel.com wrote:
 > 
-> This is an alternative to:
-> - https://patchwork.kernel.org/project/netdevbpf/cover/20230317113427.302162-1-noltari@gmail.com/
-> - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.302162-2-noltari@gmail.com/
-> - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.302162-3-noltari@gmail.com/
-> - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.302162-4-noltari@gmail.com/
-> As discussed, it was an ABI break and not the correct way of fixing the issue.
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > When a cxl_poison trace event is reported for a region, the poisoned
+> > Device Physical Address (DPA) can be translated to a Host Physical
+> > Address (HPA) for consumption by user space.
+> > 
+> > Translate and add the resulting HPA to the cxl_poison trace event.
+> > Follow the device decode logic as defined in the CXL Spec 3.0 Section
+> > 8.2.4.19.13.
+> > 
+> > If no region currently maps the poison, assign ULLONG_MAX to the
+> > cxl_poison event hpa field.
+> > 
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> 
+> Hi Alison,
+> 
+> I poked this with a few more test cases in QEMU and ran into a corner that
+> probably wants addressing.
+> 
+> What should the tracepoints contain if the poisoned DPA length of a single
+> record returned by the device is greater than the interleave granularity of
+> of an interleaved region?
 
-Looks good for the most part, just a few questions below.
+Jonathan,
+
+How does that happen now that we are reading poison by endpoint decoder,
+when committed decoders exist?
+
+If we are always bounding the poison read requests by the decoder
+resource, then the device cannot give us a length that goes beyond
+that decoder's mapping.
+
+For an endpoint decoder - a contiguous DPA space maps to a contiguous
+HPA space.
+
+Or not?
+
+Alison
 
 > 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> ---
->   drivers/net/dsa/b53/b53_mmap.c    | 86 +++++++++++++++++++++++++++++++
->   include/linux/platform_data/b53.h |  1 +
->   2 files changed, 87 insertions(+)
+> That didn't matter until HPA was added as we were just reporting a DPA
+> base and length, but with the HPA present, the length is only in DPA space
+> not HPA space.  Userspace can figure this out, but that's rather inelegant
+> and would require ras-daemon or similar to go and query the interleave granularity
+> and ways.
 > 
-> diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
-> index 706df04b6cee..7deca1c557c5 100644
-> --- a/drivers/net/dsa/b53/b53_mmap.c
-> +++ b/drivers/net/dsa/b53/b53_mmap.c
-> @@ -19,14 +19,25 @@
->   #include <linux/bits.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
-> +#include <linux/of_mdio.h>
->   #include <linux/io.h>
->   #include <linux/platform_device.h>
->   #include <linux/platform_data/b53.h>
->   
->   #include "b53_priv.h"
->   
-> +#define REG_MDIOC		0xb0
-> +#define  REG_MDIOC_EXT_MASK	BIT(16)
-> +#define  REG_MDIOC_REG_SHIFT	20
-> +#define  REG_MDIOC_PHYID_SHIFT	25
-> +#define  REG_MDIOC_RD_MASK	BIT(30)
-> +#define  REG_MDIOC_WR_MASK	BIT(31)
-
-For some reason, there was no bit introduced to tell us when a 
-transaction has finished, so we have to poll after a certain delay has 
-elapsed...
-
-> +
-> +#define REG_MDIOD		0xb4
-> +
->   struct b53_mmap_priv {
->   	void __iomem *regs;
-> +	struct mii_bus *bus;
->   };
->   
->   static int b53_mmap_read8(struct b53_device *dev, u8 page, u8 reg, u8 *val)
-> @@ -216,6 +227,69 @@ static int b53_mmap_write64(struct b53_device *dev, u8 page, u8 reg,
->   	return 0;
->   }
->   
-> +static inline void b53_mmap_mdio_read(struct b53_device *dev, int phy_id,
-> +				      int loc, u16 *val)
-> +{
-> +	uint32_t reg;
-> +
-> +	b53_mmap_write32(dev, 0, REG_MDIOC, 0);
-> +
-> +	reg = REG_MDIOC_RD_MASK |
-> +	      (phy_id << REG_MDIOC_PHYID_SHIFT) |
-> +	      (loc << REG_MDIOC_REG_SHIFT);
-> +
-> +	b53_mmap_write32(dev, 0, REG_MDIOC, reg);
-> +	udelay(50);
-> +	b53_mmap_read16(dev, 0, REG_MDIOD, val);
-> +}
-> +
-> +static inline int b53_mmap_mdio_write(struct b53_device *dev, int phy_id,
-> +				      int loc, u16 val)
-> +{
-> +	uint32_t reg;
-> +
-> +	b53_mmap_write32(dev, 0, REG_MDIOC, 0);
-> +
-> +	reg = REG_MDIOC_WR_MASK |
-> +	      (phy_id << REG_MDIOC_PHYID_SHIFT) |
-> +	      (loc << REG_MDIOC_REG_SHIFT) |
-> +	      val;
-> +
-> +	b53_mmap_write32(dev, 0, REG_MDIOC, reg);
-> +	udelay(50);
-> +
-> +	return 0;
-> +}
-> +
-> +static int b53_mmap_phy_read16(struct b53_device *dev, int addr, int reg,
-> +			       u16 *value)
-> +{
-> +	struct b53_mmap_priv *priv = dev->priv;
-> +	struct mii_bus *bus = priv->bus;
-> +
-> +	if (bus)
-> +		*value = mdiobus_read_nested(bus, addr, reg);
-
-Since you make the 'mii-bus' property and 'priv->bus' necessary 
-prerequisites for the driver to finish probing successfully, when shall 
-we not have valid priv->bus reference to work with? Do we end-up taking 
-the other path at all?
--- 
-Florian
-
+> I think the best thing to do in this case would be to break the single returned DPA
+> base record up into multiple trace points at the interleave granual boundaries.
+> 
+> What do you think we should do?
+> 
+> Jonathan
+> 
+> > ---
+> >  drivers/cxl/core/trace.c | 94 ++++++++++++++++++++++++++++++++++++++++
+> >  drivers/cxl/core/trace.h |  9 +++-
+> >  2 files changed, 102 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/cxl/core/trace.c b/drivers/cxl/core/trace.c
+> > index 29ae7ce81dc5..d0403dc3c8ab 100644
+> > --- a/drivers/cxl/core/trace.c
+> > +++ b/drivers/cxl/core/trace.c
+> > @@ -1,5 +1,99 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  /* Copyright(c) 2022 Intel Corporation. All rights reserved. */
+> >  
+> > +#include <cxl.h>
+> > +#include "core.h"
+> > +
+> >  #define CREATE_TRACE_POINTS
+> >  #include "trace.h"
+> > +
+> > +static bool cxl_is_hpa_in_range(u64 hpa, struct cxl_region *cxlr, int pos)
+> > +{
+> > +	struct cxl_region_params *p = &cxlr->params;
+> > +	int gran = p->interleave_granularity;
+> > +	int ways = p->interleave_ways;
+> > +	u64 offset;
+> > +
+> > +	/* Is the hpa within this region at all */
+> > +	if (hpa < p->res->start || hpa > p->res->end) {
+> > +		dev_dbg(&cxlr->dev,
+> > +			"Addr trans fail: hpa 0x%llx not in region\n", hpa);
+> > +		return false;
+> > +	}
+> > +
+> > +	/* Is the hpa in an expected chunk for its pos(-ition) */
+> > +	offset = hpa - p->res->start;
+> > +	offset = do_div(offset, gran * ways);
+> > +	if ((offset >= pos * gran) && (offset < (pos + 1) * gran))
+> > +		return true;
+> > +
+> > +	dev_dbg(&cxlr->dev,
+> > +		"Addr trans fail: hpa 0x%llx not in expected chunk\n", hpa);
+> > +
+> > +	return false;
+> > +}
+> > +
+> > +static u64 cxl_dpa_to_hpa(u64 dpa,  struct cxl_region *cxlr,
+> > +			  struct cxl_endpoint_decoder *cxled)
+> > +{
+> > +	u64 dpa_offset, hpa_offset, bits_upper, mask_upper, hpa;
+> > +	struct cxl_region_params *p = &cxlr->params;
+> > +	int pos = cxled->pos;
+> > +	u16 eig = 0;
+> > +	u8 eiw = 0;
+> > +
+> > +	ways_to_eiw(p->interleave_ways, &eiw);
+> > +	granularity_to_eig(p->interleave_granularity, &eig);
+> > +
+> > +	/*
+> > +	 * The device position in the region interleave set was removed
+> > +	 * from the offset at HPA->DPA translation. To reconstruct the
+> > +	 * HPA, place the 'pos' in the offset.
+> > +	 *
+> > +	 * The placement of 'pos' in the HPA is determined by interleave
+> > +	 * ways and granularity and is defined in the CXL Spec 3.0 Section
+> > +	 * 8.2.4.19.13 Implementation Note: Device Decode Logic
+> > +	 */
+> > +
+> > +	/* Remove the dpa base */
+> > +	dpa_offset = dpa - cxl_dpa_resource_start(cxled);
+> > +
+> > +	mask_upper = GENMASK_ULL(51, eig + 8);
+> > +
+> > +	if (eiw < 8) {
+> > +		hpa_offset = (dpa_offset & mask_upper) << eiw;
+> > +		hpa_offset |= pos << (eig + 8);
+> > +	} else {
+> > +		bits_upper = (dpa_offset & mask_upper) >> (eig + 8);
+> > +		bits_upper = bits_upper * 3;
+> > +		hpa_offset = ((bits_upper << (eiw - 8)) + pos) << (eig + 8);
+> > +	}
+> > +
+> > +	/* The lower bits remain unchanged */
+> > +	hpa_offset |= dpa_offset & GENMASK_ULL(eig + 7, 0);
+> > +
+> > +	/* Apply the hpa_offset to the region base address */
+> > +	hpa = hpa_offset + p->res->start;
+> > +
+> > +	if (!cxl_is_hpa_in_range(hpa, cxlr, cxled->pos))
+> > +		return ULLONG_MAX;
+> > +
+> > +	return hpa;
+> > +}
+> > +
+> > +u64 cxl_trace_hpa(struct cxl_region *cxlr, struct cxl_memdev *cxlmd,
+> > +		  u64 dpa)
+> > +{
+> > +	struct cxl_region_params *p = &cxlr->params;
+> > +	struct cxl_endpoint_decoder *cxled = NULL;
+> > +
+> > +	for (int i = 0; i <  p->nr_targets; i++) {
+> > +		cxled = p->targets[i];
+> > +		if (cxlmd == cxled_to_memdev(cxled))
+> > +			break;
+> > +	}
+> > +	if (!cxled || cxlmd != cxled_to_memdev(cxled))
+> > +		return ULLONG_MAX;
+> > +
+> > +	return cxl_dpa_to_hpa(dpa, cxlr, cxled);
+> > +}
+> > diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
+> > index 33a22d26e742..25dbf52ac327 100644
+> > --- a/drivers/cxl/core/trace.h
+> > +++ b/drivers/cxl/core/trace.h
+> > @@ -631,6 +631,8 @@ TRACE_EVENT(cxl_memory_module,
+> >  #define cxl_poison_overflow(flags, time)				\
+> >  	(flags & CXL_POISON_FLAG_OVERFLOW ? le64_to_cpu(time) : 0)
+> >  
+> > +u64 cxl_trace_hpa(struct cxl_region *cxlr, struct cxl_memdev *memdev, u64 dpa);
+> > +
+> >  TRACE_EVENT(cxl_poison,
+> >  
+> >  	TP_PROTO(struct cxl_memdev *cxlmd, struct cxl_region *region,
+> > @@ -645,6 +647,7 @@ TRACE_EVENT(cxl_poison,
+> >  		__field(u64, serial)
+> >  		__string(region, region)
+> >  		__field(u64, overflow_t)
+> > +		__field(u64, hpa)
+> >  		__field(u64, dpa)
+> >  		__field(u32, length)
+> >  		__array(char, uuid, 16)
+> > @@ -664,18 +667,22 @@ TRACE_EVENT(cxl_poison,
+> >  		if (region) {
+> >  			__assign_str(region, dev_name(&region->dev));
+> >  			memcpy(__entry->uuid, &region->params.uuid, 16);
+> > +			__entry->hpa = cxl_trace_hpa(region, cxlmd,
+> > +						     __entry->dpa);
+> >  		} else {
+> >  			__assign_str(region, "");
+> >  			memset(__entry->uuid, 0, 16);
+> > +			__entry->hpa = ULLONG_MAX;
+> >  		}
+> >  	    ),
+> >  
+> > -	TP_printk("memdev=%s host=%s serial=%lld region=%s region_uuid=%pU dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
+> > +	TP_printk("memdev=%s host=%s serial=%lld region=%s region_uuid=%pU hpa=0x%llx dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
+> >  		__get_str(memdev),
+> >  		__get_str(host),
+> >  		__entry->serial,
+> >  		__get_str(region),
+> >  		__entry->uuid,
+> > +		__entry->hpa,
+> >  		__entry->dpa,
+> >  		__entry->length,
+> >  		show_poison_source(__entry->source),
+> 
