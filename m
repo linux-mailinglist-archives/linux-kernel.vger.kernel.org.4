@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6526C23BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4036C23C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjCTVdK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 17:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S230053AbjCTVeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjCTVdI (ORCPT
+        with ESMTP id S229843AbjCTVeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:33:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C8F2D171;
-        Mon, 20 Mar 2023 14:32:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAC8CB810A7;
-        Mon, 20 Mar 2023 21:31:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6078AC433EF;
-        Mon, 20 Mar 2023 21:31:57 +0000 (UTC)
-Date:   Mon, 20 Mar 2023 17:31:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, ast@kernel.org, daniel@iogearbox.net,
-        kpsingh@kernel.org
-Subject: Re: [PATCH 5/7] ftrace: Store direct called addresses in their ops
-Message-ID: <20230320173155.55f38adc@gandalf.local.home>
-In-Reply-To: <CABRcYmL_JCAGSoX98dZUhGkmek+5iL4kd+F_POJ65GfnZLADcg@mail.gmail.com>
-References: <20230316173811.1223508-1-revest@chromium.org>
-        <20230316173811.1223508-6-revest@chromium.org>
-        <ZBcqUoUTZSNyIjLx@krava>
-        <20230319135443.1d29db2d@rorschach.local.home>
-        <ZBdagJQFA/Z7Phj5@krava>
-        <CABRcYmL_JCAGSoX98dZUhGkmek+5iL4kd+F_POJ65GfnZLADcg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 20 Mar 2023 17:34:01 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F1C39BAC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:33:20 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v25so8332788wra.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679347967;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDzcrREkxsiZpZ0TLzQirhe35EprAUvJXNPwHt1OSyg=;
+        b=VoHHIymktydEFSc4aPIysLUsv0OdQQ4t5wE79jmv2rbB3JFyQyUynRNYSI4eOPwWct
+         0NaFy0gHZRSpFm3N5CO8DogCZYefXTzsXgxLbdAcSUHVEsMaF8Fi91nb+kEHI1WTHq42
+         MGDxtDL+E/Rx5Mp+AnJRCXCl4A+FfCkSZp4a05DaNQHye+FyijS6BRnJscZ8ZuU5BiDB
+         rR9+eJ8cxB/2VGIlqoZgpqB1AwwUGRHKVB1OQgYn0AVIFJlgVgOFz81uRq3Zf+PAyQQd
+         lDtoc4p7eHeDcHojpwC0KLP+yRdVDIiafz4KDYfYxS6KGGEDc/iEV9ZzTVp/aJ8kRG6p
+         GHZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679347967;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bDzcrREkxsiZpZ0TLzQirhe35EprAUvJXNPwHt1OSyg=;
+        b=Vp/rv9owV7cOonKRzYB47u4ljOPOUuakhoIonemMLKelTl+C7Q6YLvRK4thzeSTS0l
+         UYIrFo5XlZOdRabsZTsB93glznb9vWhmPnEl2JFPeYuEDdUeZ3dzJIuVK3ye2PNkgmfH
+         NXn6cPaA9irLBthnhYeBHXN6c5JWMIa/R0mLaxIKEQgzCFw3p/13WmM0ZLDxkSnAizJ4
+         jQjMp1MOddUF3I6DMvu64z+6prALiOm5EcJoc3PYImjx4NhuDs//ORSO6eyc+Mm7+Tio
+         Nc91WRb0rDfsyDN7rDI0vKErr8NCaTc2whvVpxx+UqsGbEGXqCGtTO2U6Ya8bRh3gfaL
+         vCrw==
+X-Gm-Message-State: AO0yUKUXnSpQWgkAGoqboBOBcEngXQiJbfxoIPT422c/zf1eZdPPq3cM
+        P9XcZVmddUZLJLZpiqoR80g=
+X-Google-Smtp-Source: AK7set/qiVQDbS6QVED9+q1rx1DgTGcBJjCu3ZaGSfTP8zVBCuciPegZoYMOegQQ2W4/of0xAgS2gQ==
+X-Received: by 2002:a05:6000:1291:b0:2d8:6cb3:dfd3 with SMTP id f17-20020a056000129100b002d86cb3dfd3mr643491wrx.13.1679347967320;
+        Mon, 20 Mar 2023 14:32:47 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id p17-20020adfcc91000000b002c71dd1109fsm9835293wrj.47.2023.03.20.14.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 14:32:46 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     rafael.j.wysocki@intel.com, dmitry.osipenko@collabora.com,
+        pmladek@suse.com
+Cc:     mcgrof@kernel.org, paulmck@kernel.org, kai.heng.feng@canonical.com,
+        tangmeng@uniontech.com, john.ogness@linutronix.de,
+        yuehaibing@huawei.com, benjamin.bara@skidata.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kernel/reboot: emergency_restart: set correct system_state
+Date:   Mon, 20 Mar 2023 22:32:30 +0100
+Message-Id: <20230320213230.1459532-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 18:45:08 +0100
-Florent Revest <revest@chromium.org> wrote:
+From: Benjamin Bara <benjamin.bara@skidata.com>
 
-> On Sun, Mar 19, 2023 at 7:55 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Sun, Mar 19, 2023 at 01:54:43PM -0400, Steven Rostedt wrote:  
-> > > On Sun, 19 Mar 2023 16:29:22 +0100
-> > > Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >  
-> > > > > +++ b/kernel/trace/ftrace.c
-> > > > > @@ -2582,9 +2582,8 @@ ftrace_add_rec_direct(unsigned long ip, unsigned long addr,
-> > > > >  static void call_direct_funcs(unsigned long ip, unsigned long pip,
-> > > > >                         struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > > > >  {
-> > > > > - unsigned long addr;
-> > > > > + unsigned long addr = ops->direct_call;  
-> > > >
-> > > > nice, should it be read with READ_ONCE ?  
-> > >
-> > > Is there a "read tearing" too?  
-> >
-> > don't know, saw the comment in __modify_ftrace_direct and got curious
-> > why it's not in here.. feel free to ignore, I'll look it up
-> >
-> > jirka  
-> 
-> Mhh, that's a good question. Based on my current understanding, it
-> seems that it should have a READ_ONCE, indeed. However, I'd like Mark
-> to confirm/deny this. :)
-> 
-> If this should be a READ_ONCE, I can send a v2 series with this fixed.
+As the emergency restart does not call kernel_restart_prepare(),
+the system_state stays in SYSTEM_RUNNING.
 
-After re-reading: https://lwn.net/Articles/793253/
+This e.g. hinders i2c_in_atomic_xfer_mode() from becoming active,
+and therefore might lead to avoidable warnings in the restart handlers,
+e.g.:
+[   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x33c/0x6b0
+[   12.676926] Voluntary context switch within RCU read-side critical section!
+...
+[   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x114
+[   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completion+0x40/0x70
+...
+[   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
+[   13.001050]  machine_restart from panic+0x2a8/0x32c
 
-I think we should add the READ_ONCE() (also with a comment).
+Avoid these by setting the correct system_state.
 
--- Steve
+Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+---
+ kernel/reboot.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 3bba88c7ffc6..6ebef11c8876 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -74,6 +74,7 @@ void __weak (*pm_power_off)(void);
+ void emergency_restart(void)
+ {
+ 	kmsg_dump(KMSG_DUMP_EMERG);
++	system_state = SYSTEM_RESTART;
+ 	machine_emergency_restart();
+ }
+ EXPORT_SYMBOL_GPL(emergency_restart);
+-- 
+2.34.1
+
