@@ -2,175 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0376C1C29
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3AF6C1C25
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjCTQlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S232490AbjCTQlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjCTQkD (ORCPT
+        with ESMTP id S232960AbjCTQj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:40:03 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9272597D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:35:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MmgvE7QKUQ4edTinCwS0oPGvPAm4/LEFa9F0RjNWvJXS1Oej1KbM6MLqjCsmgBnrWkePdTHoUQ4a50QmY7HtYhqGh6Mn3LQX1Pzz3nIO97sUPi44U6/TSxlesSLkQyVYydz2bKWB0jFvsMXR6opBGK3725EfdK4Ho4T8YHGxQcn9tFLTDc/GcSxfVmITDHm997OwaHd3Ma868zXCI2kMdl3SYJX3L1sDsTxF72vQOLjWmTBFXczLkaVjAIsxzhuD9E7osvCXmeKWSy1Wo7qXPblKKnYenPRF3qLWERM2+vWMJkyvi3MBN0F012OrOxNfELUNrgKHYikSWxsMDxIHdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MXhevIw6A9pBrv4OnhpJpZ57QdmkqYIYIM6TCQn6tA4=;
- b=DEZ5x923ViyKp0K0IWWw4Kkyq1qHJ9ZYVzCs3dr3i2ZRPDfyJqkpHyIeMGsZAAFcaQo/CMtE4paschP7o/dW4gjXM8FAAFZ5wviiFSu9v49Pp6KhQmQmT40nD8EOxj/F57MY2u/oA0i0ttUO7BabXM+HtYSp3+IBe6iqaEcuujR/dq58K2BHJ0+M7Kot9IRQf9GqnkWeiigR/Dh2K+Qp35gx88tjos5FtIxYt2FKjhR4p7ysKPy+6uHANkP1kqkCJygUDgdrBRwbqPH7mBk2yY2RI8Z6kOD1cXO5dMDjhfiqiadip4aC7GG4/1WGuLQCVa8KXd7BgS+zmxutQF534g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MXhevIw6A9pBrv4OnhpJpZ57QdmkqYIYIM6TCQn6tA4=;
- b=an5s6zCLO06yVAtzMafEwhYT/UPbcNXKyriVziZyktJxCGMpSDMibQw57T5Rus6p0c5/BwIWXkjUFYOCh0x6PGstGA5S1w/aS1vuPfzFUJvxZZnfiHJyxNgR2nvYbunYhksM/V7u0f18pwGQrmfGrSRJKYhQPN481oRqUcZLJsauesQ25sTdDOoAKTWfVbJrrhvMgT6z3obD9Qc7FnGAUfxdEU8jDaYgTk82cRFbPq/WhF63ErhRnlXetCmFK2UNFWcpRaIC+VW0D21LdmTxGRZ30Jp+kKNdQa4frrSIo7SJe4VKa4l9J29vsf8gJL4ouqaaLHLlC1EKdGtz3iPpig==
-Received: from BN9PR03CA0750.namprd03.prod.outlook.com (2603:10b6:408:110::35)
- by CH2PR12MB4040.namprd12.prod.outlook.com (2603:10b6:610:ac::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 16:35:35 +0000
-Received: from BL02EPF000108E9.namprd05.prod.outlook.com
- (2603:10b6:408:110:cafe::7e) by BN9PR03CA0750.outlook.office365.com
- (2603:10b6:408:110::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Mon, 20 Mar 2023 16:35:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL02EPF000108E9.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.30 via Frontend Transport; Mon, 20 Mar 2023 16:35:34 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 20 Mar 2023
- 09:35:22 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Mon, 20 Mar 2023 09:35:22 -0700
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Mon, 20 Mar 2023 09:35:21 -0700
-Date:   Mon, 20 Mar 2023 09:35:20 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Robin Murphy <robin.murphy@arm.com>, <will@kernel.org>,
-        <eric.auger@redhat.com>, <kevin.tian@intel.com>,
-        <baolu.lu@linux.intel.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <jean-philippe@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Message-ID: <ZBiLSJvtY5UKDJ5l@Asurada-Nvidia>
-References: <92fdb06f-e5b1-8534-fb0e-ad47b5be9e1d@arm.com>
- <ZAx2K08L5TIm6r3y@Asurada-Nvidia>
- <ab762cc6-5adf-2515-d9d2-d21d916eb6ad@arm.com>
- <ZBJcS07G3mt7gjkA@Asurada-Nvidia>
- <c753c2a8-024d-5bef-8987-96582084991e@arm.com>
- <ZBOFcenanpRsGFzF@Asurada-Nvidia>
- <ZBe3kxRXf+VbKy+m@Asurada-Nvidia>
- <ZBhbmqprnux4q00i@nvidia.com>
- <ZBh7hSX5hdW4vxwh@Asurada-Nvidia>
- <ZBiDcYwxL7eV1EmQ@nvidia.com>
+        Mon, 20 Mar 2023 12:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE51315C8F;
+        Mon, 20 Mar 2023 09:35:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0E8E616D4;
+        Mon, 20 Mar 2023 16:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203CDC4339E;
+        Mon, 20 Mar 2023 16:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679330131;
+        bh=RP22Xwt/Frb4zh2FwdW1ZmTjeCQ1cIWoHCq2ZxemqzM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=le/gMaeIpH/u8qk0+EcETSbLjXH0BIOemYIKihw+rUm8eb9Hd2xqWzTgktqb9K/zS
+         6UN9zAb2jSZEU9dQB9hqyLTdNndznLH+7xQfEB3qYmN3NESvLR69HHZNfDmbIFU24g
+         Gz5FLYNk8RckXvx4PyNUjNagIa7tZkFOK+VJXkqyXFygGtVjfe2FseYBjTR/CBWr1z
+         roXRrEEOHHFqRRix9d0FC4iPXZeQBFTbgTh5wv8108LvF/fuvW17fkohvSY/w+J1cY
+         1NYryNtGbPlKq/2b7kDXeah32MOWvwgxQATfV9+qLI5uSm6HgBb6RsHE0Nqo7u9MEB
+         JYB0wkludtjTQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 8BEA51540395; Mon, 20 Mar 2023 09:35:30 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 09:35:30 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] srcu: Fix srcu structure's->srcu_sup memory leak in
+ init_srcu_struct_fields()
+Message-ID: <fac310a2-c42f-4a1a-967c-667c210dd062@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230320055751.4120251-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZBiDcYwxL7eV1EmQ@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108E9:EE_|CH2PR12MB4040:EE_
-X-MS-Office365-Filtering-Correlation-Id: d508a18b-0a75-4d77-0430-08db29612113
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qtg/idDYi3bdtlhDSjhFJYvygePWpPaumi2McvPaJeoroYLR+w6JV9vMWc9cUmCRVPe6Wc1DoKV9mvCD0hKqy25W4hkbC+RMyNLWXCsRTQFmb0BCki0M9kNslygVvuNZ5khEsYXvFdBhkE6j1DcjULBgsJviBkxFqhwIFsIx6ooHpBnuznAM2HEDRtHjVE4j1/se15KvKNwzyORcSJOmfubD5HECrvgWIX/kDeZR2FN6iXu6AHELZX8exO/rLIjJ5aM3eL94siYzF8XxB02chu5OVVR5ab8/Zp91sYX3r8Q2Nnn3sUwxKloYaLoTfxJufo7Fq1Vg/kH6dMHw+z7DCF8tGxyg3E1EvMRkiWMTZoDx9o0JwNYAc87b0P6l+1puqVi0GRlc91nAFauUsfmOUBGMmjRla0Zm+wPp1DHHsB6Ja2sWTODJgFFjqoUwwjOUDwxkrUMmAEJHfySrEzHh6n1KNj7XBG2wE1DGZMmf6qKvVT8+46V3BcUuzcOGVo12Of8lfRs19xl4EJpFiFEcQYtpMaRJZ9EnMQYiq0SqP26JmhOBgPJpWlZpZMIU7sDh3PPH+qnsZ32eu1fYs2EY8xOZuQrLcdM/41sFDh3ui2Rq3VB2TlJnMMjYi24PX74hr7tSVzPmRlhGHqtDJ+ykXmzKSUTRvSoA5TgbN/Tfxj0c/sUK8KQK8lx3x+DnKw2uIUEcAx1LMmvGNCY7Qjn+cTcUiQqumMXq3uIc6Cu4FCp5bp5dU6hqXiiP4XM3cYf/tHcuM9Cr54c6xDkMmCjEpoxQlfdkXo4V8c7v1/ROmCU=
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(83380400001)(2906002)(316002)(54906003)(6636002)(7636003)(55016003)(478600001)(70586007)(70206006)(4326008)(8676002)(5660300002)(356005)(7416002)(41300700001)(86362001)(8936002)(40460700003)(6862004)(33716001)(40480700001)(82310400005)(82740400003)(36860700001)(336012)(186003)(9686003)(426003)(47076005)(26005)(341764005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 16:35:34.4643
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d508a18b-0a75-4d77-0430-08db29612113
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4040
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230320055751.4120251-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 01:01:53PM -0300, Jason Gunthorpe wrote:
-> On Mon, Mar 20, 2023 at 08:28:05AM -0700, Nicolin Chen wrote:
-> > On Mon, Mar 20, 2023 at 10:11:54AM -0300, Jason Gunthorpe wrote:
-> > > On Sun, Mar 19, 2023 at 06:32:03PM -0700, Nicolin Chen wrote:
-> > > 
-> > > > +struct iommu_hwpt_invalidate_arm_smmuv3 {
-> > > > +       struct iommu_iova_range range;
-> > > 
-> > > what is this?
-> > 
-> > Not used. A copy-n-paste mistake :(
-> > 
-> > > 
-> > > > +       __u64 cmd[2];
-> > > > +};
-> > > 
-> > > You still have to do something with the SID. We can't just allow any
-> > > un-validated SID value - the driver has to check the incoming SID
-> > > against allowed SIDs for this iommufd_ctx
-> > 
-> > Hmm, that's something "missing" even in the current design.
-> > 
-> > Yet, most of the TLBI commands don't hold an SID field. So,
-> > the hypervisor only trapping a queue write-pointer movement
-> > cannot get the exact vSID for a TLBI command. What our QEMU
-> > code currently does is simply broadcasting all the devices
-> > on the list of attaching devices to the vSMMU, which means
-> > that such an enforcement in the kernel would basically just
-> > allow any vSID (device) that's attached to the domain?
+On Mon, Mar 20, 2023 at 01:57:51PM +0800, Zqiang wrote:
+> When use init_srcu_struct() to initializing srcu structure, and
+> will allocate memory for srcu structure's->sda and ->srcu_sup,
+> however, if allocate srcu structure's->sda memory failed, the
+> srcu structure's->srcu_sup memory need to be released.
 > 
-> SID is only used for managing the ATC as far as I know. It is because
-> the ASID doesn't convey enough information to determine what PCI RID
-> to generate an ATC invalidation for.
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Yes. And a CD invalidation too, though the kernel eventually
-would do a broadcast to all devices that are using the same
-CD.
+Good catch, and thank you for reviewing this series!!!
 
-> We shouldn't be broadcasting for efficiency, at least it should not be
-> baked into the API.
-> 
-> You need to know what devices the vSID is targetting ang issues
-> invalidations only for those devices.
+I must fold this change into this commit for bisectability, so please
+check the updated original patch shown below.
 
-I agree with that, yet cannot think of a solution to achieve
-that out of vSID. QEMU code by means of emulating a physical
-SMMU only reads the commands from the queue, without knowing
-which device (vSID) actually sent these commands.
+							Thanx, Paul
 
-I probably can do something to the solution that is doing an
-entire broadcasting, with the ASID fields from the commands,
-yet it'd only improve the situation by having an ASID-based
-broadcasting...
+------------------------------------------------------------------------
 
-Thanks
-Nic
+commit 0eaf7510703ec0c9fa148bfb6d371ef60f93f44e
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Thu Mar 16 17:58:51 2023 -0700
+
+    srcu: Begin offloading srcu_struct fields to srcu_update
+    
+    The current srcu_struct structure is on the order of 200 bytes in size
+    (depending on architecture and .config), which is much better than the
+    old-style 26K bytes, but still all too inconvenient when one is trying
+    to achieve good cache locality on a fastpath involving SRCU readers.
+    
+    However, only a few fields in srcu_struct are used by SRCU readers.
+    The remaining fields could be offloaded to a new srcu_update
+    structure, thus shrinking the srcu_struct structure down to a few
+    tens of bytes.  This commit begins this noble quest, a quest that is
+    complicated by open-coded initialization of the srcu_struct within the
+    srcu_notifier_head structure.  This complication is addressed by updating
+    the srcu_notifier_head structure's open coding, given that there does
+    not appear to be a straightforward way of abstracting that initialization.
+    
+    This commit moves only the ->node pointer to srcu_update.  Later commits
+    will move additional fields.
+    
+    [ paulmck: Fold in qiang1.zhang@intel.com's memory-leak fix. ]
+    
+    Link: https://lore.kernel.org/all/20230320055751.4120251-1-qiang1.zhang@intel.com/
+    Suggested-by: Christoph Hellwig <hch@lst.de>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+    Cc: "Michał Mirosław" <mirq-linux@rere.qmqm.pl>
+    Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+
+diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+index aef88c2d1173..2aba75145144 100644
+--- a/include/linux/notifier.h
++++ b/include/linux/notifier.h
+@@ -73,6 +73,9 @@ struct raw_notifier_head {
+ 
+ struct srcu_notifier_head {
+ 	struct mutex mutex;
++#ifdef CONFIG_TREE_SRCU
++	struct srcu_usage srcuu;
++#endif
+ 	struct srcu_struct srcu;
+ 	struct notifier_block __rcu *head;
+ };
+@@ -107,7 +110,7 @@ extern void srcu_init_notifier_head(struct srcu_notifier_head *nh);
+ 	{							\
+ 		.mutex = __MUTEX_INITIALIZER(name.mutex),	\
+ 		.head = NULL,					\
+-		.srcu = __SRCU_STRUCT_INIT(name.srcu, pcpu),	\
++		.srcu = __SRCU_STRUCT_INIT(name.srcu, name.srcuu, pcpu), \
+ 	}
+ 
+ #define ATOMIC_NOTIFIER_HEAD(name)				\
+diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
+index 5aa5e0faf6a1..ebd72491af99 100644
+--- a/include/linux/srcutiny.h
++++ b/include/linux/srcutiny.h
+@@ -31,7 +31,7 @@ struct srcu_struct {
+ 
+ void srcu_drive_gp(struct work_struct *wp);
+ 
+-#define __SRCU_STRUCT_INIT(name, __ignored)				\
++#define __SRCU_STRUCT_INIT(name, __ignored, ___ignored)			\
+ {									\
+ 	.srcu_wq = __SWAIT_QUEUE_HEAD_INITIALIZER(name.srcu_wq),	\
+ 	.srcu_cb_tail = &name.srcu_cb_head,				\
+@@ -44,9 +44,9 @@ void srcu_drive_gp(struct work_struct *wp);
+  * Tree SRCU, which needs some per-CPU data.
+  */
+ #define DEFINE_SRCU(name) \
+-	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
++	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
+ #define DEFINE_STATIC_SRCU(name) \
+-	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
++	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
+ 
+ void synchronize_srcu(struct srcu_struct *ssp);
+ 
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index 428480152375..2689e64024bb 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -57,11 +57,17 @@ struct srcu_node {
+ 	int grphi;				/* Biggest CPU for node. */
+ };
+ 
++/*
++ * Per-SRCU-domain structure, update-side data linked from srcu_struct.
++ */
++struct srcu_usage {
++	struct srcu_node *node;			/* Combining tree. */
++};
++
+ /*
+  * Per-SRCU-domain structure, similar in function to rcu_state.
+  */
+ struct srcu_struct {
+-	struct srcu_node *node;			/* Combining tree. */
+ 	struct srcu_node *level[RCU_NUM_LVLS + 1];
+ 						/* First node at each level. */
+ 	int srcu_size_state;			/* Small-to-big transition state. */
+@@ -90,6 +96,7 @@ struct srcu_struct {
+ 	unsigned long reschedule_count;
+ 	struct delayed_work work;
+ 	struct lockdep_map dep_map;
++	struct srcu_usage *srcu_sup;		/* Update-side data. */
+ };
+ 
+ // Values for size state variable (->srcu_size_state).  Once the state
+@@ -121,24 +128,24 @@ struct srcu_struct {
+ #define SRCU_STATE_SCAN1	1
+ #define SRCU_STATE_SCAN2	2
+ 
+-#define __SRCU_STRUCT_INIT_COMMON(name)								\
++#define __SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+ 	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
+ 	.srcu_gp_seq_needed = -1UL,								\
+ 	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
++	.srcu_sup = &usage_name,								\
+ 	__SRCU_DEP_MAP_INIT(name)
+ 
+-#define __SRCU_STRUCT_INIT_MODULE(name)								\
++#define __SRCU_STRUCT_INIT_MODULE(name, usage_name)						\
+ {												\
+-	__SRCU_STRUCT_INIT_COMMON(name)								\
++	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+ }
+ 
+-#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
++#define __SRCU_STRUCT_INIT(name, usage_name, pcpu_name)						\
+ {												\
+ 	.sda = &pcpu_name,									\
+-	__SRCU_STRUCT_INIT_COMMON(name)								\
++	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+ }
+ 
+-
+ /*
+  * Define and initialize a srcu struct at build time.
+  * Do -not- call init_srcu_struct() nor cleanup_srcu_struct() on it.
+@@ -160,15 +167,17 @@ struct srcu_struct {
+  */
+ #ifdef MODULE
+ # define __DEFINE_SRCU(name, is_static)								\
+-	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name);			\
++	static struct srcu_usage name##_srcu_usage;						\
++	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
+ 	extern struct srcu_struct * const __srcu_struct_##name;					\
+ 	struct srcu_struct * const __srcu_struct_##name						\
+ 		__section("___srcu_struct_ptrs") = &name
+ #else
+ # define __DEFINE_SRCU(name, is_static)								\
+ 	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
++	static struct srcu_usage name##_srcu_usage;						\
+ 	is_static struct srcu_struct name =							\
+-		__SRCU_STRUCT_INIT(name, name##_srcu_data)
++		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
+ #endif
+ #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
+ #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, static)
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index 115616ac3bfa..8d18d4bf0e29 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -341,11 +341,13 @@ extern void rcu_init_geometry(void);
+  * specified state structure (for SRCU) or the only rcu_state structure
+  * (for RCU).
+  */
+-#define srcu_for_each_node_breadth_first(sp, rnp) \
++#define _rcu_for_each_node_breadth_first(sp, rnp) \
+ 	for ((rnp) = &(sp)->node[0]; \
+ 	     (rnp) < &(sp)->node[rcu_num_nodes]; (rnp)++)
+ #define rcu_for_each_node_breadth_first(rnp) \
+-	srcu_for_each_node_breadth_first(&rcu_state, rnp)
++	_rcu_for_each_node_breadth_first(&rcu_state, rnp)
++#define srcu_for_each_node_breadth_first(ssp, rnp) \
++	_rcu_for_each_node_breadth_first(ssp->srcu_sup, rnp)
+ 
+ /*
+  * Scan the leaves of the rcu_node hierarchy for the rcu_state structure.
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 1df9e62a9459..02293a202323 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -173,12 +173,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+ 
+ 	/* Initialize geometry if it has not already been initialized. */
+ 	rcu_init_geometry();
+-	ssp->node = kcalloc(rcu_num_nodes, sizeof(*ssp->node), gfp_flags);
+-	if (!ssp->node)
++	ssp->srcu_sup->node = kcalloc(rcu_num_nodes, sizeof(*ssp->srcu_sup->node), gfp_flags);
++	if (!ssp->srcu_sup->node)
+ 		return false;
+ 
+ 	/* Work out the overall tree geometry. */
+-	ssp->level[0] = &ssp->node[0];
++	ssp->level[0] = &ssp->srcu_sup->node[0];
+ 	for (i = 1; i < rcu_num_lvls; i++)
+ 		ssp->level[i] = ssp->level[i - 1] + num_rcu_lvl[i - 1];
+ 	rcu_init_levelspread(levelspread, num_rcu_lvl);
+@@ -195,7 +195,7 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+ 		snp->srcu_gp_seq_needed_exp = SRCU_SNP_INIT_SEQ;
+ 		snp->grplo = -1;
+ 		snp->grphi = -1;
+-		if (snp == &ssp->node[0]) {
++		if (snp == &ssp->srcu_sup->node[0]) {
+ 			/* Root node, special case. */
+ 			snp->srcu_parent = NULL;
+ 			continue;
+@@ -236,8 +236,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+  */
+ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+ {
++	if (!is_static)
++		ssp->srcu_sup = kzalloc(sizeof(*ssp->srcu_sup), GFP_KERNEL);
++	if (!ssp->srcu_sup)
++		return -ENOMEM;
+ 	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+-	ssp->node = NULL;
++	ssp->srcu_sup->node = NULL;
+ 	mutex_init(&ssp->srcu_cb_mutex);
+ 	mutex_init(&ssp->srcu_gp_mutex);
+ 	ssp->srcu_idx = 0;
+@@ -249,8 +253,11 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+ 	ssp->sda_is_static = is_static;
+ 	if (!is_static)
+ 		ssp->sda = alloc_percpu(struct srcu_data);
+-	if (!ssp->sda)
++	if (!ssp->sda) {
++		if (!is_static)
++			kfree(ssp->srcu_sup);
+ 		return -ENOMEM;
++	}
+ 	init_srcu_struct_data(ssp);
+ 	ssp->srcu_gp_seq_needed_exp = 0;
+ 	ssp->srcu_last_gp_end = ktime_get_mono_fast_ns();
+@@ -259,6 +266,7 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+ 			if (!ssp->sda_is_static) {
+ 				free_percpu(ssp->sda);
+ 				ssp->sda = NULL;
++				kfree(ssp->srcu_sup);
+ 				return -ENOMEM;
+ 			}
+ 		} else {
+@@ -656,13 +664,15 @@ void cleanup_srcu_struct(struct srcu_struct *ssp)
+ 			rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
+ 		return; /* Caller forgot to stop doing call_srcu()? */
+ 	}
++	kfree(ssp->srcu_sup->node);
++	ssp->srcu_sup->node = NULL;
++	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+ 	if (!ssp->sda_is_static) {
+ 		free_percpu(ssp->sda);
+ 		ssp->sda = NULL;
++		kfree(ssp->srcu_sup);
++		ssp->srcu_sup = NULL;
+ 	}
+-	kfree(ssp->node);
+-	ssp->node = NULL;
+-	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+ }
+ EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
+ 
