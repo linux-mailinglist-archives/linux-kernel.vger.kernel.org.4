@@ -2,164 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9306C1F1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482676C1F1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjCTSJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S229830AbjCTSJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjCTSIt (ORCPT
+        with ESMTP id S229967AbjCTSJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:08:49 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADDB3D925;
-        Mon, 20 Mar 2023 11:02:44 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id g7-20020a4ae887000000b0053b544f7e8aso2861ooe.12;
-        Mon, 20 Mar 2023 11:02:44 -0700 (PDT)
+        Mon, 20 Mar 2023 14:09:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2D930B3F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:02:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x3so50130181edb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679335348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/v9R5gnCY6fdHFgH5PKyKB7qBIPOqi3I48b2pUQUxIw=;
-        b=BEvixRIUWdZ++zol6HP2FDqAImpYFJVOYn8eoRuuKOqhwahmC5d/IShmuHYtg/dggD
-         3EsPNGlgrzf3IyYJpLbYHXFu8OZRMdgljUUNnsAAatON5W6gxhe148gVIkWTWm1LpcyH
-         NMPEIitAs2+d1b/13yFpAG73H34vLdQEFs9dWGgKvahbsID5XBZ7sV54H5Bh0ob34n+J
-         7XPeZEITpNd+s7g0oQ0esjbgBy8GrSgN7cRPw1eCSlQaITl6H6mw4Fs3qheNGRszqgUW
-         o4pRJqL6d/zZ4NpVHx3Tu6VHbn0IG7aG4hIKcvI2nNJ1QA5+tqQZ/XmnTgoHMBPvN5u+
-         NmYQ==
+        d=linaro.org; s=google; t=1679335370;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s0eoWfmO41fcTesmFbumMelX1mm4aMPERyhh0espiXY=;
+        b=qmP95LEReUwzh5aFhObeTYcZF8mkRX+F2NKB82E7CMqOUN2qq7XLyh8EJXDIKkvQ9M
+         iRMAPlV3qmDQl46VrmXFD9r16xGdGc3riIb3SX5cjcxqca9Ixlf95ni69oIUH9yfMHPj
+         ya6DT8n8KRcHpeIZ8EaCGlaOlDPu+h6b1PvZCW/1ZnwJSe+cxxA4RNuPd6I964iA7un5
+         PKDxsMcZIbVOtW5IHFoJcXGK/Hb5N4WV8jtUOWRWQ0WzGbkuWtW+qPzLRYVZ9J8rR1yZ
+         jZxLhkTneuUUVn/AlSD3jYviJfqOdXocoPv/ztf0jF1GLiOiYxY6NwhNb7uAkrtM5Qfs
+         +2Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679335348;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/v9R5gnCY6fdHFgH5PKyKB7qBIPOqi3I48b2pUQUxIw=;
-        b=z36mc2LP5eWALS0spYMKUxktM75feNjda+2FfsqZm/aJXZi8mVWCb1K7w+Vkgcg5eF
-         6iimFvL8x8FpiE1MeXib/FdoT4FGmDF9Fu25j5LEVy0BT5LVkiR3Q9566diweXOLhR8x
-         Homwb/HB/MhYp2W3KHxvwQ+l1NMUWDr48c/pRctWYc7LbjNbFp/kKmvVH2zKjAz/qtf3
-         2x1Du10E4W56B0MJw1XwSVAlNrxzacRTwV1XRzwd96LJfkYy+yuMlzxxHiUmUvcSjRnX
-         qk8Lzipm+oxoIJpTiOMHp1h1R4Lm+igJpv/VZ+2COttT9m07yaXK17UiwOQ4ud/tKUUn
-         L8jg==
-X-Gm-Message-State: AO0yUKUydtfQIpFJ2CbU1t/+Jlceu50AGTP2Q+ifGm4pvscRi60fE29J
-        zeUhc66rPTY8VBzMmKehJCfDErFLl/z9OI7o+vw=
-X-Google-Smtp-Source: AK7set9AD56qu+Gun/6aRs1RMmgFg9rKa49NcMCWQF/Z2GZO0K8Lp2H8d2haPlsGoAz5zglTnBSuCq77k3G24DUgNIE=
-X-Received: by 2002:a4a:a301:0:b0:525:5f43:215a with SMTP id
- q1-20020a4aa301000000b005255f43215amr304148ool.1.1679335347762; Mon, 20 Mar
- 2023 11:02:27 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679335370;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s0eoWfmO41fcTesmFbumMelX1mm4aMPERyhh0espiXY=;
+        b=uhp9AI1e4XNxG11f5RYphf6Lc5EUPGObcZIJAz4M497Y9CdRTliNGiWW+PQOX5XGjx
+         NbVK50+leLnKWZLQYsuTAaDzHHLL1+9l6kEnjeUsmWYiL0j4TsuZem6N74GKNDyS04Jp
+         IH99jx3tSpUka6xUU1QKT6PNiFRgSaQ4OWhE8+mtc90KIC2CCsYLJvWkv/Bcj/x6UV2u
+         iPAaSTKLS8W4p0dMumJewwlWuYe350bCvyaWwYcE6IFOPooiQlapx1gL+/jnp1PDB45U
+         QLgXSghX6JABEmc31by8mh0GUN0ThjZNIbIAjf7QEi6/4gw/XSZ3D3dwxjCe4KmozoaD
+         mE1Q==
+X-Gm-Message-State: AO0yUKXaEwyexFUJH5pM2pohDCSBZTr/dt9SOdEii8x1egHgDdzM+9Ok
+        gpdLt/rzIxeLN3dzvlfbpOgaxg==
+X-Google-Smtp-Source: AK7set+X8Ws3lSJorXAGlLHIxDKllor1Be8KbnrGdbc3YDiOHCp60p/e04Sg1zXSgKAnrXNGG2uQuw==
+X-Received: by 2002:a17:906:2b15:b0:922:8fc9:d235 with SMTP id a21-20020a1709062b1500b009228fc9d235mr533372ejg.9.1679335370626;
+        Mon, 20 Mar 2023 11:02:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
+        by smtp.gmail.com with ESMTPSA id gv27-20020a1709072bdb00b008b9b4ab6ad1sm4705102ejc.102.2023.03.20.11.02.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 11:02:50 -0700 (PDT)
+Message-ID: <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
+Date:   Mon, 20 Mar 2023 19:02:49 +0100
 MIME-Version: 1.0
-References: <20230223-topic-opp-v3-0-5f22163cd1df@linaro.org>
- <20230223-topic-opp-v3-4-5f22163cd1df@linaro.org> <2f2467d1-f5f3-86dd-edba-fc26e60d142f@marek.ca>
- <8e9fc1c0-f74f-ba82-fade-31212637d6bb@linaro.org>
-In-Reply-To: <8e9fc1c0-f74f-ba82-fade-31212637d6bb@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 20 Mar 2023 11:02:16 -0700
-Message-ID: <CAF6AEGvYJg1r4A7bvfNrck-wfWv7+sQ8DnN=R_RaSK=tE1tzGw@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH v3 4/7] drm/msm/a2xx: Implement .gpu_busy
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+ <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 9:54=E2=80=AFAM Konrad Dybcio <konrad.dybcio@linaro=
-.org> wrote:
->
->
->
-> On 24.02.2023 16:04, Jonathan Marek wrote:
-> > This won't work because a2xx freedreno userspace expects to own all the=
- perfcounters.
-> >
-> > This will break perfcounters for userspace, and when userspace isn't us=
-ing perfcounters, this won't count correctly because userspace writes 0 to =
-CP_PERFMON_CNTL at the start of every submit.
->
-> Rob, would you be willing to take this without the a2xx bits? It
-> should still be fine, except without devfreq. Not that we had
-> any significant sort of scaling on a2xx before.
+On 20/03/2023 18:57, Arınç ÜNAL wrote:
+>>> All of these are at the end the
+>>> way we can properly match compatible-data to write a proper driver.
+>>> The current ralink dtsi files which are in tree now
+>>> are totally incomplete and not documented so we are planning to align
+>>
+>> Nothing like this was said in commit msg, so how can we know?
+>>
+>>> all of this with openWRT used files and others soon. That's the reason
+>>> we are not touching
+>>> 'arch/mips/boot/dts' at all now. I don't think anybody is using any of
+>>> this but mt7621 which is properly completed and documented.
+>>
+>> Anyway, none of this explains exception from naming convention - vendor,
+>> device or family name.
+> 
+> Would mediatek,mtmips-clock.yaml make sense?
 
-Yup, sounds like a plan
+More, except:
+1. This is not clock, but sysc.
+2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which are ARM?
 
-BR,
--R
+Best regards,
+Krzysztof
 
-> Konrad
-> >
-> > On 2/23/23 5:52 AM, Konrad Dybcio wrote:
-> >> Implement gpu_busy based on the downstream msm-3.4 code [1]. This
-> >> allows us to use devfreq on this old old old hardware!
-> >>
-> >> [1] https://github.com/LineageOS/android_kernel_sony_apq8064/blob/line=
-age-16.0/drivers/gpu/msm/adreno_a2xx.c#L1975
-> >>
-> >> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> >>   drivers/gpu/drm/msm/adreno/a2xx_gpu.c | 26 +++++++++++++++++++++++++=
-+
-> >>   1 file changed, 26 insertions(+)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/adreno/a2xx_gpu.c b/drivers/gpu/drm/m=
-sm/adreno/a2xx_gpu.c
-> >> index c67089a7ebc1..104bdf28cdaf 100644
-> >> --- a/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
-> >> +++ b/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
-> >> @@ -481,6 +481,31 @@ a2xx_create_address_space(struct msm_gpu *gpu, st=
-ruct platform_device *pdev)
-> >>       return aspace;
-> >>   }
-> >>   +/* While the precise size of this field is unknown, it holds at lea=
-st these three values.. */
-> >> +static u64 a2xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_samp=
-le_rate)
-> >> +{
-> >> +    u64 busy_cycles;
-> >> +
-> >> +    /* Freeze the counter */
-> >> +    gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_FREEZE);
-> >> +
-> >> +    busy_cycles =3D gpu_read64(gpu, REG_A2XX_RBBM_PERFCOUNTER1_LO);
-> >> +
-> >> +    /* Reset the counter */
-> >> +    gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_RESET);
-> >> +
-> >> +    /* Re-enable the performance monitors */
-> >> +    gpu_rmw(gpu, REG_A2XX_RBBM_PM_OVERRIDE2,
-> >> +        A2XX_RBBM_PM_OVERRIDE2_DEBUG_PERF_SCLK_PM_OVERRIDE,
-> >> +        A2XX_RBBM_PM_OVERRIDE2_DEBUG_PERF_SCLK_PM_OVERRIDE);
-> >> +    gpu_write(gpu, REG_A2XX_RBBM_PERFCOUNTER1_SELECT, 1);
-> >> +    gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_ENABLE);
-> >> +
-> >> +    *out_sample_rate =3D clk_get_rate(gpu->core_clk);
-> >> +
-> >> +    return busy_cycles;
-> >> +}
-> >> +
-> >>   static u32 a2xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer =
-*ring)
-> >>   {
-> >>       ring->memptrs->rptr =3D gpu_read(gpu, REG_AXXX_CP_RB_RPTR);
-> >> @@ -502,6 +527,7 @@ static const struct adreno_gpu_funcs funcs =3D {
-> >>   #if defined(CONFIG_DEBUG_FS) || defined(CONFIG_DEV_COREDUMP)
-> >>           .show =3D adreno_show,
-> >>   #endif
-> >> +        .gpu_busy =3D a2xx_gpu_busy,
-> >>           .gpu_state_get =3D a2xx_gpu_state_get,
-> >>           .gpu_state_put =3D adreno_gpu_state_put,
-> >>           .create_address_space =3D a2xx_create_address_space,
-> >>
