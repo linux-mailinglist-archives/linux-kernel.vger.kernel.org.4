@@ -2,102 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE9A6C2280
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CABA6C2275
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCTUXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S231185AbjCTUWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbjCTUWw (ORCPT
+        with ESMTP id S230220AbjCTUWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:22:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA54034008;
-        Mon, 20 Mar 2023 13:22:46 -0700 (PDT)
+        Mon, 20 Mar 2023 16:22:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8878130B2F;
+        Mon, 20 Mar 2023 13:22:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7910ACE13E7;
-        Mon, 20 Mar 2023 20:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E190CC4339C;
-        Mon, 20 Mar 2023 20:22:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CA57ECE13E1;
+        Mon, 20 Mar 2023 20:22:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105FFC433D2;
+        Mon, 20 Mar 2023 20:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679343762;
-        bh=DsQcH8xwycCkHIQ8QfvnCvZGiwQiVzM3IGKlFw3c6vs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C0iv1Wn2Pa5vHsqdFDR6zw0f6xRpMK70/N1T2glolnKQ3YLIxVa9NLi/VD/MuIgDD
-         AMlrJgSTLVgGIpOVJF1+Ghunoe4Mbsb67QPp53znrKW3xqS69cxFryb/04xLE/z2UL
-         cYlidr2lmoh4xOWy5u90QTZdPEyL7HL6T0jBjSwd5lfJMMfoBUHFNLgIBWf0S+srxu
-         QZQgZ6OIkcxVFR1EjRm8zUOSHLQaN3IU6e6CbVR9+h6qLlj6H177msFp2UNHRvKiJl
-         8K9FZ0cUgUsllPY3vklbGfqakT/9Rif52mfARdFAsLbORk70Elf2bjYltEQCF1V5q6
-         z2BOKHQPJU6XQ==
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-544787916d9so244339317b3.13;
-        Mon, 20 Mar 2023 13:22:42 -0700 (PDT)
-X-Gm-Message-State: AO0yUKViLwnhnSTssDtvD243PVLOWIq9eYqLY0+Uc0eKx4e8fgxyNqRe
-        xpJchmn/BgvPRbOhWHGE1YhIkIgoEbGhJLyk1w==
-X-Google-Smtp-Source: AK7set9FJ+m1VwanpiAMfxA818L7HV/dPyhWg6DYQSadevXyKErLiGfJvZlidEnREDYwVbhCFXXRZvTZAhJh0VfOM4I=
-X-Received: by 2002:a1f:28c4:0:b0:436:2fa4:e25d with SMTP id
- o187-20020a1f28c4000000b004362fa4e25dmr363729vko.3.1679343741554; Mon, 20 Mar
- 2023 13:22:21 -0700 (PDT)
+        s=k20201202; t=1679343745;
+        bh=CveMy0+pCgXXZvzKhxyxVeH/jvFaXFhg92cxgaOQxik=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=i4uHDRkPBxUmKMAmrfWWhyvXDFj9Ra80BvZIMfgNtJthD5t0qmeXOlPMOZ57+ejMx
+         /tGY1mTM6v2B3pyrXXaLY6vcE1fNMhQ5x1crN9d1Ucuif5RSk0hS8fxCqIhjvnPC17
+         Aps0aMDSqnUnPg5XGWtoQ/9Be850cd/VfjCXCB+7yrlgaxEW5Vof1yHl2rAaiUKLEr
+         Z0vuo0xdfSu+cB+nev+D7Wibq63j8OxSNHuKVh12a/tGhF+qJl2wi2SCnt3s1S1vJM
+         MTviY8yFxiiUavuzvbZ2r2sSh+bL8HmK7HTrvnbs+kvWhbk4fahTJXFOvTd4u1leRv
+         NWXYm7k06nvqw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id A96AF1540395; Mon, 20 Mar 2023 13:22:24 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 13:22:24 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH rcu 7/7] rcutorture: Add srcu_lockdep.sh
+Message-ID: <15e799a8-0e63-4bd9-9a01-028c9d906904@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230317031339.10277-1-boqun.feng@gmail.com>
+ <20230317031339.10277-8-boqun.feng@gmail.com>
+ <ZBijmdz2ucql+BSb@boqun-archlinux>
+ <bed30db4-d998-4382-a9a1-716c6f428263@paulmck-laptop>
+ <ZBizxQ9BY/hQk8+Y@boqun-archlinux>
 MIME-Version: 1.0
-References: <20230317233605.3967621-1-robh@kernel.org>
-In-Reply-To: <20230317233605.3967621-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 20 Mar 2023 15:22:10 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK+Q5HS=0PqnA60gV43O7ymxhPH-WHKFJKpQMYe5KfEfg@mail.gmail.com>
-Message-ID: <CAL_JsqK+Q5HS=0PqnA60gV43O7ymxhPH-WHKFJKpQMYe5KfEfg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: Drop unneeded quotes
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-aspeed@lists.ozlabs.org,
-        linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBizxQ9BY/hQk8+Y@boqun-archlinux>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,52 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 6:36=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
->
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/net/actions,owl-emac.yaml  |  2 +-
->  .../bindings/net/allwinner,sun4i-a10-emac.yaml     |  2 +-
->  .../bindings/net/allwinner,sun4i-a10-mdio.yaml     |  2 +-
->  .../devicetree/bindings/net/altr,tse.yaml          |  2 +-
->  .../bindings/net/aspeed,ast2600-mdio.yaml          |  2 +-
->  .../devicetree/bindings/net/brcm,amac.yaml         |  2 +-
->  .../devicetree/bindings/net/brcm,systemport.yaml   |  2 +-
->  .../bindings/net/broadcom-bluetooth.yaml           |  2 +-
->  .../devicetree/bindings/net/can/xilinx,can.yaml    |  6 +++---
->  .../devicetree/bindings/net/dsa/brcm,sf2.yaml      |  2 +-
->  .../devicetree/bindings/net/dsa/qca8k.yaml         |  2 +-
->  .../devicetree/bindings/net/engleder,tsnep.yaml    |  2 +-
->  .../devicetree/bindings/net/ethernet-phy.yaml      |  2 +-
->  .../bindings/net/fsl,qoriq-mc-dpmac.yaml           |  2 +-
->  .../bindings/net/intel,ixp4xx-ethernet.yaml        |  8 ++++----
->  .../devicetree/bindings/net/intel,ixp4xx-hss.yaml  | 14 +++++++-------
->  .../devicetree/bindings/net/marvell,mvusb.yaml     |  2 +-
->  .../devicetree/bindings/net/mdio-gpio.yaml         |  2 +-
->  .../devicetree/bindings/net/mediatek,net.yaml      |  2 +-
->  .../bindings/net/mediatek,star-emac.yaml           |  2 +-
->  .../bindings/net/microchip,lan966x-switch.yaml     |  2 +-
->  .../bindings/net/microchip,sparx5-switch.yaml      |  4 ++--
->  .../devicetree/bindings/net/mscc,miim.yaml         |  2 +-
->  .../devicetree/bindings/net/nfc/marvell,nci.yaml   |  2 +-
->  .../devicetree/bindings/net/nfc/nxp,pn532.yaml     |  2 +-
->  .../bindings/net/pse-pd/podl-pse-regulator.yaml    |  2 +-
->  .../devicetree/bindings/net/qcom,ipq4019-mdio.yaml |  2 +-
->  .../devicetree/bindings/net/qcom,ipq8064-mdio.yaml |  2 +-
->  .../devicetree/bindings/net/rockchip,emac.yaml     |  2 +-
->  .../devicetree/bindings/net/snps,dwmac.yaml        |  2 +-
->  .../devicetree/bindings/net/stm32-dwmac.yaml       |  4 ++--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml    | 10 +++++-----
->  .../devicetree/bindings/net/ti,davinci-mdio.yaml   |  2 +-
->  .../devicetree/bindings/net/ti,dp83822.yaml        |  2 +-
->  .../devicetree/bindings/net/ti,dp83867.yaml        |  2 +-
->  .../devicetree/bindings/net/ti,dp83869.yaml        |  2 +-
->  36 files changed, 53 insertions(+), 53 deletions(-)
+On Mon, Mar 20, 2023 at 12:28:05PM -0700, Boqun Feng wrote:
+> On Mon, Mar 20, 2023 at 12:09:00PM -0700, Paul E. McKenney wrote:
+> > On Mon, Mar 20, 2023 at 11:19:05AM -0700, Boqun Feng wrote:
+> > > Hi Paul,
+> > > 
+> > > On Thu, Mar 16, 2023 at 08:13:39PM -0700, Boqun Feng wrote:
+> > > > From: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > 
+> > > > This commit adds an srcu_lockdep.sh script that checks whether lockdep
+> > > > correctly classifies SRCU-based, SRCU/mutex-based, and SRCU/rwsem-based
+> > > > deadlocks.
+> > > > 
+> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > [ boqun: Fix "RCUTORTURE" with "$RCUTORTURE" ]
+> > > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > > > ---
+> > > >  .../selftests/rcutorture/bin/srcu_lockdep.sh  | 73 +++++++++++++++++++
+> > > >  1 file changed, 73 insertions(+)
+> > > >  create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > > > 
+> > > > diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > > > new file mode 100755
+> > > > index 000000000000..961932754684
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > > 
+> > > Could you provide the SPDX header and copyright bits for this newly
+> > > added file? For small changes I can do it myself, however this is about
+> > > licenses and copyright, so I need it from you, thanks!
+> > 
+> > Good catch, thank you!
+> > 
+> > Would you like a delta patch to merge into your existing one, or would
+> > you prefer a replacement patch?  Either way works for me.
+> > 
+> 
+> A delta patch if that's not much trouble. I will fold it into this one.
 
-Sending a v2 as there are a few more cases with $id and $schema quoted.
+Here you go!
 
-Rob
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+rcutorture: Add proper comment header to srcu_lockdep.sh
+
+This patch adds a proper comment header to srcu_lockdep.sh,
+and is intended to be folded into 9dc68f40c665 ("rcutorture: Add
+srcu_lockdep.sh").
+
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+index 961932754684..2e63ef009d59 100755
+--- a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
++++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+@@ -1,6 +1,11 @@
+ #!/bin/bash
++# SPDX-License-Identifier: GPL-2.0+
+ #
+ # Run SRCU-lockdep tests and report any that fail to meet expectations.
++#
++# Copyright (C) 2021 Meta Platforms, Inc.
++#
++# Authors: Paul E. McKenney <paulmck@kernel.org>
+ 
+ usage () {
+ 	echo "Usage: $scriptname optional arguments:"
