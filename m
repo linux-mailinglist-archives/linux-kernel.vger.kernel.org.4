@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A107F6C1954
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED7D6C18F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjCTPco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
+        id S232973AbjCTP3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbjCTPcX (ORCPT
+        with ESMTP id S232929AbjCTP2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:32:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A9E18A97;
-        Mon, 20 Mar 2023 08:25:10 -0700 (PDT)
+        Mon, 20 Mar 2023 11:28:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8A932CC6;
+        Mon, 20 Mar 2023 08:21:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1DEA61598;
-        Mon, 20 Mar 2023 15:25:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE609C4339B;
-        Mon, 20 Mar 2023 15:25:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95107B80EC2;
+        Mon, 20 Mar 2023 15:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3C1C433EF;
+        Mon, 20 Mar 2023 15:21:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679325907;
+        s=korg; t=1679325682;
         bh=whCBsYSpfT8Fg3mVeUSV+UNbIi6U/xFKJGj1jZAxL8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FRZcPf5OXSSOo7YbKGvsO0hLcX+lfaSCxqW0D8WtQ6uC2AiNFnVZyCs2KWg+Cehca
-         TexMr5Fw7XAAR2mNNuiUlYXYDSggBvnfYoPZ6bnwkX6ItOrZQD6p8PwCvV9Z6FhSnf
-         BDbiNdkpzWQcAo3iJCVrphxa6ln26fWbPbQ95hLA=
+        b=cTayiMx/xf2jdy2P6mQmJpk0IZ/lHMLJbpHx3hyhlm3Xfthsu+XGC2FFGsjCKDLzT
+         yug8b4F/dAibQdkDeY+91KRQYolz0Oi7bv9AkMuzUGvScEbjNcvb1ZIKJ0+koYUSz6
+         l8+3YK2rMB+tq99oyeB9RtS7r9DSm81kgOyfFkMg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,18 +37,18 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>,
         Michal Simek <michal.simek@xilinx.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6.2 123/211] firmware: xilinx: dont make a sleepable memory allocation from an atomic context
-Date:   Mon, 20 Mar 2023 15:54:18 +0100
-Message-Id: <20230320145518.517445672@linuxfoundation.org>
+Subject: [PATCH 6.1 122/198] firmware: xilinx: dont make a sleepable memory allocation from an atomic context
+Date:   Mon, 20 Mar 2023 15:54:20 +0100
+Message-Id: <20230320145512.662071519@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230320145513.305686421@linuxfoundation.org>
-References: <20230320145513.305686421@linuxfoundation.org>
+In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
+References: <20230320145507.420176832@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
