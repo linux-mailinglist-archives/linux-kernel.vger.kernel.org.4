@@ -2,83 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7796C21AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2246C21B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCTThl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        id S231251AbjCTThw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjCTThL (ORCPT
+        with ESMTP id S230337AbjCTThT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:37:11 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014BE6EB6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 12:31:37 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id l15so5502062ilv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 12:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679340697;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SVP0YkpWhYSYuvkOPAOY0bbcXnkGvHyM33oWwvtqnw8=;
-        b=gAXoMAoA/LwEeAIQEyvlSukoThnf2mCeS6Sy0WhL0a6QfMr1x4M5MPArtT5ztQtov1
-         UWWi5Cel20I9IblUDD0iTi6a24PujKM26P4qJQKoWUxvlTS0gx6aVWFR9mAdqSURLZES
-         wVqWkoS3rBAQbDcA70pXTBRWz8FsTOl1It4dM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679340697;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SVP0YkpWhYSYuvkOPAOY0bbcXnkGvHyM33oWwvtqnw8=;
-        b=Yc8YbZk+dW3OqxklpFtO+u/Hg0E/pnb8zVXAiHuF0YwW7QDDJ9+7u7Lsx+oP37XPfk
-         ZHZsUxsHib5yAe8GQxJXCj0Vz8ZNjkasj67gpig5RTRaT0w7VJj/UZVgUMHwQDy00cM0
-         SHqJsnjfooPP3xmck678axQt7a51Hw+AiqjW+OUuFhSoSwVS58f1jcJzbVzrpJRLvaET
-         dLACzEvYj8moXqEyoGvRHMoeDsfnZKnY1ppccWhjOWrO699VZLEMjzp+rUyGDGhiVlUC
-         /7XMea/i4k2A1WtlVhsxIApkBcjUqiwvh1kB/ubX0ElgxIxC+Bf6E4CrBU9oneZrCYsc
-         igjA==
-X-Gm-Message-State: AO0yUKWTunOgGSL1yKOmS/b1VnxLqFDc7sI7TZ31zOkn+SEX9DF7oCKR
-        xgNpreC6SzVyC0Mf3C99mlFlMA==
-X-Google-Smtp-Source: AK7set8LaNKyKUmLiT+RGpi7UWOXp4sRL6BZ7BxmiTeyyXPTeErFf5lOjonpPO8DqZ4atMuYHyjKRg==
-X-Received: by 2002:a92:da84:0:b0:323:277c:4cea with SMTP id u4-20020a92da84000000b00323277c4ceamr459603iln.17.1679340697318;
-        Mon, 20 Mar 2023 12:31:37 -0700 (PDT)
-Received: from markhas1.roam.corp.google.com (71-218-36-105.hlrn.qwest.net. [71.218.36.105])
-        by smtp.gmail.com with ESMTPSA id m7-20020a026a47000000b003c5178055fdsm3575990jaf.62.2023.03.20.12.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 12:31:37 -0700 (PDT)
-From:   Mark Hasemeyer <markhas@chromium.org>
-To:     markhas@chromium.org
-Cc:     Felix.Held@amd.com, Rijo-john.Thomas@amd.com,
-        Thomas.Lendacky@amd.com, andriy.shevchenko@linux.intel.com,
-        gjb@semihalf.com, herbert@gondor.apana.org.au,
-        jarkko.nikula@linux.intel.com, jsd@semihalf.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mario.limonciello@amd.com, mika.westerberg@linux.intel.com
-Subject: [PATCH v4 8/8] i2c: designware: Add doorbell support for Skyrim
-Date:   Mon, 20 Mar 2023 13:31:24 -0600
-Message-Id: <20230320193124.55807-1-markhas@chromium.org>
-X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-In-Reply-To: <20230320190407.51252-1-markhas@chromium.org>
-References: <20230320190407.51252-1-markhas@chromium.org>
+        Mon, 20 Mar 2023 15:37:19 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390E83645F;
+        Mon, 20 Mar 2023 12:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=HojbwMSiEtZKlQdfE1hnnoB2RYxodFjMqNVmkdMaTE4=; b=UTwuS59N/DkJgr/7fUE2JTH62X
+        AhIEtJYFFX67UsLmhqkAOgHh4nQviuZbanJJ5f7SM98Xq/YbeJU1Mc3XeoxdfdEsym7a4Q0bty5sf
+        XU2PDo/aguksS9t7Gp0rZ6vDxNs0cA+Dmaf3GIHQ3xeplirk2AthvAl5u+QeTJ5Csk/8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1peLEG-007tlX-8U; Mon, 20 Mar 2023 20:31:36 +0100
+Date:   Mon, 20 Mar 2023 20:31:36 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v5 04/15] leds: Provide stubs for when CLASS_LED
+ is disabled
+Message-ID: <5ee3c2cf-8100-4f35-a2df-b379846a8736@lunn.ch>
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-5-ansuelsmth@gmail.com>
+ <aa2d0a8b-b98b-4821-9413-158be578e8e0@lunn.ch>
+ <64189d72.190a0220.8d965.4a1c@mx.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64189d72.190a0220.8d965.4a1c@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int psp_send_i2c_req_skyrim(enum psp_i2c_req_type i2c_req_type)
-> +{
-> +	return psp_ring_platform_doorbell(i2c_req_type);
-> +}
-Should this function retry acquiring the I2C bus while it is busy?  Similar to
-how the cezanne variant works. Also wondering if the function should be named
-psp_send_i2c_req_mendocino for consistency.
+On Mon, Mar 20, 2023 at 06:52:47PM +0100, Christian Marangi wrote:
+> On Sun, Mar 19, 2023 at 11:49:02PM +0100, Andrew Lunn wrote:
+> > > +#if IS_ENABLED(CONFIG_LEDS_CLASS)
+> > >  enum led_default_state led_init_default_state_get(struct fwnode_handle *fwnode);
+> > > +#else
+> > > +static inline enum led_default_state
+> > > +led_init_default_state_get(struct fwnode_handle *fwnode)
+> > > +{
+> > > +	return LEDS_DEFSTATE_OFF;
+> > > +}
+> > > +#endif
+> > 
+> > 0-day is telling me i have this wrong. The function is in led-core.c,
+> > so this should be CONFIG_NEW_LEDS, not CONFIG_LEDS_CLASS.
+> > 
+> 
+> Any idea why? NEW_LEDS just enable LEDS_CLASS selection so why we need
+> to use that? Should not make a difference (in theory)
 
-Sorry about the repost, the quoted code wasn't included originally.
+0-day came up with a configuration which resulted in NEW_LEDS enabled
+but LEDS_CLASS disabled. That then resulted in multiple definitions of 
+led_init_default_state_get() when linking.
+
+I _guess_ this is because select is used, which is not mandatory. So
+randconfig can turn off something which is enabled by select.
+
+I updated my tree, and so far 0-day has not complained, but it can
+take a few days when it is busy.
+
+	Andrew
