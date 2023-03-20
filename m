@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007256C2345
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9E36C2347
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjCTU6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S230213AbjCTU71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCTU6R (ORCPT
+        with ESMTP id S229483AbjCTU7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:58:17 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20E7B74B;
-        Mon, 20 Mar 2023 13:58:12 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id r16so14828318qtx.9;
-        Mon, 20 Mar 2023 13:58:12 -0700 (PDT)
+        Mon, 20 Mar 2023 16:59:25 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E67659F7;
+        Mon, 20 Mar 2023 13:59:24 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t11so16619907lfr.1;
+        Mon, 20 Mar 2023 13:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679345892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yoeChtzo2lWFrH5XgwNuAkfFSV3nOpgGzq4XPO44Eas=;
-        b=FLFjbErCI/z0z3nasBQdIVv++X8I+lvgdo6KFZY8MG+S++cUNeUH9WXuJh7zj/kYYp
-         qE0hqtTUBLa1nxmTd65+gbqd57y4ae9tz1+NkucBA2W3/e49NUPquTy5mS7L61iL/BDQ
-         b2ckWuZqxfzkjwlR4BlwAFLFXKcUenV0Es5xCX34ZgkgvD8eLzQIsBW1JJxrOCcAavmm
-         A78BoiYyYaAe3x9wkgNqunABRINWV+yRDPuQtz9SfkZW0NmyjQe2BY1CQzWUNcZYuj8K
-         iCkgDwXfvOHjJHsW2FEnoO32vf5XwV5/XwkPvKMw29GU3vcCUC/LxNefV94kTv76N4J+
-         WJSg==
+        d=gmail.com; s=20210112; t=1679345962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4wdRIgcY7Wk+vGvoS1kaRTmzag7+Y3UY2FpHXNBgXvs=;
+        b=Nm3Y99OB9aFwl0pabiX5CZeYbKNWtMBZyPrYWkRf4g+imrSzCam4brI1ewqNUBCz2U
+         kMHwjOgbL+RXpmj8gSV7l/6UEjrZZ++v2kMZDg7Um2/3O0N9DDB6Pol0hNV767Y8MsQo
+         +xBctop95NN6REtVjVQDvCv7M/1pG25yk6dWqzVii+d1bYYtnoG5pGjj3qm3flvuU10Y
+         Dv329b5pdKEryPxOfZ0LDgLWyFFe2rnH7CbGx4MWscf8q8gqmRObcPmvqPUdZgq0t8AP
+         hEzuxLiP9rivuTL52sFuZ9GXWAgZvJaQLGdtWhkomhn76hVYuztJsl3gtE38OVqSYDF3
+         O1Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679345892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yoeChtzo2lWFrH5XgwNuAkfFSV3nOpgGzq4XPO44Eas=;
-        b=va5fK8PvMuFCow+4XCeWgyIqvZLASUCTACmyGi0p5x9lXg642mtjMlTG0LXQPK+4IA
-         n+nDe1PBzptKgIbqHxR+nc8EGXwSIswrJpY02i32Spt9fE6ewWPEYdrJQWgBzxs5nwyk
-         uKi9+JswsBy8aSDiCefT2nKJRZrfbKJr6OUbBDOXTO8wIfB0B4njaDCbnsJglQuCVonh
-         ailmHLTRSw/6NAsqltXsolqCPSTOfQSkCZafA1jyrB0aHNk4YO16oDYhGMFW5MyCtFOU
-         YAvKGn1+yS69/BkDMduJHouOFiF9nnD2XTIEwDSDdWhTEBknWc284IWR3ZFI28LFDV6i
-         QROQ==
-X-Gm-Message-State: AO0yUKX1G+yMVY6r/BTyc5BsfCy3LmdKCuFucTgeszvXF+TmHg6jdwoE
-        txcp85VtCQBaFWlNmk4aoSI=
-X-Google-Smtp-Source: AK7set89AGEw+qpi24l+uwt6mCVUfwsoNeY8Skw29NjmzPV/ZzgoHOZXSfzRZ2CV2terbeLji1FPCw==
-X-Received: by 2002:a05:622a:511:b0:3d4:3d6c:a62b with SMTP id l17-20020a05622a051100b003d43d6ca62bmr1081294qtx.27.1679345892078;
-        Mon, 20 Mar 2023 13:58:12 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id m64-20020a375843000000b0073b8512d2dbsm7943235qkb.72.2023.03.20.13.58.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 13:58:11 -0700 (PDT)
-Message-ID: <a3ed86fd-ac5e-3692-abcc-9e7849e176c1@gmail.com>
-Date:   Mon, 20 Mar 2023 13:58:03 -0700
+        d=1e100.net; s=20210112; t=1679345962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4wdRIgcY7Wk+vGvoS1kaRTmzag7+Y3UY2FpHXNBgXvs=;
+        b=tV6D0FJ0kKNASQc6z4cagh5PB4tz+ZmIjz0xeun9mv9cPjHBKKxgJfZq/IQCy5Zhky
+         uzG1XcSWXMypyUKx+CU7f7jB7pJ8FESeLwglgffYT0y7r5Csb+TwY8rQpYCSsDPUe7UB
+         N81iVCyLviBUprfEfS35ytul6CDwX4t8kqxN7XZR2Fpu2vsAAISMM3yC9skw6PLY5QpK
+         PKnDQHD8cQlnM2qJCz6i3rurHVn1Sk0mRWTZS2VH8BHm+eyBXZxijiVVTMmYAOGkCVuy
+         O5CtNU9tkuOb934Q8R6d69BIwrdXwhI/nKdtQNVwA8OqatV2noAJRECsS+zCOT4AxLeO
+         5X+g==
+X-Gm-Message-State: AO0yUKXP4pWeFVLPgS8r5oDcWTTYIBuFwFbNecTTZmNOQ5hk3zevknGM
+        iK75JCvWDBCtp3Snsf+F9XWhG00imKIEsHhsBBA=
+X-Google-Smtp-Source: AK7set+GZMOV2oPYZrJasjIPI1HMHAl8AQeBQ9R07smtrNPJoB8+7sP4Wq8Ktz7t6X+MuWN17iwbVFfaFiLRZuVhDUk=
+X-Received: by 2002:ac2:5625:0:b0:4d5:ca32:6ed5 with SMTP id
+ b5-20020ac25625000000b004d5ca326ed5mr282905lff.3.1679345961969; Mon, 20 Mar
+ 2023 13:59:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230320145507.420176832@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230318150555.1705749-1-alvin@pqrs.dk>
+In-Reply-To: <20230318150555.1705749-1-alvin@pqrs.dk>
+Reply-To: cwchoi00@gmail.com
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Date:   Tue, 21 Mar 2023 05:58:45 +0900
+Message-ID: <CAGTfZH2P=xDkRswWz6GdVpETVqO8HBSSG_+6vQ3EjLq2HmM6Yg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] extcon: usbc-tusb320: add accessory detection support
+To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-usb@vger.kernel.org,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 07:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.21 release.
-> There are 198 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Mar 2023 14:54:29 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.21-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sun, Mar 19, 2023 at 12:19=E2=80=AFAM Alvin =C5=A0ipraga <alvin@pqrs.dk>=
+ wrote:
+>
+> From: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+>
+> The TUSB320 can detect the following types of accessory:
+>
+>   - Audio Accessory
+>   - Audio Accessory with charge-thru
+>   - Debug Accessory (DFP)
+>   - Debug Accessory (UFP)
+>
+> Moreover, the typec subsystem can be informed of this through the
+> typec_set_mode() function. The information will be propagated to any
+> linked typec muxes. Add the necessary support to the driver.
+>
+> Note that for the Debug Accessory modes, an educated guess was made that
+> for the USB data role, DFP implies HOST and UFP implies DEVICE. But this
+> might want to be made configurable at a later date.
+>
+> Signed-off-by: Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> v3: add Heikki's Acked-by
+> v2: no change
+> ---
+>  drivers/extcon/extcon-usbc-tusb320.c | 90 +++++++++++++++++++++-------
+>  1 file changed, 68 insertions(+), 22 deletions(-)
+>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+(snip)
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Applied them. Thanks.
 
+Best Regards,
+Chanwoo Choi
