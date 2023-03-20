@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE5F6C0B8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8948E6C0B8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCTHmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
+        id S230091AbjCTHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjCTHmr (ORCPT
+        with ESMTP id S230195AbjCTHmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Mar 2023 03:42:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727142367C;
-        Mon, 20 Mar 2023 00:42:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 578F6611D9;
-        Mon, 20 Mar 2023 07:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC221C433EF;
-        Mon, 20 Mar 2023 07:42:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679298127;
-        bh=WjYiW3bdBC26DMUYGurbBPSF3Li7THUYtv1H3tndCY4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RSSytet/200iwrE/lIMidXGrJh+pzH43ULVTOKfB6cKLziSBSCB/id5jVbuVDjMpH
-         eGtjeNUzYIVQ96U7U1cMrNlsE8jaxfOLrLbj20Ra5+FL9KaB4AulMJkyCGKXxmjYqF
-         v8FB6Uz50mVCuGTuXBMT744SK5kx/KkNrkvucvW1CylcSlbz2CdOUmeVJWU9xglr+E
-         ysiGXzVMqt+0OdYClaTxrnmMr6CH4lVEjBGbdWWFumpx0NeWO4PklXINtXdoOPjUYl
-         T3214e1BkukTMmxuOJ21WwUto7l77j5NNfC7FWTvKJFusZxGlWshgfyp9rYhZhczly
-         nFs1i7xEOeX6A==
-Date:   Mon, 20 Mar 2023 09:42:02 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        wei.liu@kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, longli@microsoft.com,
-        ssengar@linux.microsoft.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net: mana: Add support for jumbo frame
-Message-ID: <20230320074202.GH36557@unreal>
-References: <1679261264-26375-1-git-send-email-haiyangz@microsoft.com>
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105BA2367D;
+        Mon, 20 Mar 2023 00:42:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679298131; x=1710834131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sbk48kWeR8tcGPniYaN2WncLmsXVlFjZA1OnqsPsU0g=;
+  b=k4jDM68kHpKp5zUykaYSTXap0EHHQymqIAo3EH+lsd+N2rB4WsQS54tz
+   qr0YaaMRASackeDdgvLWqfGeNEg5lG9XLdcWO+YU3NH6pTbvDnFiFhxXb
+   k32ViwJ4i3qD2BsDUsmIje5mCk9k2eqbO50WGExHtb25e9DZaT5y49oaY
+   dWPOc61G7uxwydr3Kgme8606ITz2Bx9AhaxWtYVApW43UCsBRrem08plX
+   f+K6ycqYXVe1L6d1Stq+qD0CR7fla6Hr88P4gUhDYugIclvoI/HPN2nqF
+   uh8H1nsvb2/EoWugS8mJXAcCN1QtaSQqgqc6QmWpW+R2ksXjlgyfQjMlF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="340956000"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="340956000"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:42:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="804812795"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="804812795"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 20 Mar 2023 00:42:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id BCC5E1CC; Mon, 20 Mar 2023 09:42:53 +0200 (EET)
+Date:   Mon, 20 Mar 2023 09:42:53 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Tom Rix <trix@redhat.com>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: rename shadowed variables bit to
+ interrupt_bit and auto_clear_bit
+Message-ID: <20230320074253.GA62143@black.fi.intel.com>
+References: <20230315220450.1470815-1-trix@redhat.com>
+ <20230316102048.GR62143@black.fi.intel.com>
+ <20230316103744.GS62143@black.fi.intel.com>
+ <2802c4c6-99d4-e084-baa4-5be7c123ddd6@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1679261264-26375-1-git-send-email-haiyangz@microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2802c4c6-99d4-e084-baa4-5be7c123ddd6@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 02:27:44PM -0700, Haiyang Zhang wrote:
-> During probe, get the hardware allowed max MTU by querying the device
-> configuration. Users can select MTU up to the device limit. Also,
-> when XDP is in use, we currently limit the buffer size to one page.
+On Sat, Mar 18, 2023 at 08:33:58PM -0500, Mario Limonciello wrote:
 > 
-> Updated RX data path to allocate and use RX queue DMA buffers with
-> proper size based on the MTU setting.
+> On 3/16/23 05:37, Mika Westerberg wrote:
+> > On Thu, Mar 16, 2023 at 12:20:48PM +0200, Mika Westerberg wrote:
+> > > +Cc Mario
+> > > 
+> > > On Wed, Mar 15, 2023 at 06:04:50PM -0400, Tom Rix wrote:
+> > > > cppcheck reports
+> > > > drivers/thunderbolt/nhi.c:74:7: style: Local variable 'bit' shadows outer variable [shadowVariable]
+> > > >    int bit;
+> > > >        ^
+> > > > drivers/thunderbolt/nhi.c:66:6: note: Shadowed declaration
+> > > >   int bit = ring_interrupt_index(ring) & 31;
+> > > >       ^
+> > > > drivers/thunderbolt/nhi.c:74:7: note: Shadow variable
+> > > >    int bit;
+> > > >        ^
+> > > > For readablity rename the outer to interrupt_bit and the innner
+> > > > to auto_clear_bit.
+> > > Thanks for the patch! Yeah, this did not show up in any of the kbuild
+> > > tests perhaps they are missing cppcheck :(
+> > > 
+> > > I'm thinking that I'll just move the two commits from "fixes" to "next"
+> > > and add this one on top (and drop the stable tags) as the code that we
+> > > should be sending to stable should not need additional fixes IMHO. I
+> > > know Mario is on vacation so probably cannot answer here so let's deal
+> > > with this when he is back.
+> > Applied to thunderbolt.git/next (along with the two commits from Mario).
 > 
-> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-> ---
->  .../net/ethernet/microsoft/mana/mana_bpf.c    |  22 +-
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 229 ++++++++++++------
->  include/net/mana/gdma.h                       |   4 +
->  include/net/mana/mana.h                       |  18 +-
->  4 files changed, 183 insertions(+), 90 deletions(-)
+> Thanks for the fix Tom!
+> 
+> Mika - It's unfortunate that a fixup was needed but I'd still like if we
+> can get these 3 commits into 6.3-rc and also to stable.
 
-<...>
-
-> +static int mana_change_mtu(struct net_device *ndev, int new_mtu)
-> +{
-> +	unsigned int old_mtu = ndev->mtu;
-> +	int err, err2;
-> +
-> +	err = mana_detach(ndev, false);
-> +	if (err) {
-> +		netdev_err(ndev, "mana_detach failed: %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	ndev->mtu = new_mtu;
-> +
-> +	err = mana_attach(ndev);
-> +	if (!err)
-> +		return 0;
-> +
-> +	netdev_err(ndev, "mana_attach failed: %d\n", err);
-> +
-> +	/* Try to roll it back to the old configuration. */
-> +	ndev->mtu = old_mtu;
-> +	err2 = mana_attach(ndev);
-
-I second to Francois and agree with him that it is very questionable.
-If mana_attach() failed for first try, you should bail out and not
-retry with some hope that it will pass.
-
-Thanks
-
-> +	if (err2)
-> +		netdev_err(ndev, "mana re-attach failed: %d\n", err2);
-> +
-> +	return err;
+Fair enough. I moved them into fixes now.
