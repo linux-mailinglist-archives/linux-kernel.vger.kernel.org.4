@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6872D6C215D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C096C2160
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjCTT2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S229754AbjCTT3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjCTT2P (ORCPT
+        with ESMTP id S229782AbjCTT2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:28:15 -0400
+        Mon, 20 Mar 2023 15:28:44 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C2A44DBCA;
-        Mon, 20 Mar 2023 12:20:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38FCE4EE6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 12:21:11 -0700 (PDT)
 Received: from vm02.corp.microsoft.com (unknown [167.220.197.27])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 13D3A20FAEFE;
-        Mon, 20 Mar 2023 12:20:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 13D3A20FAEFE
+        by linux.microsoft.com (Postfix) with ESMTPSA id D8F7920FB19F;
+        Mon, 20 Mar 2023 12:20:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D8F7920FB19F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679340024;
-        bh=5BR0f6PrkO2ZuCv3kzx8IsqaHLeKQ2EwX1QEDZefxrY=;
+        s=default; t=1679340026;
+        bh=T/Kzn8Yd7+WmZZ2G5JhyiJuSkC/HTVlKDk1fI7xOGw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UVBn9ynWsu5EEl41Ch9x59ghkmiYuQwTFGsIQTdRxgfKS6ybWbXZ10Wc4UTEgIdAw
-         hqp1jpwGZ52hjOzpcsH9vswOMXbvqKyNemXqPOh2NpFLZsotXf5xF/46fmL6gPklwt
-         bIqP+aDsurNEzApM1gjIab7W7hOz0OdU/xA9CM1E=
+        b=fHWiqLsrsK5liuESoXYcTTsH+AG4ywvK6DdfILXohxXaQ8w8PYxf8XsCWZC+quRxc
+         0LyPjJ7373jeo+PuF+N7d4tJbKXYpVTromx/Fae/X5OBaAPUd+rKgLEcl0Tui6E5jD
+         +/1yfZ8hRogHXmYTmkRpu/XVtLL1+7fiNV8tRkro=
 From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
         "Brijesh Singh" <brijesh.singh@amd.com>,
         "Tom Lendacky" <thomas.lendacky@amd.com>,
         "Kalra, Ashish" <ashish.kalra@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Len Brown" <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [PATCH v3 2/8] ACPI: ASPT: Add helper to parse table
-Date:   Mon, 20 Mar 2023 19:19:50 +0000
-Message-Id: <20230320191956.1354602-3-jpiotrowski@linux.microsoft.com>
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: [PATCH v3 3/8] x86/psp: Register PSP platform device when ASP table is present
+Date:   Mon, 20 Mar 2023 19:19:51 +0000
+Message-Id: <20230320191956.1354602-4-jpiotrowski@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
 References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
@@ -52,183 +53,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ASP table indicates the presence of a Platform Security Processor
-with a register window and registers to configure interrupt delivery.
-The helper checks for the presence of the table and returns a resource
-and struct with register offsets.
+The ASP table contains the memory location of the register window for
+communication with the Platform Security Processor. The device is not
+exposed as an acpi node, so it is necessary to probe for the table and
+register a platform_device to represent it in the kernel.
 
-Link: https://github.com/acpica/acpica/commit/15b939b034ab41a864b4e7647b8e2233780bb0c7
-Link: https://www.amd.com/system/files/TechDocs/58028_1.00-PUB.pdf
+At least conceptually, the same PSP may be exposed on the PCIe bus as
+well, in which case it would be necessary to choose whether to use a PCI
+BAR or the register window defined in ASPT for communication. There is
+no advantage to using the ACPI and there are no known bare-metal systems
+that expose the ASP table, so device registration is restricted to the
+only systems known to provide an ASPT: Hyper-V VMs. Hyper-V VMs also do
+not expose the PSP over PCIe.
+
+This is a skeleton device at this point, as the ccp driver is not yet
+prepared to correctly probe it. Interrupt configuration will come later
+on as well.
+
 Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
 Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
 ---
- drivers/acpi/Makefile             |   1 +
- drivers/acpi/aspt.c               | 104 ++++++++++++++++++++++++++++++
- include/linux/platform_data/psp.h |  32 +++++++++
- 3 files changed, 137 insertions(+)
- create mode 100644 drivers/acpi/aspt.c
- create mode 100644 include/linux/platform_data/psp.h
+ arch/x86/kernel/Makefile |  1 +
+ arch/x86/kernel/psp.c    | 42 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 arch/x86/kernel/psp.c
 
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index feb36c0b9446..831d7a12b522 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -57,6 +57,7 @@ acpi-y				+= evged.o
- acpi-y				+= sysfs.o
- acpi-y				+= property.o
- acpi-$(CONFIG_X86)		+= acpi_cmos_rtc.o
-+acpi-$(CONFIG_X86)		+= aspt.o
- acpi-$(CONFIG_X86)		+= x86/apple.o
- acpi-$(CONFIG_X86)		+= x86/utils.o
- acpi-$(CONFIG_X86)		+= x86/s2idle.o
-diff --git a/drivers/acpi/aspt.c b/drivers/acpi/aspt.c
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 96d51bbc2bd4..6fe52328bc28 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -139,6 +139,7 @@ obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
+ obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
+ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ 
++obj-$(CONFIG_KVM_AMD_SEV)		+= psp.o
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+ 
+ obj-$(CONFIG_CFI_CLANG)			+= cfi.o
+diff --git a/arch/x86/kernel/psp.c b/arch/x86/kernel/psp.c
 new file mode 100644
-index 000000000000..cf629db35036
+index 000000000000..64f3bfc5c9ff
 --- /dev/null
-+++ b/drivers/acpi/aspt.c
-@@ -0,0 +1,104 @@
++++ b/arch/x86/kernel/psp.c
+@@ -0,0 +1,42 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+#define pr_fmt(fmt) "ACPI: ASPT: " fmt
-+#include <linux/acpi.h>
-+#include <linux/kernel.h>
++
 +#include <linux/platform_data/psp.h>
++#include <linux/platform_device.h>
++#include <asm/hypervisor.h>
 +
-+static int __init psp_validate_regs(const struct acpi_aspt_global_regs *gregs,
-+	const struct acpi_aspt_sev_mbox_regs *sevregs,
-+	const struct acpi_aspt_acpi_mbox_regs *acpiregs)
-+{
-+	u64 pfn;
-+	int idx;
-+	u64 regs[] = {
-+		gregs->feature_reg_addr,
-+		gregs->irq_en_reg_addr,
-+		gregs->irq_st_reg_addr,
-+		sevregs->cmd_resp_reg_addr,
-+		sevregs->cmd_buf_lo_reg_addr,
-+		sevregs->cmd_buf_hi_reg_addr,
-+		acpiregs->cmd_resp_reg_addr
-+	};
-+	pfn = regs[0] >> PAGE_SHIFT;
-+	for (idx = 1; idx < ARRAY_SIZE(regs); idx++) {
-+		if (regs[idx] >> PAGE_SHIFT != pfn)
-+			return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * acpi_parse_aspt - Parse ASPT table and return contained information
-+ * @res: will be filled with the address and size of the ASP register window
-+ * @pdata: will be filled with the register offsets parsed from the ASPT table
-+ */
-+int __init acpi_parse_aspt(struct resource *res, struct psp_platform_data *pdata)
-+{
-+	struct acpi_aspt_acpi_mbox_regs acpiregs = {};
-+	struct acpi_aspt_sev_mbox_regs sevregs = {};
-+	struct acpi_aspt_global_regs gregs = {};
-+	struct acpi_aspt_header *entry, *end;
-+	struct acpi_table_aspt *aspt;
-+	unsigned long base;
-+	acpi_status status;
-+	int err = 0;
-+
-+	status = acpi_get_table(ACPI_SIG_ASPT, 0, (struct acpi_table_header **)&aspt);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+	if (aspt->header.revision != ASPT_REVISION_ID) {
-+		pr_err("unsupported table revision: %d\n", (int)aspt->header.revision);
-+		err = -ENODEV;
-+		goto exit;
-+	}
-+	entry = (struct acpi_aspt_header *)(aspt + 1);
-+	end = (struct acpi_aspt_header *)((void *)aspt + aspt->header.length);
-+	while (entry < end) {
-+		if (((void *)entry + entry->length) > (void *)end) {
-+			pr_err("error during parsing\n");
-+			err = -EINVAL;
-+			goto exit;
-+		}
-+		switch (entry->type) {
-+		case ACPI_ASPT_TYPE_GLOBAL_REGS:
-+			memcpy(&gregs, entry, entry->length);
-+			break;
-+		case ACPI_ASPT_TYPE_SEV_MBOX_REGS:
-+			memcpy(&sevregs, entry, entry->length);
-+			break;
-+		case ACPI_ASPT_TYPE_ACPI_MBOX_REGS:
-+			memcpy(&acpiregs, entry, entry->length);
-+			break;
-+		}
-+		entry = (struct acpi_aspt_header *)((void *)entry + entry->length);
-+	}
-+	if (!gregs.header.length || !sevregs.header.length || !acpiregs.header.length) {
-+		pr_err("missing ASPT table entry: %u %u %u\n", gregs.header.length,
-+			sevregs.header.length,
-+			acpiregs.header.length);
-+		err = -EINVAL;
-+		goto exit;
-+	}
-+	/* All registers are expected to be within the same page */
-+	err = psp_validate_regs(&gregs, &sevregs, &acpiregs);
-+	if (err) {
-+		pr_err("ASPT registers span multiple pages\n");
-+		goto exit;
-+	}
-+
-+	base = ALIGN_DOWN(gregs.feature_reg_addr, PAGE_SIZE);
-+	*res = (struct resource)DEFINE_RES_MEM(base, PAGE_SIZE);
-+
-+	pdata->sev_cmd_resp_reg = sevregs.cmd_resp_reg_addr & ~PAGE_MASK;
-+	pdata->sev_cmd_buf_lo_reg = sevregs.cmd_buf_lo_reg_addr & ~PAGE_MASK;
-+	pdata->sev_cmd_buf_hi_reg = sevregs.cmd_buf_hi_reg_addr & ~PAGE_MASK;
-+	pdata->feature_reg = gregs.feature_reg_addr & ~PAGE_MASK;
-+	pdata->irq_en_reg = gregs.irq_en_reg_addr & ~PAGE_MASK;
-+	pdata->irq_st_reg = gregs.irq_st_reg_addr & ~PAGE_MASK;
-+	pdata->mbox_irq_id = sevregs.mbox_irq_id;
-+	pdata->acpi_cmd_resp_reg = acpiregs.cmd_resp_reg_addr & ~PAGE_MASK;
-+
-+exit:
-+	acpi_put_table((struct acpi_table_header *)aspt);
-+	return err;
-+}
-diff --git a/include/linux/platform_data/psp.h b/include/linux/platform_data/psp.h
-new file mode 100644
-index 000000000000..b761f72168d6
---- /dev/null
-+++ b/include/linux/platform_data/psp.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * psp.h - PSP register offsets parsed from ASPT ACPI table
-+ */
-+
-+#ifndef __LINUX_PSP_H
-+#define __LINUX_PSP_H
-+
-+#include <linux/types.h>
-+#include <linux/ioport.h>
-+
-+struct psp_platform_data {
-+	int sev_cmd_resp_reg;
-+	int sev_cmd_buf_lo_reg;
-+	int sev_cmd_buf_hi_reg;
-+	int feature_reg;
-+	int irq_en_reg;
-+	int irq_st_reg;
-+	int mbox_irq_id;
-+	int acpi_cmd_resp_reg;
++static struct platform_device psp_device = {
++	.name           = "psp",
++	.id             = PLATFORM_DEVID_NONE,
 +};
 +
-+#if IS_ENABLED(CONFIG_ACPI)
-+int acpi_parse_aspt(struct resource *res, struct psp_platform_data *pdata);
-+#else
-+static inline acpi_parse_aspt(struct resource *res, struct psp_platform_data *pdata)
++static int __init psp_init_platform_device(void)
 +{
-+	return -ENODEV;
-+}
-+#endif
++	struct psp_platform_data pdata = {};
++	struct resource res[1];
++	int err;
 +
-+#endif /* __LINUX_PSP_H */
++	/*
++	 * The ACPI PSP interface is mutually exclusive with the PCIe interface,
++	 * but there is no reason to use the ACPI interface over the PCIe one.
++	 * Restrict probing ACPI PSP to platforms known to only expose the ACPI
++	 * interface, which at this time is SNP-host capable Hyper-V VMs.
++	 */
++	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
++		return -ENODEV;
++
++	err = acpi_parse_aspt(res, &pdata);
++	if (err)
++		return err;
++	err = platform_device_add_resources(&psp_device, res, 1);
++	if (err)
++		return err;
++	err = platform_device_add_data(&psp_device, &pdata, sizeof(pdata));
++	if (err)
++		return err;
++
++	err = platform_device_register(&psp_device);
++	if (err)
++		return err;
++	return 0;
++}
++device_initcall(psp_init_platform_device);
 -- 
 2.34.1
 
