@@ -2,94 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DB66C15B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828A96C15DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjCTO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S231398AbjCTO6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbjCTO4O (ORCPT
+        with ESMTP id S231530AbjCTO55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:56:14 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0959830D9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:54:17 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id o4so710000ljp.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679324051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Spp529PzCZgqhAAdlPnFv6OIEZrrIKgp/RWvJ8WolNg=;
-        b=Bnf40LzQk0w775WdvYdPmAMTmhOjbWxNw+2yFjhkL7Fano+915afbnLRX5RFjw3+f/
-         1Xph3gDde11HSLtOIyKNmu9RSJy6WS0cuLxnyeSxH9iCK5BUtaRU1cmxWFJ3OhnTgguU
-         vTzFY7tlndVGGQe+gcGNsQYLzrTQTaepext9eBAF2ro8n5exu0In+DAWpR6lD2m/cUy9
-         bhNO2lViuxSHKpLs6gel7u/J8Myrfl4E5bkgEBJmMQLtnrhM2w1nxBTxHgfoMHKlnlVG
-         BeiWSO4/qNwT6VD0yW9L1Zqb2YA7InQNYpJacy+XpLs5zoUt7dFeCfV0bjblQBFIz4OF
-         WLpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679324051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Spp529PzCZgqhAAdlPnFv6OIEZrrIKgp/RWvJ8WolNg=;
-        b=Hur33evAGiqQixZjcwFJuL1FJjSFxYOrlYcHXO+XwePMpui7Xv87bEWQBUtitQocSe
-         VDisd+JxW2qcjI1xVn55koapqz9TDtHIdk4uI0lOInXJxpId73QwRRzQrYm0tCzNnLYl
-         hgijahldk5uBNn9MP0pMfY+PeT+92lJhQha+0U/qg6YS+ZgHIpZIjKQNd5B2ukERpHxL
-         kPc6uOolanhFVQP0e/LIspPcRgPlYP2eOIrZ8AaTtoam14v2Nw+6QdQ5B7aLFqLXM7bL
-         sMwxjY5y53NBBQtVYCN20EmNfCUl4paw+wotNf+VkvJJ1y9m9DIjOr5Q4JO+QOW7aeXY
-         avgA==
-X-Gm-Message-State: AO0yUKW7U5GDU9WgIY2tGptBH0xP2IGDgIotM0EE0xyCWJ/SpIHXMF1X
-        PUnpx6hgZCUHlkaYF5SXtTR66A==
-X-Google-Smtp-Source: AK7set9UYHJ/Xq6ZI+7zEKJw+l9/by83tYwPGdo3BTSPPzwIWoekfXNftqMx/5eZFnN/3zGJF1JIfQ==
-X-Received: by 2002:a2e:980e:0:b0:29a:96f0:54ed with SMTP id a14-20020a2e980e000000b0029a96f054edmr73588ljj.30.1679324051447;
-        Mon, 20 Mar 2023 07:54:11 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id s9-20020a2e98c9000000b00293534d9757sm1783102ljj.81.2023.03.20.07.54.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 07:54:11 -0700 (PDT)
-Message-ID: <909746ad-a6b9-18d8-cb43-b2460c7181d0@linaro.org>
+        Mon, 20 Mar 2023 10:57:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A9EA269;
+        Mon, 20 Mar 2023 07:56:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C2231CE12DC;
+        Mon, 20 Mar 2023 14:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE6CC433EF;
+        Mon, 20 Mar 2023 14:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679324170;
+        bh=8KOdPNZADtNP0VYhtS4hyOuvu3LwJDpiYU4U2GfrMmM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u0djYbZmqb6vquL36xPq/9TT23EYVDdHlAl7R3BTI7DQFdZ58se3+WQBG5QgoGqfw
+         /C1F4Qw/maC8R60JeM/Sxroz35xrKBL1lNp9RBy4ytnhh+GfPjlxR69G6P0lC4vdGG
+         9cH/TZoT2nG9NYuFuOzwfCyAJyeC1eK9MTXa/jJs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.4 00/60] 5.4.238-rc1 review
 Date:   Mon, 20 Mar 2023 15:54:09 +0100
+Message-Id: <20230320145430.861072439@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 01/18] media: venus: hfi_venus: Set
- venus_sys_idle_indicator to false on V6
-Content-Language: en-US
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>
-References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
- <20230228-topic-venus-v1-1-58c2c88384e9@linaro.org>
- <99eeebc6-69aa-c6ba-139b-92672c299747@linaro.org>
- <893851c9-c8be-ed7f-ebde-5d90b9313f6d@linaro.org>
- <48ac4272-0e11-d943-e950-0be8d93fb036@linaro.org>
- <b7f0c568-72b7-3342-decc-784cd5f68b1a@linaro.org>
- <1091d8b4-3dd3-427b-2fcb-c3e0d32b0a3b@linaro.org>
- <aa8db9a1-ac11-acbe-1a05-b60c39989bc1@nexus-software.ie>
- <28b0eed5-6e80-e424-70bb-ba984fdbc1ac@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <28b0eed5-6e80-e424-70bb-ba984fdbc1ac@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.238-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.238-rc1
+X-KernelTest-Deadline: 2023-03-22T14:54+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,113 +62,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is the start of the stable review cycle for the 5.4.238 release.
+There are 60 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
+
+Responses should be made by Wed, 22 Mar 2023 14:54:16 +0000.
+Anything received after that time might be too late.
+
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.238-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.238-rc1
+
+Lee Jones <lee@kernel.org>
+    HID: uhid: Over-ride the default maximum data buffer value with our own
+
+Lee Jones <lee@kernel.org>
+    HID: core: Provide new max_buffer_size attribute to over-ride the default
+
+Lukas Wunner <lukas@wunner.de>
+    PCI: Unify delay handling for reset and resume
+
+Sven Schnelle <svens@linux.ibm.com>
+    s390/ipl: add missing intersection check to ipl_report handling
+
+Biju Das <biju.das.jz@bp.renesas.com>
+    serial: 8250_em: Fix UART port type
+
+John Harrison <John.C.Harrison@Intel.com>
+    drm/i915: Don't use stolen memory for ring buffers with LLC
+
+Kees Cook <keescook@chromium.org>
+    treewide: Replace DECLARE_TASKLET() with DECLARE_TASKLET_OLD()
+
+Tom Saeger <tom.saeger@oracle.com>
+    Revert "treewide: Replace DECLARE_TASKLET() with DECLARE_TASKLET_OLD()"
+
+Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+    x86/mm: Fix use of uninitialized buffer in sme_enable()
+
+Helge Deller <deller@gmx.de>
+    fbdev: stifb: Provide valid pixelclock and add fb_check_var() checks
+
+Chen Zhongjin <chenzhongjin@huawei.com>
+    ftrace: Fix invalid address access in lookup_rec() when index is 0
+
+Paolo Bonzini <pbonzini@redhat.com>
+    KVM: nVMX: add missing consistency checks for CR0 and CR4
+
+Steven Rostedt (Google) <rostedt@goodmis.org>
+    tracing: Make tracepoint lockdep check actually test something
+
+Steven Rostedt (Google) <rostedt@goodmis.org>
+    tracing: Check field value in hist_field_name()
+
+Johan Hovold <johan+linaro@kernel.org>
+    interconnect: fix mem leak when freeing nodes
+
+Sherry Sun <sherry.sun@nxp.com>
+    tty: serial: fsl_lpuart: skip waiting for transmission complete when UARTCTRL_SBK is asserted
+
+Theodore Ts'o <tytso@mit.edu>
+    ext4: fix possible double unlock when moving a directory
+
+Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+    sh: intc: Avoid spurious sizeof-pointer-div warning
+
+Qu Huang <qu.huang@linux.dev>
+    drm/amdkfd: Fix an illegal memory access
+
+Baokun Li <libaokun1@huawei.com>
+    ext4: fix task hung in ext4_xattr_delete_inode
+
+Baokun Li <libaokun1@huawei.com>
+    ext4: fail ext4_iget if special inode unallocated
+
+David Gow <davidgow@google.com>
+    rust: arch/um: Disable FP/SIMD instruction to match x86
+
+Yifei Liu <yifeliu@cs.stonybrook.edu>
+    jffs2: correct logic when creating a hole in jffs2_write_begin
+
+Tobias Schramm <t.schramm@manjaro.org>
+    mmc: atmel-mci: fix race between stop command and start of next command
+
+Linus Torvalds <torvalds@linux-foundation.org>
+    media: m5mols: fix off-by-one loop termination error
+
+Marcus Folkesson <marcus.folkesson@gmail.com>
+    hwmon: (ina3221) return prober error code
+
+Zheng Wang <zyytlz.wz@163.com>
+    hwmon: (xgene) Fix use after free bug in xgene_hwmon_remove due to race condition
+
+Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+    hwmon: (adt7475) Fix masking of hysteresis registers
+
+Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+    hwmon: (adt7475) Display smoothing attributes in correct order
+
+Liang He <windhl@126.com>
+    ethernet: sun: add check for the mdesc_grab()
+
+Alexandra Winter <wintera@linux.ibm.com>
+    net/iucv: Fix size of interrupt data
+
+Szymon Heidrich <szymon.heidrich@gmail.com>
+    net: usb: smsc75xx: Move packet length check to prevent kernel panic in skb_pull
+
+Ido Schimmel <idosch@nvidia.com>
+    ipv4: Fix incorrect table ID in IOCTL path
+
+Liang He <windhl@126.com>
+    block: sunvdc: add check for mdesc_grab() returning NULL
+
+Damien Le Moal <damien.lemoal@opensource.wdc.com>
+    nvmet: avoid potential UAF in nvmet_req_complete()
+
+Szymon Heidrich <szymon.heidrich@gmail.com>
+    net: usb: smsc75xx: Limit packet length to skb->len
+
+Zheng Wang <zyytlz.wz@163.com>
+    nfc: st-nci: Fix use after free bug in ndlc_remove due to race condition
+
+Heiner Kallweit <hkallweit1@gmail.com>
+    net: phy: smsc: bail out in lan87xx_read_status if genphy_read_status fails
+
+Eric Dumazet <edumazet@google.com>
+    net: tunnels: annotate lockless accesses to dev->needed_headroom
+
+Daniil Tatianin <d-tatianin@yandex-team.ru>
+    qed/qed_dev: guard against a possible division by zero
+
+Ivan Vecera <ivecera@redhat.com>
+    i40e: Fix kernel crash during reboot when adapter is in recovery mode
+
+Jianguo Wu <wujianguo@chinatelecom.cn>
+    ipvlan: Make skb->skb_iif track skb->dev for l3s mode
+
+Fedor Pchelkin <pchelkin@ispras.ru>
+    nfc: pn533: initialize struct pn533_out_arg properly
+
+Breno Leitao <leitao@debian.org>
+    tcp: tcp_make_synack() can be called from process context
+
+Bart Van Assche <bvanassche@acm.org>
+    scsi: core: Fix a procfs host directory removal regression
+
+Xiang Chen <chenxiang66@hisilicon.com>
+    scsi: core: Fix a comment in function scsi_host_dev_release()
+
+Jeremy Sowden <jeremy@azazel.net>
+    netfilter: nft_redir: correct value of inet type `.maxattrs`
+
+Bjorn Helgaas <bhelgaas@google.com>
+    ALSA: hda: Match only Intel devices with CONTROLLER_IN_GPU()
+
+Kai Vehmanen <kai.vehmanen@linux.intel.com>
+    ALSA: hda: Add Intel DG2 PCI ID and HDMI codec vid
+
+Kai Vehmanen <kai.vehmanen@linux.intel.com>
+    ALSA: hda: Add Alderlake-S PCI ID and HDMI codec vid
+
+Kai Vehmanen <kai.vehmanen@linux.intel.com>
+    ALSA: hda - controller is in GPU on the DG1
+
+Kai Vehmanen <kai.vehmanen@linux.intel.com>
+    ALSA: hda - add Intel DG1 PCI and HDMI ids
+
+Wenchao Hao <haowenchao2@huawei.com>
+    scsi: mpt3sas: Fix NULL pointer access in mpt3sas_transport_port_add()
+
+Glenn Washburn <development@efficientek.com>
+    docs: Correct missing "d_" prefix for dentry_operations member d_weak_revalidate
+
+Randy Dunlap <rdunlap@infradead.org>
+    clk: HI655X: select REGMAP instead of depending on it
+
+Christian Hewitt <christianshewitt@gmail.com>
+    drm/meson: fix 1px pink line on GXM when scaling video overlay
+
+Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+    cifs: Move the in_send statistic to __smb_send_rqst()
+
+Dmitry Osipenko <dmitry.osipenko@collabora.com>
+    drm/panfrost: Don't sync rpm suspension after mmu flushing
+
+Herbert Xu <herbert@gondor.apana.org.au>
+    xfrm: Allow transport-mode states with AF_UNSPEC selector
+
+Eric Biggers <ebiggers@google.com>
+    ext4: fix cgroup writeback accounting with fs-layer encryption
 
 
-On 2.03.2023 07:39, Dikshita Agarwal wrote:
-> 
-> On 2/28/2023 10:23 PM, Bryan O'Donoghue wrote:
->> On 28/02/2023 15:41, Konrad Dybcio wrote:
->>>> Can you test it and make sure ?
->>> As I mentioned in the cover letter, 8250 still seems to work with this
->>> patchset. I have no idea how one would go about validating the
->>> functionality enabled through this call.
->>
->> We offlined about this.
->>
->> I think it is correct to say you don't have access to a display to test this on sm8250.
->>
->> I do so, I will try this out for you, though I'll wait for your V2 for this series.
->>
->> ---
->> bod
-> 
-> Hi Konrad,
-> 
-> I understand from your commit text, setting this indicator for AR50L is causing issue with suspend.
-> 
-> Ideally it shouldn't cause any such issue. I checked with FW team and got to know that this property is not supported on AR50LT so if you set it there should be some property not supported error.
-> 
-> In my opinion it would be good to replace these versions checks with VPU version check you have introduced in your other patch and keep this setting for current targets and not set wherever not needed eg AR50LT.
-So.. I did *something* and I'm no longer getting a jump to EDL.
+-------------
 
-The *something* being knocking off hfi_core_suspend().
+Diffstat:
 
-If I send a sys_idle_indicator = true, I get (reformatted for
-better legibility):
-
-
-[    0.576543] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_H:HostDr:unkn:--------:-> IMAGE_VARIANT_STRING=PROD
-
-[    0.603818] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_H:HostDr:unkn:--------:-> OEM_IMAGE_VERSION_STRING=CRM
-
-[    0.608633] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_H:HostDr:unkn:--------:-> BUILD_TIME: Mar 15 2021 04:24:58
-
-[    0.608644] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_L:HostDr:unkn:--------:-> Host cmd 0x10005
-
-[    0.608655] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_E:HostDr:unkn:--------:-> VenusHostDriver_SetSysProperty(1019): HostDriver:  VenusHostDriver_SetSysProperty unsupport property!
-
-[    0.608667] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_E:HostDr:unkn:--------:-> WaitForHWidle(408): VENUS is idle, no HW is running 
-
-[    0.650759] qcom-venus 5a00000.video-codec: VenusFW  :
-<VFW_E:HostDr:unkn:--------:-> assert_loop(433):
-FW Assertion - Z:/b/venus_proc/venus/drivers/src/VenusHostDriver.c:1020:5ab9a
-
-
-Which then crashes Venus for good (perhaps we're missing a
-handler for such errors that would hard reset the hw), meaning
-trying to access it through ffmpeg will result in it never firing
-any IRQs, so no submitted commands ever complete.
-
-With this information, after uncommenting the hfi_core_suspend
-call and changing:
-
-[1]
---- hfi_venus.c : venus_suspend_3xx() --
-
-- venus_prepare_power_collapse(hdev, true);
-+ venus_prepare_power_collapse(hdev, false);
-
-----------------------------------------
-
-I was able to test further. Turning the ARM9 core off messes
-with the sys_idle things. Perhaps some power sequencing is
-wrong. The diff I just mentioned comes from the fact that
-AR50L will never ever ever send a PC_PREP_DONE ack, or at
-least downstream never expects it (or any other HFI6XX
-target FWIW) to do so.
+ Documentation/filesystems/vfs.rst           |  2 +-
+ Makefile                                    |  4 +--
+ arch/mips/lasat/picvue_proc.c               |  2 +-
+ arch/s390/boot/ipl_report.c                 |  8 +++++
+ arch/x86/Makefile.um                        |  6 ++++
+ arch/x86/kvm/vmx/nested.c                   | 10 ++++--
+ arch/x86/mm/mem_encrypt_identity.c          |  3 +-
+ drivers/block/sunvdc.c                      |  2 ++
+ drivers/clk/Kconfig                         |  2 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_events.c     |  9 ++---
+ drivers/gpu/drm/i915/gt/intel_ringbuffer.c  |  5 +--
+ drivers/gpu/drm/meson/meson_vpp.c           |  2 ++
+ drivers/gpu/drm/panfrost/panfrost_mmu.c     |  2 +-
+ drivers/hid/hid-core.c                      | 18 +++++++---
+ drivers/hid/uhid.c                          |  1 +
+ drivers/hwmon/adt7475.c                     |  8 ++---
+ drivers/hwmon/ina3221.c                     |  2 +-
+ drivers/hwmon/xgene-hwmon.c                 |  1 +
+ drivers/interconnect/core.c                 |  4 +++
+ drivers/media/i2c/m5mols/m5mols_core.c      |  2 +-
+ drivers/mmc/host/atmel-mci.c                |  3 --
+ drivers/net/ethernet/intel/i40e/i40e_main.c |  1 +
+ drivers/net/ethernet/qlogic/qed/qed_dev.c   |  5 +++
+ drivers/net/ethernet/sun/ldmvsw.c           |  3 ++
+ drivers/net/ethernet/sun/sunvnet.c          |  3 ++
+ drivers/net/ipvlan/ipvlan_l3s.c             |  1 +
+ drivers/net/phy/smsc.c                      |  5 ++-
+ drivers/net/usb/smsc75xx.c                  |  7 ++++
+ drivers/nfc/pn533/usb.c                     |  1 +
+ drivers/nfc/st-nci/ndlc.c                   |  6 ++--
+ drivers/nvme/target/core.c                  |  4 ++-
+ drivers/pci/pci-driver.c                    |  4 +--
+ drivers/pci/pci.c                           | 54 +++++++++++++----------------
+ drivers/pci/pci.h                           | 10 +++++-
+ drivers/scsi/hosts.c                        |  5 +--
+ drivers/scsi/mpt3sas/mpt3sas_transport.c    | 14 ++++++--
+ drivers/tty/serial/8250/8250_em.c           |  4 +--
+ drivers/tty/serial/fsl_lpuart.c             | 12 +++++--
+ drivers/video/fbdev/stifb.c                 | 27 +++++++++++++++
+ fs/cifs/transport.c                         | 21 +++++------
+ fs/ext4/inode.c                             | 18 +++++-----
+ fs/ext4/namei.c                             |  4 +--
+ fs/ext4/page-io.c                           | 10 +++---
+ fs/ext4/xattr.c                             | 11 ++++++
+ fs/jffs2/file.c                             | 15 ++++----
+ include/linux/hid.h                         |  3 ++
+ include/linux/netdevice.h                   |  6 ++--
+ include/linux/sh_intc.h                     |  5 ++-
+ include/linux/tracepoint.h                  | 15 ++++----
+ kernel/trace/ftrace.c                       |  3 +-
+ kernel/trace/trace_events_hist.c            |  3 ++
+ net/ipv4/fib_frontend.c                     |  3 ++
+ net/ipv4/ip_tunnel.c                        | 12 +++----
+ net/ipv4/tcp_output.c                       |  2 +-
+ net/ipv6/ip6_tunnel.c                       |  4 +--
+ net/iucv/iucv.c                             |  2 +-
+ net/netfilter/nft_redir.c                   |  2 +-
+ net/xfrm/xfrm_state.c                       |  3 --
+ sound/pci/hda/hda_intel.c                   | 22 ++++++++++--
+ sound/pci/hda/patch_hdmi.c                  |  3 ++
+ 60 files changed, 284 insertions(+), 145 deletions(-)
 
 
-Now, I also realized the adjacent set_power_control doesn't seem to be used at
-all on msm-4.19 techpack/video. Testing all the possible combinations, I get
-(to make it extra clear, with all the powerdown stuff in place and only diff
-[1] in place atop what I already had before):
-
-
-[set_idle_message] [set_power_control] [result]
-0 0 - no crash at boot, venus doesn't work ->
-	"Too many packets buffered for output stream 0:1."
-
-0 1 - no crash at boot, ffmpeg hangs near vdec session init ->
-	jump to EDL shortly after
-
-1 0 - hang at boot, even before display subsys initializes ->
-	platform totally hangs
-
-1 1 - same as (1, 0), probably due to sys_idle_indicator being on ->
-	platform totally hangs as well
-
-Perhaps (0, 0) is "good" and things can be worked up from there?
-Can you recheck with the firmware team if this is expected?
-
-Konrad
-> 
-> Thanks,
-> 
-> Dikshita
-> 
