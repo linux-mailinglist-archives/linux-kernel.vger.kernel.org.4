@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0256C114F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492706C114E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjCTL4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S229527AbjCTL4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 07:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjCTL4r (ORCPT
+        with ESMTP id S231297AbjCTL4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:56:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C3B241D3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:56:44 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id k37so1600737lfv.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112; t=1679313402;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5WnSpd3VjsTbvqmg4BcKQ/9NURcg/rAIqLX+pwVi5FI=;
-        b=sMX/yAzahLvSZ2O7ssNj+wjXOD9WO5l+DuNliL+EhQAmP/YIvRNGdWdqJCMItb1vss
-         bpJIcpXCLdLd2ZIWKfrjXOL3YTdQHD4NM2+HqMuxrtyGXlmxMe9SUq+dXNteUJ31B0xs
-         k9kSqnmV9MGJMKjP1bMZQL+X6F7m6FpFZYVR6UTGmsmZsNZACubjWQiDA63pMwJHe2XN
-         7JBO9a8Jv1UerSYBCS5/Tuto6hlpIqs9bj5iRMDDIGT9aMGQvCFMrHuEtHtFnXT2Jmux
-         KnTdaOOMJ6gq5WcUCm3/9+vYtOiJwBni1V0YNy14IPXYpfX+5KREWyXtAQQw8nvvpy6k
-         0ySg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679313402;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5WnSpd3VjsTbvqmg4BcKQ/9NURcg/rAIqLX+pwVi5FI=;
-        b=zUeQsBhiRvhJzkv9Wjrb3EVS4Or1oFHDfdO+7JCoItFjRGizl/tlquniUjlIkMqL1S
-         0Oi63x8Jq2f0N9zNpNDF9ig9k4axRKcSiKCOyR600mVlvJwzqU85bRS/BhVsvzbys0hL
-         cqamp3aanq3eX1Q/WXXNfazMwXfvg+ZXfB5ZN1f3B5rNdExDkkkDnlZmSaiUml6lJVWG
-         50DYhhywQwreoHUOAJlmGpWcmX9zzJ88HHmKU3VOJcLY0eX8RvkrdJTStW/2NHFt2yRh
-         mLS+x32aAG9Qd5hQgW2Nem7mGl2tU+eDHY3wqIoVg8CzJx/RG4Bf+gAlV4k8cjp9TFKp
-         Y4Vg==
-X-Gm-Message-State: AO0yUKWLQ6bwYL3Ax55Fwj892lbgBP//DRKWdbGiRtAWnktnN4bYCOKo
-        wSj67lHj7nx7y/z5g7QvQyyWIXR5TaPovpEu/n4z2g==
-X-Google-Smtp-Source: AK7set+uol6QXCpUJGg+606D4BmiExi6ejKvFgAF2wx4JM478RT93ChjtVBqpMxFAYSup+7ZQnS9pQ==
-X-Received: by 2002:a05:6512:92e:b0:4dd:b766:37ae with SMTP id f14-20020a056512092e00b004ddb76637aemr5689585lft.13.1679313401967;
-        Mon, 20 Mar 2023 04:56:41 -0700 (PDT)
-Received: from vp-pc.. (109-252-122-203.nat.spd-mgts.ru. [109.252.122.203])
-        by smtp.gmail.com with ESMTPSA id y26-20020a05651c021a00b0029571d505a1sm1720217ljn.80.2023.03.20.04.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 04:56:41 -0700 (PDT)
-From:   Viktor Prutyanov <viktor@daynix.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
-Subject: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-Date:   Mon, 20 Mar 2023 14:54:51 +0300
-Message-Id: <20230320115451.1232171-1-viktor@daynix.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 20 Mar 2023 07:56:32 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A6C24108;
+        Mon, 20 Mar 2023 04:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679313390; x=1710849390;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r1s5/ZMg2lLOSle8HVr6eWPHl10IKSNJRBE1UwV5bX0=;
+  b=FDm1uJvrHZad9clSGe2KXImZdlrkJVDWEB2puL5mqpRZ5sCuR0MXAO+b
+   6RahidznhZT0N+LfmkAq6YYnhsuL0AOAGU3iU0Tpm9YBxtOTjgtLyB02C
+   s/gzi+EtX1Zlgc4kFUM2kFrHfTRnCpCHPwqIbKGvCyEjP+SEiTCSissJ1
+   /kWB0j3tS5goQoX57EYdtOYk4HUYRdWBUYUcLpvSqHJAV49QfBq+W1JLQ
+   n723F2+WabhUMDPxu1ORYpvfbQ+E3Ivyg+Vfb6R7D/hUCNEccBsWPzqSl
+   8Tx2yc0a11lA4IvMSQMha8HeHdS8bTU7dmVflHoqSC1PmNmOZSyyhNFvX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="403511333"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="403511333"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 04:56:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="824450449"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="824450449"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 20 Mar 2023 04:56:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Mar 2023 13:56:24 +0200
+Date:   Mon, 20 Mar 2023 13:56:24 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 01/12] usb: typec: ucsi: add PMIC Glink UCSI driver
+Message-ID: <ZBhJ6P9lDcvwW3/x@kuha.fi.intel.com>
+References: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v4-1-38bf0f5d07bd@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v4-1-38bf0f5d07bd@linaro.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,193 +71,405 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
-indicates that the driver passes extra data along with the queue
-notifications.
+On Fri, Mar 17, 2023 at 04:04:17PM +0100, Neil Armstrong wrote:
+> Introduce the UCSI PMIC Glink aux driver that communicates
+> with the aDSP firmware with the UCSI protocol which handles
+> the USB-C Port(s) Power Delivery.
+> 
+> The UCSI messaging is necessary on newer Qualcomm SoCs to
+> provide USB role switch and altmode notifications.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-In a split queue case, the extra data is 16-bit available index. In a
-packed queue case, the extra data is 1-bit wrap counter and 15-bit
-available index.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Add support for this feature for both MMIO and PCI.
+> ---
+>  drivers/usb/typec/ucsi/Kconfig      |  10 ++
+>  drivers/usb/typec/ucsi/Makefile     |   1 +
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 345 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 356 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> index 8f9c4b9f31f7..b3bb0191987e 100644
+> --- a/drivers/usb/typec/ucsi/Kconfig
+> +++ b/drivers/usb/typec/ucsi/Kconfig
+> @@ -58,4 +58,14 @@ config UCSI_STM32G0
+>  	  To compile the driver as a module, choose M here: the module will be
+>  	  called ucsi_stm32g0.
+>  
+> +config UCSI_PMIC_GLINK
+> +	tristate "UCSI Qualcomm PMIC GLINK Interface Driver"
+> +	depends on QCOM_PMIC_GLINK
+> +	help
+> +	  This driver enables UCSI support on platforms that expose UCSI
+> +	  interface as PMIC GLINK device.
+> +
+> +	  To compile the driver as a module, choose M here: the module will be
+> +	  called ucsi_glink.
+> +
+>  endif
+> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+> index 480d533d762f..77f09e136956 100644
+> --- a/drivers/usb/typec/ucsi/Makefile
+> +++ b/drivers/usb/typec/ucsi/Makefile
+> @@ -18,3 +18,4 @@ endif
+>  obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
+>  obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+>  obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+> +obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> new file mode 100644
+> index 000000000000..b454a5159896
+> --- /dev/null
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -0,0 +1,345 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023, Linaro Ltd
+> + */
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/mutex.h>
+> +#include <linux/property.h>
+> +#include <linux/soc/qcom/pdr.h>
+> +#include <linux/soc/qcom/pmic_glink.h>
+> +#include "ucsi.h"
+> +
+> +#define UCSI_BUF_SIZE                   48
+> +
+> +#define MSG_TYPE_REQ_RESP               1
+> +#define UCSI_BUF_SIZE                   48
+> +
+> +#define UC_NOTIFY_RECEIVER_UCSI         0x0
+> +#define UC_UCSI_READ_BUF_REQ            0x11
+> +#define UC_UCSI_WRITE_BUF_REQ           0x12
+> +#define UC_UCSI_USBC_NOTIFY_IND         0x13
+> +
+> +struct ucsi_read_buf_req_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +};
+> +
+> +struct ucsi_read_buf_resp_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +	u8                      buf[UCSI_BUF_SIZE];
+> +	u32                     ret_code;
+> +};
+> +
+> +struct ucsi_write_buf_req_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +	u8                      buf[UCSI_BUF_SIZE];
+> +	u32                     reserved;
+> +};
+> +
+> +struct ucsi_write_buf_resp_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +	u32                     ret_code;
+> +};
+> +
+> +struct ucsi_notify_ind_msg {
+> +	struct pmic_glink_hdr   hdr;
+> +	u32                     notification;
+> +	u32                     receiver;
+> +	u32                     reserved;
+> +};
+> +
+> +struct pmic_glink_ucsi {
+> +	struct device *dev;
+> +
+> +	struct pmic_glink_client *client;
+> +
+> +	struct ucsi *ucsi;
+> +	struct completion read_ack;
+> +	struct completion write_ack;
+> +	struct completion sync_ack;
+> +	bool sync_pending;
+> +	struct mutex lock;	/* protects concurrent access to PMIC Glink interface */
+> +
+> +	int sync_val;
+> +
+> +	struct work_struct notify_work;
+> +	struct work_struct register_work;
+> +
+> +	u8 read_buf[UCSI_BUF_SIZE];
+> +};
+> +
+> +static int pmic_glink_ucsi_read(struct ucsi *__ucsi, unsigned int offset,
+> +				void *val, size_t val_len)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(__ucsi);
+> +	struct ucsi_read_buf_req_msg req = {};
+> +	unsigned long left;
+> +	int ret;
+> +
+> +	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
+> +	req.hdr.type = MSG_TYPE_REQ_RESP;
+> +	req.hdr.opcode = UC_UCSI_READ_BUF_REQ;
+> +
+> +	mutex_lock(&ucsi->lock);
+> +	memset(ucsi->read_buf, 0, sizeof(ucsi->read_buf));
+> +	reinit_completion(&ucsi->read_ack);
+> +
+> +	ret = pmic_glink_send(ucsi->client, &req, sizeof(req));
+> +	if (ret < 0) {
+> +		dev_err(ucsi->dev, "failed to send UCSI read request: %d\n", ret);
+> +		goto out_unlock;
+> +	}
+> +
+> +	left = wait_for_completion_timeout(&ucsi->read_ack, 5 * HZ);
+> +	if (!left) {
+> +		dev_err(ucsi->dev, "timeout waiting for UCSI read response\n");
+> +		ret = -ETIMEDOUT;
+> +		goto out_unlock;
+> +	}
+> +
+> +	memcpy(val, &ucsi->read_buf[offset], val_len);
+> +	ret = 0;
+> +
+> +out_unlock:
+> +	mutex_unlock(&ucsi->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int pmic_glink_ucsi_locked_write(struct pmic_glink_ucsi *ucsi, unsigned int offset,
+> +					const void *val, size_t val_len)
+> +{
+> +	struct ucsi_write_buf_req_msg req = {};
+> +	unsigned long left;
+> +	int ret;
+> +
+> +	req.hdr.owner = PMIC_GLINK_OWNER_USBC;
+> +	req.hdr.type = MSG_TYPE_REQ_RESP;
+> +	req.hdr.opcode = UC_UCSI_WRITE_BUF_REQ;
+> +	memcpy(&req.buf[offset], val, val_len);
+> +
+> +	reinit_completion(&ucsi->write_ack);
+> +
+> +	ret = pmic_glink_send(ucsi->client, &req, sizeof(req));
+> +	if (ret < 0) {
+> +		dev_err(ucsi->dev, "failed to send UCSI write request: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	left = wait_for_completion_timeout(&ucsi->write_ack, 5 * HZ);
+> +	if (!left) {
+> +		dev_err(ucsi->dev, "timeout waiting for UCSI write response\n");
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pmic_glink_ucsi_async_write(struct ucsi *__ucsi, unsigned int offset,
+> +				       const void *val, size_t val_len)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(__ucsi);
+> +	int ret;
+> +
+> +	mutex_lock(&ucsi->lock);
+> +	ret = pmic_glink_ucsi_locked_write(ucsi, offset, val, val_len);
+> +	mutex_unlock(&ucsi->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int pmic_glink_ucsi_sync_write(struct ucsi *__ucsi, unsigned int offset,
+> +				      const void *val, size_t val_len)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(__ucsi);
+> +	unsigned long left;
+> +	int ret;
+> +
+> +	/* TOFIX: Downstream forces recipient to CON when UCSI_GET_ALTERNATE_MODES command */
+> +
+> +	mutex_lock(&ucsi->lock);
+> +	ucsi->sync_val = 0;
+> +	reinit_completion(&ucsi->sync_ack);
+> +	ucsi->sync_pending = true;
+> +	ret = pmic_glink_ucsi_locked_write(ucsi, offset, val, val_len);
+> +	mutex_unlock(&ucsi->lock);
+> +
+> +	left = wait_for_completion_timeout(&ucsi->sync_ack, 5 * HZ);
+> +	if (!left) {
+> +		dev_err(ucsi->dev, "timeout waiting for UCSI sync write response\n");
+> +		ret = -ETIMEDOUT;
+> +	} else if (ucsi->sync_val) {
+> +		dev_err(ucsi->dev, "sync write returned: %d\n", ucsi->sync_val);
+> +	}
+> +
+> +	ucsi->sync_pending = false;
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct ucsi_operations pmic_glink_ucsi_ops = {
+> +	.read = pmic_glink_ucsi_read,
+> +	.sync_write = pmic_glink_ucsi_sync_write,
+> +	.async_write = pmic_glink_ucsi_async_write
+> +};
+> +
+> +static void pmic_glink_ucsi_read_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
+> +{
+> +	const struct ucsi_read_buf_resp_msg *resp = data;
+> +
+> +	if (resp->ret_code)
+> +		return;
+> +
+> +	memcpy(ucsi->read_buf, resp->buf, UCSI_BUF_SIZE);
+> +	complete(&ucsi->read_ack);
+> +}
+> +
+> +static void pmic_glink_ucsi_write_ack(struct pmic_glink_ucsi *ucsi, const void *data, int len)
+> +{
+> +	const struct ucsi_write_buf_resp_msg *resp = data;
+> +
+> +	if (resp->ret_code)
+> +		return;
+> +
+> +	ucsi->sync_val = resp->ret_code;
+> +	complete(&ucsi->write_ack);
+> +}
+> +
+> +static void pmic_glink_ucsi_notify(struct work_struct *work)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, notify_work);
+> +	unsigned int con_num;
+> +	u32 cci;
+> +	int ret;
+> +
+> +	ret = pmic_glink_ucsi_read(ucsi->ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	if (ret) {
+> +		dev_err(ucsi->dev, "failed to read CCI on notification\n");
+> +		return;
+> +	}
+> +
+> +	con_num = UCSI_CCI_CONNECTOR(cci);
+> +	if (con_num)
+> +		ucsi_connector_change(ucsi->ucsi, con_num);
+> +
+> +	if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
+> +		ucsi->sync_val = -EBUSY;
+> +		complete(&ucsi->sync_ack);
+> +	} else if (ucsi->sync_pending &&
+> +		   (cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))) {
+> +		complete(&ucsi->sync_ack);
+> +	}
+> +}
+> +
+> +static void pmic_glink_ucsi_register(struct work_struct *work)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
+> +
+> +	ucsi_register(ucsi->ucsi);
+> +}
+> +
+> +static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = priv;
+> +	const struct pmic_glink_hdr *hdr = data;
+> +
+> +	switch (hdr->opcode) {
+> +	case UC_UCSI_READ_BUF_REQ:
+> +		pmic_glink_ucsi_read_ack(ucsi, data, len);
+> +		break;
+> +	case UC_UCSI_WRITE_BUF_REQ:
+> +		pmic_glink_ucsi_write_ack(ucsi, data, len);
+> +		break;
+> +	case UC_UCSI_USBC_NOTIFY_IND:
+> +		schedule_work(&ucsi->notify_work);
+> +		break;
+> +	};
+> +}
+> +
+> +static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = priv;
+> +
+> +	if (state == SERVREG_SERVICE_STATE_UP)
+> +		schedule_work(&ucsi->register_work);
+> +	else if (state == SERVREG_SERVICE_STATE_DOWN)
+> +		ucsi_unregister(ucsi->ucsi);
+> +}
+> +
+> +static void pmic_glink_ucsi_destroy(void *data)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = data;
+> +
+> +	/* Protect to make sure we're not in a middle of a transaction from a glink callback */
+> +	mutex_lock(&ucsi->lock);
+> +	ucsi_destroy(ucsi->ucsi);
+> +	mutex_unlock(&ucsi->lock);
+> +}
+> +
+> +static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+> +				 const struct auxiliary_device_id *id)
+> +{
+> +	struct pmic_glink_ucsi *ucsi;
+> +	struct device *dev = &adev->dev;
+> +	int ret;
+> +
+> +	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
+> +	if (!ucsi)
+> +		return -ENOMEM;
+> +
+> +	ucsi->dev = dev;
+> +	dev_set_drvdata(dev, ucsi);
+> +
+> +	INIT_WORK(&ucsi->notify_work, pmic_glink_ucsi_notify);
+> +	INIT_WORK(&ucsi->register_work, pmic_glink_ucsi_register);
+> +	init_completion(&ucsi->read_ack);
+> +	init_completion(&ucsi->write_ack);
+> +	init_completion(&ucsi->sync_ack);
+> +	mutex_init(&ucsi->lock);
+> +
+> +	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
+> +	if (IS_ERR(ucsi->ucsi))
+> +		return PTR_ERR(ucsi->ucsi);
+> +
+> +	/* Make sure we destroy *after* pmic_glink unregister */
+> +	ret = devm_add_action_or_reset(dev, pmic_glink_ucsi_destroy, ucsi);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+> +
+> +	ucsi->client = devm_pmic_glink_register_client(dev,
+> +						       PMIC_GLINK_OWNER_USBC,
+> +						       pmic_glink_ucsi_callback,
+> +						       pmic_glink_ucsi_pdr_notify,
+> +						       ucsi);
+> +	return PTR_ERR_OR_ZERO(ucsi->client);
+> +}
+> +
+> +static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
+> +{
+> +	struct pmic_glink_ucsi *ucsi = dev_get_drvdata(&adev->dev);
+> +
+> +	/* Unregister first to stop having read & writes */
+> +	ucsi_unregister(ucsi->ucsi);
+> +}
+> +
+> +static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
+> +	{ .name = "pmic_glink.ucsi", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(auxiliary, pmic_glink_ucsi_id_table);
+> +
+> +static struct auxiliary_driver pmic_glink_ucsi_driver = {
+> +	.name = "pmic_glink_ucsi",
+> +	.probe = pmic_glink_ucsi_probe,
+> +	.remove = pmic_glink_ucsi_remove,
+> +	.id_table = pmic_glink_ucsi_id_table,
+> +};
+> +
+> +module_auxiliary_driver(pmic_glink_ucsi_driver);
+> +
+> +MODULE_DESCRIPTION("Qualcomm PMIC GLINK UCSI driver");
+> +MODULE_LICENSE("GPL");
 
-Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
----
- drivers/virtio/virtio_mmio.c       | 15 ++++++++++++++-
- drivers/virtio/virtio_pci_common.c | 10 ++++++++++
- drivers/virtio/virtio_pci_common.h |  4 ++++
- drivers/virtio/virtio_pci_legacy.c |  2 +-
- drivers/virtio/virtio_pci_modern.c |  2 +-
- drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
- include/linux/virtio_ring.h        |  2 ++
- include/uapi/linux/virtio_config.h |  6 ++++++
- 8 files changed, 55 insertions(+), 3 deletions(-)
+thanks,
 
-diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index 3ff746e3f24a..05da5ad7fc93 100644
---- a/drivers/virtio/virtio_mmio.c
-+++ b/drivers/virtio/virtio_mmio.c
-@@ -285,6 +285,19 @@ static bool vm_notify(struct virtqueue *vq)
- 	return true;
- }
- 
-+static bool vm_notify_with_data(struct virtqueue *vq)
-+{
-+	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
-+	__le32 data = vring_fill_notification_data(vq);
-+
-+	writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
-+
-+	return true;
-+}
-+
-+#define VM_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-+	? vm_notify_with_data : vm_notify)
-+
- /* Notify all virtqueues on an interrupt. */
- static irqreturn_t vm_interrupt(int irq, void *opaque)
- {
-@@ -397,7 +410,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
- 
- 	/* Create the vring */
- 	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
--				 true, true, ctx, vm_notify, callback, name);
-+			true, true, ctx, VM_NOTIFY(vdev), callback, name);
- 	if (!vq) {
- 		err = -ENOMEM;
- 		goto error_new_virtqueue;
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index a6c86f916dbd..bf7daad9ce65 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
- 	/* we write the queue's selector into the notification register to
- 	 * signal the other end */
- 	iowrite16(vq->index, (void __iomem *)vq->priv);
-+
-+	return true;
-+}
-+
-+bool vp_notify_with_data(struct virtqueue *vq)
-+{
-+	__le32 data = vring_fill_notification_data(vq);
-+
-+	iowrite32(data, (void __iomem *)vq->priv);
-+
- 	return true;
- }
- 
-diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
-index 23112d84218f..9a7212dcbb32 100644
---- a/drivers/virtio/virtio_pci_common.h
-+++ b/drivers/virtio/virtio_pci_common.h
-@@ -105,6 +105,7 @@ static struct virtio_pci_device *to_vp_device(struct virtio_device *vdev)
- void vp_synchronize_vectors(struct virtio_device *vdev);
- /* the notify function used when creating a virt queue */
- bool vp_notify(struct virtqueue *vq);
-+bool vp_notify_with_data(struct virtqueue *vq);
- /* the config->del_vqs() implementation */
- void vp_del_vqs(struct virtio_device *vdev);
- /* the config->find_vqs() implementation */
-@@ -114,6 +115,9 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
- 		struct irq_affinity *desc);
- const char *vp_bus_name(struct virtio_device *vdev);
- 
-+#define VP_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-+	? vp_notify : vp_notify_with_data)
-+
- /* Setup the affinity for a virtqueue:
-  * - force the affinity for per vq vector
-  * - OR over all affinities for shared MSI
-diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-index 2257f1b3d8ae..b98e994cae48 100644
---- a/drivers/virtio/virtio_pci_legacy.c
-+++ b/drivers/virtio/virtio_pci_legacy.c
-@@ -131,7 +131,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
- 	vq = vring_create_virtqueue(index, num,
- 				    VIRTIO_PCI_VRING_ALIGN, &vp_dev->vdev,
- 				    true, false, ctx,
--				    vp_notify, callback, name);
-+				    VP_NOTIFY(&vp_dev->vdev), callback, name);
- 	if (!vq)
- 		return ERR_PTR(-ENOMEM);
- 
-diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-index 9e496e288cfa..7fcd8af5af7e 100644
---- a/drivers/virtio/virtio_pci_modern.c
-+++ b/drivers/virtio/virtio_pci_modern.c
-@@ -321,7 +321,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
- 	vq = vring_create_virtqueue(index, num,
- 				    SMP_CACHE_BYTES, &vp_dev->vdev,
- 				    true, true, ctx,
--				    vp_notify, callback, name);
-+				    VP_NOTIFY(&vp_dev->vdev), callback, name);
- 	if (!vq)
- 		return ERR_PTR(-ENOMEM);
- 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 41144b5246a8..8de0800efee7 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -2752,6 +2752,21 @@ void vring_del_virtqueue(struct virtqueue *_vq)
- }
- EXPORT_SYMBOL_GPL(vring_del_virtqueue);
- 
-+__le32 vring_fill_notification_data(struct virtqueue *_vq)
-+{
-+	struct vring_virtqueue *vq = to_vvq(_vq);
-+	u16 next;
-+
-+	if (vq->packed_ring)
-+		next = (vq->packed.next_avail_idx & ~(1 << 15)) |
-+			((u16)vq->packed.avail_wrap_counter << 15);
-+	else
-+		next = virtio16_to_cpu(_vq->vdev, vq->split.vring.avail->idx);
-+
-+	return cpu_to_le32(((u32)next << 16) | _vq->index);
-+}
-+EXPORT_SYMBOL_GPL(vring_fill_notification_data);
-+
- /* Manipulates transport-specific feature bits. */
- void vring_transport_features(struct virtio_device *vdev)
- {
-@@ -2771,6 +2786,8 @@ void vring_transport_features(struct virtio_device *vdev)
- 			break;
- 		case VIRTIO_F_ORDER_PLATFORM:
- 			break;
-+		case VIRTIO_F_NOTIFICATION_DATA:
-+			break;
- 		default:
- 			/* We don't understand this bit. */
- 			__virtio_clear_bit(vdev, i);
-diff --git a/include/linux/virtio_ring.h b/include/linux/virtio_ring.h
-index 8b95b69ef694..3222324fb244 100644
---- a/include/linux/virtio_ring.h
-+++ b/include/linux/virtio_ring.h
-@@ -117,4 +117,6 @@ void vring_del_virtqueue(struct virtqueue *vq);
- void vring_transport_features(struct virtio_device *vdev);
- 
- irqreturn_t vring_interrupt(int irq, void *_vq);
-+
-+__le32 vring_fill_notification_data(struct virtqueue *_vq);
- #endif /* _LINUX_VIRTIO_RING_H */
-diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-index 3c05162bc988..2c712c654165 100644
---- a/include/uapi/linux/virtio_config.h
-+++ b/include/uapi/linux/virtio_config.h
-@@ -99,6 +99,12 @@
-  */
- #define VIRTIO_F_SR_IOV			37
- 
-+/*
-+ * This feature indicates that the driver passes extra data (besides
-+ * identifying the virtqueue) in its device notifications.
-+ */
-+#define VIRTIO_F_NOTIFICATION_DATA	38
-+
- /*
-  * This feature indicates that the driver can reset a queue individually.
-  */
 -- 
-2.35.1
-
+heikki
