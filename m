@@ -2,147 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EBC6C14CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C54406C14DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjCTOf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
+        id S231588AbjCTOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjCTOfY (ORCPT
+        with ESMTP id S231479AbjCTOgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:35:24 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4EE23658;
-        Mon, 20 Mar 2023 07:35:19 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id o7so10574995wrg.5;
-        Mon, 20 Mar 2023 07:35:19 -0700 (PDT)
+        Mon, 20 Mar 2023 10:36:10 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF4F1A651
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:36:08 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id cn12so1965785edb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679322967;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+bhKdJGctfgNktjxuVj2so7dX31mlyALoONZ3xTxQAo=;
+        b=h8UPhcIEH39Ywj5eMgZz0xyTP3unUC/KUfkRJw0CqfGPlEKN6SwKqG2gqt1qfYfKz8
+         UCy6FmSEU6W7FJdpoEKE5cBmfQuvwRdvomX+bZRIIUpHIwRsKgXNLAuaQvndtkd17GzJ
+         HJK4SKYWulZhCWvfwkMozsbjVthDUgWwl2fold1owMQTDwa6vsG6ivVxdFTu/iTccaRy
+         RRH/I+NOLyu0XndnjKft6VjQ7okAs7qb9X4s60zwKW+2jmFN/ty7U3NqEOSZxHkV379c
+         mhV4P2VKedk0b7yxKVEddlF89/2DHCvGPs959aXjJOrEPBZjE/RrqN2xIicXLCYG+AUy
+         4lLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679322918;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m1BzpXV0y6te1zBYqcLNkghC0956cKZHajoibkxBlDw=;
-        b=i1VrILvAC1Ef9ZbmvFHarwcrJ57CxRkBBamHUbbRbDpV/ihCgB2WDmImGBnb24fRH6
-         qmc7irMmqtlKVwPbO/IwJFau+yGPXJefom6yJ4iF116yqW1gBwpuYPlOYnwlNL+0Nfxy
-         DRqmhJ/u2sB9jv2+o7ST+9lQy6rBM6SJXmEFOmsgMgdMgacHwJg4GD+0dvbNYn4RJCVF
-         xowEi24JXD/+1LjhcCz1oNZNLJBn2dumuXPoplhi+sG8QdQqKMVWL56ismPYkzj20g0g
-         a2iVpZV8ZA3AJa+SG7Q+98+BGvhxAeRzF+StY3DBFGbkDmmlSdCwMWj2LeG3Q5//rIWH
-         jaEw==
-X-Gm-Message-State: AO0yUKVFhqas6wViFiA+dELIIuuVskEj/2ejFpXDEWU9mJIIzP01PxPj
-        8JFgQKfosU9zPTN+TW0ki3Y=
-X-Google-Smtp-Source: AK7set8/Cz6xju4k7BMBZp/msbyxb+nYsSmbOrYN9Ee0ZiQTLUIM37XnMB8HDLUUSUuDfwUsa7RbXA==
-X-Received: by 2002:adf:e583:0:b0:2c7:bb13:e23f with SMTP id l3-20020adfe583000000b002c7bb13e23fmr14783687wrm.24.1679322917558;
-        Mon, 20 Mar 2023 07:35:17 -0700 (PDT)
-Received: from localhost ([2a01:4b00:d307:1000:f1d3:eb5e:11f4:a7d9])
-        by smtp.gmail.com with ESMTPSA id b7-20020a5d4b87000000b002cfe0ab1246sm9075318wrt.20.2023.03.20.07.35.16
+        d=1e100.net; s=20210112; t=1679322967;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+bhKdJGctfgNktjxuVj2so7dX31mlyALoONZ3xTxQAo=;
+        b=7W/ULa0L8o35DqGbE5neTm2yU9/zJ+yMy6jTPenQYlDhj5i4QcdIF0UCf6tLlHJ0jm
+         JD0YbMGpnazX1yMWxFXGiV+B/z7wfrxCNL4sJFmZ8vukftzfT/kbpLrejPKVx3H0Vkdw
+         UJHaTg42yODSNKP/JJGhdVzS2eutnsdTdrYD0Rya6x8n5V+GfwG10Lnmfmc12HXJYoBc
+         0NiVauzLVEUs18aGfpUXSaumOwX0itQlhLNbufu/Z1NBN3hUua7Kx0j8iyZFSdjerrbU
+         YabcDGGFrnpilxPGnGh/NH+Pr9CKTUxFe87WTPG2wQLWPt66aeZWeRcXfENS/Tubfnes
+         1z7g==
+X-Gm-Message-State: AO0yUKWNvJXNsKnOEjto8Lx1K3eaq2Q+UJlzxCD4DYt07SrIUzbucvJ9
+        8QU+UhS8ADCKSkmfqy6LEgCGMm73sFpUTefTrv0=
+X-Google-Smtp-Source: AK7set8jbwJ62Rb4/CWNBz2G/at5rbfmgI979Xo7rDZoF8x9yzaT6t4b5n/rH43xpuzCDJQl76yolQ==
+X-Received: by 2002:aa7:c658:0:b0:4fb:e14:c25b with SMTP id z24-20020aa7c658000000b004fb0e14c25bmr12070380edr.33.1679322966785;
+        Mon, 20 Mar 2023 07:36:06 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id b44-20020a509f2f000000b004c09527d62dsm4969535edf.30.2023.03.20.07.36.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:35:16 -0700 (PDT)
-Message-ID: <7b4f8261bd3cc76c123ee7fbd176ca6a82387dce.camel@debian.org>
-Subject: Re: [PATCH net-next 0/3] Add SCM_PIDFD and SO_PEERPIDFD
-From:   Luca Boccassi <bluca@debian.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>, smcv@collabora.com
-Date:   Mon, 20 Mar 2023 14:35:15 +0000
-In-Reply-To: <20230316131526.283569-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230316131526.283569-1-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-g+4MrqyDATbFKaUjggeo"
-User-Agent: Evolution 3.38.3-1+plugin 
+        Mon, 20 Mar 2023 07:36:06 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 19:36:03 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8] staging: axis-fifo: initialize timeouts in init only
+Message-ID: <ZBhvU/USP0es8e4P@khadija-virtual-machine>
+References: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
+ <2222576.3ZeAukHxDK@suse>
+ <ZBf+XDN8GM0xDDCq@khadija-virtual-machine>
+ <3180435.l52yBJDM9G@suse>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3180435.l52yBJDM9G@suse>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 20, 2023 at 02:38:24PM +0100, Fabio M. De Francesco wrote:
+> On lunedì 20 marzo 2023 07:34:04 CET Khadija Kamran wrote:
+> > On Fri, Mar 17, 2023 at 11:29:25AM +0100, Fabio M. De Francesco wrote:
+> > > Khadija,
+> > > 
+> > > Congratulations for having your first patch in Linux, via Greg's staging
+> > > tree.
+> > > 
+> > > It will take some time before it reaches mainline, although it is already 
+> on
+> > > its way to get upstream.
+> > 
+> > Thank you! :)
+> > 
+> > > On giovedì 16 marzo 2023 21:09:00 CET Khadija Kamran wrote:
+> > > > Initialize the module parameters, read_timeout and write_timeout once in
+> > > > init().
+> > > > 
+> > > > Module parameters can only be set once and cannot be modified later, so 
+> we
+> > > > don't need to evaluate them again when passing the parameters to
+> > > > wait_event_interruptible_timeout().
+> > >
 
---=-g+4MrqyDATbFKaUjggeo
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2023-03-16 at 14:15 +0100, Alexander Mikhalitsyn wrote:
-> 1. Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENT=
-IALS,
-> but it contains pidfd instead of plain pid, which allows programmers not
-> to care about PID reuse problem.
->=20
-> 2. Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd=
-.
-> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
->=20
-> 3. Add SCM_PIDFD / SO_PEERPIDFD kselftest
->=20
-> Idea comes from UAPI kernel group:
-> https://uapi-group.org/kernel-features/
->=20
-> Big thanks to Christian Brauner and Lennart Poettering for productive
-> discussions about this.
->=20
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Christian Brauner <brauner@kernel.org>
->=20
-> Alexander Mikhalitsyn (3):
-> =C2=A0=C2=A0scm: add SO_PASSPIDFD and SCM_PIDFD
-> =C2=A0=C2=A0net: core: add getsockopt SO_PEERPIDFD
-> =C2=A0=C2=A0selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+Hey Fabio,
+I am talking about this below:
 
-I've implemented support for this in dbus-daemon:
 
-https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/398
+> > > Greg made you (and indirectly me notice) that the statement above is a 
+> kind
+> > > of short-circuit because it misses to make the readers notice that you are
+> > > dealing with specific permissions granted to these two module's 
+> parameters.
+> 
+> Only "read" permissions for owner, group, others.
+> Obviously, when the module is initialized, "insmod" can pass actual values to 
+> the arguments. The point is that from that moment onward nobody is allowed to 
+> change the initial values associated with this variables, but they can still 
+> be read at will.
+> 
+> > I am trying to make sense of this. As the permissions do not allow
+> > write, so the value cannot be configured afterwards.
+> 
+> Yes, if with "afterwards" you are intending after they are set at insmod runs. 
+> 
+> > Instead of saying 'cannot be modified later', we should talk more about
+> > permissions here too.
+> 
+> I'm confused by this statement. Can you please rephrase?
+> 
+> > Am I getting it right?
+> 
+> Not sure, it depends on what you meant with the previous phrase.
 
-It's working very well. I am also working on the dbus-broker and polkit
-side of things, will share the links here once they are in a reviewable
-state. But the dbus-daemon implementation is enough to meaningfully
-test this.
+As you said above that the commit message makes the reader miss the
+permission details, so should we write more about permissions in the
+description?
 
-For the series:
 
-Tested-by: Luca Boccassi <bluca@debian.org>
+>  
+> > Thank you!
+> > 
+> > Regards,
+> > Khadija
+> 
+> You're welcome!
+> 
+> So, thanks for working on this patch as long as it takes to get it done. 
+> 
+> I think the lesson to be learned is that in our community there are barriers 
+> to the entry of substandard products and therefore people have to do their 
+> best if they really want to see their work applied.
 
---=20
-Kind regards,
-Luca Boccassi
 
---=-g+4MrqyDATbFKaUjggeo
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+Yes, you are right. Due to this reason, the whole process is making me
+learn a lot. I am really glad to be a part of it ^-^ 
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmQYbyMACgkQKGv37813
-JB6t4Q/+LGVA6D+WY1fJtevPmTYQLD8EETU5dViUGoPPOwDMl2RbZAbvZV5syoh7
-Qp27XNLX8m0kL4j7oUCZCEae1kydxmUg2IW+urUZBLKaYlf6lO8aiwdWMJzdwTLg
-QnQnFd667ToGX57ZCMe00qWc/FeIqMXbhYdvpJARuPQPctD6+nQTCGcfstX0UV2V
-e90FgATPEVIG/4jn2gpq7Pi7G/YzCCZenrfQokftx3j62XkA+vvW5KL85HfNUh7s
-W/QztIr+RgYssEaO1jd3dKaWqcOPuQjRqIxL0aRpwGV83nQptL2wzkoXgH/lU905
-WOjPF7CZPARnZi+sISOA+nRNI4I19X3LaibfIUUypvTEutx/ejH3vEBTgZKGTx1v
-fcJOMZ9srZU5Ap+/tLgJnmQ/MsksxhY7ddlecXdg0gIp6Yhdavc0gflNycfknXj9
-OanmPcKc05q93784bH2By4ZDaKmgUb0hoykKbq+4dYF24ap38yP2MXxnevevZzNK
-SXlyXKu2qz6jRcleQSu/AaAMbyadaa6lt5antKKiMrmgB0LU3D25b0HfXkcNk9q1
-vIsSqChvtqIRp3KAZXZdADVO0nDjZWqkfnrNo59sJ3TBl+BaIflR95gxpLu/c5A/
-H6CmAE2WTYQdqzYUvbacyeLABURr/EhDzYIobGZqiKNOiovTPE0=
-=Mns1
------END PGP SIGNATURE-----
+> These tasks are not for the "faints of heart" :-)
+> 
+> Fabio
+>
 
---=-g+4MrqyDATbFKaUjggeo--
+Regards,
+Khadija :)
+
+
+> 
+> 
