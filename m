@@ -2,126 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965886C1375
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAF86C137C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjCTNcw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 09:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S230381AbjCTNeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjCTNcs (ORCPT
+        with ESMTP id S230046AbjCTNeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:32:48 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5263358E;
-        Mon, 20 Mar 2023 06:32:46 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1peFcv-002LMJ-Sn; Mon, 20 Mar 2023 14:32:41 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1peFcv-000m1l-Kk; Mon, 20 Mar 2023 14:32:41 +0100
-Message-ID: <c33548dd94ca23347a418743120aed4a552264a2.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not
- enabled
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, stable@vger.kernel.org,
-        linux-sh <linux-sh@vger.kernel.org>
-Date:   Mon, 20 Mar 2023 14:32:40 +0100
-In-Reply-To: <CAMuHMdVR78EXTVd7ThUEv6rxL8aHSyAoC_5z8KyAPmiTyww85w@mail.gmail.com>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
-         <20230306040037.20350-8-rdunlap@infradead.org>
-         <056df6d548ad0e4f7f4ccb2782744b165ce20578.camel@physik.fu-berlin.de>
-         <CAMuHMdU+tsKuONm9iPqqTFSnRT2zaV3zogYgc-+vCp6x-ruQ_w@mail.gmail.com>
-         <01f84314b2499b6859a4826ecf7363635e66a4fc.camel@physik.fu-berlin.de>
-         <CAMuHMdVR78EXTVd7ThUEv6rxL8aHSyAoC_5z8KyAPmiTyww85w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Mon, 20 Mar 2023 09:34:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0409E2130;
+        Mon, 20 Mar 2023 06:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4ZH7pgpUeJbXrkFFil6ceo9u06+QpQF5ILp07z1RGgk=; b=xt5nxVFijLtiUlCb289PXu9H0E
+        rjmWwb4I9vYRpNZB5SqcRePpUqQrzECXPX8Ogac1as2ySTojc7Ik+5mQvMi8I410746j7DeyHm6To
+        MXAKt2KY7ffbqMy/sz8VBeahv84AYeU1volXuChFZYIvEJLvS+nK5qCz18hTfB69QHTLt2jUsmjih
+        DYsmYB889q+XZTfZZ6kVLRRmVaKSutrml/MpxPDFjpSdPMHDOJyixIWY0Htvuz543esS7vGhlr2MU
+        2X8Fn3zQZG++8Vc2+/3HoGWXDfWc1wDz0jmHobL1YjNwS5Qeq2+HFVdJxmGfJ+c+Y5HBx5nSP7CNZ
+        I7Lk1AIg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1peFeF-009CO0-0A;
+        Mon, 20 Mar 2023 13:34:03 +0000
+Date:   Mon, 20 Mar 2023 06:34:03 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block: add queue_logical_block_mask() and
+ bdev_logical_block_mask()
+Message-ID: <ZBhgy/+u/5+79uZq@infradead.org>
+References: <20230310082413.58141-1-frank.li@vivo.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310082413.58141-1-frank.li@vivo.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
+On Fri, Mar 10, 2023 at 04:24:13PM +0800, Yangtao Li wrote:
+> Introduce queue_logical_block_mask() and bdev_logical_block_mask()
+> to simplify code, which replace (queue_logical_block_size(q) - 1)
+> and (bdev_logical_block_size(bdev) - 1).
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+> Like wo done for fs.
+> This round we add helpers and start converting in the next cycle.
+> https://lore.kernel.org/lkml/20230309124035.15820-1-frank.li@vivo.com/
 
-On Mon, 2023-03-20 at 13:42 +0100, Geert Uytterhoeven wrote:
-> Oops, obviously all of that happened before my morning coffee ;-)
-> 
-> Makefile has:
-> 
->     ifdef CONFIG_FRAME_POINTER
->     KBUILD_CFLAGS   += -fno-omit-frame-pointer -fno-optimize-sibling-calls
->     KBUILD_RUSTFLAGS += -Cforce-frame-pointers=y
->     else
->     # Some targets (ARM with Thumb2, for example), can't be built with frame
->     # pointers.  For those, we don't have FUNCTION_TRACER automatically
->     # select FRAME_POINTER.  However, FUNCTION_TRACER adds -pg, and this is
->     # incompatible with -fomit-frame-pointer with current GCC, so we don't use
->     # -fomit-frame-pointer with FUNCTION_TRACER.
->     # In the Rust target specification, "frame-pointer" is set explicitly
->     # to "may-omit".
->     ifndef CONFIG_FUNCTION_TRACER
->     KBUILD_CFLAGS   += -fomit-frame-pointer
->     endif
->     endif
-> 
-> Your config probably has CONFIG_FRAME_POINTER set?
-> 
->     arch/sh/Kconfig.debug=config DWARF_UNWINDER
->     arch/sh/Kconfig.debug-  bool "Enable the DWARF unwinder for stacktraces"
->     arch/sh/Kconfig.debug-  depends on DEBUG_KERNEL
->     arch/sh/Kconfig.debug:  select FRAME_POINTER
-> 
-> You should make sure that cannot happen when CONFIG_FUNCTION_TRACER
-> is enabled. I.e. make DWARF_UNWINDER depend on !FUNCTION_TRACER?
-> 
-> Other architectures do something similar:
-> 
->     arch/sparc/Kconfig.debug:config FRAME_POINTER
->     arch/sparc/Kconfig.debug-       bool
->     arch/sparc/Kconfig.debug-       depends on MCOUNT
-> 
->     arch/x86/Kconfig.debug:config FRAME_POINTER
->     arch/x86/Kconfig.debug- depends on !UNWINDER_ORC && !UNWINDER_GUESS
->     arch/x86/Kconfig.debug- bool
-> 
-> Probably you need to adjust the following, too:
-> 
->     lib/Kconfig.debug:config FRAME_POINTER
->     lib/Kconfig.debug-      bool "Compile the kernel with frame pointers"
->     lib/Kconfig.debug-      depends on DEBUG_KERNEL && (M68K || UML ||
-> SUPERH) || ARCH_WANT_FRAME_POINTERS
->     lib/Kconfig.debug-      default y if (DEBUG_INFO && UML) ||
-> ARCH_WANT_FRAME_POINTERS
-> 
-> i.e. drop SUPERH from the list above, and select ARCH_WANT_FRAME_POINTERS
-> if !FUNCTION_TRACER.
+Please always send the helper with the actual users.
 
-Do you think you can send a patch for this change? I can then review and apply
-it together with Randy's series in case everything works as expected.
+And for use in file systems the request_queue is very much the
+wrong object to work on.  All the block layer APIs for consumers like
+file systems are based on struct block_device.
 
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
