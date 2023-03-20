@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905876C2567
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057A76C256D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCTXGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S229971AbjCTXHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjCTXGM (ORCPT
+        with ESMTP id S229511AbjCTXHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:06:12 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874973401D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:05:49 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id bc5so1568929ilb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679353549;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KwJX4b+VPStuq284oz9cB+/Udp1QkSmbOh4T1cpR4pg=;
-        b=CQQhyhzxFqeKEC8ObG77F4cyUsoPaWdJ+AO9fw9JujjKmlm9DQt9/DFZk7mp3y6t0Q
-         17H5HCqlTMi+CCkfYaXyB0oh2DAMhbh64g78gKzJNcQ1yOLLqu0ggWagu9IKTvXZgNzw
-         vzDmp6/MeVb2jowwPp6ox7eA0Y0Fke6GjcHYk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679353549;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KwJX4b+VPStuq284oz9cB+/Udp1QkSmbOh4T1cpR4pg=;
-        b=kDs9W+LWwanE5+S200D3EbBzruwG/eo1qtIYQNjer8X4GDwhfy94YNhyUIYPEBitjb
-         1sSnWJyNHhnCR+Yu8DYWV4xpsM2Slvi/UchGAmZIAHmy9iKdOS/aq90VjfRt4s+C3/Eb
-         osbnA60iy3y0ljhz6R+5f1U3e8BhtcADtXxMlz05Ag9Quk4Y0xtLmOHd6BU1zla4d4vw
-         tc1nQwVhTIkPh7In97Hc2EDdwKprt05amwDm/FgWwJ1GEvA+R2TfXNX9rlgLd3jDI+r7
-         tka4LchOEZNgd35jUhsXu7tTvDYQUNNNB+AD7BwhTAkKjKGKUYcfabWvRA7SSu/SEgR7
-         RCbw==
-X-Gm-Message-State: AO0yUKWNfC+KwVgPVEDw0TqIL++dtVb4x/YP2/uPMpbVuwtX42i1oJeR
-        dwKn8oVZk+mhbA6UZpyvqlnMEQ==
-X-Google-Smtp-Source: AK7set+OCd+B5gc9ajXw1DDPfyi7WoLhrSHDcnF2ZsZfQucYQURr55VjtxQuikn+AYFRrV+b76DTwg==
-X-Received: by 2002:a05:6e02:16cd:b0:317:9d16:e6c7 with SMTP id 13-20020a056e0216cd00b003179d16e6c7mr793903ilx.3.1679353548872;
-        Mon, 20 Mar 2023 16:05:48 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o3-20020a056e02114300b003158e48f1e9sm3131882ill.60.2023.03.20.16.05.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 16:05:48 -0700 (PDT)
-Message-ID: <2a7a841c-0f5b-9227-0014-fe40afd925f7@linuxfoundation.org>
-Date:   Mon, 20 Mar 2023 17:05:47 -0600
+        Mon, 20 Mar 2023 19:07:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B23E34034
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:06:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35937B810A7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:06:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF80C433EF;
+        Mon, 20 Mar 2023 23:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679353588;
+        bh=yaXZgSE+xCFmCr4PCErEggAZ0puJQCwS/ik5TH+VHeg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ub3qa4pZvRu1j4yx5LD+RBviIZkyNSwBLv/sySylbXc/9s5aWwbfth7Plf14rys6+
+         dpOtAJcUbOAMQGwR6y/sT1YI88jy9NSfHUc/sy/IBgUb5Z8Qvd8tZl9uau98NUOO1+
+         4F8ukYlMIkS5gcN7UHa4d+7zg4HjHwKcTEK1CmDDQKliNpa8GvHoKC9g792QgzknOM
+         4D2mhJpe0u8Qye7FRamDYhjArLdKji+75LTovDLzSo4wx1YYe9o5+Bga+PmYbJ4rQj
+         DKPuDKlPufGTJx1lf5zlhL4uYgMYGgEhjAme3/KpkAoTdGi3jCaPMAr7vZbjYcbHOz
+         WtTwldxjY6guQ==
+Date:   Mon, 20 Mar 2023 16:06:26 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [tip:core/urgent 1/1] include/linux/context_tracking.h:99:19:
+ error: redefinition of '__ct_state'
+Message-ID: <20230320230626.m3zg5pjkn7rwi67u@treble>
+References: <202303202052.lv1EF1t6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.15 000/115] 5.15.104-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230320145449.336983711@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230320145449.336983711@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202303202052.lv1EF1t6-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 08:53, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.104 release.
-> There are 115 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Mar 20, 2023 at 09:04:00PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/urgent
+> head:   3e2619c4ebba2cab8414c55b131b7a28f628de3b
+> commit: 3e2619c4ebba2cab8414c55b131b7a28f628de3b [1/1] entry: Fix noinstr warning in __enter_from_user_mode()
+> config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230320/202303202052.lv1EF1t6-lkp@intel.com/config)
+> compiler: powerpc-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=3e2619c4ebba2cab8414c55b131b7a28f628de3b
+>         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>         git fetch --no-tags tip core/urgent
+>         git checkout 3e2619c4ebba2cab8414c55b131b7a28f628de3b
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc prepare
 > 
-> Responses should be made by Wed, 22 Mar 2023 14:54:26 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.104-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303202052.lv1EF1t6-lkp@intel.com/
 
-Compiled and booted on my test system. No dmesg regressions.
+Not sure why I didn't get this build bot error before.  Thomas, can you
+squash in this fix?
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 4a4d56f77180..fdd537ea513f 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -46,7 +46,9 @@ struct context_tracking {
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+ DECLARE_PER_CPU(struct context_tracking, context_tracking);
++#endif
+ 
++#ifdef CONFIG_CONTEXT_TRACKING_USER
+ static __always_inline int __ct_state(void)
+ {
+ 	return arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
