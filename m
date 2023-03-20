@@ -2,118 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8073F6C1B42
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C8A6C1BA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjCTQV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S232177AbjCTQa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbjCTQVh (ORCPT
+        with ESMTP id S232097AbjCTQa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:21:37 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4862C132F6;
-        Mon, 20 Mar 2023 09:14:19 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KF4Yt6019970;
-        Mon, 20 Mar 2023 17:13:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=NgXwip3o4wXvf5NxUnDvu10B6XH84zMDeQuJvYMe7Vg=;
- b=K9zLZUzMadtdLq2tG/MTTTVQfBEic3JY21LeF+gOr89GdIgdZH8EOLeQSSthS7VGhcSv
- Uo8kxadvOjMJ8gAmqRJulD0dRgNn8IeXhqb8NvGzifjLd0Uee2cKwHWc8l80cd0ygVVx
- gNQW/ULIcHGc1HqW0iqMKxfOSH/B/VFc+Ns/hfNk9pl/B+mH4KYETXOY4nWIixVeb8bP
- cYDVo1myfPxdzylphr88capYzDlMTYqgSDkE2UyxWXoGlOZUvL15uCJ1yAH2uWDp7BPb
- Yt+mXJJ+C7nOBn/ETUzIXkeM/D1qIUzS3uHD6BaAhJ6egDwYV2GD2FXViTthZkCTtz9b LA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pekqx3bh2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 17:13:58 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2D7D610002A;
-        Mon, 20 Mar 2023 17:13:56 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 276AB216EFE;
-        Mon, 20 Mar 2023 17:13:56 +0100 (CET)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Mon, 20 Mar
- 2023 17:13:55 +0100
-Message-ID: <37b5bf6c-c290-1283-1dca-6e8fdbf7f430@foss.st.com>
-Date:   Mon, 20 Mar 2023 17:13:54 +0100
+        Mon, 20 Mar 2023 12:30:28 -0400
+X-Greylist: delayed 370 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Mar 2023 09:22:54 PDT
+Received: from pv50p00im-zteg10011401.me.com (pv50p00im-zteg10011401.me.com [17.58.6.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A367713D63
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1679329003;
+        bh=rh8fsgpj4qufqjt6unxdAU5GmU9fIG/olnJE9qASDBQ=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=MDjCnw68RSNePlpqFapchG/U5MgcpzRqhTGSQgLtZAVKhYLqwcQAc8908czQAXHDw
+         lTf/YWxugghqN+6MmUYdx/K23kYogtRwE7vssWLX0uNwvkVcnY+eLDQj0pIL8v4qKV
+         bTvfrqa+h5Gwz/lVMBxUaxxUTJqISHVVrcN1HxkvjAdG6iwKxf/LkMmXIu/OmS7kNJ
+         OPnm4llj4lhMrnoQe3ZtTd9PahxmBIwWR9BbY21el79aQO3Rhu0nz43uJwcqd1LzWn
+         2TTxlhckc2AIaAc6wm8zFKitvt9STyIbn7DUnXWpJ53V65YSBNqZvmu0yJe28+tj43
+         ha5Ww6kjJSxew==
+Received: from localhost.localdomain (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-zteg10011401.me.com (Postfix) with ESMTPSA id CA69BDC08E1;
+        Mon, 20 Mar 2023 16:16:39 +0000 (UTC)
+From:   Roman Beranek <romanberanek@icloud.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/sun4i: uncouple DSI dotclock divider from TCON0_DCLK_REG
+Date:   Mon, 20 Mar 2023 17:16:36 +0100
+Message-Id: <20230320161636.24411-1-romanberanek@icloud.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] ARM: dts: stm32: Add coprocessor detach mbox on
- stm32mp15xx-osd32 SoM
-Content-Language: en-US
-To:     =?UTF-8?Q?Leonard_G=c3=b6hrs?= <l.goehrs@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     <kernel@pengutronix.de>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230310092650.1007662-1-l.goehrs@pengutronix.de>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230310092650.1007662-1-l.goehrs@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_13,2023-03-20_02,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: kdl0OAMlASNejuphoXbv8xBp_Es7-AqJ
+X-Proofpoint-GUID: kdl0OAMlASNejuphoXbv8xBp_Es7-AqJ
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 clxscore=1011 mlxlogscore=999 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2303200138
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leonard
+In the case of DSI output, the value of SUN4I_TCON0_DCLK_DIV (4) does
+not represent the actual dotclock divider, PLL_MIPI instead runs at
+(bpp / lanes )-multiple [1] of the dotclock. [2] Setting 4 as dotclock
+divder thus leads to reduced frame rate, specifically by 1/3 on 4-lane
+panels, and by 2/3 on 2-lane panels respectively.
 
-On 3/10/23 10:26, Leonard Göhrs wrote:
-> To support the detach feature, add a new mailbox channel to inform
-> the remote processor on a detach. This signal allows the remote processor
-> firmware to stop IPC communication and to reinitialize the resources for
-> a re-attach.
-> 
-> See 6257dfc1c412dcdbd76ca5fa92c8444222dbe5b0 for a patch that does the
-> same for stm32mp15x-dkx boards.
-> 
-> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-> ---
->   arch/arm/boot/dts/stm32mp15xx-osd32.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi b/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi
-> index 935b7084b5a2..a43965c86fe8 100644
-> --- a/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi
-> @@ -210,8 +210,8 @@ &ipcc {
->   &m4_rproc {
->   	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
->   			<&vdev0vring1>, <&vdev0buffer>;
-> -	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
-> -	mbox-names = "vq0", "vq1", "shutdown";
-> +	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
-> +	mbox-names = "vq0", "vq1", "shutdown", "detach";
->   	interrupt-parent = <&exti>;
->   	interrupts = <68 1>;
->   	status = "okay";
-> 
+As sun4i_dotclock driver stores its calculated divider directly in
+the register, conditional handling of the DSI output scenario is needed.
+Instead of reading the divider from SUN4I_TCON0_DCLK_REG, retrieve
+the value from tcon->dclk_min_div.
 
-Applied on stm32-next.
+[1] bits per pixel / number of DSI lanes
+[2] https://github.com/BPI-SINOVOIP/BPI-M64-bsp-4.4/blob/66bef0f2f30b367eb93b1cbad21ce85e0361f7ae/linux-sunxi/drivers/video/fbdev/sunxi/disp2/disp/de/lowlevel_sun50iw1/disp_al.c#L322
 
-Thanks.
-Alex
+Signed-off-by: Roman Beranek <romanberanek@icloud.com>
+---
+ drivers/gpu/drm/sun4i/sun4i_dotclock.c | 6 +++++-
+ drivers/gpu/drm/sun4i/sun4i_tcon.c     | 5 +++--
+ drivers/gpu/drm/sun4i/sun4i_tcon.h     | 1 +
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+diff --git a/drivers/gpu/drm/sun4i/sun4i_dotclock.c b/drivers/gpu/drm/sun4i/sun4i_dotclock.c
+index 417ade3d2565..26fa99aff590 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_dotclock.c
++++ b/drivers/gpu/drm/sun4i/sun4i_dotclock.c
+@@ -11,6 +11,7 @@
+ 
+ #include "sun4i_tcon.h"
+ #include "sun4i_dotclock.h"
++#include "sun6i_mipi_dsi.h"
+ 
+ struct sun4i_dclk {
+ 	struct clk_hw		hw;
+@@ -56,6 +57,9 @@ static unsigned long sun4i_dclk_recalc_rate(struct clk_hw *hw,
+ 	struct sun4i_dclk *dclk = hw_to_dclk(hw);
+ 	u32 val;
+ 
++	if (dclk->tcon->is_dsi)
++		return parent_rate / dclk->tcon->dclk_min_div;
++
+ 	regmap_read(dclk->regmap, SUN4I_TCON0_DCLK_REG, &val);
+ 
+ 	val >>= SUN4I_TCON0_DCLK_DIV_SHIFT;
+@@ -116,7 +120,7 @@ static int sun4i_dclk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 			       unsigned long parent_rate)
+ {
+ 	struct sun4i_dclk *dclk = hw_to_dclk(hw);
+-	u8 div = parent_rate / rate;
++	u8 div = dclk->tcon->is_dsi ? SUN6I_DSI_TCON_DIV : parent_rate / rate;
+ 
+ 	return regmap_update_bits(dclk->regmap, SUN4I_TCON0_DCLK_REG,
+ 				  GENMASK(6, 0), div);
+diff --git a/drivers/gpu/drm/sun4i/sun4i_tcon.c b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+index 523a6d787921..7f5d3c135058 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_tcon.c
++++ b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+@@ -367,8 +367,9 @@ static void sun4i_tcon0_mode_set_cpu(struct sun4i_tcon *tcon,
+ 	u32 block_space, start_delay;
+ 	u32 tcon_div;
+ 
+-	tcon->dclk_min_div = SUN6I_DSI_TCON_DIV;
+-	tcon->dclk_max_div = SUN6I_DSI_TCON_DIV;
++	tcon->is_dsi = true;
++	tcon->dclk_min_div = bpp / lanes;
++	tcon->dclk_max_div = bpp / lanes;
+ 
+ 	sun4i_tcon0_mode_set_common(tcon, mode);
+ 
+diff --git a/drivers/gpu/drm/sun4i/sun4i_tcon.h b/drivers/gpu/drm/sun4i/sun4i_tcon.h
+index fa23aa23fe4a..d8150ba2f319 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_tcon.h
++++ b/drivers/gpu/drm/sun4i/sun4i_tcon.h
+@@ -271,6 +271,7 @@ struct sun4i_tcon {
+ 	struct clk			*dclk;
+ 	u8				dclk_max_div;
+ 	u8				dclk_min_div;
++	bool				is_dsi;
+ 
+ 	/* Reset control */
+ 	struct reset_control		*lcd_rst;
+-- 
+2.32.0 (Apple Git-132)
 
