@@ -2,149 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91CC6C121D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002686C1220
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjCTMno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
+        id S231478AbjCTMnx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 08:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjCTMnj (ORCPT
+        with ESMTP id S231465AbjCTMnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:43:39 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2051.outbound.protection.outlook.com [40.107.243.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B72119B6;
-        Mon, 20 Mar 2023 05:43:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JyhHSox2FZTnEDoir+4DJOeZO8MuI4thFfRyMgYlpC3Ujqg7ziR4Yyo6EEnGOsC6U1ZTkb5AXho2acKZWS1JMxypYfTiHrrsy319aZV0v0sNcTBewWlg/3phoOvJu3pxLOz2aPgxfqpzrXYb/rKGXxNxHD3jYszQH4OIYVqiZUKKBEiCahSgwCdxGKWgyZvN6LANQ5NXJ8OYQ09Kvhio2YZ+4wS2Ju0HGMDjuinxoNijgYCTtb6P0wu9vXMd9u1mZo9pNJG3WDpvjfjZFxLz6eUR/DctoLKpEmim1ayvceD6yHF+ZsKQq0mV1SvESCZ4Q0QszargfuXTdClpG4JWPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7eMOayg9P1prabRZ+S8SyoQ5m7H8DyngUO6obOrvIJg=;
- b=iXqCU9tZ6Pt70cHR54M0cIRMr58WxLpltbXMK8216adH+5r9ONzbBX9kLhsG+SxKy/7q4TxUdbJkePC2p/cc8efW/JNPzHlx5fxt2D6/ZFfjMzbayS9Y8bRrstdaR/TG6stvDJy4nwgPngc802Ce9YGUH0ErzOwntXmEmXBhmtj5r/O2djhcJuTkKK57ReNhOWH88YmSDxjfbMFikGHnZl1zVHdsiP140+LyUxuxYLE+iQWh72n/tJuwweis8tD+xLmsPr0ZgS1EppKxX4C1f3p//A4ncWAoTu+L5+CoWLg1Vxbza3ucTjyUs9YL9kqcPIg64GlUOI2vlLVE5Eb76Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7eMOayg9P1prabRZ+S8SyoQ5m7H8DyngUO6obOrvIJg=;
- b=TNrDWqI38wKT8Ou395TxvQ2fXkaxoeKH6gUPIjCDv+pOy9pIa8g8oFFiYj8zSBvCuPaibaH3tctz2567lfUQICNzhBb6+z3+Vq+d0KwBVeCaq0VB0HPrAXGX/BMuWSz3M23tY5PniaMtDNbv4Gh3jWOO9/XQUzudn3Je6Je0QZ1U7LC7znRcgfqufkeFDmQIfjDYwlI00SDEbrs4+sg9nrg2mOYK1RE5j8eUNP62CyX0ypkz12qghJlAcjMvvHhNWeXx+Elm/ZE9o0jFfZBVhG/NNx6YImvjCAqTGImiCT9Wf/EEie0XL0Gmsxx2J0ZVEecqVNeLGAob/Hlc+kwVkQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BY5PR12MB4049.namprd12.prod.outlook.com (2603:10b6:a03:201::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 12:43:32 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 12:43:32 +0000
-Date:   Mon, 20 Mar 2023 09:43:30 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] iommufd/selftest: Add coverage for
- IOMMU_DEVICE_GET_HW_INFO ioctl
-Message-ID: <ZBhU8p4RZKVWKKBG@nvidia.com>
-References: <20230309075358.571567-1-yi.l.liu@intel.com>
- <20230309075358.571567-5-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309075358.571567-5-yi.l.liu@intel.com>
-X-ClientProxiedBy: BL0PR0102CA0012.prod.exchangelabs.com
- (2603:10b6:207:18::25) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 20 Mar 2023 08:43:45 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2FE17CC8;
+        Mon, 20 Mar 2023 05:43:44 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id t9so12760928qtx.8;
+        Mon, 20 Mar 2023 05:43:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679316223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J27/p0bP3aKpOCIgRWklAhNJ8h7EoV6Eqok7p2+EW2s=;
+        b=KsTqTsHzwAETomPDd0GLJqhHyM1uBvBhzmYwn3d3S15guNht3MQ+juWNmV2GEUIyE6
+         FN83M3RMSjfo2Vb9HZwjmGc2E3/Ch/ybfVhpRoI0s/T3n1+zTGFPdNxsqwyqrva+Nob4
+         REWZHiijWBCZkzSJe+TwQXwPgRRaE6MLfHomy0hm+iSzibHKtHn7PgNrwFiYmfBOTOC9
+         EOr2drR4efcGzh9MLYmE6o2QkYjXWRFzoeUfHNhSaNzdgyTh7MqHoefJdxrEuruWcuwi
+         ErYaUPWXb0MLzeUEdB8cjH18Oe9BGDTv6BIIFMOdiRxBUxy+6Jrz9i7ge3usiVSY2QOb
+         vsKg==
+X-Gm-Message-State: AO0yUKX2vZYG/GugqemK7OQyNdDuooL2r6dIFT2HzGt3IhiKEJO/EOZb
+        a+W0kQif4seX/Za8PFgn3AO1mKCqjIyBvg==
+X-Google-Smtp-Source: AK7set+U8dXVTqiPc6hfsq5yDwVruWdQXI8XyeJmDXmRWkGMsFNB9u2NIIAabOY8jN50ziBuDUBTBQ==
+X-Received: by 2002:ac8:5715:0:b0:3e1:59e8:7450 with SMTP id 21-20020ac85715000000b003e159e87450mr5893331qtw.41.1679316222893;
+        Mon, 20 Mar 2023 05:43:42 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id r15-20020ac8794f000000b003bfaff2a6b9sm6508278qtt.10.2023.03.20.05.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 05:43:42 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id x198so3148071ybe.9;
+        Mon, 20 Mar 2023 05:43:42 -0700 (PDT)
+X-Received: by 2002:a5b:c47:0:b0:b56:1f24:7e9f with SMTP id
+ d7-20020a5b0c47000000b00b561f247e9fmr5449744ybr.12.1679316222145; Mon, 20 Mar
+ 2023 05:43:42 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4049:EE_
-X-MS-Office365-Filtering-Correlation-Id: 079d1dd4-9583-4a2a-877d-08db2940b6a4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XUgmWTNhXjCSmDDKx0Tk4cpzA03g2OnyIG7SpjIqWhqk9Dz+mDNiGnnJHIaKhCCoxToerLm77hwknKrbBME29+uKkrynv61RCTsl8mLHutCpSVFgPtpbJeC/do/DTZbXWSplZUhrvf6kiagefMNrvzVZE/a42QSMlg8iPuGhmCI8YEtrqt+3QgyX1tfZsdYOh0Z7Jvv+//Q0Ghw6N9WJu0rnlVPruJy6tFJCIR2ZtiC/v93DpZ0mCd5A+vSeDIHuaryr/Kc8ZGtdAy0+r1wt+/Ctad/TsA75daeIKaEeXxJfp6pxnQqxhLrtfZTPalpIc4t9Lo6Ntf+9qFskrGph82w56RBNsJS3jZErTB2raO2A2yaPLeyDItT+eGOcyhyaC22hjselzv4f6LDadxzxTFX4K/rjunqYhMSKaQIQjyOUAR+mK9ijrQU0SAdAp9HkllI6Y+9fuMO9az/OHm5YAGqb/h0BVIsahxdA4Ea4Ad/wlHSbxYrAs7tKbkTYJBpZh7PMWiAEzhC09i76PQomQf6S6tT0nT/UgQnf5e8dbF76GdDQkWbykcFt1AquQvtdxWchnEmaCkJghmoHMS0W+7EY0QwugIEJ2ycEGy6mxTKs3ohBEQpbod3I3Zq05BsnYsRDAntV5VNif+q/xwS/3w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(39850400004)(136003)(396003)(346002)(451199018)(2616005)(6486002)(6512007)(5660300002)(478600001)(186003)(316002)(6506007)(26005)(7416002)(38100700002)(86362001)(2906002)(8936002)(66946007)(41300700001)(4744005)(4326008)(8676002)(6916009)(66476007)(36756003)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?APb2bAYE4bkGc2nRmctk/oAb6zLH5ok5iXRDy/en78TrxB4+M/aKhPXRCcWX?=
- =?us-ascii?Q?YRIZQLjUlVjxEnmaDU/CYTwyVNUazNbscQOuS2E3ExMEjHzlIy6eobnE8T6l?=
- =?us-ascii?Q?vYMQym4P5fTGXukLOu1tLXqdHXxtbQY9Eq+SRXndQluBn4blnEol9AXeYzZ9?=
- =?us-ascii?Q?AC54sby/52EJ4ICgtGtfc8AkKpx3saVMdDj/J06V1c2VvDtvabi2f61GJy7n?=
- =?us-ascii?Q?TzfMYf/+QxZSM7peobj/2IWXuF+6wgF0t5qTwU+bNKL8LHTe0MuWP+k6dFns?=
- =?us-ascii?Q?ir/xsMFJQcGQ7Dte9/TrWLnEkoW76Dhxm58Si+xsv2GE+dUI3iayOI1Q4b3G?=
- =?us-ascii?Q?7lUu7xG4BgIZD59ATOdFX8O9zBvLT/i8Onmp7wcdHK7rZbB8OeqIrrjcf7s1?=
- =?us-ascii?Q?SKmOTf475PgCvhml/q7mW+QRaj5tgyUmsleDdTK5kznYy3Kf8rjFatOl2/bj?=
- =?us-ascii?Q?P7dwXEQJTv10vmF/GoP5FAmW/8Q6SF4qk2zY8Tl5njLL9JO+baLe6fEEN5N2?=
- =?us-ascii?Q?FxFc1JywcrXw7twQSPvoGMPu+YHnnCR12pUG3kmMDFV6UndjyIVXoyVy6T6C?=
- =?us-ascii?Q?tdikMVCwFdnDkyYnqSSVFMvly3ONO9yAJSF2vmIZXU7gO14stZ7ZCEMZNkhK?=
- =?us-ascii?Q?Wb181PzpFfJJgGxo+vVUxVn30V6a5q16k6UxD1hUyVghAt95fB+QRPZOYtmA?=
- =?us-ascii?Q?qOikHP4Bish4OJEuOZB8Wll1tXnfjUiVW7n3d6tRqlFW9ixttBLJz9AUP57d?=
- =?us-ascii?Q?8qfT/7R8u/2ILOp2r+IeqIM6OyYKi22OVuAbG0OJMP8L0GMcASFfgDuiG090?=
- =?us-ascii?Q?N5fF2J2YjWmUxNLJGL31AvPGpR5HSUPq16Dt435CvWLZlpAMIVX9gQ8obHow?=
- =?us-ascii?Q?Xpv2y/C4F/AvM595ua5CFNuT0ofTl7J9+YixQTw+ma/S2lVaqquMEysrSIDH?=
- =?us-ascii?Q?2JGFg1h2g5ElLQN2XIFVWxovqYlVWpgu/YUfvGprtVolwTEKO6l9Hu1BvNh5?=
- =?us-ascii?Q?MJKgECwM2Sjs6zpLXKmtVyjIlyhgVDbf9PEThLW1UyfH0rqnqXO9Tt/m7zld?=
- =?us-ascii?Q?nGlihz3MdpTAeoQlIHw8lO1Hn2Y6KQ9BBWZjBJdxGt6bWbXSrHYh8nvNlzxn?=
- =?us-ascii?Q?3EvkTe1hGBb+HD7Cwm3xoQDF016a5ylWdq45/YP7B4a7SATIl3hDwp68s1II?=
- =?us-ascii?Q?6DhSnHwYSe+fshXgnh1Evsptry4ulVEqIN3oMk2a8p+zeyRNjpGOWIkVjmzc?=
- =?us-ascii?Q?yY/LoK3ZQCxRlTQuikP0PWX6e59sFFeeAm8+lzzQp0XnPYaLb9H+QTIruOcU?=
- =?us-ascii?Q?OYEELaNYiXvsVG1fk8rxSWjQHmnJaKotSrzqLBnZiCOQPzx5p9wWBslIzQEk?=
- =?us-ascii?Q?QfiPJEzid6aWfPqVc4yaZoWRQ5AalF93jzvoIaFHme/+L2Ky3Zo4YyNfh4Ef?=
- =?us-ascii?Q?WakOAw6WIeKI5q3tnoCNHWBY/B3lphWGY2JdrYP98Q6xzfuzbDPsaCfAopSX?=
- =?us-ascii?Q?WQGWin58itLeK/jSNPc75HJqLLX+oyxTw0SsPUfoFCUAifSvWnQU2jHQ9nGx?=
- =?us-ascii?Q?36zkC/G/Ru+UMT/ZTfhNPxoU//jt1mRK0LFn3wib?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 079d1dd4-9583-4a2a-877d-08db2940b6a4
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 12:43:32.4282
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X2NXdq3iA19xwdPaOXueomKxvKgiDggKtyTUolV79P/3NfcddJlkmSDAyLVJdb6n
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306040037.20350-1-rdunlap@infradead.org> <20230306040037.20350-8-rdunlap@infradead.org>
+ <056df6d548ad0e4f7f4ccb2782744b165ce20578.camel@physik.fu-berlin.de>
+ <CAMuHMdU+tsKuONm9iPqqTFSnRT2zaV3zogYgc-+vCp6x-ruQ_w@mail.gmail.com>
+ <01f84314b2499b6859a4826ecf7363635e66a4fc.camel@physik.fu-berlin.de> <CAMuHMdVR78EXTVd7ThUEv6rxL8aHSyAoC_5z8KyAPmiTyww85w@mail.gmail.com>
+In-Reply-To: <CAMuHMdVR78EXTVd7ThUEv6rxL8aHSyAoC_5z8KyAPmiTyww85w@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Mar 2023 13:43:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW7-4ENVzbUBmquUWyvO5yVJGAC2v3Hffqh12sveOqb_w@mail.gmail.com>
+Message-ID: <CAMuHMdW7-4ENVzbUBmquUWyvO5yVJGAC2v3Hffqh12sveOqb_w@mail.gmail.com>
+Subject: Re: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, stable@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 11:53:58PM -0800, Yi Liu wrote:
-> diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-> index da1898a9128f..578691602d94 100644
-> --- a/drivers/iommu/iommufd/iommufd_test.h
-> +++ b/drivers/iommu/iommufd/iommufd_test.h
-> @@ -100,4 +100,19 @@ struct iommu_test_cmd {
->  };
->  #define IOMMU_TEST_CMD _IO(IOMMUFD_TYPE, IOMMUFD_CMD_BASE + 32)
->  
-> +/* Mock structs for IOMMU_DEVICE_GET_HW_INFO ioctl */
-> +#define IOMMU_HW_INFO_TYPE_SELFTEST	0xfeedbeef
-> +#define IOMMU_HW_INFO_SELFTEST_REGVAL	0xdeadbeef
-> +
-> +/**
-> + * struct iommu_hw_info_selftest
-> + *
-> + * @flags: Must be set to 0
-> + * @test_reg: Pass IOMMU_HW_INFO_SELFTEST_REGVAL to user selftest program
-> + */
+CC linux-sh
 
-Probably don't need the comment, it is misleading
-
-> +struct iommu_hw_info_selftest {
-
-struct iommu_test_hw_info
-
-Jason
+On Mon, Mar 20, 2023 at 1:42 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Mon, Mar 20, 2023 at 10:13 AM John Paul Adrian Glaubitz
+> <glaubitz@physik.fu-berlin.de> wrote:
+> > On Mon, 2023-03-20 at 09:16 +0100, Geert Uytterhoeven wrote:
+> > > On Sun, Mar 19, 2023 at 9:49 PM John Paul Adrian Glaubitz
+> > > <glaubitz@physik.fu-berlin.de> wrote:
+> > > > On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> > > > > Fix a build error in mcount.S when CONFIG_PRINTK is not enabled.
+> > > > > Fixes this build error:
+> > > > >
+> > > > > sh2-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
+> > > > > (.text+0xec): undefined reference to `dump_stack'
+> > > > >
+> > > > > Fixes: e460ab27b6c3 ("sh: Fix up stack overflow check with ftrace disabled.")
+> > > > > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > > > > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > > > > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > > > > Cc: Rich Felker <dalias@libc.org>
+> > > > > Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > Cc: stable@vger.kernel.org
+> > > > > ---
+> > > > > v2: add PRINTK to STACK_DEBUG dependency (thanks, Geert)
+> > > > > v3: skipped
+> > > > > v4: refresh & resend
+> > > > >
+> > > > >  arch/sh/Kconfig.debug |    2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >
+> > > > > diff -- a/arch/sh/Kconfig.debug b/arch/sh/Kconfig.debug
+> > > > > --- a/arch/sh/Kconfig.debug
+> > > > > +++ b/arch/sh/Kconfig.debug
+> > > > > @@ -15,7 +15,7 @@ config SH_STANDARD_BIOS
+> > > > >
+> > > > >  config STACK_DEBUG
+> > > > >       bool "Check for stack overflows"
+> > > > > -     depends on DEBUG_KERNEL
+> > > > > +     depends on DEBUG_KERNEL && PRINTK
+> > > > >       help
+> > > > >         This option will cause messages to be printed if free stack space
+> > > > >         drops below a certain limit. Saying Y here will add overhead to
+> > > >
+> > > > I can't really test this change as the moment I am enabling CONFIG_STACK_DEBUG,
+> > > > the build fails with:
+> > > >
+> > > >   CC      scripts/mod/devicetable-offsets.s
+> > > > sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
+> > > > make[1]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+> > > > make[1]: *** Waiting for unfinished jobs....
+> > > > sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
+> > > > make[1]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+> > > > make: *** [Makefile:1286: prepare0] Error 2
+> > > >
+> > > > So, I assume we need to strip -fomit-frame-pointer from KBUILD_CFLAGS, correct?
+> > > >
+> > > > I tried this change, but that doesn't fix it for me:
+> > > >
+> > > > diff --git a/arch/sh/Makefile b/arch/sh/Makefile
+> > > > index 5c8776482530..83f535b73835 100644
+> > > > --- a/arch/sh/Makefile
+> > > > +++ b/arch/sh/Makefile
+> > > > @@ -173,6 +173,7 @@ KBUILD_AFLAGS               += $(cflags-y)
+> > > >
+> > > >  ifeq ($(CONFIG_MCOUNT),y)
+> > > >    KBUILD_CFLAGS += -pg
+> > > > +  KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS))
+> > > >  endif
+> > > >
+> > > >  ifeq ($(CONFIG_DWARF_UNWINDER),y)
+> > > >
+> > > > Any ideas?
+> > >
+> > > Please try with "+=" instead of ":=".
+> >
+> > That doesn't work either. I tried the following, but that didn't strip -fomit-frame-pointer:
+>
+> Oops, obviously all of that happened before my morning coffee ;-)
+>
+> Makefile has:
+>
+>     ifdef CONFIG_FRAME_POINTER
+>     KBUILD_CFLAGS   += -fno-omit-frame-pointer -fno-optimize-sibling-calls
+>     KBUILD_RUSTFLAGS += -Cforce-frame-pointers=y
+>     else
+>     # Some targets (ARM with Thumb2, for example), can't be built with frame
+>     # pointers.  For those, we don't have FUNCTION_TRACER automatically
+>     # select FRAME_POINTER.  However, FUNCTION_TRACER adds -pg, and this is
+>     # incompatible with -fomit-frame-pointer with current GCC, so we don't use
+>     # -fomit-frame-pointer with FUNCTION_TRACER.
+>     # In the Rust target specification, "frame-pointer" is set explicitly
+>     # to "may-omit".
+>     ifndef CONFIG_FUNCTION_TRACER
+>     KBUILD_CFLAGS   += -fomit-frame-pointer
+>     endif
+>     endif
+>
+> Your config probably has CONFIG_FRAME_POINTER set?
+>
+>     arch/sh/Kconfig.debug=config DWARF_UNWINDER
+>     arch/sh/Kconfig.debug-  bool "Enable the DWARF unwinder for stacktraces"
+>     arch/sh/Kconfig.debug-  depends on DEBUG_KERNEL
+>     arch/sh/Kconfig.debug:  select FRAME_POINTER
+>
+> You should make sure that cannot happen when CONFIG_FUNCTION_TRACER
+> is enabled. I.e. make DWARF_UNWINDER depend on !FUNCTION_TRACER?
+>
+> Other architectures do something similar:
+>
+>     arch/sparc/Kconfig.debug:config FRAME_POINTER
+>     arch/sparc/Kconfig.debug-       bool
+>     arch/sparc/Kconfig.debug-       depends on MCOUNT
+>
+>     arch/x86/Kconfig.debug:config FRAME_POINTER
+>     arch/x86/Kconfig.debug- depends on !UNWINDER_ORC && !UNWINDER_GUESS
+>     arch/x86/Kconfig.debug- bool
+>
+> Probably you need to adjust the following, too:
+>
+>     lib/Kconfig.debug:config FRAME_POINTER
+>     lib/Kconfig.debug-      bool "Compile the kernel with frame pointers"
+>     lib/Kconfig.debug-      depends on DEBUG_KERNEL && (M68K || UML ||
+> SUPERH) || ARCH_WANT_FRAME_POINTERS
+>     lib/Kconfig.debug-      default y if (DEBUG_INFO && UML) ||
+> ARCH_WANT_FRAME_POINTERS
+>
+> i.e. drop SUPERH from the list above, and select ARCH_WANT_FRAME_POINTERS
+> if !FUNCTION_TRACER.
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
