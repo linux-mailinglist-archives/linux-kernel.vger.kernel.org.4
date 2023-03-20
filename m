@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF75E6C0D18
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB726C0D2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbjCTJWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S231367AbjCTJYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjCTJVQ (ORCPT
+        with ESMTP id S231332AbjCTJXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:21:16 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2292387A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=DfsC6bnYi3tDvb
-        jmiiFrhH8pT9NOHPzKI8k3QOYtKg4=; b=PO6n0iREOsfnz106nHUPWkLnOvShlT
-        TfOKOYGGy8CDH2eTvqBzALWKu4PxkuGshlsdbU1iEVpFQ8RqTaGfh4ZF7yI6Te+n
-        j+LuEKyP1LoAKhWmiInnVl6Sm1bLUdyflLP6kyg5Zh73udbWGr3bZEpNzG39b/6c
-        GgMm24oe5+fR8=
-Received: (qmail 860502 invoked from network); 20 Mar 2023 10:20:48 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Mar 2023 10:20:48 +0100
-X-UD-Smtp-Session: l3s3148p1@lVZDcVH3btwujnuq
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] smsc911x: avoid PHY being resumed when interface is not up
-Date:   Mon, 20 Mar 2023 10:20:41 +0100
-Message-Id: <20230320092041.1656-3-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230320092041.1656-1-wsa+renesas@sang-engineering.com>
-References: <20230320092041.1656-1-wsa+renesas@sang-engineering.com>
+        Mon, 20 Mar 2023 05:23:34 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB454233F6;
+        Mon, 20 Mar 2023 02:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679304176; x=1710840176;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=52HlZPeoz1Lq10GDbn1tdSpDfEepChN/u9evpNWzX/Y=;
+  b=MEpXCyHebhZ1QuuLhRvscUVlsX5w1tG66xFyxYRplHglVI/D8BZrvljs
+   GFNKMThOh+SCe6j3304a8VqAh+4nfE4VaXWvYSGPKeJSVwXMtscDtxJf3
+   mSQfzXw25z3DJzOGpxuFzWojle99Q/0xLjqPjugU9V5NZRW5/SQvKkvAe
+   yiSPjbB+B1TJmC8blPO+7SajixxuHhZMIEUgNF2Kwvo+TysZwSF1hryWZ
+   1Dp8jZ7qf3+earjSqXlwojzxOkQUZliuVkac7mq9zadnexWvKPinzkFPQ
+   N4TUc2F/sTxtjqQ2SVicG5U7/2KhERpmcRA6Nm3K1ECrpT0OKntali3U1
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
+   d="scan'208";a="202464503"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 02:22:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 02:22:39 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 20 Mar 2023 02:22:34 -0700
+Message-ID: <9840f009-d056-ea2d-fbcf-61e168157cc9@microchip.com>
+Date:   Mon, 20 Mar 2023 10:22:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dt-bindings: rtc: Drop unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Avi Fishman" <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        "Tali Perry" <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        "Nancy Yuen" <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230317233634.3968656-1-robh@kernel.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230317233634.3968656-1-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SMSC911x doesn't need mdiobus suspend/resume, that's why it sets
-'mac_managed_pm'. However, setting it needs to be moved from init to
-probe, so mdiobus PM functions will really never be called (e.g. when
-the interface is not up yet during suspend/resume). The errno is changed
-because ENODEV has a special meaning when returned in probe().
+On 18/03/2023 at 00:36, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> Signed-off-by: Rob Herring<robh@kernel.org>
+> ---
 
-Fixes: 3ce9f2bef755 ("net: smsc911x: Stop and start PHY during suspend and resume")
-Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-Changes since v1:
-* no change
+[..]
 
-In smsc911x_mii_probe(), I remove the sanity check for 'phydev' because
-it was already done in smsc911x_mii_init(). Let me know if this is
-acceptable or if a more defensive approach is favoured.
+>   .../devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml         | 2 +-
+>   .../devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml        | 2 +-
+
+For Microchip:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Thanks! Best regards,
+   Nicolas
 
 
- drivers/net/ethernet/smsc/smsc911x.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
-index 67cb5eb9c716..8b875bbbc05e 100644
---- a/drivers/net/ethernet/smsc/smsc911x.c
-+++ b/drivers/net/ethernet/smsc/smsc911x.c
-@@ -1019,12 +1019,7 @@ static int smsc911x_mii_probe(struct net_device *dev)
- 	struct phy_device *phydev = NULL;
- 	int ret;
- 
--	/* find the first phy */
- 	phydev = phy_find_first(pdata->mii_bus);
--	if (!phydev) {
--		netdev_err(dev, "no PHY found\n");
--		return -ENODEV;
--	}
- 
- 	SMSC_TRACE(pdata, probe, "PHY: addr %d, phy_id 0x%08X",
- 		   phydev->mdio.addr, phydev->phy_id);
-@@ -1037,8 +1032,6 @@ static int smsc911x_mii_probe(struct net_device *dev)
- 		return ret;
- 	}
- 
--	/* Indicate that the MAC is responsible for managing PHY PM */
--	phydev->mac_managed_pm = true;
- 	phy_attached_info(phydev);
- 
- 	phy_set_max_speed(phydev, SPEED_100);
-@@ -1066,6 +1059,7 @@ static int smsc911x_mii_init(struct platform_device *pdev,
- 			     struct net_device *dev)
- {
- 	struct smsc911x_data *pdata = netdev_priv(dev);
-+	struct phy_device *phydev;
- 	int err = -ENXIO;
- 
- 	pdata->mii_bus = mdiobus_alloc();
-@@ -1108,6 +1102,15 @@ static int smsc911x_mii_init(struct platform_device *pdev,
- 		goto err_out_free_bus_2;
- 	}
- 
-+	phydev = phy_find_first(pdata->mii_bus);
-+	if (!phydev) {
-+		netdev_err(dev, "no PHY found\n");
-+		err = -ENOENT;
-+		goto err_out_free_bus_2;
-+	}
-+
-+	phydev->mac_managed_pm = true;
-+
- 	return 0;
- 
- err_out_free_bus_2:
 -- 
-2.30.2
+Nicolas Ferre
 
