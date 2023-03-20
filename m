@@ -2,149 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D7A6C0BA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32FD6C0BAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCTIAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S229913AbjCTIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCTH74 (ORCPT
+        with ESMTP id S229835AbjCTIAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:59:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C08D12CCA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679299195; x=1710835195;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=YVw9SzaqPt5R2Jh/Y/jSV9pqtQ0IhNlz8O+4tLs+q/8=;
-  b=cBwN769AcZm4EZr1GGuTqVfp/L+ckimfOU/CV2/pV03YMCyi0SSFW9zd
-   ekjIozyLJTNMDxBm6fSfj/7I8vHO2AsT7bE9BvbYvWsk5bABMCplCn4yN
-   i/4vOtepL3dIT7zuQcAP00iedYyhzQ4Repjqc4/b1dC9fJ1Gr8bkEVwKB
-   iBCQAE2i634qf/kdAyu2vkjA1GBB2mv6EYQjodIjtBx47ug/vS++mNGyD
-   y3fK3DE2h4Mb5jZnc/2C8b2IX9FKUt0W7qrqfpzvBJVQ6f5vErk6huRVX
-   T08kxj2rGMY47vrmcUs0vbMSpwlIsAeKDBS9qYyWJUYvmJPvXoAVKzEpr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="424875548"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="424875548"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:59:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="1010375162"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="1010375162"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:59:50 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xin Hao <xhao@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        "Alistair Popple" <apopple@nvidia.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, <linux-mm@kvack.org>,
-        <feng.tang@intel.com>, <zhengjun.xing@linux.intel.com>,
-        <fengwei.yin@intel.com>
-Subject: Re: [linus:master] [migrate_pages] 7e12beb8ca:
- vm-scalability.throughput -3.4% regression
-References: <202303192325.ecbaf968-yujie.liu@intel.com>
-Date:   Mon, 20 Mar 2023 15:58:42 +0800
-In-Reply-To: <202303192325.ecbaf968-yujie.liu@intel.com> (kernel test robot's
-        message of "Mon, 20 Mar 2023 09:12:16 +0800")
-Message-ID: <87o7onua4t.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 20 Mar 2023 04:00:34 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B112CCA
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:00:33 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so6989076pjl.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679299233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y76s/7TZKYipqIGX6dfWBMjuej27Nnu4nm7IdQ4ODYY=;
+        b=HOPeCt4ZCSi3Hr3eqqbUhIy/U8JBXz/aEuPOSI6qA+KF4a5RGoI7p/E40CtdGMYiKx
+         o3HiKzdxk4jChC10/etrjMqiuyUO/RLOdK2xjlkqnRfQcqE/Xkj8QpkYZOlaSOcKecg2
+         +BfruCGMBKT4ylzq2Q/vzd3/paPtEVENSemXq+fhQaUfAgndI7Ifn1bdxI4BtOvfX6PJ
+         UlWRHsKNTnNdgxHBMx80X8SdVLTl5how0FYsNkLoz84QaBd/nqCl1RDFfn/duVlworDI
+         DvOR4c8pvVr8zNkeoOkh0ipJnwVXXZQLqrd5S2NjGgGYqLiXdD8g/9IWP4sTq1nLzcie
+         FA8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679299233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y76s/7TZKYipqIGX6dfWBMjuej27Nnu4nm7IdQ4ODYY=;
+        b=x033jfrYuLI/DPlZgR0Hf5bjmlAof/c7y/EsfaiX+f9ZXFWpFXGK07x+xsBBO6FK7Z
+         LKs3rY8ZrMrnS9jGThuzRqUlx4zPZzrHa8FYfNCNicYUiSRMwJJzw+gZfwwvosOzjPAe
+         IGlrF4degPnuH+ZEyaNcgAxdpLRKhq7YPppg7gM0t2MFg/hMtqk8++Qqh0RojPpTraFm
+         2p1i+AJvetYxo15+vhn0aHu6uOAr2mdXkCXI9b1fzTPaAsZu5l0k/q/Jps+aak2Z00H7
+         ygYa+/OpuhMz5QLJ2GctT9kXf6mxhVbhv4j7l6O7f07pvK665+GrQ4lSSR0sJcUaz124
+         IWIg==
+X-Gm-Message-State: AO0yUKWBu/f3T1dkMhidN8vzip2qYm57onljXyWGv1JntBNeFL4vvsuD
+        /iThunAx/PoAq57MNsPU+w0=
+X-Google-Smtp-Source: AK7set8XC6zuNWgR0plIjofK+YZ3FpO6theGa0DufFvPKzPlVg5PX3MqG+OvQAnKBtku3lQqFmAp+Q==
+X-Received: by 2002:a17:90b:1a8c:b0:22c:59c3:8694 with SMTP id ng12-20020a17090b1a8c00b0022c59c38694mr18213964pjb.44.1679299232894;
+        Mon, 20 Mar 2023 01:00:32 -0700 (PDT)
+Received: from localhost.localdomain ([223.38.28.252])
+        by smtp.gmail.com with ESMTPSA id ez9-20020a17090ae14900b0023cfdb24874sm5570164pjb.5.2023.03.20.01.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 01:00:32 -0700 (PDT)
+From:   junghoonHyun <cjbtest001@gmail.com>
+X-Google-Original-From: junghoonHyun <hyunjunghoon@melfas.com>
+To:     dmitry.torokhov@gmail.com
+Cc:     jeesw@melfas.com, rydberg@bitmath.org,
+        linux-kernel@vger.kernel.org, kms2701@lgdisplay.com,
+        hyunjunghoon@melfas.com, hbarnor@google.com,
+        sstarkenburg@google.com, jbtech0701@daum.net
+Subject: [PATCH] Staging: melfas_mip4: add palm sequence
+Date:   Mon, 20 Mar 2023 17:00:12 +0900
+Message-Id: <20230320080012.4053-1-hyunjunghoon@melfas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yujie,
+add palm processing logic
 
-kernel test robot <yujie.liu@intel.com> writes:
-
-> Hello,
->
-> FYI, we noticed a -3.4% regression of vm-scalability.throughput due to commit:
->
-> commit: 7e12beb8ca2ac98b2ec42e0ea4b76cdc93b58654 ("migrate_pages: batch flushing TLB")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
->
-> in testcase: vm-scalability
-> on test machine: 96 threads 2 sockets Intel(R) Xeon(R) Platinum 8260L CPU @ 2.40GHz (Cascade Lake) with 128G memory
-> with following parameters:
->
-> 	runtime: 300s
-> 	size: 512G
-> 	test: anon-cow-rand-mt
-> 	cpufreq_governor: performance
->
-> test-description: The motivation behind this suite is to exercise functions and regions of the mm/ of the Linux kernel which are of interest to us.
-> test-url: https://git.kernel.org/cgit/linux/kernel/git/wfg/vm-scalability.git/
->
->
-> If you fix the issue, kindly add following tag
-> | Reported-by: kernel test robot <yujie.liu@intel.com>
-> | Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie.liu@intel.com
->
-
-Thanks a lot for report!  Can you try whether the debug patch as
-below can restore the regression?
-
-Best Regards,
-Huang, Ying
-
--------------------------------------8<------------------------------------
-From 1ac61967b54bbdc1ca20af16f9dfb2507a4d4811 Mon Sep 17 00:00:00 2001
-From: Huang Ying <ying.huang@intel.com>
-Date: Mon, 20 Mar 2023 15:48:39 +0800
-Subject: [PATCH] dbg, rmap: avoid flushing TLB in batch if PTE is inaccessible
-
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Signed-off-by: JungHoon Hyun <hyunjunghoon@melfas.com>
 ---
- mm/rmap.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/input/touchscreen/melfas_mip4.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 8632e02661ac..3c7c43642d7c 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1582,7 +1582,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+diff --git a/drivers/input/touchscreen/melfas_mip4.c b/drivers/input/touchscreen/melfas_mip4.c
+index acdfbdea2b6e..311a6a1c0ac4 100644
+--- a/drivers/input/touchscreen/melfas_mip4.c
++++ b/drivers/input/touchscreen/melfas_mip4.c
+@@ -525,7 +525,11 @@ static void mip4_report_touch(struct mip4_ts *ts, u8 *packet)
+ 	} else if (state) {
+ 		/* Press or Move event */
+ 		input_mt_slot(ts->input, id);
+-		input_mt_report_slot_state(ts->input, MT_TOOL_FINGER, true);
++		if (palm)
++			input_mt_report_slot_state(ts->input, MT_TOOL_PALM, true);
++		else
++			input_mt_report_slot_state(ts->input, MT_TOOL_FINGER, true);
++
+ 		input_report_abs(ts->input, ABS_MT_POSITION_X, x);
+ 		input_report_abs(ts->input, ABS_MT_POSITION_Y, y);
+ 		input_report_abs(ts->input, ABS_MT_PRESSURE, pressure);
+@@ -1483,6 +1487,9 @@ static int mip4_probe(struct i2c_client *client)
+ 	input->keycodesize = sizeof(*ts->key_code);
+ 	input->keycodemax = ts->key_num;
  
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				if (pte_accessible(mm, pteval))
-+					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
-@@ -1963,7 +1964,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 				 */
- 				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
- 
--				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+				if (pte_accessible(mm, pteval))
-+					set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
- 			} else {
- 				pteval = ptep_clear_flush(vma, address, pvmw.pte);
- 			}
++	input_set_abs_params(input, ABS_MT_TOOL_TYPE,
++							0, MT_TOOL_PALM, 0, 0);
++
+ 	input_set_abs_params(input, ABS_MT_POSITION_X, 0, ts->max_x, 0, 0);
+ 	input_set_abs_params(input, ABS_MT_POSITION_Y, 0, ts->max_y, 0, 0);
+ 	input_set_abs_params(input, ABS_MT_PRESSURE,
 -- 
-2.30.2
+2.25.1
 
