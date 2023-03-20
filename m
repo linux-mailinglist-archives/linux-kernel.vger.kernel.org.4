@@ -2,96 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1318F6C15C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6846C15B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjCTO5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S231846AbjCTO4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjCTO4j (ORCPT
+        with ESMTP id S231538AbjCTO4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:56:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5D29E36;
-        Mon, 20 Mar 2023 07:54:42 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 97D1D660308E;
-        Mon, 20 Mar 2023 14:53:54 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679324036;
-        bh=YDB02KYv+O6uCPYWRowGPNFWwtu4sohwX02cVa4LFOI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bFziUYKeg51eXwppZBd+rwb317+nq73mdgQoax3v8HuThRxgQyaovJRC5550PJRO3
-         J6IarL42w2eGpOFN0Ht8qxhcEiY38iAIadr03j3TWR5eqc1+k8Le6L5qRHApP0u0yL
-         /Xv+yBKhX7x0CcFCAkDuaMKhtDA1ZaYe62+aUOIofr0oIgW1b+46Gl4tA2U8FGzZ+D
-         dytSEWmUDXQq4yqzxHUpaqhzCl60l3Y1rNApNaDebSuXbUgT4kfdQau30O/9DJrsaE
-         TlbamkBx24aTlv6LZSC8L3yRBzB+IiLZd5EzYD1psPbVN6veuhBG7Mkr+Jy9+OnvyB
-         yQf1qvao0kHXw==
-Message-ID: <9ec79f3a-19b8-f9b1-4226-a2d53a99eac9@collabora.com>
-Date:   Mon, 20 Mar 2023 15:53:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 15/21] dt-bindings: pinctrl: {mediatek,ralink}: fix
- formatting
-Content-Language: en-US
-To:     arinc9.unal@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Rob Herring <robh@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20230317213011.13656-1-arinc.unal@arinc9.com>
- <20230317213011.13656-16-arinc.unal@arinc9.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230317213011.13656-16-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 10:56:03 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E903AD1A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:54:06 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso13230917ybi.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679324037;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQGGTioDiFhMUev8HEdAuk60WbDrELdDZuLoywdGHhs=;
+        b=ek9Rtks1+RLLIGYP9pLXyiQGTAdkwhYdChftSdXgUbweUuBMHdtsjTM9Az9+3nmUqY
+         C5CRfRQOxBw2lI9piPSumO+6TQ6VLkgq7iFSRGODmyNP69JeGXwu/nNsLVidcw3SwJvs
+         v2EAbrCloIyJhbbnzTOHgmODWsDgqRt7rseU5bdbSsEKQepvGjSzWBwHNTGzXkkXUsH9
+         +2v/jBVNnCU5mw3/l3VF2SWMpt+vmMJ64lzIPdHJtTeqiLXECoLJ78ms9qX18R81AUNe
+         YYYPzgPijo5X/3Rsf/9a1xbivqSM3r5skWcJRU5BR+uXZjKlBbrQIzzYG1cDdZ6bU1Ag
+         4eHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679324037;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQGGTioDiFhMUev8HEdAuk60WbDrELdDZuLoywdGHhs=;
+        b=pqPcWtlwSl9AQZFAgWR4rs4Vjn6scAnHhQ+JfUbCHT3DW5p6GZ76aEyBDPRSxIRtbt
+         FfsGsF9x47SqmKgc2kGhhHIQPDtTZvKJLEsLa/2BKvUg50fGds1ecNuyEWf+S3yZYIAz
+         Y+1Qw0troBlZ5+v1KYNnMjLBSlJA5b2ZPzh4B7OuyWATiXP4RepMO0VZ3vPSbCzJ5/PJ
+         nVAGK0EO69WYGmQvbIakeRR8bVZ8JKsSpaTbMaqygVB6QJtKFY7/b4H7MTO+YrGSY6pN
+         rw9i6BlbUakhsmcslwMyTQKjyOD2gNmwGApNuCwavEn5R0KhLKZkPZySytvMV5esR9s8
+         I65Q==
+X-Gm-Message-State: AO0yUKV7G4hS+p0DtR1sJxrfBT44y+oGymE55lPx0CzlQArWXEsL1aiz
+        qvn6BPOGvhWiV05DK+3Nj6q3g3UZ6rU=
+X-Google-Smtp-Source: AK7set/PCK3X9s+E6GRIICuOFmnyzneuIcUGunPdbFL18912Eq2A09I5mT3JJrRlAsxBuRZ/JtaocvKtfEI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:c749:0:b0:541:753d:32f9 with SMTP id
+ i9-20020a81c749000000b00541753d32f9mr10653263ywl.9.1679324037680; Mon, 20 Mar
+ 2023 07:53:57 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 07:53:56 -0700
+In-Reply-To: <20230317235959.buk3y25iwllscrbe@desk>
+Mime-Version: 1.0
+References: <20230201132905.549148-1-eesposit@redhat.com> <20230201132905.549148-2-eesposit@redhat.com>
+ <20230317190432.GA863767@dev-arch.thelio-3990X> <20230317225345.z5chlrursjfbz52o@desk>
+ <20230317231401.GA4100817@dev-arch.thelio-3990X> <20230317235959.buk3y25iwllscrbe@desk>
+Message-ID: <ZBhzhPDk+EV1zRf0@google.com>
+Subject: Re: [PATCH 1/3] kvm: vmx: Add IA32_FLUSH_CMD guest support
+From:   Sean Christopherson <seanjc@google.com>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Ben Serebrin <serebrin@google.com>,
+        Peter Shier <pshier@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/03/23 22:30, arinc9.unal@gmail.com ha scritto:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Fri, Mar 17, 2023, Pawan Gupta wrote:
+> On Fri, Mar 17, 2023 at 04:14:01PM -0700, Nathan Chancellor wrote:
+> > On Fri, Mar 17, 2023 at 03:53:45PM -0700, Pawan Gupta wrote:
+> > > On Fri, Mar 17, 2023 at 12:04:32PM -0700, Nathan Chancellor wrote:
+> > > > > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > > > > index c788aa382611..9a78ea96a6d7 100644
+> > > > > --- a/arch/x86/kvm/vmx/vmx.c
+> > > > > +++ b/arch/x86/kvm/vmx/vmx.c
+> > > > > @@ -2133,6 +2133,39 @@ static u64 vmx_get_supported_debugctl(struct kvm_vcpu *vcpu, bool host_initiated
+> > > > >  	return debugctl;
+> > > > >  }
+> > > > >  
+> > > > > +static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
+> > > > > +				struct msr_data *msr_info,
+> > > > > +				bool guest_has_feat, u64 cmd,
+> > > > > +				int x86_feature_bit)
+> > > > > +{
+> > > > > +	if (!msr_info->host_initiated && !guest_has_feat)
+> > > > > +		return 1;
+> > > > > +
+> > > > > +	if (!(msr_info->data & ~cmd))
+> > > 
+> > > Looks like this is doing a reverse check. Shouldn't this be as below:
+> > 
+> > That diff on top of next-20230317 appears to resolve the issue for me
+> > and my L1 guest can spawn an L2 guest without any issues (which is the
+> > extent of my KVM testing).
 > 
-> Change the style of description properties to plain style where there's no
-> need to preserve the line endings, and vice versa.
+> Great!
 > 
-> Fix capitalisation and indentation.
+> > Is this a problem for the SVM version? It has the same check it seems,
+> > although I did not have any issues on my AMD test platform (but I guess
+> > that means that the system has the support?).
 > 
-> Fit the schemas to 80 columns for each line.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> IIUC, SVM version also needs to be fixed.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Yeah, looks that way.  If we do go this route, can you also rename "cmd" to something
+like "allowed_mask"?  It took me far too long to understand what "cmd" represents.
 
+> > I assume this will just be squashed into the original change but if not:
+> 
+> Thats what I think, and if its too late to be squashed I will send a
+> formal patch. Maintainers?
 
+Honestly, I'd rather revert the whole mess and try again.  The patches obviously
+weren't tested, and the entire approach (that was borrowed from the existing
+MSR_IA32_PRED_CMD code) makes no sense.
+
+The MSRs are write-only command registers, i.e. don't have a persistent value.
+So unlike MSR_IA32_SPEC_CTRL (which I suspect was the source for the copy pasta),
+where KVM needs to track the guest value, there are no downsides to disabling
+interception of the MSRs.  
+
+Manually checking the value written by the guest or host userspace is similarly
+ridiculous.  The MSR is being exposed directly to the guest, i.e. after the first
+access, the guest can throw any value at bare metal anyways, so just do wrmsrl_safe()
+and call it good.
+
+In other words, the common __kvm_set_msr() switch should have something like so,
+
+	case MSR_IA32_PRED_CMD:
+		if (!cpu_feature_enabled(X86_FEATURE_IBPB))
+			return 1;
+
+		if (!msr_info->host_initiated &&
+		    !guest_cpuid_has(vcpu, guest_has_pred_cmd_msr(vcpu)))
+			return 1;
+
+		ret = !!wrmsrl_safe(MSR_IA32_PRED_CMD, msr_info->data);
+		break;
+	case MSR_IA32_FLUSH_CMD:
+		if (!cpu_feature_enabled(X86_FEATURE_FLUSH_L1D))
+			return 1;
+
+		if (!msr_info->host_initiated &&
+		    !guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D))
+			return 1;
+
+		ret = !!wrmsrl_safe(MSR_IA32_FLUSH_CMD, msr_info->data);
+		break;
+
+with the MSR interception handled in e.g. vmx_vcpu_after_set_cpuid().
+
+Paolo?
