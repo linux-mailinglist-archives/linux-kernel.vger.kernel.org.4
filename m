@@ -2,328 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C32D6C1466
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871186C146F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjCTOKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S231536AbjCTOLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjCTOKD (ORCPT
+        with ESMTP id S230126AbjCTOLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:10:03 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2454440DA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:10:01 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id p16so7597239wmq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679321399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=htLtQDgflxVCtls627rP/k7MKZwMTANV654yyEH5hZU=;
-        b=ZnCU9yvtryvvvyX8+KZ+3J83oYhk9FeSUCXcuqFm4XEBHKT1OKsVupA9Hr4/CotM/a
-         hbPMd6uKHzs/xqVw2PglL5dT1Ldq8E2Q0IP7BvQg4FggR67WwxiVU2UGXu52V/IIeypI
-         t5yX8CaNptJqa0Hp92u7+HjJq+lxFNm+DPA3eLxfXUlXthysMO+ebAjJt1FhrI++/7cV
-         SL6VCq9ZFU0rF++G2A4S6M7a70vIO0zuNwap3eA/VOocXa9G7lQXD6dTWR3PUYujGreH
-         gqlLCJvLiR3Va6+e+cCUI8h/A7slwUXDfsBChWBct5hPlmt1tZT8oniIIHp1DFjNBOKS
-         FBUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679321399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=htLtQDgflxVCtls627rP/k7MKZwMTANV654yyEH5hZU=;
-        b=JEjmnTkNm8rZeXYFeGYZK8Ns9U+uG2p+oWD/zX0IH4Q8Imc6+sSLim8gwWBtZD4fO7
-         HfZTOpwDLxFqTcv49QKPEph6Gc4yAH+L7iCfknzVIPrA5ndwVaHTVrjEycTLrfZjsPVh
-         bh7FBiJaLiDknDr/xqjyKpAUJ29jd/UpzDFAhnWCrUOb7415kCDEOse+AabhFCy0B3Ws
-         aWd0FH9iQ/3Dsb0HH5M+QDS9dZf31oEQ2qSbcHMFaNWMcOAmA4Ja6/vThWZKwelwDdgb
-         q5/EKZh1NCZzGMZDs0YxmsveyETcKf6IatnF48FNz9yHprPhy45Ohe7e+PZNAz7xMouH
-         3Txg==
-X-Gm-Message-State: AO0yUKUKevpaBP0oGFB5/Pkpu+PvqVpHyBFbXldFZthOI0FSh6m74j2f
-        ihFA1bUwEPCCP/LCCqgV+8Y=
-X-Google-Smtp-Source: AK7set/vbtlUj96cQeTIX7lwt9hh7zWN8V/T6JHrsCZmTW7W6CnmQuOAuRk0hIkYPvuQI/6+uNIxsA==
-X-Received: by 2002:a7b:c845:0:b0:3ed:76c3:50e9 with SMTP id c5-20020a7bc845000000b003ed76c350e9mr10678365wml.17.1679321399353;
-        Mon, 20 Mar 2023 07:09:59 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id bg7-20020a05600c3c8700b003eb2e33f327sm28160504wmb.2.2023.03.20.07.09.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:09:58 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
-Date:   Mon, 20 Mar 2023 15:09:57 +0100
-Message-ID: <1788637.Zkmt1EvEu4@suse>
-In-Reply-To: <ZBf2fNF4AC3ovR1B@khadija-virtual-machine>
-References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine> <2599595.k3LOHGUjKi@suse>
- <ZBf2fNF4AC3ovR1B@khadija-virtual-machine>
+        Mon, 20 Mar 2023 10:11:16 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2079.outbound.protection.outlook.com [40.107.212.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EA27A87;
+        Mon, 20 Mar 2023 07:11:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I9/03LI93hVixczg0WdE7EAVn5py72LEumiGkkysEb4rMOGwA4Lb4t3pwrgP8v7LpelbMrrVH443tSqGQrNsOexUdixpMlTnjrRmCqRkNt6KOZe+iTgn1Z/niIjd9rQ3CiQ9ZX0Ytpjg/qkBUj54pd5tQFm3TUc9UZEzHHCkLQiOSzohhVOKJD7chQGQipPXpWlApCBrj8YMjvIhYu+XNzcqyVVhHCNVntoE3E5wcLK1LN713TVWAH5OTRCy28jGiqQ47H7RblZdTUBavTvglcl18vUb8UpoifUKkFpi0mpWLfDsKPUZIDMl23d7376gk41T2xtvdM/L4NpCnNACwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z6sOyCftS5Sw89rUmrVxeleLvb7pv7LtLYA89EBaXgo=;
+ b=K3FZrQ4/YuzWotduKG0LT8nA9TvZaur0BgjFD46YZFwQtvoBQ2M2uQ26rJZ/EokYSpbonA8hUP1bYI7CQboZlssqE5cz9PeODuR++wKt1WB6vmgWGyUYBjpMFDwmbd58Ubl064cUfYlQ/C5LDLvCbGA0RWlRfCKs3n0b4HTHeZuV2t7C+cnlVJHdwk499ZiCKBkRM43cyPRcJUdpir9dw0IAB6oi5Tl3xgYWUh1u8HrdtiOiFo+od/Hv76Oi/tl4V7GeazML6nYvCTQGQlHiUexMgWBA8zqF2dGSiuiw4Bn4ksuqHbhzfnHFSr/VFIWi+R8ZjVPk+H3X01ZlJ3ZI8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z6sOyCftS5Sw89rUmrVxeleLvb7pv7LtLYA89EBaXgo=;
+ b=LOvIr8JsrfAhX9wH99yAiLPAS2HsIRwYx6CoX8lsqX94yYMvNdobEkqOVSazMn+KuqBuMPWVyxfiQa5fukOYG1duGxuvWctIIayZrc5H77h3qvLF0QNnyGg1hhxJe52+T8r/FdBGttqqYmXp8rx6eOiKRtEJsubpqcnS/lZOOZlDC1l6MOsC+AH7sd528eluDhCIBZwMAHogTGrU2pIAdOPsJ4hhGp/cf1QqACOD2queVv6RsKfdfXNnrGUWnQgQ5HKv5XOApy4timlzsONKLlCL9pPjcaoz0VST8e4o3BR0mWmwppL+1wbcaszwfZO2b0RChrRODWzjZidnAw5nKw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB6044.namprd12.prod.outlook.com (2603:10b6:208:3d4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 14:11:14 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 14:11:14 +0000
+Date:   Mon, 20 Mar 2023 11:11:12 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v4 3/6] iommu/sva: Stop using ioasid_set for SVA
+Message-ID: <ZBhpgHIJOvZFwaWn@nvidia.com>
+References: <20230301235646.2692846-4-jacob.jun.pan@linux.intel.com>
+ <3b7fb4d3-1fe9-a3be-46ad-c271be9f96c7@linux.intel.com>
+ <20230302091707.58d59964@jacob-builder>
+ <794c7dad-2e62-3afa-ea10-92179b0d1659@linux.intel.com>
+ <20230303093235.GB361458@myrica>
+ <3b2c6fe9-821f-9b84-acb6-777e8517a0fc@linux.intel.com>
+ <ZAHzAa0mnilf0N9K@nvidia.com>
+ <20230307143209.2873d9e2@jacob-builder>
+ <ZAjSsm4/PDRqViwa@nvidia.com>
+ <3050c4a3-8ced-2469-4546-4af9620d3363@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3050c4a3-8ced-2469-4546-4af9620d3363@intel.com>
+X-ClientProxiedBy: BL0PR02CA0066.namprd02.prod.outlook.com
+ (2603:10b6:207:3d::43) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6044:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13d47b53-b7da-4de5-65a7-08db294cf6e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hz3bk68CHb6zRJTnTJL4lIeUD8fRRi5Uknd7oAXHag06rGEJIKKXDWapuvslGFwIbK67jIcdPBYQIUk9uZYMwyBDGMgUQ65dZ9VwIWAKqItChYa0tBruCV5KQCyiHOe4OITVWVdG6plWCS7pkoDQH/HOlJGACXw7QljPVSQNX2gbspImJJifSblAv3oAytSr115e6zstQ2Nb7BHtP89zhzezHJEbeQOipFI3oM6n1AutIsBFCmW7DZdmE5kdfi8OLkImS6r576YZyG0pPjWzDbAFInMHqupvlQLRifyitBS7uWBqhcdZSPg7WA4UaF7jJVIzc0DAycbHYOA2LxHe6ZNSfzwOU8GzVpkcj+vAo64EhvGqGLmI50Yg4dddp69KR0HlAZTfOu56gTj0lu5GA6lkCFY/gN3Jap6i/ZYvp6gGXDdstJXOZRVtrk5Tz2Y7rQBF3uc/MEfNc8jWK+Vy7zovE3Wtb4p1pN3TWMM00IQb58Wrkz4kR9EJqRgHllEVvJ4vi6hy+ZzxJT8/ZCylg7IzHoplgP6725y86gKLYYlHg+pV+hQEEgB09MDBsvgGJ/epKOgSx3Dc5FHR9v8xj20eJ8nNfV0NDGNYpULXwEvIQE8+Dv5VJq3uSv/Ahbnl5U+oiKo/onPXZ0sOK6em1A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(451199018)(8936002)(4744005)(7416002)(5660300002)(41300700001)(4326008)(36756003)(86362001)(38100700002)(2906002)(6916009)(6486002)(83380400001)(478600001)(186003)(2616005)(54906003)(26005)(6506007)(6512007)(316002)(66556008)(8676002)(66946007)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GgkCmqU3KogB+JgQtV966lp108hqqc8z2WO3nA5yfAVewX7mwl3C6gdD1ehv?=
+ =?us-ascii?Q?g6G6A/T0sG3rrpbk8PLwfqOdTlWwNhswsMCvzngMvt+HBHIuTcAkU0OAsyMp?=
+ =?us-ascii?Q?gG/2FYK48UTtnR8iKTjnjDLwBkKazmsYVfxE4uJ3/0oDxsOawOOEzdRITZ1D?=
+ =?us-ascii?Q?LgIbz1Ag1ZSht2hRlEsDE1LzHPEeoPjOk058x/H1q52yTuRpiK9XTpJn/GAI?=
+ =?us-ascii?Q?dbdc40brCa2mXzXm7tznCWSbR6KyJXkn28iitW7EDLKiYYFoWcT4kSIlkz0T?=
+ =?us-ascii?Q?a+bAQwy6NcaOtJVVBAlcPNgTPaj3Eq1Dc4MyXZNAxvc+ABwM26+crbsAvn8q?=
+ =?us-ascii?Q?jtNv+rWSPCRA5QcTKdRLe6wNWaty8fu8cfe/QtJZ+RiPdfO4HqjacufAhU4d?=
+ =?us-ascii?Q?cTcx2tzPKX6rLjh1uNn3DpmH2Nf50dg+Tu4ZRKIv8jeuFNMaH6iE728nEdzs?=
+ =?us-ascii?Q?yGEknkrY3di2jLfwc+E4btEz+WoyNEBdGSXmaXzXCgaVmYG8xPBDiAF67SyG?=
+ =?us-ascii?Q?WR/Kk844yiS6hSGmOZ9sgYtYs361O5cWE0kulkuVtVDOSJGVcM1U7mBFU/Qe?=
+ =?us-ascii?Q?ihiuAxWC0N+aun1hIQcq3KROX+hez9uSuYyF56CK8h7pYOmkuGhVn6T3EuWF?=
+ =?us-ascii?Q?J05jT+YaPsJQX+iDWFCS7/TvjoVvLaoSYdlW0c8gzXfG7PUwomNSunJ8f+1j?=
+ =?us-ascii?Q?6g3Q/97cH54LiDhrW+wa+pJiNNsE4Hs8UVoIHWXWaLWgROOWB7wdyB8JYAzv?=
+ =?us-ascii?Q?6UoXlL8M1peOGyS8hTN1ccae/XBh/hVm71W2c4yGUlfDQF0V/6LboGdRZdGJ?=
+ =?us-ascii?Q?zbtoebB9Kgphbe8haWHZ3JijcJJKwkQFh+tzBrNfFFJmAKdQTD5w8q9+Ot/M?=
+ =?us-ascii?Q?r/RwWEEja57X7PIDD19LY+/dHWF0E8s8QoFE443UiRNymwosckFgKvzpDrvq?=
+ =?us-ascii?Q?1QDaR4GBoUHHjzrRc2azd38WYA9Vk9vfpWlanmTHF4LChjJORbDE9wDgVoNH?=
+ =?us-ascii?Q?XxL74YzpeRl0XIhG7CCN1pQnbMcxRC+XCqXRn4xNX8HQCngt0pFu8qNAM/tZ?=
+ =?us-ascii?Q?RHxhZU8gSkI6U/vXsULn9dDzlS1oz9Eedu92odn36sP6tIBPX9d37fgCm03A?=
+ =?us-ascii?Q?DQjxVo/smcsSl4tLpWAoNWNPkWZFwtcfHwbApcOUNaz3NXdFdr8TcRqVIyEV?=
+ =?us-ascii?Q?gBunkzF0pqnyErJ7dA/TpE4QAwr4nnCXSVnl+cKgHo+sqL9t2WKmr98tWHrl?=
+ =?us-ascii?Q?+nLaPPJbLgKiYDzXH3ndkahZM7WbLDDyq0Ne4dRvClfcXjBRORejzslTp+YM?=
+ =?us-ascii?Q?PzED/TVPuMkuQZr+XBqlgfEJ7VnQljwY4JqaRg6+5U6HVXb5MFJgz7EaO1xH?=
+ =?us-ascii?Q?WnUxu7LtcvzdbElY7U9xDvub8SR7njCOIvZP6HodZ3VKfzPHP10Eq7UyErUV?=
+ =?us-ascii?Q?ZH9jK8P67vrzyEm9LuzqmYA2ETylJrirFvUUQs7NOTT+ZBxYc8KrDLAFvfbH?=
+ =?us-ascii?Q?GbwkYWP7Ays8CZmp2jM1U+N+4vwKLe0yZzHPBbOt+VSQ9mN6tYa/CpNv0wjD?=
+ =?us-ascii?Q?7zSFW6dPu1EVaUuWOZ/WsJ57dWq4D1gIAqLOq8cy?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13d47b53-b7da-4de5-65a7-08db294cf6e6
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 14:11:14.1167
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LrS+PrmR8K4P9lKHvJHBzR6vnE/kb7xUtwCjXgQCo2dcGCZM1pzNDzOkt6ICKiBc
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6044
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=EC 20 marzo 2023 07:00:28 CET Khadija Kamran wrote:
-> On Thu, Mar 16, 2023 at 09:07:09PM +0100, Fabio M. De Francesco wrote:
-> > On gioved=EC 16 marzo 2023 19:35:09 CET Khadija Kamran wrote:
-> > > On Thu, Mar 16, 2023 at 05:17:47PM +0100, Fabio M. De Francesco wrote:
-> > > > On gioved=EC 16 marzo 2023 16:09:08 CET Khadija Kamran wrote:
-> > [snip]
-> >=20
-> > > Hey Fabio!
-> > >=20
-> > > Hope you are doing well. After  spending a lot of time on this I am
-> > > stuck now. Kindly help me resolve this issue or understand it better.
-> > >=20
-> > > Following your instructions I deleted my config file and copied one f=
-rom
-> > > the /boot/ directory. After that I enabled the dependencies(CONFIG_OF=
-=3Dy
-> > > and CONFIG_HAS_IOMEM=3Dy). I was successfully able to enable axis-fif=
-o as
-> > > a module.
-> > >=20
-> > > I then ran the following commands:
-> > >  - make drivers/staging/axis-fifo/
->=20
-> Hey Fabio!
-> Sorry for reaching out to you very late. For the past two days I have
-> had problems with my Virtual Machine. It is stuck at boot, and this
-> happened after it accidentally shut down. I have tried to resolve this
-> problem but nothing is working. Currently I have boot into an older
-> kernel version from the GRUB menu.
->=20
-> I am also sharing the error here:
-> Gave up waiting for root device. Common problems:
-> -Boot args (cat /proc/cmdline)
->   -Check rootdelay=3D (did the system wait long enough?)
-> -Missing modules (cat /proc/modules; ls /dev)
-> ALERT! UUID=3D718ed077-947d-4018-80ad-59825678e81d does not exist.
-> Dropping to a shell!
-> BusyBox v1.27.2 (Ubuntu 1:1.27.2-2ubuntu3.2) built-in shell (ash)
-> Enter 'help' for a list of built-in commands.
->=20
-> I have Windows10 installed and I have created Ubunutu 22.04.1 VM on VMWare
-> with 13GB RAM and 2 processors(4 cores each).
->=20
-> (initramfs)_
->=20
-> > No, this is not the right command... you are not invoking the linker to=
-=20
-make
-> > the .ko object.
-> >=20
-> > Use "make M=3Ddrivers/staging/axis-fifo/"
-> > or "make M=3Ddrivers/staging/axis-fifo/ W=3D1 -j8" (the latter to enabl=
-e level
-> > '1' warning and run on your 2 * 4 logical cores).
->=20
-> This command gives error saying:
-> scripts/Makefile.build:41: /drivers/staging/axis-fifo/Makefile:
-> No such file or directory
-> make[1]: *** No rule to make target '/drivers/staging/axis-fifo/Makefile'=
-=2E=20
-> Stop. make: *** [Makefile:2028: /drivers/staging/axis-fifo] Error 2
->=20
-> > >  - sudo make modules_install install(this command took hours) :'(
-> >=20
-> > This is odd, it shouldn't :-/
-> >=20
-> > As I said in another message, I'll set aside some time to help you chec=
-k=20
-if
-> > you need to fine tune your VM and Hypervisor configuration.
-> >=20
-> > I'm returning on the same subject we have been talked about because you=
-=20
-said
-> > at least twice that your builds and install are too slow. We'll try to
-> > diagnose it in an IRC session on #kernel-outreachy (I'm pretty sure for=
-=20
-the
-> > first days of next week - I'll send an invite).
->=20
-> Yes I would love that. Kindly help me with this.
-> Thank you!
->=20
-> Regards,
-> Khadija Kamran
->=20
-> > > > When you are done with build, install, and final reboot to test if=
-=20
-your
-> > > > module can "modprobe" or "insmod" (i.e. link with the running custom
-> >=20
-> > kernel
-> >=20
-> > > > you built, installed and boot), try to compare the output of the
-> > > > following
-> > > > commands:
-> > > >=20
-> > > > # uname -a
-> > > > Linux suse 6.2.2-1-default #1 SMP PREEMPT_DYNAMIC Thu Mar  9 06:06:=
-13
-> > > > UTC
-> > > > 2023 (44ca817) x86_64 x86_64 x86_64 GNU/Linux
-> > >=20
-> > > The above command works
-> > >=20
-> > > > AND
-> > > >=20
-> > > > # modinfo <name of the module you are testing here>
-> > >=20
-> > > On running 'modinfo axis-fifo' I get error saying module axis-fifo not
-> > > found.
-> >=20
-> > Try again after building with "M=3Ddrivers/staging" (as said above). Do=
-n't
-> > forget to run "make modules_install install" and then reboot into your
-> > custom
-> > built Kernel, not the distribution's kernel.
-> >=20
-> > While you are there, run "lsmod" to see all loaded modules. Pick one
-> > randomly
-> > from the output list and run "modinfo
-> > name_of_the_module_you_want_info_about".>=20
-> > > > I'm running "modinfo kvm" (but showing only two of many lines):
-> > > >=20
-> > > > # modinfo kvm
-> > > > filename:       /lib/modules/6.2.2-1-default/kernel/arch/x86/kvm/
-> >=20
-> > kvm.ko.zst
-> >=20
-> > > > vermagic:       6.2.2-1-default SMP preempt mod_unload modversions
-> > > >=20
-> > > > Can you see that the kernel in "uname -a" and the filename and=20
-vermagic
-> >=20
-> > have
-> >=20
-> > > > the same "6.2.2-1-default"? Well, so I'm sure I'm running the right
-> > > > Kernel
-> > > > and inserted the appropriate "kvm" module.
-> > > >=20
-> > > > Furthermore, before rebooting your custom kernel, you may also look=
- at
-> > > > the
-> > > > directory in the Kernel where you compiled your module and search f=
-or
-> >=20
-> > "*.o"
-> >=20
-> > > > "*mod*" and "*.ko" files. If you have them, you built your module
-> >=20
-> > properly.
-> >=20
-> > > There is a "*.o" file and "*.mod" file but there is no "*.ko" file in
-> > > the axis-fifo directory.
-> > >=20
-> > > Kindly help me with this.
-> > >=20
-> > > Regards,
-> > > Khadija
-> > >=20
-> > > > Thanks,
-> > > >=20
-> > > > Fabio
-> >=20
-> > Let me know if this time it works.
-> >=20
-> > Fabio
-> >=20
-> > P.S.: Have you had time to read that "Linux Kernel Module Programming"=
-=20
-guide
-> > I sent you the link of? You can find a lot of information about modules
-> > there. I'd strongly recommend you to read it.
+On Sat, Mar 11, 2023 at 09:18:30AM -0800, Fenghua Yu wrote:
 
-Khadija,
+> Ok. I will maintain mm and find mm from PASID inside IDXD driver. And will
+> implement accessing the remote mm inside IDXD driver although the
+> implementation will have duplicate code as access_remote_vm().
 
-I think that you are trying to skip some passages. Let me explain better...
+If you really need it and it really makes sense, then export it 
 
-Soon after copying from /boot your new .config you should run "make=20
-menuconfig" or "make oldconfig" to re-create the necessary dependence and=20
-other files which are required to build properly.
-
-I'd suggest "make menuconfig" so that you can check if you enabled correctl=
-y=20
-the module(s) you are interested to build and other built-in options you ma=
-y=20
-optionally need.
-
-Then you must rebuild and install. So...
-
-1) "make menuconfig" (don't forget to save before exiting),
-2) "make W=3D1 -j8" (because you have 8 logical cores reserved to your VMWa=
-re=20
-VM, correct?).
-3) "make modules_install install".
-
-At this point check that you have a fresh kernel image in /boot, that /boot/
-grub/grub.conf contains a new entry with your freshly built custom kernel s=
-o=20
-that you can boot it from selecting the proper entry in the menu that you'l=
-l=20
-see after reboot. Also check that you have axis-fifo.ko under /lib/modules/
-<the new kernel version>/build/drivers/staging/axis-fifo/.
-
-=46or example in my VM for test I see axis-fifo with...
-
-ls -l /lib/modules/6.3.0-rc2-x86-32-debug+/build/drivers/staging/axis-fifo/
-total 564
-=2Drw-r--r-- 1 1001 fsgqa    196 Mar 16 20:57 .Module.symvers.cmd
-=2Drw-r--r-- 1 1001 fsgqa    275 Mar 17 15:39 .axis-fifo.ko.cmd
-=2Drw-r--r-- 1 1001 fsgqa    183 Mar 12 20:29 .axis-fifo.mod.cmd
-=2Drw-r--r-- 1 1001 fsgqa  50093 Mar 17 15:39 .axis-fifo.mod.o.cmd
-=2Drw-r--r-- 1 1001 fsgqa  61110 Mar 17 15:37 .axis-fifo.o.cmd
-=2Drw-r--r-- 1 1001 fsgqa    147 Mar 17 15:37 .modules.order.cmd
-=2Drw-r--r-- 1 1001 fsgqa      0 Mar 16 20:57 Module.symvers
-=2Drw-r--r-- 1 1001 fsgqa 255748 Mar 17 15:39 axis-fifo.ko
-=2Drw-r--r-- 1 1001 fsgqa     38 Mar 12 20:29 axis-fifo.mod
-=2Drw-r--r-- 1 1001 fsgqa   2354 Mar 17 15:38 axis-fifo.mod.c
-=2Drw-r--r-- 1 1001 fsgqa  44604 Mar 17 15:39 axis-fifo.mod.o
-=2Drw-r--r-- 1 1001 fsgqa 128156 Mar 17 15:37 axis-fifo.o
-=2Drw-r--r-- 1 1001 fsgqa     38 Mar 17 15:37 modules.order
-
-(as you can see, the last time I built and installed the kernel and the axi=
-s-
-fifo driver's module was March 17, 15:39).
-
-Please notice that my kernel has that "-x86-32-debug+" suffix after the ker=
-nel=20
-version but this depends on a special option I need to set to differentiate=
-=20
-"debug" kernels from "production" kernels. You may have something else that=
-=20
-your distribution appends.
-
-If you can't find the module run again "ls -l" one level up, like in /lib/
-modules/6.3.0-rc2-x86-32-debug+/build/drivers/staging/ to see if at least y=
-ou=20
-have any of the drivers/staging/ modules. Go one more layer up if you don't=
-=20
-find them.
-
-If everything I cited above is where it is supposed to be and grub.conf is=
-=20
-properly configured with the new entry, reboot and enjoy your module (try=20
-modprobe, modinfo, lsmod, and the likes).
-
-=46abio=20
-
-=46abio
-
-
-
-
+Jason
