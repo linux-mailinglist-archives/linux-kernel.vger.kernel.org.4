@@ -2,276 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A086C21FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51A76C2201
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjCTTyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S230299AbjCTTyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjCTTxz (ORCPT
+        with ESMTP id S230098AbjCTTys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:53:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5660E38E;
-        Mon, 20 Mar 2023 12:53:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5E9C821ABF;
-        Mon, 20 Mar 2023 19:53:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679342012; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EpUxLNmwTqpW0BLfBZKQROzzyyfZskZY+ODA7yDR4ts=;
-        b=qR5CpGZLQY/SCUQdt4yITkO5T2uYX9sLwpKzKsJeaW0X5Ld9eVytU1ukxQ24t0tmIf4fI0
-        uwxYvm1xkTXqUdlGN9GXAv6XCJ7MuBQYW7HgPWlLX+JhsHiSzbWj+fV6xqfMWhGRnf/D+g
-        bebXl8LmopGVi20cPt/BZ0Pg2eXjTPM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679342012;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EpUxLNmwTqpW0BLfBZKQROzzyyfZskZY+ODA7yDR4ts=;
-        b=uF2A3CzqmZcv7MVfoV+Z7vxg3NbycpCcWhG4+gAX89upgjFIJbYjnQQBmeh+nremNWBcIU
-        pzWTfup7BsY3STBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D163C13A00;
-        Mon, 20 Mar 2023 19:53:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id V8rpJLu5GGSjUAAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Mon, 20 Mar 2023 19:53:31 +0000
-Date:   Mon, 20 Mar 2023 16:53:29 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 02/10] livepatch: Add klp-convert tool
-Message-ID: <20230320195329.6iptay5bjoaapdvb@daedalus>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230306140824.3858543-3-joe.lawrence@redhat.com>
- <20230314182621.tsh55pjeo6onb6ix@daedalus>
- <b2a6784f-d928-19a8-365f-35fc1e6c617d@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Mon, 20 Mar 2023 15:54:48 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2131.outbound.protection.outlook.com [40.107.100.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34076E38E;
+        Mon, 20 Mar 2023 12:54:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nw/IsA2r5WlZ3cMJPpCiFAJvptsKCLGf7gAW1h561jPYkR6ME1y/sSE9QWLJNUkzvftOA4Rkswr9N0qxcVTCM7hgrnBUmbb5a/JwPcONpmYBfGdhuKmKAqBNy8kR8rmbQEeu+Xx4pgIRxMqD2TqDRsss4RXkWc+cFcfY3z737owGPy0FZvFaTbJ9iFX/FIUkGzFf97FnjrnHhifTJ06GmgMoZoxDYcT6znEnEoskP0tpYGqFDrJDaQTLMg4olekTn/pdKg22PGTGrzQ0A9Y6LaS5EEFc0px1bukHWxLc8e77naTOHcsZf8j0Xg+oCJbonLgkBb4/wOZpJ4DelWbpgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YfrW1NdjstnmDjRB9vP2G9u2+cXi21aBKAkl64Euhxs=;
+ b=BXadN3IEkfz50YHzrFZozRg1oQhAwrolUqr3KGqL9mbumAwCCWMTf1J09XTKObWmO4Jr7tknk3k5y3uQQKzzEKm0SegMf3mO/7V9cjR8r0umsPPAu9CU6I6HxMNkGwnDUdwhmWk9wAIi92v5Oa3K0CzkO1G/uO3RfmsH3pREmwfmBJhzQxdnHK+7x2P0KpNjN5ORasMqszXudo7EeuiflajEpOI/d31k3rsMUVE8u4oKk3NVyvnsJscovc1eL1Pv7LpQBxVAKnqPD8MUi3RzlW9PkpEAASRCdhydy4glQ8X0xhCTR691x++Op3R7a+fBXtZK8EVP6nGSAeTNJI/11Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YfrW1NdjstnmDjRB9vP2G9u2+cXi21aBKAkl64Euhxs=;
+ b=l0gvkb9utp7SyBIcaYHxJxwlnSt4SE/P8G1nEwAI2sxOSvyVtJpaHtb3zSgbJvjQi4wyIa1TcoFyzAbPMhNZaFcxabdtqeDBA3JzLxvc0uklMHowjYT2GuMTErlCHXUfSzgtMJHcYoIzRlca8ZB0bVb4IQb/GN26iConiFKuNyc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB6108.namprd13.prod.outlook.com (2603:10b6:510:29b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 19:54:27 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 19:54:27 +0000
+Date:   Mon, 20 Mar 2023 20:54:19 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     =?utf-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
+Cc:     f.fainelli@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] net: dsa: b53: mmap: add more BCM63xx SoCs
+Message-ID: <ZBi56yI4CnY2AAtH@corigine.com>
+References: <20230320155024.164523-1-noltari@gmail.com>
+ <20230320155024.164523-3-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b2a6784f-d928-19a8-365f-35fc1e6c617d@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230320155024.164523-3-noltari@gmail.com>
+X-ClientProxiedBy: AM0PR01CA0124.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:168::29) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB6108:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bcd7f7b-1221-41cd-926c-08db297ce93c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RUGf/lWCUNoQ9pxk8uJlsDeK5kVRe9VIDvYkY3Nvbyjce0zhkQ/OWMbk3GQamOaZ+zaB3QoQe1OzfyFNG7aeeeMZkSM437YMkIQOsEJjgh2sn08euYzzYJmLPa85cDsds2gjnRJr6R+v2uOcdF3IOaTtq3ZFtO8L3INbGpb4vX15lSWenbNuFIUKFenzyAJwQCeDZ7eFabzV3myLKB+5U6qq2ivhyUjFImlQbFo0Ah9MppENtXL2KMjF9vtI6IZnoQyAr17f//OQaOD/BIXMNvZ7BsO3YOMjiO+AnxgLRIJzLbJeFKV0m0OBuHOXyYG8yC26MZlNDXkiuUMs4HexQ47tnzNoVHkGYa8nvw59nYgM0uZ4QTQjbho49nWsSlE7mCkeFBQUy5IBfLqRqXJLQgwUya8uyjvgC1R4Zs+cQ2xx9epyQM54ubjSBUhC/tKd9wcmoFpiChm0OjEaN3mwt5yNksWhjckgpxQAV8TFTw73IOHkoyk8CMoQfLqh3EFgOoEdW8rBBsW38QiyUpfhhniImNQjKn0PDHZfd2RM3dfyBweUg6fJxUuF/1qKWY3+ycR5tjFukOeWhh4r8U+fvmWCkwrDW65+kLUz+ybNbe8ahMrpPPgdR3f4QH9M5OuZ3AFhYy7ok1KxOrqOYAZkQg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(6029001)(4636009)(376002)(396003)(136003)(346002)(39840400004)(366004)(451199018)(86362001)(38100700002)(316002)(44832011)(66946007)(8676002)(7416002)(5660300002)(36756003)(66556008)(4326008)(6916009)(41300700001)(66476007)(8936002)(2906002)(478600001)(2616005)(6666004)(6512007)(6506007)(186003)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEtqV3ZWWFg4WklPRkRKSmcxRkdjQ0hTWVJ3UGlRL0NwU1hFNzFUckFBbDRL?=
+ =?utf-8?B?WTlKUzErNXk3S1U4OHI2WU9OMEY5a3lFQlBXVTJ2TFg2VzdSU2VmdFRKSnZI?=
+ =?utf-8?B?b0ZWQ2ppTU50dEkvT3dCbHJNd2FkSHc2cUxJVXZmTjZYWkhPenFBbUJvY3Jn?=
+ =?utf-8?B?bUFLK2Z0L21VRUttRm9LUWRhQlkraFZpREJkMTk1ZHpkRnBLaFRiZjVjZFIx?=
+ =?utf-8?B?a2h4aDFZMG12TW9GaDJlbWk2cC9ONmlmNEhSc1VQZmdmZEF1eUNPM29LM1Bw?=
+ =?utf-8?B?ZllOYWJkRU1XaTVFc0lWR3R0NWtTMm9ON2RQMnJ5RWt0dkt6YVN0RnRLK1ZI?=
+ =?utf-8?B?NmlmY2xrRzQvTkcyZnMwdEU2eHQvWlFTQWNiVWRHb0lwZ3ZFTnF4U3pBdVcr?=
+ =?utf-8?B?YXdsZHZ3eVBQcUZySllOWWJITVpxb21zSDFEWk8wSFZhRlpyQ0ZUb05HUm0z?=
+ =?utf-8?B?dWViSm0xUHN1d0lGbG5vRkJhKzhqclZaNDNkdHhGUG1IVFE4REliL3FYdkhC?=
+ =?utf-8?B?eU1Zd1RDRmtQYWRCRWdRQ1hHM2U1VUloZ1BrSFlVYnFFa1lQKzg1MzA0Q0Mv?=
+ =?utf-8?B?NDhoVkRoZkhoNWdCZlZZK0EvOGpvcFFRS1ZiQkRySzgvNE51WVc3SDRFT3Rj?=
+ =?utf-8?B?ZXVveDlpakpkamhNbFV0Mzg2S2ZvdVJ3a1ZwMm9iTURqMDBwdFdFRHVVMTUr?=
+ =?utf-8?B?MXFkcW8vanQ2b2llcDhuSzVzZDdHRXBQcVBmT2NaN014czFaV0xQSmZQQ3lE?=
+ =?utf-8?B?N3ZiMFJ6VXpJV2JJMnQ0NHJIWVU3bUxzN0dNUVpjcDI1cTJJb1pKa1c4YXNz?=
+ =?utf-8?B?T2pBSFdiZTV6ZG9BZTVycmluYWRoSUVWZUZkUzVpa0E0MnVoYm95SWQxZHUw?=
+ =?utf-8?B?NUhnbUlhNXZPYXhPMDhPbE9TRzA2M21OYUpZdlloTldOcUZyODNCOXJ6Q1hv?=
+ =?utf-8?B?Ym5YaGMxVWtTWGdNYXRyWU43OGhtakRHdmhmTEpWcmpwcGR0THJhZmRYejR0?=
+ =?utf-8?B?MUx1Lzg0dHRjNUJnTFdPQWVnYnpoV0p3b0pGY29SdUFqQnVwM0lwNGRKdmxE?=
+ =?utf-8?B?RjB2UFRyanYwZGNycGpaN3RuemIrVXFncGFQb2hMN3hRWm50eHNYbnArL0l5?=
+ =?utf-8?B?YjhtQjV4V3R5S0xYTHJ1bis1OWZOcGNKKzgxNEpJalZoRm9XeEtCRlViZ3BH?=
+ =?utf-8?B?V1dPdEJ3elF4M2M1dm9wZ214SGcxOHcvNWRMbFNLeDNHdjlOSUxCVUJlTXFp?=
+ =?utf-8?B?VGU3WGFVSit1eEF6dFFvYkJqRkNraWl5bzF1SHZFZVVlYTlJNEVFVFR2Tmla?=
+ =?utf-8?B?QWxDS2ZlN2NxYUsyMzdGOGs2eHM5RzdOR05JV0hsYXdKdmZlM2ptZndhNm5a?=
+ =?utf-8?B?STRHMG9qNTFDdTFxbkxTTDlPdEJBQ05WM1plSWsvcXVsQlE3Zk5KOHE4bnNl?=
+ =?utf-8?B?UThmS2s3ZjRtT3VFM0lMbHpLT1dENmtHMzBNRk9jMXhWWVk3ZnEyU3NCdVVn?=
+ =?utf-8?B?aXlFUDgzZnAwV3A2bWZEZEZFVzdIakpxKzB0bGdrN0thdlI2dGl4QnpCd1ZM?=
+ =?utf-8?B?TkxYOC9lblBGbDFzK3hVV3I2RVJsenZoM25OQUd2eFRXT2dHdFpmUjZFR2hN?=
+ =?utf-8?B?R0RrQ0dKOFNVTWpJV2lRQ210b1djK2FBdStzalpFdlFsSEU0SGx0TGFzemta?=
+ =?utf-8?B?M1d1aVZTcjRNZHhrY2o0MXlKVFFaT05abDBIK09YckxVN1JXUmpYNCt3MkpI?=
+ =?utf-8?B?UElLZnNhd0ZoUEhOUmUrR3FzRSt1a2JCL0R6dzI4WGdxeERMVTc2Qjk4UnBp?=
+ =?utf-8?B?cURoVlg5U3Zpb0dSMzY0VTNna3RBc2ZrNTBPaXcxTDYyd2N0aTU1R2piTGVK?=
+ =?utf-8?B?Sk5KaGgrMHVjN3NBS1E4dUxoQThjdzZET0txRGpmN0tGL2VGai9SVU5pRmhu?=
+ =?utf-8?B?NFlYNlU3MVNKbng5ci9VOWlXaklFa3FaN04wMEYwdVc0S3lzc1dTbVZ0b1M2?=
+ =?utf-8?B?SzNmSm1Idk00Wkxka0NjK2czcC8vZlh6NXhBallXdXRYWFNWcnc3dkVEM1FU?=
+ =?utf-8?B?REZ3Wng2OTFBODB1eThyRE14VGRCc0hGaldPeEdQQ2N1c0szTW5VK0tkSDB3?=
+ =?utf-8?B?YjF2TWwwYW9tMHE2cXE3bGNwTXl2UTZybDROZWhwbENVQWZiUkxtMitRelM4?=
+ =?utf-8?B?RW9LeHl6TFpsMG94MGNya21DOTFjMU8yU1A5QStOK0tqMG56WEh6amQwdVV0?=
+ =?utf-8?B?U0YxQktMVjkxLy9zZGsxRzZsS1pRPT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bcd7f7b-1221-41cd-926c-08db297ce93c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 19:54:27.0988
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fQwB51/8wXn1WoHrKmg1qBE+8T5iTgsSt2dfInZ1XcswNgXxJ6EDL/JHwKKlO9q1CspoprzCkabj5VmPJ8RbFvZvo3xOgpeWpdw9xcojnYE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB6108
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 04:06:15PM -0400, Joe Lawrence wrote:
-> On 3/14/23 14:26, Marcos Paulo de Souza wrote:
-> > On Mon, Mar 06, 2023 at 09:08:16AM -0500, Joe Lawrence wrote:
-> >> Livepatches may use symbols which are not contained in its own scope,
-> >> and, because of that, may end up compiled with relocations that will
-> >> only be resolved during module load. Yet, when the referenced symbols
-> >> are not exported, solving this relocation requires information on the
-> >> object that holds the symbol (either vmlinux or modules) and its
-> >> position inside the object, as an object may contain multiple symbols
-> >> with the same name. Providing such information must be done accordingly
-> >> to what is specified in Documentation/livepatch/module-elf-format.txt.
-> >>
-> >> Currently, there is no trivial way to embed the required information as
-> >> requested in the final livepatch elf object. klp-convert solves this
-> >> problem in two different forms: (i) by relying on symbols.klp, which is
-> >> built during kernel compilation, to automatically infer the relocation
-> >> targeted symbol, and, when such inference is not possible (ii) by using
-> >> annotations in the elf object to convert the relocation accordingly to
-> >> the specification, enabling it to be handled by the livepatch loader.
-> >>
-> >> Given the above, create scripts/livepatch to hold tools developed for
-> >> livepatches and add source files for klp-convert there.
-> >>
-> >> The core file of klp-convert is scripts/livepatch/klp-convert.c, which
-> >> implements the heuristics used to solve the relocations and the
-> >> conversion of unresolved symbols into the expected format, as defined in
-> >> [1].
-> >>
-> >> klp-convert receives as arguments the symbols.klp file, an input
-> >> livepatch module to be converted and the output name for the converted
-> >> livepatch. When it starts running, klp-convert parses symbols.klp and
-> >> builds two internal lists of symbols, one containing the exported and
-> >> another containing the non-exported symbols. Then, by parsing the rela
-> >> sections in the elf object, klp-convert identifies which symbols must be
-> >> converted, which are those unresolved and that do not have a
-> >> corresponding exported symbol, and attempts to convert them accordingly
-> >> to the specification.
-> >>
-> >> By using symbols.klp, klp-convert identifies which symbols have names
-> >> that only appear in a single kernel object, thus being capable of
-> >> resolving these cases without the intervention of the developer. When
-> >> various homonymous symbols exist through kernel objects, it is not
-> >> possible to infer the right one, thus klp-convert falls back into using
-> >> developer annotations. If these were not provided, then the tool will
-> >> print a list with all acceptable targets for the symbol being processed.
-> >>
-> >> Annotations in the context of klp-convert are accessible as struct
-> >> klp_module_reloc entries in sections named .klp.module_relocs.<objname>.
-> >> These entries are pairs of symbol references and positions which are to
-> >> be resolved against definitions in <objname>.
-> >>
-> >> Define the structure klp_module_reloc in include/linux/uapi/livepatch.h
-> >> allowing developers to annotate the livepatch source code with it.
-> >>
-> >> klp-convert relies on libelf and on a list implementation. Add files
-> >> scripts/livepatch/elf.c and scripts/livepatch/elf.h, which are a libelf
-> >> interfacing layer and scripts/livepatch/list.h, which is a list
-> >> implementation.
-> >>
-> >> Update Makefiles to correctly support the compilation of the new tool,
-> >> update MAINTAINERS file and add a .gitignore file.
-> >>
-> >> [1] - Documentation/livepatch/module-elf-format.txt
-> > 
-> > LGTM:
-> > 
-> > Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > 
-> > I only have two remarks:
-> > 
-> >>
-> >> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> >> Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
-> >> Signed-off-by: Joao Moreira <jmoreira@suse.de>
-> >> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> > 
-> > ...
-> > 
-> > 
-> >> +#if 0
-> >> +	/*
-> >> +	 * klp-relocations forbidden in sections that otherwise would
-> >> +	 * match in allowed_prefixes[]
-> >> +	 */
-> >> +	static const char * const not_allowed[] = {
-> >> +		".rela.data.rel.ro",
-> >> +		".rela.data.rel.ro.local",
-> >> +		".rela.data..ro_after_init",
-> >> +		NULL
-> >> +	};
-> >> +#endif
-> >> +
-> >> +	/* klp-relocations allowed in sections only for vmlinux */
-> >> +	static const char * const allowed_vmlinux[] = {
-> >> +		".rela__jump_table",
-> >> +		NULL
-> >> +	};
-> >> +
-> >> +	/* klp-relocations allowed in sections with prefixes */
-> >> +	static const char * const allowed_prefixes[] = {
-> >> +		".rela.data",
-> >> +		".rela.rodata",	// supported ???
-> >> +		".rela.sdata",
-> >> +		".rela.text",
-> >> +		".rela.toc",
-> >> +		NULL
-> >> +	};
-> >> +
-> >> +	const char * const *name;
-> >> +
-> >> +#if 0
-> >> +	for (name = not_allowed; *name; name++)
-> >> +		if (strcmp(sec->name, *name) == 0)
-> >> +			return false;
-> >> +#endif
-> >> +
-> > 
-> > Have you needed to enable the not_allowed checks when creating your livepatches?
-> > Otherwise I believe that this can be removed and added again in the future is
-> > needed.
-> > 
+On Mon, Mar 20, 2023 at 04:50:22PM +0100, Álvaro Fernández Rojas wrote:
+> BCM6318, BCM6362 and BCM63268 are SoCs with a B53 MMAP switch.
 > 
-> Good question.
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>  drivers/net/dsa/b53/b53_mmap.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> I left the disabled blocks in the code as a bookmark for an outstanding
-> question: should klp-convert avoid converting relocations in any
-> read-only-ish section?
-> 
-> This becomes interesting in the late module loading case -- some arches
-> (ppc64le IIRC) do not like the module loader tweaking these relocations
-> post module load. [1]
-> 
-> In "[PATCH v7 09/10] livepatch/selftests: add data relocations test"
-> test_klp_convert_data.c, you'll see a few "// .rela.data.rel.ro,
-> .rela.rodata supported ??" comments.  Those would generate relocations
-> in such sections.
-> 
-> Do they *need* to be supported?  AFAIK kpatch-build hasn't needed to
-> create any of those.  That said, it's not too difficult for this
-> patchset's self-tests to generate these.  klp-convert could easily
-> detect this scenario.  The livepatch author could be advised to remove
-> const or  __ro_after_init annotation to move the relocation out of the
-> read-only-ish section.
+> diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
+> index 70887e0aece3..464c77e10f60 100644
+> --- a/drivers/net/dsa/b53/b53_mmap.c
+> +++ b/drivers/net/dsa/b53/b53_mmap.c
+> @@ -331,8 +331,11 @@ static void b53_mmap_shutdown(struct platform_device *pdev)
+>  
+>  static const struct of_device_id b53_mmap_of_table[] = {
+>  	{ .compatible = "brcm,bcm3384-switch" },
+> +	{ .compatible = "brcm,bcm6318-switch" },
+>  	{ .compatible = "brcm,bcm6328-switch" },
+> +	{ .compatible = "brcm,bcm6362-switch" },
+>  	{ .compatible = "brcm,bcm6368-switch" },
+> +	{ .compatible = "brcm,bcm63268-switch" },
 
-I'm not sure if it needs to be supported as well. Maybe other people could give
-their inputs in this regard? Suggesting the livepatch author about this case
-seems a good option either way.
+This patch adds support to this driver for "brcm,bcm63268-switch".
+However, less I am mistaken, this support doesn't work without
+patches 3/4 and 4/4 of this series.
 
-> 
-> [1] https://github.com/joe-lawrence/klp-convert-tree/issues/5
-> 
-> >> +int main(int argc, const char **argv)
-> >> +{
-> >> +	const char *klp_in_module, *klp_out_module, *symbols_list;
-> > 
-> > ...
-> > 
-> >> +
-> >> +/* Functions kept commented since they might be useful for future debugging */
-> >> +
-> >> +/* Dumps sympos list (useful for debugging purposes)
-> >> + * static void dump_sympos(void)
-> >> + * {
-> >> + *	struct sympos *sp;
-> >> + *
-> >> + *	fprintf(stderr, "BEGIN OF SYMPOS DUMP\n");
-> >> + *	list_for_each_entry(sp, &usr_symbols, list) {
-> >> + *		fprintf(stderr, "%s %s %d\n", sp->symbol_name, sp->object_name,
-> >> + *				sp->pos);
-> >> + *	}
-> >> + *	fprintf(stderr, "END OF SYMPOS DUMP\n");
-> >> + * }
-> >> + *
-> >> + *
-> >> + * / Dump symbols list for debugging purposes /
-> >> + * static void dump_symbols(void)
-> >> + * {
-> >> + *	struct symbol_entry *entry;
-> >> + *
-> >> + *	fprintf(stderr, "BEGIN OF SYMBOLS DUMP\n");
-> >> + *	list_for_each_entry(entry, &symbols, list)
-> >> + *		printf("%s %s\n", entry->object_name, entry->symbol_name);
-> >> + *	fprintf(stderr, "END OF SYMBOLS DUMP\n");
-> >> + * }
-> > 
-> > Same here. Have you used these functions recently when debugging klp-convert?
-> > Othewise it can be removed as well.
-> > 
-> 
-> I was tinkering with an alternate sympos annotation (I'll describe it in
-> a separate reply) and think that these debug routines could be activated
-> with --debug cmdline flag(s).  They can be handy for debug/development,
-> so better to make them always active rather than #if 0'd out.
+I think it would be better to re-range this series so
+that support for "brcm,bcm63268-switch" works when it is
+added to/enabled in the driver.
 
-Seems a good plan.
-
-> 
+>  	{ .compatible = "brcm,bcm63xx-switch" },
+>  	{ /* sentinel */ },
+>  };
 > -- 
-> Joe
+> 2.30.2
 > 
