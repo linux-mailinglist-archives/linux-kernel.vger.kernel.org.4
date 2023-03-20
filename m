@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E576C226A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBDF6C226B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCTUSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S231210AbjCTUSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjCTUSb (ORCPT
+        with ESMTP id S229915AbjCTUSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:18:31 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B037E2A98D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:18:24 -0700 (PDT)
-Received: from [192.168.2.1] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B420B20FAEF9;
-        Mon, 20 Mar 2023 13:18:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B420B20FAEF9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679343503;
-        bh=19cxAa5JropGxFJ2QMy34nCRCKBRgMKBM8Me8JoU5nA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=koW0O41c1Ths+6WM7MFXNFuxwap8MXNW22UZFUOGtskJdfu4gtZiVRwxF+PEjqaYx
-         TYZQ/qkv1jO0QSpZ4jEhLxs3e/2UCsBlWrVe+RAEsI0hEPRW1YFRYZvTlgV4UTHUHG
-         00z+MKZ6GW4FEgedSwWiLshj2Ohpl1t7L57ASltc=
-Message-ID: <9b86ac2a-4ef9-1e98-ae5d-94b2655fbe6f@linux.microsoft.com>
-Date:   Mon, 20 Mar 2023 21:18:19 +0100
+        Mon, 20 Mar 2023 16:18:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF991E9D8;
+        Mon, 20 Mar 2023 13:18:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6080614E6;
+        Mon, 20 Mar 2023 20:18:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26EA9C433EF;
+        Mon, 20 Mar 2023 20:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679343515;
+        bh=kCBWJI0OErTst/5QhqoBa5yOjBl4Dx/YTIf9ZhEnLYE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=s/yYmhwLnKzkvUw2LminwOH+fNfM0lolyFwxU/hoHIkE9WqGWXAEjLQYQYeNFU7Zl
+         6USGWKDAkti/Cahw5TYeI1Mho1hO0GQEZ2ge5GwK9uNz5vZwWeBc5q6CggN4U5SBss
+         JqHuH9QJZzZkwEX4M7isVZ7liYV0LV4/Ejt92TobUJ9D+EO62sugRGO0srmycMqnGu
+         nmfFaMa+iLwDdfSK1290hlKo4Ao43yvHDMxDEmFrxZDSqop0XbJIiN+s+rKh9XLWk0
+         I7h300pSSP6ONGtvfMWQO4S4QH5R6l9Jnb5P9M6M0+0b/ovLAE0jBOlnIxSx/j323H
+         qPlx+6NjHHZpw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id A84E01540395; Mon, 20 Mar 2023 13:18:34 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 13:18:34 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rcutorture: Convert
+ schedule_timeout_uninterruptible() to mdelay() in rcu_torture_stall()
+Message-ID: <7a414721-25fa-485c-91a5-13d3149073fe@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230320032422.4010801-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 3/8] x86/psp: Register PSP platform device when ASP
- table is present
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
- <20230320191956.1354602-4-jpiotrowski@linux.microsoft.com>
- <20230320192504.GCZBizEGDjVtGWpNP3@fat_crate.local>
- <6d3d512b-55e9-8205-461c-02f1e71f2b63@linux.microsoft.com>
- <20230320200321.GDZBi8CXCyE6kD7qSN@fat_crate.local>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <20230320200321.GDZBi8CXCyE6kD7qSN@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320032422.4010801-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 21:03, Borislav Petkov wrote:
-> On Mon, Mar 20, 2023 at 08:37:56PM +0100, Jeremi Piotrowski wrote:
->> Because of patch 4. My thinking was that the irq setup requires poking
->> at intimate architectural details (init_irq_alloc_info etc.) so it seems
->> like it fits in arch/x86.
+On Mon, Mar 20, 2023 at 11:24:22AM +0800, Zqiang wrote:
+> For kernels built with enable PREEMPT_NONE and CONFIG_DEBUG_ATOMIC_SLEEP,
+> running the RCU stall tests.
 > 
-> arch/x86/platform/uv/uv_irq.c:193:      init_irq_alloc_info(&info, cpumask_of(cpu));
-> drivers/iommu/amd/init.c:2391:  init_irq_alloc_info(&info, NULL);
+> runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4"
+> bootparams="nokaslr console=ttyS0 rcutorture.stall_cpu=30
+> rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_irqsoff=1
+> rcutorture.stall_cpu_block=1" -d
 > 
-> Also, what patch 4's commit message says, sounds hacky to me. A simple
-> driver should not need the x86_vector_domain. Especially if it is some
-> ACPI wrapper around the PSP hw.
- 
-I agree with you here. The irq config of this thing requires specifying
-passing a CPU vector, this follows the hardware spec which I linked in the
-first 2 commits, pages 13-15 here:
+> [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
+> [   10.841073] rcu_torture_stall start on CPU 3.
+> [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
+> ....
+> [   10.841108] Call Trace:
+> [   10.841110]  <TASK>
+> [   10.841112]  dump_stack_lvl+0x64/0xb0
+> [   10.841118]  dump_stack+0x10/0x20
+> [   10.841121]  __schedule_bug+0x8b/0xb0
+> [   10.841126]  __schedule+0x2172/0x2940
+> [   10.841157]  schedule+0x9b/0x150
+> [   10.841160]  schedule_timeout+0x2e8/0x4f0
+> [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
+> [   10.841195]  rcu_torture_stall+0x2e8/0x300
+> [   10.841199]  kthread+0x175/0x1a0
+> [   10.841206]  ret_from_fork+0x2c/0x50
+> 
+> The above calltrace occurs in the local_irq_disable/enable() critical
+> section call schedule_timeout(), and invoke schedule_timeout() also
+> implies a quiescent state, of course it also fails to trigger RCU stall,
+> this commit therefore use mdelay() instead of schedule_timeout() to
+> trigger RCU stall.
+> 
+> Suggested-by: Joel Fernandes <joel@joelfernandes.org>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/rcutorture.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+> index d06c2da04c34..a08a72bef5f1 100644
+> --- a/kernel/rcu/rcutorture.c
+> +++ b/kernel/rcu/rcutorture.c
+> @@ -2472,7 +2472,7 @@ static int rcu_torture_stall(void *args)
 
-https://www.amd.com/system/files/TechDocs/58028_1.00-PUB.pdf
+Right here there is:
 
-The only way I found to get this to work was going through x86_vector_domain
-or statically defining a system vector (the latter felt worse).
+			if (stall_cpu_block) {
 
+In other words, the rcutorture.stall_cpu_block module parameter says to
+block, even if it is a bad thing to do.  The point of this is to verify
+the error messages that are supposed to be printed on the console when
+this happens.
+
+>  #ifdef CONFIG_PREEMPTION
+>  				preempt_schedule();
+>  #else
+> -				schedule_timeout_uninterruptible(HZ);
+> +				mdelay(jiffies_to_msecs(HZ));
+
+So this really needs to stay schedule_timeout_uninterruptible(HZ).
+
+So should there be a change to kernel-parameters.txt to make it
+more clear that this is intended behavior?
+
+						Thanx, Paul
+
+>  #endif
+>  			} else if (stall_no_softlockup) {
+>  				touch_softlockup_watchdog();
+> -- 
+> 2.25.1
 > 
-> But I'd leave that to tglx.
->>> I also drew inspiration from the sev-guest device in the arch/x86/kernel/sev.c,
-> 
-> Yeah, we've designed another mess there considering we already have
-> 
-> drivers/virt/coco/sev-guest/sev-guest.c
-> 
-> That sev guest thing has no place in sev.c and it should go away from
-> there.
-> 
->> which is used in a similar context (the PSP device I am registering here is
->> for SNP-host support).
->>
->> Would you prefer it in drivers/platform/x86?
-> 
-> drivers/hv/?
-> 
-> Seeing how hyperv is the only thing that's going to use it, AFAICT.
-> 
- 
-That could work, let me try that.
