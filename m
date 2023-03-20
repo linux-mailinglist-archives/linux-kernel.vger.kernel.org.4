@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C53A6C2269
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E576C226A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjCTUSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
+        id S230233AbjCTUSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjCTUSG (ORCPT
+        with ESMTP id S230497AbjCTUSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:18:06 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAA52659C;
-        Mon, 20 Mar 2023 13:17:59 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id r36so9658205oiw.7;
-        Mon, 20 Mar 2023 13:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679343479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yvCcR37fJLrlgMelR2q/aS1U42JwkCalYOsRuH6mTh8=;
-        b=IKID8tLkc4Izl4DY8COzbDpVHlzwLNw9WA2rcFJqv14tjXVobe7QhMBCp8bZ4v9cnO
-         /Satm3TrEt+LK98otDTP6100A93uBQYCVVreUQ205taqSq+fP34SNCRN5NfxBgWT+ObM
-         GNdEYb0CrhVk0fz9yydwfg3DL94vUQdLDG+jUlzE3aMemPx9E09UqgwT5nb5YlyKdeHS
-         OWPsag8iVs9tL64UPZ5R20tPIUnHDQfZ+gRHrNQwSio4E5Y0AiAJfmncH9HNu/7TJdie
-         aZNNNA2e+rLjOa5TeMTQKr4CLT8NtOkTvu1PVkTQmJ3AU7KbCeMqZtz0kA07hs7pERD5
-         Orag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679343479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yvCcR37fJLrlgMelR2q/aS1U42JwkCalYOsRuH6mTh8=;
-        b=yBK+lj/q7m/1VtseVIWN6tQKJ6cxEOY/a/RJx5BtFc6SktiOLdJDXFsn7e0wbcm+f6
-         itCeentwJWYHYJqIcrexjYmak6wPxVisM4wPpZiGanG5jwx7YFsoiF9SqvpaaA/yMqbC
-         uJDc22B0nHQ3/n8drWCWxMN8BZDwfEeVCTYn50Vt4PKDC51VjTfG5nhI9vGUCMOjmkUo
-         8HNE6djeyPfKzbIv1I4hHYVBS0fPDUp46YFOIA30nbgUHoiglBf38MGjuXYoKMBO6wsO
-         f2oJSEoZBLMgJgCfb3aEyK/MDRtoG+y4HrLa32OF55ooK+sZxvOb0PRINQxOcTeQiKiY
-         tCyQ==
-X-Gm-Message-State: AO0yUKXeFwhz+Nr7pOKL4StYhAoXyAMAp2KiWBnSDDk3lrqnMIWGfC4d
-        Z1rUBHqjNqxpuxSrBGGckb0NZOC3TVIB4c6OR0c1ZjMM
-X-Google-Smtp-Source: AK7set807dpDFqIgr0TVWjB5UgDKtLRi91cnUNLVUYnXxWSDoNT/vCt3knhIXpePGsDmGr/HTl+GDDsJ6PHeO0k/eb8=
-X-Received: by 2002:a05:6808:18f:b0:387:1107:1d63 with SMTP id
- w15-20020a056808018f00b0038711071d63mr387087oic.0.1679343478819; Mon, 20 Mar
- 2023 13:17:58 -0700 (PDT)
+        Mon, 20 Mar 2023 16:18:31 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B037E2A98D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:18:24 -0700 (PDT)
+Received: from [192.168.2.1] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B420B20FAEF9;
+        Mon, 20 Mar 2023 13:18:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B420B20FAEF9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679343503;
+        bh=19cxAa5JropGxFJ2QMy34nCRCKBRgMKBM8Me8JoU5nA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=koW0O41c1Ths+6WM7MFXNFuxwap8MXNW22UZFUOGtskJdfu4gtZiVRwxF+PEjqaYx
+         TYZQ/qkv1jO0QSpZ4jEhLxs3e/2UCsBlWrVe+RAEsI0hEPRW1YFRYZvTlgV4UTHUHG
+         00z+MKZ6GW4FEgedSwWiLshj2Ohpl1t7L57ASltc=
+Message-ID: <9b86ac2a-4ef9-1e98-ae5d-94b2655fbe6f@linux.microsoft.com>
+Date:   Mon, 20 Mar 2023 21:18:19 +0100
 MIME-Version: 1.0
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-8-sergio.paracuellos@gmail.com> <966523bee1d28d546969a24eff60d315.sboyd@kernel.org>
-In-Reply-To: <966523bee1d28d546969a24eff60d315.sboyd@kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 20 Mar 2023 21:17:47 +0100
-Message-ID: <CAMhs-H-y6TsSoKsJzM0gkFk6wx7xNigXKJb7wm8rBzrigtJANg@mail.gmail.com>
-Subject: Re: [PATCH 07/10] mips: ralink: remove clock related function prototypes
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, arinc.unal@arinc9.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 3/8] x86/psp: Register PSP platform device when ASP
+ table is present
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
+ <20230320191956.1354602-4-jpiotrowski@linux.microsoft.com>
+ <20230320192504.GCZBizEGDjVtGWpNP3@fat_crate.local>
+ <6d3d512b-55e9-8205-461c-02f1e71f2b63@linux.microsoft.com>
+ <20230320200321.GDZBi8CXCyE6kD7qSN@fat_crate.local>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <20230320200321.GDZBi8CXCyE6kD7qSN@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 20/03/2023 21:03, Borislav Petkov wrote:
+> On Mon, Mar 20, 2023 at 08:37:56PM +0100, Jeremi Piotrowski wrote:
+>> Because of patch 4. My thinking was that the irq setup requires poking
+>> at intimate architectural details (init_irq_alloc_info etc.) so it seems
+>> like it fits in arch/x86.
+> 
+> arch/x86/platform/uv/uv_irq.c:193:      init_irq_alloc_info(&info, cpumask_of(cpu));
+> drivers/iommu/amd/init.c:2391:  init_irq_alloc_info(&info, NULL);
+> 
+> Also, what patch 4's commit message says, sounds hacky to me. A simple
+> driver should not need the x86_vector_domain. Especially if it is some
+> ACPI wrapper around the PSP hw.
+ 
+I agree with you here. The irq config of this thing requires specifying
+passing a CPU vector, this follows the hardware spec which I linked in the
+first 2 commits, pages 13-15 here:
 
-On Mon, Mar 20, 2023 at 8:38=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wro=
-te:
->
-> Quoting Sergio Paracuellos (2023-03-20 09:18:20)
-> > Clock related code has been removed from 'arch/mips/ralink' folder and =
-put
-> > into drivers space. Hence remove clock related prototypes which are not
-> > used anymore.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  arch/mips/ralink/common.h | 3 ---
-> >  1 file changed, 3 deletions(-)
-> >
-> > diff --git a/arch/mips/ralink/common.h b/arch/mips/ralink/common.h
-> > index 87fc16751281..fcdfc9dc6210 100644
-> > --- a/arch/mips/ralink/common.h
-> > +++ b/arch/mips/ralink/common.h
-> > @@ -23,9 +23,6 @@ extern struct ralink_soc_info soc_info;
-> >
-> >  extern void ralink_of_remap(void);
-> >
-> > -extern void ralink_clk_init(void);
->
-> Why isn't this removed in the patch that removes the function?
+https://www.amd.com/system/files/TechDocs/58028_1.00-PUB.pdf
 
-Because the function exists for all the SoCs code and there are
-several patches removing it; one per SoC, so I decided to remove this
-at the end. Should I squash all patches together instead?
+The only way I found to get this to work was going through x86_vector_domain
+or statically defining a system vector (the latter felt worse).
 
->
-> > -extern void ralink_clk_add(const char *dev, unsigned long rate);
-> > -
->
-> Same comment.
->
-> >  extern void ralink_rst_init(void);
-> >
-
-Best regards,
-    Sergio Paracuellos
+> 
+> But I'd leave that to tglx.
+>>> I also drew inspiration from the sev-guest device in the arch/x86/kernel/sev.c,
+> 
+> Yeah, we've designed another mess there considering we already have
+> 
+> drivers/virt/coco/sev-guest/sev-guest.c
+> 
+> That sev guest thing has no place in sev.c and it should go away from
+> there.
+> 
+>> which is used in a similar context (the PSP device I am registering here is
+>> for SNP-host support).
+>>
+>> Would you prefer it in drivers/platform/x86?
+> 
+> drivers/hv/?
+> 
+> Seeing how hyperv is the only thing that's going to use it, AFAICT.
+> 
+ 
+That could work, let me try that.
