@@ -2,180 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865F76C0EA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDDC6C0EA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCTKWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S230001AbjCTKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjCTKVm (ORCPT
+        with ESMTP id S230266AbjCTKWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:21:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C0C126D1;
-        Mon, 20 Mar 2023 03:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679307672; x=1710843672;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ptgEEDnEf7sjIU2+4VSiuwlR9WoohHPih28INcG26Ys=;
-  b=IlSurYH3qGTCtaVU8zHFT5KV5yvGTNsN3WzHKXXF0bIb1BmCfhqG5hzq
-   31JwfYXzsEzKkW+VT0M1V+q55WvjlW7cYc7M8sabhBFXDeiUwyJgm6E9A
-   O/PGVO+XtDFDTzVNslfkvofedLDyKfWU87HRXG49s7WFGkJ444WKnBXVQ
-   Ry8kbIFqv398rmeGBWynaUdEE3d3p6xL9DSm8+dEavJz9EjhB81p5GkZB
-   cAw6XG2Kqf1758wlRXjeGSIDdq34UezgaeICJ/vDEdsJCpVGgGeYgnddf
-   S3+gdNzmbsIJYcf2M7jr3aym3/HvV9b4VGDYqwrfyTQHTvGvP1CwI+oAN
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
-   d="scan'208";a="217071513"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 03:21:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 03:21:11 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 20 Mar 2023 03:21:11 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ee3fbfF6aF/gRdsyEDKKLciSNLoGAiiZ66FJzDyHG9Nw30WR9wzphFfnm+dpxpzDeNVKezuSYjb1EM7Fuvx+z0tqBJDJY5VqScEOVSBLgNOiW0J1ruYOdT/lQO8zelVXtucXdhoNdcYQkaA5lv3VaZvSPF3fUEKW+cVhKhuDdoSWVMUrnxL+QUXURiUDeRHhifH4wXxhiYHJ0sVTwq4T9hOtMlGSm6xJH7tzVnoumpcS2Wg7M4j58SdDMCHAciR5lM+6NegYGX4up1YjrM4zQ9M2WuK+UyFqy6dBH14KFhIsWzTPTNcEW5Spm2lUe4TxZ0oqTB6ghDLxsMoUfNiM9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ptgEEDnEf7sjIU2+4VSiuwlR9WoohHPih28INcG26Ys=;
- b=FpqQKlytRM80qmMrY5f2WfcAdAQXSanMJ/g0RTSlcZsBCfJp6OU+mcxFTYo3YtjyMuBlAdBQD1eveBUuYj+eLZCLPRHaR41Pt4THnVaRHq2YWIeTn/oep3ymkp/HYF8VaMepBz+Tj07qvUNLokz/3/GvvIXIpLoSYSasNJiuTT37oNZVwWUr0Pc4amWCkneroonaUz5QXvuW1Px7oRgXmFcFBzAfogmD5JpIaYIf8sjNhDgPYkSOijaH5h/IEIzXqq9UjS4+bLCsY+FO4mWSAgtB649llm8cubmMoeZsPXlg52aQaeMvjxuZ3XQxc28oq9zt1/cQtiu7dCtY6cX/Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ptgEEDnEf7sjIU2+4VSiuwlR9WoohHPih28INcG26Ys=;
- b=ZtaW5qwBvjXkZ4yqlE/iqkUG2XBdZs76tbk0XFMO/fBisut6vG9ajo5emIpbaULZVdVhS71M66ObAlFcmwEKwvIvqrEnKdqiREH2MxDD5b2reuBxoORqzaRwmc0gk6l3kDZ3ff/p8X7eXSVpqFjNpbXUFQ9UYuDjxetjPEsnVlw=
-Received: from DM4PR11MB5358.namprd11.prod.outlook.com (2603:10b6:5:395::7) by
- PH8PR11MB8259.namprd11.prod.outlook.com (2603:10b6:510:1c2::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 10:21:08 +0000
-Received: from DM4PR11MB5358.namprd11.prod.outlook.com
- ([fe80::6c5d:5b92:1599:ce9]) by DM4PR11MB5358.namprd11.prod.outlook.com
- ([fe80::6c5d:5b92:1599:ce9%4]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 10:21:07 +0000
-From:   <Steen.Hegelund@microchip.com>
-To:     <peter_hong@fintek.com.tw>, <wg@grandegger.com>,
-        <mkl@pengutronix.de>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mailhol.vincent@wanadoo.fr>,
-        <frank.jungclaus@esd.eu>, <linux-kernel@vger.kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH] can: usb: f81604: add Fintek F81604 support
-Thread-Topic: [PATCH] can: usb: f81604: add Fintek F81604 support
-Thread-Index: AQHZWL+KXCc33Xm+FUG9YEYYnE7ChK8Ded6A
-Date:   Mon, 20 Mar 2023 10:21:07 +0000
-Message-ID: <CRB4VW859JPC.253TLOWY0XT6S@den-dk-m31857>
-References: <20230317093352.3979-1-peter_hong@fintek.com.tw>
-In-Reply-To: <20230317093352.3979-1-peter_hong@fintek.com.tw>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: aerc 0.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR11MB5358:EE_|PH8PR11MB8259:EE_
-x-ms-office365-filtering-correlation-id: 756393fc-8077-42d4-1925-08db292cd1df
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 62Lg91s1opoXE/PpTrpfwB0ZmbcWurnDesuq8/6ucekeonU+Eg2+SB8KoiG1LeEZ8jP8MGm4+PFblJHhziWqQpu+kW1PI2mQYkiArmu7q42j5eKWIl462TsgLKt/n+kH4IM2PlOvjXZP2ZkQj0K9EYvHT0D2pgs4Of4L8QqOTm/pFyPcoO83dmXD4DJ/SGd0MOi105DOqJWYzZy/gq6jFYwvB3GtXSExcOKzXH311n7gwENMXfehenY9K2NKiLqf5hgR+KT/N57GpzNb/yLNPU9uhZ5JaUnE2YqWps3yjAoEgDc/SO/VH2s4WFZWMG/lWBP16QhInOqBcEqOLz02lu0psPSQw90SzsiZ0Ti3m5leKarfYNIoloD+p3ErsD++hH0cUyLHfcunmqQqweD/i3bz9eggD0jbmBqNDLiJamDoTRl2sYpVv/ZIGoHrYvXD9D3DqyyIVS31fG9tr9UBgDzdajYVEZk05KgafYSqFMtkzA8OOQs5iXru/bNO/6mf7kJs4uWIhd+gTvrY9u2lrk0SYHUe7Q9vyya19JkuS2hsxZaKtkaqwkv2t8fCNCDyPdoW/bGZH46Da7IL4nUxTOqV9jH9+SUhKGsYABTSJQF2flV7LiyO3Jshi+wXlCWYNrRDKB2zL442QlEQNG/jrcztmW+Qz6fsicBs+i7DP5B4f7ca66w3F7uwWZfkSnP+BPsDdFcYVRuvaQEc573T1Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5358.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(39860400002)(396003)(376002)(136003)(366004)(451199018)(54906003)(110136005)(316002)(86362001)(33716001)(83380400001)(9686003)(38100700002)(122000001)(38070700005)(966005)(71200400001)(478600001)(6486002)(33656002)(26005)(186003)(6512007)(6506007)(2906002)(41300700001)(8936002)(7416002)(5660300002)(66446008)(66556008)(8676002)(66476007)(66946007)(64756008)(91956017)(76116006)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWxQd3VrMnQ2b2c4VFplNjJnVmhLZnp5MU5sa0IxMVdmM1EwTi9UWjFSTUxn?=
- =?utf-8?B?Y2ZTRXYxSm5zVnhVNGhSS3NIOG9TVDIxN0FGYWc4OGlIaUQweU94TlFlNHFJ?=
- =?utf-8?B?QUpXamxvQ2NnVThESDhHY2dEdGlVZmdUbW1OcDlmb1hyd1lFMzVtaHBzYXpp?=
- =?utf-8?B?NE0yV1RGVUZPSUU4a2V2dXhDQUZrbk5NM01GODNLL2gwbW1ZV3JsNGtmaGlU?=
- =?utf-8?B?dlJJSnNzLzRwTkRjZktPeGlwZ0hWWTJKdHgxSU56ZzFLajNRVXNMNGQrVUda?=
- =?utf-8?B?NENhOFhJcEk4MURFOUJkVUlsRzRQTWsyWm1qVEpDdFRycktJRGw5bFZmb2VM?=
- =?utf-8?B?SjFQdFBRODBVbG51SnJrQkRKOUdPcXdHaXE4ZnFuaVF0YWx2QnI5UE1aZXhl?=
- =?utf-8?B?T3Fob1B1WWU1SmhMWGVEV0hlQmlMNXNiMis0SjBubVZtZkRpM3ExZHV2U3d0?=
- =?utf-8?B?elp6ZlhoaS9YTGNpQ3YxZVhDeEFJT1hPUnBDQ01Jd2p0OHYxbGdpOUM5Q1pw?=
- =?utf-8?B?SEUrNVpsNGNTR1BHWnRsRmkrZndpb0ZuUlJ6VTNtaUI1S0EreHltdUdPSWNv?=
- =?utf-8?B?SWY4VE5GMGRjS0t5ek1GM0E3WjJMTDlwMzAvMXl5VFl4em5qaEg0VDJaUjVm?=
- =?utf-8?B?Z1I2K2F2YUk1Q243aFY5ZFRqMGY0cUhSZmtHREFyMnNsVy90cjdOM1VyQzVB?=
- =?utf-8?B?QTVWNWxPRFpuVzdPQnU2OXhqeVk0VU9CajdaVndzY0cydkRmSFU4eHV1cEZH?=
- =?utf-8?B?ZWp5RkgxTncrNzlaZUg2VzdWV1MyMVNtSE43ZlpZNHg2Zm1yTWptUG9aQXh6?=
- =?utf-8?B?NEgvWFA4bDVId1ZzT1ZLYXdxS3B6a3VIcHFDMFMrSktpOElhOWFqSUJSdzRI?=
- =?utf-8?B?am44cWVlOU9nVEJKUUJ4eFhpS2xpU2hNbkxVL0FpM2hUMjFHM1E4blJjb0tQ?=
- =?utf-8?B?TzJ6TEZtRm8xeW5heEhMQnFhTlJXcENzbU1keHJha3pkQnFmMVY4eTFaUUt4?=
- =?utf-8?B?aWoxNThiOUVhazk2ek9jc1ExQ1NldVdzTEhYelRSMFBzTGsycmcrSkMrZVJD?=
- =?utf-8?B?WDE5UGJqSmY2b2RyOGRVb2szaFVjT3J1YVBXMVFZNFp4SjNSTEJuQmdWSnZz?=
- =?utf-8?B?elgyQ2RRR3NiSUNqVG5QM1F3Q3BiQWd6YWZ6d294STlMNUxUZ2RwZytvNllN?=
- =?utf-8?B?cGJnMUN4VUcyd09ibDBFaUFwcHZyeVgrUEhoa3FJYW5FY1d5dWVqRTBlODdE?=
- =?utf-8?B?R0xmZ1lTOGkwWEQyRlM2eld0ZVlZWkFjUk1jWkpwWG80V2IrNWlEOTgxWFV6?=
- =?utf-8?B?WkVpSWx4T3BvNXZGRFJSZHlMZjhqVFNaVDFGbC9MQlYycHhhY3FlODVsVkNU?=
- =?utf-8?B?OEhtQ3pEQjhxckY5UDFaaWpIdEFjZDE4Yk81NTY3aCtVSFFwaXE3N21QVjNV?=
- =?utf-8?B?empPN2YvN2l3ay8vMGJTdkNnVTRjNjE1OERYLzZ1dWF1SkpDUW5MNHQ4eWZO?=
- =?utf-8?B?b0liRjhUaVFhSm9xTjIybHBLNW1hZ3hGcHBteUxtTytmc0o3SXYzSnZVTTRl?=
- =?utf-8?B?U09YaTRueG41WmQxSWpCSlMvMnI3dDFhMEc1bEZFQzVzMTlqdllCeHNTQXdO?=
- =?utf-8?B?UkNZZFMrazBoUGpXWnBPZU0zWEhKYzlSMVRwUXVIenBVU0xqZ2VjZnZSRzYz?=
- =?utf-8?B?SUhhMGhid0k5b0FRSmVWSWdqZU9JSzVxR3c2NWxXU1p2R2RCVktDT1VPV0lW?=
- =?utf-8?B?QUpxS3o4UHU1d29RelQxL1dXOThhazJoYjUzSjFFUzZqM1huK0k2NStpV0M1?=
- =?utf-8?B?OS8xbE1IZHpBRW9jdDRGNUgyUnY0Ymh1Z08zNVpWODJYeXovZFljWDdJSU5x?=
- =?utf-8?B?aTBNdllFMTVUWkRTQXY4ZS9TNVYvRHpvcWoyWkk2M2lmc3RQeU5tMFBQNnJX?=
- =?utf-8?B?d3BJamxhYXd0NitTT0lVUWZXb1ZlQ050L05rSER5bjhZQU5sSmZOaFZnWk9H?=
- =?utf-8?B?NVRJN2liZ0ljcFRLT1dKeGdUU25Nb0NQRmk1dkM4VkhiY3JjSkpmSForVGc5?=
- =?utf-8?B?cVhmSDhoSU0yS3VuY1kzSk1hc3R4dDFzRmNLTlF6ek1mMVBMRW9Bc09yYmtQ?=
- =?utf-8?B?NjA5Yzd1Um1nbEVBYmNXNXZSOTZvYUxtQVI2dVVjb0JnNE9tUzJ6bS9MUTR5?=
- =?utf-8?Q?um+HB0oNNjPr8jpVlF70PpQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <52AD49A200097A4FBD088A341A6694E7@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 20 Mar 2023 06:22:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529611E5E6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679307678;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BgSWj3zSpvR+t6erekcaSg4yxSMvQy9o3Bkd3DNLF24=;
+        b=XPdjKZ9lEZsgWYGc/KZ3YiqnsjzQhQIcLllEgACbdQT0m2PJmgL7I2iNqNOla1SeQIxDqH
+        4KWN0Vnp23mai2+/KHj+PNP+KOj62wpZeiqnxsE5MwJ5Ud277o92DEuynYabIZY1kK1/IX
+        ycSOHICiGYDy2hHgmMZ7+PLjSc6ML68=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-85qoikPQOQWE8uK9HyzwaA-1; Mon, 20 Mar 2023 06:21:16 -0400
+X-MC-Unique: 85qoikPQOQWE8uK9HyzwaA-1
+Received: by mail-wr1-f70.google.com with SMTP id g7-20020a5d6987000000b002cea7acd26fso1345446wru.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:21:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679307675;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BgSWj3zSpvR+t6erekcaSg4yxSMvQy9o3Bkd3DNLF24=;
+        b=3EWSG25H80Vnc4ML9Dq/YofIJi7qACz4Mqy7b8kG9lgRkJJwoT66a6PaHyZzrxvrhT
+         Y9bMIX3eNQXWYfDWNVmyozLns8IUthpx/SHgBP+9NlAk3BuBv/TTCPcLl0orM/jHT+T2
+         eJwFswrwE9tfIECdGUSEEvHdMPdSdpsXruKDHAql7sdZSHK5rVIshhHXFlNguJ07a8e+
+         NLiP9X1QvRhTykrIa+KrNjjVRgTojgNpYva8dQpLupmN0TftDiR6Jw6ye7ctAo6LJzqb
+         vKdUpA3TL0n3ve3618SW0U0cTrrS/Cm60Zv4A91Ut/EHqFnqlVDX+KtUrvMtW4oCTGNu
+         7i+w==
+X-Gm-Message-State: AO0yUKXSAYb2UMHe6/Xg4QWQpk746lRd3NtcGEsbLmkpVUU6uugtZN6g
+        8PgW03B8TDzI+QXeDmF2ZL9QyjIfX5ejNgg1ZOXKfgqgWyKov9fQce1My6Dg8pJNTx4VxzBYmHA
+        eMCcTW+ealrmjuQrfYr3ystK5
+X-Received: by 2002:a05:600c:4ecf:b0:3eb:29fe:70ec with SMTP id g15-20020a05600c4ecf00b003eb29fe70ecmr36012809wmq.27.1679307675668;
+        Mon, 20 Mar 2023 03:21:15 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+vItu0U3zmhAl3fXtHhWhsS19G9xFs9rpMm3JTWvnO8fUtGK+E9HJKmLUIHcQQoJKjWjITsg==
+X-Received: by 2002:a05:600c:4ecf:b0:3eb:29fe:70ec with SMTP id g15-20020a05600c4ecf00b003eb29fe70ecmr36012793wmq.27.1679307675309;
+        Mon, 20 Mar 2023 03:21:15 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id n15-20020a1c720f000000b003ee0fc6244asm861481wmc.32.2023.03.20.03.21.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:21:14 -0700 (PDT)
+Message-ID: <cf338070-246e-25d3-e624-53f4beda8158@redhat.com>
+Date:   Mon, 20 Mar 2023 11:21:13 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5358.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 756393fc-8077-42d4-1925-08db292cd1df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 10:21:07.9103
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WZOncXpkIskloQWSqefD8nrUp0b61zuvJy0f1kyguXXRx0geO+E6htMdrVWVGjGIzcpKfqK7PFB9WuZJTpZ6ltdeolj4cxk9zSqTgH5wo9E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8259
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230309223711.823547-1-peterx@redhat.com>
+ <20230309223711.823547-2-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4 1/2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
+In-Reply-To: <20230309223711.823547-2-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUGV0ZXIsDQoNCkJlc2lkZXMgd2hhdCBNaWNoYWwgaGFzIG1lbnRpb25lZCwgSSBub3RlZCB0
-aGlzOg0KDQpPbiBGcmkgTWFyIDE3LCAyMDIzIGF0IDEwOjMzIEFNIENFVCwgSmktWmUgSG9uZyAo
-UGV0ZXIgSG9uZykgd3JvdGU6DQo+IFtTb21lIHBlb3BsZSB3aG8gcmVjZWl2ZWQgdGhpcyBtZXNz
-YWdlIGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIHBldGVyX2hvbmdAZmludGVrLmNvbS50dy4g
-TGVhcm4gd2h5IHRoaXMgaXMgaW1wb3J0YW50IGF0IGh0dHBzOi8vYWthLm1zL0xlYXJuQWJvdXRT
-ZW5kZXJJZGVudGlmaWNhdGlvbiBdDQo+DQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sg
-bGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlIGNvbnRlbnQgaXMg
-c2FmZQ0KPg0KPiBUaGlzIHBhdGNoIGFkZCBzdXBwb3J0IGZvciBGaW50ZWsgVVNCIHRvIDJDQU4g
-Y29udHJvbGxlciBzdXBwb3J0Lg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBKaS1aZSBIb25nIChQZXRl
-ciBIb25nKSA8cGV0ZXJfaG9uZ0BmaW50ZWsuY29tLnR3Pg0KPiAtLS0NCg0KLi5zbmlwLi4uDQoN
-Cj4gK3N0YXRpYyBpbnQgZjgxNjA0X3ByZXBhcmVfdXJicyhzdHJ1Y3QgbmV0X2RldmljZSAqbmV0
-ZGV2KQ0KPiArew0KPiArICAgICAgIHN0YXRpYyB1OCBidWxrX2luX2FkZHJbRjgxNjA0X01BWF9E
-RVZdID0geyAweDgyLCAweDg0IH07DQo+ICsgICAgICAgc3RhdGljIHU4IGJ1bGtfb3V0X2FkZHJb
-RjgxNjA0X01BWF9ERVZdID0geyAweDAxLCAweDAzIH07DQo+ICsgICAgICAgc3RhdGljIHU4IGlu
-dF9pbl9hZGRyW0Y4MTYwNF9NQVhfREVWXSA9IHsgMHg4MSwgMHg4MyB9Ow0KDQpUaGVzZSAzIHNo
-b3VsZCBiZSBtYWRlIGNvbnN0DQoNCj4gKyAgICAgICBzdHJ1Y3QgZjgxNjA0X3BvcnRfcHJpdiAq
-cHJpdjsNCj4gKyAgICAgICBpbnQgaWQ7DQoNCi4uc25pcC4uLg0KDQo+ICsgICAgICAgaW50IGk7
-DQo+ICtNT0RVTEVfQVVUSE9SKCJKaS1aZSBIb25nIChQZXRlciBIb25nKSA8cGV0ZXJfaG9uZ0Bm
-aW50ZWsuY29tLnR3PiIpOw0KPiArTU9EVUxFX0RFU0NSSVBUSU9OKCJGaW50ZWsgRjgxNjA0IFVT
-QiB0byAyeENBTkJVUyIpOw0KPiArTU9EVUxFX0xJQ0VOU0UoIkdQTCIpOw0KPiAtLQ0KPiAyLjE3
-LjENCg0KDQpCUg0KU3RlZW4=
+
+>    (1) With huge page disabled
+>    echo madvise > /sys/kernel/mm/transparent_hugepage/enabled
+>    ./uffd_wp_perf
+>    Test DEFAULT: 4
+>    Test PRE-READ: 1111453 (pre-fault 1101011)
+>    Test MADVISE: 278276 (pre-fault 266378)
+
+Thinking about it, I guess the biggest slowdown here is the "one fake 
+pagefault at a time" handling.
+
+>    Test WP-UNPOPULATE: 11712
+> 
+>    (2) With Huge page enabled
+>    echo always > /sys/kernel/mm/transparent_hugepage/enabled
+>    ./uffd_wp_perf
+>    Test DEFAULT: 4
+>    Test PRE-READ: 22521 (pre-fault 22348)
+>    Test MADVISE: 4909 (pre-fault 4743)
+>    Test WP-UNPOPULATE: 14448
+> 
+> There'll be a great perf boost for no-thp case, while for thp enabled with
+> extreme case of all-thp-zero WP_UNPOPULATED can be slower than MADVISE, but
+> that's low possibility in reality, also the overhead was not reduced but
+> postponed until a follow up write on any huge zero thp, so potentially it
+> is faster by making the follow up writes slower.
+> 
+> [1] https://lore.kernel.org/all/20210401092226.102804-4-andrey.gruzdev@virtuozzo.com/
+> [2] https://lore.kernel.org/all/Y+v2HJ8+3i%2FKzDBu@x1n/
+> [3] https://lore.kernel.org/all/d0eb0a13-16dc-1ac1-653a-78b7273781e3@collabora.com/
+> [4] https://github.com/xzpeter/clibs/blob/master/uffd-test/uffd-wp-perf.c
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   Documentation/admin-guide/mm/userfaultfd.rst | 17 ++++++
+>   fs/userfaultfd.c                             | 16 ++++++
+>   include/linux/mm_inline.h                    |  6 +++
+>   include/linux/userfaultfd_k.h                | 23 ++++++++
+>   include/uapi/linux/userfaultfd.h             | 10 +++-
+>   mm/memory.c                                  | 56 +++++++++++++++-----
+>   mm/mprotect.c                                | 51 ++++++++++++++----
+>   7 files changed, 154 insertions(+), 25 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+> index 7dc823b56ca4..c86b56c95ea6 100644
+> --- a/Documentation/admin-guide/mm/userfaultfd.rst
+> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
+> @@ -219,6 +219,23 @@ former will have ``UFFD_PAGEFAULT_FLAG_WP`` set, the latter
+>   you still need to supply a page when ``UFFDIO_REGISTER_MODE_MISSING`` was
+>   used.
+>   
+> +Userfaultfd write-protect mode currently behave differently on none ptes
+> +(when e.g. page is missing) over different types of memories.
+> +
+> +For anonymous memory, ``ioctl(UFFDIO_WRITEPROTECT)`` will ignore none ptes
+> +(e.g. when pages are missing and not populated).  For file-backed memories
+> +like shmem and hugetlbfs, none ptes will be write protected just like a
+> +present pte.  In other words, there will be a userfaultfd write fault
+> +message generated when writting to a missing page on file typed memories,
+
+s/writting/writing/
+
+> +as long as the page range was write-protected before.  Such a message will
+> +not be generated on anonymous memories by default.
+> +
+> +If the application wants to be able to write protect none ptes on anonymous
+> +memory, one can pre-populate the memory with e.g. MADV_POPULATE_READ.  On
+> +newer kernels, one can also detect the feature UFFD_FEATURE_WP_UNPOPULATED
+> +and set the feature bit in advance to make sure none ptes will also be
+> +write protected even upon anonymous memory.
+> +
+
+[...]
+
+>   /*
+>    * A number of key systems in x86 including ioremap() rely on the assumption
+> @@ -1350,6 +1364,10 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
+>   			      unsigned long addr, pte_t *pte,
+>   			      struct zap_details *details, pte_t pteval)
+>   {
+> +	/* Zap on anonymous always means dropping everything */
+> +	if (vma_is_anonymous(vma))
+> +		return;
+> +
+>   	if (zap_drop_file_uffd_wp(details))
+>   		return;
+>   
+> @@ -1456,8 +1474,12 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+>   				continue;
+>   			rss[mm_counter(page)]--;
+>   		} else if (pte_marker_entry_uffd_wp(entry)) {
+> -			/* Only drop the uffd-wp marker if explicitly requested */
+> -			if (!zap_drop_file_uffd_wp(details))
+> +			/*
+> +			 * For anon: always drop the marker; for file: only
+> +			 * drop the marker if explicitly requested.
+> +			 */
+
+So MADV_DONTNEED a pte marker in an anonymous VMA will always remove 
+that marker. Is that the same handling as for MADV_DONTNEED on shmem or 
+on fallocate(PUNCHHOLE) on shmem?
+
+> +			if (!vma_is_anonymous(vma) &&
+> +			    !zap_drop_file_uffd_wp(details))
+>   				continue;
+
+Maybe it would be nicer to have a zap_drop_uffd_wp_marker(vma, details) 
+and have the comment in there. Especially because of the other hunk above.
+
+So zap_drop_file_uffd_wp(details) -> zap_drop_uffd_wp_marker(vma, 
+details) and move the anon handling + comment in there.
+
+
+>   		} else if (is_hwpoison_entry(entry) ||
+>   			   is_swapin_error_entry(entry)) {
+> @@ -3624,6 +3646,14 @@ static vm_fault_t pte_marker_clear(struct vm_fault *vmf)
+>   	return 0;
+>   }
+>   
+> +static vm_fault_t do_pte_missing(struct vm_fault *vmf)
+> +{
+> +	if (vma_is_anonymous(vmf->vma))
+> +		return do_anonymous_page(vmf);
+> +	else
+> +		return do_fault(vmf);
+
+No need for the "else" statement.
+
+> +}
+> +
+>   /*
+>    * This is actually a page-missing access, but with uffd-wp special pte
+>    * installed.  It means this pte was wr-protected before being unmapped.
+> @@ -3634,11 +3664,10 @@ static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf)
+>   	 * Just in case there're leftover special ptes even after the region
+>   	 * got unregistered - we can simply clear them.
+>   	 */
+> -	if (unlikely(!userfaultfd_wp(vmf->vma) || vma_is_anonymous(vmf->vma)))
+> +	if (unlikely(!userfaultfd_wp(vmf->vma)))
+>   		return pte_marker_clear(vmf);
+>   
+> -	/* do_fault() can handle pte markers too like none pte */
+> -	return do_fault(vmf);
+> +	return do_pte_missing(vmf);
+>   }
+>   
+
+[...]
+
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index 231929f119d9..455f7051098f 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -276,7 +276,15 @@ static long change_pte_range(struct mmu_gather *tlb,
+>   		} else {
+>   			/* It must be an none page, or what else?.. */
+>   			WARN_ON_ONCE(!pte_none(oldpte));
+> -			if (unlikely(uffd_wp && !vma_is_anonymous(vma))) {
+> +
+> +			/*
+> +			 * Nobody plays with any none ptes besides
+> +			 * userfaultfd when applying the protections.
+> +			 */
+> +			if (likely(!uffd_wp))
+> +				continue;
+> +
+> +			if (userfaultfd_wp_use_markers(vma)) {
+>   				/*
+>   				 * For file-backed mem, we need to be able to
+>   				 * wr-protect a none pte, because even if the
+> @@ -320,23 +328,46 @@ static inline int pmd_none_or_clear_bad_unless_trans_huge(pmd_t *pmd)
+>   	return 0;
+>   }
+>   
+> -/* Return true if we're uffd wr-protecting file-backed memory, or false */
+> +/*
+> + * Return true if we want to split huge thps in change protection
+
+"huge thps" sounds redundant. "if we want to PTE-map a huge PMD" ?
+
+> + * procedure, false otherwise.
+
+
+In general,
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
