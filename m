@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC616C13CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC4E6C13C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjCTNnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S231815AbjCTNnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbjCTNmd (ORCPT
+        with ESMTP id S231571AbjCTNme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:42:33 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC32FF17
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:42:30 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id o12so46876923edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:42:30 -0700 (PDT)
+        Mon, 20 Mar 2023 09:42:34 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917ED10412
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:42:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id cy23so46807784edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679319750;
+        d=linaro.org; s=google; t=1679319752;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Htzjm9MSCo4/scEOmWkP20tbOGwc7n5xhdN8GyJQ6GQ=;
-        b=bg8QBqEMCU2HBbMjnyK7G8pFNFhcaxlWlgPUkC1vmuTd98atUix3MIbBpG3lJAys+0
-         2OxXvRg04f1/Y4Zw8e3Vi2GHv7C9QlOn47ZCDI6ypkC2t9j4c/68f5X7HfJigdkdE4rU
-         i6r/7Cch0fOo1xTP21OktKc1Onawn+Hn4+yuBsrBwgR0h8M9V2FtKPI82e3hKXiBAOs3
-         0pkDKbVru0PvsTBhhRiwHkOpn+cVCzsC1PdmFNoudWUAkN/Vby253U2/xMXn+Gzbg8yk
-         ZxWg6fRkJz01IddW7B7uWGI0TLzKV5ppQJdre2FTgTZw29WSq37fGZgEi2MlHSxuctke
-         Iqng==
+        bh=5bAvIgcdwvK6qGlX9/tkRQ+PgCIHsC6PUxID2XxtmJs=;
+        b=uQJkr15djkVmBgXdKKgYT+9o9C75QiioeKW8Q5/wJYPZfxnhvse2/8a0DDverHAWLS
+         V4MRks7KPnmb3/58MMbQeBZJCd+WBChFQ/qlPGj271EniIbqjMTbcFNtivNU+bjVjPo3
+         VJ8RMTBwR3qb8UntS5t8Mbw6a7v6pOYhS7hWQ322eXdq3ae0xeb281kDss612++wBbkl
+         dFNiQ9tS/f7YmtYvC8fQTGYMgak7u2A8A0NWXOYfPEzqdzOVdoEsbBM1FOBolkv0PEJG
+         8F5nYdKwqjF2UqeqKa5HdYWamA+Adnph+EsOxTr0nRpV6i04HhKU+5xExxxro1quh0yR
+         j/Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679319750;
+        d=1e100.net; s=20210112; t=1679319752;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Htzjm9MSCo4/scEOmWkP20tbOGwc7n5xhdN8GyJQ6GQ=;
-        b=skyPMg/cUnz/F/IHLzBP9x2sOniZrHXIdbcFc68foV/EvJiGSekapa0/eXs3EmvqJ7
-         uQNmOD+bY3Li8XfF1IJ4rzR5tCTGT+NoL14pM8ZdM14M0WjzW4UxIZE5XD2LwBxMgD+S
-         gzHQacFB4HyPDOd4kFdby+2ljDW/j5R9tbQA9ePza4VesdVgVJgHO6by7ff/2Ms4ptFB
-         NnOkG2iSbjLc2mzr0GNcg2E7CbJilG0RkjLjyny8m3oUMatEhIvB5cX8qyITWlqdHj9X
-         HCUAXB0axOjNcO6lgoVdVCvGl9k8F2AV1nbx70fMpS4+QxoOcEyfniYE23j/IUyZQ3s2
-         KCYQ==
-X-Gm-Message-State: AO0yUKUPJu3+RG+5DOxAVRavImzM3DVKiXzOtojW8kCM5Pa15mYPjbA6
-        dB38vWaREzrSHSo0kKcrOKyrzw==
-X-Google-Smtp-Source: AK7set8r62lDWNAku2VSCK32k/4YB9QoETXYmzVcob5j4AQs+mzZFX1MpD0qRD8dnoNReX8JRMdX/Q==
-X-Received: by 2002:a17:906:13cb:b0:925:f542:1a3d with SMTP id g11-20020a17090613cb00b00925f5421a3dmr8999852ejc.25.1679319750345;
-        Mon, 20 Mar 2023 06:42:30 -0700 (PDT)
+        bh=5bAvIgcdwvK6qGlX9/tkRQ+PgCIHsC6PUxID2XxtmJs=;
+        b=H8YnqF82/+enEqKkPi+UOAjV/F22V3rw+h0+LhpGdkzi65b4z73sfne2X5PgaLiaVA
+         Q2XRLDYx0FxjxupCPPXJ1vFTsPza5TqgjBHeQYA2Vnx/OZh9oRjNRLkzIJSwslU529o+
+         YT/a4t90jWsX13ycInAsU8oXQm4Zae+xmIStXPdP4RMotnSb/3HLAbxXM62rdZxDg1j9
+         aDF6oy0lVn/1ZAcKFYYriNanuNDfyCYg+gaGlC9quIdFZHrS/T5Ov+yBo7c0LbYHBIez
+         Pcu0lo+7oTSK3SR3pD6qghbMayogAHR2UZPAZwr1uzirgazo08MvrA2isutIXYzrWPlh
+         BBeg==
+X-Gm-Message-State: AO0yUKVxFN5xheHKaM4l8qe7M5nZuFSVWA3KgT3CH3iZXh1rZEJzLhqS
+        aWJU62luV6DScsDT94LTW2N+vw==
+X-Google-Smtp-Source: AK7set+MK8KcRE7MiT2j4MzvskiRjviqc1Ln0yYh7b/PAFNB5eSsRSEpWjDZaOM3sZzgMOex9ThcPg==
+X-Received: by 2002:a17:906:5015:b0:922:ae30:3c23 with SMTP id s21-20020a170906501500b00922ae303c23mr9566199ejj.18.1679319751913;
+        Mon, 20 Mar 2023 06:42:31 -0700 (PDT)
 Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id u23-20020a170906409700b009334a6ef3e8sm2368602ejj.141.2023.03.20.06.42.28
+        by smtp.gmail.com with ESMTPSA id u23-20020a170906409700b009334a6ef3e8sm2368602ejj.141.2023.03.20.06.42.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:42:29 -0700 (PDT)
+        Mon, 20 Mar 2023 06:42:31 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         Doug Anderson <dianders@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>
-Subject: [RFC PATCH v2 4/5] clk: qcom: Add sync state callback to all SC8280XP providers
-Date:   Mon, 20 Mar 2023 15:42:16 +0200
-Message-Id: <20230320134217.1685781-5-abel.vesa@linaro.org>
+Subject: [RFC PATCH v2 5/5] clk: qcom: Add sync state callback to all SM8450 providers
+Date:   Mon, 20 Mar 2023 15:42:17 +0200
+Message-Id: <20230320134217.1685781-6-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230320134217.1685781-1-abel.vesa@linaro.org>
 References: <20230320134217.1685781-1-abel.vesa@linaro.org>
@@ -77,7 +77,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,51 +87,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Now that we have support for sync state delayed disabling of unused
 power domains and a provided generic gdsc sync state callback, add it to
-all the providers related to the SC8280XP platform.
+all the providers related to the SM8450 platform.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/clk/qcom/dispcc-sc8280xp.c | 1 +
- drivers/clk/qcom/gcc-sc8280xp.c    | 1 +
- drivers/clk/qcom/gpucc-sc8280xp.c  | 1 +
+ drivers/clk/qcom/camcc-sm8450.c  | 1 +
+ drivers/clk/qcom/dispcc-sm8450.c | 1 +
+ drivers/clk/qcom/gcc-sm8450.c    | 1 +
  3 files changed, 3 insertions(+)
 
-diff --git a/drivers/clk/qcom/dispcc-sc8280xp.c b/drivers/clk/qcom/dispcc-sc8280xp.c
-index 167470beb369..a64c396b9cc4 100644
---- a/drivers/clk/qcom/dispcc-sc8280xp.c
-+++ b/drivers/clk/qcom/dispcc-sc8280xp.c
-@@ -3199,6 +3199,7 @@ static struct platform_driver disp_cc_sc8280xp_driver = {
+diff --git a/drivers/clk/qcom/camcc-sm8450.c b/drivers/clk/qcom/camcc-sm8450.c
+index 51338a2884d2..b2c6109c7eba 100644
+--- a/drivers/clk/qcom/camcc-sm8450.c
++++ b/drivers/clk/qcom/camcc-sm8450.c
+@@ -2847,6 +2847,7 @@ static struct platform_driver cam_cc_sm8450_driver = {
  	.driver = {
- 		.name = "disp_cc-sc8280xp",
- 		.of_match_table = disp_cc_sc8280xp_match_table,
+ 		.name = "camcc-sm8450",
+ 		.of_match_table = cam_cc_sm8450_match_table,
 +		.sync_state = qcom_cc_sync_state,
  	},
  };
  
-diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-index b3198784e1c3..64d828ba07da 100644
---- a/drivers/clk/qcom/gcc-sc8280xp.c
-+++ b/drivers/clk/qcom/gcc-sc8280xp.c
-@@ -7441,6 +7441,7 @@ static struct platform_driver gcc_sc8280xp_driver = {
+diff --git a/drivers/clk/qcom/dispcc-sm8450.c b/drivers/clk/qcom/dispcc-sm8450.c
+index adbfd30bfc96..0ea719940a8e 100644
+--- a/drivers/clk/qcom/dispcc-sm8450.c
++++ b/drivers/clk/qcom/dispcc-sm8450.c
+@@ -1803,6 +1803,7 @@ static struct platform_driver disp_cc_sm8450_driver = {
  	.driver = {
- 		.name = "gcc-sc8280xp",
- 		.of_match_table = gcc_sc8280xp_match_table,
+ 		.name = "disp_cc-sm8450",
+ 		.of_match_table = disp_cc_sm8450_match_table,
 +		.sync_state = qcom_cc_sync_state,
  	},
  };
  
-diff --git a/drivers/clk/qcom/gpucc-sc8280xp.c b/drivers/clk/qcom/gpucc-sc8280xp.c
-index ea1e9505c335..46ca242ba427 100644
---- a/drivers/clk/qcom/gpucc-sc8280xp.c
-+++ b/drivers/clk/qcom/gpucc-sc8280xp.c
-@@ -453,6 +453,7 @@ static struct platform_driver gpu_cc_sc8280xp_driver = {
+diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
+index 84764cc3db4f..248709fb975e 100644
+--- a/drivers/clk/qcom/gcc-sm8450.c
++++ b/drivers/clk/qcom/gcc-sm8450.c
+@@ -3262,6 +3262,7 @@ static struct platform_driver gcc_sm8450_driver = {
  	.driver = {
- 		.name = "gpu_cc-sc8280xp",
- 		.of_match_table = gpu_cc_sc8280xp_match_table,
+ 		.name = "gcc-sm8450",
+ 		.of_match_table = gcc_sm8450_match_table,
 +		.sync_state = qcom_cc_sync_state,
  	},
  };
- module_platform_driver(gpu_cc_sc8280xp_driver);
+ 
 -- 
 2.34.1
 
