@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C1F6C0B5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E6B6C0B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjCTH2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S229767AbjCTHaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjCTH22 (ORCPT
+        with ESMTP id S229665AbjCTH37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:28:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884AE8A57;
-        Mon, 20 Mar 2023 00:28:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97B09B80D4C;
-        Mon, 20 Mar 2023 07:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C57AC433D2;
-        Mon, 20 Mar 2023 07:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679297303;
-        bh=QDq3psYYPI1XmtNVdVpK0cyJmaeS12aYbyEfukWS36E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UDCbyys/slXK5DDVUObA4SBOtaa8YAdB+OqCPeP8nqwHsxDAIDCkfBEfiwUMGiTaD
-         LqQr2CiMvEgVlJJb9IlBF7wGYguOlmGF1rypy6g5LLDuCGvWayecp943rG5xBP/0lz
-         wTFXv8W5NHwRND1G5ozBAXND4N8DtGAXT369dsE08VAGO7qVTfrRn9opP/A1j21Ahr
-         ICpJ2yWfq7NTOui/uxyfuGiqNjpJ4Q/RWBda9DTaudL497rqozGJGEg5iG1vOFzF/K
-         T7pHENHw1+U7982Jg3wJkPY3sDtBpV7boFEo1y00D/xVPbgIIOfjQgl06kZwcalgtc
-         9aJUhZA2qThvg==
-Date:   Mon, 20 Mar 2023 12:58:18 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     rashmi.a@intel.com
-Cc:     ulf.hansson@linaro.org, michal.simek@xilinx.com,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kishon@kernel.org,
-        yuancan@huawei.com, andriy.shevchenko@linux.intel.com,
-        linux-phy@lists.infradead.org, mgross@linux.intel.com,
-        kris.pan@linux.intel.com, adrian.hunter@intel.com,
-        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
-        vasavi.v.itha@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com
-Subject: Re: [PATCH v2 4/4] dt-bindings: phy: intel: Remove Thunder Bay eMMC
- PHY bindings
-Message-ID: <ZBgLEv9FMphyaHyO@matsya>
-References: <20230316120549.21486-1-rashmi.a@intel.com>
- <20230316120549.21486-5-rashmi.a@intel.com>
+        Mon, 20 Mar 2023 03:29:59 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2864783DA;
+        Mon, 20 Mar 2023 00:29:57 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 8E20B24E1DF;
+        Mon, 20 Mar 2023 15:29:55 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 15:29:55 +0800
+Received: from [192.168.125.128] (183.27.97.64) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 15:29:54 +0800
+Message-ID: <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
+Date:   Mon, 20 Mar 2023 15:29:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316120549.21486-5-rashmi.a@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
+ patternProperties
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
+ <20230316030514.137427-4-xingyu.wu@starfivetech.com>
+ <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
+ <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
+ <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,13 +69,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-03-23, 17:35, rashmi.a@intel.com wrote:
-> From: "A, Rashmi" <rashmi.a@intel.com>
+On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
+> On 20/03/2023 04:54, Xingyu Wu wrote:
+>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
+>>> On 16/03/2023 04:05, Xingyu Wu wrote:
+>>>> Add optional compatible and patternProperties.
+>>>>
+>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>> ---
+>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
+>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>> index ae7f1d6916af..b61d8921ef42 100644
+>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>> @@ -15,16 +15,31 @@ description: |
+>>>>  
+>>>>  properties:
+>>>>    compatible:
+>>>> -    items:
+>>>> -      - enum:
+>>>> -          - starfive,jh7110-aon-syscon
+>>>> -          - starfive,jh7110-stg-syscon
+>>>> -          - starfive,jh7110-sys-syscon
+>>>> -      - const: syscon
+>>>> +    oneOf:
+>>>> +      - items:
+>>>> +          - enum:
+>>>> +              - starfive,jh7110-aon-syscon
+>>>> +              - starfive,jh7110-stg-syscon
+>>>> +              - starfive,jh7110-sys-syscon
+>>>> +          - const: syscon
+>>>> +      - items:
+>>>> +          - enum:
+>>>> +              - starfive,jh7110-aon-syscon
+>>>> +              - starfive,jh7110-stg-syscon
+>>>> +              - starfive,jh7110-sys-syscon
+>>>> +          - const: syscon
+>>>> +          - const: simple-mfd
+>>>>  
+>>>>    reg:
+>>>>      maxItems: 1
+>>>>  
+>>>> +patternProperties:
+>>>> +  # Optional children
+>>>> +  "pll-clock-controller":
+>>>
+>>> It's not a pattern.
+>> 
+>> Does it use 'properties' instead of 'patternProperties'?
 > 
-> Remove Thunder Bay specific code as the product got cancelled
-> and there are no end customers or users.
+> Yes.
+> 
+>> 
+>>>
+>>> Anyway should be clock-controller
+>> 
+>> Will fix.
+>> 
+>>>
+>>>> +    type: object
+>>>> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+>>>> +    description: Clock provider for PLL.
+>>>> +
+>>>
+>>> You just added these bindings! So the initial submission was incomplete
+>>> on purpose?
+>>>
+>>> No, add complete bindings.
+>> 
+>> Does you mean that it should drop the 'description', or add complete 'description',
+>> or add 'compatible', 'clocks' and 'clock-cells' of complete clock-controller bindings?
+> 
+> It means it should be squashed with the patch which adds it.
 
-Applied, thanks
+Should I drop the 'decription' here and keep the 'decription' in patch1?
 
--- 
-~Vinod
+> 
+>> 
+>>>
+>>>>  required:
+>>>>    - compatible
+>>>>    - reg
+>>>> @@ -38,4 +53,16 @@ examples:
+>>>>          reg = <0x10240000 0x1000>;
+>>>>      };
+>>>>  
+>>>> +  - |
+>>>> +    syscon@13030000 {
+>>>
+>>> No need for new example... Just put it in existing one.
+>>>
+>> 
+>> Actually, the PLL clock-controller are just set in sys-syscon resgisters. The stg-syscon and
+>> aon-syscon don't need it. So PLL clock-controller node only is added in sys-syscon node.
+> 
+> So why having other examples if they are included here? Drop them.
+> 
+
+Should I drop the old example of stg-syscon and add a new example of sys-syscon which
+include clock-controller child node?
+
+Best regards,
+Xingyu Wu
