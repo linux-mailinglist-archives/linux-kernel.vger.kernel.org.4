@@ -2,94 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C376C0F92
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D126C0F95
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjCTKqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S231260AbjCTKrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCTKqJ (ORCPT
+        with ESMTP id S230138AbjCTKrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:46:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D87F25B83
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:44:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8847B80DFD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27288C433EF;
-        Mon, 20 Mar 2023 10:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679308983;
-        bh=b7PFh3YhCgSl4cZHu1XnSk4/kQBLuxV+91gIq3yFMaY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ImOUHhynTTZoM9nBetVrrEMlNZ9aqCaSvqF4LPrJhWwbhkL/MG4hA0RnvlKyLiwfB
-         TwaDI0LwOqmHkurwpNzDggxlD7Np7ath9Q0YfGxQ2w+o5JeRSlcGoGDafpE0UmcjSO
-         Dg/Z2y1+iZaEU9eGcfllLmDKSLKpJcAg3SQHJqCU=
-Date:   Mon, 20 Mar 2023 11:43:00 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-Cc:     outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, Julia Lawall <julia.lawall@inria.fr>
-Subject: Re: [PATCH] staging: rtl8723bs: use inline functions for
- dev_to_sdio_func
-Message-ID: <ZBg4tGlY+Epz0Vhd@kroah.com>
-References: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
+        Mon, 20 Mar 2023 06:47:03 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0F0CC3F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:44:56 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 5543C5FD0F;
+        Mon, 20 Mar 2023 13:43:16 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679308996;
+        bh=iyUXeu3+jkqtK4aQs+x6vXU9UqkcLHAPrhpZ7EOKuCQ=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=eV7CpVjqOf2rynWDJ0YHKRjUdBwvUla8SDE2+t0+b0Nb6HZrnn66w7hv8oOa1+Ced
+         j6snk9n5lHC0dC2+MCOg7P350vllYHTamMfgeQybKlI1jmXJOXFsKfsebii5dYlZLW
+         pUZ50EleSJyANUJDSvRzlWRqlsrnqcpCMynPdoU7wZWd4fo+TRIirsyrcibsZ9vILh
+         fpFvwNNWL630XPKjwFBg4M6+KNDdWi12/nNpG61n397oLDauw/bB5WuVEPkRRh//hx
+         qOWFRlV7GNoB8cQS3mzfQVweLzSxa2BWdzDG9Av+1SQp/YOCpwcdp/mowh+xpQKryd
+         ensde3VAvEWzA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 13:43:15 +0300 (MSK)
+Date:   Mon, 20 Mar 2023 13:43:14 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v1] mtd: rawnand: meson: invalidate cache on polling
+ ECC bit
+Message-ID: <20230320104314.i2stk665xbrleb53@CAB-WSD-L081021>
+References: <d4ef0bd6-816e-f6fa-9385-f05f775f0ae2@sberdevices.ru>
+ <20f7f1f8-e8f8-b3e1-251e-27db71ab6840@sberdevices.ru>
+ <20230313121808.27170d1b@xps-13>
+ <dc46c06f-6b36-3c1c-bf96-2ef37e29dfdb@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc46c06f-6b36-3c1c-bf96-2ef37e29dfdb@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/20 04:57:00 #20976224
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:34:41PM +0200, Menna Mahmoud wrote:
-> Convert `dev_to_sdio_func` macro into a static inline function.
-> it is not great to have macro that use `container_of` macro,
-> because from looking at the definition one cannot tell
-> what type it applies to.
+Hello guys!
+
+Was it applied to some nand 'prepare-for-merge' release branch?
+
+On Mon, Mar 13, 2023 at 12:23:12PM +0100, Neil Armstrong wrote:
+> On 13/03/2023 12:18, Miquel Raynal wrote:
+> > Hi Arseniy,
+> > 
+> > avkrasnov@sberdevices.ru wrote on Mon, 13 Mar 2023 10:36:11 +0300:
+> > 
+> > > Hello,
+> > > 
+> > > we reproduced this problem on one of our boards. It triggers very rare
+> > > when 'usleep_range()' is present, but when sleeping is removed - it fires
+> > > always. I suppose problem is with caching, as 'info_buf' memory is mapped by
+> > > 'dma_map_single()'.
+> > 
+> > The fix looks really legitimate, indeed I get that the usleep_range()
+> > might make it work most of the time but not always. Having this bit in
+> > a DMA buf area is a bit strange. Well, the fix LGTM anyway.
 > 
-> One can get the same benefit from an efficiency point of view
-> by making an inline function.
+> Yep it looks legitimate!
 > 
-> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
->  drivers/staging/rtl8723bs/os_dep/sdio_intf.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> LGTM
 > 
-> diff --git a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
-> index 490431484524..7ee821dbbae0 100644
-> --- a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
-> +++ b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
-> @@ -10,7 +10,10 @@
->  #include <linux/jiffies.h>
->  
->  #ifndef dev_to_sdio_func
-> -#define dev_to_sdio_func(d)     container_of(d, struct sdio_func, dev)
-> +static inline struct sdio_func *dev_to_sdio_func(struct device *d)
-> +{
-> +	return container_of(d, struct sdio_func, dev);
-> +}
->  #endif
+> 
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> > 
+> > > 
+> > > Thanks, Arseniy
+> > > 
+> > > On 13.03.2023 10:32, Arseniy Krasnov wrote:
+> > > > 'info_buf' memory is cached and driver polls ECC bit in it. This bit
+> > > > is set by the NAND controller. If 'usleep_range()' returns before device
+> > > > sets this bit, 'info_buf' will be cached and driver won't see update of
+> > > > this bit and will loop forever.
+> > > > 
+> > > > Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+> > > > Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> > > > ---
+> > > >   drivers/mtd/nand/raw/meson_nand.c | 8 +++++++-
+> > > >   1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+> > > > index 5ee01231ac4c..2c05c08a0eaf 100644
+> > > > --- a/drivers/mtd/nand/raw/meson_nand.c
+> > > > +++ b/drivers/mtd/nand/raw/meson_nand.c
+> > > > @@ -176,6 +176,7 @@ struct meson_nfc {
+> > > >   	dma_addr_t daddr;
+> > > >   	dma_addr_t iaddr;
+> > > > +	u32 info_bytes;
+> > > >   	unsigned long assigned_cs;
+> > > >   };
+> > > > @@ -503,6 +504,7 @@ static int meson_nfc_dma_buffer_setup(struct nand_chip *nand, void *databuf,
+> > > >   					 nfc->daddr, datalen, dir);
+> > > >   			return ret;
+> > > >   		}
+> > > > +		nfc->info_bytes = infolen;
+> > > >   		cmd = GENCMDIADDRL(NFC_CMD_AIL, nfc->iaddr);
+> > > >   		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> > > > @@ -520,8 +522,10 @@ static void meson_nfc_dma_buffer_release(struct nand_chip *nand,
+> > > >   	struct meson_nfc *nfc = nand_get_controller_data(nand);
+> > > >   	dma_unmap_single(nfc->dev, nfc->daddr, datalen, dir);
+> > > > -	if (infolen)
+> > > > +	if (infolen) {
+> > > >   		dma_unmap_single(nfc->dev, nfc->iaddr, infolen, dir);
+> > > > +		nfc->info_bytes = 0;
+> > > > +	}
+> > > >   }
+> > > >   static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+> > > > @@ -710,6 +714,8 @@ static void meson_nfc_check_ecc_pages_valid(struct meson_nfc *nfc,
+> > > >   		usleep_range(10, 15);
+> > > >   		/* info is updated by nfc dma engine*/
+> > > >   		smp_rmb();
+> > > > +		dma_sync_single_for_cpu(nfc->dev, nfc->iaddr, nfc->info_bytes,
+> > > > +					DMA_FROM_DEVICE);
+> > > >   		ret = *info & ECC_COMPLETE;
+> > > >   	} while (!ret);
+> > > >   }
+> > 
+> > 
+> > Thanks,
+> > Miquèl
+> 
 
-Why is the "#ifndef" check still needed now?  Really it was never
-needed, but now would be a great time to remove it as it doubly does not
-make any sense here.
-
-Oh wait, no, this whole thing can just be removed entirely, right?
-There already is a dev_to_sdio_func macro defined, so the #ifndef check
-catches that so your change doesn't actually modify any code that is
-used.  So this should all be removed, not changed to an inline function.
-
-thanks,
-
-greg k-h
+-- 
+Thank you,
+Dmitry
