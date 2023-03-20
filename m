@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662BB6C2338
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007256C2345
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjCTU4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S230200AbjCTU6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjCTU41 (ORCPT
+        with ESMTP id S229483AbjCTU6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:56:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF7846A2;
-        Mon, 20 Mar 2023 13:56:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E685161812;
-        Mon, 20 Mar 2023 20:56:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15DCC4339B;
-        Mon, 20 Mar 2023 20:56:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679345779;
-        bh=TIisIt10fTBip8aXju7/P4H6FODyu04/HbhhX49wO9c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U5f18BUkAyOeemq+22V7ydwhU6CkvKYt0o8epjIrF0czmcfDjiO6l/qH1Dyj1kzrG
-         QUAI3mZzKD1ahZyJY/KWPlbSVe81sqXAgnCpIfAz7MtASKADACYryCU8cSEgZecc9j
-         zlehdT5gmVpt7G0PLyEOhsCKfSvds1PuNphhyQR+qmiQ7CLu2Sr4pjgROgcYXoVIs3
-         j7wG3QUllgK7yn6mDxn7RRzvw4shjIilMNewkePzbuVLGayq9mmz8FotoZES+8VJBZ
-         prpx8rnFWGiQOwqVeiOBeP6SSJ8xPJJ0C48++C7IVdHdUPzetM8UTP6LNoz6iPVulj
-         CkKA5jzVtGvrQ==
-Date:   Mon, 20 Mar 2023 13:56:17 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [GIT PULL] fscrypt fix for v6.3-rc4
-Message-ID: <20230320205617.GA1434@sol.localdomain>
+        Mon, 20 Mar 2023 16:58:17 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20E7B74B;
+        Mon, 20 Mar 2023 13:58:12 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id r16so14828318qtx.9;
+        Mon, 20 Mar 2023 13:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679345892;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yoeChtzo2lWFrH5XgwNuAkfFSV3nOpgGzq4XPO44Eas=;
+        b=FLFjbErCI/z0z3nasBQdIVv++X8I+lvgdo6KFZY8MG+S++cUNeUH9WXuJh7zj/kYYp
+         qE0hqtTUBLa1nxmTd65+gbqd57y4ae9tz1+NkucBA2W3/e49NUPquTy5mS7L61iL/BDQ
+         b2ckWuZqxfzkjwlR4BlwAFLFXKcUenV0Es5xCX34ZgkgvD8eLzQIsBW1JJxrOCcAavmm
+         A78BoiYyYaAe3x9wkgNqunABRINWV+yRDPuQtz9SfkZW0NmyjQe2BY1CQzWUNcZYuj8K
+         iCkgDwXfvOHjJHsW2FEnoO32vf5XwV5/XwkPvKMw29GU3vcCUC/LxNefV94kTv76N4J+
+         WJSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679345892;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yoeChtzo2lWFrH5XgwNuAkfFSV3nOpgGzq4XPO44Eas=;
+        b=va5fK8PvMuFCow+4XCeWgyIqvZLASUCTACmyGi0p5x9lXg642mtjMlTG0LXQPK+4IA
+         n+nDe1PBzptKgIbqHxR+nc8EGXwSIswrJpY02i32Spt9fE6ewWPEYdrJQWgBzxs5nwyk
+         uKi9+JswsBy8aSDiCefT2nKJRZrfbKJr6OUbBDOXTO8wIfB0B4njaDCbnsJglQuCVonh
+         ailmHLTRSw/6NAsqltXsolqCPSTOfQSkCZafA1jyrB0aHNk4YO16oDYhGMFW5MyCtFOU
+         YAvKGn1+yS69/BkDMduJHouOFiF9nnD2XTIEwDSDdWhTEBknWc284IWR3ZFI28LFDV6i
+         QROQ==
+X-Gm-Message-State: AO0yUKX1G+yMVY6r/BTyc5BsfCy3LmdKCuFucTgeszvXF+TmHg6jdwoE
+        txcp85VtCQBaFWlNmk4aoSI=
+X-Google-Smtp-Source: AK7set89AGEw+qpi24l+uwt6mCVUfwsoNeY8Skw29NjmzPV/ZzgoHOZXSfzRZ2CV2terbeLji1FPCw==
+X-Received: by 2002:a05:622a:511:b0:3d4:3d6c:a62b with SMTP id l17-20020a05622a051100b003d43d6ca62bmr1081294qtx.27.1679345892078;
+        Mon, 20 Mar 2023 13:58:12 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m64-20020a375843000000b0073b8512d2dbsm7943235qkb.72.2023.03.20.13.58.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 13:58:11 -0700 (PDT)
+Message-ID: <a3ed86fd-ac5e-3692-abcc-9e7849e176c1@gmail.com>
+Date:   Mon, 20 Mar 2023 13:58:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230320145507.420176832@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+On 3/20/23 07:52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 198 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 22 Mar 2023 14:54:29 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.21-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-are available in the Git repository at:
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-  https://git.kernel.org/pub/scm/fs/fscrypt/linux.git tags/fscrypt-for-linus
-
-for you to fetch changes up to 4bcf6f827a79c59806c695dc280e763c5b6a6813:
-
-  fscrypt: check for NULL keyring in fscrypt_put_master_key_activeref() (2023-03-18 21:08:03 -0700)
-
-----------------------------------------------------------------
-
-Fix a bug where when a filesystem was being unmounted, the fscrypt
-keyring was destroyed before inodes have been released by the Landlock
-LSM.  This bug was found by syzbot.
-
-----------------------------------------------------------------
-Eric Biggers (3):
-      fscrypt: destroy keyring after security_sb_delete()
-      fscrypt: improve fscrypt_destroy_keyring() documentation
-      fscrypt: check for NULL keyring in fscrypt_put_master_key_activeref()
-
- fs/crypto/keyring.c | 23 +++++++++++++----------
- fs/super.c          | 15 ++++++++++++---
- 2 files changed, 25 insertions(+), 13 deletions(-)
