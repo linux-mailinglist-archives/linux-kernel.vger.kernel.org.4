@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF386C1657
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 378A26C1662
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjCTPEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S231732AbjCTPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjCTPES (ORCPT
+        with ESMTP id S232385AbjCTPFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:04:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F8F2A144;
-        Mon, 20 Mar 2023 08:00:18 -0700 (PDT)
+        Mon, 20 Mar 2023 11:05:21 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909CF2A989;
+        Mon, 20 Mar 2023 08:01:31 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CF766660212C;
-        Mon, 20 Mar 2023 15:00:09 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 47A0B6602173;
+        Mon, 20 Mar 2023 15:00:32 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679324411;
-        bh=69r7ZJ7lFz8tBgGhwZoAQpSTq3WnA5tKdeH7p99cqsg=;
+        s=mail; t=1679324433;
+        bh=AfixiP+8HtjjvMIA24QWs2GNAgmS/cAvbsYFMd2V1R8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FXf6S4YEmmMAIySgVsoRQJfX1gpJGGnOTA1pmvDKiMkygZcbGxRYV8B2kkwoGMO1P
-         UEoyuLFZYh16TQ0EDqps/0OaHYp0ZPC25L8JrF0/y0HQXSf3JLYigFpLzNqx28Dfy8
-         yIYd2oyKoyYNPeCNzEmu4ZzEZjAbpfxHg0Rab2X1yTH2TvbWMUzFQgD4BJ4joSQuBs
-         9TWNRYBHurfikKt3tjxT/FRZukfXP8pMD0WxRiYFPtZuUtnbARWzqAyrpoeC7I6KsB
-         GQFN+Mwi/45P47Suv4Mh3B/vKsl2M9bneGds8zAFi1CECZTyc0jW4n1ilBcUbbCBIV
-         NIgIlTI2irtbw==
-Message-ID: <1d0c0e49-4f50-7fc8-d514-b19cf4054066@collabora.com>
-Date:   Mon, 20 Mar 2023 16:00:06 +0100
+        b=lGZKoKJxulxhXT27+WHTQ+D3jlwfNFNNGlfa364Q4mk2q1N9H4KmoaTaDyUmAY+PK
+         g5K9dzh3EqHGF5Hcuy0xo+uTHp8TF0LvQ7hagbAuZhREWCG79YJmzP7kjQHQShKYO8
+         HskdECNhT4ha3jDhD5NUjeFKZUkg9Gk4SHl1g71s+arA9SYUlGXoHQdrPHmqGsJ/R0
+         FFRytE5zUKlv29DQO5ksvTNSV6QKI1Z+mJrII540pU/bTMm10lf4Yixtex3xaes4JU
+         c+X2xcpw7ifZCuI48Gu2lt35+InR0TgHPJ72E462Ytm+6G7eqc66eIvM6bBbdx0daB
+         9/Ce92kV9ANgQ==
+Message-ID: <a19a4310-3228-c6b5-8eec-ed7f35eb5e13@collabora.com>
+Date:   Mon, 20 Mar 2023 16:00:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v3 20/21] dt-bindings: pinctrl: mediatek: mt7620: split
- binding
+Subject: Re: [PATCH v3 11/21] dt-bindings: pinctrl: mediatek: mt8186: rename
+ to mediatek,mt8186-pinctrl
 Content-Language: en-US
 To:     arinc9.unal@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -64,10 +64,10 @@ Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
 References: <20230317213011.13656-1-arinc.unal@arinc9.com>
- <20230317213011.13656-21-arinc.unal@arinc9.com>
+ <20230317213011.13656-12-arinc.unal@arinc9.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230317213011.13656-21-arinc.unal@arinc9.com>
+In-Reply-To: <20230317213011.13656-12-arinc.unal@arinc9.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,38 +82,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Il 17/03/23 22:30, arinc9.unal@gmail.com ha scritto:
 > From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> The MT7628 and MT7688 SoCs contain different pin muxing information,
-> therefore, should be split. This can be done now that there are compatible
-> strings to distinguish them from other SoCs.
-> 
-> Split the schema out to mediatek,mt76x8-pinctrl.yaml.
-> 
-> Remove mediatek,mt76x8-pinctrl from mt7620.
+> Rename pinctrl-mt8186.yaml to mediatek,mt8186-pinctrl.yaml to be on par
+> with the compatible string and other mediatek dt-binding schemas.
 > 
 > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->   .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 379 +--------------
->   .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 450 ++++++++++++++++++
+> Acked-by: Rob Herring <robh@kernel.org>
 
-AFAIK, wildcards aren't allowed, so the new file should instead be called
-"mediatek,mt7628-pinctrl.yaml", the compatible string "ralink,mt76x8-pinctrl"
-should be deprecated (but still present as to not break ABI), and the driver
-updated to accept the compatible string "ralink,mt7628-pinctrl".
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-At that point, you could update the devicetrees as well: for MT7628, you'd
-have a node using
-
-compatible = "ralink,mt7628-pinctrl";
-
-while for MT7688, you'd have
-
-compatible = "ralink,mt7688-pinctrl", "ralink,mt7628-pinctrl";
-
-If you don't want to go through those lengths, you could still do the
-cleanup that you wanted to perform, but with a filename containing no
-wildcards - anyway.
-
-Regards,
-Angelo
 
