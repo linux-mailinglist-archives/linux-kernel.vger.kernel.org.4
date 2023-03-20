@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A91A6C0C60
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FD76C0C62
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjCTIkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S230381AbjCTIoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCTIko (ORCPT
+        with ESMTP id S229892AbjCTIoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:40:44 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B330728B;
-        Mon, 20 Mar 2023 01:40:43 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso8634204wmb.0;
-        Mon, 20 Mar 2023 01:40:43 -0700 (PDT)
+        Mon, 20 Mar 2023 04:44:32 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFBC12CFB;
+        Mon, 20 Mar 2023 01:44:29 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso11588157pjb.2;
+        Mon, 20 Mar 2023 01:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679301642;
+        d=gmail.com; s=20210112; t=1679301869;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcKnhemYdKHWThhsxV1AhOlClFynUX4pt1AKusVZUtM=;
-        b=ERS1o6I1GyJB1x/Owu+aLzg/wa7KALPuXw34Y5/nyy/FPpP/dQAR5s65Sh+cpgQSUu
-         2WeXVR2YxURM6pF79L/vGRAHBTxBarR59IUS+PiP5dj2gULIVjfPD8KJT6ZbmmZGa55l
-         HD/gjEvlaOpZNvho7lOMiOcEGfJ43sYrTM+Wo0qM9pqaL3DnjhLRlfkXbtQjc6/1Laj6
-         HH/PGtwgiA2+UhopsFytxDyc2BROSOZT7bdRokzb9/NpsLXY+DVHJ89IE5Rj3O4PUR5I
-         xuX1PIIwK6DR6izzjFtsik1xfU4aTCr6bGydAA5AWzpaTySlU1uZ6uqqxokT35DkuPlS
-         q3zw==
+        bh=gs8rcm/d7d5rUf8zE5Zuo/A8IdhoZtRoqNxyEktI7DU=;
+        b=D1Zmcz+v1MK/aSof4oDyzd7q1lx9K9HTk27r+LV6Lh1C3y/VPTkYrWUQMA/OMPpcKU
+         we08QnxWPTFCyvkjbDwhE3gvfDeg2Jn0RzBP4V+/2fH0eNEg36YInV9OONtM4o6Dh3x5
+         qXABGpInu9pkf6OBcanjeGCD6sMY50g9QkfUk2RT3Igek5ixe3O75VESxkXnrq00JXyr
+         9Cs6qlykNDGCbrYqav6bfOyJ82b9huN0+x0ahdhTu3wnkJNC2whpCfZf6e0MOZHAtgBi
+         VO8GxL4tZ1h9YYEM6GnojpOykTBVhIcWmpVO+SHsjNgsnvFU+NBzkK4GWrBATqH6zCwk
+         gUzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679301642;
+        d=1e100.net; s=20210112; t=1679301869;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zcKnhemYdKHWThhsxV1AhOlClFynUX4pt1AKusVZUtM=;
-        b=qcbWOTLMO/LmMAFIcs+28OaSLRMJkJyylbzNdPuA03GrioytNP0SQB1IhY5Dt4rg48
-         ZOTUFq04WoSHG6LxETgrweZR6BKY+insAQ5OAZ+NaCSVSxsEt3otDDGcHnJEyc4KJ/nR
-         fJiWrUPhcdaB2EUHl2i5Hc0pMWJegcs29jQHMLSiYjcXyzNhsU7JNho1GMuurSS9shtT
-         eIHk4gqKtss7cfSv+m8nKRlqYabd+TAtYquFlAOTfnwWEFXQg8z0MIVSdl0IPj4oDChr
-         CLR7BpJUbYzEAohQJ8/FtdPECpfSeOn/mT5nGC8WVI2kr0H3SF1xA8efvxl8Fyn6oYfa
-         p8QA==
-X-Gm-Message-State: AO0yUKVebC1s0UKqo29eaJwvZwOeuhicVsLk6skbXhfkDDum0hXyJnPG
-        gk6XZ3gVbvzEM1JLQ/80xks=
-X-Google-Smtp-Source: AK7set/x80FQjPZUn/3XtHXtVyfMUipTNm59Yq+rktAgdqJxPhM28LN40nX/xK7/Rl6DFvAQKJtv4A==
-X-Received: by 2002:a05:600c:2053:b0:3ed:5cf7:3080 with SMTP id p19-20020a05600c205300b003ed5cf73080mr12180070wmg.5.1679301642106;
-        Mon, 20 Mar 2023 01:40:42 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id i7-20020adffc07000000b002c5706f7c6dsm8295961wrr.94.2023.03.20.01.40.41
+        bh=gs8rcm/d7d5rUf8zE5Zuo/A8IdhoZtRoqNxyEktI7DU=;
+        b=1lLd+yteqHnpR+xHSPKljGsQccn6Y25i26vsPHj53KteOqRqLc7fDgHfDHnwqt87dL
+         VzXJwCcIuQlBoPb2FIJtOC4IBFPtrobD2/n/q1R3L8S/MNneNs8cSQcKh4q8dswOpZeo
+         7ZT+0KA2grMHmPXh5NgV/ZbO3UL7bfrHpJ2yBQwda6rRIRTJZ5J0liB/fB5DGttNc9CM
+         fmXl7iTarIVWWWeJmjPSt7nu414QmAYpbK35PphlMevGsuzApyAfZBlaRs9PJgu6/r+j
+         d2HFGnXt8mz6Bx8PmCcfFxzKh20HzG+CaswZyNkR6Y+xf+FmE1aeD1J6PtzXEvLidP6Q
+         s5Lw==
+X-Gm-Message-State: AO0yUKU5JdludfT5ywBO3CxoNd77JBSKXpyvut057V+JI+rjUZantEDi
+        K1EzkRUKjU7s1FfvcILauRU=
+X-Google-Smtp-Source: AK7set/c7pstRRWuhurf3gUuxnXwtKb1375FG/fOeRr1dGCOpfdeRb7/xUqrWb2ye0HQRVT8Xbwv3w==
+X-Received: by 2002:a17:902:e742:b0:19f:7977:c9d6 with SMTP id p2-20020a170902e74200b0019f7977c9d6mr18905610plf.28.1679301869033;
+        Mon, 20 Mar 2023 01:44:29 -0700 (PDT)
+Received: from sumitra.com ([210.212.97.176])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902b70400b001a1c2eb3950sm2847455pls.22.2023.03.20.01.44.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:40:41 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 08:40:40 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ce89fe94-dc8d-4e10-9181-e01760939ef6@lucifer.local>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <20230319131047.174fa4e29cabe4371b298ed0@linux-foundation.org>
- <fadd8558-8917-4012-b5ea-c6376c835cc8@lucifer.local>
- <ZBd00i7fvwrMX/FY@casper.infradead.org>
- <b4233383-2c87-422f-9f66-3815a6c77372@lucifer.local>
+        Mon, 20 Mar 2023 01:44:27 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 01:44:22 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Marc Dietrich <marvin24@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] Staging: nvec: Convert to_nvec_led from a macro to an
+ inline function
+Message-ID: <20230320084422.GA126429@sumitra.com>
+References: <20230318175250.GA49618@sumitra.com>
+ <417e944c-4653-43ef-b492-c82c536e4d87@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b4233383-2c87-422f-9f66-3815a6c77372@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <417e944c-4653-43ef-b492-c82c536e4d87@kili.mountain>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 09:16:18PM +0000, Lorenzo Stoakes wrote:
-> On Sun, Mar 19, 2023 at 08:47:14PM +0000, Matthew Wilcox wrote:
-> > I wonder if we can't do something like prefaulting the page before
-> > taking the spinlock, then use copy_page_to_iter_atomic()
+On Mon, Mar 20, 2023 at 08:39:49AM +0300, Dan Carpenter wrote:
+> On Sat, Mar 18, 2023 at 10:52:50AM -0700, Sumitra Sharma wrote:
+> > Convert to_nvec_led from a macro to a static inline function, to make the
+> > relevant types apparent in the definition and to benefit from the type
+> > checking performed by the compiler at call sites.
+> > 
+> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > ---
+> 
+> You need to compile test your changes.
 >
-<snip>
 
-On second thoughts, and discussing with Uladzislau, this seems like a more
-sensible approach.
+Hi dan,
 
-I'm going to respin with prefaulting and revert to the previous locking.
+I am facing problems in creating modules and in compiling them.
+
+Any help in this would be appreciated. Here is the link to the thread https://lore.kernel.org/outreachy/alpine.DEB.2.22.394.2303191336090.2867@hadrien/T/#t
+
+Regards,
+
+Sumitra
+
+> regards,
+> dan carpenter
+> 
