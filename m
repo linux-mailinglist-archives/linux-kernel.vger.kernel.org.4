@@ -2,166 +2,477 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8BF6C1033
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4C56C1034
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjCTLFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S230184AbjCTLGC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 07:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCTLFS (ORCPT
+        with ESMTP id S230022AbjCTLF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:05:18 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C199E381;
-        Mon, 20 Mar 2023 04:00:40 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32K97edr008241;
-        Mon, 20 Mar 2023 11:00:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : references : date : in-reply-to : message-id : content-type :
- mime-version; s=corp-2022-7-12;
- bh=klKIAm5TZKP2gRqNT1UGmdh5NMN9LQYDgEe0TlG+1w0=;
- b=Hev8DskYDrFXZys0c3wqo3NFV9yNbo1TMTUSln2VkUHNL1eKfvtLOsetEQqlGMrCgHoH
- dVa8CGHMLDv9cQiOmFbvU9ONTmbWKqqlMPzbVXBToOyWJ40XUjQZQ6jpUNmrfzq0i5Uq
- fZv6Rc9U+Gbn+t6xLBR/cdo8J9eDQp9KXLZvAp/K2Uejx0upw3J69aXOb7Q5hl2XXtFx
- hAn/zVLKH+kjvS26MugufAq1GaWb+kbxkmc8TxJO+3UUURKR7OcyumPyTNgkVY3FTmXk
- hRx1cRXGdjyMa4gSHVIshXiqltpcyXAPSdpN6x1w8nsNLlYCAF2OyCMzCx/5J4YcPFEp BA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pd4wt3433-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Mar 2023 11:00:25 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32KAbKpf014427;
-        Mon, 20 Mar 2023 11:00:24 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2040.outbound.protection.outlook.com [104.47.51.40])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3pd3r446dq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Mar 2023 11:00:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=co5OoUdQNSBFwkR790FuTzmNMp+3bqybGYXi11jMhz3JlM4RT/oloz05a+2cURw0bOjpye/+zuYBH/a1/VexYZtIwkI20pSe9MvrRMFzWIvzkQLm0D4s9W4q33noN7LIzQObj9y+XNwTRGEC2R321hzzuF0pxoWWuMPp615/EMpQiCUY1Mg8yIE1d1135ptqA1SIDULBDb2F8hi1CIkMZtIfWsHfNvUOESYIyXYkEcxrhZ/kGB22ONjH/CFoiC9H5VGSgnv87b56jc/wnd5N69R5tp0vO03BHK0JcqrB2dUkIRC1qdSty/LoyULcgDXsET3SRWVzxt7xhmpbexpLSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=klKIAm5TZKP2gRqNT1UGmdh5NMN9LQYDgEe0TlG+1w0=;
- b=i1s1NsSQ+7zDJun0XlYgN6mKiO/Cx31lW6DAKgwuU0/mWaElsGPR80LqvHyS1wPq0mGI7UvCY1t4e769FsbmqvM7vr9AfdRWMTo7VnyLRtFDmNagZFL0Zr1RHwKGiWoaMZIyWqjwfC97HjG3PgNhcSF0gXrrgeNb427G3n0Cq+J+ZRe2gtqC7aOTBmpFDgWVnLRuDGjQGJ0+BOIQbtoZWfP1T+IpWqwsZeXkXxQV6xGFyCprzdPIXo1Izyokv+jcwUA9Qn8NFaDOUdAgNO4Bfi7NajF+WMgLbPjIs0RCbikLTxSrNxyfg2kv+FJ+Djv352Q5/vjSa9SnM3VmrZiNAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=klKIAm5TZKP2gRqNT1UGmdh5NMN9LQYDgEe0TlG+1w0=;
- b=boEiVdUzry1pflsrB0XO2R8APq7JxZK1nW0sFqa9pi/qjknaxBxfJnmjzazMaUu6fuMNJnETHoaWPLdkF3iDNUWO3y8GM8ismvkvDFhi6o21mBGjcAll4RwEKvRQA7kiq/sbkjscOIklaXb51XSrBkW2aHhntZcoQRxk6Y6hny4=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by CH0PR10MB5308.namprd10.prod.outlook.com (2603:10b6:610:c6::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 11:00:21 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 11:00:17 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>,
-        dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/17] MODULE_LICENSE removals, sixth tranche
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
-        <ZAJzCvTI67NgbJiY@bombadil.infradead.org>
-Emacs:  impress your (remaining) friends and neighbors.
-Date:   Mon, 20 Mar 2023 11:00:17 +0000
-In-Reply-To: <ZAJzCvTI67NgbJiY@bombadil.infradead.org> (Luis Chamberlain's
-        message of "Fri, 3 Mar 2023 14:22:02 -0800")
-Message-ID: <87ilevu1q6.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0344.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:d::20) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+        Mon, 20 Mar 2023 07:05:28 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58FC46A4;
+        Mon, 20 Mar 2023 04:00:41 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7DB3A24E292;
+        Mon, 20 Mar 2023 19:00:32 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 19:00:32 +0800
+Received: from [192.168.125.108] (183.27.97.64) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 19:00:31 +0800
+Message-ID: <b80132fd-4c11-56c8-318b-c2e34c982d49@starfivetech.com>
+Date:   Mon, 20 Mar 2023 19:00:30 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|CH0PR10MB5308:EE_
-X-MS-Office365-Filtering-Correlation-Id: 768f7194-ceab-48d4-e342-08db29324a6e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LgrsJHahYgM9SFsXSPOCeHei5Qu32kjlulgEPAbRkPyfxrEmnEn2glxwc3rPWzq29YddV5bZSDYm1yj0Id0Yq41Yq6mdHHEr2FxiLvl/tK3LpvntyubTjxUZKWkqbXIhwr57oVjm+wcMzVcc8/56g0Snny2YqGe2gJT1V0o/otomXdSwAVz6CKSGf12+Nq5Ou5aIzn0odRU2bpmE/jj+u2QlSvp2VhpniFh2Qx+qxujgWwxzCSII/6JskJtV9Dtc1UlI0J20pydiiPI98hXJjtxEZYknCpbwwsorvJT6PnVlGf+O8V17czB2hlB3l5/bBhZvO/vCpqaaSrvZDSX4OCclcWCYTTXdfBU1gVW+w32Zb3bnXaHIlQCdPCqqk87YcqufCDI0w5384i4udBwChVvomMVRiaeN07gC9Hxm5yiKNXrnYLeyg/ePbhkJ7zYxgrJ+Wh73KsRfGGFmR2NcX7H900jlIpYgbtetqiUlacs26iSns0ayfruf2AXgEWGQuDvvZFGRoqeLKrLZzbe1/EgR94CjSIWcLFLTNvf5yyeF2+RU3HjPL8TwJ5jk4ndKJYQ4+4dQ8uMT5SmyOt7eoFalbAigiW3+ZiqT7msD6etowD/cn+p6d82c1WKQ3OzxmdLZbSJ9u5wCKI53cEketg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(346002)(366004)(396003)(136003)(451199018)(9686003)(6486002)(4326008)(478600001)(316002)(66556008)(66476007)(66946007)(6916009)(8676002)(186003)(6506007)(6512007)(4744005)(8936002)(44832011)(41300700001)(5660300002)(38100700002)(2906002)(36756003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Oqia4xyz+QwAshmwcVuxG7PDuNYb/M0QXo/rVBzTYIFslN/71SgN97piuNdv?=
- =?us-ascii?Q?g2pP2XfT6Ts0imgLmdC2IfJr0CU69ybas7AP2UZ35CVlhZOmbrqdL2H+kjXg?=
- =?us-ascii?Q?B3WMkg+z8XCib84wfM7am67ujNkkfwjEqbOwO8ypnGH5RNgf5fpXjaBnXVBK?=
- =?us-ascii?Q?fbUHfsrIbxMRqi64J9gaEibFfr+dKrdakszeKgt9ThwpfJx9hUq6+0W8rUrP?=
- =?us-ascii?Q?WDLi17Clt1m98Lr0GXRA9FyQuvavsGwkSfR1RnSf/wk9ejgAEvHRc7Pyb2S+?=
- =?us-ascii?Q?EAyv8O3nd/+mzeAFVyyLTVSQCXNjcF5OB2ZcF9sDwINlDZywz94o0YpTcvbL?=
- =?us-ascii?Q?RSxdv9fFSXw5g6VNxFNZCarLRNfEMEDqtZWvBlYhGmkvUHGloLJEsN2FnCkR?=
- =?us-ascii?Q?5V+Aemkv37NkRs5R/820T7Oca1ovmAAXJdQ5+up55yMNBrrO+wYXEc/OCxAI?=
- =?us-ascii?Q?AQr+rtX+1nN2sAyHMIoJXZWE7LsjMJ8Y/r4B+f1CGYHkCvLHg72WGxeuDv9U?=
- =?us-ascii?Q?l+mlfkf5DrYJuOBLlwhs3TW/v+g7aJw2dG4Kuv228Ix/wVTZkQW2XsWJjP6v?=
- =?us-ascii?Q?4zhROygCC9FcC07WLxuQNZuH5NKCSaPctFLbNU0LqJa0ICr/N/7sfa7+neKZ?=
- =?us-ascii?Q?x31S7OJ7Y1gws4O7kpbCJVLyBDynOVA6l9CDIK3CVA/4p2c5V0IAhb9pPOdI?=
- =?us-ascii?Q?7RFQ+GAN9o/niFpp/oSJ/tz5tvtmW73opE+0Pr61KP29WyW/ZUN0YEXb3pk5?=
- =?us-ascii?Q?OPjEAjZjpM5ukuTxrPkpKHtwql71oDIvcWz7+CsRSPpZgwGFXgJeVhu20w4l?=
- =?us-ascii?Q?ENLUwA+fQuqgSjBclHcbgarD6XdeOu1lrtcyQDWpG0T5y0s00rHwA37hqy+I?=
- =?us-ascii?Q?ppNmcFdoLVcFrz5silSbzqFV3WiukHrZ50ZT4+/JhpFrOsd30CHaCYX4VWZ0?=
- =?us-ascii?Q?l7P4wQYzsRvH4ddqLaDvIbMwCyeu8NEdy73zEB7aQA+XPrXimjq1peRdKvOU?=
- =?us-ascii?Q?DTthwb2q73Ok3RZU5KS5Ra8Rmx97ugzaOBPpCcZ+cet8sqD255vZpT0Lmtjh?=
- =?us-ascii?Q?TF43GTu2N97/xAe4KzPIpWzKeYW99BjRyzQ4hh0E3IrXXBEx1nHg+yHB8S4V?=
- =?us-ascii?Q?Eeb5+RiqBYgvf6FnbcOTpAOJAMNItcxQz7uU0D3C2cTBBhQp5ElWOtjd0bCD?=
- =?us-ascii?Q?HzyZ/NmGfwe72tREnVf5rkPr/AXa9VDC/iTZiSrpLT6ZYuXaDjhwEO/6PYk6?=
- =?us-ascii?Q?huLUVQmh+BvZ57nY0CglWJJ0ZrWTOB4hqwl77wImOkIeuApxX8vNi8NPZEoU?=
- =?us-ascii?Q?S3qh7W8w6KU7qi/GlshpCcg4Re6y+5UEdMlhJHovlput8fSy8BEtEaCI12YO?=
- =?us-ascii?Q?fZzakgUH1ZoUw8m39YnGDordhSgNjBxJet4jA1Ra+Gpw1xL/htmo+7jcgkG9?=
- =?us-ascii?Q?WwmQ0qx9r9gmO571mtCVqoNfVV/GwTs754O4jvmZR01v9coMOU9FAvd3ge98?=
- =?us-ascii?Q?UYuvbfz9SIGyaY/NNvIezea5xtYkQAULDd8Nn/85E2KVRB2LcUPhxiVyynEo?=
- =?us-ascii?Q?rFfIRJ06SZjXDcs/XxmqSPsf4JLDt3TkSlV6hylhTz0Dm7P3/KUWAJt9kRLo?=
- =?us-ascii?Q?yg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: HkvnAYZS1D1WQNMHqOCPC2iWQIPAu2tNcWXvUdCz6g+FPKcJC6B5NqoUOh4WULDq2fqEDmbwpWGqf4I5cfzq6uF46lfN9W0OV6DdfGW8YBoqy8DTZEx0ub6VqJCTa6QLQ7BrA5ndnugmyv/l8llBMp68d/Osms5mLoerjySTw9FoTTF8zUnn3ynlJ4V55HPFoxNVS/r8hEYdlCSSDxIw1NBxRDFPc2v1fGQGjdeQicTDWr6vecQjRsYiBXgQm/wjKy9O1DVnVagwvGqKG/Yd9YWmJo6kK5rQwwzX4Yxszur0T4sGN3v6fqtqSvvXpDPlpuWxlhqRjSit3YMfbnL0f4V3t7/m9X9cIhpDhxHxhpt96SCf1deiRMEKOC/Oe/7ZxSfansvY9MrMiZiVp35p64qTeBOE5gZJnXdrk/9kDaIdc8T4+JZn3lTsgfKwT/JLyMtNnamqI1HjTUuhvH46qg351HhC+mL3KfkbOcQzhKZVcozPBB7iXsgpfM608FBk7iKoVpUYpyN9VCYJAM7/5u7+mbXTp4T+QrMW06dvJePJdoaw9wHqP6hQSBdkI3viXQ6bJTedeaWrauJWRfhQIsQ2VAmK5g8MMJVNg3/rcgE0R8wcrKDf62jKnWJ411RX43XknLJe2A0HCn6zM20T/YjGuHFNIsBf0VuUK5Lq/ZhKFxqxj8tbZzxOJP8aqnRKJtuQi6boheIDPBpti7lcS58ucfJI1ifwQ0Ilaq4yDU1m5qxIQvsCnc1aZ6vzChyznSzkc52fLjpLa7iTtBTGhcwHbzknNgipvdQmDrHQibh56K7TFfKgb4HFlOxAmvagqKk4REBIXIHV7/agT/o/YWZ2r3nMK0O2jSSzj33VkBryq+lL2a0nWVamegfQXVHH
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 768f7194-ceab-48d4-e342-08db29324a6e
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 11:00:17.8348
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xi96LBpaSuL0Kj9nK5amig3vQCiR7UkhaMPA/1/aohuny6b9lsjv7ZFDHkK+q1wnZMOMJLKdxlR6DJVrRfTJnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5308
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_07,2023-03-20_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 spamscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303200093
-X-Proofpoint-GUID: 7WTFMFq3M16P8NIN9-Q0BavUdpsdsPS-
-X-Proofpoint-ORIG-GUID: 7WTFMFq3M16P8NIN9-Q0BavUdpsdsPS-
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/5] phy: starfive: add JH7110 PCIE 2.0 and USB 2.0 PHY
+ driver.
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-3-minda.chen@starfivetech.com>
+ <ZBgflY0NTqpmJMEc@matsya>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <ZBgflY0NTqpmJMEc@matsya>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Sorry about this, MTA delivered a bunch of stuff very late.)
 
-On 3 Mar 2023, Luis Chamberlain verbalised:
 
-> Stupid question, if you're removing MODULE_LICENSE() than why keep the
-> other stupid MODULE_*() crap too? If its of no use, be gone!
-
-I wish, but when I tried it it broke stuff. At least some MODULE_ things
-have side effects -- MODULE_DEVICE_TABLE, maybe MODULE_ALIAS etc...
-
-... and also I was getting complaints when I sent a tree out that did
-that, along the lines of "if MODULE_LICENSE is the problem why not just
-remove that". It seems one cannot win here, both options elicit
-complaints.
+On 2023/3/20 16:55, Vinod Koul wrote:
+> On 15-03-23, 18:44, Minda Chen wrote:
+>> Add Starfive JH7110 SoC PCIe 2.0 and USB 2.0 PHY driver support.
+>> PCIe 2.0 PHY can used as USB 3.0 PHY
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  MAINTAINERS                            |   8 ++
+>>  drivers/phy/starfive/Kconfig           |  22 ++++
+>>  drivers/phy/starfive/Makefile          |   2 +
+>>  drivers/phy/starfive/phy-jh7110-pcie.c | 136 ++++++++++++++++++++
+>>  drivers/phy/starfive/phy-jh7110-usb.c  | 167 +++++++++++++++++++++++++
+>>  5 files changed, 335 insertions(+)
+>>  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
+>>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 8361b8e710ca..4263c005e45c 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19977,6 +19977,14 @@ S:	Supported
+>>  F:	Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+>>  F:	drivers/phy/starfive/phy-starfive-dphy-rx.c
+>>  
+>> +STARFIVE JH71X0 PCIE AND USB PHY DRIVER
+>> +M:	Emil Renner Berthing <kernel@esmil.dk>
+>> +M:	Minda Chen <minda.chen@starfivetech.com>
+>> +S:	Supported
+>> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
+>> +F:	drivers/phy/starfive/phy-jh7110-pcie.c
+>> +F:	drivers/phy/starfive/phy-jh7110-usb.c
+>> +
+>>  STATIC BRANCH/CALL
+>>  M:	Peter Zijlstra <peterz@infradead.org>
+>>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+>> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
+>> index e449a662acf5..dd0f139b5bfb 100644
+>> --- a/drivers/phy/starfive/Kconfig
+>> +++ b/drivers/phy/starfive/Kconfig
+>> @@ -11,3 +11,25 @@ config PHY_STARFIVE_DPHY_RX
+>>  	  Choose this option if you have a Starfive D-PHY in your
+>>  	  system. If M is selected, the module will be called
+>>  	  phy-starfive-dphy-rx.
+>> +
+>> +config PHY_STARFIVE_JH7110_USB
+>> +	tristate "Starfive JH7110 USB 2.0 PHY support"
+>> +	depends on USB_SUPPORT
+>> +	select GENERIC_PHY
+>> +	select USB_PHY
+>> +	help
+>> +	  Enable this to support the StarFive USB 2.0 PHY,
+>> +	  used with the Cadence USB controller.
+>> +	  If M is selected, the module will be called
+>> +	  phy-jh7110-usb.ko.
+>> +
+>> +config PHY_STARFIVE_JH7110_PCIE
+> 
+> Sorted alphabetically please
+> 
+>> +	tristate "Starfive JH7110 PCIE 2.0/USB 3.0 PHY support"
+>> +	depends on USB_SUPPORT
+>> +	select GENERIC_PHY
+>> +	select USB_PHY
+>> +	help
+>> +	  Enable this to support the StarFive PCIe 2.0 PHY,
+>> +	  or used as USB 3.0 PHY.
+>> +	  If M is selected, the module will be called
+>> +	  phy-jh7110-pcie.ko.
+>> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
+>> index 7ec576cb30ae..c3eaf1b34cbb 100644
+>> --- a/drivers/phy/starfive/Makefile
+>> +++ b/drivers/phy/starfive/Makefile
+>> @@ -1,2 +1,4 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  obj-$(CONFIG_PHY_STARFIVE_DPHY_RX)      += phy-starfive-dphy-rx.o
+>> +obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
+>> +obj-$(CONFIG_PHY_STARFIVE_JH7110_PCIE)	+= phy-jh7110-pcie.o
+> 
+> Here also
+> 
+ok， thanks
+>> diff --git a/drivers/phy/starfive/phy-jh7110-pcie.c b/drivers/phy/starfive/phy-jh7110-pcie.c
+>> new file mode 100644
+>> index 000000000000..30a8fa1f580d
+>> --- /dev/null
+>> +++ b/drivers/phy/starfive/phy-jh7110-pcie.c
+>> @@ -0,0 +1,136 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * StarFive JH7110 PCIe 2.0 PHY driver
+>> + *
+>> + * Copyright (C) 2023 Minda Chen <minda.chen@starfivetech.com>
+>> + */
+>> +
+>> +#include <linux/bits.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/err.h>
+>> +#include <linux/io.h>
+>> +#include <linux/module.h>
+>> +#include <linux/phy/phy.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#define PCIE_KVCO_LEVEL_OFF		(0x28)
+>> +#define PCIE_USB3_PHY_PLL_CTL_OFF	(0x7c)
+>> +#define PCIE_KVCO_TUNE_SIGNAL_OFF	(0x80)
+>> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
+>> +#define PHY_KVCO_FINE_TUNE_LEVEL	0x91
+>> +#define PHY_KVCO_FINE_TUNE_SIGNALS	0xc
+>> +
+>> +struct jh7110_pcie_phy {
+>> +	struct phy *phy;
+>> +	void __iomem *regs;
+>> +	enum phy_mode mode;
+>> +};
+>> +
+>> +static void jh7110_usb3_mode_set(struct jh7110_pcie_phy *phy)
+>> +{
+>> +	/* Configuare spread-spectrum mode: down-spread-spectrum */
+>> +	writel(PCIE_USB3_PHY_ENABLE, phy->regs + PCIE_USB3_PHY_PLL_CTL_OFF);
+>> +}
+>> +
+>> +static void jh7110_pcie_mode_set(struct jh7110_pcie_phy *phy)
+>> +{
+>> +	/* PCIe Multi-PHY PLL KVCO Gain fine tune settings: */
+>> +	writel(PHY_KVCO_FINE_TUNE_LEVEL, phy->regs + PCIE_KVCO_LEVEL_OFF);
+>> +	writel(PHY_KVCO_FINE_TUNE_SIGNALS, phy->regs + PCIE_KVCO_TUNE_SIGNAL_OFF);
+>> +}
+>> +
+>> +static int jh7110_pcie_phy_set_mode(struct phy *_phy,
+>> +				  enum phy_mode mode, int submode)
+>> +{
+>> +	struct jh7110_pcie_phy *phy = phy_get_drvdata(_phy);
+>> +
+>> +	if (mode != phy->mode) {
+>> +		switch (mode) {
+>> +		case PHY_MODE_USB_HOST:
+>> +		case PHY_MODE_USB_DEVICE:
+>> +		case PHY_MODE_USB_OTG:
+>> +			jh7110_usb3_mode_set(phy);
+>> +			break;
+>> +		case PHY_MODE_PCIE:
+>> +			jh7110_pcie_mode_set(phy);
+>> +			break;
+>> +		default:
+>> +			return -EINVAL;
+>> +		}
+>> +
+>> +		dev_info(&_phy->dev, "Changing phy mode to %d\n", mode);
+>> +		phy->mode = mode;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int jh7110_pcie_phy_init(struct phy *_phy)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static int jh7110_pcie_phy_exit(struct phy *_phy)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct phy_ops jh7110_pcie_phy_ops = {
+>> +	.init		= jh7110_pcie_phy_init,
+>> +	.exit		= jh7110_pcie_phy_exit,
+>> +	.set_mode	= jh7110_pcie_phy_set_mode,
+>> +	.owner		= THIS_MODULE,
+>> +};
+>> +
+>> +static int jh7110_pcie_phy_probe(struct platform_device *pdev)
+>> +{
+>> +	struct jh7110_pcie_phy *phy;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct phy_provider *phy_provider;
+>> +
+>> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+>> +	if (!phy)
+>> +		return -ENOMEM;
+>> +
+>> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(phy->regs))
+>> +		return PTR_ERR(phy->regs);
+>> +
+>> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_pcie_phy_ops);
+>> +	if (IS_ERR(phy->phy))
+>> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+>> +			"Failed to map phy base\n");
+>> +
+>> +	platform_set_drvdata(pdev, phy);
+>> +	phy_set_drvdata(phy->phy, phy);
+>> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+>> +
+>> +	return PTR_ERR_OR_ZERO(phy_provider);
+>> +}
+>> +
+>> +static int jh7110_pcie_phy_remove(struct platform_device *pdev)
+>> +{
+>> +	platform_set_drvdata(pdev, NULL);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id jh7110_pcie_phy_of_match[] = {
+>> +	{ .compatible = "starfive,jh7110-pcie-phy" },
+>> +	{ /* sentinel */ },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, jh7110_pcie_phy_of_match);
+>> +
+>> +static struct platform_driver jh7110_pcie_phy_driver = {
+>> +	.probe	= jh7110_pcie_phy_probe,
+>> +	.remove	= jh7110_pcie_phy_remove,
+>> +	.driver = {
+>> +		.of_match_table	= jh7110_pcie_phy_of_match,
+>> +		.name  = "jh7110-pcie-phy",
+>> +	}
+>> +};
+>> +module_platform_driver(jh7110_pcie_phy_driver);
+>> +
+>> +MODULE_DESCRIPTION("StarFive JH7110 PCIe 2.0 PHY driver");
+>> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
+>> +MODULE_LICENSE("GPL");
+>> diff --git a/drivers/phy/starfive/phy-jh7110-usb.c b/drivers/phy/starfive/phy-jh7110-usb.c
+>> new file mode 100644
+>> index 000000000000..89db0b7b1224
+>> --- /dev/null
+>> +++ b/drivers/phy/starfive/phy-jh7110-usb.c
+>> @@ -0,0 +1,167 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * StarFive JH7110 USB 2.0 PHY driver
+> 
+> Since these two seem to be different driver, pls split the patches to
+> two, one for each phy driver
+> 
+ok
+>> + *
+>> + * Copyright (C) 2023 Minda Chen <minda.chen@starfivetech.com>
+>> + */
+>> +
+>> +#include <linux/bits.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/err.h>
+>> +#include <linux/io.h>
+>> +#include <linux/module.h>
+>> +#include <linux/phy/phy.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/usb/of.h>
+>> +
+>> +#define USB_125M_CLK_RATE		125000000
+>> +#define USB_LS_KEEPALIVE_OFF		0x4
+>> +#define USB_LS_KEEPALIVE_ENABLE		BIT(4)
+>> +
+>> +struct jh7110_usb2_phy {
+>> +	struct phy *phy;
+>> +	void __iomem *regs;
+>> +	struct clk *usb_125m_clk;
+>> +	struct clk *app_125;
+>> +	enum usb_dr_mode dr_mode;
+>> +};
+>> +
+>> +static void jh7110_usb2_mode_set(struct jh7110_usb2_phy *phy)
+>> +{
+>> +	unsigned int val;
+>> +
+>> +	if (phy->dr_mode != USB_DR_MODE_PERIPHERAL) {
+>> +		/* Enable the LS speed keep-alive signal */
+>> +		val = readl(phy->regs + USB_LS_KEEPALIVE_OFF);
+>> +		val |= USB_LS_KEEPALIVE_ENABLE;
+>> +		writel(val, phy->regs + USB_LS_KEEPALIVE_OFF);
+>> +	}
+>> +}
+>> +
+>> +static int jh7110_usb2_phy_set_mode(struct phy *_phy,
+>> +				  enum phy_mode mode, int submode)
+>> +{
+>> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+>> +	int new_mode;
+>> +
+>> +	switch (mode) {
+>> +	case PHY_MODE_USB_HOST:
+>> +		new_mode = USB_DR_MODE_HOST;
+>> +		break;
+>> +	case PHY_MODE_USB_DEVICE:
+>> +		new_mode = USB_DR_MODE_PERIPHERAL;
+>> +		break;
+>> +	case PHY_MODE_USB_OTG:
+>> +		new_mode = USB_DR_MODE_OTG;
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (new_mode != phy->dr_mode) {
+>> +		dev_info(&_phy->dev, "Changing dr_mode to %d\n", new_mode);
+>> +		phy->dr_mode = new_mode;
+>> +		jh7110_usb2_mode_set(phy);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int jh7110_usb2_phy_init(struct phy *_phy)
+>> +{
+>> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+>> +	int ret;
+>> +
+>> +	ret = clk_set_rate(phy->usb_125m_clk, USB_125M_CLK_RATE);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = clk_prepare_enable(phy->app_125);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int jh7110_usb2_phy_exit(struct phy *_phy)
+>> +{
+>> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+>> +
+>> +	clk_disable_unprepare(phy->app_125);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct phy_ops jh7110_usb2_phy_ops = {
+>> +	.init		= jh7110_usb2_phy_init,
+>> +	.exit		= jh7110_usb2_phy_exit,
+>> +	.set_mode	= jh7110_usb2_phy_set_mode,
+>> +	.owner		= THIS_MODULE,
+>> +};
+>> +
+>> +static int jh7110_usb_phy_probe(struct platform_device *pdev)
+>> +{
+>> +	struct jh7110_usb2_phy *phy;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct phy_provider *phy_provider;
+>> +
+>> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+>> +	if (!phy)
+>> +		return -ENOMEM;
+>> +
+>> +	phy->usb_125m_clk = devm_clk_get(dev, "125m");
+>> +	if (IS_ERR(phy->usb_125m_clk))
+>> +		return dev_err_probe(dev, PTR_ERR(phy->usb_125m_clk),
+>> +			"Failed to get 125m clock\n");
+>> +
+>> +	phy->app_125 = devm_clk_get(dev, "app_125");
+>> +	if (IS_ERR(phy->app_125))
+>> +		return dev_err_probe(dev, PTR_ERR(phy->app_125),
+>> +			"Failed to get app 125m clock\n");
+>> +
+>> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(phy->regs))
+>> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+>> +			"Failed to map phy base\n");
+>> +
+>> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_usb2_phy_ops);
+>> +	if (IS_ERR(phy->phy))
+>> +		return dev_err_probe(dev, PTR_ERR(phy->phy),
+>> +			"Failed to create phy\n");
+>> +
+>> +	platform_set_drvdata(pdev, phy);
+>> +	phy_set_drvdata(phy->phy, phy);
+>> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+>> +
+>> +	return PTR_ERR_OR_ZERO(phy_provider);
+>> +}
+>> +
+>> +static int jh7110_usb_phy_remove(struct platform_device *pdev)
+>> +{
+>> +	struct jh7110_usb2_phy *phy = platform_get_drvdata(pdev);
+>> +
+>> +	clk_disable_unprepare(phy->app_125);
+>> +	platform_set_drvdata(pdev, NULL);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id jh7110_usb_phy_of_match[] = {
+>> +	{ .compatible = "starfive,jh7110-usb-phy" },
+>> +	{ /* sentinel */ },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, jh7110_usb_phy_of_match);
+>> +
+>> +static struct platform_driver jh7110_usb_phy_driver = {
+>> +	.probe	= jh7110_usb_phy_probe,
+>> +	.remove	= jh7110_usb_phy_remove,
+>> +	.driver = {
+>> +		.of_match_table	= jh7110_usb_phy_of_match,
+>> +		.name  = "jh7110-usb-phy",
+>> +	}
+>> +};
+>> +module_platform_driver(jh7110_usb_phy_driver);
+>> +
+>> +MODULE_DESCRIPTION("StarFive JH7110 USB 2.0 PHY driver");
+>> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
+>> +MODULE_LICENSE("GPL");
+>> -- 
+>> 2.17.1
+> 
