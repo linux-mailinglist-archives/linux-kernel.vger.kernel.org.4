@@ -2,190 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAFD6C0AC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC51F6C0AC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjCTGh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 02:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S229944AbjCTGig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 02:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjCTGhy (ORCPT
+        with ESMTP id S229527AbjCTGid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 02:37:54 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AC1126D3
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:37:51 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id eg48so42342410edb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:37:51 -0700 (PDT)
+        Mon, 20 Mar 2023 02:38:33 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9640FD527
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:38:30 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id er8so30744652edb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:38:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679294269;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=043cJL8M7bmhja0804XphdavMgq23OL+4hcE4H+oIJA=;
-        b=RlpKESwHE3eu8MkwEeNa/I+o0GrPq17cPNTpkDCW8pO25wB5GkuFfZguuIuqqu7W+2
-         gp/ya3dM8CTaO/o9Xw1ivg63pEaKV8kKGrmU/eQ9uHblr9TWOJn3urlWsHpxQu9dB/W+
-         Fl03xdyYZRQgBMNs8xThVa7P1sa79uwKd5BycLm8l7w+Rk2sAKG2G4kg4i9OfzruFkYh
-         MLFdqO5RQfMlDEgi2jvFDE253red7ydcAbZ9RBfyynPDUpkUINUQ6qBgwidycel0n9Bp
-         cdX3QLrBg/b/dvkigQPd4C7uTvypshpvS1Jc86//QDSNyf6qJjac+HTjKPtuTm9quAFj
-         bOjg==
+        d=linaro.org; s=google; t=1679294309;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t7XeoSe7UBuX/qyHKNlFZtj5mQnbrycYOrmZq1cWzw8=;
+        b=og1arrjvv3V1NdTKTL6nqWdto4cJlvx1lJaOUNCZQU3G6Z+9CVFWBZwA9KKnSw9aCN
+         AG75/Do04vm1Qf4H6oTVavstgAkPq6nCdoXdzjjkRh3Hnod3I/hA70S3G5qRXRazZ3ov
+         eDALdS055/VHd+mWMubR9Dg5B1MNq1EfJKbUtmWmPaZzxSpEGUa9h5RCr/K9i48XzaJ3
+         eA4n/AbtFz9gQv4nRpJZ1B2daPdP2um5KxxScW7XpjE76P2aZDJkuc+91Mze3/Uz0Mvk
+         OLvcAyE258gGyChEZjewf1ULjk0gfkA/IEMNzI4ItXaPGyH+bLbNBtqEkQg0UvfJ77S8
+         bz8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679294269;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20210112; t=1679294309;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=043cJL8M7bmhja0804XphdavMgq23OL+4hcE4H+oIJA=;
-        b=LFdxgvR8xcaMcFDOv5VVq1Pj6KSam34rKd9YlfDj3moBqbpSrIM6a3ZbaKQVTTdrS5
-         iGjQFAnrsf5oIgLIrYwXZOrHVj8EqUlrzVFfW+Fb9OYW74+BGEC9xUjGz7aVXHbP/7x1
-         tTfmuHrLIfMIQ2JmueJTYhaeR8dMnDgihzh1TTGHlpzXkwAHVsU54RaHgVqyatzesCnT
-         s8H4PcvAmRT/sa51EkdGnyQRvvaEWJf82XujOh2x8nfzaI1pi7ZYel9VtJGjLbq436hK
-         ppSVIJ5F/u5bvA5iKicTQjaxmClpbFYp4lyKNJnX9o5i7WApvnxKgkPnx+KujYzWcMBs
-         ln5w==
-X-Gm-Message-State: AO0yUKXTqioDAwARDyzwZUjIDkEXqjiSvk/MwjaqjOe6SxEjV0/qsqNr
-        bBlDR/xFLrONLqKbQ7GoDsTIaKNJg2RzPzFX
-X-Google-Smtp-Source: AK7set87I0UPLQeLtuvVamN9YVClfZk/eJRdtJC6LAJX7LFhk7VmTloSaJI8JdCbscvOSwQf7usdvg==
-X-Received: by 2002:aa7:c650:0:b0:4fd:14d5:bb47 with SMTP id z16-20020aa7c650000000b004fd14d5bb47mr9992523edr.38.1679294269298;
-        Sun, 19 Mar 2023 23:37:49 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1709064dd700b00931536d461fsm3983267ejw.20.2023.03.19.23.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 23:37:48 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 11:37:46 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
-Message-ID: <ZBf/OuuUUeharrXp@khadija-virtual-machine>
-References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
- <2162728.C4sosBPzcN@suse>
- <ZBNhXc3sVVLdibUF@khadija-virtual-machine>
- <2599595.k3LOHGUjKi@suse>
+        bh=t7XeoSe7UBuX/qyHKNlFZtj5mQnbrycYOrmZq1cWzw8=;
+        b=QegHmgX2KHAbvGJj6Aa40996ej91SnMxE28FBF7dkviOhaSjwUdbidW+YVq0zT+eoi
+         juCbv6myK8YnrSToa/hA6jHhBjwFws+Y7vkpG9IIJdJWX0hLpLcRKxhnDzhQ/2Zqecfu
+         Cbe/h/RDQV6/jS9rc4JKF/ix6KLM7Bl5NlbVVr+CbmHBLKU6VNSkrswxSMY/reQ+/Sax
+         bdSuZRlLl0wqm8zcpwOmXvyp9MBXY0IGm+ADSme9BTiSgmQ0rxdoOFI86hkGLVe947D/
+         sGhvtlOb70B5FexTX6IhJJdRx6iF72jX1jOaLSN3ta8ndv8ph4cBOtET1PWW3IqepgCl
+         pxjg==
+X-Gm-Message-State: AO0yUKXpmOInp4+SrslveNQoWlRChSh+myivoJRDSdmMrqyJH558Id1r
+        us/ILsqfIg5l/EDKNjBTDWmF6A==
+X-Google-Smtp-Source: AK7set8zaCmvCo/leOy8Mug11ajTRxSNFLkO0e1EhQz95/FxfjvSuWjkKWa7MhfAtVfj+tsoVUmaGQ==
+X-Received: by 2002:a17:906:1f53:b0:931:91a:fa4f with SMTP id d19-20020a1709061f5300b00931091afa4fmr8592424ejk.41.1679294309064;
+        Sun, 19 Mar 2023 23:38:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4428:8354:afb6:2992? ([2a02:810d:15c0:828:4428:8354:afb6:2992])
+        by smtp.gmail.com with ESMTPSA id 8-20020a170906300800b008e2dfc6382asm3967122ejz.125.2023.03.19.23.38.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Mar 2023 23:38:28 -0700 (PDT)
+Message-ID: <f25cc55e-3405-4b17-fb45-5ae5eb36a404@linaro.org>
+Date:   Mon, 20 Mar 2023 07:38:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2599595.k3LOHGUjKi@suse>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RESEND v6 1/2] dt-bindings: soc: starfive: Add StarFive syscon
+ doc
+Content-Language: en-US
+To:     William Qiu <william.qiu@starfivetech.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>
+References: <20230315055813.94740-1-william.qiu@starfivetech.com>
+ <20230315055813.94740-2-william.qiu@starfivetech.com>
+ <850bc37e-c6d1-2381-a851-965a4cbee8a0@linaro.org>
+ <e38efd81-9c79-553b-7556-7aff30f6ec50@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e38efd81-9c79-553b-7556-7aff30f6ec50@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:07:09PM +0100, Fabio M. De Francesco wrote:
-> On giovedì 16 marzo 2023 19:35:09 CET Khadija Kamran wrote:
-> > On Thu, Mar 16, 2023 at 05:17:47PM +0100, Fabio M. De Francesco wrote:
-> > > On giovedì 16 marzo 2023 16:09:08 CET Khadija Kamran wrote:
+On 20/03/2023 06:54, William Qiu wrote:
 > 
-> [snip]
 > 
-> > Hey Fabio!
-> > 
-> > Hope you are doing well. After  spending a lot of time on this I am
-> > stuck now. Kindly help me resolve this issue or understand it better.
-> > 
-> > Following your instructions I deleted my config file and copied one from
-> > the /boot/ directory. After that I enabled the dependencies(CONFIG_OF=y
-> > and CONFIG_HAS_IOMEM=y). I was successfully able to enable axis-fifo as
-> > a module.
-> > 
-> > I then ran the following commands:
-> >  - make drivers/staging/axis-fifo/
+> On 2023/3/19 20:27, Krzysztof Kozlowski wrote:
+>> On 15/03/2023 06:58, William Qiu wrote:
+>>> Add documentation to describe StarFive System Controller Registers.
+>>>
+>>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>>> ---
+>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 41 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  5 +++
+>>>  2 files changed, 46 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>> new file mode 100644
+>>> index 000000000000..ae7f1d6916af
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>> @@ -0,0 +1,41 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: StarFive JH7110 SoC system controller
+>>> +
+>>> +maintainers:
+>>> +  - William Qiu <william.qiu@starfivetech.com>
+>>> +
+>>> +description: |
+>>> +  The StarFive JH7110 SoC system controller provides register information such
+>>> +  as offset, mask and shift to configure related modules such as MMC and PCIe.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - starfive,jh7110-aon-syscon
+>>> +          - starfive,jh7110-stg-syscon
+>>> +          - starfive,jh7110-sys-syscon
+>>> +      - const: syscon
+>>
+>> Does not look like you tested the bindings. Please run `make
+>> dt_binding_check` (see
+>> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+>>
+>> ... or your PLL clock controller was not tested.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> Hi Krzysztof,
 > 
-> No, this is not the right command... you are not invoking the linker to make 
-> the .ko object.
-> 
-> Use "make M=drivers/staging/axis-fifo/"
-> or "make M=drivers/staging/axis-fifo/ W=1 -j8" (the latter to enable level '1' 
-> warning and run on your 2 * 4 logical cores).
-> 
-> >  - sudo make modules_install install(this command took hours) :'(
-> 
-> This is odd, it shouldn't :-/
-> 
-> As I said in another message, I'll set aside some time to help you check if 
-> you need to fine tune your VM and Hypervisor configuration. 
-> 
-> I'm returning on the same subject we have been talked about because you said 
-> at least twice that your builds and install are too slow. We'll try to 
-> diagnose it in an IRC session on #kernel-outreachy (I'm pretty sure for the 
-> first days of next week - I'll send an invite).
-> 
-> > > When you are done with build, install, and final reboot to test if your
-> > > module can "modprobe" or "insmod" (i.e. link with the running custom 
-> kernel
-> > > you built, installed and boot), try to compare the output of the following
-> > > commands:
-> > > 
-> > > # uname -a
-> > > Linux suse 6.2.2-1-default #1 SMP PREEMPT_DYNAMIC Thu Mar  9 06:06:13 UTC
-> > > 2023 (44ca817) x86_64 x86_64 x86_64 GNU/Linux
-> > 
-> > The above command works
-> > 
-> > > AND
-> > > 
-> > > # modinfo <name of the module you are testing here>
-> > 
-> > On running 'modinfo axis-fifo' I get error saying module axis-fifo not
-> > found.
-> 
-> Try again after building with "M=drivers/staging" (as said above). Don't 
-> forget to run "make modules_install install" and then reboot into your custom 
-> built Kernel, not the distribution's kernel.
-> 
-> While you are there, run "lsmod" to see all loaded modules. Pick one randomly 
-> from the output list and run "modinfo name_of_the_module_you_want_info_about".
->  
-> > > I'm running "modinfo kvm" (but showing only two of many lines):
-> > > 
-> > > # modinfo kvm
-> > > filename:       /lib/modules/6.2.2-1-default/kernel/arch/x86/kvm/
-> kvm.ko.zst
-> > > vermagic:       6.2.2-1-default SMP preempt mod_unload modversions
-> > > 
-> > > Can you see that the kernel in "uname -a" and the filename and vermagic 
-> have
-> > > the same "6.2.2-1-default"? Well, so I'm sure I'm running the right Kernel
-> > > and inserted the appropriate "kvm" module.
-> > > 
-> > > Furthermore, before rebooting your custom kernel, you may also look at the
-> > > directory in the Kernel where you compiled your module and search for 
-> "*.o"
-> > > "*mod*" and "*.ko" files. If you have them, you built your module 
-> properly.
-> > 
-> > There is a "*.o" file and "*.mod" file but there is no "*.ko" file in
-> > the axis-fifo directory.
-> > 
-> > Kindly help me with this.
-> > 
-> > Regards,
-> > Khadija
-> > 
-> > > Thanks,
-> > > 
-> > > Fabio
-> 
-> Let me know if this time it works.
-> 
-> Fabio
-> 
-> P.S.: Have you had time to read that "Linux Kernel Module Programming" guide I 
-> sent you the link of? You can find a lot of information about modules there. 
-> I'd strongly recommend you to read it. 
->
+> I've already done`make dt_binding_check`, and get no error. So maybe PLL clock controller
+> was not tested which I didn't add in this patch series. And PLL clock controller belongs
+> to Xingyu Wu, I would tell him.
 
-Fabio,
+What's confusing you do not allow here clock controller.
 
-I have not read it yet. But it is in my mind and as soon as I get some
-free time I will start reading it :)
+Best regards,
+Krzysztof
 
-Thank you!
-
-> 
