@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811B56C096C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB236C096E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjCTDma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S230082AbjCTDmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCTDls (ORCPT
+        with ESMTP id S230070AbjCTDl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:41:48 -0400
+        Sun, 19 Mar 2023 23:41:57 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A67922CBC
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:40:36 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i11-20020a256d0b000000b0086349255277so11809269ybc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:40:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7226231F7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:40:43 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 204-20020a2514d5000000b00a3637aea9e1so11875700ybu.17
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:40:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679283635;
+        d=google.com; s=20210112; t=1679283643;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Py8U8PqFwPIRVvHHDItGJJ+sTjfy4CxHiyg06BPRgeo=;
-        b=n+gKE63K3SKDTQo/iu8pU9gFXI2PAJbYBkvXhYMxrv7G3p+hiuhE4hXChTy3JqmfXu
-         pKDQKBWo91txB3O0gHkwCYsUDlg4BXrQiJXJkx7HWp/SSg1q00qidcrDQ/BbqGBhuTL1
-         UvdWPY37uZ9xexSslCjA6IkxEDS45AHDt4NOfm8JZochOhauqt97OWLrYRa7gVhruy1g
-         RpVUeYdk40b9OxcCBqJaYr0tcLGmaP9OGlLz8G5jH2rcOXPq0Ekj+DUBOTH523FygzT9
-         4cN7qK1mnLlwld/+/3nDFJFiJxGak8rLgLaoCaz5kQxyUgZ0E2QmhR1r92tIEQXe2DNy
-         rv3g==
+        bh=Sc0UoT/sOrVoOx3FR0aFOvpKiVJitcdLEI81kwZKe/g=;
+        b=UmEP33hr/jPyu0yNNb2qGf4hbSQTq8fi6dIbd1w65AkitadLNWgAFBRVIskw3bUef5
+         tFNkH4yIg0GKr/pw4/15xpiZJQRWK5WcFRNxnsPD6wAnYlqn3OVLLeCoruhZK5BI7PpI
+         CAgb8lADRB3PIShqAqa7B79AAM9QNvkuQ1Tz32gZo6EWNKQnRiusj/RVG42LM17H64bU
+         0Z39e1rhWe3JlBYvgJZl40GeBH4Z820ZTt7XS3nMiuL27ybtNFUGzkPDujBIfssPEKb9
+         6fZPy9qmNeQHPylel43XezvOWOAjy6iGTKTLLxaM+9VcQ21jjJ5bi11fBnOmxPWN+HZ4
+         v4og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679283635;
+        d=1e100.net; s=20210112; t=1679283643;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Py8U8PqFwPIRVvHHDItGJJ+sTjfy4CxHiyg06BPRgeo=;
-        b=nwzTQsnRE/ydqZey4O9qVLl8bD6vAUKML6KKpM1uYlsE4ueoSzJdVbfdgI5oBpvqW8
-         snmPgdamXxLSKXTUDenwGV6JSeKZQ43Vj/mZlOtMy2oBSfyKwnz4wR1X+2aoWzLyJBs5
-         QVFnbnx0DZi3AECTtAGjIdc/D206qzIfiFB0jw02+JAeZd4LEh9maS8MSdCCZTaSAx1m
-         WgbyFsIBhm+Gft7dEvbWv0yz31o3Di/btGZuyeUokpGPpmI6jTdT6tmIaVMy1atSfRXD
-         nYVDQOomNzLfgO8s9X2hXXiIkJ6y5lyoCwFWa0UqDT29o9bE2an5gLU8ZAHzduZEqP5t
-         AiCg==
-X-Gm-Message-State: AO0yUKWAnCTGIJ3QMgvc3q2rJr6Iy6vnYZaPUkWWVAr4O9fX8Zn9IPFu
-        MpOw+Ab6y1Vpn8VPyWhnoCERiHPxdsdd
-X-Google-Smtp-Source: AK7set8vSqZsRSfY53oCnbMUg7lQPOwN0CXJrzMHSihbyBNkzmqp/4+dNcN0A9xOYeEdkDXhOjRr9HhciVv9
+        bh=Sc0UoT/sOrVoOx3FR0aFOvpKiVJitcdLEI81kwZKe/g=;
+        b=Aet8x4wpDKV4oKtxXecrYGHthIPMC+1CqdZh0zRIkqn4e0lV/ldojaO8i5QH5VGT96
+         8x+6WuUD4JaknTK5zm/39Ql8/3u/66qP9AHKCbN8NGymqqBQMwwwrv/UUVqqhRz6Y8zq
+         YShrcZUtMIdvfXp8KkSBzdBpg8tjSUsBbpemxKby2bTYG+e0aZRmii332uNEyVdA7DyZ
+         hPqS48D6N86K6NTh4bRMF+Qq1ZbVMfevmEHrWNWoYqTZIkG3MMVZu9todFER9D8WxtoR
+         qzX+pM3v0eGZYif+V/2cGs0Y32kv7d8tv5mKedWFZI+9dkuCVo+iBzj1O5puEzsi2jw2
+         tX4w==
+X-Gm-Message-State: AO0yUKX4p4dqsSvG8o1HDC/0bK3iNToLZFkIMXDeE6e2AJhND1gUGA9r
+        3h8Esi1KXihn6i8rmpFLpsA5lIjv7ck+
+X-Google-Smtp-Source: AK7set8rIGJCJcTTopzK8gDqrWUi43rxBiQxYsPlBLHZMzFHhN/bfigSuXEcRY8MK2r/URicHWHJMXIbvOtn
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:1895:9fa0:27f5:cb71])
- (user=irogers job=sendgmr) by 2002:a25:8f8b:0:b0:b68:7b14:186b with SMTP id
- u11-20020a258f8b000000b00b687b14186bmr2946840ybl.1.1679283635105; Sun, 19 Mar
- 2023 20:40:35 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 20:38:03 -0700
+ (user=irogers job=sendgmr) by 2002:a5b:711:0:b0:a42:1dd7:6fc7 with SMTP id
+ g17-20020a5b0711000000b00a421dd76fc7mr4398820ybq.11.1679283642774; Sun, 19
+ Mar 2023 20:40:42 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 20:38:04 -0700
 In-Reply-To: <20230320033810.980165-1-irogers@google.com>
-Message-Id: <20230320033810.980165-16-irogers@google.com>
+Message-Id: <20230320033810.980165-17-irogers@google.com>
 Mime-Version: 1.0
 References: <20230320033810.980165-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v4 15/22] perf test: Add extra diagnostics to maps test
+Subject: [PATCH v4 16/22] perf maps: Modify maps_by_name to hold a reference
+ to a map
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -93,7 +94,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,81 +102,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dump the resultant and comparison maps on failure.
+To make it clearer about the ownership of a reference count split the
+by-name case from the regular start-address sorted tree. Put the
+reference count when maps_by_name is freed, which requires moving a
+decrement to nr_maps in maps__remove. Add two missing map puts in
+maps__fixup_overlappings in the event maps__insert fails.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/maps.c | 51 +++++++++++++++++++++++++++++------------
- 1 file changed, 36 insertions(+), 15 deletions(-)
+ tools/perf/util/maps.c   | 30 ++++++++++++++++--------------
+ tools/perf/util/symbol.c | 21 +++++++++++++++++----
+ 2 files changed, 33 insertions(+), 18 deletions(-)
 
-diff --git a/tools/perf/tests/maps.c b/tools/perf/tests/maps.c
-index fd0c464fcf95..1c7293476aca 100644
---- a/tools/perf/tests/maps.c
-+++ b/tools/perf/tests/maps.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <inttypes.h>
- #include <linux/compiler.h>
- #include <linux/kernel.h>
- #include "tests.h"
-@@ -17,22 +18,42 @@ static int check_maps(struct map_def *merged, unsigned int size, struct maps *ma
- {
- 	struct map_rb_node *rb_node;
- 	unsigned int i = 0;
--
--	maps__for_each_entry(maps, rb_node) {
--		struct map *map = rb_node->map;
--
--		if (i > 0)
--			TEST_ASSERT_VAL("less maps expected", (map && i < size) || (!map && i == size));
--
--		TEST_ASSERT_VAL("wrong map start",  map__start(map) == merged[i].start);
--		TEST_ASSERT_VAL("wrong map end",    map__end(map) == merged[i].end);
--		TEST_ASSERT_VAL("wrong map name",  !strcmp(map__dso(map)->name, merged[i].name));
--		TEST_ASSERT_VAL("wrong map refcnt", refcount_read(&map->refcnt) == 1);
--
--		i++;
-+	bool failed = false;
+diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
+index ffd4a4a64026..74e3133f5007 100644
+--- a/tools/perf/util/maps.c
++++ b/tools/perf/util/maps.c
+@@ -26,6 +26,9 @@ static void __maps__free_maps_by_name(struct maps *maps)
+ 	/*
+ 	 * Free everything to try to do it from the rbtree in the next search
+ 	 */
++	for (unsigned int i = 0; i < maps__nr_maps(maps); i++)
++		map__put(maps__maps_by_name(maps)[i]);
 +
-+	if (maps__nr_maps(maps) != size) {
-+		pr_debug("Expected %d maps, got %d", size, maps__nr_maps(maps));
-+		failed = true;
-+	} else {
-+		maps__for_each_entry(maps, rb_node) {
-+			struct map *map = rb_node->map;
-+
-+			if (map__start(map) != merged[i].start ||
-+			    map__end(map) != merged[i].end ||
-+			    strcmp(map__dso(map)->name, merged[i].name) ||
-+			    refcount_read(&map->refcnt) != 1) {
-+				failed = true;
-+			}
-+			i++;
-+		}
- 	}
--
--	return TEST_OK;
-+	if (failed) {
-+		pr_debug("Expected:\n");
-+		for (i = 0; i < size; i++) {
-+			pr_debug("\tstart: %" PRIu64 " end: %" PRIu64 " name: '%s' refcnt: 1\n",
-+				merged[i].start, merged[i].end, merged[i].name);
-+		}
-+		pr_debug("Got:\n");
-+		maps__for_each_entry(maps, rb_node) {
-+			struct map *map = rb_node->map;
-+
-+			pr_debug("\tstart: %" PRIu64 " end: %" PRIu64 " name: '%s' refcnt: %d\n",
-+				map__start(map),
-+				map__end(map),
-+				map__dso(map)->name,
-+				refcount_read(&map->refcnt));
-+		}
-+	}
-+	return failed ? TEST_FAIL : TEST_OK;
+ 	zfree(&maps->maps_by_name);
+ 	maps->nr_maps_allocated = 0;
+ }
+@@ -42,7 +45,7 @@ static int __maps__insert(struct maps *maps, struct map *map)
+ 		return -ENOMEM;
+ 
+ 	RB_CLEAR_NODE(&new_rb_node->rb_node);
+-	new_rb_node->map = map;
++	new_rb_node->map = map__get(map);
+ 
+ 	while (*p != NULL) {
+ 		parent = *p;
+@@ -55,7 +58,6 @@ static int __maps__insert(struct maps *maps, struct map *map)
+ 
+ 	rb_link_node(&new_rb_node->rb_node, parent, p);
+ 	rb_insert_color(&new_rb_node->rb_node, maps__entries(maps));
+-	map__get(map);
+ 	return 0;
  }
  
- static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest __maybe_unused)
+@@ -100,7 +102,7 @@ int maps__insert(struct maps *maps, struct map *map)
+ 			maps->maps_by_name = maps_by_name;
+ 			maps->nr_maps_allocated = nr_allocate;
+ 		}
+-		maps__maps_by_name(maps)[maps__nr_maps(maps) - 1] = map;
++		maps__maps_by_name(maps)[maps__nr_maps(maps) - 1] = map__get(map);
+ 		__maps__sort_by_name(maps);
+ 	}
+  out:
+@@ -126,9 +128,9 @@ void maps__remove(struct maps *maps, struct map *map)
+ 	rb_node = maps__find_node(maps, map);
+ 	assert(rb_node->map == map);
+ 	__maps__remove(maps, rb_node);
+-	--maps->nr_maps;
+ 	if (maps__maps_by_name(maps))
+ 		__maps__free_maps_by_name(maps);
++	--maps->nr_maps;
+ 	up_write(maps__lock(maps));
+ }
+ 
+@@ -136,6 +138,9 @@ static void __maps__purge(struct maps *maps)
+ {
+ 	struct map_rb_node *pos, *next;
+ 
++	if (maps__maps_by_name(maps))
++		__maps__free_maps_by_name(maps);
++
+ 	maps__for_each_entry_safe(maps, pos, next) {
+ 		rb_erase_init(&pos->rb_node,  maps__entries(maps));
+ 		map__put(pos->map);
+@@ -293,7 +298,7 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
+ 	}
+ 
+ 	next = first;
+-	while (next) {
++	while (next && !err) {
+ 		struct map_rb_node *pos = rb_entry(next, struct map_rb_node, rb_node);
+ 		next = rb_next(&pos->rb_node);
+ 
+@@ -331,8 +336,10 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
+ 
+ 			before->end = map__start(map);
+ 			err = __maps__insert(maps, before);
+-			if (err)
++			if (err) {
++				map__put(before);
+ 				goto put_map;
++			}
+ 
+ 			if (verbose >= 2 && !use_browser)
+ 				map__fprintf(before, fp);
+@@ -352,22 +359,17 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
+ 			assert(map__map_ip(pos->map, map__end(map)) ==
+ 				map__map_ip(after, map__end(map)));
+ 			err = __maps__insert(maps, after);
+-			if (err)
++			if (err) {
++				map__put(after);
+ 				goto put_map;
+-
++			}
+ 			if (verbose >= 2 && !use_browser)
+ 				map__fprintf(after, fp);
+ 			map__put(after);
+ 		}
+ put_map:
+ 		map__put(pos->map);
+-
+-		if (err)
+-			goto out;
+ 	}
+-
+-	err = 0;
+-out:
+ 	up_write(maps__lock(maps));
+ 	return err;
+ }
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index 0431c328f4d6..1f4c23052a54 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -2049,10 +2049,23 @@ int dso__load(struct dso *dso, struct map *map)
+ 
+ static int map__strcmp(const void *a, const void *b)
+ {
+-	const struct dso *dso_a = map__dso(*(const struct map **)a);
+-	const struct dso *dso_b = map__dso(*(const struct map **)b);
++	const struct map *map_a = *(const struct map **)a;
++	const struct map *map_b = *(const struct map **)b;
++	const struct dso *dso_a = map__dso(map_a);
++	const struct dso *dso_b = map__dso(map_b);
++	int ret = strcmp(dso_a->short_name, dso_b->short_name);
+ 
+-	return strcmp(dso_a->short_name, dso_b->short_name);
++	if (ret == 0 && map_a != map_b) {
++		/*
++		 * Ensure distinct but name equal maps have an order in part to
++		 * aid reference counting.
++		 */
++		ret = (int)map__start(map_a) - (int)map__start(map_b);
++		if (ret == 0)
++			ret = (int)((intptr_t)map_a - (intptr_t)map_b);
++	}
++
++	return ret;
+ }
+ 
+ static int map__strcmp_name(const void *name, const void *b)
+@@ -2084,7 +2097,7 @@ static int map__groups__sort_by_name_from_rbtree(struct maps *maps)
+ 	maps->nr_maps_allocated = maps__nr_maps(maps);
+ 
+ 	maps__for_each_entry(maps, rb_node)
+-		maps_by_name[i++] = rb_node->map;
++		maps_by_name[i++] = map__get(rb_node->map);
+ 
+ 	__maps__sort_by_name(maps);
+ 
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
