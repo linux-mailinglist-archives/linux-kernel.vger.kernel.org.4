@@ -2,107 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFBE6C133B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F2E6C133C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjCTN0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S231757AbjCTN1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjCTN0k (ORCPT
+        with ESMTP id S231760AbjCTN04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:26:40 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4767F24BDC;
-        Mon, 20 Mar 2023 06:26:38 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id r11so46715238edd.5;
-        Mon, 20 Mar 2023 06:26:38 -0700 (PDT)
+        Mon, 20 Mar 2023 09:26:56 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E588D24725
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:26:47 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u20so6448176pfk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679318797;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1679318807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vDfXw8n+plfaogBjIL2pZ2EWfG8n/n4snUHtV8b5Viw=;
-        b=TK24hBgvtg6ItCpuhcywrfVa7qGcJHXRiQu+H4BC19kNZKV80fTwXzNZXYs/MGtsSL
-         xidhfMRdQ3Ow/iOcTrVtdIRkil7Ie339b+l+4SQepJ89IPiS0i6ZWwGDtIADlUTEjqZ6
-         1lnplEniFlBc1neWPlpkXoYwVSG91v+zR7GlmDjH/xe3bsSm40Mxh9cJND0Qc0HlFETe
-         KE5zHnaSzvHAKC2WMpPwWKHwBuf2X3LcOV1bkP0d7aiZ2a90r02UbrwOubsO1YuOzz1I
-         kLuFJE+OdglrKxyMYRdTVm9VR6QZyz08ShJOTHcTh5GL5koIapzUvqRdQ7yjQVrD0VVB
-         9xsw==
+        bh=1fgTt2Ao0ISWSUH3uhfkiBoC8HyvGwhHuixHsaZdKFU=;
+        b=NOKmCUsfoxAIWkNMwy+/UWwl4Z67ce5g8wFCbadXaSfkxUYcH6mZskKk7dorEqEBcy
+         Zj5DhpJFqSjMVEyGLaS4G6X/3ELMnSiL7zAZguIKTfJHAbM9lulQ/gsFQs59hW/0kBa4
+         wJtvnEV3y/kjs7J0imUlxwMk1pl8G3NuCq9QIQnEDWlmh/N8GDN2o21/jp2b1hPSIzmF
+         SgEHawi9n5Z8TWFy9jd1lJbQklx2Rzk2fgosDTR8B8hLEGyVQ+qsKOe0X4xVlbtquJNi
+         lWjFoFB4SMrVIC6aclw8IFlymzzSm6/9hhrFP1qG7Le+8YCxrJQKc4HvyOw4i/7K1HqI
+         rfUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679318797;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679318807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vDfXw8n+plfaogBjIL2pZ2EWfG8n/n4snUHtV8b5Viw=;
-        b=lsxbNWzI2joXD/gnAISqo59Lo437XoVPwhofm+/wqsv4+Ei/wB6a5Madu9veXXspP9
-         Lp8joffiRzVBfHEQlq1dWTRpe7RwmaNrAu1zvLI21jDXw78vRMwomgP2Iq1IPvLRXffV
-         pCsXQg/lky2AWBEQXu4gyv+M5R3c0bDUxFvXB/vwkER/G8bDoQg2L+6c53pVDkeqkZkY
-         1xW5Jkihu7VQGyyJDpjezhbKu69Cd/zLicOTyH5uZVyv1/wl6qIW8ch3FaS+xuBdyhJL
-         jijB5GCbOOx5mvxcWPs5ehcTsbUEA9Jtj7iIM9Pmc3FnsHgaqGfY6IJkW3uqJ/IPW8zB
-         ZVlw==
-X-Gm-Message-State: AO0yUKU9Q7DmlXEXcwhll6nCf8gQgJeLFl0+SHlPwX1Yf480RF/U1bYa
-        /zjPwz72tuVuWKZL9VT5VWnzS0dhS6XBQQ==
-X-Google-Smtp-Source: AK7set9LYsrc6rSGVPOo2WixyVETc+tPy5GdWlw9Og9E8PmO2dLEFAp0dxhnAFPXzTX++ZwHvPz24g==
-X-Received: by 2002:aa7:c1d6:0:b0:4fb:78a0:eac2 with SMTP id d22-20020aa7c1d6000000b004fb78a0eac2mr12517447edp.31.1679318796724;
-        Mon, 20 Mar 2023 06:26:36 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:394b:6c53:31d8:7b18])
-        by smtp.gmail.com with ESMTPSA id sd24-20020a170906ce3800b00931024e96c5sm4492691ejb.99.2023.03.20.06.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:26:36 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] ARM: mediatek: Remove unused configs MACH_MT6592 and MACH_MT6592
-Date:   Mon, 20 Mar 2023 14:26:34 +0100
-Message-Id: <20230320132634.17331-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        bh=1fgTt2Ao0ISWSUH3uhfkiBoC8HyvGwhHuixHsaZdKFU=;
+        b=G2KiJ/+yw+nLosdkUdmO/1IyjtczpqgC23xst2W3yFWX1e9AS4yyy/9vkxhdixmX1T
+         RIQMPpRBUkmhpdnZnbSzNUzfUwmjxCa7pCxoYnXEYFsUsJRs33aoKgYOs2DCGPLrO2bY
+         AMvqLz2tQ3ZY0Ep+aHxUDo894jjqy7MGkz8oifJqvXdIl/pTVsC5s+qRjkQKmMY/5Ywo
+         +7UgGGnKFTt6UjSmkRuwDXwssN1oIoLhuN51HGVYUKHZSywpAReR5Wdux1qIfKBtJtWB
+         jXn6L5rcr6MaeK3c43UI+K29TiL0zcw3eT3+vWK2h+GguXCBguSxOHa/l5EUEE1e4vAp
+         ELEQ==
+X-Gm-Message-State: AO0yUKXyHGKx09CU8+2TPZ8/EmD/KGH7c87WgjoSWguThs1epJ0vMrWg
+        i+Qrye4Sgm2BKRDnGvTe5Hct3taI/CFHyrYEBqm/tA==
+X-Google-Smtp-Source: AK7set90mTaGguMUli06F/qC2JcjSTOHtck3FWOY6WoE4T4u2ATWF/ctlvNzELkk+E0LkU3f8D8i+oIOKQPr6LvfG7g=
+X-Received: by 2002:a63:7519:0:b0:50b:cf00:7d2e with SMTP id
+ q25-20020a637519000000b0050bcf007d2emr1884550pgc.11.1679318807094; Mon, 20
+ Mar 2023 06:26:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230317160810.107988-1-vincent.guittot@linaro.org>
+ <f0f7bce7-4d98-c5d0-5e75-55f27a9a0d69@huawei.com> <df2cccda-1550-b06b-aa74-e0f054e9fb9d@arm.com>
+In-Reply-To: <df2cccda-1550-b06b-aa74-e0f054e9fb9d@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 20 Mar 2023 14:26:35 +0100
+Message-ID: <CAKfTPtADr6ds6kmfE73J-33fT6mkziGZ4=x45rpwmGhv-u1f2A@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Zhang Qiao <zhangqiao22@huawei.com>, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ad8a221e1f49 ("ARM: mediatek: Add config options for mediatek SoCs.")
-adds four configs MACH_MT6592, MACH_MT6592, MACH_MT8127 and MACH_MT8127 for
-foreseen future use in the MediaTek pinctrl driver. As of now, nine years
-after that commit, the configs MACH_MT8127 and MACH_MT8127 are used for
-that purpose, but tconfigs MACH_MT6592 and MACH_MT6592 have not been used.
+On Mon, 20 Mar 2023 at 13:29, Dietmar Eggemann <dietmar.eggemann@arm.com> w=
+rote:
+>
+> On 18/03/2023 08:45, Zhang Qiao wrote:
+> >
+> >
+> > =E5=9C=A8 2023/3/18 0:08, Vincent Guittot =E5=86=99=E9=81=93:
+> >> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being pl=
+aced")
+> >> fixes an overflowing bug, but ignore a case that se->exec_start is res=
+et
+> >> after a migration.
+> >>
+> >> For fixing this case, we delay the reset of se->exec_start after
+> >> placing the entity which se->exec_start to detect long sleeping task.
+> >>
+> >> In order to take into account a possible divergence between the clock_=
+task
+> >> of 2 rqs, we increase the threshold to around 104 days.
+> >>
+> >>
+> >> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being pl=
+aced")
+> >> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+> >> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> >> ---
+> >>
+> >> My last proposal was not yet correct as the exec_start was not always
+> >> reset after migrating a task. I finally found this solution which keep=
+s
+> >> the long sleep detection to one place as well as the reset of se->exec=
+_start.
+> >>
+> >
+> > Tested-by: Zhang Qiao <zhangqiao22@huawei.com>
+> >
+> > I have retested it with this version, and the result is fine.
+> >
+> > -------
+> >
+> >  Performance counter stats for 'hackbench -g 44 -f 20 --process --pipe =
+-l 60000 -s 100' (10 runs):
+> >
+> >              80.10 +- 1.22 seconds time elapsed  ( +-  1.53% )
+>
+> [...]
+>
+> >> @@ -8701,7 +8734,7 @@ static void attach_task(struct rq *rq, struct ta=
+sk_struct *p)
+> >>      lockdep_assert_rq_held(rq);
+> >>
+> >>      WARN_ON_ONCE(task_rq(p) !=3D rq);
+> >> -    activate_task(rq, p, ENQUEUE_NOCLOCK);
+> >> +    activate_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_MIGRATED);
+> >>      check_preempt_curr(rq, p, 0);
+>
+> Why not:
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index b9bc1ab67aaa..96dd3a62e683 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7674,7 +7674,10 @@ static void migrate_task_rq_fair(struct task_struc=
+t *p, int new_cpu)
+>                 se->vruntime -=3D u64_u32_load(cfs_rq->min_vruntime);
+>         }
+>
+> -       if (!task_on_rq_migrating(p)) {
+> +       if (task_on_rq_migrating(p)) {
+> +               /* We have migrated, no longer consider this task hot */
+> +               se->exec_start =3D 0;
 
-Remove the unused configs MACH_MT6592 and MACH_MT6592.
+mainly to keep the clear of se->exec_start =3D 0 in one place to ease
+the maintenance
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/arm/mach-mediatek/Kconfig | 8 --------
- 1 file changed, 8 deletions(-)
 
-diff --git a/arch/arm/mach-mediatek/Kconfig b/arch/arm/mach-mediatek/Kconfig
-index 35a3430c7942..521af13a79d8 100644
---- a/arch/arm/mach-mediatek/Kconfig
-+++ b/arch/arm/mach-mediatek/Kconfig
-@@ -15,14 +15,6 @@ config MACH_MT2701
- 	bool "MediaTek MT2701 SoCs support"
- 	default ARCH_MEDIATEK
- 
--config MACH_MT6589
--	bool "MediaTek MT6589 SoCs support"
--	default ARCH_MEDIATEK
--
--config MACH_MT6592
--	bool "MediaTek MT6592 SoCs support"
--	default ARCH_MEDIATEK
--
- config MACH_MT7623
- 	bool "MediaTek MT7623 SoCs support"
- 	default ARCH_MEDIATEK
--- 
-2.17.1
-
+> +       } else {
+>                 remove_entity_load_avg(se);
+>
+>                 /*
+> @@ -8726,7 +8729,7 @@ static void attach_task(struct rq *rq, struct task_=
+struct *p)
+>         lockdep_assert_rq_held(rq);
+>
+>         WARN_ON_ONCE(task_rq(p) !=3D rq);
+> -       activate_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_MIGRATED);
+> +       activate_task(rq, p, ENQUEUE_NOCLOCK);
+>         check_preempt_curr(rq, p, 0);
+>  }
+>
+>
+> entity_is_long_sleeper() will bail early for these rq-migrating tasks
+> for which a long-sleep test would make little sense anyway.
+>
+> Plus move_queued_task() (e.g. from sched_exex()) would be covered as well=
+.
