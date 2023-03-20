@@ -2,258 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5CF6C0E2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A18696C0E33
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjCTKFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S230050AbjCTKG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCTKFK (ORCPT
+        with ESMTP id S230046AbjCTKGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:05:10 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC5C21951;
-        Mon, 20 Mar 2023 03:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679306677; x=1710842677;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=089CF72/jASKJqoqvGhxZDa0esoCSdvFUSdgI5zns3Y=;
-  b=K8+4QBJrk6k1pPh6BNN5m2N1yO2DLXMmqXYmsAcvRPDpT9uEMJHs5ZEu
-   Fxxg6W0Pei3CXOnrI4Gw8OL0VJLm7iCcsVLgy6lGSm8YCyt69KbDfEVEM
-   KwatX9wfr0TVdPsFo9nTugYu5J5Ec7ZgWykGmFV84CtXKPqy69xx66hE+
-   bbvJwHB5L+ygWxlqNCBxVVpCtdKa52QNvfTke9imL1P/HGSe46Fr8P+Zx
-   +gxIDHFqSyVthJgkZQr3Bn1N0g4/UZNUGG4EpkH/Z8e6TiCiZl5bgulSZ
-   a4mULGgj9ASdpmJ751TZVXFfAaYH8dobtdlOBS8vDX1xcob0XyMrd3xoO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="336124734"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="336124734"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 03:04:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="713520158"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="713520158"
-Received: from mbouhaou-mobl1.ger.corp.intel.com ([10.252.61.151])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 03:04:11 -0700
-Date:   Mon, 20 Mar 2023 12:04:08 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jacky Huang <ychuang570808@gmail.com>
-cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>, schung@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>, mjchen@nuvoton.com
-Subject: Re: [PATCH 14/15] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-In-Reply-To: <c755e596-9187-8de1-5769-9c67c1f01c48@gmail.com>
-Message-ID: <b6995749-4b54-59d1-99d2-6b64b438f22f@linux.intel.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com> <20230315072902.9298-15-ychuang570808@gmail.com> <24ce3334-b535-f6d5-70dd-3ba9be991252@linux.intel.com> <c755e596-9187-8de1-5769-9c67c1f01c48@gmail.com>
+        Mon, 20 Mar 2023 06:06:05 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C2E10409
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:05:23 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5419d4c340aso214192357b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679306717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RS5uQJNZ1THmu6+X8Hb2Mm7jDWUuSU7jbDW+7hVrlos=;
+        b=Jb44Xtwe8Y35yQASV5loMBMF0QSIw63XrGakD6XtfCfAbvOm/HWXnpBAI64kBYyRja
+         EtjRUUqT7GecQtZ/BTNM5wRh4mR1Dm8X3/ssSlR4WrS3am1pjSalNEiiQ8H9Wgm6U90V
+         ro+43zgOVBPrGYB+9BM/NCet5EDqRr/W6CZWsZczhIe7pGbZhPL1t9kSNfrfMuvL0Mvf
+         IECWpKRYes/oJjCN7apQea6V64VE1ZrtE1TsJfdIqVCohFh0MFJCsUluLwlF9SuACccX
+         sG5yYxWZVewAKIH2g38PHEJXouanmQ4QgPA4A1T1H1yttKK7iDPC4/NHn1rVaUyJNmTF
+         XOtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679306717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RS5uQJNZ1THmu6+X8Hb2Mm7jDWUuSU7jbDW+7hVrlos=;
+        b=eE5qEYSblfI9et3vImZYckchXmF3cEukysbwx1Ve1k0HUl96owv3cTOy4TjPOEGeEm
+         RKnOSFHqonHRxV1o8d1kFKok0pDR0YHOt6i4LObkdMRwiPVSq5mccK+AtCkSbsN6jYoo
+         p3CGyuzsCFzH3nK4FWKYK/SZ0e0OGRs80Wchf5NxCRNGN+SuIWYKDTjcXQ9EzdMXuXDs
+         aPhyye0Tt3p5+a/irc3XUBFlppQjyfp34Gn3OAQze/C4Icn0XbdzkoCjuKD1wTpAnysV
+         CVVKvQitJqx/sW20agytlMyb6bgfuVz70arrWXDBLixbF61OtT3/nBG3iwwsYNDsHV9y
+         A0gg==
+X-Gm-Message-State: AO0yUKUIV0CYp6aYDcvlRd64U8ETYDcE4bWgalh02RXd+FmNBQwLSh+U
+        0dibH9UQVShet0oEupkLinBR13rrr6+tJIoBLs4cuw==
+X-Google-Smtp-Source: AK7set8yZJJ7PcEpWeL3Q3EKXcvp1UnUYfow+xu3cIExi7jlM4OJrw0lvCr1Ce3+4bMfd/5sBwGklabDX6Mfswnfh78=
+X-Received: by 2002:a81:ae5f:0:b0:532:e887:2c23 with SMTP id
+ g31-20020a81ae5f000000b00532e8872c23mr9961200ywk.9.1679306717628; Mon, 20 Mar
+ 2023 03:05:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-286954288-1679306062=:2177"
-Content-ID: <e72f080-5a39-cbae-939d-47658ab1940@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230320093259.845178-1-korneld@chromium.org>
+In-Reply-To: <20230320093259.845178-1-korneld@chromium.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 20 Mar 2023 11:05:06 +0100
+Message-ID: <CACRpkdbhV1qE+Kx4cqAKiv4Zacv6tQ8wKF8C6+0kZ-Dw=0cx7Q@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
+To:     =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Mar 20, 2023 at 10:33=E2=80=AFAM Kornel Dul=C4=99ba <korneld@chromi=
+um.org> wrote:
 
---8323329-286954288-1679306062=:2177
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <9e48e57-5483-8748-822b-8ba6f3ef356@linux.intel.com>
+> This fixes a similar problem to the one observed in:
+> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on probe"=
+).
+>
+> On some systems, during suspend/resume cycle firmware leaves
+> an interrupt enabled on a pin that is not used by the kernel.
+> This confuses the AMD pinctrl driver and causes spurious interrupts.
+>
+> The driver already has logic to detect if a pin is used by the kernel.
+> Leverage it to re-initialize interrupt fields of a pin only if it's not
+> used by us.
+>
+> Signed-off-by: Kornel Dul=C4=99ba <korneld@chromium.org>
 
-On Mon, 20 Mar 2023, Jacky Huang wrote:
+Uh oh this looks serious.
+Do we need a Fixes: tag and Cc: stable on this patch?
 
-> Dear Ilpo,
-> 
-> 
-> Thanks for your advice.
-> 
-> On 2023/3/16 下午 10:54, Ilpo Järvinen wrote:
-> > Hi,
-> > 
-> > I'll not note all things below because others have already seemingly
-> > commented many things.
-> > 
-> > On Wed, 15 Mar 2023, Jacky Huang wrote:
-> > 
-> > > From: Jacky Huang <ychuang3@nuvoton.com>
-> > > 
-> > > This adds UART and console driver for Nuvoton ma35d1 Soc.
-
-> > > +		}
-> > > +		ch = (u8)serial_in(up, UART_REG_RBR);
-> > Drop the case.
-> 
-> I  will fix it.
-
-I meant "cast" in case it wasn't obvious.
-
-> > > +/* Enable or disable the rs485 support */
-> > > +static int ma35d1serial_config_rs485(struct uart_port *port,
-> > > +				     struct ktermios *termios,
-> > > +				     struct serial_rs485 *rs485conf)
-> > > +{
-> > > +	struct uart_ma35d1_port *p = to_ma35d1_uart_port(port);
-> > > +
-> > > +	p->rs485 = *rs485conf;
-> > > +
-> > > +	if (p->rs485.delay_rts_before_send >= 1000)
-> > > +		p->rs485.delay_rts_before_send = 1000;
-> > Don't do this in driver, the core handles the delay limits. You don't seem
-> > to be using the value anyway for anything???
-> > 
-> > Please separate the RS485 support into its own patch.
-> 
-> 
-> OK, we will remove RS485 support from this initial patch.
-> Once this initial patch was merged, we will submit the patch for RS485
-> support.
-
-You could do that but you could just as well include it into the same 
-series as another patch after the main patch.
-
-> > > +	serial_out(p, UART_FUN_SEL,
-> > > +		   (serial_in(p, UART_FUN_SEL) & ~FUN_SEL_MASK));
-> > > +
-> > > +	if (rs485conf->flags & SER_RS485_ENABLED) {
-> > > +		serial_out(p, UART_FUN_SEL,
-> > > +			   (serial_in(p, UART_FUN_SEL) | FUN_SEL_RS485));
-> > Does this pair of serial_out()s glitch the RS485 line if ->rs485_config()
-> > is called while RS485 mode is already set?
-> > 
-> > Why you need to do serial_in() from the UART_FUN_SEL twice?
-> 
-> UART_FUN_SEL (2 bits) definition:
-> 00 - UART function
-> 01 - IrDA function
-> 11 - RS485 function
-> 
-> The first searial_in() is used to clear set as UART function.
-> The second one is used to set RS485 function if SER_RS485_ENABLED is true.
-
-I got that, but it doesn't answer either of my questions which are:
-
-Can you clear the UART function without causing a glitch in the RS485?
-->rs485_config() can be called while already in RS485 mode so does it 
-cause the UART to temporarily switch away from RS485 mode to "UART 
-function" until the second write.
-
-Also, you didn't explain why you need to read the register again, does 
-the HW play with other bits when you do the clearing or to they remain 
-the same (in which case you can just use a temporary variable to store 
-the value)? ...It would be better to just write once too so this question 
-might not matter in the end.
-
-> > > +	if (pdev->dev.of_node) {
-> > > +		ret = of_alias_get_id(pdev->dev.of_node, "serial");
-> > > +		if (ret < 0) {
-> > > +			dev_err(&pdev->dev,
-> > > +				"failed to get alias/pdev id, errno %d\n",
-> > > +				ret);
-> > Just put error prints to one line if you don't break 100 chars limit.
-> 
-> But the checkpatch limitation is 80 characters.
-
-No, it isn't. It was changed years ago already.
-
-> > > +++ b/drivers/tty/serial/ma35d1_serial.h
-> > > @@ -0,0 +1,93 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + *  MA35D1 serial driver header file
-> > > + *  Copyright (C) 2023 Nuvoton Technology Corp.
-> > > + */
-> > > +#ifndef __MA35D1_SERIAL_H__
-> > > +#define __MA35D1_SERIAL_H__
-> > > +
-> > > +/* UART Receive/Transmit Buffer Register */
-> > > +#define UART_REG_RBR	0x00
-> > > +#define UART_REG_THR	0x00
-> > > +
-> > > +/* UART Interrupt Enable Register */
-> > > +#define UART_REG_IER	0x04
-> > > +#define RDA_IEN		0x00000001 /* RBR Available Interrupt Enable
-> > > */
-> > > +#define THRE_IEN	0x00000002 /* THR Empty Interrupt Enable */
-> > > +#define RLS_IEN		0x00000004 /* RX Line Status Interrupt Enable
-> > > */
-> > > +#define RTO_IEN		0x00000010 /* RX Time-out Interrupt Enable */
-> > > +#define BUFERR_IEN	0x00000020 /* Buffer Error Interrupt Enable */
-> > > +#define TIME_OUT_EN	0x00000800 /* RX Buffer Time-out Counter
-> > > Enable */
-> > > +
-> > > +/* UART FIFO Control Register */
-> > > +#define UART_REG_FCR	0x08
-> > > +#define RFR		0x00000002 /* RX Field Software Reset */
-> > > +#define TFR		0x00000004 /* TX Field Software Reset */
-> > > +
-> > > +/* UART Line Control Register */
-> > > +#define UART_REG_LCR	0x0C
-> > > +#define	NSB		0x00000004 /* Number of “STOP Bit” */
-> > > +#define PBE		0x00000008 /* Parity Bit Enable */
-> > > +#define EPE		0x00000010 /* Even Parity Enable */
-> > > +#define SPE		0x00000020 /* Stick Parity Enable */
-> > > +#define BCB		0x00000040 /* Break Control */
-> > > +
-> > > +/* UART Modem Control Register */
-> > > +#define UART_REG_MCR	0x10
-> > > +#define RTS		0x00000020 /* nRTS Signal Control */
-> > > +#define RTSACTLV	0x00000200 /* nRTS Pin Active Level */
-> > > +#define RTSSTS		0x00002000 /* nRTS Pin Status (Read Only) */
-> > > +
-> > > +/* UART Modem Status Register */
-> > > +#define UART_REG_MSR	0x14
-> > > +#define CTSDETF		0x00000001 /* Detect nCTS State Change Flag */
-> > > +#define CTSSTS		0x00000010 /* nCTS Pin Status (Read Only) */
-> > > +#define CTSACTLV	0x00000100 /* nCTS Pin Active Level */
-> > > +
-> > > +/* UART FIFO Status Register */
-> > > +#define UART_REG_FSR	0x18
-> > > +#define RX_OVER_IF	0x00000001 /* RX Overflow Error Interrupt Flag */
-> > > +#define PEF		0x00000010 /* Parity Error Flag*/
-> > > +#define FEF		0x00000020 /* Framing Error Flag */
-> > > +#define BIF		0x00000040 /* Break Interrupt Flag */
-> > > +#define RX_EMPTY	0x00004000 /* Receiver FIFO Empty (Read Only) */
-> > > +#define RX_FULL		0x00008000 /* Receiver FIFO Full (Read Only)
-> > > */
-> > > +#define TX_EMPTY	0x00400000 /* Transmitter FIFO Empty (Read Only) */
-> > > +#define TX_FULL		0x00800000 /* Transmitter FIFO Full (Read
-> > > Only) */
-> > > +#define TX_OVER_IF	0x01000000 /* TX Overflow Error Interrupt Flag */
-> > > +#define TE_FLAG		0x10000000 /* Transmitter Empty Flag (Read
-> > > Only) */
-> > > +
-> > > +/* UART Interrupt Status Register */
-> > > +#define UART_REG_ISR	0x1C
-> > > +#define RDA_IF		0x00000001 /* RBR Available Interrupt Flag */
-> > > +#define THRE_IF		0x00000002 /* THR Empty Interrupt Flag */
-> > > +#define RLSIF		0x00000004 /* Receive Line Interrupt Flag */
-> > > +#define MODEMIF		0x00000008 /* MODEM Interrupt Flag */
-> > > +#define RXTO_IF		0x00000010 /* RX Time-out Interrupt Flag */
-> > > +#define BUFEIF		0x00000020 /* Buffer Error Interrupt Flag */
-> > > +#define WK_IF		0x00000040 /* UART Wake-up Interrupt Flag */
-> > > +#define RDAINT		0x00000100 /* RBR Available Interrupt
-> > > Indicator */
-> > > +#define THRE_INT	0x00000200 /* THR Empty Interrupt Indicator */
-
-I forgot to mention earlier, there are many defines above which should use 
-BIT().
-
-
--- 
- i.
---8323329-286954288-1679306062=:2177--
+Yours,
+Linus Walleij
