@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094E96C0BB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A13E6C0BB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjCTIFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S230298AbjCTIGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjCTIFp (ORCPT
+        with ESMTP id S230299AbjCTIGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:05:45 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733013DEA;
-        Mon, 20 Mar 2023 01:05:42 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id i10-20020a05600c354a00b003ee0da1132eso289291wmq.4;
-        Mon, 20 Mar 2023 01:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679299541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/P71frEcH2Ptvt6OvUiP4jDXbdRBVOUmTFIf0mXTCI=;
-        b=osQhTOWzydX1M8AN7E88QZiS8JCzt6b5QzhDJGoJSxDY3Q95h+Lz4B5HPbfPoj9wCO
-         svSvznvgsU69F7ZME8zrfNJm7V9Cd6z+p5frHzTrgIj7sAhTvMHfY/vwwfxQ866ht1Yp
-         kSZQDk2QmG+u1B2gxRRGOPmpyoT7g6e3nDwCSRYu8YaaGG2CabdbiBBpyHIMneytVCnw
-         AEGFGNuIzQ2FnFa16gdfVqRKwU/CcOPXKbUPtXDScs5nu0zfimQ4ilPZKBC0OKY62ong
-         4sAyJG5HBwOlapd4AuCDAqrBYYV8CkjJCwGWju6Lfd2xpasry+syHifubWy0oPQjlg8i
-         NC4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679299541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6/P71frEcH2Ptvt6OvUiP4jDXbdRBVOUmTFIf0mXTCI=;
-        b=0U8xLyzhv9iyK1p7t/wR2ZBIjn0+lulswyeZoKlfPq5NAMk5QgO0vfYu2HCRnMpIiZ
-         rQM9fXunl6YafBMS86slvSWbGGEfaMy1EIsGFHYvw344h+kWEAEvbSVZGqzDtmdADHnb
-         BM/uNRMTRYalcB8z+N6lfUlaX3tDXCdLWdsx7mkkfyANxSLpS1qoVYTc6qRy8NiNLdU1
-         Q4O4IUTUz4cKh3aLGn1xbfIjPe6TSzFjQlcerPuLKpST0qgLGtPShe6giQRN5rVbDXjV
-         uPMltf963dVqba0kp38kJCCQlLdl4Ogzxu5NPkb0H77QuM1DtotWU4QiAHxqqNutd2Zr
-         zGTw==
-X-Gm-Message-State: AO0yUKVYpRzg0ViGodL4AV7YiPwtX0+fI5H3yIuPCh5RXnSzuVY0RBlh
-        aCacHLKyG+vu3UG2wdltAaI=
-X-Google-Smtp-Source: AK7set/4x5u751ZAQwe0/rqKPNenqM200IRub/sBKM8OfD/PiB5aUPJy32/YFnncJEm3ZQVYj7bZ6g==
-X-Received: by 2002:a05:600c:213:b0:3ed:c84c:7efe with SMTP id 19-20020a05600c021300b003edc84c7efemr4515782wmi.7.1679299540570;
-        Mon, 20 Mar 2023 01:05:40 -0700 (PDT)
-Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
-        by smtp.gmail.com with ESMTPSA id bi6-20020a05600c3d8600b003ede178dc52sm3563167wmb.40.2023.03.20.01.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:05:40 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 20 Mar 2023 09:05:36 +0100
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org
-Subject: Re: [PATCH 4/7] ftrace: Rename _ftrace_direct_multi APIs to
- _ftrace_direct APIs
-Message-ID: <ZBgT0FINOmW7c4pK@krava>
-References: <20230316173811.1223508-1-revest@chromium.org>
- <20230316173811.1223508-5-revest@chromium.org>
- <ZBcqWqWyq0uW/wj7@krava>
- <20230319135550.22aaa04b@rorschach.local.home>
- <ZBdTA0gKh2xAk5Ay@krava>
- <20230319204731.6691dedc@rorschach.local.home>
+        Mon, 20 Mar 2023 04:06:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E34014216
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:05:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7576F1F750;
+        Mon, 20 Mar 2023 08:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679299558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QZil6SCsGulb1DGcYgYEjYlDnmhOikIUA3WXba3RmkI=;
+        b=UdVBiUBw4pdD7eMEYC02fmGalxMUEmxar7XnouKpcR49uPSb28axeRzee8I/PEp80SeQnT
+        5SVavWwDg7KNvaAOEsO+S7TLgYaO6B0nbFbaqF+gqhaZ7RHFfepjhWVhWBFvLDJMUmTkVn
+        pfh0kaq5biY/v2ZHGKfwnc7qCKgGOIM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679299558;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QZil6SCsGulb1DGcYgYEjYlDnmhOikIUA3WXba3RmkI=;
+        b=I+lgjnT3OzT2DVrsW4Asndn9HbGQ73MkSpb3k0gzZ7l0Av9i+RrgrG9c+Sh8hBF4R9SNko
+        8Qvxci8EHecMGDBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3C3BE13A00;
+        Mon, 20 Mar 2023 08:05:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HYXyDeYTGGS4RAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 20 Mar 2023 08:05:58 +0000
+Message-ID: <015855b3-ced3-8d84-e21d-cc6ce112b556@suse.cz>
+Date:   Mon, 20 Mar 2023 09:05:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319204731.6691dedc@rorschach.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
+Content-Language: en-US
+To:     "chenjun (AM)" <chenjun102@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     "xuqiang (M)" <xuqiang36@huawei.com>,
+        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+References: <20230314123403.100158-1-chenjun102@huawei.com>
+ <0cad1ff3-8339-a3eb-fc36-c8bda1392451@suse.cz>
+ <344c7521d72e4107b451c19b329e9864@huawei.com>
+ <8c700468-245d-72e9-99e7-b99d4547e6d8@suse.cz>
+ <aeb2bd3990004b9eb4f151aa833ddcf2@huawei.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <aeb2bd3990004b9eb4f151aa833ddcf2@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 08:47:31PM -0400, Steven Rostedt wrote:
-> On Sun, 19 Mar 2023 19:22:59 +0100
-> Jiri Olsa <olsajiri@gmail.com> wrote:
+On 3/19/23 08:22, chenjun (AM) wrote:
+> 在 2023/3/17 20:06, Vlastimil Babka 写道:
+>> On 3/17/23 12:32, chenjun (AM) wrote:
+>>> 在 2023/3/14 22:41, Vlastimil Babka 写道:
+>>>>>    	pc.flags = gfpflags;
+>>>>> +
+>>>>> +	/*
+>>>>> +	 * when (node != NUMA_NO_NODE) && (gfpflags & __GFP_THISNODE)
+>>>>> +	 * 1) try to get a partial slab from target node with __GFP_THISNODE.
+>>>>> +	 * 2) if 1) failed, try to allocate a new slab from target node with
+>>>>> +	 *    __GFP_THISNODE.
+>>>>> +	 * 3) if 2) failed, retry 1) and 2) without __GFP_THISNODE constraint.
+>>>>> +	 */
+>>>>> +	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+>>>>> +			pc.flags |= __GFP_THISNODE;
+>>>>
+>>>> Hmm I'm thinking we should also perhaps remove direct reclaim possibilities
+>>>> from the attempt 2). In your qemu test it should make no difference, as it
+>>>> fills everything with kernel memory that is not reclaimable. But in practice
+>>>> the target node might be filled with user memory, and I think it's better to
+>>>> quickly allocate on a different node than spend time in direct reclaim. So
+>>>> the following should work I think?
+>>>>
+>>>> pc.flags = GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
+>>>>
+>>>
+>>> Hmm, Should it be that:
+>>>
+>>> pc.flags |= GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
+>> 
+>> No, we need to ignore the other reclaim-related flags that the caller
+>> passed, or it wouldn't work as intended.
+>> The danger is that we ignore some flag that would be necessary to pass, but
+>> I don't think there's any?
+>> 
+>> 
 > 
-> > > > >  config SAMPLE_FTRACE_DIRECT_MULTI    
-> > > > 
-> > > > nit, we could perhaps remove this config option as well
-> > > > and use SAMPLE_FTRACE_DIRECT_MULTI  
-> > > 
-> > > Remove SAMPLE_FTRACE_DIRECT_MULTI for SAMPLE_FTRACE_DIRECT_MULTI?
-> > >   
-> > 
-> > sorry typo, I meant SAMPLE_FTRACE_DIRECT
+> If we ignore __GFP_ZERO passed by kzalloc， kzalloc will not work.
+> Could we just unmask __GFP_RECLAIMABLE | __GFP_RECLAIM?
 > 
-> I believe this was discussed before, and I thought we decided to keep
-> them separate. Or perhaps that was at least for testing?
-> 
-> Anyway, we could merge this in the future, but I don't think that's
-> necessary now.
+> pc.flags &= ~(__GFP_RECLAIMABLE | __GFP_RECLAIM)
+> pc.flags |= __GFP_THISNODE
 
-yes, I said it's nit earlier
+__GFP_RECLAIMABLE would be wrong, but also ignored as new_slab() does:
+	flags & (GFP_RECLAIM_MASK | GFP_CONSTRAINT_MASK)
 
-jirka
+which would filter out __GFP_ZERO as well. That's not a problem as kzalloc()
+will zero out the individual allocated objects, so it doesn't matter if we
+don't zero out the whole slab page.
+
+But I wonder, if we're not past due time for a helper e.g.
+gfp_opportunistic(flags) that would turn any allocation flags to a
+GFP_NOWAIT while keeping the rest of relevant flags intact, and thus there
+would be one canonical way to do it - I'm sure there's a number of places
+with their own variants now?
+With such helper we'd just add __GFP_THISNODE to the result here as that's
+specific to this particular opportunistic allocation.
