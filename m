@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2376C1558
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8866E6C1559
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjCTOp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S231932AbjCTOqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbjCTOpH (ORCPT
+        with ESMTP id S232029AbjCTOpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:45:07 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E734D10405;
-        Mon, 20 Mar 2023 07:44:52 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id z18so6709253pgj.13;
-        Mon, 20 Mar 2023 07:44:52 -0700 (PDT)
+        Mon, 20 Mar 2023 10:45:16 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7180710273;
+        Mon, 20 Mar 2023 07:44:55 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id kq3so265939plb.13;
+        Mon, 20 Mar 2023 07:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679323490;
+        d=gmail.com; s=20210112; t=1679323493;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O4Xvkkg7F6CjyOF2RZo8Gtbu7JFTSy/bgLszOXTif/c=;
-        b=pdh6pDbj0hMlQMJiqcjb8EcHHB++Bz4iZs1fWn8cufOZ+Nlx3Cw+6HTaCNHQc1riJo
-         sNuYVoJZKGIWIeMkxx9NXtGIedo/FV+PKDgDHWaf9G0Teyo5+mk7ELb+tQFBYD1G0S21
-         0PtNuq9gBlinRoOXPX9RrFMMstWiCfJbX6w0UiLfyeU6VyzeB4va8oEX0kp4G/PqgrZ4
-         J8x7zIf81il9FWDLwkwoPzsnDUwEcI479IVGKAZjOeVZVZk4yNQNiDf7cUZrYqgllCFZ
-         rRGRxpH+E0sP+A0ffVoJH4/hiO7565ux39p3UDwlawoDk1SaGvLvjUCn4t/eGacpTtyc
-         c0Uw==
+        bh=ldFupt5wrZbRxkmdbQJ7PqzJnkF6w4MSZ/CZLw9J9jU=;
+        b=nLqncyImNrlz2RYRgSTcGk81CIP+FxeIhwn8gsHuejhfPlvxGvZoYbDo0a811aEXK9
+         V1LlsnULXd0sVZPzFucY4idd1TfEuzWSGRr8oLl/nGNtw0w61RogcCNsUN5LYoaVQgy8
+         A9Zjp7rXg0KtTQarA5j7PNz52fbJgT60Emcaw3O4Td7B/lgNjsxPkom0BwnCRmFdnQOz
+         ay5YoqOYuFncYBGa78Ckg/Fc8t6MF4OaZhtzlc9O16bNsgB0fKDDkrlbvblGBXx62ZqL
+         kkIj3+KSXWEXR+AMbc3PB0j7Fhhv2yHH3MBrVP4JTcpba0E8hu6lf6FUt8KEpiKFKbzS
+         Nr0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679323490;
+        d=1e100.net; s=20210112; t=1679323493;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O4Xvkkg7F6CjyOF2RZo8Gtbu7JFTSy/bgLszOXTif/c=;
-        b=7+Qhj1vSKnOh9qzyJAuKL3aSa4SXi12ShCNe1fQKfCAOdCj0TzckLX37agv7svEKna
-         Fj8SANYxyCkcCtS5mpO52l+f1hdlSBVsT/PEFai8K0yZKsk2lFq/1o6lSzDlIA+ZNhY/
-         iAYpW7A+y8pT98r19jyNBXDxoZD9NWvkzoski3gtJoxz+BX8sH/Zrx4gHEkSoX9PmHUx
-         IwD96l2dh8Xrdl73SB0dDLfIMQ6ppJov1gTiP4sKkSAj5mkXeS+Y5JAaSD09r6zWfbSh
-         Uv5bqBEcIsGsOgYZSGjYB+x2igwFkBizf693qUMBLPgoElggdwIx8qzpiNQruoxu9SEV
-         onQA==
-X-Gm-Message-State: AO0yUKWSEnuaTUa6DdHsztDNp4P0r0CqEUKI2HYgbuvt+irUnVAbQBUE
-        iVuIoxZb4357KQvUOjxKUAI=
-X-Google-Smtp-Source: AK7set8KWfMWUfN/rUSfAdvgv538dmuC8YG9xJe+nc38O3y7lCz5M7md+3TF5MvUHCrG2tMwgVLAcQ==
-X-Received: by 2002:aa7:9f91:0:b0:627:fc31:1de with SMTP id z17-20020aa79f91000000b00627fc3101demr3121841pfr.7.1679323490696;
-        Mon, 20 Mar 2023 07:44:50 -0700 (PDT)
+        bh=ldFupt5wrZbRxkmdbQJ7PqzJnkF6w4MSZ/CZLw9J9jU=;
+        b=4Ijn8dGLsYTuXuJN1KE8BnX95ftX4uYEwdWyzrbL1iFJatug5Mdr7SSOCqcFx+YGV8
+         Aqr09L4EpiXJxnW2JhK+3ZdG5BvRQ/kppHDkZT73XfwXgi8zY5R8Cochq/5u9/KutYLf
+         N9lv5c/kpTkIUjcUkEfaC8PZF8BRyphYykkW5UZoPFF8j9eI1p1qFLZGQ8TL5NPK1w/7
+         OnaM5474dNWIiDTRiUOUrkYBPIZtbbLlqMn26z0L9pQnA6owu3f7ibpLr0hix5s2MOrT
+         yScQZp2L80CQf4WqL5Tg02DqoHRAY9lGbBqWyIBucAKb+csgf8kLpSckSi/jOOgqaCrB
+         SZmQ==
+X-Gm-Message-State: AO0yUKUBD+mWInhycCZqPa4ZV0Lj3Pj3mu59AuLSBBuqP9bs+cp5NgLS
+        dBuS3crU8CWc5vB+qwX4Hxo=
+X-Google-Smtp-Source: AK7set8ban8EVPY/GlOSyVWpuGWIu9Ktpe8j0t2q1ieP66G7xMsPkz9aTzAfar0y6DwailYRK/6igQ==
+X-Received: by 2002:a05:6a20:bc9e:b0:d9:f086:e756 with SMTP id fx30-20020a056a20bc9e00b000d9f086e756mr1931648pzb.39.1679323493697;
+        Mon, 20 Mar 2023 07:44:53 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id v22-20020a62a516000000b0058bc7453285sm6389779pfm.217.2023.03.20.07.44.50
+        by smtp.gmail.com with ESMTPSA id j8-20020aa78dc8000000b00571f66721aesm6454473pfr.42.2023.03.20.07.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:44:50 -0700 (PDT)
+        Mon, 20 Mar 2023 07:44:53 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     Daniel Vetter <daniel@ffwll.ch>, freedreno@lists.freedesktop.org,
@@ -58,10 +58,15 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>, freedreno@lists.freedesktop.org,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 11/23] drm/msm: Use idr_preload()
-Date:   Mon, 20 Mar 2023 07:43:33 -0700
-Message-Id: <20230320144356.803762-12-robdclark@gmail.com>
+Subject: [PATCH v2 12/23] drm/msm/gpu: Move fw loading out of hw_init() path
+Date:   Mon, 20 Mar 2023 07:43:34 -0700
+Message-Id: <20230320144356.803762-13-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230320144356.803762-1-robdclark@gmail.com>
 References: <20230320144356.803762-1-robdclark@gmail.com>
@@ -79,58 +84,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Avoid allocation under idr_lock, to prevent deadlock against the
-job_free() path (which runs on same thread as job_run(), which makes
-it also part of the fence-signaling path.
+It is already a no-op, since we've already loaded the fw from
+adreno_load_gpu(), so drop the redundant call.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/msm_gem_submit.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index b9d81e5acb42..0ab62cb4ed69 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -882,6 +882,8 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+index 817599766329..28cc5685ba96 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@@ -503,16 +503,9 @@ struct drm_gem_object *adreno_fw_create_bo(struct msm_gpu *gpu,
  
- 	submit->nr_cmds = i;
+ int adreno_hw_init(struct msm_gpu *gpu)
+ {
+-	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+-	int ret, i;
+-
+ 	VERB("%s", gpu->name);
  
-+	idr_preload(GFP_KERNEL);
-+
- 	spin_lock(&queue->idr_lock);
+-	ret = adreno_load_fw(adreno_gpu);
+-	if (ret)
+-		return ret;
+-
+-	for (i = 0; i < gpu->nr_rings; i++) {
++	for (int i = 0; i < gpu->nr_rings; i++) {
+ 		struct msm_ringbuffer *ring = gpu->rb[i];
  
- 	/*
-@@ -893,6 +895,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	if ((args->flags & MSM_SUBMIT_FENCE_SN_IN) &&
- 			idr_find(&queue->fence_idr, args->fence)) {
- 		spin_unlock(&queue->idr_lock);
-+		idr_preload_end();
- 		ret = -EINVAL;
- 		goto out;
- 	}
-@@ -910,7 +913,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 		submit->fence_id = args->fence;
- 		ret = idr_alloc_u32(&queue->fence_idr, submit->user_fence,
- 				    &submit->fence_id, submit->fence_id,
--				    GFP_KERNEL);
-+				    GFP_NOWAIT);
- 		/*
- 		 * We've already validated that the fence_id slot is valid,
- 		 * so if idr_alloc_u32 failed, it is a kernel bug
-@@ -923,10 +926,11 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 		 */
- 		submit->fence_id = idr_alloc_cyclic(&queue->fence_idr,
- 						    submit->user_fence, 1,
--						    INT_MAX, GFP_KERNEL);
-+						    INT_MAX, GFP_NOWAIT);
- 	}
- 
- 	spin_unlock(&queue->idr_lock);
-+	idr_preload_end();
- 
- 	if (submit->fence_id < 0) {
- 		ret = submit->fence_id;
+ 		if (!ring)
 -- 
 2.39.2
 
