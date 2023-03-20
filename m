@@ -2,164 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF836C231D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0986C2323
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjCTUr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S229836AbjCTUsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCTUrZ (ORCPT
+        with ESMTP id S229738AbjCTUsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:47:25 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A9FA8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:47:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jdmq11yKS8YsZapXKKC/lzX+Fn6Rcq1Hsw8EMcWUQV7eitmhw6nQF7IwpC6LnIolqQYMPSVaAh3deRSEY4jmqZu0XroG0aJ7GO95ac4XDAXPetmaHZuluknmxRtSNpPoR26sFxTsjyZD0OsCZtPftdF0tDRxBcNAeDI/L5LAddFqgX4hYThN5SA8TqlqCUSQBfBOuPiF+KGqNCPTIYLakQlohg4sqKhSzL75l0Gq9/6IiZYDUkEWdbyH+1mxhMj3qx185z7J3wGFi/CfMyp0J4k3yTaUZNyt/9bbV6hPeCFz7/Q1YEUlXXkX0ONT0HYT0XdI2wjPSen1lGPlJvMKCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=14Mva8e8qmEkbSikBO6n8yxgx97b3Bn+isFabfMXLoA=;
- b=KKv/EtC58RfgF6PBKpxgHIB+gHTJJO4A7klo/Kc/gcp7V5/nGxeJW1IFw4x2QPgWMyaZ3wQZ+mKmeB32omT1PwaY8S/gRJRHX2QnNbj2VhNodyKCFStlilUdLkd7yfD+c1WNeab4xomDWm4S2pd/Cvk1Yk/swIBOnx6731A0xVmJizyx72Dgb8McRoRAd5eH5IPaiB2xaiGCtqtqctrT867c0owfPBNUcQcsHJDDtmw0Ze8SUEr7ujp7jZMXCB84Nres3xJqOMXgmWM7cHJf2S+UnYYmwqWLn4lrxxtRZzA3WCuUpE7qmHCFQNvaXr5glhwL5F2XGWnFMJSZpv4ejA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=14Mva8e8qmEkbSikBO6n8yxgx97b3Bn+isFabfMXLoA=;
- b=rS44QuhANNXubaReeAGuPhyOBdXaNCTO53UbxxEyllnqvsRakYcahWrs8XSgyhPZasxtR+KLPeuIYq4z7+Blc/oxNuIWWrGOWu0E0piUOYaPMiBXyIIHMo5yyqKAFbWekDwO9H3LSyfBTw+O+q3NvVSK5TI94RO4K34ZZesaq9lhtq74erFkOj2VnW/1eSOlN7CmEqi7HBvXDrWZmLUZIm9poihU1BsInjOPGq59dy9W5DEGbZygc9G770pBNpV7AzARa86ur9Yu68fi+2IE7AYglDxG4Yuo+IxepeFHpvr2hwssy3bSpp7l3qNlOoJf4sMINMoHUKMLs0XQ4JOZ4g==
-Received: from MW4PR04CA0069.namprd04.prod.outlook.com (2603:10b6:303:6b::14)
- by SA0PR12MB4496.namprd12.prod.outlook.com (2603:10b6:806:9b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 20:47:08 +0000
-Received: from CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:6b:cafe::58) by MW4PR04CA0069.outlook.office365.com
- (2603:10b6:303:6b::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Mon, 20 Mar 2023 20:47:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT058.mail.protection.outlook.com (10.13.174.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.15 via Frontend Transport; Mon, 20 Mar 2023 20:47:07 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 20 Mar 2023
- 13:46:54 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 20 Mar
- 2023 13:46:54 -0700
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Mon, 20 Mar 2023 13:46:53 -0700
-Date:   Mon, 20 Mar 2023 13:46:52 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Robin Murphy <robin.murphy@arm.com>, <will@kernel.org>,
-        <eric.auger@redhat.com>, <kevin.tian@intel.com>,
-        <baolu.lu@linux.intel.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <jean-philippe@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Message-ID: <ZBjGPI29BE/puciv@Asurada-Nvidia>
-References: <ab762cc6-5adf-2515-d9d2-d21d916eb6ad@arm.com>
- <ZBJcS07G3mt7gjkA@Asurada-Nvidia>
- <c753c2a8-024d-5bef-8987-96582084991e@arm.com>
- <ZBOFcenanpRsGFzF@Asurada-Nvidia>
- <ZBe3kxRXf+VbKy+m@Asurada-Nvidia>
- <ZBhbmqprnux4q00i@nvidia.com>
- <ZBh7hSX5hdW4vxwh@Asurada-Nvidia>
- <ZBiDcYwxL7eV1EmQ@nvidia.com>
- <ZBiLSJvtY5UKDJ5l@Asurada-Nvidia>
- <ZBig0fN3l7LsUlQg@nvidia.com>
+        Mon, 20 Mar 2023 16:48:53 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F9593C0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:48:50 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3d7aef37dccso703771cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679345330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0iGj9gwcm4e4ac0NCSGO8171w0NDeoSnjyBfeexxjTo=;
+        b=GomZIKXsD6iYzuOydfHF7Vmd+/a2V5ldYR8Nc+H906JlSAkGrNW/aCrrn+jWPH74l4
+         le8ZJDTPI7d/OrLg4BFEvdt0iaTeKN6e/CNnty2h8rW7sDWYKk5GmN8DoP7epXQZjKGd
+         zBDqInSq3D5KL/4+eAMvClcwKo3onL3m9rUG1sIjrlPgiK107rc4QOInKrcqsP0+K2Sm
+         Iwgvo3iKQcW9TxKp/QFo39S9YtxuWk8YWLjkzBXOTTu+A9tC4Gk21hzAYyF8Taqv63EP
+         Nu5+dt9F1klOu6rBl+WSli0l8vnlqABd5wePDZ2s5jmer9uD9f462wVG/hOsBzXuAzGu
+         FU2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679345330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0iGj9gwcm4e4ac0NCSGO8171w0NDeoSnjyBfeexxjTo=;
+        b=YDqbnZBYGs9bXcECTslyfyiw/CJ3eKset8udbnRwxoQhs9m9/dNfqYCwFVORm2sK8z
+         LkmJ66r7LkEGw0BR8dl17hbpeak+taf831nXdd+sMcD1MGa77fuTsw1FIPHf9PPNfl8b
+         frhBZ0a4R5e3p2xPZAjGO6QM+PHofK/U2xF3a7YFiOriFE2MXCdi5xXIMWCT7VT/D2Wk
+         N9Yy5NptdEoDIH3azp41XMaQmgxYaoMGXMlSe0YjUYCFr48BNY7LR8QH5mP0y9Z8jF/x
+         M7cKgCRpHhAo0gjdmX5Ah6yXNKLE9h9OCw2N8jrJ/LOEVGjzcvSYcIBvx6TCb92FNhf1
+         fgLA==
+X-Gm-Message-State: AO0yUKVhbqEl74goqbUZqXwK+TACHKvth1/e8WMLc4UMR6ZjPLA66LFY
+        8JD73hgzHqWk4aCHuZbbrcmTKkVi4UD5q/J2HyKbQg==
+X-Google-Smtp-Source: AK7set/G9GbTxjCo4Pwsbe2Elo0X85937zZME0lUs/FSvigtRHGSnx6jYbVWcur4ZREWNa4Zz4O32o9PXllUVNM0u0o=
+X-Received: by 2002:a05:622a:170f:b0:3b9:f696:c759 with SMTP id
+ h15-20020a05622a170f00b003b9f696c759mr132455qtk.10.1679345329601; Mon, 20 Mar
+ 2023 13:48:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZBig0fN3l7LsUlQg@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT058:EE_|SA0PR12MB4496:EE_
-X-MS-Office365-Filtering-Correlation-Id: d818c371-cae9-4231-8a51-08db29844566
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wP5m6YtOuq1kQzwFy7mYRVBE+PK6b7Z8SQN/EO1DC9LBwGr/yFwEIM7+BHHILqMPG1j2bWGYMSsxPneuR255GOkvwBFl6nsfrfCOc5P2RVPoz78A3sk6HOhWzDosYkqB65Q4TSb/Du6ytcrAPZ8fKkeupqwn1gBMyWHN97JvKTdkD3hJfTSIKAME4uRJaiTyhBQPrXNM+AKe/tUo6l3mWFj7W2qcHw4JowMTsenOm3QW7gRBUSYwPUScLSleyitMoqXBZ/gc53Bfd2KgWb386Yk/0WywoQVI1EBMO+2wAjc+AQCBLjrAdZ0WSS3fdZpv6gNzs09bw5uZuUqPvwDYiKFtUmvf/bri7ij2icFUn65oEzg/6yhLNR+s9zfURBDVCFIx3Qgjwtp12SX/lnfDWSaYOTJILqE5I56wxBdEDQiQ0N/g4JOm9+J9fKvqoH5AyVhiBt0ejXLOTNyGVfjwTspKhD/EEufcOxQLEnUkY8svQRnTsnFj9+5wHp5cXR3mFzfrCfLDO1SKjnuvfMzxK9zjcm2SRpMLAAx58pMMt93frucTDP5mjpnpCCcLlSe3j3okR+zJ2zg5l1f+V5jRGyYWQMBw0vvQ8W2heNSoqXHtkDRa6vwdcNX118lUX8L3gxk/b58CcTuKBeta43jGsfjBYA5KKKkrFdaGRYZWsdbVgYpKvYadCp+1aUmAvf2M+YwGicHg5yhc1mP+vxxikmOnaZvuFQtT2LY10qR/I/9ZQ24TERnOI/KGn8DCPLWX
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(82310400005)(47076005)(83380400001)(478600001)(6636002)(426003)(336012)(86362001)(356005)(36860700001)(7636003)(70586007)(40460700003)(55016003)(82740400003)(4326008)(8676002)(41300700001)(40480700001)(2906002)(8936002)(6862004)(70206006)(7416002)(5660300002)(9686003)(26005)(316002)(54906003)(186003)(33716001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 20:47:07.8420
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d818c371-cae9-4231-8a51-08db29844566
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4496
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230320201841.1133-1-bwiedemann@suse.de>
+In-Reply-To: <20230320201841.1133-1-bwiedemann@suse.de>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 20 Mar 2023 13:48:38 -0700
+Message-ID: <CAP-5=fUGbT8=spY=e6NPJvf_+Ct6VksFzWM6Eybf=gst_J=Xmw@mail.gmail.com>
+Subject: Re: [PATCH] perf jevents: Sort list of input files
+To:     "Bernhard M. Wiedemann" <bwiedemann@suse.de>,
+        Ben Hutchings <benh@debian.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 03:07:13PM -0300, Jason Gunthorpe wrote:
-> On Mon, Mar 20, 2023 at 09:35:20AM -0700, Nicolin Chen wrote:
-> 
-> > > You need to know what devices the vSID is targetting ang issues
-> > > invalidations only for those devices.
-> > 
-> > I agree with that, yet cannot think of a solution to achieve
-> > that out of vSID. QEMU code by means of emulating a physical
-> > SMMU only reads the commands from the queue, without knowing
-> > which device (vSID) actually sent these commands.
-> 
-> Huh?
-> 
-> CMD_ATC_INV has the SID
-> 
-> Other commands have the ASID.
-> 
-> You never need to cross an ASID to a SID or vice versa.
-> 
-> If the guest is aware of ATS it will issue CMD_ATC_INV with vSIDs, and
-> the hypervisor just needs to convert vSID to pSID.
-> 
-> Otherwise vSID doesn't matter because it isn't used in the invalidation
-> API and you are just handling ASIDs that only need the VM_ID scope
-> applied.
+On Mon, Mar 20, 2023 at 1:19=E2=80=AFPM Bernhard M. Wiedemann
+<bwiedemann@suse.de> wrote:
+>
+> Without this, pmu-events.c would be generated with variations in ordering
+> depending on non-deterministic filesystem readdir order.
+>
+> I tested that pmu-events.c still has the same number of lines
+> and that perf list output works.
+>
+> This patch was done while working on reproducible builds for openSUSE,
+> but also solves issues in Debian [1] and other distributions.
+>
+> [1] https://tests.reproducible-builds.org/debian/rb-pkg/unstable/i386/lin=
+ux.html
+>
+> Signed-off-by: Bernhard M. Wiedemann <bwiedemann@suse.de>
+> CC: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/pmu-events/jevents.py | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 
-Yea, I was thinking of your point (at the top) how we could
-ensure if an invalidation is targeting a correct vSID. So,
-that narrative was only about CMD_ATC_INV...
+Thanks Bernhard,
 
-Actually, we don't forward CMD_ATC_INV in QEMU. In another
-thread, Kevin also remarked whether we need to support that
-in the host or not. And I plan to drop CMD_ATC_INV from the
-list of cache_invalidate_user(), following his comments and
-the QEMU situation. Our uAPI, either forwarding the commands
-or a package of queue info, should be able to cover this in
-the future whenever we think it's required.
+I think this may already be addressed by sorting prior to output:
+https://lore.kernel.org/r/20220812230949.683239-5-irogers@google.com
 
-Combining the two parts above, we probably don't need to know
-at this moment which vSID an invalidation is targeting, nor
-to only allow it to execute for those devices, since the rest
-of commands are all ASID based.
+Could you confirm?
 
-Thanks
-Nic
+Thanks,
+Ian
+
+>
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jev=
+ents.py
+> index 2bcd07ce609f..f06e1abac7c7 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -381,10 +381,13 @@ def read_json_events(path: str, topic: str) -> Sequ=
+ence[JsonEvent]:
+>
+>    return events
+>
+> +def sorted_scandir(path: str) -> list[os.DirEntry]:
+> +  return sorted(os.scandir(path), key=3Dlambda e: e.name)
+> +
+>  def preprocess_arch_std_files(archpath: str) -> None:
+>    """Read in all architecture standard events."""
+>    global _arch_std_events
+> -  for item in os.scandir(archpath):
+> +  for item in sorted_scandir(archpath):
+>      if item.is_file() and item.name.endswith('.json'):
+>        for event in read_json_events(item.path, topic=3D''):
+>          if event.name:
+> @@ -497,7 +500,7 @@ def preprocess_one_file(parents: Sequence[str], item:=
+ os.DirEntry) -> None:
+>  def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
+>    """Process a JSON file during the main walk."""
+>    def is_leaf_dir(path: str) -> bool:
+> -    for item in os.scandir(path):
+> +    for item in sorted_scandir(path):
+>        if item.is_dir():
+>          return False
+>      return True
+> @@ -889,7 +892,7 @@ def main() -> None:
+>    def ftw(path: str, parents: Sequence[str],
+>            action: Callable[[Sequence[str], os.DirEntry], None]) -> None:
+>      """Replicate the directory/file walking behavior of C's file tree wa=
+lk."""
+> -    for item in os.scandir(path):
+> +    for item in sorted_scandir(path):
+>        if _args.model !=3D 'all' and item.is_dir():
+>          # Check if the model matches one in _args.model.
+>          if len(parents) =3D=3D _args.model.split(',')[0].count('/'):
+> @@ -930,7 +933,7 @@ struct compact_pmu_event {
+>
+>  """)
+>    archs =3D []
+> -  for item in os.scandir(_args.starting_dir):
+> +  for item in sorted_scandir(_args.starting_dir):
+>      if not item.is_dir():
+>        continue
+>      if item.name =3D=3D _args.arch or _args.arch =3D=3D 'all' or item.na=
+me =3D=3D 'test':
+> --
+> 2.35.3
+>
