@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DFC6C0D0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1736C0D10
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCTJUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S231272AbjCTJVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjCTJUY (ORCPT
+        with ESMTP id S231266AbjCTJUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:20:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5C5AF20;
-        Mon, 20 Mar 2023 02:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2328FB80DB5;
-        Mon, 20 Mar 2023 09:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DB099C4339B;
-        Mon, 20 Mar 2023 09:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679304019;
-        bh=aRfWzyfuMD/6LDTt48kesyPO7X9IlFJAhbBlvoIsV28=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZJnCPupcqPglYwWfYGoYPdwkoBIFV6ImH5xtJRdOe1+42ehZX/+VyoThZYrmNr5rk
-         FpRlXbTTrbioNzykR0+8T2ACi4MVab1y6Azpczq4yJ1DkKQktK8q7fQtFhFHKr3yHg
-         C96TsURdZOdpbTijCLHJYMofdnEQpro2d5BwuHJLLt2X4NmpQTNDxjVwzVoIJuLYKt
-         jk2R4BHImjNl+3lzdQ+X4jUhMcNlSQQmHBPLmsURtEXvxfAokcyRUGBdPVU9d+JrI4
-         Cmyb/QPWEF9kSA+3seyGDTLYNJ0DbICSEteFOEkggmoSGA0aA9NbqyxxJQJAt3xNyf
-         Y4i1rDiJnkecA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C44D8C395F4;
-        Mon, 20 Mar 2023 09:20:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 20 Mar 2023 05:20:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DF618A80
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:20:40 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1peBgt-0007ye-C4; Mon, 20 Mar 2023 10:20:31 +0100
+Message-ID: <8ea65a63-9cb2-8e80-d5ee-429db14be6d1@pengutronix.de>
+Date:   Mon, 20 Mar 2023 10:20:28 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v1] ARM: dts: stm32: Add coprocessor detach mbox on
+ stm32mp15xx-osd32 SoM
+Content-Language: en-US
+To:     =?UTF-8?Q?Leonard_G=c3=b6hrs?= <l.goehrs@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20230310092650.1007662-1-l.goehrs@pengutronix.de>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20230310092650.1007662-1-l.goehrs@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net-next 0/9] add support for ocelot external ports
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167930401979.16850.3612356547133103899.git-patchwork-notify@kernel.org>
-Date:   Mon, 20 Mar 2023 09:20:19 +0000
-References: <20230317185415.2000564-1-colin.foster@in-advantage.com>
-In-Reply-To: <20230317185415.2000564-1-colin.foster@in-advantage.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        kishon@kernel.org, vkoul@kernel.org, pabeni@redhat.com,
-        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
-        f.fainelli@gmail.com, andrew@lunn.ch, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
-        vladimir.oltean@nxp.com, lee@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 17 Mar 2023 11:54:06 -0700 you wrote:
-> This is the start of part 3 of what is hopefully a 3-part series to add
-> Ethernet switching support to Ocelot chips.
+On 10.03.23 10:26, Leonard Göhrs wrote:
+> To support the detach feature, add a new mailbox channel to inform
+> the remote processor on a detach. This signal allows the remote processor
+> firmware to stop IPC communication and to reinitialize the resources for
+> a re-attach.
 > 
-> Part 1 of the series (A New Chip) added general support for Ocelot chips
-> that were controlled externally via SPI.
-> https://lore.kernel.org/all/20220815005553.1450359-1-colin.foster@in-advantage.com/
+> See 6257dfc1c412dcdbd76ca5fa92c8444222dbe5b0 for a patch that does the
+> same for stm32mp15x-dkx boards.
 > 
-> [...]
+> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
 
-Here is the summary with links:
-  - [v2,net-next,1/9] phy: phy-ocelot-serdes: add ability to be used in a non-syscon configuration
-    https://git.kernel.org/netdev/net-next/c/672faa7bbf60
-  - [v2,net-next,2/9] mfd: ocelot: add ocelot-serdes capability
-    https://git.kernel.org/netdev/net-next/c/c21ff0939d1d
-  - [v2,net-next,3/9] net: mscc: ocelot: expose ocelot_pll5_init routine
-    https://git.kernel.org/netdev/net-next/c/fec53f449458
-  - [v2,net-next,4/9] net: mscc: ocelot: expose generic phylink_mac_config routine
-    https://git.kernel.org/netdev/net-next/c/69f7f89c0db5
-  - [v2,net-next,5/9] net: mscc: ocelot: expose serdes configuration function
-    https://git.kernel.org/netdev/net-next/c/dfca93ed51a7
-  - [v2,net-next,6/9] net: dsa: felix: attempt to initialize internal hsio plls
-    https://git.kernel.org/netdev/net-next/c/3821fd0107b0
-  - [v2,net-next,7/9] net: dsa: felix: allow configurable phylink_mac_config
-    https://git.kernel.org/netdev/net-next/c/544435c9346a
-  - [v2,net-next,8/9] net: dsa: felix: allow serdes configuration for dsa ports
-    https://git.kernel.org/netdev/net-next/c/6865ecee385b
-  - [v2,net-next,9/9] net: dsa: ocelot: add support for external phys
-    https://git.kernel.org/netdev/net-next/c/4c05e5ceecbb
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-You are awesome, thank you!
+Thanks,
+Ahmad
+
+> ---
+>  arch/arm/boot/dts/stm32mp15xx-osd32.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi b/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi
+> index 935b7084b5a2..a43965c86fe8 100644
+> --- a/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp15xx-osd32.dtsi
+> @@ -210,8 +210,8 @@ &ipcc {
+>  &m4_rproc {
+>  	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
+>  			<&vdev0vring1>, <&vdev0buffer>;
+> -	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
+> -	mbox-names = "vq0", "vq1", "shutdown";
+> +	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
+> +	mbox-names = "vq0", "vq1", "shutdown", "detach";
+>  	interrupt-parent = <&exti>;
+>  	interrupts = <68 1>;
+>  	status = "okay";
+> 
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
