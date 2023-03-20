@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F846C1CDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481606C1CE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbjCTQxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S233195AbjCTQxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjCTQwh (ORCPT
+        with ESMTP id S232305AbjCTQxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:52:37 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F014228E57
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:44:29 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id cy23so49109282edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679330667;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FeEIDHoB9o6g2lYpPuZ0KuSMMkKV5X2skedJzB7DuLA=;
-        b=IWEi5HhJ9YeK4NE/eMIWMmkvcPz8PaLg0KjOnS6SKgmjaPsQo/68VVXemONuwDkWL8
-         qOkg0JfkD4GmtiO7ys1NdDCGOBjAPAfPTawe6RMA9EOSMNi4Bnf1goRjIplm6JUyDfHy
-         46sNx13iah4gHoyA0b6JSdyKfMUt/ytOF8P5SYdONZF9AlD5lgjljvmEQmUC4WQ+ZN71
-         LChfi7nlr/EL4iwhl+Rf6iMxlsRdKsna0b3H9wbKRjGzy88Musb04sGtzcW9pKmzI4iD
-         5MQvhdvEFgGbXyPcAluzFYvWgUN12CeBgMlvPgPkKLln2CtfzNV3zaeBGmmA/vC8EAkO
-         ZWbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679330667;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FeEIDHoB9o6g2lYpPuZ0KuSMMkKV5X2skedJzB7DuLA=;
-        b=7AwrVqBoF23887CfL5zS0q7O4OsZdTeRV1YzYsp5z/S/c7fPR5GBFpP+hfTsaF68TX
-         A22U3PpWqCEjsV8hMeTBJCdrMpO+op1C1WWDcKVpqeLPDYlHMa2TqHzpnEGI8Xo2QURy
-         ycmzJelL+lw3+BsFV3DljRrIt7x63CAIooM16IYYqsuqT4FNEa8O+hcI6vaMTybxw+/1
-         +QBJbpOJwCo19bjJ6hJmG8hLJsh2f6e9GxF5ggAxR+q+ChS413K/1PkjR8uiRFHu1K1D
-         GDjZvKCt5Bjdy8jXX4W+t/iaY4jhZSX+ParPT7EcKu6kswr92qGQBuFVEiFe5gaYs3Qr
-         shfQ==
-X-Gm-Message-State: AO0yUKUreTMxCFtfiQXLjVIV5P446otMa/DKI/3jK5wniRT8VV0vHlq6
-        e25cQ9xYOqO+0bcOtEu6ThmA2w==
-X-Google-Smtp-Source: AK7set857BiOBmKTujHh8csYwdRDVe6ekRDoWQXJtebx3wK/eM5YNJR8+TzIzezQsJdWFS3x5aPrSg==
-X-Received: by 2002:a17:906:e87:b0:932:d831:8517 with SMTP id p7-20020a1709060e8700b00932d8318517mr9972153ejf.13.1679330666975;
-        Mon, 20 Mar 2023 09:44:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
-        by smtp.gmail.com with ESMTPSA id l19-20020a170906079300b00932ed432475sm3473631ejc.124.2023.03.20.09.44.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 09:44:26 -0700 (PDT)
-Message-ID: <ea673f62-f462-a559-d0dc-0662efc60f9e@linaro.org>
-Date:   Mon, 20 Mar 2023 17:44:25 +0100
+        Mon, 20 Mar 2023 12:53:02 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC4B18AB4;
+        Mon, 20 Mar 2023 09:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ckSQEj+Igo6tabLZGjCg19IVePPixEan7GCzQanCqbU=; b=Wk4umnnRcEOaVFIf7ADu+HE5Rp
+        Ty/M6muzlTsDwYCRhQaSnyJpOEPT8MsUhdIFp3C58fxA198pS2feoryDteyCdOERgj0fsWjSR8WlQ
+        sn7kbJnD3HAxQ90l3NH6zgDRVRve6IRMqQG+4bmktcKS7k18yHLvqGkevoZM7kldz9OHSsnFrFVpE
+        pNINtb2Sm9S+EDOsdmHNdWELAA6pnoeeUUlLfG5lnWDwlXswY8nhItDws12ymO1HU/zL9kzmjMtuD
+        EXE7sR8zehdCnN8uwRW5A+GgtxUnxAPckmd32xmMFS7wFrtzsry8+wReH3+xkyjFWcWGJkLlDmsJl
+        B3t4toBg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1peIcb-003zlA-1h;
+        Mon, 20 Mar 2023 16:44:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BE7D300288;
+        Mon, 20 Mar 2023 17:44:31 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2242A200A76E5; Mon, 20 Mar 2023 17:44:31 +0100 (CET)
+Date:   Mon, 20 Mar 2023 17:44:31 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>, Xin Li <xin3.li@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com
+Subject: Re: [PATCH v5 22/34] x86/fred: FRED initialization code
+Message-ID: <20230320164431.GQ2194297@hirez.programming.kicks-ass.net>
+References: <20230307023946.14516-1-xin3.li@intel.com>
+ <20230307023946.14516-23-xin3.li@intel.com>
+ <CAJhGHyADXz-3PCFS3M_7TJ8qLGJ=4NcV9aBWrpjemuXB_SnMGg@mail.gmail.com>
+ <5D679723-D84F-42F0-AD8A-8BD1A38FB6CD@zytor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: leds: aw2013: Document vdd-supply
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230320141638.3378-1-linmengbo0689@protonmail.com>
- <20230320142103.3440-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230320142103.3440-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5D679723-D84F-42F0-AD8A-8BD1A38FB6CD@zytor.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 15:22, Lin, Meng-Bo wrote:
-> Document vdd-supply, a regulator providing power to the "VDD" pin.
-> 
+On Fri, Mar 17, 2023 at 02:32:28PM -0700, H. Peter Anvin wrote:
+> The purpose of separate stacks for NMI, #DB and #MC *in the kernel*
+> (remember that user space faults are always taken on stack level 0) is
+> to avoid overflowing the kernel stack. #DB in the kernel would imply
+> the use of a kernel debugger.
 
-No. This device does not have VDD pin. I checked in datasheet.
-
-Best regards,
-Krzysztof
-
+Perf (and through it bpf) also has access to #DB. They can set
+breakpoints on kernel instructions/memory just fine provided permission
+etc.
