@@ -2,172 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D6D6C1CD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8CF6C1CDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbjCTQwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S232101AbjCTQxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbjCTQwP (ORCPT
+        with ESMTP id S232119AbjCTQwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:52:15 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015A73A8A;
-        Mon, 20 Mar 2023 09:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=WyT5pk+JdnVwgOoOQiKG7pJHdKl0DzzKPRLhy5H2GH0=; b=R9vXyQqav0Qp5+OFU6PGanrsAw
-        XtTDDqXQ0q2NlSoz85EE+nc/RSVBwvlSaVG3bMe30ilZptvlzwodBALhuoXxTJtmMLO+tETZ3Mo85
-        jQOddePwuWVpYCEiNSbxo7LMsj8f7/jTQpEM+rZo4Bqr3V6b9lGcPiisqLKKhSnLL0BCIxxwcMfGJ
-        BmuJpieSb0f63HnwgfkeJomgW2GXu/98Ji/mkShDs41lkKdSZs6wFA3fKqXaZS8XWquR0PwEFqckO
-        BoZaz5KmMSzGelq4mrbZKr6lZuNpj2tYp0UYhKdivG/BPKIRTS77cZ1HRRLVdUSBmE8pwmRDZ+yIB
-        BfrG4oEQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1peIaX-000A2h-7W; Mon, 20 Mar 2023 17:42:25 +0100
-Received: from [81.6.34.132] (helo=localhost.localdomain)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1peIaW-0009Og-M2; Mon, 20 Mar 2023 17:42:24 +0100
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix a umin > umax reg bound error
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
- <20230314203424.4015351-2-xukuohai@huaweicloud.com>
- <1331dd9c-4fb0-5347-6519-2b8d2dfea93d@iogearbox.net>
-Message-ID: <9c4c6052-974d-dbea-42dd-42a02c23ba01@iogearbox.net>
-Date:   Mon, 20 Mar 2023 17:42:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 20 Mar 2023 12:52:42 -0400
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BAC2B294
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:44:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679330597; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=h/+PbCZE5l6XCKBrHAhhdQNPbbcbZrIwO4OUE1rQf8sncft0ZctlEScVikknpqW20Ho5CYHEWL2W35J2wvlCkdV4WQgI79twaJgi7CGkn1Hf9/+0VkG68nOFhFTPy/TVpN79TjmwQk/yIz+/xpi5CwsVdb8FDV7l6h8si50VPkI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679330597; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=2NprtxqNiitwbY2F8dbISBFoRDQEsNs4+aP+35cmoTs=; 
+        b=KU77Cl2bnOrMSP9UEoQmtKnEauUir9k8qO3kSwiTgFGNzEJcSedhdLhK7Oh2QwhJiR5ST8G/8DzP9N+Syroo298Vr1Cz2D5JX3fxiN353Y7lTVDVlM0PcLYAeisz11ovGbMLCgluokO3HhiVfE/RM5RDprYkJUD9xb9HrZV0WJc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679330597;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=2NprtxqNiitwbY2F8dbISBFoRDQEsNs4+aP+35cmoTs=;
+        b=V9JUA8ia0cZHiYVePihLYBSm+u/PE2Z19t7LIe8jIUa93oItI1r5Enc1aYw68niz
+        XO3obKHoS0JZniS2QDP9b6LpKgpqzbmHvE5l/gmVuQKcfZQAfWWGSKK8SoECbD3aMBG
+        lpIlrbJqNYWLe1Y8CLd9JNd3lsGfXT7mNIcSONCI=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679330596642147.2366316206377; Mon, 20 Mar 2023 09:43:16 -0700 (PDT)
+Message-ID: <b98429b7-2932-6bd5-39bc-f82c747b4333@arinc9.com>
+Date:   Mon, 20 Mar 2023 19:43:11 +0300
 MIME-Version: 1.0
-In-Reply-To: <1331dd9c-4fb0-5347-6519-2b8d2dfea93d@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-clk@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        john@phrozen.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
 Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26849/Mon Mar 20 08:24:18 2023)
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 11:24 PM, Daniel Borkmann wrote:
-> On 3/14/23 9:34 PM, Xu Kuohai wrote:
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> After commit 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking"),
->> the following bpf prog is rejected:
->>
->> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
->> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
->> 2: (bf) r1 = r2
->> 3: (07) r1 += 1
->> 4: (2d) if r1 > r3 goto pc+8
->> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
->> 6: (18) r0 = 0x7fffffffffffff10
->> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
->> 9: (18) r0 = 0x8000000000000000
->> 11: (07) r0 += 1
->> 12: (ad) if r0 < r1 goto pc-2
->> 13: (b7) r0 = 0
->> 14: (95) exit
->>
->> And the verifier log says:
->>
->> [...]
->>
->> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
->> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 13: safe
->>
->> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
->> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 13: safe
->>
->> [...]
->>
->> What can be seen here is that r1->umin grows blindly and becomes bigger
->> than r1->umax. The reason is because the loop does not terminate, when
->> r0 increases to r1->umax_value, the following code in reg_set_min_max()
->> sets r1->umin_value to r1->umax_value + 1 blindly:
->>
->> case BPF_JGT:
->> {
->>          if (is_jmp32) {
->>                  [...]
->>          } else {
->>                  u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
->>                  u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
->>
->>                  false_reg->umax_value = min(false_reg->umax_value, false_umax);
->>                  true_reg->umin_value = max(true_reg->umin_value, true_umin);
->>          }
->>          break;
->> }
->>
->> Why the loop does not terminate is because tnum_is_const(src_reg->var_off)
->> always returns false, causing is_branch_taken() to be skipped:
->>
->> if (src_reg->type == SCALAR_VALUE &&
->>        !is_jmp32 && tnum_is_const(src_reg->var_off)) {
->>     pred = is_branch_taken(dst_reg,   // could not reach here
->>                    src_reg->var_off.value,
->>                    opcode,
->>                    is_jmp32);
->> }
->>
->> Why tnum_is_const(src_reg->var_off) always returns false is because
->> r1->umin_value starts increasing from 0x7fffffffffffff10, always bigger
->> than U32_MAX, causing the __reg_combine_64_into_32() to mark the lower
->> 32 bits unbounded, i.e. not a constant.
->>
->> To fix it:
->> 1. avoid increasing reg lower bound to a value bigger than the upper bound,
->>     or decreasing reg upper bound to a value smaller than the lower bound.
->> 2. set 32-bit min/max values to the lower 32 bits of the 64-bit min/max values
->>     when the 64-bit min/max values are equal.
+On 20.03.2023 19:36, Krzysztof Kozlowski wrote:
+> On 20/03/2023 17:18, Sergio Paracuellos wrote:
+>> Adds device tree binding documentation for clocks and resets in the
+>> Mediatek MIPS and Ralink SOCs. This covers RT2880, RT3050, RT3052, RT3350,
+>> RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
 > 
-> Should both these be separate patches, meaning are both of them strictly
-> required as one logical entity or not? From your description it's not really
-> clear wrt reg_{inc,dec}_{u32,u64}_{min,max} and if this is mainly defensive
-> or required.
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+> 
+> Subject: drop second/last, redundant "device tree binding
+> documentation". The "dt-bindings" prefix is already stating that these
+> are bindings.
+> (BTW, that's the longest redundant component I ever saw)
+> 
+>>
+>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>> ---
+>>   .../bindings/clock/mtmips-clock.yaml          | 68 +++++++++++++++++++
+>>   1 file changed, 68 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/clock/mtmips-clock.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/mtmips-clock.yaml b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
+>> new file mode 100644
+>> index 000000000000..c92969ce231d
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
+> 
+> Filename matching compatible, so vendor prefix and device name (or
+> family of names).
 
-Fyi, I'm working on the below draft patch which passes all of test_verifier and
-your test cases as well from patch 2. Will cook a proper patch once I'm through
-with further analysis:
+I influenced Sergio to use MTMIPS here as I want to designate it the 
+family name for the MediaTek MIPS and Ralink SoCs. We can't change the 
+compatible string as it's established from my pinctrl patch series we 
+don't do that.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d517d13878cf..8bef2ed89e87 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1823,7 +1823,7 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
-         struct tnum var64_off = tnum_intersect(reg->var_off,
-                                                tnum_range(reg->umin_value,
-                                                           reg->umax_value));
--       struct tnum var32_off = tnum_intersect(tnum_subreg(reg->var_off),
-+       struct tnum var32_off = tnum_intersect(tnum_subreg(var64_off),
-                                                 tnum_range(reg->u32_min_value,
-                                                            reg->u32_max_value));
+Arınç
