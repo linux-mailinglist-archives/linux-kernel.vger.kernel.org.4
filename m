@@ -2,204 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92C06C1A54
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4B16C1A55
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbjCTPuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S232172AbjCTPu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjCTPtj (ORCPT
+        with ESMTP id S233114AbjCTPtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:49:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079311E92
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:41:12 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1peHd3-0003kL-Nu; Mon, 20 Mar 2023 16:40:57 +0100
-Received: from pengutronix.de (unknown [IPv6:2a00:20:c01f:3d56:6ab1:6a2f:e979:45b0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 193DD197A1C;
-        Mon, 20 Mar 2023 15:40:55 +0000 (UTC)
-Date:   Mon, 20 Mar 2023 16:40:53 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
-        skhan@linuxfoundation.org,
-        syzbot+c9bfd85eca611ebf5db1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] FS, NET: Fix KMSAN uninit-value in vfs_write
-Message-ID: <20230320154053.x3h54b2s3r7iclby@pengutronix.de>
-References: <20230314120445.12407-1-ivan.orlov0322@gmail.com>
- <0e7090c4-ca9b-156f-5922-fd7ddb55fee4@hartkopp.net>
- <ff0a4ed4-9fde-7a9f-da39-d799dfb946f1@gmail.com>
- <b4abefa2-16d0-a18c-4614-1786eb94ffab@hartkopp.net>
+        Mon, 20 Mar 2023 11:49:45 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2B94484;
+        Mon, 20 Mar 2023 08:41:22 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679326880;
+        bh=HEy3v+RR70w+a7+c3eh2YZR6p30gJnTpTFORFe8VIEI=;
+        h=From:Subject:Date:To:Cc:From;
+        b=nGNOK8CeDsVx2fMzR+QypyAeX6isAJW7ZjyX3OWtR6Zt0CXKLgYQNvKucKvm1gZM8
+         7pdBSFp7MfsmKZe8XqBhT86Npi4pleyFjS04hbfsmfQe1z8yQD6knjz+yw3tpoTbe0
+         mnWZAcanh6CsnlytO3h++ZCBkz5lRREs06ZdAAqw=
+Subject: [PATCH v2 0/8] tools/nolibc: add support for stack protector
+Date:   Mon, 20 Mar 2023 15:41:00 +0000
+Message-Id: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p67maiohpxc2m32e"
-Content-Disposition: inline
-In-Reply-To: <b4abefa2-16d0-a18c-4614-1786eb94ffab@hartkopp.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI1+GGQC/4WNSwrCMBQAr1KyNtIklRZX3kO6yOfFPCxJyUurU
+ np3Yy/gcgaG2RhBRiB2bTaWYUXCFCvIU8Ns0PEBHF1lJlupWikVj2lCYzkVbZ9zTgVsSZm7zl1
+ 8N3jf94LV1mgCbrKONtQ6LtNU5ZzB4/uY3cfKAam2n+O9ip/9t1kFb7mCvnODMMpLcXsBEpENS
+ zhHKGzc9/0LwWy0GNQAAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326877; l=2615;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=HEy3v+RR70w+a7+c3eh2YZR6p30gJnTpTFORFe8VIEI=;
+ b=C7AOi+lgXBPeINSgzKlo1KMxZgZHKMecHalkVsYS98wdSkCFiyVkexc3v2Acluzpa/vAC5tIq
+ +ptBs7+Jz4RC+4+wrSW4he5ZEMh9+hmR4fArciX6Xb53Yi2hp3VegHk
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is useful when using nolibc for security-critical tools.
+Using nolibc has the advantage that the code is easily auditable and
+sandboxable with seccomp as no unexpected syscalls are used.
+Using compiler-assistent stack protection provides another security
+mechanism.
 
---p67maiohpxc2m32e
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For this to work the compiler and libc have to collaborate.
 
-On 14.03.2023 20:23:47, Oliver Hartkopp wrote:
->=20
->=20
-> On 14.03.23 16:37, Ivan Orlov wrote:
-> > On 3/14/23 18:38, Oliver Hartkopp wrote:
-> > > Hello Ivan,
-> > >=20
-> > > besides the fact that we would read some uninitialized value the
-> > > outcome of the original implementation would have been an error and
-> > > a termination of the copy process too. Maybe throwing a different
-> > > error number.
-> > >=20
-> > > But it is really interesting to see what KMSAN is able to detect
-> > > these days! Many thanks for the finding and your effort to
-> > > contribute this fix!
-> > >=20
-> > > Best regards,
-> > > Oliver
-> > >=20
-> > >=20
-> > > On 14.03.23 13:04, Ivan Orlov wrote:
-> > > > Syzkaller reported the following issue:
-> > >=20
-> > > (..)
-> > >=20
-> > > >=20
-> > > > Reported-by: syzbot+c9bfd85eca611ebf5db1@syzkaller.appspotmail.com
-> > > > Link: https://syzkaller.appspot.com/bug?id=3D47f897f8ad958bbde5790e=
-bf389b5e7e0a345089
-> > > > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-> > >=20
-> > > Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> > >=20
-> > >=20
-> > > > ---
-> > > > =C2=A0 net/can/bcm.c | 16 ++++++++++------
-> > > > =C2=A0 1 file changed, 10 insertions(+), 6 deletions(-)
-> > > >=20
-> > > > diff --git a/net/can/bcm.c b/net/can/bcm.c
-> > > > index 27706f6ace34..a962ec2b8ba5 100644
-> > > > --- a/net/can/bcm.c
-> > > > +++ b/net/can/bcm.c
-> > > > @@ -941,6 +941,8 @@ static int bcm_tx_setup(struct bcm_msg_head
-> > > > *msg_head, struct msghdr *msg,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 cf =3D op->frames + op->cfsiz * i;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 err =3D memcpy_from_msg((u8 *)cf, msg, op->cfsiz);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- if (err < 0)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 goto free_op;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 if (op->flags & CAN_FD_FRAME) {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cf->len > 64)
-> > > > @@ -950,12 +952,8 @@ static int bcm_tx_setup(struct bcm_msg_head
-> > > > *msg_head, struct msghdr *msg,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D -EINVA=
-L;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 }
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- if (err < 0) {
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 if (op->frames !=3D &op->sframe)
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->frames);
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op);
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 return err;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- }
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- if (err < 0)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 goto free_op;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 if (msg_head->flags & TX_CP_CAN_ID) {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* copy can_id into frame */
-> > > > @@ -1026,6 +1024,12 @@ static int bcm_tx_setup(struct
-> > > > bcm_msg_head *msg_head, struct msghdr *msg,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bcm_tx_start=
-_timer(op);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return msg_head->nframes * op->cfsiz=
- + MHSIZ;
-> > > > +
-> > > > +free_op:
-> > > > +=C2=A0=C2=A0=C2=A0 if (op->frames !=3D &op->sframe)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->frames);
-> > > > +=C2=A0=C2=A0=C2=A0 kfree(op);
-> > > > +=C2=A0=C2=A0=C2=A0 return err;
-> > > > =C2=A0 }
-> > > > =C2=A0 /*
-> >=20
-> > Thank you for the quick answer! I totally agree that this patch will not
-> > change the behavior a lot. However, I think a little bit more error
-> > processing will not be bad (considering this will not bring any
-> > performance overhead). If someone in the future tries to use the "cf"
-> > object right after "memcpy_from_msg" call without proper error
-> > processing it will lead to a bug (which will be hard to trigger). Maybe
-> > fixing it now to avoid possible future mistakes in the future makes
-> > sense?
->=20
-> Yes! Definitely!
->=20
-> Therefore I added my Acked-by: tag. Marc will likely pick this patch for
-> upstream.
+This patch adds the following parts to nolibc that are required by the
+compiler:
 
-Can you create a proper Fixes tag?
+* __stack_chk_guard: random sentinel value
+* __stack_chk_fail: handler for detected stack smashes
 
-Marc
+In addition an initialization function is added that randomizes the
+sentinel value.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Only support for global guards is implemented.
+Register guards are useful in multi-threaded context which nolibc does
+not provide support for.
 
---p67maiohpxc2m32e
-Content-Type: application/pgp-signature; name="signature.asc"
+Link: https://lwn.net/Articles/584225/
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Code and comments style fixes
+- Only use raw syscalls in stackprotector functions
+- Remove need for dedicated entrypoint and exec() during tests
+- Add more rationale
+- Shuffle some code around between commits
+- Provide compatibility with the -fno-stack-protector patch
+- Remove RFC status
+- Link to v1: https://lore.kernel.org/r/20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQYfnoACgkQvlAcSiqK
-BOgJHggAs4kxDY/WxmiaOlQ4jg5qtMM36yenwMmqwGTbSHRs6ShzX/B8pK7R9XQA
-Z3VLNf9gc8MqivXTSF9tbSfPQPOadGoCVAjUc4UNN9AacC9gcYA30wM3m7REYX3Q
-qsud6oe/nyrnAOens7bprqUJnRX1W/qKPhJZ6hs/IlIuuRFCxvuzMqj8X0JvEPIm
-51d7WPCfcVQsUrEaad7W0QLxdjreX61mtRWyDY9p1HS9kBt7n0wHToMizWMOtPjQ
-lu3outarT8zLrAHaV6CPJ8v3lgtrhC4JPzcXhh5AsPtp0wAUjxedYqaxV+d/2Z4h
-mR8ip99WHeYPrbWhxXB9xGfM3hIV+A==
-=sdPM
------END PGP SIGNATURE-----
+This series is based on the current rcu/dev branch of Pauls rcu tree.
 
---p67maiohpxc2m32e--
+---
+Thomas Weißschuh (8):
+      tools/nolibc: add definitions for standard fds
+      tools/nolibc: add helpers for wait() signal exits
+      tools/nolibc: tests: constify test_names
+      tools/nolibc: add support for stack protector
+      tools/nolibc: tests: fold in no-stack-protector cflags
+      tools/nolibc: tests: add test for -fstack-protector
+      tools/nolibc: i386: add stackprotector support
+      tools/nolibc: x86_64: add stackprotector support
+
+ tools/include/nolibc/Makefile                |  4 +-
+ tools/include/nolibc/arch-i386.h             |  7 ++-
+ tools/include/nolibc/arch-x86_64.h           |  5 +++
+ tools/include/nolibc/nolibc.h                |  1 +
+ tools/include/nolibc/stackprotector.h        | 53 +++++++++++++++++++++++
+ tools/include/nolibc/types.h                 |  2 +
+ tools/include/nolibc/unistd.h                |  5 +++
+ tools/testing/selftests/nolibc/Makefile      | 11 ++++-
+ tools/testing/selftests/nolibc/nolibc-test.c | 64 ++++++++++++++++++++++++++--
+ 9 files changed, 144 insertions(+), 8 deletions(-)
+---
+base-commit: a9b8406e51603238941dbc6fa1437f8915254ebb
+change-id: 20230223-nolibc-stackprotector-d4d5f48ff771
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
