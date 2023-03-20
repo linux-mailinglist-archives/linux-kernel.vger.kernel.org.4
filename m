@@ -2,111 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DEC6C22CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCD56C22D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCTUeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S229998AbjCTUgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCTUeO (ORCPT
+        with ESMTP id S229670AbjCTUgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:34:14 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC373468A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:34:04 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 2F1AC5FD10;
-        Mon, 20 Mar 2023 23:34:00 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679344440;
-        bh=DFzqPpTMUf1xZTOArO7q4XeqATyxAxZahKRgAMFPTfk=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=f+o/ipMrcwfkV861m/R4vi8KJqdlVx8zDL93KbIu7iq/WT5JYU/kyUuuXSjGOPI87
-         1w6m6BgdERW1NvOQdZoFs0/o/QJh4sr5CaLPRLnPt77yWNS0MN5rww7SDIbZCh+K91
-         lgc6jtdQn/kgPSuygaPw8cwkHi2V7Qp3ImowHKzqJZIoJQNV2AkiyINCl/7eYKXq1n
-         o7qhg/jTyG/UrlMNA5tBq5/GyPxWOFB5+wj6q9yXtM7zNUn31YDseQzUF7mVLvCVlJ
-         ddPTqBjpuVCBFyCXbuNkiVUtJbDDPFykn4aAcj701tvFnUHmdVelde9aWY6zSTqhjc
-         gNcNRikgXlNbQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 20 Mar 2023 23:33:58 +0300 (MSK)
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
-        <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
-        <lukas.bulwahn@gmail.com>
-CC:     <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
-        <rockosov@gmail.com>, Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v3] checkpatch: add missing bindings license check
-Date:   Mon, 20 Mar 2023 23:33:50 +0300
-Message-ID: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
+        Mon, 20 Mar 2023 16:36:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABEEA253
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679344559; x=1710880559;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XsI54tRIC2yyLGKG7ZmZAaYYUDtiaowqXj/qk8ckWTM=;
+  b=RavBrUY73E55ISIVixkw4vSHAHTVNiZddFBfamW3o+guGE4SNo6GrlHt
+   2/82Ndby5c6FgzJenHAIx2kBg2Gdr3f2prMFZaoX/cepakgR3xn4E3Kqc
+   zxg6BLmvo1+8ZLHP6Zr2Nm7fa7NoUekWcPn0/nbZVP7dC1fwSNq1Ycn+U
+   pgUsM1AFObJ2advEPpAtIQjCyY9nvRJ7+h57CdaVEuglKlv80D2m8UgMu
+   3m2zW8JMA3a2cpZ0m2ZUjCOnsjcOzIFR14L3b8KPcdmANPwTkakHrGpmX
+   Xzik/Fl8Fo6vWkC5ojQiyvndxLaWx6LUcwtUfk1SZel6CxeknaZ6RjVdq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="318424153"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="318424153"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:35:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="681223512"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="681223512"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 20 Mar 2023 13:35:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peMEW-000BIQ-0J;
+        Mon, 20 Mar 2023 20:35:56 +0000
+Date:   Tue, 21 Mar 2023 04:34:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viktor Prutyanov <viktor@daynix.com>, mst@redhat.com,
+        jasowang@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
+Subject: Re: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+Message-ID: <202303210449.m2ERQJXB-lkp@intel.com>
+References: <20230320115451.1232171-1-viktor@daynix.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/20 09:56:00 #20977321
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320115451.1232171-1-viktor@daynix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All headers from 'include/dt-bindings/' must be verified by checkpatch
-together with Documentation bindings, because all of them are part of
-the whole DT bindings system.
+Hi Viktor,
 
-The requirement is dual licensed and matching pattern:
-    /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+Thank you for the patch! Perhaps something to improve:
 
-The issue was found during patch review:
-https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
-Changes v3 since v2 at [2]:
-    - replace 'not =~' expression with '!~' to be aligned with other
-      checkpatch lines
+url:    https://github.com/intel-lab-lkp/linux/commits/Viktor-Prutyanov/virtio-add-VIRTIO_F_NOTIFICATION_DATA-feature-support/20230320-195725
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20230320115451.1232171-1-viktor%40daynix.com
+patch subject: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+config: nios2-randconfig-s051-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210449.m2ERQJXB-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/b6212a12ca1691dc346e5de046ec46bd3ce11247
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Viktor-Prutyanov/virtio-add-VIRTIO_F_NOTIFICATION_DATA-feature-support/20230320-195725
+        git checkout b6212a12ca1691dc346e5de046ec46bd3ce11247
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/virtio/
 
-Changes v2 since v1 at [1]:
-    - include/dt-bindings check is aligned to open parens
-    - introduce more strict pattern for bindings license:
-      /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210449.m2ERQJXB-lkp@intel.com/
 
-Links:
-    [1] https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
-    [2] https://lore.kernel.org/all/20230320100027.27788-1-ddrokosov@sberdevices.ru/
----
- scripts/checkpatch.pl | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/virtio/virtio_mmio.c:293:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] data @@
+   drivers/virtio/virtio_mmio.c:293:16: sparse:     expected unsigned int [usertype] value
+   drivers/virtio/virtio_mmio.c:293:16: sparse:     got restricted __le32 [usertype] data
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 78cc595b98ce..65db3d2518a7 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3709,8 +3709,9 @@ sub process {
- 						WARN("SPDX_LICENSE_TAG",
- 						     "'$spdx_license' is not supported in LICENSES/...\n" . $herecurr);
- 					}
--					if ($realfile =~ m@^Documentation/devicetree/bindings/@ &&
--					    not $spdx_license =~ /GPL-2\.0.*BSD-2-Clause/) {
-+					if (($realfile =~ m@^Documentation/devicetree/bindings/@ ||
-+					     $realfile =~ m@^include/dt-bindings/@) &&
-+					    $spdx_license !~ /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/) {
- 						my $msg_level = \&WARN;
- 						$msg_level = \&CHK if ($file);
- 						if (&{$msg_level}("SPDX_LICENSE_TAG",
+vim +293 drivers/virtio/virtio_mmio.c
+
+   287	
+   288	static bool vm_notify_with_data(struct virtqueue *vq)
+   289	{
+   290		struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
+   291		__le32 data = vring_fill_notification_data(vq);
+   292	
+ > 293		writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
+   294	
+   295		return true;
+   296	}
+   297	
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
