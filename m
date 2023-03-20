@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DDD6C11FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69AC6C1200
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjCTMgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S231251AbjCTMhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCTMgg (ORCPT
+        with ESMTP id S230094AbjCTMhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:36:36 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B024EC7E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:36:34 -0700 (PDT)
+        Mon, 20 Mar 2023 08:37:32 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4C71969A;
+        Mon, 20 Mar 2023 05:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679315794; x=1710851794;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679315851; x=1710851851;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=c4fTS22EntYkPyJ7LZfkV/isNWtd+bG5rciJpOFRr08=;
-  b=K8S/meiHCef0KXxFjipXW3PVKvD7bOC7PkFKfRIXtFe34+M5HeOKaFen
-   Dvyae5xwb2E/mRyzH/m4dquSaUw+IaLQkxLdkZUuMiDkaI02A1B36Y5gW
-   K2TqcFqp0JgIcFcLqhNW0qGn8rk4SCS1MH/Vv35KpiyMyTz6XK9b8wf0V
-   qM89T8vo70b/8FScuUJSK2HpJoohbWIItVALHV6RGTLX5f8V7aBBNAJOy
-   W3TLzC91XOn2wjHu8utaV53IGRqp4Zgm2wv6Bql/J6E30/qstoXtquUF6
-   lr843GA+1zcNUrr9leNNa1tqaPZGUCwYQNqGC4IVgvLeyW9Qlhovsxyoq
+  bh=shwS6H2yP9WzS83JZYbQSKXmDnL0qqKc0EicSPK/i74=;
+  b=mriRx1s63iuLPJYbe8U9En9EOIlxHLfbXVapTMDjPsqAhv7HAidG/5B3
+   GfgSINxFPdv2yWEBwX7SxDmUWLQloyi+rsN5nbJtCaR0YyWaESvWg/dy8
+   OgLcNR45nDvQlYLBMJ5G6P98sffCjCyfO3QExabtZf63OvQSh0xkVE7kF
+   yGtHNcTNoqQYu+z7vlD+jZHo2qXs/4/3jr+eybYlXr16jGrcoaVWl12s8
+   CJdVNQPadv4NuceXNpIcLKTW78x8VBsUwj/rRlsY3idk9HybruRJ9Zk3u
+   39Yl0NtI0vwdC55CEVhfXzjG1V4jeOX3fnBShWFDQ7zp4a4VmW4/Mkp12
    Q==;
-X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
-   d="asc'?scan'208";a="217085399"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 05:36:33 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 05:36:33 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 20 Mar 2023 05:36:31 -0700
-Date:   Mon, 20 Mar 2023 12:36:02 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Sia Jee Heng <jeeheng.sia@starfivetech.com>
-CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <leyfoon.tan@starfivetech.com>,
-        <mason.huo@starfivetech.com>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH v6 2/4] RISC-V: Factor out common code of
- __cpu_resume_enter()
-Message-ID: <e4cbdcec-585b-4e82-8f74-3799592b1308@spud>
-References: <20230314050316.31701-1-jeeheng.sia@starfivetech.com>
- <20230314050316.31701-3-jeeheng.sia@starfivetech.com>
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="403519053"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="403519053"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 05:37:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="658326017"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="658326017"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2023 05:37:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1peElT-006Gab-18;
+        Mon, 20 Mar 2023 14:37:27 +0200
+Date:   Mon, 20 Mar 2023 14:37:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tharunkumar.Pasumarthi@microchip.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH i2c-master] i2c: microchip: pci1xxxx: Update Timing
+ registers
+Message-ID: <ZBhThvAm8yAEbNtS@smile.fi.intel.com>
+References: <20230316033223.2046359-1-tharunkumar.pasumarthi@microchip.com>
+ <ZBL6JWXKCLsLyNzn@smile.fi.intel.com>
+ <PH7PR11MB5958DE8BDC2B824B4961379A9B839@PH7PR11MB5958.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="87p31Ihj7t7GhMZ6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314050316.31701-3-jeeheng.sia@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <PH7PR11MB5958DE8BDC2B824B4961379A9B839@PH7PR11MB5958.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,21 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---87p31Ihj7t7GhMZ6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Sun, Mar 19, 2023 at 02:42:37PM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Thursday, March 16, 2023 4:45 PM
+> > To: Tharunkumar Pasumarthi - I67821
+> > <Tharunkumar.Pasumarthi@microchip.com>
+> > 
+> > On Thu, Mar 16, 2023 at 09:02:23AM +0530, Tharun Kumar P wrote:
+> > > Update I2C timing registers based on latest hardware design.
+> > 
+> > What about older designs?
+> 
+> Older design is updated due to a bug. No future changes are expected in the timing registers going forward.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Do you have customers for the older designs in the wild?
 
---87p31Ihj7t7GhMZ6
-Content-Type: application/pgp-signature; name="signature.asc"
+P.S> All this has to be mentioned in the commit message to assure maintainers
+that you are not going to break things for the existing users.
 
------BEGIN PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBhTMgAKCRB4tDGHoIJi
-0tVZAQCD0PqDy7i1j0jcRVMZZCw3usZtoykmyLeexRgU5oeodgD/bJEqeA2/L9nK
-fgWqwx5DPJAzeU6xjtUxnyEon3UxJgc=
-=sH0e
------END PGP SIGNATURE-----
 
---87p31Ihj7t7GhMZ6--
