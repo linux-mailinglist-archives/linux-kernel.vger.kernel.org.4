@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650FC6C2515
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF2D6C254F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjCTXAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S229885AbjCTXAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjCTXAJ (ORCPT
+        with ESMTP id S229635AbjCTXAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:00:09 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9902B193D5;
-        Mon, 20 Mar 2023 16:00:08 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMxxW1074559;
-        Mon, 20 Mar 2023 17:59:59 -0500
+        Mon, 20 Mar 2023 19:00:52 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9E483CE;
+        Mon, 20 Mar 2023 16:00:51 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KN0idr024180;
+        Mon, 20 Mar 2023 18:00:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679353199;
-        bh=71EY7V9kl8VznXN41MHsmUqEwx9Sj/qvjwupG52J4JQ=;
+        s=ti-com-17Q1; t=1679353244;
+        bh=RQOIEpCSGYjhwGa7ZpvSmcbm5++KjQDdyIMwuBvzfPg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=K6RgknibzeoP2IGVkc3N4ca4YMWH6Zzq382Sxj3J0UTaM/8/JWbWKQOD4l9EZ7UVh
-         ogjW+XIzYWHIDka+olK9IUGCzq8Ni+v9R7SWT4EvGuN2TGr3rfo4u0ehGV00Mab5k2
-         vLKuyFGjmpXEKRnelM3B3gyV/dhCIJ7qTmpksP4E=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMxxYB046414
+        b=w75XUw1UDclBUMUud0wsCvVk+PTI4agX7owjXXq17FA7yZO0at+pgeFje0RPZbNDM
+         YlV++jYfoVWFWmTZ3J2TppyQUbKFInm83lrDv2iycSOfLkFC5o5/4K/VezL40oK2IV
+         vNEFTmjhQTvXaMkjqZGlGrpUyzvGIiXNAVsqepgw=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KN0ijn104946
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 17:59:59 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 20 Mar 2023 18:00:44 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 17:59:58 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 18:00:44 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 17:59:58 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMxwNX022163;
-        Mon, 20 Mar 2023 17:59:58 -0500
+ Frontend Transport; Mon, 20 Mar 2023 18:00:44 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KN0iGg096961;
+        Mon, 20 Mar 2023 18:00:44 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski@linaro.org>,
@@ -48,12 +48,12 @@ To:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
 CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
-Subject: Re: [PATCH v2] arm64: dts: ti: k3-j784s4-evm: Enable MCU CPSW2G
-Date:   Mon, 20 Mar 2023 17:59:57 -0500
-Message-ID: <167935317752.215003.7431774729095480986.b4-ty@ti.com>
+Subject: Re: [PATCH v3 0/4] Add DT support for J721E CPSW9G and J7200 CPSW5G
+Date:   Mon, 20 Mar 2023 18:00:43 -0500
+Message-ID: <167935322172.215185.12851063500203208364.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230315042548.1500528-1-s-vadapalli@ti.com>
-References: <20230315042548.1500528-1-s-vadapalli@ti.com>
+In-Reply-To: <20230315062307.1612220-1-s-vadapalli@ti.com>
+References: <20230315062307.1612220-1-s-vadapalli@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -69,16 +69,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Siddharth Vadapalli,
 
-On Wed, 15 Mar 2023 09:55:48 +0530, Siddharth Vadapalli wrote:
-> Add device tree support to enable MCU CPSW with J784S4 EVM.
+On Wed, 15 Mar 2023 11:53:03 +0530, Siddharth Vadapalli wrote:
+> This series adds the device-tree nodes for the CPSW9G instance of CPSW
+> Ethernet Switch on TI's J721E SoC and the CPSW5G instance of CPSW
+> Ethernet Switch on TI's J7200 SoC. Additionally, overlays are also added
+> to individually enable CPSW9G on J721E SoC and CPSW5G on J7200 SoC in
+> QSGMII mode with the Add-On J7 QUAD Port Ethernet expansion QSGMII
+> daughtercard.
 > 
-> 
+> [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/1] arm64: dts: ti: k3-j784s4-evm: Enable MCU CPSW2G
-      commit: 6cd4b7cfbcca4a45f06a8031f299c4019221a4ce
+[1/4] arm64: dts: ti: k3-j721e: Add CPSW9G nodes
+      commit: a2ff7f1108f6eeaa73a60378ed891b634a3bba61
+[2/4] arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports in QSGMII mode
+      commit: 86e7de8bf908a03ac8fba4afeef25c54a1c2ef4a
+[3/4] arm64: dts: ti: j7200-main: Add CPSW5G nodes
+      commit: d3bac98015da55866891054a2aeb42af7904fca8
+[4/4] arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII mode
+      commit: 496cdc82e05f5683cdca5ab157938091e7744c95
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
