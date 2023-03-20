@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E161F6C0F9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E533E6C0FF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjCTKsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S230167AbjCTK7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjCTKsG (ORCPT
+        with ESMTP id S230322AbjCTK6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:48:06 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632D26CE3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:45:50 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id l12so9840210wrm.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679309057;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=MGEZCQ150WLMwboCRH3jhHI9TWpdx3QCBwHBAGlQva8=;
-        b=n2/0i2L0Dz4SRvTTNgGnznlHXJo0b4MZGU5NGLIgSNHRwOAHRjImLnm+6DrTRGFq93
-         gokQPiOIeusC9nZf4aiHUwrXexNyFRkSTDZVoHVdeMstDOfau8kJEBQ/5tA99KbYedgD
-         Y5sRh8B/PNF8Mr3SS/w2o4bD8Ld5lVNwYhEKo1QeZSaRNhzy6AsPUMWjXrFUOVRjX2bt
-         KODRrfw7su6HFPR7Lei+5Td41sl6u+tI3T5Q403vrfkLlg/G0mb9IMVv/n5SFu6BllQi
-         qWsRe506okSNSdx8NWAqW2u6dRNAMOUSDf89e1gn1dhoVa9OlQX8fWsheVGdFTEtv1Jo
-         zZJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679309057;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MGEZCQ150WLMwboCRH3jhHI9TWpdx3QCBwHBAGlQva8=;
-        b=U3+yXdAEQelJCCVVMSBzvv47LUaW69bTqrCHUFCqxA+yLQof3d2AYn/+yX9IywvQEq
-         ljjAfsJhDxq2L2Ki0Aw7RnZSNMAFV746/N303EaOtR3hpQX7kXLWfi9a8cS+8MX6Kzhk
-         AqHDN2lnWfdFtAyKENf1cI5QBa1RAxGNyU8co4PthrdIRMlvlwTzBwfb5x5H0PxnjyLJ
-         xyeGTBvODY/mi1Hf1DU4XkSOwgwoN7tlQHnA4ltSi2RSsfzWpb45XeYn6mLOmyW5HkJJ
-         ji2MuiznAHmOJmpg3ICkxy7hQtTLquuTRilji9t8KB80PJsoXW/E8QTszNssnJuQXjpW
-         mkXA==
-X-Gm-Message-State: AO0yUKXnvTSaCJP3vNN3kTOhTwaH6H4WtB1hOL4dw7kQr1s5v0l5EVcr
-        lD1YA3q5zqldbJLgtjxjJDN3HA==
-X-Google-Smtp-Source: AK7set8ws1fvI/lQ/aLItuJCYxfZJ340DRxEnPFrM8z3p+AXst2wtKtiztvyfSGEkh6pYlpHvg2pgQ==
-X-Received: by 2002:a05:6000:1144:b0:2c7:a3c:5bd6 with SMTP id d4-20020a056000114400b002c70a3c5bd6mr13422741wrx.52.1679309056890;
-        Mon, 20 Mar 2023 03:44:16 -0700 (PDT)
-Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id c15-20020adffb0f000000b002c6e8cb612fsm8537741wrr.92.2023.03.20.03.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:44:16 -0700 (PDT)
-Message-ID: <afc44c13-0863-d1de-df03-30b83f5a015a@linaro.org>
-Date:   Mon, 20 Mar 2023 11:44:15 +0100
+        Mon, 20 Mar 2023 06:58:06 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1BC13D6C;
+        Mon, 20 Mar 2023 03:54:54 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32K8OlqD017738;
+        Mon, 20 Mar 2023 10:45:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=wOFEbWs9Cw33LhoI4x7uWEBuX97sD4JEm+1a7zgmROw=;
+ b=LvoB6rv/ZdFR0D6QdmjdVP8KS3MlnGIGq6rWURgHAKwDj2VXjPjAfwZg/TQX4355kmXO
+ vkGtD385GB3JPE1XE+ySkD1LWWIbJ+VENwMgGw/Yg2X/qELMLdCV/emK+Lj0X2fPs2Ee
+ clRgkd9TxQCUAJRDpc7SAw7UG0lyGzmwKqOSozdpK10F/5xvyHh0jvt8HB8M75OPie1/
+ Nk4yruJayZJo7FvKWPB7AWuA5+KUjEnmj05UCu8PcHfByTTS4ESff4/XCEYdikgZDv4G
+ 1c08TkNykp38jqNfdTqtZ2AkKs6UfOik5yy4mHSeTVGM6DhgveV507IC6rbowotg8/12 lQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3peg57ru01-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 10:45:50 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32KAjmh5023616
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 10:45:48 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 20 Mar 2023 03:45:44 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V2 0/2] Add few device nodes for IPQ5332 SoC
+Date:   Mon, 20 Mar 2023 16:15:28 +0530
+Message-ID: <20230320104530.30411-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] drm/bridge: nwl-dsi: fix packet read ISR handling
-Content-Language: en-US
-To:     Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230318223621.4239-1-kgroeneveld@lenbrook.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230318223621.4239-1-kgroeneveld@lenbrook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4df9pUOpMs9NWn9PQR7hz6ehNyp8yeqq
+X-Proofpoint-GUID: 4df9pUOpMs9NWn9PQR7hz6ehNyp8yeqq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_06,2023-03-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 clxscore=1015 phishscore=0 mlxlogscore=644
+ priorityscore=1501 mlxscore=0 suspectscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303200090
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds the support for QUP peripherals, PRNG, WDT for IPQ5332
+SoC.
 
-On 18/03/2023 23:36, Kevin Groeneveld wrote:
-> In some cases the NWL_DSI_RX_PKT_PAYLOAD_DATA_RCVD interrupt flag is not
-> set along with NWL_DSI_RX_PKT_HDR_RCVD when the initial interrupt fires.
-> Since the NWL_DSI_RX_PKT_PAYLOAD_DATA_RCVD_MASK was not set then the ISR
-> does not fire again when NWL_DSI_RX_PKT_PAYLOAD_DATA_RCVD is finally set
-> and the read times out.
-> 
-> Also the read packet handling checks for NWL_DSI_DPHY_DIRECTION which is
-> not always set when the ISR for reading the payload runs. Instead it seems
-> better to check xfer->direction is DSI_PACKET_RECEIVE (more similar to the
-> send packet case).
-> 
-> The above two changes were required to perform a successful DCS read from
-> a display with a Chipone ICNL9707 driver IC.
-> 
-> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+This series depends on the below patch, due to the node ordering
+https://lore.kernel.org/linux-arm-msm/20230217083308.12017-6-quic_kathirav@quicinc.com/#t
 
+Kathiravan T (2):
+  dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq5332 compatible
+  arm64: dts: qcom: ipq5332: add few device nodes
 
-Thanks for the patch, can you provide a Fixes tag ?
+ .../bindings/watchdog/qcom-wdt.yaml           |  1 +
+ arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts   | 14 ++++
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         | 67 +++++++++++++++++++
+ 3 files changed, 82 insertions(+)
 
-Neil
-
-> ---
->   drivers/gpu/drm/bridge/nwl-dsi.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-> index 6dc2a4e191d7..241568a17f60 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -334,6 +334,7 @@ static int nwl_dsi_init_interrupts(struct nwl_dsi *dsi)
->   {
->   	u32 irq_enable = ~(u32)(NWL_DSI_TX_PKT_DONE_MASK |
->   				NWL_DSI_RX_PKT_HDR_RCVD_MASK |
-> +				NWL_DSI_RX_PKT_PAYLOAD_DATA_RCVD_MASK |
->   				NWL_DSI_TX_FIFO_OVFLW_MASK |
->   				NWL_DSI_HS_TX_TIMEOUT_MASK);
->   
-> @@ -489,7 +490,7 @@ static void nwl_dsi_finish_transmission(struct nwl_dsi *dsi, u32 status)
->   	    status & NWL_DSI_TX_PKT_DONE) {
->   		xfer->status = xfer->tx_len;
->   		end_packet = true;
-> -	} else if (status & NWL_DSI_DPHY_DIRECTION &&
-> +	} else if (xfer->direction == DSI_PACKET_RECEIVE &&
->   		   ((status & (NWL_DSI_RX_PKT_HDR_RCVD |
->   			       NWL_DSI_RX_PKT_PAYLOAD_DATA_RCVD)))) {
->   		end_packet = nwl_dsi_read_packet(dsi, status);
+-- 
+2.17.1
 
