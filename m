@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02B86C102A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B3D6C103E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjCTLEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S230203AbjCTLGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 07:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjCTLDp (ORCPT
+        with ESMTP id S230122AbjCTLF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:03:45 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6584218
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:59:38 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id g18so11630972ljl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679309972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UWGmTe6cHKLXfItotDWU53tPbM2QwDIy9fraKQP6pWc=;
-        b=l8XzT4Z5L7Z1Suv/sMMykA9BhEiikHcMBNKgvX+X4pMtJsM44VOi8FyEI2Bm5mP7Xh
-         Ho1d81zfF2TZrvUnYsTjWbMwy1T6HnRqyXmmPT06c5fD5B08Cc62InEfw6giHMrMwB77
-         kAyQ1hDMpm9scWz8micYKanhoIRlmfCiYtgkEHu08tOfMJwfQwGkb7BqZ40gWHKZRgnB
-         m9Bkeer3Mz6/y3PdZZKguNjiRqdmZdsHu82+da2xqVCAdeZmUkL3ytJHtTDyu34d5Jzj
-         hoDqYzzsKI+nk7O4KRdpd6n0fPD7OtlJHF/5rFXZXr4dW8meMZCZO/DxKj/Fa26ZJqfG
-         zsaA==
+        Mon, 20 Mar 2023 07:05:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCAD2DE5E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679310008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YvwS21V87OZURkjfZ9iHLFx7wse477fWO8o7cVdC8zE=;
+        b=G7nqLdNRu3U/hpjxUOy5IBjkCZNtz87WkaNzXMMYSvc5ldkjnsXlD/TX5hHsxcbnq1Lb4d
+        LkGUKWQeSUr7Dv9aRRo5VdDBY1PPrGJmzRHy5msGI59BAsmhqw/GLTE8yrnbrPJ9wKx8Sc
+        ZIgkUnSXRNTDaWdQZJbDyrPe4m5FoY4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-161-hA-HF2aiMUaF63Tq7wp92Q-1; Mon, 20 Mar 2023 07:00:06 -0400
+X-MC-Unique: hA-HF2aiMUaF63Tq7wp92Q-1
+Received: by mail-wr1-f69.google.com with SMTP id j17-20020adfb311000000b002d660153278so253814wrd.20
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:00:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679309972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679310005;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UWGmTe6cHKLXfItotDWU53tPbM2QwDIy9fraKQP6pWc=;
-        b=EEmEk+XQaztpm8L+hrbYx+0+TRuiFEJDXZw7xxef3pDjPBwtb/68tnluwo5p7uZf9m
-         ev+dBtLqnHC1DohTUS7ljwhqRJMe9mfsgdsx5AK6shAtylwi//6RjjG0umKLf3MywR6Q
-         VX618du568jGSPL79K8kc1s2Qd1y38DLuj0riClPOdZN5ZpRY7GMij7c/T5cD50IN/qp
-         BO0fsaI+uWcQBVUD0nX34cN4IpYHPeZ0VHrsUyAir8bk9PLidSg1GU7rxAjTfyHm+yOS
-         KsWDnv1c+nLjhYqKCd9TMRfRPA5GInrCtT23jCfaL9BK4cFfj6UAgqzLZRnzVHdhsFjr
-         aRCg==
-X-Gm-Message-State: AO0yUKVpJvUQhCbdAzMXcZQeKiYtbiW2lKxtIuaZKZlJJc9trZsf5f8Y
-        Qf41OiwSErctFaKmqkYI99Fc2A==
-X-Google-Smtp-Source: AK7set9tM5PRfDurzmymTzNE12vthtHUPQDrRxC6SHxx5x5Vhd8wk3NJ/cEreblq8XGdz7zgDBkmIw==
-X-Received: by 2002:a2e:880d:0:b0:29b:d436:5c8a with SMTP id x13-20020a2e880d000000b0029bd4365c8amr1741092ljh.3.1679309972812;
-        Mon, 20 Mar 2023 03:59:32 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id d3-20020ac25443000000b004e83f1da2b4sm1643915lfn.66.2023.03.20.03.59.31
+        bh=YvwS21V87OZURkjfZ9iHLFx7wse477fWO8o7cVdC8zE=;
+        b=cjCcGKvhMfY00UBfEHhfNlIkoYPnQILDEIBoVN2NUympYE/bwT+LcgulsFmpnQjAYg
+         M2FR1r0bVlsvJTAYPnCK0DdKqw0kmf8sTdA7Unh5bndtavq0m2n+oEnv4zNSxXErbwbp
+         WVJQzB9SpScATZDMGe8rP+c/Q42CgxvpjXMndPvxhvRWDmjYOLhoesr0k/0IXWgVfMAi
+         zqS2bOnoSCfaooIDU7hscFVPuGPdQ+6trBQgWZSIOkiSp4ypjCiqXUXFvPjaUpCr28xj
+         Hurq+zThTReY9VQiHASMUiZ/qLvpZTJZCYnCnUr0sijwPpqCYhyp/mbDqyllCpSXq4JY
+         bhEQ==
+X-Gm-Message-State: AO0yUKXmhmkui8kMTnGFYWIa8wxnEC64PIjsJQeBsSbZhZCQ4OYL5R8N
+        tAWHF4npDDAENLkm029wx9SKt2GQClKlJKNTlKHwg5C5iY/Z8G9fsbQjgoivPKbpGJ0qdrtn1QG
+        6Qt7sQsOyuv8fz9HEoFZJF+Gp
+X-Received: by 2002:adf:fb01:0:b0:2ce:b7a1:c1a3 with SMTP id c1-20020adffb01000000b002ceb7a1c1a3mr13234763wrr.3.1679310005017;
+        Mon, 20 Mar 2023 04:00:05 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+Nm/AP50JtymPg9eFJ2hX8KoBE8+/Y4A7ha4GmGX4nlc3yTngMWY2fH+jF7oTeCP5yHiDIEA==
+X-Received: by 2002:adf:fb01:0:b0:2ce:b7a1:c1a3 with SMTP id c1-20020adffb01000000b002ceb7a1c1a3mr13234726wrr.3.1679310004672;
+        Mon, 20 Mar 2023 04:00:04 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id u8-20020adfdb88000000b002cff06039d7sm8616030wri.39.2023.03.20.04.00.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:59:32 -0700 (PDT)
-Message-ID: <515e4533-fd98-ec96-3e00-03d27168e576@linaro.org>
-Date:   Mon, 20 Mar 2023 11:59:31 +0100
+        Mon, 20 Mar 2023 04:00:04 -0700 (PDT)
+Message-ID: <94d228b4-3d49-8cb0-a45c-3342c8b1da22@redhat.com>
+Date:   Mon, 20 Mar 2023 12:00:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: sc8280xp-x13s: add wifi calibration
- variant
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v8 26/40] mm: Warn on shadow stack memory in wrong vma
 Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230320104658.22186-1-johan+linaro@kernel.org>
- <20230320104658.22186-3-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230320104658.22186-3-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        debug@rivosinc.com, szabolcs.nagy@arm.com
+References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
+ <20230319001535.23210-27-rick.p.edgecombe@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230319001535.23210-27-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20.03.2023 11:46, Johan Hovold wrote:
-> Describe the bus topology for PCIe domain 6 and add the ath11k
-> calibration variant so that the board file (calibration data) can be
-> loaded.
+On 19.03.23 01:15, Rick Edgecombe wrote:
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
 > 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216246
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts  | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
+> treated as shadow by the CPU, but this combination used to be created by
+> the kernel on x86. Previous patches have changed the kernel to now avoid
+> creating these PTEs unless they are for shadow stack memory. In case any
+> missed corners of the kernel are still creating PTEs like this for
+> non-shadow stack memory, and to catch any re-introductions of the logic,
+> warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
+> stack VMAs when they are being zapped. This won't catch transient cases
+> but should have decent coverage. It will be compiled out when shadow
+> stack is not configured.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index 150f51f1db37..0051025e0aa8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -711,6 +711,23 @@ &pcie4 {
->  	pinctrl-0 = <&pcie4_default>;
->  
->  	status = "okay";
-> +
-> +	pcie@0 {
-> +		device_type = "pci";
-> +		reg = <0x0 0x0 0x0 0x0 0x0>;
-> +		#address-cells = <3>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		bus-range = <0x01 0xff>;
-> +
-> +		wifi@0 {
-> +			compatible = "pci17cb,1103";
-> +			reg = <0x10000 0x0 0x0 0x0 0x0>;
-> +
-> +			qcom,ath11k-calibration-variant = "LE_X13S";
-> +		};
-> +	};
->  };
->  
->  &pcie4_phy {
+> In order to check if a PTE is shadow stack in core mm code, add two arch
+> breakouts arch_check_zapped_pte/pmd(). This will allow shadow stack
+> specific code to be kept in arch/x86.
+> 
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Tested-by: Kees Cook <keescook@chromium.org>
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
