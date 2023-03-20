@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBC26C0B6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8336C0B78
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCTHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S230107AbjCTHip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjCTHg7 (ORCPT
+        with ESMTP id S230045AbjCTHin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:36:59 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6093E12865
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:36:58 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id y4so43000029edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:36:58 -0700 (PDT)
+        Mon, 20 Mar 2023 03:38:43 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF881BDC3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:38:40 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso11427662pjb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679297817;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1u1keNrwlSxZAkuogiDlSpUUhe7tlydyWOAQpr6eUZQ=;
-        b=i5YWulF8A13Hk2/Fuq9ts3lAKcaK4to9nIq9nroeit9Akcy3epLW2uJ5w6it25FK43
-         Z6ENW1Ns41950R96kAqJGRu4St5J2XdKp85FN92vs4n4dnh531BCajjP9pjuFyu0KAhN
-         ZVvAyIXF+P3/rjgBe3KMOzh5j9TjUG0n4a2w5czc9jafFeaX2Q9jooBYLcJBO1xVrhXY
-         HZl2hj2Gpnkj7+n41E1J1YsV+FjgEgKwHU905b0UzVAn+kl4PlECIaRMpMYrpnAKbZq6
-         SxwD9pBjPns94eiENlpOj8SXXHCMmUDBxm7EtXrDNsHNB0yzbBqJkRRsMzA+tVH1ZJiC
-         v3/g==
+        d=linaro.org; s=google; t=1679297920;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNoZCqbMgBSH40W4pfEiFDhEI90p6zM5KTABLDNwlQM=;
+        b=N5CrJk/HsF7f/yD83EjLqKLRQxEl17o2JpHJWYCXkUPVmlc+nIoq+dafz8LcOYZxQN
+         JXIFQIs8kG19LPZZ9xKIMaeZVqyeetLzspjI3E0HyGVxDFYNOhNHLEGLXQTh+uRQdn83
+         d9i8zT7wxkR3HMehAea5nhgfER6PgfXpaeundJLB0YILUcId36J7G/dEHpBnrQk/zbd8
+         t9G/A9qmLm9rmhpvBJe2Uq1203xpiPtLJPMkUKTkPo6U+V/QVNChawBAlDN7w6+dGGgA
+         bZmyK/cq2isLXGe1WDSmwFKLc8P1kwLT/J1/dUGakanCijAdC5hxSKJQeySyk42M+Zzr
+         85cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679297817;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1u1keNrwlSxZAkuogiDlSpUUhe7tlydyWOAQpr6eUZQ=;
-        b=SN1jt6lsFfKgvd9WA/nu3rVLI0NwHz854OHVCMMSG6mLX+3ffvbUkI2PsBCPla4mVc
-         EV7Uw4HYaK5oDLP34+D//pSA7xwfDjpgn4+rfKDCgq/KShlRPst8hvG/Y0BmguPYdrBR
-         ccMs7QHQtB51XZcxcDZNxGgawC1VhU3VMXpt2jiPifD6g86v/ZXtEilgbqL3cKOEI9/T
-         VsSTHUMH6tBOFjJArOHOjO6ccKhpz8YRVlVCP9MuY5lcCojU+WSszq7SwF+wn1jbsHqw
-         Hbu/r9svNJ7QH4Oxg26e+WKrtvPCAaMO1WAICPBvN84ji8QJiTv8uEgFx2Cp7ZbeEC5/
-         DWqQ==
-X-Gm-Message-State: AO0yUKXbVXufSHeb6Dc3TsMrMTkwGfajMAcofW3X3Vfk1IhEQzSKJQO2
-        Lf3+KRMw+jNN2/SnrHTPuRkIfQ==
-X-Google-Smtp-Source: AK7set/t+53oOOD8eIyQPbZd6RDd9nOYzNrI9c5ak3LVckOfd3cTjKFbFUi1el1Yx5F45xPvoX28uw==
-X-Received: by 2002:aa7:c858:0:b0:4fd:2a29:ceac with SMTP id g24-20020aa7c858000000b004fd2a29ceacmr11280938edt.14.1679297816830;
-        Mon, 20 Mar 2023 00:36:56 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4428:8354:afb6:2992? ([2a02:810d:15c0:828:4428:8354:afb6:2992])
-        by smtp.gmail.com with ESMTPSA id u27-20020a50951b000000b004bf999f8e57sm4426183eda.19.2023.03.20.00.36.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 00:36:56 -0700 (PDT)
-Message-ID: <34cb347f-17cf-3da1-b484-0c793ae8c5db@linaro.org>
-Date:   Mon, 20 Mar 2023 08:36:55 +0100
+        d=1e100.net; s=20210112; t=1679297920;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZNoZCqbMgBSH40W4pfEiFDhEI90p6zM5KTABLDNwlQM=;
+        b=Qy7cMN576ttaJOz3i9AUL79MU6tkn7EG9rA0haTXqOH/6XfO3hyg5dl/EUYIPvr9uH
+         BP7VygsRKfk5ohg8xdzAHyHPdSala/KbXZUWXSigYTsdhOkev16JY1hSGRKOvyhU8N6r
+         630Ox0bq9ceAIO6MSeb6U8R0aDRRrIM+Fz++PdTGZbUOGFwYPTorA/nAHQZAKr98n7/i
+         SOArHj2SEjuDFeN7uNhyA8Ha54iHwAqegxox2XUr1GtzXStBEtqCvu7c3um6a+ZtZtqp
+         DOXZW+ol/4x5JOg+JCj6VkqdVl3SHd4UNU/07z8VzaLLiyZ7QJ38CSeA6/i9YkLW20mC
+         HxEg==
+X-Gm-Message-State: AO0yUKVN91L5loSIGu+Mi2yLkd809IPtf7GdkKdbgceYj0bQ5ok3Gy/W
+        v/BJj/Hj2Li8o0A/ZSZbS0F8cw==
+X-Google-Smtp-Source: AK7set9YbJZDMR6YZ4q3B1kwJTPJHAsZo6yP2x5I+WCbNAh0suT4iofAlq4O4AAF3uOIf9LZ7o/eeg==
+X-Received: by 2002:a17:902:fa4f:b0:19c:be03:d1a3 with SMTP id lb15-20020a170902fa4f00b0019cbe03d1a3mr13752029plb.40.1679297920245;
+        Mon, 20 Mar 2023 00:38:40 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c61:7331:922d:c0be:85c4:f0ae])
+        by smtp.gmail.com with ESMTPSA id jj5-20020a170903048500b0019edcc30d9bsm6010251plb.155.2023.03.20.00.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 00:38:39 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-crypto@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org,
+        vladimir.zapolskiy@linaro.org
+Subject: [PATCH 1/1] dt-bindings: qcom-qce: Add compatibles for SM6115 and QCS2290
+Date:   Mon, 20 Mar 2023 13:08:16 +0530
+Message-Id: <20230320073816.3012198-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] MAINTAINERS: remove file entry in NFC SUBSYSTEM after
- platform_data movement
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Simon Horman <simon.horman@corigine.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
-Cc:     linux-nfc@lists.01.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230320073201.32401-1-lukas.bulwahn@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230320073201.32401-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 08:32, Lukas Bulwahn wrote:
-> Commit 053fdaa841bd ("nfc: mrvl: Move platform_data struct into driver")
-> moves the nfcmrvl.h header file from include/linux/platform_data to the
-> driver's directory, but misses to adjust MAINTAINERS.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
+Crypto Engine block on Qualcomm SoCs SM6115 and QCS2290
+do not require clocks strictly, so add compatibles for these
+SoCs, indicating that they are similar to the flavour
+found on SM8150.
 
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+index e375bd981300..e6840d124af3 100644
+--- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
++++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+@@ -35,10 +35,12 @@ properties:
+ 
+       - items:
+           - enum:
++              - qcom,sm6115-qce
+               - qcom,sm8250-qce
+               - qcom,sm8350-qce
+               - qcom,sm8450-qce
+               - qcom,sm8550-qce
++              - qcom,qcs2290-qce
+           - const: qcom,sm8150-qce
+           - const: qcom,qce
+ 
+-- 
+2.38.1
 
