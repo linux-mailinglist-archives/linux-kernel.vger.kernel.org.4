@@ -2,197 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF3E6C0D5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0B16C0D6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjCTJd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S230480AbjCTJfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjCTJdy (ORCPT
+        with ESMTP id S230510AbjCTJe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:33:54 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE931ACF6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:33:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so44019508edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679304826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3QdF0wMkBTmtVBS8ynp8ovaXMshD0DpAnNchV77vtY=;
-        b=UesMPWRFpR2JX5vPVbvxYR1zQ+M+IhSMpWZH2lIpwZ0WZoIufebUX5DzgeExhxsh7f
-         2ANido3DAEPiekrASioV8YH/Jgcw3esOfddOi4zUrFGfwZH+R7TNm67sArqs/cA7Zz5F
-         A7AyqxWgJjo8G9/PU64k17rMzERIA8qXy56VI5gym42uXNTsm/mpiul0NW5VkB4AhCiI
-         4Kyo+ano9ElnW2faIL27Uj7bGtTQbDO4kn+9y4GHB2ELbwX5BjABnNaG0vWTvrEkjcu1
-         q/HiAokTchc8jfj0QCgB/f8Zcm/suqr7eLzE29iRGb5WnLKftKTj1VuEUDJ0dBI48GyS
-         cozg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679304826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3QdF0wMkBTmtVBS8ynp8ovaXMshD0DpAnNchV77vtY=;
-        b=JBg0DDK9BRfNuFSyh1IAvEZN5+gwmkVngVX+2HENjBtBgDxtciVtesWUUr2iBsjaF0
-         buqDu+FgKk6ZdjC+LtzDbtMMj6rcBTHmhpESBZ5W4tLWyGieOZYVY7Jq4xTDjbLmXsBo
-         GBmpSPtN9r3SY6wBtRixWeoypQprlMbWBZLzZfqIxkB8DC+lU2MWAE6rUMPn00Hx7pQj
-         yhSysK8XUiEp4t4lLUTnltrXXxpjigOT1Em6crDPz2IOq05S8HFWB3NlJ0DWDAj4K9WT
-         kNeiOsTei++Pa0UEbdIUh65li+ADuGUQmo5DESu1sSedcFEbz5NtQBGiOEtyJlf8Wnrv
-         pTeA==
-X-Gm-Message-State: AO0yUKXT+oHjzotTAxJJXxYGVYQQj+Rq9eEfHDb/c13itNES0zSlZI9x
-        JqYgpAmOIPHnrZXEo2SZyy8=
-X-Google-Smtp-Source: AK7set8Qn657Y7DA+BYuCWXB4qfbuxFmPEcongWcCbMjvnz5MP4Uux0KQPqqqU1zWuDfyZSENqbyDw==
-X-Received: by 2002:a17:906:f193:b0:933:868:413a with SMTP id gs19-20020a170906f19300b009330868413amr8046651ejb.15.1679304825710;
-        Mon, 20 Mar 2023 02:33:45 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id p25-20020a17090653d900b009333b82f061sm2492372ejo.80.2023.03.20.02.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 02:33:45 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 14:33:43 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Vaibhav Agarwal <vaibhav.sr@gmail.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: Re: [PATCH] Staging: greybus: Fix lines ending with '('
-Message-ID: <ZBgod938/PJX1xsE@khadija-virtual-machine>
-References: <20230319164520.GA125117@sumitra.com>
+        Mon, 20 Mar 2023 05:34:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E280D1C590;
+        Mon, 20 Mar 2023 02:34:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F1F9B80DB3;
+        Mon, 20 Mar 2023 09:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3784C433EF;
+        Mon, 20 Mar 2023 09:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679304894;
+        bh=ag2c2dcaduyuiuxSCK0A5eBY3Oxo/0SPlIjrrZ08ayU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rnET9Zz5m3Pgm87+POpjApopr1BleYlIHihy5entbvC7LhqG1ZXCZbpZjVa0unVUx
+         sRRBKns0FaTFG+Qb3mdfA1/gFTazZpiIfsCo/phQCtAVVkIWn/r8ArjToreFtvQVvG
+         7YriPF8jORuAnb5sdUm2GP3x74plLmWyOhRRhcC1iS4u7AWBod6QANvmgb66QXyQo9
+         Dkq+0NzxHqj8dgA9cQoGhk7j+UMnhotk6FbXXyklE5QJcpOjm67CUdgRMES9Mun9oG
+         JxxCIe000s5UgGsgMj+XwhZdL/L8PRoyLAox/H1CSEBr4xa7f95Vv/A6f0UZGNFYxl
+         PTZJr5bXgkSXA==
+From:   Roger Quadros <rogerq@kernel.org>
+To:     Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, vigneshr@ti.com, srk@ti.com,
+        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
+Subject: [RFC PATCH 0/2] usb: dwc3: Support wake-up from USB suspend.
+Date:   Mon, 20 Mar 2023 11:34:45 +0200
+Message-Id: <20230320093447.32105-1-rogerq@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319164520.GA125117@sumitra.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 09:45:20AM -0700, Sumitra Sharma wrote:
-> The coding style used to limit lines to 80 characters,
-> which led to splitting of these function headers into multiple
-> lines and ends the first line with a '('.
-> Such splits causes checks reported by the checkpatch.
-> 
-> Place the function parameters of each function immediately after
-> '(' in a single line to align the function headers.
-> 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->  .../staging/greybus/audio_manager_module.c    | 40 +++++++++----------
->  1 file changed, 18 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/staging/greybus/audio_manager_module.c b/drivers/staging/greybus/audio_manager_module.c
-> index 0a0f0a394c84..81b4ba607a0e 100644
-> --- a/drivers/staging/greybus/audio_manager_module.c
-> +++ b/drivers/staging/greybus/audio_manager_module.c
-> @@ -70,9 +70,8 @@ static void gb_audio_module_release(struct kobject *kobj)
->  	kfree(module);
->  }
->  
-> -static ssize_t gb_audio_module_name_show(
-> -	struct gb_audio_manager_module *module,
-> -	struct gb_audio_manager_module_attribute *attr, char *buf)
-> +static ssize_t gb_audio_module_name_show(struct gb_audio_manager_module *module,
-> +					 struct gb_audio_manager_module_attribute *attr, char *buf)
->  {
->  	return sprintf(buf, "%s", module->desc.name);
->  }
-> @@ -80,9 +79,8 @@ static ssize_t gb_audio_module_name_show(
->  static struct gb_audio_manager_module_attribute gb_audio_module_name_attribute =
->  	__ATTR(name, 0664, gb_audio_module_name_show, NULL);
->  
-> -static ssize_t gb_audio_module_vid_show(
-> -	struct gb_audio_manager_module *module,
-> -	struct gb_audio_manager_module_attribute *attr, char *buf)
-> +static ssize_t gb_audio_module_vid_show(struct gb_audio_manager_module *module,
-> +					struct gb_audio_manager_module_attribute *attr, char *buf)
->  {
->  	return sprintf(buf, "%d", module->desc.vid);
->  }
-> @@ -90,9 +88,8 @@ static ssize_t gb_audio_module_vid_show(
->  static struct gb_audio_manager_module_attribute gb_audio_module_vid_attribute =
->  	__ATTR(vid, 0664, gb_audio_module_vid_show, NULL);
->  
-> -static ssize_t gb_audio_module_pid_show(
-> -	struct gb_audio_manager_module *module,
-> -	struct gb_audio_manager_module_attribute *attr, char *buf)
-> +static ssize_t gb_audio_module_pid_show(struct gb_audio_manager_module *module,
-> +					struct gb_audio_manager_module_attribute *attr, char *buf)
->  {
->  	return sprintf(buf, "%d", module->desc.pid);
->  }
-> @@ -100,9 +97,9 @@ static ssize_t gb_audio_module_pid_show(
->  static struct gb_audio_manager_module_attribute gb_audio_module_pid_attribute =
->  	__ATTR(pid, 0664, gb_audio_module_pid_show, NULL);
->  
-> -static ssize_t gb_audio_module_intf_id_show(
-> -	struct gb_audio_manager_module *module,
-> -	struct gb_audio_manager_module_attribute *attr, char *buf)
-> +static ssize_t gb_audio_module_intf_id_show(struct gb_audio_manager_module *module,
-> +					    struct gb_audio_manager_module_attribute *attr,
-> +					    char *buf)
->  {
->  	return sprintf(buf, "%d", module->desc.intf_id);
->  }
-> @@ -111,9 +108,9 @@ static struct gb_audio_manager_module_attribute
->  					gb_audio_module_intf_id_attribute =
->  	__ATTR(intf_id, 0664, gb_audio_module_intf_id_show, NULL);
->  
-> -static ssize_t gb_audio_module_ip_devices_show(
-> -	struct gb_audio_manager_module *module,
-> -	struct gb_audio_manager_module_attribute *attr, char *buf)
-> +static ssize_t gb_audio_module_ip_devices_show(struct gb_audio_manager_module *module,
-> +					       struct gb_audio_manager_module_attribute *attr,
-> +					       char *buf)
->  {
->  	return sprintf(buf, "0x%X", module->desc.ip_devices);
->  }
-> @@ -122,9 +119,9 @@ static struct gb_audio_manager_module_attribute
->  					gb_audio_module_ip_devices_attribute =
->  	__ATTR(ip_devices, 0664, gb_audio_module_ip_devices_show, NULL);
->  
-> -static ssize_t gb_audio_module_op_devices_show(
-> -	struct gb_audio_manager_module *module,
-> -	struct gb_audio_manager_module_attribute *attr, char *buf)
-> +static ssize_t gb_audio_module_op_devices_show(struct gb_audio_manager_module *module,
-> +					       struct gb_audio_manager_module_attribute *attr,
-> +					       char *buf)
->  {
->  	return sprintf(buf, "0x%X", module->desc.op_devices);
->  }
-> @@ -181,10 +178,9 @@ static void send_add_uevent(struct gb_audio_manager_module *module)
->  	kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
->  }
->  
-> -int gb_audio_manager_module_create(
-> -	struct gb_audio_manager_module **module,
-> -	struct kset *manager_kset,
-> -	int id, struct gb_audio_manager_module_descriptor *desc)
-> +int gb_audio_manager_module_create(struct gb_audio_manager_module **module,
-> +				   struct kset *manager_kset,
-> +				   int id, struct gb_audio_manager_module_descriptor *desc)
->  {
->  	int err;
->  	struct gb_audio_manager_module *m;
-> -- 
-> 2.25.1
-> 
->
+Hi,
 
-Hi Mentors,
+The current USB gadget driver behaviour is to stop the controller
+and disconnect from the bus during System sleep.
 
-I came across a same check error in greybus/audio_topology file.
-Would it be okay to send a patch similar to this one?
+This series introduces a new DT property that will change this
+behaviour and keep the controller active and connected
+to the bus during System sleep. This is useful for applications
+that want to enter a low power state when USB is suspended but
+remain connected so they can resume activity on USB resume.
 
-Regards,
-Khadija
+This feature introduces a new constraint if Gadget driver is connected
+to USB host: i.e.  the gadget must be in USB suspend state to allow
+a System sleep as we cannot process any USB transactions
+when in System sleep.
+
+The system hardware is responsible to detect the end of USB suspend
+and wake up the system so we can begin processing the USB transactions
+as soon as possible.
+
+Some prior discussion about System suspend vs USB suspend can be found
+at [1]
+
+[1] - https://marc.info/?l=linux-usb&m=167645398109860&w=2
+
+cheers,
+-roger
+
+Roger Quadros (2):
+  dt-bindings: usb: snps,dwc3: Add 'snps,gadget-keep-connect-sys-sleep'
+  usb: dwc3: Support 'snps,gadget-keep-connect-sys-sleep' feature
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  5 ++++
+ drivers/usb/dwc3/core.c                       | 25 ++++++++++++++-----
+ drivers/usb/dwc3/core.h                       |  2 ++
+ drivers/usb/dwc3/gadget.c                     | 25 +++++++++++++++++--
+ 4 files changed, 49 insertions(+), 8 deletions(-)
+
+-- 
+2.34.1
 
