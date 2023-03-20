@@ -2,98 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319936C2408
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709006C240B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCTVnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S229841AbjCTVnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCTVnP (ORCPT
+        with ESMTP id S229810AbjCTVnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:43:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD524BF2;
-        Mon, 20 Mar 2023 14:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gzQ0IRamnabVhoWBY7vcKUhwOr44R6rpO7XXkU2CMqw=; b=WIqpGufgrnpO14KtvYsvaMDF1y
-        gqW6Z0Q33pfwYf6gMZXEVPmcVkrz0EwzSRYbBJsfq8x6XRthCD8Xf2twg5JfahBAkwTuWnAnPdGgb
-        aiHATtQwvmG+xlvY8X26x4/S+69qpbdb23wvTuKrZSY/BzNMJuB/W2WN0DoSKML+quyObNACTWx08
-        sMiurTfwjz7qNdWy3YOREbe71U5G2oPNikQgc0jJ/D5EPvjpjqfyqxOfFCX/xgwm2xajxcwgvjOnt
-        mpEgQYK14xFZsbEoVbm9HBAB+Ck1H7VmmaFJQ6qx7AVy6C7Li3Xdl4K9YxLOjgZpzqODZmoiz32Hi
-        nnagA1Uw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peNGW-00AZ3O-0H;
-        Mon, 20 Mar 2023 21:42:04 +0000
-Date:   Mon, 20 Mar 2023 14:42:04 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 14/24] kbuild, firmware: imx: remove MODULE_LICENSE in
- non-modules
-Message-ID: <ZBjTLGhohFlbO4xr@bombadil.infradead.org>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-15-nick.alcock@oracle.com>
- <20230314013539.GA143566@dragon>
- <874jqfvheo.fsf@esperi.org.uk>
+        Mon, 20 Mar 2023 17:43:46 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20610.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::610])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAEA193EC
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:43:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FqQMH0Lv84EuFh6XLtmuYodQmIxJNRa08XTMqcq9OG67bKUZhpAa9j7hgpPaWerRQXHofChPKwXq/JRtwXjIOS7XSpB1woqtzq5H35Puxzq2aFHYZ5f0z9iq8Bm6jHtYU+fvEXc0HhU614NsYA84x1JNzmBc3g7Bew8gv+rtSlERAk3QMc9OJ/8k2Szbvshr1jq3xEeU1xCP/ulSV9aDVw4w7us7LrRQ5shA3qi7Jd3mF7B1UAL/cQFXn3Z+TWKkgnjfsvTuCRo/eZGGwTIkyhEaa9/EpnHRzu/rSAOHuyjW3p49f1LvyqfgTGGGuAjKRD+BDm3qN9ByVW/vcKOSog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t4FKwuk7iswStsysni1tFAVs8dKSEqt2NxPorL00Quk=;
+ b=EwaDnRwWYbVABVW6vW0jOu8SEvitMD0ykBPSVR4BWlAPYESCokc5avac20DzwQdnlpuBCF515QSFUC8EL7vsX3myOOQbctjbO01JapfE/dn7tQEl7woRgtLBZsJq3jRkBHd2pdWQeoI+qlupvMPUnhS43UyaZXLx0Z8PFUf6SWdt/w2v1M1QPejQyizI0aSeDdDD8IG3S4ZFM/tWorfq4MXz64SW6jL9l3tq5ncgwYbAhI3FrN4Uxv0keNS4ZWeMaMt41Ne2h77Jp6xT9XZC7/VLygg6hFfvnJd9aNpqU0lzfAK8+8Hkw7Z3qCkhJqNzwjL8DhRIcubi9yismRfj/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t4FKwuk7iswStsysni1tFAVs8dKSEqt2NxPorL00Quk=;
+ b=P6gT6FdrTu/hoQ7DROfo+ecDQAdwX6g6EYkNA2GCD/WxJGrfmC2oG2X/2TNY5YjP1zq9BErKg+M7jPR8VrAaqskw6584pEDQLwPLaXZ60v1MdfjvnkhxEw1N+FWMRan9MO5qePHjUFW5tWMmHEY6zfBaJk949Q8bcdHmnaOjpyc=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by BL1PR12MB5876.namprd12.prod.outlook.com (2603:10b6:208:398::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 21:42:37 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a4e:62dd:d463:5614]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a4e:62dd:d463:5614%9]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 21:42:37 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>
+CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
+        "Gao, Likun" <Likun.Gao@amd.com>,
+        "Kuehling, Felix" <Felix.Kuehling@amd.com>,
+        "Zhao, Victor" <Victor.Zhao@amd.com>,
+        "Xiao, Jack" <Jack.Xiao@amd.com>, "Quan, Evan" <Evan.Quan@amd.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        "Somalapuram, Amaranath" <Amaranath.Somalapuram@amd.com>,
+        "Zhang, Bokun" <Bokun.Zhang@amd.com>, "Liu, Leo" <Leo.Liu@amd.com>,
+        "Gopalakrishnan, Veerabadhran (Veera)" 
+        <Veerabadhran.Gopalakrishnan@amd.com>,
+        "Gong, Richard" <Richard.Gong@amd.com>,
+        "Feng, Kenneth" <Kenneth.Feng@amd.com>,
+        Jiansong Chen <Jiansong.Chen@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] drm/amdgpu/nv: Apply ASPM quirk on Intel ADL + AMD
+ Navi
+Thread-Topic: [PATCH v2] drm/amdgpu/nv: Apply ASPM quirk on Intel ADL + AMD
+ Navi
+Thread-Index: AQHZVzck/ItsispBG0ifZfMyjJp9ZK8EO0Iw
+Date:   Mon, 20 Mar 2023 21:42:36 +0000
+Message-ID: <MN0PR12MB6101AC459C9DBBCC4837B7B3E2809@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230315120726.427486-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20230315120726.427486-1-kai.heng.feng@canonical.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-03-20T21:42:34Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=e371d595-2451-4702-9443-fd2d8c371eef;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2023-03-20T21:42:34Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 8e16cb42-0283-4b72-96f6-0fa088e91082
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|BL1PR12MB5876:EE_
+x-ms-office365-filtering-correlation-id: ab5d5fbf-1f5c-46fe-3322-08db298c0582
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +qr4Js+d4XYiImtBqbOCIQmZW0H4pwtvGRyUW/VKk6WaF+i04/5OgUC2ubbFQ/kJ9TjDsuNRdqky9xjqDM9OfXoHyiFUGk/FdobODSTg/RljDA953GBTOhUCkCE6Rl1lLI1hdPrwztwf4n0RWGiAg7kH1iQzD/6hSsv8L0Ld0ouHcmsfkg1T4ZYRBAGIUzoONJ8dWLrTUsdUCkfBx0yejK7ULwaAEfzvUSXuqWFXwi7XNrIajqZfOKoyvEu+O0rLyzWe5rNFlwT5yh4fY8Bl9YjwcqwoPrWgHEcoVinNm9TUtdhmsIYSyzdCqki5KS5lpe3E+AmLJF1Q5QmPzvhBpiw17THDUuhc7KAW1gSlbys6IaeZakrq9mkOok57pbFG5bVdwgJQhGqn7ZL7mpai93v5bKJvKFDJBUoBEGsPXJnxM2dEO/IlDSPGTDlSfCtvwA/RZwsXvdtC3ZjoitzhA9oC6O0oF1bGPtzxrGNssDckLz8HIxE5YORYwuS9WW0q3q1e3T813+oTgnnRtPMr4VSPMmLbqd88DnJpdOA+0VEDJcz3/q+HmKgJaHnbYB8LjxVbPfF9AK09kQsakqMtEskbw+8dsrZknCWK4+ZyPOPRQHlQVq1lOQq71IITlW/TuAEmLG/2zt2k1hx35zrGRA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(346002)(39860400002)(376002)(396003)(451199018)(966005)(7696005)(33656002)(26005)(5660300002)(86362001)(6506007)(71200400001)(53546011)(478600001)(316002)(6636002)(186003)(9686003)(110136005)(83380400001)(54906003)(76116006)(64756008)(66446008)(66476007)(66556008)(38070700005)(4326008)(8676002)(41300700001)(52536014)(8936002)(38100700002)(66946007)(2906002)(122000001)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1Q3m4JYyrQLrr/+LRS2mNZD0dKfrhEVBSh7zeDQmscpPUnwDMofH4/1oKpmp?=
+ =?us-ascii?Q?g77d3weAjtwkpHjrA5vvofK9/Sf1+N4t0hQAZIysIUTDj5n/0NkpSahCoiqK?=
+ =?us-ascii?Q?7rn19NDX8BfHmuZKAaez2tVs5XucIH2deqgSray3sZj9V2VoY0TQAK9o3tnL?=
+ =?us-ascii?Q?8Jl8ewDFPt/TP9xdtsY1yP0AUPJs++/JBm+55y+0a0/VP59rDJKCNrvZMEyr?=
+ =?us-ascii?Q?ExQzCPQh7Wg5lJGky4jYX06zg6e3XKC0okLN00y6D9P6zcF9PyudGac9gbMG?=
+ =?us-ascii?Q?tUkxc7faQ5ixX8VIWBmASxBVPEF6xk4P1gJjCB1rSZDYZPWpcYOHLpZbJE4E?=
+ =?us-ascii?Q?BdQiBu9cRiW1HsZSZUgkEHRFsA7QDThxIDOzMCgFe3jF9A9m8BHwBd6ZtTAf?=
+ =?us-ascii?Q?qkmq+oT7fRhkG/09bW2m1IWMuNJjSPfu9N6JX6JRNbhOEmm3fjA14UfC4b2k?=
+ =?us-ascii?Q?UkHbNtWBS6E9H3EQWhrwnHERNgvy4L1UOYZ+HS3s8m8boZiqZZFhTmVn7FY4?=
+ =?us-ascii?Q?7ayOVbQwakHDeEnTlbgkmt83vjfP8zZLuZfvytIictJ0cNMkkwJDh1CBS5Ih?=
+ =?us-ascii?Q?Rw2a92EMxNIWQn/8b0EcfwjR/dg/BKwNWr1UzV8YR2LFKThgMah8CbJPg5K6?=
+ =?us-ascii?Q?oiUDMDQDEQRTLMp3UBbDva/XYkEORYnWPE1JupWv3p/TPpx0gs5CJz8wOC3c?=
+ =?us-ascii?Q?JjYPZJHkBvb44vK9xgUXjWstlwEeyR+Q4vxlS3DeKEG9Z9B0xFEb1qpBxEX3?=
+ =?us-ascii?Q?8eLSzmgu9RVQ+vJrRBd+seFDbjzDfbbN03hK+EM0qKX//Fh3yX4FWuKDrnuY?=
+ =?us-ascii?Q?cN0o3mf8U5DMzVkj/1b1S8T5de1CZfZ2GAa4pf/kp3OTUiNKakdGrN5yD6Ga?=
+ =?us-ascii?Q?8GJZ2Q212MWTR69ixnsh3zqL9LWko+9KJJu9cxkPfAhxUDx4mkSzI0JKGFnX?=
+ =?us-ascii?Q?LC/fMCh7gz/59pjo7DbeG9o6o1GN99TWKa0RNf4E6gcTRkbkrtTGo+Dki/il?=
+ =?us-ascii?Q?+AA0e46P6I0tavDFAvidXPhj/MYyUXgDPkxAIy45jkRjQV6I5d0SwYRt86A/?=
+ =?us-ascii?Q?zX02Z9ypRDU8zX81zDyzZRDuHpuGvK3kqeBrcqJ8ErVBQaa8Ffhbg44Qg73u?=
+ =?us-ascii?Q?Iq65gww1o99LAIkUIR68QKoc0aTM9Va2GJKBWPCefWRGC4YjD1rIhNd3uXOy?=
+ =?us-ascii?Q?tIlEbCB6mb8fLBPbI+8jIOmwJY0GkWcV1Zc90whbEvSBnDXKr1imhJ+L06P+?=
+ =?us-ascii?Q?WvpYg24JFy0waYLqasJgkGFNKCU/y0rsqLLwzK653ogdGPJFX1oks4gqxabp?=
+ =?us-ascii?Q?w7fNDiY8lyE+JdTMdcyRqmQDriGdWoIAMZc6JAfGcvTdx189z12VU9iXal9L?=
+ =?us-ascii?Q?8lVhgmo6VKuLYebmwJi/YLTdG3exhU/pXtzlnbvnZuKoMO3ITdEkCjy1onh3?=
+ =?us-ascii?Q?mciKDEH2Bzm6p4mnNbzDOjVMI2kXdNjAwJE3s5KOutNdfJ6hgZ9sewILk17v?=
+ =?us-ascii?Q?dSNwQ7b34jFRALYpPiAWnAW3q4siwIaI8fz/ZQvKsR/5aPR5kcw/E2uKVfZ0?=
+ =?us-ascii?Q?6Rr7eb9K0646G3MYCVk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874jqfvheo.fsf@esperi.org.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab5d5fbf-1f5c-46fe-3322-08db298c0582
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 21:42:36.7010
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z604kJ9SLs5sM8EB8FMEW3mw2aCCd/27Id9rhI/FM5ejVrPI8U6aIGxU7gNLLGczy3ShD+4/Hc6CPDwS6dXA8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5876
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 10:36:15AM +0000, Nick Alcock wrote:
-> On 14 Mar 2023, Shawn Guo verbalised:
-> 
-> > On Fri, Feb 17, 2023 at 02:10:49PM +0000, Nick Alcock wrote:
-> >> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> >> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> >> are used to identify modules. As a consequence, uses of the macro
-> >> in non-modules will cause modprobe to misidentify their containing
-> >> object file as a module when it is not (false positives), and modprobe
-> >> might succeed rather than failing with a suitable error message.
-> >> 
-> >> So remove it in the files in this commit, none of which can be built as
-> >> modules.
-> >> 
-> >> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> >> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> >
-> > Should I apply it as a fix for 6.3-rc with Cc stable tag, or can it be
-> > a material for -next?
+[Public]
 
-These are not stable critical patches.
 
-> This is currently built against -next, but Luis has indicated an intent
-> to pull the lot in via -rc3 (hence my scrambling to get the series
-> polished up for him, tags attached etc now). So, er... yes? :)
 
-Those patches which don't get this simply can't benefit from future
-tooling enhancements which Nick is working on which will leverage
-correct mapping.
+> -----Original Message-----
+> From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Sent: Wednesday, March 15, 2023 07:07
+> To: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
+> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>
+> Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>; David Airlie
+> <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; Zhang, Hawking
+> <Hawking.Zhang@amd.com>; Gao, Likun <Likun.Gao@amd.com>; Kuehling,
+> Felix <Felix.Kuehling@amd.com>; Zhao, Victor <Victor.Zhao@amd.com>;
+> Xiao, Jack <Jack.Xiao@amd.com>; Quan, Evan <Evan.Quan@amd.com>;
+> Limonciello, Mario <Mario.Limonciello@amd.com>; Lazar, Lijo
+> <Lijo.Lazar@amd.com>; Chai, Thomas <YiPeng.Chai@amd.com>; Andrey
+> Grodzovsky <andrey.grodzovsky@amd.com>; Somalapuram, Amaranath
+> <Amaranath.Somalapuram@amd.com>; Zhang, Bokun
+> <Bokun.Zhang@amd.com>; Liu, Leo <Leo.Liu@amd.com>; Gopalakrishnan,
+> Veerabadhran (Veera) <Veerabadhran.Gopalakrishnan@amd.com>; Gong,
+> Richard <Richard.Gong@amd.com>; Feng, Kenneth
+> <Kenneth.Feng@amd.com>; Jiansong Chen <Jiansong.Chen@amd.com>;
+> amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
+> kernel@vger.kernel.org
+> Subject: [PATCH v2] drm/amdgpu/nv: Apply ASPM quirk on Intel ADL + AMD
+> Navi
+>=20
+> S2idle resume freeze can be observed on Intel ADL + AMD WX5500. This is
+> caused by commit 0064b0ce85bb ("drm/amd/pm: enable ASPM by default").
+>=20
+> The root cause is still not clear for now.
+>=20
+> So extend and apply the ASPM quirk from commit e02fe3bc7aba
+> ("drm/amdgpu: vi: disable ASPM on Intel Alder Lake based systems"), to
+> workaround the issue on Navi cards too.
+>=20
+> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2458
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-So yes, my goal is to pull up straggler patches except where some
-maintainer explicitly don't want them. For instance, I will not be
-taking in the patches for trees that Greg KH maintains as he would
-prefer an alternative, but yet hasn't recommended an alternative
-strategy to help with Nick's work.
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-  Luis
+I've applied to this to amd-staging-drm-next, thanks!
+
+> ---
+> v2:
+>  - Rename the quirk function.
+>=20
+>  drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  1 +
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 15 +++++++++++++++
+>  drivers/gpu/drm/amd/amdgpu/nv.c            |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/vi.c            | 17 +----------------
+>  4 files changed, 18 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> index 164141bc8b4a..5f3b139c1f99 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> @@ -1272,6 +1272,7 @@ void amdgpu_device_pci_config_reset(struct
+> amdgpu_device *adev);
+>  int amdgpu_device_pci_reset(struct amdgpu_device *adev);
+>  bool amdgpu_device_need_post(struct amdgpu_device *adev);
+>  bool amdgpu_device_should_use_aspm(struct amdgpu_device *adev);
+> +bool amdgpu_device_aspm_support_quirk(void);
+>=20
+>  void amdgpu_cs_report_moved_bytes(struct amdgpu_device *adev, u64
+> num_bytes,
+>  				  u64 num_vis_bytes);
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index c4a4e2fe6681..05a34ff79e78 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -80,6 +80,10 @@
+>=20
+>  #include <drm/drm_drv.h>
+>=20
+> +#if IS_ENABLED(CONFIG_X86)
+> +#include <asm/intel-family.h>
+> +#endif
+> +
+>  MODULE_FIRMWARE("amdgpu/vega10_gpu_info.bin");
+>  MODULE_FIRMWARE("amdgpu/vega12_gpu_info.bin");
+>  MODULE_FIRMWARE("amdgpu/raven_gpu_info.bin");
+> @@ -1356,6 +1360,17 @@ bool amdgpu_device_should_use_aspm(struct
+> amdgpu_device *adev)
+>  	return pcie_aspm_enabled(adev->pdev);
+>  }
+>=20
+> +bool amdgpu_device_aspm_support_quirk(void)
+> +{
+> +#if IS_ENABLED(CONFIG_X86)
+> +	struct cpuinfo_x86 *c =3D &cpu_data(0);
+> +
+> +	return !(c->x86 =3D=3D 6 && c->x86_model =3D=3D INTEL_FAM6_ALDERLAKE);
+> +#else
+> +	return true;
+> +#endif
+> +}
+> +
+>  /* if we get transitioned to only one device, take VGA back */
+>  /**
+>   * amdgpu_device_vga_set_decode - enable/disable vga decode
+> diff --git a/drivers/gpu/drm/amd/amdgpu/nv.c
+> b/drivers/gpu/drm/amd/amdgpu/nv.c
+> index 855d390c41de..26733263913e 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/nv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/nv.c
+> @@ -578,7 +578,7 @@ static void nv_pcie_gen3_enable(struct
+> amdgpu_device *adev)
+>=20
+>  static void nv_program_aspm(struct amdgpu_device *adev)
+>  {
+> -	if (!amdgpu_device_should_use_aspm(adev))
+> +	if (!amdgpu_device_should_use_aspm(adev) ||
+> !amdgpu_device_aspm_support_quirk())
+>  		return;
+>=20
+>  	if (!(adev->flags & AMD_IS_APU) &&
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c
+> b/drivers/gpu/drm/amd/amdgpu/vi.c
+> index 12ef782eb478..ceab8783575c 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+> @@ -81,10 +81,6 @@
+>  #include "mxgpu_vi.h"
+>  #include "amdgpu_dm.h"
+>=20
+> -#if IS_ENABLED(CONFIG_X86)
+> -#include <asm/intel-family.h>
+> -#endif
+> -
+>  #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+>  #define
+> PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK
+> 	0x00000001L
+>  #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK
+> 	0x00000002L
+> @@ -1138,24 +1134,13 @@ static void vi_enable_aspm(struct
+> amdgpu_device *adev)
+>  		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+>  }
+>=20
+> -static bool aspm_support_quirk_check(void)
+> -{
+> -#if IS_ENABLED(CONFIG_X86)
+> -	struct cpuinfo_x86 *c =3D &cpu_data(0);
+> -
+> -	return !(c->x86 =3D=3D 6 && c->x86_model =3D=3D INTEL_FAM6_ALDERLAKE);
+> -#else
+> -	return true;
+> -#endif
+> -}
+> -
+>  static void vi_program_aspm(struct amdgpu_device *adev)
+>  {
+>  	u32 data, data1, orig;
+>  	bool bL1SS =3D false;
+>  	bool bClkReqSupport =3D true;
+>=20
+> -	if (!amdgpu_device_should_use_aspm(adev) ||
+> !aspm_support_quirk_check())
+> +	if (!amdgpu_device_should_use_aspm(adev) ||
+> !amdgpu_device_aspm_support_quirk())
+>  		return;
+>=20
+>  	if (adev->flags & AMD_IS_APU ||
+> --
+> 2.34.1
