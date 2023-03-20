@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887FF6C0D2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71156C0D32
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbjCTJYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S230052AbjCTJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjCTJXj (ORCPT
+        with ESMTP id S231263AbjCTJYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:23:39 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0089234E0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:22:56 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id bc12so11146424plb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679304175;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CzDHJfzg6ymj/2kYsYe/76LlqdX5RlwbqnYIBtADvSA=;
-        b=OzQaIWXYak+Ii5KQxOH0wopXAsCGkgtKVPSolE1NXMowMylUuJBZO82EgCQwIqUnkf
-         qhgV90wEuA3GIYu58nktn3fvGnLtJGWhEurkmdLCLAlorPfpwfbHl21Ty2yv5JRu68z5
-         ZpOFg0+bVAv1ReRRBU0vaI6QwcqIF+CB2Sk8Td5wh1n2iHfSR4zk6i4EPTZwfwCfiKMU
-         4fJoozegD2lP3zuOnYeDqdzlIg1PWlDqqgEiem0//IwHbzCJI9x8n4COPJJ8BgR5lg0M
-         u3nDnCUQy10PLb5Z64xMbesGP2FkkyEFBzkBQnbZXon/QmcYW02+3vvUuovJ+kcuCjQP
-         YLew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679304175;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CzDHJfzg6ymj/2kYsYe/76LlqdX5RlwbqnYIBtADvSA=;
-        b=yFctn6uAEgC50UmBi1sAQ0toWYSWkmbTbQwMNtmXUMiEu3f1EQpx/QsW9A0nhkZzTX
-         CgDhT9ntJwMb1t0+QSn+FZ12zqJwPHCdWuAyfpKBwkV/1V+hGtXmdQ7q24Z3J8uz0WAd
-         qTaex5cPCILY7VkVx3P33NCg4xiaM5a0lLQdYkSnzlxmg3I99nazuQcxfF1JXHoP5Fo+
-         TZBass1r5kG4WOa6Ymbf9kJiMh7vSj4DO3xTYtsJA5cjSvaTr2CqSi4NkwGu2AYB2ebV
-         8+lWqlLrhcXvcnZ6SgXqwfzb1evsjWohgDId+jIWTpei1ieyfWCfLxr5DEU7ELBD9oqf
-         bUoA==
-X-Gm-Message-State: AO0yUKUL2Mh7l3tILiznwO+a9z3ymoD9t1wrjf8zLRQUE6dzh4lh9oUg
-        UBCwo20+CXR6t6NqEvZymQvL+kjo+7ugsg==
-X-Google-Smtp-Source: AK7set80p1kE/yvUyRsQ81/5vyrNy88Pa2l3+EiIb6a5VMhZzzboUgSSftgNBEmpIwjpApBm5TXTfg==
-X-Received: by 2002:a17:902:e742:b0:19f:380e:9cca with SMTP id p2-20020a170902e74200b0019f380e9ccamr18697605plf.20.1679304174840;
-        Mon, 20 Mar 2023 02:22:54 -0700 (PDT)
-Received: from debian.me (subs09a-223-255-225-69.three.co.id. [223.255.225.69])
-        by smtp.gmail.com with ESMTPSA id bi11-20020a170902bf0b00b0019f11caf11asm6202334plb.166.2023.03.20.02.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 02:22:54 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 602F11065D0; Mon, 20 Mar 2023 16:22:51 +0700 (WIB)
-Date:   Mon, 20 Mar 2023 16:22:50 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     David Wang <00107082@163.com>, linux-kernel@vger.kernel.org,
-        masahiroy@kernel.org
-Subject: Re: [Debian Package]Regression 6.3-rc3: version is empty  for
- linux-headers installation dir
-Message-ID: <ZBgl6tbOT0GdIqb4@debian.me>
-References: <33233f0e.3970.186fdf28bc7.Coremail.00107082@163.com>
+        Mon, 20 Mar 2023 05:24:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2099B2471D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:24:14 -0700 (PDT)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pg8Pv6bFfzKsJ2;
+        Mon, 20 Mar 2023 17:21:55 +0800 (CST)
+Received: from huawei.com (10.50.163.32) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 20 Mar
+ 2023 17:24:10 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <shameerali.kolothum.thodi@huawei.com>,
+        <jonathan.cameron@huawei.com>
+CC:     <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <liulongfang@huawei.com>
+Subject: [PATCH v9 0/5] add debugfs to migration driver
+Date:   Mon, 20 Mar 2023 17:23:33 +0800
+Message-ID: <20230320092338.2889-1-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BENAmvkmHN2cxxdR"
-Content-Disposition: inline
-In-Reply-To: <33233f0e.3970.186fdf28bc7.Coremail.00107082@163.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add a debugfs function to the migration driver in VFIO to provide
+a step-by-step test function for the migration driver.
 
---BENAmvkmHN2cxxdR
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When the execution of live migration fails, the user can view the
+status and data during the migration process separately from the
+source and the destination, which is convenient for users to analyze
+and locate problems.
 
-On Mon, Mar 20, 2023 at 03:36:16PM +0800, David Wang wrote:
-> This could be fixed by adding back the definition for version
->=20
-> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-> index c5ae57167d7c..1870b2485217 100755
-> --- a/scripts/package/builddeb
-> +++ b/scripts/package/builddeb
-> @@ -216,6 +216,7 @@ install_libc_headers () {
->  rm -f debian/files
-> =20
->  packages_enabled=3D$(dh_listpackages)
-> +version=3D$KERNELRELEASE
-> =20
->  for package in ${packages_enabled}
->  do
-> --
+Changes v8 -> v9
+	Update the debugfs directory structure of vfio.
 
-Hi,
+Changes v7 -> v8
+	Add support for platform devices.
 
-Looks like your fixup is corrupted (tabs converted to spaces). Can you
-please send the proper patch (see
-Documentation/process/submitting-patches.rst)?
+Changes v6 -> v7
+	Fix some code style issues.
 
-Also, see Documentation/process/email-clients.rst) for guides on
-configuring your email client for kernel development.
+Changes v5 -> v6
+	Control the creation of debugfs through the CONFIG_DEBUG_FS.
 
-Thanks.
+Changes v4 -> v5
+	Remove the newly added vfio_migration_ops and use seq_printf
+	to optimize the implementation of debugfs.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Changes v3 -> v4
+	Change the migration_debug_operate interface to debug_root file.
 
---BENAmvkmHN2cxxdR
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes v2 -> v3
+	Extend the debugfs function from hisilicon device to vfio.
 
------BEGIN PGP SIGNATURE-----
+Changes v1 -> v2
+	Change the registration method of root_debugfs to register
+	with module initialization. 
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBgl5wAKCRD2uYlJVVFO
-ox8/APkB9AAoXSLkUsuzIroOgebRWIKmMZKBUhoktxWoAPXq9AEAsYsDS8cyRCZ6
-NbbyT+dKZE6IRHE6xM5xYxbwsZjDowA=
-=PkKU
------END PGP SIGNATURE-----
+Longfang Liu (5):
+  vfio/migration: Add debugfs to live migration driver
+  hisi_acc_vfio_pci: extract public functions for container_of
+  hisi_acc_vfio_pci: register debugfs for hisilicon migration driver
+  Documentation: add debugfs description for vfio
+  vfio: update live migration device status
 
---BENAmvkmHN2cxxdR--
+ .../ABI/testing/debugfs-hisi-migration        |  28 ++
+ Documentation/ABI/testing/debugfs-vfio        |  25 ++
+ drivers/vfio/Makefile                         |   2 +-
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 314 +++++++++++++++++-
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  11 +
+ drivers/vfio/pci/mlx5/main.c                  |   3 +
+ drivers/vfio/vfio.h                           |  14 +
+ drivers/vfio/vfio_debugfs.c                   |  80 +++++
+ drivers/vfio/vfio_main.c                      |   5 +
+ include/linux/vfio.h                          |   8 +
+ 10 files changed, 479 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-hisi-migration
+ create mode 100644 Documentation/ABI/testing/debugfs-vfio
+ create mode 100644 drivers/vfio/vfio_debugfs.c
+
+-- 
+2.24.0
+
