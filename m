@@ -2,159 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9CD6C0CEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAC56C0CF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCTJQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S229913AbjCTJSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjCTJQi (ORCPT
+        with ESMTP id S229497AbjCTJSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:16:38 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC17E13DFE;
-        Mon, 20 Mar 2023 02:16:36 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9508024E1B5;
-        Mon, 20 Mar 2023 17:16:29 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 17:16:29 +0800
-Received: from [192.168.125.128] (183.27.97.64) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 17:16:28 +0800
-Message-ID: <e3604902-2b7d-6ca5-9523-04dc09c920ed@starfivetech.com>
-Date:   Mon, 20 Mar 2023 17:16:20 +0800
+        Mon, 20 Mar 2023 05:18:30 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7322617CF1;
+        Mon, 20 Mar 2023 02:18:28 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1peBep-0004EZ-O8; Mon, 20 Mar 2023 10:18:23 +0100
+Message-ID: <c5383d0e-d33c-d59f-3ee6-4635c1c4d334@leemhuis.info>
+Date:   Mon, 20 Mar 2023 10:18:23 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
- patternProperties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        William Qiu <william.qiu@starfivetech.com>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
- <20230316030514.137427-4-xingyu.wu@starfivetech.com>
- <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
- <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
- <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
- <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
- <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
- <2eb0380e-bbb7-83fd-3916-9bdd8b068334@starfivetech.com>
- <8c5a7421-2948-674d-91a0-9cafe336401b@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <8c5a7421-2948-674d-91a0-9cafe336401b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH] media: i2c: imx290: fix conditional function defintions
+Content-Language: en-US, de-DE
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20230207161316.293923-1-arnd@kernel.org>
+ <Y+J+7lsf083k4x80@pendragon.ideasonboard.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <Y+J+7lsf083k4x80@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.64]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679303908;9226e0bf;
+X-HE-SMSGID: 1peBep-0004EZ-O8
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/20 16:36, Krzysztof Kozlowski wrote:
-> On 20/03/2023 09:26, Xingyu Wu wrote:
->> On 2023/3/20 15:40, Krzysztof Kozlowski wrote:
->>> On 20/03/2023 08:29, Xingyu Wu wrote:
->>>> On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
->>>>> On 20/03/2023 04:54, Xingyu Wu wrote:
->>>>>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
->>>>>>> On 16/03/2023 04:05, Xingyu Wu wrote:
->>>>>>>> Add optional compatible and patternProperties.
->>>>>>>>
->>>>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>>>>> ---
->>>>>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
->>>>>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>>>>> index ae7f1d6916af..b61d8921ef42 100644
->>>>>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>>>>> @@ -15,16 +15,31 @@ description: |
->>>>>>>>  
->>>>>>>>  properties:
->>>>>>>>    compatible:
->>>>>>>> -    items:
->>>>>>>> -      - enum:
->>>>>>>> -          - starfive,jh7110-aon-syscon
->>>>>>>> -          - starfive,jh7110-stg-syscon
->>>>>>>> -          - starfive,jh7110-sys-syscon
->>>>>>>> -      - const: syscon
->>>>>>>> +    oneOf:
->>>>>>>> +      - items:
->>>>>>>> +          - enum:
->>>>>>>> +              - starfive,jh7110-aon-syscon
->>>>>>>> +              - starfive,jh7110-stg-syscon
->>>>>>>> +              - starfive,jh7110-sys-syscon
->>>>>>>> +          - const: syscon
->>>>>>>> +      - items:
->>>>>>>> +          - enum:
->>>>>>>> +              - starfive,jh7110-aon-syscon
->>>>>>>> +              - starfive,jh7110-stg-syscon
->>>>>>>> +              - starfive,jh7110-sys-syscon
->>>>>>>> +          - const: syscon
->>>>>>>> +          - const: simple-mfd
->>>
->>> BTW, this also looks wrong. You just said that clock controller exists
->>> only in few variants. Also, why sometimes the same device  goes with
->>> simple-mfd and sometimies without? It's the same device.
->> 
->> Oh yes, If modified to:
->> 
->> oneOf:
->>       - items:
->>           - enum:
->>               - starfive,jh7110-aon-syscon
->>               - starfive,jh7110-stg-syscon
->>           - const: syscon
->>       - items:
->>           - const: starfive,jh7110-sys-syscon
->>           - const: syscon
->>           - const: simple-mfd
->> 
->> Or:
->> 
->>      - minItems: 2
->>        items:
->>          - enum:
->>              - starfive,jh7110-aon-syscon
->>              - starfive,jh7110-stg-syscon
->>              - starfive,jh7110-sys-syscon
->>          - const: syscon
->>          - const: simple-mfd
->> 
->> 
->> Which one is better?
+On 07.02.23 17:40, Laurent Pinchart wrote:
+> On Tue, Feb 07, 2023 at 05:13:12PM +0100, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The runtime suspend/resume functions are only referenced from the
+>> dev_pm_ops, but they use the old SET_RUNTIME_PM_OPS() helper
+>> that requires a __maybe_unused annotation to avoid a warning:
+>>
+>> drivers/media/i2c/imx290.c:1082:12: error: unused function 'imx290_runtime_resume' [-Werror,-Wunused-function]
+>> static int imx290_runtime_resume(struct device *dev)
+>>            ^
+>> drivers/media/i2c/imx290.c:1090:12: error: unused function 'imx290_runtime_suspend' [-Werror,-Wunused-function]
+>> static int imx290_runtime_suspend(struct device *dev)
+>>            ^
+>>
+
+I might be missing something (if so, please tell me), but to me it looks
+ this fix for a build issue in 6.3-rc (which shows up in Guenters weekly
+reports to Linus) didn't make any progress in the past few weeks. Is
+there a reason why? Who actually needs to pick it up and send it towards
+mainline? Manivannan Sadhasivam? Sakari Ailus?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+>> Convert this to the new RUNTIME_PM_OPS() helper that so this
+>> is not required. To improve this further, also use the pm_ptr()
+>> helper that lets the dev_pm_ops get dropped entirely when
+>> CONFIG_PM is disabled.
+>>
+>> A related mistake happened in the of_match_ptr() macro here, which
+>> like SET_RUNTIME_PM_OPS() requires the match table to be marked
+>> as __maybe_unused, though I could not reproduce building this without
+>> CONFIG_OF. Remove the of_match_ptr() here as there is no point in
+>> dropping the match table in configurations without CONFIG_OF.
+>>
+>> Fixes: 02852c01f654 ("media: i2c: imx290: Initialize runtime PM before subdev")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > 
-> If aon and stg are not supposed to have children, then only the first is
-> correct. It's not which is better, the second is not really correct in
-> such case.
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > 
-
-OK, will modify it in next version. Thanks.
-
-Best regards,
-Xingyu Wu
-
+>> ---
+>>  drivers/media/i2c/imx290.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+>> index 49d6c8bdec41..48ae2e0adf9e 100644
+>> --- a/drivers/media/i2c/imx290.c
+>> +++ b/drivers/media/i2c/imx290.c
+>> @@ -1098,7 +1098,7 @@ static int imx290_runtime_suspend(struct device *dev)
+>>  }
+>>  
+>>  static const struct dev_pm_ops imx290_pm_ops = {
+>> -	SET_RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
+>> +	RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
+>>  };
+>>  
+>>  /* ----------------------------------------------------------------------------
+>> @@ -1362,8 +1362,8 @@ static struct i2c_driver imx290_i2c_driver = {
+>>  	.remove = imx290_remove,
+>>  	.driver = {
+>>  		.name  = "imx290",
+>> -		.pm = &imx290_pm_ops,
+>> -		.of_match_table = of_match_ptr(imx290_of_match),
+>> +		.pm = pm_ptr(&imx290_pm_ops),
+>> +		.of_match_table = imx290_of_match,
+>>  	},
+>>  };
+>>  
+> 
