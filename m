@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E4E6C0D71
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202C66C0D73
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjCTJgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S231241AbjCTJgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjCTJf4 (ORCPT
+        with ESMTP id S231205AbjCTJf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:35:56 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977652413A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:35:33 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32K7F5K9024145;
-        Mon, 20 Mar 2023 04:35:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=iSaww0mrqhKwTlaGqHNwuY7eqsGxVnwAwh8sP3T5lqA=;
- b=pymYL24zh3LUP8oVda1OKRu07nK757dVAxdDk2sbi3CbkdsREk0U1S6NYf5rzXhncV33
- okihQu02XaUBx58r3HqMJPSgNBzJOWUJCuKxA4IPEI0n9UzGSKdAotjcc0tY8xk+4Etp
- nQNRK+48JXOkk7PFjdQx1Jdi/sGmHg9vakJslP9+QgyM69tBKKfvXYp+EvXjDeUyZTDf
- YTihGW7ekvbiupt60BgQDlMmv/A6SsiXaDIGq1SKwOqhaTCliy1PSnkw33w1zQI5uSJE
- dF5/5Z1Jy6Dq0jjPqd3Zilj1GE4fFlLjHJZ2QIGIEXuM7omhGP4ivgLWYexcT+eMBKVV gQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pd9qpt8u3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 04:35:21 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 20 Mar
- 2023 04:35:18 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 20 Mar 2023 04:35:18 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2CDFA11D4;
-        Mon, 20 Mar 2023 09:35:18 +0000 (UTC)
-Date:   Mon, 20 Mar 2023 09:35:18 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-CC:     Lee Jones <lee@kernel.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>
-Subject: Re: [PATCH] mfd: arizona-i2c: add the missing device table IDs for of
-Message-ID: <20230320093518.GJ68926@ediswmail.ad.cirrus.com>
-References: <20230319124153.35294-1-git@apitzsch.eu>
+        Mon, 20 Mar 2023 05:35:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28F42057A;
+        Mon, 20 Mar 2023 02:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679304936; x=1710840936;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dyi9itZ2EsM0QbXbELyjxRO6wIIBtI+33DE19QI5xqM=;
+  b=vBumbBz7E0Or0y0XMk0CvHUGoZOXRq1rQHdc/uzHsyRd2MxiyZAy9Tno
+   SwlJlBUrlIFq2wJ3/aTVgxe/ZReWysZbZCovCJgFeUaYCscjBo/i23zob
+   6a21B801a/PRjIx+TPCeKKEMhhoFAu1/w6I8rmBgYNj7PpH6/HYFSFcfz
+   GgLltgcc/DJoOHHSBtJ38DrMR/PuSFpCqZOgPtQo8tzC8zx3VJsSnc708
+   NU9m4V9khDPQYiGGjNSIUq7Euto8MOJk647UF9n0QWyuJq7OdYbbp2de4
+   m+wKbAAxFFds7WX+kJ7VaESIHczH5oDBCC0ldFEPuKGqPdERL5AFG2hDi
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
+   d="scan'208";a="142894619"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 02:35:32 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 02:35:32 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 20 Mar 2023 02:35:30 -0700
+Message-ID: <954acc8c-0df3-23a4-7237-ecbc31811a56@microchip.com>
+Date:   Mon, 20 Mar 2023 10:35:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230319124153.35294-1-git@apitzsch.eu>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: hm8ytVwUae6Ecn56T0Yq9u_FZX9HP4Gh
-X-Proofpoint-ORIG-GUID: hm8ytVwUae6Ecn56T0Yq9u_FZX9HP4Gh
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] iio: at91-sama5d2_adc: Fix use after free bug in
+ at91_adc_remove due to race condition
+Content-Language: en-US
+To:     Zheng Wang <zyytlz.wz@163.com>, <eugen.hristev@collabora.com>
+CC:     <jic23@kernel.org>, <lars@metafoo.de>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230310091239.1440279-1-zyytlz.wz@163.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230310091239.1440279-1-zyytlz.wz@163.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,15 +69,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 01:41:53PM +0100, André Apitzsch wrote:
-> This patch adds missing MODULE_DEVICE_TABLE definition
-> which generates correct modalias for automatic loading
-> of this driver when it is built as a module.
+On 10/03/2023 at 10:12, Zheng Wang wrote:
+> In at91_adc_probe, &st->touch_st.workq is bound with
+> at91_adc_workq_handler. Then it will be started by irq
+> handler at91_adc_touch_data_handler
 > 
-> Signed-off-by: André Apitzsch <git@apitzsch.eu>
+> If we remove the driver which will call at91_adc_remove
+>    to make cleanup, there may be a unfinished work.
+> 
+> The possible sequence is as follows:
+> 
+> Fix it by finishing the work before cleanup in the at91_adc_remove
+> 
+> CPU0                  CPU1
+> 
+>                      |at91_adc_workq_handler
+> at91_adc_remove     |
+> iio_device_unregister|
+> iio_dev_release     |
+> kfree(iio_dev_opaque);|
+>                      |
+>                      |iio_push_to_buffers
+>                      |&iio_dev_opaque->buffer_list
+>                      |//use
+
+There is no such thing as a SMP platform using this driver (yet?), so we 
+agree that this fix is purely theoretical, cannot be reproduced nor its 
+fix validated.
+
+That being said, I'm happy that enhancements are provided to this 
+driver, no doubt about that.
+
+
+> Fixes: 23ec2774f1cc ("iio: adc: at91-sama5d2_adc: add support for position and pressure channels")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 > ---
+>   drivers/iio/adc/at91-sama5d2_adc.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+> index 50d02e5fc6fc..1b95d18d9e0b 100644
+> --- a/drivers/iio/adc/at91-sama5d2_adc.c
+> +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+> @@ -2495,6 +2495,8 @@ static int at91_adc_remove(struct platform_device *pdev)
+>          struct iio_dev *indio_dev = platform_get_drvdata(pdev);
+>          struct at91_adc_state *st = iio_priv(indio_dev);
+> 
+> +       disable_irq_nosync(st->irq);
+> +       cancel_work_sync(&st->touch_st.workq);
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+About stopping the source of interrupt, I would recommend using a 
+sequence already exposed in at91_adc_hw_init (and possibly make it 
+common), like:
 
-Thanks,
-Charles
+    if (st->soc_info.platform->layout->EOC_IDR)
+            at91_adc_writel(st, EOC_IDR, 0xffffffff);
+    at91_adc_writel(st, IDR, 0xffffffff);
+
+Regards,
+   Nicolas
+
+>          iio_device_unregister(indio_dev);
+> 
+>          at91_adc_dma_disable(st);
+> --
+> 2.25.1
+> 
+
+-- 
+Nicolas Ferre
+
