@@ -2,104 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63676C0F02
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E8E6C0F07
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjCTKfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
+        id S230384AbjCTKgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjCTKfX (ORCPT
+        with ESMTP id S230379AbjCTKfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:35:23 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C2723643
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:34:49 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id eg48so44589604edb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679308486;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0YON+Je37l5rNH4i+NhItyHzULx6NYE6uyGW+1TbDg=;
-        b=qdGK3JLlynirCfpYsq2enpE1iu8iadQJO5cUlAxFy+JMKgkRgYTZLFG+u5KD546xQc
-         T0XYJAFAd8hrmEKvI4todGkTV1qbnBGsSJ0Ur06KT9ta8qfSWenHR/6kM70bRYTEFBfN
-         67uwHteZDRU6Apd6DSu3ABxOOi3i1eUn36ncxuRNa7jH+vmAlGishyu6fFSvK9KL2wL4
-         u0zl15/MiZY01ESdPQOUogHJ3dsP9ychc+bgweae3v+LmVy+0uGZJ1qs624koV5bHXRs
-         72SM5pVaBLekPuXrEm6x/ygEyzRBOen56LhCivprZ4bB1GYUqlbA2oNnweyC2GpbDs2N
-         A7ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308486;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v0YON+Je37l5rNH4i+NhItyHzULx6NYE6uyGW+1TbDg=;
-        b=k0E9Jy6CVEuyFmLmS7teItaSNjt1OyEAjUFkuVgHUGTzo2Xg4zRXq5auZga6UxNlRr
-         R+EXsEtDCY7D5V/9iFi2kwEcCQL4G6jtNWwEuxJjPMKy6VZyVE9Acaog9ee4QocO51ZE
-         pdVw1Z0r2j/zAhjbdw5pxae/jKxex5fg1YIDMLYD0HVezqFQZfsTnuQ5cw7REoq41Q3h
-         1gDZQQyq9LK2u3YmplvsxIFGc9nxX4eWhLA/GEXHoycar45u13M9jJ+kHZDuRmqx1f6e
-         WNLk/MRdnCtGZzpbP4gbGD8GfIvC7OxI0Ced+H9/FTQ6iEhgDggUknlNoWAI6IXALdVn
-         LSLg==
-X-Gm-Message-State: AO0yUKVshGIg1PYkh5UmRq8GhY2M0Dk4G2m1QFDNql9/uh+Iuvw2xtG/
-        XIn+/GFQXXxxz8hKQUqP6Z4VTliUYKE=
-X-Google-Smtp-Source: AK7set/yDflInru6nyu/C75gNAtSOaLhUN4WZSH7nppGQk6eU80Mrd5X0iVQ5sAQkHhWV9oUMAITYQ==
-X-Received: by 2002:a17:906:40d1:b0:932:748a:f0ea with SMTP id a17-20020a17090640d100b00932748af0eamr8458784ejk.63.1679308486325;
-        Mon, 20 Mar 2023 03:34:46 -0700 (PDT)
-Received: from alaa-emad.. ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id q18-20020a170906b29200b008c607dd7cefsm4235244ejz.79.2023.03.20.03.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 03:34:46 -0700 (PDT)
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, eng.mennamahmoud.mm@gmail.com,
-        Julia Lawall <julia.lawall@inria.fr>
-Subject: [PATCH] staging: rtl8723bs: use inline functions for dev_to_sdio_func
-Date:   Mon, 20 Mar 2023 12:34:41 +0200
-Message-Id: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 20 Mar 2023 06:35:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F59D7A90;
+        Mon, 20 Mar 2023 03:35:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3CAB61333;
+        Mon, 20 Mar 2023 10:35:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348B5C433EF;
+        Mon, 20 Mar 2023 10:34:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679308504;
+        bh=M/wWyAoTmx9mB/cTEjucMK8opbUBCDiaoVYvdKCtM00=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ug4MGKB5x6BjiRYYC4VzrvoxvY/oDRwFjN2VLdzI5TBwlSfpiMayNt3lfjtPibAHu
+         St7oiHUW9MjFsGWKPzLGvkvvUZqr8LOyeFgbzc19GlegmF6RIPsYIgGp3bTH5Q8xbI
+         n7QyKIU3IjeRQwkowbrl/zEVnMX59V2xCugTCcAfq5tKdRQBJjp7lWTJET6pIfxMzH
+         De+CtrWrTv4duxBvCTvGLvc2V1yU0OKYCkVIuUYnQkuAxg1YiezlnRyCdqXOo3KJWx
+         C9ffVaU5Fppad0dttD16qvp+PBUE7PpEdPBO9Xp6YD6Bux3Yej/BZmKW9RY8T6CaBL
+         AWpIEJI+3iQUQ==
+Date:   Mon, 20 Mar 2023 16:04:52 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Robert Richter <rric@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-unisoc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH 1/9] gpio: rda: Convert to immutable irq_chip
+Message-ID: <20230320103452.GD4564@thinkpad>
+References: <20230316-immutable-chips-2-v1-0-053d6ede831b@linaro.org>
+ <20230316-immutable-chips-2-v1-1-053d6ede831b@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230316-immutable-chips-2-v1-1-053d6ede831b@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert `dev_to_sdio_func` macro into a static inline function.
-it is not great to have macro that use `container_of` macro,
-because from looking at the definition one cannot tell
-what type it applies to.
+On Mon, Mar 20, 2023 at 10:55:08AM +0100, Linus Walleij wrote:
+> Convert the driver to immutable irq-chip with a bit of
+> intuition.
+> 
+> Cc: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-One can get the same benefit from an efficiency point of view
-by making an inline function.
+Acked-by: Manivannan Sadhasivam <mani@kernel.org>
 
-Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
----
- drivers/staging/rtl8723bs/os_dep/sdio_intf.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Thanks,
+Mani
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
-index 490431484524..7ee821dbbae0 100644
---- a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
-+++ b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
-@@ -10,7 +10,10 @@
- #include <linux/jiffies.h>
- 
- #ifndef dev_to_sdio_func
--#define dev_to_sdio_func(d)     container_of(d, struct sdio_func, dev)
-+static inline struct sdio_func *dev_to_sdio_func(struct device *d)
-+{
-+	return container_of(d, struct sdio_func, dev);
-+}
- #endif
- 
- static const struct sdio_device_id sdio_ids[] = {
+> ---
+>  drivers/gpio/gpio-rda.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpio-rda.c b/drivers/gpio/gpio-rda.c
+> index 62ba18b3a602..dd568907d389 100644
+> --- a/drivers/gpio/gpio-rda.c
+> +++ b/drivers/gpio/gpio-rda.c
+> @@ -38,7 +38,6 @@ struct rda_gpio {
+>  	struct gpio_chip chip;
+>  	void __iomem *base;
+>  	spinlock_t lock;
+> -	struct irq_chip irq_chip;
+>  	int irq;
+>  };
+>  
+> @@ -74,6 +73,7 @@ static void rda_gpio_irq_mask(struct irq_data *data)
+>  	value |= BIT(offset) << RDA_GPIO_IRQ_FALL_SHIFT;
+>  
+>  	writel_relaxed(value, base + RDA_GPIO_INT_CTRL_CLR);
+> +	gpiochip_disable_irq(chip, offset);
+>  }
+>  
+>  static void rda_gpio_irq_ack(struct irq_data *data)
+> @@ -154,6 +154,7 @@ static void rda_gpio_irq_unmask(struct irq_data *data)
+>  	u32 offset = irqd_to_hwirq(data);
+>  	u32 trigger = irqd_get_trigger_type(data);
+>  
+> +	gpiochip_enable_irq(chip, offset);
+>  	rda_gpio_set_irq(chip, offset, trigger);
+>  }
+>  
+> @@ -195,6 +196,16 @@ static void rda_gpio_irq_handler(struct irq_desc *desc)
+>  	chained_irq_exit(ic, desc);
+>  }
+>  
+> +static const struct irq_chip rda_gpio_irq_chip = {
+> +	.name = "rda-gpio",
+> +	.irq_ack = rda_gpio_irq_ack,
+> +	.irq_mask = rda_gpio_irq_mask,
+> +	.irq_unmask = rda_gpio_irq_unmask,
+> +	.irq_set_type = rda_gpio_irq_set_type,
+> +	.flags = IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
+> +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+> +
+>  static int rda_gpio_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -241,15 +252,8 @@ static int rda_gpio_probe(struct platform_device *pdev)
+>  	rda_gpio->chip.base = -1;
+>  
+>  	if (rda_gpio->irq >= 0) {
+> -		rda_gpio->irq_chip.name = "rda-gpio",
+> -		rda_gpio->irq_chip.irq_ack = rda_gpio_irq_ack,
+> -		rda_gpio->irq_chip.irq_mask = rda_gpio_irq_mask,
+> -		rda_gpio->irq_chip.irq_unmask = rda_gpio_irq_unmask,
+> -		rda_gpio->irq_chip.irq_set_type = rda_gpio_irq_set_type,
+> -		rda_gpio->irq_chip.flags = IRQCHIP_SKIP_SET_WAKE,
+> -
+>  		girq = &rda_gpio->chip.irq;
+> -		girq->chip = &rda_gpio->irq_chip;
+> +		gpio_irq_chip_set_chip(girq, &rda_gpio_irq_chip);
+>  		girq->handler = handle_bad_irq;
+>  		girq->default_type = IRQ_TYPE_NONE;
+>  		girq->parent_handler = rda_gpio_irq_handler;
+> 
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
