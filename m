@@ -2,82 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A8E6C1436
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DFD6C1434
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjCTN73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S231358AbjCTN7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbjCTN7R (ORCPT
+        with ESMTP id S229813AbjCTN7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:59:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0F71BD9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679320700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xluQCIRM9KUg+iS1ks5cvU7xSezg5DUOPbgJwMPELqs=;
-        b=Sm9JlDfMdBi7ddhsh2/XN/JSHCDATjK/tsJpw7ocyuj4oRsQuoig/LpmpfmBc1tg6sWmzx
-        c9hJ8/w8y7LEYEAmYRwCTG4pyA9lvuKQHv2QDOIc/10qhDkEcdHeNhQf7YBaeSqkeTJiA5
-        OImKX+fnYFR7ZK29js7n4iHUrxeFamE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-158-RKky9z7uMAKV1MvZFNV_TA-1; Mon, 20 Mar 2023 09:58:18 -0400
-X-MC-Unique: RKky9z7uMAKV1MvZFNV_TA-1
-Received: by mail-wm1-f69.google.com with SMTP id p21-20020a05600c1d9500b003ed34032a01so5578416wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:58:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679320698;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xluQCIRM9KUg+iS1ks5cvU7xSezg5DUOPbgJwMPELqs=;
-        b=T8Qe+2joXl6I+6Y2KoUhlhSszbK/1tYzvInjACl+GqyqVIwGDvI/CWmkqzXwac3n2l
-         owDNGMSwWObZGpmidEHcMvFOqmaH2X1mRLx3mv26VTTZ+ZUis2IFUgczhdUPA1txCuEL
-         JN063dMXKk+Nlln7t2KqN9W5Ac/HLkFBQUcBo38KuUJAMBGO0acxHZjB6sdtIAUEaPuA
-         TdfuYrgolgaPotP4wkBdd9KDZQEX1GM2QDeVOq87t+kLZEMs5QfuRnCThJxDPT8+p4Kr
-         1wrdlc7zrX5mKfPnzrSv5TZS1/HPhpu9TcRxc+Hhs6YsSQC88ukKv2/0CjKmLKDQTzyt
-         IMzg==
-X-Gm-Message-State: AO0yUKXacHvZNdt5EGgK2UtisQFdoRTzyL22LhGHDM++ChAz3FiQT1pk
-        lrpSWP9I48ALfvx7m7duUQX359iyBH89fTc2ZlXaLcdWiiUFlcJiWaKpe6Ui/SnX06ff9YmWIfh
-        sLOLn0u4IUKuTTxqYJ92n6kpl
-X-Received: by 2002:adf:ce11:0:b0:2c7:851:c0bf with SMTP id p17-20020adfce11000000b002c70851c0bfmr13818707wrn.0.1679320697842;
-        Mon, 20 Mar 2023 06:58:17 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+FUDvH/psBKoCx/B613vRQOYlndcOrSX0ahkGfyMMplDZBRpmL9wOqCuvTHwUfmOLfiNDOAg==
-X-Received: by 2002:adf:ce11:0:b0:2c7:851:c0bf with SMTP id p17-20020adfce11000000b002c70851c0bfmr13818684wrn.0.1679320697599;
-        Mon, 20 Mar 2023 06:58:17 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id s13-20020a5d510d000000b002c794495f6fsm5977998wrt.117.2023.03.20.06.58.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:58:17 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 14:58:14 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v1] virtio/vsock: check transport before skb
- allocation
-Message-ID: <20230320135814.jncpvznka56liu36@sgarzare-redhat>
-References: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 20 Mar 2023 09:59:07 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD59C136E5;
+        Mon, 20 Mar 2023 06:59:04 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id A00C632008C0;
+        Mon, 20 Mar 2023 09:59:03 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Mon, 20 Mar 2023 09:59:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1679320743; x=1679407143; bh=RcFAA+JH7hHzquVrgWhPoE2JbQgsxayCGJV
+        rJ9IKzK4=; b=pdyGtudY62tGvSoWAr8MYWqjMZN0Lz8ijJcuZbCzAkTJbM2Yzx7
+        GQiPqc1FS4vaxeqOo/c4aObmk6hgyhtWG67BksE33LAngGUC4G0R6za+Go+CaYdL
+        jfn9qGAibNlJAnH4xSm2raPMP0Prtx9Lgukmn7CNJuRpnb+OY5kjo2YA1lNg0Qfw
+        FXDGLngm/X7gFJDYXS+HbWdFrZ2LFoEsDRM7p6uPZLAET0RW23sTNllxNxbiTrQr
+        SbCkSkXIwxifZBY6t7/cKpqaSD0JZLmMOAcmglfuGAEQe9ku0w3vJHEho7uWegQ9
+        5cQVmftqEwsZMThetAQ3UubRYdfeLTNd1Bg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1679320743; x=1679407143; bh=RcFAA+JH7hHzquVrgWhPoE2JbQgsxayCGJV
+        rJ9IKzK4=; b=v1jv+d9JCCPF+V5tU5NYoca13K/ohd6CQ9dB/MSn/GgncchKb9b
+        WRHPsNv2yfxwd76kNk/346PLPNkpKR71ZbmMfYcbodHQgyVnXok4gRdY488pZMmR
+        YUEhjrylfxptJAM5DRgF8BqmpDGez7xejufBbtR/n/6dFNuRO/I18QmemzTrJCyv
+        OtDMRhaJ3IeFK7QLQqWkiIfex4xXDeuzTTCSUS2cAnMkiNV4vX07XM0uLfbnbTry
+        H5IbJn/8PXbK+n1XKSDdAEHsYWnaZbJCY1xZQCuE4PBp7Ub8qcWMlxU0DVTqxgK7
+        E4UoVb9wrlMBGyf9WHMXU5jAcacwrPFOIwg==
+X-ME-Sender: <xms:pmYYZL5Hmx8D_ZstQUoC8cOfzvUnzLbAjj6n02NeXvtONMT-3fw9YQ>
+    <xme:pmYYZA5csCZZ1BxcJIzzahfusDWf5paTV0f9rm2m3lZDqohkLXzBTao69bkjUqxNs
+    Ye9KseumyIgXGyZjAU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefkedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfo
+    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
+    gsrdgtrgeqnecuggftrfgrthhtvghrnhepfeejgedvudegvdekhedvffefjefhuedthfdt
+    heehkeffuddvgfetjeegjeeufefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmphgvrghr
+    shhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
+X-ME-Proxy: <xmx:pmYYZCceFORcq38em0H_Pv2bOrUShdhKxyRoMPXa3QZx53PjoQtd4w>
+    <xmx:pmYYZMJMfxJn5Wr9uoD1sBd8qdiOl2H1GaBqgc-8XyYFni3sdmO_Vg>
+    <xmx:pmYYZPK-RXqN0yieOOF5WS4JvSVrhX130l-svH6vbXTX6inFUYIg0g>
+    <xmx:p2YYZFjCwiwl5fiBlcBqirz35TX3h8l0ZIUmJ7_v19w-7zsOGNNwdA>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 801D2C60091; Mon, 20 Mar 2023 09:59:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <b8c775a1-0934-4d6b-ab13-bbccc2be50c7@app.fastmail.com>
+In-Reply-To: <087797f9-9303-cbf2-dcdc-c78a10f92118@redhat.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20230320003221.561750-1-mpearson-lenovo@squebb.ca>
+ <8b6dd11e-f166-37e4-8ed4-f92b94b3a7ac@redhat.com>
+ <087797f9-9303-cbf2-dcdc-c78a10f92118@redhat.com>
+Date:   Mon, 20 Mar 2023 09:58:42 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     "Hans de Goede" <hdegoede@redhat.com>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     "markgross@kernel.org" <markgross@kernel.org>,
+        "Mark Pearson" <markpearson@lenovo.com>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        =?UTF-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+Subject: Re: [PATCH v4 1/4] platform/x86: think-lmi: add missing type attribute
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,50 +96,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:37:10PM +0300, Arseniy Krasnov wrote:
->Pointer to transport could be checked before allocation of skbuff, thus
->there is no need to free skbuff when this pointer is NULL.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/virtio_transport_common.c | 8 +++-----
-> 1 file changed, 3 insertions(+), 5 deletions(-)
 
-LGTM, I think net-next is fine for this.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+On Mon, Mar 20, 2023, at 9:57 AM, Hans de Goede wrote:
+> Hi,
+>
+> On 3/20/23 14:56, Hans de Goede wrote:
+>> Hi Mark,
+>>=20
+>> It seems that while adding linux-kernel@vger.kernel.org you have drop=
+ped
+>> platform-driver-x86@vger.kernel.org. For future patches please Cc bot=
+h.
+>>=20
+>> platform-driver-x86@vger.kernel.org needs to be Cc-ed for patches
+>> to show up in patchwork:
+>> https://patchwork.kernel.org/project/platform-driver-x86/list/
+>>=20
+>> Which I use as my primary means of tracking which patches I need
+>> to review / merge (note no need to resend this series I have it
+>> on my radar).
+>>=20
+>> More importantly you seem to not have Cc-ed
+>> Thomas Wei=C3=9Fschuh on this version ?
+>
+> Never mind, I just noticed that Thomas has 2 email addresses
+> and you did Cc their other address...
 
-Thanks,
-Stefano
+Yep - and no idea how I missed pdx86 mailing list....must have been a co=
+py paste error :( Sorry - not deliberate.
+
+Mark
 
 >
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index cda587196475..607149259e8b 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -867,6 +867,9 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
-> 	if (le16_to_cpu(hdr->op) == VIRTIO_VSOCK_OP_RST)
-> 		return 0;
+> Regards,
 >
->+	if (!t)
->+		return -ENOTCONN;
->+
-> 	reply = virtio_transport_alloc_skb(&info, 0,
-> 					   le64_to_cpu(hdr->dst_cid),
-> 					   le32_to_cpu(hdr->dst_port),
->@@ -875,11 +878,6 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
-> 	if (!reply)
-> 		return -ENOMEM;
+> Hans
 >
->-	if (!t) {
->-		kfree_skb(reply);
->-		return -ENOTCONN;
->-	}
->-
-> 	return t->send_pkt(reply);
-> }
 >
->-- 
->2.25.1
 >
-
+>> On 3/20/23 01:32, Mark Pearson wrote:
+>>> This driver was missing the mandatory type attribute...oops.
+>>>
+>>> Add it in along with logic to determine whether the attribute is an
+>>> enumeration type or a string by parsing the possible_values attribut=
+e.
+>>>
+>>> Upstream bug https://bugzilla.kernel.org/show_bug.cgi?id=3D216460
+>>>
+>>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>>> ---
+>>> Changes in v4:
+>>>  - Unchanged. Sending to linux-kernel mailing list as recommended
+>>> Changes in v3:
+>>>  - Rebased on latest pdx86, review_hans branch
+>>> Changes in v2:=20
+>>>  - Simplify the code and move type determination into show function
+>>>  - Don't use Fixes with URL in commit info
+>>>
+>>>  drivers/platform/x86/think-lmi.c | 17 +++++++++++++++++
+>>>  1 file changed, 17 insertions(+)
+>>>
+>>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86=
+/think-lmi.c
+>>> index cc66f7cbccf2..a765bf8c27d8 100644
+>>> --- a/drivers/platform/x86/think-lmi.c
+>>> +++ b/drivers/platform/x86/think-lmi.c
+>>> @@ -947,6 +947,20 @@ static ssize_t possible_values_show(struct kobj=
+ect *kobj, struct kobj_attribute
+>>>  	return sysfs_emit(buf, "%s\n", setting->possible_values);
+>>>  }
+>>> =20
+>>> +static ssize_t type_show(struct kobject *kobj, struct kobj_attribut=
+e *attr,
+>>> +		char *buf)
+>>> +{
+>>> +	struct tlmi_attr_setting *setting =3D to_tlmi_attr_setting(kobj);
+>>> +
+>>> +	if (setting->possible_values) {
+>>> +		/* Figure out what setting type is as BIOS does not return this */
+>>> +		if (strchr(setting->possible_values, ','))
+>>> +			return sysfs_emit(buf, "enumeration\n");
+>>> +	}
+>>> +	/* Anything else is going to be a string */
+>>> +	return sysfs_emit(buf, "string\n");
+>>> +}
+>>> +
+>>>  static ssize_t current_value_store(struct kobject *kobj,
+>>>  		struct kobj_attribute *attr,
+>>>  		const char *buf, size_t count)
+>>> @@ -1036,10 +1050,13 @@ static struct kobj_attribute attr_possible_v=
+alues =3D __ATTR_RO(possible_values);
+>>> =20
+>>>  static struct kobj_attribute attr_current_val =3D __ATTR_RW_MODE(cu=
+rrent_value, 0600);
+>>> =20
+>>> +static struct kobj_attribute attr_type =3D __ATTR_RO(type);
+>>> +
+>>>  static struct attribute *tlmi_attrs[] =3D {
+>>>  	&attr_displ_name.attr,
+>>>  	&attr_current_val.attr,
+>>>  	&attr_possible_values.attr,
+>>> +	&attr_type.attr,
+>>>  	NULL
+>>>  };
+>>>
