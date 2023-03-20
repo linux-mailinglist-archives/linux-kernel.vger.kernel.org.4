@@ -2,283 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571E16C1DF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642066C1DFA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjCTRa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S233319AbjCTRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbjCTR3i (ORCPT
+        with ESMTP id S233389AbjCTR3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:29:38 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3426728849;
-        Mon, 20 Mar 2023 10:25:15 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id be16so9309224oib.0;
-        Mon, 20 Mar 2023 10:25:14 -0700 (PDT)
+        Mon, 20 Mar 2023 13:29:32 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8E5113C5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:25:03 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id y20so15888456lfj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679333111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NwYte0FtFZG8eWczHimoVeVFmR0OVT3lcfyLXk0qH2w=;
-        b=lt8aqP1FG+udw9Q0/RUbLn7xO+AXDEEHgOy0GEzotsWIO46JdEynu5tSbCUvL5hvlj
-         lNrbc5NBciW4S2IL+rnhZVEJIhBqgRAwS8lOZadDrRxviiQSmqfU9yJPpyuXgI2+25GK
-         PBS7Ajy6XHt2RNS+zVDeGBmCeHqc5v//d6svifqwrh8r09RjXf9jQL21Fu5zZVwaxYkj
-         Qxccob0dDvGAWAT/dzk++RokW06JXgLzxJ+3L96R6mYD0Ngu38y28nXuFl6Z7oWBnkxh
-         kCKuG1h3VZ9ph20ToNww8pk8+JoZYYgI99ton40oOz/fWGlinIivhCjN/TSuCj9JmR35
-         kQTQ==
+        d=linaro.org; s=google; t=1679333099;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D+40F17R4r2j3Oa6hgihalVLyCdyNWY4c+LMQXZbgJQ=;
+        b=cjbmYIKQo5lsWj1ch9ZWz3daxBvFMofo3k7xie5Xjmfs5T+PIfIENsxuozFIT+2iHF
+         dV2novyZc+LxFOy0e8hgfX7XHp4N5xuqSNH5PGv+B9gousA9GfWD1l6RJLvutf6Tpowu
+         ftyNoaKympt7mjvx3otP08Mt11w0/buGivH4m5qlhLIpot7+yRKjScO/cupLPbQvsily
+         AUe8VjAGLOYR41p2lJWl6iEpe7G7YD7iJ0kz69Sjpw/+NXNLJunMixrO5F3N0Q+h1y4i
+         s3W9atqhhVof7mkqZAs4i5pAqY4Yfby4j4/kMlRMXxgwbEHKFcPoOCCi2FoKO228HRC8
+         d6+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NwYte0FtFZG8eWczHimoVeVFmR0OVT3lcfyLXk0qH2w=;
-        b=25ymYnxjeCJxwXmXxyTsoexKfRsmbk81aLpNxMBP74FfrWDZTz6c/m+LbEypmjMPsB
-         jEjdwnwufMdfaGTmsAt7EspoxdiOjPSEnS03jbLo/bR1qs4L4ZMPDrju81FVWZeJnpnT
-         eXI4g7tdjgLiDx0Q6inFo9Xy/vY7UB3XxLjX8tTScy5LeDtoqL5qKA6gbWEDtejSstex
-         omWxh5n6R1Fti+AXGk9zCFNhU881ryUzND4A8K0wvfH0dbgn6baVAsGg4c3lEZlhr1L/
-         z5sNLs2m/abi1drJZ1s6mk9EOlmPNRSJ4Jht+fJ0YAV1jVT3ZkHIJKe7GoEujx9SXIqo
-         NRsw==
-X-Gm-Message-State: AO0yUKXed1qUBADpkz2KoKhq6YonBFQksGUTfGSYxqef+c4F2jQEktle
-        1QBWncUvUkIM6sJ6Cd95DhSBQd9IGcPQjTFuDdE=
-X-Google-Smtp-Source: AK7set99nLRMGCaQsMXfUkkwGjfD2VCHlH+V3NU0HwtldQphI2vEN5ve+Togabn0vKIkTaR9VNRPgOMJ+6xUlQVL8m0=
-X-Received: by 2002:a05:6808:2117:b0:386:a829:48d4 with SMTP id
- r23-20020a056808211700b00386a82948d4mr235548oiw.0.1679333109557; Mon, 20 Mar
- 2023 10:25:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679333099;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+40F17R4r2j3Oa6hgihalVLyCdyNWY4c+LMQXZbgJQ=;
+        b=Fc4PB6RLT9birFgA6W2Np2cHr6xHdgJat/FKY8cUjcCrAH0EbGegXsP3T3tZ9GVu9Y
+         rsiTjqkctWLT8wm+9Y/nYknSPfmf8Zl0Z2k0hA6kidhCKC6qfTtOzzVTfdH87mOygZiY
+         20XFa//UI10fDRTtD7iW8+PdlBd2jF8wU1VojwCxTjHUpTIHjbvVStKUJPq/w8OtslFY
+         V+Az5jJof3Bpz8VX2krGymX0IZDbHPQFHK4P3Vk3kwQcKAzGZFOB82KqG2ojTlz2lJMt
+         7NzTUnak0herxC+6WSj6kWW7ff1bU8r211vo5hV4KtSZ5xk7x7P0x/BzOaCx0Ql9oTpl
+         tLmQ==
+X-Gm-Message-State: AO0yUKWWQUIITU0UIq06grEqLrBnkK/mGCBbtb6l+00WQfAXRPFq1BID
+        6Wh1eCNYlMsJ9F92IKBq1FN/0Q==
+X-Google-Smtp-Source: AK7set8zFljyy8dHcXkHKUOf31A8hZipF/B/M99aifxoFkUBPjyWNnCOLRLpicX+grbKR4Uy6qO0lg==
+X-Received: by 2002:ac2:4905:0:b0:4df:7cc4:d1f3 with SMTP id n5-20020ac24905000000b004df7cc4d1f3mr191838lfi.20.1679333099529;
+        Mon, 20 Mar 2023 10:24:59 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id w9-20020a05651203c900b004db2ac3a522sm1803756lfp.62.2023.03.20.10.24.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 10:24:59 -0700 (PDT)
+Message-ID: <c74e0683-304d-7571-1d22-c2c65d02dc6a@linaro.org>
+Date:   Mon, 20 Mar 2023 18:24:57 +0100
 MIME-Version: 1.0
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com> <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
-In-Reply-To: <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 20 Mar 2023 18:24:56 +0100
-Message-ID: <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, arinc.unal@arinc9.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 09/15] arm64: dts: qcom: sa8775p: add the Power On
+ device node
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230320154841.327908-1-brgl@bgdev.pl>
+ <20230320154841.327908-10-brgl@bgdev.pl>
+ <65d15d82-c106-b0a7-11b4-703bf22c28b1@linaro.org>
+In-Reply-To: <65d15d82-c106-b0a7-11b4-703bf22c28b1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-On Mon, Mar 20, 2023 at 5:36=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/03/2023 17:18, Sergio Paracuellos wrote:
-> > Adds device tree binding documentation for clocks and resets in the
-> > Mediatek MIPS and Ralink SOCs. This covers RT2880, RT3050, RT3052, RT33=
-50,
-> > RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
->
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
->
-> Subject: drop second/last, redundant "device tree binding
-> documentation". The "dt-bindings" prefix is already stating that these
-> are bindings.
 
-Sure, will do. Sorry for the inconvenience.
+On 20.03.2023 18:23, Konrad Dybcio wrote:
+> 
+> 
+> On 20.03.2023 16:48, Bartosz Golaszewski wrote:
+>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>
+>> Add the PON node to PMIC #0 for sa8775p platforms.
+>>
+>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>> ---
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Konrad
+Hold up, I am not sure if PBS is there on PMM8654AU. Check the
+-pmic-overlay.dtsi.
 
-> (BTW, that's the longest redundant component I ever saw)
-
-I thought it was better to just list compatible strings inside one
-single file than adding the same binding in multiple files.
-
->
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  .../bindings/clock/mtmips-clock.yaml          | 68 +++++++++++++++++++
-> >  1 file changed, 68 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/mtmips-cloc=
-k.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/mtmips-clock.yaml =
-b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
-> > new file mode 100644
-> > index 000000000000..c92969ce231d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/mtmips-clock.yaml
->
-> Filename matching compatible, so vendor prefix and device name (or
-> family of names).
-
-I used mtmips here but list compatibles starting with ralink. As I
-have said in the cover letter I am inspired by the last merged pinctrl
-series for these SoCs.
-See:
-- https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06185@a=
-rinc9.com/T/#t
-
-Not all of compatible currently exist. All of these are at the end the
-way we can properly match compatible-data to write a proper driver.
-The current ralink dtsi files which are in tree now
-are totally incomplete and not documented so we are planning to align
-all of this with openWRT used files and others soon. That's the reason
-we are not touching
-'arch/mips/boot/dts' at all now. I don't think anybody is using any of
-this but mt7621 which is properly completed and documented.
-
->
-> > @@ -0,0 +1,68 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/mtmips-clock.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MTMIPS SoCs Clock
->
-> One clock? Are you sure these describe exactly one clock?
-
-I will change this to 'Clocks'.
-
->
-> > +
-> > +maintainers:
-> > +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > +
-> > +description: |
-> > +  MediaTek MIPS and Ralink SoCs have an XTAL from where the cpu clock =
-is
-> > +  provided as well as derived clocks for the bus and the peripherals.
-> > +
-> > +  Each clock is assigned an identifier and client nodes use this ident=
-ifier
-> > +  to specify the clock which they consume.
->
-> Drop useless or obvious pieces of description. Describe the hardware.
->
-> > +
-> > +  The clocks are provided inside a system controller node.
-
->
-> ???
-
-I meant, this node is a syscon from where both clock and reset related
-registers are used. I think writing in this way was enough since it
-has a pretty similar description like the one in
-'mediatek,mt7621-sysc.yaml'.
-
->
-> > +
-> > +  This node is also a reset provider for all the peripherals.
->
-> ??? Does it mean it is not only "Clock" but also reset controller?
-
-Yes, this node is a clock and reset controller for all the SoC.
-
->
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - ralink,rt2880-sysc
-> > +          - ralink,rt3050-sysc
-> > +          - ralink,rt3052-sysc
-> > +          - ralink,rt3352-sysc
-> > +          - ralink,rt3883-sysc
-> > +          - ralink,rt5350-sysc
-> > +          - ralink,mt7620-sysc
-> > +          - ralink,mt7620a-sysc
-> > +          - ralink,mt7628-sysc'
-> > +          - ralink,mt7688-sysc
-> > +          - ralink,rt2880-reset
->
-> That's odd. rt2880 is sysc and reset? One device with two compatibles?
-
-This 'ralink,rt2880-reset' is for compatibility reasons. Reset related
-code was inside 'arch/mips/ralink' folder reset.c file but it is moved
-to this new driver, so we have maintained this reset stuff for the
-reset compatibility. All of the rest are the new possible stuff for
-both reset and clocks. Clock driver is instantiated in two phases. The
-earlier one set up the clocks via CLK_OF_DECLARE macro. Resets are set
-up as a platform driver. Is only inside this where
-'ralink,rt2880-reset' is used. See patch 2 of the series for details.
-
->
-> Also, order these by name.
-
-All are ordered but I maintained the  'ralink,rt2880-reset' at the end.
-
->
->
-> > +      - const: syscon
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#clock-cells':
-> > +    description:
-> > +      The first cell indicates the clock number.
-> > +    const: 1
-> > +
-> > +  '#reset-cells':
-> > +    description:
-> > +      The first cell indicates the reset bit within the register.
-> > +    const: 1
->
-> Wait, only rt2880-reset is reset controller? This is confusing.
-
-No, that is the reset compatibility one. All the rest are both clock
-and reset controllers from now on.
-
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - '#clock-cells'
-> > +  - '#reset-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    sysc: sysc@0 {
->
-> Drop label.
-
-Sure, thanks.
-
->
-> Node names should be generic, clock-controller or reset-controller or
-> system-controller sometimes.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-device=
-tree-basics.html#generic-names-recommendation
->
-> > +      compatible =3D "ralink,rt5350-sysc", "syscon";
-> > +      reg =3D <0x0 0x100>;
-> > +      #clock-cells =3D <1>;
-> > +      #reset-cells =3D <1>;
-> > +    };
-
-Ok, so I will set this as 'syscon@' if you are ok with it.
-
->
-> Best regards,
-> Krzysztof
->
-
-Thanks to you for the review.
-
-Best regards,
-    Sergio Paracuellos
+Konrad
+>>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+>> index afe220b374c2..dbc596e32253 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+>> @@ -12,6 +12,14 @@ pmm8654au_0: pmic@0 {
+>>  		reg = <0x0 SPMI_USID>;
+>>  		#address-cells = <1>;
+>>  		#size-cells = <0>;
+>> +
+>> +		pmm8654au_0_pon: pon@1200 {
+>> +			compatible = "qcom,pmk8350-pon";
+>> +			reg = <0x1200>, <0x800>;
+>> +			reg-names = "hlos", "pbs";
+>> +			mode-recovery = <0x1>;
+>> +			mode-bootloader = <0x2>;
+>> +		};
+>>  	};
+>>  
+>>  	pmm8654au_1: pmic@2 {
