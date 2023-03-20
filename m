@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410126C1AC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC6D6C1AE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbjCTQA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S232519AbjCTQFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbjCTQAM (ORCPT
+        with ESMTP id S233414AbjCTQEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:00:12 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2C438B53;
-        Mon, 20 Mar 2023 08:50:38 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id iw17so2507691wmb.0;
-        Mon, 20 Mar 2023 08:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679327433;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WlRvHn65p7ApqB1hkWXEl334dlDtfL7sexIylSD7RF8=;
-        b=Xb9J1kzvH/7/KC9kfFPe5nfM0jOx0VqmPqlTVHQ2ICuE/eznYiDnZR2GROkiEBeSW5
-         aj8nTpjx/Zgj9GE1Ere9JmGDP4qH6Ms4GG1dcgxiwCZUubj8EmKPPzq+xRYgui52JXXZ
-         GG9yZPfp/eWkFHvSgIPzHyC1iWc88F8XSN7+xdXyC7MOoEWIbvy0y04VrbuO9p8+RjCl
-         XbF+dk2kkZAseZ7QMlgJZ2Bt8HfHx2I4D6+r4BhyVy6oIsdzkMTei+drCezAB5fFzerw
-         y3GD2qAHDRRSrMpv7wTUuM9Erg/6k7sGs+HKjLlgmmAwT7LMqxNkXvmZeU5IucnlPzyQ
-         zxGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679327433;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WlRvHn65p7ApqB1hkWXEl334dlDtfL7sexIylSD7RF8=;
-        b=mx+DrcUS/RrkssaKZwtjxNb1RtQP6+pwhyW7/EaPvgWZPMBZeDHy7B+x5GRw7gA8l5
-         lIqtZ41yhnrcZ8wp6SSyG+pJJ2Xn4q0N8W3NJS8vZz5/ORmoRdLxyNY8IdlTQlmjV9YT
-         jY1LCVegFoErlMPP49XZ1fzJtRPIeFv0MZphvdw7nXk5yhg4+vpnfCPKzOJdOmpEgfut
-         GnIW/BBXCezqjF0GT9Lmp61lPf1j0PCq8lmrcrZtKwI11zyVmOPqgdWmkRh+YirD5L0P
-         ORDeuqwz5SkyDZ+Sw+dahSLeLtZ/VB+58nFWPpxF4yUw/sKPrhpkZfGzo/VN/jDL1ZfN
-         1t3w==
-X-Gm-Message-State: AO0yUKVurWpxXw8kQLLJFFk7zmIVuc+hSmpXM9lpLIB/ByDuw5z3fAds
-        TZs+QVHvNnvyK9ovwNMJwU0=
-X-Google-Smtp-Source: AK7set8fEPc92nUNA58HgNEL8eOH1DCae42kd5S11MkuO5+TV9yIVNP77n+5gS3XrTpCzsFfJmaf/A==
-X-Received: by 2002:a05:600c:470e:b0:3eb:42fc:fb30 with SMTP id v14-20020a05600c470e00b003eb42fcfb30mr34204824wmo.32.1679327433327;
-        Mon, 20 Mar 2023 08:50:33 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c020300b003eddefd8792sm4812333wmi.14.2023.03.20.08.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 08:50:32 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH 4/4] net: dsa: b53: add BCM63268 RGMII configuration
-Date:   Mon, 20 Mar 2023 16:50:24 +0100
-Message-Id: <20230320155024.164523-5-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230320155024.164523-1-noltari@gmail.com>
-References: <20230320155024.164523-1-noltari@gmail.com>
+        Mon, 20 Mar 2023 12:04:51 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2153D092;
+        Mon, 20 Mar 2023 08:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679327654; x=1710863654;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HPFt5wbvwAzTASQxl4om3089Cr96nMrFu47+XtnfK5s=;
+  b=C5svXfCizWhZkNfhyLQt6Lx9p6vWDg+ls+NXaOb8hJ0nhTkbm1LjVJH3
+   Dwjs8FcpnvZrD4Sonwvq0PZ1Y9tx4lFAzzOrqHD1bXExJtQtnHsjj1YIC
+   WclJSVbV7k/XL9lOJdB6yvoSlBy6WPjDsYxs9I6LSyVN7yJihN7yKU0Md
+   fv2ymmBAURp10CZC8PRUxuwdU5jzbFi6q1SzcDJDfyExzeT9nz98Y4ZYI
+   7KIdHQ/Xhrfnr+WSxmQ1fmztvvLrAnyd5TYnlZ3fE7Woudadaf87DK5VC
+   4gNxbIkdD3sbpx4UVUbnCI7sev3PHUAnI5D6ND2rKRYOjCRyhZ4s9K4mo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="336204541"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="336204541"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:51:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="1010523400"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="1010523400"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 08:51:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1peHnI-006Ktu-1N;
+        Mon, 20 Mar 2023 17:51:32 +0200
+Date:   Mon, 20 Mar 2023 17:51:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: addac: stx104: Migrate to the regmap API
+Message-ID: <ZBiBBJOmjOAHGUn0@smile.fi.intel.com>
+References: <20230319202256.352939-1-william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319202256.352939-1-william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BCM63268 requires special RGMII configuration to work.
+On Sun, Mar 19, 2023 at 04:22:56PM -0400, William Breathitt Gray wrote:
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- drivers/net/dsa/b53/b53_common.c | 6 +++++-
- drivers/net/dsa/b53/b53_regs.h   | 1 +
- 2 files changed, 6 insertions(+), 1 deletion(-)
+...
 
-diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
-index 6e212f6f1cb9..d0a22c8a55c9 100644
---- a/drivers/net/dsa/b53/b53_common.c
-+++ b/drivers/net/dsa/b53/b53_common.c
-@@ -1240,8 +1240,12 @@ static void b53_adjust_63xx_rgmii(struct dsa_switch *ds, int port,
- 		break;
- 	}
- 
--	if (port != dev->imp_port)
-+	if (port != dev->imp_port) {
-+		if (is63268(dev))
-+			rgmii_ctrl |= RGMII_CTRL_MII_OVERRIDE;
-+
- 		rgmii_ctrl |= RGMII_CTRL_ENABLE_GMII;
-+	}
- 
- 	b53_write8(dev, B53_CTRL_PAGE, off, rgmii_ctrl);
- 
-diff --git a/drivers/net/dsa/b53/b53_regs.h b/drivers/net/dsa/b53/b53_regs.h
-index b2c539a42154..bfbcb66bef66 100644
---- a/drivers/net/dsa/b53/b53_regs.h
-+++ b/drivers/net/dsa/b53/b53_regs.h
-@@ -138,6 +138,7 @@
- 
- #define B53_RGMII_CTRL_IMP		0x60
- #define   RGMII_CTRL_ENABLE_GMII	BIT(7)
-+#define   RGMII_CTRL_MII_OVERRIDE	BIT(6)
- #define   RGMII_CTRL_TIMING_SEL		BIT(2)
- #define   RGMII_CTRL_DLL_RXC		BIT(1)
- #define   RGMII_CTRL_DLL_TXC		BIT(0)
+> -/**
+> - * struct stx104_iio - IIO device private data structure
+
+I believe this...
+
+> - * @chan_out_states:	channels' output states
+> - * @reg:		I/O address offset for the device registers
+> - */
+
+> -struct stx104_iio {
+
+...and this can be left here. With that the diff won't be too disrupted.
+
+(You are using only pointers to the generic data types in the struct
+ definition, that's why its location can be almost anywhere before the
+ first its real user.)
+
+> -	unsigned int chan_out_states[STX104_NUM_OUT_CHAN];
+> -	struct stx104_reg __iomem *reg;
+
+...
+
+> +struct stx104_iio {
+> +	struct regmap *aio_data_map;
+> +	struct regmap *aio_ctl_map;
+>  };
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
