@@ -2,127 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1CB6C0941
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0694F6C0943
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCTDRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
+        id S229788AbjCTDSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCTDRp (ORCPT
+        with ESMTP id S229496AbjCTDS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:17:45 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5701449B;
-        Sun, 19 Mar 2023 20:17:44 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k2so11066514pll.8;
-        Sun, 19 Mar 2023 20:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679282264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z9JRG63v/PU6iN9kUwJChfjBRC2zYHxpkDWhma0ZLQY=;
-        b=LyU5qo1oH6ehJKbIQ1TMfNt44biZqTXeC/VgI1G6sNgQEnbyeBiu9uaKMME1o5MleE
-         qdEK1fm39D15FhffnnufQODmW9+xilKGy0f/NAWr31bSr+zFEMhiTs/xD/Al0rcfhbUK
-         TYHAZYu8ND8RT7mjE68Wrbc12nYkb/2bpx77MfrWmkagS25dFJ0daEhN92pJVTMpgsMv
-         /6hslTWsa7U55AndBJ36lUb5WCNwLtByAOWWD9FR1yvK+t9ONO3CSjU+yBl3EfJj7ODZ
-         AjYcYOXjEcp45dtzK+3UIZZqj69+WTrm6Nx/16u4fcXU2ISduxDT4qbnzY+P9bxl6Lrt
-         dE1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679282264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z9JRG63v/PU6iN9kUwJChfjBRC2zYHxpkDWhma0ZLQY=;
-        b=7ldtCx3WbdFS9nMRkmdPjPC0wOntc6FKGeyMseN+7rB0PsiiwHixxnoysuqkDn0JqH
-         qWVDcYoAr7ZzAt3zhXmrBMHLNw9QHFnBa8bIeNruiUkNKlz6Q4abl2qqy0B/jIY68Awa
-         CjP7c0iO0+AQffrptG9qWYJvfR9vKCldZh3Lv5MPBLROBtqQDqixitwZHcXKu8QEGNc9
-         Csq+dqX6hyok6zAkvN/5BoVpDJLkzr9nAWZ+muKzZYBez3e7BRKywkVDi1FjtfNqON/a
-         skC+7DqQMnqwAhtbEctUY3DWMsI3XHvDm2euKJLNghQULqNMn2pS3TyTF+ZfCOOEd8FL
-         IYIg==
-X-Gm-Message-State: AO0yUKXpUK2sgudUkIHZInE32TtXAgcWcBj3wkqKFBs+kzBGrn1UwRPq
-        +H1ooYo0qm2N+otVHVe2VSZQOGUraHQ9UA==
-X-Google-Smtp-Source: AK7set/jMPKlVxmLMFRs1CKqRNHOBxKkUJ6jc1WKzo2WxqLWGRRsPlQx/lCNiMwpmmLZgJqqt3JrRw==
-X-Received: by 2002:a17:902:dacd:b0:1a1:cef2:acd4 with SMTP id q13-20020a170902dacd00b001a1cef2acd4mr2557396plx.21.1679282263629;
-        Sun, 19 Mar 2023 20:17:43 -0700 (PDT)
-Received: from debian.me (subs09a-223-255-225-67.three.co.id. [223.255.225.67])
-        by smtp.gmail.com with ESMTPSA id g9-20020a170902934900b0019f1205bdcbsm5405191plp.147.2023.03.19.20.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 20:17:43 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E058E106591; Mon, 20 Mar 2023 10:17:39 +0700 (WIB)
-Date:   Mon, 20 Mar 2023 10:17:39 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-Message-ID: <ZBfQU7LOxkRQV4MQ@debian.me>
-References: <20230320100922.0f877bb9@canb.auug.org.au>
+        Sun, 19 Mar 2023 23:18:26 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B651514EBC;
+        Sun, 19 Mar 2023 20:18:24 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pg0Gv3lnVz17M2V;
+        Mon, 20 Mar 2023 11:15:19 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 11:18:22 +0800
+Subject: Re: ubi0 error: ubi_open_volume: cannot open device 0, volume 6,
+ error -16
+To:     Pintu Agarwal <pintu.ping@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>
+References: <CAOuPNLgTWNMSaZmE4UzOq8UhsLWnBzyt0xwsO=dS9NpQxh-h_g@mail.gmail.com>
+ <CAOuPNLiu+40HREtXFL_yMaXiaRtnZSbW9VvZRZmEpNXvZWzaQw@mail.gmail.com>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <5d0e0518-267c-7445-5d6a-b28b6000b033@huawei.com>
+Date:   Mon, 20 Mar 2023 11:18:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h1Qbk0+Cd9DCs4Ma"
-Content-Disposition: inline
-In-Reply-To: <20230320100922.0f877bb9@canb.auug.org.au>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAOuPNLiu+40HREtXFL_yMaXiaRtnZSbW9VvZRZmEpNXvZWzaQw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+> Hi,
+> 
+> Sorry, for missing the subject last time.
+> 
+> On Wed, 15 Feb 2023 at 23:06, Pintu Agarwal <pintu.ping@gmail.com> wrote:
+>>
+>> Hi,
+>>
+>> We are seeing below "ubi errors" during booting.
+>> Although this does not cause any functionality break, I am wondering
+>> if there is any way to fix it ?
+>> We are using Kernel 4.14 with UBI and squashfs (ubiblock) as volumes,
+>> and with systemd.
+>>
+>> Anybody have experienced the similar logs with ubi/squashfs and
+>> figured out a way to avoid it ?
+>> It seems like these open volumes are called twice, thus error -16
+>> indicates (device or resource busy).
+>> Or, are these logs expected because of squashfs or ubiblock ?
+>> Or, do we need to add anything related to udev-rules ?
+>>
+>> {
+>> ....
+>> [  129.394789] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 6, error -16
+>> [  129.486498] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 7, error -16
+>> [  129.546582] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 8, error -16
+>> [  129.645014] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 9, error -16
+>> [  129.676456] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 6, error -16
+>> [  129.706655] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 10, error -16
+>> [  129.732740] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 7, error -16
+>> [  129.811111] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 8, error -16
+>> [  129.852308] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 9, error -16
+>> [  129.923429] ubi0 error: ubi_open_volume: cannot open device 0,
+>> volume 10, error -16
+>>
+>> }
+>>
+> 
+> I see that the errors are reported by systemd-udevd and other processes.
+> Is there a way to fix it by some means ?
+> These logs actually consume lots of boot up time...
 
---h1Qbk0+Cd9DCs4Ma
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I guess that systemd-udevd and mtd_probe are racing to open the same 
+volume with mode UBI_EXCLUSIVE or UBI_READWRITE, and these error 
+messages are in expected. How about temporarily shutting down 
+systemd-udevd during booting?
 
-On Mon, Mar 20, 2023 at 10:09:22AM +1100, Stephen Rothwell wrote:
-> diff --cc Documentation/bpf/bpf_devel_QA.rst
-> index 7403f81c995c,e151e61dff38..000000000000
-> --- a/Documentation/bpf/bpf_devel_QA.rst
-> +++ b/Documentation/bpf/bpf_devel_QA.rst
-> @@@ -684,8 -689,11 +689,7 @@@ when
->  =20
->  =20
->   .. Links
-> - .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintain=
-er-netdev.html
->  -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proc=
-ess/
->   .. _selftests:
->      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
-ree/tools/testing/selftests/bpf/
->  -.. _Documentation/dev-tools/kselftest.rst:
->  -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
->  -.. _Documentation/bpf/btf.rst: btf.rst
->  =20
->   Happy BPF hacking!
-
-The resolution LGTM, thanks!
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---h1Qbk0+Cd9DCs4Ma
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBfQTQAKCRD2uYlJVVFO
-o6KmAQCAY/8MeWR7qg+k5E++QiSaM1Isczan4vcxY2KjXBlWigEAxG6ceXNRlneh
-gpM1Fw3yrdgnmEIFbCUMXSbMvcPX2gs=
-=z4iD
------END PGP SIGNATURE-----
-
---h1Qbk0+Cd9DCs4Ma--
