@@ -2,181 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AE66C0B46
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91EA6C0B4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjCTHVO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 03:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S229699AbjCTHZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCTHVG (ORCPT
+        with ESMTP id S229497AbjCTHZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:21:06 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F01213DDE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:21:01 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 16B0A24E263;
-        Mon, 20 Mar 2023 15:21:00 +0800 (CST)
-Received: from EXMBX163.cuchost.com (172.16.7.73) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 15:20:58 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX163.cuchost.com
- (172.16.7.73) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 15:20:58 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Mon, 20 Mar 2023 15:20:58 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v6 0/4] RISC-V Hibernation Support
-Thread-Topic: [PATCH v6 0/4] RISC-V Hibernation Support
-Thread-Index: AQHZVjJN8ydv64d8Vka8VV2EaIDg/68DSv4g
-Date:   Mon, 20 Mar 2023 07:20:58 +0000
-Message-ID: <1a2b03d49ce1440b9e50ca8a13320782@EXMBX066.cuchost.com>
-References: <20230314050316.31701-1-jeeheng.sia@starfivetech.com>
-In-Reply-To: <20230314050316.31701-1-jeeheng.sia@starfivetech.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [202.188.176.82]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 20 Mar 2023 03:25:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DE61CAE4;
+        Mon, 20 Mar 2023 00:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679297106; x=1710833106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sckrP9DIwS5nXONc32/B3DuRvwTDeY7P3PNd34uwKrc=;
+  b=J1/Q4IL1YY9vEXAgBwR34VF7uHoziVlHDatzQ2dmgUZFL5rl3FxsmlW3
+   5+z3dXA8BnxVerG9o+Wb7EQXOxTErozoAe1ThgidnaHGYgmHhoZZ87bdH
+   Ai2KYUxU5XG11x2ALijX44SFlP7bew5py5JmvfvDHrmKoOZquyxJ13P9F
+   suYiXy3OC7k5caPWEe1sT5eNIg7DlASNyNbjoJwn4AsHBecSjGYwBUmlo
+   qMyBtS0f6z792fxRsWv0VOB8tKjCFYkUontzxpmVqOZY9VSeOlwcnD69b
+   riQQCsqctllN+g7xzldt6ERYK3z5xeDVXsCHi4diem4+ZFVEJyh6ROCGI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="403465133"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="403465133"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:25:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="711221338"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="711221338"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:25:02 -0700
+Date:   Mon, 20 Mar 2023 08:24:58 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mailhol.vincent@wanadoo.fr, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH] can: usb: f81604: add Fintek F81604 support
+Message-ID: <ZBgKSqaFiImtTThv@localhost.localdomain>
+References: <20230317093352.3979-1-peter_hong@fintek.com.tw>
+ <ZBRoCVHV3S3ugEoO@localhost.localdomain>
+ <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Mar 20, 2023 at 10:59:33AM +0800, Peter Hong wrote:
+> Hi,
+> 
+> Michal Swiatkowski 於 2023/3/17 下午 09:15 寫道:
+> > On Fri, Mar 17, 2023 at 05:33:52PM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> > 
+> > --- a/drivers/net/can/usb/Kconfig
+> > +++ b/drivers/net/can/usb/Kconfig
+> > @@ -147,4 +147,13 @@ config CAN_UCAN
+> >   	          from Theobroma Systems like the A31-ÂľQ7 and the RK3399-Q7
+> >   	          (https://www.theobroma-systems.com/rk3399-q7)
+> > Hi,
+> > 
+> > I am not familiar with CAN, so only style review :)
+> 
+> Thanks for your reviews :D
+> > +
+> > +	if (status) {
+> > +		dev_err(&dev->dev, "%s: reg: %x data: %x failed: %d\n",
+> > +			__func__, reg, data, status);
+> > +	}
+> > The { and } aren't needed as inside if is only one line.
+> 
+> Could I remove the { and } when the logical line to split multi-line ?
+> 
 
-I understand that you must be extremely busy, but I was wondering if there are any comments for the below v6 patch series?
+Yes You can, and You should :)
 
-Thanks
-Regards
-Jee Heng
+> > > +static int f81604_set_normal_mode(struct net_device *netdev)
+> > > +{
+> > > +	struct f81604_port_priv *priv = netdev_priv(netdev);
+> > > +	int status, i;
+> > > +	u8 mod_reg_val = 0x00;
+> > RCT, mod_reg should be one line above
+> 
+> What mean about "RCT"?
+> 
+> Is this section should change to above like ??
+> 
+>     u8 mod_reg_val;
+>     ...
+> 
+>     mod_reg_val = 0;
 
-> -----Original Message-----
-> From: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Sent: Tuesday, March 14, 2023 1:03 PM
-> To: paul.walmsley@sifive.com; palmer@dabbelt.com; aou@eecs.berkeley.edu
-> Cc: linux-riscv@lists.infradead.org; linux-kernel@vger.kernel.org; JeeHeng Sia <jeeheng.sia@starfivetech.com>; Leyfoon Tan
-> <leyfoon.tan@starfivetech.com>; Mason Huo <mason.huo@starfivetech.com>
-> Subject: [PATCH v6 0/4] RISC-V Hibernation Support
-> 
-> This series adds RISC-V Hibernation/suspend to disk support.
-> Low level Arch functions were created to support hibernation.
-> swsusp_arch_suspend() relies code from __cpu_suspend_enter() to write
-> cpu state onto the stack, then calling swsusp_save() to save the memory
-> image.
-> 
-> Arch specific hibernation header is implemented and is utilized by the
-> arch_hibernation_header_restore() and arch_hibernation_header_save()
-> functions. The arch specific hibernation header consists of satp, hartid,
-> and the cpu_resume address. The kernel built version is also need to be
-> saved into the hibernation image header to making sure only the same
-> kernel is restore when resume.
-> 
-> swsusp_arch_resume() creates a temporary page table that covering only
-> the linear map. It copies the restore code to a 'safe' page, then start to
-> restore the memory image. Once completed, it restores the original
-> kernel's page table. It then calls into __hibernate_cpu_resume()
-> to restore the CPU context. Finally, it follows the normal hibernation
-> path back to the hibernation core.
-> 
-> To enable hibernation/suspend to disk into RISCV, the below config
-> need to be enabled:
-> - CONFIG_ARCH_HIBERNATION_HEADER
-> - CONFIG_ARCH_HIBERNATION_POSSIBLE
-> 
-> At high-level, this series includes the following changes:
-> 1) Change suspend_save_csrs() and suspend_restore_csrs()
->    to public function as these functions are common to
->    suspend/hibernation. (patch 1)
-> 2) Refactor the common code in the __cpu_resume_enter() function and
->    __hibernate_cpu_resume() function. The common code are used by
->    hibernation and suspend. (patch 2)
-> 3) Enhance kernel_page_present() function to support huge page. (patch 3)
-> 4) Add arch/riscv low level functions to support
->    hibernation/suspend to disk. (patch 4)
-> 
-> The above patches are based on kernel v6.3-rc2 and are tested on
-> StarFive VF2 SBC board and Qemu.
-> ACPI platform mode is not supported in this series.
-> 
-> Changes since v5:
-> - Rebased to kernel v6.3-rc2
-> - Removed extra line at the commit msg
-> - Added comment to describe the reason to map the kernel address
-> 
-> Changes since v4:
-> - Rebased to kernel v6.3-rc1
-> - Resolved typo(s)
-> - Removed unnecessary helper function
-> - Removed unnecessary "addr" local variable
-> - Removed typecast of 'int'
-> - Used def_bool HIBERNATION
-> - Used "mv a0, zero" instead of "add a0, zero, zero"
-> - Make linear region as executable and writable when restoring the
->   image
-> 
-> Changes since v3:
-> - Rebased to kernel v6.2
-> - Temporary page table code refactoring by reference to ARM64
-> - Resolved typo(s) and grammars
-> - Resolved documentation errors
-> - Resolved clang build issue
-> - Removed unnecessary comments
-> - Used kzalloc instead of kcalloc
-> 
-> Changes since v2:
-> - Rebased to kernel v6.2-rc5
-> - Refactor the common code used by hibernation and suspend
-> - Create copy_page macro
-> - Solved other comments from Andrew and Conor
-> 
-> Changes since v1:
-> - Rebased to kernel v6.2-rc3
-> - Fixed bot's compilation error
-> 
-> Sia Jee Heng (4):
->   RISC-V: Change suspend_save_csrs and suspend_restore_csrs to public
->     function
->   RISC-V: Factor out common code of __cpu_resume_enter()
->   RISC-V: mm: Enable huge page support to kernel_page_present() function
->   RISC-V: Add arch functions to support hibernation/suspend-to-disk
-> 
->  arch/riscv/Kconfig                 |   6 +
->  arch/riscv/include/asm/assembler.h |  82 ++++++
->  arch/riscv/include/asm/suspend.h   |  22 ++
->  arch/riscv/kernel/Makefile         |   1 +
->  arch/riscv/kernel/asm-offsets.c    |   5 +
->  arch/riscv/kernel/hibernate-asm.S  |  77 ++++++
->  arch/riscv/kernel/hibernate.c      | 427 +++++++++++++++++++++++++++++
->  arch/riscv/kernel/suspend.c        |   4 +-
->  arch/riscv/kernel/suspend_entry.S  |  34 +--
->  arch/riscv/mm/pageattr.c           |   8 +
->  10 files changed, 633 insertions(+), 33 deletions(-)
->  create mode 100644 arch/riscv/include/asm/assembler.h
->  create mode 100644 arch/riscv/kernel/hibernate-asm.S
->  create mode 100644 arch/riscv/kernel/hibernate.c
-> 
-> 
-> base-commit: fc89d7fb499b0162e081f434d45e8d1b47e82ece
-> --
-> 2.34.1
+reverse christmas tree, it is about how variable definition should look
+like. In Your case:
 
+struct f81604_port_priv *priv = netdev_priv(netdev);
+u8 mod_reg_val = 0x00;
+int status, i;
+
+instead of
+
+
+struct f81604_port_priv *priv = netdev_priv(netdev);
+int status, i;
+u8 mod_reg_val = 0x00;
+
+Cosmetic Linux style rule
+
+> > > +static int f81604_register_urbs(struct net_device *netdev)
+> > > +{
+> > > +	struct f81604_port_priv *priv = netdev_priv(netdev);
+> > > +	int status, i;
+> > > +
+> > > +	for (i = 0; i < F81604_MAX_RX_URBS; ++i) {
+> > > +		status = usb_submit_urb(priv->read_urb[i], GFP_KERNEL);
+> > > +		if (status) {
+> > > +			netdev_warn(netdev, "%s: submit rx urb failed: %d\n",
+> > > +				    __func__, status);
+> > > +			return status;
+> > Don't know usb subsytem, but shouldn't previously submitted urb be
+> > killed?
+> 
+> Yes, I had made kill operations in
+>     f81604_start()
+>         -> f81604_unregister_urbs()
+>
+
+Ok, thanks
+
+> > > +static void f81604_process_rx_packet(struct urb *urb)
+> > > +{
+> > > +	struct net_device_stats *stats;
+> > > +	struct net_device *netdev;
+> > > +	struct can_frame *cf;
+> > > +	struct sk_buff *skb;
+> > > +	u8 *data;
+> > > +	u8 *ptr;
+> > > +	int i;
+> > > +	int count;
+> > RCT
+> > 
+> > > +
+> > > +	netdev = urb->context;
+> > > +	stats = &netdev->stats;
+> > > +	data = urb->transfer_buffer;
+> > netdev and data can be set in declaration
+> 
+> why only netdev & data ?? Could I set netdev, stats & data in declaration ?
+> 
+
+You can, but it will be hard to still have declaration as RCT (netdev
+declaration have to be before stats declaration).
+
+> 
+> > > +/* Called by the usb core when driver is unloaded or device is removed */
+> > > +static void f81604_disconnect(struct usb_interface *intf)
+> > > +{
+> > > +	struct f81604_priv *priv = usb_get_intfdata(intf);
+> > > +	int i;
+> > > +
+> > > +	for (i = 0; i < F81604_MAX_DEV; ++i) {
+> > > +		if (!priv->netdev[i])
+> > > +			continue;
+> > > +
+> > > +		unregister_netdev(priv->netdev[i]);
+> > > +		free_candev(priv->netdev[i]);
+> > > +	}
+> > What about closing USB device? It is called brefore disconnect or it
+> > should be done here?
+> 
+> When candev close in f81604_close(), It will call f81604_set_reset_mode() to
+> make candev to reset mode.
+> 
+
+Understand, thanks
+
+> Thanks
