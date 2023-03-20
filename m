@@ -2,79 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955386C08E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D766C08EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCTC2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 22:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S229787AbjCTC3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 22:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCTC2s (ORCPT
+        with ESMTP id S229685AbjCTC3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 22:28:48 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B4F1C588
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 19:28:46 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PfzBW52QfzKs3J;
-        Mon, 20 Mar 2023 10:26:27 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 10:28:42 +0800
-Subject: Re: [PATCH -next] mtd: ubi: Simplify bool conversion
-To:     Yang Li <yang.lee@linux.alibaba.com>, <miquel.raynal@bootlin.com>
-CC:     <vigneshr@ti.com>, <richard@nod.at>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230215012117.83938-1-yang.lee@linux.alibaba.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <cce0dab6-01f4-11d4-6885-381171b7199e@huawei.com>
-Date:   Mon, 20 Mar 2023 10:28:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Sun, 19 Mar 2023 22:29:12 -0400
+Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B71CF54;
+        Sun, 19 Mar 2023 19:29:06 -0700 (PDT)
+Received: from [172.16.12.33] (unknown [58.22.7.114])
+        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 331BD6802DA;
+        Mon, 20 Mar 2023 10:28:55 +0800 (CST)
+Message-ID: <879d18af-e3a9-e953-1b3a-99965f74f63e@rock-chips.com>
+Date:   Mon, 20 Mar 2023 10:28:55 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230215012117.83938-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/4] usb: typec: tcpm: fix cc role at port reset
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, heiko@sntech.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com
+References: <20230313025843.17162-1-frank.wang@rock-chips.com>
+ <20230313025843.17162-2-frank.wang@rock-chips.com>
+ <ZBA8Y/dbozOk2df7@kuha.fi.intel.com>
+ <f0f0ac72-0a90-da9e-f686-49c21a76866b@rock-chips.com>
+ <ZBRN11OwtkvXk1Hd@kuha.fi.intel.com>
+ <d5d1880b-2852-a168-b155-26f972a96457@roeck-us.net>
+From:   Frank Wang <frank.wang@rock-chips.com>
+In-Reply-To: <d5d1880b-2852-a168-b155-26f972a96457@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRgdSFZISU1MS0xCTRpLTU9VEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
+        Y+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PTo6Mio4Qj0WVhI4KjIRPwEw
+        IT0wFEtVSlVKTUxCSUxCSEhNS09DVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFPTkJCNwY+
+X-HM-Tid: 0a86fcd9289c2eb5kusn331bd6802da
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-�� 2023/2/15 9:21, Yang Li д��:
-> ./drivers/mtd/ubi/build.c:1261:33-38: WARNING: conversion to bool not needed here
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4061
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->   drivers/mtd/ubi/build.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
-> index 0904eb40c95f..e9c153b7c471 100644
-> --- a/drivers/mtd/ubi/build.c
-> +++ b/drivers/mtd/ubi/build.c
-> @@ -1258,7 +1258,7 @@ static int __init ubi_init(void)
->   		mutex_lock(&ubi_devices_mutex);
->   		err = ubi_attach_mtd_dev(mtd, p->ubi_num,
->   					 p->vid_hdr_offs, p->max_beb_per1024,
-> -					 p->enable_fm == 0 ? true : false);
-> +					 p->enable_fm == 0);
->   		mutex_unlock(&ubi_devices_mutex);
->   		if (err < 0) {
->   			pr_err("UBI error: cannot attach mtd%d\n",
-> 
+Hi Guenter,
 
-Looks good.
+On 2023/3/17 20:47, Guenter Roeck wrote:
+> On 3/17/23 04:24, Heikki Krogerus wrote:
+>> On Wed, Mar 15, 2023 at 10:55:20AM +0800, Frank Wang wrote:
+>>> Hi Heikki,
+>>>
+>>> On 2023/3/14 17:20, Heikki Krogerus wrote:
+>>>> On Mon, Mar 13, 2023 at 10:58:40AM +0800, Frank Wang wrote:
+>>>>> In the current implementation, the tcpm set CC1/CC2 role to open when
+>>>>> it do port reset would cause the VBUS removed by the Type-C partner.
+>>>>>
+>>>>> The Figure 4-20 in the TCPCI 2.0 specification show that the CC1/CC2
+>>>>> role should set to 01b (Rp) or 10b (Rd) at Power On or Reset stage
+>>>>> in DRP initialization and connection detection.
+>>>>>
+>>>>> So set CC1/CC2 to Rd to fix it.
+>>>>>
+>>>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+>>>>> ---
+>>>>>    drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c 
+>>>>> b/drivers/usb/typec/tcpm/tcpm.c
+>>>>> index a0d943d785800..66de02a56f512 100644
+>>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>>>> @@ -4851,7 +4851,7 @@ static void run_state_machine(struct 
+>>>>> tcpm_port *port)
+>>>>>            break;
+>>>>>        case PORT_RESET:
+>>>>>            tcpm_reset_port(port);
+>>>>> -        tcpm_set_cc(port, TYPEC_CC_OPEN);
+>>>>> +        tcpm_set_cc(port, TYPEC_CC_RD);
+>>>>>            tcpm_set_state(port, PORT_RESET_WAIT_OFF,
+>>>>>                       PD_T_ERROR_RECOVERY);
+>>>>>            break;
+>>>> Will this work if the port is for example source only?
+>>>
+>>> Yeah, this only set at port reset stage and CC value will be set again
+>>> (Rd for Sink, Rp_* for Source) when start toggling.
+>>
+>> Okay. Let's wait for comments from Guenter.
+>>
+>
+> Figure 4-20 is specifically for dual role ports. Also, start toggling 
+> would not
+> happen if the low level driver doesn't have a start_toggling callback. 
+> I think this
+> may require some tweaking based on the port type or, rather, 
+> tcpm_default_state().
+> Something like
+>
+>     tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ? 
+> TYPEC_CC_RD : tcpm_rp_cc(port));
 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+To amend likes above make sense, I shall fix it later.
+
+
+BR.
+Frank
+
+>
+> Thanks,
+> Guenter
+>
