@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B1A6C11E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CF26C11E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjCTM3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S231352AbjCTM3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCTM3H (ORCPT
+        with ESMTP id S231201AbjCTM3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:29:07 -0400
+        Mon, 20 Mar 2023 08:29:12 -0400
 Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9F793F0;
-        Mon, 20 Mar 2023 05:29:02 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PgDMN1tlqz9y4Sk;
-        Mon, 20 Mar 2023 20:20:00 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3828A83C0;
+        Mon, 20 Mar 2023 05:29:10 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PgDMY3bQ6z9y4Sk;
+        Mon, 20 Mar 2023 20:20:09 +0800 (CST)
 Received: from A2101119013HW2.china.huawei.com (unknown [10.48.148.162])
-        by APP2 (Coremail) with SMTP id GxC2BwBnOF9kURhkkqGyAQ--.46782S2;
-        Mon, 20 Mar 2023 13:28:33 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwBnOF9kURhkkqGyAQ--.46782S3;
+        Mon, 20 Mar 2023 13:28:42 +0100 (CET)
 From:   Petr Tesarik <petrtesarik@huaweicloud.com>
 To:     Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -36,29 +36,32 @@ To:     Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
         linux-kernel@vger.kernel.org (open list),
         iommu@lists.linux.dev (open list:DMA MAPPING HELPERS)
 Cc:     Roberto Sassu <roberto.sassu@huawei.com>, petr@tesarici.cz
-Subject: [RFC v1 0/4] Allow dynamic allocation of software IO TLB bounce buffers
-Date:   Mon, 20 Mar 2023 13:28:12 +0100
-Message-Id: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+Subject: [RFC v1 1/4] dma-mapping: introduce the DMA_ATTR_MAY_SLEEP attribute
+Date:   Mon, 20 Mar 2023 13:28:13 +0100
+Message-Id: <ea0646e0e63380bb8595fbac81c23aeca30feae9.1679309810.git.petr.tesarik.ext@huawei.com>
 X-Mailer: git-send-email 2.21.0.windows.1
+In-Reply-To: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBnOF9kURhkkqGyAQ--.46782S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw18WF1rGrW5XF4kXryxZrb_yoWrXr1DpF
-        Wakw15Zr1DtryxA3yxCw4xXas5Gws5Aay5GFZaqr1UZrW5GFnFvrnrtay5Xa9rGws7Xw1j
-        qryYvrn8CFyvvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-        w4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU8gyCJUUUUU==
+X-CM-TRANSID: GxC2BwBnOF9kURhkkqGyAQ--.46782S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF17ur1rWw1kKFyrJr1DJrb_yoW8Zw1Dp3
+        ZagFyfGr92gr1xCr1kGw1agF4UWa1ru345GF40vr1rZrW5A3Z29rs8Kr1Yq34DXryxCFWF
+        vrW29ry5Cryqy37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+        Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAKzI0EY4
+        vE52x082I5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+        0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jx
+        wIDUUUUU=
 X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -71,84 +74,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Petr Tesarik <petr.tesarik.ext@huawei.com>
 
-The goal of my work is to provide more flexibility in the sizing of
-SWIOTLB. This patch series is a request for comments from the wider
-community. The code is more of a crude hack than final solution.
+Introduce a DMA attribute to tell the DMA-mapping subsystem that
+the operation is allowed to sleep.
 
-I would appreciate suggestions for measuring the performance impact
-of changes in SWIOTLB. More info at the end of this cover letter.
+This patch merely adds the flag, which is not used for anything at
+the moment. It should be used by users who can sleep (e.g. dma-buf
+ioctls) to allow page reclaim and/or allocations from CMA.
 
-The software IO TLB was designed with these assumptions:
+Signed-off-by: Petr Tesarik <petr.tesarik.ext@huawei.com>
+---
+ Documentation/core-api/dma-attributes.rst | 10 ++++++++++
+ include/linux/dma-mapping.h               |  6 ++++++
+ 2 files changed, 16 insertions(+)
 
-1. It would not be used much, especially on 64-bit systems.
-2. A small fixed memory area (64 MiB by default) is sufficient to
-   handle the few cases which require a bounce buffer.
-3. 64 MiB is little enough that it has no impact on the rest of the
-   system.
-
-First, if SEV is active, all DMA must be done through shared
-unencrypted pages, and SWIOTLB is used to make this happen without
-changing device drivers. The software IO TLB size is increased to
-6% of total memory in sev_setup_arch(), but that is more of an
-approximation. The actual requirements may vary depending on the
-amount of I/O and which drivers are used. These factors may not be
-know at boot time, i.e. when SWIOTLB is allocated.
-
-Second, on the Raspberry Pi 4, swiotlb is used by dma-buf for pages
-moved from the rendering GPU (v3d driver), which can access all
-memory, to the display output (vc4 driver), which is connected to a
-bus with an address limit of 1 GiB and no IOMMU. These buffers can
-be large (8 MiB with a FullHD monitor, 34 MiB with a 4K monitor)
-and cannot be even handled by current SWIOTLB, because they exceed
-the maximum segment size of 256 KiB.  Mapping failures can be
-easily reproduced with GNOME remote desktop on a Raspberry Pi 4.
-
-Third, other colleagues have noticed that they can reliably get rid
-of occasional OOM kills on an Arm embedded device by reducing the
-SWIOTLB size. This can be achieved with a kernel parameter, but
-determining the right value puts additional burden on pre-release
-testing, which could be avoided if SWIOTLB is allocated small and
-grows only when necessary.
-
-I have tried to measure the expected performance degradation so
-that I could reduce it and/or compare it to alternative approaches.
-I have performed all tests on an otherwise idle Raspberry Pi 4 with
-swiotlb=force (which, addmittedly, is a bit artificial). I quickly
-ran into trouble.
-
-I ran fio against an ext3 filesystem mounted from a UAS drive. To
-my surprise, forcing swiotlb (without my patches) *improved* IOPS
-and bandwidth for 4K and 64K blocks by 3 to 7 percent, and made no
-visible difference for 1M blocks. I also observed smaller minimum
-and average completion latencies, and even smaller maximum
-latencies for 4K blocks. However, when I ran the tests again later
-to verify some oddities, there was a performance drop. It appears
-that I/O, bandwidth and latencies reported by two consecutive fio
-runs may differ by as much as 10%, so the results are invalid.
-
-I tried to make a micro-benchmark on dma_map_page_attrs() using the
-bcc tool funclatency, but just loading the eBPF program was enough
-to change the behaviour of the system wildly.
-
-I wonder if anyone can give me advice on measuring SWIOTLB
-performance. I can see that AMD, IBM and Microsoft people have
-mentioned performance in their patches, but AFAICS without
-explaining how it was measured. Knowing a bit more would be much
-appreciated.
-
-Petr Tesarik (4):
-  dma-mapping: introduce the DMA_ATTR_MAY_SLEEP attribute
-  swiotlb: Move code around in preparation for dynamic bounce buffers
-  swiotlb: Allow dynamic allocation of bounce buffers
-  swiotlb: Add an option to allow dynamic bounce buffers
-
- .../admin-guide/kernel-parameters.txt         |   6 +-
- Documentation/core-api/dma-attributes.rst     |  10 +
- include/linux/dma-mapping.h                   |   6 +
- include/linux/swiotlb.h                       |  17 +-
- kernel/dma/swiotlb.c                          | 233 +++++++++++++++---
- 5 files changed, 241 insertions(+), 31 deletions(-)
-
+diff --git a/Documentation/core-api/dma-attributes.rst b/Documentation/core-api/dma-attributes.rst
+index 1887d92e8e92..6481ce2acf5d 100644
+--- a/Documentation/core-api/dma-attributes.rst
++++ b/Documentation/core-api/dma-attributes.rst
+@@ -130,3 +130,13 @@ accesses to DMA buffers in both privileged "supervisor" and unprivileged
+ subsystem that the buffer is fully accessible at the elevated privilege
+ level (and ideally inaccessible or at least read-only at the
+ lesser-privileged levels).
++
++DMA_ATTR_MAY_SLEEP
++------------------
++
++This tells the DMA-mapping subsystem that it is allowed to sleep. For example,
++if mapping needs a bounce buffer, software IO TLB may use CMA for the
++allocation if this flag is given.
++
++This attribute is not used for dma_alloc_* functions. Instead, the provided
++GFP flags are used to determine whether the allocation may sleep.
+diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+index 0ee20b764000..7a75c503ac38 100644
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -61,6 +61,12 @@
+  */
+ #define DMA_ATTR_PRIVILEGED		(1UL << 9)
+ 
++/*
++ * DMA_ATTR_MAY_SLEEP: This tells the DMA-mapping subsystem that it is allowed
++ * to sleep.
++ */
++#define DMA_ATTR_MAY_SLEEP		(1UL << 10)
++
+ /*
+  * A dma_addr_t can hold any valid DMA or bus address for the platform.  It can
+  * be given to a device to use as a DMA source or target.  It is specific to a
 -- 
 2.25.1
 
