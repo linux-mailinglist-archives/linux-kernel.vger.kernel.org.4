@@ -2,75 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD566C2319
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF836C231D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjCTUqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S230243AbjCTUr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjCTUqE (ORCPT
+        with ESMTP id S229890AbjCTUrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:46:04 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D626448D;
-        Mon, 20 Mar 2023 13:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679345162; x=1710881162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oj8FCpgjJtzrtUXxb6wifpz4rftHlOYHuOur48CLjI0=;
-  b=ZDiJFrwk8hr8zpyb+pjHmo0l4WLZhDfuGxqXeawKRr+HoGkuKM6mIZsY
-   H/bMfKBB4m7EufN7CpZ5wL/1bE8qNsYsclbciY67yn5xeu0PsksSRng9/
-   IprRLmAwzpbWkqpTFJpzYX7iBPLTy/dlEIesoEW/CPa3FcYiWIZTknsIp
-   7aRGGLmoGidylBKGWNNcrn7hn8upa2rGDysj8sWOu0XX2WDgA+qWvesgk
-   rRZRxL0maFSzZl/Dce4giO4rRrk/K03SclpLG9whCxn94ozD+dgVUrIWq
-   W+WXU1bN5jXKss4AT4HubDNBB4f2a+whUb1vKh9oM4U92eSRJFxIP8dfH
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340322682"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="340322682"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:46:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="658505666"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="658505666"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2023 13:45:57 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peMOC-000BJC-1h;
-        Mon, 20 Mar 2023 20:45:56 +0000
-Date:   Tue, 21 Mar 2023 04:45:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kal Conley <kal.conley@dectris.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, Kal Conley <kal.conley@dectris.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-Message-ID: <202303210408.FyhMgxME-lkp@intel.com>
-References: <20230319195656.326701-2-kal.conley@dectris.com>
+        Mon, 20 Mar 2023 16:47:25 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A9FA8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:47:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jdmq11yKS8YsZapXKKC/lzX+Fn6Rcq1Hsw8EMcWUQV7eitmhw6nQF7IwpC6LnIolqQYMPSVaAh3deRSEY4jmqZu0XroG0aJ7GO95ac4XDAXPetmaHZuluknmxRtSNpPoR26sFxTsjyZD0OsCZtPftdF0tDRxBcNAeDI/L5LAddFqgX4hYThN5SA8TqlqCUSQBfBOuPiF+KGqNCPTIYLakQlohg4sqKhSzL75l0Gq9/6IiZYDUkEWdbyH+1mxhMj3qx185z7J3wGFi/CfMyp0J4k3yTaUZNyt/9bbV6hPeCFz7/Q1YEUlXXkX0ONT0HYT0XdI2wjPSen1lGPlJvMKCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=14Mva8e8qmEkbSikBO6n8yxgx97b3Bn+isFabfMXLoA=;
+ b=KKv/EtC58RfgF6PBKpxgHIB+gHTJJO4A7klo/Kc/gcp7V5/nGxeJW1IFw4x2QPgWMyaZ3wQZ+mKmeB32omT1PwaY8S/gRJRHX2QnNbj2VhNodyKCFStlilUdLkd7yfD+c1WNeab4xomDWm4S2pd/Cvk1Yk/swIBOnx6731A0xVmJizyx72Dgb8McRoRAd5eH5IPaiB2xaiGCtqtqctrT867c0owfPBNUcQcsHJDDtmw0Ze8SUEr7ujp7jZMXCB84Nres3xJqOMXgmWM7cHJf2S+UnYYmwqWLn4lrxxtRZzA3WCuUpE7qmHCFQNvaXr5glhwL5F2XGWnFMJSZpv4ejA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=14Mva8e8qmEkbSikBO6n8yxgx97b3Bn+isFabfMXLoA=;
+ b=rS44QuhANNXubaReeAGuPhyOBdXaNCTO53UbxxEyllnqvsRakYcahWrs8XSgyhPZasxtR+KLPeuIYq4z7+Blc/oxNuIWWrGOWu0E0piUOYaPMiBXyIIHMo5yyqKAFbWekDwO9H3LSyfBTw+O+q3NvVSK5TI94RO4K34ZZesaq9lhtq74erFkOj2VnW/1eSOlN7CmEqi7HBvXDrWZmLUZIm9poihU1BsInjOPGq59dy9W5DEGbZygc9G770pBNpV7AzARa86ur9Yu68fi+2IE7AYglDxG4Yuo+IxepeFHpvr2hwssy3bSpp7l3qNlOoJf4sMINMoHUKMLs0XQ4JOZ4g==
+Received: from MW4PR04CA0069.namprd04.prod.outlook.com (2603:10b6:303:6b::14)
+ by SA0PR12MB4496.namprd12.prod.outlook.com (2603:10b6:806:9b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 20:47:08 +0000
+Received: from CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::58) by MW4PR04CA0069.outlook.office365.com
+ (2603:10b6:303:6b::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Mon, 20 Mar 2023 20:47:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT058.mail.protection.outlook.com (10.13.174.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.15 via Frontend Transport; Mon, 20 Mar 2023 20:47:07 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 20 Mar 2023
+ 13:46:54 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 20 Mar
+ 2023 13:46:54 -0700
+Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Mon, 20 Mar 2023 13:46:53 -0700
+Date:   Mon, 20 Mar 2023 13:46:52 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Robin Murphy <robin.murphy@arm.com>, <will@kernel.org>,
+        <eric.auger@redhat.com>, <kevin.tian@intel.com>,
+        <baolu.lu@linux.intel.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <jean-philippe@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
+ arm_smmu_cache_invalidate_user
+Message-ID: <ZBjGPI29BE/puciv@Asurada-Nvidia>
+References: <ab762cc6-5adf-2515-d9d2-d21d916eb6ad@arm.com>
+ <ZBJcS07G3mt7gjkA@Asurada-Nvidia>
+ <c753c2a8-024d-5bef-8987-96582084991e@arm.com>
+ <ZBOFcenanpRsGFzF@Asurada-Nvidia>
+ <ZBe3kxRXf+VbKy+m@Asurada-Nvidia>
+ <ZBhbmqprnux4q00i@nvidia.com>
+ <ZBh7hSX5hdW4vxwh@Asurada-Nvidia>
+ <ZBiDcYwxL7eV1EmQ@nvidia.com>
+ <ZBiLSJvtY5UKDJ5l@Asurada-Nvidia>
+ <ZBig0fN3l7LsUlQg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230319195656.326701-2-kal.conley@dectris.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <ZBig0fN3l7LsUlQg@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT058:EE_|SA0PR12MB4496:EE_
+X-MS-Office365-Filtering-Correlation-Id: d818c371-cae9-4231-8a51-08db29844566
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wP5m6YtOuq1kQzwFy7mYRVBE+PK6b7Z8SQN/EO1DC9LBwGr/yFwEIM7+BHHILqMPG1j2bWGYMSsxPneuR255GOkvwBFl6nsfrfCOc5P2RVPoz78A3sk6HOhWzDosYkqB65Q4TSb/Du6ytcrAPZ8fKkeupqwn1gBMyWHN97JvKTdkD3hJfTSIKAME4uRJaiTyhBQPrXNM+AKe/tUo6l3mWFj7W2qcHw4JowMTsenOm3QW7gRBUSYwPUScLSleyitMoqXBZ/gc53Bfd2KgWb386Yk/0WywoQVI1EBMO+2wAjc+AQCBLjrAdZ0WSS3fdZpv6gNzs09bw5uZuUqPvwDYiKFtUmvf/bri7ij2icFUn65oEzg/6yhLNR+s9zfURBDVCFIx3Qgjwtp12SX/lnfDWSaYOTJILqE5I56wxBdEDQiQ0N/g4JOm9+J9fKvqoH5AyVhiBt0ejXLOTNyGVfjwTspKhD/EEufcOxQLEnUkY8svQRnTsnFj9+5wHp5cXR3mFzfrCfLDO1SKjnuvfMzxK9zjcm2SRpMLAAx58pMMt93frucTDP5mjpnpCCcLlSe3j3okR+zJ2zg5l1f+V5jRGyYWQMBw0vvQ8W2heNSoqXHtkDRa6vwdcNX118lUX8L3gxk/b58CcTuKBeta43jGsfjBYA5KKKkrFdaGRYZWsdbVgYpKvYadCp+1aUmAvf2M+YwGicHg5yhc1mP+vxxikmOnaZvuFQtT2LY10qR/I/9ZQ24TERnOI/KGn8DCPLWX
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(82310400005)(47076005)(83380400001)(478600001)(6636002)(426003)(336012)(86362001)(356005)(36860700001)(7636003)(70586007)(40460700003)(55016003)(82740400003)(4326008)(8676002)(41300700001)(40480700001)(2906002)(8936002)(6862004)(70206006)(7416002)(5660300002)(9686003)(26005)(316002)(54906003)(186003)(33716001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 20:47:07.8420
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d818c371-cae9-4231-8a51-08db29844566
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4496
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,176 +118,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kal,
+On Mon, Mar 20, 2023 at 03:07:13PM -0300, Jason Gunthorpe wrote:
+> On Mon, Mar 20, 2023 at 09:35:20AM -0700, Nicolin Chen wrote:
+> 
+> > > You need to know what devices the vSID is targetting ang issues
+> > > invalidations only for those devices.
+> > 
+> > I agree with that, yet cannot think of a solution to achieve
+> > that out of vSID. QEMU code by means of emulating a physical
+> > SMMU only reads the commands from the queue, without knowing
+> > which device (vSID) actually sent these commands.
+> 
+> Huh?
+> 
+> CMD_ATC_INV has the SID
+> 
+> Other commands have the ASID.
+> 
+> You never need to cross an ASID to a SID or vice versa.
+> 
+> If the guest is aware of ATS it will issue CMD_ATC_INV with vSIDs, and
+> the hypervisor just needs to convert vSID to pSID.
+> 
+> Otherwise vSID doesn't matter because it isn't used in the invalidation
+> API and you are just handling ASIDs that only need the VM_ID scope
+> applied.
 
-Thank you for the patch! Yet something to improve:
+Yea, I was thinking of your point (at the top) how we could
+ensure if an invalidation is targeting a correct vSID. So,
+that narrative was only about CMD_ATC_INV...
 
-[auto build test ERROR on bpf/master]
-[also build test ERROR on next-20230320]
-[cannot apply to bpf-next/master linus/master v6.3-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Actually, we don't forward CMD_ATC_INV in QEMU. In another
+thread, Kevin also remarked whether we need to support that
+in the host or not. And I plan to drop CMD_ATC_INV from the
+list of cache_invalidate_user(), following his comments and
+the QEMU situation. Our uAPI, either forwarding the commands
+or a package of queue info, should be able to cover this in
+the future whenever we think it's required.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kal-Conley/xsk-Support-UMEM-chunk_size-PAGE_SIZE/20230320-035849
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20230319195656.326701-2-kal.conley%40dectris.com
-patch subject: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-config: mips-randconfig-r011-20230320 (https://download.01.org/0day-ci/archive/20230321/202303210408.FyhMgxME-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bbcc35c4ff807754bf61ef2c1f11195533e53de0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kal-Conley/xsk-Support-UMEM-chunk_size-PAGE_SIZE/20230320-035849
-        git checkout bbcc35c4ff807754bf61ef2c1f11195533e53de0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/
+Combining the two parts above, we probably don't need to know
+at this moment which vSID an invalidation is targeting, nor
+to only allow it to execute for those devices, since the rest
+of commands are all ASID based.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210408.FyhMgxME-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   net/xdp/xsk.c:425:68: warning: '_Static_assert' with no message is a C2x extension [-Wc2x-extensions]
-   _Static_assert(XDP_UMEM_MAX_CHUNK_SIZE / PAGE_SIZE <= MAX_SKB_FRAGS);
-                                                                      ^
-                                                                      , ""
-   In file included from net/xdp/xsk.c:26:
-   In file included from include/net/xdp_sock_drv.h:10:
->> include/net/xsk_buff_pool.h:179:43: error: call to '__compiletime_assert_494' declared with 'error' attribute: BUILD_BUG failed
-           bool cross_pg = pool->hugetlb ? (addr & (HPAGE_SIZE - 1)) + len > HPAGE_SIZE :
-                                                    ^
-   arch/mips/include/asm/page.h:68:22: note: expanded from macro 'HPAGE_SIZE'
-   #define HPAGE_SIZE      ({BUILD_BUG(); 0; })
-                             ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-                       ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:191:1: note: expanded from here
-   __compiletime_assert_494
-   ^
-   1 warning and 1 error generated.
---
-   net/xdp/xdp_umem.c:23:52: warning: '_Static_assert' with no message is a C2x extension [-Wc2x-extensions]
-   _Static_assert(XDP_UMEM_MIN_CHUNK_SIZE <= PAGE_SIZE);
-                                                      ^
-                                                      , ""
->> net/xdp/xdp_umem.c:24:43: error: statement expression not allowed at file scope
-   _Static_assert(XDP_UMEM_MAX_CHUNK_SIZE <= HPAGE_SIZE);
-                                             ^
-   arch/mips/include/asm/page.h:68:20: note: expanded from macro 'HPAGE_SIZE'
-   #define HPAGE_SIZE      ({BUILD_BUG(); 0; })
-                           ^
-   1 warning and 1 error generated.
---
->> net/xdp/xsk_buff_pool.c:378:28: error: call to '__compiletime_assert_507' declared with 'error' attribute: BUILD_BUG failed
-           u32 page_size = hugetlb ? HPAGE_SIZE : PAGE_SIZE;
-                                     ^
-   arch/mips/include/asm/page.h:68:22: note: expanded from macro 'HPAGE_SIZE'
-   #define HPAGE_SIZE      ({BUILD_BUG(); 0; })
-                             ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-                       ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:82:1: note: expanded from here
-   __compiletime_assert_507
-   ^
-   In file included from net/xdp/xsk_buff_pool.c:3:
-   include/net/xsk_buff_pool.h:179:43: error: call to '__compiletime_assert_350' declared with 'error' attribute: BUILD_BUG failed
-           bool cross_pg = pool->hugetlb ? (addr & (HPAGE_SIZE - 1)) + len > HPAGE_SIZE :
-                                                    ^
-   arch/mips/include/asm/page.h:68:22: note: expanded from macro 'HPAGE_SIZE'
-   #define HPAGE_SIZE      ({BUILD_BUG(); 0; })
-                             ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-                       ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:21:1: note: expanded from here
-   __compiletime_assert_350
-   ^
-   In file included from net/xdp/xsk_buff_pool.c:3:
-   include/net/xsk_buff_pool.h:179:43: error: call to '__compiletime_assert_350' declared with 'error' attribute: BUILD_BUG failed
-   arch/mips/include/asm/page.h:68:22: note: expanded from macro 'HPAGE_SIZE'
-   #define HPAGE_SIZE      ({BUILD_BUG(); 0; })
-                             ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-                       ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:385:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:378:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:21:1: note: expanded from here
-   __compiletime_assert_350
-   ^
-   3 errors generated.
-
-
-vim +179 include/net/xsk_buff_pool.h
-
-   175	
-   176	static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
-   177							 u64 addr, u32 len)
-   178	{
- > 179		bool cross_pg = pool->hugetlb ? (addr & (HPAGE_SIZE - 1)) + len > HPAGE_SIZE :
-   180						(addr & (PAGE_SIZE - 1)) + len > PAGE_SIZE;
-   181	
-   182		if (likely(!cross_pg))
-   183			return false;
-   184	
-   185		if (pool->dma_pages_cnt) {
-   186			return !(pool->dma_pages[addr >> PAGE_SHIFT] &
-   187				 XSK_NEXT_PG_CONTIG_MASK);
-   188		}
-   189	
-   190		/* skb path */
-   191		return addr + len > pool->addrs_cnt;
-   192	}
-   193	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks
+Nic
