@@ -2,143 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43376C06D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282016C06D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCTAck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 20:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
+        id S229685AbjCTA2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 20:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCTAci (ORCPT
+        with ESMTP id S229446AbjCTA2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 20:32:38 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8586F168B3
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 17:32:36 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id DFDFF5C00BA;
-        Sun, 19 Mar 2023 20:32:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 19 Mar 2023 20:32:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679272353; x=
-        1679358753; bh=iwPU2XUoORcrqxgWnL7qQpsymVVO5t7PxaOWHT9jlq4=; b=C
-        00Hio0rKz2qHrJrV/M0gZ59GCcgOB7qtFIVEE9CxnYxSb+UqxO+Mas/kFePj1CG0
-        fvVmSLzCBxWGd31+327oOeZhXQp4kFSwpGHchnERuLGfanccv+lorCF6o+k8L9Lq
-        Q+4zMEH0NUOQ26Zy/IJPab+B73aJnlG/B+L06vaxZ+ZQBvrW0tM6iBrYZhjkrKlR
-        XUVUFNRTpbtFtp/Q/iOSR0cRuFA96H8IpLuSJTULUZqYZ1sUDF1CcorKbFQgFCh4
-        6k68/kFlvly64oOypRer5zaRjQdr/OQtWB0I1euVZkG6vJukiCsXuJNAlhEJSXBL
-        YKgpTjdNj26edaCtiyQBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679272353; x=
-        1679358753; bh=iwPU2XUoORcrqxgWnL7qQpsymVVO5t7PxaOWHT9jlq4=; b=A
-        /gN8Tp0KGpuCQ2Xs/NPe/tWeVCkfMQNplm/nOPrsYLGdQ7Siq0DHrol0XYkr1oTh
-        RaeJrH+NB4Qwc1pOp0zlVx8zehLJ8lrWptOSe8Cy+zcvbbNNrsxPJ9OQ21MNeok6
-        hKeHPrJSt9SHfQ0vmo713yRHGPjiriwLT/elqlVSG+X64PfdqlOV1lGbOcXoLe9E
-        WrcBWqx+wvfdgjwpjnh57zk+c2i/UkxeFNX2tRE4L/GHrWCQwu3PcpfBppb856VU
-        4ffHwRkcAkDBCsNyFscEd3LKv1mmWc2Io7wK2nUNUaa1HaT9XOG6Ltr0KK1q6eAl
-        VwO/3z9/JvHqnNG2hA9nQ==
-X-ME-Sender: <xms:oakXZNO_0a_uLjZdCHiQovSwnsoefwqUvj6y2EMeTrxxCVBmYdXRhQ>
-    <xme:oakXZP9aIGfRMan7f92Cg7PsKwRSgcieopHlscdsZcKMSqE6onYClqICCA0_oNJoU
-    9RJeOQBs6c4gkaAZUk>
-X-ME-Received: <xmr:oakXZMQw_Pb0eYtMht3DDlJdiQKiv1GoB_QASfw7vZHhA3FYs6MEnDQ4LvBQsE_ICPX-bTv04XJMGxc_cbW7J27hxc-ruq9ScXUkxxsT6fnktya6-ddDuHJ4lA-xn477N-2tUsgZEMT1>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefjedgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgoteeftdduqddtudculdduhedmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrrhhkucfrvggrrhhs
-    ohhnuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrgeqnecuggftrf
-    grthhtvghrnhepfedtvdejfeelffevhffgjeejheduteetieeguefgkefhhfegjeduueet
-    hefgvdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
-X-ME-Proxy: <xmx:oakXZJtHxO5OmehtbztSQoUP9JM-1UNSecy2_XIfPgzJDEbryKbA0Q>
-    <xmx:oakXZFeDD6ubvQ52uMUTIBmX3svZbnALmwqoVHU9iHJ5MHJ0g9RvTw>
-    <xmx:oakXZF2ytcwOAQWKwZIDA10qT_wQqmDvffgpO-nJuE9_qMW4UDMCJg>
-    <xmx:oakXZOEVP7naDiE9t9UiD7Fl6htTem85o39pe0MOeiqZmg0WUA6t_g>
-Feedback-ID: ibe194615:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 19 Mar 2023 20:32:33 -0400 (EDT)
-From:   Mark Pearson <mpearson-lenovo@squebb.ca>
-To:     mpearson-lenovo@squebb.ca
-Cc:     hdegoede@redhat.com, markgross@kernel.org, markpearson@lenovo.com,
-        thomas@t-8ch.de, pobrn@protonmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] platform/x86: think-lmi: Add possible_values for ThinkStation
-Date:   Sun, 19 Mar 2023 20:32:21 -0400
-Message-Id: <20230320003221.561750-4-mpearson-lenovo@squebb.ca>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320003221.561750-1-mpearson-lenovo@squebb.ca>
-References: <mpearson-lenovo@squebb.ca>
- <20230320003221.561750-1-mpearson-lenovo@squebb.ca>
+        Sun, 19 Mar 2023 20:28:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B7E1284A;
+        Sun, 19 Mar 2023 17:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679272122; x=1710808122;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lyXTxJMbbk8wy2ewc/Bwdw41SIVEUEcTA92IvbzzJ8Q=;
+  b=kE8NkJa8+l5I+MNv2RUhvExaxYu2nBuKtMJM4z1BuWhWJcHp518DO9YZ
+   2lqip9rSO6fghmla4JzTJ9UVV6xit/luz3azqSmehoDxkeJv6Sat8IwPd
+   H5JmEAwKP0Q6ZYJfPLSCka63Q8qdIRXGtMWA0EJn5Z/AXg9Dc2SeHxrar
+   GVgiQIb5jv6vt1FhOmkd49FWnGD+XF/WXKqfuivJjtpycFotnD2sXUr/W
+   7FsdDfygd76t2e0UonRAbLnwqdQbhK1LwWECaz2tjYF76njD6s06ZTTyM
+   19yTBxzMcqveTNVAjunRnQGHF+Y7vmiIqIHXMWxH6VWBRxL/aXccqcTiH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="424824675"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="424824675"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 17:28:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="674163012"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="674163012"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 17:28:39 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcutorture: Convert schedule_timeout_uninterruptible() to mdelay() in rcu_torture_stall()
+Date:   Mon, 20 Mar 2023 08:33:16 +0800
+Message-Id: <20230320003316.3897447-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ThinkStation platforms don't support the API to return possible_values
-but instead embed it in the settings string.
+For kernels built with enable PREEMPT_NONE and CONFIG_DEBUG_ATOMIC_SLEEP,
+running the RCU stall tests.
 
-Try and extract this information and set the possible_values attribute
-appropriately.
+runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4"
+bootparams="nokaslr console=ttyS0 rcutorture.stall_cpu=30
+rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_irqsoff=1
+rcutorture.stall_cpu_block=1" -d
 
-Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+[   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
+[   10.841073] rcu_torture_stall start on CPU 3.
+[   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
+....
+[   10.841108] Call Trace:
+[   10.841110]  <TASK>
+[   10.841112]  dump_stack_lvl+0x64/0xb0
+[   10.841118]  dump_stack+0x10/0x20
+[   10.841121]  __schedule_bug+0x8b/0xb0
+[   10.841126]  __schedule+0x2172/0x2940
+[   10.841157]  schedule+0x9b/0x150
+[   10.841160]  schedule_timeout+0x2e8/0x4f0
+[   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
+[   10.841195]  rcu_torture_stall+0x2e8/0x300
+[   10.841199]  kthread+0x175/0x1a0
+[   10.841206]  ret_from_fork+0x2c/0x50
+
+The above calltrace occurs in the local_irq_disable/enable() critical
+section call schedule_timeout(), and invoke schedule_timeout() also
+implies a quiescent state, of course it also fails to trigger RCU stall,
+this commit therefore use mdelay() instead of schedule_timeout() to
+trigger RCU stall.
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 ---
-Changes in v4:
- - is_visible handling split out into separate patch
- - linelength reduced so checkpatch is clean.
-Changes in v3:
- - Use is_visible attribute to determine if possible_values should be
-   available
- - Code got refactored a bit to make compilation cleaner
-Changes in v2:
- - Move no value for possible_values handling into show function
- - use kstrndup for allocating string
+ kernel/rcu/rcutorture.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/platform/x86/think-lmi.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 6f8c91716a95..aaaeb30fb0b0 100644
---- a/drivers/platform/x86/think-lmi.c
-+++ b/drivers/platform/x86/think-lmi.c
-@@ -1422,6 +1422,26 @@ static int tlmi_analyze(void)
- 			if (ret || !setting->possible_values)
- 				pr_info("Error retrieving possible values for %d : %s\n",
- 						i, setting->display_name);
-+		} else {
-+			/*
-+			 * Older Thinkstations don't support the bios_selections API.
-+			 * Instead they store this as a [Optional:Option1,Option2] section of the
-+			 * name string.
-+			 * Try and pull that out if it's available.
-+			 */
-+			char *item, *optstart, *optend;
-+
-+			if (!tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
-+				optstart = strstr(item, "[Optional:");
-+				if (optstart) {
-+					optstart += strlen("[Optional:");
-+					optend = strstr(optstart, "]");
-+					if (optend)
-+						setting->possible_values =
-+							kstrndup(optstart, optend - optstart,
-+									GFP_KERNEL);
-+				}
-+			}
- 		}
- 		/*
- 		 * firmware-attributes requires that possible_values are separated by ';' but
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index d06c2da04c34..fe4f5a4074e3 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -2472,7 +2472,7 @@ static int rcu_torture_stall(void *args)
+ #ifdef CONFIG_PREEMPTION
+ 				preempt_schedule();
+ #else
+-				schedule_timeout_uninterruptible(HZ);
++				mdelay(HZ);
+ #endif
+ 			} else if (stall_no_softlockup) {
+ 				touch_softlockup_watchdog();
 -- 
-2.39.2
+2.25.1
 
