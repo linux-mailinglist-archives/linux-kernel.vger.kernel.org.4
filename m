@@ -2,394 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF53A6C0DA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6998A6C0DA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjCTJqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S231222AbjCTJq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjCTJq1 (ORCPT
+        with ESMTP id S231159AbjCTJqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:46:27 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25731ACD3;
-        Mon, 20 Mar 2023 02:46:23 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 40453C0009;
-        Mon, 20 Mar 2023 09:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679305582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ieu9Fv38se4lD4z/BVXUHLrVJL9Tx5iKWZgvO8X+VoY=;
-        b=m4O7nLC1LPZDOI5eM/hmgqouxdkin2veA6CvJhT9kU9rGQALB3ya2fuybMfDvrkTqqBjEd
-        j6DAxXMgOKgwuUfEsZsp3BFJpoii00hSaf0r2uIbnnGcUrDGVQqUQVEqv51O6VBqnrViQk
-        PstlJM0lcE9R/AFASd5D/HQGoYYyRY+NKT7xt8g1Ax23Yk/tUG59LXku/skn/4faSLodnU
-        vV2ng3VMUcoLuvSMJtdYY3hrXEWqUrW1ZogxAFHJNiKuyOELmqZGmNo4B4yAFOEcqqyano
-        /f4m/7BtT7X1wwPvGu29gg+0aOFrGQq5kb4UNrMoriSQyKnxPRha8zL3J2Jckw==
-Date:   Mon, 20 Mar 2023 10:46:19 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466
- E1/T1/J1 framer
-Message-ID: <20230320104619.468a304b@bootlin.com>
-In-Reply-To: <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
-References: <20230316122741.577663-1-herve.codina@bootlin.com>
-        <20230316122741.577663-2-herve.codina@bootlin.com>
-        <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 20 Mar 2023 05:46:53 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160842056F;
+        Mon, 20 Mar 2023 02:46:51 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1peC6H-0002eW-Nz; Mon, 20 Mar 2023 10:46:45 +0100
+Message-ID: <810afc81-57e3-17ea-c624-34a157602d1f@leemhuis.info>
+Date:   Mon, 20 Mar 2023 10:46:45 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] media: i2c: imx290: fix conditional function defintions
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20230207161316.293923-1-arnd@kernel.org>
+ <Y+J+7lsf083k4x80@pendragon.ideasonboard.com>
+ <c5383d0e-d33c-d59f-3ee6-4635c1c4d334@leemhuis.info>
+ <ZBgoHvg3kxsVoSzg@kekkonen.localdomain>
+ <84540c66-166e-067a-e1d9-961234640d2e@leemhuis.info>
+In-Reply-To: <84540c66-166e-067a-e1d9-961234640d2e@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679305611;9dfe5d9b;
+X-HE-SMSGID: 1peC6H-0002eW-Nz
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
 
-On Fri, 17 Mar 2023 09:54:07 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-> On 16/03/2023 13:27, Herve Codina wrote:
-> > The Lantiq PEF2256 is a framer and line interface component designed to
-> > fulfill all required interfacing between an analog E1/T1/J1 line and the
-> > digital PCM system highway/H.100 bus.
-> >=20
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  .../bindings/misc/lantiq,pef2256.yaml         | 190 ++++++++++++++++++
-> >  1 file changed, 190 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/misc/lantiq,pef22=
-56.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/misc/lantiq,pef2256.yaml=
- b/Documentation/devicetree/bindings/misc/lantiq,pef2256.yaml
-> > new file mode 100644
-> > index 000000000000..1ba788d06a14
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/misc/lantiq,pef2256.yaml
-> > @@ -0,0 +1,190 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/misc/lantiq,pef2256.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Lantiq PEF2256
-> > +
-> > +maintainers:
-> > +  - Herve Codina <herve.codina@bootlin.com>
-> > +
-> > +description:
-> > +  The Lantiq PEF2256, also known as Infineon PEF2256 or FALC256, is a =
-framer and
-> > +  line interface component designed to fulfill all required interfacin=
-g between
-> > +  an analog E1/T1/J1 line and the digital PCM system highway/H.100 bus.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: lantiq,pef2256
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Master clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: mclk
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  reset-gpios:
-> > +    description:
-> > +      GPIO used to reset the device.
-> > +    maxItems: 1
-> > +
-> > +  pinctrl:
-> > +    allOf:
-> > +      - $ref: "/schemas/pinctrl/pinctrl.yaml#" =20
->=20
-> Drop quotes. Drop allOf, no need for it.
->=20
-> additionalProperties: false
+On 20.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 20.03.23 10:32, Sakari Ailus wrote:
+>> On Mon, Mar 20, 2023 at 10:18:23AM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>> On 07.02.23 17:40, Laurent Pinchart wrote:
+>>>> On Tue, Feb 07, 2023 at 05:13:12PM +0100, Arnd Bergmann wrote:
+>>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>>
+>>>>> The runtime suspend/resume functions are only referenced from the
+>>>>> dev_pm_ops, but they use the old SET_RUNTIME_PM_OPS() helper
+>>>>> that requires a __maybe_unused annotation to avoid a warning:
+>>>>>
+>>>>> drivers/media/i2c/imx290.c:1082:12: error: unused function 'imx290_runtime_resume' [-Werror,-Wunused-function]
+>>>>> static int imx290_runtime_resume(struct device *dev)
+>>>>>            ^
+>>>>> drivers/media/i2c/imx290.c:1090:12: error: unused function 'imx290_runtime_suspend' [-Werror,-Wunused-function]
+>>>>> static int imx290_runtime_suspend(struct device *dev)
+>>>>>            ^
+>>>>>
+>>>
+>>> I might be missing something (if so, please tell me), but to me it looks
+>>>  this fix for a build issue in 6.3-rc (which shows up in Guenters weekly
+>>> reports to Linus) didn't make any progress in the past few weeks. Is
+>>> there a reason why? Who actually needs to pick it up and send it towards
+>>> mainline? Manivannan Sadhasivam? Sakari Ailus?
+>>
+>> Mauro has recently pulled my PR including this and I understand it's in
+>> Mauro's tree now.
+> 
+> Ahh, great, many thx.
+> 
+> I checked Linux-next before writing my mail, but didn't sport it there. :-/
 
-Will be dropped and added in v3
+Argh, ohh no, it's there. Sorry for the noise. Second time something
+like this happens today. Seems today is not my best day. :-/
 
->=20
-> > +
-> > +    patternProperties:
-> > +      '-pins$':
-> > +        type: object
-> > +        allOf:
-> > +          - $ref: "/schemas/pinctrl/pincfg-node.yaml#" =20
->=20
-> Drop quotes. Drop allOf, no need for it.
->=20
-> additionalProperties: false
->=20
-
-Will be dropped and added in v3
-
->=20
-> > +
-> > +        properties:
-> > +          pins:
-> > +            enum: [ RPA, RPB, RPC, RPD, XPA, XPB, XPC, XPD ]
-> > +
-> > +          function:
-> > +            enum: [ SYPR, RFM, RFMB, RSIGM, RSIG, DLR, FREEZE, RFSP, L=
-OS,
-> > +                    SYPX, XFMS, XSIG, TCLK, XMFB, XSIGM, DLX, XCLK, XL=
-T,
-> > +                    GPI, GPOH, GPOL ]
-> > +
-> > +        required:
-> > +          - pins
-> > +          - function
-> > +
-> > +  lantiq,line-interface:
-> > +    $ref: /schemas/types.yaml#/definitions/string
-> > +    enum: [e1, t1j1]
-> > +    default: e1
-> > +    description: |
-> > +      The line interface type
-> > +        - e1: E1 line
-> > +        - t1j1: T1/J1 line
-> > +
-> > +  lantiq,sysclk-rate-hz:
-> > +    enum: [2048000, 4096000, 8192000, 16384000]
-> > +    default: 2048000
-> > +    description:
-> > +      Clock rate (Hz) on the system highway. =20
->=20
-> I am pretty sure we have discussions on sysclk for other drivers. First,
-> why you cannot use assigned-clock-rates? Or clk_get_rate() if this is
-> about being consumer?
->=20
-> Second, there is already system-clock-frequency property, so use it.
-
-Indeed, I will added the related clocks in the 'clocks' property and use
-clk_get_rate() in the driver.
-
->=20
-> > +
-> > +  lantiq,data-rate-bps:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [2048000, 4096000, 8192000, 16384000]
-> > +    default: 2048000
-> > +    description:
-> > +      Data rate (bit per seconds) on the system highway. =20
->=20
-> Why do you need it? How is it different from clock? Do you expect some
-> DDR here?
-
-This is needed to set the data position on the data line.
-If the data line clock (sysclk-rate-hz) is greater than 'data-rate-bps',
-the device interleaves some holes between data in the full frame.
-
-The exact position of the data and the holes is defined by 'channel-phase'
-
-So, two information are needed:
-- The number of slots available (deduced from 'lantiq,data-rate-bps')
-- The slot to use in the available slots ('lantiq,channel-phase" property
-
-lantiq,data-rate-bps is not a clock but a property used to set the frame
-physical setting. ie the correct data position in the frame.=20
-
->=20
-> > +
-> > +  lantiq,clock-falling-edge:
-> > +    $ref: /schemas/types.yaml#/definitions/flag
-> > +    description:
-> > +      Data is sent on falling edge of the clock (and received on the r=
-ising
-> > +      edge). If 'clock-falling-edge' is not present, data is sent on t=
-he
-> > +      rising edge (and received on the falling edge).
-> > +
-> > +  lantiq,channel-phase:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [0, 1, 2, 3, 4, 5, 6, 7]
-> > +    default: 0
-> > +    description:
-> > +      The pef2256 delivers a full frame (32 8bit time-slots in E1 and =
-24 8bit
-> > +      time-slots 8 8bit signaling in E1/J1) every 125us. This lead to =
-a data
-> > +      rate of 2048000 bit/s. When lantiq,data-rate-bps is more than 20=
-48000
-> > +      bit/s, the data (all 32 8bit) present in the frame are interleav=
-e with
-> > +      unused time-slots. The lantiq,channel-phase property allows to s=
-et the
-> > +      correct alignment of the interleave mechanism.
-> > +      For instance, suppose lantiq,data-rate-bps =3D 8192000 (ie 4*204=
-8000), and
-> > +      lantiq,channel-phase =3D 2, the interleave schema with unused ti=
-me-slots
-> > +      (nu) and used time-slots (XX) for TSi is
-> > +        nu nu XX nu nu nu XX nu nu nu XX nu
-> > +        <-- TSi --> <- TSi+1 -> <- TSi+2 ->
-> > +      With lantiq,data-rate-bps =3D 8192000, and lantiq,channel-phase =
-=3D 1, the
-> > +      interleave schema is
-> > +        nu XX nu nu nu XX nu nu nu XX nu nu
-> > +        <-- TSi --> <- TSi+1 -> <- TSi+2 ->
-> > +      With lantiq,data-rate-bps =3D 4096000 (ie 2*2048000), and
-> > +      lantiq,channel-phase =3D 1, the interleave schema is
-> > +        nu    XX    nu    XX    nu    XX
-> > +        <-- TSi --> <- TSi+1 -> <- TSi+2 ->
-> > +
-> > +  lantiq,subordinate:
-> > +    $ref: /schemas/types.yaml#/definitions/flag
-> > +    description:
-> > +      If present, the pef2256 works in subordinate mode. In this mode =
-it
-> > +      synchronizes on line interface clock signals. Otherwise, it sync=
-hronizes
-> > +      on internal clocks.
-> > +
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        lantiq,line-interface:
-> > +          contains:
-> > +            const: e1
-> > +    then:
-> > +      properties:
-> > +        lantiq,frame-format: =20
->=20
-> Do not define properties in if:then, but in top-level. Disallow them or
-> customize for the specific cases in if:then
-
-Will be changed in v3.
-
->=20
-> > +          $ref: /schemas/types.yaml#/definitions/string
-> > +          enum: [doubleframe, crc4-multiframe, auto-multiframe]
-> > +          default: doubleframe
-> > +          description: |
-> > +            The E1 line interface frame format
-> > +              - doubleframe: Doubleframe format
-> > +              - crc4-multiframe: CRC4 multiframe format
-> > +              - auto-multiframe: CRC4 multiframe format with interwork=
-ing
-> > +                                 capabilities (ITU-T G.706 Annex B)
-> > +
-> > +    else:
-> > +      # T1/J1 line
-> > +      properties:
-> > +        lantiq,frame-format: =20
->=20
-> Same problem - definitions go to top level.
-
-Will be changed in v3
-
->=20
-> > +          $ref: /schemas/types.yaml#/definitions/string
-> > +          enum: [4frame, 12frame, 24frame, 72frame]
-> > +          default: 12frame
-> > +          description: |
-> > +            The T1/J1 line interface frame format
-> > +              - 4frame: 4-frame multiframe format (F4)
-> > +              - 12frame: 12-frame multiframe format (F12, D3/4)
-> > +              - 24frame: 24-frame multiframe format (ESF)
-> > +              - 72frame: 72-frame multiframe format (F72, remote switc=
-h mode)
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - interrupts
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    pef2256@2000000 { =20
->=20
-> Figure out some generic node name.
-
-What do you think about 'framer' ?
-
->=20
-> > +      compatible =3D "lantiq,pef2256";
-> > +      reg =3D <0x2000000 0xFF>; =20
->=20
-> Lowercase hex
-
-Will be changed in v3.
-
->=20
-> > +      interrupts =3D <8 1>; =20
->=20
-> if 1 is interrupt flag, use proper defines.
-
-Will be replaced by 'interrupts =3D <8 IRQ_TYPE_LEVEL_LOW>'
-I will also change the interrupt-parent to interrupt-parent =3D <&intc>
-to avoid mentioning PIC and avoid any misunderstanding as the PIC we use
-does not follow the standard IRQ_TYPE_* flags.
-
->=20
-> > +      interrupt-parent =3D <&PIC>;
-> > +      clocks =3D <&clk_mclk>;
-> > +      clock-names =3D "mclk";
-> > +      reset-gpios =3D <&gpio 11 GPIO_ACTIVE_LOW>;
-> > +      lantiq,sysclk-rate-hz =3D <8192000>;
-> > +      lantiq,data-rate-bps =3D <4096000>;
-> > +
-> > +      pinctrl {
-> > +        pef2256_rpa_sypr: rpa-pins {
-> > +          pins =3D "RPA";
-> > +          function =3D "SYPR";
-> > +        };
-> > +        pef2256_xpa_sypx: xpa-pins {
-> > +          pins =3D "XPA";
-> > +          function =3D "SYPX";
-> > +        };
-> > +      };
-> > +    }; =20
->=20
-> Best regards,
-> Krzysztof
->=20
-
-Thanks for the review.
-
-Best regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Ciao, Thorsten
