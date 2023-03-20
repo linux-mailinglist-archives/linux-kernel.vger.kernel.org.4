@@ -2,112 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7126C25AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541E16C25AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjCTXfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S229598AbjCTXfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCTXfl (ORCPT
+        with ESMTP id S229453AbjCTXfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:35:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A320E32CDA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679355293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eLRNau9yfu5hUtNACbqD47eGjINw3xSx6xkN8nR2nXo=;
-        b=ftsUeORo919szKTO1NisJUIbZ98MbRl142IwhMnQRmUP7ToeRFgyRNvIruhYgRODrTwp/P
-        HFtkWD3Gd7bwct2L7i2XGuVP6Zz5KZCAsazfu4G1BlZFhP9gvrHLo/PwF3kKus9ZbtxSCY
-        OtRzp+C6v64LrLk7SM8fhCJi+V9OH3M=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-NgfrCnvdNUyQY9iC6NRZHA-1; Mon, 20 Mar 2023 19:34:52 -0400
-X-MC-Unique: NgfrCnvdNUyQY9iC6NRZHA-1
-Received: by mail-qt1-f198.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so1251741qta.16
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:34:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679355292;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eLRNau9yfu5hUtNACbqD47eGjINw3xSx6xkN8nR2nXo=;
-        b=Z025chv6CL5d+OR3CPhjgnWKcFBbho6HEIm/cegxzMK7/GggeMjxoEJQuzULjXJW1r
-         s9U3v1+iHYLTGZUoOA+wbaUkV5Lk82yf8aZ8jJPCFY/TZNg9pPqbzJj5SyigooESpSTt
-         SZ9hHoBXTYUy1o3MOjMNMcZGjL31rV9bssVklI5OGwKbM6YIRR+xFvbYZCe7yiD5RP7x
-         yfXYxUrY5/tMMsZAHK7nIe6vYlgfcZDUBY1STA5xczKyqVe6pkKn9Iy5LuV5svPuclbV
-         YHSXLN7bBnvrHJ7EWc2Ltgqu2Ouy7AvFefyJn5aJZEeqciIPh7/yY+KzqmvJEGTu/R69
-         ruag==
-X-Gm-Message-State: AO0yUKWcAVVLO1t6bfnyFbrrSxALFjlqFY/6lrkDWEwJFVGw6zktPlWM
-        ve8QhjoMuBoYcUadAQtwEE7hnRD7+g0rhhw35cZO+U61tamw4Kjq0EHONnnCTrJWUHufb7LSmUA
-        z7hsRK8mmYEnHGkm7mw3za9XA
-X-Received: by 2002:ac8:590d:0:b0:3bf:c407:10c6 with SMTP id 13-20020ac8590d000000b003bfc40710c6mr1680916qty.13.1679355292033;
-        Mon, 20 Mar 2023 16:34:52 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/MSGMYSq3HoZIhVmyS6T1eXwZz2enrFbuKq9nPI2QR/JAsY9RsSg0g8FFAWo/GPQAdeced0g==
-X-Received: by 2002:ac8:590d:0:b0:3bf:c407:10c6 with SMTP id 13-20020ac8590d000000b003bfc40710c6mr1680898qty.13.1679355291794;
-        Mon, 20 Mar 2023 16:34:51 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 5-20020a370b05000000b0071eddd3bebbsm8312839qkl.81.2023.03.20.16.34.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 16:34:51 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     tony0620emma@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
-Date:   Mon, 20 Mar 2023 19:34:48 -0400
-Message-Id: <20230320233448.1729899-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 20 Mar 2023 19:35:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BFC36087;
+        Mon, 20 Mar 2023 16:35:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 445E7618C2;
+        Mon, 20 Mar 2023 23:35:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E29C433D2;
+        Mon, 20 Mar 2023 23:35:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679355334;
+        bh=5xOvmHmUf2cEKOzAJOcRijmuejRiFNLhPJ88WTuylQ0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=rKUOXh7a0R2s0mRzp93zpdwuFs0B7H8/Rc95jS/fLT9+Yz8daFD0bR7DGV0RaBLDF
+         QTN+l/re3XsVtgAzUgelfJr6ryk8AkqsEMm1J4x2aB/IuK0t/ST2WDj3AM3Z+H124I
+         P9xapvUxHmbUHZx2vbd3wmv1SiDTH6ZIU5v3lqT8YsMcBZzqw9kbU6WW7rywycNxFm
+         1m8uN0+ultPGBBE8jECLqClo9vPmr8+CgJ1Rrzm4ohx/NAD8GM3Fj1OzWhIWPtt8Rx
+         YzKU4Oah7bRr/DLpQgioqXIKQXv8jsdvIp2Zwn6WQYdNKSiUvu0wjqUGPjJCqimyrZ
+         TXrY2JVCkgFhw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 29D3F1540395; Mon, 20 Mar 2023 16:35:34 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 16:35:34 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rcutorture: Convert
+ schedule_timeout_uninterruptible() to mdelay() in rcu_torture_stall()
+Message-ID: <5a887ca6-10e9-4026-b792-164deb80d0a8@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230320032422.4010801-1-qiang1.zhang@intel.com>
+ <7a414721-25fa-485c-91a5-13d3149073fe@paulmck-laptop>
+ <PH0PR11MB58806032CE88C9E6BE61059CDA809@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB58806032CE88C9E6BE61059CDA809@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/net/wireless/realtek/rtw88/pci.c:92:21: error:
-  unused function 'rtw_pci_get_tx_desc' [-Werror,-Wunused-function]
-static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
-                    ^
-This function is not used, so remove it.
+On Mon, Mar 20, 2023 at 11:05:17PM +0000, Zhang, Qiang1 wrote:
+> > For kernels built with enable PREEMPT_NONE and CONFIG_DEBUG_ATOMIC_SLEEP,
+> > running the RCU stall tests.
+> > 
+> > runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4"
+> > bootparams="nokaslr console=ttyS0 rcutorture.stall_cpu=30
+> > rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_irqsoff=1
+> > rcutorture.stall_cpu_block=1" -d
+> > 
+> > [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
+> > [   10.841073] rcu_torture_stall start on CPU 3.
+> > [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
+> > ....
+> > [   10.841108] Call Trace:
+> > [   10.841110]  <TASK>
+> > [   10.841112]  dump_stack_lvl+0x64/0xb0
+> > [   10.841118]  dump_stack+0x10/0x20
+> > [   10.841121]  __schedule_bug+0x8b/0xb0
+> > [   10.841126]  __schedule+0x2172/0x2940
+> > [   10.841157]  schedule+0x9b/0x150
+> > [   10.841160]  schedule_timeout+0x2e8/0x4f0
+> > [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
+> > [   10.841195]  rcu_torture_stall+0x2e8/0x300
+> > [   10.841199]  kthread+0x175/0x1a0
+> > [   10.841206]  ret_from_fork+0x2c/0x50
+> > 
+> > The above calltrace occurs in the local_irq_disable/enable() critical
+> > section call schedule_timeout(), and invoke schedule_timeout() also
+> > implies a quiescent state, of course it also fails to trigger RCU stall,
+> > this commit therefore use mdelay() instead of schedule_timeout() to
+> > trigger RCU stall.
+> > 
+> > Suggested-by: Joel Fernandes <joel@joelfernandes.org>
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > ---
+> >  kernel/rcu/rcutorture.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+> > index d06c2da04c34..a08a72bef5f1 100644
+> > --- a/kernel/rcu/rcutorture.c
+> > +++ b/kernel/rcu/rcutorture.c
+> > @@ -2472,7 +2472,7 @@ static int rcu_torture_stall(void *args)
+> >
+> >Right here there is:
+> >
+> >			if (stall_cpu_block) {
+> >
+> >In other words, the rcutorture.stall_cpu_block module parameter says to
+> >block, even if it is a bad thing to do.  The point of this is to verify
+> >the error messages that are supposed to be printed on the console when
+> >this happens.
+> >
+> >  #ifdef CONFIG_PREEMPTION
+> >  				preempt_schedule();
+> >  #else
+> > -				schedule_timeout_uninterruptible(HZ);
+> > +				mdelay(jiffies_to_msecs(HZ));
+> >
+> >So this really needs to stay schedule_timeout_uninterruptible(HZ).
+> 
+> But invoke schedule_timeout_uninterruptible(HZ) implies a quiescent state, 
+> this will not cause an RCU stall to occur, and still in the RCU read critical section(PREEMPT_COUNT=y).
+> 
+> It didn't happen RCU stall when I tested with the following parameters for 
+> rcutorture.stall_cpu=30
+> rcutorture.stall_no_softlockup=1
+> rcutorture.stall_cpu_irqsoff=1
+> rcutorture.stall_cpu_block=1
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/wireless/realtek/rtw88/pci.c | 7 -------
- 1 file changed, 7 deletions(-)
+Understood.  If you want that RCU CPU stall in a CONFIG_PREEMPTION=n
+kernel, you should not use rcutorture.stall_cpu_block=1.
 
-diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
-index b4bd831c9845..6a8e6ee82069 100644
---- a/drivers/net/wireless/realtek/rtw88/pci.c
-+++ b/drivers/net/wireless/realtek/rtw88/pci.c
-@@ -89,13 +89,6 @@ static void rtw_pci_write32(struct rtw_dev *rtwdev, u32 addr, u32 val)
- 	writel(val, rtwpci->mmap + addr);
- }
- 
--static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
--{
--	int offset = tx_ring->r.desc_size * idx;
--
--	return tx_ring->r.head + offset;
--}
--
- static void rtw_pci_free_tx_ring_skbs(struct rtw_dev *rtwdev,
- 				      struct rtw_pci_tx_ring *tx_ring)
- {
--- 
-2.27.0
+In a CONFIG_PREEMPTION=y kernel, rcutorture.stall_cpu_block=1 forces
+the grace period to be stalled on a task rather than a CPU, exercising
+a different part of the RCU CPU stall warning code.
 
+In a CONFIG_PREEMPTION=n kernel, using rcutorture.stall_cpu_block=1
+forces the CPU to go through a quiescent state, as you say.  It can
+also cause lockdep and scheduling-while-atomic complaints, depending on
+exactly what type of RCU reader is in effect.
+
+So these are test-the-diagnostics parameters.  The mdelay() instead
+makes rcutorture.stall_cpu_block=1 do the same thing as does
+rcutorture.stall_cpu_block=0 for CONFIG_PREEMPTION=n kernels, right?
+
+							Thanx, Paul
+
+> Thanks
+> Zqiang
+> 
+> >
+> >So should there be a change to kernel-parameters.txt to make it
+> >more clear that this is intended behavior?
+> >
+> >						Thanx, Paul
+> >
+> >  #endif
+> >  			} else if (stall_no_softlockup) {
+> >  				touch_softlockup_watchdog();
+> > -- 
+> > 2.25.1
+> > 
