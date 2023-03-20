@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754656C0F6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4316C0F71
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjCTKmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S230347AbjCTKmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjCTKmV (ORCPT
+        with ESMTP id S229786AbjCTKmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:42:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE5283E4;
-        Mon, 20 Mar 2023 03:40:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C049B80DF4;
-        Mon, 20 Mar 2023 10:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E42C433A7;
-        Mon, 20 Mar 2023 10:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679308804;
-        bh=b/HGnMlXeuHvPae1x52H670xDuHDuYpTJN0Rl8TuTuM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DRaIRabUskl2RpkaJgvjV+RL80IVFsZL5ud/3JEyvB1lyaQDpvdkMoWDap16n4wrc
-         HP6OvGsFUX5Nu6qHKFbtcyYtLiVIUS9t845WvUKLhhl6Pwhvexr2cUZ5VnRWr9gRZA
-         CfNzsFR17w6mZza9u1AQ4Zv3yJnAOH7kwS/D/xrniCE7lmhvRhqHO7BxgxP+oMl+8E
-         1LR2wnJSnpSgmiQlpeFxV225fVQkxgIa6JOJo/yXfy+JxNSSOWAs9coc9hggeOKyBK
-         BEV2Z4zJiU3yrvKEUqhopn+IhZjp1w87jKVj2FDWdflxOG9im5n79I/ADB46JCWDJR
-         giX4B+uC0gPjA==
-Date:   Mon, 20 Mar 2023 16:09:56 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mon, 20 Mar 2023 06:42:24 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C451D26CC9;
+        Mon, 20 Mar 2023 03:40:31 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id k2so11926352pll.8;
+        Mon, 20 Mar 2023 03:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679308810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ytodzSMqKI+g6vziElNMEkt2Uz4MK0qBsUvh5kc4oY0=;
+        b=aVBcSvaWtaFyKL45eHS55ASyUBgV5hhFSlWXe/FsfV8IvzxFyee8V/j4n+ZXr0cA8h
+         ZVO2KBURAWTx2sUgqY4G8Ljf25jjf0Y6HIDXcyB7YvRQGkw0Sh5T1+SvoFSwmWjobvks
+         QdM8Sp+gEDAYzFGmYlS6aUYGI3/nbVRQ5KRxBhe/Z/XPBb7JjsonC28RDfnFDjMX73cb
+         CXMPSorHzThl8TuhJ0P5QdTG6RvDljh+uBZOSaKN5lHngSq8Kv9/V9jo8hCbVN18KvlG
+         6eT4AVsfw9ulFNRBoqJxRYRzmQO657hP6slEvoeZWBff7wJzglbmd/KaG7ZAZRrd88JH
+         dH4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679308810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ytodzSMqKI+g6vziElNMEkt2Uz4MK0qBsUvh5kc4oY0=;
+        b=LNyoPqbq8mpUAVlFIgJ5aZEFi7/+dhpyzkhsAy/Lpl36euktrsuu1Ly67kiVZYRxKj
+         4dTwqXR3NYRXUtGVkiF6JqWPQJu46FLXWd+4jCsI0qdVvVf8Bai+6zc4h0GDt/kaGbvw
+         aIBziinUV1RHL56vSDm8wTkvUNvxbxfNsfjtYBQy4OvBjo4j2ouTGtwBfJxUOy7R68Om
+         gjgqKtxSSIwcsrwTWr4p9bxd/Mncd/0/XWpLOlcQ1+i/K5XofYWh372EkX87H6DcGB2S
+         WWb+eUz1N6cSoVLTJb27a1MrPO/+6LTfGsnD2M5UECCMQ/8kyy3lyJs/iKCCh0uXWmru
+         yMCw==
+X-Gm-Message-State: AO0yUKUqEVahlWpqxXiY28y8p3b61iCF0k+/E2Cj9cLEqCV0crG2q6EJ
+        3Seq1vP6CmAWs97sFNhj/sT0kLY4OpI=
+X-Google-Smtp-Source: AK7set9p7RaTki583fnEIoXwiT2hgRfy0b/tvJDJntOFblX1CVmcZ4gFnxZPOBptOMTfENV0EHIrrw==
+X-Received: by 2002:a05:6a20:4321:b0:cd:1367:3b69 with SMTP id h33-20020a056a20432100b000cd13673b69mr19206208pzk.17.1679308810517;
+        Mon, 20 Mar 2023 03:40:10 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (94.130.220.35.bc.googleusercontent.com. [35.220.130.94])
+        by smtp.gmail.com with ESMTPSA id e17-20020a63ee11000000b00478c48cf73csm5922535pgi.82.2023.03.20.03.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 03:40:10 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 01/13] dt-bindings: mailbox: qcom,apcs-kpss-global:
- correct SDX55 clocks
-Message-ID: <20230320103956.GE4564@thinkpad>
-References: <20230314080917.68246-1-krzysztof.kozlowski@linaro.org>
- <20230314080917.68246-2-krzysztof.kozlowski@linaro.org>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH v4 0/4] Devicetree support for Loongson-1 clock
+Date:   Mon, 20 Mar 2023 18:39:59 +0800
+Message-Id: <20230320104003.407844-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230314080917.68246-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:09:05AM +0100, Krzysztof Kozlowski wrote:
-> SDX55 and SDX65 DTS takes clocks in a bit different order.  Adjust
-> bindings to the DTS.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Removes the old Loongson-1 clock driver and related code
+mainly because of no DT support and outdated implementation.
 
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+Then, re-implement it to solve the above issues,
+along with the devicetree binding document.
 
-Thanks,
-Mani
+Changelog
+V3 -> V4: Fix the build error of missing linux/module.h
+          Add Reviewed-by tag from Krzysztof Kozlowski
+V2 -> V3: Add 'reg' property into the 'required' field
+          Delete the unnecessary property 'clock-names'
+          Use the same license as binding document for the header file.
+          Add MODULE_AUTHOR and MODULE_DESCRIPTION info
+          Add patch "MIPS: loongson32: Update the clock initialization" into this series
+	  Add Acked-by tag from Stephen Boyd and Thomas Bogendoerfer
+V1 -> V2: Change to one clock controller (suggested by Krzysztof Kozlowski)
+          Add clock-related dt-binding header file
+          Fix the warning of dt_binding_check
+          Split the driver removal to a separate patch
+          Implement one clock controller instead of single clocks
+          (suggested by Krzysztof Kozlowski)
 
-> ---
->  .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml    | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> index d888ead09282..2992227631c4 100644
-> --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> @@ -97,14 +97,14 @@ allOf:
->        properties:
->          clocks:
->            items:
-> +            - description: reference clock
->              - description: primary pll parent of the clock driver
->              - description: auxiliary parent
-> -            - description: reference clock
->          clock-names:
->            items:
-> +            - const: ref
->              - const: pll
->              - const: aux
-> -            - const: ref
->    - if:
->        properties:
->          compatible:
-> -- 
-> 2.34.1
-> 
+Keguang Zhang (4):
+  dt-bindings: clock: Add Loongson-1 clock
+  clk: loongson1: Remove the outdated driver
+  clk: loongson1: Re-implement the clock driver
+  MIPS: loongson32: Update the clock initialization
 
+ .../bindings/clock/loongson,ls1x-clk.yaml     |  45 +++
+ .../include/asm/mach-loongson32/platform.h    |   1 -
+ arch/mips/loongson32/common/time.c            |   3 +-
+ drivers/clk/Makefile                          |   2 +-
+ drivers/clk/clk-loongson1.c                   | 302 ++++++++++++++++++
+ drivers/clk/loongson1/Makefile                |   4 -
+ drivers/clk/loongson1/clk-loongson1b.c        | 118 -------
+ drivers/clk/loongson1/clk-loongson1c.c        |  95 ------
+ drivers/clk/loongson1/clk.c                   |  41 ---
+ drivers/clk/loongson1/clk.h                   |  15 -
+ include/dt-bindings/clock/loongson,ls1x-clk.h |  19 ++
+ 11 files changed, 369 insertions(+), 276 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
+ create mode 100644 drivers/clk/clk-loongson1.c
+ delete mode 100644 drivers/clk/loongson1/Makefile
+ delete mode 100644 drivers/clk/loongson1/clk-loongson1b.c
+ delete mode 100644 drivers/clk/loongson1/clk-loongson1c.c
+ delete mode 100644 drivers/clk/loongson1/clk.c
+ delete mode 100644 drivers/clk/loongson1/clk.h
+ create mode 100644 include/dt-bindings/clock/loongson,ls1x-clk.h
+
+
+base-commit: d8bb7bcf754c39de7347b746766ed45932e787d1
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
