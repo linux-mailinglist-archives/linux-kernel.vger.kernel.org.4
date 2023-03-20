@@ -2,115 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1BE6C08E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955386C08E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCTCZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 22:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S229697AbjCTC2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 22:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCTCZU (ORCPT
+        with ESMTP id S229473AbjCTC2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 22:25:20 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D2A14495;
-        Sun, 19 Mar 2023 19:25:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Ve9mrKl_1679279113;
-Received: from 30.240.114.229(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Ve9mrKl_1679279113)
-          by smtp.aliyun-inc.com;
-          Mon, 20 Mar 2023 10:25:14 +0800
-Message-ID: <91796ce2-2f63-4b07-3e44-dc2a2a98615e@linux.alibaba.com>
-Date:   Mon, 20 Mar 2023 10:25:12 +0800
+        Sun, 19 Mar 2023 22:28:48 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B4F1C588
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 19:28:46 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PfzBW52QfzKs3J;
+        Mon, 20 Mar 2023 10:26:27 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 10:28:42 +0800
+Subject: Re: [PATCH -next] mtd: ubi: Simplify bool conversion
+To:     Yang Li <yang.lee@linux.alibaba.com>, <miquel.raynal@bootlin.com>
+CC:     <vigneshr@ti.com>, <richard@nod.at>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230215012117.83938-1-yang.lee@linux.alibaba.com>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <cce0dab6-01f4-11d4-6885-381171b7199e@huawei.com>
+Date:   Mon, 20 Mar 2023 10:28:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] ACPI: APEI: EINJ: warn on invalid argument when
- explicitly indicated by platform
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "jaylu102@amd.com" <jaylu102@amd.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
-References: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
- <SJ1PR11MB60836145DD10108B1FE13A4FFCBD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <SJ1PR11MB60836145DD10108B1FE13A4FFCBD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230215012117.83938-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/18 AM5:24, Luck, Tony wrote:
-> -	if (val != EINJ_STATUS_SUCCESS)
-> +	if (val == EINJ_STATUS_FAIL)
->  		return -EBUSY;
-> +	else if (val == EINJ_STATUS_INVAL)
-> +		return -EINVAL;
+ÔÚ 2023/2/15 9:21, Yang Li Ð´µÀ:
+> ./drivers/mtd/ubi/build.c:1261:33-38: WARNING: conversion to bool not needed here
 > 
-> The ACPI Specification is really vague here. Documented error codes are
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4061
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   drivers/mtd/ubi/build.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 0 = Success (Linux #define EINJ_STATUS_SUCCESS)
-> 1 = Unknown failure (Linux #define EINJ_STATUS_FAIL)
-> 2 = Invalid Access (Linux #define EINJ_STATUS_INVAL)
-
-Absolutely right.
-
+> diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
+> index 0904eb40c95f..e9c153b7c471 100644
+> --- a/drivers/mtd/ubi/build.c
+> +++ b/drivers/mtd/ubi/build.c
+> @@ -1258,7 +1258,7 @@ static int __init ubi_init(void)
+>   		mutex_lock(&ubi_devices_mutex);
+>   		err = ubi_attach_mtd_dev(mtd, p->ubi_num,
+>   					 p->vid_hdr_offs, p->max_beb_per1024,
+> -					 p->enable_fm == 0 ? true : false);
+> +					 p->enable_fm == 0);
+>   		mutex_unlock(&ubi_devices_mutex);
+>   		if (err < 0) {
+>   			pr_err("UBI error: cannot attach mtd%d\n",
 > 
-> I don't see how reporting -EBUSY for the "Unknown Failure" case is
-> actually better.
 
-Tony, did you misunderstand this patch?
+Looks good.
 
-The original code report -EBUSY for both "Unknown Failure" and
-"Invalid Access" cases.
-
-This patch intends to report -EINVAL for "Invalid Access" case
-and keeps reporting -EBUSY for "Unknown Failure" case unchanged.
-Although -EBUSY for "Unknown Failure" case is not a good choice.
-Will -EIO for "Unknown failure" case be better?
-
-By the way, do you think -EIO for time out case is suitable.
-
-	for (;;) {
-		rc = apei_exec_run(&ctx, ACPI_EINJ_CHECK_BUSY_STATUS);
-		if (rc)
-			return rc;
-		val = apei_exec_ctx_get_output(&ctx);
-		if (!(val & EINJ_OP_BUSY))
-			break;
-		if (einj_timedout(&timeout))
-			return -EIO;
-
-For example, the OSPM will may warn:
-
-    Firmware does not respond in time.
-
-And a message is printed on the console:
-    echo: write error: Input/output error
-
-Will -EBUSY or -ETIME for timeout be better?
-
-> 
-> -Tony
-
-Thank you for comments.
-
-Best Regards.
-Shuai
+Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
