@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF10D6C203D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F5F6C2044
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCTSr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S231228AbjCTSsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjCTSrJ (ORCPT
+        with ESMTP id S230055AbjCTSrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:47:09 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD52AF21;
-        Mon, 20 Mar 2023 11:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679337619; x=1710873619;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NVpb0s44A4CDvY38C/xGCzroKuG69A4v+lxaRmy7irg=;
-  b=bGvBe4PiDvsrKSgrUj8XdoZYQWLVQ4CO22Vi/Phib0tF2Ktslzh+vLXQ
-   cuSbeTzia86HFJ1f0jC1zVfWBwCyHx9x6mcf7uxnk5sBm9Un3lBsKOYuu
-   e7ceP2R525fD4n88OhYad9n9P99EqGHe/uwjVG7qGphLIz2nWkcUSsjWN
-   e5Qc331oz2sznKaif7fcDwxfmnXITLu8dP4zwcH7YSYMSyoCch2VAMmo3
-   1CgS50lBo5IShmUBP9qBuZV6D/ox3myuc+iEKYFlsY2geaFSb8fRjbOb2
-   meyTh1oWFLNmAJsGYXTjGXVkmypIXWZM9LT9PTRXXUVX+WlK16AzvkYkv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="337463648"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="337463648"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 11:39:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="824605929"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="824605929"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.6.65]) ([10.213.6.65])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 11:39:25 -0700
-Message-ID: <e0481f32-1245-f429-cebe-b6c55c613f80@intel.com>
-Date:   Mon, 20 Mar 2023 19:39:23 +0100
+        Mon, 20 Mar 2023 14:47:40 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1EB2D14D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:40:49 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3d7aef37dccso682761cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679337617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lpfaYXXDDOEU7faI8DiWKFieDk8XViRrjAK2ROVtZfQ=;
+        b=I3kz/xOalPWbO/CR0ar9RYajhPuyAIKh9PYpDyCPNsPdV5sXhr8iNhDH0/n4vf1wKT
+         3ftX29zVpCdXHaAc0Q9jW5TjyfCPJFw4/rkgJRNQNxych78v3ao8588qev5rSgzYH+A+
+         h+F7D/s8c9JL/onYI2CGK+IafaREheyO7KVfXhAcaU2EtwjBNAtjyk/MFeOcqlgMRtZO
+         O6yjcJf/GAGz6c8gr+x8NwkDNWWOCMg+l6C5vcDpqVLADLGT41WM/VoLR566Dohe1gUm
+         o3KCyqYLlMdgdXCkHArTRKJv2sI65703X5gptwa1JgDWnp/i8F8NbMmVBF8ZXVjz5RO3
+         jF9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679337617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lpfaYXXDDOEU7faI8DiWKFieDk8XViRrjAK2ROVtZfQ=;
+        b=19YuKsUr258dnjcalLURDzCIicebcrjv/tO5OHGBqv246EI85Ih8p0iv4X8GjOiaSm
+         wSg+2/wrHJhC+YDLLXmdu9NKRFzW8b+RHenV4zAGO3dNcyl1umiq4qKNoqKAJTe77rfn
+         5+uyoT9bp4DHSKU/k8/AZ3VQOr27nSzBm5XIRUSuSwLPQX6mbQfugChKed+aLHXt3QN7
+         bLUKyFtvDN/mSoxmH9lI6ILU8J/m/38P0x4jLlMAK+Lx1GyRDaoWx/A2wW+VTNxPKVTy
+         TE2uu6l+nA6x1N6VHoaz3RI3Aiuu5miSx47UyzhsRp76eDsKSgPh/RDK0Ne9+lQT0yHq
+         LACw==
+X-Gm-Message-State: AO0yUKWgmH/1IZX/01bRsGOLU8ip+7F3c4XAaVKyQ84m0T8PeD47PDc5
+        SegpbW7J/lr7DKn+tY9TG/OqgnbJp67g5yLKR/7QTw==
+X-Google-Smtp-Source: AK7set8QOk2DntJh7mcqwgfwttG/x+ZqIbXeJT8XqeAa/MNCDZE02/eXTofY/4kq/8hAg5VuU7IvQlqYrxUypdskMzA=
+X-Received: by 2002:a05:622a:1a13:b0:3de:1aaa:42f5 with SMTP id
+ f19-20020a05622a1a1300b003de1aaa42f5mr19529qtb.15.1679337617388; Mon, 20 Mar
+ 2023 11:40:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [Intel-gfx] [PATCH v4 06/10] drm/i915: Separate wakeref tracking
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <20230224-track_gt-v4-0-464e8ab4c9ab@intel.com>
- <20230224-track_gt-v4-6-464e8ab4c9ab@intel.com>
- <ZBehYC0npr4nv4mw@ashyti-mobl2.lan>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <ZBehYC0npr4nv4mw@ashyti-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230320183517.15099-1-adrian.hunter@intel.com>
+In-Reply-To: <20230320183517.15099-1-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 20 Mar 2023 11:40:06 -0700
+Message-ID: <CAP-5=fU56Kx_K1jQq9b5TpbW-AKTHRAUeQRxfrAvnX7d_zgZkg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] perf intel-pt: Small updates
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,102 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.03.2023 00:57, Andi Shyti wrote:
-> Hi Andrzej,
-> 
-> On Mon, Mar 06, 2023 at 05:32:02PM +0100, Andrzej Hajda wrote:
->> From: Chris Wilson <chris@chris-wilson.co.uk>
->>
->> Extract the callstack tracking of intel_runtime_pm.c into its own
->> utility so that that we can reuse it for other online debugging of
->> scoped wakerefs.
->>
->> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
->> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
->> ---
->>   drivers/gpu/drm/i915/Kconfig.debug           |   9 ++
->>   drivers/gpu/drm/i915/Makefile                |   4 +
->>   drivers/gpu/drm/i915/intel_runtime_pm.c      | 222 +++----------------------
->>   drivers/gpu/drm/i915/intel_wakeref.h         |   2 +-
->>   drivers/gpu/drm/i915/intel_wakeref_tracker.c | 234 +++++++++++++++++++++++++++
->>   drivers/gpu/drm/i915/intel_wakeref_tracker.h |  52 ++++++
->>   6 files changed, 319 insertions(+), 204 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/Kconfig.debug b/drivers/gpu/drm/i915/Kconfig.debug
->> index 93dfb7ed970547..5fde52107e3b44 100644
->> --- a/drivers/gpu/drm/i915/Kconfig.debug
->> +++ b/drivers/gpu/drm/i915/Kconfig.debug
->> @@ -25,6 +25,7 @@ config DRM_I915_DEBUG
->>   	select PREEMPT_COUNT
->>   	select I2C_CHARDEV
->>   	select STACKDEPOT
->> +	select STACKTRACE
->>   	select DRM_DP_AUX_CHARDEV
->>   	select X86_MSR # used by igt/pm_rpm
->>   	select DRM_VGEM # used by igt/prime_vgem (dmabuf interop checks)
->> @@ -37,6 +38,7 @@ config DRM_I915_DEBUG
->>   	select DRM_I915_DEBUG_GEM
->>   	select DRM_I915_DEBUG_GEM_ONCE
->>   	select DRM_I915_DEBUG_MMIO
->> +	select DRM_I915_TRACK_WAKEREF
->>   	select DRM_I915_DEBUG_RUNTIME_PM
->>   	select DRM_I915_SW_FENCE_DEBUG_OBJECTS
->>   	select DRM_I915_SELFTEST
->> @@ -227,11 +229,18 @@ config DRM_I915_DEBUG_VBLANK_EVADE
->>   
->>   	  If in doubt, say "N".
->>   
->> +config DRM_I915_TRACK_WAKEREF
->> +	depends on STACKDEPOT
->> +	depends on STACKTRACE
->> +	bool
->> +
->>   config DRM_I915_DEBUG_RUNTIME_PM
->>   	bool "Enable extra state checking for runtime PM"
->>   	depends on DRM_I915
->>   	default n
->>   	select STACKDEPOT
->> +	select STACKTRACE
->> +	select DRM_I915_TRACK_WAKEREF
->>   	help
->>   	  Choose this option to turn on extra state checking for the
->>   	  runtime PM functionality. This may introduce overhead during
->> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
->> index b2f91a1f826858..42daff6d575a82 100644
->> --- a/drivers/gpu/drm/i915/Makefile
->> +++ b/drivers/gpu/drm/i915/Makefile
->> @@ -81,6 +81,10 @@ i915-$(CONFIG_DEBUG_FS) += \
->>   	i915_debugfs_params.o \
->>   	display/intel_display_debugfs.o \
->>   	display/intel_pipe_crc.o
->> +
->> +i915-$(CONFIG_DRM_I915_TRACK_WAKEREF) += \
->> +	intel_wakeref_tracker.o
->> +
-> 
-> This patch, along with the previous one and two following it, is
-> a bit confusing. We add this file only to remove it later and
-> the code hops from file to file. There seem to be some extra
-> steps that could be avoided.
-> 
-> Is there room for simplification?
+On Mon, Mar 20, 2023 at 11:35=E2=80=AFAM Adrian Hunter <adrian.hunter@intel=
+.com> wrote:
+>
+> Hi
+>
+> Here are 2 small updates for Intel PT.
+>
+> The first is just a couple of new event type names.
+>
+> The second is a small change to Intel PT as it relates to
+> Intel FRED.  The patch is standalone but, for anyone
+> interested, you can search LKML for FRED to find out more
+> about Intel FRED implementation.
+>
 
-The reason behind this was that i915 had it's own tracker integrated 
-with i915_runtime_pm, then it was abstracted out (05,06) to allow track 
-gt->wakerefs (07) and then I proposed replacement of internal tracker 
-with ref_tracker (09). I wanted to keep original history of development.
-I can squash all/some of this work, but I am afraid it will generate 
-less readable patches - now we have separated abstract-out and replace 
-steps.
+Series:
+Acked-by: Ian Rogers <irogers@google.com>
 
-Probably sending patches 05-08 1st, then proposing conversion to 
-ref_tracker in another patchset would make it more clear.
+Thanks,
+Ian
 
-Regards
-Andrzej
-
-
-> 
-> Thanks,
-> Andi
-
+> Adrian Hunter (2):
+>       perf intel-pt: Add event type names UINTR and UIRET
+>       perf intel-pt: Add support for new branch instructions ERETS and ER=
+ETU
+>
+>  tools/perf/arch/x86/tests/insn-x86.c                   |  4 ++++
+>  tools/perf/builtin-script.c                            |  2 +-
+>  .../perf/util/intel-pt-decoder/intel-pt-insn-decoder.c | 18 ++++++++++++=
+++++++
+>  .../perf/util/intel-pt-decoder/intel-pt-insn-decoder.h |  2 ++
+>  4 files changed, 25 insertions(+), 1 deletion(-)
+>
+>
+> Regards
+> Adrian
