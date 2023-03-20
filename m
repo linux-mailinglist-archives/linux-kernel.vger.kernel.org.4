@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12426C10A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6509A6C10A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjCTLUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S230482AbjCTLVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 07:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjCTLUV (ORCPT
+        with ESMTP id S230330AbjCTLUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:20:21 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98F8526B;
-        Mon, 20 Mar 2023 04:20:08 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id y20so14433882lfj.2;
-        Mon, 20 Mar 2023 04:20:08 -0700 (PDT)
+        Mon, 20 Mar 2023 07:20:40 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597D5A24B;
+        Mon, 20 Mar 2023 04:20:23 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w9so45274857edc.3;
+        Mon, 20 Mar 2023 04:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679311207;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j2UL4IhRczrMrkP5475LvCds4xNJEhrT8X1HycL9bCM=;
-        b=OIKR1gpz9fxP9kEKYvLpG9gFyqB6Ac9wXlzlWqKCzh7tCkMxxd/gjXqirHd1XftHuG
-         pl6B14hklTrpuU2MTnq3CG8+AEHgBWss70azrqAcmCjWhsh8hK9RalzOMx+oMOLjV+Kh
-         fGEDHO3Cx9qtTbqPt3ksSHa5DMp6dIFFr0PUx7l+Ve4vnJodgdc6Dfon1M8Yv0KZuw8C
-         RPU49u3y5rsXo2yToa13w5igQ0YqWyorKvmL35yiO0wAEdmymh5nbOZiIiazFSuXmfdY
-         QQzWNqEfPfcLZnU2SACtJd+qUrhDZsRaz48aFt7l9nIkT7/P7dRcnhKu1JPl01ANuHdy
-         Wxrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679311207;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679311221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j2UL4IhRczrMrkP5475LvCds4xNJEhrT8X1HycL9bCM=;
-        b=zjLjs6Z3yb8lRMGDzrSO5iu3DC/+Fb2Nq1Cc6g+pbY5m2Er1caeX0AYl3mlmKk+l8X
-         QLH8h2XvOq5VY8VC0df6dPUwI+sfI4FLUW/IEswiUy+PC08CJxqjm03LROebkrCirm9K
-         m65j/E5Pb7XCGoME6Hn9XE1meR8IK2XbFNDIitRRBX1fOOTYBj9Vj5aiwga45qZQEaxB
-         2K+4FGn0delbc/KsrUZZdjv6QP2cs2jgryf2+lkka7MldK942zfYuur3KkIBx1fqfJPi
-         k3Ae9k9AA7IipyNyRck796YBDt+7LIDyp8WbEfRnU4i76dgp9dylDpH9uq04kZer1o8v
-         Qihw==
-X-Gm-Message-State: AO0yUKVXxRBZ+Ws1tCtJPcv3FTTuyWkgC+ADsMHVxE5otWLzuE5/D+Iu
-        6nUZ2j4vx83hUBjaZEZ/nVo=
-X-Google-Smtp-Source: AK7set9iwMt81SiNTCxVYLtVATbXkAzHAgYDh2+QIEnKRGF458BQJo4CdD5b5KOJsAPUaO9n19BDDQ==
-X-Received: by 2002:ac2:494b:0:b0:4b5:b06d:4300 with SMTP id o11-20020ac2494b000000b004b5b06d4300mr5770655lfi.29.1679311206757;
-        Mon, 20 Mar 2023 04:20:06 -0700 (PDT)
-Received: from pc636 (host-90-235-3-187.mobileonline.telia.com. [90.235.3.187])
-        by smtp.gmail.com with ESMTPSA id u1-20020ac248a1000000b004db51387ad6sm1653571lfg.129.2023.03.20.04.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 04:20:06 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 20 Mar 2023 12:20:02 +0100
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBhBRCIyc5Scx1Kf@pc636>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBgROQ0uAfZCbScg@pc636>
- <413e0dfe-5a68-4cd9-9036-bed741e4cd22@lucifer.local>
- <ZBgaBqareTrUrasp@pc636>
- <cd91527d-e6e0-4900-a368-dfc9812546da@lucifer.local>
+        bh=b8sVUk19mi0ENvLdXL4dc1wi5Y68vF33xYYUnM/Y+b4=;
+        b=N36boUDV7HOoTgzqioSkm3MXbjJim3un5x5Tc4BDS8kRe5KapgmG1MzBV5/fqDHOrt
+         gjkwhj9Kiwl0tAC092PoPiXbj65Zq9nMmopzLx2l37FweObx8iP3kF1447u/o5uAIr7M
+         0tuHkoqwfJ6bkcrpG03/MWj5Z8oSLns7vB/8nrge2aBmOApfAtMcnA9sA+muvrbHi/pg
+         lmyril4EWypXHCmtxI9qV8ViFrUFSfTiTpRxMj+viAkITnUHm5iC41mcflXOdQoFT+4F
+         7mStUaalQYY6B9QnrC/NyrnuYIBbmzo+vL3slEAYVvWcM10jIHHw0Aj7G+Sh4Xs4iymw
+         MXHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679311221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b8sVUk19mi0ENvLdXL4dc1wi5Y68vF33xYYUnM/Y+b4=;
+        b=3ZYgolYdKqm26Zkabm69bLKvlajhUSaoAGJUvqYccgTE+i0O69dXDb7X38wSk50od0
+         GBjvDoB3cH9xcY2buEd34dLLOI8If5wYNyLXa0fjDRpVvAfSkX7a4AjcF3DW+WTWVpjw
+         Q8gILcXJg3S1+6tOow+yL8rm3DsQiw4sX2Y1f8tgOVn0WD4jUIvLmK0Nffrt1QZfg0Av
+         rFPzbNZpKRDr5EMfPVEpRz38xqCeGjv0+2QIe7n/ugbanyTtZIbq1vJFVj1w/zwHeYGb
+         7baCM3evQVtw4t7PtxIxxatnrLhD0/1qBElrS3VtFpoSo12ZMhfc3M0SKriWcLq9rbjY
+         FYww==
+X-Gm-Message-State: AO0yUKVg4a0AHCGNokRjLxJMsjfHx+CyPB7tkMVvSG8u5dtfuIKU1uWj
+        MRHyDRWB+Duh2OsOBd/rv3GsMF067TmXcHJOHAw=
+X-Google-Smtp-Source: AK7set+Dn0AjhRJZc+MJf6gW1KJa8DUjZI/Fdxn0cmVGoZtVMjB0+zAMJOTRvehR3gk8I4LRsO6hF1LdLh2+y2Yp78c=
+X-Received: by 2002:a50:8756:0:b0:4be:f5a0:a80f with SMTP id
+ 22-20020a508756000000b004bef5a0a80fmr6107654edv.0.1679311221362; Mon, 20 Mar
+ 2023 04:20:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd91527d-e6e0-4900-a368-dfc9812546da@lucifer.local>
+References: <20230316181413.26916-1-lhenriques@suse.de> <568da52f-18a6-5f96-cd51-5b07dedefb2d@redhat.com>
+In-Reply-To: <568da52f-18a6-5f96-cd51-5b07dedefb2d@redhat.com>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 20 Mar 2023 12:20:09 +0100
+Message-ID: <CAOi1vP9QsbSUq9JNRcpQpV3XWM2Eurhk+6AkDDNmks5PLTx3YQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] ceph: fscrypt: fix atomic open bug for encrypted directories
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     =?UTF-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -84,98 +74,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 08:35:11AM +0000, Lorenzo Stoakes wrote:
-> On Mon, Mar 20, 2023 at 09:32:06AM +0100, Uladzislau Rezki wrote:
-> > On Mon, Mar 20, 2023 at 08:25:32AM +0000, Lorenzo Stoakes wrote:
-> > > On Mon, Mar 20, 2023 at 08:54:33AM +0100, Uladzislau Rezki wrote:
-> > > > > vmalloc() is, by design, not permitted to be used in atomic context and
-> > > > > already contains components which may sleep, so avoiding spin locks is not
-> > > > > a problem from the perspective of atomic context.
-> > > > >
-> > > > > The global vmap_area_lock is held when the red/black tree rooted in
-> > > > > vmap_are_root is accessed and thus is rather long-held and under
-> > > > > potentially high contention. It is likely to be under contention for reads
-> > > > > rather than write, so replace it with a rwsem.
-> > > > >
-> > > > > Each individual vmap_block->lock is likely to be held for less time but
-> > > > > under low contention, so a mutex is not an outrageous choice here.
-> > > > >
-> > > > > A subset of test_vmalloc.sh performance results:-
-> > > > >
-> > > > > fix_size_alloc_test             0.40%
-> > > > > full_fit_alloc_test		2.08%
-> > > > > long_busy_list_alloc_test	0.34%
-> > > > > random_size_alloc_test		-0.25%
-> > > > > random_size_align_alloc_test	0.06%
-> > > > > ...
-> > > > > all tests cycles                0.2%
-> > > > >
-> > > > > This represents a tiny reduction in performance that sits barely above
-> > > > > noise.
-> > > > >
-> > > > How important to have many simultaneous users of vread()? I do not see a
-> > > > big reason to switch into mutexes due to performance impact and making it
-> > > > less atomic.
-> > >
-> > > It's less about simultaneous users of vread() and more about being able to write
-> > > direct to user memory rather than via a bounce buffer and not hold a spinlock
-> > > over possible page faults.
-> > >
-> > > The performance impact is barely above noise (I got fairly widely varying
-> > > results), so I don't think it's really much of a cost at all. I can't imagine
-> > > there are many users critically dependent on a sub-single digit % reduction in
-> > > speed in vmalloc() allocation.
-> > >
-> > > As I was saying to Willy, the code is already not atomic, or rather needs rework
-> > > to become atomic-safe (there are a smattering of might_sleep()'s throughout)
-> > >
-> > > However, given your objection alongside Willy's, let me examine Willy's
-> > > suggestion that we instead of doing this, prefault the user memory in advance of
-> > > the vread call.
-> > >
-> > Just a quick perf tests shows regression around 6%. 10 workers test_mask is 31:
+On Mon, Mar 20, 2023 at 2:07=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
+>
+>
+> On 17/03/2023 02:14, Lu=C3=ADs Henriques wrote:
+> > Hi!
 > >
-> > # default
-> > [  140.349731] All test took worker0=485061693537 cycles
-> > [  140.386065] All test took worker1=486504572954 cycles
-> > [  140.418452] All test took worker2=467204082542 cycles
-> > [  140.435895] All test took worker3=512591010219 cycles
-> > [  140.458316] All test took worker4=448583324125 cycles
-> > [  140.494244] All test took worker5=501018129647 cycles
-> > [  140.518144] All test took worker6=516224787767 cycles
-> > [  140.535472] All test took worker7=442025617137 cycles
-> > [  140.558249] All test took worker8=503337286539 cycles
-> > [  140.590571] All test took worker9=494369561574 cycles
+> > I started seeing fstest generic/123 failing in ceph fscrypt, when runni=
+ng it
+> > with 'test_dummy_encryption'.  This test is quite simple:
 > >
-> > # patch
-> > [  144.464916] All test took worker0=530373399067 cycles
-> > [  144.492904] All test took worker1=522641540924 cycles
-> > [  144.528999] All test took worker2=529711158267 cycles
-> > [  144.552963] All test took worker3=527389011775 cycles
-> > [  144.592951] All test took worker4=529583252449 cycles
-> > [  144.610286] All test took worker5=523605706016 cycles
-> > [  144.627690] All test took worker6=531494777011 cycles
-> > [  144.653046] All test took worker7=527150114726 cycles
-> > [  144.669818] All test took worker8=526599712235 cycles
-> > [  144.693428] All test took worker9=526057490851 cycles
+> > 1. Creates a directory with write permissions for root only
+> > 2. Writes into a file in that directory
+> > 3. Uses 'su' to try to modify that file as a different user, and
+> >     gets -EPERM
 > >
-> 
-> OK ouch, that's worse than I observed! Let me try this prefault approach and
-> then we can revert back to spinlocks.
-> 
-> > > >
-> > > > So, how important for you to have this change?
-> > > >
-> > >
-> > > Personally, always very important :)
-> > >
-> > This is good. Personal opinion always wins :)
+> > All the test steps succeed, but the test fails to cleanup: 'rm -rf <dir=
+>'
+> > will fail with -ENOTEMPTY.  'strace' shows that calling unlinkat() to r=
+emove
+> > the file got a -ENOENT and then -ENOTEMPTY for the directory.
 > >
-> 
-> The heart always wins ;) well, an adaption here can make everybody's hearts
-> happy I think.
-> 
-Totally agree :)
+> > This is because 'su' does a drop_caches ('su (874): drop_caches: 2' in
+> > dmesg), and ceph's atomic open will do:
+> >
+> >       if (IS_ENCRYPTED(dir)) {
+> >               set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
+> >               if (!fscrypt_has_encryption_key(dir)) {
+> >                       spin_lock(&dentry->d_lock);
+> >                       dentry->d_flags |=3D DCACHE_NOKEY_NAME;
+> >                       spin_unlock(&dentry->d_lock);
+> >               }
+> >       }
+> >
+> > Although 'dir' has the encryption key available, fscrypt_has_encryption=
+_key()
+> > will return 'false' because fscrypt info isn't yet set after the cache
+> > cleanup.
+> >
+> > The first patch will add a new helper for the atomic_open that will for=
+ce
+> > the fscrypt info to be loaded into an inode that has been evicted recen=
+tly
+> > but for which the key is still available.
+> >
+> > The second patch switches ceph atomic_open to use the new fscrypt helpe=
+r.
+> >
+> > Cheers,
+> > --
+> > Lu=C3=ADs
+> >
+> > Changes since v2:
+> > - Make helper more generic and to be used both in lookup and atomic ope=
+n
+> >    operations
+> > - Modify ceph_lookup (patch 0002) and ceph_atomic_open (patch 0003) to =
+use
+> >    the new helper
+> >
+> > Changes since v1:
+> > - Dropped IS_ENCRYPTED() from helper function because kerneldoc says
+> >    already that it applies to encrypted directories and, most important=
+ly,
+> >    because it would introduce a different behaviour for
+> >    CONFIG_FS_ENCRYPTION and !CONFIG_FS_ENCRYPTION.
+> > - Rephrased helper kerneldoc
+> >
+> > Changes since initial RFC (after Eric's review):
+> > - Added kerneldoc comments to the new fscrypt helper
+> > - Dropped '__' from helper name (now fscrypt_prepare_atomic_open())
+> > - Added IS_ENCRYPTED() check in helper
+> > - DCACHE_NOKEY_NAME is not set if fscrypt_get_encryption_info() returns=
+ an
+> >    error
+> > - Fixed helper for !CONFIG_FS_ENCRYPTION (now defined 'static inline')
+>
+> This series looks good to me.
+>
+> And I have run the test locally and worked well.
+>
+>
+> > Lu=C3=ADs Henriques (3):
+> >    fscrypt: new helper function - fscrypt_prepare_lookup_partial()
+>
+> Eric,
+>
+> If possible I we can pick this together to ceph repo and need your ack
+> about this. Or you can pick it to the crypto repo then please feel free
+> to add:
+>
+> Tested-by: Xiubo Li <xiubli@redhat.com> and Reviewed-by: Xiubo Li
+> <xiubli@redhat.com>
 
---
-Uladzislau Rezki
+I would prefer the fscrypt helper to go through the fscrypt tree.
+
+Thanks,
+
+                Ilya
