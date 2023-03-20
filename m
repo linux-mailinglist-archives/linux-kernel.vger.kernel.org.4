@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730056C092D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0C36C0930
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCTDFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S229779AbjCTDGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCTDFO (ORCPT
+        with ESMTP id S229548AbjCTDF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:05:14 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD3C7A5E8
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:05:11 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32K352C5003205;
-        Mon, 20 Mar 2023 04:05:02 +0100
-Date:   Mon, 20 Mar 2023 04:05:02 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] tools/nolibc: always disable stack protector for
- tests
-Message-ID: <ZBfNXlUBBB6c6Btw@1wt.eu>
-References: <20230319135100.31952-1-w@1wt.eu>
- <5c2fdd86-4e6a-4f48-ab57-95a223f39e94@paulmck-laptop>
- <ZBdsZ61bt7aLdbSo@1wt.eu>
- <b8badcd8-44a0-4380-a5f1-381f058ea276@paulmck-laptop>
+        Sun, 19 Mar 2023 23:05:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A03411E80;
+        Sun, 19 Mar 2023 20:05:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B65F9FEC;
+        Sun, 19 Mar 2023 20:06:16 -0700 (PDT)
+Received: from [10.162.41.7] (a077893.blr.arm.com [10.162.41.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B1343F67D;
+        Sun, 19 Mar 2023 20:05:26 -0700 (PDT)
+Message-ID: <4d3fa526-f108-3f8c-71db-ebfb2734f9fa@arm.com>
+Date:   Mon, 20 Mar 2023 08:35:23 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8badcd8-44a0-4380-a5f1-381f058ea276@paulmck-laptop>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver
+ for MMIO devices
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        scclevenger@os.amperecomputing.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230317030501.1811905-5-anshuman.khandual@arm.com>
+ <202303181800.KxbuwjRT-lkp@intel.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202303181800.KxbuwjRT-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 04:54:53PM -0700, Paul E. McKenney wrote:
-> On Sun, Mar 19, 2023 at 09:11:19PM +0100, Willy Tarreau wrote:
-> > Hi Paul,
-> > 
-> > On Sun, Mar 19, 2023 at 11:05:15AM -0700, Paul E. McKenney wrote:
-> > > Queued and pushed, thank you both!
-> > 
-> > Thank you!
-> > 
-> > > Just to make sure I understand, you would like me to add this to the
-> > > serieses from Vincent, yourself, and Feiyang that are set up to go into
-> > > the next merge window, correct?
-> > > 
-> > > If you instead would like me to push it to Linus directly into the v6.3
-> > > release as a regression fix late this coming week, please let me know.
-> > 
-> > It would indeed be preferable for 6.3 as it fixes issues, but it's not
-> > critical at all, just an annoyance for some developers. So if you have a
-> > series of fixes pending to be sent soon, it would be nice to add it there.
-> 
-> Very well, here is what I currently have for nolibc, from newest to
-> oldest:
-> 
-> 7712ec32cbda selftests/nolibc: Adjust indentation for Makefile
-> 96218cfc79eb selftests/nolibc: Add support for LoongArch
-> cab6bbd00f2a tools/nolibc: Add support for LoongArch
-> 496921e4724c tools/nolibc: Add statx() and make stat() rely on statx() if necessary
-> 97a15c47b98c tools/nolibc: Include linux/fcntl.h and remove duplicate code
-> de06f2fe1aac tools/nolibc: check for S_I* macros before defining them
-> 7fb54b517d44 selftests/nolibc: skip the chroot_root and link_dir tests when not privileged
-> 296659c6e551 tools/nolibc: add getuid() and geteuid()
-> bd9a87d64994 tools/nolibc: add tests for the integer limits in stdint.h
-> 2d1813a7ef67 tools/nolibc: enlarge column width of tests
-> 5dbcbb2da574 tools/nolibc: add integer types and integer limit macros
-> 111bb94f67eb tools/nolibc: add stdint.h
-> 2dbf8575b2da tools/nolibc: Add gitignore to avoid git complaints about sysroot
-> 
-> I will take the new commit, rebase it to precede the first of the above,
-> so that the stack will look like this:
-> 
-> 7712ec32cbda selftests/nolibc: Adjust indentation for Makefile
-> 96218cfc79eb selftests/nolibc: Add support for LoongArch
-> cab6bbd00f2a tools/nolibc: Add support for LoongArch
-> 496921e4724c tools/nolibc: Add statx() and make stat() rely on statx() if necessary
-> 97a15c47b98c tools/nolibc: Include linux/fcntl.h and remove duplicate code
-> de06f2fe1aac tools/nolibc: check for S_I* macros before defining them
-> 7fb54b517d44 selftests/nolibc: skip the chroot_root and link_dir tests when not privileged
-> 296659c6e551 tools/nolibc: add getuid() and geteuid()
-> bd9a87d64994 tools/nolibc: add tests for the integer limits in stdint.h
-> 2d1813a7ef67 tools/nolibc: enlarge column width of tests
-> 5dbcbb2da574 tools/nolibc: add integer types and integer limit macros
-> 111bb94f67eb tools/nolibc: add stdint.h
-> 2dbf8575b2da tools/nolibc: Add gitignore to avoid git complaints about sysroot
-> ???????????? tools/nolibc: always disable stack protector for tests
-> 
-> Then if tests, -next, and kernel test robot are kind, I will send a
-> pull request to Linus for the "always disable stack protector for tests"
-> commit.  The rest I send for the upcoming merge window.
-> 
-> Please let me know if I am missing something.
 
-This is perfect, thank you very much, Paul!
 
-Willy
+On 3/18/23 15:54, kernel test robot wrote:
+> Hi Anshuman,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on robh/for-next]
+> [also build test WARNING on soc/for-next rafael-pm/linux-next linus/master v6.3-rc2 next-20230317]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> patch link:    https://lore.kernel.org/r/20230317030501.1811905-5-anshuman.khandual%40arm.com
+> patch subject: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver for MMIO devices
+> config: arm64-buildonly-randconfig-r002-20230312 (https://download.01.org/0day-ci/archive/20230318/202303181800.KxbuwjRT-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
+>         git checkout f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303181800.KxbuwjRT-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/hwtracing/coresight/coresight-etm4x-core.c:2336:32: warning: unused variable 'etm4_dev_pm_ops' [-Wunused-const-variable]
+>    static const struct dev_pm_ops etm4_dev_pm_ops = {
+
+These pm_ops needs to tagged along with the platform driver.
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index 3ce2b4911a49..fe10dd91183e 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -2280,6 +2280,7 @@ static struct platform_driver etm4_platform_driver = {
+                .of_match_table         = etm4_match,
+                .acpi_match_table       = ACPI_PTR(etm4x_acpi_ids),
+                .suppress_bind_attrs    = true,
++               .pm                     = &etm4_dev_pm_ops,
+        },
+ };
