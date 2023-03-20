@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D316C0CA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1D16C0CA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjCTI61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
+        id S231134AbjCTI7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjCTI6Y (ORCPT
+        with ESMTP id S230328AbjCTI72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:58:24 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072510AAE;
-        Mon, 20 Mar 2023 01:58:22 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id m2so9544456wrh.6;
-        Mon, 20 Mar 2023 01:58:22 -0700 (PDT)
+        Mon, 20 Mar 2023 04:59:28 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A3F6A70
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:59:26 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5416698e889so211778487b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679302701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DzJeoTbKWKmIBwgQA0Y6y/DCv+ZaiOaeERybU2fweUE=;
-        b=QDRO/di0+W4wO0US7hLYQPt0JtqrXuz+l1/4iXt4x4pSqH1+Up7aPBXLgzauOOdr4t
-         R4aV7r0anl4+aiGVdthztkDvMh13STej0atvbniaW+ZYi1AuLxQT5WD3x3pVlG7yVf4e
-         dL9R2uq6DQsa2EfgQZg4XciDUjCT9prIVtNyNDpH16tFUnnVVIxox7ieHMFD1iRNu159
-         wcjrALUHtCKlnPBrU5mZrtSyc1sfF5Jb+rXHsJDZYnytWbso+d/DnRzzr7cZ5I/dLNCk
-         00u8YFwtqnSwRObn4iDBzgVlb/VBTi5k99cT2a4XC7oGphqujkc1lFpZ37nqP/ubyIgi
-         MxBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679302701;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1679302766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DzJeoTbKWKmIBwgQA0Y6y/DCv+ZaiOaeERybU2fweUE=;
-        b=RXWMgjp1ShFfhOsMQjj4q0UmNj8/egXDhZIhwK1i8todMwA5gkKnX4Xzq2V1Gckfos
-         q5uG7djXHmETNTDR3PxC9BqtSBP8QlO/6GbT7ioRxJpw1/B/y0nPd/V6Agbm3sA9nBpU
-         Gzt4lGY23TRys6a+p8YCHuqjkcwcyr6+l+ZcBXhuAQSAvJEVIwPczPDf41p1eJBRBkXq
-         CdvpzsIExmVPB31QsPVj8hRPzhlopLPd/6Z/WulQFKnaLyPO6jdGMyDtnpOK+B5S3n8m
-         nVoOaLIsqUQ6EaLQTQLUvPmUtFm2BINmzOn+djhcsW581spSCasM6iu6aaF4XoSjRAFG
-         wgzQ==
-X-Gm-Message-State: AO0yUKX7wvfodVfo9pkCUgkRvhFTUqUvOSKOBpwujUhXZEbnmZHpNIKX
-        1Rl/aUtZ5UBie6XsXCpnI08=
-X-Google-Smtp-Source: AK7set+KLxobAAO+fehPbXx6zZ9HiCLEkSn44tcxAykkKqp8FeNPy5vK22tOMa9HFICZsPo+2mWv2A==
-X-Received: by 2002:a5d:6512:0:b0:2ce:9c6b:4fc5 with SMTP id x18-20020a5d6512000000b002ce9c6b4fc5mr8838497wru.16.1679302700800;
-        Mon, 20 Mar 2023 01:58:20 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id m23-20020a056000181700b002c5694aef92sm8312838wrh.21.2023.03.20.01.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:58:20 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 11:58:16 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     Marc Dietrich <marvin24@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH v2] Staging: nvec: Convert to_nvec_led from a macro to an
- inline function
-Message-ID: <256ee298-e34e-4ff4-94ba-e4a0102ef2ac@kili.mountain>
-References: <20230318175250.GA49618@sumitra.com>
- <417e944c-4653-43ef-b492-c82c536e4d87@kili.mountain>
- <20230320084422.GA126429@sumitra.com>
+        bh=ZDWJfXvdVXROmcaw8SY1hPpIrcHxAiUQmw6S8AbfRjk=;
+        b=hT8zarIC6fGYO8JaQq+5aomWL4kdHdFIMWxkLjsEAGQyCKEjeN0eO7gH7NWS01wmZG
+         PeQq+pkGgtbGSr3a+xgj4NaPRyLVXeaLNmVgvXKoJUErSzDKgOKE0jBJqS4ioTI8SxO9
+         jCV/35h90ss/uAbNVb+xTGp1qtDmKiXHgrxbompb+SYr1TbJuFQvj+r3lcVrIrjDllOn
+         /r/7jFhcShwJnmUel5vb/6sKCAog8Y67DjWlTbSIiI9213OOkbgf2OFWehyfjp7HEUQc
+         qFa0Xqk8iHu7qFsRXggiYwC//ZVuR62CX8sqHX3dQq80jXDgBpzLISQecktE92sJxuMY
+         A47g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679302766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZDWJfXvdVXROmcaw8SY1hPpIrcHxAiUQmw6S8AbfRjk=;
+        b=GvnjPlqpch8pAqu+ATi5rYh2IZxlgk+KuSGNvHr6QgtKrWI4mI6xeboxbzSupcKNI2
+         YiYOg44wMEBS/GZes1jcTKEnMwFwDAmqyt9v2YrJXL1R3GQvZIOLhp9WHRe2lWQPx/F6
+         62uMKRZRFwba/xRyFK/O++qZeGVxBd7GBajmvdK2/hJe9wm3qasXPF10v6mh4vQ/Cdgc
+         VwgepcI5/v5/u9qdp0DdX6IdmUA571JnpbFB9rpCe5hz1REslbTF3RWChCNasZQhlmoH
+         8PWMVkBzXYtsEvX9qnHzX8e+0a2Oqq80c4Zf7iZ2vOafYZAtsM7hk1EuAq4CkL8NfdBI
+         Cb9g==
+X-Gm-Message-State: AO0yUKV+KkaUDPOZ+IznRfnQ06M/RW/GUPuHHkPnxQTaU+eDPCLpRWuN
+        HUqXnFw/7fyA3ioJeUZ4jKK6KUtXhtGJE5wrhT6htg==
+X-Google-Smtp-Source: AK7set/+qbyNpMEXruJw4ZG3Cg+VGChyijWfL/S1Gs9k8SMXV8jldggbsN7+QdqY5qCobMSvgsRb6xs+dByuL5RTqzs=
+X-Received: by 2002:a81:c749:0:b0:541:753d:32f9 with SMTP id
+ i9-20020a81c749000000b00541753d32f9mr10038873ywl.9.1679302765812; Mon, 20 Mar
+ 2023 01:59:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320084422.GA126429@sumitra.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1679070482-8391-1-git-send-email-quic_mojha@quicinc.com>
+ <1679070482-8391-3-git-send-email-quic_mojha@quicinc.com> <CACRpkdbA27buNiOTz6ad4gyS4FCvcoYru6QB5k9Lqwiu72sf9g@mail.gmail.com>
+ <20230320041019.5qs6qbztvv45pacs@ripper>
+In-Reply-To: <20230320041019.5qs6qbztvv45pacs@ripper>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 20 Mar 2023 09:59:14 +0100
+Message-ID: <CACRpkdaWL_Rf+wbpLcAgr38Liy5_7J=UHrBbLqW-ZBkcpjvQKA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] pinctrl: qcom: Use qcom_scm_io_update_field()
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 01:44:22AM -0700, Sumitra Sharma wrote:
-> On Mon, Mar 20, 2023 at 08:39:49AM +0300, Dan Carpenter wrote:
-> > On Sat, Mar 18, 2023 at 10:52:50AM -0700, Sumitra Sharma wrote:
-> > > Convert to_nvec_led from a macro to a static inline function, to make the
-> > > relevant types apparent in the definition and to benefit from the type
-> > > checking performed by the compiler at call sites.
-> > > 
-> > > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> > > ---
-> > 
-> > You need to compile test your changes.
-> >
-> 
-> Hi dan,
-> 
-> I am facing problems in creating modules and in compiling them.
-> 
-> Any help in this would be appreciated. Here is the link to the thread
-> https://lore.kernel.org/outreachy/alpine.DEB.2.22.394.2303191336090.2867@hadrien/T/#t
+On Mon, Mar 20, 2023 at 5:07=E2=80=AFAM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
 
-If you're editing a .h file then you need to compile all the stuff which
-includes it.  It's slightly complicated.  But if you're just editing a
-.c file like here then what I do is I have use my Smatch script to try
-compile it.
+> > Fine by me, but I want you to first consider switching the
+> > custom register accessors to regmap.
+(...)
+> IMHO this is quite a significant effort, and given that the driver seems
+> to be doing its job I'd rather see such efforts being focused elsewhere.
 
-In Debian run:
-apt-get install gcc make sqlite3 libsqlite3-dev libdbd-sqlite3-perl libssl-dev libtry-tiny-perl
-Or in Fedora run:
-yum install gcc make sqlite3 sqlite-devel sqlite perl-DBD-SQLite openssl-devel perl-Try-Tiny
+I think you know it better than me, if regmap is just going to clutter
+the view the don't do it.
 
-git clone https://github.com/error27/smatch.git
-cd smatch
-make
+Regmap does have the upside of looking the same on all platforms so it
+would potentially give less maintenance burden.
 
-cd /path/to/kernel_src/
-~/smatch/smatch_scripts/kchecker drivers/staging/nvec/nvec_paz00.c
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+for these patches if you need to merge them elsewhere, I can also
+queue them if you ACK them.
 
-Also I run Sparse on the file.
-~/smatch/smatch_scripts/kchecker --sparse drivers/staging/nvec/nvec_paz00.c
-
-When I'm patching a file, then I like to look at any other issues I
-might want to fix and deal with that as well.
-
-regards,
-dan carpenter
+Yours,
+Linus Walleij
