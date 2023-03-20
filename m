@@ -2,180 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71226C244E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FCF6C2468
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjCTWOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
+        id S229821AbjCTWRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjCTWOW (ORCPT
+        with ESMTP id S229635AbjCTWRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:14:22 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB442EFAD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:14:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oOihL2i3wa4GriR1j+ukiGRSZxLOimxxgL1WboPYYX1+u+ZaDvCXfst2KOiDMptITPu1uPli177kiIj+BM+nY5RPcvKstJBK9/FRIjLfta0FY7gfPYTp2d8bYj4OGaxEq0qxsv5sM2nI7fG85O3Om2RPvSqypwERNYptosrYmMqphbwcw9Ob8DWAZh3p4T/xvhJ+DwrMv9DzjOdTDEETXICgll6KWbw1a+ToMeHmu/ASSlsiNAvGs7jiXfowN6c9VgEGKjUR4vVJhAN1IbYuh4Cd+s7dehr/BbuBt4Ebl9Qj5d233XOf2biYh1oxMRP4tDGe8DN9hjupKRddDAJaCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uP1lBgQsUR/qzXHw4Ka9PipaelqChuLMxUXzX3S5oqo=;
- b=FiSdBdK35+RDG55tDyJgESZP4tIakU89bemotV59zqD9cAh95+c398ty6bLezSjk2ZLAWcZaeUOPXc6UR93l0Q0Xa+yDQXcChiJ+KKVUyoJxabMAgd/7M+qZQJglBjTxGZ49lMLT6Iszqe+zZFcLjMeJupVGzJO+Ggh+RIh14oCjtGMYo9anYDEzhra1Mf1DWGdHITeOWJdmTA1mV6D7bxvVLmMQitt6HU8dBLRN1bHh3f3U8D4eprxgEkL1GjxY+bSvVXeFRaT9SzOMUqwjn7h2whKXYNzJAS7seQhBnnn+GFvHFw/uwaKOA/BEUl9ru6SGaVwlSZtgDzG0WPavNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uP1lBgQsUR/qzXHw4Ka9PipaelqChuLMxUXzX3S5oqo=;
- b=YKJ8XjYH2YdrgPJp8NinZ+GgnhqDLrkFHu4i1NpYhNenxI3roAfm+QuclCKhmz3A5NZcevgIJ+zumcwzmm+cbkGeFACcCdm0pAeYXpGaSvlxmdaFmkexuRzUwh49FD/SB1Sj4HXBSkvzUZ3iAPs+wizytgS2q+22GbcWa6yehZVPSnOpvS6DC8M2mqVk0vHdLI5FnNetqLncqh651EXY4Yl+MxkGi9EVAnTiBzkg2J7L3Iek8nbblnCkm5lc+ihRE+aC/CP9aGo9mCcTIEgSiKbYX8K+OKLxl9Se9rMYi5QYSQmNbjfm8WfxbgJGRZjiYAEhczADrsQW2h16fJSsiQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA1PR12MB8857.namprd12.prod.outlook.com (2603:10b6:806:38d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 22:14:18 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 22:14:18 +0000
-Date:   Mon, 20 Mar 2023 19:14:17 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Message-ID: <ZBjauQlH3TYbZQ7P@nvidia.com>
-References: <ZBJcS07G3mt7gjkA@Asurada-Nvidia>
- <c753c2a8-024d-5bef-8987-96582084991e@arm.com>
- <ZBOFcenanpRsGFzF@Asurada-Nvidia>
- <ZBe3kxRXf+VbKy+m@Asurada-Nvidia>
- <ZBhbmqprnux4q00i@nvidia.com>
- <ZBh7hSX5hdW4vxwh@Asurada-Nvidia>
- <ZBiDcYwxL7eV1EmQ@nvidia.com>
- <ZBiLSJvtY5UKDJ5l@Asurada-Nvidia>
- <ZBig0fN3l7LsUlQg@nvidia.com>
- <ZBjGPI29BE/puciv@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBjGPI29BE/puciv@Asurada-Nvidia>
-X-ClientProxiedBy: BL1PR13CA0063.namprd13.prod.outlook.com
- (2603:10b6:208:2b8::8) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 20 Mar 2023 18:17:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BE43400C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679350596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/pYp/+TvIZEdbO864hX1ZaEe6NV95MuM6NldpNo+j88=;
+        b=Pr907x99p8cXhsmjCMDomakKJWq1FiX8YUXtpZCrp1bFPDvw/7lZXuL3Gb+K6CBpt6XRg8
+        Phvpmpk43RyxIUhNHQ/uvUjtbXGU33y7rhG7sjQdlaxuzj7CaIA2OvfIR+w/UbaAXPsdi+
+        CJUxpAWSEqDX6YzQm1Rmz1v7H3wWQ4s=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-185-m7i3dFlXOFm-_J37QCpTww-1; Mon, 20 Mar 2023 18:16:33 -0400
+X-MC-Unique: m7i3dFlXOFm-_J37QCpTww-1
+Received: by mail-oo1-f72.google.com with SMTP id w3-20020a4ae083000000b0052645d4a2dfso4057743oos.18
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:16:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679350592;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/pYp/+TvIZEdbO864hX1ZaEe6NV95MuM6NldpNo+j88=;
+        b=s/DfHhVSGc+B2LWtGgz4l28Iv0m53ffaSvFSaDZyhs+SecjmqAbwkkO8yhXIDW9JXC
+         Du0jxzSlwkOB4wIqBLacI6tiBe6pEEb7Yac7w0iFVoNnhExF0RvSTzeKbvnnlOorQSXY
+         XFzr6tgZBiNKt1JMPQWXqhkldEoDb1oVlo/5If/tl4XM+AK7K/5zh0yL6BUlqydJ8Cnl
+         2ep3/2LIs5AuQkTyHQbF3E3bFlvYwiZ4kKJTm6WOlr9JX8/PRaTGBt7KuM170pO/+yqy
+         1LkSUMrwcZdGpOpZi1LktMawAwLQil6UP16/pDiMVSsEk10wgEIASaNDr/9ZUBdu/yBJ
+         H6nw==
+X-Gm-Message-State: AO0yUKVr9afr+BkwbU0BnZDi6ok+LyrmBV00wZIshmuKNA9yXJBOXY5k
+        rk+Yqk5Vyd//DEavFu4TbyDlOHWqGw9ZvpgeVB2zOzyTxLQThhadfhe7R1Wrx5YIJr1z7VMCT0k
+        ltqcvztt03JVd9a1RWXQ3SDqsgLfKNYVvbhEZF4zYfEJxE4avKETlFS+b1a7YIMD63bx8bHFOUg
+        f98emnSroFdxk=
+X-Received: by 2002:a05:6808:10c:b0:387:117f:f7fb with SMTP id b12-20020a056808010c00b00387117ff7fbmr25046oie.20.1679350592251;
+        Mon, 20 Mar 2023 15:16:32 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+FD0dDk0+dvXSvybPdytDkBKj3L/oyZtE72xtPkWildC/DlDoAUTQxy/hAD04b7A6y0cPDLA==
+X-Received: by 2002:a05:6808:10c:b0:387:117f:f7fb with SMTP id b12-20020a056808010c00b00387117ff7fbmr24984oie.20.1679350590464;
+        Mon, 20 Mar 2023 15:16:30 -0700 (PDT)
+Received: from halaney-x13s.redhat.com (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id q204-20020a4a33d5000000b0053853156b5csm4092465ooq.8.2023.03.20.15.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 15:16:29 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH net-next v2 00/12] Add EMAC3 support for sa8540p-ride
+Date:   Mon, 20 Mar 2023 17:16:05 -0500
+Message-Id: <20230320221617.236323-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA1PR12MB8857:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08ff0d1b-74c7-4c27-e06a-08db299072de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h03DPeD3CtvRM4G0IwcuV+Mz6MyePBJRnS1+xAv33ruFuPyNMbXoVNwX2UJUV93/5ybzTUqtMK79atooorxLxgWvZbhglmNIfuYSLfaWu4jDeguTc8w76a9VSwwSuXy9RyhzrVXoLwzckttIxQH55aOyJRNueZbXPzqWwQhGCXu44JfFXs/jDw+aiBekcxq/ozwJuHCijUAJ/PArb0Oamk6t5rSrJhC0fS42DqPc2iMxd1nLdRVn0n2G6Q7R3IG1IpuxecnjA7SrHApajS5/fiU2VTw3pvOp9Pk6eNpYe8yql97jp9gE63b40uQdqHiskY3zKKzCR4jG7IqkBRAHISfNuOM0JZ4+dZqnUkGML+8QPxG6nqCT40h40iwbydQq77JYQ+xFzr6h+Kspi29ivMPv7IjrpIG2lWGG+eKq85YBdYq/7TttMf20WNDLiFpWb837r8HfmHXyD8WhucjcUqmXczwlR1fiU8gRCFhjf1VaNOPPicmG1icUDYHc1fhM4jN++fTtYl0nlsnXMLazc9grwG1YiIms9LqUPLeoqOUNGtlzRIok3MPr1ffraPijOdvqh4UArtMDZfcAdoa3+dLP5cIhuBbc21c+e+ueCYbI+tAQX4bOG8GIJ28SCempu++XL044/4jf/gGRfypsyQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199018)(36756003)(41300700001)(5660300002)(4326008)(2906002)(7416002)(8676002)(86362001)(38100700002)(8936002)(6486002)(66946007)(316002)(37006003)(478600001)(6862004)(66476007)(66556008)(26005)(83380400001)(2616005)(186003)(6512007)(6636002)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8n971/+yhZhhtG1TkMr/Cc4eT9gfoj9aw784GoDacn+KKeDtstW/0xYW9gij?=
- =?us-ascii?Q?3M//fmHnogWWup1uEIHgk0WjEv6hi95qRqJJ5in8QqZ3oBcSX27jyYxx1r8b?=
- =?us-ascii?Q?nRxgRBb4VKVP9b8Iw9gM81HvKKN21hsZObQ2x5BUIdNwn2Weai9I8S0UuUBM?=
- =?us-ascii?Q?32ik8nzWUlBf0JrJzKOZI7KriPHmOvOa3oDw4EFF7Uo2syahMaFLQYqcLRZA?=
- =?us-ascii?Q?Y6zPVvab/lXLTm3a7m/ggTYZOQiOjqxFCRF29wNHBMRYRwoXvLUE7aWTi7YU?=
- =?us-ascii?Q?dGKikpcoZyCDJHahe/Qw+1UF65YRYoRRJwYO0i8u2/6jQhZ5BaM8J43cvEK/?=
- =?us-ascii?Q?z32tD4fgaNYEcy85g9MrnQFhOkq0g/0BjvTIK+UzjgeN3u9Dg8KMWviVYcj1?=
- =?us-ascii?Q?gaXn6gHsONsrZagnq8hVCZKYP0D3Ins0hR5sgnKCH9LdbRfiCh8smAfRZih8?=
- =?us-ascii?Q?tW/1zIBA09pswc18Rzh/o2XZYTfZaU8tgbS7ZyuOrEi2uFhiuVALY7qcYE/C?=
- =?us-ascii?Q?G74WXbfcYnPmEJMk/34V1EB1e6F5ahaqISh3irq8L7QXSOWgh5Kc7wOPSerg?=
- =?us-ascii?Q?FJ427WmOtOZUHZuKreFfA2bAlqS+291gPZA7R2QLlw4mYHw/StBRsm2GgKnO?=
- =?us-ascii?Q?fNCG+VmPJ4P2TsIKKccDvpA674ZRb3k5I2bUy3yO1MK/d03DaFaqQWjagiiE?=
- =?us-ascii?Q?WVrX1QQBwpP3pK246j/6xBctU6eimRlW0WL04Lr7Jao9hIZy2x40FxSpnQbX?=
- =?us-ascii?Q?DVGGnSVCqlZcd9XyWHWcWCgu+b6ljwT/kY/ShFDnOQHcdT6TLU23ZQ2SOfZg?=
- =?us-ascii?Q?/6lBKqiRF10RPhW/CCzXt0getzSrInJAkX/G38BH/5KxlSVaLvpJBX0+VIEp?=
- =?us-ascii?Q?T8WmSqMRLRLyelK7tDk8AyJPec6xKnrjRTTJd6DIwQgY/220Z7NBZXZYTqdY?=
- =?us-ascii?Q?+CF9XKHCcDULyXW2+kpP3s2n7tpODOy4VwDzsZ71Qa/r+NV1c5hW+IQ1k+MI?=
- =?us-ascii?Q?fNKkKKRJkMJFj5Q4q6j9aF0UD01Q2sSRYdEHKUqWRvRaJgTDXNKxiZbDg+uR?=
- =?us-ascii?Q?Ia2F8zYL1Gdsdo6mPcvj0lzFcalJKyJMLA2a5egC/z3wFVU4gTSCSubx0Akw?=
- =?us-ascii?Q?ykYDQ8A8ZINB9HbFT+BihGNbyTr9XaF1hTegbo+cK7Di6mgBQAfQaZA8W7UV?=
- =?us-ascii?Q?g33+9UvX2AXkSbk/gl+jcU96ZatrY2p0Ijncx0JrOHeKk9dmCC7YrE2OFz8J?=
- =?us-ascii?Q?61OPvhM40l2n986V0yrwuQTKNx1Optz5EkPQImkMkkx9kDnVzDLJqNl4Yab/?=
- =?us-ascii?Q?CC+DaBdn05RX159H9PkXo1W/oo3YdcMJxsc01hUS6jHJ702AsoSBdpstdkvE?=
- =?us-ascii?Q?MEapQNBbqsBoW4bguQNuojwVATinlTF6wl9TekE+AQA/AkpgRqX2DWo/eOLs?=
- =?us-ascii?Q?H60RtzrK/sa9+8l0pqAN+OM2i+hCmPu6t32rwv77lquZf5WDBWCY7fLC+s/I?=
- =?us-ascii?Q?WHAfNSk6LVOblsimAyvMiob4vbzvaNHWkIVG7ds3vQjUUvag5IW/JvDDQXL1?=
- =?us-ascii?Q?YBmTEa/Yd8wEQagmhMTb1YJdprFdP2S/X/SrmJEI?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08ff0d1b-74c7-4c27-e06a-08db299072de
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 22:14:18.3545
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UIRJ71eFIPF+ii/E3LnhdjyESme157talH8oz8HjSslBM2kv7R+ZVpKvnLPtG3/K
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8857
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 01:46:52PM -0700, Nicolin Chen wrote:
-> On Mon, Mar 20, 2023 at 03:07:13PM -0300, Jason Gunthorpe wrote:
-> > On Mon, Mar 20, 2023 at 09:35:20AM -0700, Nicolin Chen wrote:
-> > 
-> > > > You need to know what devices the vSID is targetting ang issues
-> > > > invalidations only for those devices.
-> > > 
-> > > I agree with that, yet cannot think of a solution to achieve
-> > > that out of vSID. QEMU code by means of emulating a physical
-> > > SMMU only reads the commands from the queue, without knowing
-> > > which device (vSID) actually sent these commands.
-> > 
-> > Huh?
-> > 
-> > CMD_ATC_INV has the SID
-> > 
-> > Other commands have the ASID.
-> > 
-> > You never need to cross an ASID to a SID or vice versa.
-> > 
-> > If the guest is aware of ATS it will issue CMD_ATC_INV with vSIDs, and
-> > the hypervisor just needs to convert vSID to pSID.
-> > 
-> > Otherwise vSID doesn't matter because it isn't used in the invalidation
-> > API and you are just handling ASIDs that only need the VM_ID scope
-> > applied.
-> 
-> Yea, I was thinking of your point (at the top) how we could
-> ensure if an invalidation is targeting a correct vSID. So,
-> that narrative was only about CMD_ATC_INV...
-> 
-> Actually, we don't forward CMD_ATC_INV in QEMU. In another
-> thread, Kevin also remarked whether we need to support that
-> in the host or not. And I plan to drop CMD_ATC_INV from the
-> list of cache_invalidate_user(), following his comments and
-> the QEMU situation. Our uAPI, either forwarding the commands
-> or a package of queue info, should be able to cover this in
-> the future whenever we think it's required.
+This is a forward port / upstream refactor of code delivered
+downstream by Qualcomm over at [0] to enable the DWMAC5 based
+implementation called EMAC3 on the sa8540p-ride dev board.
 
-Something has to generate CMD_ATC_INV.
+From what I can tell with the board schematic in hand,
+as well as the code delivered, the main changes needed are:
 
-How do you plan to generate this from the hypervisor based on ASID
-invalidations?
+    1. A new address space layout for /dwmac5/EMAC3 MTL/DMA regs
+    2. A new programming sequence required for the EMAC3 base platforms
 
-The hypervisor doesn't know what ASIDs are connected to what SIDs to
-generate the ATC?
+This series makes those adaptations as well as other housekeeping items
+such as converting dt-bindings to yaml, adding clock descriptions, etc.
 
-Intel is different, they know what devices the vDID is connected to,
-so when they get a vDID invalidation they can elaborate it into a ATC
-invalidation. ARM doesn't have that information.
+[0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
 
-Jason
+v1: https://lore.kernel.org/netdev/20230313165620.128463-1-ahalaney@redhat.com/
+
+Thanks,
+Andrew
+
+Andrew Halaney (8):
+  dt-bindings: net: qcom,ethqos: Add Qualcomm sc8280xp compatibles
+  clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
+  arm64: dts: qcom: sc8280xp: Add ethernet nodes
+  arm64: dts: qcom: sa8540p-ride: Add ethernet nodes
+  net: stmmac: Remove unnecessary if statement brackets
+  net: stmmac: dwmac-qcom-ethqos: Respect phy-mode and TX delay
+  net: stmmac: dwmac-qcom-ethqos: Use loopback_en for all speeds
+  net: stmmac: dwmac-qcom-ethqos: Add EMAC3 support
+
+Bhupesh Sharma (3):
+  dt-bindings: net: snps,dwmac: Update interrupt-names
+  dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
+  dt-bindings: net: qcom,ethqos: Convert bindings to yaml
+
+Brian Masney (1):
+  net: stmmac: Add EMAC3 variant of dwmac4
+
+ .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ----
+ .../devicetree/bindings/net/qcom,ethqos.yaml  | 111 ++++++
+ .../devicetree/bindings/net/snps,dwmac.yaml   |   9 +-
+ MAINTAINERS                                   |   2 +-
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 181 ++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  53 +++
+ drivers/clk/qcom/gcc-sc8280xp.c               |  18 +
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 161 ++++++---
+ drivers/net/ethernet/stmicro/stmmac/dwmac4.h  |  32 +-
+ .../net/ethernet/stmicro/stmmac/dwmac4_core.c | 235 ++++++++++--
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.c  | 334 ++++++++++++++----
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.h  |  38 ++
+ .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  | 144 ++++++--
+ drivers/net/ethernet/stmicro/stmmac/hwif.c    |  29 +-
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    |   2 +
+ .../ethernet/stmicro/stmmac/stmmac_ethtool.c  |   6 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  17 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   9 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  |   4 +-
+ include/dt-bindings/clock/qcom,gcc-sc8280xp.h |   2 +
+ include/linux/stmmac.h                        |   1 +
+ 21 files changed, 1196 insertions(+), 258 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+
+-- 
+2.39.2
+
