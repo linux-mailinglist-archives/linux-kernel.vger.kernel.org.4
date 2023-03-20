@@ -2,126 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEE66C0AB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273E26C0AB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCTGdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 02:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        id S229879AbjCTGdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 02:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCTGdF (ORCPT
+        with ESMTP id S229529AbjCTGdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 02:33:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AA722A32;
-        Sun, 19 Mar 2023 23:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679293964; x=1710829964;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Fd/G5KCuQQujS9KXOruku3RueXzTt7Ru/BXGSsi5VuU=;
-  b=MzR4KjWLvjzXF8U3Fx5/NcuSwdh0Ops90HfJ4nn8KMmbxQz6I1sxNlCi
-   83pzo8q718jVgqKCpWSFwn/7ZqptiXXJtxsvbkgm/9WiZVAy5zohC6q2R
-   tgKf/ZIm2cFWYnWhK9Ud3xHllVe2t9AaJheop3se9a4tmNbHWDEOrnBxP
-   ZIItAfuYUtnwZ7nT68V1nTyIe5Z0IqisUwX1G/WHeNVeYI9vibkGegS20
-   baHw4WCiqEoaeyEEOrEkj2/K9gDn7hIb9HMW9lPUatdBExnyfR1/euzR7
-   4F7olNilsn96bpuunHlSR/PKOmB/1pykCggqoTKOQvixlZjJeF3xhJGwW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="337301492"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="337301492"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 23:32:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="631009703"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="631009703"
-Received: from isasover-mobl.ger.corp.intel.com ([10.209.180.176])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 23:32:39 -0700
-Message-ID: <8207eb83d6b2488cfb524befdbb7184c8503f997.camel@linux.intel.com>
-Subject: Re: [PATCH linux-next v2 1/3] platform/x86/intel/tpmi: Fix double
- free in tpmi_create_device()
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 19 Mar 2023 23:32:37 -0700
-In-Reply-To: <3c2f9226-8741-4e51-241f-5dbac45cc794@hust.edu.cn>
-References: <20230309040107.534716-1-dzm91@hust.edu.cn>
-         <20230309040107.534716-2-dzm91@hust.edu.cn>
-         <dd36a2ab-d465-f857-30c6-3c0094babd31@redhat.com>
-         <559654bbef8483fcd53458824f23814236b0c9e0.camel@linux.intel.com>
-         <40d7cb19-5712-9754-b7bd-2b582055c929@hust.edu.cn>
-         <41c9e613d718095e31674f625f48c60fe493d658.camel@linux.intel.com>
-         <3c2f9226-8741-4e51-241f-5dbac45cc794@hust.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Mon, 20 Mar 2023 02:33:50 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A977FEC78
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:33:47 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32K6XanB013678;
+        Mon, 20 Mar 2023 01:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679294016;
+        bh=PpWfLDL8EN47urhltItaJFJ868B98/oY43mUbJWqm+s=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=JtMH+Ws+mniuKEgVVyrumnMv6I0GLuutPy4AKdIMkgxUV+SRyMVo6cjAvYqO2oG16
+         fXU4hbP4OY+aHyZKP8TqAAfyZQ9DaJ5zcmEHQiOktrC6yhct6HSs2PqwBCIuWAe7SK
+         IIYUWJYNRSKFt8oRJKVGc3os1yWPBIoylWL/OJrs=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32K6XaBK030290
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Mar 2023 01:33:36 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
+ Mar 2023 01:33:36 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 20 Mar 2023 01:33:36 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32K6XZHH116601;
+        Mon, 20 Mar 2023 01:33:36 -0500
+Date:   Mon, 20 Mar 2023 12:03:37 +0530
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Vaishnav Achath <vaishnav.a@ti.com>
+CC:     <linux-phy@lists.infradead.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devarsht@ti.com>, <tomi.valkeinen@ideasonboard.com>,
+        <praneeth@ti.com>, <u-kumar1@ti.com>, <vigneshr@ti.com>,
+        <nm@ti.com>, <sinthu.raja@ti.com>
+Subject: Re: [PATCH] phy: cadence: cdns-dphy-rx: Add common module reset
+ support
+Message-ID: <20230320063337.oeta63lyes72pfxb@uda0497096>
+References: <20230314073137.2153-1-vaishnav.a@ti.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zu4fbieikuth2lrl"
+Content-Disposition: inline
+In-Reply-To: <20230314073137.2153-1-vaishnav.a@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTAzLTIwIGF0IDEwOjQzICswODAwLCBEb25nbGlhbmcgTXUgd3JvdGU6Cj4g
-Cj4gT24gMjAyMy8zLzE3IDE4OjI3LCBzcmluaXZhcyBwYW5kcnV2YWRhIHdyb3RlOgo+ID4gSGkg
-RG9uZ2xpYW5nLAo+ID4gCj4gPiAuLi4KPiA+IC4uLgo+ID4gCj4gPiAKPiA+ID4gSGkgU3Jpbml2
-YXMgYW5kIEhhbnMsCj4gPiA+IAo+ID4gPiBIb3cgYWJvdXQgZm9sZGluZyB0aGVzZSB0aHJlZSBw
-YXRjaGVzIGludG8gb25lIHBhdGNoIGFuZCByZXNlbmQgYQo+ID4gPiB2Mwo+ID4gPiBwYXRjaD8K
-PiA+ID4gCj4gPiA+IFRoaXMgd2lsbCBnZXQgYWxsIHBlb3BsZSB0b2dldGhlciBhbmQgYXZvaWQg
-dGhlIHByZXZpb3VzCj4gPiA+IGVtYmFycmFzc2luZwo+ID4gPiBzaXRhdGlvbi4KPiA+IFRoaXMg
-aXMgTk9UIGFuIGVtYmFycmFzc2luZyBzaXR1YXRpb24uCj4gPiBUaGFua3MgZm9yIGZpbmRpbmcg
-YW5kIGZpeGluZyB0aGUgaXNzdWUuCj4gPiAKPiA+IFRoYW5rcywKPiA+IFNyaW5pdmFzCj4gPiAK
-PiBIaSBTcmluaXZhcywKPiAKPiBBbnkgY29uY2x1c2lvbiBhYm91dCB0aGlzIHBhdGNoIHNldD8K
-CkhhbnMgY2FuIHJlb3JkZXIgcGF0Y2hlcyBhcyBoZSBzdWdnZXN0ZWQgYW5kIGFwcGx5LgoKVGhh
-bmtzLApTcmluaXZhcwoKPiAKPiA+ID4gRG9uZ2xpYW5nIE11Cj4gPiA+IAo+ID4gPiA+ID4gUmVn
-YXJkcywKPiA+ID4gPiA+IAo+ID4gPiA+ID4gSGFucwo+ID4gPiA+ID4gCj4gPiA+ID4gPiAKPiA+
-ID4gPiA+IAo+ID4gPiA+ID4gCj4gPiA+ID4gPiA+IC0tLQo+ID4gPiA+ID4gPiDCoMKgwqBkcml2
-ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC90cG1pLmMgfCAxNyArKysrLS0tLS0tLS0tLS0tLQo+ID4g
-PiA+ID4gPiDCoMKgwqAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlv
-bnMoLSkKPiA+ID4gPiA+ID4gCj4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BsYXRm
-b3JtL3g4Ni9pbnRlbC90cG1pLmMKPiA+ID4gPiA+ID4gYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9p
-bnRlbC90cG1pLmMKPiA+ID4gPiA+ID4gaW5kZXggYzk5OTczMmIwZjFlLi44ODJmZTVlNDc2M2Yg
-MTAwNjQ0Cj4gPiA+ID4gPiA+IC0tLSBhL2RyaXZlcnMvcGxhdGZvcm0veDg2L2ludGVsL3RwbWku
-Ywo+ID4gPiA+ID4gPiArKysgYi9kcml2ZXJzL3BsYXRmb3JtL3g4Ni9pbnRlbC90cG1pLmMKPiA+
-ID4gPiA+ID4gQEAgLTIxNSw4ICsyMTUsOCBAQCBzdGF0aWMgaW50IHRwbWlfY3JlYXRlX2Rldmlj
-ZShzdHJ1Y3QKPiA+ID4gPiA+ID4gaW50ZWxfdHBtaV9pbmZvICp0cG1pX2luZm8sCj4gPiA+ID4g
-PiA+IMKgwqAgCj4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgZmVhdHVyZV92c2VjX2Rl
-diA9Cj4gPiA+ID4gPiA+IGt6YWxsb2Moc2l6ZW9mKCpmZWF0dXJlX3ZzZWNfZGV2KSwKPiA+ID4g
-PiA+ID4gR0ZQX0tFUk5FTCk7Cj4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKCFm
-ZWF0dXJlX3ZzZWNfZGV2KSB7Cj4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqByZXQgPSAtRU5PTUVNOwo+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgZ290byBmcmVlX3JlczsKPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGtmcmVlKHJlcyk7Cj4gPiA+ID4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqByZXR1cm4gLUVOT01FTTsKPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4g
-PiA+ID4gPiA+IMKgwqAgCj4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgc25wcmludGYo
-ZmVhdHVyZV9pZF9uYW1lLAo+ID4gPiA+ID4gPiBzaXplb2YoZmVhdHVyZV9pZF9uYW1lKSwKPiA+
-ID4gPiA+ID4gInRwbWktCj4gPiA+ID4gPiA+ICVzIiwgbmFtZSk7Cj4gPiA+ID4gPiA+IEBAIC0y
-NDIsMTcgKzI0Miw4IEBAIHN0YXRpYyBpbnQgdHBtaV9jcmVhdGVfZGV2aWNlKHN0cnVjdAo+ID4g
-PiA+ID4gPiBpbnRlbF90cG1pX2luZm8gKnRwbWlfaW5mbywKPiA+ID4gPiA+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgKiBmZWF0dXJlX3ZzZWNfZGV2IG1lbW9yeSBpcyBhbHNvIGZyZWVkIGFzIHBh
-cnQKPiA+ID4gPiA+ID4gb2YKPiA+ID4gPiA+ID4gZGV2aWNlCj4gPiA+ID4gPiA+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgICogZGVsZXRlLgo+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
-Lwo+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqByZXQgPSBpbnRlbF92c2VjX2FkZF9hdXgodnNl
-Y19kZXYtPnBjaWRldiwKPiA+ID4gPiA+ID4gJnZzZWNfZGV2LQo+ID4gPiA+ID4gPiA+IGF1eGRl
-di5kZXYsCj4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBmZWF0dXJlX3ZzZWNfZGV2LAo+ID4gPiA+ID4gPiBm
-ZWF0dXJlX2lkX25hbWUpOwo+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqBpZiAocmV0KQo+ID4g
-PiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBmcmVlX3JlczsKPiA+
-ID4gPiA+ID4gLQo+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+ID4gPiA+
-ID4gLQo+ID4gPiA+ID4gPiAtZnJlZV9yZXM6Cj4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoGtm
-cmVlKHJlcyk7Cj4gPiA+ID4gPiA+IC0KPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgcmV0dXJu
-IHJldDsKPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIGludGVsX3ZzZWNfYWRkX2F1
-eCh2c2VjX2Rldi0+cGNpZGV2LAo+ID4gPiA+ID4gPiAmdnNlY19kZXYtCj4gPiA+ID4gPiA+ID4g
-YXV4ZGV2LmRldiwKPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZmVhdHVyZV92c2VjX2RldiwKPiA+ID4g
-PiA+ID4gZmVhdHVyZV9pZF9uYW1lKTsKPiA+ID4gPiA+ID4gwqDCoMKgfQo+ID4gPiA+ID4gPiDC
-oMKgIAo+ID4gPiA+ID4gPiDCoMKgwqBzdGF0aWMgaW50IHRwbWlfY3JlYXRlX2RldmljZXMoc3Ry
-dWN0IGludGVsX3RwbWlfaW5mbwo+ID4gPiA+ID4gPiAqdHBtaV9pbmZvKQoK
+--zu4fbieikuth2lrl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
+
+On Mar 14, 2023 at 13:01:37 +0530, Vaishnav Achath wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
+>=20
+> DPHY RX module has a common module reset (RSTB_CMN) which is expected
+> to be released during configuration. In J721E SR1.0 the RSTB_CMN is
+> internally tied to CSI_RX_RST and is hardware controlled, for all
+> other newer platforms the common module reset is software controlled.
+> Add support to control common module reset during configuration and
+> also skip common module reset based on soc_device_match() for J721E SR1.0.
+>=20
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> Co-developed-by: Vaishnav Achath <vaishnav.a@ti.com>
+> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+
+Reviewed-by: Jai Luthra <j-luthra@ti.com>
+
+> ---
+>=20
+> Tested on J721E SR1.0 and SR 1.1 by CSI2RX streaming,
+> without this changes CSI2RX streaming fails on J721E SR1.1
+> and all other newer TI platforms (J721S2, J784S4, AM62X).
+>=20
+> Logs: https://gist.github.com/vaishnavachath/3ecda7de0e63b13c6f765ae2c4f9=
+c5ff
+>=20
+>  drivers/phy/cadence/cdns-dphy-rx.c | 32 ++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>=20
+> diff --git a/drivers/phy/cadence/cdns-dphy-rx.c b/drivers/phy/cadence/cdn=
+s-dphy-rx.c
+> index 572c70089a94..c05b043893a9 100644
+> --- a/drivers/phy/cadence/cdns-dphy-rx.c
+> +++ b/drivers/phy/cadence/cdns-dphy-rx.c
+> @@ -11,10 +11,12 @@
+>  #include <linux/phy/phy.h>
+>  #include <linux/phy/phy-mipi-dphy.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/sys_soc.h>
+> =20
+>  #define DPHY_PMA_CMN(reg)		(reg)
+>  #define DPHY_PCS(reg)			(0xb00 + (reg))
+>  #define DPHY_ISO(reg)			(0xc00 + (reg))
+> +#define DPHY_WRAP(reg)			(0x1000 + (reg))
+> =20
+>  #define DPHY_CMN_SSM			DPHY_PMA_CMN(0x20)
+>  #define DPHY_CMN_RX_MODE_EN		BIT(10)
+> @@ -33,6 +35,9 @@
+>  #define DPHY_POWER_ISLAND_EN_CLK	DPHY_PCS(0xc)
+>  #define DPHY_POWER_ISLAND_EN_CLK_VAL	0xaa
+> =20
+> +#define DPHY_LANE			DPHY_WRAP(0x0)
+> +#define DPHY_LANE_RESET_CMN_EN		BIT(23)
+> +
+>  #define DPHY_ISO_CL_CTRL_L		DPHY_ISO(0x10)
+>  #define DPHY_ISO_DL_CTRL_L0		DPHY_ISO(0x14)
+>  #define DPHY_ISO_DL_CTRL_L1		DPHY_ISO(0x20)
+> @@ -57,6 +62,10 @@ struct cdns_dphy_rx_band {
+>  	unsigned int max_rate;
+>  };
+> =20
+> +struct cdns_dphy_soc_data {
+> +	bool has_hw_cmn_rstb;
+> +};
+> +
+>  /* Order of bands is important since the index is the band number. */
+>  static const struct cdns_dphy_rx_band bands[] =3D {
+>  	{ 80, 100 }, { 100, 120 }, { 120, 160 }, { 160, 200 }, { 200, 240 },
+> @@ -142,13 +151,36 @@ static int cdns_dphy_rx_wait_lane_ready(struct cdns=
+_dphy_rx *dphy,
+>  	return 0;
+>  }
+> =20
+> +static struct cdns_dphy_soc_data j721e_soc_data =3D {
+> +	.has_hw_cmn_rstb =3D true,
+> +};
+> +
+> +static const struct soc_device_attribute cdns_dphy_socinfo[] =3D {
+> +	{
+> +		.family =3D "J721E",
+> +		.revision =3D "SR1.0",
+> +		.data =3D &j721e_soc_data,
+> +	},
+> +	{/* sentinel */}
+> +};
+> +
+>  static int cdns_dphy_rx_configure(struct phy *phy,
+>  				  union phy_configure_opts *opts)
+>  {
+>  	struct cdns_dphy_rx *dphy =3D phy_get_drvdata(phy);
+>  	unsigned int reg, lanes =3D opts->mipi_dphy.lanes;
+> +	const struct cdns_dphy_soc_data *soc_data =3D NULL;
+> +	const struct soc_device_attribute *soc;
+>  	int band_ctrl, ret;
+> =20
+> +	soc =3D soc_device_match(cdns_dphy_socinfo);
+> +	if (soc && soc->data)
+> +		soc_data =3D soc->data;
+> +	if (!soc || (soc_data && !soc_data->has_hw_cmn_rstb)) {
+> +		reg =3D DPHY_LANE_RESET_CMN_EN;
+> +		writel(reg, dphy->regs + DPHY_LANE);
+> +	}
+> +
+>  	/* Data lanes. Minimum one lane is mandatory. */
+>  	if (lanes < DPHY_LANES_MIN || lanes > DPHY_LANES_MAX)
+>  		return -EINVAL;
+> --=20
+> 2.17.1
+>=20
+
+--zu4fbieikuth2lrl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEETeDYGOXVdejUWq/FQ96R+SSacUUFAmQX/j0ACgkQQ96R+SSa
+cUV8DQ//TQSS+B32sjEFR5WtQKDvogX+qctvjlzUGW9tQlmhoiA/jGbppC7lzd+e
+AG+urSCcw2+VG/kfaI4K4DDAvTeRdpGJiQT4VtYczN2pQab7sg1Did69UOIUDaSL
+UKZVbalrwofC/VBgimirF3/SpRQrVT3LspUydB3FFmxGRwswAcTNsx/yZ7/Q/wlY
+r+LkC4l0iasKre5y1rVGYMIdpOYoXi+tIKjF/T/3QflyRk44DtUBQYALcPPK/Qpn
+4w1WY4eUz/XRrFk3bgGR8moAxaZjSrDv6mK1g+8BuOeyJ+k2Tw1E4LAmht2nIOwh
+kqrxBVukkfWqxgxZI24YQZGb15tcMgb58DatFjPOQzOezMt+FkDZx/yYGt4lyQcQ
+7TGrXIyM0u5OauTD8UPUpa6FYUTf0vwyARxeT8XmuX0tIWNEtmTM6zacLXnx+Zzm
+8eVeVlpdq0rzZvgGEsTOLJzlc94ylVzgl8WeN8XU4ldkWFKPaEY3KwCKbg8GI+7J
+r2HXza9YX6g7sJpiMyONAzZ4ZK4aIchmsQtSh4a56ZxbQb6NEfmpBXj3d4JC1n6M
+8FNMR+Wcz7FQmDBxqULNyRgb6YLa3ZVVGVsVRFjiaR/j34IYO8BYIZCWvw0DnsjX
+/2JXWom922THeEszn/ZqQDPx8e/MlWa5QMCYeB/qs6Bhidj370Q=
+=2ZlC
+-----END PGP SIGNATURE-----
+
+--zu4fbieikuth2lrl--
