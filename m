@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FD66C0F94
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C376C0F92
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjCTKqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S230028AbjCTKqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjCTKq2 (ORCPT
+        with ESMTP id S229524AbjCTKqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:46:28 -0400
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C072312A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:44:20 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id q16so3440782lfe.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679308926;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k16MUxzAr7So06ek3jaPuSWRMbCu5blX7yixTU1VOIo=;
-        b=yeL7UQSEl7jxwbF+hiCfIPXVpJOFWcmKPNTDVlbXSiMaDqQKl14bXg52B3O8Jd5bfj
-         cnsiJshIg73GzFW0UqBuR+zMaCPyHONlpuy6GCwi4fznClsRfR4pPvry5kUAOskkmo0K
-         jxPFuc1h0bOnK5locxjGh4qc5YQQxwpcIVc10edsXIm3jV+9wohQxpa8Id/x3e7i0Cqt
-         QdplhuFyvPQM/Sp8li3H+1nCsvWt4cv0bbAvoSGAVjMPpA1w6PUdPNQx96u6nfy+uU7/
-         jhW19gHBX2PLS86+WnYLU4/svMBt914HAGx/haMQZMbGfWEBKwiRCMFQESSeuUnbfpfI
-         7dJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308926;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k16MUxzAr7So06ek3jaPuSWRMbCu5blX7yixTU1VOIo=;
-        b=Zo9qV1pDXd0ax3LzR375KhSLMIUEzrYRUGfMdPJ9OPRKYR6Op54cwpiBT3spdB2WDf
-         4LZdkg0GuPQsehLpwmiki3Y1xHDLf9hDO1AZpls2bYQNx/SkKE5r5SSP5CRLxycjeCaf
-         ccq5nG/fZDcrow14ZAeHLTJxI77UTbwofXkF866ntMDowYAbEXfDMAAY448Tym3IUKjJ
-         LdO8DO22aJwkiaL8cIB4DlXmMoQWXNycBOL0hdymsm/DSGvwVTOd6DggUVu8RhEgEEvR
-         Uk+BgMaqU1aE7fp4fOneWc2qE+8Ys/JO+bVFYmV1m0SCA5P/16CY95glWDWddyr1/jEa
-         IG3A==
-X-Gm-Message-State: AO0yUKWkkZ+101HnreTGDQKC89VZf3tyHnj8reM/RSb+3nHeJQbW3pz7
-        6QXPfswMP8mqKE8j+zn+lhY2Fg==
-X-Google-Smtp-Source: AK7set8rHwqmHn+7sNRobBB28oMLRWp7yGgCfY/k3lB8f0Hw3GPmtlFfnPKnKWQkObtFPzP1JQGv4Q==
-X-Received: by 2002:ac2:5097:0:b0:4b5:2ef3:fd2a with SMTP id f23-20020ac25097000000b004b52ef3fd2amr7744823lfm.47.1679308926377;
-        Mon, 20 Mar 2023 03:42:06 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id r8-20020a19ac48000000b004e8b90e14a8sm1659531lfc.25.2023.03.20.03.42.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:42:06 -0700 (PDT)
-Message-ID: <0a8fcd57-94dc-61e6-0ba0-b1591e05e6f2@linaro.org>
-Date:   Mon, 20 Mar 2023 11:42:04 +0100
+        Mon, 20 Mar 2023 06:46:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D87F25B83
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:44:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8847B80DFD
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27288C433EF;
+        Mon, 20 Mar 2023 10:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679308983;
+        bh=b7PFh3YhCgSl4cZHu1XnSk4/kQBLuxV+91gIq3yFMaY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ImOUHhynTTZoM9nBetVrrEMlNZ9aqCaSvqF4LPrJhWwbhkL/MG4hA0RnvlKyLiwfB
+         TwaDI0LwOqmHkurwpNzDggxlD7Np7ath9Q0YfGxQ2w+o5JeRSlcGoGDafpE0UmcjSO
+         Dg/Z2y1+iZaEU9eGcfllLmDKSLKpJcAg3SQHJqCU=
+Date:   Mon, 20 Mar 2023 11:43:00 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+Cc:     outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, Julia Lawall <julia.lawall@inria.fr>
+Subject: Re: [PATCH] staging: rtl8723bs: use inline functions for
+ dev_to_sdio_func
+Message-ID: <ZBg4tGlY+Epz0Vhd@kroah.com>
+References: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dmaengine: qcom: bam_dma: Add support for BAM engine
- v1.7.4
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        dmaengine@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com, vkoul@kernel.org,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        vladimir.zapolskiy@linaro.org
-References: <20230320071211.3005769-1-bhupesh.sharma@linaro.org>
- <20230320071211.3005769-2-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230320071211.3005769-2-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20.03.2023 08:12, Bhupesh Sharma wrote:
-> Qualcomm SoCs SM6115 and  QRB2290 support BAM engine version
-> v1.7.4.
+On Mon, Mar 20, 2023 at 12:34:41PM +0200, Menna Mahmoud wrote:
+> Convert `dev_to_sdio_func` macro into a static inline function.
+> it is not great to have macro that use `container_of` macro,
+> because from looking at the definition one cannot tell
+> what type it applies to.
 > 
-> Add the support for the same in driver. Since the reg info of
-> this version is similar to version v1.7.0, so reuse the same.
+> One can get the same benefit from an efficiency point of view
+> by making an inline function.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
 > ---
->  drivers/dma/qcom/bam_dma.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/staging/rtl8723bs/os_dep/sdio_intf.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> index 1e47d27e1f81..153d189de7d2 100644
-> --- a/drivers/dma/qcom/bam_dma.c
-> +++ b/drivers/dma/qcom/bam_dma.c
-> @@ -1228,6 +1228,7 @@ static const struct of_device_id bam_of_match[] = {
->  	{ .compatible = "qcom,bam-v1.3.0", .data = &bam_v1_3_reg_info },
->  	{ .compatible = "qcom,bam-v1.4.0", .data = &bam_v1_4_reg_info },
->  	{ .compatible = "qcom,bam-v1.7.0", .data = &bam_v1_7_reg_info },
-> +	{ .compatible = "qcom,bam-v1.7.4", .data = &bam_v1_7_reg_info },
-The compatible is meaningless as of today (it uses the exact same driver
-data as v1.7.0), so I'd say going with:
-
-compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-
-is what we want.
-
-Konrad
->  	{}
->  };
+> diff --git a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+> index 490431484524..7ee821dbbae0 100644
+> --- a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+> +++ b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+> @@ -10,7 +10,10 @@
+>  #include <linux/jiffies.h>
 >  
+>  #ifndef dev_to_sdio_func
+> -#define dev_to_sdio_func(d)     container_of(d, struct sdio_func, dev)
+> +static inline struct sdio_func *dev_to_sdio_func(struct device *d)
+> +{
+> +	return container_of(d, struct sdio_func, dev);
+> +}
+>  #endif
+
+Why is the "#ifndef" check still needed now?  Really it was never
+needed, but now would be a great time to remove it as it doubly does not
+make any sense here.
+
+Oh wait, no, this whole thing can just be removed entirely, right?
+There already is a dev_to_sdio_func macro defined, so the #ifndef check
+catches that so your change doesn't actually modify any code that is
+used.  So this should all be removed, not changed to an inline function.
+
+thanks,
+
+greg k-h
