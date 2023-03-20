@@ -2,198 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4647D6C1B0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C806C1B0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjCTQPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S229564AbjCTQQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjCTQPa (ORCPT
+        with ESMTP id S232178AbjCTQPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:15:30 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2055.outbound.protection.outlook.com [40.107.243.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E86B399CD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:04:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BDZ9cZl6InnPLa4AF+Pgxz3nDo9rh2lFQvuJgVvpLSSzDXgfPEPwjKMZTcH9WK9FbTQV+jG8trJZZU5hxSUf6Pp173Az/9Nv6qvTRRJPlZl72LlGOrY5utJEFnlUm3ss+dc8pkfwGEuQYOVpYudjzyCAZZXLZgXv8T3yuwT4+DsCEeSXQnMS3tKGZr+QjchoQJ36zGqseLTi2n2V8e0HDVE93cU8HB6VLmebjH5nZ5hhhy747rDeaapZBbbUti//UwJigm26pbztXxN9YA6DtbaVqX2+524yXDvDl0GkSsL1zHPoM27QhOkDZg/60/nkv+UggN46c2WRcECrKgAfkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZosQ2t8zMBeani3FdrG5beIMMefbxoHSDm11AXSI6bk=;
- b=enI35bMtSHKvtyuqhDckQTRmW1CiRFbxsKvNQ8dnvNHYTOtXdJiFJ5dkp+3P8DKwWlvQnjy1nEBXZWSIW6lBwg7adQNRK/h52xR8sNIjHmSpducsIiXGjaav6CUQjk2Cd6iQwliAMfOYEO/irLowNyeBMERwnNLkHP4EhTfSwuvT9oPpXiMlbwWajbZZ8wAhVy46rCXJ37lT0Qy2Nbo6XoErWXBhnU5vsAoYGYYf65FAg3Bq9udLEMwhQCFbhFj41txCei6doSH3G944G+LlTYd+ZBZ/l/EYCHr06x9nJISC6apq147RiFLOFYwpglnrSJV1/eiAxqveaM3WJPxPUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZosQ2t8zMBeani3FdrG5beIMMefbxoHSDm11AXSI6bk=;
- b=mMCUIEOB1Grxak7aqN3pPvYjvPMXuzqDq4wVZryTnCCX0oJ+pxN2/s/70iaZKk+t94qfERGOkv9q4ZJJvZc8VPrxAz79o1EeVNSGVV2JUTlLRQBcMygF25MiY6XBSzZEp48rVL+hCJcv7clIXqAUN4Dr+xUPsL20Rha0bYqT3e7Bw03PzjLRJGQa6Q7hsJ/ijQyHxRW6QRzSjTVMSZ5Vtfmoliruogre06TngpHtuf+nV8jKwlhbfGwD2feC+0huPfSxiC+IQ+0GLlP/5MqvYKVuUDCL0SzPS/3HZu6qTbUM/2bjBhP6AIfPBfDbfBdyy7jZeF2WjqLNcHuT8LR8yA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB6836.namprd12.prod.outlook.com (2603:10b6:510:1b6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 16:04:36 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 16:04:36 +0000
-Date:   Mon, 20 Mar 2023 13:04:35 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Message-ID: <ZBiEE+QLjPpxBjkQ@nvidia.com>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
- <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
- <ZAn7uC9UweiNdGkJ@nvidia.com>
- <ZAqv87fjbdynVaHA@Asurada-Nvidia>
- <ZAtYphmOuEqQ1BiC@nvidia.com>
- <ZAxsgjuuG3ziqs9E@Asurada-Nvidia>
- <ZBhZiCOQHAxEaamy@nvidia.com>
- <ZBiCEAqP1OU5EvoG@Asurada-Nvidia>
+        Mon, 20 Mar 2023 12:15:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38B0CE3A3;
+        Mon, 20 Mar 2023 09:05:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C054AD7;
+        Mon, 20 Mar 2023 09:05:51 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E0A93F67D;
+        Mon, 20 Mar 2023 09:05:05 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 16:04:55 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexey Klimov <alexey.klimov@linaro.org>
+Cc:     peterz@infradead.org, draszik@google.com, peter.griffin@linaro.org,
+        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
+        tony@atomide.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        alim.akhtar@samsung.com, regressions@lists.linux.dev,
+        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com
+Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
+ and slow-stuck reboots
+Message-ID: <ZBiEEyDaxq9oSXJk@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230314230004.961993-1-alexey.klimov@linaro.org>
+ <ZBhlL4tqSUi/c3qk@FVFF77S0Q05N.cambridge.arm.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBiCEAqP1OU5EvoG@Asurada-Nvidia>
-X-ClientProxiedBy: BLAPR03CA0011.namprd03.prod.outlook.com
- (2603:10b6:208:32b::16) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB6836:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3342a8ed-aa3c-4e1c-8fa1-08db295ccd7b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iSLTKxBhCsteP0aJrtABUpd7Vty7v3FO4MbxaPoSsrJ7sArPQ6bZFJr1OieFVNZ1T6rg/bQ0r9AVDdjbFMETyisxCeVY7uB3J5/GI84ImQFtkPqbhPYlMGHPDCJ9iE+r+dsZODrUPAJBPRNqL1jySH+rniEbX7NtSJaojWVvgV2LNSvwOJzEsK5aOOjmbsZldYjcnN0kFhc+X+xlRRQ4+487ZjPVNZubJuuQgCFkTctA0Ad1DqgJPXObkW346Mrx9HA34QCO7hxhaMTTxOwVcsRJZWKCvpgs/Sz++o6VKTtxKdlALmYeB5fNJlWOqdyGZvU8rOXOMJqa/VitjVIKCnMQh9wSTpGqxPUHNYGW+y9NIfCKfzxaf9STt2pz4/mRi9+hFTQvoZx8ngeaRdcCp2RmEy1W6/E3cxfpLoBlSJByB59r90FHtgMdf9nbUuEzBFSbnCd1s/hVbFHyBDvuq8s3oWPn7HH5qEfWHZkQENUUVtzwkeRaE8I3zRWAH+De9Tx1MyZBfoh4dCL/heDzT1qOoawBQidJDEztr9WVomm5LRJLepw82NIdLJnidtlD5OKQzBPWkX4QLpmSFnk57yvjflJ9ArL783NKJCMLXhp+PafbHfKMGn1E62Smn9kEe8GyCjxIC/GT+MHvXmgnFhLezjvrFfPi0RwCwKzstMO80gI9OvNjCSh4itoHjn2T6NhpjQIP3D0qOewrFZA6oyNOJ8VhzIWWCIrmsG0B5RxkkU/T8diTORC2Hp2KEKkB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(39860400002)(136003)(396003)(376002)(451199018)(8676002)(4326008)(66946007)(66476007)(66556008)(26005)(186003)(6512007)(6506007)(36756003)(5660300002)(41300700001)(83380400001)(2616005)(8936002)(7416002)(6862004)(2906002)(38100700002)(86362001)(37006003)(316002)(6636002)(478600001)(6486002)(67856001)(473944003)(414714003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OesTaQkqWC/qK4IXMN4Tha2S3SGb8TQXPWyrUEOcP8qE/4gxPfA82+5Tg7QI?=
- =?us-ascii?Q?Bk6EXnn5A5xQTnvLr9gtEv+DH2qdoh5o4TTXExikblwfPGKiecNxEULC2PQa?=
- =?us-ascii?Q?/FBoRdste1moYZDU67c02syMj2ebiQ52m4A79SnojlsxRdi4lRVKplRJj8Co?=
- =?us-ascii?Q?qOOJh4pX025toGSJWQ+TDXijVhfmk81qPpyT/xiQYfR4OpMWcNzycQYK2VJH?=
- =?us-ascii?Q?RPZ5T07LojKULsCgftO0Uw9DCQprxzhWU7Jhy6r6iAlvxqouu+URPQdc2hno?=
- =?us-ascii?Q?LUT0aouDJSqnU67Tyvvc3iS38etNLJn4OtCabe6Q9TYU0w2nmv1FQ7sdGb0z?=
- =?us-ascii?Q?flnH/qjouh28omoVMxVLmVTQSct+CLUxDXlLi1E6ASAySZSwMR1zvNdEX6DA?=
- =?us-ascii?Q?L8IqzH/O45ieiCRiOLjer4BmMFMEgXW5porl+qlstj+ehe3ya/Al4iUPfn3k?=
- =?us-ascii?Q?C03gR6sf/30FRqxd+3B70qZVlWkJEOy+enmLkjVRN+99vZfo3+XwnqxE7YH/?=
- =?us-ascii?Q?HoM5LZpN7N74HFdZu/YNX8pTTGS4P42v0rBN2z4ShHHA2EW77bHdI1vnI5Ye?=
- =?us-ascii?Q?eCQhblU56iy+o4wZsbVk2ZgC99rdnwCxlrIYat319ztAMXnZRVETr5csR+le?=
- =?us-ascii?Q?dkVUVECBDyg0d3DG9+2sbSgfqCxogBOwTVd3HEpicZGHyWVqbb0M5pX9o1uv?=
- =?us-ascii?Q?U/fnITcB0DLufQy1Z7OETe+o8p6RDl+iSwYZXpW9YBNNpi+2COMIZzcYf8tB?=
- =?us-ascii?Q?2ws8aWq+oRKOK46fVDT6IJfjf68EpgR5oHLOL3tVE5UTmC17DqWuB/UKfGlD?=
- =?us-ascii?Q?P0WvW+NQQqDwTS2RwJw4eNDtwlBtOv8TVPgy+ofg3Rae2VOjKprcDrsAu/FS?=
- =?us-ascii?Q?+iDeVMynn2nJg9slPOHBDI7rwV1qnM2E2UNu9RDZkMzHKNnqV2s9EbblFpzQ?=
- =?us-ascii?Q?GAI1r5L8gRpH+axWmM7AI0vnwoDaIAXl4TbyIOSpv+7VX23lcvNz7VrquRnP?=
- =?us-ascii?Q?2guXVCH5BVwWZsAEw8j+qHNUREG6D3YBxgDNcmUWNRxoPWer0pLnaCZHdZNN?=
- =?us-ascii?Q?0dNNqZR2WEA8A+DY2ktUjEF1WxmDbD0oc+SnbS7fGMRtgn3RXG5mCdCtWuIm?=
- =?us-ascii?Q?MQOSEBq6mJd0bJdVui+6edvWHdbgJSF72k4/hnQa58htu4j6vWniJS+jVsZb?=
- =?us-ascii?Q?7HRtC3QdKk9JkPFj8HaP4QujDWQk4IPhnDfJ5Mukh9tIoyIv/d41kkI6uJ0f?=
- =?us-ascii?Q?BnsARl0QuqtVkrOFWfI+dcBNs2gdwVdV+6lY68P8bt1+jIQsnJgG4BqRecSA?=
- =?us-ascii?Q?Dq8D/3b23kArDXw5sG9K23HAccIG9zYZQwU+k64WKBL7g+mtLid2OR+hZK4b?=
- =?us-ascii?Q?o4UNjvZgt6K58T1KhRc0OHRREEG0WpPRFtlyvRoQ6vxmmYEdt5Zx58HtIxw4?=
- =?us-ascii?Q?JGpmeYnNeQ9dtAhM5ISVr98R4eFgn1s9fXwtj/H9PZ6YhgNcni8tlwvPbIcr?=
- =?us-ascii?Q?Go66A08Ee+MD9sCx+b0w4oT/K+6hvXuCrtqqdBcmT3vuvVmZtDuGwL6bwAgO?=
- =?us-ascii?Q?ynVNrh/pgrMMUAIVdS+zAUmRFtFItjhdm1aZ1sZm?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3342a8ed-aa3c-4e1c-8fa1-08db295ccd7b
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 16:04:36.7520
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2RrEvz4/XzScXVRh0YFLZB5Y0oyNSvNieKktfUFF8zC4ANd+M9Vk/Xe/mpWkYNUz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6836
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZBhlL4tqSUi/c3qk@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 08:56:00AM -0700, Nicolin Chen wrote:
-> On Mon, Mar 20, 2023 at 10:03:04AM -0300, Jason Gunthorpe wrote:
-> > On Sat, Mar 11, 2023 at 03:56:50AM -0800, Nicolin Chen wrote:
+On Mon, Mar 20, 2023 at 01:52:47PM +0000, Mark Rutland wrote:
+> On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:
+> > #regzbot introduced: 0c5ffc3d7b15
+> > #regzbot title: CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and slow-stuck reboots
 > > 
-> > > I recall that one difficulty is to pass the vSID from the guest
-> > > down to the host kernel driver and to link with the pSID. What I
-> > > did previously for VCMDQ was to set the SID_MATCH register with
-> > > iommu_group_id(group) and set the SID_REPLACE register with the
-> > > pSID. Then hyper will use the iommu_group_id to search for the
-> > > pair of the registers, and to set vSID. Perhaps we should think
-> > > of something smarter.
+> > The upstream changes are being merged into android-mainline repo and at some
+> > point we started to observe kernel panics on reboot or long reboot times.
+> 
+> Where can I find the android-mainline repo, and which specific branch/commit
+> from that repo is being merged in?
+
+I assume that was the android-mainline branch in:
+
+  https://android.googlesource.com/kernel/common/
+
+... and I had a go with commit:
+
+  8338670fd5bdf8d7 ("Merge "Merge 36289a03bcd3 ("Merge tag 'v6.3-p1' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6") into android-mainline" into android-mainline")
+
+... as that was the commit immediately before your local revert:
+
+  a32cec8e3f2253bc ("ANDROID: Revert "cpuidle, dt: Push RCU-idle into driver")
+
+Testing on Juno R2 with defconfig + PROVE_LOCKING=y + DEBUG_LOCKDEP=y, I cannot
+reproduce the reboot issue; everything seems to work just fine.
+
+Can you say which config you're using?
+
+Just to check: are you using a pristine version of that tree, or do you have
+any vendor hooks present? I note that there are special hooks added to the
+cpuidle and PSCI code, and I can imagine those might expect the old behaviour
+w.r.t. RCU and idle, so ruling those out would help.
+
+Thanks,
+Mark.
+
+> 
+> > The merge commit is 1f2d9ffc7a5f Merge tag 'sched-core-2023-02-20' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.
+> > Before, the reboot usually took significantly less than 15 seconds and after merge the reboot time fall in the range of 60-100 seconds.
+> > At some point watchdog-like functionality or softdog start to worry about the system stuck somewhere nd panic the system.
 > > 
-> > We need an ioctl for this, I think. To load a map of vSID to dev_id
-> > into the driver. Kernel will convert dev_id to pSID. Driver will
-> > program the map into HW.
-> 
-> Can we just pass a vSID via the alloc ioctl like this?
-> 
-> -----------------------------------------------------------
-> @@ -429,7 +429,7 @@ struct iommu_hwpt_arm_smmuv3 {
->  #define IOMMU_SMMUV3_FLAG_VMID (1 << 1) /* vmid override */
->         __u64 flags;
->         __u32 s2vmid;
-> -       __u32 __reserved;
-> +       __u32 sid;
->         __u64 s1ctxptr;
->         __u64 s1cdmax;
->         __u64 s1fmt;
-> -----------------------------------------------------------
-> 
-> An alloc is initiated by an SMMU_CMD_CFGI_STE command that has
-> an SID filed anyway.
-
-No, a HWPT is not a device or a SID. a HWPT is an ASID in the ARM
-model.
-
-dev_id is the SID.
-
-The cfgi_ste will carry the vSID which is mapped to a iommufd dev_id.
-
-The kernel has to translate the vSID to the dev_id to the pSID to
-issue an ATC invalidation for the correct entity.
-
-> > SW path will program the map into an xarray
-> 
-> I found a tricky thing about SIDs in the SMMU driver when doing
-> this experiment: the SMMU kernel driver mostly handles devices
-> using struct arm_smmu_master. However, an arm_smmu_master might
-> have a num_streams>1, meaning a device can have multiple SIDs.
-> Though it seems that PCI devices might not be in this scope, a
-> plain xarray might not work for other type of devices in a long
-> run, if there'd be?
-
-You'd replicate each of the vSIDs of the extra SIDs in the xarray.
-
-> > > cache_invalidate_user as void, like we are doing now? An fault
-> > > injection pathway to report CERROR asynchronously is what we've
-> > > been doing though -- even with Eric's previous VFIO solution.
+> > The delay is found to be in device's ->shutdown() methods called from kernel_restart():
+> > void kernel_restart_prepare(char *cmd)
+> > {
+> > 	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
+> > 	system_state = SYSTEM_RESTART;
+> > 	usermodehelper_disable();
+> > 	device_shutdown();	<---- here
+> > }
 > > 
-> > Where is this? How does it look?
+> > The driver in question is ufshcd and its ufshcd_wl_shutdown() shutdown method. It often blocks on scsi_device_quiesce() and upon manual checking it seems that it sleeps on blk_mq_freeze_queue_wait()/wait_event() in blk_freeze_queue():
+> > 
+> > scsi_device_quiesce(struct scsi_device *sdev)
+> > {
+> > 	...
+> > 	blk_mq_freeze_queue(q);
+> > 	...
+> > }
+> > 	||
+> > 	V
+> > void blk_freeze_queue(struct request_queue *q)
+> > {
+> > 	/*
+> > 	 * In the !blk_mq case we are only calling this to kill the
+> > 	 * q_usage_counter, otherwise this increases the freeze depth
+> > 	 * and waits for it to return to zero.  For this reason there is
+> > 	 * no blk_unfreeze_queue(), and blk_freeze_queue() is not
+> > 	 * exported to drivers as the only user for unfreeze is blk_mq.
+> > 	 */
+> > 	blk_freeze_queue_start(q);
+> > 	blk_mq_freeze_queue_wait(q);	<--- sleeps on wait_event() here
+> > }
+> > 
+> > Or in other words:
+> > 
+> > [   34.785050][    C4] sysrq: Show Blocked State
+> > [   34.785132][    C4] task:init            state:D stack:9680  pid:1     ppid:0      flags:0x04000008
+> > [   34.785301][    C4] Call trace:
+> > [   34.785360][    C4]  __switch_to+0x180/0x308
+> > [   34.785452][    C4]  __schedule+0x61c/0x9f0
+> > [   34.785530][    C4]  schedule+0x84/0xf4
+> > [   34.785602][    C4]  blk_mq_freeze_queue_wait+0x78/0xbc
+> > [   34.785707][    C4]  blk_freeze_queue+0x74/0x8c
+> > [   34.785850][    C4]  blk_mq_freeze_queue+0x18/0x2c
+> > [   34.786033][    C4]  scsi_device_quiesce+0x54/0xec
+> > [   34.786216][    C4]  ufshcd_wl_shutdown+0x98/0xc0
+> > [   34.786396][    C4]  device_shutdown+0x1a8/0x264
+> > [   34.786572][    C4]  kernel_restart+0x48/0x11c
+> > [   34.786742][    C4]  __arm64_sys_reboot+0x1a8/0x27c
+> > [   34.786927][    C4]  invoke_syscall+0x60/0x130
+> > [   34.787096][    C4]  el0_svc_common+0xbc/0x100
+> > [   34.787266][    C4]  do_el0_svc+0x38/0xc4
+> > [   34.787420][    C4]  el0_svc+0x34/0xc4
+> > [   34.787563][    C4]  el0t_64_sync_handler+0x8c/0xfc
+> > [   34.787749][    C4]  el0t_64_sync+0x1a4/0x1a8
+> > 
+> > 
+> > However, bisect pointed to 0c5ffc3d7b15 cpuidle, dt: Push RCU-idle into driver
+> > 
+> > ->BAD 924aed1646bf cpuidle, cpu_pm: Remove RCU fiddling from cpu_pm_{enter,exit}()
+> > ->BAD a01353cf1896 cpuidle: Fix ct_idle_*() usage
+> > ->BAD (doesn't compile, needs one missing header file) 0c5ffc3d7b15 cpuidle, dt: Push RCU-idle into driver
+> > ->good c3d42418dca5 cpuidle, OMAP4: Push RCU-idle into driver
+> > 
+> > Looks like adding CPUIDLE_FLAG_RCU_IDLE flag to idle driver caused this behaviour.
+> > The minimal change that is required for this system to avoid the regression
+> > would be one liner that removes the flag (below).
+> > 
+> > But if it is a real regression, then other idle drivers if used will likely
+> > cause this regression too withe same ufshcd driver. There is also a suspicion
+> > that CPUIDLE_FLAG_RCU_IDLE just revealed or uncovered some other problem.
+> > 
+> > Any thoughts on this? Some missing __cpuidle or noinstr annotations?
 > 
-> That's postponed with the PRI support, right? My use case does
-> not need PRI actually, but a fault injection pathway to guests.
-> This pathway should be able to take care of any CERROR (detected
-> by a host interrupt) or something funky in cache_invalidate_user
-> requests itself?
-
-I would expect that if invalidation can fail that we have a way to
-signal that failure back to the guest.
-
-Jason
+> As Peter has suggested in another reply, this might not be an *upstream*
+> regression, but rather an interaction with those out-of-tree patches. If you
+> can provide a pointer to the branch above that, it'll make it much easier to
+> figure out what's going on.
+> 
+> The code in mainline is unfortunately convoluted, but it doesn't look to be
+> obviously wrong.
+> 
+> FWIW, I've just tried v6.3-rc3 on Juno R2 in a few configurations (ACPI, DT,
+> with PROVE_LOCKING=y and DEBUG_LOCKDEP=y, with PSCI_CHECKER=y) and I'm not
+> seeing similar issues. So either I'm not tickling the same code path, or
+> something else is involved.
+> 
+> Thanks,
+> Mark.
