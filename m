@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777D66C1A15
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E9A6C1A17
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjCTPp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S230138AbjCTPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbjCTPpk (ORCPT
+        with ESMTP id S231831AbjCTPpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:45:40 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67FB37B6F;
-        Mon, 20 Mar 2023 08:36:03 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id y4so48444156edo.2;
-        Mon, 20 Mar 2023 08:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1679326562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L7O9sQEBEyADAKShtHU/SV4p9FNZJbLKQq8Lw4CGcFY=;
-        b=BE6GpoyPw/AtySquV40eHJgpL6SWYMenmYeYMtclwKiXWHVXC9JA+1/Gxrb3tRXE2e
-         mNLG6v+SbrTxH0SjFNiidBlc1dG2gIEVMRLo/QATdLrNyk2/m2UtzyEEJ2aO1mSnLiEK
-         xlqlAs6KgNI6qc2pV8iZjzUCSmjDp5ebWTXKQh800VGtbci9onYhEVblyftUBDkPDWnh
-         ntskMDf5QBsqXI3wfTi/2cdsoO2xnjuQyUHy4N4Qrgv2ZXCo3tnEBiQOwNVeAEYzIAk1
-         7tlXARNcqsM/VOOFigg4VX+5tQVJOS0eWYlyerqoWLNXzWJCy+qbt7KPu4ut4NNevIs+
-         QN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L7O9sQEBEyADAKShtHU/SV4p9FNZJbLKQq8Lw4CGcFY=;
-        b=nz+GZvCS64Ifgc0P77dAct0j4uFOSDITKN8qmq9BZGEi4T7u0wBPfEoF/1nuSlcjzr
-         TE1bL3Mo8RQY5b6W/MDq2qHqVjc83fD2+Ph+LLhlp6Nem7+YY8WWe8nKeOLSWDw9Reyj
-         xC3flT5x91gxbMDa9QT8DBhnfZYHeJqxOvxrLyppqvzAMPukLNalVt9KkmPwcbySC9fp
-         CweE/ln1mAkNkXTs3ZCOW6Dk1N+9BRFqffj2KP/TzaDcKZgGMPlN6IyyYIVYYdldK1du
-         WdE1WCziM2c54O9dgk6jWixibFgSn7eEj1UMsda6CE9FlBvj7GZKNh15Y9zGNBj6B3In
-         zoQw==
-X-Gm-Message-State: AO0yUKU1wtgHgorqJs1eK8OwiwzoVEvCcwT/JVUe3lGwByTZo6zElDYI
-        O1XvbbMOknYB2w0r9WJ68wh/oT0Id4Qi9Efxrm0=
-X-Google-Smtp-Source: AK7set+uH28cMFUpa6epWEpBR3ODSq1DYQPiF68MjOnhPNWsv1RcqqFuNC7TRJTOxtvfIB6B1/dwSy8yOuTgBc4MgO4=
-X-Received: by 2002:a17:906:3e1a:b0:930:90ce:a1a6 with SMTP id
- k26-20020a1709063e1a00b0093090cea1a6mr3861875eji.6.1679326561903; Mon, 20 Mar
- 2023 08:36:01 -0700 (PDT)
+        Mon, 20 Mar 2023 11:45:46 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420873A851;
+        Mon, 20 Mar 2023 08:36:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679326587; x=1710862587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q+Aqrp+jsVZRrM1TwtSk95kdu9HXUBXl8cfQitPnQCE=;
+  b=GrGyhL8vpjhGdc+8L9K1bfXq3V1agJKosYJjQmP3x91WHJq8Ypl5L94W
+   YPRYxJcvlVpleptLBGFpcLZhiZksVsVD/TCC2F9IuA6l6ZDTVtOh6+v5l
+   wbsJs4ciuOtooWwIPUoesA+cjFqVv1Qz0wyoLjtuiVsZNkrk01ziHz/4R
+   2i682wwrDFJrJpOPzq2lMRda2XZdVjBz/CWIOrymcH6qBzjpr9nHB124t
+   vIMw6gr+mjosXBVyD4t238JJY8lOO6Cdfl7jQ67dJBtqCvL3DB28e+ROc
+   W+Y/ub+78cwnCrnrH0GdYtk/W7hQtbGFxPLVOG8J5DrjvRrGLH1mMCkI/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="318344314"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="318344314"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:36:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="745433753"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="745433753"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Mar 2023 08:36:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1peHYY-006Kdx-0k;
+        Mon, 20 Mar 2023 17:36:18 +0200
+Date:   Mon, 20 Mar 2023 17:36:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-iio@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] counter: 104-quad-8: Utilize helper functions to
+ handle PR, FLAG and PSC
+Message-ID: <ZBh9cUwvV+hi5We8@smile.fi.intel.com>
+References: <cover.1679149542.git.william.gray@linaro.org>
+ <71496f9295e68388ce07f3051bf5882177be83c5.1679149543.git.william.gray@linaro.org>
+ <ZBhRb+v/8+vSwjz6@smile.fi.intel.com>
+ <ZBh8O5oOL0TB9wzT@fedora>
 MIME-Version: 1.0
-References: <20230320113445.17260-1-yu.tu@amlogic.com>
-In-Reply-To: <20230320113445.17260-1-yu.tu@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 20 Mar 2023 16:35:50 +0100
-Message-ID: <CAFBinCAE-ihq9oeXc=GqUEHVKUYM+n_e+2_5+gDMTGQcEEhRtg@mail.gmail.com>
-Subject: Re: [PATCH V2] clk: meson: vid-pll-div: added meson_vid_pll_div_ops support
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, kelvin.zhang@amlogic.com,
-        qi.duan@amlogic.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBh8O5oOL0TB9wzT@fedora>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yu Tu,
+On Mon, Mar 20, 2023 at 11:31:07AM -0400, William Breathitt Gray wrote:
+> On Mon, Mar 20, 2023 at 02:28:31PM +0200, Andy Shevchenko wrote:
+> > On Sat, Mar 18, 2023 at 10:59:51AM -0400, William Breathitt Gray wrote:
+> > > The Preset Register (PR), Flag Register (FLAG), and Filter Clock
+> > > Prescaler (PSC) have common usage patterns. Wrap up such usage into
+> > > dedicated functions to improve code clarity.
 
-On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Yu Tu <yu.tu@amlogic.com> wrote:
->
-> Since the previous code only provides "ro_ops" for the vid_pll_div
-> clock. In fact, the clock can be set. So add "ops" that can set the
-> clock, especially for later chips like S4 SOC and so on.
->
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
-please describe the changes you did compared to the previous version(s)
+...
 
-[...]
-> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vid-pll-=
-div.h
-> index c0128e33ccf9..bbccab340910 100644
-> --- a/drivers/clk/meson/vid-pll-div.h
-> +++ b/drivers/clk/meson/vid-pll-div.h
-> @@ -10,11 +10,14 @@
->  #include <linux/clk-provider.h>
->  #include "parm.h"
->
-> +#define VID_PLL_DIV_TABLE_SIZE         14
-In v1 you used ARRAY_SIZE(vid_pll_div_table) wherever this new macro
-is used instead.
-I think using ARRAY_SIZE is the better approach because it means the
-references will update automatically if an entry is added/removed from
-vid_pll_div_table
+> > > +static void quad8_preset_register_set(struct quad8 *const priv, const size_t id,
+> > > +				      const unsigned long preset)
+> > > +{
+> > > +	struct channel_reg __iomem *const chan = priv->reg->channel + id;
+> > > +	int i;
+> > > +
+> > > +	/* Reset Byte Pointer */
+> > > +	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
+> > > +
+> > > +	/* Set Preset Register */
+> > > +	for (i = 0; i < 3; i++)
+> > > +		iowrite8(preset >> (8 * i), &chan->data);
+> > > +}
+> > 
+> > May we add generic __iowrite8_copy() / __ioread8_copy() instead?
+> > 
+> > It seems that even current __ioread32_copy() and __iowrite32_copy() has to
+> > be amended to support IO.
 
-Also I think there's a different understanding about what Jerome
-previously wrote:
-> It would be nice to actually describe how this vid pll work so we can
-> stop using precompute "magic" values and actually use the IP to its full
-> capacity.
-From what I understand is that you interpreted this as "let's change
-ARRAY_SIZE(vid_pll_div_table) to a new macro called
-VID_PLL_DIV_TABLE_SIZE".
-But I think what Jerome meant is: "let's get rid of vid_pll_div_table
-and implement how to actually calculate the clock rate - without
-hard-coding 14 possible clock settings in vid_pll_div_table". Look at
-clk-mpll.c and/or clk-pll.c which allow calculating arbitrary rates
-without any hard-coded tables.
+> Sure, I would use __iowrite8_copy() / __ioread8_copy() for these
+> situations if it were available.
+
+If needed, you may always introduce ones.
+
+> Is something equivalent available for the regmap API? I'm planning to
+> migrate this driver to the regmap API soon after this patch series is
+> merged, so the *_copy() calls would need to migrated as well.
+
+Yes. It's regmap bulk operations.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Best regards,
-Martin
