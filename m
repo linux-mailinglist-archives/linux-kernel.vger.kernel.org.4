@@ -2,299 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC9A6C1403
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0278F6C1407
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjCTNv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S231295AbjCTNw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbjCTNvw (ORCPT
+        with ESMTP id S229849AbjCTNw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:51:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E5320073
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679320257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3cXvDtzKrFJ8bnHtmDTEg1nHL2YCUCh/QeXr/0MY3ok=;
-        b=PN3uJdmRrEkCbNBJvdEELfyh/yrQdHC7Pt2LeK2n99eFFxEVFNdtavbMsIeI7oCJZ9adj7
-        ou1R9tkuo0FhVKwHBuD3m24yLOBIuOawaHX3AONZE9zLcgFXifg+kYewG751YEujrYX5yt
-        ZLHP3n821b58jyDD2u4Vb1rUXs+H5Ug=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-20-Ch45FiKWOjeB8xwq_q5bCA-1; Mon, 20 Mar 2023 09:50:56 -0400
-X-MC-Unique: Ch45FiKWOjeB8xwq_q5bCA-1
-Received: by mail-ed1-f71.google.com with SMTP id en6-20020a056402528600b004fa01232e6aso17631687edb.16
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:50:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679320255;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3cXvDtzKrFJ8bnHtmDTEg1nHL2YCUCh/QeXr/0MY3ok=;
-        b=FcrFhNLiucb5mv2wKhbY8WWWG8H6CzqFfqfl7+aJh9NCOq/6TVg5YgDppbXL17ubEB
-         qy/tdAyrl3RLP8YC1jng+hrezYi5AUBg96eW7Ho9vGSfRl1uytpxaT8OdsDwtxzbtPgp
-         EU8hMRK6QDYtBrkt4gHO7k2daGgaOqyyAkidZEw7IhB7x8CeQ5ljWFkoKXXtRsiARsS+
-         6+QrLrDa+oKo+JIwOfora1c+zLz8QRQdS7PUMM85pMBgQcI7db6YnKMO+Y8n0Aq5lOBn
-         f2mZvGsnG3P5LwgExY/gyxc8QVdO5ejMgexVilhd4EyHb+b7U4kHNm/pcRRMGlnQ4crg
-         2nMQ==
-X-Gm-Message-State: AO0yUKU1wXqOIPHDiv+O/wOw2ISQTNAL2bTb+IFAqvJN4naTQ1WHcv1O
-        SVUrK4CPKc/d1OPyBX3V7lNTDz0GNMz9l3XoZyLF+lE8YDSpy6mWwCHtvMDZQ7CXM+0M5zUrLlT
-        4R1oJD9n9Axvir/jE0OMs1DAw
-X-Received: by 2002:a17:906:5e4e:b0:931:32f5:1f31 with SMTP id b14-20020a1709065e4e00b0093132f51f31mr9457767eju.9.1679320255267;
-        Mon, 20 Mar 2023 06:50:55 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/oy/Pxy0ceMKMy3L+hJsQAwarTkauZ06l7nmkHjrGkuQJdj8a31m4++wgBT8aegPGIT0Gx0w==
-X-Received: by 2002:a17:906:5e4e:b0:931:32f5:1f31 with SMTP id b14-20020a1709065e4e00b0093132f51f31mr9457744eju.9.1679320254934;
-        Mon, 20 Mar 2023 06:50:54 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id i19-20020a170906251300b009312cc428e4sm4419360ejb.165.2023.03.20.06.50.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 06:50:54 -0700 (PDT)
-Message-ID: <953fca38-ea86-21db-11f3-b8c8a207f910@redhat.com>
-Date:   Mon, 20 Mar 2023 14:50:53 +0100
+        Mon, 20 Mar 2023 09:52:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 738F3768B;
+        Mon, 20 Mar 2023 06:52:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9FD5FEC;
+        Mon, 20 Mar 2023 06:53:38 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED1F43F71E;
+        Mon, 20 Mar 2023 06:52:52 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 13:52:47 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexey Klimov <alexey.klimov@linaro.org>
+Cc:     peterz@infradead.org, draszik@google.com, peter.griffin@linaro.org,
+        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
+        tony@atomide.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        alim.akhtar@samsung.com, regressions@lists.linux.dev,
+        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com
+Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
+ and slow-stuck reboots
+Message-ID: <ZBhlL4tqSUi/c3qk@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230314230004.961993-1-alexey.klimov@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] platform/x86/intel/vsec: Explicitly enable capabilities
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "David E. Box" <david.e.box@linux.intel.com>
-Cc:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
-        markgross@kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-References: <20230316224628.2855884-1-david.e.box@linux.intel.com>
- <CAHp75Vd6ee_uqPLHiOa8DX4huf7bB0CmWf4yRPN=0TQw_5JvgA@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75Vd6ee_uqPLHiOa8DX4huf7bB0CmWf4yRPN=0TQw_5JvgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314230004.961993-1-alexey.klimov@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 3/17/23 13:58, Andy Shevchenko wrote:
-> On Fri, Mar 17, 2023 at 12:46 AM David E. Box
-> <david.e.box@linux.intel.com> wrote:
->>
->> Discovered Intel VSEC/DVSEC capabilities are enabled by default and only
->> get disabled by quirk. Instead, remove such quirks and only enable support
->> for capabilities that have been explicitly added to a new capabilities
->> field. While here, also reorder the device info structures alphabetically.
+On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:
+> #regzbot introduced: 0c5ffc3d7b15
+> #regzbot title: CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and slow-stuck reboots
 > 
-> This looks better indeed.
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> The upstream changes are being merged into android-mainline repo and at some
+> point we started to observe kernel panics on reboot or long reboot times.
 
-Thank you both for the patch and review, I've applied this patch
-to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Where can I find the android-mainline repo, and which specific branch/commit
+from that repo is being merged in?
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
+> The merge commit is 1f2d9ffc7a5f Merge tag 'sched-core-2023-02-20' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.
+> Before, the reboot usually took significantly less than 15 seconds and after merge the reboot time fall in the range of 60-100 seconds.
+> At some point watchdog-like functionality or softdog start to worry about the system stuck somewhere nd panic the system.
 > 
->> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
->> ---
->>  drivers/platform/x86/intel/vsec.c | 69 ++++++++++++++-----------------
->>  drivers/platform/x86/intel/vsec.h |  9 +++-
->>  2 files changed, 38 insertions(+), 40 deletions(-)
->>
->> diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
->> index 13decf36c6de..01b1f6480e5c 100644
->> --- a/drivers/platform/x86/intel/vsec.c
->> +++ b/drivers/platform/x86/intel/vsec.c
->> @@ -67,14 +67,6 @@ enum intel_vsec_id {
->>         VSEC_ID_TPMI            = 66,
->>  };
->>
->> -static enum intel_vsec_id intel_vsec_allow_list[] = {
->> -       VSEC_ID_TELEMETRY,
->> -       VSEC_ID_WATCHER,
->> -       VSEC_ID_CRASHLOG,
->> -       VSEC_ID_SDSI,
->> -       VSEC_ID_TPMI,
->> -};
->> -
->>  static const char *intel_vsec_name(enum intel_vsec_id id)
->>  {
->>         switch (id) {
->> @@ -98,26 +90,19 @@ static const char *intel_vsec_name(enum intel_vsec_id id)
->>         }
->>  }
->>
->> -static bool intel_vsec_allowed(u16 id)
->> -{
->> -       int i;
->> -
->> -       for (i = 0; i < ARRAY_SIZE(intel_vsec_allow_list); i++)
->> -               if (intel_vsec_allow_list[i] == id)
->> -                       return true;
->> -
->> -       return false;
->> -}
->> -
->> -static bool intel_vsec_disabled(u16 id, unsigned long quirks)
->> +static bool intel_vsec_supported(u16 id, unsigned long caps)
->>  {
->>         switch (id) {
->> +       case VSEC_ID_TELEMETRY:
->> +               return !!(caps & VSEC_CAP_TELEMETRY);
->>         case VSEC_ID_WATCHER:
->> -               return !!(quirks & VSEC_QUIRK_NO_WATCHER);
->> -
->> +               return !!(caps & VSEC_CAP_WATCHER);
->>         case VSEC_ID_CRASHLOG:
->> -               return !!(quirks & VSEC_QUIRK_NO_CRASHLOG);
->> -
->> +               return !!(caps & VSEC_CAP_CRASHLOG);
->> +       case VSEC_ID_SDSI:
->> +               return !!(caps & VSEC_CAP_SDSI);
->> +       case VSEC_ID_TPMI:
->> +               return !!(caps & VSEC_CAP_TPMI);
->>         default:
->>                 return false;
->>         }
->> @@ -205,7 +190,7 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
->>         unsigned long quirks = info->quirks;
->>         int i;
->>
->> -       if (!intel_vsec_allowed(header->id) || intel_vsec_disabled(header->id, quirks))
->> +       if (!intel_vsec_supported(header->id, info->caps))
->>                 return -EINVAL;
->>
->>         if (!header->num_entries) {
->> @@ -260,14 +245,14 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
->>  static bool intel_vsec_walk_header(struct pci_dev *pdev,
->>                                    struct intel_vsec_platform_info *info)
->>  {
->> -       struct intel_vsec_header **header = info->capabilities;
->> +       struct intel_vsec_header **header = info->headers;
->>         bool have_devices = false;
->>         int ret;
->>
->>         for ( ; *header; header++) {
->>                 ret = intel_vsec_add_dev(pdev, *header, info);
->>                 if (ret)
->> -                       dev_info(&pdev->dev, "Could not add device for DVSEC id %d\n",
->> +                       dev_info(&pdev->dev, "Could not add device for VSEC id %d\n",
->>                                  (*header)->id);
->>                 else
->>                         have_devices = true;
->> @@ -402,14 +387,8 @@ static int intel_vsec_pci_probe(struct pci_dev *pdev, const struct pci_device_id
->>         return 0;
->>  }
->>
->> -/* TGL info */
->> -static const struct intel_vsec_platform_info tgl_info = {
->> -       .quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG |
->> -                 VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
->> -};
->> -
->>  /* DG1 info */
->> -static struct intel_vsec_header dg1_telemetry = {
->> +static struct intel_vsec_header dg1_header = {
->>         .length = 0x10,
->>         .id = 2,
->>         .num_entries = 1,
->> @@ -418,19 +397,31 @@ static struct intel_vsec_header dg1_telemetry = {
->>         .offset = 0x466000,
->>  };
->>
->> -static struct intel_vsec_header *dg1_capabilities[] = {
->> -       &dg1_telemetry,
->> +static struct intel_vsec_header *dg1_headers[] = {
->> +       &dg1_header,
->>         NULL
->>  };
->>
->>  static const struct intel_vsec_platform_info dg1_info = {
->> -       .capabilities = dg1_capabilities,
->> +       .caps = VSEC_CAP_TELEMETRY,
->> +       .headers = dg1_headers,
->>         .quirks = VSEC_QUIRK_NO_DVSEC | VSEC_QUIRK_EARLY_HW,
->>  };
->>
->>  /* MTL info */
->>  static const struct intel_vsec_platform_info mtl_info = {
->> -       .quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG,
->> +       .caps = VSEC_CAP_TELEMETRY,
->> +};
->> +
->> +/* OOBMSM info */
->> +static const struct intel_vsec_platform_info oobmsm_info = {
->> +       .caps = VSEC_CAP_TELEMETRY | VSEC_CAP_SDSI | VSEC_CAP_TPMI,
->> +};
->> +
->> +/* TGL info */
->> +static const struct intel_vsec_platform_info tgl_info = {
->> +       .caps = VSEC_CAP_TELEMETRY,
->> +       .quirks = VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
->>  };
->>
->>  #define PCI_DEVICE_ID_INTEL_VSEC_ADL           0x467d
->> @@ -445,7 +436,7 @@ static const struct pci_device_id intel_vsec_pci_ids[] = {
->>         { PCI_DEVICE_DATA(INTEL, VSEC_DG1, &dg1_info) },
->>         { PCI_DEVICE_DATA(INTEL, VSEC_MTL_M, &mtl_info) },
->>         { PCI_DEVICE_DATA(INTEL, VSEC_MTL_S, &mtl_info) },
->> -       { PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &(struct intel_vsec_platform_info) {}) },
->> +       { PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &oobmsm_info) },
->>         { PCI_DEVICE_DATA(INTEL, VSEC_RPL, &tgl_info) },
->>         { PCI_DEVICE_DATA(INTEL, VSEC_TGL, &tgl_info) },
->>         { }
->> diff --git a/drivers/platform/x86/intel/vsec.h b/drivers/platform/x86/intel/vsec.h
->> index ae8fe92c5595..0fd042c171ba 100644
->> --- a/drivers/platform/x86/intel/vsec.h
->> +++ b/drivers/platform/x86/intel/vsec.h
->> @@ -5,6 +5,12 @@
->>  #include <linux/auxiliary_bus.h>
->>  #include <linux/bits.h>
->>
->> +#define VSEC_CAP_TELEMETRY     BIT(0)
->> +#define VSEC_CAP_WATCHER       BIT(1)
->> +#define VSEC_CAP_CRASHLOG      BIT(2)
->> +#define VSEC_CAP_SDSI          BIT(3)
->> +#define VSEC_CAP_TPMI          BIT(4)
->> +
->>  struct pci_dev;
->>  struct resource;
->>
->> @@ -27,7 +33,8 @@ enum intel_vsec_quirks {
->>
->>  /* Platform specific data */
->>  struct intel_vsec_platform_info {
->> -       struct intel_vsec_header **capabilities;
->> +       struct intel_vsec_header **headers;
->> +       unsigned long caps;
->>         unsigned long quirks;
->>  };
->>
->>
->> base-commit: 02c464b73645404654359ad21f368a13735e2850
->> --
->> 2.34.1
->>
+> The delay is found to be in device's ->shutdown() methods called from kernel_restart():
+> void kernel_restart_prepare(char *cmd)
+> {
+> 	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
+> 	system_state = SYSTEM_RESTART;
+> 	usermodehelper_disable();
+> 	device_shutdown();	<---- here
+> }
+> 
+> The driver in question is ufshcd and its ufshcd_wl_shutdown() shutdown method. It often blocks on scsi_device_quiesce() and upon manual checking it seems that it sleeps on blk_mq_freeze_queue_wait()/wait_event() in blk_freeze_queue():
+> 
+> scsi_device_quiesce(struct scsi_device *sdev)
+> {
+> 	...
+> 	blk_mq_freeze_queue(q);
+> 	...
+> }
+> 	||
+> 	V
+> void blk_freeze_queue(struct request_queue *q)
+> {
+> 	/*
+> 	 * In the !blk_mq case we are only calling this to kill the
+> 	 * q_usage_counter, otherwise this increases the freeze depth
+> 	 * and waits for it to return to zero.  For this reason there is
+> 	 * no blk_unfreeze_queue(), and blk_freeze_queue() is not
+> 	 * exported to drivers as the only user for unfreeze is blk_mq.
+> 	 */
+> 	blk_freeze_queue_start(q);
+> 	blk_mq_freeze_queue_wait(q);	<--- sleeps on wait_event() here
+> }
+> 
+> Or in other words:
+> 
+> [   34.785050][    C4] sysrq: Show Blocked State
+> [   34.785132][    C4] task:init            state:D stack:9680  pid:1     ppid:0      flags:0x04000008
+> [   34.785301][    C4] Call trace:
+> [   34.785360][    C4]  __switch_to+0x180/0x308
+> [   34.785452][    C4]  __schedule+0x61c/0x9f0
+> [   34.785530][    C4]  schedule+0x84/0xf4
+> [   34.785602][    C4]  blk_mq_freeze_queue_wait+0x78/0xbc
+> [   34.785707][    C4]  blk_freeze_queue+0x74/0x8c
+> [   34.785850][    C4]  blk_mq_freeze_queue+0x18/0x2c
+> [   34.786033][    C4]  scsi_device_quiesce+0x54/0xec
+> [   34.786216][    C4]  ufshcd_wl_shutdown+0x98/0xc0
+> [   34.786396][    C4]  device_shutdown+0x1a8/0x264
+> [   34.786572][    C4]  kernel_restart+0x48/0x11c
+> [   34.786742][    C4]  __arm64_sys_reboot+0x1a8/0x27c
+> [   34.786927][    C4]  invoke_syscall+0x60/0x130
+> [   34.787096][    C4]  el0_svc_common+0xbc/0x100
+> [   34.787266][    C4]  do_el0_svc+0x38/0xc4
+> [   34.787420][    C4]  el0_svc+0x34/0xc4
+> [   34.787563][    C4]  el0t_64_sync_handler+0x8c/0xfc
+> [   34.787749][    C4]  el0t_64_sync+0x1a4/0x1a8
 > 
 > 
+> However, bisect pointed to 0c5ffc3d7b15 cpuidle, dt: Push RCU-idle into driver
+> 
+> ->BAD 924aed1646bf cpuidle, cpu_pm: Remove RCU fiddling from cpu_pm_{enter,exit}()
+> ->BAD a01353cf1896 cpuidle: Fix ct_idle_*() usage
+> ->BAD (doesn't compile, needs one missing header file) 0c5ffc3d7b15 cpuidle, dt: Push RCU-idle into driver
+> ->good c3d42418dca5 cpuidle, OMAP4: Push RCU-idle into driver
+> 
+> Looks like adding CPUIDLE_FLAG_RCU_IDLE flag to idle driver caused this behaviour.
+> The minimal change that is required for this system to avoid the regression
+> would be one liner that removes the flag (below).
+> 
+> But if it is a real regression, then other idle drivers if used will likely
+> cause this regression too withe same ufshcd driver. There is also a suspicion
+> that CPUIDLE_FLAG_RCU_IDLE just revealed or uncovered some other problem.
+> 
+> Any thoughts on this? Some missing __cpuidle or noinstr annotations?
 
+As Peter has suggested in another reply, this might not be an *upstream*
+regression, but rather an interaction with those out-of-tree patches. If you
+can provide a pointer to the branch above that, it'll make it much easier to
+figure out what's going on.
+
+The code in mainline is unfortunately convoluted, but it doesn't look to be
+obviously wrong.
+
+FWIW, I've just tried v6.3-rc3 on Juno R2 in a few configurations (ACPI, DT,
+with PROVE_LOCKING=y and DEBUG_LOCKDEP=y, with PSCI_CHECKER=y) and I'm not
+seeing similar issues. So either I'm not tickling the same code path, or
+something else is involved.
+
+Thanks,
+Mark.
