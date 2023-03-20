@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5746C24AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 778B66C24AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCTWUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S229950AbjCTWUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCTWUQ (ORCPT
+        with ESMTP id S229940AbjCTWUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:20:16 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB3B1D937
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:18:31 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso17987509pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:18:31 -0700 (PDT)
+        Mon, 20 Mar 2023 18:20:20 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73184FF0D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:18:36 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id y35so6359575pgl.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679350710;
+        d=linaro.org; s=google; t=1679350712;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mPLmB3dzpBczm3qRE9s2V0X3S8uJO7/jVxWe+sb20rE=;
-        b=VZXByqS8gHum2nUGLIN3iOP/iDUJ34c9r8a9Mm2c8bP2DU0bJMcb4l7vWherdXtZqv
-         0Cx81BbLUunRRC50uVwkKjqcMCSvjwdPd+RQS3f5uNZQyFnwIV0zlT6f+M6/wqDAK4KE
-         ZMq7MpX3CmWy/wW+7GZX3KR9NR2L9AG2XPpLcQ+0wfTLDchs92oD9mMmkumxD4Ktdzuh
-         qiQRxVpo0tCBPTugl+oMPgO1IqmdhmZK4WpYVQqIEvGtTAyuc8QGoi61qMxwSKJPFKvf
-         pq6iD/fs8VR9NYw6pbSR95vfLcju1ljWtDCYvl6rfd5tSTSxTZwp4pIB0UFbRv+622U8
-         m4+w==
+        bh=lFdP+n8hU6K/nm3EJ5X3exiUwV1teDwsbi7RZq6Ti4k=;
+        b=mKWIQ1ued3KEIaaBhwWod6mpPzfwB+wmMWyZoPsGGBMeDOGU7TYzTm2o3cJ9dnwAv/
+         H9jxCA8OWqVyyYcl7cNSERbaSFiEFFfkCV1+RQoO0RJvzpf5q+5YzEjgMUopmX1iOPzX
+         qAVeRnj6/xRg/tbaW6zpvDe7UqWeBIaOZYNCqw+rCytUeuLzYCPbVGL60OEXvmUNOwZb
+         GY7ePqkHVmh3woTxGbb7effv4zNLlp7OA1fy43QmdhgDI8lhZqZGh+tcUJnCGBg066d9
+         YjDKm+OMB90mEFr0Kyhj55ciUpTOFSbSoclC063Lw4ZNDDP7qRLOH3ZYTuyxGkxtpOhE
+         FGRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679350710;
+        d=1e100.net; s=20210112; t=1679350712;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mPLmB3dzpBczm3qRE9s2V0X3S8uJO7/jVxWe+sb20rE=;
-        b=SFPrIsPF//kiEYZQq1GxdViuVBQghqNt8wksW9Pe7dTZsrgeEM1DdngZDahu7wb7eT
-         rwscNuW/+NIr/abMwj2QVvn/UdQG038dLK8YR0aGG5hMayt0asHzAznMb8Pl4iR/0qDC
-         TeOrEvx5MDZTUk2Q6L0v1svZWh9wENGbow7kbHeeMGA+JT703PGH42FlRCOx253UM78+
-         4rOCRbciQT6IT60/ckoLtEusqY/Q5/3noiaByYRgyOCfuRdB0vUoRB1KZgMrWTdVydMS
-         OWfh9tkQJ/nWeVvte1PuFMEh5so4/pO3p6Lrjb5bb5kPEcaZJYUndxXWbFGYlYHxJDl5
-         eUpw==
-X-Gm-Message-State: AO0yUKV49/s+zmWFQvdaFX+9m3mV5miPuhYG8Ma9O1an9z5oSaMlE97p
-        jn/skHjC91kBMz70514ufp2vvA==
-X-Google-Smtp-Source: AK7set92de8kBYqLx5A0esQubvPjq2QNtxaJtiRr9ydQgC4/m0jxePjCzHFFNlbQqB9Lw07ypdHMsg==
-X-Received: by 2002:a05:6a20:4f1f:b0:c2:fb92:3029 with SMTP id gi31-20020a056a204f1f00b000c2fb923029mr35523pzb.33.1679350710546;
-        Mon, 20 Mar 2023 15:18:30 -0700 (PDT)
+        bh=lFdP+n8hU6K/nm3EJ5X3exiUwV1teDwsbi7RZq6Ti4k=;
+        b=gyF2v+Nk5c44ZRbFaNUAOkfk7yvJlrIsQjEK3GaH7/JNWL/n23cUgD7MTHBMIln0Rp
+         aEmVEhF/qjmh0uSFE+SnG7WUcFTgmtuEHktepJXc4+vIW3fbFjqYkIIoA+FsmD79Wqc7
+         2CZRly6446+z3+sBfDjmFYJHzFiDwFQ7T1mbiJnMBzm8S/UnM5f/MnK/tcrm3S+kgkNA
+         iSlYuk4OeaEipgJokP+ADjECo9WF3TC0B/sEY6KhnNbseFL0AKnQ/6snvqzmOGDw5K/G
+         Xtj9/2vfOEB4YSDr6nBnU56NnnmG53rTfIQnvQiIrW2PaAMmHARsNlkCF3HyleLFKzSs
+         O1hA==
+X-Gm-Message-State: AO0yUKWAX3bhMALvGkk+TxLh+c4EOPX2KCeQHhWeozR3EWWLcDmcHC2b
+        8lbmU00VomsNNS4wRVHfwRW93A==
+X-Google-Smtp-Source: AK7set/MHng4ARlnTcxmx0ng1ZTOghx6afNW4lDFSbwHaS2XdaezdegyKPn0y+K3PxUIqlhmhyc4+Q==
+X-Received: by 2002:aa7:9539:0:b0:627:e69c:8488 with SMTP id c25-20020aa79539000000b00627e69c8488mr340538pfp.14.1679350712244;
+        Mon, 20 Mar 2023 15:18:32 -0700 (PDT)
 Received: from p14s.cg.shawcable.net ([2604:3d09:148c:c800:4ab5:5131:bafc:4428])
-        by smtp.gmail.com with ESMTPSA id e15-20020a62aa0f000000b006259e883ee9sm4459196pff.189.2023.03.20.15.18.29
+        by smtp.gmail.com with ESMTPSA id e15-20020a62aa0f000000b006259e883ee9sm4459196pff.189.2023.03.20.15.18.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 15:18:30 -0700 (PDT)
+        Mon, 20 Mar 2023 15:18:31 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     andersson@kernel.org
 Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -58,9 +58,9 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         arnaud.pouliquen@st.com, hongxing.zhu@nxp.com, peng.fan@nxp.com,
         shengjiu.wang@nxp.com, linux-remoteproc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] remoteproc: stm32: Call of_node_put() on iteration error
-Date:   Mon, 20 Mar 2023 16:18:22 -0600
-Message-Id: <20230320221826.2728078-2-mathieu.poirier@linaro.org>
+Subject: [PATCH 2/5] remoteproc: st: Call of_node_put() on iteration error
+Date:   Mon, 20 Mar 2023 16:18:23 -0600
+Message-Id: <20230320221826.2728078-3-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230320221826.2728078-1-mathieu.poirier@linaro.org>
 References: <20230320221826.2728078-1-mathieu.poirier@linaro.org>
@@ -68,7 +68,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,18 +80,18 @@ Function of_phandle_iterator_next() calls of_node_put() on the last
 device_node it iterated over, but when the loop exits prematurely it has
 to be called explicitly.
 
-Fixes: 13140de09cc2 ("remoteproc: stm32: add an ST stm32_rproc driver")
+Fixes: 3df52ed7f269 ("remoteproc: st: add reserved memory support")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/stm32_rproc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/remoteproc/st_remoteproc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 7d782ed9e589..23c1690b8d73 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -223,11 +223,13 @@ static int stm32_rproc_prepare(struct rproc *rproc)
+diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
+index a3268d95a50e..e6bd3c7a950a 100644
+--- a/drivers/remoteproc/st_remoteproc.c
++++ b/drivers/remoteproc/st_remoteproc.c
+@@ -129,6 +129,7 @@ static int st_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
  	while (of_phandle_iterator_next(&it) == 0) {
  		rmem = of_reserved_mem_lookup(it.node);
  		if (!rmem) {
@@ -98,13 +99,7 @@ index 7d782ed9e589..23c1690b8d73 100644
  			dev_err(dev, "unable to acquire memory-region\n");
  			return -EINVAL;
  		}
- 
- 		if (stm32_rproc_pa_to_da(rproc, rmem->base, &da) < 0) {
-+			of_node_put(it.node);
- 			dev_err(dev, "memory region not valid %pa\n",
- 				&rmem->base);
- 			return -EINVAL;
-@@ -254,8 +256,10 @@ static int stm32_rproc_prepare(struct rproc *rproc)
+@@ -150,8 +151,10 @@ static int st_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
  							   it.node->name);
  		}
  
