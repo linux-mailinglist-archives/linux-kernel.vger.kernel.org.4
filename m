@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BEF6C206F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD416C2050
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCTSyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S229617AbjCTSt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjCTSx5 (ORCPT
+        with ESMTP id S230361AbjCTSs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:53:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C9729428;
-        Mon, 20 Mar 2023 11:46:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1107CCE1268;
-        Mon, 20 Mar 2023 18:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF97C433D2;
-        Mon, 20 Mar 2023 18:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679337689;
-        bh=2f37lfeV2uqUCawsoKtMP9QdXPtifZqxFzFW3xEcp8A=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=lWjFQyEDIo8MQTCiFBBVl1jHJQAxQmCPf74aa6CD2aNlUTBxZk29rMePvw8C6mLZc
-         wrLYKoBIJEJBr84jjiWrDCUAOen5B8fxBAYivmL2MrxnYEaa7BLtJ0yNKhlJyJlhJn
-         mwO2PQGUjdAF//4mjd+cijoCJT/NPCkgIT1s085wg/N6CmLzuCuhpmGN9xNZpRS996
-         QgdIbY2voj2IIg2MFiNX4yGIE86800v/tQ4SJLTjcZCL3l3WbgQyAALlno3xrapB+e
-         J9/eA4VdhrKZiarWIOG/mieT8wjMe8N+wVuD6CJPn5AKpxNeO6gSsg5qN2EH05S8Ga
-         B9glULQd/XfTA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org
-Subject: Re: [PATCH 1/3] dt-bindings: wireless: add ath11k pcie bindings
-References: <20230320104658.22186-1-johan+linaro@kernel.org>
-        <20230320104658.22186-2-johan+linaro@kernel.org>
-        <87ttyfhatn.fsf@kernel.org> <ZBhUo1C08U5mp9zP@hovoldconsulting.com>
-Date:   Mon, 20 Mar 2023 20:41:21 +0200
-In-Reply-To: <ZBhUo1C08U5mp9zP@hovoldconsulting.com> (Johan Hovold's message
-        of "Mon, 20 Mar 2023 13:42:11 +0100")
-Message-ID: <87a607fepa.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 14:48:56 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7543B228
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:41:52 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id o10-20020a17090ac08a00b0023f3196fa6fso4633984pjs.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679337690;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGeXag6D9kuvOFx10JcqNN4G7nzKqx8n4sK14frGlkY=;
+        b=U9P4ktn0YkzcsNkjKO3O3Ey5KGceaGAI7p8ldXV5RZsiQx9D4pGgPcVlI5C5vcEaYi
+         7ZFwggQRCDcnL66/e8kG6/yQPeRqQkJ7tSSaWU6/M4thn/MQl3cr4eFvjv3DTepgVjmP
+         AfGzt3REUcyAZDjcMXz71BUJb0TOBK3sMUTx/VlSYrmtGgsDuO3EggSfIlYDOHw6+pBF
+         BQNiej9HV/+MHQez+BeYly6UZuuNT4NgTYuIvFarBCrpOezD+q6wLcky0yinYb0u9QyT
+         cr6jS7cjEoGgb1PSgJv0kqBU/GkCjFDI0qZz8inr6QOpPMZJnojb6MGHtuSCWIDBXJZK
+         M9vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679337690;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AGeXag6D9kuvOFx10JcqNN4G7nzKqx8n4sK14frGlkY=;
+        b=AuLyqK7ULoocbUliGU7xzB3CsMCTeMBjRgbZs7I0OUWl2SGpdlH3ToWL7lm+bJZtpI
+         a0hnQELiZzoO/UPFfyLWUNaPADmc+ScgvWlsV360Qdvu90/vsZc/QixOZC1NDu+czN33
+         DO5nzow+8T4FU4kAvtvfUQUqOxvVN7qtcMtSwKeTsLgj9BJIncIVZFmf4D8x4TZge3Nr
+         mSXgenia2+FQAPFKFkfb6ljRYTbOxsvYvz/VTtKHjhht3HisT0HTtvJPyAc/EfAbHhUz
+         nIkN8ghnPzr+TK0BXt23I1ljeeIMFwHYy5sbwSZ1TcEZKSV/VTUAnlYzi5/2IlABSunr
+         +r/Q==
+X-Gm-Message-State: AO0yUKWqAinldQjyLbdWvZHzMH53MDNdrhTgAuhBg6g2F3ZNWjT5GOyK
+        2bQ2x5mce5oOIfQKvZzLPD6dhDsDh2k=
+X-Google-Smtp-Source: AK7set/pLysGBEI7iu4qioNRYT41BiTPna9N6cshhvM7P4GCwyT22Eawv1P1/8/vvJ5fs130lwI3yr6ZPlY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:db09:b0:1a0:4be5:ccea with SMTP id
+ m9-20020a170902db0900b001a04be5cceamr6937261plx.9.1679337690302; Mon, 20 Mar
+ 2023 11:41:30 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 11:41:28 -0700
+In-Reply-To: <20230202182809.1929122-10-bgardon@google.com>
+Mime-Version: 1.0
+References: <20230202182809.1929122-1-bgardon@google.com> <20230202182809.1929122-10-bgardon@google.com>
+Message-ID: <ZBio2Cs7UrkkilTc@google.com>
+Subject: Re: [PATCH 09/21] KVM: x86/MMU: Move paging_tmpl.h includes to shadow_mmu.c
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ ath11k list
+First off, I apologize for not giving this feedback in the RFC.  I didn't think
+too hard about the impliciations of moving paging_tmpl.h until I actually looked
+at the code.
 
-Johan Hovold <johan@kernel.org> writes:
+On Thu, Feb 02, 2023, Ben Gardon wrote:
+> Move the integration point for paging_tmpl.h to shadow_mmu.c since
+> paging_tmpl.h is ostensibly part of the Shadow MMU.
 
-> On Mon, Mar 20, 2023 at 02:22:12PM +0200, Kalle Valo wrote:
->> Johan Hovold <johan+linaro@kernel.org> writes:
->> 
->> > Add devicetree bindings for Qualcomm ath11k PCIe devices such as WCN6856
->> > for which the calibration data variant may need to be described.
->> >
->> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->> > ---
->> >  .../bindings/net/wireless/pci17cb,1103.yaml   | 56 +++++++++++++++++++
->> >  1 file changed, 56 insertions(+)
->> >  create mode 100644
->> > Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml
->> 
->> I'm confused (as usual), how does this differ from
->> bindings/net/wireless/qcom,ath11k.yaml? Why we need two .yaml files?
->
-> Almost none of bindings/net/wireless/qcom,ath11k.yaml applies to WCN6856
-> when using PCIe (e.g. as most properties are then discoverable).
->
-> We could try to encode everything in one file, but that would likely
-> just result in a big mess of a schema with conditionals all over.
+Ostensibly indeed.  While a simple majority of paging_tmpl.h is indeed unique to
+the shadow MMU, all of the guest walker code needs to exist independent of the
+shadow MMU.  And that code is signficant both in terms of lines of code, and
+more importantly in terms of understanding its role in KVM at large.
 
-Ah, so the current qcom,ath11k.yaml would be only for ath11k AHB devices
-and this new file is only for ath11k PCI devices? But why still the odd
-name pci17cb,1103.yaml? It's not really descriptive and I'm for sure
-will not remember that pci17cb,1103.yaml is for ath11k :)
+This is essentially the same mess that eventually led the cpu_role vs. root_role
+cleanup, and I think we should figure out a way to give paging_tmpl.h similar
+treatment.  E.g. split paging_tmpl.h itself in some way.
 
-Also it doesn't look good that we have qcom,ath11k-calibration-variant
-documented twice now. I'm no DT expert but isn't there any other way? Is
-it possible to include other files? For example, if we would have three
-files:
+Unfortunately, this is a sticking point for me.  If the code movement were minor
+and/or cleaner in nature (definitely not your fault, simply the reality of the
+code base), I might feel differently.  But as it stands, there is a lot of churn
+to get to an endpoint that has significant flaws.
 
-qcom,ath11k.yaml
-qcom,ath11k-ahb.yaml
-qcom,ath11k-pci.yaml
+So while I love the idea of separating the MMU implementations from the common
+MMU logic, because the guest walker stuff is a lynchpin of sorts, e.g. splitting
+out the guest walker logic could go hand-in-hand with reworking guest_mmu, I don't
+want to take this series as is.
 
-Then have the common properties like ath11k-calibration-variant in the
-first file and ahb/pci files would include that.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Sadly, as much as I'm itching to dive in and do a bit of exploration, I am woefully
+short on bandwidth right now, so all I can do is say no.  Sorry :-(
