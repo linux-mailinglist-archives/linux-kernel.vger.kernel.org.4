@@ -2,114 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35696C121B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91CC6C121D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjCTMnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S231461AbjCTMno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjCTMni (ORCPT
+        with ESMTP id S231443AbjCTMnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:43:38 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2E59776;
-        Mon, 20 Mar 2023 05:43:34 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id x15so1662301pjk.2;
-        Mon, 20 Mar 2023 05:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679316214;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CuPNRur3NtDnFJVCvDkEsVvpqOyVBKyvwyaXnfO9pqQ=;
-        b=QMgf8Le2567Br9ksKL7GWK1o3CI5/d/geLI8q2Tpae+sN4p5dtWy0TU8d154IWd9el
-         k2eHxUtxg18PFCvrZv3gGPh9Yu+3x9+CdOyl/alM0efOpo4jys4fk0iLr6xWv+lvxVSb
-         8LX4tkFuQRp3DNPaY8qW90NokPcLNXzF5uhztu8SmG2W3b3eBEqjNuWo4JSRHPtV6CSL
-         w6bzCX8NhIdahw8f31d9/B8Sonxo7V4u/iijvJ0H26p4dvAIssh4cvlVD+HYYN/tiArX
-         aHbbMJ5/nJFCHZeqY4DBSFtuZdd27bGIAqxaH1dCR1WteITU5JG/oSO0FIfONDsuJGeQ
-         ZI5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679316214;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CuPNRur3NtDnFJVCvDkEsVvpqOyVBKyvwyaXnfO9pqQ=;
-        b=g7YMRlcF91a78Xi+8w+c8lKfDxZs4/3GuUgNkyOKgb4D/KJKaUz3jMwu/+TS4VVkEO
-         jKWjHIyTCGmimqJnLGDaIZrQ3BSzlEJuq5zfZjBxr0VrMElrIjh6FsJnhfaEdBMXLUWH
-         sMo98FEFtfZqoCDYJ2PF/fpUVL9AC6Gz9DjnPMBME2FDR4wkf0PK6LSleSnDq2w4xCCp
-         CotCl1av24ZbIVyo9JFSyxfHTFU4donsDjyruln113RZJy234gqps7U8jHcc5ruQizb/
-         9EofxxZU1p8/qD5e+BJ3l32sAGEAz0pycwg9yoDSQr9h2eEsnZ1OOfXPW5ZtPIA3Wzpv
-         yPPg==
-X-Gm-Message-State: AO0yUKUWfw11uQESVXWgzH1Nm2PKO05Kz9qQ1fHr+lnlan6Bb6afhqvU
-        4RxtQj+ALUa1d6Alfvg+5Z8=
-X-Google-Smtp-Source: AK7set9exICfpZxGY8h+eBzFIKrFFkrk0yOXMxizkoAm5tACLSpbGCmlrUA5F82wFem4X1ugpyK80A==
-X-Received: by 2002:a17:90b:4acf:b0:23d:9a3:f571 with SMTP id mh15-20020a17090b4acf00b0023d09a3f571mr19188670pjb.20.1679316214106;
-        Mon, 20 Mar 2023 05:43:34 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-6.three.co.id. [180.214.232.6])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090a2d8c00b0023440af7aafsm6114484pjd.9.2023.03.20.05.43.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 05:43:33 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7343A1065D0; Mon, 20 Mar 2023 19:43:29 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH] Documentation: maintainer-tip: Rectify link to "Describe your changes" section of submitting-patches.rst
-Date:   Mon, 20 Mar 2023 19:43:27 +0700
-Message-Id: <20230320124327.174881-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 20 Mar 2023 08:43:39 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2051.outbound.protection.outlook.com [40.107.243.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B72119B6;
+        Mon, 20 Mar 2023 05:43:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JyhHSox2FZTnEDoir+4DJOeZO8MuI4thFfRyMgYlpC3Ujqg7ziR4Yyo6EEnGOsC6U1ZTkb5AXho2acKZWS1JMxypYfTiHrrsy319aZV0v0sNcTBewWlg/3phoOvJu3pxLOz2aPgxfqpzrXYb/rKGXxNxHD3jYszQH4OIYVqiZUKKBEiCahSgwCdxGKWgyZvN6LANQ5NXJ8OYQ09Kvhio2YZ+4wS2Ju0HGMDjuinxoNijgYCTtb6P0wu9vXMd9u1mZo9pNJG3WDpvjfjZFxLz6eUR/DctoLKpEmim1ayvceD6yHF+ZsKQq0mV1SvESCZ4Q0QszargfuXTdClpG4JWPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7eMOayg9P1prabRZ+S8SyoQ5m7H8DyngUO6obOrvIJg=;
+ b=iXqCU9tZ6Pt70cHR54M0cIRMr58WxLpltbXMK8216adH+5r9ONzbBX9kLhsG+SxKy/7q4TxUdbJkePC2p/cc8efW/JNPzHlx5fxt2D6/ZFfjMzbayS9Y8bRrstdaR/TG6stvDJy4nwgPngc802Ce9YGUH0ErzOwntXmEmXBhmtj5r/O2djhcJuTkKK57ReNhOWH88YmSDxjfbMFikGHnZl1zVHdsiP140+LyUxuxYLE+iQWh72n/tJuwweis8tD+xLmsPr0ZgS1EppKxX4C1f3p//A4ncWAoTu+L5+CoWLg1Vxbza3ucTjyUs9YL9kqcPIg64GlUOI2vlLVE5Eb76Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7eMOayg9P1prabRZ+S8SyoQ5m7H8DyngUO6obOrvIJg=;
+ b=TNrDWqI38wKT8Ou395TxvQ2fXkaxoeKH6gUPIjCDv+pOy9pIa8g8oFFiYj8zSBvCuPaibaH3tctz2567lfUQICNzhBb6+z3+Vq+d0KwBVeCaq0VB0HPrAXGX/BMuWSz3M23tY5PniaMtDNbv4Gh3jWOO9/XQUzudn3Je6Je0QZ1U7LC7znRcgfqufkeFDmQIfjDYwlI00SDEbrs4+sg9nrg2mOYK1RE5j8eUNP62CyX0ypkz12qghJlAcjMvvHhNWeXx+Elm/ZE9o0jFfZBVhG/NNx6YImvjCAqTGImiCT9Wf/EEie0XL0Gmsxx2J0ZVEecqVNeLGAob/Hlc+kwVkQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BY5PR12MB4049.namprd12.prod.outlook.com (2603:10b6:a03:201::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 12:43:32 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 12:43:32 +0000
+Date:   Mon, 20 Mar 2023 09:43:30 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
+        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
+        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] iommufd/selftest: Add coverage for
+ IOMMU_DEVICE_GET_HW_INFO ioctl
+Message-ID: <ZBhU8p4RZKVWKKBG@nvidia.com>
+References: <20230309075358.571567-1-yi.l.liu@intel.com>
+ <20230309075358.571567-5-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309075358.571567-5-yi.l.liu@intel.com>
+X-ClientProxiedBy: BL0PR0102CA0012.prod.exchangelabs.com
+ (2603:10b6:207:18::25) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1511; i=bagasdotme@gmail.com; h=from:subject; bh=FAEl/7SkBqFPoHqShwOaCVSmuT0ZoOhqKjAWrvmRTI8=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkSIa8U3zaEsvBwi3b9MjvFo2LWZiqYvyjNcfopsfPiY Xftf6zuKGVhEONikBVTZJmUyNd0epeRyIX2tY4wc1iZQIYwcHEKwETCMhn+qXt+UL5/0Lpl1bbP e0IXNxxJX/GE/ZBJSv8CYQnuBvvjqxj+R3zxWmVvsKvj2htVnsUpqQ83ld7a+WzHCZ65otdnv7V cwQcA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4049:EE_
+X-MS-Office365-Filtering-Correlation-Id: 079d1dd4-9583-4a2a-877d-08db2940b6a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XUgmWTNhXjCSmDDKx0Tk4cpzA03g2OnyIG7SpjIqWhqk9Dz+mDNiGnnJHIaKhCCoxToerLm77hwknKrbBME29+uKkrynv61RCTsl8mLHutCpSVFgPtpbJeC/do/DTZbXWSplZUhrvf6kiagefMNrvzVZE/a42QSMlg8iPuGhmCI8YEtrqt+3QgyX1tfZsdYOh0Z7Jvv+//Q0Ghw6N9WJu0rnlVPruJy6tFJCIR2ZtiC/v93DpZ0mCd5A+vSeDIHuaryr/Kc8ZGtdAy0+r1wt+/Ctad/TsA75daeIKaEeXxJfp6pxnQqxhLrtfZTPalpIc4t9Lo6Ntf+9qFskrGph82w56RBNsJS3jZErTB2raO2A2yaPLeyDItT+eGOcyhyaC22hjselzv4f6LDadxzxTFX4K/rjunqYhMSKaQIQjyOUAR+mK9ijrQU0SAdAp9HkllI6Y+9fuMO9az/OHm5YAGqb/h0BVIsahxdA4Ea4Ad/wlHSbxYrAs7tKbkTYJBpZh7PMWiAEzhC09i76PQomQf6S6tT0nT/UgQnf5e8dbF76GdDQkWbykcFt1AquQvtdxWchnEmaCkJghmoHMS0W+7EY0QwugIEJ2ycEGy6mxTKs3ohBEQpbod3I3Zq05BsnYsRDAntV5VNif+q/xwS/3w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(39850400004)(136003)(396003)(346002)(451199018)(2616005)(6486002)(6512007)(5660300002)(478600001)(186003)(316002)(6506007)(26005)(7416002)(38100700002)(86362001)(2906002)(8936002)(66946007)(41300700001)(4744005)(4326008)(8676002)(6916009)(66476007)(36756003)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?APb2bAYE4bkGc2nRmctk/oAb6zLH5ok5iXRDy/en78TrxB4+M/aKhPXRCcWX?=
+ =?us-ascii?Q?YRIZQLjUlVjxEnmaDU/CYTwyVNUazNbscQOuS2E3ExMEjHzlIy6eobnE8T6l?=
+ =?us-ascii?Q?vYMQym4P5fTGXukLOu1tLXqdHXxtbQY9Eq+SRXndQluBn4blnEol9AXeYzZ9?=
+ =?us-ascii?Q?AC54sby/52EJ4ICgtGtfc8AkKpx3saVMdDj/J06V1c2VvDtvabi2f61GJy7n?=
+ =?us-ascii?Q?TzfMYf/+QxZSM7peobj/2IWXuF+6wgF0t5qTwU+bNKL8LHTe0MuWP+k6dFns?=
+ =?us-ascii?Q?ir/xsMFJQcGQ7Dte9/TrWLnEkoW76Dhxm58Si+xsv2GE+dUI3iayOI1Q4b3G?=
+ =?us-ascii?Q?7lUu7xG4BgIZD59ATOdFX8O9zBvLT/i8Onmp7wcdHK7rZbB8OeqIrrjcf7s1?=
+ =?us-ascii?Q?SKmOTf475PgCvhml/q7mW+QRaj5tgyUmsleDdTK5kznYy3Kf8rjFatOl2/bj?=
+ =?us-ascii?Q?P7dwXEQJTv10vmF/GoP5FAmW/8Q6SF4qk2zY8Tl5njLL9JO+baLe6fEEN5N2?=
+ =?us-ascii?Q?FxFc1JywcrXw7twQSPvoGMPu+YHnnCR12pUG3kmMDFV6UndjyIVXoyVy6T6C?=
+ =?us-ascii?Q?tdikMVCwFdnDkyYnqSSVFMvly3ONO9yAJSF2vmIZXU7gO14stZ7ZCEMZNkhK?=
+ =?us-ascii?Q?Wb181PzpFfJJgGxo+vVUxVn30V6a5q16k6UxD1hUyVghAt95fB+QRPZOYtmA?=
+ =?us-ascii?Q?qOikHP4Bish4OJEuOZB8Wll1tXnfjUiVW7n3d6tRqlFW9ixttBLJz9AUP57d?=
+ =?us-ascii?Q?8qfT/7R8u/2ILOp2r+IeqIM6OyYKi22OVuAbG0OJMP8L0GMcASFfgDuiG090?=
+ =?us-ascii?Q?N5fF2J2YjWmUxNLJGL31AvPGpR5HSUPq16Dt435CvWLZlpAMIVX9gQ8obHow?=
+ =?us-ascii?Q?Xpv2y/C4F/AvM595ua5CFNuT0ofTl7J9+YixQTw+ma/S2lVaqquMEysrSIDH?=
+ =?us-ascii?Q?2JGFg1h2g5ElLQN2XIFVWxovqYlVWpgu/YUfvGprtVolwTEKO6l9Hu1BvNh5?=
+ =?us-ascii?Q?MJKgECwM2Sjs6zpLXKmtVyjIlyhgVDbf9PEThLW1UyfH0rqnqXO9Tt/m7zld?=
+ =?us-ascii?Q?nGlihz3MdpTAeoQlIHw8lO1Hn2Y6KQ9BBWZjBJdxGt6bWbXSrHYh8nvNlzxn?=
+ =?us-ascii?Q?3EvkTe1hGBb+HD7Cwm3xoQDF016a5ylWdq45/YP7B4a7SATIl3hDwp68s1II?=
+ =?us-ascii?Q?6DhSnHwYSe+fshXgnh1Evsptry4ulVEqIN3oMk2a8p+zeyRNjpGOWIkVjmzc?=
+ =?us-ascii?Q?yY/LoK3ZQCxRlTQuikP0PWX6e59sFFeeAm8+lzzQp0XnPYaLb9H+QTIruOcU?=
+ =?us-ascii?Q?OYEELaNYiXvsVG1fk8rxSWjQHmnJaKotSrzqLBnZiCOQPzx5p9wWBslIzQEk?=
+ =?us-ascii?Q?QfiPJEzid6aWfPqVc4yaZoWRQ5AalF93jzvoIaFHme/+L2Ky3Zo4YyNfh4Ef?=
+ =?us-ascii?Q?WakOAw6WIeKI5q3tnoCNHWBY/B3lphWGY2JdrYP98Q6xzfuzbDPsaCfAopSX?=
+ =?us-ascii?Q?WQGWin58itLeK/jSNPc75HJqLLX+oyxTw0SsPUfoFCUAifSvWnQU2jHQ9nGx?=
+ =?us-ascii?Q?36zkC/G/Ru+UMT/ZTfhNPxoU//jt1mRK0LFn3wib?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 079d1dd4-9583-4a2a-877d-08db2940b6a4
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 12:43:32.4282
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X2NXdq3iA19xwdPaOXueomKxvKgiDggKtyTUolV79P/3NfcddJlkmSDAyLVJdb6n
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4049
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The general changelog rules for the tip tree refers to "Describe your
-changes" section of submitting patches guide. However, the internal link
-reference targets to non-existent "submittingpatches" label, which
-brings reader to the top of the linked doc.
+On Wed, Mar 08, 2023 at 11:53:58PM -0800, Yi Liu wrote:
+> diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
+> index da1898a9128f..578691602d94 100644
+> --- a/drivers/iommu/iommufd/iommufd_test.h
+> +++ b/drivers/iommu/iommufd/iommufd_test.h
+> @@ -100,4 +100,19 @@ struct iommu_test_cmd {
+>  };
+>  #define IOMMU_TEST_CMD _IO(IOMMUFD_TYPE, IOMMUFD_CMD_BASE + 32)
+>  
+> +/* Mock structs for IOMMU_DEVICE_GET_HW_INFO ioctl */
+> +#define IOMMU_HW_INFO_TYPE_SELFTEST	0xfeedbeef
+> +#define IOMMU_HW_INFO_SELFTEST_REGVAL	0xdeadbeef
+> +
+> +/**
+> + * struct iommu_hw_info_selftest
+> + *
+> + * @flags: Must be set to 0
+> + * @test_reg: Pass IOMMU_HW_INFO_SELFTEST_REGVAL to user selftest program
+> + */
 
-Correct the target. No changes to submitting-patches.rst since the
-required label is already there.
+Probably don't need the comment, it is misleading
 
-Fixes: 31c9d7c8297558 ("Documentation/process: Add tip tree handbook")
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- This patch is based on core/urgent branch of tip tree.
+> +struct iommu_hw_info_selftest {
 
- Documentation/process/maintainer-tip.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+struct iommu_test_hw_info
 
-diff --git a/Documentation/process/maintainer-tip.rst b/Documentation/process/maintainer-tip.rst
-index 572a3289c9cbf3..178c95fd17dcad 100644
---- a/Documentation/process/maintainer-tip.rst
-+++ b/Documentation/process/maintainer-tip.rst
-@@ -128,8 +128,8 @@ uppercase letter and should be written in imperative tone.
- Changelog
- ^^^^^^^^^
- 
--The general rules about changelogs in the process documentation, see
--:ref:`Documentation/process/ <submittingpatches>`, apply.
-+The general rules about changelogs in the :ref:`Submitting patches guide
-+<describe_changes>`, apply.
- 
- The tip tree maintainers set value on following these rules, especially on
- the request to write changelogs in imperative mood and not impersonating
-
-base-commit: 3e2619c4ebba2cab8414c55b131b7a28f628de3b
--- 
-An old man doll... just what I always wanted! - Clara
-
+Jason
