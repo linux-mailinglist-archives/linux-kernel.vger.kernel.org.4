@@ -2,83 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C58E6C0DB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51C46C0DB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjCTJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S231221AbjCTJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCTJv3 (ORCPT
+        with ESMTP id S229473AbjCTJxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:51:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCC81B2C0;
-        Mon, 20 Mar 2023 02:51:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679305888; x=1710841888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F5B5AEnVmr1t6vsXHndScG3OO7bIHfDCKGwu/Lz5eR0=;
-  b=VoG2/PdNs6T8RzR6qvn8G/hVFMUmNw3uS6I3TgpbL0ZHruvcDjdkoZ1G
-   aU0p5UBDSyTYzJ86uqfzJ8AVgJWB4iWoyNe/Ez4BrgBlfFmF1yZij73Hd
-   wo/OLPgGDjx5sjZBfyi2tBTB5VT85C9sPLs3qvZpYtejotjzEWoD+y3Kb
-   HQGk7XHPe8tZ2szFfuo1wtZ1OuRlhKREnBzGNJydU38b7CrKODDarmoLF
-   sb5YDgYfElz7m9dJGNCCSq9CgFTTFwKABiYWGbfRoBBiCu/Bqn3Xp0h/H
-   tlf9oeDoFvuVcRfD0v+KPXn4HaKnadlCP0dmMvOfFI37nKPSutoG5hdeK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="319019963"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="319019963"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:51:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="855231116"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="855231116"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:51:25 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 77F64122400;
-        Mon, 20 Mar 2023 11:51:22 +0200 (EET)
-Date:   Mon, 20 Mar 2023 11:51:22 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH] media: i2c: imx290: fix conditional function defintions
-Message-ID: <ZBgsmvZDJmhGGrmU@kekkonen.localdomain>
-References: <20230207161316.293923-1-arnd@kernel.org>
- <Y+J+7lsf083k4x80@pendragon.ideasonboard.com>
- <c5383d0e-d33c-d59f-3ee6-4635c1c4d334@leemhuis.info>
- <ZBgoHvg3kxsVoSzg@kekkonen.localdomain>
- <84540c66-166e-067a-e1d9-961234640d2e@leemhuis.info>
- <810afc81-57e3-17ea-c624-34a157602d1f@leemhuis.info>
+        Mon, 20 Mar 2023 05:53:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C78061BE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:53:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C88D0B80D7D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C00C43339;
+        Mon, 20 Mar 2023 09:53:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679305994;
+        bh=D5BHlxKKNnfm+orqjuQfYDNb8O0fSKI6DJrwJTX1coU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i34lSCHJ2lij3k41ZH5uuH6oo6pHBkmRvOPrjx02c7BH6CocKB+wa7IxPrKrNvjnM
+         TizekFABjr4+eWsky5fM6vzJb5MGiX2QYLeEDA2UdcsyIwOiKR8tb0ffAjc3GxuGah
+         MemgsnBWBLyfNOBXa1MgHllkt48Jtz4mg4/Ev0sMf8uUheVXS6OsjLRsp+2afUKoNd
+         qA0kvzNr/XewrfUZR0Kr3Y+ZBct6crcUb7s5DK6HNT6dH2ZlWQ/YONuX495AjAoUAF
+         YyJIyfCef2gmBkDGw23ZBNaMpLgRrNVsh3oVGoVc+qlQSTvxR/Z8c6pQUnNQEUc+/F
+         jYJQyr3frYcnQ==
+From:   rfoss@kernel.org
+To:     ndesaulniers@google.com, jernej.skrabec@gmail.com,
+        nathan@kernel.org, jonas@kwiboo.se, Tom Rix <trix@redhat.com>,
+        Laurent.pinchart@ideasonboard.com, daniel@ffwll.ch,
+        neil.armstrong@linaro.org, airlied@gmail.com,
+        andrzej.hajda@intel.com
+Cc:     Robert Foss <rfoss@kernel.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] gpu: drm: bridge: sii9234: remove unused bridge_to_sii9234 function
+Date:   Mon, 20 Mar 2023 10:52:38 +0100
+Message-Id: <167930590639.1131145.3012560086575195897.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230318002321.1675181-1-trix@redhat.com>
+References: <20230318002321.1675181-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <810afc81-57e3-17ea-c624-34a157602d1f@leemhuis.info>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 10:46:45AM +0100, Thorsten Leemhuis wrote:
-> Argh, ohh no, it's there. Sorry for the noise. Second time something
-> like this happens today. Seems today is not my best day. :-/
+From: Robert Foss <rfoss@kernel.org>
 
-No worries!
+On Fri, 17 Mar 2023 20:23:21 -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/gpu/drm/bridge/sii9234.c:870:31: error:
+>   unused function 'bridge_to_sii9234' [-Werror,-Wunused-function]
+> static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
+>                               ^
+> This static function is not used, so remove it.
+> 
+> [...]
 
--- 
-Sakari Ailus
+Applied, thanks!
+
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
+
+
+[1/1] gpu: drm: bridge: sii9234: remove unused bridge_to_sii9234 function
+      commit: 5327469ec4c07977e1d824badadd2628fcd04e85
+
+
+
+Rob
+
