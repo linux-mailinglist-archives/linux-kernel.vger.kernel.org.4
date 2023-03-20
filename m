@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF9C6C0F99
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150686C0F8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCTKsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S231203AbjCTKoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjCTKrs (ORCPT
+        with ESMTP id S230327AbjCTKoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:47:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72656265B0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679309041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Fv8w0AbL4i3rtVaOqAMiK4Y5Lk55ACIoeLlYUsMQaA=;
-        b=YRGw22DckkMaK0Wd8f/UnQ6B5+NUsG7qtPyFqzOT7kTLjsIrYkx83hHjB1LKBbzLWlk7jo
-        IBvyuB07cHHLHWOolPlsokAlsMQnKQCh9y91OCMRLiVvVQj3hYcWZKekMQ/DT2upoBXzav
-        oUzBJBbXzhEDVuJLwE7glEDjH0PtmJo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-139-Y-rFtTEjOLmUr-xtin-gwQ-1; Mon, 20 Mar 2023 06:40:23 -0400
-X-MC-Unique: Y-rFtTEjOLmUr-xtin-gwQ-1
-Received: by mail-wm1-f69.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so8229331wmj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:40:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308822;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5Fv8w0AbL4i3rtVaOqAMiK4Y5Lk55ACIoeLlYUsMQaA=;
-        b=bqvPTqmTZMsO+Yk+yqZby3TO6Wjfp8bxUkyqRrW9rsX71OUzHd1xy12Tu7eCpdwrds
-         drNwulBoKYfkpG0AGcFnw77BqfuIm1btZt5v5PjZ75DUNauRnqZjV2COGss78RHcQcui
-         +Wi4jbuXKMbfg8QHEvdF1mLuHOakj3y/tydbAoBwCnfxhUJZk+JvocPuUhEObzZDeIpQ
-         iL+JrxhhI66zH0D4VPS2RaZro3XDUtqrAY4QDlmyyEgLIutrGYpAGpDdRurKJL3vM/Vd
-         UQ+OCVdnTz0OJKWkoyYtNIrkScsFj0rE2+lQrT+LMuJS7aqzfzIyJkMQKPfHgTHZsvKd
-         +Oeg==
-X-Gm-Message-State: AO0yUKVKJ3yWXEsKpjErY/udnaeoSiNs3vNw45z1d5xlW5nsYDezFBTR
-        NKMMG2K+jnny/aEZJ1mTEs8fcfLHK+SDwNtZ5XyDzEKRAWcp2NQSlOhwmFSs4UXlWyTRHPv1rxE
-        Ezy9XR3jppgStd66gZsCUPGJ5
-X-Received: by 2002:a1c:f706:0:b0:3eb:2e27:2d0c with SMTP id v6-20020a1cf706000000b003eb2e272d0cmr9616603wmh.1.1679308822327;
-        Mon, 20 Mar 2023 03:40:22 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/10g4Z7aB7TI1HoVcnUgopnpX2wy6FwefAdrIqgvU3clik3GvbZHOBAURtPSuVMmg+4a+jYg==
-X-Received: by 2002:a1c:f706:0:b0:3eb:2e27:2d0c with SMTP id v6-20020a1cf706000000b003eb2e272d0cmr9616595wmh.1.1679308822052;
-        Mon, 20 Mar 2023 03:40:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id l15-20020a7bc44f000000b003edef091b17sm3057940wmi.37.2023.03.20.03.40.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:40:21 -0700 (PDT)
-Message-ID: <1cb57760-7ca6-a2e9-1f86-366ca8d3145e@redhat.com>
-Date:   Mon, 20 Mar 2023 11:40:20 +0100
+        Mon, 20 Mar 2023 06:44:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0095D136F4;
+        Mon, 20 Mar 2023 03:42:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B85361381;
+        Mon, 20 Mar 2023 10:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F31B4C433D2;
+        Mon, 20 Mar 2023 10:40:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679308850;
+        bh=hty8Tn856K11peonll6sLiSPE/aLUDCSZBHJjJne0I8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fh0mE/7bVwTvAyMRpw46lgJJKcsdizYzTkzRiF/Ysn/mhUCYpnDq0aC2j0WCU8qGp
+         9Fx8O+LoZi+CfE251z63yPk8id55+Uiz3iQGjEuX4VIiprO0wUZj+9VaGG/lckflNZ
+         iUBNeB/HI0mD3tfBh78YpwOThNkOwDS3vrLDLmBUWBuKikIgfRx/eHI3QOikt1fTgX
+         xtcmSuWsaUnFQBg4aL4WgHDbzdoQIXCDAAb6yvtCEg32A9hoTeSHkcEBa1PnSr+W38
+         65LlikG1Pb7L27xq9h2GqxwnkyDnMFxul8vHRpxKfCKo1JFsPIou6s20drI53iDfM7
+         kFON59CUA2Jxw==
+Date:   Mon, 20 Mar 2023 16:10:42 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: mailbox: qcom,apcs-kpss-global:
+ fix SDX55 'if' match
+Message-ID: <20230320104042.GF4564@thinkpad>
+References: <20230314080917.68246-1-krzysztof.kozlowski@linaro.org>
+ <20230314080917.68246-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 12/15] mm: move mem_init_print_info() to mm_init.c
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230319220008.2138576-1-rppt@kernel.org>
- <20230319220008.2138576-13-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230319220008.2138576-13-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230314080917.68246-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.03.23 23:00, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Tue, Mar 14, 2023 at 09:09:06AM +0100, Krzysztof Kozlowski wrote:
+> The qcom,sdx55-apcs-gcc is followed by another compatible (syscon), thus
+> the 'if' clause must match by contains.
 > 
-> mem_init_print_info() is only called from mm_core_init().
-> 
-> Move it close to the caller and make it static.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
+> Fixes: 0d17014e9189 ("dt-bindings: mailbox: Add binding for SDX55 APCS")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
+
+> ---
+>  .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml   | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+> index 2992227631c4..4d2f408a5efb 100644
+> --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+> @@ -91,8 +91,9 @@ allOf:
+>    - if:
+>        properties:
+>          compatible:
+> -          enum:
+> -            - qcom,sdx55-apcs-gcc
+> +          contains:
+> +            enum:
+> +              - qcom,sdx55-apcs-gcc
+>      then:
+>        properties:
+>          clocks:
+> -- 
+> 2.34.1
+> 
 
 -- 
-Thanks,
-
-David / dhildenb
-
+மணிவண்ணன் சதாசிவம்
