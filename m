@@ -2,236 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D706C1A2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA3F6C19FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjCTPst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S233259AbjCTPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjCTPsE (ORCPT
+        with ESMTP id S233245AbjCTPkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:48:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDD437F2D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679326681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4kPJZ32Y+l53box6ko+ne5cwDvp4Win8rdXeR0QS2JU=;
-        b=enMJvpLHndoWX8pxFosX08g9AnjeoJLQTJIvgSsqIYOEDbqSD98YEWKNzgCM59y5v+54YQ
-        VsSbn6HF2g4TsJ0AaD9MpObDd89c98/9R2wJSNEJMTQofirwhRZUWE2JEoMRLAFPlWYQHJ
-        ofeT4KhbKRRKBeWF60qj1fSow87zViE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-148-hUBHHRubNouH9vzsOfE59Q-1; Mon, 20 Mar 2023 11:31:39 -0400
-X-MC-Unique: hUBHHRubNouH9vzsOfE59Q-1
-Received: by mail-wm1-f70.google.com with SMTP id j36-20020a05600c1c2400b003ed245a452fso5707444wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:31:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326298;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Mon, 20 Mar 2023 11:40:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD46534037
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:31:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eh3so48272720edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1679326314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4kPJZ32Y+l53box6ko+ne5cwDvp4Win8rdXeR0QS2JU=;
-        b=Jqm33MKPMoEwEPqtnZ257k0Bgbjg6KiVU8RXURIcM1qxjCTK5Y0qo6Fp53WhAbNu7h
-         9wsMiJ8xR24Y027faE/TX8p12lt+FYbyPJfV51zFB/UCn+FwTil8oiuwvWd4nmGz2r3G
-         HpiPMLb8oZ683k/OZl5CLZS6CwPdAV/RnM2rgPSj0xzDt8zw0APth03xJyipqTGZ5zKt
-         Iz1hJjojF/m2zIc3a0dEgnfLSpesrhEjvvwhYYB77EXUlpWnR8Rfgtduoa54aQT1P4xi
-         UxBFElfKfXVXk55aAPC89Cm9Cm7BXcIvL0L4xtaT5svwqOF5SwlQmx4jjKtbUlSN8tPw
-         3yOQ==
-X-Gm-Message-State: AO0yUKWV8ynO1xngiph62J7FzX+Eoq00oLH05lBXTmsTfSOcVDDirJPe
-        vhNFFuRXiCaTtW3T2QjFdH5PThDY9viTCm4BwRqeY29FaWiU6IGznojag3e3wfWXXgv+2gKjLB1
-        MHjDKBVmZxO2m969d+m1swMo9SfKqWKNd
-X-Received: by 2002:a05:600c:3aca:b0:3ed:6049:a5ae with SMTP id d10-20020a05600c3aca00b003ed6049a5aemr9662596wms.4.1679326298129;
-        Mon, 20 Mar 2023 08:31:38 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+K/iSPqBhOxqnDWry6nMA6XFyLEMJvZ5BagJzhVQg80QiS5si7gT89jIVKwdv6jvS+LcnPCg==
-X-Received: by 2002:a05:600c:3aca:b0:3ed:6049:a5ae with SMTP id d10-20020a05600c3aca00b003ed6049a5aemr9662575wms.4.1679326297864;
-        Mon, 20 Mar 2023 08:31:37 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id h11-20020a05600c314b00b003e7c89b3514sm7332828wmo.23.2023.03.20.08.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 08:31:37 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 16:31:32 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v1 3/3] test/vsock: skbuff merging test
-Message-ID: <20230320153132.o3xvwxmn3722lin4@sgarzare-redhat>
-References: <e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru>
- <14ca87d1-3e07-85e9-d11c-39789a9d17d4@sberdevices.ru>
+        bh=ONCoqAuPFAdxcHJlJkmwpKMX/MPlR6FkYHZLYnTGWGA=;
+        b=ZAG07fjd1pGdKzK6v1r6GnVVdTiwCGVdbZgvimV0oMBbMrtpEp7Vf5VtfChYznrOc6
+         H0M5oKF/oqkK+eiujHnj4RkGkHe1EGUWGTj5spGvroIRSc0RunHN0DZeywnFEy+ELW3g
+         I1IsObzaSbYO7aYSdtbhiiuZyLfr04luFU8Ju/hnMT9QRQjo3bnL3xU12gKF8bXKVocG
+         wPSKeMuXRncMIA08YpSBxkh35gUR42GYCP/ZSehhvMNiZVSOhSd24vgR4AsLaeCwcD26
+         mQChHP13oK+HLvVovVvuVvI/Re5PiAqBU2KoYz0eW9Tb3NAQLfevbE9pwLetC1J9bp4O
+         FRPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679326314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ONCoqAuPFAdxcHJlJkmwpKMX/MPlR6FkYHZLYnTGWGA=;
+        b=OIoE6vxXXnhOYLCNmfcMDgA1TwHGNNtpJlBsMpvDWgox9DIrFdKouU1TJH/pBcaR9t
+         KHsMC5CAWPsxUSh6nbTEjPK9wEeaFFK377powSgwidW2q8crcMEDKPHrh9IODtajgM4w
+         E3iDKHR4XOtcutpd100Cmt3Y+UU4MtHADMjHpcrgpzmXEuCqTMJw+m5q6SocUqrhFy+K
+         aWpdEkmEI5S5ruzCT1iKNuSMKYbDjEBVTwO5gjKZDDI6ITKgU/X+I08hFn9Mv6sfrtjB
+         LVlTY+carlUStZZvoj6QHx4ArmPI+h1EsFMspCSwatPwvdx+PIqe8AtP5UJbYPkdAw1q
+         LztA==
+X-Gm-Message-State: AO0yUKXocA10X88Mh5j2TM/awqSXHFE9wcPOaZYKRXm1WcsAwj/kvhKX
+        i7D4JAmX7AuFVMDQEO+4vhNGLKyjRTMq1HXrKWyhyw==
+X-Google-Smtp-Source: AK7set9zRda+HOBbyE1RH7U3Q5LdXAIFkGANo3ucDxxjiF5CtJ+awwn6fl76qqAqukfOF4oE95J6aFnk+XfPYhz4GPU=
+X-Received: by 2002:a17:906:cf8d:b0:930:310:abef with SMTP id
+ um13-20020a170906cf8d00b009300310abefmr4344539ejb.3.1679326313919; Mon, 20
+ Mar 2023 08:31:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <14ca87d1-3e07-85e9-d11c-39789a9d17d4@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
+In-Reply-To: <20230320005258.1428043-8-sashal@kernel.org>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Mon, 20 Mar 2023 15:31:42 +0000
+Message-ID: <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
+ resolves after pointer
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@kernel.org>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
+        yhs@fb.com, eddyz87@gmail.com, sdf@google.com, error27@gmail.com,
+        iii@linux.ibm.com, memxor@gmail.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 09:53:54PM +0300, Arseniy Krasnov wrote:
->This adds test which checks case when data of newly received skbuff is
->appended to the last skbuff in the socket's queue.
+On Mon, Mar 20, 2023 at 12:53=E2=80=AFAM Sasha Levin <sashal@kernel.org> wr=
+ote:
 >
->This test is actual only for virtio transport.
+> From: Lorenz Bauer <lorenz.bauer@isovalent.com>
 >
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/vsock_test.c | 81 ++++++++++++++++++++++++++++++++
-> 1 file changed, 81 insertions(+)
+> [ Upstream commit dfdd608c3b365f0fd49d7e13911ebcde06b9865b ]
 >
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index 3de10dbb50f5..00216c52d8b6 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -968,6 +968,82 @@ static void test_seqpacket_inv_buf_server(const struct test_opts *opts)
-> 	test_inv_buf_server(opts, false);
-> }
+> Add a regression test that ensures that a VAR pointing at a
+> modifier which follows a PTR (or STRUCT or ARRAY) is resolved
+> correctly by the datasec validator.
 >
->+static void test_stream_virtio_skb_merge_client(const struct test_opts *opts)
->+{
->+	ssize_t res;
->+	int fd;
->+
->+	fd = vsock_stream_connect(opts->peer_cid, 1234);
->+	if (fd < 0) {
->+		perror("connect");
->+		exit(EXIT_FAILURE);
->+	}
->+
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> Link: https://lore.kernel.org/r/20230306112138.155352-3-lmb@isovalent.com
+> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Please use a macro for "HELLO" or a variabile, e.g.
+Hi Sasha,
 
-         char *buf;
-         ...
+Can you explain why this patch was selected? I'd prefer to not
+backport the test, since it frequently leads to breakage when trying
+to build selftests/bpf on stable kernels.
 
-         buf = "HELLO";
-         res = send(fd, buf, strlen(buf), 0);
-         ...
-
->+	res = send(fd, "HELLO", strlen("HELLO"), 0);
->+	if (res != strlen("HELLO")) {
->+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_writeln("SEND0");
->+	/* Peer reads part of first packet. */
->+	control_expectln("REPLY0");
->+
->+	/* Send second skbuff, it will be merged. */
->+	res = send(fd, "WORLD", strlen("WORLD"), 0);
-
-Ditto.
-
->+	if (res != strlen("WORLD")) {
->+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_writeln("SEND1");
->+	/* Peer reads merged skbuff packet. */
->+	control_expectln("REPLY1");
->+
->+	close(fd);
->+}
->+
->+static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
->+{
->+	unsigned char buf[64];
->+	ssize_t res;
->+	int fd;
->+
->+	fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
->+	if (fd < 0) {
->+		perror("accept");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_expectln("SEND0");
->+
->+	/* Read skbuff partially. */
->+	res = recv(fd, buf, 2, 0);
->+	if (res != 2) {
->+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-
-We don't expect a failure, so please update the error message and make
-it easy to figure out which recv() is failing. For example by saying
-how many bytes you expected and how many you received.
-
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_writeln("REPLY0");
->+	control_expectln("SEND1");
->+
->+
->+	res = recv(fd, buf, sizeof(buf), 0);
-
-Perhaps a comment here to explain why we expect only 8 bytes.
-
->+	if (res != 8) {
->+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-
-Ditto.
-
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	res = recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
->+	if (res != -1) {
->+		fprintf(stderr, "expected recv(2) success, got %zi\n", res);
-
-It's the other way around, isn't it?
-Here you expect it to fail instead it is not failing.
-
->+		exit(EXIT_FAILURE);
->+	}
-
-Moving the pointer correctly, I would also check that there is
-HELLOWORLD in the buffer.
-
-Thanks for adding tests in this suite!
-Stefano
-
->+
->+	control_writeln("REPLY1");
->+
->+	close(fd);
->+}
->+
-> static struct test_case test_cases[] = {
-> 	{
-> 		.name = "SOCK_STREAM connection reset",
->@@ -1038,6 +1114,11 @@ static struct test_case test_cases[] = {
-> 		.run_client = test_seqpacket_inv_buf_client,
-> 		.run_server = test_seqpacket_inv_buf_server,
-> 	},
->+	{
->+		.name = "SOCK_STREAM virtio skb merge",
->+		.run_client = test_stream_virtio_skb_merge_client,
->+		.run_server = test_stream_virtio_skb_merge_server,
->+	},
-> 	{},
-> };
->
->-- 
->2.25.1
->
-
+Thanks
+Lorenz
