@@ -2,135 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1196C0C2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550676C0C32
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCTIZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S230138AbjCTI0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjCTIZh (ORCPT
+        with ESMTP id S229782AbjCTI0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:25:37 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67B1188;
-        Mon, 20 Mar 2023 01:25:35 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id iw17so1530118wmb.0;
-        Mon, 20 Mar 2023 01:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679300734;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lq9ByukcLzCd4kriwtF9/gxGSEg8VeFv6cJLw8F5Cs4=;
-        b=IJmshY7kOIZtz1stoAYNuTVmks50/4vFpi2fEKWTDNiLoLxZln6eaWVvG85lkMB1cd
-         BcctcQI/JMb5ucLC+flnHuqr2J/myPMRO3gku/oPtKxcib56yqqEOq4pf2Di6SHMZgtB
-         xG0bGt8navy8lZgLydyRUHr+pbEuM3glHWc5dcWGBymboc1pXuunrTiI1gnw8a2zGjwP
-         N5kUALa0fFEuUrpCBXFHEujlcu7waD6BfOoMSiblLwrLTjvueQ+5fTDUXA1OeDuleYtt
-         vC2kRV+BiUyX+UFXSSk4IqW05Op78qlCaP2LE55QFqEjnqVLY1FcjIO4/cxIFHwf/P1p
-         U9nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679300734;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lq9ByukcLzCd4kriwtF9/gxGSEg8VeFv6cJLw8F5Cs4=;
-        b=b4FtJaCSAOWG/C+h1MmQubUmW+1w6bXjUkrz4cgKDRZlJgkNoGT6A1cs+5FW5OG4DZ
-         x53k3kXPuZNb0oVxp56crvjdCQ+6m7UcJlMNSXnKTleJDKHcgXLa+UJGuSScUPTf2BiQ
-         YUp7h1VXuvfta9ky4C4Gsvi6cc2Pa4BLG6TNRXBRq60IusDtjt1ZXEk/KggQKBuUi1Rv
-         1YClKml0Qj+96l9dM7z35tlNIE+V0HMICSryydw4xTgyFyFF0Gzl2HzmpelIqPECRc4p
-         x3r0utlGAxje3ai+Lgs1QmYuS4tO3yiLRZfC68TQzUyc3CIDJF5rjLxvmm9An5aRywto
-         seog==
-X-Gm-Message-State: AO0yUKWtzNLi9eD1SQK1Qjbgy11+AW5/qNlnLF9+BrSCa/OdkvHM08XG
-        9nEVaP5L58iCE0hHEPOlFgo=
-X-Google-Smtp-Source: AK7set/KjExHxU/VRUundBhJwbAOn8f1vO3ZgnzhGHZgLDRty1RmkvUexWYNUQs9Tt5IKcmL51/a/A==
-X-Received: by 2002:a7b:c40b:0:b0:3ee:1084:aa79 with SMTP id k11-20020a7bc40b000000b003ee1084aa79mr359148wmi.20.1679300734123;
-        Mon, 20 Mar 2023 01:25:34 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id p17-20020adfcc91000000b002c71dd1109fsm8327072wrj.47.2023.03.20.01.25.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:25:33 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 08:25:32 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <413e0dfe-5a68-4cd9-9036-bed741e4cd22@lucifer.local>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBgROQ0uAfZCbScg@pc636>
+        Mon, 20 Mar 2023 04:26:22 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118AA188;
+        Mon, 20 Mar 2023 01:26:20 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 2A62824E284;
+        Mon, 20 Mar 2023 16:26:18 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 16:26:18 +0800
+Received: from [192.168.125.128] (183.27.97.64) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 16:26:17 +0800
+Message-ID: <2eb0380e-bbb7-83fd-3916-9bdd8b068334@starfivetech.com>
+Date:   Mon, 20 Mar 2023 16:26:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBgROQ0uAfZCbScg@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
+ patternProperties
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        William Qiu <william.qiu@starfivetech.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
+ <20230316030514.137427-4-xingyu.wu@starfivetech.com>
+ <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
+ <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
+ <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
+ <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
+ <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 08:54:33AM +0100, Uladzislau Rezki wrote:
-> > vmalloc() is, by design, not permitted to be used in atomic context and
-> > already contains components which may sleep, so avoiding spin locks is not
-> > a problem from the perspective of atomic context.
-> >
-> > The global vmap_area_lock is held when the red/black tree rooted in
-> > vmap_are_root is accessed and thus is rather long-held and under
-> > potentially high contention. It is likely to be under contention for reads
-> > rather than write, so replace it with a rwsem.
-> >
-> > Each individual vmap_block->lock is likely to be held for less time but
-> > under low contention, so a mutex is not an outrageous choice here.
-> >
-> > A subset of test_vmalloc.sh performance results:-
-> >
-> > fix_size_alloc_test             0.40%
-> > full_fit_alloc_test		2.08%
-> > long_busy_list_alloc_test	0.34%
-> > random_size_alloc_test		-0.25%
-> > random_size_align_alloc_test	0.06%
-> > ...
-> > all tests cycles                0.2%
-> >
-> > This represents a tiny reduction in performance that sits barely above
-> > noise.
-> >
-> How important to have many simultaneous users of vread()? I do not see a
-> big reason to switch into mutexes due to performance impact and making it
-> less atomic.
+On 2023/3/20 15:40, Krzysztof Kozlowski wrote:
+> On 20/03/2023 08:29, Xingyu Wu wrote:
+>> On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
+>>> On 20/03/2023 04:54, Xingyu Wu wrote:
+>>>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
+>>>>> On 16/03/2023 04:05, Xingyu Wu wrote:
+>>>>>> Add optional compatible and patternProperties.
+>>>>>>
+>>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>>>> ---
+>>>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
+>>>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>> index ae7f1d6916af..b61d8921ef42 100644
+>>>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>> @@ -15,16 +15,31 @@ description: |
+>>>>>>  
+>>>>>>  properties:
+>>>>>>    compatible:
+>>>>>> -    items:
+>>>>>> -      - enum:
+>>>>>> -          - starfive,jh7110-aon-syscon
+>>>>>> -          - starfive,jh7110-stg-syscon
+>>>>>> -          - starfive,jh7110-sys-syscon
+>>>>>> -      - const: syscon
+>>>>>> +    oneOf:
+>>>>>> +      - items:
+>>>>>> +          - enum:
+>>>>>> +              - starfive,jh7110-aon-syscon
+>>>>>> +              - starfive,jh7110-stg-syscon
+>>>>>> +              - starfive,jh7110-sys-syscon
+>>>>>> +          - const: syscon
+>>>>>> +      - items:
+>>>>>> +          - enum:
+>>>>>> +              - starfive,jh7110-aon-syscon
+>>>>>> +              - starfive,jh7110-stg-syscon
+>>>>>> +              - starfive,jh7110-sys-syscon
+>>>>>> +          - const: syscon
+>>>>>> +          - const: simple-mfd
+> 
+> BTW, this also looks wrong. You just said that clock controller exists
+> only in few variants. Also, why sometimes the same device  goes with
+> simple-mfd and sometimies without? It's the same device.
 
-It's less about simultaneous users of vread() and more about being able to write
-direct to user memory rather than via a bounce buffer and not hold a spinlock
-over possible page faults.
+Oh yes, If modified to:
 
-The performance impact is barely above noise (I got fairly widely varying
-results), so I don't think it's really much of a cost at all. I can't imagine
-there are many users critically dependent on a sub-single digit % reduction in
-speed in vmalloc() allocation.
+oneOf:
+      - items:
+          - enum:
+              - starfive,jh7110-aon-syscon
+              - starfive,jh7110-stg-syscon
+          - const: syscon
+      - items:
+          - const: starfive,jh7110-sys-syscon
+          - const: syscon
+          - const: simple-mfd
 
-As I was saying to Willy, the code is already not atomic, or rather needs rework
-to become atomic-safe (there are a smattering of might_sleep()'s throughout)
+Or:
 
-However, given your objection alongside Willy's, let me examine Willy's
-suggestion that we instead of doing this, prefault the user memory in advance of
-the vread call.
+     - minItems: 2
+       items:
+         - enum:
+             - starfive,jh7110-aon-syscon
+             - starfive,jh7110-stg-syscon
+             - starfive,jh7110-sys-syscon
+         - const: syscon
+         - const: simple-mfd
 
->
-> So, how important for you to have this change?
->
 
-Personally, always very important :)
+Which one is better?
 
-> --
-> Uladzislau Rezki
+> 
+>>>>>>  
+>>>>>>    reg:
+>>>>>>      maxItems: 1
+>>>>>>  
+>>>>>> +patternProperties:
+>>>>>> +  # Optional children
+>>>>>> +  "pll-clock-controller":
+>>>>>
+>>>>> It's not a pattern.
+>>>>
+>>>> Does it use 'properties' instead of 'patternProperties'?
+>>>
+>>> Yes.
+>>>
+>>>>
+>>>>>
+>>>>> Anyway should be clock-controller
+>>>>
+>>>> Will fix.
+>>>>
+>>>>>
+>>>>>> +    type: object
+>>>>>> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+>>>>>> +    description: Clock provider for PLL.
+>>>>>> +
+>>>>>
+>>>>> You just added these bindings! So the initial submission was incomplete
+>>>>> on purpose?
+>>>>>
+>>>>> No, add complete bindings.
+>>>>
+>>>> Does you mean that it should drop the 'description', or add complete 'description',
+>>>> or add 'compatible', 'clocks' and 'clock-cells' of complete clock-controller bindings?
+>>>
+>>> It means it should be squashed with the patch which adds it.
+>> 
+>> Should I drop the 'decription' here and keep the 'decription' in patch1?
+> 
+> There should be no this patch at all. However I do not understand what
+> you want to do with description. What's wrong with description?
+
+I thought you were commenting under description, saying a conflict with pll dtbindings' description.
+Is that mean I should add it in the syscon patch fo william not this patchset?
+
+>> 
+>>>
+>>>>
+>>>>>
+>>>>>>  required:
+>>>>>>    - compatible
+>>>>>>    - reg
+>>>>>> @@ -38,4 +53,16 @@ examples:
+>>>>>>          reg = <0x10240000 0x1000>;
+>>>>>>      };
+>>>>>>  
+>>>>>> +  - |
+>>>>>> +    syscon@13030000 {
+>>>>>
+>>>>> No need for new example... Just put it in existing one.
+>>>>>
+>>>>
+>>>> Actually, the PLL clock-controller are just set in sys-syscon resgisters. The stg-syscon and
+>>>> aon-syscon don't need it. So PLL clock-controller node only is added in sys-syscon node.
+>>>
+>>> So why having other examples if they are included here? Drop them.
+>>>
+>> 
+>> Should I drop the old example of stg-syscon and add a new example of sys-syscon which
+>> include clock-controller child node?
+> 
+> No, there should be no stg-syscon example, it's useless.
+> 
+
+Thanks. I will remind william to use sys-syscon example instead.
+
+Best regards,
+Xingyu Wu
+
