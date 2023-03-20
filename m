@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D326C24E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9C76C24E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjCTWsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
+        id S229617AbjCTWsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCTWsC (ORCPT
+        with ESMTP id S229599AbjCTWsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:48:02 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8AA2DE78
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:47:59 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMlp40072645;
-        Mon, 20 Mar 2023 17:47:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679352471;
-        bh=0JV3lGlPSMKb4n8Bd4U7fFZOw4VchhA04TswRoAwPkw=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=RQx4gOoIqhX+r8rqoaaCVc/mQcNdxq3DBLLh0NvGt6dCk55adxz55UDOQ0LTwxqk8
-         +Y/7MDtQE7RQDRJ8lFJVOMolLiAVia2pItfOBguo/KBG0jHL0gieoI9VLsQfHvXbcx
-         qlQfXRgEioCKdtPNalFDvsO8yVVkky8N5E6Fmf/M=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMlpxC083457
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 17:47:51 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 17:47:50 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 17:47:50 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMlo9b085256;
-        Mon, 20 Mar 2023 17:47:50 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     <ssantosh@kernel.org>, Jayesh Choudhary <j-choudhary@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, <s-vadapalli@ti.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2] soc: ti: k3-socinfo: Add entry for J784S4 SOC
-Date:   Mon, 20 Mar 2023 17:47:49 -0500
-Message-ID: <167935245399.210102.927782020619972781.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230314085500.10597-1-j-choudhary@ti.com>
-References: <20230314085500.10597-1-j-choudhary@ti.com>
+        Mon, 20 Mar 2023 18:48:41 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B9235EF6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:48:40 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a19cf1b8ddso3325ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679352519;
+        h=content-transfer-encoding:mime-version:user-agent:message-id
+         :in-reply-to:date:references:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7OpRJ3NaHifOdXnXMOAjL7A3rwwZXBDeBcL7dk4Zj7U=;
+        b=AYUI9qTKz/8bfjZBpZaxodLM9aq535dUaaz2yXD9Sl0Y6RcMZptCZRM/BPtAGXInqg
+         jRjFc52pUQY2lMr7qfe1uQrL5xaxxkQSVpS1OHJ2+pEG9IQXybD/3qBmv16OSC3/epDF
+         Xk7Z9Kk2wtRnUT3VoOg8KuUlucKELPRv8jpFQfedooD+5KBx7yoyzEEthSfM5/BBM3wk
+         wixnnlSPmkGfnXIl0Fr7x9qBGUofnB+GPKWjtXnQqzPgzNE5KVdyEfcQjMI4ZeKIkYrO
+         neLcVoHzdNWF7+6jN3BBjG2L0TWEnKXTn/cNu+3e8PW8yEYBPFq+gxbdyCV42CZP1SYn
+         /3kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679352519;
+        h=content-transfer-encoding:mime-version:user-agent:message-id
+         :in-reply-to:date:references:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7OpRJ3NaHifOdXnXMOAjL7A3rwwZXBDeBcL7dk4Zj7U=;
+        b=EtKodt1QJte6Q0+YsuIlh5hExLgiNj2dv8oWQ5ncSsJ+HW+UiJedUtete2w76nJjXK
+         bLlSWbhJ+L4HFxFF1Sat3NwLeoaYrgLiydvqB8GKzkr6WMewNle4rJSy3DuFEl8e+cAE
+         QjAxduA+ylOaRa1bxgfahcZkH+24hqx0xLG/ufPDRyI799PpIJtQ58J/p588PKHWW+kv
+         nSL9MvrxFfvNIq1K61owRlqItHPNRWGZU4OVg2yE0KaqkJWuDrQtxFTRvXjR4mboTn/3
+         WsagQhPNEULbQjSwgnEfzCvr/jpM0k8R+IZdi/t+2hzo2QnzwyXSVB0XcmoI6biDbS8F
+         3ZKA==
+X-Gm-Message-State: AO0yUKURowrDvhoLr1QPL/lMKQmkCQwtF7JjE8DlidOoZxQemlKquOfD
+        PPPSVX/ak0e1Gte8l1wZDrwFtjXbEhZIhlPye8nKJg==
+X-Google-Smtp-Source: AK7set/dSoy8sg1l9KlZyobKlqFU1sPfjBmkRl+PE2Qm9gfFmX1SOHoBDUXVGnxw7y3t4r6CiZMsow==
+X-Received: by 2002:a17:902:e74f:b0:198:af4f:de07 with SMTP id p15-20020a170902e74f00b00198af4fde07mr34213plf.7.1679352519390;
+        Mon, 20 Mar 2023 15:48:39 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
+        by smtp.gmail.com with ESMTPSA id o9-20020a17090a0a0900b0023cfdbb6496sm10275879pjo.1.2023.03.20.15.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 15:48:38 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched: core: Optimize the structure of
+ 'tg_cfs_schedulable_down' function
+References: <20230319200255.3640-1-kunyu@nfschina.com>
+Date:   Mon, 20 Mar 2023 15:48:36 -0700
+In-Reply-To: <20230319200255.3640-1-kunyu@nfschina.com> (Li kunyu's message of
+        "Mon, 20 Mar 2023 04:02:55 +0800")
+Message-ID: <xm26o7onvy2j.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jayesh Choudhary,
+Li kunyu <kunyu@nfschina.com> writes:
 
-On Tue, 14 Mar 2023 14:25:00 +0530, Jayesh Choudhary wrote:
-> J784S4 SoC's JTAG PARTNO is 0xBB80.
-> 
-> 
+> Optimize if branches and define  in the branch statement
+> block=E3=80=80parent_quota variable.
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+It's not an optimization; it is arguably a slight style improvement.
 
-[1/1] soc: ti: k3-socinfo: Add entry for J784S4 SOC
-      commit: 00e34c94987e4fe866f12ad8eac17268c936880c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
+>
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> ---
+>  kernel/sched/core.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 488655f2319f..7e8535d2e36d 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -10915,15 +10915,12 @@ static int tg_cfs_schedulable_down(struct task_=
+group *tg, void *data)
+>  {
+>  	struct cfs_schedulable_data *d =3D data;
+>  	struct cfs_bandwidth *cfs_b =3D &tg->cfs_bandwidth;
+> -	s64 quota =3D 0, parent_quota =3D -1;
+> +	s64 quota =3D RUNTIME_INF;
+>=20=20
+> -	if (!tg->parent) {
+> -		quota =3D RUNTIME_INF;
+> -	} else {
+> +	if (tg->parent) {
+>  		struct cfs_bandwidth *parent_b =3D &tg->parent->cfs_bandwidth;
+> -
+> +		s64 parent_quota =3D parent_b->hierarchical_quota;
+>  		quota =3D normalize_cfs_quota(tg, d);
+> -		parent_quota =3D parent_b->hierarchical_quota;
+>=20=20
+>  		/*
+>  		 * Ensure max(child_quota) <=3D parent_quota.  On cgroup2,
