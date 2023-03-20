@@ -2,114 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36A06C0B36
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92966C0B39
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCTHO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S229771AbjCTHPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjCTHOw (ORCPT
+        with ESMTP id S229763AbjCTHPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:14:52 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42D1E5D8;
-        Mon, 20 Mar 2023 00:14:50 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id t15so9296680wrz.7;
-        Mon, 20 Mar 2023 00:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679296489;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfkxMOxAGfgWPUNtNItdws/lAov0WMT4Tn6jUy/fV/w=;
-        b=GjiILlTCr5jfQ1cyHmMIYapJx0INf4D0wivvzByi6ZopCTgn/AEn2+rbNfguJgkRp6
-         S6vEh49Mmbr7nsPSYfd7V5dapTpUPjmeioLBRNzEoo+Jdeef1NOwW5qtU/Ip0HcvhTOa
-         B35E5BpyCMILEG/AI7JYr8AMbTZ75lrrtRukiDiDrwvg8F8cmJE9/r/xdAlkEJQqHcKn
-         2dJBMLeWrwcX7jpnqQmsjwKp94DeSeTxAhg3NhOW6Tct5nWBAKucie0tjKrI0zE/l1uK
-         HaW83YzF5zdsgfMS0wDWDTa3yqC8x6WNd1aobB1sVxUzZwX8nxNHK4cwCQAlEjR6Nudr
-         FMMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679296489;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zfkxMOxAGfgWPUNtNItdws/lAov0WMT4Tn6jUy/fV/w=;
-        b=vbdaUXzT9pfXHPw9PSM0MQckNJ/9ae1KyRg8tPaEICVSQpA8YVFAoh9HvaCiaQRJmu
-         vn4WDc5EHbctNmKfucyUilPVjkqivP31S7nIVaa7EGr+sqbSfdP7ASalfHMme+RklYJX
-         OSStj+jrbP5VFr0am6kVwvdHzg0SEmj38apuZ6zb1bgS5iX852OPUqMlo4hRHTl96Gbg
-         nMEgWCEcO8mSS52RaMGDlBzeTruocj15RsLVDB0+w3mgRTgiYwVby3HxWOoNnrEeXkbk
-         qGiN9hpnUOV7bqyTaZpA+GRTXWUKATiSxcRsk4dCXkugogsR/JIIAbHSVx7seBACK4W7
-         g2oA==
-X-Gm-Message-State: AO0yUKWA5klA6l0J1FsSBUoDl/jVewfyH/t4HFjuUVkumUeSaotrdOnl
-        GKKQNdtfJRPDK2hbYY/7S4g=
-X-Google-Smtp-Source: AK7set9LxTlNs2eaxMX/lSXB7TNtIlMeLJWZMAm6UaDw2gJuFl/i5cmOyIMVsa/Gk5Nl3nEH1O5jHQ==
-X-Received: by 2002:a5d:4046:0:b0:2ce:ac70:5113 with SMTP id w6-20020a5d4046000000b002ceac705113mr12797192wrp.41.1679296489069;
-        Mon, 20 Mar 2023 00:14:49 -0700 (PDT)
-Received: from PC-PEDRO-ARCH.lan ([2001:8a0:7280:5801:9441:3dce:686c:bfc7])
-        by smtp.gmail.com with ESMTPSA id e23-20020a5d5957000000b002cfefa50a8esm8092442wri.98.2023.03.20.00.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 00:14:48 -0700 (PDT)
-From:   Pedro Falcato <pedro.falcato@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pedro Falcato <pedro.falcato@gmail.com>
-Subject: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
-Date:   Mon, 20 Mar 2023 07:14:42 +0000
-Message-Id: <20230320071442.172228-1-pedro.falcato@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 20 Mar 2023 03:15:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C85E1E5D8;
+        Mon, 20 Mar 2023 00:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679296538; x=1710832538;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=96gp98CgPmdI61qm0TB29Gzv3LWLZoLSpLgfOEYGVIo=;
+  b=O5NHNLPIBgX1Da4eC3NJ2q8R0JC+D2ZDAJgX01m6F2WOT4HWyHMoopFd
+   FzJuxhPIzYRQDWQxSftL39kA7iiy4YcTlUEXYmc6Kg9yEylCUlyxuJWVi
+   0bKm2AJpgezbkHPhOGDw0jDsW3/UmHbGps/ITRyF18hiNSx+tgJaDkpAd
+   rzD5dyBR+NlhMe+iVmXBnJ5qyDmM6gy+x9kKVFz/wleZxFNLSJe7Q20uG
+   au53pqj520WVX2CcvZkyJxL0Mnc4Osv/AGznWBqDapdnRtFywSjaeQwo6
+   x90nvKACYqCqaGouMSuq3wWR0pjIFSR1YV/JpXds5b2IDgBx6FdmL4g4D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="337308497"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="337308497"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:15:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="1010362285"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="1010362285"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 00:15:33 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pe9jx-000AtG-0G;
+        Mon, 20 Mar 2023 07:15:33 +0000
+Date:   Mon, 20 Mar 2023 15:15:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        CK Hu <ck.hu@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        linaro-mm-sig@lists.linaro.org, linux-mediatek@lists.infradead.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [v3, PATCH] drm/mediatek: add dma buffer control for drm plane
+ disable
+Message-ID: <202303201543.ahrAhliY-lkp@intel.com>
+References: <20230320030449.5397-1-yongqiang.niu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320030449.5397-1-yongqiang.niu@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Linux, open(O_DIRECTORY | O_CREAT) has historically meant "open
-directory or create a regular file". This has remained mostly true,
-except open(O_DIR | O_CREAT) has started returning an error *while
-creating the file*. Restore the old behavior.
+Hi Yongqiang,
 
-Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
----
-I did not explicitly add a Fixes: tag because I was unable to bisect this locally,
-but it seems to me that this was introduced in the path walking refactoring done in early 2020.
-Al, if you have a rough idea of what may have added this bug, feel free to add a Fixes.
+Thank you for the patch! Yet something to improve:
 
-This should also probably get CC'd to stable, but I'll leave this to your criteria.
- fs/namei.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.3-rc3 next-20230320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/fs/namei.c b/fs/namei.c
-index edfedfbccae..7b26db2f0f8 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3540,8 +3540,18 @@ static int do_open(struct nameidata *nd,
- 		if (unlikely(error))
- 			return error;
- 	}
--	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
--		return -ENOTDIR;
-+
-+	if ((open_flag & (O_DIRECTORY | O_CREAT)) != (O_DIRECTORY | O_CREAT) ||
-+	    !(file->f_mode & FMODE_CREATED)) {
-+		/* O_DIRECTORY | O_CREAT has the strange property of being the
-+		 * only open(O_DIRECTORY) lookup that can create and return a
-+		 * regular file *if we indeed did create*. Because of this,
-+		 * only return -ENOTDIR if we're not O_DIR | O_CREAT or if we
-+		 * did not create a file.
-+		 */
-+		if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
-+			return -ENOTDIR;
-+	}
- 
- 	do_truncate = false;
- 	acc_mode = op->acc_mode;
+url:    https://github.com/intel-lab-lkp/linux/commits/Yongqiang-Niu/drm-mediatek-add-dma-buffer-control-for-drm-plane-disable/20230320-110649
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230320030449.5397-1-yongqiang.niu%40mediatek.com
+patch subject: [v3, PATCH] drm/mediatek: add dma buffer control for drm plane disable
+config: arm64-randconfig-r001-20230320 (https://download.01.org/0day-ci/archive/20230320/202303201543.ahrAhliY-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/ae19fefd6d548a2766bc6d1902c46d5baa39a202
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yongqiang-Niu/drm-mediatek-add-dma-buffer-control-for-drm-plane-disable/20230320-110649
+        git checkout ae19fefd6d548a2766bc6d1902c46d5baa39a202
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303201543.ahrAhliY-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: module mediatek-drm uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
