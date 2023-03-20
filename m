@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251EF6C1DDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F2B6C1D9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbjCTR1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
+        id S232142AbjCTRU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbjCTR0l (ORCPT
+        with ESMTP id S231935AbjCTRTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:26:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92CC420A33
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:22:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE71B150C;
-        Mon, 20 Mar 2023 10:13:36 -0700 (PDT)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 773EB3F67D;
-        Mon, 20 Mar 2023 10:12:49 -0700 (PDT)
-Message-ID: <1ebc5430-9858-2360-3162-7d18e9c88cad@arm.com>
-Date:   Mon, 20 Mar 2023 17:12:48 +0000
+        Mon, 20 Mar 2023 13:19:30 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B185B2DE74
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:15:36 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id i5so2704724eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679332487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uVgWDorTw0IdLkGaMvMMy9AFx6YqJaCeHBK8myDlk6A=;
+        b=TkgcSoMo4utawLQICl8E4yxmgVen7z6kShX4LbzEW3s5Q4Y60awf8hh7aND4zD+iSi
+         /kfMcbvY+HBZ5nnG1U1MMcm19nvPnKekv9xjLRHsjuKLA6F+LRhy1+vCikQpGaMBXBaz
+         FUiFHH6ZoQxI6MWN4xZOKcfxkoAqoipvC453s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679332487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uVgWDorTw0IdLkGaMvMMy9AFx6YqJaCeHBK8myDlk6A=;
+        b=utFvnpe7izHNKcp2ah4WeqaE58+y+quNtqoyal79J5pWLmu0hXGZ659IqpXBCXZ8wO
+         U9EuB/GFKDMz3P2Anlyl7JXVpBnPa4uU46liWFKoPdIqFCRoqFh/xYlktFY/ewZaJdmD
+         Sx/qHk3gS6oDZBscBxppv5g4sjvC2/GYYRRyHyNKJYeiZvzJZ3Kjs4fp0MY+nB1PMpRX
+         HRyngqRNyH5zXbZzXJzMHEQKL2AnYcqaXxtATVeXZTONt/HaQEJ+nmWdQbeTibkV2XJS
+         yPUpX0MpKYjfAmN5us71u4Nd6a3dkdvZO9YplRlj1P2MbqmsCWm1DCM7WCBiZ4X/+gTV
+         YjVQ==
+X-Gm-Message-State: AO0yUKXVnl+sscACPPFuxSNQN3qBUrccYFOdElkGNpNcopyoVXu13Stq
+        uOqnBbNhPyasmnsYn+mDePVdrz67LfP9qaZ8bozSEU6m
+X-Google-Smtp-Source: AK7set+WQBjZHrEetaXoxOZlRgwQg74GMQbTB6uPnjv4AahqR3KDk0fkQpeY+1jluB3LlgOnPB+DEw==
+X-Received: by 2002:a17:906:f6c6:b0:931:ad32:79ed with SMTP id jo6-20020a170906f6c600b00931ad3279edmr9343250ejb.12.1679332486709;
+        Mon, 20 Mar 2023 10:14:46 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id y12-20020a17090668cc00b008d044ede804sm2637940ejr.163.2023.03.20.10.14.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 10:14:46 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id i5so2704401eda.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:14:45 -0700 (PDT)
+X-Received: by 2002:a17:907:6e28:b0:933:f6e8:26d9 with SMTP id
+ sd40-20020a1709076e2800b00933f6e826d9mr2790573ejc.15.1679332485637; Mon, 20
+ Mar 2023 10:14:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 18/18] x86/resctrl: Separate arch and fs resctrl locks
-Content-Language: en-GB
-To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
-References: <20230113175459.14825-1-james.morse@arm.com>
- <20230113175459.14825-19-james.morse@arm.com>
- <d7d43c53-a482-100f-8a25-4dae6500d184@intel.com>
- <cc4eed18-1966-ebcf-8ae1-81b7e0833299@arm.com>
- <16e7fd97-49e4-0180-86bc-9dfd5bf90940@intel.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <16e7fd97-49e4-0180-86bc-9dfd5bf90940@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230320071442.172228-1-pedro.falcato@gmail.com> <20230320115153.7n5cq4wl2hmcbndf@wittgenstein>
+In-Reply-To: <20230320115153.7n5cq4wl2hmcbndf@wittgenstein>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Mar 2023 10:14:29 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
+Message-ID: <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
+Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,141 +77,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette
+On Mon, Mar 20, 2023 at 4:52=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> So before we continue down that road should we maybe treat this as a
+> chance to fix the old bug? Because this behavior of returning -ENOTDIR
+> has existed ever since v5.7 now. Since that time we had three LTS
+> releases all returning ENOTDIR even if the file was created.
 
-On 11/03/2023 00:22, Reinette Chatre wrote:
-> On 3/6/2023 3:34 AM, James Morse wrote:
->> On 02/02/2023 23:50, Reinette Chatre wrote:
->>> On 1/13/2023 9:54 AM, James Morse wrote:
->>>> resctrl has one mutex that is taken by the architecture specific code,
->>>> and the filesystem parts. The two interact via cpuhp, where the
->>>> architecture code updates the domain list. Filesystem handlers that
->>>> walk the domains list should not run concurrently with the cpuhp
->>>> callback modifying the list.
->>>>
->>>> Exposing a lock from the filesystem code means the interface is not
->>>> cleanly defined, and creates the possibility of cross-architecture
->>>> lock ordering headaches. The interaction only exists so that certain
->>>> filesystem paths are serialised against cpu hotplug. The cpu hotplug
->>>> code already has a mechanism to do this using cpus_read_lock().
->>>>
->>>> MPAM's monitors have an overflow interrupt, so it needs to be possible
->>>> to walk the domains list in irq context. RCU is ideal for this,
->>>> but some paths need to be able to sleep to allocate memory.
->>>>
->>>> Because resctrl_{on,off}line_cpu() take the rdtgroup_mutex as part
->>>> of a cpuhp callback, cpus_read_lock() must always be taken first.
->>>> rdtgroup_schemata_write() already does this.
->>>>
->>>> All but one of the filesystem code's domain list walkers are
->>>> currently protected by the rdtgroup_mutex taken in
->>>> rdtgroup_kn_lock_live(). The exception is rdt_bit_usage_show()
->>>> which takes the lock directly.
->>>
->>> The new BMEC code also. You can find it on tip's x86/cache branch,
->>> see mbm_total_bytes_config_write() and mbm_local_bytes_config_write().
->>>
->>>>
->>>> Make the domain list protected by RCU. An architecture-specific
->>>> lock prevents concurrent writers. rdt_bit_usage_show() can
->>>> walk the domain list under rcu_read_lock().
->>>> The other filesystem list walkers need to be able to sleep.
->>>> Add cpus_read_lock() to rdtgroup_kn_lock_live() so that the
->>>> cpuhp callbacks can't be invoked when file system operations are
->>>> occurring.
->>>>
->>>> Add lockdep_assert_cpus_held() in the cases where the
->>>> rdtgroup_kn_lock_live() call isn't obvious.
->>>>
->>>> Resctrl's domain online/offline calls now need to take the
->>>> rdtgroup_mutex themselves.
+Ack.
 
->>>> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
->>>> index 7896fcf11df6..dc1ba580c4db 100644
->>>> --- a/arch/x86/kernel/cpu/resctrl/core.c
->>>> +++ b/arch/x86/kernel/cpu/resctrl/core.c
->>>> @@ -25,8 +25,14 @@
->>>>  #include <asm/resctrl.h>
->>>>  #include "internal.h"
->>>>  
->>>> -/* Mutex to protect rdtgroup access. */
->>>> -DEFINE_MUTEX(rdtgroup_mutex);
->>>> +/*
->>>> + * rdt_domain structures are kfree()d when their last cpu goes offline,
->>>> + * and allocated when the first cpu in a new domain comes online.
->>>> + * The rdt_resource's domain list is updated when this happens. The domain
->>>> + * list is protected by RCU, but callers can also take the cpus_read_lock()
->>>> + * to prevent modification if they need to sleep. All writers take this mutex:
->>>
->>> Using "callers can" is not specific (compare to "callers should"). Please provide
->>> clear guidance on how the locks should be used. Reader may wonder "why take cpus_read_lock()
->>> to prevent modification, why not just take the mutex to prevent modification?"
->>
->> 'if they need to sleep' is the answer to this. I think a certain amount of background
->> knowledge can be assumed. My aim here wasn't to write an essay, but indicate not all
->> readers do the same thing. This is already the case in resctrl, and the MPAM pmu stuff
->> makes that worse.
->>
->> Is this more robust:
->> | * rdt_domain structures are kfree()d when their last cpu goes offline,
->> | * and allocated when the first cpu in a new domain comes online.
->> | * The rdt_resource's domain list is updated when this happens. Readers of
->> | * the domain list must either take cpus_read_lock(), or rely on an RCU
->> | * read-side critical section, to avoid observing concurrent modification.
->> | * For information about RCU, see Docuemtation/RCU/rcu.rst.
->> | * All writers take this mutex:
->>
->> ?
-> 
-> Yes, I do think this is more robust. Since you do mention, "'if they need to sleep'
-> is the answer to this", how about "... must take cpus_read_lock() if they need to
-> sleep, or otherwise rely on an RCU read-side critical section, ..."?
+I think considering that the return value has been broken for so long,
+I think we can pretty much assume that there are no actual users of
+it, and we might as well clean up the semantics properly.
 
-Yes, I've changed this to
-| * The rdt_resource's domain list is updated when this happens. Readers of
-| * the domain list must either take cpus_read_lock() if they need to sleep,
-| * or rely on an RCU read-side critical section, to avoid observing concurrent
-| * modification.
+Willing to send that patch in and we'll get it tested in the crucible
+of the real world?
 
-
-> I do not
-> think it is necessary to provide a link to the documentation. If you do prefer
-> to keep it, please note the typo.
-
-I'll drop that then.
-
-> Also, please cpu -> CPU. 
-
-Fixed.
-
-
->>>> @@ -569,30 +579,27 @@ static void clear_closid_rmid(int cpu)
->>>>  static int resctrl_arch_online_cpu(unsigned int cpu)
->>>>  {
->>>>  	struct rdt_resource *r;
->>>> -	int err;
->>>>  
->>>> -	mutex_lock(&rdtgroup_mutex);
->>>> +	mutex_lock(&domain_list_lock);
->>>>  	for_each_capable_rdt_resource(r)
->>>>  		domain_add_cpu(cpu, r);
->>>>  	clear_closid_rmid(cpu);
->>>> +	mutex_unlock(&domain_list_lock);
->>
->>> Why is clear_closid_rmid(cpu) protected by mutex?
->>
->> It doesn't need to be, its just an artefact of changing the lock, then moving the
->> filesystem calls out. (its doesn't need to be protected by rdtgroup_mutex today).
->>
->> If you don't think its churn, I'll move it to make it clearer.
-
-> I do not see a problem with keeping the lock/unlock as before but
-> if you do find that you can make the locking clearer then
-> please do.
-
-Done,
-
-
-Thanks,
-
-James
+                Linus
