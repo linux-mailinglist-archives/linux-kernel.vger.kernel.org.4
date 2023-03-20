@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3446C06E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880926C06F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCTAs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 20:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S229684AbjCTAxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 20:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCTAsY (ORCPT
+        with ESMTP id S229483AbjCTAxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 20:48:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CBA1A651;
-        Sun, 19 Mar 2023 17:48:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 19 Mar 2023 20:53:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A081A48A;
+        Sun, 19 Mar 2023 17:53:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pfx1D6mPgz4whr;
-        Mon, 20 Mar 2023 11:48:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679273297;
-        bh=QcLIfaZPezFlMCQYfvgh1M5erf9QtnCKDR4foIcR2po=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qeFCgw00UedFknB0zCGwXtTt7IoW/tqT4/e6YsTzkCawbLHo+j1OEHjMdX4dIfpOX
-         UcsQxol3mNPbqopgTqdlzSajwvah/NfrQ1G2VRm/OD1b84j/2CZaCQsOTDVb0IJdQz
-         XaQym/BM+z27evrFdU106svP6d1K490NNtaXEbO11G+gaQO40Tvp5ez+5Y1sJbr2hK
-         ETI2mqeWic3lcahMbvD8M/6khw53BPzVS8Wl424aaZ55WDMiKaBvNMVSKvSfTGQRKZ
-         y5iomJ0DwHmHihzeY9Yq9xwjHCJC28d2IaHEf4q0O2XekMnWc0rCCMdlRpqK9q91zJ
-         E1euUvYzQOM1g==
-Date:   Mon, 20 Mar 2023 11:48:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the leds-lj tree
-Message-ID: <20230320114816.2abe5751@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40DA3B80D3D;
+        Mon, 20 Mar 2023 00:53:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637A7C433D2;
+        Mon, 20 Mar 2023 00:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679273581;
+        bh=jSUNIjL8GeyeDz0d1ATeTeuULRx6zQ5sbGxW0nJ5JMc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MOfUIfzwPNQIWOynyJHERDXNnvOFwWNWABOTrCX5MDGQsPyaGDkAiSB9e7HNWNWlI
+         MKxegEGZe/QAyTwxAuHjNDDgKOaOGY5BRl0sCOZkJmDMqMFAWyug2Y6xc8wSHVqXkh
+         SSaXzLVuRTseWJ8796mITxvuU8WaUxX0fgOgvxe2h2aDJ/mt0wAKleNSk28BZERL0X
+         eeOt6ATv3Tdeg8ZGQEoXunHbjq/njcAZuyImpJATF3fjU8BpoPVztu+R3xl64SQQ0M
+         ISxVOsm7JPnB8XdkZr3uJVqryGFkyDcgA1BUEA4SC1jf91EuJTzy8K3vo26f5i71r4
+         hhBKzjBXlc6QA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alexandr Sapozhnikov <alsp705@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sasha Levin <sashal@kernel.org>, airlied@redhat.com,
+        kraxel@redhat.com, airlied@gmail.com, daniel@ffwll.ch,
+        sam@ravnborg.org, jani.nikula@intel.com, javierm@redhat.com,
+        ville.syrjala@linux.intel.com,
+        virtualization@lists.linux-foundation.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.2 01/30] drm/cirrus: NULL-check pipe->plane.state->fb in cirrus_pipe_update()
+Date:   Sun, 19 Mar 2023 20:52:26 -0400
+Message-Id: <20230320005258.1428043-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/isvlHpMjxe2I3lD7Cg4I/iS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/isvlHpMjxe2I3lD7Cg4I/iS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Alexandr Sapozhnikov <alsp705@gmail.com>
 
-Hi all,
+[ Upstream commit 7245e629dcaaf308f1868aeffa218e9849c77893 ]
 
-After merging the leds-lj tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After having been compared to NULL value at cirrus.c:455, pointer
+'pipe->plane.state->fb' is passed as 1st parameter in call to function
+'cirrus_fb_blit_rect' at cirrus.c:461, where it is dereferenced at
+cirrus.c:316.
 
-drivers/leds/rgb/leds-mt6370-rgb.c: In function 'mt6370_check_vendor_info':
-drivers/leds/rgb/leds-mt6370-rgb.c:889:15: error: implicit declaration of f=
-unction 'FIELD_GET' [-Werror=3Dimplicit-function-declaration]
-  889 |         vid =3D FIELD_GET(MT6370_VENDOR_ID_MASK, devinfo);
-      |               ^~~~~~~~~
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Caused by commit
+v2:
+	* aligned commit message to line-length limits
 
-  55a8a5c16eb3 ("leds: rgb: mt6370: Add MediaTek MT6370 current sink type L=
-ED Indicator support")
+Signed-off-by: Alexandr Sapozhnikov <alsp705@gmail.com>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20230215171549.16305-1-alsp705@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/tiny/cirrus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have used the leds-lj tree from next-20230317 for today.
+diff --git a/drivers/gpu/drm/tiny/cirrus.c b/drivers/gpu/drm/tiny/cirrus.c
+index 678c2ef1cae70..ffa7e61dd1835 100644
+--- a/drivers/gpu/drm/tiny/cirrus.c
++++ b/drivers/gpu/drm/tiny/cirrus.c
+@@ -455,7 +455,7 @@ static void cirrus_pipe_update(struct drm_simple_display_pipe *pipe,
+ 	if (state->fb && cirrus->cpp != cirrus_cpp(state->fb))
+ 		cirrus_mode_set(cirrus, &crtc->mode, state->fb);
+ 
+-	if (drm_atomic_helper_damage_merged(old_state, state, &rect))
++	if (state->fb && drm_atomic_helper_damage_merged(old_state, state, &rect))
+ 		cirrus_fb_blit_rect(state->fb, &shadow_plane_state->data[0], &rect);
+ }
+ 
+-- 
+2.39.2
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/isvlHpMjxe2I3lD7Cg4I/iS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXrVAACgkQAVBC80lX
-0Gx3Vwf+MArjrV4EynLd3zfNyIyMIsvFZc4c+/6Ct7ovau0FdQg+CdEPHI+VCouY
-v7tHRJs6z5pk0zNuOPfXq4PjMoKvtmD+oo+vB7KbPenaZFwxDDxsQNfAurjJ2Z7T
-tTDMDCejGAgzJBKaiobKdMNzuH2wm44TvQk56UMJjduv3hp7v2qXMtEgEOBFXur3
-XXIgfctbFhYsfJLKHdIvht6rvk8y6lqxHP16Roc4S97t2x8ujq27Y3ZYFensAqXJ
-3LF4PU71Thk23YEBeYIAfL+DVxlpe6kVWrZw+DPL9HvBLO+0JARN6ZI5VkrriTTx
-idU6xisv8RCLrrhVGQppvWK4nM3inw==
-=m4bJ
------END PGP SIGNATURE-----
-
---Sig_/isvlHpMjxe2I3lD7Cg4I/iS--
