@@ -2,143 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E6F6C1E67
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B207F6C1F56
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCTRqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S231216AbjCTSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCTRpi (ORCPT
+        with ESMTP id S229742AbjCTSQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:45:38 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2989A2A178;
-        Mon, 20 Mar 2023 10:41:33 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id h31so7085781pgl.6;
-        Mon, 20 Mar 2023 10:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679334091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+jXsORzAzATpiIMon/GzfxOK7NLxGV8EwmaMIYBmS0I=;
-        b=X3mlmfkdl1WpAb/hv+kWhBJGn/eOx9nnn8RjNStTAaTfxh9zjIzpbmxCN4LkVo59LL
-         d48b7/nMnQZYfb4Xn+Fnv1AYco0fp2qMYUVGkQJCJb9u+5Q6uWGObaRQRiU7MLlKgzvI
-         keEE6vI+SjAcMNrTQj+ni0Wl9iTq0mGRZwcJgvAFnUAdwFn/cxMrdkh701Ilv2Qohsrk
-         eqIlvT5wLH0Oj0hMIfFJ8ZS1Xt0+hSPeV+5HEqhMk0VRY55rcMhEkMYpfYIlnQUto5jH
-         P3RcfgKUfEIBzJAOMYkn5eHsT6k2QzUrVf0nhZs2SGAJkWdHDtUjzAoGsH6UEA7EMSLA
-         hfxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679334091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+jXsORzAzATpiIMon/GzfxOK7NLxGV8EwmaMIYBmS0I=;
-        b=IylAli7VfncPeEcGeaveof/IkMkagVZ/4NyH9n/xpNpInJUOeo/qISvWtAE7oFolns
-         iM95kKIsF8LiacC2ZUWedHPB6BoXUc2LmLRADGZN++HDnpOfjZwDS//1u/VTTHDtu4Tf
-         txyJnQwncgvH8JmFQpxbWbxYQ9/ZS6cijtkgFj8oMFBsMIHl2VfKJ1vbnYzUUGDVmPnq
-         PtpQ8X+SlQkJE3G0RQaeUQngu8ikhrGdvC3YZ93sOmRQnOlf1JcQj+m4L1zKYZTPxcAn
-         UXxjVWEHb5V+cYevfCz9zJKIJjeXn68Cayr27BpTKbvsuqGMLUHUQgueXctr0J46VGsb
-         xmrA==
-X-Gm-Message-State: AO0yUKXadCh0nV4Sj8iYJS6ifKD2Zt35HhSax/gYF31FwsHHkA4u0k3b
-        qJosYtnYX7o4Tkd9g83eYAFg396Vaxvagdq+Pa4=
-X-Google-Smtp-Source: AK7set//+jyxRSt0k/E22iqEqLXnguu06v5ypSdA0D50hd788gr3RF0q6o+tORTrExIVAv9LiKvEqvWsazq5AekVz1E=
-X-Received: by 2002:a65:5183:0:b0:507:8088:9e0d with SMTP id
- h3-20020a655183000000b0050780889e0dmr2197473pgq.7.1679334090955; Mon, 20 Mar
- 2023 10:41:30 -0700 (PDT)
+        Mon, 20 Mar 2023 14:16:49 -0400
+X-Greylist: delayed 667 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Mar 2023 11:10:38 PDT
+Received: from rcdn-iport-9.cisco.com (rcdn-iport-9.cisco.com [173.37.86.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2375330B22
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=3216; q=dns/txt; s=iport;
+  t=1679335839; x=1680545439;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lL/L1M5ipRbcKUTE79G1Dbmu5VJ+KpCTQx7b3yegPPY=;
+  b=gTm2MEC+B7Fsdm+ggiP3J75cNdLrnTaWxYOps1jNNWP/LEuLPSZ6ocYY
+   ezSRTSaNFyV/m3qfITeI5+1iMHRr2TjlO/IUWgLZjGdasXjvnswGNXtSK
+   9wT0sVO/jeREo9r8QLV8yxGRS7UQVdpu1Nfbl3t2X+/yUCZ04uuWilv/I
+   8=;
+X-IronPort-AV: E=Sophos;i="5.98,276,1673913600"; 
+   d="scan'208";a="34119886"
+Received: from rcdn-core-10.cisco.com ([173.37.93.146])
+  by rcdn-iport-9.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 20 Mar 2023 17:42:22 +0000
+Received: from sjc-ads-7158.cisco.com (sjc-ads-7158.cisco.com [10.30.217.233])
+        by rcdn-core-10.cisco.com (8.15.2/8.15.2) with ESMTPS id 32KHgMo7024218
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 20 Mar 2023 17:42:22 GMT
+Received: by sjc-ads-7158.cisco.com (Postfix, from userid 1776881)
+        id 12D75CBEFAB; Mon, 20 Mar 2023 10:42:22 -0700 (PDT)
+From:   Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+To:     vigneshr@ti.com, tjoseph@cadence.com, lpieralisi@kernel.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com
+Cc:     linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
+        mawierzb@cisco.com, Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Subject: [PATCH] PCI: cadence: Move 28 bit mask CPU addr fixup ops from platform device to J721E platform
+Date:   Mon, 20 Mar 2023 10:41:34 -0700
+Message-Id: <20230320174134.3418224-1-bwawrzyn@cisco.com>
+X-Mailer: git-send-email 2.35.6
 MIME-Version: 1.0
-References: <CAE2MWkm=zvkF_Ge1MH7vn+dmMboNt+pOEEVSgSeNNPRY5VmroA@mail.gmail.com>
- <a4ce2c34-eabe-a11f-682a-4cecf6c3462b@blackwall.org> <CAE2MWkkDNZuThePts_nU-LNYryYyWTYOMk5gmuoCoGPh4bf4ag@mail.gmail.com>
-In-Reply-To: <CAE2MWkkDNZuThePts_nU-LNYryYyWTYOMk5gmuoCoGPh4bf4ag@mail.gmail.com>
-From:   Ujjal Roy <royujjal@gmail.com>
-Date:   Mon, 20 Mar 2023 23:11:19 +0530
-Message-ID: <CAE2MWkn=ygeVwj=j7ggLd+10mGjPJEC8Et5MGHVzs=dGWLccYg@mail.gmail.com>
-Subject: Re: Multicast: handling of STA disconnect
-To:     Nikolay Aleksandrov <razor@blackwall.org>
-Cc:     roopa@nvidia.com, netdev@vger.kernel.org,
-        Kernel <linux-kernel@vger.kernel.org>,
-        bridge@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.30.217.233, sjc-ads-7158.cisco.com
+X-Outbound-Node: rcdn-core-10.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nik,
+The 28 bit mask CPU addr fixup is used for generic platform device. However,
+not all platforms require to mask 32 bit CPU address. Move 28 bit mask CPU addr
+fixup ops to J721E SoC platform driver and use empty as a default one.
 
-Any idea if the station connects back immediately after say 10 sec?
-How to resume the session immediately if we delete the MDB on
-disconnect? Currently, the station needs to wait until the next
-general query to come to STA.
+28 bit mask was introduced in commit d07701a17aec ("PCI: cadence: Add
+new *ops* for CPU addr fixup").
 
-My idea is to send a general query to that specific port to resume the
-session immediately from the STA connect event. This will create the
-MDB immediately and resume the stream, as we have deleted the MDB from
-disconnect.
+Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+---
+ drivers/pci/controller/cadence/pci-j721e.c       |  8 ++++++++
+ .../pci/controller/cadence/pcie-cadence-plat.c   | 16 ++++++----------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
-Thanks,
-UjjaL Roy
+diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+index 918e11082e6a..9436ae322d58 100644
+--- a/drivers/pci/controller/cadence/pci-j721e.c
++++ b/drivers/pci/controller/cadence/pci-j721e.c
+@@ -35,6 +35,8 @@
+ #define J721E_PCIE_USER_LINKSTATUS	0x14
+ #define LINK_STATUS			GENMASK(1, 0)
 
-On Mon, Mar 20, 2023 at 10:55=E2=80=AFPM Ujjal Roy <royujjal@gmail.com> wro=
-te:
->
-> Hi Nik,
->
-> Flushing MDB can only be done when we are managing it per station not
-> per port. For that we need to have MCAST_TO_UCAST, EHT and FAST_LEAVE.
->
-> Here one more point is - some vendors may offload MCAST_TO_UCAST
-> conversion in their own FW to reduce CPU.
->
-> So, the best way is to have MCAST_TO_UCAST enabled and MDB will become
-> per station, so we can delete MDB on disconnect. Shall, I create one
-> patch for review?
->
-> Thanks,
-> UjjaL Roy
->
-> On Mon, Mar 20, 2023 at 5:38=E2=80=AFPM Nikolay Aleksandrov <razor@blackw=
-all.org> wrote:
-> >
-> > On 20/03/2023 13:45, Ujjal Roy wrote:
-> > > Hi Nikolay,
-> > >
-> > > I have some query on multicast. When streams running on an STA and ST=
-A
-> > > disconnected due to some reason. So, until the MDB is timed out the
-> > > stream will be forwarded to the port and in turn to the driver and
-> > > dropps there as no such STA.
-> > >
-> > > So, is the multicast_eht handling this scenario to take any action
-> > > immediately? If not, can we do this to take quick action to reduce
-> > > overhead of memory and driver?
-> > >
-> > > I have an idea on this. Can we mark this port group (MDB entry) as
-> > > INACTIVE from the WiFi disconnect event and skip forwarding the strea=
-m
-> > > to this port in br_multicast_flood by applying the check? I can share
-> > > the patch on this.
-> > >
-> > > Thanks,
-> > > UjjaL Roy
-> >
-> > Hi,
-> > Fast leave and EHT (as that's v3's fast leave version) are about quickl=
-y converging when
-> > a leave is received (e.g. when there are no listeners to quickly remove=
- the mdb). They
-> > don't deal with interface states (IIUC). Why don't you just flush the p=
-ort's mdb entries
-> > on disconnect? That would stop fwding.
-> >
-> > Cheers,
-> >  Nik
-> >
-> >
++#define CDNS_PLAT_CPU_TO_BUS_ADDR	0x0FFFFFFF
++
+ enum link_status {
+ 	NO_RECEIVERS_DETECTED,
+ 	LINK_TRAINING_IN_PROGRESS,
+@@ -156,10 +158,16 @@ static bool j721e_pcie_link_up(struct cdns_pcie *cdns_pcie)
+ 	return false;
+ }
+
++static u64 j721e_pcie_cpu_addr_fixup(struct cdns_pcie *pcie, u64 cpu_addr)
++{
++	return cpu_addr & CDNS_PLAT_CPU_TO_BUS_ADDR;
++}
++
+ static const struct cdns_pcie_ops j721e_pcie_ops = {
+ 	.start_link = j721e_pcie_start_link,
+ 	.stop_link = j721e_pcie_stop_link,
+ 	.link_up = j721e_pcie_link_up,
++	.cpu_addr_fixup = j721e_pcie_cpu_addr_fixup,
+ };
+
+ static int j721e_pcie_set_mode(struct j721e_pcie *pcie, struct regmap *syscon,
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+index a224afadbcc0..8b8a072fdd9d 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+@@ -13,7 +13,6 @@
+ #include <linux/of_device.h>
+ #include "pcie-cadence.h"
+
+-#define CDNS_PLAT_CPU_TO_BUS_ADDR	0x0FFFFFFF
+
+ /**
+  * struct cdns_plat_pcie - private data for this PCIe platform driver
+@@ -30,16 +29,9 @@ struct cdns_plat_pcie_of_data {
+ 	bool is_rc;
+ };
+
+-static const struct of_device_id cdns_plat_pcie_of_match[];
+-
+-static u64 cdns_plat_cpu_addr_fixup(struct cdns_pcie *pcie, u64 cpu_addr)
+-{
+-	return cpu_addr & CDNS_PLAT_CPU_TO_BUS_ADDR;
+-}
++static struct cdns_pcie_ops cdns_plat_ops;
+
+-static const struct cdns_pcie_ops cdns_plat_ops = {
+-	.cpu_addr_fixup = cdns_plat_cpu_addr_fixup,
+-};
++static const struct of_device_id cdns_plat_pcie_of_match[];
+
+ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+ {
+@@ -77,6 +69,8 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+
+ 		rc = pci_host_bridge_priv(bridge);
+ 		rc->pcie.dev = dev;
++
++		/* Set default bus ops */
+ 		rc->pcie.ops = &cdns_plat_ops;
+ 		cdns_plat_pcie->pcie = &rc->pcie;
+ 		cdns_plat_pcie->is_rc = is_rc;
+@@ -105,6 +99,8 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+ 			return -ENOMEM;
+
+ 		ep->pcie.dev = dev;
++
++		/* Set default bus ops */
+ 		ep->pcie.ops = &cdns_plat_ops;
+ 		cdns_plat_pcie->pcie = &ep->pcie;
+ 		cdns_plat_pcie->is_rc = is_rc;
+--
+2.35.6
+
