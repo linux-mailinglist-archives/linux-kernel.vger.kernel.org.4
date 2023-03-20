@@ -2,91 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3846C1D58
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D64D6C1D53
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbjCTRI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S232415AbjCTRIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbjCTRIB (ORCPT
+        with ESMTP id S232388AbjCTRHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:08:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DEBBB81;
-        Mon, 20 Mar 2023 10:02:33 -0700 (PDT)
+        Mon, 20 Mar 2023 13:07:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC141BE9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:02:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79FFEB80FF1;
-        Mon, 20 Mar 2023 17:00:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 866FAC433EF;
-        Mon, 20 Mar 2023 17:00:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1816DCE136E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:01:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E55CC4339B;
+        Mon, 20 Mar 2023 17:00:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679331645;
-        bh=/djYoZe9ntFSOZv339dKdTqeE9XcpIw3rmFzL5xK5wM=;
+        s=k20201202; t=1679331660;
+        bh=KmJ/oFXmAm37DV4SuZPLCkjjERN6TSNmtSmlsR7nsUw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D9J+jNnUyG8XvfRGVoKpZa9jOutVYyLOYQgDSFJCXyYata3ZIpPO0ZNtjJTxrlhBS
-         rW8qMOpu6YoMNhwYidRGE3WH2XhzdcRlI8WafChZeGijpuFoc08FfDK5S8zOoKXka4
-         1npTXPa/eHn8mFULIkGN67E1owEoGrazdQam3cBV74CswiK79vAf0JCfWT6VmdV2xf
-         /mzpewb2X3E0w35to99OEREy0mDx2MMKVW8zQrF1J5g6wBZEXM9CwdtCebkh5ddEAm
-         hlgZ/EORi0lXYcOvdwLMlXIzdWP+zmW4TvZe5vNn6Ql8f5/125K8uV1PSyeMqTj557
-         v/TYt+IxRNZCg==
-Date:   Mon, 20 Mar 2023 18:00:38 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
-Message-ID: <ZBiRNpvITuOT03rE@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
- <204f124a-1030-99bd-9c84-25ed067991b6@ideasonboard.com>
+        b=fIUXguaAn3Smfj+ncepg6XqMZ00K09/+L1F6OcxR73uhTMI4IwNFis7TBBuORpYZ7
+         zXkRaVy1XqjoZ2j4yf2QZ8C+zia52EPL9mXanmwlwyhVvaVBv5iq4FJ1UMF7JWOn7I
+         HvB2AHcz8Ux8ZvSgJdJ+BC8a4f6s7qJS9HVmxSCiJ9Ev3hITezvV9J0ibXm8AAzq+k
+         uBuEdW+VDGOPSYJp4N50nky2T/yMqMJOuGv+zrNkH3QDuXm0IWqgZvCzyyiPh+bQBd
+         pWtuiGGmeT5MnBB/4JWqNODCaxI+tAtphC6nYubeDZ4GrhRIKD9vs4m6aq8LMoMuvB
+         /3Qw8n5fFFmLQ==
+Date:   Mon, 20 Mar 2023 10:00:57 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     hjc@rock-chips.com, heiko@sntech.de, airlied@gmail.com,
+        daniel@ffwll.ch, ndesaulniers@google.com,
+        michael.riesch@wolfvision.net, s.hauer@pengutronix.de,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/rockchip: vop2: fix uninitialized variable
+ possible_crtcs
+Message-ID: <20230320170057.GA592480@dev-arch.thelio-3990X>
+References: <20230316132302.531724-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+tPumYvoRMdn+0LO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <204f124a-1030-99bd-9c84-25ed067991b6@ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230316132302.531724-1-trix@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,54 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 09:23:02AM -0400, Tom Rix wrote:
+> clang reportes this error
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error:
+>   variable 'possible_crtcs' is used uninitialized whenever 'if'
+>   condition is false [-Werror,-Wsometimes-uninitialized]
+>                         if (vp) {
+>                             ^~
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2336:36: note:
+>   uninitialized use occurs here
+>                 ret = vop2_plane_init(vop2, win, possible_crtcs);
+>                                                  ^~~~~~~~~~~~~~
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:4:
+>   note: remove the 'if' if its condition is always true
+>                         if (vp) {
+>                         ^~~~~~~~
+> 
+> The else-statement changes the win->type to OVERLAY without setting the
+> possible_crtcs variable.  Rework the block, initialize possible_crtcs to
+> 0 to remove the else-statement.  Split the else-if-statement out to its
+> own if-statement so the OVERLAY check will catch when the win-type has
+> been changed.
+> 
+> Fixes: 368419a2d429 ("drm/rockchip: vop2: initialize possible_crtcs properly")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
---+tPumYvoRMdn+0LO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Hi Tomi,
-
-> Wolfram, do you have any comments on this?
-
-Not yet. I need to dive into the previous discussions again to
-understand what we agreed on and what potential problems we had to face.
-However, holiday season is near, it could be that I won't have really
-time for this until Mid-April or so. I'll try earlier but no promises :/
-
-> Things have been calming down, I think, and I'd like to merge the series
-> soon if nothing major comes up. The easiest way would be to merge the whole
-> series via linux-media, as most of the patches are for media. If this looks
-> good, can you ack it and I'll send a pull request to linux-media
-> maintainers?
-
-I'd think this is a too elemental (is this a word?) change for someone
-else to pull it. But no worries, I would offer an immutable branch right
-when I am done with reviewing so other subsystems can pull it. Or are
-there other technical reasons I missed?
-
-Sorry for not having better news,
-
-   Wolfram
-
-
---+tPumYvoRMdn+0LO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQYkTIACgkQFA3kzBSg
-KbajBxAAkjZdWBWFPtrSxR/LahXMxyN95xYIZuGOYTIVmt6GWdN5oimajXGp72Kp
-gn/PysIRZ6LRH6lruLwVNiLPV3OzvSs0K/seVwxE3CINFd1QnHajhXpjwajZmVy8
-ZnDpbdl3aN6OSpuZuKlANJ/PNt2BN5Wm2iC+bOXKb30u+2u+3cfGoRkZ+MngUxmR
-T5XSFXGMxokpHyIIaP47gerFh/aYwQ280kyRM/ZfBNVYhsfy2FnehHWfOtk1X+/h
-ALwGntFezsferOQUB/qbzNg33sTkGu6rVMhlFZu/40QBgFhqozOuHousk9I66MmT
-Or7sGgZ12EDsmdgAIn2Aik2hSvGXBdlpINBVr+lPE3Rxo4J2H7uTjSrsedBjGYwH
-acU3dD6hqzTjL7Xth6hHE7HAft6nzso2EEB1EKZQtsw3MlYfRNQb35jdbcvPc8tc
-U58KKbV3wBIJ/VnPbQ44j5S0B/LFhPwhhhhohBZ3NY0Yv1tw7ckMqzMiWxue2cVQ
-1jPT5HCCD5mskzm9n56EQ9A5JE3Naic2/iaOHNP3K4TPYAhZ7lXGziuNuS5jRr84
-8z3ffCgs/aSpPe1OPQdZwYAPewFe5TP332nDzTOLNaxDJSManIpyoyOgmuaEZdXH
-LvY7DaRf2zW49i6gi05WhzUYL0Mb2sfv3Xm7gyxSH0ieFZ/0CX8=
-=j1Ll
------END PGP SIGNATURE-----
-
---+tPumYvoRMdn+0LO--
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> index 03ca32cd2050..fce992c3506f 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> @@ -2301,7 +2301,7 @@ static int vop2_create_crtcs(struct vop2 *vop2)
+>  	nvp = 0;
+>  	for (i = 0; i < vop2->registered_num_wins; i++) {
+>  		struct vop2_win *win = &vop2->win[i];
+> -		u32 possible_crtcs;
+> +		u32 possible_crtcs = 0;
+>  
+>  		if (vop2->data->soc_id == 3566) {
+>  			/*
+> @@ -2327,12 +2327,11 @@ static int vop2_create_crtcs(struct vop2 *vop2)
+>  				/* change the unused primary window to overlay window */
+>  				win->type = DRM_PLANE_TYPE_OVERLAY;
+>  			}
+> -		} else if (win->type == DRM_PLANE_TYPE_OVERLAY) {
+> -			possible_crtcs = (1 << nvps) - 1;
+> -		} else {
+> -			possible_crtcs = 0;
+>  		}
+>  
+> +		if (win->type == DRM_PLANE_TYPE_OVERLAY)
+> +			possible_crtcs = (1 << nvps) - 1;
+> +
+>  		ret = vop2_plane_init(vop2, win, possible_crtcs);
+>  		if (ret) {
+>  			drm_err(vop2->drm, "failed to init plane %s: %d\n",
+> -- 
+> 2.27.0
+> 
