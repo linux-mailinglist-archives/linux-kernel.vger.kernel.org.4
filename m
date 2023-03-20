@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DF26C2221
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFE86C221C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjCTUBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S229776AbjCTUAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCTUBS (ORCPT
+        with ESMTP id S229538AbjCTUAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:01:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7920B28D15
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679342416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VLdKgj4+WVR+d9i0P6IUaXA9yjHWXiqkGmOulRR5eEk=;
-        b=JwNhytAY7E2KpV09IA4fdJ6Z5dPyBaQ17iFrvupH+Lo3ffAK63FseICstYmHpJzFYdPdfO
-        4xwLVZcPxFwN5nrh6Wh+sdAo4jxXtqbtWsfR7IIcFk0s3LSWVAnHfw2bs6vOz+KhWjJW+C
-        8ZUxtP/a8BfDCSH/TjRJ+m+VLlAFjho=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-oAwANaBLOzWrhjRM7RjbCg-1; Mon, 20 Mar 2023 16:00:14 -0400
-X-MC-Unique: oAwANaBLOzWrhjRM7RjbCg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 32EBC1C0432C;
-        Mon, 20 Mar 2023 20:00:14 +0000 (UTC)
-Received: from localhost (unknown [10.22.11.102])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D27841121319;
-        Mon, 20 Mar 2023 20:00:13 +0000 (UTC)
-Date:   Mon, 20 Mar 2023 17:00:13 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     Joe Korty <joe.korty@concurrent-rt.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH 5.10.162-rt78] Restore initialization of
- wake_q_sleeper.next in fork.c
-Message-ID: <ZBi7TbNgBAZL6tdw@uudg.org>
-References: <20230320193731.GA36840@zipoli.concurrent-rt.com>
+        Mon, 20 Mar 2023 16:00:44 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F4FBDD5;
+        Mon, 20 Mar 2023 13:00:23 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id q88so2100400qvq.13;
+        Mon, 20 Mar 2023 13:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679342422;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uK4an5IRfEdpcLHvzRWsxmJ6vlYV0PkLamta65Wo9WM=;
+        b=BiZjGvdnJU2MQaQfHwoFOFhNRFz3PtJqwdiLljGre/M1uxpBCXW11o1bAAK04SkOj0
+         2EJcwCcD4JiGRZKX4H3KqWvlzBA0ZWLSrYOxfvBfKKXaBSAAN4B9Z7p6wQzwizOS0PQU
+         ycnu/dESAn3f6psN8fLxGRkYRUNCUfiPrg+JQREbO9fzXaR53fKv9qjS1jMCuN8eMVna
+         ck+eYNtADgnscR1+UCdaC0oRs48VtmKA6N/R6FT7nVa0Pz5Aw7Ly9FGt0NLDOruSlto8
+         lEGyeKLoXGc3nDvZm+PhKSztdJYzWuPbEtawBB5DHvRR/77+bHCMqe1RY1myVRxVUJXm
+         lxIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679342422;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uK4an5IRfEdpcLHvzRWsxmJ6vlYV0PkLamta65Wo9WM=;
+        b=AA9Q6wkMVLcOnh9O94qgs2iupzkliPZGdqZzKAz+U6YgJpJac7ya3A2lX8cU1nRMW/
+         b9mtbWHrnqKXqUwy4TCdiKsitCj2w1VIJgRrmIam+6Fq/kFQ2kterM0Q5miFXzgIkR5l
+         INoAb/c8ihGf7qHZr49Vi2kIoPjaYPzmS5EAUyEMpwY40NH8RGA59s+l/Y1yKk3IEUdU
+         X0wOAbIh/2Aa2bZYSQk/QadqWPT6CCR42DONd6Ty+TGfqUA+romV1z77u0eIu3QmhFJx
+         Nds47GJXNum2D92ysI6KJJS3kTROJYExEcmHptwmABapafmjVWOYiHzhCCZuhLBF3ApW
+         zdYw==
+X-Gm-Message-State: AO0yUKVr12PsQFM1fKaFaxbR1/Ly3+JutwVjTFcXP31UbceT3icQFjIR
+        LFiegeCgQ5sx69T7XER5EjQ=
+X-Google-Smtp-Source: AK7set8am0n0iqcCczejb+M4mjKbMTpHk7CLBVNcxZJA3LDgnUvfmg6PZvWWWiRzrEo0DCsbzv2F7A==
+X-Received: by 2002:a05:6214:19ed:b0:5c8:ad0d:3b7e with SMTP id q13-20020a05621419ed00b005c8ad0d3b7emr205412qvc.35.1679342422543;
+        Mon, 20 Mar 2023 13:00:22 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s127-20020a37a985000000b007469b5bc2c4sm104393qke.13.2023.03.20.13.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 13:00:21 -0700 (PDT)
+Message-ID: <6f7e9b8c-6256-e7dd-b130-8e1429610faa@gmail.com>
+Date:   Mon, 20 Mar 2023 13:00:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320193731.GA36840@zipoli.concurrent-rt.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4/4] net: dsa: b53: add BCM63268 RGMII configuration
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230320155024.164523-1-noltari@gmail.com>
+ <20230320155024.164523-5-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230320155024.164523-5-noltari@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,56 +79,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 03:37:31PM -0400, Joe Korty wrote:
-> In the transition from 5.10.158-rt77 to 5.10.162-rt78,
-> the initialization of task_struct::wake_q_sleeper.next
-> was dropped.  Restore it.
+On 3/20/23 08:50, Álvaro Fernández Rojas wrote:
+> BCM63268 requires special RGMII configuration to work.
 > 
-> This appears to be only a problem in 5.10.  5.15 does not
-> have wake_q_sleeper; 4.19 does have it but its initialization
-> there is still present.
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>   drivers/net/dsa/b53/b53_common.c | 6 +++++-
+>   drivers/net/dsa/b53/b53_regs.h   | 1 +
+>   2 files changed, 6 insertions(+), 1 deletion(-)
 > 
-> The 5.10.162-rt78 patch that damaged fork.c is:
-> 
->    0170-locking-rtmutex-add-sleeping-lock-implementation.patch
-> 
-> I do not have a simple test that brings out this problem.
-> My test consists of a shell script and eight binaries,
-> all of which were written in Ada.  strace shows that it
-> does a few thousand forks in rapid succession.  One of the
-> forks stalls out, after which no fork after that returns.
-> Eventually the 122 second stallout occurs and a large
-> number of threads are shown to be waiting for tasklist
-> lock, either in do_exit or in copy_process.  The kernel
-> .config has rt and many debug features enabled, lockdep
-> included.
+> diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
+> index 6e212f6f1cb9..d0a22c8a55c9 100644
+> --- a/drivers/net/dsa/b53/b53_common.c
+> +++ b/drivers/net/dsa/b53/b53_common.c
+> @@ -1240,8 +1240,12 @@ static void b53_adjust_63xx_rgmii(struct dsa_switch *ds, int port,
+>   		break;
+>   	}
+>   
+> -	if (port != dev->imp_port)
+> +	if (port != dev->imp_port) {
+> +		if (is63268(dev))
+> +			rgmii_ctrl |= RGMII_CTRL_MII_OVERRIDE;
 
-Joe, thank you for investigating that problem and for writing a patch.
+AFAICT the override bit is defined and valid for both 63268 and 6318, 
+essentially whenever more than one RGMII control register for port 4, 
+but also for other ports, it seems like the bit becomes valid. The 
+comment I have says that the override bit ensures that what is populated 
+in bits 5:4 which is the actual RGMII interface mode is applied. That 
+mode can be one of:
 
-Earlier today Steffen Dirkwinkel sent a similar patch:
+0b00: RGMII mode
+0b01: MII mode
+0b10: RVMII mode
+0b11: GMII mode
 
-    https://lore.kernel.org/all/20230320080347.32434-1-linux@steffen.cc/
+even though this is not documented as such, I suspect that the override 
+bit does not only set the mode, but also ensures that the delays are 
+also applied.
 
-Would you mind giving your ACK to his patch? I have that patch queued for
-my next build already.
+Once you update patch 3, this LGTM and you may add:
 
-Thank you,
-Luis
- 
-> Signed-off-by: Joe Korty <joe.korty@concurrent-rt.com
-> 
-> Index: b/kernel/fork.c
-> ===================================================================
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -960,6 +960,7 @@ static struct task_struct *dup_task_stru
->  	tsk->splice_pipe = NULL;
->  	tsk->task_frag.page = NULL;
->  	tsk->wake_q.next = NULL;
-> +	tsk->wake_q_sleeper.next = NULL;
->  	tsk->pf_io_worker = NULL;
->  
->  	account_kernel_stack(tsk, 1);
-> 
----end quoted text---
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+
+For your v2. Thanks!
+-- 
+Florian
 
