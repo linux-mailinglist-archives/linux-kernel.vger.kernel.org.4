@@ -2,103 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8948E6C0B8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA8C6C0B98
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjCTHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S230227AbjCTHsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjCTHmr (ORCPT
+        with ESMTP id S230005AbjCTHrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:42:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105BA2367D;
-        Mon, 20 Mar 2023 00:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679298131; x=1710834131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sbk48kWeR8tcGPniYaN2WncLmsXVlFjZA1OnqsPsU0g=;
-  b=k4jDM68kHpKp5zUykaYSTXap0EHHQymqIAo3EH+lsd+N2rB4WsQS54tz
-   qr0YaaMRASackeDdgvLWqfGeNEg5lG9XLdcWO+YU3NH6pTbvDnFiFhxXb
-   k32ViwJ4i3qD2BsDUsmIje5mCk9k2eqbO50WGExHtb25e9DZaT5y49oaY
-   dWPOc61G7uxwydr3Kgme8606ITz2Bx9AhaxWtYVApW43UCsBRrem08plX
-   f+K6ycqYXVe1L6d1Stq+qD0CR7fla6Hr88P4gUhDYugIclvoI/HPN2nqF
-   uh8H1nsvb2/EoWugS8mJXAcCN1QtaSQqgqc6QmWpW+R2ksXjlgyfQjMlF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="340956000"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="340956000"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:42:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="804812795"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="804812795"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 20 Mar 2023 00:42:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id BCC5E1CC; Mon, 20 Mar 2023 09:42:53 +0200 (EET)
-Date:   Mon, 20 Mar 2023 09:42:53 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Tom Rix <trix@redhat.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: rename shadowed variables bit to
- interrupt_bit and auto_clear_bit
-Message-ID: <20230320074253.GA62143@black.fi.intel.com>
-References: <20230315220450.1470815-1-trix@redhat.com>
- <20230316102048.GR62143@black.fi.intel.com>
- <20230316103744.GS62143@black.fi.intel.com>
- <2802c4c6-99d4-e084-baa4-5be7c123ddd6@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2802c4c6-99d4-e084-baa4-5be7c123ddd6@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 03:47:48 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 085E3125A4;
+        Mon, 20 Mar 2023 00:47:44 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D9D1820FAAB1;
+        Mon, 20 Mar 2023 00:47:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D9D1820FAAB1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679298463;
+        bh=R4FGQ4lqxzQ6i3XyEaB9tLoLHAKACDanZWNyaclL3hc=;
+        h=From:To:Subject:Date:From;
+        b=RbKLxl4qHVxRyI2pw7kqaG0xTQtDR77cZni4USqxvMLSN1THeRzfMXLWRx1D2Omoj
+         tw0/IETt6qvJtMxJ3ublJDH2wKYO/0eVGriU6TI7U+SKvvNA9HqmOSZynryxORapgr
+         Zyf9kzUnjl5z1lao0MbSJyecCHBMK9CUt++HTuAk=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com
+Subject: [PATCH v9 0/5] Device tree support for Hyper-V VMBus driver
+Date:   Mon, 20 Mar 2023 00:47:35 -0700
+Message-Id: <1679298460-11855-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 08:33:58PM -0500, Mario Limonciello wrote:
-> 
-> On 3/16/23 05:37, Mika Westerberg wrote:
-> > On Thu, Mar 16, 2023 at 12:20:48PM +0200, Mika Westerberg wrote:
-> > > +Cc Mario
-> > > 
-> > > On Wed, Mar 15, 2023 at 06:04:50PM -0400, Tom Rix wrote:
-> > > > cppcheck reports
-> > > > drivers/thunderbolt/nhi.c:74:7: style: Local variable 'bit' shadows outer variable [shadowVariable]
-> > > >    int bit;
-> > > >        ^
-> > > > drivers/thunderbolt/nhi.c:66:6: note: Shadowed declaration
-> > > >   int bit = ring_interrupt_index(ring) & 31;
-> > > >       ^
-> > > > drivers/thunderbolt/nhi.c:74:7: note: Shadow variable
-> > > >    int bit;
-> > > >        ^
-> > > > For readablity rename the outer to interrupt_bit and the innner
-> > > > to auto_clear_bit.
-> > > Thanks for the patch! Yeah, this did not show up in any of the kbuild
-> > > tests perhaps they are missing cppcheck :(
-> > > 
-> > > I'm thinking that I'll just move the two commits from "fixes" to "next"
-> > > and add this one on top (and drop the stable tags) as the code that we
-> > > should be sending to stable should not need additional fixes IMHO. I
-> > > know Mario is on vacation so probably cannot answer here so let's deal
-> > > with this when he is back.
-> > Applied to thunderbolt.git/next (along with the two commits from Mario).
-> 
-> Thanks for the fix Tom!
-> 
-> Mika - It's unfortunate that a fixup was needed but I'd still like if we
-> can get these 3 commits into 6.3-rc and also to stable.
+This set of patches expands the VMBus driver to include device tree
+support. This feature allows for a kernel boot without the use of ACPI
+tables, resulting in a smaller memory footprint and potentially faster
+boot times. This is tested by enabling CONFIG_OF and OF_EARLY_FLATTREE
+for x86.
 
-Fair enough. I moved them into fixes now.
+The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+build.
+
+The third patch converts the VMBus driver from acpi to more generic
+platform driver.
+
+The fourth patch introduces the device tree documentation for VMBus.
+
+The fifth patch adds device tree support to the VMBus driver. Currently
+this is tested only for x86 and it may not work for other archs.
+
+[V9]
+- Add vmbus_mmio_remove for error handling
+- Remove logic from !acpi_disabled to acpi_disabled 
+
+[V8]
+- Remove the auto select of CONFIG_OF
+- Remove the dependency on !ACPI for OF_EARLY_FLATTREE
+- Used acpi_disabled instead of #ifdef and hence added a dummy function
+  for vmbus_acpi_add
+- GFP_ATOMIC -> GFP_KERNEL
+- used range.flags instead of hard coding flags
+- used __maybe_unused for acpi device id, removed #ifdef
+
+[V7]
+- Use cpu_addr instead of bus_addr.
+- Updated Documentation accordingly.
+
+[V6]
+- define acpi_sleep_state_supported in acpi header for !ACPI,
+  dropped the changes done in hv_common.c under #ifdef CONFIG_ACPI
+- "Devicetree" instead of "device tree"
+- Remove initialize of ret
+- set "np = pdev->dev.of_node;" on declarartion
+- remove one error print
+- use bus_addr instead of pci_addr
+
+
+[V5]
+- Removed #else for device tree parsing code. This should help better
+  test coverage.
+- Fix macro '__maybe_unused' warning
+- Added below options in Kconfig to enable device tree options for HYPERV
+	select OF if !ACPI
+	select OF_EARLY_FLATTREE if !ACPI
+- moved dt documantation to bus folder
+- update the dt node to have 'bus' as parent node instead of 'soc'. Also
+  added compatible and ranges property for parent node.
+- Made sure dt_binding_check have no error/varnings for microsoft,vmbus.yaml file
+- Fix commit messages and add Reviwed-by from Michael for first 3 patches
+
+[V4]
+- rebased which fixed return type of 'vmbus_mmio_remove' from int to void
+- used __maybe_unused for 'vmbus_of_match' and safeguard vmbus_acpi_device_ids
+  under #ifdef
+
+[V3]
+- Changed the logic to use generic api (for_each_of_range) for parsing "ranges".
+- Remove dependency of ACPI for HYPERV in case of x86.
+- Removed "device tree bindings" from title and patch subject.
+- Removed duplicate vendor prefix, used microsoft instead of msft.
+- Use 'soc' in example of device tree documantation for parent node.
+- Fixed compatible schemas error generated in other modules referring to
+  virtio.
+- Drop hex notation and leading zeros from device tree cell properties.
+- Added missing full stop at the end of commit message.
+- Typos fix: s/Initaly/Initially/ and s/hibernate/hibernation/.
+- Replace to_acpi_device with ACPI_COMPANION which simplify the logic.
+- Added more info in cover letter aboutsystem under test.
+
+[v2]
+- Convert VMBus acpi device to platform device, and added device tree support
+  in separate patch. This enables using same driver structure for both the flows.
+- In Device tree documentation, changed virtio folder to hypervisor and moved
+  VMBus documentation there.
+- Moved bindings before Device tree patch.
+- Removed stale ".data" and ".name" field from of_device match table.
+- Removed debug print.
+
+Saurabh Sengar (5):
+  drivers/clocksource/hyper-v: non ACPI support in hyperv clock
+  ACPI: bus: Add stub acpi_sleep_state_supported() in non-ACPI cases
+  Drivers: hv: vmbus: Convert acpi_device to more generic
+    platform_device
+  dt-bindings: bus: VMBus
+  Driver: VMBus: Add Devicetree support
+
+ .../bindings/bus/microsoft,vmbus.yaml         |  54 ++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/clocksource/hyperv_timer.c            |  15 ++-
+ drivers/hv/Kconfig                            |   5 +-
+ drivers/hv/vmbus_drv.c                        | 122 ++++++++++++++----
+ include/linux/acpi.h                          |   5 +
+ 6 files changed, 172 insertions(+), 30 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+
+-- 
+2.34.1
+
