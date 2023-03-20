@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B84F6C0B9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DF76C0B9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjCTHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S230195AbjCTHut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjCTHt5 (ORCPT
+        with ESMTP id S230113AbjCTHuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:49:57 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610A811E94
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:49:49 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id w11so5747454wmo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679298587;
-        h=content-transfer-encoding:mime-version:to:from:subject:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=IfpM4ChVlmSMiOjhRunbmWtdJ1rW4MbqLuM2qp48nxQ=;
-        b=oIQgEds23IB0CT77z1qbybWa6l0Q9/qQCbqhYxVpdu6si+/tJkG6pswGVt4UfrfjCW
-         21cvBSTUo2kvTDdNd3bYWODZr1o8c1b8EK1j8bhWFNRMhbbRQJYBScKqPL5lHkNZXEeM
-         CuyZ1jqnKEF+A17uNDloa4Q1VrpGqRAoHxmJiB+dZ/b/WXBRyh/UzA0wopfs0+dA2tuT
-         AFfyAotpg6SEWoWiYeYh85EFcQbnucIcf62VxrPidYXVAbj9ImxWDoL2ZZvIU31zaUt3
-         w/yBoR1MpfgSqagcEkvAAUxbTtmfAhgwbZV08ZMULrSmaRTBafxHqfw4uahPpbFaMqIi
-         OElA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679298587;
-        h=content-transfer-encoding:mime-version:to:from:subject:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IfpM4ChVlmSMiOjhRunbmWtdJ1rW4MbqLuM2qp48nxQ=;
-        b=oFE4jjBuaVyb8Gy3oX8M3zg0BRsCwH0SuTa8XBIkAqNV55qVX9Q44Pbi7VEbgQw4zJ
-         j4PhXmH6/Vyw2rapov6p9bmCojfDS1PVKo4DLJt3IEUEub0mA8fU5GwEjTKyFcNHRJoB
-         MR8agJ+2Pu0sQBKGR4XiMa59j3Ww3Ix+cgqrTILWPN1h7q86NRop62A81HUm1g3mQJUm
-         qYYWp1058f8QIHqsZO2ewom6RIBUUe1AfOu1tV4g02Ljwkqu7CDIpfwLtf8D1GVT3WhU
-         7vMCscV8PIeOEEFjC2rAgrISU5RLFtk2asgQRCoVT0qLOhqyRep3eibm91hTliD7FEp/
-         IUbw==
-X-Gm-Message-State: AO0yUKVscPCRPjQdeuNPm3nZFptPw+ULLlF6lE3OkLzQwTBn7XVyiPBI
-        0jZ6wi8R52R5n1X5uNJhsaEfqX5ADRbX8w==
-X-Google-Smtp-Source: AK7set9yNwg3NuHPFiuvAoEJY4hO9C0MvcRgqnlVGds88fz6+eJ3sXL+qyL+mJKqdu87Y5l9FV9Emw==
-X-Received: by 2002:a1c:f706:0:b0:3eb:2e27:2d0c with SMTP id v6-20020a1cf706000000b003eb2e272d0cmr9206676wmh.1.1679298587624;
-        Mon, 20 Mar 2023 00:49:47 -0700 (PDT)
-Received: from [127.0.0.1] (178.165.205.58.wireless.dyn.drei.com. [178.165.205.58])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c22c100b003ede06f3178sm3572162wmg.31.2023.03.20.00.49.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 Mar 2023 00:49:47 -0700 (PDT)
-Message-ID: <aa775380bad70870d6cd17c178c2055c@swift.generated>
-Date:   Mon, 20 Mar 2023 08:49:42 +0100
-Subject: Re: Domainname singleboard.de
-From:   Franz Steiner <franzjsteiner69@gmail.com>
-To:     "" <linux-kernel@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 03:50:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAF8E3BD
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:50:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4541C21AA2;
+        Mon, 20 Mar 2023 07:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679298630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7wWFxNwBeI6QSlHFitfcPhehJyQxi9nEaShLJ5NEVOM=;
+        b=L1X9g0Ud8Wux2i8xISKl5VsEteG2EOpaG38S5l0rPLbymKyV1rRpeRUGn98oWjy31caBsT
+        Xv7gbC5wqHm12ScAoul3Kj/zf+u6AHkElvCKYEfn9RA72+W4E00DOhX9SW/7gBTlXBFqa1
+        9gDd2x0D5E70UgQ4o/JwgnfnpKmCfSg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679298630;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7wWFxNwBeI6QSlHFitfcPhehJyQxi9nEaShLJ5NEVOM=;
+        b=s3KRZN6U79ZtB0Ry/XOLMdRSAsaHn21BfNrDlLMNKMqEkAtCZMpUdaMO6gDqujwDs8MCgi
+        Hlc/QTak8/1M9XDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 149C613A00;
+        Mon, 20 Mar 2023 07:50:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 17JTBEYQGGTUPAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 20 Mar 2023 07:50:30 +0000
+Date:   Mon, 20 Mar 2023 08:50:29 +0100
+Message-ID: <87wn3blv3u.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     lizhe <sensor1010@163.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] ALSA:ac97: Remove redundant driver match function
+In-Reply-To: <77006340.15c8.186f97b96e7.Coremail.sensor1010@163.com>
+References: <20230319044733.327091-1-sensor1010@163.com>
+        <87h6uhma0g.wl-tiwai@suse.de>
+        <77006340.15c8.186f97b96e7.Coremail.sensor1010@163.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sehr geehrte Damen und Herren,
+On Sun, 19 Mar 2023 11:47:51 +0100,
+lizhe wrote:
+> 
+> 
+> HI : 
+>      my name is li Zhe, I am Chinese
+
+OK, then applied the patch now.
 
 
-singleboard.de wird nicht mehr ben=
-=C3=B6tigt, und deshalb zur Feilbietung ausgeschrieben.
+thanks,
 
-Falls Sie weit=
-ere Informationen ben=C3=B6tigen, freue ich mich auf Ihre Nachricht.
+Takashi
 
-E=
-inen guten Start in die Woche
-
-Franz Steiner
-
----------------------=
-----------------------------------
+> At 2023-03-19 16:16:15, "Takashi Iwai" <tiwai@suse.de> wrote:
+> >On Sun, 19 Mar 2023 05:47:33 +0100,
+> >Lizhe wrote:
+> >> 
+> >> If there is no driver match function, the driver core assumes that each
+> >> candidate pair (driver, device) matches, see driver_match_device()
+> >> 
+> >> Drop the bus's match function that always returned 1 and so
+> >> implements the same behaviour as when there is no match function.
+> >> 
+> >> Signed-off-by: Lizhe <sensor1010@163.com>
+> >
+> >Is Lizeh your real full name?  (i.e. your name is "Li Zhe" ?)
+> >I'm asking because the Signed-off-by line is a legal requirement.
+> >
+> >
+> >thanks,
+> >
+> >Takashi
+> 
+> 
