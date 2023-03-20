@@ -2,80 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DAB6C095A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6730A6C095D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjCTDfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S229700AbjCTDim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCTDfb (ORCPT
+        with ESMTP id S229642AbjCTDih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:35:31 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EDC22104;
-        Sun, 19 Mar 2023 20:35:20 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id h2so1659368iow.0;
-        Sun, 19 Mar 2023 20:35:20 -0700 (PDT)
+        Sun, 19 Mar 2023 23:38:37 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2213FF965
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:38:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id m13-20020a25800d000000b00b3dfeba6814so11670205ybk.11
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:38:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679283319;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wmh00mSkc1yZ2kAYcG5WXSz9CKFnfDRzRtU77CPNAeQ=;
-        b=Sk1UO0BqWbVIcFRSdIKFLrdgojmDr9n8S/t7QQnrDxW60QXNx502h+HUyE5wCjyQYw
-         ns8iHl+9x6RMc5cjnuaNTaSCUFR2p8PhGP3ww+USCuZXwnAzAxLwBxA1vY752BU+wTcv
-         b3Wp5bDsu/nkqDLcagS5kORn1ATxDCbvVMjdT4MRgum431NMuMjB5yNiFA/UcAx4vvqj
-         RHmRGuFby0812mCsaZ4Vyiv+ertgCSy7mnh27I6eDEgUI6XX0Tqx2HqDMz6E5k1z/Ca4
-         6zLBsxp7lAD/h3CyIYvRevjP53ibxjv5DU8DVdgGEHGnh5cBC8sncBAluLABS63a+3Un
-         bfkw==
+        d=google.com; s=20210112; t=1679283514;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lEZYqTvAXtJtxMDl8FDOj3xVdVn2rBr2WTRC9CD3FD4=;
+        b=KFItMDuePrfwDcnb1SmdlpjX8taeFZPACRXcf15WX7MqLcnAJlyKa9KmGXj1Yzgmtk
+         eqWVLKwVu9twVUm1fNYgZ8Ekl7xFzAysVN7/VvufpyL+WorUE15pPj00TCmZx8NEUsWv
+         E+oiV+2W/Wa4UAHxlnsYcMol+hWAVT8cazSWCH4xjhSyf4bQFcuWLNIjLXgGDGzri2dO
+         PHo+RGR3s8+jUsI307wlqZJNu/S+xEY95joHun7MWI7ab0p1NUShBIIbHmn89rBUVNpl
+         QcRVvKiDDMUoP2tUHFWmMeUTJiqlRI1hO3TLjRxxy7FhjO3MjTk6VnYifSm0qBBHsrBo
+         sIFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679283319;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wmh00mSkc1yZ2kAYcG5WXSz9CKFnfDRzRtU77CPNAeQ=;
-        b=y7ZRxil4sFD/jkWyABvQNLH7p3cULACjyPo38VlYP+V3p9W+p+aQaxsf9DF8F4Vx4N
-         MnygzooRbvUur/hmIIyPW2N//fJMnlCS3XClIc0qI0xBvihncnnlxu3u37UE5gwC7mcV
-         FmIxe8T3WhsUm/JJHqAiGgZzOxLWewnOaz2bVy1iTH2X6zs/F1ay1/OOzPPJbMq9ZMV1
-         xWrijv4AnYz5fbhrFSDMbUiYktGlTJY2N1tu993KYrGo9Ro+ckb5W3pM0KQ3MgoXlis3
-         pg2mUiUZ8qOpyL2+Ynkbk0M4rkES5QEcAOnuSk/6uMQNvbq44vR/IYs33woL30bW3HJe
-         SQuQ==
-X-Gm-Message-State: AO0yUKXinwP7wDNKCTO8TyCw0BcgWu9mXqc/T5KZPQtbuj3GonTpBm7x
-        htjYgqQvHWkid36aQwE5QxM2RfU6qpI=
-X-Google-Smtp-Source: AK7set+BlDQo6auxxwphnPD+V6cZdPYewGRVL2C66NdtY01WQjeyEQFDE6hol0q6e9oU818n1R/k+g==
-X-Received: by 2002:a6b:dd19:0:b0:753:ee63:3dc with SMTP id f25-20020a6bdd19000000b00753ee6303dcmr4487405ioc.20.1679283319602;
-        Sun, 19 Mar 2023 20:35:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056638214900b004063cfecdb8sm2690378jaj.113.2023.03.19.20.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 20:35:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 19 Mar 2023 20:35:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        heiko@sntech.de, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        huangtao@rock-chips.com, william.wu@rock-chips.com,
-        jianwei.zheng@rock-chips.com, yubing.zhang@rock-chips.com,
-        wmc@rock-chips.com
-Subject: Re: [PATCH 4/4] usb: typec: tcpm: fix source caps may lost after
- soft reset
-Message-ID: <7038030f-1d7a-4c91-a255-bec73847b7c9@roeck-us.net>
-References: <20230313025843.17162-1-frank.wang@rock-chips.com>
- <20230313025843.17162-5-frank.wang@rock-chips.com>
- <f5650fa4-db16-b1e4-f5b4-917fbcabb415@roeck-us.net>
- <867179bc-a21f-5479-f27f-2e17fc5a9a01@rock-chips.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <867179bc-a21f-5479-f27f-2e17fc5a9a01@rock-chips.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        d=1e100.net; s=20210112; t=1679283514;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lEZYqTvAXtJtxMDl8FDOj3xVdVn2rBr2WTRC9CD3FD4=;
+        b=wAyzG6UOTMmvzQcV9CWuQMve9KiMSHn27j3xpmf4H2kDcWHi+grHFUj46yIBkidpT2
+         8p2jbvQxkkkapfaBtw8gefXB8+GrIQrb3W/maHc1CxoFRUk2T7QkDVXXBssnnX0U7QBn
+         MgRLNhb6G9A8Kkvg4uQycVfzVplbZsNXASR+Dhs6jvR+OiGO3xzUTCegSA2Yc0Ec0SYg
+         9xyI3/bR10iVr2xlZ8pLFTSnClj8A9HSIdI+xiqIpCqGRD+iGe4r6neHvj0+zxm0acmw
+         VxKJo29L8VfSwEJ34BydU3NBJgFE0jX2YRrWhzVsnRKZe+bueaAIa9foYQCzggj+9fnh
+         DyVQ==
+X-Gm-Message-State: AO0yUKU6T1DACaOl2/ajagnAZqWn+TYY2Nvd4P92ysrpLsZh/9kwp2ty
+        vPj4wd7vhrH0GJsbUQZYsV4ijN7KYSM3
+X-Google-Smtp-Source: AK7set9GQPL6P42ccI2PNSi17+UzRDe7MRmYUnCtluB0ZBEOKulpbRg3LrtW/zlgiUMlOipWp+RB2uzm8GM2
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:1895:9fa0:27f5:cb71])
+ (user=irogers job=sendgmr) by 2002:a05:6902:114b:b0:b09:6f3d:ea1f with SMTP
+ id p11-20020a056902114b00b00b096f3dea1fmr4617820ybu.4.1679283514323; Sun, 19
+ Mar 2023 20:38:34 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 20:37:48 -0700
+Message-Id: <20230320033810.980165-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Subject: [PATCH v4 00/22] Reference count checker and related fixes
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@collabora.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>, Hao Luo <haoluo@google.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,99 +99,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 10:38:35AM +0800, Frank Wang wrote:
-> Hi Guenter,
-> 
-> On 2023/3/17 20:58, Guenter Roeck wrote:
-> > On 3/12/23 19:58, Frank Wang wrote:
-> > > Invoke set_pd_rx() may flush the RX FIFO of PD controller, so do
-> > > set_pd_rx() before sending Soft Reset in case Source caps may be flushed
-> > > at debounce time between SOFT_RESET_SEND and SNK_WAIT_CAPABILITIES
-> > > state.
-> > > 
-> > 
-> > Isn't that a problem of the fusb302 driver that it flushes its buffers
-> > unconditionally when its set_pd_rx() callback is called ?
-> > 
-> > Guenter
-> > 
-> 
-> The story goes like this,  the fusb302 notified SOFT_RESET completion to
-> TCPM and began to receive the Source Caps automatically,
-> TCPM got completion from fusb302 and changed state to SNK_WAIT_CAPABILITIES
-> and invoked set_pd_rx() callback. However, the
-> fusb302 or TCPM's worker may be not scheduled in time, set_pd_rx() would be
-> performed after the Source Caps packets had received
-> into fusb302's FIFO, even after the GoodCRC (Source Caps) had be replied.
-> 
+The perf tool has a class of memory problems where reference counts
+are used incorrectly. Memory/address sanitizers and valgrind don't
+provide useful ways to debug these problems, you see a memory leak
+where the only pertinent information is the original allocation
+site. What would be more useful is knowing where a get fails to have a
+corresponding put, where there are double puts, etc.
 
-Yes, but the fusb302 driver clears its fifo in the set_pd_rx() callback.
-I see that as a problem in the fusb302 driver( it could clear its fifo when
-it notifies the TCPM that soft reset is complete, for example), and I am
-hesitant to work around that problem in the tcpm code.
+This work was motivated by the roll-back of:
+https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+where fixing a missed put resulted in a use-after-free in a different
+context. There was a sense in fixing the issue that a game of
+wac-a-mole had been embarked upon in adding missed gets and puts.
 
-Guenter
+The basic approach of the change is to add a level of indirection at
+the get and put calls. Get allocates a level of indirection that, if
+no corresponding put is called, becomes a memory leak (and associated
+stack trace) that leak sanitizer can report. Similarly if two puts are
+called for the same get, then a double free can be detected by address
+sanitizer. This can also detect the use after put, which should also
+yield a segv without a sanitizer.
 
-> So make forward set_pd_rx() process before PD_CTRL_SOFT_RESET sent at
-> SOFT_RESET_SEND state can cleanup the context in our side
-> and ensure the right PD commucation. I am not sure whether it is sensible?
-> 
-> BR.
-> Frank
-> 
-> > > Without this patch, in PD charger stress test, the FUSB302 driver may
-> > > occur the following exceptions in power negotiation stage.
-> > > 
-> > > [ ...]
-> > > [ 4.512252] fusb302_irq_intn
-> > > [ 4.512260] AMS SOFT_RESET_AMS finished
-> > > [ 4.512269] state change SOFT_RESET_SEND ->SNK_WAIT_CAPABILITIES
-> > > [rev3 NONE_AMS]
-> > > [ 4.514511] pd := on
-> > > [ 4.514516] pending state change SNK_WAIT_CAPABILITIES
-> > > ->HARD_RESET_SEND @ 310 ms [rev3 NONE_AMS]
-> > > [ 4.515428] IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-> > > [ 4.515431] IRQ: BC_LVL, handler pending
-> > > [ 4.515435] IRQ: PD sent good CRC
-> > > [ 4.516434] PD message header: 0
-> > > [ 4.516437] PD message len: 0
-> > > [ 4.516444] PD RX, header: 0x0 [1]
-> > > 
-> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> > > ---
-> > >   drivers/usb/typec/tcpm/tcpm.c | 11 +++++++----
-> > >   1 file changed, 7 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c
-> > > b/drivers/usb/typec/tcpm/tcpm.c
-> > > index 9e583060e64fc..ba6bf71838eed 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -4321,10 +4321,12 @@ static void run_state_machine(struct
-> > > tcpm_port *port)
-> > >           tcpm_set_state(port, unattached_state(port), 0);
-> > >           break;
-> > >       case SNK_WAIT_CAPABILITIES:
-> > > -        ret = port->tcpc->set_pd_rx(port->tcpc, true);
-> > > -        if (ret < 0) {
-> > > -            tcpm_set_state(port, SNK_READY, 0);
-> > > -            break;
-> > > +        if (port->prev_state != SOFT_RESET_SEND) {
-> > > +            ret = port->tcpc->set_pd_rx(port->tcpc, true);
-> > > +            if (ret < 0) {
-> > > +                tcpm_set_state(port, SNK_READY, 0);
-> > > +                break;
-> > > +            }
-> > >           }
-> > >           /*
-> > >            * If VBUS has never been low, and we time out waiting
-> > > @@ -4603,6 +4605,7 @@ static void run_state_machine(struct tcpm_port
-> > > *port)
-> > >       case SOFT_RESET_SEND:
-> > >           port->message_id = 0;
-> > >           port->rx_msgid = -1;
-> > > +        port->tcpc->set_pd_rx(port->tcpc, true);
-> > >           if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
-> > >               tcpm_set_state_cond(port, hard_reset_state(port), 0);
-> > >           else
-> > 
+Adding reference count checking to cpu map was done as a proof of
+concept, it yielded little other than a location where the use of get
+could be cleaner by using its result. Reference count checking on
+nsinfo identified a double free of the indirection layer and the
+related threads, thereby identifying a data race as discussed here:
+ https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+Accordingly the dso->lock was extended and use to cover the race.
+
+The v3 version addresses problems in v2, in particular using macros to
+avoid #ifdefs. The v3 version applies the reference count checking
+approach to two more data structures, maps and map. While maps was
+straightforward, struct map showed a problem where reference counted
+thing can be on lists and rb-trees that are oblivious to the
+reference count. To sanitize this, struct map is changed so that it is
+referenced by either a list or rb-tree node and not part of it. This
+simplifies the reference count and the patches have caught and fixed a
+number of missed or mismatched reference counts relating to struct
+map.
+
+The patches are arranged so that API refactors and bug fixes appear
+first, then the reference count checker itself appears. This allows
+for the refactor and fixes to be applied upstream first, as has
+already happened with cpumap.
+
+A wider discussion of the approach is on the mailing list:
+ https://lore.kernel.org/linux-perf-users/YffqnynWcc5oFkI5@kernel.org/T/#mf25ccd7a2e03de92cec29d36e2999a8ab5ec7f88
+Comparing it to a past approach:
+ https://lore.kernel.org/all/20151209021047.10245.8918.stgit@localhost.localdomain/
+and to ref_tracker:
+ https://lwn.net/Articles/877603/
+
+v4. rebases on to acme's perf-tools-next, fixes more issues with
+    map/maps and breaks apart the accessor functions to reduce
+    individual patch sizes. The accessor functions are mechanical
+    changes where the single biggest one is refactoring use of
+    map->dso to be map__dso(map). A summary of the sizes of each patch
+    is:
+
+92e1b65b136b perf map: Add reference count checking
+ 12 files changed, 136 insertions(+), 114 deletions(-)
+7fef12ca75a1 perf maps: Add reference count checking.
+ 8 files changed, 64 insertions(+), 56 deletions(-)
+1a57842b86fd perf namespaces: Add reference count checking
+ 7 files changed, 83 insertions(+), 62 deletions(-)
+6e50b206b364 perf cpumap: Add reference count checking
+ 6 files changed, 81 insertions(+), 71 deletions(-)
+d64ebe641edd libperf: Add reference count checking macros.
+ 1 file changed, 94 insertions(+)
+e0c3f6d95483 perf map: Changes to reference counting
+ 11 files changed, 114 insertions(+), 44 deletions(-)
+d34755aef532 perf maps: Modify maps_by_name to hold a reference to a map
+ 2 files changed, 33 insertions(+), 18 deletions(-)
+24c5eb40b0b4 perf test: Add extra diagnostics to maps test
+ 1 file changed, 36 insertions(+), 15 deletions(-)
+1f1540178acf perf map: Add accessors for pgoff and reloc
+ 9 files changed, 33 insertions(+), 23 deletions(-)
+a9f0c85f6269 perf map: Add accessors for prot, priv and flags
+ 6 files changed, 28 insertions(+), 12 deletions(-)
+ee07e4fbbf8f perf map: Add helper for map_ip and unmap_ip
+ 23 files changed, 80 insertions(+), 65 deletions(-)
+a2ff37e2d9c1 perf map: Rename map_ip and unmap_ip
+ 6 files changed, 13 insertions(+), 13 deletions(-)
+285214010556 perf map: Add accessor for start and end
+ 24 files changed, 114 insertions(+), 103 deletions(-)
+bcd608c93c81 perf map: Add accessor for dso
+ 48 files changed, 404 insertions(+), 293 deletions(-)
+d921b7cb8254 perf maps: Add functions to access maps
+ 20 files changed, 175 insertions(+), 111 deletions(-)
+3909794aab1c perf maps: Remove rb_node from struct map
+ 16 files changed, 291 insertions(+), 184 deletions(-)
+c202320ec659 perf map: Move map list node into symbol
+ 2 files changed, 60 insertions(+), 35 deletions(-)
+5f0c2abb3f6b perf symbol: Sort names under write lock
+ 1 file changed, 7 insertions(+)
+38c930af7ecb perf test: Fix memory leak in symbols
+ 1 file changed, 1 insertion(+)
+144f31b33eff perf tests: Add common error route for code-reading
+ 1 file changed, 23 insertions(+), 16 deletions(-)
+d043380916fb perf bpf_counter: Use public cpumap accessors
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+08d8e5dd2277 perf symbol: Avoid memory leak from abi::__cxa_demangle
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+The v3 change is available here:
+https://lore.kernel.org/lkml/20220211103415.2737789-1-irogers@google.com/
+
+Ian Rogers (22):
+  perf symbol: Avoid memory leak from abi::__cxa_demangle
+  perf bpf_counter: Use public cpumap accessors
+  perf tests: Add common error route for code-reading
+  perf test: Fix memory leak in symbols
+  perf symbol: Sort names under write lock
+  perf map: Move map list node into symbol
+  perf maps: Remove rb_node from struct map
+  perf maps: Add functions to access maps
+  perf map: Add accessor for dso
+  perf map: Add accessor for start and end
+  perf map: Rename map_ip and unmap_ip
+  perf map: Add helper for map_ip and unmap_ip
+  perf map: Add accessors for prot, priv and flags
+  perf map: Add accessors for pgoff and reloc
+  perf test: Add extra diagnostics to maps test
+  perf maps: Modify maps_by_name to hold a reference to a map
+  perf map: Changes to reference counting
+  libperf: Add reference count checking macros.
+  perf cpumap: Add reference count checking
+  perf namespaces: Add reference count checking
+  perf maps: Add reference count checking.
+  perf map: Add reference count checking
+
+ tools/lib/perf/Makefile                       |   2 +-
+ tools/lib/perf/cpumap.c                       |  94 +++---
+ tools/lib/perf/include/internal/cpumap.h      |   4 +-
+ tools/lib/perf/include/internal/rc_check.h    |  94 ++++++
+ tools/perf/arch/s390/annotate/instructions.c  |   4 +-
+ tools/perf/arch/x86/tests/dwarf-unwind.c      |   2 +-
+ tools/perf/arch/x86/util/event.c              |  13 +-
+ tools/perf/builtin-annotate.c                 |  11 +-
+ tools/perf/builtin-buildid-list.c             |   4 +-
+ tools/perf/builtin-inject.c                   |  12 +-
+ tools/perf/builtin-kallsyms.c                 |   6 +-
+ tools/perf/builtin-kmem.c                     |   4 +-
+ tools/perf/builtin-lock.c                     |   4 +-
+ tools/perf/builtin-mem.c                      |  10 +-
+ tools/perf/builtin-report.c                   |  26 +-
+ tools/perf/builtin-script.c                   |  27 +-
+ tools/perf/builtin-top.c                      |  17 +-
+ tools/perf/builtin-trace.c                    |   2 +-
+ .../scripts/python/Perf-Trace-Util/Context.c  |  13 +-
+ tools/perf/tests/code-reading.c               |  76 +++--
+ tools/perf/tests/cpumap.c                     |   4 +-
+ tools/perf/tests/hists_common.c               |   8 +-
+ tools/perf/tests/hists_cumulate.c             |  14 +-
+ tools/perf/tests/hists_filter.c               |  14 +-
+ tools/perf/tests/hists_link.c                 |  18 +-
+ tools/perf/tests/hists_output.c               |  12 +-
+ tools/perf/tests/maps.c                       |  69 ++--
+ tools/perf/tests/mmap-thread-lookup.c         |   3 +-
+ tools/perf/tests/symbols.c                    |   7 +-
+ tools/perf/tests/thread-maps-share.c          |  29 +-
+ tools/perf/tests/vmlinux-kallsyms.c           |  54 +--
+ tools/perf/ui/browsers/annotate.c             |   9 +-
+ tools/perf/ui/browsers/hists.c                |  19 +-
+ tools/perf/ui/browsers/map.c                  |   4 +-
+ tools/perf/util/annotate.c                    |  40 ++-
+ tools/perf/util/auxtrace.c                    |   2 +-
+ tools/perf/util/block-info.c                  |   4 +-
+ tools/perf/util/bpf-event.c                   |  10 +-
+ tools/perf/util/bpf_counter.c                 |   6 +-
+ tools/perf/util/bpf_lock_contention.c         |   6 +-
+ tools/perf/util/build-id.c                    |   2 +-
+ tools/perf/util/callchain.c                   |  24 +-
+ tools/perf/util/cpumap.c                      |  40 ++-
+ tools/perf/util/data-convert-json.c           |  10 +-
+ tools/perf/util/db-export.c                   |  16 +-
+ tools/perf/util/demangle-cxx.cpp              |   5 +-
+ tools/perf/util/dlfilter.c                    |  28 +-
+ tools/perf/util/dso.c                         |   8 +-
+ tools/perf/util/dsos.c                        |   2 +-
+ tools/perf/util/event.c                       |  29 +-
+ tools/perf/util/evsel_fprintf.c               |   4 +-
+ tools/perf/util/hist.c                        |  22 +-
+ tools/perf/util/intel-pt.c                    |  63 ++--
+ tools/perf/util/machine.c                     | 252 ++++++++------
+ tools/perf/util/map.c                         | 217 ++++++------
+ tools/perf/util/map.h                         |  74 +++-
+ tools/perf/util/maps.c                        | 318 +++++++++++-------
+ tools/perf/util/maps.h                        |  67 +++-
+ tools/perf/util/namespaces.c                  | 132 +++++---
+ tools/perf/util/namespaces.h                  |   3 +-
+ tools/perf/util/pmu.c                         |   8 +-
+ tools/perf/util/probe-event.c                 |  62 ++--
+ .../util/scripting-engines/trace-event-perl.c |  10 +-
+ .../scripting-engines/trace-event-python.c    |  26 +-
+ tools/perf/util/sort.c                        |  67 ++--
+ tools/perf/util/symbol-elf.c                  |  41 ++-
+ tools/perf/util/symbol.c                      | 316 +++++++++++------
+ tools/perf/util/symbol_fprintf.c              |   2 +-
+ tools/perf/util/synthetic-events.c            |  34 +-
+ tools/perf/util/thread-stack.c                |   4 +-
+ tools/perf/util/thread.c                      |  39 +--
+ tools/perf/util/unwind-libdw.c                |  20 +-
+ tools/perf/util/unwind-libunwind-local.c      |  16 +-
+ tools/perf/util/unwind-libunwind.c            |  33 +-
+ tools/perf/util/vdso.c                        |   7 +-
+ 75 files changed, 1696 insertions(+), 1062 deletions(-)
+ create mode 100644 tools/lib/perf/include/internal/rc_check.h
+
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
