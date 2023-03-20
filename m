@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259C76C2599
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EFE6C25A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjCTX20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
+        id S229749AbjCTXbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCTX2X (ORCPT
+        with ESMTP id S229734AbjCTXbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:28:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E863587;
-        Mon, 20 Mar 2023 16:28:21 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KITHIa022196;
-        Mon, 20 Mar 2023 23:28:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=a/IDKoJVzHM1US9p3+YmQx5LUxlZjCPiY9+PMVoxE/M=;
- b=dSg07JhZfBgdp7myyhYtnFQqK1pE/YQsoJSAyvS89gATjFD9EzXGyLpFxLaYpjys7GmA
- 2qpPeKSPdVxaiVjGGqlxSGd35QUbyeEGGFUg3XDDZKb7HwjtWPOygdgRW+uvCfmkI0V2
- R5ZLnaOh5Wkz1DKJq2BdmdP25q+8baA6eKeb3leC1ffN1FUNYZDf6zFqAy+GNHpW+qNE
- mzYzFGsXzMvWsUYm5w2jB9VrWyyFiKCX/bpJCeIs7VuH1zyrLeBqW/aiRprKzhNwtRAB
- cu8Ao+4w+FD1FI5avqRk9OJOt2EEkiiR02EmoSFdjbnOidOCZ0u+KqsGXbWX8aZd/oQ3 kg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pernkhayu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 23:28:17 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32KNSGZx000714
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 23:28:16 GMT
-Received: from [10.110.115.97] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Mar
- 2023 16:28:15 -0700
-Message-ID: <80851901-b5d6-3336-2d38-1b84a2185df1@quicinc.com>
-Date:   Mon, 20 Mar 2023 16:28:15 -0700
+        Mon, 20 Mar 2023 19:31:18 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4E31E1B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679355076; x=1710891076;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AKwYTZ1GIQpElxUt8onE9LFkf77DgwVeNYSSKwaIXgQ=;
+  b=cMsdjI18VTAZoS4xSAzUOoF9Lppk/JQ9ioBIjJUA1ha2dIPdPUT1O0Am
+   0M8yDln/2P9mTw0FuK1rLo45Lds6VaWhvsrM+nlo46LRt7jBLJxHayBJY
+   /TxWjxH3DkVXUDLrYmbyiUxR5tR50tG3CrEeLwFBt3cduAtXKw12VKswA
+   hw/LQEwIwgVGlM3ekNrdYb2hfaJa8fv/ZcP5VKaC9JMpNhxyhFEZUfhaY
+   Jl9nECq3kQYDdJizfBhJucx1aEcndDVUKmpLjuU29+jFJyuusyewhrdJ/
+   EwhkOFg0VOB/uv+vF1FnPwGuvNardTQBl8fMsritQbqH5kO1RENQYui+Y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="327176927"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="327176927"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 16:31:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="631323235"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="631323235"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 20 Mar 2023 16:31:01 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peOxw-000BPB-34;
+        Mon, 20 Mar 2023 23:31:00 +0000
+Date:   Tue, 21 Mar 2023 07:30:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viktor Prutyanov <viktor@daynix.com>, mst@redhat.com,
+        jasowang@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
+Subject: Re: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+Message-ID: <202303210759.kRnNnZb4-lkp@intel.com>
+References: <20230320115451.1232171-1-viktor@daynix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/3] arm64: dts: qcom: qdu1000: Add IPCC, MPSS, AOSS
- nodes
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230306231719.22263-1-quic_molvera@quicinc.com>
- <20230306231719.22263-2-quic_molvera@quicinc.com>
- <af21f499-5895-c564-3e6f-d23ba188544b@linaro.org>
- <3ee969ec-faae-fd9f-d583-6a8e2670b567@quicinc.com>
- <4d7d3d5a-4a3c-44ab-6f32-ddee2cb621fc@linaro.org>
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <4d7d3d5a-4a3c-44ab-6f32-ddee2cb621fc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QC6B2Leo2XY4HwPEPuULlGB4PNbCDY0I
-X-Proofpoint-GUID: QC6B2Leo2XY4HwPEPuULlGB4PNbCDY0I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_16,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 impostorscore=0 adultscore=0 phishscore=0
- mlxscore=0 bulkscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=712 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303200197
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320115451.1232171-1-viktor@daynix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Viktor,
 
+Thank you for the patch! Perhaps something to improve:
 
-On 3/14/2023 3:55 AM, Konrad Dybcio wrote:
->
-> On 13.03.2023 22:25, Melody Olvera wrote:
->>
->> On 3/8/2023 2:23 AM, Konrad Dybcio wrote:
->>> On 7.03.2023 00:17, Melody Olvera wrote:
->>>> Add nodes for IPCC, MPSS, and AOSS drivers. Also update
->>>> the scm node to include its interconnect.
->>> Quite a bit of stuff in a single commit, this could be
->>> separated into:
->>>
->>> - scm icc
->>> - aoss+ipcc
->>> - smp2p+mpss
->> Hmm ok. Will split this patch into a few patches.
->>
->>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>>> ---
-> [...]
->
->>>> +			      <0x0 0x4180000 0x0 0x1000>;
->>> No reg-names?
->> No; we don't use reg-names in the driver. Lmk if we should be.
->>
-> qcom_q6v5_mss.c / qcom_q6v5_wcss.c get the 'rmb' region with
-> [...]_byname and I think it'd scale better if we did the same here,
-> as one day there may be a weird SoC that'd have an "XYZ" region,
-> different to "base" and "rmb", which we would need to handle.. somehow..
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yeah that's sensible. Will update the driver and this entry.
+url:    https://github.com/intel-lab-lkp/linux/commits/Viktor-Prutyanov/virtio-add-VIRTIO_F_NOTIFICATION_DATA-feature-support/20230320-195725
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20230320115451.1232171-1-viktor%40daynix.com
+patch subject: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+config: alpha-randconfig-s043-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210759.kRnNnZb4-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/b6212a12ca1691dc346e5de046ec46bd3ce11247
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Viktor-Prutyanov/virtio-add-VIRTIO_F_NOTIFICATION_DATA-feature-support/20230320-195725
+        git checkout b6212a12ca1691dc346e5de046ec46bd3ce11247
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/virtio/
 
-Thanks,
-Melody
->
-> Konrad
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210759.kRnNnZb4-lkp@intel.com/
 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/virtio/virtio_mmio.c:293:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] b @@     got restricted __le32 [usertype] data @@
+   drivers/virtio/virtio_mmio.c:293:16: sparse:     expected unsigned int [usertype] b
+   drivers/virtio/virtio_mmio.c:293:16: sparse:     got restricted __le32 [usertype] data
+
+vim +293 drivers/virtio/virtio_mmio.c
+
+   287	
+   288	static bool vm_notify_with_data(struct virtqueue *vq)
+   289	{
+   290		struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
+   291		__le32 data = vring_fill_notification_data(vq);
+   292	
+ > 293		writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
+   294	
+   295		return true;
+   296	}
+   297	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
