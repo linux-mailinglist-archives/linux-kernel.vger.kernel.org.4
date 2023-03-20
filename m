@@ -2,247 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752806C0F57
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4129C6C0F5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjCTKk3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 06:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S229583AbjCTKkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjCTKjJ (ORCPT
+        with ESMTP id S230443AbjCTKjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:39:09 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B97125B80;
-        Mon, 20 Mar 2023 03:38:31 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 922C224E2B1;
-        Mon, 20 Mar 2023 18:38:02 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 18:38:02 +0800
-Received: from ubuntu.localdomain (183.27.97.64) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 18:38:01 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 12/21] dt-bindings: clock: Add StarFive JH7110 always-on clock and reset generator
-Date:   Mon, 20 Mar 2023 18:37:41 +0800
-Message-ID: <20230320103750.60295-13-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230320103750.60295-1-hal.feng@starfivetech.com>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com>
+        Mon, 20 Mar 2023 06:39:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751B225E0E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679308666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z3q/VrYNqGMx2nbuJd3OpHcyuerGqYFRs5YEB6SDNJQ=;
+        b=cOt3/HGhxeCWKbSpzQfyN6gbnOl3tUPzZObW7xg2v+iQhP/Em8z9Ijk2iinxoSqTkzJJqR
+        4U82vRvFUOKZswZyan9JjjIf2TZdMEFQ96rA/gVO3JdePIEPMG66yIvIT4s9RhcLLbisCw
+        FhEzDbm6EfKRbkKGZ30021Kbb9sVU4I=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-244-FK6fZAtvMe26gfSDURf-PQ-1; Mon, 20 Mar 2023 06:37:45 -0400
+X-MC-Unique: FK6fZAtvMe26gfSDURf-PQ-1
+Received: by mail-wm1-f72.google.com with SMTP id j16-20020a05600c1c1000b003edfa11fa91so746757wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:37:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679308664;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z3q/VrYNqGMx2nbuJd3OpHcyuerGqYFRs5YEB6SDNJQ=;
+        b=gKL3z+hnGva9JDpBhNdZKJp/0YgscLx697WEkv1TzM3pQLDss+/2TJdnv2Cs43a6tY
+         pjYa34V/Wbi+h98esTxJ2Kc9YCjbWV6359qM0H6rzewy728T01wgCHsY+6NL8lZy2RaH
+         R2w8e0ayHzTic2OQieMGkY78TDW7Qk73r8VrPbxtKOvWIKxXuyAW4km9eT+xQYEteIe8
+         4UJxfma8BxMix6hcZUTpk0lsbv7nBJeH1mfm5xWZ9prM+k8X7aZPrf9GFKAc5euPQR3d
+         lF754F7a2PjIXBSGFQ8a3dOQHAF9NoPRNCStZOoZgkwdIWlKQ4/5k6xCjn/jxUsIVgwG
+         MZMw==
+X-Gm-Message-State: AO0yUKVca9RBbr/MWnH5T7smqu9D9GgT8j/vBgaTw+wY7cU0sBD1S27s
+        eBZxmPvpWPRZB6V5L2NaXBMMtAKelEcsUjaH0ghVV+Zse0z7/M8ngBA1UVd2zmaQ2rD0bgiX4tD
+        HY0cnwuHsxSMQdA41pv3bMecB
+X-Received: by 2002:a05:600c:2193:b0:3ed:af6b:7fb3 with SMTP id e19-20020a05600c219300b003edaf6b7fb3mr6429624wme.2.1679308664207;
+        Mon, 20 Mar 2023 03:37:44 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9nu9AUM11EMOey9gw9s7r1RxvuKD2hoESr3zs9Dn3KEhaTkAv9L39m+Xqo0Tr0kNa2Gefx7A==
+X-Received: by 2002:a05:600c:2193:b0:3ed:af6b:7fb3 with SMTP id e19-20020a05600c219300b003edaf6b7fb3mr6429607wme.2.1679308663897;
+        Mon, 20 Mar 2023 03:37:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id f1-20020a1c6a01000000b003edcc2223c6sm5338002wmc.28.2023.03.20.03.37.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:37:43 -0700 (PDT)
+Message-ID: <99391ca1-a9b8-401d-0042-c8b7d1cfab9c@redhat.com>
+Date:   Mon, 20 Mar 2023 11:37:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.64]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 09/15] mm: move pgtable_init() to mm/mm_init.c and make it
+ static
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
+        Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230319220008.2138576-1-rppt@kernel.org>
+ <20230319220008.2138576-10-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230319220008.2138576-10-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
+On 19.03.23 23:00, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> pgtable_init() is only called from mm_core_init().
+> 
+> Move it close to the caller and make it static.
 
-Add bindings for the always-on clock and reset generator (AONCRG) on the
-JH7110 RISC-V SoC by StarFive Ltd.
+Why not inline it completely into the single caller? I don't see too 
+much value of this indirection.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- .../clock/starfive,jh7110-aoncrg.yaml         | 107 ++++++++++++++++++
- .../dt-bindings/clock/starfive,jh7110-crg.h   |  18 +++
- .../dt-bindings/reset/starfive,jh7110-crg.h   |  12 ++
- 3 files changed, 137 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
-new file mode 100644
-index 000000000000..923680a44aef
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/starfive,jh7110-aoncrg.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: StarFive JH7110 Always-On Clock and Reset Generator
-+
-+maintainers:
-+  - Emil Renner Berthing <kernel@esmil.dk>
-+
-+properties:
-+  compatible:
-+    const: starfive,jh7110-aoncrg
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    oneOf:
-+      - items:
-+          - description: Main Oscillator (24 MHz)
-+          - description: GMAC0 RMII reference or GMAC0 RGMII RX
-+          - description: STG AXI/AHB
-+          - description: APB Bus
-+          - description: GMAC0 GTX
-+
-+      - items:
-+          - description: Main Oscillator (24 MHz)
-+          - description: GMAC0 RMII reference or GMAC0 RGMII RX
-+          - description: STG AXI/AHB or GMAC0 RGMII RX
-+          - description: APB Bus or STG AXI/AHB
-+          - description: GMAC0 GTX or APB Bus
-+          - description: RTC Oscillator (32.768 kHz) or GMAC0 GTX
-+
-+      - items:
-+          - description: Main Oscillator (24 MHz)
-+          - description: GMAC0 RMII reference
-+          - description: GMAC0 RGMII RX
-+          - description: STG AXI/AHB
-+          - description: APB Bus
-+          - description: GMAC0 GTX
-+          - description: RTC Oscillator (32.768 kHz)
-+
-+  clock-names:
-+    oneOf:
-+      - minItems: 5
-+        items:
-+          - const: osc
-+          - enum:
-+              - gmac0_rmii_refin
-+              - gmac0_rgmii_rxin
-+          - const: stg_axiahb
-+          - const: apb_bus
-+          - const: gmac0_gtxclk
-+          - const: rtc_osc
-+
-+      - minItems: 6
-+        items:
-+          - const: osc
-+          - const: gmac0_rmii_refin
-+          - const: gmac0_rgmii_rxin
-+          - const: stg_axiahb
-+          - const: apb_bus
-+          - const: gmac0_gtxclk
-+          - const: rtc_osc
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
-+
-+  '#reset-cells':
-+    const: 1
-+    description:
-+      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+  - '#reset-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/starfive,jh7110-crg.h>
-+
-+    clock-controller@17000000 {
-+        compatible = "starfive,jh7110-aoncrg";
-+        reg = <0x17000000 0x10000>;
-+        clocks = <&osc>, <&gmac0_rmii_refin>,
-+                 <&gmac0_rgmii_rxin>,
-+                 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
-+                 <&syscrg JH7110_SYSCLK_APB_BUS>,
-+                 <&syscrg JH7110_SYSCLK_GMAC0_GTXCLK>,
-+                 <&rtc_osc>;
-+        clock-names = "osc", "gmac0_rmii_refin",
-+                      "gmac0_rgmii_rxin", "stg_axiahb",
-+                      "apb_bus", "gmac0_gtxclk",
-+                      "rtc_osc";
-+        #clock-cells = <1>;
-+        #reset-cells = <1>;
-+    };
-diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
-index fdd1852e34cc..06257bfd9ac1 100644
---- a/include/dt-bindings/clock/starfive,jh7110-crg.h
-+++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
-@@ -200,4 +200,22 @@
- 
- #define JH7110_SYSCLK_END			190
- 
-+/* AONCRG clocks */
-+#define JH7110_AONCLK_OSC_DIV4			0
-+#define JH7110_AONCLK_APB_FUNC			1
-+#define JH7110_AONCLK_GMAC0_AHB			2
-+#define JH7110_AONCLK_GMAC0_AXI			3
-+#define JH7110_AONCLK_GMAC0_RMII_RTX		4
-+#define JH7110_AONCLK_GMAC0_TX			5
-+#define JH7110_AONCLK_GMAC0_TX_INV		6
-+#define JH7110_AONCLK_GMAC0_RX			7
-+#define JH7110_AONCLK_GMAC0_RX_INV		8
-+#define JH7110_AONCLK_OTPC_APB			9
-+#define JH7110_AONCLK_RTC_APB			10
-+#define JH7110_AONCLK_RTC_INTERNAL		11
-+#define JH7110_AONCLK_RTC_32K			12
-+#define JH7110_AONCLK_RTC_CAL			13
-+
-+#define JH7110_AONCLK_END			14
-+
- #endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__ */
-diff --git a/include/dt-bindings/reset/starfive,jh7110-crg.h b/include/dt-bindings/reset/starfive,jh7110-crg.h
-index b88216a4fe40..d78e38690ceb 100644
---- a/include/dt-bindings/reset/starfive,jh7110-crg.h
-+++ b/include/dt-bindings/reset/starfive,jh7110-crg.h
-@@ -139,4 +139,16 @@
- 
- #define JH7110_SYSRST_END			126
- 
-+/* AONCRG resets */
-+#define JH7110_AONRST_GMAC0_AXI			0
-+#define JH7110_AONRST_GMAC0_AHB			1
-+#define JH7110_AONRST_IOMUX			2
-+#define JH7110_AONRST_PMU_APB			3
-+#define JH7110_AONRST_PMU_WKUP			4
-+#define JH7110_AONRST_RTC_APB			5
-+#define JH7110_AONRST_RTC_CAL			6
-+#define JH7110_AONRST_RTC_32K			7
-+
-+#define JH7110_AONRST_END			8
-+
- #endif /* __DT_BINDINGS_RESET_STARFIVE_JH7110_CRG_H__ */
 -- 
-2.38.1
+Thanks,
+
+David / dhildenb
 
