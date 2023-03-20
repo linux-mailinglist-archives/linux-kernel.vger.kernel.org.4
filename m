@@ -2,101 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B7D6C16DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7C86C16F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjCTPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
+        id S232351AbjCTPKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjCTPJX (ORCPT
+        with ESMTP id S232265AbjCTPKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:09:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBAF7AB8;
-        Mon, 20 Mar 2023 08:04:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 64CFD1F894;
-        Mon, 20 Mar 2023 15:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679324675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hwWqYXOi2JWUeQesBva9impsRBcN0SMjROswWsfpc4s=;
-        b=r8Ym2XCbihrsxLtFN08w06AOIshHu11IbK2BZr6ABPHC7XQk0y0yK4mY8d81jkGe3H0/Cg
-        lsmCJu73Fn24TssqB10M9LUnvuQ3AtCZSk4r3zEmQlIbFacyS0/YKpuAR+VVVD9U66RiN7
-        G/cFWEmoCSMmZbkRpEUr1vD4mv0gFA0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B2A013A00;
-        Mon, 20 Mar 2023 15:04:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DDuBBQN2GGT+OAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 20 Mar 2023 15:04:35 +0000
-Date:   Mon, 20 Mar 2023 16:04:33 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH v2 3/4] cgroup/cpuset: Include offline CPUs when tasks'
- cpumasks in top_cpuset are updated
-Message-ID: <20230320150433.v3xcl7rqsxz4x6tg@blackpad>
-References: <20230317151508.1225282-1-longman@redhat.com>
- <20230317151508.1225282-4-longman@redhat.com>
- <20230317180157.uqlleobldg53pgj6@blackpad>
- <11b5454b-42c7-fb0d-f071-c46712f76f3b@redhat.com>
+        Mon, 20 Mar 2023 11:10:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D662A17C;
+        Mon, 20 Mar 2023 08:05:29 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KEbRli006686;
+        Mon, 20 Mar 2023 15:04:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=sbcm4J2uGMccHXFiI4jv/CBAQt7jKBKzS5MR4N3bNUE=;
+ b=S+Va+QTt697D5tJVvi6JTQ13iPw7K751usCwDFJ2zxJWuIdYM9boODQ8Hc4rxLD74Hue
+ pkt4VveZ9qvsOrBli9M82fSmjuq5iW3YOttYkZ2Lxpn6qSNJw1a9Xn91HP7ixhkC2+6X
+ AcisqWVDAELAl6iL5l1i/TY17o/NrA0kIjRtjoOs3UgID8BaXTej0Pq0BamsEshyXo9N
+ xwkIWRpHzXG0BA7TfLhpY2JSTt+p9eheD0J50DP5eIstj48YQ9xiiW2kzJNepDFRelZP
+ YyuRx1QA2v6F/jk+N89ZAfnzz7gsh01C3gTPebo6lZ85WCxCMZ8S2p8qqxurxu3yYp7e 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3peqvuv28b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 15:04:53 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32KEgALP017620;
+        Mon, 20 Mar 2023 15:04:53 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3peqvuv27w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 15:04:53 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32KEtmv2021467;
+        Mon, 20 Mar 2023 15:04:52 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pd4x70qws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 15:04:52 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32KF4n3H1049232
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Mar 2023 15:04:49 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F71B5805E;
+        Mon, 20 Mar 2023 15:04:49 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66FA75805F;
+        Mon, 20 Mar 2023 15:04:48 +0000 (GMT)
+Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.ibm.com.com (unknown [9.65.246.37])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 15:04:48 +0000 (GMT)
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, pasic@linux.vnet.ibm.com,
+        jjherne@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, hca@linux.ibm.com
+Subject: [PATCH v2] s390/vfio_ap: fix memory leak in vfio_ap device driver
+Date:   Mon, 20 Mar 2023 11:04:47 -0400
+Message-Id: <20230320150447.34557-1-akrowiak@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g3azguixlje76xpd"
-Content-Disposition: inline
-In-Reply-To: <11b5454b-42c7-fb0d-f071-c46712f76f3b@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZGv7e11yR1FhRlWYheeuhKBHyxIvhDDJ
+X-Proofpoint-ORIG-GUID: C4lwPTqHf4vg_XTOvIjzPvev6rbdan7d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_10,2023-03-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 impostorscore=0
+ suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303200128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The device release callback function invoked to release the matrix device
+uses the dev_get_drvdata(device *dev) function to retrieve the
+pointer to the vfio_matrix_dev object in order to free its storage. The
+problem is, this object is not stored as drvdata with the device; since the
+kfree function will accept a NULL pointer, the memory for the
+vfio_matrix_dev object is never freed.
 
---g3azguixlje76xpd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Since the device being released is contained within the vfio_matrix_dev
+object, the container_of macro will be used to retrieve its pointer.
 
-On Fri, Mar 17, 2023 at 02:05:32PM -0400, Waiman Long <longman@redhat.com> wrote:
-> A cpu will be in the subparts_cpus only if it has been given to the child
-> partition. So when it becomes online, it will become part of the scheduling
-> domain that child partition. Only the tasks in that child partition will get
-> their cpumasks updated to use it, not those in the top cpuset.
+Fixes: 1fde573413b5 ("s390: vfio-ap: base implementation of VFIO AP device driver")
+Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+---
+ drivers/s390/crypto/vfio_ap_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Right, it's actually the difference between offlining a CPU and giving it
-to a sub-partition (hence a removed child (or switched to member) before
-CPU onlining). It's clear to me now.
+diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
+index 997b524bdd2b..a48c6938ae68 100644
+--- a/drivers/s390/crypto/vfio_ap_drv.c
++++ b/drivers/s390/crypto/vfio_ap_drv.c
+@@ -54,8 +54,9 @@ static struct ap_driver vfio_ap_drv = {
+ 
+ static void vfio_ap_matrix_dev_release(struct device *dev)
+ {
+-	struct ap_matrix_dev *matrix_dev = dev_get_drvdata(dev);
++	struct ap_matrix_dev *matrix_dev;
+ 
++	matrix_dev = container_of(dev, struct ap_matrix_dev, device);
+ 	kfree(matrix_dev);
+ }
+ 
+-- 
+2.31.1
 
-Thanks,
-Michal
-
---g3azguixlje76xpd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZBh1/wAKCRAkDQmsBEOq
-uX3wAQCFD+U7rIP4rxH0pPPjBiVpGL+85S7rzdSIW7hL/H4DaAD/VJF7JKo6+E01
-gtBEpTVziKoADESQUhA8DJ2KYUQIlw4=
-=n3My
------END PGP SIGNATURE-----
-
---g3azguixlje76xpd--
