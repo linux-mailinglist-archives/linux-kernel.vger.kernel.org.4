@@ -2,99 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0F16C11C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 127356C11D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbjCTMWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S231211AbjCTMYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjCTMWc (ORCPT
+        with ESMTP id S230252AbjCTMYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:22:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616AC2884D;
-        Mon, 20 Mar 2023 05:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679314949; x=1710850949;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8SAM708+qCwhV13504dEVrJbXJXUFcMQFWXkSQ7vwC8=;
-  b=G7U9Y5as6HkEQS62ZHLMO6VM2G7KBnSuAnQqF6kssxIu3NtDO2GblkHX
-   nUul8y3NSaIVa6Ew+ck0KgGPcaZ/UWUhabimuhQABjItWEKxy+uprSHPR
-   Q5tT3oCkED38y4xQMCiHPXEHUQv6AZxUco92P4EykMPp83OxZLcoKYUJL
-   VIpbjcdDwYpd6A5i1iIzZayS4v9dD130vTgrCihPWN1M8iJ7V7APvYCQR
-   +S9+s4R8F5i61F51PN+X8zDDRADniHO+eCyWofomDdiAylMH0jCvRZWfK
-   RV8mseSwtpuAwMOMsdUGokJRcQ4YVuHMiOWtBmzRT7x9oyimttNe36b+o
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="318296349"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="318296349"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 05:22:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="855267150"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="855267150"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 05:22:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1peEWv-006GMp-1H;
-        Mon, 20 Mar 2023 14:22:25 +0200
-Date:   Mon, 20 Mar 2023 14:22:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] bitfield: Introduce the FIELD_MODIFY() macro
-Message-ID: <ZBhQAdYVBUhr1kzX@smile.fi.intel.com>
-References: <cover.1679149542.git.william.gray@linaro.org>
- <1c1492558c1a72b64bb26f7a44c4e69fff0e6b44.1679149543.git.william.gray@linaro.org>
- <7cd746c7b585c5086cfbd9db22414a060356cdd8.camel@sipsolutions.net>
+        Mon, 20 Mar 2023 08:24:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 165F2976F;
+        Mon, 20 Mar 2023 05:24:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A63B2FEC;
+        Mon, 20 Mar 2023 05:24:54 -0700 (PDT)
+Received: from [10.57.18.164] (unknown [10.57.18.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E69E33F67D;
+        Mon, 20 Mar 2023 05:24:08 -0700 (PDT)
+Message-ID: <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
+Date:   Mon, 20 Mar 2023 12:24:07 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cd746c7b585c5086cfbd9db22414a060356cdd8.camel@sipsolutions.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
+To:     Di Shen <di.shen@unisoc.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org
+References: <20230320095620.7480-1-di.shen@unisoc.com>
+Content-Language: en-US
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230320095620.7480-1-di.shen@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 09:50:35AM +0100, Johannes Berg wrote:
-> On Sat, 2023-03-18 at 14:59 +0000, William Breathitt Gray wrote:
-> > It is a common code pattern to modify a bitfield by masking the field
-> > and performing a bitwise OR with the respective FIELD_PREP. Wrap such a
-> > task into a macro by introducing FIELD_MODIFY() which modifies the field
-> > specified by a mask from a bitfield by putting a val in the field.
+
+
+On 3/20/23 09:56, Di Shen wrote:
+> Commit <0952177f2a1f>(thermal/core/power_allocator: Update once
+> cooling devices when temp is low) adds a update flag to avoid
+> the thermal event is triggered when there is no need, and
+> thermal cdev would be update once when temperature is low.
 > 
-> So I have no objection to adding this and you using FIELD_* macros, but
-> just wanted to say that personally I've come to prefer the typed
-> versions declared later in the fiel, and there we have
-> <type>_replace_bits() already.
+> But when the trips are writable, and switch_on_temp is set
+> to be a higher value, the cooling device state may not be
+> reset to 0, because last_temperature is smaller than the
+> switch_on_temp.
 > 
-> Hmm. And now that I mentioned that, maybe that means FIELD_REPLACE()
-> would be nicer as a name?
+> For example:
+> First:
+> switch_on_temp=70 control_temp=85;
+> Then userspace change the trip_temp:
+> switch_on_temp=45 control_temp=55 cur_temp=54
+> 
+> Then userspace reset the trip_temp:
+> switch_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
+> 
+> At this time, the cooling device state should be reset to 0.
+> However, because cur_temp(57) < switch_on_temp(70)
+> last_temp(54) < switch_on_temp(70)  ---->  update = false,
+> update is false, the cooling device state can not be reset.
+> 
+> This patch adds a function thermal_cdev_needs_update() to
+> renew the update flag value only when the trips are writable,
+> so that thermal cdev->state can be reset after switch_on_temp
+> changed from low to high.
+> 
+> Fixes: <0952177f2a1f> (thermal/core/power_allocator: Update once cooling devices when temp is low)
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> 
+> ---
+> V3:
+> - Add fix tag.
+> 
+> V2:
+> - Compared to v1, do not revert.
+> 
+> - Add a variable(last_switch_on_temp) in power_allocator_params
+>    to record the last switch_on_temp value.
+> 
+> - Adds a function to renew the update flag and update the
+>    last_switch_on_temp when thermal trips are writable.
+> 
+> V1:
+> - Revert commit 0952177f2a1f.
+> ---
+> ---
+>   drivers/thermal/gov_power_allocator.c | 39 ++++++++++++++++++++++-----
+>   1 file changed, 33 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 0eaf1527d3e3..c9e1f3b15f15 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -59,6 +59,8 @@ static inline s64 div_frac(s64 x, s64 y)
+>    *			governor switches on when this trip point is crossed.
+>    *			If the thermal zone only has one passive trip point,
+>    *			@trip_switch_on should be INVALID_TRIP.
+> + * @last_switch_on_temp:Record the last switch_on_temp only when trips
+> +			are writable.
+>    * @trip_max_desired_temperature:	last passive trip point of the thermal
+>    *					zone.  The temperature we are
+>    *					controlling for.
+> @@ -70,6 +72,9 @@ struct power_allocator_params {
+>   	s64 err_integral;
+>   	s32 prev_err;
+>   	int trip_switch_on;
+> +#ifdef CONFIG_THERMAL_WRITABLE_TRIPS
+> +	int last_switch_on_temp;
+> +#endif
+>   	int trip_max_desired_temperature;
+>   	u32 sustainable_power;
+>   };
+> @@ -554,6 +559,25 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+>   	}
+>   }
+>   
+> +#ifdef CONFIG_THERMAL_WRITABLE_TRIPS
+> +static bool thermal_cdev_needs_update(struct thermal_zone_device *tz, int switch_on_temp)
+> +{
+> +	bool update;
+> +	struct power_allocator_params *params = tz->governor_data;
+> +	int last_switch_on_temp = params->last_switch_on_temp;
+> +
+> +	update = (tz->last_temperature >= last_switch_on_temp);
+> +	params->last_switch_on_temp = switch_on_temp;
+> +
+> +	return update;
+> +}
+> +#else
+> +static inline bool thermal_cdev_needs_update(struct thermal_zone_device *tz, int switch_on_temp)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+>   static void reset_pid_controller(struct power_allocator_params *params)
+>   {
+>   	params->err_integral = 0;
+> @@ -709,12 +733,15 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+>   		return 0;
+>   
+>   	ret = __thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
+> -	if (!ret && (tz->temperature < trip.temperature)) {
+> -		update = (tz->last_temperature >= trip.temperature);
+> -		tz->passive = 0;
+> -		reset_pid_controller(params);
+> -		allow_maximum_power(tz, update);
+> -		return 0;
+> +	if (!ret) {
+> +		update = thermal_cdev_needs_update(tz, trip.temperature);
+> +		if (tz->temperature < trip.temperature) {
+> +			update |= (tz->last_temperature >= trip.temperature);
+> +			tz->passive = 0;
+> +			reset_pid_controller(params);
+> +			allow_maximum_power(tz, update);
+> +			return 0;
+> +		}
+>   	}
+>   
+>   	tz->passive = 1;
 
-+1 here with the similar thoughts.
 
-One thing I hate about macros like above mentioned is that Elixir or similar
-code browsing tools can't find. In net there are specific #if 0 ... #endif
-sections for mitigating that.
+Thanks for the patch. The code looks good. The initial value of
+'last_switch_on_temp' would be set to 0. It won't harm us because it
+will get the proper value later.
 
-Shouldn't we add the similar into bitfield.h?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
