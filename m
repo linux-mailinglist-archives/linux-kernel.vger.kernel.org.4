@@ -2,122 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CFB6C132C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBED36C132E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjCTNW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        id S229923AbjCTNXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjCTNW4 (ORCPT
+        with ESMTP id S231732AbjCTNXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:22:56 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDC3196A1;
-        Mon, 20 Mar 2023 06:22:55 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id bp22so1863039oib.6;
-        Mon, 20 Mar 2023 06:22:55 -0700 (PDT)
+        Mon, 20 Mar 2023 09:23:24 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A12700;
+        Mon, 20 Mar 2023 06:23:21 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so12550762pjp.1;
+        Mon, 20 Mar 2023 06:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679318600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LwCDKhpVotUuQMaBr5jTrfbX68cNb9ff470+ysZxzzQ=;
+        b=DbPUt+EfMJ+gN+n6cCxeLDCHK554tVu7xveqEz1ELZYrSZU538T3sIDkOC2iEjLIj3
+         vxyOtqP1ORPBGGeWWY46uhEHukWiZdqTrcJYK4WmRBV+BqNwsat4pGHhP2lpFDF6X8qY
+         wBmIMBPiigRbDggFkUwax/ZeAKqVtNKlUN7cLHY58OLU9kqmdvMT70JBWt3eNt0b6chR
+         9o8ugYkJBCfDbaPcUQ4/rc0MjCMCgNjWj+2RYSMV4u2rVtzUGNU0GTJk1Nt6ypxmTN9A
+         HRbkkDGmm7Xir+AWDuEMejFwBSvZp0Vqijsia2SVlSi3FPDyy4xAD4239RbBglvz8Ds/
+         Ynow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679318574;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ux14OwgY8H5fgO7IVmMzzrEbv4R7hHF2xiI4gbIKjE4=;
-        b=47cxygcLSSkiKTxEBXVGytP8zVfiRnoXJ4WPEKSMmTmEbtQ/vCCCTXWdYw2k+7r4Hh
-         Mpwn9OgV5Ues3eg6Wukh8j8QJmrXXOOfOUvie2Vyh1rt/Frkzr3WRvWuoEN3HxCAc6Vl
-         C+PLPfRVv/nb6QZPR0BIhL17peH6nkDy85xbXzHUNGTX2PQkOW3BdGZVPOkew76L7V53
-         dFHoAoZqEl/dYOo7ePirDTkK09UNWrCmsnoIUFnB6fuiJgmhjT4wuN8MVD7j5dOV1y1+
-         rzbHRHV4xzkD5tFFYnWCEan4OM4F/U8ZGjvZ5VtFuqNWkJqwwZHB3ctZteeleX6aNdzm
-         u7SA==
-X-Gm-Message-State: AO0yUKUVCDnHzLzVe+5qkU13IhW/qj75fkyfjIV9WD60skNJTd1IVSKM
-        hIszO8Py1hrY5Ah+ZqgayxFoS2wgdg==
-X-Google-Smtp-Source: AK7set9/7tjSuYHC6DcIiwcsDj22kt1OMSA5SOhAI4ceO1Xj3QUhHqYXFl9CsqNcQeqNJy+F7l5qAw==
-X-Received: by 2002:a05:6808:6c5:b0:37f:936d:b5d9 with SMTP id m5-20020a05680806c500b0037f936db5d9mr8978153oih.12.1679318573208;
-        Mon, 20 Mar 2023 06:22:53 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 129-20020a4a1887000000b005252d376caesm3777554ooo.22.2023.03.20.06.22.52
+        d=1e100.net; s=20210112; t=1679318600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LwCDKhpVotUuQMaBr5jTrfbX68cNb9ff470+ysZxzzQ=;
+        b=LwVGFqdirmwgB2zMNLQM/y/VhtGJBVP/4pGZWQoVAaviilX7VJfoW26awcJz0jAYbI
+         10onTQgrZeImbOtG7b8oMMS3DV+ItLeeZVZdDNxTTxy1ksMjwKhYql9D/Fy4FbDRlnJ0
+         6mHOKb7ws0RmGnatenb/RqgvFOSBUxW4mpm9SBDb3uMlSuHy5gxnb5t3rZNRFh9dTn9H
+         glDmQSWQh2zWMXM+Xqw8HnBoxG00ZpFIpQmdvg3lixf4T5kMynrEOVlab9yELXiUeKLH
+         3F0uB5S8Remqrq/gBd7IEMG6NQwTQkoaIFsrJEI42Jp2Dmv1t++rYJt6RG8SaTsen+vx
+         MqWw==
+X-Gm-Message-State: AO0yUKUlh2MbdCFNRKwYeOidRzcYSHI2skSUeZvSinovnB7zW8GH9qXQ
+        xzqJd+tk5fbdBLc+fmEVhPk=
+X-Google-Smtp-Source: AK7set8aYmCTfdKijx/Xv5EdBgScVTAJQugwVEr8ZpKjCsLK3YBjTocbHsvANkrz6b03DDcBWUhaGQ==
+X-Received: by 2002:a17:90b:380d:b0:232:fa13:4453 with SMTP id mq13-20020a17090b380d00b00232fa134453mr19012364pjb.13.1679318600483;
+        Mon, 20 Mar 2023 06:23:20 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090aa51300b00233db0db3dfsm9824478pjq.7.2023.03.20.06.23.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:22:52 -0700 (PDT)
-Received: (nullmailer pid 1445818 invoked by uid 1000);
-        Mon, 20 Mar 2023 13:22:52 -0000
-Date:   Mon, 20 Mar 2023 08:22:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, vigneshr@ti.com, srk@ti.com,
-        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,gadget-keep-connect-sys-sleep'
-Message-ID: <20230320132252.GA1440894-robh@kernel.org>
-References: <20230320093447.32105-1-rogerq@kernel.org>
- <20230320093447.32105-2-rogerq@kernel.org>
+        Mon, 20 Mar 2023 06:23:20 -0700 (PDT)
+From:   korantwork@gmail.com
+To:     helgaas@kernel.org, nirmal.patel@linux.intel.com,
+        kbusch@kernel.org, jonathan.derrick@linux.dev,
+        lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
+Date:   Mon, 20 Mar 2023 21:23:16 +0800
+Message-Id: <20230320132316.3126838-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320093447.32105-2-rogerq@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 11:34:46AM +0200, Roger Quadros wrote:
-> The current USB gadget driver behaviour is to stop the controller
-> and disconnect from the bus during System sleep.
+From: Xinghui Li <korantli@tencent.com>
 
-What's USB gadget? ;)
+In the legacy, the vmd MSI mode can only be adjusted by configuring
+vmd_ids table. This patch adds another way to adjust MSI mode by
+adjusting module param, which allows users easier to adjust the vmd
+according to the I/O scenario without rebuilding driver. There are two
+params that could be recognized: on, off. The default param is NULL,
+the goal is not to effect the existing settings of the device.
 
-> The 'snps,gadget-keep-connect-sys-sleep' property can be used to
-> change this behaviour and keep the controller active and connected
-> to the bus during System sleep. This is useful for applications
-> that want to enter a low power state when USB is suspended but
-> remain connected so they can resume activity on USB resume.
-> 
-> This feature introduces a new constraint if Gadget driver is connected
-> to USB host: i.e.  the gadget must be in USB suspend state to allow
-> a System sleep as we cannot process any USB transactions
-> when in System sleep.
-> 
-> The system hardware is responsible to detect the end of USB suspend
-> and wake up the system so we can begin processing the USB transactions
-> as soon as possible.
+Signed-off-by: Xinghui Li <korantli@tencent.com>
+Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+---
+ drivers/pci/controller/vmd.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Sounds like something the user/OS would want to choose rather than fixed 
-by your board's firmware.
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index 990630ec57c6..fb61181baa9e 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -34,6 +34,19 @@
+ #define MB2_SHADOW_OFFSET	0x2000
+ #define MB2_SHADOW_SIZE		16
+ 
++/*
++ * The VMD msi_remap module parameter provides the alternative way
++ * to adjust MSI mode when loading vmd.ko other than vmd_ids table.
++ * There are two params could be recognized:
++ *
++ * off: disable MSI remapping
++ * on:  enable MSI remapping
++ *
++ */
++static char *msi_remap;
++module_param(msi_remap, charp, 0444);
++MODULE_PARM_DESC(msi_remap, "Whether to enable MSI remapping function");
++
+ enum vmd_features {
+ 	/*
+ 	 * Device may contain registers which hint the physical location of the
+@@ -875,6 +888,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 			return ret;
+ 
+ 		vmd_set_msi_remapping(vmd, true);
++		dev_info(&vmd->dev->dev, "init vmd with remapping MSI\n");
+ 
+ 		ret = vmd_create_irq_domain(vmd);
+ 		if (ret)
+@@ -887,6 +901,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
+ 	} else {
+ 		vmd_set_msi_remapping(vmd, false);
++		dev_info(&vmd->dev->dev, "init vmd with bypass MSI\n");
+ 	}
+ 
+ 	pci_add_resource(&resources, &vmd->resources[0]);
+@@ -955,6 +970,16 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 	return 0;
+ }
+ 
++static void vmd_config_msi_remap_param(unsigned long *features)
++{
++	if (msi_remap) {
++		if (strcmp(msi_remap, "on") == 0)
++			*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
++		else if (strcmp(msi_remap, "off") == 0)
++			*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
++	}
++}
++
+ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ {
+ 	unsigned long features = (unsigned long) id->driver_data;
+@@ -984,6 +1009,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	if (err < 0)
+ 		goto out_release_instance;
+ 
++	vmd_config_msi_remap_param(&features);
++
+ 	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
+ 	if (!vmd->cfgbar) {
+ 		err = -ENOMEM;
+-- 
+2.31.1
 
-Is this somehow DWC3 specific? If not, why a DWC3 specific property?
-
-> 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index be36956af53b..1ce8008e7fef 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -262,6 +262,11 @@ properties:
->        asserts utmi_sleep_n.
->      type: boolean
->  
-> +  snps,gadget-keep-connect-sys-sleep:
-> +    description:
-> +      If True then gadget driver will not disconnect during system sleep.
-> +      System sleep will not be allowed if gadget is not already in USB suspend.
-
-'gadget' is a Linuxism.
-
-> +
->    snps,hird-threshold:
->      description: HIRD threshold
->      $ref: /schemas/types.yaml#/definitions/uint8
-> -- 
-> 2.34.1
-> 
