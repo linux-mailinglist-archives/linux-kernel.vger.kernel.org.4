@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92676C0E4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12C06C0E52
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjCTKKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
+        id S229670AbjCTKLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjCTKKh (ORCPT
+        with ESMTP id S229735AbjCTKLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:10:37 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3227AB1;
-        Mon, 20 Mar 2023 03:10:33 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id t14so11473543ljd.5;
-        Mon, 20 Mar 2023 03:10:33 -0700 (PDT)
+        Mon, 20 Mar 2023 06:11:18 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806C61BD9;
+        Mon, 20 Mar 2023 03:11:15 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id bz27so609177qtb.1;
+        Mon, 20 Mar 2023 03:11:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679307032;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ROGny04CILeyCPZ4vkWe21NJxi6A4EiVeLCtFyNlFs=;
-        b=ZR/0YZ46z2R1px//N0p0Im+diR1oI2cClyXVOcochUiM28WB8AS+2KbuoIuF+y2w2S
-         SGp3e4N/2V/31/W1P50/3k0BC39KHANQCUpz1USm3bFshWR5pXt9NXXO3Yp5W8IHH0no
-         4SDSiTdBo6lgcBUM1Jpm7j8p/hvMt24KAADG17vwxvPiIBIOC0Ukw3/BKWPOVI/jqX8S
-         xFijGUWy1xQu0pdt+ZJT1f3OVeUXoM4YcfmUXqDKY6Rwp5XMngmCmuPb9KEQaEvDwGtR
-         Y77LAdLVSwhv1LD+KnIzGE1VqKuErkQyRl5PMAJd9E92k+90oeHinlMJHlZD6qOcoIMk
-         IPeg==
+        d=gmail.com; s=20210112; t=1679307074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yVu+5LM+n5S+m3afYfpgcD0EeRGmLNpp+tXakDwzmT8=;
+        b=beWuDmyL+NNsrvkK7dFnUmnYw04XKdrb13EeNF9Px9lt6H5FFNrH6JdvPf4+NOVRbW
+         UmEdZ9NJTRhTvjGJuV7GLe5wwPXQw516KPGlgxFMg4AXNDkjB2z1HJp0v/+9ebI8ynBX
+         3qtKBzEtxu+8mh1pAR6BgraUkxLRQqtUCn0O63niGzZnYvNrFB8RUEzftYvWxoqqkPtC
+         C34/aZNEmUvXUiBrAEkti0IENYv63XGjTczE1c8SH6OGJTYPhk08alV3aJsJ1uW88fzA
+         wZeiSGiM1C34wXrunmox3djy4K8/HHe0utwlH785SRutcG1OeSvBigKYkBkMgUxc08wZ
+         BYgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679307032;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ROGny04CILeyCPZ4vkWe21NJxi6A4EiVeLCtFyNlFs=;
-        b=OJD18c8tZNTa22v3vdyA7PAL+ucyYYroOOQ0utneNe+XSH50vIbjMG42D4r8j5+6wf
-         hH57gahcHvJMxyfsc8h7tmr2X5JJ7/rUIE2Ofqf0/9aCpR1+ZLh45iq7QRe5ig9G1QiI
-         6AR1GqdfymIfBUeQxbid/BmdEUNp+085vU4W4N4+R9wSuegRewH+wo15rP4wMiRaOOcD
-         o77gCD62p6f4QqJQc9VvPsxjxiS2DG1+0G+PXm5T03/fUbvD99r5YOy1GiaojFZbWbou
-         FEcNEQ7vEYWY3fIJSHvhpB83NmtiKIiCHje+kbtCutvI6ptX2zfUYmGGP9CtsTKDe5VH
-         F4KQ==
-X-Gm-Message-State: AO0yUKUKElTbZhwMOC/z/h+RwvhYdKeR59YVxOoBW6rxEusuU6Zb/8DZ
-        51EVzLhK+ShOIO9bZkogdKA=
-X-Google-Smtp-Source: AK7set8BlupRJrQbxc3VqBd1QIZwBQ2zzvWSnLrmb+RqyM2N/9W7Y/lQ3XFjGIiv9rqyjE24i67KWA==
-X-Received: by 2002:a2e:9990:0:b0:29b:6521:887f with SMTP id w16-20020a2e9990000000b0029b6521887fmr2287242lji.51.1679307031576;
-        Mon, 20 Mar 2023 03:10:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id h23-20020a2e3a17000000b00295a9be8764sm1673368lja.117.2023.03.20.03.10.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:10:31 -0700 (PDT)
-Message-ID: <98ff1aa3-2c7f-0503-4e72-32a711638153@gmail.com>
-Date:   Mon, 20 Mar 2023 12:10:30 +0200
+        d=1e100.net; s=20210112; t=1679307074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yVu+5LM+n5S+m3afYfpgcD0EeRGmLNpp+tXakDwzmT8=;
+        b=Nc6U3exIHFIHQSqrOmLLcXSkGCs/ltdJ9nYhKz4LN34xHU6nRJsgPdqry+SJEDiNlG
+         r8q3y1MMqM969hKriPxLCg1dJdfuEFSisz3/u3TCT8VIOaIv9FL4JOyBTa7ijkScLhiN
+         nhalfLcJjmUpe4oWxsueRbnnr/QFyRRw/19leMpkAsdtlGMR4fOnPmRaarOIy/2yPpJK
+         74lVcLHICIeANdtXT0be/1pzKzFAVvdA7Kh9zZI0C3F6e/Q/G83TpqQxgZ7Vbjrf1ZHq
+         33cmBqejdCjpYWuRJ4n7XcY2AVPbNO4qydWrqG+pCuql+U1cK6SKgdvuzeYqZ9TYRTBf
+         VoUg==
+X-Gm-Message-State: AO0yUKWn2vH2ii4fSLGj1hNNrVjeMKdklv3DHyvAn0cOO3Ty3vFrBYh/
+        E/GzoxKWUT99VBLZB4YLDgHSz1M4Of0aYYG4k0U=
+X-Google-Smtp-Source: AK7set/N/c1j9jpxMoJtOx8hIYRYm3z6xjz0i0SNt/oDvYWlcoKOLY50Y1BWLlTU5klU113E28kOdzETszUS/8JqKvY=
+X-Received: by 2002:a05:622a:1aa8:b0:3df:58e7:4aa5 with SMTP id
+ s40-20020a05622a1aa800b003df58e74aa5mr1704739qtc.0.1679307074525; Mon, 20 Mar
+ 2023 03:11:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Emma Anholt <emma@anholt.net>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <cover.1679062529.git.mazziesaccount@gmail.com>
- <20230319165744.10e49cc0@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v4 0/8] Support ROHM BU27034 ALS sensor
-In-Reply-To: <20230319165744.10e49cc0@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230319115925.1317654-1-sensor1010@163.com>
+In-Reply-To: <20230319115925.1317654-1-sensor1010@163.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 20 Mar 2023 12:10:38 +0200
+Message-ID: <CAHp75Vf9kwhbZaGjZeN5Jq0Wr_yJtDdj9N48-3o79AMORqmS3w@mail.gmail.com>
+Subject: Re: [PATCH v2] drivers/gpio : Remove redundant platform_set_drvdata().
+To:     Lizhe <sensor1010@163.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, geert+renesas@glider.be,
+        info@metux.net, rjui@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        sbranden@broadcom.com, shc_work@mail.ru, j-keerthy@ti.com,
+        hoan@os.amperecomputing.com, fancer.lancer@gmail.com,
+        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kaloz@openwrt.org, khalasa@piap.pl, keguang.zhang@gmail.com,
+        daniel@thingy.jp, romain.perier@gmail.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, grygorii.strashko@ti.com,
+        ssantosh@kernel.org, khilman@kernel.org, mani@kernel.org,
+        ludovic.desroches@microchip.com, andy@kernel.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, jonathanh@nvidia.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        michal.simek@xilinx.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-unisoc@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,51 +89,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/19/23 18:57, Jonathan Cameron wrote:
-> On Fri, 17 Mar 2023 16:40:16 +0200
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> Support ROHM BU27034 ALS sensor
-> 
-> Hi Matti,
-> 
-> For ease of when this is ready to apply, better to just keep
-> key mailing lists and individuals cc'd on all patches.
+On Sun, Mar 19, 2023 at 2:01=E2=80=AFPM Lizhe <sensor1010@163.com> wrote:
+>
+> platform_set_drvdata() is redundant in these functions.
+> the purpose of calling this function is to place data
+> in *driver_data. but the data is not retrieved in these
+> functions
 
-Right. Sorry about this. I kind of rushed the sending at last friday - 
-which resulted bunch of errors in the process. I forgot to do the 
-spell-check, missed a header and messed the recipients... I should 
-really learn to not try meeting artificial deadlines like friday EOB. 
-There is Saturday and Sunday - and even if I spent weekend off the 
-computer there will likely be the next Monday. (and if there is not, 
-then I should probably not care about sending the patches).
+You need to:
+1) split the series on per driver basis (not all of the drivers are
+going thru the same subsystem);
+2) improve English grammar and style in your commit message;
+3) carefully explain in the cover letter your methods of finding the
+places you think need to be improved.
 
-> Mind you cc list is random enough I'm guessing it wasn't
-> deliberate (like the maintainers patch 8 only went to lkml
-> where no one will notice it)
+Before that it's a waste of time to look at your contributions.
 
-I am using a script which generates the recipients "per patch" using the 
-get_maintaner.pl underneath because in many cases certain people are 
-only interested in seeing a subset of a series. This avoids polluting 
-inboxes when sending large series. For v2 and v3 I did manually add the 
-relevant lists / recipients to MAINTAINERS patches which only pick-up 
-the LKML list.
-
-> I can scrape these all of lore, but it's a step that not
-> all reviewers are going to bother with.
-
-I appreciate the extra mile you're ready to go here as well :) However, 
-you should not need to do that. This whole series should've been CC'd to 
-you and the iio-list. Sorry again.
-
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+--=20
+With Best Regards,
+Andy Shevchenko
