@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54406C14DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2A16C14E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjCTOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S231801AbjCTOhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjCTOgK (ORCPT
+        with ESMTP id S231837AbjCTOhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:36:10 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF4F1A651
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:36:08 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id cn12so1965785edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679322967;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+bhKdJGctfgNktjxuVj2so7dX31mlyALoONZ3xTxQAo=;
-        b=h8UPhcIEH39Ywj5eMgZz0xyTP3unUC/KUfkRJw0CqfGPlEKN6SwKqG2gqt1qfYfKz8
-         UCy6FmSEU6W7FJdpoEKE5cBmfQuvwRdvomX+bZRIIUpHIwRsKgXNLAuaQvndtkd17GzJ
-         HJK4SKYWulZhCWvfwkMozsbjVthDUgWwl2fold1owMQTDwa6vsG6ivVxdFTu/iTccaRy
-         RRH/I+NOLyu0XndnjKft6VjQ7okAs7qb9X4s60zwKW+2jmFN/ty7U3NqEOSZxHkV379c
-         mhV4P2VKedk0b7yxKVEddlF89/2DHCvGPs959aXjJOrEPBZjE/RrqN2xIicXLCYG+AUy
-         4lLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679322967;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+bhKdJGctfgNktjxuVj2so7dX31mlyALoONZ3xTxQAo=;
-        b=7W/ULa0L8o35DqGbE5neTm2yU9/zJ+yMy6jTPenQYlDhj5i4QcdIF0UCf6tLlHJ0jm
-         JD0YbMGpnazX1yMWxFXGiV+B/z7wfrxCNL4sJFmZ8vukftzfT/kbpLrejPKVx3H0Vkdw
-         UJHaTg42yODSNKP/JJGhdVzS2eutnsdTdrYD0Rya6x8n5V+GfwG10Lnmfmc12HXJYoBc
-         0NiVauzLVEUs18aGfpUXSaumOwX0itQlhLNbufu/Z1NBN3hUua7Kx0j8iyZFSdjerrbU
-         YabcDGGFrnpilxPGnGh/NH+Pr9CKTUxFe87WTPG2wQLWPt66aeZWeRcXfENS/Tubfnes
-         1z7g==
-X-Gm-Message-State: AO0yUKWNvJXNsKnOEjto8Lx1K3eaq2Q+UJlzxCD4DYt07SrIUzbucvJ9
-        8QU+UhS8ADCKSkmfqy6LEgCGMm73sFpUTefTrv0=
-X-Google-Smtp-Source: AK7set8jbwJ62Rb4/CWNBz2G/at5rbfmgI979Xo7rDZoF8x9yzaT6t4b5n/rH43xpuzCDJQl76yolQ==
-X-Received: by 2002:aa7:c658:0:b0:4fb:e14:c25b with SMTP id z24-20020aa7c658000000b004fb0e14c25bmr12070380edr.33.1679322966785;
-        Mon, 20 Mar 2023 07:36:06 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id b44-20020a509f2f000000b004c09527d62dsm4969535edf.30.2023.03.20.07.36.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:36:06 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 19:36:03 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] staging: axis-fifo: initialize timeouts in init only
-Message-ID: <ZBhvU/USP0es8e4P@khadija-virtual-machine>
-References: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
- <2222576.3ZeAukHxDK@suse>
- <ZBf+XDN8GM0xDDCq@khadija-virtual-machine>
- <3180435.l52yBJDM9G@suse>
+        Mon, 20 Mar 2023 10:37:24 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93F224729;
+        Mon, 20 Mar 2023 07:37:09 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KEauwu099838;
+        Mon, 20 Mar 2023 09:36:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679323016;
+        bh=LmKfiqOB9lLaiKr+Uw2VYK639kxj+XeEJN2M8SFWSfk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=l2DBSGa+CbgIUe1ieMhINKpKNWGK4nqeAa6lWSh/EVvLI2VQI0s9VvwGDbVfJ2Xrk
+         OlmAT3Xocz2t/JOFL4fADi8Xt7jM6S9RhdZIiRyV2zOY0Btd8lAR8vvmO2yiS+JRXE
+         kIZqRS34edGCA2fuOsNO0/iIHh2v2ezLc1XaW1jA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KEaue3017624
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Mar 2023 09:36:56 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
+ Mar 2023 09:36:56 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 20 Mar 2023 09:36:56 -0500
+Received: from [10.249.132.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KEaqkI041627;
+        Mon, 20 Mar 2023 09:36:53 -0500
+Message-ID: <70bf6237-1762-98f4-393d-42dd3ade3fe4@ti.com>
+Date:   Mon, 20 Mar 2023 20:06:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3180435.l52yBJDM9G@suse>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2 1/2] arm64: dts: ti: k3-am62-wakeup: Introduce RTC node
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20230315170706.1598977-1-nm@ti.com>
+ <20230315170706.1598977-2-nm@ti.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230315170706.1598977-2-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,93 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 02:38:24PM +0100, Fabio M. De Francesco wrote:
-> On lunedì 20 marzo 2023 07:34:04 CET Khadija Kamran wrote:
-> > On Fri, Mar 17, 2023 at 11:29:25AM +0100, Fabio M. De Francesco wrote:
-> > > Khadija,
-> > > 
-> > > Congratulations for having your first patch in Linux, via Greg's staging
-> > > tree.
-> > > 
-> > > It will take some time before it reaches mainline, although it is already 
-> on
-> > > its way to get upstream.
-> > 
-> > Thank you! :)
-> > 
-> > > On giovedì 16 marzo 2023 21:09:00 CET Khadija Kamran wrote:
-> > > > Initialize the module parameters, read_timeout and write_timeout once in
-> > > > init().
-> > > > 
-> > > > Module parameters can only be set once and cannot be modified later, so 
-> we
-> > > > don't need to evaluate them again when passing the parameters to
-> > > > wait_event_interruptible_timeout().
-> > >
+Hi,
 
-
-Hey Fabio,
-I am talking about this below:
-
-
-> > > Greg made you (and indirectly me notice) that the statement above is a 
-> kind
-> > > of short-circuit because it misses to make the readers notice that you are
-> > > dealing with specific permissions granted to these two module's 
-> parameters.
-> 
-> Only "read" permissions for owner, group, others.
-> Obviously, when the module is initialized, "insmod" can pass actual values to 
-> the arguments. The point is that from that moment onward nobody is allowed to 
-> change the initial values associated with this variables, but they can still 
-> be read at will.
-> 
-> > I am trying to make sense of this. As the permissions do not allow
-> > write, so the value cannot be configured afterwards.
-> 
-> Yes, if with "afterwards" you are intending after they are set at insmod runs. 
-> 
-> > Instead of saying 'cannot be modified later', we should talk more about
-> > permissions here too.
-> 
-> I'm confused by this statement. Can you please rephrase?
-> 
-> > Am I getting it right?
-> 
-> Not sure, it depends on what you meant with the previous phrase.
-
-As you said above that the commit message makes the reader miss the
-permission details, so should we write more about permissions in the
-description?
-
-
->  
-> > Thank you!
-> > 
-> > Regards,
-> > Khadija
-> 
-> You're welcome!
-> 
-> So, thanks for working on this patch as long as it takes to get it done. 
-> 
-> I think the lesson to be learned is that in our community there are barriers 
-> to the entry of substandard products and therefore people have to do their 
-> best if they really want to see their work applied.
-
-
-Yes, you are right. Due to this reason, the whole process is making me
-learn a lot. I am really glad to be a part of it ^-^ 
-
-
-> These tasks are not for the "faints of heart" :-)
-> 
-> Fabio
+On 15/03/23 22:37, Nishanth Menon wrote:
+> Introduce digital RTC node in wakeup domain. Even though this has
+> no specific battery backup supply, this on-chip RTC is used in
+> cost-optimized board designs as a wakeup source.
 >
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>
+> No changes since V1
+> V1: https://lore.kernel.org/all/20230311105850.21811-2-nm@ti.com/
+>
+>  arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+> index 38dced6b4fef..fec81546fbbd 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+> @@ -40,4 +40,14 @@ wkup_i2c0: i2c@2b200000 {
+>  		clock-names = "fck";
+>  		status = "disabled";
+>  	};
+> +
+> +	wkup_rtc0: rtc@2b1f0000 {
+> +		compatible = "ti,am62-rtc";
+> +		reg = <0x00 0x2b1f0000 0x00 0x100>;
+> +		interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&k3_clks 117 6> , <&k3_clks 117 0>;
+> +		clock-names = "vbus", "osc32k";
+> +		power-domains = <&k3_pds 117 TI_SCI_PD_EXCLUSIVE>;
+> +		wakeup-source;
+> +	};
+>  };
 
-Regards,
-Khadija :)
+LGTM!
 
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-> 
-> 
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
+
