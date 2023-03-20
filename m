@@ -2,140 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2E46C1E48
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472406C1E49
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjCTRkf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 13:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S232260AbjCTRkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbjCTRkC (ORCPT
+        with ESMTP id S233640AbjCTRkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:40:02 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45314303EF;
-        Mon, 20 Mar 2023 10:36:14 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id eg48so49756406edb.13;
-        Mon, 20 Mar 2023 10:36:14 -0700 (PDT)
+        Mon, 20 Mar 2023 13:40:06 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E54200
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:36:18 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id o12so49859519edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679333758;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JaK1FcRwkMamAspffUihcNnqOOe0rFedFLTh7UEKOP4=;
+        b=q2+0GQ4ca+9rxW4ELMVguPlAgyC5BI4CYHivIaVymMM/+m4Ok0xDQO8UJ19SyNcBWq
+         10ZQq1kP32zhH9N8MA9T4UMG+Dh91sCFYAdHsjax6WxqhpXE6ejWfyBeqMRbd33xpti7
+         vpJTQnwsCzLQIWD7RQSPojO5PLIkBkM06ArztABv9YTVTGYToZ9kvK9MedLE5fyEEXYk
+         7foy6P5h2iZMRFUg9VtpIDRITqq5C5me0ADZkT622Mc0v8GPQavi5q0+y85zWLmsZrVg
+         bq+zT2zSk6Uk7g8BbZNPvSeRVkoe/RWzy4oAxuYzXP32rLM2ATiA+/YpMc9sHhNu/rAP
+         CYuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333722;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/QjLJro0ozwvQtAPPR3kthvt1S0gysI2a8deVUCjjkU=;
-        b=K+oZ3duqAE9yeKq9dEwPpH6PUArOyL/Xa8bA66dXFE5bRf0VjabSFge1KvoDkolusG
-         CCV4akOsaa7wndYVb5n5XsoNz8GV4IWoTAWH3QFdcRZRTTASCFNHHHxBaCxtdruHWMPc
-         hp/JQCib39etGjvvwMbmRu8eFsoUGFIa7Oh2/QadKILvsWi3L25Vs0w+ev4A+fqDlN+O
-         TnRtk6lS0j1+cJmNJ5Og3tY6W/SWhzEm05oHqpYYkbV+44iXpPpnp6g1jvC+eWOc4rDj
-         hnl4NrC6tAgdUJqptmMy9LgE2iQWaRh5evJk643qCQflJLfKwIqU82AKfpCdYMBoTkuG
-         HfaA==
-X-Gm-Message-State: AO0yUKUYc/wz3+EPFcgcC7+av4msszo9E7ByJUeKdwq431guK0Byn/45
-        jhUoP+s7F/pHC6iELjiB+zJyltzNv3d5FjZg/N0w8ZSj
-X-Google-Smtp-Source: AK7set+VA/rcOUmpoZp8eUYkOmJGipU8Zizu65yISHQcCQ3wzfK76tFC/CrVN58vbC56wW3FLuLW+piLzR7dMmE8XJU=
-X-Received: by 2002:a17:906:896:b0:8b1:38d6:9853 with SMTP id
- n22-20020a170906089600b008b138d69853mr3919355eje.2.1679333721776; Mon, 20 Mar
- 2023 10:35:21 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679333758;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JaK1FcRwkMamAspffUihcNnqOOe0rFedFLTh7UEKOP4=;
+        b=Hw7l+aRo5RoOUm4pfNRy8RDHi/1PQ7iyDeaGmYueHAtbaEBnlun6CIjAnNI/7CmWp1
+         sriRedL8O2c9qtQDshQOnTOB9DwrCqk9z8pWmjltrChDu5SKaWqCVa9Q1YxxotA0US6U
+         kVZDFSGPDxlUWRaOENKRv+9RJaSXQRoxHDqKcgAbI0JqdcgLJsrt47mDgt67WhzoQB1h
+         rfZxNDpKMHONnnxuHWrtaApmYP8PeBhbn8NFehyMHpAlo/HUO4YhUsADg2RMy8Kr/dJe
+         OI6qP9VkNOeA2XR51FJqFJLnqPQUPI0iX4rDssU4jUuT72kETuGGr8j80TOQTimPQgl4
+         8OZQ==
+X-Gm-Message-State: AO0yUKUNO3hj2gz/cNEb87zKLVmwP39GHVg2jF8kAIRm44cnw593xyLG
+        h3R61+oy/zFEtZifA/0YDBUwXIeJrkQHvXzo2OE=
+X-Google-Smtp-Source: AK7set9Qw6i6STl9atpvvImsPZbi6y7G4oN8QkTErnRZmai4FnQgeTcK8ajIj7MGNIOK5VLlRA9ThQ==
+X-Received: by 2002:a17:907:3f95:b0:935:1565:d661 with SMTP id hr21-20020a1709073f9500b009351565d661mr3929597ejc.66.1679333757942;
+        Mon, 20 Mar 2023 10:35:57 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id r29-20020a50d69d000000b004c2158e87e6sm5132110edi.97.2023.03.20.10.35.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 10:35:57 -0700 (PDT)
+Message-ID: <eb23cc13-9738-8e82-6b13-76cc7ccbe280@linaro.org>
+Date:   Mon, 20 Mar 2023 17:35:53 +0000
 MIME-Version: 1.0
-References: <20230302071327.557734-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <CAJZ5v0gB7WSB3F3+kTnB-r83xO9G7Sk1Vyh2os0=AeYNvHK_Mw@mail.gmail.com> <39d7b92a-8f30-8302-049b-d2ee9e6c1a78@linux.intel.com>
-In-Reply-To: <39d7b92a-8f30-8302-049b-d2ee9e6c1a78@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 20 Mar 2023 18:35:10 +0100
-Message-ID: <CAJZ5v0jpJ1yq7bS7TLLAzCL6k-_HWCVSQLx4U=3wuM_2=V-sHQ@mail.gmail.com>
-Subject: Re: [PATCH v1] ACPI: sysfs: Enable ACPI sysfs support for CCEL records
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael J Wysocki <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/5] firmware: qcom_scm: provide a read-modify-write
+ function
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+References: <1679070482-8391-1-git-send-email-quic_mojha@quicinc.com>
+ <1679070482-8391-2-git-send-email-quic_mojha@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <1679070482-8391-2-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 6:34 PM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On 3/20/23 10:15 AM, Rafael J. Wysocki wrote:
-> > On Thu, Mar 2, 2023 at 8:13 AM Kuppuswamy Sathyanarayanan
-> > <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> >>
-> >> The Confidential Computing Event Log (CCEL) table provides the address
-> >> and length of the CCEL records area in UEFI reserved memory. To access
-> >> these records, userspace can use /dev/mem to retrieve them. But
-> >> '/dev/mem' is not enabled on many systems for security reasons.
-> >>
-> >> So to allow user space access these event log records without the
-> >> /dev/mem interface, add support to access it via sysfs interface. The
-> >> ACPI driver has provided read only access to BERT records area via
-> >> '/sys/firmware/acpi/tables/data/BERT' in sysfs. So follow the same way,
-> >> and add support for /sys/firmware/acpi/tables/data/CCEL to enable
-> >> read-only access to the CCEL recorids area.
-> >>
-> >> More details about the CCEL table can be found in ACPI specification
-> >> r6.5, sec titled "CC Event Log ACPI Table".
-> >>
-> >> Original-patch-by: Haibo Xu <haibo1.xu@intel.com>
-> >> [Original patch is for TDEL table, modified it for CCEL support]
-> >> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> >> ---
-> >>  drivers/acpi/sysfs.c | 17 +++++++++++++++++
-> >>  1 file changed, 17 insertions(+)
-> >>
-> >> diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-> >> index 7db3b530279b..afeac925b31b 100644
-> >> --- a/drivers/acpi/sysfs.c
-> >> +++ b/drivers/acpi/sysfs.c
-> >> @@ -458,11 +458,28 @@ static int acpi_bert_data_init(void *th, struct acpi_data_attr *data_attr)
-> >>         return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
-> >>  }
-> >>
-> >> +static int acpi_ccel_data_init(void *th, struct acpi_data_attr *data_attr)
-> >> +{
-> >> +       struct acpi_table_ccel *ccel = th;
-> >> +
-> >> +       if (ccel->header.length < sizeof(struct acpi_table_ccel) ||
-> >> +           !(ccel->log_area_start_address) || !(ccel->log_area_minimum_length)) {
-> >
-> > The inner parens in this line are not necessary AFAICS.
-> >
-> > Otherwise I have no objections.
->
-> Yes. We can do without it. Shall I submit v2 with this change, or you want to
-> fix it when applying?
 
-I would appreciate a v2.
 
-> >
-> >> +               kfree(data_attr);
-> >> +               return -EINVAL;
-> >> +       }
-> >> +       data_attr->addr = ccel->log_area_start_address;
-> >> +       data_attr->attr.size = ccel->log_area_minimum_length;
-> >> +       data_attr->attr.attr.name = "CCEL";
-> >> +
-> >> +       return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
-> >> +}
-> >> +
-> >>  static struct acpi_data_obj {
-> >>         char *name;
-> >>         int (*fn)(void *, struct acpi_data_attr *);
-> >>  } acpi_data_objs[] = {
-> >>         { ACPI_SIG_BERT, acpi_bert_data_init },
-> >> +       { ACPI_SIG_CCEL, acpi_ccel_data_init },
-> >>  };
-> >>
-> >>  #define NUM_ACPI_DATA_OBJS ARRAY_SIZE(acpi_data_objs)
-> >> --
->
-> --
+On 17/03/2023 16:27, Mukesh Ojha wrote:
+> It was released by Srinivas K. that there is a need of
+> read-modify-write scm exported function so that it can
+> be used by multiple clients.
+> 
+> Let's introduce qcom_scm_io_update_field() which masks
+> out the bits and write the passed value to that
+> bit-offset. Subsequent patch will use this function.
+> 
+> Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>   drivers/firmware/qcom_scm.c            | 15 +++++++++++++++
+>   include/linux/firmware/qcom/qcom_scm.h |  2 ++
+>   2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 3e020d1..aca2556 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -407,6 +407,21 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+>   }
+>   EXPORT_SYMBOL(qcom_scm_set_remote_state);
+>   
+> +int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask, unsigned int val)
+> +{
+> +	unsigned int old, new;
+> +	int ret;
+> +
+> +	ret = qcom_scm_io_readl(addr, &old);
+> +	if (ret)
+> +		return ret;
+> +
+> +	new = (old & ~mask) | val;
+
+thanks for doing this,
+
+With field semantics, val should be shifted within the function, so the 
+caller only sets value for field rather than passing a shifted value.
+so this should be:
+
+new = (old & ~mask) | (val << ffs(mask) - 1);
+
+
+--srini
+
+
+
+> +
+> +	return qcom_scm_io_writel(addr, new);
+> +}
+> +EXPORT_SYMBOL(qcom_scm_io_update_field);
+> +
+>   static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>   {
+>   	struct qcom_scm_desc desc = {
+> diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+> index 1e449a5..203a781 100644
+> --- a/include/linux/firmware/qcom/qcom_scm.h
+> +++ b/include/linux/firmware/qcom/qcom_scm.h
+> @@ -84,6 +84,8 @@ extern bool qcom_scm_pas_supported(u32 peripheral);
+>   
+>   extern int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val);
+>   extern int qcom_scm_io_writel(phys_addr_t addr, unsigned int val);
+> +extern int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask,
+> +				    unsigned int val);
+>   
+>   extern bool qcom_scm_restore_sec_cfg_available(void);
+>   extern int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
