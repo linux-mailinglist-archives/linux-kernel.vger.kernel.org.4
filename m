@@ -2,120 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F496C1717
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40066C16CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjCTPLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S232222AbjCTPJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbjCTPLU (ORCPT
+        with ESMTP id S232203AbjCTPIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:11:20 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902B930EAD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:06:20 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-544b959a971so195285367b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:06:19 -0700 (PDT)
+        Mon, 20 Mar 2023 11:08:46 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FC0158B4;
+        Mon, 20 Mar 2023 08:04:14 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id j7so13433650ybg.4;
+        Mon, 20 Mar 2023 08:04:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679324775;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h7QKwmnDsultUs7P04JgZDKG6OgjB7qlJObVmRmggeo=;
-        b=p49FRkUpa1onj861owxR+cbfkVnBlLbJtuZi5TZBnMJXSSaIbhf/VQNWrSWgdlU1pM
-         0NyYbI3zjL8czjOnrV8W6ccHFFdPuz10pqO7O2q2cBZ86fDCnsE7jDPOtghpWBKEfH2f
-         b91PuoXNuBsH5i7DpJGcougkcijNYEOqAxTSA5d2fkiZYOMSJvkJrd+n4h/kEziooN/e
-         6j/LGmLE1nxkmnvlsZeWQZ07K2NARkAPyaRTceg9SzMnj8R9S3IbblvJYft79oh6gIvn
-         orsW5tfj7HNYrnD6tJqd5CJvGCZKBAHxW1AtMFMdXnrrP6d2njA6qmFfFoxOp58jTI9y
-         N6Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679324775;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679324652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h7QKwmnDsultUs7P04JgZDKG6OgjB7qlJObVmRmggeo=;
-        b=vnkkjRjz0F2qltx5/qp2OVgZIfFep50zuqZJRrm4uIsFK6n9d7Q135cUfu8AeKkwPw
-         PRH6A+WGDuMt5mtIgdmiUFSxZp0IFtVL3Ia1PE/INYybE8/TZMo7FVkyn6bimbIow4XK
-         QjyueNzVkU/emCAK+NcOYwfDNlaL8FZdo+iZoahgzynDhWwU0r8vQIVH6U+djb9LmUIX
-         coMtdlR4P7s/KtOEB5DKXQzs2DnfMmfGEz6galZSOq489QLqbgGMfSklzI41mbiN+Rwh
-         E8RRPRUvAO/nUX9TnTCy7lDviXh72OU3oVb9ONbiyEoEFIgP4uq9Uxe/pGLobF39PaH4
-         SKBg==
-X-Gm-Message-State: AO0yUKXeba+Coo06FZG3mQwDMGACE3X0YAPlvKi99CA0n2NY7dRJVVkB
-        bdWUjZ2pDiIVCXaElGoKEX5Ktw==
-X-Google-Smtp-Source: AK7set8F5wtPeeMQXBQuil2kSxCrxL1PD/6MVTUn5/U8lzeifvdg4qgj0Gb6Lc6I0cIT5qV3t9CCYQ==
-X-Received: by 2002:a0d:dd86:0:b0:544:77f1:a0f3 with SMTP id g128-20020a0ddd86000000b0054477f1a0f3mr15939653ywe.37.1679324775631;
-        Mon, 20 Mar 2023 08:06:15 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id i22-20020a05620a249600b0074411b03972sm6394896qkn.51.2023.03.20.08.05.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 08:06:04 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 11:03:32 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] bitfield: Introduce the FIELD_MODIFY() macro
-Message-ID: <ZBh1xFkjAtZW6kaA@fedora>
-References: <cover.1679149542.git.william.gray@linaro.org>
- <1c1492558c1a72b64bb26f7a44c4e69fff0e6b44.1679149543.git.william.gray@linaro.org>
- <7cd746c7b585c5086cfbd9db22414a060356cdd8.camel@sipsolutions.net>
+        bh=UfQbiHyuciDYZ6wT1sRsPTIPKxB7RSLYf+crBU68Qi0=;
+        b=j8k2+/3VarZSc/NMQHcwhYtJz5zq9bSfVj0k4A+7CeW8eANT8LP5VD7BHmhgHX+BHL
+         /w9tVseKnuZ0NocKzEf01YhSTVAMiO3FKqhd82rQjPvCkzAyu/7tHP1ZOPdfdNHyGM40
+         uk6Rq1tBGejbFEcol4lOS3uDHR66VPE32/lrvBj6htFlSrzaqqE+K3Mj3wCAuCXWfe6I
+         LX2l0cClZPaHrhyh658PZjq1UA80o5B1g0nMBdxA+tPMwYynkzsGkB0MeZP77a1Kg+ca
+         q/2oL7S1R29Px19BEeUxK/l3ElXHx1oZcv4b6C3vjnHCIrZSTRuhngXfBG8ewOSUFM0x
+         ta3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679324652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UfQbiHyuciDYZ6wT1sRsPTIPKxB7RSLYf+crBU68Qi0=;
+        b=W902NNWLW1Qck8812qwZSjMup2XbCDxLiBQGILCvp4eKH27d+a3xp2D8HCmJe27BqA
+         DlwW2Uts2I7+WLFzeS1V0rsF8EOQTF8fxWJXYlhbe7ELkuM8Dopn8QvNgKxAxLJQ2dja
+         2BA1Ca5s5W4Nzx1jUOEj9J6pJH410S8fqbRFHkyo32hfZ95fqrNoTic9QzdAVrlk4Vhe
+         VnK04y8UAdbD8JLWMfMoH9zbZBOFhOVRBKt3mbaT1gXZqpwl5gG7g4kMgP//II5ttKIQ
+         YCPhJ8/oDOTIHkMrsh59fp+DD2noDvDPfBjmIbCSz79Iys1h3dhoz8rvWSMDy7npf6bf
+         y1XQ==
+X-Gm-Message-State: AO0yUKWbQqyLDCkLTmFJqGWQIGWkvq7r6d/wksBhC4UeAKe2Z9moqpxL
+        6g9PESM3f6Jtrqz+jTbGbttEenfnyHEzimn0Lp5SUo3MqdzH/g==
+X-Google-Smtp-Source: AK7set+T4SQFGUzShpw9RAeXFNVykJfZsE+AjE5Jgx8IMziSWwoV9OuKg6TnM2XPaYHyIKLIi1W7kJ7lL2bh7xi6vxE=
+X-Received: by 2002:a5b:c47:0:b0:ac9:cb97:bd0e with SMTP id
+ d7-20020a5b0c47000000b00ac9cb97bd0emr4310434ybr.5.1679324652143; Mon, 20 Mar
+ 2023 08:04:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vugPevjziSdHkgiz"
-Content-Disposition: inline
-In-Reply-To: <7cd746c7b585c5086cfbd9db22414a060356cdd8.camel@sipsolutions.net>
+References: <20230320105323.187307-1-nunog@fr24.com> <20230320110314.GJ36557@unreal>
+ <CAJ8uoz1kbFsttvWNTUdtYcwEa=hQvky2z0Jfn0=9b5v6m_FVXg@mail.gmail.com>
+ <20230320134058.GM36557@unreal> <CAJ8uoz2ctdQzG8V+13RUQW0BjK1-L6ckP=HbxcAz2xerYhCsLQ@mail.gmail.com>
+In-Reply-To: <CAJ8uoz2ctdQzG8V+13RUQW0BjK1-L6ckP=HbxcAz2xerYhCsLQ@mail.gmail.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Mon, 20 Mar 2023 16:04:00 +0100
+Message-ID: <CAJ8uoz3XqUOmrUhP0i5GZmYhvDHMB6vd6f68zqN1WcLqSiUcJg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     =?UTF-8?Q?Nuno_Gon=C3=A7alves?= <nunog@fr24.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 20 Mar 2023 at 14:45, Magnus Karlsson <magnus.karlsson@gmail.com> w=
+rote:
+>
+> On Mon, 20 Mar 2023 at 14:41, Leon Romanovsky <leon@kernel.org> wrote:
+> >
+> > On Mon, Mar 20, 2023 at 01:27:18PM +0100, Magnus Karlsson wrote:
+> > > On Mon, 20 Mar 2023 at 12:09, Leon Romanovsky <leon@kernel.org> wrote=
+:
+> > > >
+> > > > On Mon, Mar 20, 2023 at 10:53:23AM +0000, Nuno Gon=C3=A7alves wrote=
+:
+> > > > > The remap of fill and completion rings was frowned upon as they
+> > > > > control the usage of UMEM which does not support concurrent use.
+> > > > > At the same time this would disallow the remap of this rings
 
---vugPevjziSdHkgiz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+these rings
 
-On Mon, Mar 20, 2023 at 09:50:35AM +0100, Johannes Berg wrote:
-> On Sat, 2023-03-18 at 14:59 +0000, William Breathitt Gray wrote:
-> > It is a common code pattern to modify a bitfield by masking the field
-> > and performing a bitwise OR with the respective FIELD_PREP. Wrap such a
-> > task into a macro by introducing FIELD_MODIFY() which modifies the field
-> > specified by a mask from a bitfield by putting a val in the field.
->=20
-> So I have no objection to adding this and you using FIELD_* macros, but
-> just wanted to say that personally I've come to prefer the typed
-> versions declared later in the fiel, and there we have
-> <type>_replace_bits() already.
->=20
-> Hmm. And now that I mentioned that, maybe that means FIELD_REPLACE()
-> would be nicer as a name?
->=20
-> johannes
+> > > > > into another process.
+> > > > >
+> > > > > A possible use case is that the user wants to transfer the socket=
+/
+> > > > > UMEM ownerwhip to another process (via SYS_pidfd_getfd) and so
+> > >
+> > > nit: ownership
+> > >
+> > > > > would need to also remap this rings.
 
-Perhaps I can convert all of these FIELD_GET(), FIELD_MODIFY(), and
-FIELD_GET() to the equivalent of u8_get_bits(), u8p_replace_bits(), and
-u8_encode_bits(). If that works, then I'll just drop the FIELD_MODIFY()
-patch in the v2 patchset submission.
+these rings
 
-William Breathitt Gray
+> > > > >
+> > > > > This will have no impact on current usages and just relaxes the
+> > > > > remap limitation.
+> > > > >
+> > > > > Signed-off-by: Nuno Gon=C3=A7alves <nunog@fr24.com>
+> > > > > ---
+> > > > >  net/xdp/xsk.c | 9 ++++++---
+> > > > >  1 file changed, 6 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > > index 2ac58b282b5eb..2af4ff64b22bd 100644
+> > > > > --- a/net/xdp/xsk.c
+> > > > > +++ b/net/xdp/xsk.c
+> > > > > @@ -1300,10 +1300,11 @@ static int xsk_mmap(struct file *file, st=
+ruct socket *sock,
+> > > > >  {
+> > > > >       loff_t offset =3D (loff_t)vma->vm_pgoff << PAGE_SHIFT;
+> > > > >       unsigned long size =3D vma->vm_end - vma->vm_start;
+> > > > > +     int state =3D READ_ONCE(xs->state);
+> > >
+> > > Reverse Christmas Tree notation here please. Move it one line down to
+> > > after the *xs declaration.
+> > >
+> > > > >       struct xdp_sock *xs =3D xdp_sk(sock->sk);
+> > > > >       struct xsk_queue *q =3D NULL;
+> > > > >
+> > > > > -     if (READ_ONCE(xs->state) !=3D XSK_READY)
+> > > > > +     if (!(state =3D=3D XSK_READY || state =3D=3D XSK_BOUND))
+> > > >
+> > > > This if(..) is actually:
+> > > >  if (state !=3D XSK_READY && state !=3D XSK_BOUND)
+> > >
+> > > Nuno had it like that to start with when he sent the patch privately
+> > > to me, but I responded that I prefered the current one. It is easier
+> > > to understand if read out aloud IMO.
+> >
+> > "Not equal" is much easier to understand than "not" of whole expression=
+.
+>
+> Then my brain is wired differently ;-).
 
---vugPevjziSdHkgiz
-Content-Type: application/pgp-signature; name="signature.asc"
+Nuno, please prepare a v2 by fixing the now four things above and
+reverting this if-expression to what you had before. It is two against
+one, so I yield. After that, it is good to go from my point of view.
 
------BEGIN PGP SIGNATURE-----
+Thanks!
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZBh1xAAKCRC1SFbKvhIj
-KyfzAP4y6u/CyvcL+6NIZgavaoJSI9BCKLnRx+nR1KvhGcC8RwD/eXnjHRFHPLhG
-WTSVwvraLRUk/0p/rf8R3oFrzkgehgQ=
-=O7Vi
------END PGP SIGNATURE-----
-
---vugPevjziSdHkgiz--
+> > > Do not have any strong feelings either way since the statements are e=
+quivalent.
+> > >
+> > > > Thanks
