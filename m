@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2B36C0C93
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44586C0C96
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCTIzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S230495AbjCTI4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjCTIzf (ORCPT
+        with ESMTP id S230353AbjCTI4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:55:35 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888A6F97A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:55:33 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id x15so1068789pjk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679302533;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=etVRjG5VQd5JEo4AAumSaMHCADdqFC9A7g60eMBxkGk=;
-        b=Yvbt1ce2ZU/iRTCCRTnc4o5D5ZFrUmPyAis6HQ5TWGBLog0KNK4Tb4X3fd17FF2xTJ
-         o4i1bdI1WuNwCW4FBA9ulhhuBd0ZbzYslvlr4w28pmLvIWKIV8bY26M5f4kQ3hWsJIgB
-         WzaEFeTjFOlGzdE+debD6AuaQgd+eaOKd7IV44uz/4q9wcgzcttOAwIINewA2Prvw+T2
-         toU1MvngNg6rDh23R7nBJJEDnEdS7OEpgeBQsQDpJeTAk1Tf49BCLNNiiS0SUwUGWWfg
-         M05Ve1N+q7hpKOjqUYE+9p80i47E8daQtLUmzAqb/uXddjuvT1RVLnGQsyluBkvEez5o
-         nZLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679302533;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=etVRjG5VQd5JEo4AAumSaMHCADdqFC9A7g60eMBxkGk=;
-        b=UIr5DNWlwpV9GY4vMvn2MrIQNCec7geuDQ4w9puwLVde9WD9zycZcOMtEdDQPfMJoH
-         mL1GP4TJPgn1nDJ1oBE/NabTt301QKLubwz8KxapxZr6urojZDoI4kjN9fbJRHnLn9d3
-         kxxJuLQ2t1r5uYDIAV6nN9+DJAT1Zutp7yvtsxyXu6MygmsfFyXXrrfdeOGgNKBDduaQ
-         3WUPzKY6U9Wu9kld0xUt2EBJgPazMb67gdCr2WFJXBik26uZQ80y+7xmcM58ONLDkX1d
-         18pr40g4c7Qah34Xjlic7y8Yzai2ciLQlZ7n2jnJcsEzmQRms7vnLMs5/f+yyotnYd9R
-         5Xlg==
-X-Gm-Message-State: AO0yUKXYz7iDpLiaYS63ulPy4k1MOms1TCtF8vMwJLC8K3gNXzdpvBW9
-        dFSFe+Nvb3FbLQg8q36wJ9LakA==
-X-Google-Smtp-Source: AK7set+C/oDQm4dY/QkJT2G1hreLYy1/MKeuAR4dixIREuei1yGUPBJRN/CcmAGVxSkAsFLXhWl9Jw==
-X-Received: by 2002:a05:6a20:3aa9:b0:d6:847d:c7af with SMTP id d41-20020a056a203aa900b000d6847dc7afmr12733980pzh.16.1679302532809;
-        Mon, 20 Mar 2023 01:55:32 -0700 (PDT)
-Received: from [10.85.115.102] ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id l2-20020a62be02000000b0062549352d1esm5803702pff.162.2023.03.20.01.55.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 01:55:32 -0700 (PDT)
-Message-ID: <4972a8be-d300-a66e-7fac-a83f11b56fbf@bytedance.com>
-Date:   Mon, 20 Mar 2023 16:55:23 +0800
+        Mon, 20 Mar 2023 04:56:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A152F97D;
+        Mon, 20 Mar 2023 01:55:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F3116129B;
+        Mon, 20 Mar 2023 08:55:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE05AC433EF;
+        Mon, 20 Mar 2023 08:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679302553;
+        bh=13FEHAR+CE5c89ZMfC6n39bWR44A7P/5OUh9yU/RQ0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H0ujfXX1gY+IpcURrGZgugKeUNIO6rm4S83QJXE6QyZAQka3vhS+LSjiujHQ4js81
+         oaoySZA9x2qBMCbSzoXhk/SlU+o6FeClBYj1J+/oKhhnL1dJDcqyyFgXR/jgaSK8DJ
+         Y29i/MvP5d68osNCz4XtLaDp/nIM1TzQAKqYVWXHQOGMKyzmejLq2TfX4OEvF2Ejxl
+         gBRBpec2w7Fv6Xs4BLUd3IwNSEWoTbchmUhJtUjPSDzT6Ll21tnQAqoRVZnNfsz4hD
+         LePZkd6LbzAtzhtbuowM5/LmS+6c+1e8SYE4N2KL7zOZGXWqMRww5e1SKWfznQLfGE
+         XI79p9FZ/rKmQ==
+Date:   Mon, 20 Mar 2023 14:25:49 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: [PATCH v3 2/5] phy: starfive: add JH7110 PCIE 2.0 and USB 2.0
+ PHY driver.
+Message-ID: <ZBgflY0NTqpmJMEc@matsya>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-3-minda.chen@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] sched/core: Minor optimize pick_next_task() when
- core-sched enable
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org, Josh Don <joshdon@google.com>,
-        joel@joelfernandes.org
-References: <20230308100414.37114-1-jiahao.os@bytedance.com>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <20230308100414.37114-1-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315104411.73614-3-minda.chen@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,183 +69,406 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kindly ping...
-
-On 2023/3/8 Hao Jia wrote:
-> If core-sched is enabled, sometimes we will traverse each CPU on the core
-> to find the highest priority task 'max' on the entire core, and then try
-> and find a runnable task that matches @max.
-> But in the following case, we choose the runnable task is not the best.
+On 15-03-23, 18:44, Minda Chen wrote:
+> Add Starfive JH7110 SoC PCIe 2.0 and USB 2.0 PHY driver support.
+> PCIe 2.0 PHY can used as USB 3.0 PHY
 > 
-> core max: task2 (cookie 0)
-> 
-> 	rq0				rq1
-> task0(cookie non-zero)		task2(cookie 0)
-> task1(cookie 0)
-> task3(cookie 0)
-> ...
-> 
-> pick-task: idle			pick-task: task2
-> 
-> CPU0 and CPU1 are two CPUs on the same core, task0 and task2 are the
-> highest priority tasks on rq0 and rq1 respectively, task2 is @max
-> on the entire core.
-> 
-> In the case that 'max' has a zero cookie, instead of continuing to
-> search for a runnable task on rq0 that matches @max's cookie, we
-> choose idle for rq0 directly.
-> At this time, it is obviously better to choose task1 to run for rq0,
-> which will increase the CPU utilization.
-> Therefore, we queue tasks with zero cookies in core_tree, and record
-> the number of non-zero cookie tasks of each rq to detect the status
-> of the sched-core.
-> 
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 > ---
->   kernel/sched/core.c       | 29 +++++++++++++++--------------
->   kernel/sched/core_sched.c |  9 ++++-----
->   kernel/sched/sched.h      |  1 +
->   3 files changed, 20 insertions(+), 19 deletions(-)
+>  MAINTAINERS                            |   8 ++
+>  drivers/phy/starfive/Kconfig           |  22 ++++
+>  drivers/phy/starfive/Makefile          |   2 +
+>  drivers/phy/starfive/phy-jh7110-pcie.c | 136 ++++++++++++++++++++
+>  drivers/phy/starfive/phy-jh7110-usb.c  | 167 +++++++++++++++++++++++++
+>  5 files changed, 335 insertions(+)
+>  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
+>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index af017e038b48..765cd14c52e1 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -236,8 +236,8 @@ void sched_core_enqueue(struct rq *rq, struct task_struct *p)
->   {
->   	rq->core->core_task_seq++;
->   
-> -	if (!p->core_cookie)
-> -		return;
-> +	if (p->core_cookie)
-> +		rq->cookied_count++;
->   
->   	rb_add(&p->core_node, &rq->core_tree, rb_sched_core_less);
->   }
-> @@ -246,11 +246,16 @@ void sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags)
->   {
->   	rq->core->core_task_seq++;
->   
-> +	if (p->core_cookie)
-> +		rq->cookied_count--;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8361b8e710ca..4263c005e45c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19977,6 +19977,14 @@ S:	Supported
+>  F:	Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+>  F:	drivers/phy/starfive/phy-starfive-dphy-rx.c
+>  
+> +STARFIVE JH71X0 PCIE AND USB PHY DRIVER
+> +M:	Emil Renner Berthing <kernel@esmil.dk>
+> +M:	Minda Chen <minda.chen@starfivetech.com>
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
+> +F:	drivers/phy/starfive/phy-jh7110-pcie.c
+> +F:	drivers/phy/starfive/phy-jh7110-usb.c
 > +
->   	if (sched_core_enqueued(p)) {
->   		rb_erase(&p->core_node, &rq->core_tree);
->   		RB_CLEAR_NODE(&p->core_node);
->   	}
->   
-> +	if (!sched_core_enabled(rq))
-> +		return;
->   	/*
->   	 * Migrating the last task off the cpu, with the cpu in forced idle
->   	 * state. Reschedule to create an accounting edge for forced idle,
-> @@ -370,7 +375,7 @@ static void sched_core_assert_empty(void)
->   	int cpu;
->   
->   	for_each_possible_cpu(cpu)
-> -		WARN_ON_ONCE(!RB_EMPTY_ROOT(&cpu_rq(cpu)->core_tree));
-> +		WARN_ON_ONCE(cpu_rq(cpu)->cookied_count);
->   }
->   
->   static void __sched_core_enable(void)
-> @@ -2061,14 +2066,12 @@ static inline void enqueue_task(struct rq *rq, struct task_struct *p, int flags)
->   	uclamp_rq_inc(rq, p);
->   	p->sched_class->enqueue_task(rq, p, flags);
->   
-> -	if (sched_core_enabled(rq))
-> -		sched_core_enqueue(rq, p);
-> +	sched_core_enqueue(rq, p);
->   }
->   
->   static inline void dequeue_task(struct rq *rq, struct task_struct *p, int flags)
->   {
-> -	if (sched_core_enabled(rq))
-> -		sched_core_dequeue(rq, p, flags);
-> +	sched_core_dequeue(rq, p, flags);
->   
->   	if (!(flags & DEQUEUE_NOCLOCK))
->   		update_rq_clock(rq);
-> @@ -6126,13 +6129,8 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->   		rq_i = cpu_rq(i);
->   		p = rq_i->core_pick;
->   
-> -		if (!cookie_equals(p, cookie)) {
-> -			p = NULL;
-> -			if (cookie)
-> -				p = sched_core_find(rq_i, cookie);
-> -			if (!p)
-> -				p = idle_sched_class.pick_task(rq_i);
-> -		}
-> +		if (!cookie_equals(p, cookie))
-> +			p = sched_core_find(rq_i, cookie);
->   
->   		rq_i->core_pick = p;
->   
-> @@ -6333,6 +6331,7 @@ static void sched_core_cpu_starting(unsigned int cpu)
->   	sched_core_lock(cpu, &flags);
->   
->   	WARN_ON_ONCE(rq->core != rq);
-> +	WARN_ON_ONCE(rq->cookied_count);
->   
->   	/* if we're the first, we'll be our own leader */
->   	if (cpumask_weight(smt_mask) == 1)
-> @@ -6425,6 +6424,7 @@ static inline void sched_core_cpu_dying(unsigned int cpu)
->   {
->   	struct rq *rq = cpu_rq(cpu);
->   
-> +	WARN_ON_ONCE(rq->cookied_count);
->   	if (rq->core != rq)
->   		rq->core = rq;
->   }
-> @@ -9917,6 +9917,7 @@ void __init sched_init(void)
->   		rq->core = rq;
->   		rq->core_pick = NULL;
->   		rq->core_enabled = 0;
-> +		rq->cookied_count = 0;
->   		rq->core_tree = RB_ROOT;
->   		rq->core_forceidle_count = 0;
->   		rq->core_forceidle_occupation = 0;
-> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-> index a57fd8f27498..70f424abcc2b 100644
-> --- a/kernel/sched/core_sched.c
-> +++ b/kernel/sched/core_sched.c
-> @@ -56,6 +56,7 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
->   	unsigned long old_cookie;
->   	struct rq_flags rf;
->   	struct rq *rq;
-> +	bool enqueued;
->   
->   	rq = task_rq_lock(p, &rf);
->   
-> @@ -67,16 +68,14 @@ static unsigned long sched_core_update_cookie(struct task_struct *p,
->   	 */
->   	SCHED_WARN_ON((p->core_cookie || cookie) && !sched_core_enabled(rq));
->   
-> -	if (sched_core_enqueued(p))
-> +	enqueued = task_on_rq_queued(p);
-> +	if (enqueued)
->   		sched_core_dequeue(rq, p, DEQUEUE_SAVE);
->   
->   	old_cookie = p->core_cookie;
->   	p->core_cookie = cookie;
->   
-> -	/*
-> -	 * Consider the cases: !prev_cookie and !cookie.
-> -	 */
-> -	if (cookie && task_on_rq_queued(p))
-> +	if (enqueued)
->   		sched_core_enqueue(rq, p);
->   
->   	/*
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 3e8df6d31c1e..f5a0ee7fccae 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1148,6 +1148,7 @@ struct rq {
->   	unsigned int		core_task_seq;
->   	unsigned int		core_pick_seq;
->   	unsigned long		core_cookie;
-> +	unsigned int		cookied_count;
->   	unsigned int		core_forceidle_count;
->   	unsigned int		core_forceidle_seq;
->   	unsigned int		core_forceidle_occupation;
+>  STATIC BRANCH/CALL
+>  M:	Peter Zijlstra <peterz@infradead.org>
+>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
+> index e449a662acf5..dd0f139b5bfb 100644
+> --- a/drivers/phy/starfive/Kconfig
+> +++ b/drivers/phy/starfive/Kconfig
+> @@ -11,3 +11,25 @@ config PHY_STARFIVE_DPHY_RX
+>  	  Choose this option if you have a Starfive D-PHY in your
+>  	  system. If M is selected, the module will be called
+>  	  phy-starfive-dphy-rx.
+> +
+> +config PHY_STARFIVE_JH7110_USB
+> +	tristate "Starfive JH7110 USB 2.0 PHY support"
+> +	depends on USB_SUPPORT
+> +	select GENERIC_PHY
+> +	select USB_PHY
+> +	help
+> +	  Enable this to support the StarFive USB 2.0 PHY,
+> +	  used with the Cadence USB controller.
+> +	  If M is selected, the module will be called
+> +	  phy-jh7110-usb.ko.
+> +
+> +config PHY_STARFIVE_JH7110_PCIE
+
+Sorted alphabetically please
+
+> +	tristate "Starfive JH7110 PCIE 2.0/USB 3.0 PHY support"
+> +	depends on USB_SUPPORT
+> +	select GENERIC_PHY
+> +	select USB_PHY
+> +	help
+> +	  Enable this to support the StarFive PCIe 2.0 PHY,
+> +	  or used as USB 3.0 PHY.
+> +	  If M is selected, the module will be called
+> +	  phy-jh7110-pcie.ko.
+> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
+> index 7ec576cb30ae..c3eaf1b34cbb 100644
+> --- a/drivers/phy/starfive/Makefile
+> +++ b/drivers/phy/starfive/Makefile
+> @@ -1,2 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_PHY_STARFIVE_DPHY_RX)      += phy-starfive-dphy-rx.o
+> +obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
+> +obj-$(CONFIG_PHY_STARFIVE_JH7110_PCIE)	+= phy-jh7110-pcie.o
+
+Here also
+
+> diff --git a/drivers/phy/starfive/phy-jh7110-pcie.c b/drivers/phy/starfive/phy-jh7110-pcie.c
+> new file mode 100644
+> index 000000000000..30a8fa1f580d
+> --- /dev/null
+> +++ b/drivers/phy/starfive/phy-jh7110-pcie.c
+> @@ -0,0 +1,136 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * StarFive JH7110 PCIe 2.0 PHY driver
+> + *
+> + * Copyright (C) 2023 Minda Chen <minda.chen@starfivetech.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define PCIE_KVCO_LEVEL_OFF		(0x28)
+> +#define PCIE_USB3_PHY_PLL_CTL_OFF	(0x7c)
+> +#define PCIE_KVCO_TUNE_SIGNAL_OFF	(0x80)
+> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
+> +#define PHY_KVCO_FINE_TUNE_LEVEL	0x91
+> +#define PHY_KVCO_FINE_TUNE_SIGNALS	0xc
+> +
+> +struct jh7110_pcie_phy {
+> +	struct phy *phy;
+> +	void __iomem *regs;
+> +	enum phy_mode mode;
+> +};
+> +
+> +static void jh7110_usb3_mode_set(struct jh7110_pcie_phy *phy)
+> +{
+> +	/* Configuare spread-spectrum mode: down-spread-spectrum */
+> +	writel(PCIE_USB3_PHY_ENABLE, phy->regs + PCIE_USB3_PHY_PLL_CTL_OFF);
+> +}
+> +
+> +static void jh7110_pcie_mode_set(struct jh7110_pcie_phy *phy)
+> +{
+> +	/* PCIe Multi-PHY PLL KVCO Gain fine tune settings: */
+> +	writel(PHY_KVCO_FINE_TUNE_LEVEL, phy->regs + PCIE_KVCO_LEVEL_OFF);
+> +	writel(PHY_KVCO_FINE_TUNE_SIGNALS, phy->regs + PCIE_KVCO_TUNE_SIGNAL_OFF);
+> +}
+> +
+> +static int jh7110_pcie_phy_set_mode(struct phy *_phy,
+> +				  enum phy_mode mode, int submode)
+> +{
+> +	struct jh7110_pcie_phy *phy = phy_get_drvdata(_phy);
+> +
+> +	if (mode != phy->mode) {
+> +		switch (mode) {
+> +		case PHY_MODE_USB_HOST:
+> +		case PHY_MODE_USB_DEVICE:
+> +		case PHY_MODE_USB_OTG:
+> +			jh7110_usb3_mode_set(phy);
+> +			break;
+> +		case PHY_MODE_PCIE:
+> +			jh7110_pcie_mode_set(phy);
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +
+> +		dev_info(&_phy->dev, "Changing phy mode to %d\n", mode);
+> +		phy->mode = mode;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_pcie_phy_init(struct phy *_phy)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int jh7110_pcie_phy_exit(struct phy *_phy)
+> +{
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops jh7110_pcie_phy_ops = {
+> +	.init		= jh7110_pcie_phy_init,
+> +	.exit		= jh7110_pcie_phy_exit,
+> +	.set_mode	= jh7110_pcie_phy_set_mode,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int jh7110_pcie_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct jh7110_pcie_phy *phy;
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *phy_provider;
+> +
+> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(phy->regs))
+> +		return PTR_ERR(phy->regs);
+> +
+> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_pcie_phy_ops);
+> +	if (IS_ERR(phy->phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+> +			"Failed to map phy base\n");
+> +
+> +	platform_set_drvdata(pdev, phy);
+> +	phy_set_drvdata(phy->phy, phy);
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +
+> +	return PTR_ERR_OR_ZERO(phy_provider);
+> +}
+> +
+> +static int jh7110_pcie_phy_remove(struct platform_device *pdev)
+> +{
+> +	platform_set_drvdata(pdev, NULL);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id jh7110_pcie_phy_of_match[] = {
+> +	{ .compatible = "starfive,jh7110-pcie-phy" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, jh7110_pcie_phy_of_match);
+> +
+> +static struct platform_driver jh7110_pcie_phy_driver = {
+> +	.probe	= jh7110_pcie_phy_probe,
+> +	.remove	= jh7110_pcie_phy_remove,
+> +	.driver = {
+> +		.of_match_table	= jh7110_pcie_phy_of_match,
+> +		.name  = "jh7110-pcie-phy",
+> +	}
+> +};
+> +module_platform_driver(jh7110_pcie_phy_driver);
+> +
+> +MODULE_DESCRIPTION("StarFive JH7110 PCIe 2.0 PHY driver");
+> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/phy/starfive/phy-jh7110-usb.c b/drivers/phy/starfive/phy-jh7110-usb.c
+> new file mode 100644
+> index 000000000000..89db0b7b1224
+> --- /dev/null
+> +++ b/drivers/phy/starfive/phy-jh7110-usb.c
+> @@ -0,0 +1,167 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * StarFive JH7110 USB 2.0 PHY driver
+
+Since these two seem to be different driver, pls split the patches to
+two, one for each phy driver
+
+> + *
+> + * Copyright (C) 2023 Minda Chen <minda.chen@starfivetech.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/usb/of.h>
+> +
+> +#define USB_125M_CLK_RATE		125000000
+> +#define USB_LS_KEEPALIVE_OFF		0x4
+> +#define USB_LS_KEEPALIVE_ENABLE		BIT(4)
+> +
+> +struct jh7110_usb2_phy {
+> +	struct phy *phy;
+> +	void __iomem *regs;
+> +	struct clk *usb_125m_clk;
+> +	struct clk *app_125;
+> +	enum usb_dr_mode dr_mode;
+> +};
+> +
+> +static void jh7110_usb2_mode_set(struct jh7110_usb2_phy *phy)
+> +{
+> +	unsigned int val;
+> +
+> +	if (phy->dr_mode != USB_DR_MODE_PERIPHERAL) {
+> +		/* Enable the LS speed keep-alive signal */
+> +		val = readl(phy->regs + USB_LS_KEEPALIVE_OFF);
+> +		val |= USB_LS_KEEPALIVE_ENABLE;
+> +		writel(val, phy->regs + USB_LS_KEEPALIVE_OFF);
+> +	}
+> +}
+> +
+> +static int jh7110_usb2_phy_set_mode(struct phy *_phy,
+> +				  enum phy_mode mode, int submode)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +	int new_mode;
+> +
+> +	switch (mode) {
+> +	case PHY_MODE_USB_HOST:
+> +		new_mode = USB_DR_MODE_HOST;
+> +		break;
+> +	case PHY_MODE_USB_DEVICE:
+> +		new_mode = USB_DR_MODE_PERIPHERAL;
+> +		break;
+> +	case PHY_MODE_USB_OTG:
+> +		new_mode = USB_DR_MODE_OTG;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (new_mode != phy->dr_mode) {
+> +		dev_info(&_phy->dev, "Changing dr_mode to %d\n", new_mode);
+> +		phy->dr_mode = new_mode;
+> +		jh7110_usb2_mode_set(phy);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_usb2_phy_init(struct phy *_phy)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +	int ret;
+> +
+> +	ret = clk_set_rate(phy->usb_125m_clk, USB_125M_CLK_RATE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(phy->app_125);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_usb2_phy_exit(struct phy *_phy)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +
+> +	clk_disable_unprepare(phy->app_125);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops jh7110_usb2_phy_ops = {
+> +	.init		= jh7110_usb2_phy_init,
+> +	.exit		= jh7110_usb2_phy_exit,
+> +	.set_mode	= jh7110_usb2_phy_set_mode,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int jh7110_usb_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct jh7110_usb2_phy *phy;
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *phy_provider;
+> +
+> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	phy->usb_125m_clk = devm_clk_get(dev, "125m");
+> +	if (IS_ERR(phy->usb_125m_clk))
+> +		return dev_err_probe(dev, PTR_ERR(phy->usb_125m_clk),
+> +			"Failed to get 125m clock\n");
+> +
+> +	phy->app_125 = devm_clk_get(dev, "app_125");
+> +	if (IS_ERR(phy->app_125))
+> +		return dev_err_probe(dev, PTR_ERR(phy->app_125),
+> +			"Failed to get app 125m clock\n");
+> +
+> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(phy->regs))
+> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+> +			"Failed to map phy base\n");
+> +
+> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_usb2_phy_ops);
+> +	if (IS_ERR(phy->phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy->phy),
+> +			"Failed to create phy\n");
+> +
+> +	platform_set_drvdata(pdev, phy);
+> +	phy_set_drvdata(phy->phy, phy);
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +
+> +	return PTR_ERR_OR_ZERO(phy_provider);
+> +}
+> +
+> +static int jh7110_usb_phy_remove(struct platform_device *pdev)
+> +{
+> +	struct jh7110_usb2_phy *phy = platform_get_drvdata(pdev);
+> +
+> +	clk_disable_unprepare(phy->app_125);
+> +	platform_set_drvdata(pdev, NULL);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id jh7110_usb_phy_of_match[] = {
+> +	{ .compatible = "starfive,jh7110-usb-phy" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, jh7110_usb_phy_of_match);
+> +
+> +static struct platform_driver jh7110_usb_phy_driver = {
+> +	.probe	= jh7110_usb_phy_probe,
+> +	.remove	= jh7110_usb_phy_remove,
+> +	.driver = {
+> +		.of_match_table	= jh7110_usb_phy_of_match,
+> +		.name  = "jh7110-usb-phy",
+> +	}
+> +};
+> +module_platform_driver(jh7110_usb_phy_driver);
+> +
+> +MODULE_DESCRIPTION("StarFive JH7110 USB 2.0 PHY driver");
+> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.17.1
+
+-- 
+~Vinod
