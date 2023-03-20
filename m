@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89F76C0D7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2F76C0D81
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCTJiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S230123AbjCTJjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCTJhx (ORCPT
+        with ESMTP id S231311AbjCTJik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:37:53 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEA823D8C;
-        Mon, 20 Mar 2023 02:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679305061; x=1710841061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tgSBiNMlvox8p9HFIVHyf8lm+Mh/0Js79g7+/dJk32s=;
-  b=ISdDfwmNhP/JzbCvk5ah5iycy57uSdrH86AXlia4PYtzkfuyNz8aGErC
-   bPdk9BmqN++0bs7f4s4OlXVaafQBeIipbbzCxUdd95LR8QOK6La95F9zO
-   pOqGiPc4+XB3ll1yVEUyAlF2xu8sWzcPml3noOt4LdCNyn0i9Lv5T15GU
-   LHf03qIM4JdCQBTKSePXJZb5l7MamdsK36oFffJHOit88L0meWCe4+sy9
-   rIlGAAE00/J43tdcItCMJPEVPuom0xIMBxcxiFMqJJZhhMaVrwTOx65m1
-   3/97XWXD7GmJj0PxT7dPXLdl5QymE07jy2Px5vodliBTJr9JwtNajQwOu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="366333512"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="366333512"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:37:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="631064558"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="631064558"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:37:36 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 6B5C5122400;
-        Mon, 20 Mar 2023 11:37:33 +0200 (EET)
-Date:   Mon, 20 Mar 2023 11:37:33 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        Francesco Dolcini <francesco@dolcini.it>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Marcel Ziswiler <marcel@ziswiler.com>,
-        linux-media@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Marco Felsch <m.felsch@pengutronix.de>
-Subject: Re: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
-Message-ID: <ZBgpXRtXcxg14OGv@kekkonen.localdomain>
-References: <20230306063649.7387-1-marcel@ziswiler.com>
- <ZBBk+h3EMSsacZ6v@valkosipuli.retiisi.eu>
- <ZBBpUAhis8L5Dtuz@francesco-nb.int.toradex.com>
- <ZBBsgW75Gc2FmuQ0@valkosipuli.retiisi.eu>
- <ZBBvmjUZIn/g0/Nv@francesco-nb.int.toradex.com>
- <20230320084844.tdjiv6kaxcosiwm2@uno.localdomain>
- <ZBggtBU1TjlvVNCS@kekkonen.localdomain>
- <20230320092602.GE20234@pendragon.ideasonboard.com>
+        Mon, 20 Mar 2023 05:38:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159351DBBF
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679305062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PSehupr3ZQFIxZG5J2UEktXA19d5C1cRws69ufPXWy0=;
+        b=Eu6rIWz7r8r5bX/OBbbAWaXq4kUI34FlNCfrdMYb1eJFczcbyvNs6W6i0gQDYnHbIvjTBF
+        isJX+O5z1ULpY1YlmRj2JTHXvkLVKstBu3KWr1RaiR0DPxpmB8oEsbMKs6h/vNstqIEHlX
+        O8zuYg+ULiSNhptV/hZDPz82pXZucrg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-582-ZubIBaGVOYO7zCGAQXx0kQ-1; Mon, 20 Mar 2023 05:37:41 -0400
+X-MC-Unique: ZubIBaGVOYO7zCGAQXx0kQ-1
+Received: by mail-wm1-f69.google.com with SMTP id z20-20020a05600c0a1400b003edcff41678so534493wmp.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:37:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679305060;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PSehupr3ZQFIxZG5J2UEktXA19d5C1cRws69ufPXWy0=;
+        b=MDgXzT7i6+8RICoIvG6o3cgKt9rXJ/MQPhtxZff5SvLfvW0a8K13t51relSs8XdwSs
+         lKRf1FzXSVbVF+xRpiuwm/3j4NV8E06jwwEjaUrZPXxZKoZm6ox8RCxe6YopJs3R/1Yu
+         Fqof1g+mxUv4uJod4QfYOdr855uBbSU4V/X1Tk01BmCXvzl0bI3u0LPh0bfE598etMiE
+         zTcousUxA4jEfjmW0lqorEE1ngUQ2Yb3jhZ2hhq/RVqr9EklEEs4bB+RaxmpgsWcd0ak
+         fmk6/Ik7dr10ZKfQJYB1ymVBMphg4m632ShE80nvUiRpuTo/GYBZoioA+qv86M8wnBNw
+         9GYg==
+X-Gm-Message-State: AO0yUKVbjuiYqsvyvFvYtekZJ1qcSca0KnG+FQWj7KEKyOGEeBCg7f1r
+        xyzn2i11dNEpwt0Bdob5vMW8jP7of6BjtSseDFsWNq2AIBjmHOXeFeMOayz1UnBe7s7qyYnb9eM
+        GpOKKl0pc0g2wNmXbWjIMA7pt
+X-Received: by 2002:adf:e74b:0:b0:2cf:e3d8:5dff with SMTP id c11-20020adfe74b000000b002cfe3d85dffmr12265919wrn.9.1679305059957;
+        Mon, 20 Mar 2023 02:37:39 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8/r56O578u5RSgT8sy/rU880Ts62o7ET9TXhnWuxBe7vr18+YzsfivcSxLVJ6J57cPrNNMlw==
+X-Received: by 2002:adf:e74b:0:b0:2cf:e3d8:5dff with SMTP id c11-20020adfe74b000000b002cfe3d85dffmr12265901wrn.9.1679305059662;
+        Mon, 20 Mar 2023 02:37:39 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id j20-20020a5d6e54000000b002cea8664304sm8371060wrz.91.2023.03.20.02.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 02:37:39 -0700 (PDT)
+Message-ID: <f65a5bca-ad5f-bd8d-e063-382c076924a8@redhat.com>
+Date:   Mon, 20 Mar 2023 10:37:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320092602.GE20234@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org
+References: <20230311051712.4095040-1-mcgrof@kernel.org>
+ <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
+ <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
+ <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
+ <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
+ <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,37 +91,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
-
-On Mon, Mar 20, 2023 at 11:26:02AM +0200, Laurent Pinchart wrote:
-> In a (simplified) nutshell,
+On 17.03.23 00:56, Luis Chamberlain wrote:
+> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
+>> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
+>>> I expect to have a machine (with a crazy number of CPUs/devices) available
+>>> in a couple of days (1-2), so no need to rush.
+>>>
+>>> The original machine I was able to reproduce with is blocked for a little
+>>> bit longer; so I hope the alternative I looked up will similarly trigger the
+>>> issue easily.
+>>
+>> OK give this a spin:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
+>>
+>> I'm seeing about ~86 MiB saving on the upper bound on memory usage
+>> while hammering on kmod test 0008, and this is on a small system.
+>>
+>> Probably won't help *that* much but am curious... if it helps somewhat.
 > 
-> ---------+     +----------+     +---------+     +-----+     +-----+
-> | Camera | --> | CSI-2 RX | --> | CSI2IPU | --> | Mux | --> | IPU |
-> | Sensor |     |          |     | Gasket  |     |     |     |     |
-> ---------+     +----------+     +---------+     +-----+     +-----+
+> How much cpu count BTW?
 
-Thank you, this is helpful.
-
-I suppose the mux here at least won't actively do anything to the data. So
-presumably its endpoint won't contain the active configuration, but its
-superset.
-
-> 
-> All those blocks, except for the gasket, have a node in DT.
-> 
-> The IPU driver needs to know the number of CSI-2 data lanes, which is
-> encoded in the data-lanes DT property present in both the sensor output
-> endpoint and the CSI-2 RX input endpoint, but not the other endpoints in
-> the pipeline.
-
-This doesn't yet explain why the sensor would need to implement
-get_mbus_config if its bus configuration remains constant.
-
-I suppose those blocks in between would probably need something to convey
-their active configuration from upstream sub-devices.
+220 physical ones and 440 virtual ones.
 
 -- 
-Kind regards,
+Thanks,
 
-Sakari Ailus
+David / dhildenb
+
