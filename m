@@ -2,105 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEFD6C0E3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A92676C0E4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjCTKIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S229821AbjCTKKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCTKIU (ORCPT
+        with ESMTP id S229879AbjCTKKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:08:20 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7442528C;
-        Mon, 20 Mar 2023 03:07:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 858E76802E6;
-        Mon, 20 Mar 2023 18:07:16 +0800 (CST)
-From:   Frank Wang <frank.wang@rock-chips.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: [PATCH v2 3/3] usb: typec: tcpm: add get max power support
-Date:   Mon, 20 Mar 2023 18:07:11 +0800
-Message-Id: <20230320100711.3708-4-frank.wang@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230320100711.3708-1-frank.wang@rock-chips.com>
-References: <20230320100711.3708-1-frank.wang@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx1KGlYYH0hOTRofGktPGkNVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
-        Y+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NDo6SQw5Qj0OCxFLSj0LHzUW
-        HSpPCTZVSlVKTUxCSEtNQ0hMTUtDVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFIS05NNwY+
-X-HM-Tid: 0a86fe7ccb902eb5kusn858e76802e6
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 06:10:37 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3227AB1;
+        Mon, 20 Mar 2023 03:10:33 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id t14so11473543ljd.5;
+        Mon, 20 Mar 2023 03:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679307032;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ROGny04CILeyCPZ4vkWe21NJxi6A4EiVeLCtFyNlFs=;
+        b=ZR/0YZ46z2R1px//N0p0Im+diR1oI2cClyXVOcochUiM28WB8AS+2KbuoIuF+y2w2S
+         SGp3e4N/2V/31/W1P50/3k0BC39KHANQCUpz1USm3bFshWR5pXt9NXXO3Yp5W8IHH0no
+         4SDSiTdBo6lgcBUM1Jpm7j8p/hvMt24KAADG17vwxvPiIBIOC0Ukw3/BKWPOVI/jqX8S
+         xFijGUWy1xQu0pdt+ZJT1f3OVeUXoM4YcfmUXqDKY6Rwp5XMngmCmuPb9KEQaEvDwGtR
+         Y77LAdLVSwhv1LD+KnIzGE1VqKuErkQyRl5PMAJd9E92k+90oeHinlMJHlZD6qOcoIMk
+         IPeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679307032;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ROGny04CILeyCPZ4vkWe21NJxi6A4EiVeLCtFyNlFs=;
+        b=OJD18c8tZNTa22v3vdyA7PAL+ucyYYroOOQ0utneNe+XSH50vIbjMG42D4r8j5+6wf
+         hH57gahcHvJMxyfsc8h7tmr2X5JJ7/rUIE2Ofqf0/9aCpR1+ZLh45iq7QRe5ig9G1QiI
+         6AR1GqdfymIfBUeQxbid/BmdEUNp+085vU4W4N4+R9wSuegRewH+wo15rP4wMiRaOOcD
+         o77gCD62p6f4QqJQc9VvPsxjxiS2DG1+0G+PXm5T03/fUbvD99r5YOy1GiaojFZbWbou
+         FEcNEQ7vEYWY3fIJSHvhpB83NmtiKIiCHje+kbtCutvI6ptX2zfUYmGGP9CtsTKDe5VH
+         F4KQ==
+X-Gm-Message-State: AO0yUKUKElTbZhwMOC/z/h+RwvhYdKeR59YVxOoBW6rxEusuU6Zb/8DZ
+        51EVzLhK+ShOIO9bZkogdKA=
+X-Google-Smtp-Source: AK7set8BlupRJrQbxc3VqBd1QIZwBQ2zzvWSnLrmb+RqyM2N/9W7Y/lQ3XFjGIiv9rqyjE24i67KWA==
+X-Received: by 2002:a2e:9990:0:b0:29b:6521:887f with SMTP id w16-20020a2e9990000000b0029b6521887fmr2287242lji.51.1679307031576;
+        Mon, 20 Mar 2023 03:10:31 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id h23-20020a2e3a17000000b00295a9be8764sm1673368lja.117.2023.03.20.03.10.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:10:31 -0700 (PDT)
+Message-ID: <98ff1aa3-2c7f-0503-4e72-32a711638153@gmail.com>
+Date:   Mon, 20 Mar 2023 12:10:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Gazzillo <paul@pgazz.com>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Emma Anholt <emma@anholt.net>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <cover.1679062529.git.mazziesaccount@gmail.com>
+ <20230319165744.10e49cc0@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v4 0/8] Support ROHM BU27034 ALS sensor
+In-Reply-To: <20230319165744.10e49cc0@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Traverse fixed pdos to calculate the maximum power that the charger
-can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-property.
+On 3/19/23 18:57, Jonathan Cameron wrote:
+> On Fri, 17 Mar 2023 16:40:16 +0200
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> 
+>> Support ROHM BU27034 ALS sensor
+> 
+> Hi Matti,
+> 
+> For ease of when this is ready to apply, better to just keep
+> key mailing lists and individuals cc'd on all patches.
 
-Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Right. Sorry about this. I kind of rushed the sending at last friday - 
+which resulted bunch of errors in the process. I forgot to do the 
+spell-check, missed a header and messed the recipients... I should 
+really learn to not try meeting artificial deadlines like friday EOB. 
+There is Saturday and Sunday - and even if I spent weekend off the 
+computer there will likely be the next Monday. (and if there is not, 
+then I should probably not care about sending the patches).
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 13830b5e2d09f..d6ad3cdf9e4af 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6320,6 +6320,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
- 	return 0;
- }
- 
-+static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
-+					  union power_supply_propval *val)
-+{
-+	unsigned int src_mv, src_ma, max_src_mw = 0;
-+	unsigned int i, tmp;
-+
-+	for (i = 0; i < port->nr_source_caps; i++) {
-+		u32 pdo = port->source_caps[i];
-+
-+		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
-+			src_mv = pdo_fixed_voltage(pdo);
-+			src_ma = pdo_max_current(pdo);
-+			tmp = src_mv * src_ma / 1000;
-+			max_src_mw = tmp > max_src_mw ? tmp : max_src_mw;
-+		}
-+	}
-+
-+	val->intval = max_src_mw;
-+	return 0;
-+}
-+
- static int tcpm_psy_get_prop(struct power_supply *psy,
- 			     enum power_supply_property psp,
- 			     union power_supply_propval *val)
-@@ -6349,6 +6370,9 @@ static int tcpm_psy_get_prop(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		ret = tcpm_psy_get_current_now(port, val);
- 		break;
-+	case POWER_SUPPLY_PROP_INPUT_POWER_LIMIT:
-+		tcpm_psy_get_input_power_limit(port, val);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
+> Mind you cc list is random enough I'm guessing it wasn't
+> deliberate (like the maintainers patch 8 only went to lkml
+> where no one will notice it)
+
+I am using a script which generates the recipients "per patch" using the 
+get_maintaner.pl underneath because in many cases certain people are 
+only interested in seeing a subset of a series. This avoids polluting 
+inboxes when sending large series. For v2 and v3 I did manually add the 
+relevant lists / recipients to MAINTAINERS patches which only pick-up 
+the LKML list.
+
+> I can scrape these all of lore, but it's a step that not
+> all reviewers are going to bother with.
+
+I appreciate the extra mile you're ready to go here as well :) However, 
+you should not need to do that. This whole series should've been CC'd to 
+you and the iio-list. Sorry again.
+
+
+Yours,
+	-- Matti
+
 -- 
-2.17.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
