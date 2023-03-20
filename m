@@ -2,188 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F196C2254
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AF56C225A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjCTUOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S231185AbjCTUPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCTUOU (ORCPT
+        with ESMTP id S229710AbjCTUPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:14:20 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE4E2FCFA;
-        Mon, 20 Mar 2023 13:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679343258; x=1710879258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u+jOUwoE6OkKQ7xRHEiSIZbHt9zZyJpg1s70VOyfcyE=;
-  b=NHgDggIOJnZ3VuvH2CuI7NNSEFzg/arHBWJyS50r70ROerwoGqakrS4r
-   TxSOTIiewwPLKDjA5HrB9Y7Mra608y9s297Millt41KPvEHsJxKvvPISb
-   Xd40ManRRIsmD57ha4yfsC8/rNiVo+W0Ww0tMSrFvNGkxx1me0P1y+pnV
-   p4AfgwBzGr4cwP2uAHyRp8wGm3Ed65sYTnGj+wDFyUJ2KhSTSTEWfF0d4
-   GPTjQJtHB5+b4tFz1932QZ5FaReKPziFyR03FIgXUFHYvm1Z9JxdUunB3
-   0QC2FH5BqMZXNgC1qJ4KgyTQgDofLGS8Vt68WznzQ5N3WaF6ccEQ6GOSE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319168744"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="319168744"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:13:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="1010629523"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="1010629523"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 13:13:56 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peLtD-000BHc-1j;
-        Mon, 20 Mar 2023 20:13:55 +0000
-Date:   Tue, 21 Mar 2023 04:13:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Rob Clark <robdclark@chromium.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
- dev_pm_qos_mtx
-Message-ID: <202303210444.Qtybv08z-lkp@intel.com>
-References: <20230320144356.803762-19-robdclark@gmail.com>
+        Mon, 20 Mar 2023 16:15:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505E631BF1;
+        Mon, 20 Mar 2023 13:15:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CE96721A6E;
+        Mon, 20 Mar 2023 20:15:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679343344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yfhoh6STg6AVEEoCjwNPK3xLyEiz12Sut2kHWBVe9sQ=;
+        b=i6IuJk/Pkh6mzgjKZlO7nUXAZjsUSIkLOdqUT/4Nq1X5rHi8j0BRlE01gYhiH3Os5trkJY
+        lp0j7Lpe/1CXjWceqRdFpo603DW4Ha/mTfpAj9+eMMkRjpd/n1+zke0rDCKdSyqkbMuoLd
+        apoMRiNi9FDL+hdMzM5JPoR8BtnRWfU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679343344;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yfhoh6STg6AVEEoCjwNPK3xLyEiz12Sut2kHWBVe9sQ=;
+        b=xlLjOo3LsFqnCjGZt1lgdj5AjBHyMpq7sE3dIkGfT09zh05eGN+R+Pl2VpeQKLwqW0J2ZO
+        1zJoLHCVyIOrgxAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57F0513416;
+        Mon, 20 Mar 2023 20:15:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id b01/CPC+GGS9WgAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Mon, 20 Mar 2023 20:15:44 +0000
+Date:   Mon, 20 Mar 2023 17:15:41 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
+Message-ID: <20230320201541.2f6mchhogr3e4yrs@daedalus>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+ <20230314202356.kal22jracaw5442y@daedalus>
+ <ZBTNvEPrCcRj3F1C@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZBTNvEPrCcRj3F1C@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Fri, Mar 17, 2023 at 04:29:48PM -0400, Joe Lawrence wrote:
+> On Tue, Mar 14, 2023 at 05:23:56PM -0300, Marcos Paulo de Souza wrote:
+> > On Mon, Mar 06, 2023 at 09:08:14AM -0500, Joe Lawrence wrote:
+> > > Summary
+> > > -------
+> > > 
+> > > Livepatches may use symbols which are not contained in its own scope,
+> > > and, because of that, may end up compiled with relocations that will
+> > > only be resolved during module load. Yet, when the referenced symbols
+> > > are not exported, solving this relocation requires information on the
+> > > object that holds the symbol (either vmlinux or modules) and its
+> > > position inside the object, as an object may contain multiple symbols
+> > > with the same name.  Providing such information must be done accordingly
+> > > to what is specified in Documentation/livepatch/module-elf-format.txt.
+> > > 
+> > > Currently, there is no trivial way to embed the required information as
+> > > requested in the final livepatch elf object. klp-convert solves this
+> > > problem in two different forms: (i) by relying on a symbol map, which is
+> > > built during kernel compilation, to automatically infer the relocation
+> > > targeted symbol, and, when such inference is not possible (ii) by using
+> > > annotations in the elf object to convert the relocation accordingly to
+> > > the specification, enabling it to be handled by the livepatch loader.
+> > > 
+> > > Given the above, add support for symbol mapping in the form of a
+> > > symbols.klp file; add klp-convert tool; integrate klp-convert tool into
+> > > kbuild; make livepatch modules discernible during kernel compilation
+> > > pipeline; add data-structure and macros to enable users to annotate
+> > > livepatch source code; make modpost stage compatible with livepatches;
+> > > update livepatch-sample and update documentation.
+> > > 
+> > > The patch was tested under three use-cases:
+> > > 
+> > > use-case 1: There is a relocation in the lp that can be automatically
+> > > resolved by klp-convert.  For example. see the saved_command_line
+> > > variable in lib/livepatch/test_klp_convert2.c.
+> > > 
+> > > use-case 2: There is a relocation in the lp that cannot be automatically
+> > > resolved, as the name of the respective symbol appears in multiple
+> > > objects. The livepatch contains an annotation to enable a correct
+> > > relocation.  See the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections
+> > > in lib/livepatch/test_klp_convert{1,2}.c.
+> > > 
+> > > use-case 3: There is a relocation in the lp that cannot be automatically
+> > > resolved similarly as 2, but no annotation was provided in the
+> > > livepatch, triggering an error during compilation.  Reproducible by
+> > > removing the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections in
+> > > lib/livepatch/test_klp_convert{1,2}.c.
+> > > 
+> > > Selftests have been added to exercise these klp-convert use-cases
+> > > through several tests.
+> > > 
+> > > 
+> > > Testing
+> > > -------
+> > > 
+> > > The patchset selftests build and execute on x86_64, s390x, and ppc64le
+> > > for both default config (with added livepatch dependencies) and a larger
+> > > RHEL-9-ish config.
+> > > 
+> > > Using the Intel's Linux Kernel Performance tests's make.cross,
+> > > klp-convert builds and processes livepatch .ko's for x86_64 ppc64le
+> > > ppc32 s390 arm64 arches.
+> > > 
+> > > 
+> > > Summary of changes in v7
+> > > ------------------------
+> > > 
+> > > - rebase for v6.2
+> > > - combine ("livepatch: Add klp-convert tool") with ("livepatch: Add
+> > >   klp-convert annotation helpers")
+> > > - combine ("kbuild: Support for symbols.klp creation") with ("modpost:
+> > >   Integrate klp-convert") to simplify Kbuild magic [Petr, Nicolas]
+> > > - klp-convert: add safe_snprintf() (-Wsign-compare)
+> > > - klp-convert: fix -Wsign-compare warnings
+> > > - klp-convert: use calloc() where appropriate
+> > > - klp-convert: copy ELF e_flags
+> > > - selftests: fix various build warnings
+> > > - klp-convert: WARN msg simplification, failed sanity checks, and sympos
+> > >   comment [Marcos]
+> > > - klp-convert: fix elf_write_file() error paths [Petr]
+> > 
+> > Thanks for the new version Joe. I've run the ksefltests on my x86 laptop, and it
+> > succeed as expected, so
+> > 
+> > Tested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> > 
+> 
+> Thanks for the testing and reviews, Marcos.
+> 
+> The selftests are the first level of testing... we should probably
+> tackle a real or simulated CVE fix to see how well the tooling fits
+> larger livepatches.
 
-I love your patch! Perhaps something to improve:
+Our plan is to start testing new livepatches with klp-convert to ensure that it
+works as expected, removing the need of kallsyms_lookup. Let's see how it goes
+in the next few weeks.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on rafael-pm/linux-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230320]
-[cannot apply to chanwoo/devfreq-testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> One complication that I can envision is symbol positioning.  Currently,
+> the klp-convert annotations are a direct mirror of the kernel's
+> <obj,symbol,pos> tuple.  It should be possible to make this a bit more
+> user friendly for the livepatch developer if the annotations were
+> <obj,file,symbol>, as derived from the vmlinux / module.tmp.ko symbol
+> tables.
+> 
+> For example, the following code:
+> 
+>   KLP_MODULE_RELOC(test_klp_convert_mod, test_klp_convert_mod_b.c) test_klp_convert_mod_relocs_b[] = {
+>         KLP_SYMPOS(homonym_string),
+>         KLP_SYMPOS(get_homonym_string),
+>   };
+> 
+> could generate the following relocations:
+> 
+>   Relocation section '.rela.klp.module_relocs.test_klp_convert_mod.test_klp_convert_mod_b.c' at offset 0x1dc0 contains 2 entries:
+>       Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+>   0000000000000000  0000003f00000001 R_X86_64_64            0000000000000000 homonym_string + 0
+>   0000000000000008  0000004900000001 R_X86_64_64            0000000000000000 get_homonym_string + 0
+> 
+> for which klp-convert looks up in symbols.klp:
+> 
+>   klp-convert-symbol-data.0.2
+>   *vmlinux
+>   ...
+>   *test_klp_convert_mod
+>   -test_klp_convert_mod_a.c             << added filenames to the format
+>   test_klp_get_driver_name
+>   driver_name
+>   get_homonym_string                    << sympos = 1
+>   homonym_string                        << sympos = 1
+>   ...
+>   -test_klp_convert_mod_b.c
+>   get_homonym_string                    << sympos = 2
+>   homonym_string                        << sympos = 2
+>   ...
+> 
+> and then generates the usual klp-relocations as currently defined.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
-patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
-config: arm-randconfig-r005-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210444.Qtybv08z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/2d7e4629d7265d7e77fc72d01e84d27d805b7485
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
-        git checkout 2d7e4629d7265d7e77fc72d01e84d27d805b7485
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/base/power/
+This can get verbose very quickly, but I liked the idea. The sympos is much more
+cryptic than specifying the file where the symbol lives on.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210444.Qtybv08z-lkp@intel.com/
+> 
+> (Unfortunately full pathnames are not saved in the STT_FILE symbol table
+> entries, so there will be a few non-unique <obj,file,symbol> entries.  I
+> believe the last time this was discussed, we found that there were a
+> relatively small number of such symbols.)
+> 
+> Have you tried retrofitting klp-convert into any real-world livepatch?
+> I'm curious as to your observations on the overall experience, or
+> thoughts on the sympos annotation style noted above.
 
-All warnings (new ones prefixed by >>):
+As I mentioned I'll start using klp-convert with new livepaches for testing
+purposes in the next coming weeks. I'll reply in a few weeks about the
+experience so far.
 
->> drivers/base/power/qos.c:947:8: warning: variable 'req' is uninitialized when used here [-Wuninitialized]
-                   if (!req) {
-                        ^~~
-   drivers/base/power/qos.c:938:33: note: initialize the variable 'req' to silence this warning
-                   struct dev_pm_qos_request *req;
-                                                 ^
-                                                  = NULL
-   1 warning generated.
-
-
-vim +/req +947 drivers/base/power/qos.c
-
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  917  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  918  /**
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  919   * dev_pm_qos_update_user_latency_tolerance - Update user space latency tolerance.
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  920   * @dev: Device to update the user space latency tolerance for.
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  921   * @val: New user space latency tolerance for @dev (negative values disable).
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  922   */
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
-2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
-00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
-00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
-00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
-00dd582e52a535 Rob Clark         2023-03-20  931  
-2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
-2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
-2d7e4629d7265d Rob Clark         2023-03-20  934  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
-00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
-2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
-2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
-2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
-2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
-2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
-2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
-2d7e4629d7265d Rob Clark         2023-03-20  964  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  975  	return ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
-034e7906211c18 Andrew Lutomirski 2016-11-29  977  EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
-13b2c4a0c3b1cd Mika Westerberg   2015-07-27  978  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Regards,
+> 
+> -- Joe
+> 
