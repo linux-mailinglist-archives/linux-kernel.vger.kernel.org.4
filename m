@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D086C24E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2185B6C24EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjCTWus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S229821AbjCTWvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCTWur (ORCPT
+        with ESMTP id S229458AbjCTWvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:50:47 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFD66A64;
-        Mon, 20 Mar 2023 15:50:46 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMoZ7u022308;
-        Mon, 20 Mar 2023 17:50:35 -0500
+        Mon, 20 Mar 2023 18:51:51 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51DC618D;
+        Mon, 20 Mar 2023 15:51:50 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMpcEx073323;
+        Mon, 20 Mar 2023 17:51:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679352635;
-        bh=I7B/JN6zDq9ILfRu8k9yIOoLPksGkuG5CmvInfJiU8w=;
+        s=ti-com-17Q1; t=1679352698;
+        bh=MbZ+XusRii1Zr2oBrUBsSXvshFMoC8qFnlsIDV2dSJk=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=njfwE3Bln5b+eHKZ7mg1bIXz7HsKSCP5uSxkodXAjUwd8Ryl8vgLh7kyxj5LRyu5A
-         ffieUtwlPo6bNApWz0tBQ6JqYcMl2CBoZWY0C10oRDuQ3Xw2OUB+Q0+yiAbXhV15yF
-         +/jyFM40A/kYyOnDN1rbxvduQzuXMrzp5iLEyGIg=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMoYiw098711
+        b=cbD4765Zx/NVzHop9GaDA9/qLELx8cIHqAfcS6BNwAHWa3Ifb09PwlaD9WmjBGj8q
+         IUSmd/iRV3JWqg4Ojm97+cXwtiKACYgwiZOUzdtc8nyfz07dkJfYswaWX7efQAsIz4
+         Z18Nlfb80rlV05x4I8G0B1fvMQZCrAeJh//I+f/I=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMpcvS085675
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 17:50:34 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 20 Mar 2023 17:51:38 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 17:50:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 17:51:38 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 17:50:34 -0500
+ Frontend Transport; Mon, 20 Mar 2023 17:51:38 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMoYj0015398;
-        Mon, 20 Mar 2023 17:50:34 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMpcrq105587;
+        Mon, 20 Mar 2023 17:51:38 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721e-sk: Remove firmware-name override for R5F
-Date:   Mon, 20 Mar 2023 17:50:33 -0500
-Message-ID: <167935261476.210767.15584121281091840384.b4-ty@ti.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, Nishanth Menon <nm@ti.com>
+CC:     Sekhar Nori <nsekhar@ti.com>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH V2 0/3] pinctrl/arm: dt-bindings: k3: Deprecate header with register constants
+Date:   Mon, 20 Mar 2023 17:51:37 -0500
+Message-ID: <167935265938.210951.6816039958932466588.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230307180942.2719-1-afd@ti.com>
-References: <20230307180942.2719-1-afd@ti.com>
+In-Reply-To: <20230315155228.1566883-1-nm@ti.com>
+References: <20230315155228.1566883-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,25 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew Davis,
+Hi Nishanth Menon,
 
-On Tue, 07 Mar 2023 12:09:42 -0600, Andrew Davis wrote:
-> The firmware name for this core should stay as the default name
-> "j7-main-r5f0_0-fw". This is expected to by a symlink to the actual
-> firmware file. If one wants to use a different firmware they should
-> change where the symlink points. This is usually achieved with
-> an update-alternative or other distro specific selection mechanisms.
+On Wed, 15 Mar 2023 10:52:25 -0500, Nishanth Menon wrote:
+> This is an updated series to move the pinctrl bindings over to arch as
+> the definitions are hardware definitions without driver usage.
 > 
-> The actual selection is policy and does not belong in DT.
-> Remove this name override.
+> This series was triggered by the discussion in [1]
+> 
+> v1: https://lore.kernel.org/linux-arm-kernel/20230311131325.9750-1-nm@ti.com/
 > 
 > [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/1] arm64: dts: ti: k3-j721e-sk: Remove firmware-name override for R5F
-      commit: 22733814631983a8bed09658648f8ffc20b99f69
+[1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Drop pinmux header
+      commit: c680fa2a09a9550284546d2deeb31640ec3b56c8
+[2/3] arm64: dts: ti: Use local header for pinctrl register values
+      commit: fe49f2d776f7994dc60dd04712a437fd0bdc67a0
+[3/3] dt-bindings: pinctrl: k3: Deprecate header with register constants
+      commit: f2de003e1426ccbefa281a066040da7699f6d461
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
