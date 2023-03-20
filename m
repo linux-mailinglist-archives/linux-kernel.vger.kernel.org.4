@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E746C24C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F4C6C24C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjCTW3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S229792AbjCTWbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjCTW3S (ORCPT
+        with ESMTP id S229694AbjCTWbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:29:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DC619C;
-        Mon, 20 Mar 2023 15:29:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 753BEB810F6;
-        Mon, 20 Mar 2023 22:29:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04FCDC433EF;
-        Mon, 20 Mar 2023 22:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679351352;
-        bh=scf65u0jBdg4sE2X6WhlnAwDa/Qn0mokAtjRKzVKTBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aZUC//1LZhzPYZGH5UOU4TgPC/YD48hCJ+XuVz6zUEw2Ap+w59sv+K+pRiSKuK7qH
-         b1QX3JSgetAwDNbXlXreAosBbAs7Qlc3nmxNOkgfoawYYn+oNbGTXZpTxaemcM0b0L
-         oxDL5zO2I40RkzwuIEMYIWcAkCHrwrdFPZt5+1RlrXW5mQ81rVIdlkT6so0ihzQM05
-         BPkZ/mhJqNy7jaXB/T5AKeRFAroBlQxWi87V/sk4wONAh4uv/PE+kkM21ujCSZvErg
-         CcELv5sT+SLNdzgVeA6GTdsTTDebiCyohXOXmunqoi+YC8dD5ZbgZ75o5V4WbTXabR
-         xp+D1oMZIkppw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EC8E04052D; Mon, 20 Mar 2023 19:29:09 -0300 (-03)
-Date:   Mon, 20 Mar 2023 19:29:09 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, Anshuman.Khandual@arm.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/4] Enable display of partial and empty SVE
- predicates from Arm SPE data
-Message-ID: <ZBjeNW9wg4fQcLCU@kernel.org>
-References: <20230320151509.1137462-1-james.clark@arm.com>
- <CAP-5=fUz_u8BODDn3OK5hh9xSbXbMZU0fiCJUdpoS3AFQGQ9GA@mail.gmail.com>
+        Mon, 20 Mar 2023 18:31:39 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8D28E6A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:31:32 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id cy23so52685154edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679351491;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OAGlFJqYmzMpi4y5YSD63yoKu9/i/gsYoJLo98dDpYM=;
+        b=H5TVtg/3LzAcq64snwXsy7VefCIII3gMvSBifldyIZdNKh2asrD7t6Nt4Qh9RAAIN4
+         sM3WpgH6gUTn/4BK2w/IufDFw9EME4pIEE0VcJfLYvAv0MlBXAZzb0TB3MF9MQeTjmY0
+         nRlFGAjPfsE0h0PANnuVAn9iu+9cVAhzryiuU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679351491;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OAGlFJqYmzMpi4y5YSD63yoKu9/i/gsYoJLo98dDpYM=;
+        b=peePGExr+szQYcHEFQHKTL0Yq/0ZWZFusllhi21kdmfV1viL9pndMes0XIuKICmvmV
+         hqjkJHlOMArf/Fvt9bRh9RLrm5T/ZQDsVUdFgpOezjAog7A3OFRW1dTWJaEheP4dQ71P
+         EvAsHoF4noJW5lT4Vodrnbz3aZDYKQ2K3kvsSSvWLlJu6boxKDvy3hNxF62ZgMc50208
+         ZEO+FPF+jwYpr3ec7sF1q5C0zm90j4+4FKqGucs/UCjLEPFF9JWViH/877USgBbt1OjH
+         Z5gZV7yUcq9BHhtYOx6BQciRiSTfUn8tjuaOjM5r0YpbA19qCJ/z8k3XjMIuwOgQmPag
+         aeVA==
+X-Gm-Message-State: AO0yUKU9GdKp7RYmbsKG3dj7bAxvUQE4NUHDLnWP3xw8a8HpIFgBjLY/
+        JtvGBkoXL6fYGB02ahAQoV+BeukNHoi3lNO9rz9yHXFm
+X-Google-Smtp-Source: AK7set/OxCAqxDFnrx3Zt3mXQeQubK0rymRGXUaTgc9sJvwCx4E34iKJxY2/B78pIX3t+KbvHkDlAg==
+X-Received: by 2002:aa7:d990:0:b0:4fb:aa0a:5b72 with SMTP id u16-20020aa7d990000000b004fbaa0a5b72mr1201035eds.5.1679351491063;
+        Mon, 20 Mar 2023 15:31:31 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id v25-20020a50d099000000b004ad61135698sm5460604edd.13.2023.03.20.15.31.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 15:31:30 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id w9so52841798edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:31:30 -0700 (PDT)
+X-Received: by 2002:a17:906:34cd:b0:8e5:411d:4d09 with SMTP id
+ h13-20020a17090634cd00b008e5411d4d09mr293646ejb.15.1679351489808; Mon, 20 Mar
+ 2023 15:31:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fUz_u8BODDn3OK5hh9xSbXbMZU0fiCJUdpoS3AFQGQ9GA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230320210724.GB1434@sol.localdomain>
+In-Reply-To: <20230320210724.GB1434@sol.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Mar 2023 15:31:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
+Message-ID: <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
+Subject: Re: [GIT PULL] fsverity fixes for v6.3-rc4
+To:     Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>
+Cc:     fsverity@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Victor Hsieh <victorhsieh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 20, 2023 at 10:50:59AM -0700, Ian Rogers escreveu:
-> On Mon, Mar 20, 2023 at 8:15 AM James Clark <james.clark@arm.com> wrote:
-> >
-> > Changes since v1:
-> >  * Rebase onto perf/core because it no longer applied cleanly
-> >
-> > ------------
-> >
-> > Hi,
-> >
-> > I'm submitting this on behalf of German who moved on to work on other
-> > things in Arm before he could finish it off.
-> >
-> > The predicate information is available on SPE samples from
-> > Armv8.3 (FEAT_SPEv1p1), this could be useful info for profiling SVE
-> > code as partial and empty predicates indicate that the full vector
-> > width isn't being used. There is a good example in the last commit
-> > message.
-> >
-> > Though currently, there isn't a suitable field to store the info
-> > on Perf samples, so this change also adds a new SIMD field.
-> > This field could be used by other architectures, but currently there
-> > is only one bit reserved to identify SVE. It's only added to
-> > struct perf_sample on the userspace side, and isn't part of the kernel
-> > ABI, so it doesn't survive a perf inject. Although this is the
-> > same behavior for some other fields like branch flags, so I don't
-> > think it should be an issue to do something similar here. Perhaps in
-> > the future we could make sure everything that is synthesised from
-> > auxtrace data also makes it back into the new Perf inject file without
-> > being lost.
-> 
-> Series:
-> Acked-by: Ian Rogers <irogers@google.com>
+On Mon, Mar 20, 2023 at 2:07=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
+wrote:
+>
+> Nathan Huckleberry (1):
+>       fsverity: Remove WQ_UNBOUND from fsverity read workqueue
 
-Thanks, applied.
+There's a *lot* of other WQ_UNBOUND users. If it performs that badly,
+maybe there is something wrong with the workqueue code.
 
-- Arnaldo
+Should people be warned to not use WQ_UNBOUND - or is there something
+very special about fsverity?
 
- 
-> Thanks,
-> Ian
-> 
-> > German Gomez (4):
-> >   perf event: Add simd_flags field to perf_sample
-> >   perf arm-spe: Refactor arm-spe to support operation packet type
-> >   perf arm-spe: Add SVE flags to the SPE samples
-> >   perf report: Add 'simd' sort field
-> >
-> >  tools/perf/Documentation/perf-report.txt      |  1 +
-> >  .../util/arm-spe-decoder/arm-spe-decoder.c    | 30 ++++++++++--
-> >  .../util/arm-spe-decoder/arm-spe-decoder.h    | 47 +++++++++++++++----
-> >  tools/perf/util/arm-spe.c                     | 28 +++++++++--
-> >  tools/perf/util/hist.c                        |  1 +
-> >  tools/perf/util/hist.h                        |  1 +
-> >  tools/perf/util/sample.h                      | 13 +++++
-> >  tools/perf/util/sort.c                        | 47 +++++++++++++++++++
-> >  tools/perf/util/sort.h                        |  2 +
-> >  9 files changed, 152 insertions(+), 18 deletions(-)
-> >
-> >
-> > base-commit: 96d541699e5c50b1bc2d50c83cd7145994d5f071
-> > --
-> > 2.34.1
-> >
+Added Tejun to the cc. With one of the main documented reasons for
+WQ_UNBOUND being performance (both implicit "try to start execution of
+work items as soon as possible") and explicit ("CPU intensive
+workloads which can be better managed by the system scheduler"), maybe
+it's time to reconsider?
 
--- 
+WQ_UNBOUND adds a fair amount of complexity and special cases to the
+workqueues, and this is now the second "let's remove it because it's
+hurting things in a big way".
 
-- Arnaldo
+              Linus
