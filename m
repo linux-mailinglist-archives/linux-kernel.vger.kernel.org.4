@@ -2,143 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DDF6C224F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F196C2254
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjCTUNl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 16:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S230453AbjCTUOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjCTUNk (ORCPT
+        with ESMTP id S229713AbjCTUOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:13:40 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DCE14230;
-        Mon, 20 Mar 2023 13:13:39 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1peLsv-0008lQ-JN; Mon, 20 Mar 2023 21:13:37 +0100
-Received: from p57bd9952.dip0.t-ipconnect.de ([87.189.153.82] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1peLsv-0038P7-Bz; Mon, 20 Mar 2023 21:13:37 +0100
-Message-ID: <c9a748cb2ee6145a3ffe85ca55a28b990f6be68c.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Mon, 20 Mar 2023 21:13:36 +0100
-In-Reply-To: <2186c0e97e6747e71ebceade317f88a7cc016772.camel@physik.fu-berlin.de>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
-         <20230306040037.20350-7-rdunlap@infradead.org>
-         <2186c0e97e6747e71ebceade317f88a7cc016772.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Mon, 20 Mar 2023 16:14:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE4E2FCFA;
+        Mon, 20 Mar 2023 13:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679343258; x=1710879258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u+jOUwoE6OkKQ7xRHEiSIZbHt9zZyJpg1s70VOyfcyE=;
+  b=NHgDggIOJnZ3VuvH2CuI7NNSEFzg/arHBWJyS50r70ROerwoGqakrS4r
+   TxSOTIiewwPLKDjA5HrB9Y7Mra608y9s297Millt41KPvEHsJxKvvPISb
+   Xd40ManRRIsmD57ha4yfsC8/rNiVo+W0Ww0tMSrFvNGkxx1me0P1y+pnV
+   p4AfgwBzGr4cwP2uAHyRp8wGm3Ed65sYTnGj+wDFyUJ2KhSTSTEWfF0d4
+   GPTjQJtHB5+b4tFz1932QZ5FaReKPziFyR03FIgXUFHYvm1Z9JxdUunB3
+   0QC2FH5BqMZXNgC1qJ4KgyTQgDofLGS8Vt68WznzQ5N3WaF6ccEQ6GOSE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319168744"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="319168744"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:13:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="1010629523"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="1010629523"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 13:13:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peLtD-000BHc-1j;
+        Mon, 20 Mar 2023 20:13:55 +0000
+Date:   Tue, 21 Mar 2023 04:13:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Rob Clark <robdclark@chromium.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
+ dev_pm_qos_mtx
+Message-ID: <202303210444.Qtybv08z-lkp@intel.com>
+References: <20230320144356.803762-19-robdclark@gmail.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.82
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy!
+Hi Rob,
 
-On Sun, 2023-03-19 at 21:20 +0100, John Paul Adrian Glaubitz wrote:
-> On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
-> > Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
-> > SYS_SUPPORTS_SMP and SMP.
-> > 
-> > kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
-> > code + data inside topology.c is only built when CONFIG_NUMA is
-> > set/enabled, so these arch/sh/ configs need to select SMP and
-> > SYS_SUPPORTS_SMP to build the NUMA support.
-> > 
-> > Fixes this build error in multiple SUPERH configs:
-> > 
-> > mm/page_alloc.o: In function `get_page_from_freelist':
-> > page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
-> > 
-> > Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
-> > Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> > Cc: Rich Felker <dalias@libc.org>
-> > Cc: linux-sh@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> > ---
-> > v2: skipped
-> > v3: skipped
-> > v4: refresh & resend
-> > 
-> >  arch/sh/Kconfig |    4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff -- a/arch/sh/Kconfig b/arch/sh/Kconfig
-> > --- a/arch/sh/Kconfig
-> > +++ b/arch/sh/Kconfig
-> > @@ -477,6 +477,8 @@ config CPU_SUBTYPE_SH7722
-> >  	select CPU_SHX2
-> >  	select ARCH_SHMOBILE
-> >  	select ARCH_SPARSEMEM_ENABLE
-> > +	select SYS_SUPPORTS_SMP
-> > +	select SMP
-> >  	select SYS_SUPPORTS_NUMA
-> >  	select SYS_SUPPORTS_SH_CMT
-> >  	select PINCTRL
-> > @@ -487,6 +489,8 @@ config CPU_SUBTYPE_SH7366
-> >  	select CPU_SHX2
-> >  	select ARCH_SHMOBILE
-> >  	select ARCH_SPARSEMEM_ENABLE
-> > +	select SYS_SUPPORTS_SMP
-> > +	select SMP
-> >  	select SYS_SUPPORTS_NUMA
-> >  	select SYS_SUPPORTS_SH_CMT
-> >  
-> 
-> It seems that we need this change for these configurations as well:
-> 
-> - config CPU_SHX3
-> - config CPU_SUBTYPE_SH7785
-> 
-> Although I can trigger a build failure for CPU_SUBTYPE_SH7785 only when
-> setting CONFIG_NUMA=y:
-> 
->   CC      net/ipv6/addrconf_core.o
-> mm/slab.c: In function 'slab_memory_callback':
-> mm/slab.c:1127:23: error: implicit declaration of function 'init_cache_node_node'; did you mean 'drain_cache_node_node'? [-Werror=implicit-function-declaration]
->  1127 |                 ret = init_cache_node_node(nid);
->       |                       ^~~~~~~~~~~~~~~~~~~~
->       |                       drain_cache_node_node
-> 
-> I would expect this error to be reproducible for CPU_SHX3 as well when
-> CONFIG_NUMA=y but CONFIG_SMP=n. But for some reason, I am not seeing
-> the error then.
+I love your patch! Perhaps something to improve:
 
-Can you make this change for config CPU_SUBTYPE_SH7785 as well?
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on rafael-pm/linux-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230320]
+[cannot apply to chanwoo/devfreq-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Then the change should be fine.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
+patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+config: arm-randconfig-r005-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210444.Qtybv08z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+        git checkout 2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/base/power/
 
-Adrian
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210444.Qtybv08z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/base/power/qos.c:947:8: warning: variable 'req' is uninitialized when used here [-Wuninitialized]
+                   if (!req) {
+                        ^~~
+   drivers/base/power/qos.c:938:33: note: initialize the variable 'req' to silence this warning
+                   struct dev_pm_qos_request *req;
+                                                 ^
+                                                  = NULL
+   1 warning generated.
+
+
+vim +/req +947 drivers/base/power/qos.c
+
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  917  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  918  /**
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  919   * dev_pm_qos_update_user_latency_tolerance - Update user space latency tolerance.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  920   * @dev: Device to update the user space latency tolerance for.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  921   * @val: New user space latency tolerance for @dev (negative values disable).
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  922   */
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
+2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
+00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
+00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
+00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
+00dd582e52a535 Rob Clark         2023-03-20  931  
+2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
+2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
+2d7e4629d7265d Rob Clark         2023-03-20  934  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
+00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
+2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
+2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
+2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
+2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
+2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
+2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
+2d7e4629d7265d Rob Clark         2023-03-20  964  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  975  	return ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
+034e7906211c18 Andrew Lutomirski 2016-11-29  977  EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
+13b2c4a0c3b1cd Mika Westerberg   2015-07-27  978  
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
