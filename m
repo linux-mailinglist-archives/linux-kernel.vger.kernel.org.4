@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB836C06D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43376C06D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjCTAcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 20:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S229648AbjCTAck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 20:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCTAcj (ORCPT
+        with ESMTP id S229446AbjCTAci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 20:32:39 -0400
+        Sun, 19 Mar 2023 20:32:38 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C33316ACA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8586F168B3
         for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 17:32:36 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 73F235C0043;
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id DFDFF5C00BA;
         Sun, 19 Mar 2023 20:32:33 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 19 Mar 2023 20:32:33 -0400
+  by compute3.internal (MEProxy); Sun, 19 Mar 2023 20:32:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to; s=fm3; t=1679272353; x=
-        1679358753; bh=E20kcOAHoR630toJdoojlu/TxXA+HrtUu4ASqXD73nI=; b=l
-        zDaJqir7vhE6PlOqrCgfAcYUrF4Vq6udjYtc1kdg6KSs58boJJovYhrqd3zE0IJo
-        bX/fm9IyAfwMo7D5d4t5YLMmw102VpeJWCuhvHXNW1RkC72qzDMY69LaopILX7ER
-        cKsvKE0fsyjuuGgChpPYwky2bn8i1V4dFqeOrw1QZhjhJ5HX0yrZvxv7rjmnnnYs
-        Ev+dxEzRBJROW1WYM8CDgNQcv8GUgY/hRIIXgagXIeDyEt7pXJmeOKO2rahusgZr
-        W63kRSMUSKFB9H+T82m/Xt5OKtyA6e6AOH/q2ngMOxA+J/OJSBB/iHEpmsksRsL7
-        7BtUI9g9xP0l1U34gg58w==
+        1679358753; bh=iwPU2XUoORcrqxgWnL7qQpsymVVO5t7PxaOWHT9jlq4=; b=C
+        00Hio0rKz2qHrJrV/M0gZ59GCcgOB7qtFIVEE9CxnYxSb+UqxO+Mas/kFePj1CG0
+        fvVmSLzCBxWGd31+327oOeZhXQp4kFSwpGHchnERuLGfanccv+lorCF6o+k8L9Lq
+        Q+4zMEH0NUOQ26Zy/IJPab+B73aJnlG/B+L06vaxZ+ZQBvrW0tM6iBrYZhjkrKlR
+        XUVUFNRTpbtFtp/Q/iOSR0cRuFA96H8IpLuSJTULUZqYZ1sUDF1CcorKbFQgFCh4
+        6k68/kFlvly64oOypRer5zaRjQdr/OQtWB0I1euVZkG6vJukiCsXuJNAlhEJSXBL
+        YKgpTjdNj26edaCtiyQBA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
         :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679272353; x=
-        1679358753; bh=E20kcOAHoR630toJdoojlu/TxXA+HrtUu4ASqXD73nI=; b=Z
-        5QQ/pPapDd5JNt3yg0ZLSLr18Xd93rxazF/yAA7zOdm0lpJyWtc72h9zv0jzhGnU
-        zsPT1tyCPlJjMW6gzP76XhIJrmHwvyDKWQUiyP2QgaJ8kxBKnIkcq+1M9LpoL3eB
-        P5Usw2N0wx/W6fzHGDjk8/UEUGhdg8kEFHy0Gt4mYjXxtyYud+iGcMISz6qYj6Dc
-        Y/w64RqC35pCe9pkjexeRv/R+u6MZFLU3Jw/4NIy3tO9j5vYcBn4BiSmt+oJeXm8
-        Q0Z88/+OXlkmAmAwlZTNxLf/w6llXkIUDX6y2s86AfErDqq1mjQ8mjDK/XpWzTo1
-        sx4xLR0vHL1Slxxn93KdQ==
-X-ME-Sender: <xms:oakXZMS3M3Ct8Sv5a3xtA-sEqWO2cvfh789hCy47i9JlrDHQlt89QQ>
-    <xme:oakXZJxyxeXnu5u7BfP8tiYyQxlzXOVkjCYRETWy0atXPrqlvzQ7wEKFl6h3R5QRe
-    ITOIYRllfLDvmHOw_0>
-X-ME-Received: <xmr:oakXZJ1MOiFkmPOHadMiQN93wTeeSuMo-_ZCdY3WcMCaD0iZRFonTd75wJOLv4Tyc3giwWKCBtZpBtXoKoHh2N3tJbUIoIeBmcYO6K-lrRLFMNLgAN6yywCChXol27OFy276s94o9TAK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefjedgvdegucetufdoteggodetrfdotf
+        1679358753; bh=iwPU2XUoORcrqxgWnL7qQpsymVVO5t7PxaOWHT9jlq4=; b=A
+        /gN8Tp0KGpuCQ2Xs/NPe/tWeVCkfMQNplm/nOPrsYLGdQ7Siq0DHrol0XYkr1oTh
+        RaeJrH+NB4Qwc1pOp0zlVx8zehLJ8lrWptOSe8Cy+zcvbbNNrsxPJ9OQ21MNeok6
+        hKeHPrJSt9SHfQ0vmo713yRHGPjiriwLT/elqlVSG+X64PfdqlOV1lGbOcXoLe9E
+        WrcBWqx+wvfdgjwpjnh57zk+c2i/UkxeFNX2tRE4L/GHrWCQwu3PcpfBppb856VU
+        4ffHwRkcAkDBCsNyFscEd3LKv1mmWc2Io7wK2nUNUaa1HaT9XOG6Ltr0KK1q6eAl
+        VwO/3z9/JvHqnNG2hA9nQ==
+X-ME-Sender: <xms:oakXZNO_0a_uLjZdCHiQovSwnsoefwqUvj6y2EMeTrxxCVBmYdXRhQ>
+    <xme:oakXZP9aIGfRMan7f92Cg7PsKwRSgcieopHlscdsZcKMSqE6onYClqICCA0_oNJoU
+    9RJeOQBs6c4gkaAZUk>
+X-ME-Received: <xmr:oakXZMQw_Pb0eYtMht3DDlJdiQKiv1GoB_QASfw7vZHhA3FYs6MEnDQ4LvBQsE_ICPX-bTv04XJMGxc_cbW7J27hxc-ruq9ScXUkxxsT6fnktya6-ddDuHJ4lA-xn477N-2tUsgZEMT1>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefjedgvdefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgoteeftdduqddtudculdduhedmnecujfgurhephf
     fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrrhhkucfrvggrrhhs
@@ -56,10 +56,10 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefjedgvdegucetufdoteggod
     grthhtvghrnhepfedtvdejfeelffevhffgjeejheduteetieeguefgkefhhfegjeduueet
     hefgvdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
     epmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
-X-ME-Proxy: <xmx:oakXZAAZR5L9bz4eP9I97obReWfTvNPhm3lZdWbgyXiuyp665U0drQ>
-    <xmx:oakXZFhp_3BFx7NhqxmaSy4i1dJN5vYgQU0-RymIbXR1x0sgDhrFZA>
-    <xmx:oakXZMqGa4OgXvdohjBqBe6_MkybbVN3O-5mhdvj-pKNPWeuReGPQQ>
-    <xmx:oakXZDY6gzUXIXYUzkmPLu7B1cAsSce2JjefRgOyJ-Ay1BunPrBvAg>
+X-ME-Proxy: <xmx:oakXZJtHxO5OmehtbztSQoUP9JM-1UNSecy2_XIfPgzJDEbryKbA0Q>
+    <xmx:oakXZFeDD6ubvQ52uMUTIBmX3svZbnALmwqoVHU9iHJ5MHJ0g9RvTw>
+    <xmx:oakXZF2ytcwOAQWKwZIDA10qT_wQqmDvffgpO-nJuE9_qMW4UDMCJg>
+    <xmx:oakXZOEVP7naDiE9t9UiD7Fl6htTem85o39pe0MOeiqZmg0WUA6t_g>
 Feedback-ID: ibe194615:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
  19 Mar 2023 20:32:33 -0400 (EDT)
@@ -67,9 +67,9 @@ From:   Mark Pearson <mpearson-lenovo@squebb.ca>
 To:     mpearson-lenovo@squebb.ca
 Cc:     hdegoede@redhat.com, markgross@kernel.org, markpearson@lenovo.com,
         thomas@t-8ch.de, pobrn@protonmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/4] platform/x86: think-lmi: only display possible_values if available
-Date:   Sun, 19 Mar 2023 20:32:20 -0400
-Message-Id: <20230320003221.561750-3-mpearson-lenovo@squebb.ca>
+Subject: [PATCH v4 4/4] platform/x86: think-lmi: Add possible_values for ThinkStation
+Date:   Sun, 19 Mar 2023 20:32:21 -0400
+Message-Id: <20230320003221.561750-4-mpearson-lenovo@squebb.ca>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230320003221.561750-1-mpearson-lenovo@squebb.ca>
 References: <mpearson-lenovo@squebb.ca>
@@ -86,59 +86,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some attributes don't have any values available. In those cases don't
-make the possible_values entry visible.
+ThinkStation platforms don't support the API to return possible_values
+but instead embed it in the settings string.
+
+Try and extract this information and set the possible_values attribute
+appropriately.
 
 Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 ---
-Changes in v4: 
- - Split out functionality in previous 'Add possible values for Thinkstation'.
- - No v1/v2/v3
+Changes in v4:
+ - is_visible handling split out into separate patch
+ - linelength reduced so checkpatch is clean.
+Changes in v3:
+ - Use is_visible attribute to determine if possible_values should be
+   available
+ - Code got refactored a bit to make compilation cleaner
+Changes in v2:
+ - Move no value for possible_values handling into show function
+ - use kstrndup for allocating string
 
- drivers/platform/x86/think-lmi.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/platform/x86/think-lmi.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 53f34b1adb8c..6f8c91716a95 100644
+index 6f8c91716a95..aaaeb30fb0b0 100644
 --- a/drivers/platform/x86/think-lmi.c
 +++ b/drivers/platform/x86/think-lmi.c
-@@ -941,9 +941,6 @@ static ssize_t possible_values_show(struct kobject *kobj, struct kobj_attribute
- {
- 	struct tlmi_attr_setting *setting = to_tlmi_attr_setting(kobj);
- 
--	if (!tlmi_priv.can_get_bios_selections)
--		return -EOPNOTSUPP;
--
- 	return sysfs_emit(buf, "%s\n", setting->possible_values);
- }
- 
-@@ -1052,6 +1049,18 @@ static struct kobj_attribute attr_current_val = __ATTR_RW_MODE(current_value, 06
- 
- static struct kobj_attribute attr_type = __ATTR_RO(type);
- 
-+static umode_t attr_is_visible(struct kobject *kobj,
-+					     struct attribute *attr, int n)
-+{
-+	struct tlmi_attr_setting *setting = to_tlmi_attr_setting(kobj);
+@@ -1422,6 +1422,26 @@ static int tlmi_analyze(void)
+ 			if (ret || !setting->possible_values)
+ 				pr_info("Error retrieving possible values for %d : %s\n",
+ 						i, setting->display_name);
++		} else {
++			/*
++			 * Older Thinkstations don't support the bios_selections API.
++			 * Instead they store this as a [Optional:Option1,Option2] section of the
++			 * name string.
++			 * Try and pull that out if it's available.
++			 */
++			char *item, *optstart, *optend;
 +
-+	/* We don't want to display possible_values attributes if not available */
-+	if ((attr == &attr_possible_values.attr) && (!setting->possible_values))
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
- static struct attribute *tlmi_attrs[] = {
- 	&attr_displ_name.attr,
- 	&attr_current_val.attr,
-@@ -1061,6 +1070,7 @@ static struct attribute *tlmi_attrs[] = {
- };
- 
- static const struct attribute_group tlmi_attr_group = {
-+	.is_visible = attr_is_visible,
- 	.attrs = tlmi_attrs,
- };
- 
++			if (!tlmi_setting(setting->index, &item, LENOVO_BIOS_SETTING_GUID)) {
++				optstart = strstr(item, "[Optional:");
++				if (optstart) {
++					optstart += strlen("[Optional:");
++					optend = strstr(optstart, "]");
++					if (optend)
++						setting->possible_values =
++							kstrndup(optstart, optend - optstart,
++									GFP_KERNEL);
++				}
++			}
+ 		}
+ 		/*
+ 		 * firmware-attributes requires that possible_values are separated by ';' but
 -- 
 2.39.2
 
