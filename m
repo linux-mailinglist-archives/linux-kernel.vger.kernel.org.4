@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7466F6C235A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53166C235C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjCTVE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S229939AbjCTVG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCTVE4 (ORCPT
+        with ESMTP id S229869AbjCTVGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:04:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F301C14EAE;
-        Mon, 20 Mar 2023 14:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=D3BVyr7z3/LsIQimIZFRzV1o+ANkI7efYBNPjgbxhxE=; b=Qwks+KfSLjSC93jiDkvXvM5s1g
-        FELkk7XGy7ASSd8+E5MZ1ZcvQL32BvP9NDspwFchEPteUGLldNsF6p0NIRX+cM/eJovlJCy3WAYs3
-        3eHk0fkuOeUin3W6P++64JJlztACRqDj7BmuXFhbV5B26VbDU6/w6SBfeV2SEM6KVZOHvsXW9fFSJ
-        7rjqA79+baoD96P3QkF0G05R52ljjuv/VuS7GY+8JzdyknmO9zwspY/U3vaYb8tbI9dBIMF1d1Pmt
-        /EZmS5oUwDwEQ+RN5j/INenbGTCR/xd2TK3VCuY2GitAiGkMTzyvPrRhS1GCsQjKpiozgMO5MwWTH
-        4Gt4QMTA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peMgR-00AUlB-2r;
-        Mon, 20 Mar 2023 21:04:47 +0000
-Date:   Mon, 20 Mar 2023 14:04:47 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-Cc:     Jason Baron <jbaron@akamai.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in
- /proc/dynamic_debug/control
-Message-ID: <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
-References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
- <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
- <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+        Mon, 20 Mar 2023 17:06:25 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EE115899
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:06:24 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5418d54d77bso246233567b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679346383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CKe7+KSQUQAzNlmMzv9Shy9QIzbeQYOv+5OEuVwBivs=;
+        b=Lk+hRioaGrZjtn94HT1wPQbi5fP1pDvEhTamUBsUzb8oNloF0//ftOQYvW3jFQG83E
+         TRUBf6FxBWDGtjGNPquGXT3acgb9jhs9nGYTKpNcrlMV51qH1nRi/1/savgzH/oR8Ks5
+         VQhGNhHgNFiECL7fzWvFo624j5HBiqxhKg4iCIORz3YGkZULyiu0WH4ysCuPXrrEWXBj
+         3PB2kv6hJsVhKM0Cyq5Jk8rD3n6TOYPuMDBr+Vr0v5WUdmreC1P6V+AQHQ17qSMCXNH6
+         K9LihUqmZSWNkPyRHhRCmpb6Og3PPI5FNDjT/pi5boPtVU085zDWhfz1Xp7xSdPXGtPn
+         lQkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679346383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CKe7+KSQUQAzNlmMzv9Shy9QIzbeQYOv+5OEuVwBivs=;
+        b=tY8s3zoll/ange6svhNGkwfQ4q3Cit8aUa54MWTd9ca8sueWOgmhEyVUQTfWXbm7i7
+         iVlZUtZ9vdKWdLe35tE/5avowPIsa7T9cH73KNZdyZ78J8KHAW1fqVUaDGvtKOUzoVa8
+         /ix2wDpfOsjcIOXeP3oI/QMV0c7tspmL4WorbnN2cXQuMqyr1DpCkiBzfWu1Vl4lLyX0
+         yYjKwC0AJrOsCtaz1dcqPoAfEpNSUmr6ycBi1kVz6nlaQu6vw4wfeiLtzMpf607v5OLq
+         baZESkKwDC+5VfziJRwjXXhIVC2ZaB8ansuJhltNlxZyjvizaQzp/ApnrMmQQgW3aNj3
+         F21Q==
+X-Gm-Message-State: AO0yUKWEkfU6Toh6ltx5nuAXMsX+6Vj93TwJBh90lbena1iSZME3Urhy
+        yo8AR+2bnugvZX89m1UhzVYTQ2ls57rkKqDJ/q/pig==
+X-Google-Smtp-Source: AK7set8mC33XeinW2XZaxcyProJsH+iPCBw839uQgmtx5WIXoAYCqyZqznzS1uFaChWVTv9EKRoKIzZtPJkYQUdeGcI=
+X-Received: by 2002:a81:4517:0:b0:536:38b4:f50 with SMTP id
+ s23-20020a814517000000b0053638b40f50mr10963785ywa.1.1679346383149; Mon, 20
+ Mar 2023 14:06:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,SUBJ_AS_SEEN autolearn=no
+References: <20230309170756.52927-1-cerasuolodomenico@gmail.com> <20230309170756.52927-2-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230309170756.52927-2-cerasuolodomenico@gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 20 Mar 2023 14:06:11 -0700
+Message-ID: <CAJuCfpGJBYSahyDGpPTJoMOSN-U4mXvpgoGnj8k2UV0WGyB_pg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] sched/psi: rearrange polling code in preparation
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        brauner@kernel.org, chris@chrisdown.name, hannes@cmpxchg.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,84 +70,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 01:59:28PM -0600, jim.cromie@gmail.com wrote:
-> On Mon, Mar 20, 2023 at 12:35 PM Jason Baron <jbaron@akamai.com> wrote:
-> >
-> >
-> >
-> > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
-> > > dynamic-debug METADATA uses KBUILD_MODNAME as:
-> > >
-> > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
-> > >          static struct _ddebug  __aligned(8)                     \
-> > >          __section("__dyndbg") name = {                          \
-> > >                  .modname = KBUILD_MODNAME,                      \
-> > >
-> > > This is going amiss for some builtins, ie those enabled here, by:
-> > >
-> > >      echo module main +pmf > /proc/dynamic_debug_control
-> > >      grep =pmf /proc/dynamic_debug/control
-> > >
-> > > init/main.c:1187 [main]initcall_blacklist =pmf "blacklisting initcall %s\n"
-> > > init/main.c:1226 [main]initcall_blacklisted =pmf "initcall %s blacklisted\n"
-> > > init/main.c:1432 [main]run_init_process =pmf "  with arguments:\n"
-> > > init/main.c:1434 [main]run_init_process =pmf "    %s\n"
-> > > init/main.c:1435 [main]run_init_process =pmf "  with environment:\n"
-> > > init/main.c:1437 [main]run_init_process =pmf "    %s\n"
-> >
-> >
-> > Hi Jim,
-> >
-> > So if I'm following correctly, this is not a new issue, the 'module'
-> > name for dynamic debug has always been this way for builtin.
-> 
-> It is not a new issue - both PM and init-main have been in [main] for some time.
-> 
-> I believe that with
-> cfc1d277891e module: Move all into module/
-> 
-> module's module-name joined them, changing from [module] to [main]
+On Thu, Mar 9, 2023 at 9:08=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
+>
+> Move a few functions up in the file to avoid forward declaration needed
+> in the patch implementing unprivileged PSI triggers.
+>
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 
-If there was a regression due to this, we'd be very interested in
-hearing about it. Aaron he did the work to move the code to its own directory. 
+LGTM. Will Ack when we finalize the rest of the patchset.
 
-> We could do
-> > something simple and just normalize it when we initially create the
-> > table, but setting the 'module name' to 'core' or 'builtin' or something
-> > for all these?
-> 
-> core and builtin would both lump all those separate modules together,
-> making it less meaningful.
-> 
-> having stable names independent of M vs Y config choices is imperative, ISTM.
-> 
-> Also, I dont think "only builtins are affected" captures the whole problem.
-> I dont recall amdgpu or other modules changing when built with =y
-> 
-> Theres some subtlety in how KBUILD_MODNAME is set,
-> and probably many current users who like its current behavior.
-> A new var ?
-> 
-> 1st, I think that anything tristate gets a sensible value,
-> but at least some of the builtin-only "modules" get basenames, by default.
-
-In general we could all benefit from an enhancement for a shortname for
-things which could be modules being built-in. We're now seeing requests
-for dynamic debug, but it could also be usefulf for Nick's future work
-to help userspace tools / tracing map kallsysms to specific modules when
-built-in.
-
-To that end I had suggested the current state of affairs & current difficulty
-in trying to get us a name for this here:
-
-https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
-
-I ended up suggesting perhaps we need a -DPOSSIBLE_MODULE then if we
-could *somehow* pull that off perhaps then we could instead use
--DPOSSIBLE_KBUILD_MODNAME which would ensure a consistent symbol when
-a module is built-in as well.
-
-That still leaves the difficulty in trying to gather possible-obj-m as
-a future challenge.
-
-  Luis
+> ---
+>  kernel/sched/psi.c | 196 ++++++++++++++++++++++-----------------------
+>  1 file changed, 98 insertions(+), 98 deletions(-)
+>
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 02e011cabe91..fe9269f1d2a4 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -384,92 +384,6 @@ static void collect_percpu_times(struct psi_group *g=
+roup,
+>                 *pchanged_states =3D changed_states;
+>  }
+>
+> -static u64 update_averages(struct psi_group *group, u64 now)
+> -{
+> -       unsigned long missed_periods =3D 0;
+> -       u64 expires, period;
+> -       u64 avg_next_update;
+> -       int s;
+> -
+> -       /* avgX=3D */
+> -       expires =3D group->avg_next_update;
+> -       if (now - expires >=3D psi_period)
+> -               missed_periods =3D div_u64(now - expires, psi_period);
+> -
+> -       /*
+> -        * The periodic clock tick can get delayed for various
+> -        * reasons, especially on loaded systems. To avoid clock
+> -        * drift, we schedule the clock in fixed psi_period intervals.
+> -        * But the deltas we sample out of the per-cpu buckets above
+> -        * are based on the actual time elapsing between clock ticks.
+> -        */
+> -       avg_next_update =3D expires + ((1 + missed_periods) * psi_period)=
+;
+> -       period =3D now - (group->avg_last_update + (missed_periods * psi_=
+period));
+> -       group->avg_last_update =3D now;
+> -
+> -       for (s =3D 0; s < NR_PSI_STATES - 1; s++) {
+> -               u32 sample;
+> -
+> -               sample =3D group->total[PSI_AVGS][s] - group->avg_total[s=
+];
+> -               /*
+> -                * Due to the lockless sampling of the time buckets,
+> -                * recorded time deltas can slip into the next period,
+> -                * which under full pressure can result in samples in
+> -                * excess of the period length.
+> -                *
+> -                * We don't want to report non-sensical pressures in
+> -                * excess of 100%, nor do we want to drop such events
+> -                * on the floor. Instead we punt any overage into the
+> -                * future until pressure subsides. By doing this we
+> -                * don't underreport the occurring pressure curve, we
+> -                * just report it delayed by one period length.
+> -                *
+> -                * The error isn't cumulative. As soon as another
+> -                * delta slips from a period P to P+1, by definition
+> -                * it frees up its time T in P.
+> -                */
+> -               if (sample > period)
+> -                       sample =3D period;
+> -               group->avg_total[s] +=3D sample;
+> -               calc_avgs(group->avg[s], missed_periods, sample, period);
+> -       }
+> -
+> -       return avg_next_update;
+> -}
+> -
+> -static void psi_avgs_work(struct work_struct *work)
+> -{
+> -       struct delayed_work *dwork;
+> -       struct psi_group *group;
+> -       u32 changed_states;
+> -       u64 now;
+> -
+> -       dwork =3D to_delayed_work(work);
+> -       group =3D container_of(dwork, struct psi_group, avgs_work);
+> -
+> -       mutex_lock(&group->avgs_lock);
+> -
+> -       now =3D sched_clock();
+> -
+> -       collect_percpu_times(group, PSI_AVGS, &changed_states);
+> -       /*
+> -        * If there is task activity, periodically fold the per-cpu
+> -        * times and feed samples into the running averages. If things
+> -        * are idle and there is no data to process, stop the clock.
+> -        * Once restarted, we'll catch up the running averages in one
+> -        * go - see calc_avgs() and missed_periods.
+> -        */
+> -       if (now >=3D group->avg_next_update)
+> -               group->avg_next_update =3D update_averages(group, now);
+> -
+> -       if (changed_states & PSI_STATE_RESCHEDULE) {
+> -               schedule_delayed_work(dwork, nsecs_to_jiffies(
+> -                               group->avg_next_update - now) + 1);
+> -       }
+> -
+> -       mutex_unlock(&group->avgs_lock);
+> -}
+> -
+>  /* Trigger tracking window manipulations */
+>  static void window_reset(struct psi_window *win, u64 now, u64 value,
+>                          u64 prev_growth)
+> @@ -516,18 +430,6 @@ static u64 window_update(struct psi_window *win, u64=
+ now, u64 value)
+>         return growth;
+>  }
+>
+> -static void init_triggers(struct psi_group *group, u64 now)
+> -{
+> -       struct psi_trigger *t;
+> -
+> -       list_for_each_entry(t, &group->triggers, node)
+> -               window_reset(&t->win, now,
+> -                               group->total[PSI_POLL][t->state], 0);
+> -       memcpy(group->polling_total, group->total[PSI_POLL],
+> -                  sizeof(group->polling_total));
+> -       group->polling_next_update =3D now + group->poll_min_period;
+> -}
+> -
+>  static u64 update_triggers(struct psi_group *group, u64 now)
+>  {
+>         struct psi_trigger *t;
+> @@ -590,6 +492,104 @@ static u64 update_triggers(struct psi_group *group,=
+ u64 now)
+>         return now + group->poll_min_period;
+>  }
+>
+> +static u64 update_averages(struct psi_group *group, u64 now)
+> +{
+> +       unsigned long missed_periods =3D 0;
+> +       u64 expires, period;
+> +       u64 avg_next_update;
+> +       int s;
+> +
+> +       /* avgX=3D */
+> +       expires =3D group->avg_next_update;
+> +       if (now - expires >=3D psi_period)
+> +               missed_periods =3D div_u64(now - expires, psi_period);
+> +
+> +       /*
+> +        * The periodic clock tick can get delayed for various
+> +        * reasons, especially on loaded systems. To avoid clock
+> +        * drift, we schedule the clock in fixed psi_period intervals.
+> +        * But the deltas we sample out of the per-cpu buckets above
+> +        * are based on the actual time elapsing between clock ticks.
+> +        */
+> +       avg_next_update =3D expires + ((1 + missed_periods) * psi_period)=
+;
+> +       period =3D now - (group->avg_last_update + (missed_periods * psi_=
+period));
+> +       group->avg_last_update =3D now;
+> +
+> +       for (s =3D 0; s < NR_PSI_STATES - 1; s++) {
+> +               u32 sample;
+> +
+> +               sample =3D group->total[PSI_AVGS][s] - group->avg_total[s=
+];
+> +               /*
+> +                * Due to the lockless sampling of the time buckets,
+> +                * recorded time deltas can slip into the next period,
+> +                * which under full pressure can result in samples in
+> +                * excess of the period length.
+> +                *
+> +                * We don't want to report non-sensical pressures in
+> +                * excess of 100%, nor do we want to drop such events
+> +                * on the floor. Instead we punt any overage into the
+> +                * future until pressure subsides. By doing this we
+> +                * don't underreport the occurring pressure curve, we
+> +                * just report it delayed by one period length.
+> +                *
+> +                * The error isn't cumulative. As soon as another
+> +                * delta slips from a period P to P+1, by definition
+> +                * it frees up its time T in P.
+> +                */
+> +               if (sample > period)
+> +                       sample =3D period;
+> +               group->avg_total[s] +=3D sample;
+> +               calc_avgs(group->avg[s], missed_periods, sample, period);
+> +       }
+> +
+> +       return avg_next_update;
+> +}
+> +
+> +static void psi_avgs_work(struct work_struct *work)
+> +{
+> +       struct delayed_work *dwork;
+> +       struct psi_group *group;
+> +       u32 changed_states;
+> +       u64 now;
+> +
+> +       dwork =3D to_delayed_work(work);
+> +       group =3D container_of(dwork, struct psi_group, avgs_work);
+> +
+> +       mutex_lock(&group->avgs_lock);
+> +
+> +       now =3D sched_clock();
+> +
+> +       collect_percpu_times(group, PSI_AVGS, &changed_states);
+> +       /*
+> +        * If there is task activity, periodically fold the per-cpu
+> +        * times and feed samples into the running averages. If things
+> +        * are idle and there is no data to process, stop the clock.
+> +        * Once restarted, we'll catch up the running averages in one
+> +        * go - see calc_avgs() and missed_periods.
+> +        */
+> +       if (now >=3D group->avg_next_update)
+> +               group->avg_next_update =3D update_averages(group, now);
+> +
+> +       if (changed_states & PSI_STATE_RESCHEDULE) {
+> +               schedule_delayed_work(dwork, nsecs_to_jiffies(
+> +                               group->avg_next_update - now) + 1);
+> +       }
+> +
+> +       mutex_unlock(&group->avgs_lock);
+> +}
+> +
+> +static void init_triggers(struct psi_group *group, u64 now)
+> +{
+> +       struct psi_trigger *t;
+> +
+> +       list_for_each_entry(t, &group->triggers, node)
+> +               window_reset(&t->win, now,
+> +                               group->total[PSI_POLL][t->state], 0);
+> +       memcpy(group->polling_total, group->total[PSI_POLL],
+> +                  sizeof(group->polling_total));
+> +       group->polling_next_update =3D now + group->poll_min_period;
+> +}
+> +
+>  /* Schedule polling if it's not already scheduled or forced. */
+>  static void psi_schedule_poll_work(struct psi_group *group, unsigned lon=
+g delay,
+>                                    bool force)
+> --
+> 2.34.1
+>
