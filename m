@@ -2,211 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1989F6C1EA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EEC6C1EAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCTR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S229846AbjCTR5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjCTR4C (ORCPT
+        with ESMTP id S229744AbjCTR4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:56:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83263B651;
-        Mon, 20 Mar 2023 10:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679334642; x=1710870642;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=RavQDPA98iCQ3T0XZLxeCDnROGXP3qxJWTB11WTO/aQ=;
-  b=Gt4cV1KqWFd5ScGbKWXR69/csktjWQZfkZsGsxkzBKW93CyZXwZda2Uc
-   ibq0o5vO9Za92DLPB7ZPka3hQ0PWPDJa56/8hsJPwtm/m7SvBS/Qlk7Ql
-   H2NelBF/ve5S5P+X2Dcm1kbZAfehhKuuFLqxJ2ftL+FidzFw7+xI5z+bF
-   /+KI38Ztg6INDuEoWJEVPfpTYTiaWURiWKO3qUiRhI7FewL5Z9Bbxmg9D
-   6haZmayim4tSoHW7qO1zNFuSjN/J5UOm9B2NevLA3p6ODi9dYFyJWu+bU
-   Cz691PQQFZ+UVvIc0jA1U1NHcqKGeSKsR79uXB5uDt5ufx2kHWNopq9Jz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340279952"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="340279952"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 10:49:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855336865"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="855336865"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 10:49:25 -0700
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 10:49:25 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 10:49:25 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 20 Mar 2023 10:49:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QaEIQ/65EideeJht8FJd2MGpr+A9XCeS9CR8pg3JjVxxWXvekrRWu2YU90eF/5D1LOY/I+BgKg66Gc2cMyrneFrqrmv59bTXoKWHlIpttlh133mGdoNaxH/vsnqf3hU076HPCzkAyobqPM/ngkLsDnOY2+0E+2POISJ0aEW5HkKVZoL3hQvY2NK36L653D4GfwjEIMASAWxhwpQAmQD+MsyPVj25Ccbc3JtXZN5fOLHne8CyV2vC1tHhCfOzJ81GNGSETmw31XM4P7O8wqcumvBSA2yEG3Sym9DUPuPpRlaB4zHtFZfK+Bhyxfu07YjqT+hzqIPbpCJLYbZJsKGvVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1DLj0drSsXEkXGnMhnUsHI0seFX502tsZeoQVHcrHoM=;
- b=naLIQSdMkaywKrUfazm/BIZQvp0MIctoKE/JYXeRnQXmZ4sisRQok/nXYCseHhVkUqTzAm2kIIExo5ex8a9M8Qrnw4yzRl+gReBtk7SDEOGI85I8P0JYDmSnnq6Hbl5DhFU7PGe1+HvQCUb0FSL/eDUS3lz23NoB9DfsZpfiuk2Z5ThG6px+MPO41m8DrgB5ImP6NeXbwCYiuqjV6MG5H5CzbhHVTVO4oUIutu8tN5zNqvDzgDeqSPa7HWpEBg/FexuK64iVLkOG6wKKdmNjEd1GEGDli0y51VNoUwXCUiBCOF6OtWGGXTeqcLZoHjpY19TNF1aQ4/xhQms76wDTDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB2937.namprd11.prod.outlook.com (2603:10b6:5:62::13) by
- MN0PR11MB6280.namprd11.prod.outlook.com (2603:10b6:208:3c0::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 17:49:06 +0000
-Received: from DM6PR11MB2937.namprd11.prod.outlook.com
- ([fe80::cece:5e80:b74f:9448]) by DM6PR11MB2937.namprd11.prod.outlook.com
- ([fe80::cece:5e80:b74f:9448%7]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 17:49:06 +0000
-Date:   Mon, 20 Mar 2023 18:48:51 +0100
-From:   Michal Kubiak <michal.kubiak@intel.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-CC:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-leds@vger.kernel.org>
-Subject: Re: [net-next PATCH v5 02/15] net: dsa: qca8k: add LEDs basic support
-Message-ID: <ZBicg28JwVLugzqz@localhost.localdomain>
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-3-ansuelsmth@gmail.com>
- <ZBiKDX/WJPfJey/+@localhost.localdomain>
- <64188af6.050a0220.c5fe1.1d96@mx.google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <64188af6.050a0220.c5fe1.1d96@mx.google.com>
-X-ClientProxiedBy: FR2P281CA0096.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9b::19) To DM6PR11MB2937.namprd11.prod.outlook.com
- (2603:10b6:5:62::13)
+        Mon, 20 Mar 2023 13:56:52 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F240113C2;
+        Mon, 20 Mar 2023 10:51:44 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id n2so14133832qtp.0;
+        Mon, 20 Mar 2023 10:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679334621;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jadN/M9/QEeUH+7TUE8KXiajBk6vI/UOdAVnM9LqwP4=;
+        b=mCUiDaIv3X2cv1paAnSxarsTJTOwhi+j/JIwMrGT7nIWhz7gsblqHK8Z6lETCS2mEs
+         Exn3yXF7il9SZiFjSe8aD/gPoDfymRynCvjDGJlA1pPMYCh+3gleK5KJwyFkUo1k5mud
+         ZgHFbS0NkXhxWWemmh1F24RvcpzjQTlUVVNN0ImSbv7PUqbeoeJEtjx84qy9ln+JEGDV
+         G4wOixZFowdgVklEgkvwNh+L4QTmJItPT2DVUQJQkVlvlk1RgLnM8Cg5tJVVYGbM8abj
+         xWAngsbo2cxo84UoUfBQ/Ff8XFVEfTlpioR7LMA7vGJv1AblGhYE9iIke548OLdMaaDS
+         Aoyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679334621;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jadN/M9/QEeUH+7TUE8KXiajBk6vI/UOdAVnM9LqwP4=;
+        b=LTjCjvzSI4seOiCa2T6cQ/DHlZVV4fcDH+iPbiO4eQC8LNZ80I0O3IiwH5pV4JHIoV
+         Gr6xNGJMTn/j0CvuB1lBAM/EPd1UrzG8rYJL72NGlnNvwkJA3HYlXHGD2JFu3ywzJ5u1
+         aRQvemoN9SWLBgaI0ErQEGQE/RJ8t6DjjDfh4Zx+lj5nkMdEy3/okAG61PgR/8sjmMrZ
+         dT2mwxuYIe0TzNfTUWO3Ybinprh5cWyFwbbXG17pxIOki8VxveMLW5qGkEB9yu4VXEpR
+         GFdK/h02Eiz/xb4lhmHly/8Tm7sfHgS2S8vYikLFM6UTGdt9e56BVjikQr6vdGMqnU7c
+         I89A==
+X-Gm-Message-State: AO0yUKUHnPDSrEq6EVPc9HFJmeHJVWI0Kc3SaaLmrWwjAOtU2ucLxR5I
+        VL+mxHeEk5JqZDQD2bIbypU=
+X-Google-Smtp-Source: AK7set/jR4MhDQ20YHO0s2tkcQ+UNrs2h8FqKTMW58USlS3w8CKf1W0XST+8K41ffAvmYQM5O0LmBg==
+X-Received: by 2002:ac8:57d2:0:b0:3e1:59e8:7437 with SMTP id w18-20020ac857d2000000b003e159e87437mr228834qta.0.1679334621067;
+        Mon, 20 Mar 2023 10:50:21 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id r9-20020a37a809000000b007463509f94asm3916840qke.55.2023.03.20.10.50.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 10:50:20 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A619427C005A;
+        Mon, 20 Mar 2023 13:50:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 20 Mar 2023 13:50:19 -0400
+X-ME-Sender: <xms:2pwYZENlbVs7OMv8zNs254-163z6BGFa7vg0cQX6_-IoT2r9vzFdgw>
+    <xme:2pwYZK9rSPJiGSIXR-Q6s0NFWmNHClcf0eDJbHiqnJMdU1-VjvZrKF6c-wQ0U_I5l
+    15184jDpnQnI1_uyQ>
+X-ME-Received: <xmr:2pwYZLRrSThimcC11eYLn0EWE2fieaZvLkMDtJvuvF5fvXdb0UqkF9M9GgxYMQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefkedguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:2pwYZMv_2ZS1cQUzBdqfAi2-jCAiOmNBzjNtAlhPeUvCU1nBaqpnNA>
+    <xmx:2pwYZMcPClLOOesYkm7VY0gi-nxv9BGB7ni2Vjugu0AptKkSI1rGsg>
+    <xmx:2pwYZA0e0JZPUal5rpddiJ8VcjrblvD1t_MOWztYE7X5JXXUnhWkWQ>
+    <xmx:25wYZK8YLSoMIM1E1NXEEi8k75ZRKMk7jvKAkTlvx20c2Lqh_f1GiA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Mar 2023 13:50:18 -0400 (EDT)
+Date:   Mon, 20 Mar 2023 10:50:03 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rcu@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH rcu 4/7] locking/lockdep: Improve the deadlock scenario
+ print for sync and read lock
+Message-ID: <ZBicy8d37opl62X5@boqun-archlinux>
+References: <20230317031339.10277-1-boqun.feng@gmail.com>
+ <20230317031339.10277-5-boqun.feng@gmail.com>
+ <20230320121305.GK2194297@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB2937:EE_|MN0PR11MB6280:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc64fb90-9b50-4845-55a4-08db296b6690
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3Pgp2wD7M7vYBT4YdDuDSqctM/T7TWekgBe+xAvPXfKu03S1Yub18VC6Hg+CrDB9Y/LsXH0LcqHxHFzyQw4HUjM2FyuJhbZYHTs9xUv+0fHrOY4M6vrWp1mFByMMnKDeliMehw52lZsTBOtOXbdYH9JKIx1LwlutV5jJOCpXKbMY+jSpnvRmqH2XjLOZgVJ5rge1Nrx3IXq9/DJi9QZfrszZuopWpquHHHDmhyOQsa8Eu3DSc0q5WNghHTIkAhKGiFE7ywpE6jt7CSKlL/Bpf0BLmc4+ms7LoDT35/5hjqooosA1FvT5BO5aQ7NHZtL1/1DI7cOXOB/KKjmN9eAEGyyT4wj2FB3Tw04PFeoaGjQcpOCPAmpi6K/PodEZm2YEFlYAaDG9PWU1GXsVDRB1Yz/4nDTM5s9QdecYbLKBfll2Wy1qmdoDoIpyR718/+8CnCExqa4pTiej1DdxlzcdfC5HZbKxzF5fSwdcRWd5140u0zI9a4fqp16f8g4dj7s3spCDIXHSG29u+oN34Vl1yYeXrsLT4Aac9qiQRPwcogORYCsa83NpHztOSFOknfWqcQSuXdMjRK0X2PSNG8EBclhBDs6VlVVqXg+5v4lqZlW+1Swu7ZwFSfLZqZyz0vQF1T7c5UQT0xCdUOzQKGXIKrac9+dM+f78hLINyzhFJ3IvjtNFlNd49tuTXcVMEH3x
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2937.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199018)(41300700001)(4326008)(6916009)(8676002)(66556008)(66946007)(66476007)(38100700002)(82960400001)(2906002)(44832011)(8936002)(26005)(5660300002)(6512007)(6506007)(7416002)(6666004)(6486002)(186003)(86362001)(83380400001)(9686003)(316002)(478600001)(54906003)(32563001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?krMAT4DTGXc3aK8e6nFs7mCW/hifFPGLBHqee50OYOsFIv17AXj49ufFQ1mT?=
- =?us-ascii?Q?GkoizY4M7iTlHMHZzoA1X7iaH+yakgmcjcxfG6NG91ehGecbJHMTuJR/hWvc?=
- =?us-ascii?Q?VIEqQ+KT1QNydNzL8FuX0PvAuyQGVQPFkRdZ/HHZIr1GAEhsEu0laYuNiAzw?=
- =?us-ascii?Q?HKd/2XPBrBjVTFK884/67OY0cNc1Ok96B9KbtZcbYJ00KoPbJFlkGflJsp+Y?=
- =?us-ascii?Q?YrjyEf1tG08MpuqtwugecKJeA8RS5beDGHeY58IDPvGbTneeUVIherFIKl20?=
- =?us-ascii?Q?o72avzgRmLQP4Lu+iJ1tNRPPBMrvgIatVMqeKpxSb/Bd4Sk1YWLmMYh/aADq?=
- =?us-ascii?Q?AIFLUs4kGduqBrjm/YHl6AW7anyUj55Ttm6ykadl3Yt+NX5G0b31xc7Klqtx?=
- =?us-ascii?Q?GGAOzBonbgSadhhE2aRgFlvopyFD5W02H4EExAXEmPbxKFx012HDdp6QCW/K?=
- =?us-ascii?Q?7xJkrmpOx7aG6AVnDpPYJ+fgHz52/e9fCUNedtzQLZ9hzmxt/fpsPQdpclFQ?=
- =?us-ascii?Q?rrDvvgZq+VG27RLzTsT9aFhh1JxdtV/bm70lWhgslw15EPkLyGUeGd7u9gZX?=
- =?us-ascii?Q?x6sjiyDQ89Ivxb4vo9CkBT2CClYmBB5h1969zodLH+dP/0ssxQGiTxIh0SJ+?=
- =?us-ascii?Q?UEu2vBNDvXNHasMO8tzOxEjN6ScGmyEYCc6ELzrEb7/NU4TCa1jBAr6tHWfr?=
- =?us-ascii?Q?9RmIFVnoTjm62jzSW+5Q+8x6ZhexRFYMPdwp77vlWEWhueyOb0kG7N08aPrl?=
- =?us-ascii?Q?Yzwg+qWM95DCcGf0DdahqZ80B2br2Dl9MqPqEl+fVYiq0O0s2+mnwBGtVBhN?=
- =?us-ascii?Q?BVxMKfiNy1gdL6SX8x0uL9FPFUBv0oUXY7eHlFrgawH3Sw3LlP6SsS4MFH/D?=
- =?us-ascii?Q?8zYsscVAJG66tNLcZMtCJwbERLu+FMA99W80pZrdg2l9TTUQmICnwyoZhI43?=
- =?us-ascii?Q?NJ1I/DAAOQVYpYkY7EFMu9je1Xty7exCNddAVlbJxP1pZretV8mDMqzleq1s?=
- =?us-ascii?Q?cwWUWIqhouPschPMK1/KodY1Y2Kim9GgM74ptmQ4GM+1dTXrlyOumqhnzKO7?=
- =?us-ascii?Q?0EX6K9QTifNP78DuECfazKJ+wbiHlFJ9ef7UopIu6EMvulZdvPsPrEFAAswc?=
- =?us-ascii?Q?AmFuLwVXVVYgVKgybISncq3LT8udoIZ5MuGYy2u5K5dV/YSAORxgfdpoxEWg?=
- =?us-ascii?Q?X81ZdiG/LGP505LFrY33qT2fQ3s8CF7yP09APUyVYaCAcFPno4dke4gFkvtu?=
- =?us-ascii?Q?l0IooYG3MmzXg0w8X3oRWvJ08B8oYA1YS1IeJYTVhxE4TF6ArKeOHeUqWNaJ?=
- =?us-ascii?Q?XACV7J+ksB0zo7kKi4RwURb6+1aHX8frtttBnbhC/6k7jqPBbhAUdqii3nls?=
- =?us-ascii?Q?4kXnqQuZ6bAhEXBo8qc1E90KTB323D6uk+1YjX6muBwa3UWxoBECOysJYKiF?=
- =?us-ascii?Q?aiHex8z4VNttE2Rpy52G3ffnGIS/a+/ya/0mvPHXI6dVlCtub3cgu6ClCpU0?=
- =?us-ascii?Q?UY9MHmnYsNMOqiCaPGIA6A0bCmaebajBz8C/FUQSBUDT80MBzgdaWLSNoNGT?=
- =?us-ascii?Q?d2X1SebdkepmGlxW+j/nTJtrNudjlLgTWmNKh42Nw7lBVdIZ1U/0/RMTo9YF?=
- =?us-ascii?Q?VA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc64fb90-9b50-4845-55a4-08db296b6690
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2937.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 17:49:06.4375
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZZD23i9xb3Ba81g2sSIy3RTe45ut5Tni+fJbdLL4SlonRkpdwIRNJF+1DLCfpWr3zY+yHS03R8aHQMYMnhOjNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6280
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320121305.GK2194297@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 05:33:56PM +0100, Christian Marangi wrote:
+On Mon, Mar 20, 2023 at 01:13:05PM +0100, Peter Zijlstra wrote:
+> On Thu, Mar 16, 2023 at 08:13:36PM -0700, Boqun Feng wrote:
+> > Lock scenario print is always a weak spot of lockdep splats. Improvement
+> > can be made if we rework the dependency search and the error printing.
+> > 
+> > However without touching the graph search, we can improve a little for
+> > the circular deadlock case, since we have the to-be-added lock
+> > dependency, and know whether these two locks are read/write/sync.
+> > 
+> > In order to know whether a held_lock is sync or not, a bit was
+> > "stolen" from ->references, which reduce our limit for the same lock
+> > class nesting from 2^12 to 2^11, and it should still be good enough.
+> > 
+> > Besides, since we now have bit in held_lock for sync, we don't need the
+> > "hardirqoffs being 1" trick, and also we can avoid the __lock_release()
+> > if we jump out of __lock_acquire() before the held_lock stored.
+> > 
+> > With these changes, a deadlock case evolved with read lock and sync gets
+> > a better print-out from:
+> > 
+> > 	[...]  Possible unsafe locking scenario:
+> > 	[...]
+> > 	[...]        CPU0                    CPU1
+> > 	[...]        ----                    ----
+> > 	[...]   lock(srcuA);
+> > 	[...]                                lock(srcuB);
+> > 	[...]                                lock(srcuA);
+> > 	[...]   lock(srcuB);
+> > 
+> > to
+> > 
+> > 	[...]  Possible unsafe locking scenario:
+> > 	[...]
+> > 	[...]        CPU0                    CPU1
+> > 	[...]        ----                    ----
+> > 	[...]   rlock(srcuA);
+> > 	[...]                                lock(srcuB);
+> > 	[...]                                lock(srcuA);
+> > 	[...]   sync(srcuB);
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> >  include/linux/lockdep.h  |  3 ++-
+> >  kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
+> >  2 files changed, 34 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> > index 14d9dbedc6c1..b32256e9e944 100644
+> > --- a/include/linux/lockdep.h
+> > +++ b/include/linux/lockdep.h
+> > @@ -134,7 +134,8 @@ struct held_lock {
+> >  	unsigned int read:2;        /* see lock_acquire() comment */
+> >  	unsigned int check:1;       /* see lock_acquire() comment */
+> >  	unsigned int hardirqs_off:1;
+> > -	unsigned int references:12;					/* 32 bits */
+> > +	unsigned int sync:1;
+> > +	unsigned int references:11;					/* 32 bits */
+> >  	unsigned int pin_count;
+> >  };
+> >  
 > 
-> Btw ok for the description of the LED mapping? It's a bit complex so
-> tried to do my best to describe them.
+> Yeah, I suppose we can do that -- another option is to steal some bits
+> from pin_count, but whatever (references used to be 11 a long while ago,
+> no problem going back to that).
+
+Thanks!
+
 > 
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Yes, now it is much easier to understand the logic behind LED mapping.
-Thanks for adding that! I think it will save some time for anyone who
-will be working with that code in the future.
+Applied locally.
 
-The only thing I still do not understand is the initial 14 bit shift:
-
->	if (led->port_num == 0 || led->port_num == 4) {
->		mask = QCA8K_LED_PATTERN_EN_MASK;
->		val <<= QCA8K_LED_PATTERN_EN_SHIFT;
-
-For example, according to the code above, for port 4:
-	- the value is shifted by 14 bits - to bits (15,14)
-	- mask is also set to bits (15,14)
-	- then, both mask and value are shifted again by 16 bits:
-
->		return regmap_update_bits(priv->regmap, reg_info.reg,
->					  mask << reg_info.shift,
->					  val << reg_info.shift);
-
-because reg_info.shift == QCA8K_LED_PHY4_CONTROL_RULE_SHIFT == 16 for
-port_num == 4.
-
-It means, in fact, for controlling port 4 we use bits (31,30) which
-seems to be inconsistent with your comment below.
-
->	 * To control port 4:
->	 * - the 2 bit (17, 16) of:
->	 *   - QCA8K_LED_CTRL0_REG for led1
->	 *   - QCA8K_LED_CTRL1_REG for led2
->	 *   - QCA8K_LED_CTRL2_REG for led3
->	 *
-
-Are values for ports 0 and 4 correct in your description in
-"qca8k_led_brightness_set()"?
-
-Thanks,
-Michal
+Regards,
+Boqun
