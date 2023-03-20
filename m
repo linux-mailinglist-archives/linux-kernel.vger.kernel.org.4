@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB31A6C0A31
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 06:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E416C0A34
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 06:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjCTFiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 01:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S229734AbjCTFkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 01:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCTFiC (ORCPT
+        with ESMTP id S229849AbjCTFj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 01:38:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E27E6EBA;
-        Sun, 19 Mar 2023 22:38:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 848C9FEC;
-        Sun, 19 Mar 2023 22:38:43 -0700 (PDT)
-Received: from [10.162.41.7] (a077893.blr.arm.com [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61EE93F67D;
-        Sun, 19 Mar 2023 22:37:54 -0700 (PDT)
-Message-ID: <6ac7d093-b11c-b37f-8058-72c8d41fba73@arm.com>
-Date:   Mon, 20 Mar 2023 11:07:51 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6/7] of/platform: Skip coresight etm4x devices from AMBA
- bus
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        scclevenger@os.amperecomputing.com,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Mon, 20 Mar 2023 01:39:56 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DEE136D6;
+        Sun, 19 Mar 2023 22:39:55 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id o32so268111wms.1;
+        Sun, 19 Mar 2023 22:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679290794;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Lj6TKm1siAlVTYsFucnGuumrrgiwekYs8gSqZFYaV8=;
+        b=fZI2qVAzQGYMO6G0NASDX9+1KvajA3fFlO1ariJDasW5tyS+HLPZAoC4bRjACtsWY7
+         nqXKXiWpPmuFp0deXotDzlBoeCaHFfcljWkr17blXd1MORE3TM2JKfsz6Bg/r4ycdIcM
+         k30uEL6UKHc9I23PWLu6ykFzkcKWOpKvcJ1kRUOhKII2fNDyIOX4+tfFLoFzoTXUa8IS
+         napxa67A1NZtgg8e25KPR3c/Is+rIYdPd8ycocY36DGF5kSojkxw2V1gWC4+Hv1/EXVK
+         5EZ71lZbytf5lQ0kzLxmL5d7oPOzWGIBmrs9KgRUhtzEVScDhiPx4RqlE3lVTJBJJADB
+         8wkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679290794;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Lj6TKm1siAlVTYsFucnGuumrrgiwekYs8gSqZFYaV8=;
+        b=kKkMW2oe7tM+ivGOUr872afR7K9+VopETl4fWHI+vowTMAr8M7/nK4IkaB1jsB0bcR
+         GhuVaHs5ZJWrkexwj2lX+OJ7XTiaTTvASx3gEfXey20SFL5Ja4txsCfqdhv17dL0q86T
+         v+BZm2P9QkPVLk7gPH8KSq5OdlD+6eRnrUqtbdq8gUX1gdxJcnbWV6+0YcpIhQp9jyhw
+         wsljZmPDtQiBWLqkXjvVpu5Uz8gpNC8H8TU8Ku/ZFnRAeM1Y2McmeyONG8/nFrWWJyUb
+         qG+/LmhoSImPXiu4tuwlyTYDhdMx1QUo9b1oY90+OhIrV+IAL4QnqmpkdcwsTYN5ujXF
+         nhEQ==
+X-Gm-Message-State: AO0yUKUA9ds1fIvciC0DFDea/QGoLb4qZjylzVoMfbl8MJYY701+GNPU
+        8M2kjxWTu3JVZLS5Qq8hE0Q=
+X-Google-Smtp-Source: AK7set9N8yJewWvbi35ASjy42fSpc8tcEcxT987snWMSBAZsoGxAAeI0352w3LhXWRv1177Y/Ij+Gg==
+X-Received: by 2002:a1c:7c01:0:b0:3e5:4fb9:ea60 with SMTP id x1-20020a1c7c01000000b003e54fb9ea60mr8568452wmc.9.1679290793862;
+        Sun, 19 Mar 2023 22:39:53 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id k16-20020a7bc310000000b003ed2433aa4asm9314376wmj.41.2023.03.19.22.39.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 22:39:53 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 08:39:49 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Marc Dietrich <marvin24@gmx.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
- <20230317030501.1811905-7-anshuman.khandual@arm.com>
- <CAL_JsqK8vnwTZ3-nTd-S+dpCrQebAUm-NRiaJBE6KkoAVq=Ovg@mail.gmail.com>
- <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] Staging: nvec: Convert to_nvec_led from a macro to an
+ inline function
+Message-ID: <417e944c-4653-43ef-b492-c82c536e4d87@kili.mountain>
+References: <20230318175250.GA49618@sumitra.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230318175250.GA49618@sumitra.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,41 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/17/23 21:33, Suzuki K Poulose wrote:
->>>   drivers/of/platform.c | 10 +++++++++-
->>>   1 file changed, 9 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
->>> index b2bd2e783445..59ff1a38ccaa 100644
->>> --- a/drivers/of/platform.c
->>> +++ b/drivers/of/platform.c
->>> @@ -325,6 +325,13 @@ static const struct of_dev_auxdata *of_dev_lookup(const struct of_dev_auxdata *l
->>>          return NULL;
->>>   }
->>>
->>> +static const struct of_device_id of_ignore_amba_table[] = {
->>> +#ifdef CONFIG_CORESIGHT_SOURCE_ETM4X
->>> +       { .compatible = "arm,coresight-etm4x" },
->>> +#endif
->>> +       {}    /* NULL terminated */
->>> +};
->>> +
->>>   /**
->>>    * of_platform_bus_create() - Create a device for a node and its children.
->>>    * @bus: device node of the bus to instantiate
->>> @@ -373,7 +380,8 @@ static int of_platform_bus_create(struct device_node *bus,
->>>                  platform_data = auxdata->platform_data;
->>>          }
->>>
->>> -       if (of_device_is_compatible(bus, "arm,primecell")) {
->>> +       if (of_device_is_compatible(bus, "arm,primecell") &&
->>> +           unlikely(!of_match_node(of_ignore_amba_table, bus))) {
->>
->> of_match_node is going to take orders of magnitude longer than any
->> difference unlikely() would make. Drop it.
+On Sat, Mar 18, 2023 at 10:52:50AM -0700, Sumitra Sharma wrote:
+> Convert to_nvec_led from a macro to a static inline function, to make the
+> relevant types apparent in the definition and to benefit from the type
+> checking performed by the compiler at call sites.
 > 
-> Agreed.
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
 
-Sure, will drop the unlikely() here.
+You need to compile test your changes.
+
+regards,
+dan carpenter
+
