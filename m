@@ -2,134 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48B96C09D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 05:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7866C09DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 06:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjCTExB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 00:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S229575AbjCTFGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 01:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCTEw7 (ORCPT
+        with ESMTP id S229458AbjCTFGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 00:52:59 -0400
-Received: from hyperium.qtmlabs.xyz (hyperium.qtmlabs.xyz [IPv6:2a02:c206:2066:3319::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2A01CAE1;
-        Sun, 19 Mar 2023 21:52:58 -0700 (PDT)
-Received: from dong.kernal.eu (unknown [222.254.17.84])
-        by hyperium.qtmlabs.xyz (Postfix) with ESMTPSA id 773DD82005A;
-        Mon, 20 Mar 2023 05:52:56 +0100 (CET)
-Received: from localhost (unknown [194.163.182.183])
-        by dong.kernal.eu (Postfix) with ESMTPSA id 692C544496AC;
-        Mon, 20 Mar 2023 11:52:52 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=syka;
-        t=1679287973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R0g5pRepGXvaveW3Y2DO3fYZK+m7A7Bx9lsMZkArEUw=;
-        b=bce9sZB/7qAa6uByHiZ1hwqef95Pg5IZxNs2jcihEaZTTHFg0PeTnAw2BvMPvMjK+fQDwu
-        LXxp1jBgsMit1fuuzKE/RoFwqhXQJeaKE9wDG6skkwtw6b9+krOa54peXAwdPcZovqCHXG
-        3UjgjNeUuKrE8xOKtBlx1a09suUSmMJMmfaQ8PeEjw17nj/a3WYmAhxp3QHUjFbel0HmKs
-        MH7RlQ436NXQ0m1FzxH+qNoQS7057FRXJW9AIyFf2PE+iVsu1xJMgAXwS4k5/NxsdW47l4
-        YEV/iQPpSrwJumqJlbwGbN/qHt1jOs40WKexRUaiCFFROZlazqz9AfQg5W7jUA==
-From:   msizanoen1 <msizanoen@qtmlabs.xyz>
-To:     msizanoen@qtmlabs.xyz
-Cc:     dmitry.torokhov@gmail.com, hdegoede@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pali@kernel.org, stable@vger.kernel.org
-Subject: [PATCH v3] input: alps: fix compatibility with -funsigned-char
-Date:   Mon, 20 Mar 2023 05:52:29 +0100
-Message-Id: <20230320045228.182259-1-msizanoen@qtmlabs.xyz>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
-References: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
+        Mon, 20 Mar 2023 01:06:22 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAC61E9EA;
+        Sun, 19 Mar 2023 22:06:20 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id n17so7041815uaj.10;
+        Sun, 19 Mar 2023 22:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679288779;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6Gib55IPNKPDHGsO/r/1AFOaqBwqBE1C5ui0pHqkTWU=;
+        b=A9+EFIHSfvLTQUD8yPRYxpH5w1+3fXQyS1sPhRmNfufxNEVjShl9soIBeHrtYn2OuQ
+         dywOCnoJMrCJaJ9WxWK9X0+hijatdYIpIUeCB8ERzlM/C2i4xgapDG5b3GR6/1wlCm9o
+         c10nA9Q685xpU3vFPTYeHcwaMcLdIPCGOQv/SLwMA8SqPvRVraWz4PbwweVGsCm5URqX
+         dVffFebYO35Pfu0vQSTMIZomWLr0pVNsrEbptIoKARj5Mum6o5oIQiyblm2P8y7cMtTy
+         zoK3rpjIVarn2N+Narmw/NGhJJA5SXYNP1iW0LxU5mY/J7xrWgRGsZxOkdapPP50yQXn
+         rj5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679288779;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6Gib55IPNKPDHGsO/r/1AFOaqBwqBE1C5ui0pHqkTWU=;
+        b=VR7hZwpYO+LjofRaHmvcXOewvd3K/r5lp+yi0hXjEGWK8cA67Ti5JDZqDaMnTev/Z3
+         s8JVmTBWsPDB7AHukkyNMyyp24t0w57oHTDKehHgOvKlZNPL05O+gMdHUc+TpzP31kSM
+         pG7DNCdGMbRB22TCfHVDzvWMHGQMShjZoOFPB31gdtp6jbyzbTMPJSDnIlnQLRRJyiHT
+         Bh51tBxb5n0Y2ErCou1A7zzXuYoiE1n7JZTJu6nw2OJheDp6AJA/VUVWlgakls67KNlh
+         QClf3neDNWOijUaGjfwAe+nU0bWcpsdRrObw21/lm03ULm3Zy/pR43cMHzLWA77c6SnG
+         /eYA==
+X-Gm-Message-State: AO0yUKXIE8Hcfsuo7Qw19ESHQDRB+U1A161fzdZXM+eOih6Y72TgJ/k/
+        qyEky7SeDYZhIGKglfsPiIflKVVKhfP/+qk9uO3gwsh2OnA=
+X-Google-Smtp-Source: AK7set/LauD6kxENWDuW87+2f6ufLPaM+vYj3cnq/yHfLtx8zE5U70z5GgzowSr+YcHZNHxPsClh8Ev6r9X40hLmTDk=
+X-Received: by 2002:a1f:264e:0:b0:401:4daf:d581 with SMTP id
+ m75-20020a1f264e000000b004014dafd581mr3197662vkm.0.1679288778914; Sun, 19 Mar
+ 2023 22:06:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   jim.cromie@gmail.com
+Date:   Sun, 19 Mar 2023 23:05:52 -0600
+Message-ID: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+Subject: RFC - KBUILD_MODNAME is misleading in builtins, as seen in /proc/dynamic_debug/control
+To:     LKML <linux-kernel@vger.kernel.org>, linux-kbuild@vger.kernel.org
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_AS_SEEN autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: msizanoen <msizanoen@qtmlabs.xyz>
+dynamic-debug METADATA uses KBUILD_MODNAME as:
 
-The AlpsPS/2 code previously relied on the assumption that `char` is a
-signed type, which was true on x86 platforms (the only place where this
-driver is used) before kernel 6.2. However, on 6.2 and later, this
-assumption is broken due to the introduction of -funsigned-char as a new
-global compiler flag.
+#define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+        static struct _ddebug  __aligned(8)                     \
+        __section("__dyndbg") name = {                          \
+                .modname = KBUILD_MODNAME,                      \
 
-Fix this by explicitly specifying the signedness of `char` when sign
-extending the values received from the device.
+This is going amiss for some builtins, ie those enabled here, by:
 
-v2:
-	Add explicit signedness to more places
+    echo module main +pmf > /proc/dynamic_debug_control
+    grep =pmf /proc/dynamic_debug/control
 
-v3:
-	Use `s8` instead of `signed char`
+init/main.c:1187 [main]initcall_blacklist =pmf "blacklisting initcall %s\n"
+init/main.c:1226 [main]initcall_blacklisted =pmf "initcall %s blacklisted\n"
+init/main.c:1432 [main]run_init_process =pmf "  with arguments:\n"
+init/main.c:1434 [main]run_init_process =pmf "    %s\n"
+init/main.c:1435 [main]run_init_process =pmf "  with environment:\n"
+init/main.c:1437 [main]run_init_process =pmf "    %s\n"
+kernel/module/main.c:336 [main]find_symbol =pmf "Failed to find symbol %s\n"
+kernel/module/main.c:567 [main]already_uses =pmf "%s uses %s!\n"
+kernel/module/main.c:571 [main]already_uses =pmf "%s does not use %s!\n"
+kernel/module/main.c:586 [main]add_module_usage =pmf "Allocating new
+usage for %s.\n"
+kernel/module/main.c:627 [main]module_unload_free =pmf "%s unusing %s\n"
+kernel/module/main.c:733 [main]__do_sys_delete_module =pmf "%s already dying\n"
+kernel/module/main.c:1345 [main]simplify_symbols =pmf "Common symbol: %s\n"
+kernel/module/main.c:1353 [main]simplify_symbols =pmf "Absolute
+symbol: 0x%08lx\n"
+kernel/module/main.c:1508 [main]__layout_sections =pmf "\t%s\n"
+kernel/module/main.c:1526 [main]layout_sections =pmf "Core section
+allocation order:\n"
+kernel/module/main.c:1529 [main]layout_sections =pmf "Init section
+allocation order:\n"
+kernel/module/main.c:2168 [main]move_module =pmf "final section addresses:\n"
+kernel/module/main.c:2183 [main]move_module =pmf "\t0x%lx %s\n"
+kernel/module/main.c:2921 [main]__do_sys_init_module =pmf
+"init_module: umod=%p, len=%lu, uargs=%p\n"
+kernel/module/main.c:2942 [main]__do_sys_finit_module =pmf
+"finit_module: fd=%d, uargs=%p, flags=%i\n"
+drivers/base/power/main.c:135 [main]device_pm_add =pmf "Adding info for %s:%s\n"
+drivers/base/power/main.c:156 [main]device_pm_remove =pmf "Removing
+info for %s:%s\n"
+drivers/base/power/main.c:175 [main]device_pm_move_before =pmf "Moving
+%s:%s before %s:%s\n"
+drivers/base/power/main.c:189 [main]device_pm_move_after =pmf "Moving
+%s:%s after %s:%s\n"
+drivers/base/power/main.c:202 [main]device_pm_move_last =pmf "Moving
+%s:%s to end of list\n"
+drivers/base/power/main.c:441 [main]pm_dev_dbg =pmf "PM: %s%s%s driver
+flags: %x\n"
+drivers/base/power/main.c:467 [main]dpm_show_time =pmf "%s%s%s of
+devices %s after %ld.%03ld msecs\n"
+bash-5.2#
 
-Fixes: f3f33c677699 ("Input: alps - Rushmore and v7 resolution support")
-Cc: stable@vger.kernel.org
-Signed-off-by: msizanoen <msizanoen@qtmlabs.xyz>
----
- drivers/input/mouse/alps.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Basically, KBUILD_MODNAME appears to get basename,
+not something specific, set in some config (such as pm, or module)
+or cleverly picked out of the path (power is possible)
 
-diff --git a/drivers/input/mouse/alps.c b/drivers/input/mouse/alps.c
-index 989228b5a0a4..e2c11d9f3868 100644
---- a/drivers/input/mouse/alps.c
-+++ b/drivers/input/mouse/alps.c
-@@ -852,8 +852,8 @@ static void alps_process_packet_v6(struct psmouse *psmouse)
- 			x = y = z = 0;
- 
- 		/* Divide 4 since trackpoint's speed is too fast */
--		input_report_rel(dev2, REL_X, (char)x / 4);
--		input_report_rel(dev2, REL_Y, -((char)y / 4));
-+		input_report_rel(dev2, REL_X, (s8)x / 4);
-+		input_report_rel(dev2, REL_Y, -((s8)y / 4));
- 
- 		psmouse_report_standard_buttons(dev2, packet[3]);
- 
-@@ -1104,8 +1104,8 @@ static void alps_process_trackstick_packet_v7(struct psmouse *psmouse)
- 	    ((packet[3] & 0x20) << 1);
- 	z = (packet[5] & 0x3f) | ((packet[3] & 0x80) >> 1);
- 
--	input_report_rel(dev2, REL_X, (char)x);
--	input_report_rel(dev2, REL_Y, -((char)y));
-+	input_report_rel(dev2, REL_X, (s8)x);
-+	input_report_rel(dev2, REL_Y, -((s8)y));
- 	input_report_abs(dev2, ABS_PRESSURE, z);
- 
- 	psmouse_report_standard_buttons(dev2, packet[1]);
-@@ -2294,20 +2294,20 @@ static int alps_get_v3_v7_resolution(struct psmouse *psmouse, int reg_pitch)
- 	if (reg < 0)
- 		return reg;
- 
--	x_pitch = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
-+	x_pitch = (s8)(reg << 4) >> 4; /* sign extend lower 4 bits */
- 	x_pitch = 50 + 2 * x_pitch; /* In 0.1 mm units */
- 
--	y_pitch = (char)reg >> 4; /* sign extend upper 4 bits */
-+	y_pitch = (s8)reg >> 4; /* sign extend upper 4 bits */
- 	y_pitch = 36 + 2 * y_pitch; /* In 0.1 mm units */
- 
- 	reg = alps_command_mode_read_reg(psmouse, reg_pitch + 1);
- 	if (reg < 0)
- 		return reg;
- 
--	x_electrode = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
-+	x_electrode = (s8)(reg << 4) >> 4; /* sign extend lower 4 bits */
- 	x_electrode = 17 + x_electrode;
- 
--	y_electrode = (char)reg >> 4; /* sign extend upper 4 bits */
-+	y_electrode = (s8)reg >> 4; /* sign extend upper 4 bits */
- 	y_electrode = 13 + y_electrode;
- 
- 	x_phys = x_pitch * (x_electrode - 1); /* In 0.1 mm units */
--- 
-2.39.2
+this compromises the clarity of  dyndbg's module keyword
 
+is some heuristic possible to improve this,
+with a manual setting to fix when heuristic fails ?
