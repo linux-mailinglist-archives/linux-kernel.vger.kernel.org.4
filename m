@@ -2,146 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858166C2264
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEFB6C2265
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjCTURY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S231189AbjCTUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCTURW (ORCPT
+        with ESMTP id S230180AbjCTURY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:17:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62651D907;
-        Mon, 20 Mar 2023 13:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=vJY8jKToHd8+Kg5E3edi1QUWHeaaaoycoz45vWtsFB4=; b=vNnQefJX4YTN2NyTDlsr84Dc+R
-        EHhJLQhHUazB7469F/UWQmi346XjrebvEcH3PCbVsNvaZqCjz1gBwqoyx6zhxPdOJBOU3kCrIPZAP
-        oIZ+9Yum7nwupiTbqHrGwA483ezvqqHMcP4oJGSd/g7UKbSywduars0sz2FTrePfJINJCXxQUG8qD
-        A0tbVv8t2y7T8eta0NU1QBJHhbwp1JioKAmsAZ6doVJ4PHS3gxwyXLrM//iXrDv/+auD3QhZ08pnk
-        LWTeaD4AE9hmcRATb83zeLu/Qyunf5weca12E+Fj1ZDuL9F8zswEdmCUgwWcPeFbOoSGaQcd8qSjz
-        8Zm6bG7g==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1peLwV-00AOl0-0Q;
-        Mon, 20 Mar 2023 20:17:19 +0000
-Message-ID: <bc1afc02-967b-73b3-49a0-b8d22cb96b35@infradead.org>
-Date:   Mon, 20 Mar 2023 13:17:16 -0700
+        Mon, 20 Mar 2023 16:17:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861B231E02;
+        Mon, 20 Mar 2023 13:17:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C6F0B8100E;
+        Mon, 20 Mar 2023 20:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4567C433EF;
+        Mon, 20 Mar 2023 20:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679343440;
+        bh=/ZtNqAMQPcKkMwrwO1UdBvMa5zg/aN46lvJizXeqpG0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ZSW4eNq6R0M8Xe4TWgOKuSTih99Wtnm/OkwE36byhp1NotDPuKYCgKP5S6jKVmnN9
+         eVGFCJhxUojoUrh0mKvhFxvuWvQYoFgXBucmSD9QnkZcgZNpe7wAI5jHnO6pKIes4o
+         VLByjWzsABlEBzSRcVJY9lyFithqxpK8j7ZpB3rEoJaDpJdevsEoGBbUwE64+WzS0+
+         2JxquPcAM6+Us8KzRxv/mICG8qqK85h1LP6/IFYukUfiA/j1SIDc2QGlqlVBiYXF6D
+         VPXUlJFViLjV7B8WxjZAgCdL3kj33ykm7AFVaeWq6COkdfcxdfYSEA5HmJ9Ey8/pLP
+         rF09mcYmLyATA==
+Message-ID: <1bac2baccd4de561944c4a3f8454f7d3.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230306040037.20350-1-rdunlap@infradead.org>
- <20230306040037.20350-7-rdunlap@infradead.org>
- <2186c0e97e6747e71ebceade317f88a7cc016772.camel@physik.fu-berlin.de>
- <c9a748cb2ee6145a3ffe85ca55a28b990f6be68c.camel@physik.fu-berlin.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <c9a748cb2ee6145a3ffe85ca55a28b990f6be68c.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230318075340.22770-2-zhuyinbo@loongson.cn>
+References: <20230318075340.22770-1-zhuyinbo@loongson.cn> <20230318075340.22770-2-zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v14 2/2] clk: clk-loongson2: add clock controller driver support
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 20 Mar 2023 13:17:17 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Yinbo Zhu (2023-03-18 00:53:40)
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 1eef05bb1f99..c0f32d9c1cc4 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -325,6 +325,15 @@ config COMMON_CLK_LOCHNAGAR
+>           This driver supports the clocking features of the Cirrus Logic
+>           Lochnagar audio development board.
+> =20
+> +config COMMON_CLK_LOONGSON2
+> +       bool "Clock driver for Loongson-2 SoC"
+> +       depends on COMMON_CLK && OF
 
+It doesn't depend on OF to build, right? If so, remove it. Also, this is
+within the 'if COMMON_CLK' section of this file, so the 'depends on
+COMMON_CLK' is redundant and should be removed.
 
-On 3/20/23 13:13, John Paul Adrian Glaubitz wrote:
-> Hi Randy!
-> 
-> On Sun, 2023-03-19 at 21:20 +0100, John Paul Adrian Glaubitz wrote:
->> On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
->>> Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
->>> SYS_SUPPORTS_SMP and SMP.
->>>
->>> kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
->>> code + data inside topology.c is only built when CONFIG_NUMA is
->>> set/enabled, so these arch/sh/ configs need to select SMP and
->>> SYS_SUPPORTS_SMP to build the NUMA support.
->>>
->>> Fixes this build error in multiple SUPERH configs:
->>>
->>> mm/page_alloc.o: In function `get_page_from_freelist':
->>> page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
->>>
->>> Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
->>> Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
->>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
->>> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
->>> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
->>> Cc: Rich Felker <dalias@libc.org>
->>> Cc: linux-sh@vger.kernel.org
->>> Cc: stable@vger.kernel.org
->>> ---
->>> v2: skipped
->>> v3: skipped
->>> v4: refresh & resend
->>>
->>>  arch/sh/Kconfig |    4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff -- a/arch/sh/Kconfig b/arch/sh/Kconfig
->>> --- a/arch/sh/Kconfig
->>> +++ b/arch/sh/Kconfig
->>> @@ -477,6 +477,8 @@ config CPU_SUBTYPE_SH7722
->>>  	select CPU_SHX2
->>>  	select ARCH_SHMOBILE
->>>  	select ARCH_SPARSEMEM_ENABLE
->>> +	select SYS_SUPPORTS_SMP
->>> +	select SMP
->>>  	select SYS_SUPPORTS_NUMA
->>>  	select SYS_SUPPORTS_SH_CMT
->>>  	select PINCTRL
->>> @@ -487,6 +489,8 @@ config CPU_SUBTYPE_SH7366
->>>  	select CPU_SHX2
->>>  	select ARCH_SHMOBILE
->>>  	select ARCH_SPARSEMEM_ENABLE
->>> +	select SYS_SUPPORTS_SMP
->>> +	select SMP
->>>  	select SYS_SUPPORTS_NUMA
->>>  	select SYS_SUPPORTS_SH_CMT
->>>  
->>
->> It seems that we need this change for these configurations as well:
->>
->> - config CPU_SHX3
->> - config CPU_SUBTYPE_SH7785
->>
->> Although I can trigger a build failure for CPU_SUBTYPE_SH7785 only when
->> setting CONFIG_NUMA=y:
->>
->>   CC      net/ipv6/addrconf_core.o
->> mm/slab.c: In function 'slab_memory_callback':
->> mm/slab.c:1127:23: error: implicit declaration of function 'init_cache_node_node'; did you mean 'drain_cache_node_node'? [-Werror=implicit-function-declaration]
->>  1127 |                 ret = init_cache_node_node(nid);
->>       |                       ^~~~~~~~~~~~~~~~~~~~
->>       |                       drain_cache_node_node
->>
->> I would expect this error to be reproducible for CPU_SHX3 as well when
->> CONFIG_NUMA=y but CONFIG_SMP=n. But for some reason, I am not seeing
->> the error then.
-> 
-> Can you make this change for config CPU_SUBTYPE_SH7785 as well?
-> 
-> Then the change should be fine.
+> +       help
+> +          This driver provides support for clock controller on Loongson-=
+2 SoC.
+> +          The clock controller can generates and supplies clock to vario=
+us
+> +          peripherals within the SoC.
+> +          Say Y here to support Loongson-2 SoC clock driver.
+> +
+>  config COMMON_CLK_NXP
+>         def_bool COMMON_CLK && (ARCH_LPC18XX || ARCH_LPC32XX)
+>         select REGMAP_MMIO if ARCH_LPC32XX
+> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
+> new file mode 100644
+> index 000000000000..c423932b626d
+> --- /dev/null
+> +++ b/drivers/clk/clk-loongson2.c
+> @@ -0,0 +1,356 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/of.h>
 
-Will do. Thanks.
+Don't think this include will be needed.
 
--- 
-~Randy
+> +#include <linux/of_address.h>
+
+Don't include this.
+
+> +#include <linux/clk-provider.h>
+> +#include <linux/slab.h>
+> +#include <linux/clk.h>
+
+Drop this include. This isn't a clk consumer.
+
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io-64-nonatomic-lo-hi.h>
+> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
+> +
+> +#define LOONGSON2_PLL_MULT_SHIFT               32
+> +#define LOONGSON2_PLL_MULT_WIDTH               10
+> +#define LOONGSON2_PLL_DIV_SHIFT                        26
+> +#define LOONGSON2_PLL_DIV_WIDTH                        6
+> +#define LOONGSON2_APB_FREQSCALE_SHIFT          20
+> +#define LOONGSON2_APB_FREQSCALE_WIDTH          3
+> +#define LOONGSON2_USB_FREQSCALE_SHIFT          16
+> +#define LOONGSON2_USB_FREQSCALE_WIDTH          3
+> +#define LOONGSON2_SATA_FREQSCALE_SHIFT         12
+> +#define LOONGSON2_SATA_FREQSCALE_WIDTH         3
+> +#define LOONGSON2_BOOT_FREQSCALE_SHIFT         8
+> +#define LOONGSON2_BOOT_FREQSCALE_WIDTH         3
+> +
+> +static void __iomem *loongson2_pll_base;
+> +
+> +static const struct clk_parent_data pdata[] =3D {
+> +       { .fw_name =3D "ref_100m", .name =3D "ref_clk", },
+
+Are you mainintain backwards compatibility? If not, which I believe is
+the case, drop .name assignment.
+
+> +};
+> +
+> +static struct clk_hw *loongson2_clk_register(struct device_node *np,
+
+Take a struct device instead.
+
+> +                                         const char *name,
+> +                                         const char *parent_name,
+> +                                         const struct clk_ops *ops,
+> +                                         unsigned long flags)
+> +{
+> +       int ret;
+> +       struct clk_hw *hw;
+> +       struct clk_init_data init;
+> +
+> +       /* allocate the divider */
+> +       hw =3D kzalloc(sizeof(*hw), GFP_KERNEL);
+> +       if (!hw)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       init.name =3D name;
+> +       init.ops =3D ops;
+> +       init.flags =3D flags;
+> +       init.num_parents =3D 1;
+> +
+> +       if (!parent_name)
+> +               init.parent_data =3D pdata;
+> +       else
+> +               init.parent_names =3D &parent_name;
+> +
+> +       hw->init =3D &init;
+> +
+> +       /* register the clock */
+> +       ret =3D of_clk_hw_register(np, hw);
+
+Use devm_clk_hw_register()
+
+> +       if (ret) {
+> +               kfree(hw);
+> +               hw =3D ERR_PTR(ret);
+> +       }
+> +
+> +       return hw;
+> +}
+> +
+> +static unsigned long loongson2_calc_pll_rate(int offset, unsigned long r=
+ate)
+> +{
+> +       u64 val;
+> +       u32 mult =3D 1, div =3D 1;
+
+Why are these initialized?
+
+> +
+> +       val =3D readq(loongson2_pll_base + offset);
+> +
+> +       mult =3D (val >> LOONGSON2_PLL_MULT_SHIFT) &
+> +                       clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
+> +       div =3D (val >> LOONGSON2_PLL_DIV_SHIFT) &
+> +                       clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
+
+They're overwritten here.
+
+> +
+> +       return div_u64((u64)rate * mult, div);
+> +}
+> +
+> +static unsigned long loongson2_node_recalc_rate(struct clk_hw *hw,
+> +                                         unsigned long parent_rate)
+> +{
+> +       return loongson2_calc_pll_rate(0x0, parent_rate);
+> +}
+[...]
+> +
+> +static inline void loongson2_check_clk_hws(struct clk_hw *clks[], unsign=
+ed int count)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i =3D 0; i < count; i++)
+> +               if (IS_ERR(clks[i]))
+> +                       pr_err("Loongson2 clk %u: register failed with %l=
+d\n",
+> +                               i, PTR_ERR(clks[i]));
+> +}
+> +
+> +static void loongson2_clocks_init(struct device_node *np)
+
+Inline this function at the caller.
+
+> +{
+> +       struct clk_hw **hws;
+> +       struct clk_hw_onecell_data *clk_hw_data;
+> +       spinlock_t loongson2_clk_lock;
+> +
+> +       loongson2_pll_base =3D of_iomap(np, 0);
+
+Use platform device APIs.
+
+> +
+> +       if (!loongson2_pll_base) {
+> +               pr_err("clk: unable to map loongson2 clk registers\n");
+
+Drop error messages when mapping.
+
+> +               return;
+> +       }
+> +
+> +       clk_hw_data =3D kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_C=
+LK_END),
+
+Use devm_kzalloc()
+
+> +                                       GFP_KERNEL);
+> +       if (WARN_ON(!clk_hw_data))
+> +               goto err;
+> +
+[...]
+> +
+> +static int loongson2_clk_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev =3D &pdev->dev;
+> +       struct device_node *np =3D dev->of_node;
+> +
+> +       loongson2_clocks_init(np);
+> +
+> +       return 0;
+> +}
+> +
