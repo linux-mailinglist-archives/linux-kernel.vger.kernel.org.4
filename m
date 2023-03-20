@@ -2,125 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08846C14AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA266C14B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjCTO10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S231640AbjCTO2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbjCTO1X (ORCPT
+        with ESMTP id S231741AbjCTO2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:27:23 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3102313A;
-        Mon, 20 Mar 2023 07:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8fPPhONKXpfhnsctRBM2wF3dukjuZcFloNfgvYDQNno=; b=gsz1m64uduKoHHN5tk3c6hFyyr
-        M8+Wo2WSTcFgcCatp8JUetMGQzOCmAXpTe3bf/bSl9+ydw2uk7Xfaillu4oiYbPQSB9/sNNX9gqz9
-        8srwL7s/FZanQpNw1bna6EggeB5hSjNXj6DvNJuqCoDpbHckNlZ7lJ622mcb0JIOEDFLA9tea+l+3
-        fVavjtgIcJxghju+roZfsKPqJ2yfg1Y3G1HKrzS+UZil3KMS1EyjC0SHLMcDHeruujAj5zVgnpq98
-        iXtUL0zf3OdFIxm5Wh0s6cD2VSGDfEQy/7tNIEemsF/qRGdoLTbdbYEfGPgZTF2AJIltyYyKXg7Vd
-        ybgTrH7Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39434)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1peGTf-0007bQ-6U; Mon, 20 Mar 2023 14:27:11 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1peGTb-0006aT-ET; Mon, 20 Mar 2023 14:27:07 +0000
-Date:   Mon, 20 Mar 2023 14:27:07 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH v2 net-next 1/9] phy: phy-ocelot-serdes: add ability to
- be used in a non-syscon configuration
-Message-ID: <ZBhtOw4Ftj3Sa3JU@shell.armlinux.org.uk>
-References: <20230317185415.2000564-1-colin.foster@in-advantage.com>
- <20230317185415.2000564-2-colin.foster@in-advantage.com>
- <ZBgeKM50e1vt+ho1@matsya>
- <ZBgmXplfA/Q3/1dC@shell.armlinux.org.uk>
- <20230320133431.GB2673958@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320133431.GB2673958@google.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+        Mon, 20 Mar 2023 10:28:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7485D173D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:28:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C61BC21AD2;
+        Mon, 20 Mar 2023 14:28:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679322482; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3zYyFeq0qsmqV47BTKJ1Q1RzeezMJiuzQL7h5/0x+9Q=;
+        b=i4tG5o+dmRtQ6+f8FICBq/t2NAaxOUFlYR7XZT4j6IjFENoVTaqXqVijJYC/6QPlOcfASF
+        8nfaa3AI5d3MqV0Z3YpbSDwcF1km40Ch14DedouinMBykpNH8/XFUc1LUNHaNxneJ4n7Op
+        JkmAJ1KHwVPoSh50A+PGxlpZrEElaJ0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679322482;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3zYyFeq0qsmqV47BTKJ1Q1RzeezMJiuzQL7h5/0x+9Q=;
+        b=kEtzSSpud782t7QCuLtXOGS6+EtPqlL0M5AeNAN+iHjTj0osErGh/VLDHnjDFR/PG0cOPO
+        an3Oyr8GQ+l//tDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C97213A00;
+        Mon, 20 Mar 2023 14:28:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sHtbJXJtGGSOIwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 20 Mar 2023 14:28:02 +0000
+Date:   Mon, 20 Mar 2023 15:28:02 +0100
+Message-ID: <87zg87jy4t.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     John Keeping <john@metanate.com>
+Cc:     Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix recursive locking on XRUN
+In-Reply-To: <ZBhLxq+CuzVcbcHa@donbot>
+References: <20230317195128.3911155-1-john@metanate.com>
+        <20230318002005.GA84781@workstation>
+        <20230319032853.GA99783@workstation>
+        <87sfe1mawg.wl-tiwai@suse.de>
+        <878rftm790.wl-tiwai@suse.de>
+        <ZBhLxq+CuzVcbcHa@donbot>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 01:34:31PM +0000, Lee Jones wrote:
-> On Mon, 20 Mar 2023, Russell King (Oracle) wrote:
+On Mon, 20 Mar 2023 13:04:22 +0100,
+John Keeping wrote:
 > 
-> > On Mon, Mar 20, 2023 at 02:19:44PM +0530, Vinod Koul wrote:
-> > > On 17-03-23, 11:54, Colin Foster wrote:
-> > > > The phy-ocelot-serdes module has exclusively been used in a syscon setup,
-> > > > from an internal CPU. The addition of external control of ocelot switches
-> > > > via an existing MFD implementation means that syscon is no longer the only
-> > > > interface that phy-ocelot-serdes will see.
-> > > >
-> > > > In the MFD configuration, an IORESOURCE_REG resource will exist for the
-> > > > device. Utilize this resource to be able to function in both syscon and
-> > > > non-syscon configurations.
-> > >
-> > > Applied to phy/next, thanks
-> >
-> > Please read the netdev FAQ. Patches sent to netdev contain the tree that
-> > the submitter wishes the patches to be applied to.
-> >
-> > As a result, I see davem has just picked up the *entire* series which
-> > means that all patches are in net-next now. net-next is immutable.
-> >
-> > In any case, IMHO if this kind of fly-by cherry-picking from patch
-> > series is intended, it should be mentioned during review to give a
-> > chance for other maintainers to respond and give feedback. Not all
-> > submitters will know how individual maintainers work. Not all
-> > maintainers know how other maintainers work.
+> On Sun, Mar 19, 2023 at 10:15:55AM +0100, Takashi Iwai wrote:
+> > On Sun, 19 Mar 2023 08:57:03 +0100,
+> > Takashi Iwai wrote:
+> > > 
+> > > On Sun, 19 Mar 2023 04:28:53 +0100,
+> > > Takashi Sakamoto wrote:
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > On Sat, Mar 18, 2023 at 09:20:05AM +0900, Takashi Sakamoto wrote:
+> > > > > On Fri, Mar 17, 2023 at 07:51:27PM +0000, John Keeping wrote:
+> > > > > > snd_usb_queue_pending_output_urbs() may be called from
+> > > > > > snd_pcm_ops::ack() which means the PCM stream is locked.
+> > > > > > 
+> > > > > > For the normal case where the call back into the PCM core is via
+> > > > > > prepare_output_urb() the "_under_stream_lock" variant of
+> > > > > > snd_pcm_period_elapsed() is called, but when an error occurs and the
+> > > > > > stream is stopped as XRUN then snd_pcm_xrun() tries to recursively lock
+> > > > > > the stream which results in deadlock.
+> > > > > > 
+> > > > > > Follow the example of snd_pcm_period_elapsed() by adding
+> > > > > > snd_pcm_xrun_under_stream_lock() and use this when the PCM substream
+> > > > > > lock is already held.
+> > > > > > 
+> > > > > > Signed-off-by: John Keeping <john@metanate.com>
+> > > > > > ---
+> > > > > >  include/sound/pcm.h     |  1 +
+> > > > > >  sound/core/pcm_native.c | 28 ++++++++++++++++++++++++----
+> > > > > >  sound/usb/endpoint.c    | 18 +++++++++++-------
+> > > > > >  3 files changed, 36 insertions(+), 11 deletions(-)
+> > > > >  
+> > > > > The name of added kernel API implies me that you refer to existent
+> > > > > 'snd_pcm_period_elapsed_under_stream_lock()' which I added to Linux
+> > > > > v5.14.
+> > > > > 
+> > > > > In my opinion, unlike the version of period elapsed API, the version of
+> > > > > XRUN API seems not to be necessarily required to ALSA PCM core, since PCM
+> > > > > device drivers can implement .pointer callback in the part of PCM operation.
+> > > > > When the callback returns SNDRV_PCM_POS_XRUN, ALSA PCM application get
+> > > > > occurence of XRUN as a result of any operation relevant to hwptr movement
+> > > > > (e.g. SNDRV_PCM_IOCTL_HWSYNC).
+> > > > > 
+> > > > > Therefore I think it possible to fix the issue without the proposed
+> > > > > kernel API. I can assume some scenario:
+> > > > > 
+> > > > > 1. Failure at tasklet for URB completion
+> > > > > 
+> > > > > It is softIRQ context. The stream lock is not acquired. It doesn't
+> > > > > matter to call current XRUN API.
+> > > > > 
+> > > > > 2. Failure at PCM operation called by ALSA PCM application
+> > > > > 
+> > > > > It is process context. The stream lock is acquired before calling driver
+> > > > > code. When detecting any type of failure, driver code stores the state.
+> > > > > Then .pointer callback should return SNDRV_PCM_POS_XRUNrefering to
+> > > > > the state.
+> > > > 
+> > > > Although being inexperienced to hack driver for USB audio device class,
+> > > > I attempt to post the patch to fix the issue of recursive stream lock.
+> > > > I apologies in advance since the patch is not tested yet...
+> > > > 
+> > > > The 'in_xrun' member is newly added to 'struct snd_usb_substream'. When
+> > > > detecting any failure, false is assigned to the member. The assignment
+> > > > is expected to be done in both softIRQ context, and process context with
+> > > > stream lock, thus no need to take care of cocurrent access (e.g. by usage
+> > > > of WRITE_ONCE/READ_ONCE).
+> > > > 
+> > > > Typical ALSA PCM application periodically calls PCM operation which calls
+> > > > .pointer in driver code. As I described, returning SNDRV_PCM_POS_XRUN
+> > > > takes ALSA PCM core to handle XRUN state of PCM substream in the timing.
+> > > > 
+> > > > The negative point of the patch is the delay of XRUN notification to user
+> > > > space application. In the point, I think the new kernel API introduced by
+> > > > your patch has advantage.
+> > > > 
+> > > > The in_xrun member can be replaced with a kind of EP_STATE_
+> > > > enumerations; i.e. EP_STATE_XRUN. In the case, we need some care so that
+> > > > the state should be referred from pcm.c.
+> > > 
+> > > Thanks for the patch.  That would work, but the shortcoming side of
+> > > this implementation is that it misses stopping / reporting the error
+> > > immediately but waiting for the next pointer update.
+> > > 
+> > > It might be simpler if we perform the xrun handling in the caller
+> > > side, i.e. a change like below:
+> > > 
+> > > --- a/sound/core/pcm_lib.c
+> > > +++ b/sound/core/pcm_lib.c
+> > > @@ -2155,6 +2155,8 @@ int pcm_lib_apply_appl_ptr(struct snd_pcm_substream *substream,
+> > >  		ret = substream->ops->ack(substream);
+> > >  		if (ret < 0) {
+> > >  			runtime->control->appl_ptr = old_appl_ptr;
+> > > +			if (ret == -EPIPE)
+> > > +				__snd_pcm_xrun(substream);
+> > >  			return ret;
+> > >  		}
+> > >  	}
+> > > 
+> > > ... and let the caller returning -EPIPE for XRUN:
+> > 
+> > and that misses the XRUN in the case of non-stream-lock.
+> > A revised version is below.
 > 
-> Once again netdev seems to have applied patches from other subsystems
-> without review/ack.  What makes netdev different to any other kernel
-> subsystem?  What would happen if other random maintainers started
-> applying netdev patches without appropriate review?  I suspect someone
-> would become understandably grumpy.
+> Yes, it looks like this also solves the problem.  If you roll this into
+> a proper patch feel free to add:
+> 
+> Tested-by: John Keeping <john@metanate.com>
 
-Why again are you addressing your whinge to me? I'm not one of the
-netdev maintainers, but I've pointed out what happens in netdev
-land. However, you seem to *not* want to discuss it directly with
-DaveM/Jakub/Paolo - as illustrated again with yet another response
-to *me* rather than addressing your concerns *to* the people who
-you have an issue with.
+Thanks, then I'll submit a proper patch.
 
-This is not communication. Effectively, this is sniping, because
-rather than discussing it with the individuals concerned, you are
-instead preferring to discuss it with others.
 
-Please stop this.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Takashi
