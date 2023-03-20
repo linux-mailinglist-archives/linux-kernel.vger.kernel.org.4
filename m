@@ -2,660 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BB26C114A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0256C114F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjCTLzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S231332AbjCTL4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 07:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjCTLzH (ORCPT
+        with ESMTP id S231158AbjCTL4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:55:07 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170BA233D0;
-        Mon, 20 Mar 2023 04:54:54 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 3D9FD24E292;
-        Mon, 20 Mar 2023 19:54:51 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 19:54:51 +0800
-Received: from [192.168.60.83] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 19:54:50 +0800
-Message-ID: <6923fefa-0358-c496-fc97-cb84bbb42d9a@starfivetech.com>
-Date:   Mon, 20 Mar 2023 19:54:49 +0800
+        Mon, 20 Mar 2023 07:56:47 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C3B241D3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:56:44 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id k37so1600737lfv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112; t=1679313402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WnSpd3VjsTbvqmg4BcKQ/9NURcg/rAIqLX+pwVi5FI=;
+        b=sMX/yAzahLvSZ2O7ssNj+wjXOD9WO5l+DuNliL+EhQAmP/YIvRNGdWdqJCMItb1vss
+         bpJIcpXCLdLd2ZIWKfrjXOL3YTdQHD4NM2+HqMuxrtyGXlmxMe9SUq+dXNteUJ31B0xs
+         k9kSqnmV9MGJMKjP1bMZQL+X6F7m6FpFZYVR6UTGmsmZsNZACubjWQiDA63pMwJHe2XN
+         7JBO9a8Jv1UerSYBCS5/Tuto6hlpIqs9bj5iRMDDIGT9aMGQvCFMrHuEtHtFnXT2Jmux
+         KnTdaOOMJ6gq5WcUCm3/9+vYtOiJwBni1V0YNy14IPXYpfX+5KREWyXtAQQw8nvvpy6k
+         0ySg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679313402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5WnSpd3VjsTbvqmg4BcKQ/9NURcg/rAIqLX+pwVi5FI=;
+        b=zUeQsBhiRvhJzkv9Wjrb3EVS4Or1oFHDfdO+7JCoItFjRGizl/tlquniUjlIkMqL1S
+         0Oi63x8Jq2f0N9zNpNDF9ig9k4axRKcSiKCOyR600mVlvJwzqU85bRS/BhVsvzbys0hL
+         cqamp3aanq3eX1Q/WXXNfazMwXfvg+ZXfB5ZN1f3B5rNdExDkkkDnlZmSaiUml6lJVWG
+         50DYhhywQwreoHUOAJlmGpWcmX9zzJ88HHmKU3VOJcLY0eX8RvkrdJTStW/2NHFt2yRh
+         mLS+x32aAG9Qd5hQgW2Nem7mGl2tU+eDHY3wqIoVg8CzJx/RG4Bf+gAlV4k8cjp9TFKp
+         Y4Vg==
+X-Gm-Message-State: AO0yUKWLQ6bwYL3Ax55Fwj892lbgBP//DRKWdbGiRtAWnktnN4bYCOKo
+        wSj67lHj7nx7y/z5g7QvQyyWIXR5TaPovpEu/n4z2g==
+X-Google-Smtp-Source: AK7set+uol6QXCpUJGg+606D4BmiExi6ejKvFgAF2wx4JM478RT93ChjtVBqpMxFAYSup+7ZQnS9pQ==
+X-Received: by 2002:a05:6512:92e:b0:4dd:b766:37ae with SMTP id f14-20020a056512092e00b004ddb76637aemr5689585lft.13.1679313401967;
+        Mon, 20 Mar 2023 04:56:41 -0700 (PDT)
+Received: from vp-pc.. (109-252-122-203.nat.spd-mgts.ru. [109.252.122.203])
+        by smtp.gmail.com with ESMTPSA id y26-20020a05651c021a00b0029571d505a1sm1720217ljn.80.2023.03.20.04.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 04:56:41 -0700 (PDT)
+From:   Viktor Prutyanov <viktor@daynix.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
+Subject: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+Date:   Mon, 20 Mar 2023 14:54:51 +0300
+Message-Id: <20230320115451.1232171-1-viktor@daynix.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 4/6] media: cadence: Add support for external dphy and
- JH7110 SoC
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Eugen Hristev" <eugen.hristev@collabora.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
- <20230310120553.60586-5-jack.zhu@starfivetech.com>
- <20230312113338.GC2545@pendragon.ideasonboard.com>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <20230312113338.GC2545@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
+indicates that the driver passes extra data along with the queue
+notifications.
 
+In a split queue case, the extra data is 16-bit available index. In a
+packed queue case, the extra data is 1-bit wrap counter and 15-bit
+available index.
 
-On 2023/3/12 19:33, Laurent Pinchart wrote:
-> Hi Jack,
-> 
-> Thank you for the patch.
-> 
-> On Fri, Mar 10, 2023 at 08:05:51PM +0800, Jack Zhu wrote:
->> Add support for external MIPI D-PHY and Starfive JH7110 SoC which
->> has the cadence csi2 receiver.
-> 
-> This patch bundles multiple changes that should be split into their own
-> patches. I'll comment on that below.
+Add support for this feature for both MMIO and PCI.
 
-Thank you for your suggestion and comments. I'll split the patch.
+Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
+---
+ drivers/virtio/virtio_mmio.c       | 15 ++++++++++++++-
+ drivers/virtio/virtio_pci_common.c | 10 ++++++++++
+ drivers/virtio/virtio_pci_common.h |  4 ++++
+ drivers/virtio/virtio_pci_legacy.c |  2 +-
+ drivers/virtio/virtio_pci_modern.c |  2 +-
+ drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
+ include/linux/virtio_ring.h        |  2 ++
+ include/uapi/linux/virtio_config.h |  6 ++++++
+ 8 files changed, 55 insertions(+), 3 deletions(-)
 
-> 
->> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> ---
->>  drivers/media/platform/cadence/cdns-csi2rx.c | 273 ++++++++++++++++++-
->>  1 file changed, 263 insertions(+), 10 deletions(-)
->> 
->> diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
->> index cc3ebb0d96f6..7e7b096869fc 100644
->> --- a/drivers/media/platform/cadence/cdns-csi2rx.c
->> +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
->> @@ -10,9 +10,11 @@
->>  #include <linux/io.h>
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->> +#include <linux/of_device.h>
->>  #include <linux/of_graph.h>
->>  #include <linux/phy/phy.h>
->>  #include <linux/platform_device.h>
->> +#include <linux/reset.h>
->>  #include <linux/slab.h>
->>  
->>  #include <media/v4l2-ctrls.h>
->> @@ -30,6 +32,12 @@
->>  #define CSI2RX_STATIC_CFG_DLANE_MAP(llane, plane)	((plane) << (16 + (llane) * 4))
->>  #define CSI2RX_STATIC_CFG_LANES_MASK			GENMASK(11, 8)
->>  
->> +#define CSI2RX_DPHY_LANE_CTRL_REG		0x40
->> +#define CSI2RX_DPHY_CL_RST			BIT(16)
->> +#define CSI2RX_DPHY_DL_RST(i)			BIT((i) + 12)
->> +#define CSI2RX_DPHY_CL_EN			BIT(4)
->> +#define CSI2RX_DPHY_DL_EN(i)			BIT(i)
->> +
->>  #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
->>  
->>  #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
->> @@ -37,6 +45,7 @@
->>  
->>  #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
->>  #define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
->> +#define CSI2RX_STREAM_DATA_CFG_EN_DATA_TYPE_0	BIT(7)
->>  #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
->>  
->>  #define CSI2RX_STREAM_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x00c)
->> @@ -54,8 +63,19 @@ enum csi2rx_pads {
->>  	CSI2RX_PAD_MAX,
->>  };
->>  
->> +struct csi2rx_fmt {
->> +	u32				code;
->> +	u8				bpp;
->> +	u32				dt;
->> +};
->> +
->> +struct csi2rx_platform_info {
->> +	unsigned long sys_clk_rate;
->> +};
->> +
->>  struct csi2rx_priv {
->>  	struct device			*dev;
->> +	unsigned int			power_count;
->>  	unsigned int			count;
->>  
->>  	/*
->> @@ -68,6 +88,9 @@ struct csi2rx_priv {
->>  	struct clk			*sys_clk;
->>  	struct clk			*p_clk;
->>  	struct clk			*pixel_clk[CSI2RX_STREAMS_MAX];
->> +	struct reset_control		*sys_rst;
->> +	struct reset_control		*p_rst;
->> +	struct reset_control		*pixel_rst[CSI2RX_STREAMS_MAX];
->>  	struct phy			*dphy;
->>  
->>  	u8				lanes[CSI2RX_LANES_MAX];
->> @@ -83,14 +106,100 @@ struct csi2rx_priv {
->>  	/* Remote source */
->>  	struct v4l2_subdev		*source_subdev;
->>  	int				source_pad;
->> +
->> +	const struct csi2rx_platform_info	*platform_info;
->> +};
->> +
->> +static const struct csi2rx_fmt formats[] = {
->> +	{
->> +		.code	= MEDIA_BUS_FMT_SRGGB10_1X10,
->> +		.bpp	= 10,
->> +		.dt	= 0x2b,
->> +	},
->> +	{
->> +		.code	= MEDIA_BUS_FMT_SGRBG10_1X10,
->> +		.bpp	= 10,
->> +		.dt	= 0x2b,
->> +	},
->> +	{
->> +		.code	= MEDIA_BUS_FMT_SGBRG10_1X10,
->> +		.bpp	= 10,
->> +		.dt	= 0x2b,
->> +	},
->> +	{
->> +		.code	= MEDIA_BUS_FMT_SBGGR10_1X10,
->> +		.bpp	= 10,
->> +		.dt	= 0x2b,
->> +	},
->>  };
->>  
->> +static u8 csi2rx_get_bpp(u32 code)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(formats); i++) {
->> +		if (formats[i].code == code)
->> +			return formats[i].bpp;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static u32 csi2rx_get_dt(u32 code)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(formats); i++) {
->> +		if (formats[i].code == code)
->> +			return formats[i].dt;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static s64 csi2rx_get_pixel_rate(struct csi2rx_priv *csi2rx)
->> +{
->> +	struct v4l2_ctrl *ctrl;
->> +
->> +	ctrl = v4l2_ctrl_find(csi2rx->source_subdev->ctrl_handler,
->> +			      V4L2_CID_PIXEL_RATE);
->> +	if (!ctrl) {
->> +		dev_err(csi2rx->dev, "no pixel rate control in subdev: %s\n",
->> +			csi2rx->source_subdev->name);
->> +		return -EINVAL;
->> +	}
->> +
->> +	return v4l2_ctrl_g_ctrl_int64(ctrl);
->> +}
->> +
->>  static inline
->>  struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
->>  {
->>  	return container_of(subdev, struct csi2rx_priv, subdev);
->>  }
->>  
->> +static int csi2rx_s_power(struct v4l2_subdev *subdev, int on)
-> 
-> .s_power() is deprecated, please drop it. You should use runtime PM
-> instead (with autosuspend). In .s_stream(), you should call
-> pm_runtime_resume_and_get() when starting streaming, and
-> pm_runtime_put_autosuspend() when stopping streaming.
-> 
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 3ff746e3f24a..05da5ad7fc93 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -285,6 +285,19 @@ static bool vm_notify(struct virtqueue *vq)
+ 	return true;
+ }
+ 
++static bool vm_notify_with_data(struct virtqueue *vq)
++{
++	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
++	__le32 data = vring_fill_notification_data(vq);
++
++	writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
++
++	return true;
++}
++
++#define VM_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
++	? vm_notify_with_data : vm_notify)
++
+ /* Notify all virtqueues on an interrupt. */
+ static irqreturn_t vm_interrupt(int irq, void *opaque)
+ {
+@@ -397,7 +410,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
+ 
+ 	/* Create the vring */
+ 	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
+-				 true, true, ctx, vm_notify, callback, name);
++			true, true, ctx, VM_NOTIFY(vdev), callback, name);
+ 	if (!vq) {
+ 		err = -ENOMEM;
+ 		goto error_new_virtqueue;
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index a6c86f916dbd..bf7daad9ce65 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
+ 	/* we write the queue's selector into the notification register to
+ 	 * signal the other end */
+ 	iowrite16(vq->index, (void __iomem *)vq->priv);
++
++	return true;
++}
++
++bool vp_notify_with_data(struct virtqueue *vq)
++{
++	__le32 data = vring_fill_notification_data(vq);
++
++	iowrite32(data, (void __iomem *)vq->priv);
++
+ 	return true;
+ }
+ 
+diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
+index 23112d84218f..9a7212dcbb32 100644
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -105,6 +105,7 @@ static struct virtio_pci_device *to_vp_device(struct virtio_device *vdev)
+ void vp_synchronize_vectors(struct virtio_device *vdev);
+ /* the notify function used when creating a virt queue */
+ bool vp_notify(struct virtqueue *vq);
++bool vp_notify_with_data(struct virtqueue *vq);
+ /* the config->del_vqs() implementation */
+ void vp_del_vqs(struct virtio_device *vdev);
+ /* the config->find_vqs() implementation */
+@@ -114,6 +115,9 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ 		struct irq_affinity *desc);
+ const char *vp_bus_name(struct virtio_device *vdev);
+ 
++#define VP_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
++	? vp_notify : vp_notify_with_data)
++
+ /* Setup the affinity for a virtqueue:
+  * - force the affinity for per vq vector
+  * - OR over all affinities for shared MSI
+diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
+index 2257f1b3d8ae..b98e994cae48 100644
+--- a/drivers/virtio/virtio_pci_legacy.c
++++ b/drivers/virtio/virtio_pci_legacy.c
+@@ -131,7 +131,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	vq = vring_create_virtqueue(index, num,
+ 				    VIRTIO_PCI_VRING_ALIGN, &vp_dev->vdev,
+ 				    true, false, ctx,
+-				    vp_notify, callback, name);
++				    VP_NOTIFY(&vp_dev->vdev), callback, name);
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+index 9e496e288cfa..7fcd8af5af7e 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -321,7 +321,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	vq = vring_create_virtqueue(index, num,
+ 				    SMP_CACHE_BYTES, &vp_dev->vdev,
+ 				    true, true, ctx,
+-				    vp_notify, callback, name);
++				    VP_NOTIFY(&vp_dev->vdev), callback, name);
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 41144b5246a8..8de0800efee7 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -2752,6 +2752,21 @@ void vring_del_virtqueue(struct virtqueue *_vq)
+ }
+ EXPORT_SYMBOL_GPL(vring_del_virtqueue);
+ 
++__le32 vring_fill_notification_data(struct virtqueue *_vq)
++{
++	struct vring_virtqueue *vq = to_vvq(_vq);
++	u16 next;
++
++	if (vq->packed_ring)
++		next = (vq->packed.next_avail_idx & ~(1 << 15)) |
++			((u16)vq->packed.avail_wrap_counter << 15);
++	else
++		next = virtio16_to_cpu(_vq->vdev, vq->split.vring.avail->idx);
++
++	return cpu_to_le32(((u32)next << 16) | _vq->index);
++}
++EXPORT_SYMBOL_GPL(vring_fill_notification_data);
++
+ /* Manipulates transport-specific feature bits. */
+ void vring_transport_features(struct virtio_device *vdev)
+ {
+@@ -2771,6 +2786,8 @@ void vring_transport_features(struct virtio_device *vdev)
+ 			break;
+ 		case VIRTIO_F_ORDER_PLATFORM:
+ 			break;
++		case VIRTIO_F_NOTIFICATION_DATA:
++			break;
+ 		default:
+ 			/* We don't understand this bit. */
+ 			__virtio_clear_bit(vdev, i);
+diff --git a/include/linux/virtio_ring.h b/include/linux/virtio_ring.h
+index 8b95b69ef694..3222324fb244 100644
+--- a/include/linux/virtio_ring.h
++++ b/include/linux/virtio_ring.h
+@@ -117,4 +117,6 @@ void vring_del_virtqueue(struct virtqueue *vq);
+ void vring_transport_features(struct virtio_device *vdev);
+ 
+ irqreturn_t vring_interrupt(int irq, void *_vq);
++
++__le32 vring_fill_notification_data(struct virtqueue *_vq);
+ #endif /* _LINUX_VIRTIO_RING_H */
+diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
+index 3c05162bc988..2c712c654165 100644
+--- a/include/uapi/linux/virtio_config.h
++++ b/include/uapi/linux/virtio_config.h
+@@ -99,6 +99,12 @@
+  */
+ #define VIRTIO_F_SR_IOV			37
+ 
++/*
++ * This feature indicates that the driver passes extra data (besides
++ * identifying the virtqueue) in its device notifications.
++ */
++#define VIRTIO_F_NOTIFICATION_DATA	38
++
+ /*
+  * This feature indicates that the driver can reset a queue individually.
+  */
+-- 
+2.35.1
 
-OK, will drop .s_power(). The csi2rx will do not call phy_init()/
-phy_exit(). The work of phy_init()/phy_exit() is integrated into PHY
-driver.
-
->> +{
->> +	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
->> +
->> +	mutex_lock(&csi2rx->lock);
->> +
->> +	if (on) {
->> +		if (!csi2rx->power_count)
->> +			phy_init(csi2rx->dphy);
->> +
->> +		csi2rx->power_count++;
->> +	} else {
->> +		csi2rx->power_count--;
->> +
->> +		if (!csi2rx->power_count)
->> +			phy_exit(csi2rx->dphy);
->> +	}
->> +
->> +	mutex_unlock(&csi2rx->lock);
->> +	return 0;
->> +}
->> +
->>  static void csi2rx_reset(struct csi2rx_priv *csi2rx)
->>  {
->>  	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
->> @@ -101,17 +210,70 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
->>  	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
->>  }
->>  
->> +static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
-> 
-> Support for external DPHYs should be split to a patch of its own.
-
-OK, will split the patch.
-
-> 
->> +{
->> +	union phy_configure_opts opts = { };
->> +	struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
->> +	struct v4l2_subdev_format sd_fmt;
->> +	s64 pixel_rate;
->> +	int ret;
->> +	u8 bpp;
->> +
->> +	sd_fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
->> +	sd_fmt.pad = 0;
->> +
->> +	ret = v4l2_subdev_call(csi2rx->source_subdev, pad, get_fmt, NULL,
->> +			       &sd_fmt);
-> 
-> Don't call .get_fmt() on the source. A subdev driver should only look at
-> its own formats. As the format on the source pad of the source must
-> match the format on the sink pad of this subdev when the pipeline is
-> valid, you can use the format on the sink pad here.
-
-OK, will drop. This step of work is not necessary.
-
-> 
->> +	if (ret)
->> +		return ret;
->> +
->> +	bpp = csi2rx_get_bpp(sd_fmt.format.code);
->> +	if (!bpp)
->> +		return -EINVAL;
->> +
->> +	pixel_rate = csi2rx_get_pixel_rate(csi2rx);
->> +	if (pixel_rate < 0)
->> +		return pixel_rate;
->> +
->> +	ret = phy_mipi_dphy_get_default_config(pixel_rate, bpp,
->> +					       csi2rx->num_lanes, cfg);
->> +	if (ret)
->> +		return ret;
->> +
->> +	phy_pm_runtime_get_sync(csi2rx->dphy);
->> +
->> +	ret = phy_power_on(csi2rx->dphy);
->> +	if (ret)
->> +		goto out;
->> +
->> +	ret = phy_configure(csi2rx->dphy, &opts);
->> +	if (ret) {
->> +		/* Can't do anything if it fails. Ignore the return value. */
->> +		phy_power_off(csi2rx->dphy);
->> +		goto out;
->> +	}
->> +
->> +out:
->> +	phy_pm_runtime_put_sync(csi2rx->dphy);
->> +
->> +	return ret;
->> +}
->> +
->>  static int csi2rx_start(struct csi2rx_priv *csi2rx)
->>  {
->> +	struct v4l2_subdev_format sd_fmt;
->>  	unsigned int i;
->>  	unsigned long lanes_used = 0;
->>  	u32 reg;
->> +	u32 dt = 0;
->>  	int ret;
->>  
->>  	ret = clk_prepare_enable(csi2rx->p_clk);
->>  	if (ret)
->>  		return ret;
->>  
->> +	reset_control_deassert(csi2rx->p_rst);
-> 
-> Support for reset controllers should also be split to a patch of its
-> own.
-
-OK, will split the patch according to logic change.
-
-> 
->> +
->>  	csi2rx_reset(csi2rx);
->>  
->>  	reg = csi2rx->num_lanes << 8;
->> @@ -139,6 +301,29 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
->>  	if (ret)
->>  		goto err_disable_pclk;
->>  
->> +	/* Enable DPHY clk and data lanes. */
->> +	if (csi2rx->dphy) {
->> +		reg = CSI2RX_DPHY_CL_EN | CSI2RX_DPHY_CL_RST;
->> +		for (i = 0; i < csi2rx->num_lanes; i++) {
->> +			reg |= CSI2RX_DPHY_DL_EN(csi2rx->lanes[i] - 1);
->> +			reg |= CSI2RX_DPHY_DL_RST(csi2rx->lanes[i] - 1);
->> +		}
->> +
->> +		writel(reg, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
->> +	}
->> +
->> +	sd_fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
->> +	sd_fmt.pad = 0;
->> +
->> +	ret = v4l2_subdev_call(csi2rx->source_subdev, pad, get_fmt, NULL,
->> +			       &sd_fmt);
-> 
-> Same as above regarding the format.
-
-OK, will fix.
-
-> 
->> +	if (ret)
->> +		dev_warn(csi2rx->dev, "Couldn't get format\n");
->> +
->> +	dt = csi2rx_get_dt(sd_fmt.format.code);
->> +	if (!dt)
-> 
-> When you reach this point, the format should be guaranteed to be valid
-> as .set_fmt() will have adjusted it. There should thus be no need to
-> handle errors.
-> 
->> +		dev_warn(csi2rx->dev, "Couldn't get dt\n");
->> +
->>  	/*
->>  	 * Create a static mapping between the CSI virtual channels
->>  	 * and the output stream.
->> @@ -154,6 +339,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
->>  		if (ret)
->>  			goto err_disable_pixclk;
->>  
->> +		reset_control_deassert(csi2rx->pixel_rst[i]);
->> +
->>  		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
->>  		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
->>  
->> @@ -161,6 +348,11 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
->>  		       CSI2RX_STREAM_DATA_CFG_VC_SELECT(i),
->>  		       csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i));
->>  
->> +		if (dt)
->> +			writel(readl(csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i)) |
->> +			       CSI2RX_STREAM_DATA_CFG_EN_DATA_TYPE_0 | dt,
->> +			       csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i));
-> 
-> Support for CSI-2 DT should be split to a patch of its own.
-
-CSI-2 DT is not necessary. I will drop the relevant code.
-
-> 
->> +
->>  		writel(CSI2RX_STREAM_CTRL_START,
->>  		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
->>  	}
->> @@ -169,10 +361,27 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
->>  	if (ret)
->>  		goto err_disable_pixclk;
->>  
->> +	if (csi2rx->platform_info && csi2rx->platform_info->sys_clk_rate > 0)
->> +		clk_set_rate(csi2rx->sys_clk,
->> +			     csi2rx->platform_info->sys_clk_rate);
->> +
->> +	reset_control_deassert(csi2rx->sys_rst);
->> +
->> +	if (csi2rx->dphy) {
->> +		ret = csi2rx_configure_ext_dphy(csi2rx);
->> +		if (ret) {
->> +			dev_err(csi2rx->dev,
->> +				"Failed to configure external DPHY: %d\n", ret);
->> +			goto err_disable_sysclk;
->> +		}
->> +	}
->> +
->>  	clk_disable_unprepare(csi2rx->p_clk);
->>  
->>  	return 0;
->>  
->> +err_disable_sysclk:
->> +	clk_disable_unprepare(csi2rx->sys_clk);
->>  err_disable_pixclk:
->>  	for (; i > 0; i--)
->>  		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
->> @@ -188,18 +397,28 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
->>  	unsigned int i;
->>  
->>  	clk_prepare_enable(csi2rx->p_clk);
->> +	reset_control_assert(csi2rx->sys_rst);
->>  	clk_disable_unprepare(csi2rx->sys_clk);
->>  
->>  	for (i = 0; i < csi2rx->max_streams; i++) {
->>  		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
->>  
->> +		reset_control_assert(csi2rx->pixel_rst[i]);
->>  		clk_disable_unprepare(csi2rx->pixel_clk[i]);
->>  	}
->>  
->> +	reset_control_assert(csi2rx->p_rst);
->>  	clk_disable_unprepare(csi2rx->p_clk);
->>  
->>  	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
->>  		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
->> +
->> +	if (csi2rx->dphy) {
->> +		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
->> +
->> +		if (phy_power_off(csi2rx->dphy))
->> +			dev_warn(csi2rx->dev, "Couldn't power off DPHY\n");
->> +	}
->>  }
->>  
->>  static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
->> @@ -236,11 +455,16 @@ static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
->>  	return ret;
->>  }
->>  
->> +static const struct v4l2_subdev_core_ops csi2rx_core_ops = {
->> +	.s_power = csi2rx_s_power,
->> +};
->> +
->>  static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
->>  	.s_stream	= csi2rx_s_stream,
->>  };
->>  
->>  static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
->> +	.core		= &csi2rx_core_ops,
->>  	.video		= &csi2rx_video_ops,
->>  };
->>  
->> @@ -250,6 +474,8 @@ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
->>  {
->>  	struct v4l2_subdev *subdev = notifier->sd;
->>  	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
->> +	struct v4l2_device *v4l2_dev;
->> +	int ret;
->>  
->>  	csi2rx->source_pad = media_entity_get_fwnode_pad(&s_subdev->entity,
->>  							 s_subdev->fwnode,
->> @@ -265,6 +491,15 @@ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
->>  	dev_dbg(csi2rx->dev, "Bound %s pad: %d\n", s_subdev->name,
->>  		csi2rx->source_pad);
->>  
->> +	/* ensure source subdev register subdev node */
->> +	v4l2_dev = notifier->v4l2_dev ? notifier->v4l2_dev :
->> +		notifier->parent->v4l2_dev;
->> +	if (v4l2_dev) {
->> +		ret = v4l2_device_register_subdev_nodes(v4l2_dev);
-> 
-> This belongs to the main driver (the camss in your case), not this
-> driver.
-
-OK, will fix.
-
-> 
->> +		if (ret < 0)
->> +			return ret;
->> +	}
->> +
->>  	return media_create_pad_link(&csi2rx->source_subdev->entity,
->>  				     csi2rx->source_pad,
->>  				     &csi2rx->subdev.entity, 0,
->> @@ -299,21 +534,23 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
->>  		return PTR_ERR(csi2rx->p_clk);
->>  	}
->>  
->> +	csi2rx->sys_rst =
->> +		devm_reset_control_get_optional_exclusive(&pdev->dev,
->> +							  "sys_rst");
->> +	if (IS_ERR(csi2rx->sys_rst))
->> +		return PTR_ERR(csi2rx->sys_rst);
->> +
->> +	csi2rx->p_rst =
->> +		devm_reset_control_get_optional_exclusive(&pdev->dev, "p_rst");
->> +	if (IS_ERR(csi2rx->p_rst))
->> +		return PTR_ERR(csi2rx->p_rst);
->> +
->>  	csi2rx->dphy = devm_phy_optional_get(&pdev->dev, "dphy");
->>  	if (IS_ERR(csi2rx->dphy)) {
->>  		dev_err(&pdev->dev, "Couldn't get external D-PHY\n");
->>  		return PTR_ERR(csi2rx->dphy);
->>  	}
->>  
->> -	/*
->> -	 * FIXME: Once we'll have external D-PHY support, the check
->> -	 * will need to be removed.
->> -	 */
->> -	if (csi2rx->dphy) {
->> -		dev_err(&pdev->dev, "External D-PHY not supported yet\n");
->> -		return -EINVAL;
->> -	}
->> -
->>  	ret = clk_prepare_enable(csi2rx->p_clk);
->>  	if (ret) {
->>  		dev_err(&pdev->dev, "Couldn't prepare and enable P clock\n");
->> @@ -343,13 +580,14 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
->>  	 * FIXME: Once we'll have internal D-PHY support, the check
->>  	 * will need to be removed.
->>  	 */
->> -	if (csi2rx->has_internal_dphy) {
->> +	if (!csi2rx->dphy && csi2rx->has_internal_dphy) {
->>  		dev_err(&pdev->dev, "Internal D-PHY not supported yet\n");
->>  		return -EINVAL;
->>  	}
->>  
->>  	for (i = 0; i < csi2rx->max_streams; i++) {
->>  		char clk_name[16];
->> +		char rst_name[16];
->>  
->>  		snprintf(clk_name, sizeof(clk_name), "pixel_if%u_clk", i);
->>  		csi2rx->pixel_clk[i] = devm_clk_get(&pdev->dev, clk_name);
->> @@ -357,6 +595,13 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
->>  			dev_err(&pdev->dev, "Couldn't get clock %s\n", clk_name);
->>  			return PTR_ERR(csi2rx->pixel_clk[i]);
->>  		}
->> +
->> +		snprintf(rst_name, sizeof(rst_name), "pixel_if%u_rst", i);
->> +		csi2rx->pixel_rst[i] =
->> +			devm_reset_control_get_optional_exclusive(&pdev->dev,
->> +								  rst_name);
->> +		if (IS_ERR(csi2rx->pixel_rst[i]))
->> +			return PTR_ERR(csi2rx->pixel_rst[i]);
->>  	}
->>  
->>  	return 0;
->> @@ -425,6 +670,7 @@ static int csi2rx_probe(struct platform_device *pdev)
->>  	csi2rx = kzalloc(sizeof(*csi2rx), GFP_KERNEL);
->>  	if (!csi2rx)
->>  		return -ENOMEM;
->> +	csi2rx->platform_info = of_device_get_match_data(&pdev->dev);
->>  	platform_set_drvdata(pdev, csi2rx);
->>  	csi2rx->dev = &pdev->dev;
->>  	mutex_init(&csi2rx->lock);
->> @@ -441,6 +687,7 @@ static int csi2rx_probe(struct platform_device *pdev)
->>  	csi2rx->subdev.dev = &pdev->dev;
->>  	v4l2_subdev_init(&csi2rx->subdev, &csi2rx_subdev_ops);
->>  	v4l2_set_subdevdata(&csi2rx->subdev, &pdev->dev);
->> +	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->>  	snprintf(csi2rx->subdev.name, V4L2_SUBDEV_NAME_SIZE, "%s.%s",
->>  		 KBUILD_MODNAME, dev_name(&pdev->dev));
->>  
->> @@ -462,6 +709,7 @@ static int csi2rx_probe(struct platform_device *pdev)
->>  	dev_info(&pdev->dev,
->>  		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
->>  		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
->> +		 csi2rx->dphy ? "external" :
->>  		 csi2rx->has_internal_dphy ? "internal" : "no");
->>  
->>  	return 0;
->> @@ -483,8 +731,13 @@ static int csi2rx_remove(struct platform_device *pdev)
->>  	return 0;
->>  }
->>  
->> +static const struct csi2rx_platform_info stf_jh7110_info = {
->> +	.sys_clk_rate = 297000000,
-> 
-> This sounds like something that would be better handled through the
-> assigned-clock-rates property in DT.
-
-OK, will use assigned-clock-rates property in DT.
-
-> 
->> +};
->> +
->>  static const struct of_device_id csi2rx_of_table[] = {
->>  	{ .compatible = "cdns,csi2rx" },
->> +	{ .compatible = "starfive,jh7110-csi2rx", .data = &stf_jh7110_info },
-> 
-> I would move SoC-specific compatible strings before the generic one.
-
-OK, will move it before the generic one.
-
-> Maxime, is there a need to keep the generic compatible string now that
-> we have SoC-specific support ?
-
-The existing bindings state
-
-  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
-
-It might be better to keep the generic compatible string.
-
-> 
->>  	{ },
->>  };
->>  MODULE_DEVICE_TABLE(of, csi2rx_of_table);
-> 
