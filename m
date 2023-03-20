@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DEA6C0922
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4724F6C0924
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjCTDBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S229953AbjCTDBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCTDBC (ORCPT
+        with ESMTP id S229839AbjCTDBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:01:02 -0400
-Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E904EB79;
-        Sun, 19 Mar 2023 20:00:59 -0700 (PDT)
-Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
-        by mail.fintek.com.tw with ESMTP id 32K2xZ3J060873;
-        Mon, 20 Mar 2023 10:59:35 +0800 (+08)
-        (envelope-from peter_hong@fintek.com.tw)
-Received: from [192.168.1.111] (192.168.1.111) by vmMailSRV.fintek.com.tw
- (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Mon, 20 Mar 2023
- 10:59:33 +0800
-Message-ID: <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
-Date:   Mon, 20 Mar 2023 10:59:33 +0800
+        Sun, 19 Mar 2023 23:01:43 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80B61027A
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:01:13 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so14966058pjt.2
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1679281271;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1F7l7Tv9LSQ3FV0WZzvP63T8ZRGBiz+hyWwDqQtTFrk=;
+        b=kXzMdTPb5N8Ul0z7u6rxOEloBxiKexaFqUxNDrFd30XOo5ezApsGP1HtNT7RTMyW2d
+         u5frjVpkc8cDUx76Kc8r8EpcinCtNqlafHj6/p9HKvk2t3DgV6TdfJr+VH8COGR5jfS5
+         1+l/SaT7tsU3hPnrjdAJYLtnnotXCs/CM+sdAsUFrUGltPDwWgcJhddB3iVNddxtgy0m
+         XhIJY6eo263R8BypN1jp9hSISDpEiUE44siXWRE+mSDg5T+LU0zxkFicOQ9nkmJJIdCj
+         J4tZx0uVCakPk3ryFGSR0Xe15X23pKRt3i8CJYiD0BuIUIOiT+H12/SDA6NKxBeORhlS
+         l/Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679281271;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1F7l7Tv9LSQ3FV0WZzvP63T8ZRGBiz+hyWwDqQtTFrk=;
+        b=lPA7saDS8bIyqiwoWSCJyjD2O+szWusXycEzjR+cI5/LnQoH5ASanVeLkm1aRYfdla
+         gAU3pwlKVCYE5NEKAGgTl1dWGKI78nPX6uiSMY81kzJlIRpK1g3KM0W2tnl0zcc1d7Xm
+         oh+ra5ifB9M8ITaEUMUzPg+fHWF0Wcm6C7UvwsU6ImTY87SNYhXEkD3zW1VCSsTTjwbF
+         53Ye3P52ww0YKdGg24kE6MAoD1SC0+0q9gK5k9iADCaz0FVTZJxY7Nz8pz0sAoCL2GCq
+         0EAs8l7gz7BfUWflNajJfA1+OM5eSYHjGr5espTLKK9s9m/8pNR7HF5UOdf9gHn063kh
+         OPUw==
+X-Gm-Message-State: AO0yUKVD7VHzdFoOTRFfkTxQ7PRe2MgQ4yz5k3fj2Me7txenTiCJcKG+
+        8Tf9kQwwU2mxdOJX2HU2/n+uttUlkwVlPu3O5hhN0AHI
+X-Google-Smtp-Source: AK7set+Uhy6In9jfIYEi7amqY8WsA4FKNiLfkNDTI7EQ+zRzGXAZfdS6XBLxKl8ikkYQ+MmFukE+Yg==
+X-Received: by 2002:a17:90a:56:b0:23d:4e9d:2eb0 with SMTP id 22-20020a17090a005600b0023d4e9d2eb0mr16866142pjb.36.1679281271272;
+        Sun, 19 Mar 2023 20:01:11 -0700 (PDT)
+Received: from PXLDJ45XCM.bytedance.net ([61.213.176.5])
+        by smtp.gmail.com with ESMTPSA id y17-20020a170902d65100b001a1c69cc0besm1844972plh.200.2023.03.19.20.01.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 19 Mar 2023 20:01:10 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     glider@google.com, elver@google.com, dvyukov@google.com,
+        akpm@linux-foundation.org, sjpark@amazon.de, jannh@google.com,
+        muchun.song@linux.dev, roman.gushchin@linux.dev
+Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH] mm: kfence: fix PG_slab and memcg_data clearing
+Date:   Mon, 20 Mar 2023 11:00:59 +0800
+Message-Id: <20230320030059.20189-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] can: usb: f81604: add Fintek F81604 support
-Content-Language: en-US
-To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-CC:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mailhol.vincent@wanadoo.fr>, <frank.jungclaus@esd.eu>,
-        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <hpeter+linux_kernel@gmail.com>
-References: <20230317093352.3979-1-peter_hong@fintek.com.tw>
- <ZBRoCVHV3S3ugEoO@localhost.localdomain>
-From:   Peter Hong <peter_hong@fintek.com.tw>
-In-Reply-To: <ZBRoCVHV3S3ugEoO@localhost.localdomain>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.1.111]
-X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27514.001
-X-TM-AS-Result: No-19.988400-8.000000-10
-X-TMASE-MatchedRID: UuaOI1zLN1j/9O/B1c/QyzjNGpWCIvfTlmG/61+LLCeqvcIF1TcLYANw
-        091XoRE6sLe9OFkv+Id3TaF7+lCZvoToZqUCO9J5UgKYbZFF6GjcAmu1xqeets+WYjg3WzyKByy
-        VimjmJJMPHd/OW2VyD6ve1RQ6Ydsa4EtSNBzFpGASEYfcJF0pRdhQO8CvZj/XK36BWK75QOTVr0
-        bDpfV8iIw9rt9E8A4oWo0SBooXS7Tm30AqBxefhDiEPRj9j9rvTJDl9FKHbrmhBPc4ZBrNkb6YV
-        RYkPkYC+JitU/PMe9hkCRQbR4V/6j1I7Q1NCxg0+GYt8f/VhTvGYnoF/CTeZQAheUymmndfsMBr
-        Nxxo1t/wOGawsB401V5974JFP0LmXHEPHmpuRH2DGx/OQ1GV8rHlqZYrZqdI+gtHj7OwNO0CpgE
-        TeT0ynA==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--19.988400-8.000000
-X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27514.001
-X-TM-SNTS-SMTP: E9B5BD1048C40DCF5A422C23447762A0AFA39FCD6982378C40C5FF645BFD0AAA2000:8
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: mail.fintek.com.tw 32K2xZ3J060873
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,102 +71,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+It does not reset PG_slab and memcg_data when KFENCE fails to initialize
+kfence pool at runtime. It is reporting a "Bad page state" message when
+kfence pool is freed to buddy. The checking of whether it is a compound
+head page seems unnecessary sicne we already guarantee this when allocating
+kfence pool, removing the check to simplify the code.
 
-Michal Swiatkowski 於 2023/3/17 下午 09:15 寫道:
-> On Fri, Mar 17, 2023 at 05:33:52PM +0800, Ji-Ze Hong (Peter Hong) wrote:
->
-> --- a/drivers/net/can/usb/Kconfig
-> +++ b/drivers/net/can/usb/Kconfig
-> @@ -147,4 +147,13 @@ config CAN_UCAN
->   	          from Theobroma Systems like the A31-ÂľQ7 and the RK3399-Q7
->   	          (https://www.theobroma-systems.com/rk3399-q7)
->   
-> Hi,
->
-> I am not familiar with CAN, so only style review :)
+Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
+Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ mm/kfence/core.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-Thanks for your reviews :D
-> +
-> +	if (status) {
-> +		dev_err(&dev->dev, "%s: reg: %x data: %x failed: %d\n",
-> +			__func__, reg, data, status);
-> +	}
-> The { and } aren't needed as inside if is only one line.
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index 79c94ee55f97..d66092dd187c 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -561,10 +561,6 @@ static unsigned long kfence_init_pool(void)
+ 		if (!i || (i % 2))
+ 			continue;
+ 
+-		/* Verify we do not have a compound head page. */
+-		if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
+-			return addr;
+-
+ 		__folio_set_slab(slab_folio(slab));
+ #ifdef CONFIG_MEMCG
+ 		slab->memcg_data = (unsigned long)&kfence_metadata[i / 2 - 1].objcg |
+@@ -597,12 +593,26 @@ static unsigned long kfence_init_pool(void)
+ 
+ 		/* Protect the right redzone. */
+ 		if (unlikely(!kfence_protect(addr + PAGE_SIZE)))
+-			return addr;
++			goto reset_slab;
+ 
+ 		addr += 2 * PAGE_SIZE;
+ 	}
+ 
+ 	return 0;
++
++reset_slab:
++	for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
++		struct slab *slab = page_slab(&pages[i]);
++
++		if (!i || (i % 2))
++			continue;
++#ifdef CONFIG_MEMCG
++		slab->memcg_data = 0;
++#endif
++		__folio_clear_slab(slab_folio(slab));
++	}
++
++	return addr;
+ }
+ 
+ static bool __init kfence_init_pool_early(void)
+@@ -632,16 +642,6 @@ static bool __init kfence_init_pool_early(void)
+ 	 * fails for the first page, and therefore expect addr==__kfence_pool in
+ 	 * most failure cases.
+ 	 */
+-	for (char *p = (char *)addr; p < __kfence_pool + KFENCE_POOL_SIZE; p += PAGE_SIZE) {
+-		struct slab *slab = virt_to_slab(p);
+-
+-		if (!slab)
+-			continue;
+-#ifdef CONFIG_MEMCG
+-		slab->memcg_data = 0;
+-#endif
+-		__folio_clear_slab(slab_folio(slab));
+-	}
+ 	memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
+ 	__kfence_pool = NULL;
+ 	return false;
+-- 
+2.11.0
 
-Could I remove the { and } when the logical line to split multi-line ?
-
->> +static int f81604_set_normal_mode(struct net_device *netdev)
->> +{
->> +	struct f81604_port_priv *priv = netdev_priv(netdev);
->> +	int status, i;
->> +	u8 mod_reg_val = 0x00;
-> RCT, mod_reg should be one line above
-
-What mean about "RCT"?
-
-Is this section should change to above like ??
-
-     u8 mod_reg_val;
-     ...
-
-     mod_reg_val = 0;
->> +static int f81604_register_urbs(struct net_device *netdev)
->> +{
->> +	struct f81604_port_priv *priv = netdev_priv(netdev);
->> +	int status, i;
->> +
->> +	for (i = 0; i < F81604_MAX_RX_URBS; ++i) {
->> +		status = usb_submit_urb(priv->read_urb[i], GFP_KERNEL);
->> +		if (status) {
->> +			netdev_warn(netdev, "%s: submit rx urb failed: %d\n",
->> +				    __func__, status);
->> +			return status;
-> Don't know usb subsytem, but shouldn't previously submitted urb be
-> killed?
-
-Yes, I had made kill operations in
-     f81604_start()
-         -> f81604_unregister_urbs()
-
->> +static void f81604_process_rx_packet(struct urb *urb)
->> +{
->> +	struct net_device_stats *stats;
->> +	struct net_device *netdev;
->> +	struct can_frame *cf;
->> +	struct sk_buff *skb;
->> +	u8 *data;
->> +	u8 *ptr;
->> +	int i;
->> +	int count;
-> RCT
->
->> +
->> +	netdev = urb->context;
->> +	stats = &netdev->stats;
->> +	data = urb->transfer_buffer;
-> netdev and data can be set in declaration
-
-why only netdev & data ?? Could I set netdev, stats & data in declaration ?
-
-
->> +/* Called by the usb core when driver is unloaded or device is removed */
->> +static void f81604_disconnect(struct usb_interface *intf)
->> +{
->> +	struct f81604_priv *priv = usb_get_intfdata(intf);
->> +	int i;
->> +
->> +	for (i = 0; i < F81604_MAX_DEV; ++i) {
->> +		if (!priv->netdev[i])
->> +			continue;
->> +
->> +		unregister_netdev(priv->netdev[i]);
->> +		free_candev(priv->netdev[i]);
->> +	}
-> What about closing USB device? It is called brefore disconnect or it
-> should be done here?
-
-When candev close in f81604_close(), It will call f81604_set_reset_mode() to
-make candev to reset mode.
-
-Thanks
