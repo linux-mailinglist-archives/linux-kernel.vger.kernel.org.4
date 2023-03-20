@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A976C0BC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E5E6C0BC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjCTIIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S230308AbjCTIKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjCTIIx (ORCPT
+        with ESMTP id S229599AbjCTIKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:08:53 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED798193D9;
-        Mon, 20 Mar 2023 01:08:47 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9C37824E26D;
-        Mon, 20 Mar 2023 16:08:45 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 16:08:45 +0800
-Received: from [192.168.60.83] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 16:08:44 +0800
-Message-ID: <e58bce6f-105f-6c39-f898-0dcae5a23edb@starfivetech.com>
-Date:   Mon, 20 Mar 2023 16:08:44 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/6] media: dt-bindings: cadence-csi2rx: Convert to DT
- schema
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
+        Mon, 20 Mar 2023 04:10:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26525BB8E;
+        Mon, 20 Mar 2023 01:10:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B514361265;
+        Mon, 20 Mar 2023 08:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA8C9C4339C;
+        Mon, 20 Mar 2023 08:09:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679299800;
+        bh=UpyOnbmz84P/0j1392CDgxerKpDK7NnKKNJvKX27NIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N9d8qt3EgAKEeQxrvjJZHsgkoKw58zCiciKWvivUs4y7houYJJT1O15v2y7LRcSaM
+         o+1nRgmuRJ+lfPuAzlEurX90LGIUME88kIvZVKoclR2lGGOVfL+w2NZWAfC3r1/1o0
+         yqKs3dxQTAAkl5kpRbsL5b2pQcs8bPgc0ote8GGE=
+Date:   Mon, 20 Mar 2023 09:09:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Haotien Hsu <haotienh@nvidia.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Eugen Hristev" <eugen.hristev@collabora.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
- <20230310120553.60586-3-jack.zhu@starfivetech.com>
- <20230312100057.GE707@pendragon.ideasonboard.com>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <20230312100057.GE707@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, JC Kuo <jckuo@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>
+Subject: Re: [PATCH] usb: xhci: tegra: fix sleep in atomic call
+Message-ID: <ZBgU0GtLAVdaBQQ1@kroah.com>
+References: <20230320074028.186282-1-haotienh@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320074028.186282-1-haotienh@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,395 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 20, 2023 at 03:40:28PM +0800, Haotien Hsu wrote:
+> From: Wayne Chang <waynec@nvidia.com>
+> 
+> When we set the OTG port to Host mode, we observed the following splat:
+> [  167.057718] BUG: sleeping function called from invalid context at
+> include/linux/sched/mm.h:229
+> [  167.057872] Workqueue: events tegra_xusb_usb_phy_work
+> [  167.057954] Call trace:
+> [  167.057962]  dump_backtrace+0x0/0x210
+> [  167.057996]  show_stack+0x30/0x50
+> [  167.058020]  dump_stack_lvl+0x64/0x84
+> [  167.058065]  dump_stack+0x14/0x34
+> [  167.058100]  __might_resched+0x144/0x180
+> [  167.058140]  __might_sleep+0x64/0xd0
+> [  167.058171]  slab_pre_alloc_hook.constprop.0+0xa8/0x110
+> [  167.058202]  __kmalloc_track_caller+0x74/0x2b0
+> [  167.058233]  kvasprintf+0xa4/0x190
+> [  167.058261]  kasprintf+0x58/0x90
+> [  167.058285]  tegra_xusb_find_port_node.isra.0+0x58/0xd0
+> [  167.058334]  tegra_xusb_find_port+0x38/0xa0
+> [  167.058380]  tegra_xusb_padctl_get_usb3_companion+0x38/0xd0
+> [  167.058430]  tegra_xhci_id_notify+0x8c/0x1e0
+> [  167.058473]  notifier_call_chain+0x88/0x100
+> [  167.058506]  atomic_notifier_call_chain+0x44/0x70
+> [  167.058537]  tegra_xusb_usb_phy_work+0x60/0xd0
+> [  167.058581]  process_one_work+0x1dc/0x4c0
+> [  167.058618]  worker_thread+0x54/0x410
+> [  167.058650]  kthread+0x188/0x1b0
+> [  167.058672]  ret_from_fork+0x10/0x20
+> 
+> The function tegra_xusb_padctl_get_usb3_companion eventually calls
+> tegra_xusb_find_port and this in turn calls kasprintf which might sleep
+> and so cannot be called from an atomic context.
+> 
+> Fix this by moving the call to tegra_xusb_padctl_get_usb3_companion to
+> the tegra_xhci_id_work function where it is really needed.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
 
+What commit id does this fix?  And does it need to be backported to
+older kernels?
 
-On 2023/3/12 19:09, Laurent Pinchart wrote:
-> Hi Jack,
+> ---
+>  drivers/usb/host/xhci-tegra.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> Thank you for the patch.
-> 
-> On Fri, Mar 10, 2023 at 08:05:49PM +0800, Jack Zhu wrote:
->> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
->> to DT schema format and add new properties.
-> 
-> This would have been easier to review if the patch had been split in
-> two, with conversion to YAML first, and then addition of new properties.
-> Generally speaking, one patch should contain a single logical change.
-> 
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index 1ff22f675930..af0185bacc70 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * NVIDIA Tegra xHCI host controller driver
+>   *
+> - * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
+> + * Copyright (c) 2014-2023, NVIDIA CORPORATION. All rights reserved.
 
-OK, will split the patch into two patches.
+Please submit copyright updates separately, showing that there really
+was copyright updates during those years as that is independent of this
+fix and does not need to be backported anywhere.
 
->> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> ---
->>  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
->>  .../bindings/media/cdns,csi2rx.yaml           | 163 ++++++++++++++++++
->>  MAINTAINERS                                   |   1 +
->>  3 files changed, 164 insertions(+), 100 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->> deleted file mode 100644
->> index 6b02a0657ad9..000000000000
->> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
->> +++ /dev/null
->> @@ -1,100 +0,0 @@
->> -Cadence MIPI-CSI2 RX controller
->> -===============================
->> -
->> -The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
->> -lanes in input, and 4 different pixel streams in output.
->> -
->> -Required properties:
->> -  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
->> -  - reg: base address and size of the memory mapped region
->> -  - clocks: phandles to the clocks driving the controller
->> -  - clock-names: must contain:
->> -    * sys_clk: main clock
->> -    * p_clk: register bank clock
->> -    * pixel_if[0-3]_clk: pixel stream output clock, one for each stream
->> -                         implemented in hardware, between 0 and 3
->> -
->> -Optional properties:
->> -  - phys: phandle to the external D-PHY, phy-names must be provided
->> -  - phy-names: must contain "dphy", if the implementation uses an
->> -               external D-PHY
->> -
->> -Required subnodes:
->> -  - ports: A ports node with one port child node per device input and output
->> -           port, in accordance with the video interface bindings defined in
->> -           Documentation/devicetree/bindings/media/video-interfaces.txt. The
->> -           port nodes are numbered as follows:
->> -
->> -           Port Description
->> -           -----------------------------
->> -           0    CSI-2 input
->> -           1    Stream 0 output
->> -           2    Stream 1 output
->> -           3    Stream 2 output
->> -           4    Stream 3 output
->> -
->> -           The stream output port nodes are optional if they are not
->> -           connected to anything at the hardware level or implemented
->> -           in the design.Since there is only one endpoint per port,
->> -           the endpoints are not numbered.
->> -
->> -
->> -Example:
->> -
->> -csi2rx: csi-bridge@0d060000 {
->> -	compatible = "cdns,csi2rx";
->> -	reg = <0x0d060000 0x1000>;
->> -	clocks = <&byteclock>, <&byteclock>
->> -		 <&coreclock>, <&coreclock>,
->> -		 <&coreclock>, <&coreclock>;
->> -	clock-names = "sys_clk", "p_clk",
->> -		      "pixel_if0_clk", "pixel_if1_clk",
->> -		      "pixel_if2_clk", "pixel_if3_clk";
->> -
->> -	ports {
->> -		#address-cells = <1>;
->> -		#size-cells = <0>;
->> -
->> -		port@0 {
->> -			reg = <0>;
->> -
->> -			csi2rx_in_sensor: endpoint {
->> -				remote-endpoint = <&sensor_out_csi2rx>;
->> -				clock-lanes = <0>;
->> -				data-lanes = <1 2>;
->> -			};
->> -		};
->> -
->> -		port@1 {
->> -			reg = <1>;
->> -
->> -			csi2rx_out_grabber0: endpoint {
->> -				remote-endpoint = <&grabber0_in_csi2rx>;
->> -			};
->> -		};
->> -
->> -		port@2 {
->> -			reg = <2>;
->> -
->> -			csi2rx_out_grabber1: endpoint {
->> -				remote-endpoint = <&grabber1_in_csi2rx>;
->> -			};
->> -		};
->> -
->> -		port@3 {
->> -			reg = <3>;
->> -
->> -			csi2rx_out_grabber2: endpoint {
->> -				remote-endpoint = <&grabber2_in_csi2rx>;
->> -			};
->> -		};
->> -
->> -		port@4 {
->> -			reg = <4>;
->> -
->> -			csi2rx_out_grabber3: endpoint {
->> -				remote-endpoint = <&grabber3_in_csi2rx>;
->> -			};
->> -		};
->> -	};
->> -};
->> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->> new file mode 100644
->> index 000000000000..ed573a67f93e
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->> @@ -0,0 +1,163 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Cadence MIPI-CSI2 RX controller
->> +
->> +maintainers:
->> +  - Maxime Ripard <mripard@kernel.org>
->> +
->> +description:
->> +  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
->> +  lanes in input, and 4 different pixel streams in output.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - cdns,csi2rx
-> 
-> The existing bindings state
-> 
->   - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
-> 
-> This should thus be
-> 
->   compatible:
->     items:
->       - enum:
->           - vendor1,device1
-> 	  - ...
->       - const: cdns,csi2rx
-> 
-> The trouble is that the existing bindings are not used in mainline and
-> don't specify any SoC-specific compatible string, so I don't know what
-> to indicate for vendor1,device1. One option would be to add the StarFive
-> compatible string already:
-> 
->   compatible:
->     items:
->       - enum:
->           - starfive,jh7110-csi2rx
->       - const: cdns,csi2rx
-> 
-> The example below should be updated accordingly.
-> 
+thanks,
 
-Will alter it according your opinion. Thanks.
-
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: CSI2Rx system clock
->> +      - description: Gated Register bank clock for APB interface
->> +      - description: pixel Clock for Stream interface 0
->> +      - description: pixel Clock for Stream interface 1
->> +      - description: pixel Clock for Stream interface 2
->> +      - description: pixel Clock for Stream interface 3
->> +
->> +  clock-names:
->> +    items:
->> +      - const: sys
->> +      - const: reg_bank
->> +      - const: pixel_if0
->> +      - const: pixel_if1
->> +      - const: pixel_if2
->> +      - const: pixel_if3
-> 
-> This changes the clock names and breaks compatibility with the driver.
-> The existing names must be preserved.
-> 
-
-OK, will use the existing names.
-
->> +
->> +  resets:
->> +    items:
->> +      - description: CSI2Rx system reset
->> +      - description: Gated Register bank reset for APB interface
->> +      - description: pixel reset for Stream interface 0
->> +      - description: pixel reset for Stream interface 1
->> +      - description: pixel reset for Stream interface 2
->> +      - description: pixel reset for Stream interface 3
->> +
->> +  reset-names:
->> +    items:
->> +      - const: sys
->> +      - const: reg_bank
->> +      - const: pixel_if0
->> +      - const: pixel_if1
->> +      - const: pixel_if2
->> +      - const: pixel_if3
-> 
-> Let's move the addition of the resets and reset-names properties to a
-> patch separate from the YAML conversion to make it easier to review them
-> independently.
-
-OK, will do. Thank.
-
-> 
->> +
->> +  phys:
->> +    maxItems: 1
->> +    description: MIPI D-PHY
->> +
->> +  phy-names:
->> +    items:
->> +      - const: dphy
->> +
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +
->> +    properties:
->> +      port@0:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description:
->> +          Input port node, single endpoint describing the CSI-2 transmitter.
->> +
->> +        properties:
->> +          endpoint:
->> +            $ref: video-interfaces.yaml#
->> +            unevaluatedProperties: false
->> +
->> +            properties:
->> +              bus-type:
->> +                enum:
->> +                  - 4
-> 
-> You can simplify this to
-> 
->               bus-type:
-> 	        const: 4
-> 
-
-OK, will fix
-
->> +
->> +              clock-lanes:
->> +                maximum: 4
->> +
->> +              data-lanes:
->> +                minItems: 1
->> +                maxItems: 4
->> +                items:
->> +                  maximum: 4
-> 
-> Does the IP core support clock and data lanes remapping ?
-
-Only data lanes remapping is supported.
-Will change it to the below:
-
-		 clock-lanes:
-		   const: 0
-
-> 
->> +
->> +            required:
->> +              - clock-lanes
->> +              - data-lanes
->> +
->> +      port@1:
->> +        $ref: /schemas/graph.yaml#/properties/port
->> +        description:
->> +          Output port node
-> 
-> This is also a change compared to the existing bindings, and it will
-> break backward compatibility. You should have four output ports.
-
-OK, will fix.
-
-> 
->> +
->> +    required:
->> +      - port@0
->> +      - port@1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - ports
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    csi2rx: csi@0d060000 {
-> 
-> The csi2rx label is never referenced, you can drop it.
-
-OK, will drop it.
-
-> 
->> +        compatible = "cdns,csi2rx";
->> +        reg = <0x0d060000 0x1000>;
->> +        clocks = <&byteclock 7>, <&byteclock 6>,
->> +                 <&coreclock 8>, <&coreclock 9>,
->> +                 <&coreclock 10>, <&coreclock 11>;
->> +        clock-names = "sys", "reg_bank",
->> +                      "pixel_if0", "pixel_if1",
->> +                      "pixel_if2", "pixel_if3";
->> +        resets = <&bytereset 9>, <&bytereset 4>,
->> +                 <&corereset 5>, <&corereset 6>,
->> +                 <&corereset 7>, <&corereset 8>;
->> +        reset-names = "sys", "reg_bank",
->> +                      "pixel_if0", "pixel_if1",
->> +                      "pixel_if2", "pixel_if3";
->> +        phys = <&csi_phy>;
->> +        phy-names = "dphy";
->> +
->> +        ports {
->> +                #address-cells = <1>;
->> +                #size-cells = <0>;
->> +
->> +                port@0 {
->> +                    reg = <0>;
->> +
->> +                    csi2rx_in_sensor: endpoint {
->> +                        remote-endpoint = <&sensor_out_csi2rx>;
->> +                        clock-lanes = <0>;
->> +                        data-lanes = <1 2>;
->> +                    };
->> +                };
->> +
->> +                port@1 {
->> +                    reg = <1>;
->> +
->> +                    csi2rx_out_grabber0: endpoint {
->> +                        remote-endpoint = <&grabber0_in_csi2rx>;
->> +                    };
->> +                };
->> +        };
->> +    };
->> +
->> +...
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 8ddef8669efb..b2e7ca5603c3 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -4632,6 +4632,7 @@ M:	Maxime Ripard <mripard@kernel.org>
->>  L:	linux-media@vger.kernel.org
->>  S:	Maintained
->>  F:	Documentation/devicetree/bindings/media/cdns,*.txt
->> +F:	Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
->>  F:	drivers/media/platform/cadence/cdns-csi2*
->>  
->>  CADENCE NAND DRIVER
-> 
+greg k-h
