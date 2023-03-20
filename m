@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D766C08EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0268A6C08EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjCTC3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 22:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S229514AbjCTCgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 22:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjCTC3M (ORCPT
+        with ESMTP id S229460AbjCTCgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 22:29:12 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B71CF54;
-        Sun, 19 Mar 2023 19:29:06 -0700 (PDT)
-Received: from [172.16.12.33] (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 331BD6802DA;
-        Mon, 20 Mar 2023 10:28:55 +0800 (CST)
-Message-ID: <879d18af-e3a9-e953-1b3a-99965f74f63e@rock-chips.com>
-Date:   Mon, 20 Mar 2023 10:28:55 +0800
+        Sun, 19 Mar 2023 22:36:53 -0400
+Received: from out-19.mta0.migadu.com (out-19.mta0.migadu.com [91.218.175.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3251EBE4
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 19:36:51 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 10:36:45 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1679279809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bgQAiGefSASwrILG20+TjVn3CY38eGKM4K8VV4CahxU=;
+        b=VZJYaWxQ1RsUe99l8y8YOyhkKTiBBJV0ophB+rC549zbG0668w6Xi2fK4lcLvl2e8jkI4O
+        PzD3k3tlGfIlDqVANFxYVbYsKR5kYiEnFBkLphPH81HrN/eIfdss6OGXodsbL3bbMRnK5L
+        J/df7CwKRhs55hnfBSpXSi1xUjWapCI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     fancer.lancer@gmail.com,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v7 3/5] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <ZBfGvRL8cHuj1tJF@chq-MS-7D45>
+References: <20230315012840.6986-1-cai.huoqing@linux.dev>
+ <20230315012840.6986-4-cai.huoqing@linux.dev>
+ <02216197-6cbd-319d-1015-bfb4449ead85@metafoo.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/4] usb: typec: tcpm: fix cc role at port reset
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20230313025843.17162-1-frank.wang@rock-chips.com>
- <20230313025843.17162-2-frank.wang@rock-chips.com>
- <ZBA8Y/dbozOk2df7@kuha.fi.intel.com>
- <f0f0ac72-0a90-da9e-f686-49c21a76866b@rock-chips.com>
- <ZBRN11OwtkvXk1Hd@kuha.fi.intel.com>
- <d5d1880b-2852-a168-b155-26f972a96457@roeck-us.net>
-From:   Frank Wang <frank.wang@rock-chips.com>
-In-Reply-To: <d5d1880b-2852-a168-b155-26f972a96457@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRgdSFZISU1MS0xCTRpLTU9VEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
-        Y+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PTo6Mio4Qj0WVhI4KjIRPwEw
-        IT0wFEtVSlVKTUxCSUxCSEhNS09DVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFPTkJCNwY+
-X-HM-Tid: 0a86fcd9289c2eb5kusn331bd6802da
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <02216197-6cbd-319d-1015-bfb4449ead85@metafoo.de>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+On 18 3月 23 06:49:41, Lars-Peter Clausen wrote:
+> On 3/14/23 18:28, Cai Huoqing wrote:
+> > Add support for HDMA NATIVE, as long the IP design has set
+> > 
+> > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-regs.h b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > new file mode 100644
+> > index 000000000000..0a6032aa1a33
+> > --- /dev/null
+> > +++ b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > @@ -0,0 +1,130 @@
+> > 
+> > +struct dw_hdma_v0_ch_regs {
+> > [...]
+> > +	u32 msi_msgdata;			/* 0x00a8 */
+> > +	u32 padding_2[21];			/* 0x00ac..0x00e8 */
+> The comment here is wrong. This goes all the way to 0x00fc.
 
-On 2023/3/17 20:47, Guenter Roeck wrote:
-> On 3/17/23 04:24, Heikki Krogerus wrote:
->> On Wed, Mar 15, 2023 at 10:55:20AM +0800, Frank Wang wrote:
->>> Hi Heikki,
->>>
->>> On 2023/3/14 17:20, Heikki Krogerus wrote:
->>>> On Mon, Mar 13, 2023 at 10:58:40AM +0800, Frank Wang wrote:
->>>>> In the current implementation, the tcpm set CC1/CC2 role to open when
->>>>> it do port reset would cause the VBUS removed by the Type-C partner.
->>>>>
->>>>> The Figure 4-20 in the TCPCI 2.0 specification show that the CC1/CC2
->>>>> role should set to 01b (Rp) or 10b (Rd) at Power On or Reset stage
->>>>> in DRP initialization and connection detection.
->>>>>
->>>>> So set CC1/CC2 to Rd to fix it.
->>>>>
->>>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
->>>>> ---
->>>>>    drivers/usb/typec/tcpm/tcpm.c | 2 +-
->>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c 
->>>>> b/drivers/usb/typec/tcpm/tcpm.c
->>>>> index a0d943d785800..66de02a56f512 100644
->>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>>>> @@ -4851,7 +4851,7 @@ static void run_state_machine(struct 
->>>>> tcpm_port *port)
->>>>>            break;
->>>>>        case PORT_RESET:
->>>>>            tcpm_reset_port(port);
->>>>> -        tcpm_set_cc(port, TYPEC_CC_OPEN);
->>>>> +        tcpm_set_cc(port, TYPEC_CC_RD);
->>>>>            tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->>>>>                       PD_T_ERROR_RECOVERY);
->>>>>            break;
->>>> Will this work if the port is for example source only?
->>>
->>> Yeah, this only set at port reset stage and CC value will be set again
->>> (Rd for Sink, Rp_* for Source) when start toggling.
->>
->> Okay. Let's wait for comments from Guenter.
->>
->
-> Figure 4-20 is specifically for dual role ports. Also, start toggling 
-> would not
-> happen if the low level driver doesn't have a start_toggling callback. 
-> I think this
-> may require some tweaking based on the port type or, rather, 
-> tcpm_default_state().
-> Something like
->
->     tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ? 
-> TYPEC_CC_RD : tcpm_rp_cc(port));
+Will fix, if send next version.
 
-To amend likes above make sense, I shall fix it later.
+Thanks,
+Cai-
 
-
-BR.
-Frank
-
->
-> Thanks,
-> Guenter
->
+> > +} __packed;
+> > +
+> 
