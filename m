@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBDF6C226B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBAD6C226D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjCTUSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S230395AbjCTUTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjCTUSj (ORCPT
+        with ESMTP id S229610AbjCTUTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:18:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF991E9D8;
-        Mon, 20 Mar 2023 13:18:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6080614E6;
-        Mon, 20 Mar 2023 20:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26EA9C433EF;
-        Mon, 20 Mar 2023 20:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679343515;
-        bh=kCBWJI0OErTst/5QhqoBa5yOjBl4Dx/YTIf9ZhEnLYE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=s/yYmhwLnKzkvUw2LminwOH+fNfM0lolyFwxU/hoHIkE9WqGWXAEjLQYQYeNFU7Zl
-         6USGWKDAkti/Cahw5TYeI1Mho1hO0GQEZ2ge5GwK9uNz5vZwWeBc5q6CggN4U5SBss
-         JqHuH9QJZzZkwEX4M7isVZ7liYV0LV4/Ejt92TobUJ9D+EO62sugRGO0srmycMqnGu
-         nmfFaMa+iLwDdfSK1290hlKo4Ao43yvHDMxDEmFrxZDSqop0XbJIiN+s+rKh9XLWk0
-         I7h300pSSP6ONGtvfMWQO4S4QH5R6l9Jnb5P9M6M0+0b/ovLAE0jBOlnIxSx/j323H
-         qPlx+6NjHHZpw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id A84E01540395; Mon, 20 Mar 2023 13:18:34 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 13:18:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcutorture: Convert
- schedule_timeout_uninterruptible() to mdelay() in rcu_torture_stall()
-Message-ID: <7a414721-25fa-485c-91a5-13d3149073fe@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230320032422.4010801-1-qiang1.zhang@intel.com>
+        Mon, 20 Mar 2023 16:19:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E846910EE;
+        Mon, 20 Mar 2023 13:19:45 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 83AB721972;
+        Mon, 20 Mar 2023 20:19:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679343584; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=7ucnq/15x0Rp5y93lmb1JxxHhCgn0FI/1MqBXviDdYc=;
+        b=DOXtZuIVccyZaRhxA73eVSlad8fdHLPJfr2kZztTvM1xKfX1WjG5kvtwwpanJxT77cZdFH
+        E9+Mf9ZOG4EgEXVgS0BpBzX+GecwKEd0d7UjiaN2qHLVE0zC7P6HpC/5/VxuktkCghmrj+
+        Bdq6CxAaTjjnt1qyIbk6txfx8x+0t3o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679343584;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=7ucnq/15x0Rp5y93lmb1JxxHhCgn0FI/1MqBXviDdYc=;
+        b=crtaprWVbsl8tnFtDT6lz5ogviRpiqtcUqYIZ78+qWdjBes3waaBVPPIXNXZLZRPnRIaX8
+        vmdVjcL1GbIjjxCQ==
+Received: from bernhard.suse.de (bernhard.suse.de [10.160.4.191])
+        by relay2.suse.de (Postfix) with ESMTP id 5F60B2C141;
+        Mon, 20 Mar 2023 20:19:44 +0000 (UTC)
+Received: by bernhard.suse.de (Postfix, from userid 16894)
+        id 49ADAE0EDD; Mon, 20 Mar 2023 21:19:44 +0100 (CET)
+From:   "Bernhard M. Wiedemann" <bwiedemann@suse.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        linux-kernel@vger.kernel.org,
+        "Bernhard M. Wiedemann" <bwiedemann@suse.de>
+Subject: [PATCH] perf jevents: Sort list of input files
+Date:   Mon, 20 Mar 2023 21:18:41 +0100
+Message-Id: <20230320201841.1133-1-bwiedemann@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320032422.4010801-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 11:24:22AM +0800, Zqiang wrote:
-> For kernels built with enable PREEMPT_NONE and CONFIG_DEBUG_ATOMIC_SLEEP,
-> running the RCU stall tests.
-> 
-> runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4"
-> bootparams="nokaslr console=ttyS0 rcutorture.stall_cpu=30
-> rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_irqsoff=1
-> rcutorture.stall_cpu_block=1" -d
-> 
-> [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
-> [   10.841073] rcu_torture_stall start on CPU 3.
-> [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
-> ....
-> [   10.841108] Call Trace:
-> [   10.841110]  <TASK>
-> [   10.841112]  dump_stack_lvl+0x64/0xb0
-> [   10.841118]  dump_stack+0x10/0x20
-> [   10.841121]  __schedule_bug+0x8b/0xb0
-> [   10.841126]  __schedule+0x2172/0x2940
-> [   10.841157]  schedule+0x9b/0x150
-> [   10.841160]  schedule_timeout+0x2e8/0x4f0
-> [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
-> [   10.841195]  rcu_torture_stall+0x2e8/0x300
-> [   10.841199]  kthread+0x175/0x1a0
-> [   10.841206]  ret_from_fork+0x2c/0x50
-> 
-> The above calltrace occurs in the local_irq_disable/enable() critical
-> section call schedule_timeout(), and invoke schedule_timeout() also
-> implies a quiescent state, of course it also fails to trigger RCU stall,
-> this commit therefore use mdelay() instead of schedule_timeout() to
-> trigger RCU stall.
-> 
-> Suggested-by: Joel Fernandes <joel@joelfernandes.org>
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/rcutorture.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> index d06c2da04c34..a08a72bef5f1 100644
-> --- a/kernel/rcu/rcutorture.c
-> +++ b/kernel/rcu/rcutorture.c
-> @@ -2472,7 +2472,7 @@ static int rcu_torture_stall(void *args)
+Without this, pmu-events.c would be generated with variations in ordering
+depending on non-deterministic filesystem readdir order.
 
-Right here there is:
+I tested that pmu-events.c still has the same number of lines
+and that perf list output works.
 
-			if (stall_cpu_block) {
+This patch was done while working on reproducible builds for openSUSE,
+but also solves issues in Debian [1] and other distributions.
 
-In other words, the rcutorture.stall_cpu_block module parameter says to
-block, even if it is a bad thing to do.  The point of this is to verify
-the error messages that are supposed to be printed on the console when
-this happens.
+[1] https://tests.reproducible-builds.org/debian/rb-pkg/unstable/i386/linux.html
 
->  #ifdef CONFIG_PREEMPTION
->  				preempt_schedule();
->  #else
-> -				schedule_timeout_uninterruptible(HZ);
-> +				mdelay(jiffies_to_msecs(HZ));
+Signed-off-by: Bernhard M. Wiedemann <bwiedemann@suse.de>
+CC: Ian Rogers <irogers@google.com>
+---
+ tools/perf/pmu-events/jevents.py | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-So this really needs to stay schedule_timeout_uninterruptible(HZ).
+diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+index 2bcd07ce609f..f06e1abac7c7 100755
+--- a/tools/perf/pmu-events/jevents.py
++++ b/tools/perf/pmu-events/jevents.py
+@@ -381,10 +381,13 @@ def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+ 
+   return events
+ 
++def sorted_scandir(path: str) -> list[os.DirEntry]:
++  return sorted(os.scandir(path), key=lambda e: e.name)
++
+ def preprocess_arch_std_files(archpath: str) -> None:
+   """Read in all architecture standard events."""
+   global _arch_std_events
+-  for item in os.scandir(archpath):
++  for item in sorted_scandir(archpath):
+     if item.is_file() and item.name.endswith('.json'):
+       for event in read_json_events(item.path, topic=''):
+         if event.name:
+@@ -497,7 +500,7 @@ def preprocess_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
+ def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
+   """Process a JSON file during the main walk."""
+   def is_leaf_dir(path: str) -> bool:
+-    for item in os.scandir(path):
++    for item in sorted_scandir(path):
+       if item.is_dir():
+         return False
+     return True
+@@ -889,7 +892,7 @@ def main() -> None:
+   def ftw(path: str, parents: Sequence[str],
+           action: Callable[[Sequence[str], os.DirEntry], None]) -> None:
+     """Replicate the directory/file walking behavior of C's file tree walk."""
+-    for item in os.scandir(path):
++    for item in sorted_scandir(path):
+       if _args.model != 'all' and item.is_dir():
+         # Check if the model matches one in _args.model.
+         if len(parents) == _args.model.split(',')[0].count('/'):
+@@ -930,7 +933,7 @@ struct compact_pmu_event {
+ 
+ """)
+   archs = []
+-  for item in os.scandir(_args.starting_dir):
++  for item in sorted_scandir(_args.starting_dir):
+     if not item.is_dir():
+       continue
+     if item.name == _args.arch or _args.arch == 'all' or item.name == 'test':
+-- 
+2.35.3
 
-So should there be a change to kernel-parameters.txt to make it
-more clear that this is intended behavior?
-
-						Thanx, Paul
-
->  #endif
->  			} else if (stall_no_softlockup) {
->  				touch_softlockup_watchdog();
-> -- 
-> 2.25.1
-> 
