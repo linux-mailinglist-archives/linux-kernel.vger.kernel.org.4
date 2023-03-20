@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F0E6C0DEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052316C0E11
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjCTKAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S229816AbjCTKEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCTJ7t (ORCPT
+        with ESMTP id S229826AbjCTKDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:59:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA54234E0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679306332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eusdBqGYQDxvoAs8ndLlA22S0Bv6aqSKMaLO9WfcaK4=;
-        b=PCj9RSPjNxS7IM4JlKxc1weYQhCOhuwgxdZae97dYjt6cYcASygz4n08q1xTf3nCZ8IJNY
-        G/FYbghigWCKMsi0HyWRp90ShPmNRUvMrxjPQ7cEQi4o1HOzNIQ6cIeX59QPHxpZJByFIf
-        dcPjULCA/m7xvffrZJijwHbjQE1LmVk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-342-IsDzkIc-Ngu9RtwbicITuw-1; Mon, 20 Mar 2023 05:58:51 -0400
-X-MC-Unique: IsDzkIc-Ngu9RtwbicITuw-1
-Received: by mail-wm1-f72.google.com with SMTP id r35-20020a05600c322300b003edce6ff3b4so1275323wmp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679306330;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eusdBqGYQDxvoAs8ndLlA22S0Bv6aqSKMaLO9WfcaK4=;
-        b=GO0rKDLUoO1++JeKB5Rf8Vr5uA7i8HHcNjC11jEo/4V462LkqkncumnrUkbtApEnMf
-         0YXgl72YnYaOFHECw2plQTXxH8ekDBigGTe9GdOD2mWPT2xWl0Uya3YyCdaqC37SsRCf
-         q2W6H5mwW/D12yGBf9olYjKo4dTzeV6UyRtjom26hM31078tjuAh95B2u+soe4VpDv/F
-         zbE88rVj3q0QeTuQeLpoOzUuFbIYOQ7s0r0nRmKF3NpKECdtxuzRlr2+k7GryKh+7WhC
-         SjPRXgTJJRXn7H5SFYkMomIkCcczq7sfPdx4ShXx2xQwyeIIhZI8ecJXzuP2jo0+roI4
-         2Gpw==
-X-Gm-Message-State: AO0yUKVdym2qfcAWbYspCK1THjvxVEiLXJVBnI4JhOA17Ulbss6j2dgh
-        zLVJv8NXoI/j08GOAdniNtQPrhTtfgxUGecu9/Ie39KEFWf+snFJMoS8/PluYKzGrO1VgEEH94X
-        7wIrR/AZKNm28/fFI66XdvJPy
-X-Received: by 2002:a05:600c:3ca8:b0:3ed:b9ee:b436 with SMTP id bg40-20020a05600c3ca800b003edb9eeb436mr5407677wmb.7.1679306330239;
-        Mon, 20 Mar 2023 02:58:50 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/G9biqC479ICASHvl9gHffWMTV5W8wX+knwU5u+GUa24HaC6JE/ihsB8eKFFScolHb3CqGNQ==
-X-Received: by 2002:a05:600c:3ca8:b0:3ed:b9ee:b436 with SMTP id bg40-20020a05600c3ca800b003edb9eeb436mr5407658wmb.7.1679306329950;
-        Mon, 20 Mar 2023 02:58:49 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id y13-20020a1c4b0d000000b003ed551b139csm10000745wma.36.2023.03.20.02.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 02:58:49 -0700 (PDT)
-Message-ID: <2593f450-f65b-53ea-8b5d-d0bab89c1bfb@redhat.com>
-Date:   Mon, 20 Mar 2023 10:58:48 +0100
+        Mon, 20 Mar 2023 06:03:53 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14C324480;
+        Mon, 20 Mar 2023 03:03:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b0JJpWlugd2o5MpMTp3o2IJpUnrSIzflxoB91j4mHGHuFeao/ksye9qZGId79hSuRo5bljPkFDe41LQ0Z24U5HfiI1L7xCLJnXcJmWL3ff9ftNDboa6vCHJmSDedgOKVE3PgnWGYCGjaBPoaA5ZIkzLixWhK0W4DRAsV6/7peEVWNexupR2vNt+ihdkPOnp5CyHf3W3XckW7fawBEjWDSwTCLSVS5tFThVYR4JdiWqEe49nzLQws7mbNLIxhpH7uTcX42ZeN3ovGVSapL5GJ5EiEtdZxQH+xz1sFrB+R1WMzBwfPyKJfyse+5YLA9+6ti+sXRbuJdvMGSdbIh/uWxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QAylQW3sXI9FYnIiHQ8+m8MLuhX87ACJmo84RM2HKRk=;
+ b=LSC9FTk0b3s+yG/UKoMn1J3itbOWAqBcyBmpR3plnn3qPYRc63yVWl3nasa0QSDeXug7Cgg9ouyeXI75FwrllR5xq03EeHtBgqSlHDJVqw4I1m/bQEbreKxSTmI/ketll5RHe7Pjg/0qoyprQVennufGbVDPeFXXo8oGGQQG/xItAKEkWLMkR6Oz7s/OSgH3mMkqKlJcS0q6wSguBD+2PPnFc2nEqZS/16ByiaSNgEnEhVh2U5l+vlDPrKQQlpXhEhvSRYKImEJDSg0UAIQzeLdrWnE4ytrp+8M7NCgrrexALv7hWccHg8OPxwry6IxqW4wwRwhBixUUNDoRIKVPwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QAylQW3sXI9FYnIiHQ8+m8MLuhX87ACJmo84RM2HKRk=;
+ b=m636ffF9Cc3micb3wU1SM1Ws/D/EEfMSTFK8l3h7s6UZ+SMpgtYKD0wgK8YUNwrut3c+odRA33XQhjx7BRCurNvMajhk4r/6JzkVQVO7PuOAgBl6XhFk0g1ENW+WbmAvH4Na2Gd3Gmru8lf5NnLswEJxRBZk9Vtlhnzig8MoXcM=
+Received: from DM5PR07CA0109.namprd07.prod.outlook.com (2603:10b6:4:ae::38) by
+ PH8PR12MB7421.namprd12.prod.outlook.com (2603:10b6:510:22b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 10:03:08 +0000
+Received: from DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:ae:cafe::63) by DM5PR07CA0109.outlook.office365.com
+ (2603:10b6:4:ae::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Mon, 20 Mar 2023 10:03:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT064.mail.protection.outlook.com (10.13.172.234) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.15 via Frontend Transport; Mon, 20 Mar 2023 10:03:07 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 20 Mar
+ 2023 05:03:07 -0500
+Received: from xhdlakshmis40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 20 Mar 2023 05:03:05 -0500
+From:   Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@amd.com>, <saikrishna12468@gmail.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: [PATCH 0/2] spi: cadence-quadspi: Fix random issues with Xilinx Versal DMA read
+Date:   Mon, 20 Mar 2023 15:29:29 +0530
+Message-ID: <20230320095931.2651714-1-sai.krishna.potthuri@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/4] fs/proc/kcore: Avoid bounce buffer for ktext data
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <2ed992d6604965fd9eea05fed4473ddf54540989.1679209395.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <2ed992d6604965fd9eea05fed4473ddf54540989.1679209395.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT064:EE_|PH8PR12MB7421:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4001432-3b3e-4b71-7aa9-08db292a4e0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +8SxvrwT6OaeFoTk4mQ74KkHPyouVRznr0CwNy8R/QahtGyPXRpZ9XHg9EfERU9Ww+TJ3a4qmLJaVF/JnJSMV6i0vYdnwQg+Kx8nfAe0imO1XmNymPX7t39CvEVIWaCFwiUiFzmGoO96SN/WoBizX41i90gWuB28F1SVpjxpyhD+kglVtdWx1NCFlQwLYVDkZY4EZ+QhjiZqKhXodYpBv/+Cc1m9Iex/LFSFoXSMuTS5++OZIOUEODVl99FnALOVJbT1oBCEjuTU9KeqOouVm7dECuQG76hBDkrDIiSErjo3+6G/RUQqOZRwRLv1AIhqEZgix5dpLb2EmvYB+G5UzpN35T8P71JA/rG7MfHiZahf3f/6A3Io4gQ8NXctx/QbEk3M0BRcSpXCtTBy+m6tZpsJsp7tq3aZMRFpTQMF53Ks509qetvO1YEYxdGxTSGeyS68J32s+jw/uy/GWsLxw1fmSIkQBTZcOPJ1TRqbvILtc/kjnTSSfidmJi9VSBoTWJjKPz5GCLOT0vX2LnJiuIsMo4C/Rm6Q5GAa+SbxqCPl1vEzYQtHLfza/a5wEN7k15RssuH/4phTNzYb3lA+aj/x/TRZHhAxaLxV9rliWebRdhkNlaIdwFlnKCFdzL9H7NF8tVYsvGgpnl/OfwuLSVBS1fapFyL6qJQaMQTBD5HCaaR5i+R9TNrdoquraXQuFVCTQcv6zFOQRlVgkd/17tJzoR5kP72wUNG9KEBoI9c=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199018)(46966006)(36840700001)(40470700004)(103116003)(86362001)(478600001)(82310400005)(316002)(54906003)(356005)(70206006)(70586007)(4326008)(8676002)(6916009)(6666004)(186003)(1076003)(41300700001)(26005)(81166007)(82740400003)(40480700001)(5660300002)(40460700003)(36756003)(4744005)(8936002)(2616005)(336012)(2906002)(83380400001)(47076005)(426003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 10:03:07.7081
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4001432-3b3e-4b71-7aa9-08db292a4e0c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7421
+X-Spam-Status: No, score=-0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.03.23 08:09, Lorenzo Stoakes wrote:
-> Commit df04abfd181a ("fs/proc/kcore.c: Add bounce buffer for ktext data")
-> introduced the use of a bounce buffer to retrieve kernel text data for
-> /proc/kcore in order to avoid failures arising from hardened user copies
-> enabled by CONFIG_HARDENED_USERCOPY in check_kernel_text_object().
-> 
-> We can avoid doing this if instead of copy_to_user() we use _copy_to_user()
-> which bypasses the hardening check. This is more efficient than using a
-> bounce buffer and simplifies the code.
-> 
-> We do so as part an overall effort to eliminate bounce buffer usage in the
-> function with an eye to converting it an iterator read.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
->   fs/proc/kcore.c | 17 +++++------------
->   1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-> index 71157ee35c1a..556f310d6aa4 100644
-> --- a/fs/proc/kcore.c
-> +++ b/fs/proc/kcore.c
-> @@ -541,19 +541,12 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
->   		case KCORE_VMEMMAP:
->   		case KCORE_TEXT:
->   			/*
-> -			 * Using bounce buffer to bypass the
-> -			 * hardened user copy kernel text checks.
-> +			 * We use _copy_to_user() to bypass usermode hardening
-> +			 * which would otherwise prevent this operation.
->   			 */
-> -			if (copy_from_kernel_nofault(buf, (void *)start, tsz)) {
-> -				if (clear_user(buffer, tsz)) {
-> -					ret = -EFAULT;
-> -					goto out;
-> -				}
-> -			} else {
-> -				if (copy_to_user(buffer, buf, tsz)) {
-> -					ret = -EFAULT;
-> -					goto out;
-> -				}
-> +			if (_copy_to_user(buffer, (char *)start, tsz)) {
-> +				ret = -EFAULT;
-> +				goto out;
->   			}
->   			break;
->   		default:
+Update Xilinx Versal external DMA read logic to fix random issues
+- Instead of having the fixed timeout, update the read timeout based on
+the length of the transfer to avoid timeout for larger data size.
+- While switching between external DMA read and indirect read, disable the
+SPI before configuration and enable it after configuration as recommended
+by Octal-SPI Flash Controller specification.
 
-Looks correct to me. The only difference between copy_to_user() and 
-_copy_to_user() is the check_copy_size() check, that ends up calling 
-check_kernel_text_object().
+Sai Krishna Potthuri (2):
+  spi: cadence-quadspi: Update the read timeout based on the length
+  spi: cadence-quadspi: Disable the SPI before reconfiguring
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+ drivers/spi/spi-cadence-quadspi.c | 40 ++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 
