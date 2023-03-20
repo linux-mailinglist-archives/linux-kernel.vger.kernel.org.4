@@ -2,166 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2A96C1F22
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BDF6C1F78
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjCTSKf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 14:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S230239AbjCTSVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjCTSKI (ORCPT
+        with ESMTP id S230012AbjCTSUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:10:08 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB5CC27;
-        Mon, 20 Mar 2023 11:04:17 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id i5so3277681eda.0;
-        Mon, 20 Mar 2023 11:04:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679335405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U1j6/P8OlulkqQ7bmZeujv6O1AXCl23IcsS+L7vXJYI=;
-        b=b+ridgtyoyBPLsYldXU4n7IkWtS0lCfxH7DK7Cu2OhQoRkCzRlUq/eBUHplkLePl27
-         ycZazFDNZ84dCH8w42/3iEUTnX/asnkTRQr8Ym7U7r5Oh9C/KNvGAmpxhR0sJM5NoVzk
-         KAFuj1Vq4eVVkdtlkwiYwwX6Y6rGjBAqYvk+9VVhwG4sBtUyFmCIu/84aBMTI7z+1Y6v
-         aW2hWz9fWWDVc2vwyRZVewsexumQxbXDivcVXD1HklBmPjQs2FjOFzHi26QHILYsh0Cc
-         3plKULcKASeME5SUc/Fp01WUo3KKC6d5lqQdU0pXtZ0k7RdBdH/n6uquLZLNE6X8d+3R
-         Agxg==
-X-Gm-Message-State: AO0yUKVhkrGEQViK6tnm4QWEiSDXUR4DTxtou71ZL9GtuyCAXjZYStQ0
-        g8bCJHbU8POj1M8Tusp4wF7jc2XiZEIDtK425To=
-X-Google-Smtp-Source: AK7set8AGdLETaqUJtnhhgevZ8nVMVu9R5T4Uenh2BbM8CA/P3BMq25yTIsEdnWVxP5t/hwZ6Xl5jcM1Ls1Y84CYR3o=
-X-Received: by 2002:a50:9995:0:b0:4fa:3c0b:74b with SMTP id
- m21-20020a509995000000b004fa3c0b074bmr220250edb.3.1679335405361; Mon, 20 Mar
- 2023 11:03:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com> <20230317072443.3189-1-xueshuai@linux.alibaba.com>
-In-Reply-To: <20230317072443.3189-1-xueshuai@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 20 Mar 2023 19:03:14 +0100
-Message-ID: <CAJZ5v0gXTbxP5VkNWY+UiXM9oiGmtQbnCsMrCW8n40TvQehcWA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] ACPI: APEI: handle synchronous exceptions with
- proper si_code
-To:     Shuai Xue <xueshuai@linux.alibaba.com>, tony.luck@intel.com,
-        james.morse@arm.com, bp@alien8.de
-Cc:     naoya.horiguchi@nec.com, linux-acpi@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        justin.he@arm.com, akpm@linux-foundation.org, ardb@kernel.org,
-        ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
-        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
-        jarkko@kernel.org, lenb@kernel.org, linmiaohe@huawei.com,
-        lvying6@huawei.com, xiexiuqi@huawei.com,
-        zhuo.song@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 14:20:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296EA3B223
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679335929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=2/4zOYZZtH2WSGJk64M37M/sTAQLT68CCaLnUdPqKgU=;
+        b=Tn64OC0ukcDCnDHYZsdi2e2CZM+rAxYIpRnPWNZ6ZnHiF4uXZmQBPrIJkpdiNW9EZGHqL9
+        dpKHBWd40D+E4uO0S5s88w/Oyw64XR5PJFStnbWxFEuphZ9iXjwV7Uvm6f16NAm2cAo/VQ
+        rDVj8txia6Q8h69/GW6cmG3glha3z28=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-zhto1ZHtMbmUSZaKIzWElw-1; Mon, 20 Mar 2023 14:12:04 -0400
+X-MC-Unique: zhto1ZHtMbmUSZaKIzWElw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9500A38173D9;
+        Mon, 20 Mar 2023 18:12:03 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 20A08C15BA0;
+        Mon, 20 Mar 2023 18:12:03 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id CF185403A3E4B; Mon, 20 Mar 2023 15:08:02 -0300 (-03)
+Message-ID: <20230320180332.102837832@redhat.com>
+User-Agent: quilt/0.67
+Date:   Mon, 20 Mar 2023 15:03:32 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@linux.com>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>
+Subject: [PATCH v7 00/13] fold per-CPU vmstats remotely
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 8:25 AM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
->
-> changes since v2 by addressing comments from Naoya:
-> - rename mce_task_work to sync_task_work
-> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
-> - add steps to reproduce this problem in cover letter
-> - Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/T/#mb3dede6b7a6d189dc8de3cf9310071e38a192f8e
->
-> changes since v1:
-> - synchronous events by notify type
-> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
->
-> Currently, both synchronous and asynchronous error are queued and handled
-> by a dedicated kthread in workqueue. And Memory failure for synchronous
-> error is synced by a cancel_work_sync trick which ensures that the
-> corrupted page is unmapped and poisoned. And after returning to user-space,
-> the task starts at current instruction which triggering a page fault in
-> which kernel will send SIGBUS to current process due to VM_FAULT_HWPOISON.
->
-> However, the memory failure recovery for hwpoison-aware mechanisms does not
-> work as expected. For example, hwpoison-aware user-space processes like
-> QEMU register their customized SIGBUS handler and enable early kill mode by
-> seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
-> the process by sending a SIGBUS signal in memory failure with wrong
-> si_code: BUS_MCEERR_AO si_code to the actual user-space process instead of
-> BUS_MCEERR_AR.
->
-> To address this problem:
->
-> - PATCH 1 sets mf_flags as MF_ACTION_REQUIRED on synchronous events which
->   indicates error happened in current execution context
-> - PATCH 2 separates synchronous error handling into task work so that the
->   current context in memory failure is exactly belongs to the task
->   consuming poison data.
->
-> Then, kernel will send SIGBUS with proper si_code in kill_proc().
->
-> Lv Ying and XiuQi also proposed to address similar problem and we discussed
-> about new solution to add a new flag(acpi_hest_generic_data::flags bit 8) to
-> distinguish synchronous event. [2][3] The UEFI community still has no response.
-> After a deep dive into the SDEI TRM, the SDEI notification should be used for
-> asynchronous error. As SDEI TRM[1] describes "the dispatcher can simulate an
-> exception-like entry into the client, **with the client providing an additional
-> asynchronous entry point similar to an interrupt entry point**". The client
-> (kernel) lacks complete synchronous context, e.g. systeam register (ELR, ESR,
-> etc). So notify type is enough to distinguish synchronous event.
->
-> To reproduce this problem:
->
->         # STEP1: enable early kill mode
->         #sysctl -w vm.memory_failure_early_kill=1
->         vm.memory_failure_early_kill = 1
->
->         # STEP2: inject an UCE error and consume it to trigger a synchronous error
->         #einj_mem_uc single
->         0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->         injecting ...
->         triggering ...
->         signal 7 code 5 addr 0xffffb0d75000
->         page not present
->         Test passed
->
-> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
-> and it is not fact.
->
-> After this patch set:
->
->         # STEP1: enable early kill mode
->         #sysctl -w vm.memory_failure_early_kill=1
->         vm.memory_failure_early_kill = 1
->
->         # STEP2: inject an UCE error and consume it to trigger a synchronous error
->         #einj_mem_uc single
->         0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->         injecting ...
->         triggering ...
->         signal 7 code 4 addr 0xffffb0d75000
->         page not present
->         Test passed
->
-> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
-> as we expected.
->
-> [1] https://developer.arm.com/documentation/den0054/latest/
-> [2] https://lore.kernel.org/linux-arm-kernel/20221205160043.57465-4-xiexiuqi@huawei.com/T/
-> [3] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
->
-> Shuai Xue (2):
->   ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
->     synchronous events
->   ACPI: APEI: handle synchronous exceptions in task work
->
->  drivers/acpi/apei/ghes.c | 135 ++++++++++++++++++++++++---------------
->  include/acpi/ghes.h      |   3 -
->  mm/memory-failure.c      |  13 ----
->  3 files changed, 83 insertions(+), 68 deletions(-)
->
-> --
+This patch series addresses the following two problems:
 
-I really need the designated APEI reviewers to give their feedback on this.
+1. A customer provided evidence indicating that a process
+   was stalled in direct reclaim:
+
+ - The process was trapped in throttle_direct_reclaim().
+   The function wait_event_killable() was called to wait condition
+   allow_direct_reclaim(pgdat) for current node to be true.
+   The allow_direct_reclaim(pgdat) examined the number of free pages
+   on the node by zone_page_state() which just returns value in
+   zone->vm_stat[NR_FREE_PAGES].
+
+ - On node #1, zone->vm_stat[NR_FREE_PAGES] was 0.
+   However, the freelist on this node was not empty.
+
+ - This inconsistent of vmstat value was caused by percpu vmstat on
+   nohz_full cpus. Every increment/decrement of vmstat is performed
+   on percpu vmstat counter at first, then pooled diffs are cumulated
+   to the zone's vmstat counter in timely manner. However, on nohz_full
+   cpus (in case of this customer's system, 48 of 52 cpus) these pooled
+   diffs were not cumulated once the cpu had no event on it so that
+   the cpu started sleeping infinitely.
+   I checked percpu vmstat and found there were total 69 counts not
+   cumulated to the zone's vmstat counter yet.
+
+ - In this situation, kswapd did not help the trapped process.
+   In pgdat_balanced(), zone_wakermark_ok_safe() examined the number
+   of free pages on the node by zone_page_state_snapshot() which
+   checks pending counts on percpu vmstat.
+   Therefore kswapd could know there were 69 free pages correctly.
+   Since zone->_watermark = {8, 20, 32}, kswapd did not work because
+   69 was greater than 32 as high watermark.
+
+ 2. With a task that busy loops on a given CPU,
+    the kworker interruption to execute vmstat_update
+    is undesired and may exceed latency thresholds
+    for certain applications.
+
+By having vmstat_shepherd flush the per-CPU counters to the
+global counters from remote CPUs.
+
+This is done using cmpxchg to manipulate the counters,
+both CPU locally (via the account functions),
+and remotely (via cpu_vm_stats_fold).
+
+Thanks to Aaron Tomlin for diagnosing issue 1 and writing
+the initial patch series.
+
+
+Performance details for the kworker interruption:
+
+oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
+oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
+oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
+kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
+ 
+The example above shows an additional 7us for the
+
+        oslat -> kworker -> oslat
+
+switches. In the case of a virtualized CPU, and the vmstat_update
+interruption in the host (of a qemu-kvm vcpu), the latency penalty
+observed in the guest is higher than 50us, violating the acceptable
+latency threshold for certain applications.
+
+v7:
+- Fix allow_direct_reclaim issue by using
+  zone_page_state_snapshot				(Michal Hocko)
+
+v6:
+- Add more information on throttle_direct_reclaim problem 
+  to commit logs	       			       (Michal Hocko)
+
+v5:
+- Drop "mm/vmstat: remove remote node draining"        (Vlastimil Babka)
+- Implement remote node draining for cpu_vm_stats_fold (Vlastimil Babka)
+
+v4:
+- Switch per-CPU vmstat counters to s32, required 
+  by RISC-V, ARC architectures			
+
+v3:
+- Removed unused drain_zone_pages and changes variable (David Hildenbrand)
+- Use xchg instead of cmpxchg in refresh_cpu_vm_stats  (Peter Xu)
+- Add drain_all_pages to vmstat_refresh to make
+  stats more accurate				       (Peter Xu)
+- Improve changelog of
+  "mm/vmstat: switch counter modification to cmpxchg"  (Peter Xu / David)
+- Improve changelog of
+  "mm/vmstat: remove remote node draining"	       (David Hildenbrand)
+
+
+v2:
+- actually use LOCK CMPXCHG on counter mod/inc/dec functions
+  (Christoph Lameter)
+- use try_cmpxchg for cmpxchg loops
+  (Uros Bizjak / Matthew Wilcox)
+
+ arch/arm64/include/asm/percpu.h     |   16 ++
+ arch/loongarch/include/asm/percpu.h |   23 +++-
+ arch/s390/include/asm/percpu.h      |    5 
+ arch/x86/include/asm/percpu.h       |   39 +++---
+ include/asm-generic/percpu.h        |   17 ++
+ include/linux/mmzone.h              |    8 -
+ include/linux/percpu-defs.h         |    2 
+ include/linux/vmstat.h              |    2 
+ kernel/fork.c                       |    2 
+ kernel/scs.c                        |    2 
+ mm/page_alloc.c                     |    5 
+ mm/vmscan.c                         |    2 
+ mm/vmstat.c                         |  440 +++++++++++++++++++++++++++++++++++++++++++++++------------------------------
+ 13 files changed, 361 insertions(+), 202 deletions(-)
+
+
