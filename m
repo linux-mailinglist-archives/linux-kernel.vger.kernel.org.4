@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4252C6C0D86
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769356C0D8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjCTJkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S230290AbjCTJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjCTJj0 (ORCPT
+        with ESMTP id S230168AbjCTJk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:39:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12612211F5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:38:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679305099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cGDPRnw1QH/lCuH6pKurUzPJ4+UKHmuK/kwnuU0RCE0=;
-        b=Uuh/Ncpna9caH9XUeJ3Jj5sDF63DxiWhICF5rbVhy9hj9y1F70vF1woIuNZrllzSHquKqm
-        B5Ll3n51sENiMRps6wZg7JSU/wFB+yoB39uLH/SThir8vTJsSuL8slJ3jpf3rST4GnuZ6w
-        DSZHydZ+/H+fn7x1sjvZIV4dn/ztU5g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-380-1kxEw_PzNvy-IAZ5tS9kKg-1; Mon, 20 Mar 2023 05:38:16 -0400
-X-MC-Unique: 1kxEw_PzNvy-IAZ5tS9kKg-1
-Received: by mail-wm1-f70.google.com with SMTP id m30-20020a05600c3b1e00b003ed31d151ecso4169576wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:38:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679305095;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cGDPRnw1QH/lCuH6pKurUzPJ4+UKHmuK/kwnuU0RCE0=;
-        b=1tGoB24KBidR1DYq6/SSRTB1dngJddTUV2fOKawUMiO4c92os5XyDJ0HwXlBRLdrZN
-         VBZJNhgxPTXO/nZSUFJBWtqyKgdPzoGdJF24xE1PMyG0PHmWB9egAxoihI7TKI2fKgtw
-         jmh5RTw7w35H0rzCLwergo85Wi9ow7qw+TsF2zS777aqIeTBT3qUm37HKYUeoKEVYJFc
-         rVbKJPiQABb5UsSq82dxsPiY32CeVyNxztt0hR63U0Y8v+zBLtzj3RyoxK6GNK6//klV
-         EYMg+h1AXFiv/GqjAzhQakKfraFyVMKNnIVehLxtpe2xy58IWPEp5R+07pwH/3RZeKCo
-         aFJQ==
-X-Gm-Message-State: AO0yUKWSGMBEjfoOHHghMLsYljKdkLPoMzkNtXyDMPVx3+HLK1/j5ep5
-        O7QxrY2oAMBxzd+yTFO7peVmt+uuiw1zjB7woinHgwpf2zZrHOaim+AXTVeWcZXJDAq57fo6oSj
-        VLYibuyyVnadAhXajtZ+1OrjC
-X-Received: by 2002:a05:600c:3109:b0:3eb:3104:efef with SMTP id g9-20020a05600c310900b003eb3104efefmr31671910wmo.31.1679305095225;
-        Mon, 20 Mar 2023 02:38:15 -0700 (PDT)
-X-Google-Smtp-Source: AK7set83QC9uGibITnAfeztg19NJ6jZYL/XkfE0u7xq+2shUYwd5s2SuVvFk8M0/NRZRSHy0WjJUeg==
-X-Received: by 2002:a05:600c:3109:b0:3eb:3104:efef with SMTP id g9-20020a05600c310900b003eb3104efefmr31671894wmo.31.1679305094944;
-        Mon, 20 Mar 2023 02:38:14 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id h10-20020adffa8a000000b002ce3d3d17e5sm8518881wrr.79.2023.03.20.02.38.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 02:38:14 -0700 (PDT)
-Message-ID: <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
-Date:   Mon, 20 Mar 2023 10:38:13 +0100
+        Mon, 20 Mar 2023 05:40:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392FB1285D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:40:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1peC0Z-00034b-RY; Mon, 20 Mar 2023 10:40:51 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1peC0V-005QQr-V7; Mon, 20 Mar 2023 10:40:47 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1peC0V-006PDg-6i; Mon, 20 Mar 2023 10:40:47 +0100
+Date:   Mon, 20 Mar 2023 10:40:47 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     lizhe <sensor1010@163.com>, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v1] nubus: Remove redunant driver match function
+Message-ID: <20230320094047.bepgy6kud7e23nf2@pengutronix.de>
+References: <20230319040816.232446-1-sensor1010@163.com>
+ <3d77744b-ea67-a5bd-8126-f3d56e608add@linux-m68k.org>
+ <4cd5783e.1665.186f9882231.Coremail.sensor1010@163.com>
+ <20230319142058.cfu3ftjfaut3pqzt@pengutronix.de>
+ <04bd0e13-d866-22f4-2b7a-200a31722a46@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-References: <20230311051712.4095040-1-mcgrof@kernel.org>
- <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
- <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
- <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m2rzkgzxqqkppypu"
+Content-Disposition: inline
+In-Reply-To: <04bd0e13-d866-22f4-2b7a-200a31722a46@linux-m68k.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.03.23 01:11, Luis Chamberlain wrote:
-> On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
->> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
->>> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
->>>> I expect to have a machine (with a crazy number of CPUs/devices) available
->>>> in a couple of days (1-2), so no need to rush.
->>>>
->>>> The original machine I was able to reproduce with is blocked for a little
->>>> bit longer; so I hope the alternative I looked up will similarly trigger the
->>>> issue easily.
->>>
->>> OK give this a spin:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
-> 
-> Today I am up to here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
-> 
-> The last patch really would have no justification yet at all unless it
-> does help your case.
 
-Still waiting on the system (the replacement system I was able to grab 
-broke ...).
+--m2rzkgzxqqkppypu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'll let you know once I succeeded in reproducing + testing your fixes.
+Hello Finn,
 
--- 
-Thanks,
+[Cc +=3D Geert]
 
-David / dhildenb
+On Mon, Mar 20, 2023 at 02:49:41PM +1100, Finn Thain wrote:
+> On Sun, 19 Mar 2023, Uwe Kleine-K=F6nig wrote:
+>=20
+> > On Sun, Mar 19, 2023 at 07:01:33PM +0800, lizhe wrote:
+> >=20
+> > > u.kleline-koenig, please
+> > >       delete the path you submitted, this patch does not belong to you
+> >=20
+> > Even if I'd agree, I couldn't. That's up to Finn (I think) to drop this=
+=20
+> > patch again from his queue and then accept a similar patch from you.=20
 
+Iff the patch under discussion is considered for applying: I just
+noticed we want:
+
+	$Subject ~=3D s/redunant/redundant/
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--m2rzkgzxqqkppypu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQYKh4ACgkQj4D7WH0S
+/k5Q8Qf/eM0TX5AUY35OMQjbh4bhF+9sECQUMmh5bp/qII6VCm4DkHHwCR6dR4f9
+3rjwYQJoXb42WF1+wXB1ztcZBRMUn7DbmiyIxDntkObtE5LbiUIOVFzerl+oZyUs
++mTAD8/0OAPIVjWfIbeJKQ39D+kbOQSfOWyRNRCjnkYI0GqC4fJY9rjF3K4+vWub
+QMWIe7HgKMdBFzIX9mjWRlRzRe2JV44+rDxvlYTv2uZiKrvbpeTU8gChGvy0aFj0
+K5J92UOVjCUoy0UuSoFQD9N3Uw9k9NsQWMICYgSMGwWLbmCVuZuBdDvqz4tLKuR2
+4XZzozC0JSWX5V6HRSONJgFVOxQsog==
+=xAEy
+-----END PGP SIGNATURE-----
+
+--m2rzkgzxqqkppypu--
