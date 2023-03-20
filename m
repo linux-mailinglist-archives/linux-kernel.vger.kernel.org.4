@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56046C1E17
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78716C1E1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbjCTReP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S233400AbjCTRep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232922AbjCTRdp (ORCPT
+        with ESMTP id S233379AbjCTReZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:33:45 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B1A900D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:29:24 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id h9so12989199ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:29:24 -0700 (PDT)
+        Mon, 20 Mar 2023 13:34:25 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D0C15543
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:30:09 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id t14so12947750ljd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:30:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679333329;
+        d=linaro.org; s=google; t=1679333374;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xlTFSQpMKcOiQF9NqlvnJbr/20GiB8UJPzfYIL8Tqdc=;
-        b=wEDrOk01qkGuLv4QDcZNhMuMAwegKpjBdFt5Cq53qF+KwLkQY4IuZeBhOfUmaSfut7
-         uTnjjmYCQN5K4l/90jUQsqmO1iEJVxMYi2d3NSV2/wxOtr1JQHS/BowJzvZkcJk4Bc48
-         udgsW8Qvbgjg69ERpkMjvmhSvjzcVC2vveqrCQcFfIVlz7AqsY5Mg41Ox6vsdvMaaW+W
-         Li7NPCdFTLo2C+n3YC4ogC5eOOZQ9h4lotYXtIS938LxFo/fhTTvtUxg1DRktun7RzPE
-         NWXghlvuYRyCSPW3W01ylbEF4QhTZAQUXSn/tHedmQleLk6sK+oj6/l2blKJB8XJO0WL
-         2fUg==
+        bh=8jK9DrWyZ9l5FOuQheMnitoszzLP5bklP79WsjtYCrw=;
+        b=NxDNZaQmNpt9V2d7gP9PLr+YynYtqw6yQq8xe2Pes6rTLqfj1gxn2ZRxL5h42D8l5T
+         7MGXX8FKWA5gclVyS/tFF3LVrIiWNVnP9tbT3XVdSNSfIwx7HoHr7CYwuqau6eNfjbKA
+         /JtlrzdL141zPzqkXFH+GzZQ2MmUKEK4oOn6PPym2PEsv1BD8peug3TqoZA530aLpWSA
+         /Gak1lQs125FX/QSfr478q+3tjnF1eN3kIO2gwypDAHGj8dHF7Ps1cTXX1mgHS1azEau
+         Bn29vUcPdkV6+Ziln0C+C3ATOc4syOHKaIC4r/r/nagp5VgX3Jwsn7PQ1wS1VGFXHVH1
+         QhdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333329;
+        d=1e100.net; s=20210112; t=1679333374;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlTFSQpMKcOiQF9NqlvnJbr/20GiB8UJPzfYIL8Tqdc=;
-        b=WntkD/sAod9UjooNdSCGPFI639SUcH4c82sW01AY8/ctsh8B/XcXOgenkIFm5WU9rl
-         dk5ElNLM5TxL9iUThuWTpus/NIDMz/hpMa1/5mmhQSET7VHLWKUFeTv6n+Eso9NdmzWc
-         o9XxlEU9I2inq8p/JJcWWbgm9JBgTLIaSIn7hYHszOtg1VUbzhUJA7Ia3+nd7PoEQW/U
-         1B9doonHxRkyJcj79R5VjLTXVrMDHjUR2infcaDQ4w5iJznIw/4CyYtS78Fm+Knkv0/D
-         7jQsNv+mXpeteFpZ2nMCDNa8hP8xGrc3fyNTMewzEU7q91HO8B6zMW1+p8cwMNpvPiE7
-         7Ngw==
-X-Gm-Message-State: AO0yUKUIGRRrIfOJIF7nGJEgSMuKTWhN+1X39dlUs88qF40kheTx0OKP
-        oooQaiK2elUvifr1L445g54M1A==
-X-Google-Smtp-Source: AK7set+SmvqU5dzoiy035pXal1iDhjCFjM6hvRf7gJpEHtaNrtqBVmFvmPzI1CUp9+kmObr6y8dJBw==
-X-Received: by 2002:a05:651c:88:b0:295:acea:5885 with SMTP id 8-20020a05651c008800b00295acea5885mr109869ljq.14.1679333329120;
-        Mon, 20 Mar 2023 10:28:49 -0700 (PDT)
+        bh=8jK9DrWyZ9l5FOuQheMnitoszzLP5bklP79WsjtYCrw=;
+        b=c7v1I3ozJjEzlTGCP1zjYy9f/MBZ+o2aJ8cuAKX2CBDIecPq61kpgmudMwiwfrekvy
+         doB0NVinjOG1UDWAJBGh/sFtu8Vp1DSc+LiUrYTwmjfZIOhuQQc8wx/l2wGyQBrarxZf
+         IbeKRcPNsQBWCFwkSOp5Yhtsr3FkeXF8ari3vBWz3BXGSaxFL7GCXwn7OKO0pLt+bu7D
+         L87c49F7ySU7b1Xq0OBvDKcYkgw6AHS11TdSzP1bfKkHgvvBNA2LeKxgPSDDRv5DQSHF
+         Tk2AVXXqPRF2o3JSvShfaV9d2HKCDx6mhK8T+4eJ5BH2f8RMv0QmjLzhOIDplxXQFD3C
+         D/aA==
+X-Gm-Message-State: AO0yUKXU7GSpV8sAl4qNWSq5dxy522XeNXonx4swZr8EDfar2poFYjUa
+        ANqkjJ+jw0DiwGqPoJGIMHz4Bw==
+X-Google-Smtp-Source: AK7set8tBlhF1mbMjSmF9PtGua8bh+FsUyn/Aas9XaRq9KrcxlT2YKjIeRg8r/IwUD/OLeMy0lqQxw==
+X-Received: by 2002:a2e:9dc3:0:b0:29b:d51d:38f9 with SMTP id x3-20020a2e9dc3000000b0029bd51d38f9mr224760ljj.46.1679333374119;
+        Mon, 20 Mar 2023 10:29:34 -0700 (PDT)
 Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id d7-20020ac25ec7000000b004e887fd71acsm1744604lfq.236.2023.03.20.10.28.47
+        by smtp.gmail.com with ESMTPSA id y26-20020a2e321a000000b002934febffe4sm1841842ljy.128.2023.03.20.10.29.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 10:28:48 -0700 (PDT)
-Message-ID: <b8721c2f-3d3b-9669-e990-00e54d7d4407@linaro.org>
-Date:   Mon, 20 Mar 2023 18:28:47 +0100
+        Mon, 20 Mar 2023 10:29:33 -0700 (PDT)
+Message-ID: <6a453da1-76cf-467d-38e3-746c4a4d2312@linaro.org>
+Date:   Mon, 20 Mar 2023 18:29:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v2 14/15] pinctrl: qcom: spmi-gpio: add support for
- pmm8654au-gpio
+Subject: Re: [PATCH v2 15/15] arm64: dts: qcom: sa8775p: add PMIC GPIO
+ controller nodes
 Content-Language: en-US
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Gross <agross@kernel.org>,
@@ -65,18 +65,16 @@ To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 References: <20230320154841.327908-1-brgl@bgdev.pl>
- <20230320154841.327908-15-brgl@bgdev.pl>
+ <20230320154841.327908-16-brgl@bgdev.pl>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230320154841.327908-15-brgl@bgdev.pl>
+In-Reply-To: <20230320154841.327908-16-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,26 +86,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 20.03.2023 16:48, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Add support for the GPIO controller present on the pmm8654au PMIC.
+> Add GPIO controller nodes to PMICs that have the GPIO hooked up on
+> sa8775p-ride.
 > 
 > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Only on 2 out of 4 SIDs?
 
 Konrad
->  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> index ea3485344f06..0d94175b34f8 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> @@ -1238,6 +1238,7 @@ static const struct of_device_id pmic_gpio_of_match[] = {
->  	{ .compatible = "qcom,pmk8350-gpio", .data = (void *) 4 },
->  	{ .compatible = "qcom,pmk8550-gpio", .data = (void *) 6 },
->  	{ .compatible = "qcom,pmm8155au-gpio", .data = (void *) 10 },
-> +	{ .compatible = "qcom,pmm8654au-gpio", .data = (void *) 12 },
->  	/* pmp8074 has 12 GPIOs with holes on 1 and 12 */
->  	{ .compatible = "qcom,pmp8074-gpio", .data = (void *) 12 },
->  	{ .compatible = "qcom,pmr735a-gpio", .data = (void *) 4 },
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index 276070b62ccd..574c20caf9eb 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -78,6 +78,16 @@ pmm8654au_0_pon_resin: resin {
+>  				status = "disabled";
+>  			};
+>  		};
+> +
+> +		pmm8654au_0_gpios: gpio@8800 {
+> +			compatible = "qcom,pmm8654au-gpio", "qcom,spmi-gpio";
+> +			reg = <0x8800>;
+> +			gpio-controller;
+> +			gpio-ranges = <&pmm8654au_0_gpios 0 0 12>;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+>  	};
+>  
+>  	pmm8654au_1: pmic@2 {
+> @@ -99,6 +109,16 @@ pmm8654au_2: pmic@4 {
+>  		reg = <0x4 SPMI_USID>;
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+> +
+> +		pmm8654au_2_gpios: gpio@8800 {
+> +			compatible = "qcom,pmm8654au-gpio", "qcom,spmi-gpio";
+> +			reg = <0x8800>;
+> +			gpio-controller;
+> +			gpio-ranges = <&pmm8654au_2_gpios 0 0 12>;
+> +			#gpio-cells = <2>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +		};
+>  	};
+>  
+>  	pmm8654au_3: pmic@6 {
