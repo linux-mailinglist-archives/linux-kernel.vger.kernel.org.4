@@ -2,135 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD0E6C229A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2B96C229B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjCTUZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S229891AbjCTU0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbjCTUZO (ORCPT
+        with ESMTP id S231220AbjCTUZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:25:14 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813082BF3B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:25:12 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id i5so4791142eda.0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679343910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Crb5gaca3LAL3QSUXcVibd0Ph4xO6N/3m0QFmJdNuPA=;
-        b=BLRXv6G1ID56F82XpWEhsLLXGi6naVJ5iSbdkQA7SE/Atqr0psA60I1mjhCS3ExRmt
-         kO7EB0NChmWHwqiRx7d86y1GMB4mdZiKi4Ci8uHv8ZAi7MT/jE9/gM7ABk3rBXSbr1Rd
-         RSrIKRwSr296G/Su9ZKl0smQU9mGe8tS6BCT8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679343910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Crb5gaca3LAL3QSUXcVibd0Ph4xO6N/3m0QFmJdNuPA=;
-        b=u2E9K8SYPfclpRs+KNTA9tuBVCCPdTQZQaKSORDd4lTp7GYHHCQG9UluVhXxS8PXZT
-         VzdgxnDcp1RJ6z1cyER92cJfy4ZL9Kw383uaR3BwaUlcuxGuFzAQHBxT6D3M7LXwhpRQ
-         RcaW7HSsq9NbkaYgel91SilY/Y+Bc20eqThXnFSoIJqRYFLXC3kJyx7jq/ioI0n2PjNQ
-         VjDUypYHnALxIXpCjVk64wguOWZ2/YqBjX7b2t/R2ma+F/g9Ht6h54YqKl65jjEf9nfZ
-         RH1KQ7aH1MjlJqMtObQgYxyv8qN6AFAIEZqCF9wjrmmO0TYvEufHxJF0V8UlEC3g7B85
-         4MTw==
-X-Gm-Message-State: AO0yUKWAntIzk1/yIhfsSYmSTFjSdT5PqHaA3P8hd3M/KSvT0oaMsN/a
-        t/Cn5UO88qBthH7DjtE/9PKAeD7b7Eh0Hd8+52dMJ8tS
-X-Google-Smtp-Source: AK7set/fAftRZY1rONnK0McfDovGkSsXzhpIRPTmgTmFC3xi//VX0nvkgYcKgxgVbSv0r4iSEiSHgg==
-X-Received: by 2002:a17:906:538e:b0:932:177a:12a5 with SMTP id g14-20020a170906538e00b00932177a12a5mr349824ejo.66.1679343910644;
-        Mon, 20 Mar 2023 13:25:10 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090610cc00b008f767c69421sm4812026ejv.44.2023.03.20.13.25.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 13:25:10 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id cy23so51591930edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:25:09 -0700 (PDT)
-X-Received: by 2002:a17:906:2c04:b0:931:6e39:3d0b with SMTP id
- e4-20020a1709062c0400b009316e393d0bmr142412ejh.15.1679343909563; Mon, 20 Mar
- 2023 13:25:09 -0700 (PDT)
+        Mon, 20 Mar 2023 16:25:46 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2D73433C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:25:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ms9o2Jw7IViO2088QB3s7wFhESxg7tkEwrhxmjQC1r+S0IaSDvJW5vJHEyQMePYigJvpeF2WGHz+Oi7zzHuQoEZYs4YIGwG14uEe8Xk4R1MDw/MSl1bTgaZ2ivpEJwvUMlJL141LJOV7ZnFXqh2JoeuY7ounZolQoXBBUGpK28rNhDb8big8fJmb7MSNzfy9NEe0sHu+vuDaReFwke5d6lxTKT5KeOBAD5MqeP5P2vqZvVSHryIdgMsZUkFX881okZRupjtTPbk/YRz+8NDsgyMclSNVlzMVnaQTGyOo/k6s1uyzpt6wEKZ4qg3lgfOwPSV7IBNg41aoYUl0GUuOeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5D6h4S5SiY9+pK5HomrmtuHvevUVkBupSAYLwxcDSe4=;
+ b=Na1EbC9fUpBTAjlkfllynZG66/9h/Bpna2pohXPx9UaPIK3I/LHXPDK1LCCJryDHYd0rJsgX3DPzyZruMJ3omotbvpZTJTbTxFNpTY+nzCEt/kBVTnGw4P7PDW9tW7zJxINouhzZwPIlyL/EfBZxO+0L02C2Q8mHa/okVOLZlEtGBwHeQPYBlBzIvKHmwP8n0IeVWW4kM5CmdRCfmF2qvx2jEq09Xanbh3L//6VRlvVCjWkNdtQ6K2nPnGbRWGPkAuFw1Qn+/X2owO7pX6SkfBdXM5iOCyDttcge/viAtSS4KAv9padwcPP0FWa8QnWN4k9fCpznsQnllYQQN86Mcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5D6h4S5SiY9+pK5HomrmtuHvevUVkBupSAYLwxcDSe4=;
+ b=sVhUJMfT1nHJHQDSy4C1y83d7XZd4q90T3Pk8LnmaJeCsaL1tRBvWu41ydPESIGoO3+K3R0UOeJIbq3xzqyTgf+ZwNt4Ip1GpEsJQcxsi2JsDtQS95nGNPg/iIXS9Xi19/iGN7z0lsafvwuU/2pt2FHUGXAqUu38p15F1VDfqEw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by BN9PR12MB5065.namprd12.prod.outlook.com (2603:10b6:408:132::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 20:25:26 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a%9]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 20:25:26 +0000
+Message-ID: <f4371199-63ad-0487-3066-8149d007b416@amd.com>
+Date:   Mon, 20 Mar 2023 16:25:21 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/amd/display: use a more accurate check in
+ dm_helpers_dp_read_dpcd()
+Content-Language: en-US
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc:     Ian Chen <ian.chen@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Sung Joon Kim <sungjoon.kim@amd.com>
+References: <20230309213027.256243-1-hamza.mahfooz@amd.com>
+ <ZAttVGN/VdrfkH3y@intel.com> <ZAtuET8c8kSgyX4Y@intel.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <ZAtuET8c8kSgyX4Y@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT4PR01CA0199.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:ad::23) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-References: <20230320071442.172228-1-pedro.falcato@gmail.com>
- <20230320115153.7n5cq4wl2hmcbndf@wittgenstein> <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
- <CAKbZUD2Y2F=3+jf+0dRvenNKk=SsYPxKwLuPty_5-ppBPsoUeQ@mail.gmail.com>
-In-Reply-To: <CAKbZUD2Y2F=3+jf+0dRvenNKk=SsYPxKwLuPty_5-ppBPsoUeQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Mar 2023 13:24:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
-Message-ID: <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
-Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
-To:     Pedro Falcato <pedro.falcato@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|BN9PR12MB5065:EE_
+X-MS-Office365-Filtering-Correlation-Id: d13829d6-e090-4291-537b-08db29813d36
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Z9Wr7qmwEnxkQmBG3k1zTLTr7uPg81W9ZNOZjNgWJLqynWL0HFpqYdeVtS4laZOK/RyImcxVsz5tx22wrIbw6zQQK5VuQYUbRKqBT00WVbSZa2bq73wetxqL5NMlFmsAAnxjKEhZgEVlYEyPT+bVKh2QH65s9yk4bf+QeXGTg/71MdEZ9rgFtETbyEcGDTd3OqkKccGQDtOSqTF58bxqsKZpped4XLSGM9/r1fI8vAiXfA3Ve/SDDnf52yLqhaJrw/hR2UJbKxW7hxqdM3DgFtOftRdoB5nRUDro7gbRn6rgUXapPAHSgn9tfoc7BIgLDq1ANs1bKoAlO3VJMotT4iFENuapkgL2lsthCaQbn1SeqQarN5CIuV04YQ2eRR7AVS7GXlT6TT77nEWpKQV01U7+wfB0vaqSHuGgJc98x5V9gzqbWWCURI0+9W0AozicLSx75MtUmTxeAuAXtoOTmPGWfaceqUVqglclPhEIBqESg776H/JEuYNGluuF9JuaYu7YDnN1pQZiR/abW+YYGASCwNpGOL8fT7pZLSJ9Z54cbFYebZWul3KQbGum8ygWCvA27Va4Ext510XVDcANlyYzZVDhfTs3vhTuAh3aFTudla96em1qu9jz9EI4vcEO47cBsh9xqZmPF55G2hPcQOGEWBkg9hoJnPuG6uAiLarkuovLvAE+YkDTYBIUuByzqHfs9XZ/R7Cnig4NSLcxl1xnzeuBDGed9Mq40oJUyLw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(451199018)(31686004)(2616005)(6666004)(6486002)(6506007)(186003)(26005)(6512007)(53546011)(54906003)(86362001)(31696002)(66574015)(38100700002)(478600001)(2906002)(83380400001)(110136005)(44832011)(6636002)(8936002)(316002)(66476007)(5660300002)(8676002)(41300700001)(4326008)(66556008)(66946007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?blo5TUs0M3UvL2kxUEQyRG5WaFFVdHlGUld0ekkrM1hGeTc2WkErKzBndnc4?=
+ =?utf-8?B?WS9DNWpPVDFBcFNYNVFnOWJQTDNOamFidGNjOFVSSDJvZXU0L1RiTFhDaXcv?=
+ =?utf-8?B?YXcrZ1dSdXVIalhNcndjOHEzNEdSeTlWWmtCUHBnR3ZHQ1h3Wmo0VFh6N3VH?=
+ =?utf-8?B?MlNpV0NWL1dDZWgwd2h5UUtqUmpCZThKYi9iTEd1eWFSRThLcEtoYzhvRUdR?=
+ =?utf-8?B?SHNPaUZHOE9NeXlYSkYyNkRmb25RcnBrZTF1VDhaVXRTdUx3R1d0eFJYallU?=
+ =?utf-8?B?Y0M2TWkweDVNbDh3SXVtSGVyOTQ5VkN6LzJnaFRmbHcwMHlUcUljMEZmSk8w?=
+ =?utf-8?B?bHRWYnVzaG03NEpjRFlrbnIwd3dkcW5RdFpQTEFIeG5lTWZoVFgyZlJ4Ykw2?=
+ =?utf-8?B?V3RTWDMxamgvUDNXUGtDSGdtUEVJd0NxcmkxWG9ZQVBlWG8yOTNQMGFZdFRD?=
+ =?utf-8?B?OXdFNG1lNE4yb0phT2MzRmRiODFyMnhTc0FlRCtaWnZ6bGl1QXhhL045di93?=
+ =?utf-8?B?b2xPMlZLN0g2TUl4disxdDZZU3p3ZHZmKzlFSWY5UGhXZE5uWjRlSFF2YnJR?=
+ =?utf-8?B?dmVBbmJXVEYrNGVicEhOdkppa1IzQ05BVU40aGtSSzBKQzQycDVaTTF6Nmlu?=
+ =?utf-8?B?MzE4ZTJLR2p0OVBwNUZnMkJZMG5xOTVVdW9PTGh0ODFWN3B1QndVRFFZK3po?=
+ =?utf-8?B?UEdTRTZTR1Y0b20wUzdEbnUvUmtzbzFyL1JxRy9yTy9iUVJ0YUhXZFNZS1N0?=
+ =?utf-8?B?cVRvZDR0bGVyaVdZMnVGK1lob1JFMlp6MThjZEdZY0RObjl0bkVxK3JvZmJU?=
+ =?utf-8?B?THVJa091cSs2K2ZpaHM5a2JmSXNJNnRPZDZzTlJWdkZoa2FQdDZ4WmlJK015?=
+ =?utf-8?B?UUt0RWZuOFR1Tks0OTA0Y3Bma1ZkZFBBczhKYkFKSEM5UXFEalNra1hmT1k3?=
+ =?utf-8?B?S0RNVEQ3V2IrRUhDR0RuRDh3bURORk5SeDFhNGg4a2g3bllmU0JISHcrUnZB?=
+ =?utf-8?B?RVpydnZoN0MvY2sxcythdGNISS81Z1FlT20wTFU3VWc4anl2SWMzbHBNeVBU?=
+ =?utf-8?B?VGgxM0N0cG5IOGhQZmFKSzNvTHpweXh4T0xsR0Z1UmRSZHZrVlp4K1BJZFMr?=
+ =?utf-8?B?Nktia0laKzRYMUIrVG11YU9YUGVYb1dRWVEzYmRJK0JBcjR4TEphNjUxb0VD?=
+ =?utf-8?B?S0pZeENYT2F1Q1IxS0tIdlhpdzZKODVXUTdSU25SaXRvekRRbTVzckR5TDFB?=
+ =?utf-8?B?T0FYNUpIMUV6R2J5ZFMvd3RGOXdYejFXV3Q4ajlWQlJ3K1JDaFNqblB2MzhP?=
+ =?utf-8?B?NXZRN0dHMlRBZnVxQVFlSS9SR25rcnRpVjZBa2ltM0RhNlROWVRENkhWRFZr?=
+ =?utf-8?B?V1VzS0pjV2hnVVhKNzJwa0M0VTg4bklHZzdiRUN0VTl6U0J6ZFZUdWhvdFRS?=
+ =?utf-8?B?N25lQTF1bko3S3JLOUttOUJuVjVqYklLOE1EYzlEeHI2b1ZrVEY5VGVHSEJo?=
+ =?utf-8?B?d05DaE5YY2p6R1ZhY210WEIvdkxtM0lYNEpMZGM1dGp3elBOaGtaZVRRVDRL?=
+ =?utf-8?B?TDF0dEpMN0s4MzU4M0RrcGQyWml5MGc3TVNpSDRVZW9iWk03OWd3U0JnZXNs?=
+ =?utf-8?B?UEZtQ21IbFdmZGtneG5ETlNLQ0dQbW5WQUsvSFYxaWJHNWZWNElWSEpOemh6?=
+ =?utf-8?B?eExHbE1TYnJvZktrZUtEVEM2Vm5ITUR2Z0pKcElMT3RBRnR1MGFBKzRDQjVR?=
+ =?utf-8?B?blF1RG5uYmRuekdpSU1DemxQRzJ0eDVzTHpkVWdhZm0yVDhpVTR3R2ZZVG9s?=
+ =?utf-8?B?N1JRRkpFZlNUM012UjB4QXhDbkwzUjFaVkhmbjhMRE1Wd3dDVVZLSkNrcEN0?=
+ =?utf-8?B?dUd3NGJ5NjVSZWdMTm5Yb09mNzRhYVJjeldoKzFpemdRdDEvN2NFQkpTS0RS?=
+ =?utf-8?B?OHFDaFJvOTBnckFlVVZyeGhNdXRzK1g3aW1HZFV5b2tseHM5VFhvNFBYYWpn?=
+ =?utf-8?B?TjVRQTBqNW02WGpsK21rcSt2SlFud1BmQ1EzOHpWTzB3djRHSXYwbGR5eTNR?=
+ =?utf-8?B?cVVLcTRGajZNQ0lqOVVyTzBnbXE0blY1YUx1Zm55blRWNGJzT2lGaEV2QnFD?=
+ =?utf-8?Q?GyAul+c3IcNDPH/GanBp5UWNi?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d13829d6-e090-4291-537b-08db29813d36
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 20:25:26.0047
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lzdkMajI59HVyeRzUClyw+hHO/wgs8Yg3P4ppkPy4gbtXrX6cNYwraJ3V0RUgEUT31fi5bOqle2gHdM7xiunwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5065
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:27=E2=80=AFPM Pedro Falcato <pedro.falcato@gmail=
-.com> wrote:
->
-> 1) Pre v5.7 Linux did the open-dir-if-exists-else-create-regular-file
-> we all know and """love""".
 
-So I think we should fall back to this as a last resort, as a "well,
-it's our historical behavior".
 
-> 2) Post 5.7, we started returning this buggy -ENOTDIR error, even when
-> successfully creating a file.
+On 3/10/23 12:51, Ville Syrjälä wrote:
+> On Fri, Mar 10, 2023 at 07:48:04PM +0200, Ville Syrjälä wrote:
+>> On Thu, Mar 09, 2023 at 04:30:27PM -0500, Hamza Mahfooz wrote:
+>>> We should be checking if drm_dp_dpcd_read() returns the size that we are
+>>> asking it to read instead of just checking if it is greater than zero.
+>>> Also, we should WARN_ON() here since this condition is only ever met, if
+>>> there is an issue worth investigating. So, compare the return value of
+>>> drm_dp_dpcd_read() to size and WARN_ON() if they aren't equal.
+>>>
+>>> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+>>> ---
+>>>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+>>> index 8d598b322e5b..ed2ed7b1d869 100644
+>>> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+>>> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+>>> @@ -511,8 +511,8 @@ bool dm_helpers_dp_read_dpcd(
+>>>  		return false;
+>>>  	}
+>>>  
+>>> -	return drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+>>> -			data, size) > 0;
+>>> +	return !WARN_ON(drm_dp_dpcd_read(&aconnector->dm_dp_aux.aux, address,
+>>> +					 data, size) != size);
+>>
+>> Just FYI there are devices out there that violate the DP spec and reads
+>> from specific DPCD registers simply fail instead of returning the
+>> expected 0.
+> 
+> And of course anyone can yank the cable anytime, so in
+> fact pretty much any DPCD read can fail.
+> 
 
-Yeah, I think this is the worst of the bunch and has no excuse (unless
-some crazy program has started depending on it, which sounds really
-*really* unlikely).
+Thanks for making this very important point. It seems like drm_dp_dpcd_access
+checks for that, though, and returns -EPROTO if !(ret == size). So I don't
+expect this patch to change any behavior.
 
-> 3) NetBSD just straight up returns EINVAL on open(O_DIRECTORY | O_CREAT)
-> 4) FreeBSD's open(O_CREAT | O_DIRECTORY) succeeds if the file exists
-> and is a directory. Fails with -ENOENT if it falls onto the "O_CREAT"
-> path (i.e it doesn't try to create the file at all, just ENOENT's;
-> this changed relatively recently, in 2015)
+Harry
 
-Either of these sound sensible to me.
 
-I suspect (3) is the clearest case.
 
-And (4) might be warranted just because it's closer to what we used to
-do, and it's *possible* that somebody happens to use O_DIRECTORY |
-O_CREAT on directories that exist, and never noticed how broken that
-was.
-
-And (4) has another special case: O_EXCL. Because I'm really hoping
-that O_DIRECTORY | O_EXCL will always fail.
-
-Is the proper patch something along the lines of this?
-
-   --- a/fs/open.c
-   +++ b/fs/open.c
-   @@ -1186,6 +1186,8 @@ inline int build_open_flags(const struct
-open_how *how, struct open_flags *op)
-
-        /* Deal with the mode. */
-        if (WILL_CREATE(flags)) {
-   +            if (flags & O_DIRECTORY)
-   +                    return -EINVAL;
-                if (how->mode & ~S_IALLUGO)
-                        return -EINVAL;
-                op->mode =3D how->mode | S_IFREG;
-
-I dunno. Not tested, not thought about very much.
-
-What about O_PATH? I guess it's fine to create a file and only get a
-path fd to the result?
-
-             Linus
