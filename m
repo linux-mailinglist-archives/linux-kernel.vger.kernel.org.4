@@ -2,238 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023AB6C219A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5D76C219E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjCTTeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S230021AbjCTTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjCTTda (ORCPT
+        with ESMTP id S229806AbjCTTd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:33:30 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0525136C5;
-        Mon, 20 Mar 2023 12:28:23 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id bz27so2765342qtb.1;
-        Mon, 20 Mar 2023 12:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679340503;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HD9AXKBAh8HyIexaR70QcnQFYbhZUDFzWQoXICwDVuo=;
-        b=Ay+14zqV5M6t83JCFWXWGDo0B0F18hyV3doDfVKRAtuzQiDLpZdudZemCh0jXXn0qC
-         1qtQfKO7vkMuiTeD9bN2mYNPyHKPUv8Qn2G7ehQynLuafPUaQG25Snq98rlzY5qI37UO
-         tHS0KurXZ++dlvGyg3r2nkiYrzaG0RM64aH4RO61aFmG/YykwrKkt4c45vfwbcjlOUo+
-         nHMNovv1+sqq7Rw3kTnnihU5bk71hCkROmeBFPbBHmx+9q1J6EQ4FYpPXrH7NPpPBvm9
-         vfo1zI6rESBAjHhuL5nsl3xjxDgzRd9MdnLiYWpuNfMP1XpBoMZEmiqEvktLMzL54i03
-         dOWA==
+        Mon, 20 Mar 2023 15:33:58 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9890729E1B
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 12:28:49 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id r3-20020a6b5d03000000b007530ad88769so6708981iob.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 12:28:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679340503;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HD9AXKBAh8HyIexaR70QcnQFYbhZUDFzWQoXICwDVuo=;
-        b=cLr0VeMILtkAo3HKfdZo1xhKMQEI/xQRnzTmM8APcqP6SuzE7WZKW6gI9iN6B4w5qN
-         IhKVenmw/GvvkjcEhfHRgijgxkOpcykBDmS8UNu8BWM7Sb48Xa+90zkv13yNLlxeGklp
-         1csdoxPHSLJP0qsJQdCVdQp9fngPnQ0Xk4wqIsV+pVEVyoX1dT5IA5856zFGJHznuwCV
-         nS5FS8nrEgC16U3r292G50IiwdfBWhml2m2NcLP7+1OsahhmbkroMM8yHlZO4fXIaDVU
-         234xIiPVZ4xwOEZ92hXtXsJ1V+hgooI0j0Q5DgkjGKtwzhPETMhYiKmrSCO23K4Bfs2T
-         rzgQ==
-X-Gm-Message-State: AO0yUKVpbHo3QKNbUyp2xllsq1/8A5ZkrY8OYKx5m7acp1M/K1t7Wg3s
-        IgAoXVMKrL1cHYR0oqkUyC8=
-X-Google-Smtp-Source: AK7set9prBP30YV2N+bl0uv5/DZq7n5gqeA2bdbYn01NNDwtqeNc41hEWzNbzPr/MlN2Se7FQ0xujA==
-X-Received: by 2002:a05:622a:45:b0:3e2:e280:c4a1 with SMTP id y5-20020a05622a004500b003e2e280c4a1mr404602qtw.52.1679340502719;
-        Mon, 20 Mar 2023 12:28:22 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id o197-20020a3741ce000000b0073b575f3603sm7878176qka.101.2023.03.20.12.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 12:28:22 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 63E3B27C0054;
-        Mon, 20 Mar 2023 15:28:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 20 Mar 2023 15:28:21 -0400
-X-ME-Sender: <xms:1LMYZElGByfLATrnic20MzPYjK2OHdja5DR-1U_I92tX0aonk5L7Zw>
-    <xme:1LMYZD2fgIgz5EAcmOek41tYyCStg85VRU_TkAC9xYwSAL1feFpp2wsmwl1RhBbxG
-    UR5PhN8lOmvXiJWFQ>
-X-ME-Received: <xmr:1LMYZCrzcFeudpYnN9ofcNZQJpXe5YMvsIKZCxTgdCnjk6qeJRxycoB_aSatyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefkedguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:1LMYZAmxKpGz82E6D5jkbyoqvbQLYMzVkAMUyk1SjoEXp_pFiXJkRA>
-    <xmx:1LMYZC07y2g-lEktBeiMWgiJtj1Cu9MJi72AaXAWPq9hliO5odyQXw>
-    <xmx:1LMYZHs8FUpUK_-Gm0JkvEUwXwumvoggSmpiM5J0q2ovXYmX9RJM1w>
-    <xmx:1bMYZMV3ZJZkQQ9CnlsYDUy4KVgSX1g2UFGT7R9cI8OmVICbQDDaDg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Mar 2023 15:28:20 -0400 (EDT)
-Date:   Mon, 20 Mar 2023 12:28:05 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Shuah Khan <shuah@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        seanjc@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH rcu 7/7] rcutorture: Add srcu_lockdep.sh
-Message-ID: <ZBizxQ9BY/hQk8+Y@boqun-archlinux>
-References: <20230317031339.10277-1-boqun.feng@gmail.com>
- <20230317031339.10277-8-boqun.feng@gmail.com>
- <ZBijmdz2ucql+BSb@boqun-archlinux>
- <bed30db4-d998-4382-a9a1-716c6f428263@paulmck-laptop>
+        d=1e100.net; s=20210112; t=1679340529;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=twO0cBgqHVuadLiEtqwEUyKk2bd1+BbcRIByatF2Y98=;
+        b=F6/aMe7PqknHFMgN8BW3MIWWp93YTa/0jn6CDP8bkLjAgQU/o+vuB3ypH5rPtRxW/l
+         g5QDuXcyz4+DxU+b87gZTCVdOc/BPiA8nx90pFJCGvt8sYB/NHITEd49q/IH0i8BTh4S
+         6LiFKIkDwkdc4QffYDvYsZOGetn5pfItv29RmvZ5CQYXd5G7JXjwV1jiZPlI+0B4JkLx
+         Q0oTtJeZdbpxp+BJqavjxG9F8CGKOpUuF253IEAOVWBBJB6/oBGA39DhlvJUymWNbRLq
+         Vj7/1L9BcXEotVeVujOXossh5e6Lrw4906THCN6KxqTeuv7j89grK1WbqGa29KfY3ZZW
+         rV5w==
+X-Gm-Message-State: AO0yUKWMlMcSvHypFnE91OIuxtpKGy+VpGnMkQN5BOUPyoKzMnejKr0R
+        HJtpRhAU1lMop2zhVDxD5T5vDx4JeIRP42BTUpDErMcyk357
+X-Google-Smtp-Source: AK7set+iH8yfyr5kAlbGh7l8msoSzx8Xt30vZFsOBN5uDeZYu2R+lEcdKLa+MW5d2J+F/gkxELLSa/C7VX9aoMMfCqDkgXX2cSTF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bed30db4-d998-4382-a9a1-716c6f428263@paulmck-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:2a04:0:b0:3c4:88e7:14cf with SMTP id
+ w4-20020a022a04000000b003c488e714cfmr442022jaw.1.1679340528905; Mon, 20 Mar
+ 2023 12:28:48 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 12:28:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aec88d05f759ef57@google.com>
+Subject: [syzbot] [jfs?] UBSAN: shift-out-of-bounds in dbFree
+From:   syzbot <syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:09:00PM -0700, Paul E. McKenney wrote:
-> On Mon, Mar 20, 2023 at 11:19:05AM -0700, Boqun Feng wrote:
-> > Hi Paul,
-> > 
-> > On Thu, Mar 16, 2023 at 08:13:39PM -0700, Boqun Feng wrote:
-> > > From: "Paul E. McKenney" <paulmck@kernel.org>
-> > > 
-> > > This commit adds an srcu_lockdep.sh script that checks whether lockdep
-> > > correctly classifies SRCU-based, SRCU/mutex-based, and SRCU/rwsem-based
-> > > deadlocks.
-> > > 
-> > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > [ boqun: Fix "RCUTORTURE" with "$RCUTORTURE" ]
-> > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > > ---
-> > >  .../selftests/rcutorture/bin/srcu_lockdep.sh  | 73 +++++++++++++++++++
-> > >  1 file changed, 73 insertions(+)
-> > >  create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-> > > 
-> > > diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-> > > new file mode 100755
-> > > index 000000000000..961932754684
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-> > 
-> > Could you provide the SPDX header and copyright bits for this newly
-> > added file? For small changes I can do it myself, however this is about
-> > licenses and copyright, so I need it from you, thanks!
-> 
-> Good catch, thank you!
-> 
-> Would you like a delta patch to merge into your existing one, or would
-> you prefer a replacement patch?  Either way works for me.
-> 
+Hello,
 
-A delta patch if that's not much trouble. I will fold it into this one.
+syzbot found the following issue on:
 
-Regards,
-Boqun
+HEAD commit:    0ddc84d2dd43 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17f30826c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dbab9019ad6fc418
+dashboard link: https://syzkaller.appspot.com/bug?extid=d2cd27dcf8e04b232eb2
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1211504ac80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1447df1ac80000
 
-> 							Thanx, Paul
-> 
-> > Regards,
-> > Boqun
-> > 
-> > > @@ -0,0 +1,73 @@
-> > > +#!/bin/bash
-> > > +#
-> > > +# Run SRCU-lockdep tests and report any that fail to meet expectations.
-> > > +
-> > > +usage () {
-> > > +	echo "Usage: $scriptname optional arguments:"
-> > > +	echo "       --datestamp string"
-> > > +	exit 1
-> > > +}
-> > > +
-> > > +ds=`date +%Y.%m.%d-%H.%M.%S`-srcu_lockdep
-> > > +scriptname="$0"
-> > > +
-> > > +T="`mktemp -d ${TMPDIR-/tmp}/srcu_lockdep.sh.XXXXXX`"
-> > > +trap 'rm -rf $T' 0
-> > > +
-> > > +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> > > +PATH=${RCUTORTURE}/bin:$PATH; export PATH
-> > > +. functions.sh
-> > > +
-> > > +while test $# -gt 0
-> > > +do
-> > > +	case "$1" in
-> > > +	--datestamp)
-> > > +		checkarg --datestamp "(relative pathname)" "$#" "$2" '^[a-zA-Z0-9._/-]*$' '^--'
-> > > +		ds=$2
-> > > +		shift
-> > > +		;;
-> > > +	*)
-> > > +		echo Unknown argument $1
-> > > +		usage
-> > > +		;;
-> > > +	esac
-> > > +	shift
-> > > +done
-> > > +
-> > > +err=
-> > > +nerrs=0
-> > > +for d in 0 1
-> > > +do
-> > > +	for t in 0 1 2
-> > > +	do
-> > > +		for c in 1 2 3
-> > > +		do
-> > > +			err=
-> > > +			val=$((d*1000+t*10+c))
-> > > +			tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5s --configs "SRCU-P" --bootargs "rcutorture.test_srcu_lockdep=$val" --trust-make --datestamp "$ds/$val" > "$T/kvm.sh.out" 2>&1
-> > > +			ret=$?
-> > > +			mv "$T/kvm.sh.out" "$RCUTORTURE/res/$ds/$val"
-> > > +			if test "$d" -ne 0 && test "$ret" -eq 0
-> > > +			then
-> > > +				err=1
-> > > +				echo -n Unexpected success for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> > > +			fi
-> > > +			if test "$d" -eq 0 && test "$ret" -ne 0
-> > > +			then
-> > > +				err=1
-> > > +				echo -n Unexpected failure for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> > > +			fi
-> > > +			if test -n "$err"
-> > > +			then
-> > > +				grep "rcu_torture_init_srcu_lockdep: test_srcu_lockdep = " "$RCUTORTURE/res/$ds/$val/SRCU-P/console.log" | sed -e 's/^.*rcu_torture_init_srcu_lockdep://' >> "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> > > +				cat "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> > > +				nerrs=$((nerrs+1))
-> > > +			fi
-> > > +		done
-> > > +	done
-> > > +done
-> > > +if test "$nerrs" -ne 0
-> > > +then
-> > > +	exit 1
-> > > +fi
-> > > +exit 0
-> > > -- 
-> > > 2.39.2
-> > > 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f1aef650a28e/disk-0ddc84d2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ab9d7540bffe/vmlinux-0ddc84d2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cf0758e28298/bzImage-0ddc84d2.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/bd86262b7da2/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.com
+
+         option from the mount to silence this warning.
+=======================================================
+find_entry called with index = 0
+read_mapping_page failed!
+ERROR: (device loop0): txCommit: 
+ERROR: (device loop0): remounting filesystem as read-only
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:381:12
+shift exponent 134217736 is too large for 64-bit type 'long long'
+CPU: 1 PID: 5068 Comm: syz-executor350 Not tainted 6.3.0-rc2-syzkaller-00069-g0ddc84d2dd43 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3c3/0x420 lib/ubsan.c:387
+ dbFree+0x46e/0x650 fs/jfs/jfs_dmap.c:381
+ txFreeMap+0x96a/0xd50 fs/jfs/jfs_txnmgr.c:2510
+ xtTruncate+0xe5c/0x3260 fs/jfs/jfs_xtree.c:2467
+ jfs_free_zero_link+0x46e/0x6e0 fs/jfs/namei.c:758
+ jfs_evict_inode+0x35f/0x440 fs/jfs/inode.c:153
+ evict+0x2a4/0x620 fs/inode.c:665
+ __dentry_kill+0x436/0x650 fs/dcache.c:607
+ shrink_dentry_list+0x39c/0x6a0 fs/dcache.c:1201
+ shrink_dcache_parent+0xcd/0x480
+ do_one_tree+0x23/0xe0 fs/dcache.c:1682
+ shrink_dcache_for_umount+0x7d/0x120 fs/dcache.c:1699
+ generic_shutdown_super+0x67/0x340 fs/super.c:472
+ kill_block_super+0x7e/0xe0 fs/super.c:1398
+ deactivate_locked_super+0xa4/0x110 fs/super.c:331
+ cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x68f/0x2290 kernel/exit.c:869
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa87e2289b9
+Code: Unable to access opcode bytes at 0x7fa87e22898f.
+RSP: 002b:00007fff4bfe3938 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fa87e2a3330 RCX: 00007fa87e2289b9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007fa87e29de40
+R10: 00007fff4bfe3850 R11: 0000000000000246 R12: 00007fa87e2a3330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
