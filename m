@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C958D6C08B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 02:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00C66C08B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 02:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjCTBnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 21:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S229635AbjCTBqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 21:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCTBno (ORCPT
+        with ESMTP id S229490AbjCTBqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 21:43:44 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171791AC;
-        Sun, 19 Mar 2023 18:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679276623; x=1710812623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YxjmBq6ikxvqoFB0iL+NlLNlseMTypJf5oOjYf5MAyM=;
-  b=hAjOiGw97clEFJe7JLt46/CtXfYzBuTV6MPANYxiu1ABifPE6n3jXS7/
-   KVutQpXs+r7gMtna4rkzSiBDrKE0Clw2hdDyZvvtshQZYqS7I4P+CsNFY
-   v+2lNDuWRLkEhVVrikfuEIhdgpCrgVWWi6FQI98b174TW3fOuG8eHNV51
-   x8LQbVjUhpb/qryJpeIikxBSzyytx1dIGlyt8HsUZ5BjcGA2t3Yk+jAg2
-   RqGkuiFqsYJ7y23m9b0omhalrtkWe7hASyvL2AfcaNcdt+u2U7rXaHJCT
-   j4f3m49Fufm59VWfM7ejXiObHV8X7DyY9LkuVd6l53sNVj9Xx4Sy0gsty
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="337269056"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="337269056"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 18:43:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="804741234"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="804741234"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 19 Mar 2023 18:43:39 -0700
-Date:   Mon, 20 Mar 2023 09:32:16 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
- xlnx_pr_decouple_read function
-Message-ID: <ZBe3oDPvAK4yn6Cs@yilunxu-OptiPlex-7050>
-References: <20230317230617.1673923-1-trix@redhat.com>
- <ZBWLeC7UuDf+4dJE@yilunxu-OptiPlex-7050>
- <7cab9365-6493-2de0-bcef-cd46809056a8@redhat.com>
+        Sun, 19 Mar 2023 21:46:22 -0400
+X-Greylist: delayed 616 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Mar 2023 18:46:20 PDT
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31379C163
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 18:46:20 -0700 (PDT)
+X-ASG-Debug-ID: 1679276160-1eb14e6d7b1e670001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id czeTCPi4m3nL3oj8 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 20 Mar 2023 09:36:00 +0800 (CST)
+X-Barracuda-Envelope-From: SilviaZhao-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from ZXBJMBX02.zhaoxin.com (10.29.252.6) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 20 Mar
+ 2023 09:35:59 +0800
+Received: from [10.29.8.47] (10.29.8.47) by ZXBJMBX02.zhaoxin.com
+ (10.29.252.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 20 Mar
+ 2023 09:35:57 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Message-ID: <81897a7c-2dab-f854-ff09-e50d8b875f02@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.47
+Date:   Mon, 20 Mar 2023 09:35:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cab9365-6493-2de0-bcef-cd46809056a8@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] perf/x86/zhaoxin: Add Yongfeng support
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH] perf/x86/zhaoxin: Add Yongfeng support
+To:     Dave Hansen <dave.hansen@intel.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <tglx@linutronix.de>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <cobechen@zhaoxin.com>, <louisqi@zhaoxin.com>,
+        <silviazhao@zhaoxin.com>, <cooperyan@zhaoxin.com>
+References: <20230316021647.771-1-silviazhao-oc@zhaoxin.com>
+ <6f78ecfb-99c8-eee3-cad0-69bbd88a107c@intel.com>
+From:   silviazhaooc <silviazhao-oc@zhaoxin.com>
+In-Reply-To: <6f78ecfb-99c8-eee3-cad0-69bbd88a107c@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.29.8.47]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ ZXBJMBX02.zhaoxin.com (10.29.252.6)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1679276160
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 926
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.106283
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-18 at 05:59:28 -0700, Tom Rix wrote:
+On 2023/3/16 22:59, Dave Hansen wrote:
+> On 3/15/23 19:16, silviazhao wrote:
+>> +		case 0x5b:
+>> +			zx_pmon_event_map[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND] =
+>> +				X86_CONFIG(.event = 0x02, .umask = 0x01, .inv = 0x01,
+>> +						.cmask = 0x01);
 > 
-> On 3/18/23 2:59 AM, Xu Yilun wrote:
-> > On 2023-03-17 at 19:06:17 -0400, Tom Rix wrote:
-> > > clang with W=1 reports
-> > > drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
-> > > static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> > >                    ^
-> > > This static function is not used, so remove it.
-> > I prefer to move the description as the first section. If you agree, I
-> > could do it before apply.
+> On the Intel side of x86/ land, we used to have these open-coded
+> model/family numbers scattered about.  But, a few years ago, we started
+> populating arch/x86/include/asm/intel-family.h and using those instead.
+> I think it's been pretty successful.  It's a lot easier to grep for
+> INTEL_FAM6_NEHALEM_EX than for 0x2E.
 > 
-> I have no preference, that is fine.
+> Is there a chance we could start doing the same for other CPU vendors?
+> Perhaps start with:
+> 
+> #define ZHAOXIN_FAMILY_YONGFENG 0x5B
 
-Applied, thanks.
-
-> 
-> Tom
-> 
-> > 
-> > Acked-by: Xu Yilun <yilun.xu@intel.com>
-> > 
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > >   drivers/fpga/xilinx-pr-decoupler.c | 6 ------
-> > >   1 file changed, 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> > > index 2d9c491f7be9..b6f18c07c752 100644
-> > > --- a/drivers/fpga/xilinx-pr-decoupler.c
-> > > +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> > > @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
-> > >   	writel(val, d->io_base + offset);
-> > >   }
-> > > -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> > > -					u32 offset)
-> > > -{
-> > > -	return readl(d->io_base + offset);
-> > > -}
-> > > -
-> > >   static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
-> > >   {
-> > >   	int err;
-> > > -- 
-> > > 2.27.0
-> > > 
-> 
+Great suggestion. After discussing with my colleagues, we decide to add 
+these open-coded model/family numbers into a new file like 
+zhaoxin-family.h, create a new patch set and re-commit.
