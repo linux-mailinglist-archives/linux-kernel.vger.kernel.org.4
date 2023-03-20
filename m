@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598676C1316
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C1C6C1AC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjCTNTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
+        id S232976AbjCTQAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbjCTNSV (ORCPT
+        with ESMTP id S233353AbjCTP7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:18:21 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20371B567;
-        Mon, 20 Mar 2023 06:18:16 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PgFfV63n2z4f3jY9;
-        Mon, 20 Mar 2023 21:18:10 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvrEQXRhkWTLvFg--.47360S2;
-        Mon, 20 Mar 2023 21:18:10 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     error27@gmail.com, jack@suse.cz, shikemeng@huaweicloud.com
-Subject: [PATCH] ext4: avoid to access uninitialized block_cluster
-Date:   Tue, 21 Mar 2023 05:21:06 +0800
-Message-Id: <20230320212106.4164212-1-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
+        Mon, 20 Mar 2023 11:59:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519AD3D910;
+        Mon, 20 Mar 2023 08:50:08 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KDoR3B029149;
+        Mon, 20 Mar 2023 14:47:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JqwEq22q9ncqQOVEz7KN8AdM+7Ga4CcGnI0+KU4Ih5g=;
+ b=DNywmC9r1P8uMY6oQ2un0xAi0OGgDewtUlj1ExZ1PyAs3BoFuPzr/A0ULWoc+8eXHJKJ
+ iVfiesckik84LreWUnnTl7404jjD5PR+HGL/iOzw/XSuMLzjKGVUY6suw1xEVuWqbg18
+ CaglMW1cZOTZs/eD3L0icgqM9rVIiNXXHXdk7U4KHAjtAj583LomK6N584UAc08MKllT
+ ZNlqvhp6Ty9QsSpTXZLicjb1DHdEZoH//KReaxwK+PtG++y93UkzRXXRael5FO8mTChB
+ 7Pnaq/1j4tAtQMzF0L/Iv1OGZW4g5ozHYDhBRvzDwXi25R/LR96oqx00WsSZxq0ybPEd xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3perqfsmxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 14:47:56 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32KDqqcX008157;
+        Mon, 20 Mar 2023 14:47:55 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3perqfsmx4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 14:47:55 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32KCe6m8028306;
+        Mon, 20 Mar 2023 14:47:55 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3pd4x78m2s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 14:47:54 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32KElr5n57344392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Mar 2023 14:47:53 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4750B5805C;
+        Mon, 20 Mar 2023 14:47:53 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0271458054;
+        Mon, 20 Mar 2023 14:47:52 +0000 (GMT)
+Received: from [9.65.246.37] (unknown [9.65.246.37])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 14:47:51 +0000 (GMT)
+Message-ID: <29430ef5-101d-c639-0f64-b9b709d34afd@linux.ibm.com>
+Date:   Mon, 20 Mar 2023 10:47:51 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvrEQXRhkWTLvFg--.47360S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrtFy7JF4UCr4fJw1DKF4fAFb_yoW8Jr48pw
-        sIy3W5GrW5ur1qga1fJr97Xw4rGw18Kr17Ja43Cr13WFZrXw4xJF95tFs0vF1j9rZrCF9I
-        vr129rWUu3s5G37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
-        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRi
-        Pl1DUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] s390/vfio-ap-drv: Remove redundant driver match
+ function
+Content-Language: en-US
+To:     Lizhe <sensor1010@163.com>, pasic@linux.ibm.com,
+        jjherne@linux.ibm.com, freude@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230319041941.259830-1-sensor1010@163.com>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <20230319041941.259830-1-sensor1010@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LXsdhGqwjc-oO3sUCnQd1LwMBlyobEX5
+X-Proofpoint-ORIG-GUID: 5BKVyTrzBrO8xaRUScMQkRam9Lv_6LoA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_10,2023-03-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 phishscore=0
+ mlxlogscore=999 malwarescore=0 spamscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303200123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If inode bitmap block and block bitmap block are in different group,
-there is a risk to access uninitialized block_cluster in
-ext4_num_overhead_clusters. Initialize block_cluster to -1 to fix this.
+Reviewed-by: Tony Krowiak <akrowiak@linux.ibm.com>
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/202303171446.eLEhZzAu-lkp@intel.com/
-Fixes: e3c70113e2cb ("ext4: improve inode table blocks counting in ext4_num_overhead_clusters")
----
- fs/ext4/balloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
-index 49fdb758b0e4..094269488183 100644
---- a/fs/ext4/balloc.c
-+++ b/fs/ext4/balloc.c
-@@ -89,7 +89,7 @@ static unsigned ext4_num_overhead_clusters(struct super_block *sb,
- 					   struct ext4_group_desc *gdp)
- {
- 	unsigned base_clusters, num_clusters;
--	int block_cluster, inode_cluster;
-+	int block_cluster = -1, inode_cluster;
- 	int itbl_cluster_start = -1, itbl_cluster_end = -1;
- 	ext4_fsblk_t start = ext4_group_first_block_no(sb, block_group);
- 	ext4_fsblk_t end = start + EXT4_BLOCKS_PER_GROUP(sb) - 1;
--- 
-2.30.0
-
+On 3/19/23 12:19 AM, Lizhe wrote:
+> If there is no driver match function, the driver core assumes that each
+> candidate pair (driver, device) matches, see driver_match_device().
+>
+> Drop the matrix bus's match function that always returned 1 and so
+> implements the same behaviour as when there is no match function
+>
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> ---
+>   drivers/s390/crypto/vfio_ap_drv.c | 6 ------
+>   1 file changed, 6 deletions(-)
+>
+> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
+> index 997b524bdd2b..9341c000da41 100644
+> --- a/drivers/s390/crypto/vfio_ap_drv.c
+> +++ b/drivers/s390/crypto/vfio_ap_drv.c
+> @@ -59,14 +59,8 @@ static void vfio_ap_matrix_dev_release(struct device *dev)
+>   	kfree(matrix_dev);
+>   }
+>   
+> -static int matrix_bus_match(struct device *dev, struct device_driver *drv)
+> -{
+> -	return 1;
+> -}
+> -
+>   static struct bus_type matrix_bus = {
+>   	.name = "matrix",
+> -	.match = &matrix_bus_match,
+>   };
+>   
+>   static struct device_driver matrix_driver = {
