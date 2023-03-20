@@ -2,175 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA186C0C4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EAD6C0C53
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjCTIfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S230411AbjCTIgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjCTIfQ (ORCPT
+        with ESMTP id S230402AbjCTIgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:35:16 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D051B566;
-        Mon, 20 Mar 2023 01:35:14 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j2so9469407wrh.9;
-        Mon, 20 Mar 2023 01:35:14 -0700 (PDT)
+        Mon, 20 Mar 2023 04:36:12 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409671B567
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:36:08 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id eh3so43410369edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679301313;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mw6JA2zY0YivE6nJVSYT9uoTL/7utmSek4bJmSKErlA=;
-        b=MuqoYtE2A+FbAxOcuJ0LCjSECiXJedG/YWDzZ7ct3SmzvH3SKQQrga/OgBkOZx379n
-         PWzmdELer0aISPFvHWVEkbck/cPSJD0vIUov3TyFJ1aRufsqpa4N3F5YuJg0CXiHtiao
-         /g3aPrRkHmdSuZsbGgfwE4LKoK9Oq+2B2lqKL7RWR5a0JJPJbfzafJty8hTFnZtUdXd5
-         sBvEOPkKA34Os6P4fCBuHcNzNnA5HL6Br28lk/TEN+tAOrSj/rHDyaNNrenz1ptSsfDr
-         o1BfF2+RdxRtZcHKjohX4TZG0S1SNwAH8zCJ8pqoD40xWcSkO8p5Nl4wj+XD6R4TVUdN
-         4SFQ==
+        d=linaro.org; s=google; t=1679301367;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EXj7AxGe8a/AWVZK9V6ITMJ6vFa0cOONXWJXMR9eH6M=;
+        b=ZQhU+h+p+BSi1x7xKlAkzSzjTnRY8ptpMPTRGk8YvWOgg0b+/aYcwerQJHi1ZHd+z8
+         qwwCUJsC0K0/yb7Xz0Omts3aL/rg+/jOCtWGO6bmkSqbdBDqdYWbKnaK5bVubZ1pPEIN
+         DZtvKYmzGG4xQEGvlN1f3HdYtKTlTRuYoz5gNPq6vI6yEp1xaV0B//MjZIeUZGyoxQkj
+         kxgvWTmgAbJi1rHZqY5x4XAfCBilV1PCVogq5t1FTeeZHES5hKTDW/Z8JffY9w0MHtT+
+         AzQxlbCK6yg/n32kMCwC6rDWc88qo52ruUtdU8okzrbqkNDmB1EnEd9yjCBzAkb6vvDO
+         wF7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679301313;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mw6JA2zY0YivE6nJVSYT9uoTL/7utmSek4bJmSKErlA=;
-        b=jUSeCq7CZJr76Qm939YUVNZphc0HyknYijCVc/kK1YS1kmOxA3YbwBqM/rSHWLRHKL
-         siFHcMsUMOYlKx2NwW225V6jomJ31GuY9EU2CdEgozr3SiOivm/GtaDtw4V3/BTmlhkt
-         tE7QRzMb/ON0hYhgNyGKpM/TteZrtDPZXOTrju3BjIPixMRgL8kj9yGvW2vXv1MWl9J2
-         ug0lfVt2pRrwUZJI1wehCKFiz9YuwtQJIfGiLjoTS8XkYhKg+CIRFkK0BfsCA5cxgUZ0
-         QrB1kjx//LpWodJZkn4qRLIndqoumksP1np/MlfwcbiQGH5rGmU/5NDfvCeSf6c99NuL
-         DPUQ==
-X-Gm-Message-State: AO0yUKV1q2/mCBoMh88Zb4d1mejV0zK59OYVjCDRf/E/VGM5tgZCOxyJ
-        9zSt/1QgdZQqA5alEdUQ34k=
-X-Google-Smtp-Source: AK7set9ID3EMrd5i5Zd++UKkLOmJpQYqUv4XbWXkslFicxah1hD9HjPt06aCYaEbotmTX9SH+EYFNg==
-X-Received: by 2002:adf:e88a:0:b0:2d3:33d4:1cfb with SMTP id d10-20020adfe88a000000b002d333d41cfbmr8150741wrm.36.1679301312658;
-        Mon, 20 Mar 2023 01:35:12 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id u4-20020a5d4344000000b002c5526234d2sm8405427wrr.8.2023.03.20.01.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:35:12 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 08:35:11 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <cd91527d-e6e0-4900-a368-dfc9812546da@lucifer.local>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBgROQ0uAfZCbScg@pc636>
- <413e0dfe-5a68-4cd9-9036-bed741e4cd22@lucifer.local>
- <ZBgaBqareTrUrasp@pc636>
+        d=1e100.net; s=20210112; t=1679301367;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EXj7AxGe8a/AWVZK9V6ITMJ6vFa0cOONXWJXMR9eH6M=;
+        b=jPjUIXGTRxCcc4A98X31T5ANtQxtw5V5POCDQv32A6aa6B+4G4UvOSkul9fNz0Ddac
+         bL5cmuKngZGQ3KMEb3PqBEzdqO7ZYnhcFuGT7DFE1gNLwFeDGcinHHDnibXZGO/N7neB
+         +njedlDS79G+GZwikkTIXxhyFO8hC/zhnhuNSZ7kmw1YwZAotv3z37q+mMNENCdzQrqw
+         5WFx1E37vfyMM/9wis1gEBKwQrKjrB8SiIEhpU4ITNjV+EIOQZDnF7J4R/VwsdSYg2Tl
+         GbqeqSqqVZsYTDi9GGeK7a6LyuLNjwExZdNNLr0oLYAG7apbbs8qYlnfg74L0two1/CY
+         ulmw==
+X-Gm-Message-State: AO0yUKXxbh8rF4Oy1o/eEwG5NHIfEU9o3L4M1WjO2UXswOwY4SfZ+zg8
+        9JBfY0M1S9VkZ1O9azznGaJjrICAMCVqhLLjWhI=
+X-Google-Smtp-Source: AK7set+23hCkEkPd4JCHw6bubA3/j+6AoHuaXJw9oOpouh+B0Jv9DY4FNJBSb5CMIfZXywHy9tZ64w==
+X-Received: by 2002:a05:6402:53:b0:4fb:4f1a:d4e1 with SMTP id f19-20020a056402005300b004fb4f1ad4e1mr10966091edu.37.1679301366716;
+        Mon, 20 Mar 2023 01:36:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4428:8354:afb6:2992? ([2a02:810d:15c0:828:4428:8354:afb6:2992])
+        by smtp.gmail.com with ESMTPSA id r29-20020a50d69d000000b004c2158e87e6sm4448985edi.97.2023.03.20.01.36.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 01:36:06 -0700 (PDT)
+Message-ID: <8c5a7421-2948-674d-91a0-9cafe336401b@linaro.org>
+Date:   Mon, 20 Mar 2023 09:36:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBgaBqareTrUrasp@pc636>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
+ patternProperties
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
+ <20230316030514.137427-4-xingyu.wu@starfivetech.com>
+ <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
+ <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
+ <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
+ <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
+ <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
+ <2eb0380e-bbb7-83fd-3916-9bdd8b068334@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2eb0380e-bbb7-83fd-3916-9bdd8b068334@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 09:32:06AM +0100, Uladzislau Rezki wrote:
-> On Mon, Mar 20, 2023 at 08:25:32AM +0000, Lorenzo Stoakes wrote:
-> > On Mon, Mar 20, 2023 at 08:54:33AM +0100, Uladzislau Rezki wrote:
-> > > > vmalloc() is, by design, not permitted to be used in atomic context and
-> > > > already contains components which may sleep, so avoiding spin locks is not
-> > > > a problem from the perspective of atomic context.
-> > > >
-> > > > The global vmap_area_lock is held when the red/black tree rooted in
-> > > > vmap_are_root is accessed and thus is rather long-held and under
-> > > > potentially high contention. It is likely to be under contention for reads
-> > > > rather than write, so replace it with a rwsem.
-> > > >
-> > > > Each individual vmap_block->lock is likely to be held for less time but
-> > > > under low contention, so a mutex is not an outrageous choice here.
-> > > >
-> > > > A subset of test_vmalloc.sh performance results:-
-> > > >
-> > > > fix_size_alloc_test             0.40%
-> > > > full_fit_alloc_test		2.08%
-> > > > long_busy_list_alloc_test	0.34%
-> > > > random_size_alloc_test		-0.25%
-> > > > random_size_align_alloc_test	0.06%
-> > > > ...
-> > > > all tests cycles                0.2%
-> > > >
-> > > > This represents a tiny reduction in performance that sits barely above
-> > > > noise.
-> > > >
-> > > How important to have many simultaneous users of vread()? I do not see a
-> > > big reason to switch into mutexes due to performance impact and making it
-> > > less atomic.
-> >
-> > It's less about simultaneous users of vread() and more about being able to write
-> > direct to user memory rather than via a bounce buffer and not hold a spinlock
-> > over possible page faults.
-> >
-> > The performance impact is barely above noise (I got fairly widely varying
-> > results), so I don't think it's really much of a cost at all. I can't imagine
-> > there are many users critically dependent on a sub-single digit % reduction in
-> > speed in vmalloc() allocation.
-> >
-> > As I was saying to Willy, the code is already not atomic, or rather needs rework
-> > to become atomic-safe (there are a smattering of might_sleep()'s throughout)
-> >
-> > However, given your objection alongside Willy's, let me examine Willy's
-> > suggestion that we instead of doing this, prefault the user memory in advance of
-> > the vread call.
-> >
-> Just a quick perf tests shows regression around 6%. 10 workers test_mask is 31:
->
-> # default
-> [  140.349731] All test took worker0=485061693537 cycles
-> [  140.386065] All test took worker1=486504572954 cycles
-> [  140.418452] All test took worker2=467204082542 cycles
-> [  140.435895] All test took worker3=512591010219 cycles
-> [  140.458316] All test took worker4=448583324125 cycles
-> [  140.494244] All test took worker5=501018129647 cycles
-> [  140.518144] All test took worker6=516224787767 cycles
-> [  140.535472] All test took worker7=442025617137 cycles
-> [  140.558249] All test took worker8=503337286539 cycles
-> [  140.590571] All test took worker9=494369561574 cycles
->
-> # patch
-> [  144.464916] All test took worker0=530373399067 cycles
-> [  144.492904] All test took worker1=522641540924 cycles
-> [  144.528999] All test took worker2=529711158267 cycles
-> [  144.552963] All test took worker3=527389011775 cycles
-> [  144.592951] All test took worker4=529583252449 cycles
-> [  144.610286] All test took worker5=523605706016 cycles
-> [  144.627690] All test took worker6=531494777011 cycles
-> [  144.653046] All test took worker7=527150114726 cycles
-> [  144.669818] All test took worker8=526599712235 cycles
-> [  144.693428] All test took worker9=526057490851 cycles
->
+On 20/03/2023 09:26, Xingyu Wu wrote:
+> On 2023/3/20 15:40, Krzysztof Kozlowski wrote:
+>> On 20/03/2023 08:29, Xingyu Wu wrote:
+>>> On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
+>>>> On 20/03/2023 04:54, Xingyu Wu wrote:
+>>>>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
+>>>>>> On 16/03/2023 04:05, Xingyu Wu wrote:
+>>>>>>> Add optional compatible and patternProperties.
+>>>>>>>
+>>>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>>>>> ---
+>>>>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
+>>>>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>>> index ae7f1d6916af..b61d8921ef42 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>>> @@ -15,16 +15,31 @@ description: |
+>>>>>>>  
+>>>>>>>  properties:
+>>>>>>>    compatible:
+>>>>>>> -    items:
+>>>>>>> -      - enum:
+>>>>>>> -          - starfive,jh7110-aon-syscon
+>>>>>>> -          - starfive,jh7110-stg-syscon
+>>>>>>> -          - starfive,jh7110-sys-syscon
+>>>>>>> -      - const: syscon
+>>>>>>> +    oneOf:
+>>>>>>> +      - items:
+>>>>>>> +          - enum:
+>>>>>>> +              - starfive,jh7110-aon-syscon
+>>>>>>> +              - starfive,jh7110-stg-syscon
+>>>>>>> +              - starfive,jh7110-sys-syscon
+>>>>>>> +          - const: syscon
+>>>>>>> +      - items:
+>>>>>>> +          - enum:
+>>>>>>> +              - starfive,jh7110-aon-syscon
+>>>>>>> +              - starfive,jh7110-stg-syscon
+>>>>>>> +              - starfive,jh7110-sys-syscon
+>>>>>>> +          - const: syscon
+>>>>>>> +          - const: simple-mfd
+>>
+>> BTW, this also looks wrong. You just said that clock controller exists
+>> only in few variants. Also, why sometimes the same device  goes with
+>> simple-mfd and sometimies without? It's the same device.
+> 
+> Oh yes, If modified to:
+> 
+> oneOf:
+>       - items:
+>           - enum:
+>               - starfive,jh7110-aon-syscon
+>               - starfive,jh7110-stg-syscon
+>           - const: syscon
+>       - items:
+>           - const: starfive,jh7110-sys-syscon
+>           - const: syscon
+>           - const: simple-mfd
+> 
+> Or:
+> 
+>      - minItems: 2
+>        items:
+>          - enum:
+>              - starfive,jh7110-aon-syscon
+>              - starfive,jh7110-stg-syscon
+>              - starfive,jh7110-sys-syscon
+>          - const: syscon
+>          - const: simple-mfd
+> 
+> 
+> Which one is better?
 
-OK ouch, that's worse than I observed! Let me try this prefault approach and
-then we can revert back to spinlocks.
+If aon and stg are not supposed to have children, then only the first is
+correct. It's not which is better, the second is not really correct in
+such case.
 
-> > >
-> > > So, how important for you to have this change?
-> > >
-> >
-> > Personally, always very important :)
-> >
-> This is good. Personal opinion always wins :)
->
+Best regards,
+Krzysztof
 
-The heart always wins ;) well, an adaption here can make everybody's hearts
-happy I think.
-
-> --
-> Uladzislau Rezki
