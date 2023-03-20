@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E856C1578
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947796C154F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjCTOrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S231894AbjCTOp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbjCTOqT (ORCPT
+        with ESMTP id S231877AbjCTOor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:46:19 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A79233E0;
-        Mon, 20 Mar 2023 07:45:18 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id fd25so7072177pfb.1;
-        Mon, 20 Mar 2023 07:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679323518;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oauBr8L/4q4Zcgdj0lHO6PXlptkvS9AYRCFUFpLRYaw=;
-        b=W0rr2Cqq8hYbPCTku8RNPwzAfVaC1WEIRqg/Jo/IaQ3jvSFgpYQ8herChIJi7syMJ5
-         YIfI8bLz+etpsyzlOr+ptGN7aE4yv3qQncLdwK43FM6YBwMvLv2nGuzW75q86R0a+YAr
-         /BdXDMgQTi9jJFtm5pTOw4gXpkvXIjjdQ3m0/xGK4graIJcbepoylaU8+L3vUi3eQAwo
-         mtSrja7NmvnQcnDLmqflMFRZ/y0KW5yPJuyn1li/3tS0CJzypeUbWgn9VKnIYHVcT7zk
-         uSs37Ij8K4IFmzBssfj5JXRk9yXHeRHiK+Cxe3xgHa7l3E0jYsSkcDMjuztlg2g3IcnX
-         4Yqg==
+        Mon, 20 Mar 2023 10:44:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9526585
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679323440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MkxAqySEXMl0R33PqRVjUbl51OSwhSQixWd8OI14xk4=;
+        b=AQ9ZEpQxT76hRKCB1bVT+S1s4DNqDOdi+BhNlUJJgrsi4wVPWx2Hz9DFNcqhRxIntAlVpO
+        7Lqs0p+yVpTHYZfxqxxE+x+6jVvUWYURe64jPtAJmzC6eFkRKqUQp6QzLI5NuiGM4JRqhR
+        dVD5blZGDi8LQVdDOKOErbcTuIdx2s8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-533-CzIkRHnvMl2kBeV95hzCSQ-1; Mon, 20 Mar 2023 10:43:59 -0400
+X-MC-Unique: CzIkRHnvMl2kBeV95hzCSQ-1
+Received: by mail-qk1-f197.google.com with SMTP id 203-20020a370ad4000000b00746981f8f4bso152050qkk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:43:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679323518;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oauBr8L/4q4Zcgdj0lHO6PXlptkvS9AYRCFUFpLRYaw=;
-        b=IRzK7tS7hr2DDEYXtjq0C5mRD6mdDoJr07+USdEarq+pbYCOadEwV1KrWzjrxJ/iQ0
-         2laO0OPjeoibtjxCaZyusZ84QIDqsjSuwlgRfI8qMonfoDCa5781cFo2OwZCPi1u9zr/
-         pG0tJ+pYzhMt2GYjBj4PxziALyDqAuTNdRSXIr6R0VT+gB5pxvmhCsttt0IaLUAhK2yZ
-         pgz6ZwToKcBjJ+bW2jziwFTpRzuc3VJlvCP1UOYUAmlXisTeKNZxzXj+DbPh68OhZx7J
-         s84jVLchyQAPWWGZ0MWLzd/zW1qhbF0O1slTePEhY9nkeHT47HEpTk28I9C6eRC/LaNF
-         n66g==
-X-Gm-Message-State: AO0yUKWdSANXwGV6zqpzGFedVUlAYmpZ0j6fojWjfC+tIdTcTiJemBJk
-        qWtIMy3xnYXJTDlK9SpoSpU=
-X-Google-Smtp-Source: AK7set9yi2RN2vxR93mdgHSZKeyGB3sxPREYIvUl6fxuZOWrBiOHFnCQYgj8gj4DknW3GheF00DOIw==
-X-Received: by 2002:a62:1a05:0:b0:5a8:9858:750a with SMTP id a5-20020a621a05000000b005a89858750amr13197023pfa.13.1679323517814;
-        Mon, 20 Mar 2023 07:45:17 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id j24-20020aa78018000000b006245e034059sm6618112pfi.178.2023.03.20.07.45.17
+        d=1e100.net; s=20210112; t=1679323438; x=1681915438;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MkxAqySEXMl0R33PqRVjUbl51OSwhSQixWd8OI14xk4=;
+        b=0OsiCZvBkJKirgDVWGRGNYwxn9U5jGysxAUDVs7wVo1oPVEHeVXV/pHHMOiB/wTz67
+         Y+5BiA6sIRKzKviGi+In7Ulh8OMBABdnytgq+A+6AMOPYH+Bx47sRdi0EWIu8sV0Zi73
+         9p86a2OJX2SdKXS5w40iCL/n0x3/5MDKNWLSVuFLn7QoCV41YFZ3yBzvaoEq6HRzez6V
+         eOu3pqKgpnVpF/Gz6+9700JX3bRWM89TnvyEi+V4Oc8BjRq/QQnbI4UFZYWFRglXPyUQ
+         id8rD8ql9lPGxsfxN71q1Fnj466Zu6HCKnQgRVns1BzWjNx2jqyfZv/6jLkHPhwTpVCK
+         L32Q==
+X-Gm-Message-State: AO0yUKV3I+ANkgFE/TX6oVPlDQIOBlAS9cPFVhP26HoUH4X5a3EYchud
+        zG44uN9XPgY04ntbpXDPRosJzxMvq6WPWsIAVgpay1WULhf3qe9RDY2SU0J/qIcGoHvuuB5Fm+O
+        wB8N0pqs06FLtb8k9VdwqKCi5
+X-Received: by 2002:a05:6214:224f:b0:5ab:af50:eb45 with SMTP id c15-20020a056214224f00b005abaf50eb45mr33845736qvc.3.1679323438487;
+        Mon, 20 Mar 2023 07:43:58 -0700 (PDT)
+X-Google-Smtp-Source: AK7set94Mxdb5LXI5fakGqoQUEz6o2Jw3M+bhIYPR7UKsBQKN5OuQZCRLIwwCui0WSKxTLGej/NOBg==
+X-Received: by 2002:a05:6214:224f:b0:5ab:af50:eb45 with SMTP id c15-20020a056214224f00b005abaf50eb45mr33845711qvc.3.1679323438265;
+        Mon, 20 Mar 2023 07:43:58 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id g2-20020a37b602000000b0071aacb2c76asm7262870qkf.132.2023.03.20.07.43.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:45:17 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 23/23] drm/sched: Add (optional) fence signaling annotation
-Date:   Mon, 20 Mar 2023 07:43:45 -0700
-Message-Id: <20230320144356.803762-24-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320144356.803762-1-robdclark@gmail.com>
-References: <20230320144356.803762-1-robdclark@gmail.com>
+        Mon, 20 Mar 2023 07:43:57 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 10:43:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v4 2/2] selftests/mm: Smoke test
+ UFFD_FEATURE_WP_UNPOPULATED
+Message-ID: <ZBhxLOBocC7mCYDG@x1n>
+References: <20230309223711.823547-1-peterx@redhat.com>
+ <20230309223711.823547-3-peterx@redhat.com>
+ <4ab36009-51c0-6583-4948-b267f8fbf32a@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4ab36009-51c0-6583-4948-b267f8fbf32a@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,82 +86,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Mon, Mar 20, 2023 at 11:25:43AM +0100, David Hildenbrand wrote:
+> On 09.03.23 23:37, Peter Xu wrote:
+> > Enable it by default on the stress test, and add some smoke tests for the
+> > pte markers on anonymous.
+> 
+> Would it make sense to make kernel support optional and test both paths --
+> once with the feature enabled (if available on the kernel we're testing) and
+> once with the feature disabled?
 
-Based on
-https://lore.kernel.org/dri-devel/20200604081224.863494-10-daniel.vetter@ffwll.ch/
-but made to be optional.
+Yeah, I think the current uffd selftest is not friendly to old kernels so I
+made it simple - IOW the test should fail already on old kernels AFAIK.
+Maybe I can prepare some patches this week or next to cleanup some parts of
+it.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_ringbuffer.c   | 1 +
- drivers/gpu/drm/scheduler/sched_main.c | 9 +++++++++
- include/drm/gpu_scheduler.h            | 2 ++
- 3 files changed, 12 insertions(+)
+Thanks,
 
-diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm/msm_ringbuffer.c
-index b60199184409..7e42baf16cd0 100644
---- a/drivers/gpu/drm/msm/msm_ringbuffer.c
-+++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
-@@ -93,6 +93,7 @@ struct msm_ringbuffer *msm_ringbuffer_new(struct msm_gpu *gpu, int id,
- 	 /* currently managing hangcheck ourselves: */
- 	sched_timeout = MAX_SCHEDULE_TIMEOUT;
- 
-+	ring->sched.fence_signaling = true;
- 	ret = drm_sched_init(&ring->sched, &msm_sched_ops,
- 			num_hw_submissions, 0, sched_timeout,
- 			NULL, NULL, to_msm_bo(ring->bo)->name, gpu->dev->dev);
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 4e6ad6e122bc..c2ee44d6224b 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -978,10 +978,15 @@ static bool drm_sched_blocked(struct drm_gpu_scheduler *sched)
- static int drm_sched_main(void *param)
- {
- 	struct drm_gpu_scheduler *sched = (struct drm_gpu_scheduler *)param;
-+	const bool fence_signaling = sched->fence_signaling;
-+	bool fence_cookie;
- 	int r;
- 
- 	sched_set_fifo_low(current);
- 
-+	if (fence_signaling)
-+		fence_cookie = dma_fence_begin_signalling();
-+
- 	while (!kthread_should_stop()) {
- 		struct drm_sched_entity *entity = NULL;
- 		struct drm_sched_fence *s_fence;
-@@ -1039,6 +1044,10 @@ static int drm_sched_main(void *param)
- 
- 		wake_up(&sched->job_scheduled);
- 	}
-+
-+	if (fence_signaling)
-+		dma_fence_end_signalling(fence_cookie);
-+
- 	return 0;
- }
- 
-diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-index 9db9e5e504ee..8f23ea522e22 100644
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@ -483,6 +483,7 @@ struct drm_sched_backend_ops {
-  * @ready: marks if the underlying HW is ready to work
-  * @free_guilty: A hit to time out handler to free the guilty job.
-  * @dev: system &struct device
-+ * @fence_signaling: Opt in to fence signaling annotations
-  *
-  * One scheduler is implemented for each hardware ring.
-  */
-@@ -507,6 +508,7 @@ struct drm_gpu_scheduler {
- 	bool				ready;
- 	bool				free_guilty;
- 	struct device			*dev;
-+	bool 				fence_signaling;
- };
- 
- int drm_sched_init(struct drm_gpu_scheduler *sched,
 -- 
-2.39.2
+Peter Xu
 
