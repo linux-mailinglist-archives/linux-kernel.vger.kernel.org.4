@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2586C23C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A216C23C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjCTVfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S230478AbjCTVfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjCTVf2 (ORCPT
+        with ESMTP id S230346AbjCTVff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:35:28 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C47113D54
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:35:02 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t15so11795399wrz.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:35:02 -0700 (PDT)
+        Mon, 20 Mar 2023 17:35:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52E61C30E;
+        Mon, 20 Mar 2023 14:35:04 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id j13so13602111pjd.1;
+        Mon, 20 Mar 2023 14:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec; t=1679348089;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oor1vzSTyizg8aBXX22RBj8zX1I0yC0LRLEIz7uLBsk=;
-        b=v1E0SqeiGdgKMPAvqLAroPtn0RLHfkTe2djuIFU6Rzhgsj1efC/TgfS9TG+Bp+03Bz
-         HbdFPW1Cetz6+2UuG8Ub+GPRq4cGfsfcbEdNtHnSb09hFnHJh/4nlpbtNuL7E2Xw0oD4
-         j+GiojUQgXACseZaPs/DUHJyKeM+pKNx+VruuXik46VI4obD6VlWRYNonsEBr3EGKxKH
-         lJel1KMH63f+jqGdFo+nGu34yaH1JHuYQ01H1OGhaFC+5H02pZ5EqSktuhu8FbPLBy1d
-         SQcnhshhjNSlurSuEctw9wdoa9EViaX8cUsfpKy5o1On6GU6dQ4eZLmyer3sD667p4IQ
-         Kz/Q==
+        d=gmail.com; s=20210112; t=1679348103;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wxcmHlfAenV2U41coeShonsYsA39MjpAEzY31lGo8mY=;
+        b=pZlSE0mjG9rsBJ1CyuI5jN5dpQHi1nX0XxG7ABXqL+BeO4qjKcGG/0iQ6RlafToWbt
+         ztuHMibXwJVyFOiygNzxgxth0y+1s4ZgcF1Mz2TFAOrMkYwh8Tb/VAe4JXLf7Cw+gJXF
+         NNFlLWuoYql56KzEfdQW4ZFrKSb5s4ZxxeuG2GZOwOyZWCzVHWUm2gR0tPx2MGXJSoap
+         zaTnX6BnBGwH5eziMk8wTCToOGVQ+np2I7+j2O2D8v/u8e8RZQY4Mvd5wnz2hyDEl5AB
+         xywZblSKB/frBFClIz5zmo6iOj3z6Yf73E47U5w6WLzYBcxH1Sl9HneSzqUCzmSM0l8S
+         BgTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679348089;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oor1vzSTyizg8aBXX22RBj8zX1I0yC0LRLEIz7uLBsk=;
-        b=YrCSQKLGZdN8uQ0doxPCvh7TPcMhw6FJaQqM1mLADgSyFsGZjvnOaxD98aRPlD0QYS
-         tsSfh6njbSytdwTHZJA8ySYFeD6l6/ACrmJnWS3HakLcC3JxECiIkbogCr0Jo8Z6QvKz
-         7HjQNWAqtxhYtgmmgt25E+IEOd2Bug3x8fBlUZazZfIm96znV0oY/ZJRMYPRn18kI/KB
-         mpp82O0TCe9StSKX9vTm72GdY445afmfOyLgoc+WH3q9/rtJPLVnzOEVXFo1E8wGwap+
-         eNkidTz0mTLjHjK5pGq5Bur26fYeO90nNp1lalWgxJywDHDaSrEwGC8MEurhbIn3ULvL
-         YjCw==
-X-Gm-Message-State: AO0yUKWfR/b4cTp1MFcmvMgNq3jA5kUNTwB4JkUxEBahtAPTxW2PpJEi
-        t6RbqtPK2A8RSIE2li2YIMdrjw==
-X-Google-Smtp-Source: AK7set+TZzZybYcteWhuUR3pyGrbfz//+0HA4ZdWmFB0SVDP6THOSdJjHXEjyKA/TIAti5hr01YJag==
-X-Received: by 2002:adf:ef8c:0:b0:2cf:ef5d:4ee7 with SMTP id d12-20020adfef8c000000b002cfef5d4ee7mr510623wro.69.1679348089290;
-        Mon, 20 Mar 2023 14:34:49 -0700 (PDT)
-Received: from ?IPV6:2003:f6:af11:1000:ea7:9b12:7b30:c669? (p200300f6af1110000ea79b127b30c669.dip0.t-ipconnect.de. [2003:f6:af11:1000:ea7:9b12:7b30:c669])
-        by smtp.gmail.com with ESMTPSA id v14-20020adfe28e000000b002c5a790e959sm9799630wri.19.2023.03.20.14.34.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 14:34:48 -0700 (PDT)
-Message-ID: <7b428c85-5f20-a077-70b6-f361d2e7ffe7@grsecurity.net>
-Date:   Mon, 20 Mar 2023 22:34:47 +0100
+        d=1e100.net; s=20210112; t=1679348103;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wxcmHlfAenV2U41coeShonsYsA39MjpAEzY31lGo8mY=;
+        b=lqN0OqI39IgS/VlhvsJmWArG25YQaSY3yNCfz0ypW7Isk2dnjO9UB7T7jmQfbeWrte
+         sYC072JQVlnpqTPESCJOu/96muRq65TdX0MW3N51u3Geh2KBNaS7AxA92mTKCxd8UTG6
+         cUpkL4x0NDHbHDKvV/108wYmbne+V4AY6nDdkJ9/NbmpWvjjPBNxb1xurTvjeJoLq4KZ
+         MeTtEglDIF/kzwEAuuurrfx51nBfHI3j1tjNC5yb7qgovgs/QH5d7OGbo1a1knmXEzR6
+         zDmuVibDh53FBw5lZj1OAvdXLR4oIsnhwHk0lgtEr+JmXPEAUYNQrltCH9sSEmI5HvUH
+         efxg==
+X-Gm-Message-State: AO0yUKWvAmQ+BA8OYYOiUJfx83yc7482PJXzlpK83Oy3sIhmO96DI1j4
+        2uJsntDBBJ2/SNE++Gr8NPGHt3TdzLw=
+X-Google-Smtp-Source: AK7set9DwfMdviJ898W6mFizRhsl120BeKzmOjdleo7zjhlJfui5v/L5/gz8VbjlCgNt55ap41t7Ww==
+X-Received: by 2002:a05:6a20:8c08:b0:da:717f:9539 with SMTP id j8-20020a056a208c0800b000da717f9539mr1624pzh.5.1679348103369;
+        Mon, 20 Mar 2023 14:35:03 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y6-20020aa78546000000b005cdc64a287dsm6802519pfn.115.2023.03.20.14.35.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 14:35:02 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     opendmb@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next] net: phy: Improved phy_error() with function and error code
+Date:   Mon, 20 Mar 2023 14:34:51 -0700
+Message-Id: <20230320213451.2579608-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 4/6] KVM: x86: Make use of kvm_read_cr*_bits() when
- testing bits
-Content-Language: en-US, de-DE
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230201194604.11135-1-minipli@grsecurity.net>
- <20230201194604.11135-5-minipli@grsecurity.net> <ZBJEGfmv42MA6bKh@google.com>
-From:   Mathias Krause <minipli@grsecurity.net>
-In-Reply-To: <ZBJEGfmv42MA6bKh@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,40 +76,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.03.23 23:18, Sean Christopherson wrote:
-> On Wed, Feb 01, 2023, Mathias Krause wrote:
->> Make use of the kvm_read_cr{0,4}_bits() helper functions when we only
->> want to know the state of certain bits instead of the whole register.
->>
->> This not only makes the intend cleaner, it also avoids a VMREAD in case
->> the tested bits aren't guest owned.
->>
->> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
->> ---
->>  arch/x86/kvm/pmu.c     | 4 ++--
->>  arch/x86/kvm/vmx/vmx.c | 4 ++--
->>  2 files changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
->> index d939d3b84e6f..d9922277df67 100644
->> --- a/arch/x86/kvm/pmu.c
->> +++ b/arch/x86/kvm/pmu.c
->> @@ -439,9 +439,9 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
->>  	if (!pmc)
->>  		return 1;
->>  
->> -	if (!(kvm_read_cr4(vcpu) & X86_CR4_PCE) &&
->> +	if (!(kvm_read_cr4_bits(vcpu, X86_CR4_PCE)) &&
-> 
-> Purely as an FYI, I proposed adding helpers to query single CR0/CR4 bits in a
-> separate thread[*].  No need to do anything on your end, I'll plan on applying
-> this patch first and will handle whatever conflicts arise.
-> 
-> [*] https://lore.kernel.org/all/ZAuRec2NkC3+4jvD@google.com
+When the PHY library calls phy_error() something bad has happened, and
+we halt the PHY state machine. To facilitate debugging, introduce
+phy_error_precise() which allows us to provide useful information about
+the calling function and the error actually returned to facilitate
+debugging.
 
-Unfortunately, not all users of kvm_read_cr*_bits() only want to read a
-single bit. There are a very few that read bit masks -- but you're
-probably fully aware of this.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/phy/phy.c | 21 ++++++++++++++-------
+ include/linux/phy.h   |  6 +++++-
+ 2 files changed, 19 insertions(+), 8 deletions(-)
 
-Thanks,
-Mathias
+diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
+index b33e55a7364e..a84f7873700d 100644
+--- a/drivers/net/phy/phy.c
++++ b/drivers/net/phy/phy.c
+@@ -1170,17 +1170,20 @@ void phy_stop_machine(struct phy_device *phydev)
+ }
+ 
+ /**
+- * phy_error - enter HALTED state for this PHY device
++ * phy_error_precise - enter HALTED state for this PHY device
+  * @phydev: target phy_device struct
++ * @func: symbolic function name that returned the error
++ * @err: return code from the function that caused the error
+  *
+  * Moves the PHY to the HALTED state in response to a read
+  * or write error, and tells the controller the link is down.
+  * Must not be called from interrupt context, or while the
+  * phydev->lock is held.
+  */
+-void phy_error(struct phy_device *phydev)
++void phy_error_precise(struct phy_device *phydev, const void *func,
++		       int err)
+ {
+-	WARN_ON(1);
++	WARN(1, "%pS: returned: %d\n", func, err);
+ 
+ 	mutex_lock(&phydev->lock);
+ 	phydev->state = PHY_HALTED;
+@@ -1188,7 +1191,7 @@ void phy_error(struct phy_device *phydev)
+ 
+ 	phy_trigger_machine(phydev);
+ }
+-EXPORT_SYMBOL(phy_error);
++EXPORT_SYMBOL(phy_error_precise);
+ 
+ /**
+  * phy_disable_interrupts - Disable the PHY interrupts from the PHY side
+@@ -1378,6 +1381,7 @@ void phy_state_machine(struct work_struct *work)
+ 	struct net_device *dev = phydev->attached_dev;
+ 	bool needs_aneg = false, do_suspend = false;
+ 	enum phy_state old_state;
++	const void *func = NULL;
+ 	bool finished = false;
+ 	int err = 0;
+ 
+@@ -1396,6 +1400,7 @@ void phy_state_machine(struct work_struct *work)
+ 	case PHY_NOLINK:
+ 	case PHY_RUNNING:
+ 		err = phy_check_link_status(phydev);
++		func = &phy_check_link_status;
+ 		break;
+ 	case PHY_CABLETEST:
+ 		err = phydev->drv->cable_test_get_status(phydev, &finished);
+@@ -1425,16 +1430,18 @@ void phy_state_machine(struct work_struct *work)
+ 
+ 	mutex_unlock(&phydev->lock);
+ 
+-	if (needs_aneg)
++	if (needs_aneg) {
+ 		err = phy_start_aneg(phydev);
+-	else if (do_suspend)
++		func = &phy_start_aneg;
++	} else if (do_suspend) {
+ 		phy_suspend(phydev);
++	}
+ 
+ 	if (err == -ENODEV)
+ 		return;
+ 
+ 	if (err < 0)
+-		phy_error(phydev);
++		phy_error_precise(phydev, func, err);
+ 
+ 	if (old_state != phydev->state) {
+ 		phydev_dbg(phydev, "PHY state change %s -> %s\n",
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index fefd5091bc24..dc77b09908da 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -1793,7 +1793,11 @@ void phy_drivers_unregister(struct phy_driver *drv, int n);
+ int phy_driver_register(struct phy_driver *new_driver, struct module *owner);
+ int phy_drivers_register(struct phy_driver *new_driver, int n,
+ 			 struct module *owner);
+-void phy_error(struct phy_device *phydev);
++void phy_error_precise(struct phy_device *phydev, const void *func, int err);
++static inline void phy_error(struct phy_device *phydev)
++{
++	phy_error_precise(phydev, (const void *)_RET_IP_, -EIO);
++}
+ void phy_state_machine(struct work_struct *work);
+ void phy_queue_state_machine(struct phy_device *phydev, unsigned long jiffies);
+ void phy_trigger_machine(struct phy_device *phydev);
+-- 
+2.34.1
+
