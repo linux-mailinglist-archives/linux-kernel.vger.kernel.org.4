@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1386C0F0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63676C0F02
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjCTKgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        id S230422AbjCTKfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCTKfy (ORCPT
+        with ESMTP id S231279AbjCTKfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:35:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEA0158BD
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679308472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X6ckZ2z0QKvMzR9VTDVT3Dh7KUskzJvhARj3Bq+OQ2A=;
-        b=JFVjFVeei4bpyf9HyuZo6AHFKa7a8K1LUXG2a7OcMMdA+7L8Gu31xh9mwLbJKekYx6gIe5
-        dUbmBeE1L+H+vaD31VnH9YY6OiDTsDj8c9BkoJTgRDJZ7ABJvuej5j+oM5V8Yh3w8cLujj
-        mRMMA6zkKSrEUf8Z6zh1lH+VqUyOGTE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-296-V3RnUSrmPs2L-cZuMsPMQg-1; Mon, 20 Mar 2023 06:34:31 -0400
-X-MC-Unique: V3RnUSrmPs2L-cZuMsPMQg-1
-Received: by mail-wm1-f72.google.com with SMTP id j10-20020a05600c190a00b003eda80e8086so2643758wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:34:31 -0700 (PDT)
+        Mon, 20 Mar 2023 06:35:23 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C2723643
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:34:49 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id eg48so44589604edb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679308486;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0YON+Je37l5rNH4i+NhItyHzULx6NYE6uyGW+1TbDg=;
+        b=qdGK3JLlynirCfpYsq2enpE1iu8iadQJO5cUlAxFy+JMKgkRgYTZLFG+u5KD546xQc
+         T0XYJAFAd8hrmEKvI4todGkTV1qbnBGsSJ0Ur06KT9ta8qfSWenHR/6kM70bRYTEFBfN
+         67uwHteZDRU6Apd6DSu3ABxOOi3i1eUn36ncxuRNa7jH+vmAlGishyu6fFSvK9KL2wL4
+         u0zl15/MiZY01ESdPQOUogHJ3dsP9ychc+bgweae3v+LmVy+0uGZJ1qs624koV5bHXRs
+         72SM5pVaBLekPuXrEm6x/ygEyzRBOen56LhCivprZ4bB1GYUqlbA2oNnweyC2GpbDs2N
+         A7ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308470;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679308486;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=X6ckZ2z0QKvMzR9VTDVT3Dh7KUskzJvhARj3Bq+OQ2A=;
-        b=Hfyat4mMKurX0Ekmj2ueLgAAr8F3aN4CLuNamd1SFEBZJCWL61ciQKAq+0i/9/2JPc
-         K+kro6M+/O9i7fnap9n0iPiWVF3Ho0V4a2FAkx0/byZtcXNhoVhAgzLTpOOXkAPTPyYj
-         ZOdT1qc1nUKnvigSQ3IapFBJ5t7lFvPzsUkZn9bDHteWZlH9pGB0y+hpM2wEYQAc0n1P
-         JuOXbXimLMSNMReP0EdX6cYUn65EkXxKDO0NQOPdihngiCphScm3daEMEoP3u1TTAzV7
-         Kvz3PBUmkPNQALlhALq1rrx2EObyejFbfJmJARsZwqI29M1W2d6HVYnjSYJqFMJTHIJl
-         H+yQ==
-X-Gm-Message-State: AO0yUKWD0aWh3/PnFyuFwdALsjC6iIzH5z48h3sBW7MSbF4Vasw8z7Ns
-        WwnZVVDrHK++Fxcxqo/46vI61Dy7e0D06KqqDa5/FQmjE+zz3qtIZgHlMarz7E8VPMshOlSGiL2
-        AZoULWzV+XMvwmCsLBadqHpxe
-X-Received: by 2002:a7b:c5d9:0:b0:3ed:8780:f265 with SMTP id n25-20020a7bc5d9000000b003ed8780f265mr9478722wmk.21.1679308470402;
-        Mon, 20 Mar 2023 03:34:30 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/See1O1GCKcnrzZelLvg7ptH0BnavM+gCW64JwSqodSWr+QN8A6MohXbjNVVp77UiBLu/t9g==
-X-Received: by 2002:a7b:c5d9:0:b0:3ed:8780:f265 with SMTP id n25-20020a7bc5d9000000b003ed8780f265mr9478710wmk.21.1679308470122;
-        Mon, 20 Mar 2023 03:34:30 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id k14-20020a7bc40e000000b003ee0d191539sm1071327wmi.10.2023.03.20.03.34.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:34:29 -0700 (PDT)
-Message-ID: <a394472b-d091-d710-4bf5-53b2b41d681d@redhat.com>
-Date:   Mon, 20 Mar 2023 11:34:28 +0100
+        bh=v0YON+Je37l5rNH4i+NhItyHzULx6NYE6uyGW+1TbDg=;
+        b=k0E9Jy6CVEuyFmLmS7teItaSNjt1OyEAjUFkuVgHUGTzo2Xg4zRXq5auZga6UxNlRr
+         R+EXsEtDCY7D5V/9iFi2kwEcCQL4G6jtNWwEuxJjPMKy6VZyVE9Acaog9ee4QocO51ZE
+         pdVw1Z0r2j/zAhjbdw5pxae/jKxex5fg1YIDMLYD0HVezqFQZfsTnuQ5cw7REoq41Q3h
+         1gDZQQyq9LK2u3YmplvsxIFGc9nxX4eWhLA/GEXHoycar45u13M9jJ+kHZDuRmqx1f6e
+         WNLk/MRdnCtGZzpbP4gbGD8GfIvC7OxI0Ced+H9/FTQ6iEhgDggUknlNoWAI6IXALdVn
+         LSLg==
+X-Gm-Message-State: AO0yUKVshGIg1PYkh5UmRq8GhY2M0Dk4G2m1QFDNql9/uh+Iuvw2xtG/
+        XIn+/GFQXXxxz8hKQUqP6Z4VTliUYKE=
+X-Google-Smtp-Source: AK7set/yDflInru6nyu/C75gNAtSOaLhUN4WZSH7nppGQk6eU80Mrd5X0iVQ5sAQkHhWV9oUMAITYQ==
+X-Received: by 2002:a17:906:40d1:b0:932:748a:f0ea with SMTP id a17-20020a17090640d100b00932748af0eamr8458784ejk.63.1679308486325;
+        Mon, 20 Mar 2023 03:34:46 -0700 (PDT)
+Received: from alaa-emad.. ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id q18-20020a170906b29200b008c607dd7cefsm4235244ejz.79.2023.03.20.03.34.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 03:34:46 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, eng.mennamahmoud.mm@gmail.com,
+        Julia Lawall <julia.lawall@inria.fr>
+Subject: [PATCH] staging: rtl8723bs: use inline functions for dev_to_sdio_func
+Date:   Mon, 20 Mar 2023 12:34:41 +0200
+Message-Id: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 05/15] mm: handle hashdist initialization in mm/mm_init.c
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230319220008.2138576-1-rppt@kernel.org>
- <20230319220008.2138576-6-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230319220008.2138576-6-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.03.23 22:59, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> The hashdist variable must be initialized before the first call to
-> alloc_large_system_hash() and free_area_init() looks like a better place
-> for it than page_alloc_init().
-> 
-> Move hashdist handling to mm/mm_init.c
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
+Convert `dev_to_sdio_func` macro into a static inline function.
+it is not great to have macro that use `container_of` macro,
+because from looking at the definition one cannot tell
+what type it applies to.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+One can get the same benefit from an efficiency point of view
+by making an inline function.
 
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+ drivers/staging/rtl8723bs/os_dep/sdio_intf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+index 490431484524..7ee821dbbae0 100644
+--- a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
++++ b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
+@@ -10,7 +10,10 @@
+ #include <linux/jiffies.h>
+ 
+ #ifndef dev_to_sdio_func
+-#define dev_to_sdio_func(d)     container_of(d, struct sdio_func, dev)
++static inline struct sdio_func *dev_to_sdio_func(struct device *d)
++{
++	return container_of(d, struct sdio_func, dev);
++}
+ #endif
+ 
+ static const struct sdio_device_id sdio_ids[] = {
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 
