@@ -2,101 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9796C24D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A17CE6C24D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCTWkz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 18:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S229684AbjCTWlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjCTWkw (ORCPT
+        with ESMTP id S229819AbjCTWlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:40:52 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5253C32E5A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:40:51 -0700 (PDT)
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id A6E501202AC;
-        Mon, 20 Mar 2023 22:40:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id EEBE517;
-        Mon, 20 Mar 2023 22:40:46 +0000 (UTC)
-Message-ID: <c544814c20db7ae7662aa4c3b0ca728dced19f41.camel@perches.com>
-Subject: Re: [PATCH v3] checkpatch: add missing bindings license check
-From:   Joe Perches <joe@perches.com>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        krzysztof.kozlowski@linaro.org, robh@kernel.org, apw@canonical.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@sberdevices.ru, linux-kernel@vger.kernel.org,
-        rockosov@gmail.com
-Date:   Mon, 20 Mar 2023 15:40:46 -0700
-In-Reply-To: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
-References: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: EEBE517
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: 4mu3pe9mq17qtkie6rgkc69zjrpaoy1s
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19e0rNjjBnNCLCdKXeMepoKqGghTFLRgzA=
-X-HE-Tag: 1679352046-599620
-X-HE-Meta: U2FsdGVkX1/Dx1KRG3TbIvIP1xhFDOMwg5Jmm5iP0RRU6gEj6atYBqcySl1U2wL/m+ctt9ZzK6mNGZLblwAA1Q==
+        Mon, 20 Mar 2023 18:41:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC4833CFA;
+        Mon, 20 Mar 2023 15:41:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86A9BB8108F;
+        Mon, 20 Mar 2023 22:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 36DC8C4339B;
+        Mon, 20 Mar 2023 22:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679352058;
+        bh=Y9+fRvoA6JYPY6fCFaksLpkN5oy7meel0lfHKE7i2Wk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=UQYeAsXZlU81Ab+CZWcTDJ90C2AMox2MUjW8uH+OyIOyfvkDV0Dp/ZuNXcZjQkCmV
+         +jpE+uVVr9MBraJDdKSjdQWb8NOvwTcDAqxPyzam8a6CKL2q/S33QI6phWksclDFNA
+         PQBn/hNbqDi5VtIChR67NyAuDUp8MnuDldYvMX5htxBYA5TaVcxWqYOUZNPRpgoso5
+         3Qw1DTT8T+XqPPY+04Gi+3Q31u8UNTR0sFUw/vs97Wx2E2njooB219z7iUQOlR0wMY
+         KvU0TWT8C5MTzXdc3RlMMIIhIpP9YAIrcBcMIZU+aaefHj/dhVaUy8LWCCsWCLbrxU
+         vRTKbTrmRyE2A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1CBC5E68C18;
+        Mon, 20 Mar 2023 22:40:58 +0000 (UTC)
+Subject: Re: [GIT PULL] fscrypt fix for v6.3-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230320205617.GA1434@sol.localdomain>
+References: <20230320205617.GA1434@sol.localdomain>
+X-PR-Tracked-List-Id: <linux-fscrypt.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230320205617.GA1434@sol.localdomain>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/fs/fscrypt/linux.git tags/fscrypt-for-linus
+X-PR-Tracked-Commit-Id: 4bcf6f827a79c59806c695dc280e763c5b6a6813
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4f1e308df88ad25c88ab4240161cbac45ba2d78e
+Message-Id: <167935205811.2111.13125595942983592868.pr-tracker-bot@kernel.org>
+Date:   Mon, 20 Mar 2023 22:40:58 +0000
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-20 at 23:33 +0300, Dmitry Rokosov wrote:
-> All headers from 'include/dt-bindings/' must be verified by checkpatch
-> together with Documentation bindings, because all of them are part of
-> the whole DT bindings system.
-> 
-> The requirement is dual licensed and matching pattern:
->     /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
-> 
-> The issue was found during patch review:
-> https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
+The pull request you sent on Mon, 20 Mar 2023 13:56:17 -0700:
 
-Assuming the devicetree people are good with this change:
+> https://git.kernel.org/pub/scm/fs/fscrypt/linux.git tags/fscrypt-for-linus
 
-Acked-by: Joe Perches <joe@perches.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4f1e308df88ad25c88ab4240161cbac45ba2d78e
 
-> Changes v3 since v2 at [2]:
->     - replace 'not =~' expression with '!~' to be aligned with other
->       checkpatch lines
-> 
-> Changes v2 since v1 at [1]:
->     - include/dt-bindings check is aligned to open parens
->     - introduce more strict pattern for bindings license:
->       /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
-> 
-> Links:
->     [1] https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
->     [2] https://lore.kernel.org/all/20230320100027.27788-1-ddrokosov@sberdevices.ru/
-> ---
-[]
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+Thank you!
 
-> @@ -3709,8 +3709,9 @@ sub process {
->  						WARN("SPDX_LICENSE_TAG",
->  						     "'$spdx_license' is not supported in LICENSES/...\n" . $herecurr);
->  					}
-> -					if ($realfile =~ m@^Documentation/devicetree/bindings/@ &&
-> -					    not $spdx_license =~ /GPL-2\.0.*BSD-2-Clause/) {
-> +					if (($realfile =~ m@^Documentation/devicetree/bindings/@ ||
-> +					     $realfile =~ m@^include/dt-bindings/@) &&
-> +					    $spdx_license !~ /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/) {
->  						my $msg_level = \&WARN;
->  						$msg_level = \&CHK if ($file);
->  						if (&{$msg_level}("SPDX_LICENSE_TAG",
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
