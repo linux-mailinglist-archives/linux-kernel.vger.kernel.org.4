@@ -2,88 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DB26C0B81
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE5F6C0B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjCTHlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S229823AbjCTHmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjCTHlH (ORCPT
+        with ESMTP id S230193AbjCTHmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:41:07 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3811F2310B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:41:00 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t5so6152714edd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:41:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679298058;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EEJwPUcj30LR1Jvi4gq3x/eDVKkkFRtCJxEfs4FDdm4=;
-        b=K+smoDKcwnMxZrFNrJhdgowPDNaNTLyYz6zlEKxBEqQoEG3U+3ow0kJxlZknQwrGMB
-         u04dEEYkv//4yL//8tVkINm9Ieh7vEfPxMPVPRU5Zxh3K6ves71YXuJonexO5/k0eruR
-         Dw4HDFJYDAT8EGmLhsDNJTcXS/1bhC560OysoRkAxlvuoUCC4qx2VzVba6gN432Z3iCx
-         JPMK8sefwNUC70ZxMHds79JkwuendtkP6KHYKc+KaAA9Yl+K1NY1bS7zb+5+KNlQ49cL
-         5foHjP4G5g5hHiEThk8XHd+37eot8QkVHdL358kCzBtbTA7CKD9Shn76OLsosAJ7tU9U
-         BLLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679298058;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EEJwPUcj30LR1Jvi4gq3x/eDVKkkFRtCJxEfs4FDdm4=;
-        b=h4vc53SS7i12bC6pxLn4Mcdazw1x0ZwzxoN6uPlRpgCafQxZX/TDPw7aa1kPF7AWLf
-         jT+TUtlnpmDhwSllcN9Vk2R5msdT0lPYfH7eMVMoQW0HAikA523gPkhzXlM4fk5m/nO7
-         sx/K2VGTaCUuwdrGyWIoJTCxRZr1dJJyt+L8tq/wsgk037YHhwcyu1c05/6COyxqxZ2c
-         TtW/I4DeirRfkIbh5hzqShdIKYbQpe2A2gbLv2KooM9/qkWQZGn/dJcw9w/6dUJd/xfp
-         JIhbd/cX6GWgw8GaZIR5ZxNAzaO6u9u3u8z/WsHSql/ZytmBusnRseoK/L0KCXroBQQg
-         8gAg==
-X-Gm-Message-State: AO0yUKX3dsJtuhuxjYtuRiveeCXEeL8CTQj0EK0EtIdUVjN3ZZm3fx57
-        WDv23BMN6C1RIo7FJw9jft1pzQ==
-X-Google-Smtp-Source: AK7set8K83XcDqgvWGsUDkVZexSnqd6rwD5aeLXBfdzVWwJ7+1NQq8zSCs4BDTyss9P7wWoUZ3G6Lw==
-X-Received: by 2002:a17:906:1f53:b0:931:91a:fa4f with SMTP id d19-20020a1709061f5300b00931091afa4fmr8808137ejk.41.1679298058663;
-        Mon, 20 Mar 2023 00:40:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4428:8354:afb6:2992? ([2a02:810d:15c0:828:4428:8354:afb6:2992])
-        by smtp.gmail.com with ESMTPSA id kj2-20020a170907764200b009324717b9f3sm3513196ejc.71.2023.03.20.00.40.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 00:40:58 -0700 (PDT)
-Message-ID: <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
-Date:   Mon, 20 Mar 2023 08:40:57 +0100
+        Mon, 20 Mar 2023 03:42:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727142367C;
+        Mon, 20 Mar 2023 00:42:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 578F6611D9;
+        Mon, 20 Mar 2023 07:42:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC221C433EF;
+        Mon, 20 Mar 2023 07:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679298127;
+        bh=WjYiW3bdBC26DMUYGurbBPSF3Li7THUYtv1H3tndCY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RSSytet/200iwrE/lIMidXGrJh+pzH43ULVTOKfB6cKLziSBSCB/id5jVbuVDjMpH
+         eGtjeNUzYIVQ96U7U1cMrNlsE8jaxfOLrLbj20Ra5+FL9KaB4AulMJkyCGKXxmjYqF
+         v8FB6Uz50mVCuGTuXBMT744SK5kx/KkNrkvucvW1CylcSlbz2CdOUmeVJWU9xglr+E
+         ysiGXzVMqt+0OdYClaTxrnmMr6CH4lVEjBGbdWWFumpx0NeWO4PklXINtXdoOPjUYl
+         T3214e1BkukTMmxuOJ21WwUto7l77j5NNfC7FWTvKJFusZxGlWshgfyp9rYhZhczly
+         nFs1i7xEOeX6A==
+Date:   Mon, 20 Mar 2023 09:42:02 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
+        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
+        wei.liu@kernel.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, longli@microsoft.com,
+        ssengar@linux.microsoft.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: mana: Add support for jumbo frame
+Message-ID: <20230320074202.GH36557@unreal>
+References: <1679261264-26375-1-git-send-email-haiyangz@microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
- patternProperties
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
- <20230316030514.137427-4-xingyu.wu@starfivetech.com>
- <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
- <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
- <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
- <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1679261264-26375-1-git-send-email-haiyangz@microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,119 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 08:29, Xingyu Wu wrote:
-> On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
->> On 20/03/2023 04:54, Xingyu Wu wrote:
->>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
->>>> On 16/03/2023 04:05, Xingyu Wu wrote:
->>>>> Add optional compatible and patternProperties.
->>>>>
->>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>> ---
->>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
->>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>> index ae7f1d6916af..b61d8921ef42 100644
->>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>> @@ -15,16 +15,31 @@ description: |
->>>>>  
->>>>>  properties:
->>>>>    compatible:
->>>>> -    items:
->>>>> -      - enum:
->>>>> -          - starfive,jh7110-aon-syscon
->>>>> -          - starfive,jh7110-stg-syscon
->>>>> -          - starfive,jh7110-sys-syscon
->>>>> -      - const: syscon
->>>>> +    oneOf:
->>>>> +      - items:
->>>>> +          - enum:
->>>>> +              - starfive,jh7110-aon-syscon
->>>>> +              - starfive,jh7110-stg-syscon
->>>>> +              - starfive,jh7110-sys-syscon
->>>>> +          - const: syscon
->>>>> +      - items:
->>>>> +          - enum:
->>>>> +              - starfive,jh7110-aon-syscon
->>>>> +              - starfive,jh7110-stg-syscon
->>>>> +              - starfive,jh7110-sys-syscon
->>>>> +          - const: syscon
->>>>> +          - const: simple-mfd
-
-BTW, this also looks wrong. You just said that clock controller exists
-only in few variants. Also, why sometimes the same device  goes with
-simple-mfd and sometimies without? It's the same device.
-
->>>>>  
->>>>>    reg:
->>>>>      maxItems: 1
->>>>>  
->>>>> +patternProperties:
->>>>> +  # Optional children
->>>>> +  "pll-clock-controller":
->>>>
->>>> It's not a pattern.
->>>
->>> Does it use 'properties' instead of 'patternProperties'?
->>
->> Yes.
->>
->>>
->>>>
->>>> Anyway should be clock-controller
->>>
->>> Will fix.
->>>
->>>>
->>>>> +    type: object
->>>>> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
->>>>> +    description: Clock provider for PLL.
->>>>> +
->>>>
->>>> You just added these bindings! So the initial submission was incomplete
->>>> on purpose?
->>>>
->>>> No, add complete bindings.
->>>
->>> Does you mean that it should drop the 'description', or add complete 'description',
->>> or add 'compatible', 'clocks' and 'clock-cells' of complete clock-controller bindings?
->>
->> It means it should be squashed with the patch which adds it.
+On Sun, Mar 19, 2023 at 02:27:44PM -0700, Haiyang Zhang wrote:
+> During probe, get the hardware allowed max MTU by querying the device
+> configuration. Users can select MTU up to the device limit. Also,
+> when XDP is in use, we currently limit the buffer size to one page.
 > 
-> Should I drop the 'decription' here and keep the 'decription' in patch1?
-
-There should be no this patch at all. However I do not understand what
-you want to do with description. What's wrong with description?
+> Updated RX data path to allocate and use RX queue DMA buffers with
+> proper size based on the MTU setting.
 > 
->>
->>>
->>>>
->>>>>  required:
->>>>>    - compatible
->>>>>    - reg
->>>>> @@ -38,4 +53,16 @@ examples:
->>>>>          reg = <0x10240000 0x1000>;
->>>>>      };
->>>>>  
->>>>> +  - |
->>>>> +    syscon@13030000 {
->>>>
->>>> No need for new example... Just put it in existing one.
->>>>
->>>
->>> Actually, the PLL clock-controller are just set in sys-syscon resgisters. The stg-syscon and
->>> aon-syscon don't need it. So PLL clock-controller node only is added in sys-syscon node.
->>
->> So why having other examples if they are included here? Drop them.
->>
-> 
-> Should I drop the old example of stg-syscon and add a new example of sys-syscon which
-> include clock-controller child node?
+> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+> ---
+>  .../net/ethernet/microsoft/mana/mana_bpf.c    |  22 +-
+>  drivers/net/ethernet/microsoft/mana/mana_en.c | 229 ++++++++++++------
+>  include/net/mana/gdma.h                       |   4 +
+>  include/net/mana/mana.h                       |  18 +-
+>  4 files changed, 183 insertions(+), 90 deletions(-)
 
-No, there should be no stg-syscon example, it's useless.
+<...>
 
-Best regards,
-Krzysztof
+> +static int mana_change_mtu(struct net_device *ndev, int new_mtu)
+> +{
+> +	unsigned int old_mtu = ndev->mtu;
+> +	int err, err2;
+> +
+> +	err = mana_detach(ndev, false);
+> +	if (err) {
+> +		netdev_err(ndev, "mana_detach failed: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	ndev->mtu = new_mtu;
+> +
+> +	err = mana_attach(ndev);
+> +	if (!err)
+> +		return 0;
+> +
+> +	netdev_err(ndev, "mana_attach failed: %d\n", err);
+> +
+> +	/* Try to roll it back to the old configuration. */
+> +	ndev->mtu = old_mtu;
+> +	err2 = mana_attach(ndev);
 
+I second to Francois and agree with him that it is very questionable.
+If mana_attach() failed for first try, you should bail out and not
+retry with some hope that it will pass.
+
+Thanks
+
+> +	if (err2)
+> +		netdev_err(ndev, "mana re-attach failed: %d\n", err2);
+> +
+> +	return err;
