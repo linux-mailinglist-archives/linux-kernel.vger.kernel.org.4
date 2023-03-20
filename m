@@ -2,74 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A696C0F67
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169E86C0F98
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCTKlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S230046AbjCTKsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjCTKlg (ORCPT
+        with ESMTP id S229980AbjCTKrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:41:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1423526599
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=01kwIZYNE8DQcNEdcecmlkCa69Wrbp8wtDAfifO304E=; b=hb6BYNvbZylvmF4hmOn3Kri8lU
-        s+XfJsoUQnBn8VA2pCncwOIwHlk1KR63vLCDkr8KJ6vVWuiecyUzMzsfar0g3MKz50tBW6gpFJuv6
-        m8rTNvO7jNNqaeWBfFDR45lWbx0nqZwrDZXX9HUI1rSh28pYn5NCQUydidur4xDwai2UcRVU8Fbx+
-        /GG0dFQ6Xnzp+fe7Ua+2ohuE9dTduvYzUAZwBrj+GsM8HBWFmsda3O8tXA8Nb9rUbQsqzX4CbdLyJ
-        V+HtU+wVlN4Mq6Dk+bY51bEFsuy+5AzsvgclfZqx0cp8VGFebV6xNOV/zGvwj4qZl55Z4hZn4nabZ
-        0I8Vro1g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1peCv9-000vdX-7x; Mon, 20 Mar 2023 10:39:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46F90300392;
-        Mon, 20 Mar 2023 11:39:17 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2454520EEFFF0; Mon, 20 Mar 2023 11:39:17 +0100 (CET)
-Date:   Mon, 20 Mar 2023 11:39:17 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/topology: set varaiables sched_energy_mutex,update
- storage-class-specifier to static
-Message-ID: <20230320103917.GH2194297@hirez.programming.kicks-ass.net>
-References: <20230314144818.1453523-1-trix@redhat.com>
+        Mon, 20 Mar 2023 06:47:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CD218B1D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:44:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679308980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=26nymbdY5u8lbHR6tGhq6iWNHbEegWrEQrrqMsFd9eI=;
+        b=g8Sdqcp4vdpI4W4YoFAEG9UQlbEQJiDem2jvYW3PZ+qJtLuTGKT0Sk7k/IytTJRjE4FPt4
+        EG06ww9TDZ7zOnvdKAbpmbYeMBVOhFuCIbklKS7gFz4+Juo9HdGtUMf007c4I9EymETElV
+        Rhw98cyMqzWYBdBnjN/50TDbVM0pOsg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-597-UDfjaUkyMfyuKnHjzRBFnw-1; Mon, 20 Mar 2023 06:39:32 -0400
+X-MC-Unique: UDfjaUkyMfyuKnHjzRBFnw-1
+Received: by mail-wm1-f72.google.com with SMTP id j10-20020a05600c190a00b003eda80e8086so2650279wmq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:39:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679308771;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=26nymbdY5u8lbHR6tGhq6iWNHbEegWrEQrrqMsFd9eI=;
+        b=24CjURl/Ubq311bxngxYul/OH+6+ePzZOzMn9X5TjKn2Bwh1FQE1UBPth+J9h7ck0x
+         iq9afGGlybC4tGjyKJVSqDcCHrdb9gYZy9KM1pKjaKlCS0dazyBuNsCxBA1ArgWPvbQQ
+         C2dO3Jw8aQmIEbwOsnf1O2hV1T8GwQwOEWq1Gc8rEDT/PTqM4AeUSxK8TRabe8yyNK/D
+         nnMU2KX7aaF90ZQcSQG6ZCzABQEekBVt6RPz7KCvXWV5dayqHMEhbd22ODTIkZGTigCd
+         UJZstQzd1AcPeN9QYLWI4PGKuSDPqkV+Qm6i5XpQZ60gYz2tcO+DlyuDrJZU6PjjDl2b
+         kCYQ==
+X-Gm-Message-State: AO0yUKXN/sp13AgLkALVsF91fhCJpzp6vog24bzgiwDCz7CT9VBQUEGs
+        U6Ybyf7Vuzx252RdZBJ9NRnLL0mhIpqymaAGvM1zGBvcZv8HPQE5wa+cEagYx0RyKMFwwC7i0mH
+        QZiKxMTnb3GVKEY/DHlFz4+5c
+X-Received: by 2002:a05:600c:3ca2:b0:3eb:3104:efec with SMTP id bg34-20020a05600c3ca200b003eb3104efecmr33198198wmb.16.1679308770990;
+        Mon, 20 Mar 2023 03:39:30 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9NBj44qlarRe5btSusjcRWML7XEeQG/k8kSYzk0ECsow+UousrzVViL3IUmOf4g4r58+RnIQ==
+X-Received: by 2002:a05:600c:3ca2:b0:3eb:3104:efec with SMTP id bg34-20020a05600c3ca200b003eb3104efecmr33198180wmb.16.1679308770675;
+        Mon, 20 Mar 2023 03:39:30 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b003ed1f111fdesm10006176wme.20.2023.03.20.03.39.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:39:30 -0700 (PDT)
+Message-ID: <496d8ba6-dea6-159e-3e98-75d8dee58a12@redhat.com>
+Date:   Mon, 20 Mar 2023 11:39:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314144818.1453523-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 10/15] mm: move init_mem_debugging_and_hardening() to
+ mm/mm_init.c
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
+        Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230319220008.2138576-1-rppt@kernel.org>
+ <20230319220008.2138576-11-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230319220008.2138576-11-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 10:48:18AM -0400, Tom Rix wrote:
-> smatch reports
-> kernel/sched/topology.c:212:1: warning:
->   symbol 'sched_energy_mutex' was not declared. Should it be static?
-> kernel/sched/topology.c:213:6: warning:
->   symbol 'sched_energy_update' was not declared. Should it be static?
+On 19.03.23 23:00, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> These variables are only used in topology.c, so should be static
+> init_mem_debugging_and_hardening() is only called from mm_core_init().
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks!
+While at it, maybe rename it to ..._init() like most other such 
+functions in there?
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
