@@ -2,69 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAF86C137C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349896C137E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjCTNeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S229666AbjCTNfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjCTNeG (ORCPT
+        with ESMTP id S230450AbjCTNel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:34:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0409E2130;
-        Mon, 20 Mar 2023 06:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4ZH7pgpUeJbXrkFFil6ceo9u06+QpQF5ILp07z1RGgk=; b=xt5nxVFijLtiUlCb289PXu9H0E
-        rjmWwb4I9vYRpNZB5SqcRePpUqQrzECXPX8Ogac1as2ySTojc7Ik+5mQvMi8I410746j7DeyHm6To
-        MXAKt2KY7ffbqMy/sz8VBeahv84AYeU1volXuChFZYIvEJLvS+nK5qCz18hTfB69QHTLt2jUsmjih
-        DYsmYB889q+XZTfZZ6kVLRRmVaKSutrml/MpxPDFjpSdPMHDOJyixIWY0Htvuz543esS7vGhlr2MU
-        2X8Fn3zQZG++8Vc2+/3HoGWXDfWc1wDz0jmHobL1YjNwS5Qeq2+HFVdJxmGfJ+c+Y5HBx5nSP7CNZ
-        I7Lk1AIg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peFeF-009CO0-0A;
-        Mon, 20 Mar 2023 13:34:03 +0000
-Date:   Mon, 20 Mar 2023 06:34:03 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: add queue_logical_block_mask() and
- bdev_logical_block_mask()
-Message-ID: <ZBhgy/+u/5+79uZq@infradead.org>
-References: <20230310082413.58141-1-frank.li@vivo.com>
+        Mon, 20 Mar 2023 09:34:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB934EFB;
+        Mon, 20 Mar 2023 06:34:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E23FBB80E8A;
+        Mon, 20 Mar 2023 13:34:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D85C433EF;
+        Mon, 20 Mar 2023 13:34:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679319277;
+        bh=cMnOr3tLcRzgkmbSL/WMm9jqyT8XlfB68HNOw/D7CEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LPbiKaokf9U+3YAZ/kZ+XllTOru/gZRM2xIJSrxQtc7VpLO2F21s+5v+cw0fnthhY
+         t+bbf9nw0X4Rp4NWiLdyOEpkX/Th/TeAgS41XDzGlFcN3+M5UIf2ukZptJAkFaI2l5
+         C1K0ucKez2pI+3Ofo84hiDmAbbZ2xYSZDHAuIkGpEb+L4hqO89JmIzSNiuNBv7yTzl
+         Ui+HZDf5W6EBiKiOIebpob7/l7aeZ6b3U64vUBmkNVl+lXe/Jla+RDMwg61TS5VDia
+         mYNX7X/Ac0Eb72jh5ghYDYX69eG/+/TvwSvZm4wDc9RQaQAeFvDirbvw3ANolWNbCn
+         hFCaGYrmRZS9g==
+Date:   Mon, 20 Mar 2023 13:34:31 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v2 net-next 1/9] phy: phy-ocelot-serdes: add ability to
+ be used in a non-syscon configuration
+Message-ID: <20230320133431.GB2673958@google.com>
+References: <20230317185415.2000564-1-colin.foster@in-advantage.com>
+ <20230317185415.2000564-2-colin.foster@in-advantage.com>
+ <ZBgeKM50e1vt+ho1@matsya>
+ <ZBgmXplfA/Q3/1dC@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230310082413.58141-1-frank.li@vivo.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZBgmXplfA/Q3/1dC@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:24:13PM +0800, Yangtao Li wrote:
-> Introduce queue_logical_block_mask() and bdev_logical_block_mask()
-> to simplify code, which replace (queue_logical_block_size(q) - 1)
-> and (bdev_logical_block_size(bdev) - 1).
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> Like wo done for fs.
-> This round we add helpers and start converting in the next cycle.
-> https://lore.kernel.org/lkml/20230309124035.15820-1-frank.li@vivo.com/
+On Mon, 20 Mar 2023, Russell King (Oracle) wrote:
 
-Please always send the helper with the actual users.
+> On Mon, Mar 20, 2023 at 02:19:44PM +0530, Vinod Koul wrote:
+> > On 17-03-23, 11:54, Colin Foster wrote:
+> > > The phy-ocelot-serdes module has exclusively been used in a syscon setup,
+> > > from an internal CPU. The addition of external control of ocelot switches
+> > > via an existing MFD implementation means that syscon is no longer the only
+> > > interface that phy-ocelot-serdes will see.
+> > >
+> > > In the MFD configuration, an IORESOURCE_REG resource will exist for the
+> > > device. Utilize this resource to be able to function in both syscon and
+> > > non-syscon configurations.
+> >
+> > Applied to phy/next, thanks
+>
+> Please read the netdev FAQ. Patches sent to netdev contain the tree that
+> the submitter wishes the patches to be applied to.
+>
+> As a result, I see davem has just picked up the *entire* series which
+> means that all patches are in net-next now. net-next is immutable.
+>
+> In any case, IMHO if this kind of fly-by cherry-picking from patch
+> series is intended, it should be mentioned during review to give a
+> chance for other maintainers to respond and give feedback. Not all
+> submitters will know how individual maintainers work. Not all
+> maintainers know how other maintainers work.
 
-And for use in file systems the request_queue is very much the
-wrong object to work on.  All the block layer APIs for consumers like
-file systems are based on struct block_device.
+Once again netdev seems to have applied patches from other subsystems
+without review/ack.  What makes netdev different to any other kernel
+subsystem?  What would happen if other random maintainers started
+applying netdev patches without appropriate review?  I suspect someone
+would become understandably grumpy.
 
+--
+Lee Jones [李琼斯]
