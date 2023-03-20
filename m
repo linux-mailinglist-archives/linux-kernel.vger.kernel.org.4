@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F106C1FE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A06A96C1FE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjCTSf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S230248AbjCTSfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbjCTSe4 (ORCPT
+        with ESMTP id S230219AbjCTSek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:34:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D9F1CBEB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:27:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 97BB121A97;
-        Mon, 20 Mar 2023 18:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679336756; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6NyzBHrEFFt3x3wldfOH2t3owxOVtgcPmDv2HFH2MaU=;
-        b=KryhIWdPnkDXrKEVLwDhapgy4b89AdPaHUXhLEd8LGuRasPsuJuEhANGgml6FxbEFO8qVs
-        DJmxoWjBSyQVvkrrXOEsiRWW5dSJwWtlEnI384hbyv8/2UnEWtLJnJ/ifZ4eVrbjcv80+d
-        ZLDbxx8GuJ2iHrjnPpJup6CgbZuNaZY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7760313416;
-        Mon, 20 Mar 2023 18:25:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7406GjSlGGRsKAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 20 Mar 2023 18:25:56 +0000
-Date:   Mon, 20 Mar 2023 19:25:55 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZBilM1JR2HKElIR1@dhcp22.suse.cz>
-References: <20230320180332.102837832@redhat.com>
+        Mon, 20 Mar 2023 14:34:40 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19C56E89
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:26:48 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id cy23so50338788edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:26:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679336795;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bIfBJvw4GqAMhW5twcZsJZl6S9pMqZHlkEyev/gaORI=;
+        b=VAd9dDtgxN14PqtMJWYqSIEAFzFtFFNLlsJrPb/OCGinTMVnOJidMx0e64v2l0xPkR
+         MuZblZBj0ZGFj01L4KSaoHWQWQIycrRIPm5FO7lfaRrKDUr6pRwx6cubkTGNaZgiChYf
+         +1i8FPpcIeEpe6DVWw3oQ8CAOQ7OEQOw5ZhKQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679336795;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bIfBJvw4GqAMhW5twcZsJZl6S9pMqZHlkEyev/gaORI=;
+        b=bxh+zC1rZIjNjQd5VeVr26z3P6L4DBKeE5/XpU83HYemlQLxbCdddWzfiLUncy4PJs
+         DLKMQbwI/T9oBCB2SKk6FLIg7ywH2S8xfKpZj/JjCIq611tgyWz1rG8k3croQDLB126h
+         qsCkIGfTeXefL3MJ/0dOwzWPDq2+M57TgkIQixglNXALE0K2hfdoUePRA2Ji3dtEzLaN
+         puhLgc3h23/+Awg/VpJbo0vezKeo4e5oPFGi0yYNy63Wzqi2lHfXyvwbM0UxN5J2bwgY
+         Hk6IE8iOMFypztAVB51KynmWoQt7VO+VPx/Y1ZB1QBNg9vontLsHYOS5AoU0Kr/12OzH
+         XcCw==
+X-Gm-Message-State: AO0yUKXJtT/HL8Afd3u9MIHaEbQYr3OKgPsClJANdgPIheKYPhDJS44s
+        9GCTq8dgMijBrzuwQowYmVBy/HaFq3TxDc+TMRAjHgtp
+X-Google-Smtp-Source: AK7set+DPnZYsbXrtFkN8t7yks1nMN3DS+EfOT1311+/0gxkNRZftNnvoszg4bVN9CgvnixTggh9ng==
+X-Received: by 2002:a17:906:5a59:b0:879:d438:4d1c with SMTP id my25-20020a1709065a5900b00879d4384d1cmr14171ejc.21.1679336795099;
+        Mon, 20 Mar 2023 11:26:35 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id x11-20020a1709064a8b00b009342fe44911sm1824629eju.123.2023.03.20.11.26.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 11:26:34 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id b20so17509193edd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:26:34 -0700 (PDT)
+X-Received: by 2002:a17:907:9b03:b0:932:da0d:9375 with SMTP id
+ kn3-20020a1709079b0300b00932da0d9375mr288149ejc.4.1679336794015; Mon, 20 Mar
+ 2023 11:26:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320180332.102837832@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+ <20230320180501.GA598084@dev-arch.thelio-3990X>
+In-Reply-To: <20230320180501.GA598084@dev-arch.thelio-3990X>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Mar 2023 11:26:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+Message-ID: <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+Subject: Re: Linux 6.3-rc3
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 20-03-23 15:03:32, Marcelo Tosatti wrote:
-> This patch series addresses the following two problems:
-> 
-> 1. A customer provided evidence indicating that a process
->    was stalled in direct reclaim:
-> 
-This is addressed by the trivial patch 1.
+On Mon, Mar 20, 2023 at 11:05=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
+>
+> On the clang front, I am still seeing the following warning turned error
+> for arm64 allmodconfig at least:
+>
+>   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uniniti=
+alized when used here [-Werror,-Wuninitialized]
+>           if (syncpt_irq < 0)
+>               ^~~~~~~~~~
 
-[...]
->  2. With a task that busy loops on a given CPU,
->     the kworker interruption to execute vmstat_update
->     is undesired and may exceed latency thresholds
->     for certain applications.
+Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
+that gcc doesn't warn about this.
 
-Yes it can but why does that matter?
+That syncpt_irq thing isn't written to anywhere, so that's pretty egregious=
+.
 
-> By having vmstat_shepherd flush the per-CPU counters to the
-> global counters from remote CPUs.
-> 
-> This is done using cmpxchg to manipulate the counters,
-> both CPU locally (via the account functions),
-> and remotely (via cpu_vm_stats_fold).
-> 
-> Thanks to Aaron Tomlin for diagnosing issue 1 and writing
-> the initial patch series.
-> 
-> 
-> Performance details for the kworker interruption:
-> 
-> oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
-> oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
-> oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
-> kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
->  
-> The example above shows an additional 7us for the
-> 
->         oslat -> kworker -> oslat
-> 
-> switches. In the case of a virtualized CPU, and the vmstat_update
-> interruption in the host (of a qemu-kvm vcpu), the latency penalty
-> observed in the guest is higher than 50us, violating the acceptable
-> latency threshold for certain applications.
+We use -Wno-maybe-uninitialized because gcc gets it so wrong, but
+that's different from the "-Wuninitialized" thing (without the
+"maybe").
 
-I do not think we have ever promissed any specific latency guarantees
-for vmstat. These are statistics have been mostly used for debugging
-purposes AFAIK. I am not aware of any specific user space use case that
-would be latency sensitive. Your changelog doesn't go into details there
-either.
+I've seen gcc mess this up when there is one single assignment,
+because then the SSA format makes it *so* easy to just use that
+assignment out-of-order (or unconditionally), but this case looks
+unusually clear-cut.
 
-[...]
->  mm/vmstat.c                         |  440 +++++++++++++++++++++++++++++++++++++++++++++++------------------------------
+So the fact that gcc doesn't warn about it is outright odd.
 
-This requires much more detailed story why we really need that.
--- 
-Michal Hocko
-SUSE Labs
+> If that does not come to you through other means before -rc4, could you
+> just apply it directly so that I can stop applying it to our CI? :)
+
+Bah. I took it now, there's no excuse for that thing.
+
+Do we have any gcc people around that could explain why gcc failed so
+miserably at this trivial case?
+
+                   Linus
