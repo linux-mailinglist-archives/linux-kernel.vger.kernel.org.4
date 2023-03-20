@@ -2,104 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613136C1E4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A666C1E81
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbjCTRlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S229488AbjCTRt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbjCTRka (ORCPT
+        with ESMTP id S229890AbjCTRsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:40:30 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F4B298D4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:36:51 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so13258649pjz.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679333785;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hpUGiYeox1kWl4OfAxGx9LTy4s9lwzAPEC2LintUMTc=;
-        b=BtCwXN29zeO1Y2JubkxnqAj2y9r5ppxzyhIYMyUQ+7kjvqpqF6WoKT4KRHH7v86VmB
-         cmGLns+Rn5mdrrdVa8FbMLj4dwKKemEB/I3XQ3Dg2L5CNV/jfELfU6YlYE1BR0yw8z0K
-         lVe9NTGAOFCpmqwTdASeFMuSLzz2DXBQENOss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333785;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hpUGiYeox1kWl4OfAxGx9LTy4s9lwzAPEC2LintUMTc=;
-        b=16ZlaXUGuygCkc1AX+nmX2l5kFUXjWzCyQy4J52L6NfTFS9UuRujff9XdosKZlvuw5
-         A4dBwcx0haa0LF0f8cFuerrjdBorcb4C3tBw7eFTeBZxv96SBkxhugnfevR1kS8k3cu2
-         B1wZGWTG1etMtlr2cV1SUP2ysEIoxx8ruMnT4XquCgidoOUGgtb2VqVZ7yBTURGqqi1f
-         QTRwTx9/DL0YE79PtS03DnaVRJcyaakXclSS/cNgTb48EDTrnFReAQvAwRIB4f4B9tBc
-         U31rI8hxPuEDgK2kqcoiYDhy71fF1H8Ulen2B8hoW6ha0PBDLCXj4qEMpeFvlu7HopB9
-         FO8g==
-X-Gm-Message-State: AO0yUKUOMjMyDekGbyTL2jt4PPrQ3zh1zaeFqw7bIYc9ucTDRoW964kY
-        8EHqAkKV46F6NWeVN8twplsYhg==
-X-Google-Smtp-Source: AK7set9t390bG2K3Xo5adX8F8Bk16FfVLogcMGAN0o6Fz61VzJapYPhoEvZSKsa75t3/lr7IoM3W2g==
-X-Received: by 2002:a17:903:120f:b0:1a0:549d:39a1 with SMTP id l15-20020a170903120f00b001a0549d39a1mr20418380plh.32.1679333785667;
-        Mon, 20 Mar 2023 10:36:25 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k23-20020a170902ba9700b0019a95baaaa6sm6979664pls.222.2023.03.20.10.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 10:36:25 -0700 (PDT)
-Message-ID: <64189999.170a0220.fa1d9.c3f5@mx.google.com>
-X-Google-Original-Message-ID: <202303201036.@keescook>
-Date:   Mon, 20 Mar 2023 10:36:24 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] drm/i915/uapi: Replace fake flex-array with
- flexible-array member
-References: <ZBSu2QsUJy31kjSE@work>
+        Mon, 20 Mar 2023 13:48:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBF459ED
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:43:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679334171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8rKq3lr86YAGdsTZ7QDkIJZmue64t7FvGz7XkMV/DXA=;
+        b=RIq/+Y6qE8RRnx2JDy8/Wfkmh/DX81E/QGtS9OTgk1tBUeiKEJo7QGznjHOSnmn7HLPj0y
+        1imk4qDDWEoYt7fSmz0VbcD5s9AgGvzlub1J92qRNmekHrg/ecS/iqW3lkTykHt7o8lwy5
+        IbZjTjDlrzB16xu5/SuzIhIPxNuor7U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-9Trh2GVXOq2ykUrhEtYtYA-1; Mon, 20 Mar 2023 13:36:48 -0400
+X-MC-Unique: 9Trh2GVXOq2ykUrhEtYtYA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 240AC101A550;
+        Mon, 20 Mar 2023 17:36:48 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F17FE1121318;
+        Mon, 20 Mar 2023 17:36:47 +0000 (UTC)
+Message-ID: <59ecce70-08de-260c-b5b9-60e0b2e58dbd@redhat.com>
+Date:   Mon, 20 Mar 2023 13:36:46 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBSu2QsUJy31kjSE@work>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, will@kernel.org, linux-kernel@vger.kernel.org,
+        boqun.feng@gmail.com
+References: <20230223122642.491637862@infradead.org>
+ <20230223123319.487908155@infradead.org>
+ <Y/t1AwGC9OoN/lFc@hirez.programming.kicks-ass.net>
+ <Y/uN+89FlTw45uiA@hirez.programming.kicks-ass.net>
+ <943686ee-975d-a463-46d1-04b200ac19b1@redhat.com>
+ <Y/yGZgz1cJ1+pTt5@hirez.programming.kicks-ass.net>
+ <c126f079-88a2-4067-6f94-82f51cf5ff2b@redhat.com>
+ <20230320081238.GC2194297@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230320081238.GC2194297@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 12:18:01PM -0600, Gustavo A. R. Silva wrote:
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
-> 
-> Address the following warning found with GCC-13 and
-> -fstrict-flex-arrays=3 enabled:
-> drivers/gpu/drm/i915/gem/i915_gem_context.c: In function ‘set_proto_ctx_engines.isra’:
-> drivers/gpu/drm/i915/gem/i915_gem_context.c:769:41: warning: array subscript n is outside array bounds of ‘struct i915_engine_class_instance[0]’ [-Warray-bounds=]
->   769 |                 if (copy_from_user(&ci, &user->engines[n], sizeof(ci))) {
->       |                                         ^~~~~~~~~~~~~~~~~
-> ./include/uapi/drm/i915_drm.h:2494:43: note: while referencing ‘engines’
->  2494 |         struct i915_engine_class_instance engines[0];
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/21
-> Link: https://github.com/KSPP/linux/issues/271
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+On 3/20/23 04:12, Peter Zijlstra wrote:
+> On Mon, Feb 27, 2023 at 03:16:25PM -0500, Waiman Long wrote:
+>> On 2/27/23 05:31, Peter Zijlstra wrote:
+>>>> I do have some concern that early lock transfer to a lock owner that has not
+>>>> been woken up yet may suppress writer lock stealing from optimistic spinning
+>>>> causing some performance regression in some cases. Let's see if the test
+>>>> robot report anything.
+>>> Ah yes, I suppose that is indeed a possibility. Given this is all under
+>>> wait_lock and the spinner is not, I was hoping it would still have
+>>> sufficient time to win. But yes, robots will tell us.
+>>>
+>> I run my rwsem locking microbenchmark on a 2-socket 96-thread x86-64
+>> system with lock event turned on for 15 secs.
+>>
+>> Before this patchset:
+>>
+>> Running locktest with rwsem [runtime = 15s, r% = 50%, load = 100]
+>> Threads = 96, Min/Mean/Max = 74,506/91,260/112,409
+>> Threads = 96, Total Rate = 584,091 op/s; Percpu Rate = 6,084 op/s
+>>
+>> rwsem_opt_fail=127305
+>> rwsem_opt_lock=4252147
+>> rwsem_opt_nospin=28920
+>> rwsem_rlock=2713129
+>> rwsem_rlock_fail=0
+>> rwsem_rlock_fast=5
+>> rwsem_rlock_handoff=280
+>> rwsem_rlock_steal=1486617
+>> rwsem_sleep_reader=2713085
+>> rwsem_sleep_writer=4313369
+>> rwsem_wake_reader=29876
+>> rwsem_wake_writer=5829160
+>> rwsem_wlock=127305
+>> rwsem_wlock_fail=0
+>> rwsem_wlock_handoff=2515
+>>
+>> After this patchset:
+>>
+>> Running locktest with rwsem [runtime = 15s, r% = 50%, load = 100]
+>> Threads = 96, Min/Mean/Max = 26,573/26,749/26,833
+>> Threads = 96, Total Rate = 171,184 op/s; Percpu Rate = 1,783 op/s
+>>
+>> rwsem_opt_fail=1265481
+>> rwsem_opt_lock=17939
+>> rwsem_rlock=1266157
+>> rwsem_rlock_fail=0
+>> rwsem_rlock_fast=0
+>> rwsem_rlock_handoff=0
+>> rwsem_rlock_steal=551
+>> rwsem_sleep_reader=1266157
+>> rwsem_sleep_writer=1265481
+>> rwsem_wake_reader=26612
+>> rwsem_wake_writer=0
+>> rwsem_wlock=1265481
+>> rwsem_wlock_ehandoff=94
+>> rwsem_wlock_fail=0
+>> rwsem_wlock_handoff=94
+>>
+>> So the locking rate is reduced to just 29.3% of the original. Looking at
+>> the number of successful writer lock stealings from optimistic spinning
+>> (rwsem_opt_lock), it is reduced from 4252147 to 17939. It is just about
+>> 0.4% of the original.
+>>
+>> So for workloads that have a lot of writer contention, there will be
+>> performance regressions. Do you mind if we try to keep the original
+>> logic of my patchset to allow write lock acquisition in writer slow
+>> path, but transfer the lock ownership in the wakeup path when handoff
+>> is required. We can do this with some minor code changes on top of your
+>> current patchset.
+> Urgh, sorry, I seem to have lost sight of this... those results,..
+> sadness :/
+>
+> Yeah, I suppose there's nothing for it but to have live with that mess,
+> be very sure to add comments eludicating any future poor sod reading it
+> as to why the code is the way it is.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+OK, I will add additional patches to your series to remediate the 
+performance degradation. Hopefully, I am planning to get it done either 
+by the end of the week or early next week.
 
--- 
-Kees Cook
+Thanks,
+Longman
+
