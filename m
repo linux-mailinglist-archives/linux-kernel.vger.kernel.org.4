@@ -2,166 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11ABB6C1EF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E753E6C1EF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjCTSEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S230144AbjCTSEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjCTSDk (ORCPT
+        with ESMTP id S229677AbjCTSDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:03:40 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880839EE1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:57:43 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id ix20so13355525plb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:57:43 -0700 (PDT)
+        Mon, 20 Mar 2023 14:03:51 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1FC14996
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:57:58 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so13335715pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679335045;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TTLqYdGFZkGom4FYP+0l2YM3DyL4CPb+gNvcjA2sta8=;
-        b=GGRc6NHuQPNvdJDi95tsj9Fdk98zaHEOdlFFVHCPwB77yfj5hO5wyG0vtfUn/RUfLn
-         sv6LnNalBQnWQQZ8kgahN6tTrF0kCh2uHkmat5sxdpRSNyh5y9oT72mvSbEbSANW3XsO
-         BcUSqICRFrhMxN/VNdP78YVQUJ1RIfHBdLJhRHPOMAB/PLH/+dzINbZRSPXqR4zJ9RXg
-         TGy8odYm98NW+d8uMAd61KqopiHA8Uee8b9oN0TdfT7V0zUteKJzjWgdjjhnOGBW+8bN
-         n3qQyFpUCn3FWIU8Zt/r6W3FNmiPWihhZWFHgiuzl9VmGTY0fuGoQ+OC8St99GJYn3ro
-         MiAQ==
+        d=gmail.com; s=20210112; t=1679335057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/r1WlIiwVQzbXgHldnF4Wyr/f+kJm7/RhfD8t1T97c=;
+        b=VXK/QcBfEEk6YoxqMEA5tWEOZywz5pAP/EdS2TKr49j3/Z0ZVxVVq41cH3Ulfo4yD4
+         v7mkDGaikbNLwEmmS+vjRhuqsJgNSu/ERicrwrUGF8Fna5sto/NKPPHqUQvaxh17ck2L
+         cHHuDgYPKCrBU3bri+IYPpmBAIbSPD6vpck5vi5eesBX9fdErBAfvF892rv4h4VNdC7B
+         R3fF4eyVVIzU1XQGuCxeylJulQaw5YRHnWniIxy6i1tUmeW07poSp+MAlIJvmpvt0/l8
+         Ohwc5wV3Vb/Dc2zZbiEDdUIuclT8K9HHQHPpgMb5eHJQBeXR5d16Q2TpgBznHqiNJ2zb
+         Blyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679335045;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679335057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TTLqYdGFZkGom4FYP+0l2YM3DyL4CPb+gNvcjA2sta8=;
-        b=SqhVe5bq2Hc5w1IDKFeWZduHGDgRH251/PuMgd4Z0gux9Z7tVxPrBr4hqLd2ipSLgH
-         n0fkXY3yTEkZmlpokjRhDJ47K1biula+TkGjt8MFVamcbndSzTXIKUqByvb3XOHnzeZO
-         WGZ6cfebXzRf+zB4o59aPJYzIcuNF0RNRsJe+T3LebSAJwAzBUSKVgeMz2XuXDled6NF
-         7KFy76yGiTZNoNyGdg4tMSmtpJTVJOZej8P1eqTVBEmTRtXUPwvSmFHmdLFzqbWg3/d7
-         dh7JB9ZuTEj8Qq/nE068pqOZwyfOEY8N+58Cs2kRZZbkGchLrkaRU7lyWxCPScjDpWgv
-         WCiA==
-X-Gm-Message-State: AO0yUKVfUI3iCIO1yferpJfRkUZQdB3mWFaEG/VOrbqlqACabHrnsuUb
-        9zGiFG64Sw8OvlGSiWit3+WhxLZDyMZ00ctQq+D6HQ==
-X-Google-Smtp-Source: AK7set8/YwBWDFBpyHo0/hfquyhBJpFJp9n/0UHpqT5eybpBB6edSz10AhON/8lghXTurJ3D2NDuSZ4yQF7ho2AvGmA=
-X-Received: by 2002:a17:90a:7ac8:b0:23d:4ab8:b1a3 with SMTP id
- b8-20020a17090a7ac800b0023d4ab8b1a3mr33238pjl.1.1679335045509; Mon, 20 Mar
- 2023 10:57:25 -0700 (PDT)
+        bh=i/r1WlIiwVQzbXgHldnF4Wyr/f+kJm7/RhfD8t1T97c=;
+        b=ohY6dVTR/Mr+M/n8oHjBCv61gwFOstOZVSvpbpdpPKZckwSR30RKvhv0RPX43LEAyH
+         VdyUyqZ2zQ+2zMPmXFFS1juliAz8/Eohv3VsayurlxPWgIrKwWX2Be7MS6rJE5eSXwKW
+         yZGK4Mv2NnFABd0tvRp/hRY1dj/8AiSg6ou6393Aepq2oSGbbuG333+pWRyXbaHpQ87g
+         RXLsMVQppHbguXsvMShpLmq7VD4rkZS1dhI2KbWElPJfjCni85Z77skC8yk15ko4NCXc
+         G9qrRF3+5TQkNI8HQbCXolbZayCEvKmv4ya8vDbzgY2bWwxWNq3sZ9VFS47GSzHs6d2e
+         j94A==
+X-Gm-Message-State: AO0yUKUjcTRiDBQ6NqC2UkvL8wXsE1rIfHvlDiTL9Us+mAFltKKvLiBc
+        +2s7AcbP3cR2h7Y/DDydIq/GFh8lefc=
+X-Google-Smtp-Source: AK7set8K247Le38RQzUaIokU/yJPSobCPqEgJKQ3LZyxvupZJmtkn8YaG3jTgB0iul1bYOLRYKSsKw==
+X-Received: by 2002:a17:903:234f:b0:1a1:be39:ce14 with SMTP id c15-20020a170903234f00b001a1be39ce14mr8594021plh.59.1679335057023;
+        Mon, 20 Mar 2023 10:57:37 -0700 (PDT)
+Received: from f37.eng.vmware.com ([66.170.99.1])
+        by smtp.googlemail.com with ESMTPSA id q2-20020a170902edc200b001a1a18a678csm7040042plk.148.2023.03.20.10.57.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 10:57:36 -0700 (PDT)
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
+To:     gregkh@linuxfoundation.org, dhowells@redhat.com,
+        dwmw2@infradead.org
+Cc:     yesshedi@gmail.com, linux-kernel@vger.kernel.org, sshedi@vmware.com
+Subject: [PATCH v5 1/7] sign-file: refactor argument parsing logic - 1
+Date:   Mon, 20 Mar 2023 23:27:25 +0530
+Message-Id: <20230320175731.79709-1-sshedi@vmware.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CGME20230308230935eucas1p1e919f4d4b020e3386ce0eac8b4c8d299@eucas1p1.samsung.com>
- <20230308230931.27261-1-semen.protsenko@linaro.org> <d1175c3e-301d-1cbc-607c-e94051780806@samsung.com>
- <611fe922-1937-d37d-a2ce-cc0a13aed9e0@linaro.org>
-In-Reply-To: <611fe922-1937-d37d-a2ce-cc0a13aed9e0@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 20 Mar 2023 12:57:14 -0500
-Message-ID: <CAPLW+4=Yd0KfaMp+oSA=rOrqJfUotHjB=QOKpaPitMh3V2fMrA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] soc: samsung: pm_domains: Add Exynos850 support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 08:41, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 09/03/2023 11:12, Marek Szyprowski wrote:
-> > Hi Sam,
-> >
-> > On 09.03.2023 00:09, Sam Protsenko wrote:
-> >> Power Domains in Exynos850 are not really different from other Exynos
-> >> platforms. Enabling Exynos850 support in the PD driver is really just a
-> >> matter of adding:
-> >>
-> >>      static const struct exynos_pm_domain_config exynos850_cfg = {
-> >>          .local_pwr_cfg = 0x1,
-> >>      };
-> >>
-> >> to the driver. But in the face of recent developments, e.g. this patch:
-> >>
-> >>      arm64: dts: exynos: move MIPI phy to PMU node in Exynos5433
-> >>
-> >> it looked logical to rework the PD driver a bit to support its nesting
-> >> under the PMU node, while adding Exynos850 support to it. Initially I
-> >> only wanted to add syscon regmap support via some dedicated property,
-> >> but pulling PD nodes under the PMU syscon looks like more correct way.
-> >
-> > Frankly speaking if you are changing this, you can go even further.
-> > Simply make PMU node a PM domain provider and specify the power domain
-> > as a phandle parameter. This is how it should have been done from the
-> > beginning, but for some unknown reasons wasn't. There is really no need
-> > to have a separate node for each power domain. This will also move
-> > implementation details to the PMU / power domain drivers and it will
-> > make it much easier to extend/modify it in the future. IMHO same applies
-> > for PHY nodes.
->
-> I agree. The "samsung,pd-index" property is not a correct approach.
-> Either you use address space or not. If not, then this should be part of
-> power domain provider, which is also matching most of other SoC
-> architectures.
->
+From: Shreenidhi Shedi <yesshedi@gmail.com>
 
-Did a bit of research, looked at how it's implemented on other
-platforms. Before I start reworking it, want to check with you on a
-couple of decisions, to avoid unnecessary resubmissions later, if it's
-ok:
+- Use getopt_long_only for parsing input args
+- Use more easy to remember command line argument names
 
-1. Instead of actually merging PD driver into PMU driver, guess it
-might be better to create a new power-controller driver (e.g.
-drivers/soc/samsung/exynos-power.c). This is how it's implemented for
-the most of platforms, and this way we can neatly separate it from
-what we already have in the PMU driver (not really power controller
-related things). This way, in device tree we'll have a
-power-controller node under PMU node, and this node can be referenced
-further as a phandle in power-domains properties of users.
+Signed-off-by: Shreenidhi Shedi <yesshedi@gmail.com>
+---
+ scripts/sign-file.c | 97 ++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 78 insertions(+), 19 deletions(-)
 
-2. After moving PD implementation into a new power-controller driver
-(with new compatibility string), the old one (pm_domains.c) should be
-probably removed. Is it reasonable, e.g. from point of view of
-compatibility with out-of-tree (downstream) dts's? Also, if I remove
-the PD driver, probably all existing (upstream) Exynos dts's should be
-reworked to use the new power-controller compatibility string?
-
-3. Where to keep offsets for each power domain (inside of PMU register
-area). Can be done in dts (a separate child node of power-controller
-for each power domain), or in the power-controller driver. I saw both
-of those ways for different platforms actually. But I guess offsets
-are more like internal details, and should be kept inside the driver,
-for each supported SoC.
-
-4. Specifying particular power domain in power-domains property. Guess
-the best way would be to have some indexes defined in dt-bindings
-header, and use those like this:
-
-        power-domains = <&power_controller EXYNOS850_PD_G3D>;
-
-   Those constants can be also used then in the driver, to keep PD
-offsets in the array, etc. Another way would be to use reg offsets,
-but indices look better: can provide more flexibility in the driver in
-future, e.g. if we'd need to add some more details other that offsets
-later.
-
-Please let me know what you think. At the moment I have to switch to
-another task temporarily. When I get back to this one, discussing the
-above items would help me a great deal.
-
-Thanks!
-
->
-> Best regards,
-> Krzysztof
->
+diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+index 598ef5465f82..94228865b6cc 100644
+--- a/scripts/sign-file.c
++++ b/scripts/sign-file.c
+@@ -213,15 +213,77 @@ static X509 *read_x509(const char *x509_name)
+ 	return x509;
+ }
+ 
++struct cmd_opts {
++	char *raw_sig_name;
++	bool save_sig;
++	bool replace_orig;
++	bool raw_sig;
++	bool sign_only;
++#ifndef USE_PKCS7
++	unsigned int use_keyid;
++#endif
++};
++
++static void parse_args(int argc, char **argv, struct cmd_opts *opts)
++{
++	struct option cmd_options[] = {
++		{"rawsig",	required_argument,  0,	's'},
++		{"savesig",	no_argument,	    0,	'p'},
++		{"signonly",	no_argument,	    0,	'd'},
++#ifndef USE_PKCS7
++		{"usekeyid",	no_argument,	    0,	'k'},
++#endif
++		{0, 0, 0, 0}
++	};
++
++	int opt;
++	int opt_index = 0;
++
++	do {
++#ifndef USE_PKCS7
++		opt = getopt_long_only(argc, argv, "pds:",
++				cmd_options, &opt_index);
++#else
++		opt = getopt_long_only(argc, argv, "pdks:",
++				cmd_options, &opt_index);
++#endif
++		switch (opt) {
++		case 's':
++			opts->raw_sig = true;
++			opts->raw_sig_name = optarg;
++			break;
++
++		case 'p':
++			opts->save_sig = true;
++			break;
++
++		case 'd':
++			opts->sign_only = true;
++			opts->save_sig = true;
++			break;
++
++#ifndef USE_PKCS7
++		case 'k':
++			opts->use_keyid = CMS_USE_KEYID;
++			break;
++#endif
++
++		case -1:
++			break;
++
++		default:
++			format();
++			break;
++		}
++	} while (opt != -1);
++}
++
+ int main(int argc, char **argv)
+ {
+ 	struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
+ 	char *hash_algo = NULL;
+-	char *private_key_name = NULL, *raw_sig_name = NULL;
++	char *private_key_name = NULL;
+ 	char *x509_name, *module_name, *dest_name;
+-	bool save_sig = false, replace_orig;
+-	bool sign_only = false;
+-	bool raw_sig = false;
+ 	unsigned char buf[4096];
+ 	unsigned long module_size, sig_size;
+ 	unsigned int use_signed_attrs;
+@@ -229,13 +291,14 @@ int main(int argc, char **argv)
+ 	EVP_PKEY *private_key;
+ #ifndef USE_PKCS7
+ 	CMS_ContentInfo *cms = NULL;
+-	unsigned int use_keyid = 0;
+ #else
+ 	PKCS7 *pkcs7 = NULL;
+ #endif
+ 	X509 *x509;
+ 	BIO *bd, *bm;
+-	int opt, n;
++	int n;
++	struct cmd_opts opts = {};
++
+ 	OpenSSL_add_all_algorithms();
+ 	ERR_load_crypto_strings();
+ 	ERR_clear_error();
+@@ -247,23 +310,19 @@ int main(int argc, char **argv)
+ #else
+ 	use_signed_attrs = PKCS7_NOATTR;
+ #endif
++	parse_args(argc, argv, &opts);
++	argc -= optind;
++	argv += optind;
+ 
+-	do {
+-		opt = getopt(argc, argv, "sdpk");
+-		switch (opt) {
+-		case 's': raw_sig = true; break;
+-		case 'p': save_sig = true; break;
+-		case 'd': sign_only = true; save_sig = true; break;
++	const char *raw_sig_name = opts.raw_sig_name;
++	const bool save_sig = opts.save_sig;
++	const bool raw_sig = opts.raw_sig;
++	const bool sign_only = opts.sign_only;
++	bool replace_orig = opts.replace_orig;
+ #ifndef USE_PKCS7
+-		case 'k': use_keyid = CMS_USE_KEYID; break;
++	const unsigned int use_keyid = opts.use_keyid;
+ #endif
+-		case -1: break;
+-		default: format();
+-		}
+-	} while (opt != -1);
+ 
+-	argc -= optind;
+-	argv += optind;
+ 	if (argc < 4 || argc > 5)
+ 		format();
+ 
+-- 
+2.39.2
