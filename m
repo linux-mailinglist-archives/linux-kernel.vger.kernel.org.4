@@ -2,235 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3856C118C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A07376C118E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjCTMKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S230364AbjCTMKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjCTMKd (ORCPT
+        with ESMTP id S230289AbjCTMKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:10:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1637A9B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:10:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A78191F88D;
-        Mon, 20 Mar 2023 12:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679314226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=4M33RPSshG/6AvzGlSc6eQGFqPX5H1NKWm/iBJHsuL0=;
-        b=kbPjemu6EfoZdMJ084ad+ZZJvk+Yzv90SEkNJwQrZsVtAazbgBI8MDKxEsjdRRpr0vHh/X
-        tTA1TPAOESCVWG3cm25C7XtTqUrpxCkMcOwJ9XBFC+PtUeFa5THE/MH9tMTQxDlcTvK/XG
-        Zd1WF/mqKywJXGBMVPfBThbU1/38VpY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6129613A00;
-        Mon, 20 Mar 2023 12:10:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EUymFjJNGGS3UAAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Mon, 20 Mar 2023 12:10:26 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        corbet@lwn.net, linux-kernel@vger.kernel.org,
-        Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH v5] x86: Avoid relocation information in final vmlinux
-Date:   Mon, 20 Mar 2023 13:10:06 +0100
-Message-Id: <20230320121006.4863-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 20 Mar 2023 08:10:42 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83F113D4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:10:39 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t5so9003917edd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679314237;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lejGXvtxYXPbRbirbLrzty70j8ZQG2QJS1aPe94BDQ0=;
+        b=JsaW7C+nAECp/HhGauljm8wmqVzAsC/nrlVXgaaVojvuNY08+jfmVumCbRqCi1cShv
+         D46LiHX02jZ1AhFY4aRc6qhjdoNU/v1xjyt6RYmFGMNn7cz56B53GUIomyHDc1ZhIFT1
+         a0ly2IFDqA8zI3nZdGNvM70XSD+lX4BMAgndCw1pC68obu20QjYQBxC9KFtEwgbKuTVI
+         FyJko3QWQwu49mF3HzXJB8ojP+ec9Jp5nK1vnLPURfrQft5jkDbn3CyLho3FxZ9BUVza
+         mqZD+m/s5KnSGn1QVZ8dhHSDdFHHOEIaPDj6NI/PMOGYLL5SUiUsJoAPbSOs/bUPoAuM
+         6WFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679314237;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lejGXvtxYXPbRbirbLrzty70j8ZQG2QJS1aPe94BDQ0=;
+        b=o88pDaWzxpF7ypVpY60s2kbScSkESh7Zv/L5n2gZAyXDBGoIZ6XOTZczha8KhXgRZO
+         +5krLk9M0uDkSEQ0kdZ6pJyUbtfILeyMO17lP83pRssrw+t5M5A8RSUP9470ptqUULor
+         jwqU6VRKXcgSuW8AfiwhyffpLoMxtJwsVRL6yqJG4STsdEi3TTPucdzm7e3CAr4j+aSQ
+         6rXsVG0KOF/2JmdZUa2ZisuxlwVSe8o68MKYxZ0LihJczdTPFP86UGLeGWf5cpPAkN3u
+         +m9M/NfTCmqdzKTTldEDL+QeGeRRsy2I5J1hFHsvqWgoYeBv7ZP9q893uJZqP8JtO4c2
+         /zfQ==
+X-Gm-Message-State: AO0yUKVzS5GMgqbjUC+GkUcRD3+M5Jr9LH3OlBV5cC5HtvE0Z20XNAXK
+        9v8Fd7w4/urKyH2E3bLCHJ62CqjI3/6lr+Pmmh8=
+X-Google-Smtp-Source: AK7set9IVH1ZPd+u+qXJXskzpIA4kaSshW23le6se8QUxh4nKLX0DNUggBx6rPK4R2KEJ8bchoKneg==
+X-Received: by 2002:a17:906:bcf4:b0:920:7a99:dcd4 with SMTP id op20-20020a170906bcf400b009207a99dcd4mr9151233ejb.62.1679314237193;
+        Mon, 20 Mar 2023 05:10:37 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id e14-20020a170906044e00b0093204090617sm4059402eja.36.2023.03.20.05.10.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 05:10:36 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 17:10:34 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: greybus: fix line ending with '('
+Message-ID: <ZBhNOkQbG4ygNF98@khadija-virtual-machine>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Linux build process on x86 roughly consists of compiling all input
-files, statically linking them into a vmlinux ELF file, and then taking
-and turning this file into an actual bzImage bootable file.
+Splitting function header to multiple lines because of 80 characters per
+line limit, results in ending the function call line with '('.
+This leads to CHECK reported by checkpatch.pl
 
-vmlinux has in this process two main purposes:
-1) It is an intermediate build target on the way to produce the final
-   bootable image.
-2) It is a file that is expected to be used by debuggers and standard
-   ELF tooling to work with the built kernel.
+Move the first parameter right after the '(' in the function call line.
+Align the rest of the parameters to the opening parenthesis.
 
-For the second purpose, a vmlinux file is typically collected by various
-package build recipes, such as distribution spec files, including the
-kernel's own tar-pkg target.
-
-When building a kernel supporting KASLR with CONFIG_X86_NEED_RELOCS,
-vmlinux contains also relocation information produced by using the
---emit-relocs linker option. This is utilized by subsequent build steps
-to create vmlinux.relocs and produce a relocatable image. However, the
-information is not needed by debuggers and other standard ELF tooling.
-
-The issue is then that the collected vmlinux file and hence distribution
-packages end up unnecessarily large because of this extra data. The
-following is a size comparison of vmlinux v6.0 with and without the
-relocation information:
-| Configuration      | With relocs | Stripped relocs |
-| x86_64_defconfig   |       70 MB |           43 MB |
-| +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
-
-Optimize a resulting vmlinux by adding a postlink step that splits the
-relocation information into vmlinux.relocs and then strips it from the
-vmlinux binary.
-
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
 ---
+ drivers/staging/greybus/audio_topology.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Changes since v4 [1]:
-- Update the example target which is mentioned in the patch description
-  to collect vmlinux from binrpm-pkg to tar-pkg, to reflect fc8c2d8ff206
-  ("kbuild: Stop including vmlinux.bz2 in the rpm's").
+diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
+index 62d7674852be..08e6a807c132 100644
+--- a/drivers/staging/greybus/audio_topology.c
++++ b/drivers/staging/greybus/audio_topology.c
+@@ -24,9 +24,8 @@ struct gbaudio_ctl_pvt {
+ 	struct gb_audio_ctl_elem_info *info;
+ };
 
-Changes since v3 [2]:
-- Update the Kbuild.include path in arch/x86/Makefile.postlink to work
-  after 67d7c3023a67 ("kbuild: remove --include-dir MAKEFLAG from top
-  Makefile").
-
-Changes since v2 [3]:
-- Ignore only the moved vmlinux.relocs, add it to .gitignore and
-  Documentation/dontdiff.
-- Clean up the patch description.
-
-Changes since v1 [4]:
-- Fix the command to remove relocations to work with llvm-objcopy too.
-
-[1] https://lore.kernel.org/lkml/20230227131829.26824-1-petr.pavlu@suse.com/
-[2] https://lore.kernel.org/lkml/20221211141227.7622-1-petr.pavlu@suse.com/
-[3] https://lore.kernel.org/lkml/20220927084632.14531-1-petr.pavlu@suse.com/
-[4] https://lore.kernel.org/lkml/20220913132911.6850-1-petr.pavlu@suse.com/
-
- .gitignore                          |  1 +
- Documentation/dontdiff              |  1 +
- arch/x86/Makefile.postlink          | 41 +++++++++++++++++++++++++++++
- arch/x86/boot/compressed/.gitignore |  1 -
- arch/x86/boot/compressed/Makefile   | 10 +++----
- 5 files changed, 47 insertions(+), 7 deletions(-)
- create mode 100644 arch/x86/Makefile.postlink
-
-diff --git a/.gitignore b/.gitignore
-index 70ec6037fa7a..9bafd3c6bb5f 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -65,6 +65,7 @@ modules.order
- /vmlinux
- /vmlinux.32
- /vmlinux.map
-+/vmlinux.relocs
- /vmlinux.symvers
- /vmlinux-gdb.py
- /vmlinuz
-diff --git a/Documentation/dontdiff b/Documentation/dontdiff
-index 3c399f132e2d..a62ad01e6d11 100644
---- a/Documentation/dontdiff
-+++ b/Documentation/dontdiff
-@@ -254,6 +254,7 @@ vmlinux.aout
- vmlinux.bin.all
- vmlinux.lds
- vmlinux.map
-+vmlinux.relocs
- vmlinux.symvers
- vmlinuz
- voffset.h
-diff --git a/arch/x86/Makefile.postlink b/arch/x86/Makefile.postlink
-new file mode 100644
-index 000000000000..195af937aa4d
---- /dev/null
-+++ b/arch/x86/Makefile.postlink
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# ===========================================================================
-+# Post-link x86 pass
-+# ===========================================================================
-+#
-+# 1. Separate relocations from vmlinux into vmlinux.relocs.
-+# 2. Strip relocations from vmlinux.
-+
-+PHONY := __archpost
-+__archpost:
-+
-+-include include/config/auto.conf
-+include $(srctree)/scripts/Kbuild.include
-+
-+CMD_RELOCS = arch/x86/tools/relocs
-+quiet_cmd_relocs = RELOCS  $@.relocs
-+      cmd_relocs = $(CMD_RELOCS) $@ > $@.relocs;$(CMD_RELOCS) --abs-relocs $@
-+
-+quiet_cmd_strip_relocs = RSTRIP  $@
-+      cmd_strip_relocs = $(OBJCOPY) --remove-section='.rel.*' --remove-section='.rel__*' --remove-section='.rela.*' --remove-section='.rela__*' $@
-+
-+# `@true` prevents complaint when there is nothing to be done
-+
-+vmlinux: FORCE
-+	@true
-+ifeq ($(CONFIG_X86_NEED_RELOCS),y)
-+	$(call cmd,relocs)
-+	$(call cmd,strip_relocs)
-+endif
-+
-+%.ko: FORCE
-+	@true
-+
-+clean:
-+	@rm -f vmlinux.relocs
-+
-+PHONY += FORCE clean
-+
-+FORCE:
-+
-+.PHONY: $(PHONY)
-diff --git a/arch/x86/boot/compressed/.gitignore b/arch/x86/boot/compressed/.gitignore
-index 25805199a506..b2968175fc27 100644
---- a/arch/x86/boot/compressed/.gitignore
-+++ b/arch/x86/boot/compressed/.gitignore
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- relocs
- vmlinux.bin.all
--vmlinux.relocs
- vmlinux.lds
- mkpiggy
- piggy.S
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 6b6cfe607bdb..19d1fb601796 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -121,14 +121,12 @@ $(obj)/vmlinux.bin: vmlinux FORCE
- 
- targets += $(patsubst $(obj)/%,%,$(vmlinux-objs-y)) vmlinux.bin.all vmlinux.relocs
- 
--CMD_RELOCS = arch/x86/tools/relocs
--quiet_cmd_relocs = RELOCS  $@
--      cmd_relocs = $(CMD_RELOCS) $< > $@;$(CMD_RELOCS) --abs-relocs $<
--$(obj)/vmlinux.relocs: vmlinux FORCE
--	$(call if_changed,relocs)
-+# vmlinux.relocs is created by the vmlinux postlink step.
-+vmlinux.relocs: vmlinux
-+	@true
- 
- vmlinux.bin.all-y := $(obj)/vmlinux.bin
--vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += $(obj)/vmlinux.relocs
-+vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += vmlinux.relocs
- 
- $(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
- 	$(call if_changed,gzip)
--- 
-2.35.3
+-static struct gbaudio_module_info *find_gb_module(
+-					struct gbaudio_codec_info *codec,
+-					char const *name)
++static struct gbaudio_module_info *find_gb_module(struct gbaudio_codec_info *codec,
++						  char const *name)
+ {
+ 	int dev_id;
+ 	char begin[NAME_SIZE];
+--
+2.34.1
 
