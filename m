@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A666C1E81
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EFF6C1E51
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjCTRt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S232922AbjCTRlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCTRsx (ORCPT
+        with ESMTP id S232789AbjCTRlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:48:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBF459ED
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679334171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8rKq3lr86YAGdsTZ7QDkIJZmue64t7FvGz7XkMV/DXA=;
-        b=RIq/+Y6qE8RRnx2JDy8/Wfkmh/DX81E/QGtS9OTgk1tBUeiKEJo7QGznjHOSnmn7HLPj0y
-        1imk4qDDWEoYt7fSmz0VbcD5s9AgGvzlub1J92qRNmekHrg/ecS/iqW3lkTykHt7o8lwy5
-        IbZjTjDlrzB16xu5/SuzIhIPxNuor7U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-9Trh2GVXOq2ykUrhEtYtYA-1; Mon, 20 Mar 2023 13:36:48 -0400
-X-MC-Unique: 9Trh2GVXOq2ykUrhEtYtYA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 20 Mar 2023 13:41:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B7F945;
+        Mon, 20 Mar 2023 10:37:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 240AC101A550;
-        Mon, 20 Mar 2023 17:36:48 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F17FE1121318;
-        Mon, 20 Mar 2023 17:36:47 +0000 (UTC)
-Message-ID: <59ecce70-08de-260c-b5b9-60e0b2e58dbd@redhat.com>
-Date:   Mon, 20 Mar 2023 13:36:46 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71BA161755;
+        Mon, 20 Mar 2023 17:36:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B166AC433EF;
+        Mon, 20 Mar 2023 17:36:54 +0000 (UTC)
+Date:   Mon, 20 Mar 2023 13:36:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Douglas RAILLARD <douglas.raillard@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "open list:TRACING" <linux-kernel@vger.kernel.org>,
+        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH] rcu: Fix rcu_torture_read ftrace event
+Message-ID: <20230320133650.5388a05e@gandalf.local.home>
+In-Reply-To: <5a4e5058-2b5c-4c65-9811-66bf68128583@paulmck-laptop>
+References: <20230306122744.236790-1-douglas.raillard@arm.com>
+        <20230320112015.2271da9c@gandalf.local.home>
+        <5a4e5058-2b5c-4c65-9811-66bf68128583@paulmck-laptop>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/6] locking/rwsem: Rework writer wakeup
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, will@kernel.org, linux-kernel@vger.kernel.org,
-        boqun.feng@gmail.com
-References: <20230223122642.491637862@infradead.org>
- <20230223123319.487908155@infradead.org>
- <Y/t1AwGC9OoN/lFc@hirez.programming.kicks-ass.net>
- <Y/uN+89FlTw45uiA@hirez.programming.kicks-ass.net>
- <943686ee-975d-a463-46d1-04b200ac19b1@redhat.com>
- <Y/yGZgz1cJ1+pTt5@hirez.programming.kicks-ass.net>
- <c126f079-88a2-4067-6f94-82f51cf5ff2b@redhat.com>
- <20230320081238.GC2194297@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230320081238.GC2194297@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,86 +52,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 04:12, Peter Zijlstra wrote:
-> On Mon, Feb 27, 2023 at 03:16:25PM -0500, Waiman Long wrote:
->> On 2/27/23 05:31, Peter Zijlstra wrote:
->>>> I do have some concern that early lock transfer to a lock owner that has not
->>>> been woken up yet may suppress writer lock stealing from optimistic spinning
->>>> causing some performance regression in some cases. Let's see if the test
->>>> robot report anything.
->>> Ah yes, I suppose that is indeed a possibility. Given this is all under
->>> wait_lock and the spinner is not, I was hoping it would still have
->>> sufficient time to win. But yes, robots will tell us.
->>>
->> I run my rwsem locking microbenchmark on a 2-socket 96-thread x86-64
->> system with lock event turned on for 15 secs.
->>
->> Before this patchset:
->>
->> Running locktest with rwsem [runtime = 15s, r% = 50%, load = 100]
->> Threads = 96, Min/Mean/Max = 74,506/91,260/112,409
->> Threads = 96, Total Rate = 584,091 op/s; Percpu Rate = 6,084 op/s
->>
->> rwsem_opt_fail=127305
->> rwsem_opt_lock=4252147
->> rwsem_opt_nospin=28920
->> rwsem_rlock=2713129
->> rwsem_rlock_fail=0
->> rwsem_rlock_fast=5
->> rwsem_rlock_handoff=280
->> rwsem_rlock_steal=1486617
->> rwsem_sleep_reader=2713085
->> rwsem_sleep_writer=4313369
->> rwsem_wake_reader=29876
->> rwsem_wake_writer=5829160
->> rwsem_wlock=127305
->> rwsem_wlock_fail=0
->> rwsem_wlock_handoff=2515
->>
->> After this patchset:
->>
->> Running locktest with rwsem [runtime = 15s, r% = 50%, load = 100]
->> Threads = 96, Min/Mean/Max = 26,573/26,749/26,833
->> Threads = 96, Total Rate = 171,184 op/s; Percpu Rate = 1,783 op/s
->>
->> rwsem_opt_fail=1265481
->> rwsem_opt_lock=17939
->> rwsem_rlock=1266157
->> rwsem_rlock_fail=0
->> rwsem_rlock_fast=0
->> rwsem_rlock_handoff=0
->> rwsem_rlock_steal=551
->> rwsem_sleep_reader=1266157
->> rwsem_sleep_writer=1265481
->> rwsem_wake_reader=26612
->> rwsem_wake_writer=0
->> rwsem_wlock=1265481
->> rwsem_wlock_ehandoff=94
->> rwsem_wlock_fail=0
->> rwsem_wlock_handoff=94
->>
->> So the locking rate is reduced to just 29.3% of the original. Looking at
->> the number of successful writer lock stealings from optimistic spinning
->> (rwsem_opt_lock), it is reduced from 4252147 to 17939. It is just about
->> 0.4% of the original.
->>
->> So for workloads that have a lot of writer contention, there will be
->> performance regressions. Do you mind if we try to keep the original
->> logic of my patchset to allow write lock acquisition in writer slow
->> path, but transfer the lock ownership in the wakeup path when handoff
->> is required. We can do this with some minor code changes on top of your
->> current patchset.
-> Urgh, sorry, I seem to have lost sight of this... those results,..
-> sadness :/
->
-> Yeah, I suppose there's nothing for it but to have live with that mess,
-> be very sure to add comments eludicating any future poor sod reading it
-> as to why the code is the way it is.
+On Mon, 20 Mar 2023 09:58:11 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-OK, I will add additional patches to your series to remediate the 
-performance degradation. Hopefully, I am planning to get it done either 
-by the end of the week or early next week.
+> On Mon, Mar 20, 2023 at 11:20:15AM -0400, Steven Rostedt wrote:
+> > 
+> > [ Wondering why this didn't get picked up in v6.3-rc3, I see that the
+> >   maintainers of RCU were not Cc'd :-( ]
+> > 
+> > This is a bug that will cause unwanted results. I have a patch that will not
+> > let the kernel build when code like this is added.
+> > 
+> >   https://patchwork.kernel.org/project/linux-trace-kernel/patch/20230309221302.642e82d9@gandalf.local.home/
+> > 
+> > ( The kernel robot even failed when applying the above patch, because it
+> >   caught the code that this patch fixes )
+> > 
+> > On Mon,  6 Mar 2023 12:27:43 +0000
+> > Douglas RAILLARD <douglas.raillard@arm.com> wrote:
+> >   
+> > > From: Douglas Raillard <douglas.raillard@arm.com>
+> > > 
+> > > Fix the rcutorturename field so that its size is correctly reported in
+> > > the text format embedded in trace.dat files. As it stands, it is
+> > > reported as being of size 1:  
+> > 
+> > And that the offsets of the following fields will be incorrect as well.
+> >   
+> > > 
+> > >     field:char rcutorturename[8];   offset:8;       size:1; signed:0;
+> > >   
+> > 
+> > Please add:
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 04ae87a52074e ("ftrace: Rework event_create_dir()")  
+> 
+> Thank you, Steve!
+> 
+> With those fixes, and with an ack or better from Steve, I will be happy
+> to pull this in to -rcu.  How urgent is this?  The default destination
+> would be the v6.5 merge window (not the upcoming one, but the one after
+> that), so if you need it sooner, please let me know.
 
-Thanks,
-Longman
+I would like my patch to get in this release, so if you can get it into
+this release too (before the next merge window) that would be great. This is
+a real bug. User space tooling can not parse this trace event (when it use
+to, so it is a regression), and my patch that prevents other trace events
+from making the same mistake will make this code as is fail the build.
+
+For this patch:
+
+ Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+
+> >   
+> > > Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
+> > > ---
+> > >  include/trace/events/rcu.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/include/trace/events/rcu.h b/include/trace/events/rcu.h
+> > > index 90b2fb0292cb..012fa0d171b2 100644
+> > > --- a/include/trace/events/rcu.h
+> > > +++ b/include/trace/events/rcu.h
+> > > @@ -768,7 +768,7 @@ TRACE_EVENT_RCU(rcu_torture_read,
+> > >  	TP_ARGS(rcutorturename, rhp, secs, c_old, c),
+> > >  
+> > >  	TP_STRUCT__entry(
+> > > -		__field(char, rcutorturename[RCUTORTURENAME_LEN])
+> > > +		__array(char, rcutorturename, RCUTORTURENAME_LEN)
+> > >  		__field(struct rcu_head *, rhp)
+> > >  		__field(unsigned long, secs)
+> > >  		__field(unsigned long, c_old)  
+> >   
 
