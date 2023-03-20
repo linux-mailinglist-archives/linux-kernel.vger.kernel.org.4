@@ -2,145 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7536C261F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7B96C2623
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCTXxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S230215AbjCTXzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjCTXxE (ORCPT
+        with ESMTP id S230274AbjCTXy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:53:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0465AB77F;
-        Mon, 20 Mar 2023 16:52:37 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KLqTpg018316;
-        Mon, 20 Mar 2023 23:51:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3NValqBeu7axcEivrOR5Cicr8D7Zw172uAmb15xsnOI=;
- b=WaEFODT8hJIBGHZm/Ylg/2wiu8feIz2K+gWh7do0YAP5NkK3IJeqfY2tCijyNTK7JEUL
- AmLR/Bgd6zLmkIzYGBYm58vMKqZmwBCWNL8TwCp/GI7ddhz009DPvhUZPZHWXr1FheEl
- LGEGGqYuTfuLdGxn89D2HE0scQl6AFinKrv0zyxQI1dszKCp9ceR/XKsBlwD0DBpxqPi
- dfnmYUYw6n0GKQDgCxQwsGQ1T+elKPS4PAaxeueo01lWknY3dOONK/HuSaQzHCwEhaJq
- upOGez1qQHPAToKlXj5oCsSWRClyaCO5kypCsMqOrCnZpxugGG+hvFaXjEhpMIey6iJz CA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pes8p19uf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 23:51:39 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32KNpcoX016942
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 23:51:38 GMT
-Received: from [10.47.206.1] (10.49.16.6) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Mar
- 2023 16:51:37 -0700
-Message-ID: <35d71338-3524-a46c-e434-bee47cfba0cb@quicinc.com>
-Date:   Mon, 20 Mar 2023 16:51:37 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RESEND PATCH v3 0/3] thermal: qcom-spmi-temp-alarm: add support
- for new TEMP_ALARM subtypes
+        Mon, 20 Mar 2023 19:54:58 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2001FCB;
+        Mon, 20 Mar 2023 16:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679356476; x=1710892476;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nRpuQFTTOlHDwBrIOmvP2g37HogdHk1Xyx7X657r4pQ=;
+  b=AOVHaNpZq25DRSG5eXNT8RjaRU9vtG185WqoOKBRdVrtyVfFJLtl6SaE
+   xMGmjqXO5heHfHKE/b9fl9XRy+McBTu/7PwMjb4JOn0i5FJ6QZeSgrfWR
+   xV//oDjU4GDwuf/OGwyXATNqhYy13O6yrkAxKkxzkFMmzRciPTh0ePChG
+   Ulzz74pMd3C5mizDxoYC7/W8bbHqivkG3EiR+mCXVeV/sKgiBVBIIOS9O
+   asj3D7wtWd8DUe/6cKtFHFa7b1co7rPup6+qCYg7SDx0OP5ZF4OFMDkOO
+   wnzuHYxg0MGU5RuXPDTLOKxl3cO1Xc1/Gp7O6kdVTW4m48w9GQtoak4nb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="401379680"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="401379680"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 16:54:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855460745"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="855460745"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 16:54:35 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 16:54:34 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 16:54:34 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.48) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 20 Mar 2023 16:54:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PmPfsMssrBEy+Qvvne71PRbvaGY7yt96KE/rt4trlfDMguv+NV90eTRR2+m4Sct3vhRixyy6Bt1cgNAsiVQoTcfWHXkR8MS/rNkPZEGwDxBe/afhw6RuGCEDu35GoyN8mx4sFNz8dP3qUUqVKxvA8RNVtRXeBoyCXkgJcKXeF4dsoHgIT8ODHUzdzih9+HMO0/X5KwZB6Bm2DeUZlvjNrmfxtrmqBscAV2yEgDlntWde3Yye4wXwBnp7IaAdjlb4V1bLmv6Wcgb4QiZWGuwGYoNyW+AFtsSbS01+p4u1cdvIJCzVW1sUe+7Khk9WZGwdiY3q3KbJYuHpqFswvwFw+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HsnDxS7l0lHrMYoRSJtNmi2bEGWOzWVUOiBDJghF4Rk=;
+ b=FtJzKuTtuvA7j6VnsKOuBeuRQFq4b1NqNNUNC5z8/MGhSeL6PbhoJ/d9rUuS3yXdsoODV/ZiDKUrVJZFTYh/l0z3dnoEb72RvgMTI9Qqt1Jkf1V/VDBBIssgg12tBDw4IVyb+qk2gFpvAiSPsJvGe5IY3pbGgnWelD8EZagO7u8wHMk/HMmbwp+vgdJ0Sxotzl7GfGBk0pRO5z9qZ9Jt2A6ew/HNvRywlFxB9CLpgbdK1hmOGZWHlO+9H7ADmEsdc6bjFFsy3aMTH0fs1jQWt1cxeML3/riVeCoo+q0Dx/3rHOeBvwPEV+S/0jICqGHEqDHRVRDYBGz9lM9AtpMTcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by MN2PR11MB4518.namprd11.prod.outlook.com (2603:10b6:208:24f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 23:54:32 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::7576:1f4a:2a6c:72f7]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::7576:1f4a:2a6c:72f7%2]) with mapi id 15.20.6178.029; Mon, 20 Mar 2023
+ 23:54:32 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: RE: [PATCH v5 23/34] x86/fred: update MSR_IA32_FRED_RSP0 during task
+ switch
+Thread-Topic: [PATCH v5 23/34] x86/fred: update MSR_IA32_FRED_RSP0 during task
+ switch
+Thread-Index: AQHZUKIQEOuHchhjNkaFGLQ0E/KREa8D93eAgABz+TA=
+Date:   Mon, 20 Mar 2023 23:54:31 +0000
+Message-ID: <SA1PR11MB6734A6ED3EDA2525A28C951DA8809@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20230307023946.14516-1-xin3.li@intel.com>
+ <20230307023946.14516-24-xin3.li@intel.com>
+ <20230320165233.GS2194297@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230320165233.GS2194297@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1674602698.git.quic_collinsd@quicinc.com>
-From:   David Collins <quic_collinsd@quicinc.com>
-In-Reply-To: <cover.1674602698.git.quic_collinsd@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: k6ws1zNRtx6lWPsyDjuLceJdJYDDYNQJ
-X-Proofpoint-ORIG-GUID: k6ws1zNRtx6lWPsyDjuLceJdJYDDYNQJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_16,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 impostorscore=0 malwarescore=0 phishscore=0 clxscore=1011
- adultscore=0 bulkscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303200201
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|MN2PR11MB4518:EE_
+x-ms-office365-filtering-correlation-id: 74607d90-686e-44f7-084c-08db299e7353
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tN5ONfJIOPr15tWwrufBBH/QJ+I+/zpVvjSIQyUAWeFnM3CzLtkkfjYsCQ4VnO5jSJ/1y/LaGk0fbR4+T2RzcuxyHhLtck7e6ifyq5Lu5V3QBoA+BVKLQyZKhlPnzRMvmULCiS6O47hW1wkgRUUIvQgx2hqiBC85Hp3cfgwGMpfvNkoHdkiE5QEmOiYAsQh6J5S6vraBdTMICBCEETkJeBG8m7ejQglSlXjgA3OQ+sIL0bMJvFYZNxRmeo+M6qUpfVCMJ3hQZaHIgPbiwPeLwfH4IVZdGU8R2rsJrcW3wmzBqTPyhx+ZVbjPLBVjtbLXlSh36N11jdvXC7FcMAEOs03vzLMsXRM+l2C+9p270YllvjhOyz8SlQnV0j2Pmns3W/rfZKQbLjY2vN1t4Q3oR+/NVdklRZYMTsH0kaSNjtDR+pn40taiy7ZLjuy5+NXp0B+CIPbEcJyRmxaZfn1No0MWuPWndxi8SeJnjl1/IArJKx1DnDcQL/+o4tWXJ5S2a3PlQfbizoVOABFuZ7Njoa5X5UqjiwVTXh6iKQ00n8vgHVCY5mtiyCZoSDi/lNrNaCl0l2YYhafjuthScFKmmswmlBc/rKatfsUAT3RBQxJcefWUZwE/7PgmL3v7/cAMFT3SNiw0z9RYs0PoTMaXFSznd1nwT1e8OmzeJ2ciTj0IrLZtr9HNn0i0sS+GTuzrlMSrQyEDjdOqtnWbFSDA2Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(136003)(396003)(346002)(376002)(451199018)(71200400001)(4744005)(8936002)(38070700005)(5660300002)(7416002)(86362001)(2906002)(9686003)(7696005)(55016003)(186003)(6506007)(26005)(33656002)(4326008)(8676002)(6916009)(41300700001)(316002)(64756008)(38100700002)(122000001)(66946007)(66476007)(66556008)(76116006)(66446008)(82960400001)(52536014)(54906003)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gV/DwPL+J7d/G85wJrwx0lQ2L73z9D2v5ecmzm9qxJB32yuuW39IGz6rdeeD?=
+ =?us-ascii?Q?dU3eh8dA6/LR31kw4SVgDOyXC8FJfmztsuMJpo34MnA2uCmIuqnPA6YQhTLP?=
+ =?us-ascii?Q?uFzLPTqRfs8XrVQZQcCda4kQOO1q76f+oHUm5VdH0yqUuXtYpcoKe7WFF5ho?=
+ =?us-ascii?Q?p27XK2BtNsAIksY63av/nBy92BAK0EPUz1N9wUFqK6/2HawHPBRNUQKgGmsH?=
+ =?us-ascii?Q?3BE5sI5Iwb6ObbD9CO3O/2hJZdcXfordr5nXEPzwn33Wka+bU49DN92Wnotf?=
+ =?us-ascii?Q?yUxkGOjQCqz2I0TVY0qzkU3pbe7jtdc1DmeBYKzcNh7Z1VNLGy+l9TzHSy7m?=
+ =?us-ascii?Q?KlOjIJatny7CgI/tdBXqfv05BnXDC/LLwmbaJL5IPBqZ26C4nnAuyd1h56lc?=
+ =?us-ascii?Q?Y+oraGaHDSFc5X8dZ2FtydPtX7Ou/svSI9mrA5lkJ67eH1ah3PpU1e9SKf3l?=
+ =?us-ascii?Q?CzyGzCvE4pqKohvFbRr59qmLikJgwfJ8p3TVnwOFiY6/49E6MMOt8PqyVNyn?=
+ =?us-ascii?Q?TzW3X8rJKCbO3DWuA3FtK23n+sYsBYo5MzAWBe/9jkw1LbXCz7qrZBY5Wv6X?=
+ =?us-ascii?Q?Y2Dc7hnON4lL0q5jjDzPR8moHkyGsNEg1Lg3zJAs0HLIbrk5jBcDhoo+7H6A?=
+ =?us-ascii?Q?nZqs6Q2+3Ti/cwd+YAaFT7dgv+Y3B3kBeTM1dhEk/AAAJBua0mlXr0Qw7i1v?=
+ =?us-ascii?Q?8r+s78+p450ZPHzN3/7sJ2ZM1SMPD1GbUXXz6ST60V8s6qLXaKS8AXRO4I/W?=
+ =?us-ascii?Q?xXQXhzsB0BDKGq9QnlADVFTYSvaRXHGHeE6GeFG1yMTixF5p2ibI/7MXNWPJ?=
+ =?us-ascii?Q?GbFiN0hkd4oLW6JVzGNneJeUX72DktNDptexgTz5HDmXNNj5e1w96G0ZLP/7?=
+ =?us-ascii?Q?1q3anSKBVcBblC+e3Oz0YPAK2SlOtdjVF5dKgShCoLnWdyAElwMqClbHKsJG?=
+ =?us-ascii?Q?aFgk7oJIuRRgAFbHECxjq+hwnPHl6foSnM/71nDrVqwbnpSoAje3N22F8fJ1?=
+ =?us-ascii?Q?eodnYEuNLEphyjvaedgiEGlb+j2iBhsm4T4ztGwADI3hn5tXHmNO6KlvrYf5?=
+ =?us-ascii?Q?AdJ/+WtfxRHLq1+XpMJi/0W+9/COBke6o3nW2HGMrTfIksSkLpKv/ByhzvRC?=
+ =?us-ascii?Q?LTEuCAAnUgQ2BO1g+3gA5ADBc5nHatcc5zZUIEq/o1ohzfUtqctPWNj7xFG7?=
+ =?us-ascii?Q?KfsK0RtCx9VA9ME7cRpEqJrFvKTt7YkVZcPXgUe/5HXAY0Xvs+2bXetmkCg4?=
+ =?us-ascii?Q?ZQX+TRWBjJhYJVpyOemldtz2RbGiBz7coGl6F3VI9KqrjGrv0daQxmA7mgsz?=
+ =?us-ascii?Q?+Az0LwbAqI/ua/5FwrzeH5/btaBP33Mt/vlaNKy6jl4JFMQGnd386Sua4ZT7?=
+ =?us-ascii?Q?6KtFVdVB9fOB2Y2Dvbt0E3BnCguIlghkGqQYw0FMR7cUBBp8vMAoiM+L7Zu5?=
+ =?us-ascii?Q?zGuYaTT0Tsnmn7V0KygLlp+1CgONccxaeyNnDNM/OM292BAsl3LPN+plOvhR?=
+ =?us-ascii?Q?Feej6Fdb/KavMEb0XkaQ90n2Xn7sxf+zlRCcSNz0buKI4QvFzIxKHDm+4frk?=
+ =?us-ascii?Q?2Wzh4yEXT4tUoPoa1d0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74607d90-686e-44f7-084c-08db299e7353
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 23:54:31.8825
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mGD2hFTuT2yi+XC2WR5lS9RCQqfOzDJuVM8calHDNHypTXjdjrLLx8It/fnSXtxbpwZEcnFGm4IA4wxIdQhEKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4518
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/23 15:46, David Collins wrote:
-> Add support in the qcom-spmi-temp-alarm driver for the new PMIC
-> TEMP_ALARM peripheral subtypes: GEN2 rev 2 and LITE.  The GEN2 rev 2
-> subtype provides greater flexibility in temperature threshold
-> specification by using an independent register value to configure
-> each of the three thresholds.  The LITE subtype utilizes a simplified
-> set of control registers to configure two thresholds: warning and
-> shutdown.
-> 
-> Also add support to avoid a potential issue on certain versions of
-> the TEMP_ALARM GEN2 subtype when automatic stage 2 partial shutdown
-> is disabled.
-> 
-> Changes since v2 [1]:
-> * Added missing header <linux/bitfield.h> in the third patch
-> 
-> Changes since v1 [2]:
-> * Updated the thermal API usage in the patches to work with the recent commit
->   ca1b9a9eb3fd ("thermal/drivers/qcom: Switch to new of API")
-> 
-> [1]: https://lore.kernel.org/lkml/cover.1670375556.git.quic_collinsd@quicinc.com/
-> [2]: https://lore.kernel.org/lkml/cover.1663282895.git.quic_collinsd@quicinc.com/
-> 
-> David Collins (3):
->   thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
->   thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 2 PMIC
->     peripherals
->   thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
-> 
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 407 +++++++++++++++++++-
->  1 file changed, 392 insertions(+), 15 deletions(-)
+> > -	if (cpu_feature_enabled(X86_FEATURE_XENPV))
+> > +	if (cpu_feature_enabled(X86_FEATURE_FRED)) {
+> > +		/*
+> > +		 * Will use WRMSRNS/WRMSRLIST for performance once it's
+> upstreamed.
+> > +		 */
+> > +		wrmsrl(MSR_IA32_FRED_RSP0,
+> > +		       task_top_of_stack(task) +
+> TOP_OF_KERNEL_STACK_PADDING);
+> > +	} else if (cpu_feature_enabled(X86_FEATURE_XENPV)) {
+>=20
+> Whee, so hardware will really only ever look at this when RSP0? I don't n=
+eed to
+> worry about exceptions during context switch?
 
-Hello Amit and Thara,
+You're right, we don't.
 
-Could you please take a look at this patch series when you have some
-time?  It hasn't received any feedback yet after being sent out on
-1/24/2023.
+RSP0 is only used in ring3. Exceptions from ring0 just keep using the curre=
+nt
+kernel stack unless a higher stack level needs to be used, e.g., RSP3 for #=
+DF.
 
-According to the MAINTAINERS files, you are the maintainers for all
-files in the drivers/thermal/qcom/ directory:
-
-QUALCOMM TSENS THERMAL DRIVER
-M:	Amit Kucheria <amitk@kernel.org>
-M:	Thara Gopinath <thara.gopinath@gmail.com>
-L:	linux-pm@vger.kernel.org
-L:	linux-arm-msm@vger.kernel.org
-S:	Maintained
-F:	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-F:	drivers/thermal/qcom/
-
-Can you please check if this entry needs to be updated?  The
-drivers/thermal/qcom directory now contains the qcom-tsens driver as
-well as three other independent QCOM thermal drivers:
-qcom-spmi-temp-alarm, qcom-spmi-adc-tm5, and lmh.
-
-Thanks,
-David
-
+Thanks!
+  Xin
