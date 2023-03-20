@@ -2,154 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A393D6C0C8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52AF6C0C91
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjCTIx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S230523AbjCTIyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjCTIxY (ORCPT
+        with ESMTP id S230167AbjCTIy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:53:24 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DBDD305
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:53:22 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id h8so43626461ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:53:22 -0700 (PDT)
+        Mon, 20 Mar 2023 04:54:29 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99DDBDE3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:54:27 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5416b0ab0ecso211514217b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679302401;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CSur2724Mrb+t2O165F/BN6jWN51XTSV+JAwdxRyZN0=;
-        b=HtN7OaOaVn8D25XKoV7oyiJWUZl790qSN5SbGGws1TIykkdNweRUTVRhIB1VmtUHbG
-         X3rrND9fEoKsd/V7KKgqV6RcENuMAsQr73/zK/LBj8GIm4HoXflUn23Ai61cybHckB+w
-         0qr5VHUA9vmZt8PzmV6iprXrXFKSAcLdec1MYeMZ48JmItqa6MgoXhf3zULptmQ1Cw54
-         7l7Q6KISU3yCkbwMJ9yt1yDP2uAx0zK+1gCnuH8dN1gdXsB7Votre8aOzJb9O51w4iPg
-         03GR5VaLw1HMmHyS+EtWTfGV2aCDLonOuX57risk7aoDMYJVomfhlwgMdaMt6AV8SEM+
-         F0Lw==
+        d=linaro.org; s=google; t=1679302467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0VwCsLRx1BqoZCFKmvQkscs5AX5CM53X2foeYLp/it0=;
+        b=kTQ2+k4ktXPkorygBmiiPssqIsjIfTv+lp5cN34Qm/XVt8ZAquFzTlEHBSNT7cNQVx
+         a3XRr3oIkD3xDMGCZYSuKx25VC+KCKZwuD+FLmsLp+rTaZ9uZ/qj6ukVjqcglVR9pM1S
+         iYFfPtSl2S6YFvcpD2YKN8hOP5nMcWC7bH4//qIW6gGbKw9NXAQVLKMULDK13KE556XT
+         /ZmoZTcaksoRup1cu17dZWwBjJ2WIJdtiFGVIff/Q6h+HQVQTjKG9nY5WsXDn9rQO5MR
+         eejLd9ZpXN41xqpwdOydlRoaWcggBgVvNwV34wVFGhJQa2xWoS4mhTaexYcAJSMjFgq+
+         0z7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679302401;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CSur2724Mrb+t2O165F/BN6jWN51XTSV+JAwdxRyZN0=;
-        b=xbgQygUqI1p6b1Njj3OF3fPRvVBxI7Fk+HkaCFzWlDr8ZZlkrDz2x9lqee2WuLgU15
-         rk/0GH1OJocLbWN7smvp0J1wBkbjhXJQU15AmUmrgFc/ygV6rHRBey7cAAC/h4NsxTS2
-         Ed4Mf1w3V0YHZDLw3d8natvZ67iLeD3fFWHlwSlsrLLvVw6R2McmPadapE8wOA9M5j9Y
-         bKystZ2maq8TW9546+I6graVSB1IQLEqVmIqr3U+wJ0YlKxwpHn/QKJXVGKdjvxtdk1O
-         6uNcm++V0fHR0AwFsKtkYmC49YZLvMXAF82cgWrjAVfN0MGfw741LW+KAlifxMqBq/z0
-         04Qg==
-X-Gm-Message-State: AO0yUKVSAlbW2ONqqR4e4Tv4w2qrjLBmssM3X5JYMyYGN48UAqx4zcwU
-        Q9niBOPHrOGCw07CIDOfPI9ZVAFCq4wp7h9PMrI=
-X-Google-Smtp-Source: AK7set9pXllFdkoHzA8sdpIZJzcBcpJTv8PFDi87umJRA+YksZIIVd0ezRSV46JAJnTPD1fWINCqjQ==
-X-Received: by 2002:aa7:c049:0:b0:4fd:21a6:a649 with SMTP id k9-20020aa7c049000000b004fd21a6a649mr11200682edo.40.1679302400922;
-        Mon, 20 Mar 2023 01:53:20 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id j30-20020a508a9e000000b004af5968cb3bsm4474230edj.17.2023.03.20.01.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:53:20 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 13:53:18 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     outreachy@lists.linux.dev,
-        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: greybus: remove tabs to fix line length and
- merge lines
-Message-ID: <ZBge/v/K/BOVkl2V@khadija-virtual-machine>
-References: <ZAusnKYVTGvO5zoi@khadija-virtual-machine>
- <640e75cfd8fc_229a89294a3@iweiny-mobl.notmuch>
+        d=1e100.net; s=20210112; t=1679302467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0VwCsLRx1BqoZCFKmvQkscs5AX5CM53X2foeYLp/it0=;
+        b=cqLLWc4yrL7TRZf2gdZFISyN3BQer/FGa8fhJHXsr6KFpJYlJvW467jTZVTr2wvIlp
+         eyul6pKH7XUvwrlAtHAUKAI5h5CWhs3qf0Wsa8UpAygKn52s1atsNyLytYEYvrPHMt08
+         8aC/JhVSw2qZj+Fp16wxYlPXqepSYVKWk5vVUm1/rAO/zeeIje0T7nMlUYrvtDd1BFk0
+         +XaKkfR8aED0q3j4CflyWbm8202gIX01be9b355hHgliYkPhYb/b+A2evylagI/BqwE2
+         mctkLhJveuLN2gI0WYORqZWUcY8gTuOq1jWJFLGZeAjeVgSqxJbGRoXsS6vtoO41B6LR
+         qGjA==
+X-Gm-Message-State: AO0yUKWlTDGSHxHkYPRXpFheOU3Vsq9k0pZZtVnn1Cho6Mvajnt1SQJt
+        cAaaF8q7yCFAK6c6fMlmkJ1EaRSe3z7edzFCHNuICQ==
+X-Google-Smtp-Source: AK7set9cIGT0nR09rLwg0UKkmrZo3q2jtFt7Xnztz809nAEgzPbiDoHduicc8RaVr7/eQUZ9wKC7+XPwFfILUV0Geo8=
+X-Received: by 2002:a81:c749:0:b0:541:753d:32f9 with SMTP id
+ i9-20020a81c749000000b00541753d32f9mr10032764ywl.9.1679302466888; Mon, 20 Mar
+ 2023 01:54:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <640e75cfd8fc_229a89294a3@iweiny-mobl.notmuch>
+References: <1679070482-8391-1-git-send-email-quic_mojha@quicinc.com>
+ <1679070482-8391-2-git-send-email-quic_mojha@quicinc.com> <CACRpkdb95V5GC81w8fiuLfx_V1DtWYpO33FOfMnArpJeC9SDQA@mail.gmail.com>
+ <20230320032238.xf5jlt43qebcewm4@ripper>
+In-Reply-To: <20230320032238.xf5jlt43qebcewm4@ripper>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 20 Mar 2023 09:54:15 +0100
+Message-ID: <CACRpkdYq96d=0hoBhNGYihVJbX-D4WLw3+GdQC5_NDXuBiaF7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] firmware: qcom_scm: provide a read-modify-write function
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 06:01:03PM -0700, Ira Weiny wrote:
-> Khadija Kamran wrote:
-> > In file drivers/staging/greybus/arche-platform.c,
-> > - Length of line 181 exceeds 100 columns, fix by removing tabs from the
-> >   line.
-> > - If condition and spin_unlock_...() call is split into two lines, join
-> > them to form a single line.
-> > 
-> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> 
-> Fundamentally the problem with arche_platform_wd_irq() is that the
-> indentation is too great.
-> 
-> "... if you need more than 3 levels of indentation, you’re screwed anyway,
-> and should fix your program."
-> 
-> 	-- https://www.kernel.org/doc/html/v4.10/process/coding-style.html#indentation
-> 
-> I think a better solution would be to refactor the entire function.  This
-> would make the logic of the function more clear as well IMHO.
-> 
-> Here is another tip to help:
-> 
-> https://www.kernel.org/doc/html/v4.10/process/coding-style.html#centralized-exiting-of-functions
-> 
-> Do you think you could try that?
+On Mon, Mar 20, 2023 at 4:19=E2=80=AFAM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
 
-Hey Ira!
+> > This is starting to reimplement regmap.
+> > In this case regmap_update_bits().
+> >
+> > What about just using regmap as accessor for these
+> > registers instead?
+> >
+>
+> I'm not sure it would be beneficial...
 
-Sorry about the late reply. Thank you for your feedback. I have looked
-into the above link. Are you referring to the use of goto statements in
-arche_platform_wd_irq() call?
+Me neither, I don't know the details, I just notice the similarity in the
+accessors.
 
-Thank you!
+> The regmap interface provides a standardized representation of a block
+> of registers, with the suitable accessors backing it. But in both cases
+> touched upon in this series, the addressed registers are part of regions
+> already handled by the kernel.
+>
+> So it wouldn't be suitable to create a regmap-abstraction for "a block
+> of secure registers", at best that would give us two kinds of regmaps
+> abstracting the same register block.
 
-Regards,
-Khadija
+From my viewpoint regmap does three things:
+- Abstract one coherent region of registers under a shared lock, with
+  nifty accessors (such as mask-and-set with regmap_update_bits())
+- Maps access patterns/permissions and permissible access range
+- Optionally cache the contents
 
+The way I would use it if these secure registers are in the same range as a
+bunch of non-secure ones is for sharing a lock and the regmap accessors.
 
-> Ira
-> 
-> > ---
-> > Changes in v2:
-> >  - Change the subject and log message
-> >  - Merge if condition and spin_unlock...() from two lines to one 
-> >  drivers/staging/greybus/arche-platform.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
-> > index fcbd5f71eff2..00ed5dfd7915 100644
-> > --- a/drivers/staging/greybus/arche-platform.c
-> > +++ b/drivers/staging/greybus/arche-platform.c
-> > @@ -176,12 +176,10 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
-> >  				 * Check we are not in middle of irq thread
-> >  				 * already
-> >  				 */
-> > -				if (arche_pdata->wake_detect_state !=
-> > -						WD_STATE_COLDBOOT_START) {
-> > +				if (arche_pdata->wake_detect_state != WD_STATE_COLDBOOT_START) {
-> >  					arche_platform_set_wake_detect_state(arche_pdata,
-> > -									     WD_STATE_COLDBOOT_TRIG);
-> > -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
-> > -							       flags);
-> > +						WD_STATE_COLDBOOT_TRIG);
-> > +					spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
-> >  					return IRQ_WAKE_THREAD;
-> >  				}
-> >  			}
-> > -- 
-> > 2.34.1
-> > 
-> > 
-> 
-> 
+I wouldn't worry about access patterns and such. That usecase (block
+access to certain registers or bits) is partly overdesign in some cases
+IMO.
+
+If regmap abstraction isn't helpful overall then we shouldn't do it.
+
+Yours,
+Linus Walleij
