@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7766C1922
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E696C192D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjCTPax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S233077AbjCTPb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbjCTPaQ (ORCPT
+        with ESMTP id S232469AbjCTPbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:30:16 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D9738E9D
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:23:06 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y4so48282195edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:23:06 -0700 (PDT)
+        Mon, 20 Mar 2023 11:31:05 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C3D33469
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:23:27 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id y14so10733879wrq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679325783;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tVDaPGZx45ChPaTeFiNTT081faxaJUHl/4AYKG0K8nc=;
-        b=u0Z+zKW9ItGEoMrinilBDZOfUYce2FROOZ5X1gNAPdIw7YZ3OAVs7422euKcy1CJN1
-         cTj5SfsWPWeVMybfb8kwtN+BD7kpjKs+lzrMGmyZMaN/5Vjt7mel7qp2/r4KZmEE160J
-         BrZvomm3KI//fIKent9LE9piMty3D64ogbRerTfWH64PNnbMoHwnCEv5+25bnQBrcKT/
-         UxoUr8feDXRmHts0yZ2Jqdc3u+Rhbng8G/gfiIX6nkSfxcRz1CnpgO8TVrk12u+yMRGc
-         GZI8mTg1C6SCZuUKBmUUztL3TF297XcMeY3CfTZG/aaWAbIHrHC5YWGWP3J0DpR5s+Mz
-         Eu4A==
+        d=linaro.org; s=google; t=1679325803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5r4xW0SFy5xnQUYRPg8Rn0IUjwAIHkZLfnsMjBMBlo=;
+        b=NIsTRyaPLIG5ttPYu/Dx7qu6rDlCE1dZBPxp5a5HqLZR6/KE2nZQWEhmluEjq9uRBz
+         z8u+45wdbyCv2MCwuzSjBaBwBLR22RpplzClcyRI7rs1imTCtRBxxhxR9ff6DAsbORSs
+         2PPbG9gYPNf2kokzwRz7zjyCboOqw1F1Q2uMPei7UyHPbn9IvkNSuzwev9ftzqZbaCdx
+         UKcj+97CdbAR48paSjN9yoGwt+gKFVSFXNFrKsYU3LXqA1njFJ0Y7suDLgygOGSJfi/1
+         2TyHAO7ew1TNroa6/MX9RxgNUe7HMJIg57i5LgZYOkb7nY6ll8dXkuwflnTK9tz6l2c5
+         ar+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679325783;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tVDaPGZx45ChPaTeFiNTT081faxaJUHl/4AYKG0K8nc=;
-        b=mE4Jc95zmnSLI9mPuLVkPDfVMlxaIIjxNIHoE1vdK4BgPZz3ro2mly/j5jxggfDiHh
-         /NPnwkd96piZRGxHyUuMIbiDwVbVvPm2D0hly9yPhr8o+PTSQVncFL58SmcnQbmsVJtv
-         B5Ozlti9e+K7z8VC8c+QNpTWKo+DgO83qhEFl3c+DQABopPDnAsOEc9Cjtnj1EfxDCUu
-         QDzDB2eJys+vnRihon8LqRncshIYtvNH+N9GkSEzLBP8kMtuLtVJt5fk3jBi6xdt/GQi
-         FtcbryGFDlEkYwdvzA6iLcE2aQIda+b/5zTSm4Xl7J81ehulVlvOy3ocH6vIbc3OjstC
-         cytQ==
-X-Gm-Message-State: AO0yUKW4bn+M+SqJNJ8SV4kcTeHnmqmmyen5e6u/PdDvBiwFKwTC5a1n
-        SgOnHKQVsAK/hQXc2HDarA//3Q==
-X-Google-Smtp-Source: AK7set+tObm2TN65SCsQ06miimyVjfZ4uqz/BCzZulB+hm0vvsB0q9UQ4f+/BsMP4Dto4Ye0t1TjJA==
-X-Received: by 2002:aa7:d713:0:b0:500:5627:a20b with SMTP id t19-20020aa7d713000000b005005627a20bmr7785052edq.1.1679325783402;
-        Mon, 20 Mar 2023 08:23:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
-        by smtp.gmail.com with ESMTPSA id j30-20020a508a9e000000b004af5968cb3bsm4971494edj.17.2023.03.20.08.23.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 08:23:02 -0700 (PDT)
-Message-ID: <b8801c83-f2dc-f144-de58-03e5c24436fd@linaro.org>
-Date:   Mon, 20 Mar 2023 16:23:01 +0100
+        d=1e100.net; s=20210112; t=1679325803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G5r4xW0SFy5xnQUYRPg8Rn0IUjwAIHkZLfnsMjBMBlo=;
+        b=jMIArm0H9BBv9+Nu6gFsKukgEdDuvO5IcW+PpbVEZ0t5Hsd8ArPD4NDwQUNfXnl2DL
+         dxTvocwwB6K3pJp9VmN36YozUSSTmSZS42yZFSaYyW++vstqhYLHUFPmMjsJyAvEcPmY
+         KuMrhXI1chOD19s5LHjly8UVxDJQBMWnS9AZ3efYjeLdXWtG0ri9kPQuxnRLD9KL7bT9
+         eCtjHffI9lo7G4bKQUz7fvqzWoqoHN1pTEX15i4fojOfAulZ+gTiUrMZUngrWDXc6YIs
+         j1YratF28Cd/hLIZTOwWvFcRvsdcMUUc04+I0wbQxuPdbml+AJsOTTk6X7H5qARN1EWG
+         cZBg==
+X-Gm-Message-State: AO0yUKUcTjm7l5Metgqj1DhTYJ/IOsDHRXErg1xXouSA0k3ewswZxg5S
+        QTYaWXffUyFwErOdduJBcQHNtg==
+X-Google-Smtp-Source: AK7set9WlCjc9i93x8LyM/2+1cA8YLtOf/j6ptEkfLMnG05NrIuCLF4V024VoZHfR1v8Vzcsa8pJhg==
+X-Received: by 2002:a5d:510f:0:b0:2ce:a74f:3249 with SMTP id s15-20020a5d510f000000b002cea74f3249mr13208228wrt.43.1679325802970;
+        Mon, 20 Mar 2023 08:23:22 -0700 (PDT)
+Received: from loic-ThinkPad-T470p.. ([2a01:e0a:82c:5f0:f775:fe58:f222:14c7])
+        by smtp.gmail.com with ESMTPSA id b13-20020adff90d000000b002c54c92e125sm9156761wrr.46.2023.03.20.08.23.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 08:23:22 -0700 (PDT)
+From:   Loic Poulain <loic.poulain@linaro.org>
+To:     lee@kernel.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>
+Subject: [PATCH] mfd: syscon: Use of_io_request_and_map() for IO mapping
+Date:   Mon, 20 Mar 2023 16:23:19 +0100
+Message-Id: <20230320152319.665592-1-loic.poulain@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXT] Re: [PATCH v2 1/3] dt-bindings: usb: cdns-imx8qm: add
- imx8qm cdns3 glue bindings
-Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-References: <20230316212712.2426542-1-Frank.Li@nxp.com>
- <20230316212712.2426542-2-Frank.Li@nxp.com>
- <e6935c0c-375e-b763-ea91-3b8bbc906ebc@linaro.org>
- <AM6PR04MB4838D1958A029701E1601BA588BD9@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <1fd1fe42-3da6-1598-a04d-cb99a9b4b145@linaro.org>
- <AM6PR04MB483800D7CDCC7AF48F88BF9688809@AM6PR04MB4838.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM6PR04MB483800D7CDCC7AF48F88BF9688809@AM6PR04MB4838.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 15:49, Frank Li wrote:
->>>>> +  clock-names:
->>>>> +    items:
->>>>> +      - const: usb3_lpm_clk
->>>>> +      - const: usb3_bus_clk
->>>>> +      - const: usb3_aclk
->>>>> +      - const: usb3_ipg_clk
->>>>> +      - const: usb3_core_pclk
->>>>> +
->>>>> +  assigned-clocks:
->>>>> +    items:
->>>>> +      - description: Phandle and clock specifier of IMX_SC_PM_CLK_PER.
->>>>> +      - description: Phandle and clock specifoer of
->> IMX_SC_PM_CLK_MISC.
->>>>> +      - description: Phandle and clock specifoer of
->>>> IMX_SC_PM_CLK_MST_BUS.
->>>>> +
->>>>> +  assigned-clock-rates:
->>>>> +    items:
->>>>> +      - description: Must be 125 Mhz.
->>>>> +      - description: Must be 12 Mhz.
->>>>> +      - description: Must be 250 Mhz.
->>>>
->>>> I would argue that both properties above are not needed. If your
->>>> hardware requires fixed frequencies, clock provider can fix them, can't it?
->>>
->>> Clock provider don't know fixed value and turn on only used by client.
->>
->> So maybe fix the clock provider? Or this device driver? Requiring by
->> binding specific frequencies for every board is a bit redundant.
-> 
-> It is not for every boards, it is common for a chip family.  Only a place to set for
-> QM and QXP. 
-> 
-> The similar case is network driver, which require a specific frequency at clock assign.
-> Generally frequency is fixed,  clock source name may change at difference chips. 
+Use of_io_request_and_map() instead of of_iomap() so that the
+region is reserved and protected, i.e reported in /proc/iomem
+and not accessible from user side (CONFIG_IO_STRICT_DEVMEM).
 
-If frequency is always fixed, I don't understand why this is in DT
-bindings. I would even say it should not be in DTS. We don't put into
-DTS properties which are always the same, because otherwise they would
-grow crazy big.
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+---
+ drivers/mfd/syscon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+index bdb2ce7ff03b..7e6d4edda118 100644
+--- a/drivers/mfd/syscon.c
++++ b/drivers/mfd/syscon.c
+@@ -60,7 +60,7 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+ 		goto err_map;
+ 	}
+ 
+-	base = of_iomap(np, 0);
++	base = of_io_request_and_map(np, 0, NULL);
+ 	if (!base) {
+ 		ret = -ENOMEM;
+ 		goto err_map;
+-- 
+2.34.1
 
