@@ -2,72 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DB86C0B6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBC26C0B6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjCTHge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 03:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        id S230126AbjCTHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCTHgb (ORCPT
+        with ESMTP id S230085AbjCTHg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 03:36:31 -0400
-Received: from 163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A694BB757
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=JPAOou1ZxwqG71rwkeXV6OnEVlQyJNiffXwBInLe4eM=; b=f
-        W1GDB94oKSKxgYDnHl1onPJxyQjy54WAAIyODgRJzN3vHtlhdP6yOnCEYzHp4QMk
-        9LiUdSFuec7uQdqIP4mOzOAO97ofP6BdjVzTfIc8xAAeuWjjsI0Tt84NoS5Ttm/Q
-        Jph+yJTOxLs8GxhiF6fCiliRx/PaETZPMc4dlPkpCk=
-Received: from 00107082$163.com ( [222.64.154.91] ) by ajax-webmail-wmsvr88
- (Coremail) ; Mon, 20 Mar 2023 15:36:16 +0800 (CST)
-X-Originating-IP: [222.64.154.91]
-Date:   Mon, 20 Mar 2023 15:36:16 +0800 (CST)
-From:   "David Wang" <00107082@163.com>
-To:     linux-kernel@vger.kernel.org, masahiroy@kernel.org
-Subject: [Debian Package]Regression 6.3-rc3: version is empty  for
- linux-headers installation dir
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-X-NTES-SC: AL_QuycC/6SuE8s4CWfbOkXn0oTju85XMCzuv8j3YJeN500oyrM/CEAX3B/Nkv0wtq/ERuzvxeyVCdK9M51WY1DUIkeh3LD6ivhaQ7BRoeoZUcr
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 20 Mar 2023 03:36:59 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6093E12865
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:36:58 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id y4so43000029edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679297817;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1u1keNrwlSxZAkuogiDlSpUUhe7tlydyWOAQpr6eUZQ=;
+        b=i5YWulF8A13Hk2/Fuq9ts3lAKcaK4to9nIq9nroeit9Akcy3epLW2uJ5w6it25FK43
+         Z6ENW1Ns41950R96kAqJGRu4St5J2XdKp85FN92vs4n4dnh531BCajjP9pjuFyu0KAhN
+         ZVvAyIXF+P3/rjgBe3KMOzh5j9TjUG0n4a2w5czc9jafFeaX2Q9jooBYLcJBO1xVrhXY
+         HZl2hj2Gpnkj7+n41E1J1YsV+FjgEgKwHU905b0UzVAn+kl4PlECIaRMpMYrpnAKbZq6
+         SxwD9pBjPns94eiENlpOj8SXXHCMmUDBxm7EtXrDNsHNB0yzbBqJkRRsMzA+tVH1ZJiC
+         v3/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679297817;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1u1keNrwlSxZAkuogiDlSpUUhe7tlydyWOAQpr6eUZQ=;
+        b=SN1jt6lsFfKgvd9WA/nu3rVLI0NwHz854OHVCMMSG6mLX+3ffvbUkI2PsBCPla4mVc
+         EV7Uw4HYaK5oDLP34+D//pSA7xwfDjpgn4+rfKDCgq/KShlRPst8hvG/Y0BmguPYdrBR
+         ccMs7QHQtB51XZcxcDZNxGgawC1VhU3VMXpt2jiPifD6g86v/ZXtEilgbqL3cKOEI9/T
+         VsSTHUMH6tBOFjJArOHOjO6ccKhpz8YRVlVCP9MuY5lcCojU+WSszq7SwF+wn1jbsHqw
+         Hbu/r9svNJ7QH4Oxg26e+WKrtvPCAaMO1WAICPBvN84ji8QJiTv8uEgFx2Cp7ZbeEC5/
+         DWqQ==
+X-Gm-Message-State: AO0yUKXbVXufSHeb6Dc3TsMrMTkwGfajMAcofW3X3Vfk1IhEQzSKJQO2
+        Lf3+KRMw+jNN2/SnrHTPuRkIfQ==
+X-Google-Smtp-Source: AK7set/t+53oOOD8eIyQPbZd6RDd9nOYzNrI9c5ak3LVckOfd3cTjKFbFUi1el1Yx5F45xPvoX28uw==
+X-Received: by 2002:aa7:c858:0:b0:4fd:2a29:ceac with SMTP id g24-20020aa7c858000000b004fd2a29ceacmr11280938edt.14.1679297816830;
+        Mon, 20 Mar 2023 00:36:56 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4428:8354:afb6:2992? ([2a02:810d:15c0:828:4428:8354:afb6:2992])
+        by smtp.gmail.com with ESMTPSA id u27-20020a50951b000000b004bf999f8e57sm4426183eda.19.2023.03.20.00.36.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 00:36:56 -0700 (PDT)
+Message-ID: <34cb347f-17cf-3da1-b484-0c793ae8c5db@linaro.org>
+Date:   Mon, 20 Mar 2023 08:36:55 +0100
 MIME-Version: 1.0
-Message-ID: <33233f0e.3970.186fdf28bc7.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: _____wA3eaXwDBhkX50UAA--.2313W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiTBA4qmI0X6xdZwAAsR
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] MAINTAINERS: remove file entry in NFC SUBSYSTEM after
+ platform_data movement
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Cc:     linux-nfc@lists.01.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230320073201.32401-1-lukas.bulwahn@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230320073201.32401-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V2hlbiBtYWtlIGEgY2xlYW4gYnVpbGQgZm9yIGRlYmlhbiBwYWNrYWdlcywgd2l0aCA2LjMtcmMz
-LCB0aGVyZSBpcyBubyB2ZXJzaW9uIGluZm9ybWF0aW9uIGluIHRoZSBuYW1lIG9mIGxpbnV4LWhl
-YWRlcnMgZGlyLCB0aGUgbGludXgtaGVhZGVycyBwYWNrYWdlIHdvdWxkIGluc3RhbGwgaW50byAi
-L3Vzci9zcmMvbGludXgtaGVhZGVycy0iLgoKVGhpcyBpcyBjYXVzZWQgYnkgMzY4NjJlMTRlMzE2
-MTFmOTc4NjYyMmRiMzY2MzI3MjA5YTdhZWRlNyB3aGljaCByZW1vdmUgdGhlIGRlZmluaXRpb24g
-Zm9yICJ2ZXJzaW9uIiBpbiBzY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKCmRpZmYgLS1naXQgYS9z
-Y3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIgYi9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKaW5kZXgg
-OTA2ODg5YjMwNGE0Li5jNWFlNTcxNjdkN2MgMTAwNzU1Ci0tLSBhL3NjcmlwdHMvcGFja2FnZS9i
-dWlsZGRlYgorKysgYi9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKLi4uCiAKLXZlcnNpb249JEtF
-Uk5FTFJFTEVBU0UKLS0KCgpCdXQgdGhlIHZhcmlhYmxlIGlzIG5lZWQgZm9yIGJ1aWxkaW5nIGxp
-bnV4LWhlYWRlcnM6CnNjcmlwdHMvcGFja2FnZS9idWlsZGRlYgoxODggICAgIGRlc3RkaXI9JHBk
-aXIvdXNyL3NyYy9saW51eC1oZWFkZXJzLSR2ZXJzaW9uCjE4OSAgICAgbWtkaXIgLXAgJGRlc3Rk
-aXIKCgpUaGlzIGNvdWxkIGJlIGZpeGVkIGJ5IGFkZGluZyBiYWNrIHRoZSBkZWZpbml0aW9uIGZv
-ciB2ZXJzaW9uCgpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9wYWNrYWdlL2J1aWxkZGViIGIvc2NyaXB0
-cy9wYWNrYWdlL2J1aWxkZGViCmluZGV4IGM1YWU1NzE2N2Q3Yy4uMTg3MGIyNDg1MjE3IDEwMDc1
-NQotLS0gYS9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKKysrIGIvc2NyaXB0cy9wYWNrYWdlL2J1
-aWxkZGViCkBAIC0yMTYsNiArMjE2LDcgQEAgaW5zdGFsbF9saWJjX2hlYWRlcnMgKCkgewogcm0g
-LWYgZGViaWFuL2ZpbGVzCiAKIHBhY2thZ2VzX2VuYWJsZWQ9JChkaF9saXN0cGFja2FnZXMpCit2
-ZXJzaW9uPSRLRVJORUxSRUxFQVNFCiAKIGZvciBwYWNrYWdlIGluICR7cGFja2FnZXNfZW5hYmxl
-ZH0KIGRvCi0tCgoKCkRhdnVkCg==
+On 20/03/2023 08:32, Lukas Bulwahn wrote:
+> Commit 053fdaa841bd ("nfc: mrvl: Move platform_data struct into driver")
+> moves the nfcmrvl.h header file from include/linux/platform_data to the
+> driver's directory, but misses to adjust MAINTAINERS.
+> 
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
