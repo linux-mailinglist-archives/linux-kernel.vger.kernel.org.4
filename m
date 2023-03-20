@@ -2,130 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A1A6C06C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1DA6C06CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCTARy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 20:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        id S229724AbjCTASh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 20:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCTARv (ORCPT
+        with ESMTP id S229446AbjCTAS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 20:17:51 -0400
-X-Greylist: delayed 119542 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Mar 2023 17:17:47 PDT
-Received: from hyperium.qtmlabs.xyz (hyperium.qtmlabs.xyz [IPv6:2a02:c206:2066:3319::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA51136CD;
-        Sun, 19 Mar 2023 17:17:47 -0700 (PDT)
-Received: from dong.kernal.eu (unknown [222.254.17.84])
-        by hyperium.qtmlabs.xyz (Postfix) with ESMTPSA id 7FB5F820068;
-        Mon, 20 Mar 2023 01:17:44 +0100 (CET)
-Received: from localhost (unknown [194.163.182.183])
-        by dong.kernal.eu (Postfix) with ESMTPSA id 9CC1C44496AC;
-        Mon, 20 Mar 2023 07:17:40 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=syka;
-        t=1679271461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=otmKIrN246oTyDwHdR9LyS1yBV+UX+yNWfJ0s/2P3xM=;
-        b=ItWAw7G4YuAA74aaV87TYgc+gaYtoawizOI/bQaJqkEQd3439JfVvosBvU8h9s+uNnlFdS
-        Olv/9UREGrltoWASPjgppwHDNR6PUl2VlGvbS3qNUz84Wcwq2gw5aGggoJ3u9eaAaNDznH
-        gnXQ214f67QNs+gbDjS71V67IrgHVIVrf+CMUWEl+aSAUZPAB6WzeJ+N6/UgFKs7isXPhH
-        xXASFj3gNl0wmS9zqRRa7ccjPfTOBYQVddtyQKQE7IJ9AxUTx7GK1vM9EjorGc9Y/o6XHR
-        jFZcMfCXWELug81fXsjuwJXMgbbmlsbBfrTc6CoM7g8M55l+5eJb1AI+TiVebA==
-From:   msizanoen <msizanoen@qtmlabs.xyz>
-To:     msizanoen@qtmlabs.xyz
-Cc:     dmitry.torokhov@gmail.com, hdegoede@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pali@kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2] input: alps: fix compatibility with -funsigned-char
-Date:   Mon, 20 Mar 2023 01:17:31 +0100
-Message-Id: <20230320001731.175969-1-msizanoen@qtmlabs.xyz>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
-References: <20230318144206.14309-1-msizanoen@qtmlabs.xyz>
+        Sun, 19 Mar 2023 20:18:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A663595;
+        Sun, 19 Mar 2023 17:18:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679271507; x=1710807507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e3HufBj/e2539/UBn9UWFanSavsSHKjv1uia5sCwpns=;
+  b=QJ72GKzoq3lzCRSbB0MQy4YRbUHnaFKakFEldexuWJplKbC2XNHORgBt
+   J89pyBmq5EMSQkvUASpZrkqcXlmNw2UfaWn7pp65XsAy0t+hFUjMGv/AT
+   NPfov6S174ohp0fKkOloxMORK47RY1hIrod1eg8zhaiirq0Yc1yNqhiKt
+   kyqIU6kXblQzORKWmuFUmQUpWIMw0z/c9+brlj7ikR36oKKSPw+5rVRGv
+   bEfJZZNTzTsuvHpFIjPaAKNNqv5pqT7+8sR/47EWeFzD0f11ncTsVfvqw
+   6EGaJeDLS4j/ZpU8ja2cROUf4UbfqEI66eDj0f8HrZaBs4df8iSule9bT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="340909770"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="340909770"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 17:18:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="745173878"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="745173878"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Mar 2023 17:18:24 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pe3EG-000AiQ-0m;
+        Mon, 20 Mar 2023 00:18:24 +0000
+Date:   Mon, 20 Mar 2023 08:18:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: Re: [PATCH v2 1/2] gpio: 104-dio-48e: Implement struct dio48e_gpio
+Message-ID: <202303200807.f6XwZEfR-lkp@intel.com>
+References: <296c8d808a4a9753ae3aa66d04b746c52df6b8ae.1679259085.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <296c8d808a4a9753ae3aa66d04b746c52df6b8ae.1679259085.git.william.gray@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AlpsPS/2 code previously relied on the assumption that `char` is a
-signed type, which was true on x86 platforms (the only place where this
-driver is used) before kernel 6.2. However, on 6.2 and later, this
-assumption is broken due to the introduction of -funsigned-char as a new
-global compiler flag.
+Hi William,
 
-Fix this by explicitly specifying the signedness of `char` when sign
-extending the values received from the device.
+I love your patch! Yet something to improve:
 
-v2:
-	Add explicit signedness to more places
+[auto build test ERROR on 03810031c91dfe448cd116ee987d5dc4139006f4]
 
-Fixes: f3f33c677699 ("Input: alps - Rushmore and v7 resolution support")
-Cc: stable@vger.kernel.org
-Signed-off-by: msizanoen <msizanoen@qtmlabs.xyz>
----
- drivers/input/mouse/alps.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/William-Breathitt-Gray/gpio-104-dio-48e-Implement-struct-dio48e_gpio/20230320-050433
+base:   03810031c91dfe448cd116ee987d5dc4139006f4
+patch link:    https://lore.kernel.org/r/296c8d808a4a9753ae3aa66d04b746c52df6b8ae.1679259085.git.william.gray%40linaro.org
+patch subject: [PATCH v2 1/2] gpio: 104-dio-48e: Implement struct dio48e_gpio
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230320/202303200807.f6XwZEfR-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/844453d513d06fbc8fbfe14ecff74b3bc3a92bbb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review William-Breathitt-Gray/gpio-104-dio-48e-Implement-struct-dio48e_gpio/20230320-050433
+        git checkout 844453d513d06fbc8fbfe14ecff74b3bc3a92bbb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-diff --git a/drivers/input/mouse/alps.c b/drivers/input/mouse/alps.c
-index 989228b5a0a4..523ba1196c72 100644
---- a/drivers/input/mouse/alps.c
-+++ b/drivers/input/mouse/alps.c
-@@ -852,8 +852,8 @@ static void alps_process_packet_v6(struct psmouse *psmouse)
- 			x = y = z = 0;
- 
- 		/* Divide 4 since trackpoint's speed is too fast */
--		input_report_rel(dev2, REL_X, (char)x / 4);
--		input_report_rel(dev2, REL_Y, -((char)y / 4));
-+		input_report_rel(dev2, REL_X, (signed char)x / 4);
-+		input_report_rel(dev2, REL_Y, -((signed char)y / 4));
- 
- 		psmouse_report_standard_buttons(dev2, packet[3]);
- 
-@@ -1104,8 +1104,8 @@ static void alps_process_trackstick_packet_v7(struct psmouse *psmouse)
- 	    ((packet[3] & 0x20) << 1);
- 	z = (packet[5] & 0x3f) | ((packet[3] & 0x80) >> 1);
- 
--	input_report_rel(dev2, REL_X, (char)x);
--	input_report_rel(dev2, REL_Y, -((char)y));
-+	input_report_rel(dev2, REL_X, (signed char)x);
-+	input_report_rel(dev2, REL_Y, -((signed char)y));
- 	input_report_abs(dev2, ABS_PRESSURE, z);
- 
- 	psmouse_report_standard_buttons(dev2, packet[1]);
-@@ -2294,20 +2294,20 @@ static int alps_get_v3_v7_resolution(struct psmouse *psmouse, int reg_pitch)
- 	if (reg < 0)
- 		return reg;
- 
--	x_pitch = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
-+	x_pitch = (signed char)(reg << 4) >> 4; /* sign extend lower 4 bits */
- 	x_pitch = 50 + 2 * x_pitch; /* In 0.1 mm units */
- 
--	y_pitch = (char)reg >> 4; /* sign extend upper 4 bits */
-+	y_pitch = (signed char)reg >> 4; /* sign extend upper 4 bits */
- 	y_pitch = 36 + 2 * y_pitch; /* In 0.1 mm units */
- 
- 	reg = alps_command_mode_read_reg(psmouse, reg_pitch + 1);
- 	if (reg < 0)
- 		return reg;
- 
--	x_electrode = (char)(reg << 4) >> 4; /* sign extend lower 4 bits */
-+	x_electrode = (signed char)(reg << 4) >> 4; /* sign extend lower 4 bits */
- 	x_electrode = 17 + x_electrode;
- 
--	y_electrode = (char)reg >> 4; /* sign extend upper 4 bits */
-+	y_electrode = (signed char)reg >> 4; /* sign extend upper 4 bits */
- 	y_electrode = 13 + y_electrode;
- 
- 	x_phys = x_pitch * (x_electrode - 1); /* In 0.1 mm units */
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303200807.f6XwZEfR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpio/gpio-104-dio-48e.c: In function 'dio48e_handle_mask_sync':
+>> drivers/gpio/gpio-104-dio-48e.c:120:30: error: 'map' redeclared as different kind of symbol
+     120 |         struct regmap *const map = dio48egpio->map;
+         |                              ^~~
+   drivers/gpio/gpio-104-dio-48e.c:112:57: note: previous definition of 'map' with type 'struct regmap * const'
+     112 | static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
+         |                                    ~~~~~~~~~~~~~~~~~~~~~^~~
+
+
+vim +/map +120 drivers/gpio/gpio-104-dio-48e.c
+
+   111	
+   112	static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
+   113					   const unsigned int mask_buf_def,
+   114					   const unsigned int mask_buf,
+   115					   void *const irq_drv_data)
+   116	{
+   117		struct dio48e_gpio *const dio48egpio = irq_drv_data;
+   118		const unsigned int prev_mask = dio48egpio->irq_mask;
+   119		int err;
+ > 120		struct regmap *const map = dio48egpio->map;
+   121		unsigned int val;
+   122	
+   123		/* exit early if no change since the previous mask */
+   124		if (mask_buf == prev_mask)
+   125			return 0;
+   126	
+   127		/* remember the current mask for the next mask sync */
+   128		dio48egpio->irq_mask = mask_buf;
+   129	
+   130		/* if all previously masked, enable interrupts when unmasking */
+   131		if (prev_mask == mask_buf_def) {
+   132			err = regmap_write(map, DIO48E_CLEAR_INTERRUPT, 0x00);
+   133			if (err)
+   134				return err;
+   135			return regmap_write(map, DIO48E_ENABLE_INTERRUPT, 0x00);
+   136		}
+   137	
+   138		/* if all are currently masked, disable interrupts */
+   139		if (mask_buf == mask_buf_def)
+   140			return regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
+   141	
+   142		return 0;
+   143	}
+   144	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
