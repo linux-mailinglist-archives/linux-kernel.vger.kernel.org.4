@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEF36C0BB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 094E96C0BB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjCTIER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S230095AbjCTIFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjCTIEP (ORCPT
+        with ESMTP id S230287AbjCTIFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:04:15 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6736A3C07;
-        Mon, 20 Mar 2023 01:04:12 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Pg6h80ytJz9sx1;
-        Mon, 20 Mar 2023 09:04:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=steffen.cc; s=MBO0001;
-        t=1679299448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bTYHukQgUX4nzP26XOdQWPxkwbbqFAk7D0BpCeYCkSE=;
-        b=kOMYnrqhCvK5YtABjE7vZcjQbdzAKuibr4CkPWDpinjcWO3NPh0elKeCpku3eglaXAY8LH
-        atk5d3oeqiH/vEb20+PJGadSjC5o03eQ7hkAjrFeoae3v+T/qmZWgJ6jnbQAdexRTJt1dt
-        DC36HewVs5jr9y0sMaJGkXOblANyMP02CqGzZBxc/s0e+H6gIeXtf9Dnukn9/uHeFPZxo4
-        lp91q8Bv1oGqvxFZZJjTvD/26C7Go6dUqXVUkoDPbfvu3vgAY5Se55Vf6u39saY3zAcCQB
-        CGnNvOARSgd5vlykhmo1n/wxSVQohL+a5peLTQ2hQMl+fJgfG2JXWCFr9QxL7g==
-From:   linux@steffen.cc
-To:     "Luis Claudio R . Goncalves" <lgoncalv@redhat.com>,
-        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Steffen Dirkwinkel <s.dirkwinkel@beckhoff.com>
-Subject: [PATCH v5.10-rt] kernel: fork: set wake_q_sleeper.next=NULL again in dup_task_struct
-Date:   Mon, 20 Mar 2023 09:03:47 +0100
-Message-Id: <20230320080347.32434-1-linux@steffen.cc>
+        Mon, 20 Mar 2023 04:05:45 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733013DEA;
+        Mon, 20 Mar 2023 01:05:42 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i10-20020a05600c354a00b003ee0da1132eso289291wmq.4;
+        Mon, 20 Mar 2023 01:05:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679299541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6/P71frEcH2Ptvt6OvUiP4jDXbdRBVOUmTFIf0mXTCI=;
+        b=osQhTOWzydX1M8AN7E88QZiS8JCzt6b5QzhDJGoJSxDY3Q95h+Lz4B5HPbfPoj9wCO
+         svSvznvgsU69F7ZME8zrfNJm7V9Cd6z+p5frHzTrgIj7sAhTvMHfY/vwwfxQ866ht1Yp
+         kSZQDk2QmG+u1B2gxRRGOPmpyoT7g6e3nDwCSRYu8YaaGG2CabdbiBBpyHIMneytVCnw
+         AEGFGNuIzQ2FnFa16gdfVqRKwU/CcOPXKbUPtXDScs5nu0zfimQ4ilPZKBC0OKY62ong
+         4sAyJG5HBwOlapd4AuCDAqrBYYV8CkjJCwGWju6Lfd2xpasry+syHifubWy0oPQjlg8i
+         NC4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679299541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6/P71frEcH2Ptvt6OvUiP4jDXbdRBVOUmTFIf0mXTCI=;
+        b=0U8xLyzhv9iyK1p7t/wR2ZBIjn0+lulswyeZoKlfPq5NAMk5QgO0vfYu2HCRnMpIiZ
+         rQM9fXunl6YafBMS86slvSWbGGEfaMy1EIsGFHYvw344h+kWEAEvbSVZGqzDtmdADHnb
+         BM/uNRMTRYalcB8z+N6lfUlaX3tDXCdLWdsx7mkkfyANxSLpS1qoVYTc6qRy8NiNLdU1
+         Q4O4IUTUz4cKh3aLGn1xbfIjPe6TSzFjQlcerPuLKpST0qgLGtPShe6giQRN5rVbDXjV
+         uPMltf963dVqba0kp38kJCCQlLdl4Ogzxu5NPkb0H77QuM1DtotWU4QiAHxqqNutd2Zr
+         zGTw==
+X-Gm-Message-State: AO0yUKVYpRzg0ViGodL4AV7YiPwtX0+fI5H3yIuPCh5RXnSzuVY0RBlh
+        aCacHLKyG+vu3UG2wdltAaI=
+X-Google-Smtp-Source: AK7set/4x5u751ZAQwe0/rqKPNenqM200IRub/sBKM8OfD/PiB5aUPJy32/YFnncJEm3ZQVYj7bZ6g==
+X-Received: by 2002:a05:600c:213:b0:3ed:c84c:7efe with SMTP id 19-20020a05600c021300b003edc84c7efemr4515782wmi.7.1679299540570;
+        Mon, 20 Mar 2023 01:05:40 -0700 (PDT)
+Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
+        by smtp.gmail.com with ESMTPSA id bi6-20020a05600c3d8600b003ede178dc52sm3563167wmb.40.2023.03.20.01.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 01:05:40 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 20 Mar 2023 09:05:36 +0100
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
+        daniel@iogearbox.net, kpsingh@kernel.org
+Subject: Re: [PATCH 4/7] ftrace: Rename _ftrace_direct_multi APIs to
+ _ftrace_direct APIs
+Message-ID: <ZBgT0FINOmW7c4pK@krava>
+References: <20230316173811.1223508-1-revest@chromium.org>
+ <20230316173811.1223508-5-revest@chromium.org>
+ <ZBcqWqWyq0uW/wj7@krava>
+ <20230319135550.22aaa04b@rorschach.local.home>
+ <ZBdTA0gKh2xAk5Ay@krava>
+ <20230319204731.6691dedc@rorschach.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4Pg6h80ytJz9sx1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319204731.6691dedc@rorschach.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steffen Dirkwinkel <s.dirkwinkel@beckhoff.com>
+On Sun, Mar 19, 2023 at 08:47:31PM -0400, Steven Rostedt wrote:
+> On Sun, 19 Mar 2023 19:22:59 +0100
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > > > >  config SAMPLE_FTRACE_DIRECT_MULTI    
+> > > > 
+> > > > nit, we could perhaps remove this config option as well
+> > > > and use SAMPLE_FTRACE_DIRECT_MULTI  
+> > > 
+> > > Remove SAMPLE_FTRACE_DIRECT_MULTI for SAMPLE_FTRACE_DIRECT_MULTI?
+> > >   
+> > 
+> > sorry typo, I meant SAMPLE_FTRACE_DIRECT
+> 
+> I believe this was discussed before, and I thought we decided to keep
+> them separate. Or perhaps that was at least for testing?
+> 
+> Anyway, we could merge this in the future, but I don't think that's
+> necessary now.
 
-Without this we get system hangs within a couple of days.
-It's also reproducible in minutes with "stress-ng --exec 20".
+yes, I said it's nit earlier
 
-Example error in dmesg:
-INFO: task stress-ng:163916 blocked for more than 120 seconds.
-      Not tainted 5.10.168-rt83 #2
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:stress-ng       state:D stack:    0 pid:163916 ppid: 72833 flags:0x00004000
-Call Trace:
- __schedule+0x2bd/0x940
- preempt_schedule_lock+0x23/0x50
- rt_spin_lock_slowlock_locked+0x117/0x2c0
- rt_spin_lock_slowlock+0x51/0x80
- rt_write_lock+0x1e/0x1c0
- do_exit+0x3ac/0xb20
- do_group_exit+0x39/0xb0
- get_signal+0x145/0x960
- ? wake_up_new_task+0x21f/0x3c0
- arch_do_signal_or_restart+0xf1/0x830
- ? __x64_sys_futex+0x146/0x1d0
- exit_to_user_mode_prepare+0x116/0x1a0
- syscall_exit_to_user_mode+0x28/0x190
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
-RIP: 0033:0x7f738d9074a7
-RSP: 002b:00007ffdafda3cb0 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00000000000000ca RCX: 00007f738d9074a7
-RDX: 0000000000028051 RSI: 0000000000000000 RDI: 00007f738be949d0
-RBP: 00007ffdafda3d88 R08: 0000000000000000 R09: 00007f738be94700
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000028051
-R13: 00007f738be949d0 R14: 00007ffdafda51e0 R15: 00007f738be94700
-
-Fixes: 1ba44dcf789d ("Merge tag 'v5.10.162' into v5.10-rt")
-Signed-off-by: Steffen Dirkwinkel <s.dirkwinkel@beckhoff.com>
----
- kernel/fork.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/fork.c b/kernel/fork.c
-index c6e0d555fca9..0c4c20eb762c 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -949,6 +949,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 	tsk->splice_pipe = NULL;
- 	tsk->task_frag.page = NULL;
- 	tsk->wake_q.next = NULL;
-+	tsk->wake_q_sleeper.next = NULL;
- 	tsk->pf_io_worker = NULL;
- 
- 	account_kernel_stack(tsk, 1);
--- 
-2.40.0
-
+jirka
