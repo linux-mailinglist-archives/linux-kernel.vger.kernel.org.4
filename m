@@ -2,106 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757516C0DF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216706C0DF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjCTKAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S229640AbjCTKBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCTKAq (ORCPT
+        with ESMTP id S229488AbjCTKBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:00:46 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A938446BB
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:00:39 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E93D65FD16;
-        Mon, 20 Mar 2023 13:00:36 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679306436;
-        bh=+AlvPPz3WwkMxZ6jkBwUTQE4LbckvPytF6kchrIlEqA=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=rGBce1OsE8g/ESJq9qPf09s/UcT7yJz220f2y91WnnltXq/b4OUr1VlJqK/LNjxe0
-         jtMP2rKi+nQTjnBkmkVdl1uYkYM26Y+7HVSjFGN/oGiiLsMXrjZBOsRHpPjLxVGflV
-         xcgWK/lmdmMEkr1zk5Pl6uyH9zFxD9ye+wJ01GMJa3cTukyfIy4MK1AoTw6nOq8dow
-         8yqn4K7ypEMp6JyMUtgp4SAnBtFjCan8jHA+EcijnUQuA0iFY4AjAx6BVqiX+/itHz
-         +gyGjOXcIMNUv/kh4JlJczlvdwBx0oUjgYII0Yxl0ovUYZeBBKS/sgwxmvlc+O6r+w
-         WaclSE0Mu5bZw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 20 Mar 2023 13:00:35 +0300 (MSK)
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
-        <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
-        <lukas.bulwahn@gmail.com>
-CC:     <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
-        <rockosov@gmail.com>, Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v2] checkpatch: add missing bindings license check
-Date:   Mon, 20 Mar 2023 13:00:27 +0300
-Message-ID: <20230320100027.27788-1-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
+        Mon, 20 Mar 2023 06:01:49 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D118DD52C;
+        Mon, 20 Mar 2023 03:01:46 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:55864.2045483661
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 67668100211;
+        Mon, 20 Mar 2023 18:01:34 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 965ea55311f24508a1a5be4b8199dd3f for maarten.lankhorst@linux.intel.com;
+        Mon, 20 Mar 2023 18:01:44 CST
+X-Transaction-ID: 965ea55311f24508a1a5be4b8199dd3f
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v8 0/2] drm: add kms driver for loongson display controller
+Date:   Mon, 20 Mar 2023 18:01:29 +0800
+Message-Id: <20230320100131.1277034-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/20 04:57:00 #20976224
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All headers from 'include/dt-bindings/' must be verified by checkpatch
-together with Documentation bindings, because all of them are part of
-the whole DT bindings system.
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-The requirement is dual licensed and matching pattern:
-    /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+Loongson display controller IP has been integrated in both Loongson
+North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
+and ls2k2000 etc), it even has been included in Loongson BMC products.
 
-The issue was found during patch review:
-https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+This display controller is a PCI device, it has two display pipe. For
+the DC in LS7A1000 and LS2K1000 each way has a DVO output interface
+which provide RGB888 signals, vertical & horizontal synchronisations,
+and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
+the maximum resolution is 2048x2048 according to the hardware spec.
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
-Changes v2 since v1 at [1]:
-    - include/dt-bindings check is aligned to open parens
-    - introduce more strict pattern for bindings license:
-      /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+For the DC in LS7A2000, each display pipe is equipped with a built-in
+HDMI encoder which is compliant with HDMI 1.4 specification, thus it
+support 3840x2160@30Hz. The first display pipe is also equipped with
+a transparent vga encoder which is parallel with the HDMI encoder.
+The DC in LS7A2000 is more complete, besides above feature, it has
+two hardware cursors, two hardware vblank counter and two scanout
+position recorders.
 
-Links:
-    [1] https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
----
- scripts/checkpatch.pl | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ v1 -> v2:
+  1) Use hpd status reg when polling for ls7a2000
+  2) Fix all warnings emerged when compile with W=1
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 78cc595b98ce..de669d29f60c 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3709,8 +3709,9 @@ sub process {
- 						WARN("SPDX_LICENSE_TAG",
- 						     "'$spdx_license' is not supported in LICENSES/...\n" . $herecurr);
- 					}
--					if ($realfile =~ m@^Documentation/devicetree/bindings/@ &&
--					    not $spdx_license =~ /GPL-2\.0.*BSD-2-Clause/) {
-+					if (($realfile =~ m@^Documentation/devicetree/bindings/@ ||
-+					     $realfile =~ m@^include/dt-bindings/@) &&
-+					    not $spdx_license =~ /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/) {
- 						my $msg_level = \&WARN;
- 						$msg_level = \&CHK if ($file);
- 						if (&{$msg_level}("SPDX_LICENSE_TAG",
+ v2 -> v3:
+  1) Add COMPILE_TEST in Kconfig and make the driver off by default
+  2) Alphabetical sorting headers (Thomas)
+  3) Untangle register access functions as much as possible (Thomas)
+  4) Switch to TTM based memory manager and prefer cached mapping
+     for Loongson SoC (Thomas)
+  5) Add chip id detection method, now all models are distinguishable.
+  6) Revise builtin HDMI phy driver, nearly all main stream mode
+     below 4K@30Hz is tested, this driver supported these mode very
+     well including clone display mode and extend display mode.
+
+ v3 -> v4:
+  1) Quickly fix a small mistake.
+
+ v4 -> v5:
+  1) Drop potential support for Loongson 2K series SoC temporary,
+     this part should be resend with the DT binding patch in the future.
+  2) Add per display pipe debugfs support to the builtin HDMI encoder.
+  3) Rewrite atomic_update() for hardware cursors plane(Thomas)
+  4) Rewrite encoder and connector initialization part, untangle it
+     according to the chip(Thomas).
+
+ v5 -> v6:
+  1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
+  2) Fix all typos I could found, make sentences and code more readable
+  3) Untange lsdc_hdmi*_connector_detect() function according to the pipe
+  4) After a serious consideration, we rename this driver as loongson.
+     Because we also have drivers toward the LoongGPU IP in LS7A2000 and
+     LS2K2000. Besides, there are also drivers about the external encoder,
+     HDMI audio driver and vbios support etc. This patch only provide DC
+     driver part, my teammate Li Yi believe that loongson will be more
+     suitable for loongson graphics than lsdc in the long run.
+
+     loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
+
+  v6 -> v7:
+  1) Add prime support, self-sharing is works. sharing buffer with etnaviv
+     is also tested, and its works with limitation.
+  2) Implement buffer objects tracking with list_head.
+  3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
+  4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
+     during BO creation. Patch V1 ~ V6 of this series no longer works
+     on Linux 6.3.0-rc2. Thus, we send V7 to revival them.
+  5) Remove depends on LOONGARCH || MIPS || COMPILE_TEST to help review
+     and compile on x86 machine.
+  6) Add a cover letter to help patchwork tracking my patch.
+
+     V1 ~ V4 can be found at link [1], V5 at link [2], V6 at link [3]
+
+     [1] https://patchwork.freedesktop.org/series/113566/
+     [2] https://patchwork.freedesktop.org/series/114386/
+     [3] https://patchwork.freedesktop.org/patch/524532/
+
+  v7 -> v8:
+  1) Zero a compile warnnings on 32-bit platform, compile with W=1
+  2) Revise lsdc_bo_gpu_offset() and minor cleanup
+  3) Pageflip tested on the virtual terminal with following commands
+
+       modetest -M loongson -s 32:1920x1080 -v
+       modetest -M loongson -s 34:1920x1080 -v -F tiles
+
+     It works like a charm, when running pageflip test with dual screnn
+     configuration, another two additional bo created by the modetest
+     emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
+     enough.
+
+     # cat bos
+       bo[0000]: size:     8112kB VRAM
+       bo[0001]: size:       16kB VRAM
+       bo[0002]: size:       16kB VRAM
+       bo[0003]: size:    16208kB VRAM
+       bo[0004]: size:     8112kB VRAM
+       bo[0005]: size:     8112kB VRAM
+
+
+Sui Jingfeng (2):
+  MAINTAINERS: add maintainers for DRM LOONGSON driver
+  drm: add kms driver for loongson display controller
+
+ MAINTAINERS                             |   7 +
+ drivers/gpu/drm/Kconfig                 |   2 +
+ drivers/gpu/drm/Makefile                |   1 +
+ drivers/gpu/drm/loongson/Kconfig        |  15 +
+ drivers/gpu/drm/loongson/Makefile       |  16 +
+ drivers/gpu/drm/loongson/lsdc_crtc.c    | 385 ++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.c | 261 +++++++++++
+ drivers/gpu/drm/loongson/lsdc_drv.c     | 501 +++++++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_drv.h     | 318 +++++++++++++
+ drivers/gpu/drm/loongson/lsdc_gem.c     | 291 ++++++++++++
+ drivers/gpu/drm/loongson/lsdc_gem.h     |  26 ++
+ drivers/gpu/drm/loongson/lsdc_i2c.c     | 171 +++++++
+ drivers/gpu/drm/loongson/lsdc_irq.c     |  88 ++++
+ drivers/gpu/drm/loongson/lsdc_irq.h     |  11 +
+ drivers/gpu/drm/loongson/lsdc_output.c  | 563 ++++++++++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_output.h  |  14 +
+ drivers/gpu/drm/loongson/lsdc_plane.c   | 416 +++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_pll.c     | 338 ++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_pll.h     |  76 ++++
+ drivers/gpu/drm/loongson/lsdc_probe.c   |  85 ++++
+ drivers/gpu/drm/loongson/lsdc_probe.h   |  11 +
+ drivers/gpu/drm/loongson/lsdc_regs.h    | 370 ++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_ttm.c     | 430 ++++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_ttm.h     |  68 +++
+ 24 files changed, 4464 insertions(+)
+ create mode 100644 drivers/gpu/drm/loongson/Kconfig
+ create mode 100644 drivers/gpu/drm/loongson/Makefile
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
+
 -- 
-2.36.0
+2.25.1
 
