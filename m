@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B016C1A5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FCE6C1A5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjCTPvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
+        id S232250AbjCTPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjCTPtt (ORCPT
+        with ESMTP id S232156AbjCTPuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:49:49 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0012B9F7;
-        Mon, 20 Mar 2023 08:41:25 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1679326882;
-        bh=i20Oh7UPtMkF7KR9AMHb1kh7uhEQ1eEVn8pe6hGS0IY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=IEEumZMhOJj7/5fO9M78jnYjwF6vw43+TOAY/TOfIzzevHlcJgYEvXOpVK4hK6WzL
-         DYbYEfL2viDF9VD4rWWIpw6yBSn5zYJYUlTIWXC0fgSIrv1eEYwV0CA922VvWoljCG
-         eIoaLVFeQNfCsVOAedKa5p8UBoO3TjLpsAssyeTc=
-Date:   Mon, 20 Mar 2023 15:41:08 +0000
-Subject: [PATCH v2 8/8] tools/nolibc: x86_64: add stackprotector support
+        Mon, 20 Mar 2023 11:50:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A23D19F3A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:42:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A812D61592
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 15:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812EEC433D2;
+        Mon, 20 Mar 2023 15:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679326949;
+        bh=AZDfh3YjXnOORQifCX1A9Zi+Ke86D7+DHnwmz7SWMkM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LxFKTA9DCJ68FwMFyvHkg89kkx9iXcciTs2Dj8rU/ApvVRfQ/1gNcRlEm4XgNpaVD
+         rRBgOobGURRC+59mb6mfS19ydozuTpxQ1q+ZRTnM9M/DClRzEpjFf6KEYXtA7MHAiI
+         c2GLBSW6W1a+tQjCxtX8ZeqQvVDzGbVGYida0RNk=
+Date:   Mon, 20 Mar 2023 16:42:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Julia Lawall <julia.lawall@inria.fr>
+Subject: Re: [PATCH v3] staging: greybus: use inline function for macros
+Message-ID: <ZBh+3W4eTL9IMW3n@kroah.com>
+References: <20230320103258.6461-1-eng.mennamahmoud.mm@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v2-8-4c938e098d67@weissschuh.net>
-References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
-In-Reply-To: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=1856;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=i20Oh7UPtMkF7KR9AMHb1kh7uhEQ1eEVn8pe6hGS0IY=;
- b=yBKpZLIhD2oLBnMhKGSP33SljC5XJO6L5jLzsIMP1QRDWF8qpnRzP3lO5IRVQgThoA/S0AcOs
- KcMpHjuFCsHCZygA9AsMyhp/qPX/l1LhHvKCsQg759Tph36y0IVFjve
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320103258.6461-1-eng.mennamahmoud.mm@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the new stackprotector support for x86_64.
+On Mon, Mar 20, 2023 at 12:32:58PM +0200, Menna Mahmoud wrote:
+> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> static inline function.
+> 
+> it is not great to have macro that use `container_of` macro,
+> because from looking at the definition one cannot tell what type
+> it applies to.
+> 
+> One can get the same benefit from an efficiency point of view
+> by making an inline function.
+> 
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> ---
+> change in v2:
+> 	remove newlines added in previous patch.
+> 
+> change in v3:
+> 	fix the patch to be against Greg's tree.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/arch-x86_64.h      | 5 +++++
- tools/testing/selftests/nolibc/Makefile | 2 ++
- 2 files changed, 7 insertions(+)
+I am lost in a twisty maze of patches from you for the greybus code that
+all seem alike but are different :(
 
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index 17f6751208e7..f7f2a11d4c3b 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -181,6 +181,8 @@ struct sys_stat_struct {
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
-+#define __ARCH_SUPPORTS_STACK_PROTECTOR
-+
- /* startup code */
- /*
-  * x86-64 System V ABI mandates:
-@@ -191,6 +193,9 @@ const unsigned long *_auxv __attribute__((weak));
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- {
- 	__asm__ volatile (
-+#ifdef NOLIBC_STACKPROTECTOR
-+		"call __stack_chk_init\n"   // initialize stack protector
-+#endif
- 		"pop %rdi\n"                // argc   (first arg, %rdi)
- 		"mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
- 		"lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 8f069ebdd124..543555f4cbdc 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -80,6 +80,8 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
- 			$(call cc-option,-mstack-protector-guard=global) \
- 			$(call cc-option,-fstack-protector-all)
- CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_s390 = -m64
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
- 		$(call cc-option,-fno-stack-protector) \
+Can you send a patch series of the latest changes you have made, as I
+really don't know what is, and is not, the latest versions at all, so
+I'm going to have to drop them all from my review queue right now.
 
--- 
-2.40.0
+thanks,
 
+greg k-h
