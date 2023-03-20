@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C321B6C11B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13ADD6C11BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjCTMUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S230473AbjCTMVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjCTMT7 (ORCPT
+        with ESMTP id S229646AbjCTMVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:19:59 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72068A6F;
-        Mon, 20 Mar 2023 05:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=SDD2xJ9FtOaz057f1e0KNKm4B5SAK+5TSxOhygHPfmo=; b=1w
-        rdnMO1b64ZpMqakitSxyQBaffNeeeCm17bGLoouwArT2eohNOoSiefGwU+Uj2CvAAjh3JFHQKOyQ7
-        Mr8lxtUJffGL5ubboBztBhb/PHm1+nLjyXP43A5lUkJ2Rod+19/xFyaPIz/TzvicjsKAd72R0IROR
-        VEuTtmYUugpUoEQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1peEUO-007qFk-S2; Mon, 20 Mar 2023 13:19:48 +0100
-Date:   Mon, 20 Mar 2023 13:19:48 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: b53: add support for BCM63xx RGMIIs
-Message-ID: <2f86d1ab-beae-45ec-b130-57865437c8a7@lunn.ch>
-References: <20230319183330.761251-1-noltari@gmail.com>
- <20230319220805.124024-1-noltari@gmail.com>
+        Mon, 20 Mar 2023 08:21:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47269AF1C;
+        Mon, 20 Mar 2023 05:21:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F27A5B80E55;
+        Mon, 20 Mar 2023 12:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD20C433D2;
+        Mon, 20 Mar 2023 12:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679314893;
+        bh=BM50t43smgKoQ+Sf/G6qQpUQUjic7BRN6eiJg+AcMxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AeU0KW03fFg3jRTUWxGykUPb8UVwi9GUGr+mf2lVysZcu9U9zUWRCadeBWzmxEqP2
+         k1tU1fRbsoJ1GbWSl+qa1VN6s09vkQn6CU+qr22EVf1nyYVi2No+4rVoaTqj45sVDe
+         CcqdKXi/JhASFgSNx5aRCqb2fGuo2tcpC3t750gon+fiNElubbJ5ybpTeqKTyFUDBZ
+         roIj+RyGP54zb/3Xnb+Kg2JOeNgBW/fckFyIXnJ2TYNmyrbWG6FtZ+5lII543UyHEG
+         EkSIt6eobNtosYpO0EWEW8JPB04DEvkAt6ebo+ayv78LpA9T6RlXdzdCQTnS02PjuG
+         kd0yw8gfQsM4Q==
+Date:   Mon, 20 Mar 2023 17:51:28 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Haotien Hsu <haotienh@nvidia.com>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        JC Kuo <jckuo@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Wayne Chang <waynec@nvidia.com>, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Henry Lin <henryl@nvidia.com>
+Subject: Re: [PATCH] phy: tegra: xusb: Support sleepwalk for Tegra234
+Message-ID: <ZBhPyLzY3leLKbFL@matsya>
+References: <20230309061708.4156383-1-haotienh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230319220805.124024-1-noltari@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230309061708.4156383-1-haotienh@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 11:08:05PM +0100, Álvaro Fernández Rojas wrote:
-> BCM63xx RGMII ports require additional configuration in order to work.
+On 09-03-23, 14:17, Haotien Hsu wrote:
+> From: Henry Lin <henryl@nvidia.com>
 > 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> Add new registers programming in sleepwalk sequence for Tegra234:
+> MASTER_ENABLE_A/B/C/D in XUSB_AO_UTMIP_SLEEPWALK.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Applied, thanks
 
-    Andrew
+-- 
+~Vinod
