@@ -2,89 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475656C1621
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598676C1316
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbjCTPCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S231782AbjCTNTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjCTPBp (ORCPT
+        with ESMTP id S231772AbjCTNSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:01:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B0E3C25;
-        Mon, 20 Mar 2023 07:58:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 451CD61582;
-        Mon, 20 Mar 2023 14:58:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91810C433D2;
-        Mon, 20 Mar 2023 14:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679324304;
-        bh=9NBq/XA6M1Wf/4O3DnQ3RUmHZrzWtpFs7WveRpHGKh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WuY/xnYIk2oPVsMR6H7VEiU00Me7r/Ic6JxUQVEt5F6VKPyDmfWwGQRn+oB4CIIdX
-         MtLEJEbeEzGlPevscuS4+n+w5847wrreEaUMkfI2Ly/2zLohF77h6c8wTA91xLmR/Y
-         97pfSZYY/kBltknpTcaIQxiwWOoq0FdmNnK0oFH+jDEoGox+N+bo8mhDpwQqppUwqB
-         wlKMwuVnP8g/QAcLsnFTUQhmYTWAqle+cVjIr5Sj+HrHJNhlUQ8Ul9U9j4slYClgsB
-         xnXgVU8ZGlhOP/NMt2wnZLcC5pkPsAreX4MqJBmOqM0SrIgtofF+dZYJ3F2nuK3h1R
-         ERwc9h2+5T50A==
-Date:   Mon, 20 Mar 2023 07:58:24 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2, RESEND 07/10] xfs: convert to kobject_del_and_put()
-Message-ID: <20230320145824.GZ11376@frogsfrogsfrogs>
-References: <20230319092641.41917-1-frank.li@vivo.com>
- <20230319092641.41917-7-frank.li@vivo.com>
+        Mon, 20 Mar 2023 09:18:21 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20371B567;
+        Mon, 20 Mar 2023 06:18:16 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PgFfV63n2z4f3jY9;
+        Mon, 20 Mar 2023 21:18:10 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgAHvrEQXRhkWTLvFg--.47360S2;
+        Mon, 20 Mar 2023 21:18:10 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     error27@gmail.com, jack@suse.cz, shikemeng@huaweicloud.com
+Subject: [PATCH] ext4: avoid to access uninitialized block_cluster
+Date:   Tue, 21 Mar 2023 05:21:06 +0800
+Message-Id: <20230320212106.4164212-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319092641.41917-7-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHvrEQXRhkWTLvFg--.47360S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrtFy7JF4UCr4fJw1DKF4fAFb_yoW8Jr48pw
+        sIy3W5GrW5ur1qga1fJr97Xw4rGw18Kr17Ja43Cr13WFZrXw4xJF95tFs0vF1j9rZrCF9I
+        vr129rWUu3s5G37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRi
+        Pl1DUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 05:26:38PM +0800, Yangtao Li wrote:
-> Use kobject_del_and_put() to simplify code.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+If inode bitmap block and block bitmap block are in different group,
+there is a risk to access uninitialized block_cluster in
+ext4_num_overhead_clusters. Initialize block_cluster to -1 to fix this.
 
-Looks good to me,
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202303171446.eLEhZzAu-lkp@intel.com/
+Fixes: e3c70113e2cb ("ext4: improve inode table blocks counting in ext4_num_overhead_clusters")
+---
+ fs/ext4/balloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---D
+diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
+index 49fdb758b0e4..094269488183 100644
+--- a/fs/ext4/balloc.c
++++ b/fs/ext4/balloc.c
+@@ -89,7 +89,7 @@ static unsigned ext4_num_overhead_clusters(struct super_block *sb,
+ 					   struct ext4_group_desc *gdp)
+ {
+ 	unsigned base_clusters, num_clusters;
+-	int block_cluster, inode_cluster;
++	int block_cluster = -1, inode_cluster;
+ 	int itbl_cluster_start = -1, itbl_cluster_end = -1;
+ 	ext4_fsblk_t start = ext4_group_first_block_no(sb, block_group);
+ 	ext4_fsblk_t end = start + EXT4_BLOCKS_PER_GROUP(sb) - 1;
+-- 
+2.30.0
 
-> ---
->  fs/xfs/xfs_sysfs.h | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_sysfs.h b/fs/xfs/xfs_sysfs.h
-> index 148893ebfdef..e2ff063e2c29 100644
-> --- a/fs/xfs/xfs_sysfs.h
-> +++ b/fs/xfs/xfs_sysfs.h
-> @@ -48,8 +48,7 @@ static inline void
->  xfs_sysfs_del(
->  	struct xfs_kobj	*kobj)
->  {
-> -	kobject_del(&kobj->kobject);
-> -	kobject_put(&kobj->kobject);
-> +	kobject_del_and_put(&kobj->kobject);
->  	wait_for_completion(&kobj->complete);
->  }
->  
-> -- 
-> 2.35.1
-> 
