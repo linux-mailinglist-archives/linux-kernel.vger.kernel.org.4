@@ -2,80 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2493F6C0C2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1196C0C2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCTIYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S230233AbjCTIZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjCTIYh (ORCPT
+        with ESMTP id S229782AbjCTIZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:24:37 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D211E9E4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:24:22 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso12929943pjc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:24:22 -0700 (PDT)
+        Mon, 20 Mar 2023 04:25:37 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67B1188;
+        Mon, 20 Mar 2023 01:25:35 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id iw17so1530118wmb.0;
+        Mon, 20 Mar 2023 01:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679300662;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vXJEuXGL6bDH3PwmPPaT3IM8ABOywFoq2Dgyfl9GkNU=;
-        b=n+mfzmqOFxZIaeBGdi7plJsb84IQidbPZCdTZd3c33zPhpNYdRTHw5R6n4tU/aqBz2
-         bIlF6yPcWpdrU/g3uJxxmxqFXvWFHJwthv2ZvqiJo1uyai5EOaWydEr9iA1LQEQhDevP
-         eQPZ/0JnNJfZc6r28fwp0tdAFPjyGdp3SAjHb9588VsJbw/R80KjU3yYsuyFwSiZ9EK9
-         hym+/RJrom2gN96vZNEbf8Oi7hAoj8XAcXJCw+NJ7OtVsYSzD7zd/pLm2kNFQKmA4ZwM
-         npTQlysrZCTJLSU5/KWAL/UpMUHkAvWmjX+0idXBWZNtxKqDy32f09ib/iGUcnpHkuo0
-         HxGA==
+        d=gmail.com; s=20210112; t=1679300734;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lq9ByukcLzCd4kriwtF9/gxGSEg8VeFv6cJLw8F5Cs4=;
+        b=IJmshY7kOIZtz1stoAYNuTVmks50/4vFpi2fEKWTDNiLoLxZln6eaWVvG85lkMB1cd
+         BcctcQI/JMb5ucLC+flnHuqr2J/myPMRO3gku/oPtKxcib56yqqEOq4pf2Di6SHMZgtB
+         xG0bGt8navy8lZgLydyRUHr+pbEuM3glHWc5dcWGBymboc1pXuunrTiI1gnw8a2zGjwP
+         N5kUALa0fFEuUrpCBXFHEujlcu7waD6BfOoMSiblLwrLTjvueQ+5fTDUXA1OeDuleYtt
+         vC2kRV+BiUyX+UFXSSk4IqW05Op78qlCaP2LE55QFqEjnqVLY1FcjIO4/cxIFHwf/P1p
+         U9nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679300662;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vXJEuXGL6bDH3PwmPPaT3IM8ABOywFoq2Dgyfl9GkNU=;
-        b=Lo1+fn1ZPLSHLRhDIfqqrVB+GJAHeN4iFXbZ8Gfc94HSix+VT7OVBR8BEvZFOA9++W
-         tkingjannZUIW2OY4Q99y0vEzUYAdgVx1ZwWx07NYhFCAOSOh2quJ2UYaYNWCscP1j88
-         kOmVVjjycg78oV+rRs7bgAbHh9jJ90/y/g2Kxsz55rCopKcoXGKvzwwzwc9aH/g9FaOx
-         8KA9u1hIiRoR/rHQOelJAguYxUrgmTuf1XKOFPXcpd/GdbxRjLt+aS6dq38lrYycjYOC
-         x4qTxl6b4mZc0I4lfmINMV8jL+YhSxNe1gmKrJj8eMhnOmOhv0SrtffKyGxQT0SyrQ/7
-         ObIA==
-X-Gm-Message-State: AO0yUKW6Aa9p1hqX8UWBczsZDmvENVjW5QiBHx7Ab10Ihlb59gWAxiSe
-        qGEMQ6J+WJr/Zco9OQtRf6k/ZxFBCcC0Phaq8rM=
-X-Google-Smtp-Source: AK7set9GzDdYtXbS0Cf4yAA4xqveR5Vmohd0FI0u+fdQW6Ug7dxgg8RitZb0cnV8InVskl+KrxUfwhJXl3LAAiWnvBc=
-X-Received: by 2002:a17:90a:5b01:b0:23c:fa47:e763 with SMTP id
- o1-20020a17090a5b0100b0023cfa47e763mr4371695pji.0.1679300662083; Mon, 20 Mar
- 2023 01:24:22 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679300734;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lq9ByukcLzCd4kriwtF9/gxGSEg8VeFv6cJLw8F5Cs4=;
+        b=b4FtJaCSAOWG/C+h1MmQubUmW+1w6bXjUkrz4cgKDRZlJgkNoGT6A1cs+5FW5OG4DZ
+         x53k3kXPuZNb0oVxp56crvjdCQ+6m7UcJlMNSXnKTleJDKHcgXLa+UJGuSScUPTf2BiQ
+         YUp7h1VXuvfta9ky4C4Gsvi6cc2Pa4BLG6TNRXBRq60IusDtjt1ZXEk/KggQKBuUi1Rv
+         1YClKml0Qj+96l9dM7z35tlNIE+V0HMICSryydw4xTgyFyFF0Gzl2HzmpelIqPECRc4p
+         x3r0utlGAxje3ai+Lgs1QmYuS4tO3yiLRZfC68TQzUyc3CIDJF5rjLxvmm9An5aRywto
+         seog==
+X-Gm-Message-State: AO0yUKWtzNLi9eD1SQK1Qjbgy11+AW5/qNlnLF9+BrSCa/OdkvHM08XG
+        9nEVaP5L58iCE0hHEPOlFgo=
+X-Google-Smtp-Source: AK7set/KjExHxU/VRUundBhJwbAOn8f1vO3ZgnzhGHZgLDRty1RmkvUexWYNUQs9Tt5IKcmL51/a/A==
+X-Received: by 2002:a7b:c40b:0:b0:3ee:1084:aa79 with SMTP id k11-20020a7bc40b000000b003ee1084aa79mr359148wmi.20.1679300734123;
+        Mon, 20 Mar 2023 01:25:34 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id p17-20020adfcc91000000b002c71dd1109fsm8327072wrj.47.2023.03.20.01.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 01:25:33 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 08:25:32 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <413e0dfe-5a68-4cd9-9036-bed741e4cd22@lucifer.local>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <ZBgROQ0uAfZCbScg@pc636>
 MIME-Version: 1.0
-Sender: anmoniteashale@gmail.com
-Received: by 2002:a05:7300:fc14:b0:b1:4517:6f5a with HTTP; Mon, 20 Mar 2023
- 01:24:21 -0700 (PDT)
-From:   Miss Sherri <sherrigallagher409@gmail.com>
-Date:   Mon, 20 Mar 2023 08:24:21 +0000
-X-Google-Sender-Auth: -HS-ahRR8J6Jge_3KuHHTR18V9M
-Message-ID: <CAFF8bF4snVpLsT-+vJHgpc1oAR0Qch90pBWD_QX8ogT9DmgOqg@mail.gmail.com>
-Subject: RE: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBgROQ0uAfZCbScg@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo,
+On Mon, Mar 20, 2023 at 08:54:33AM +0100, Uladzislau Rezki wrote:
+> > vmalloc() is, by design, not permitted to be used in atomic context and
+> > already contains components which may sleep, so avoiding spin locks is not
+> > a problem from the perspective of atomic context.
+> >
+> > The global vmap_area_lock is held when the red/black tree rooted in
+> > vmap_are_root is accessed and thus is rather long-held and under
+> > potentially high contention. It is likely to be under contention for reads
+> > rather than write, so replace it with a rwsem.
+> >
+> > Each individual vmap_block->lock is likely to be held for less time but
+> > under low contention, so a mutex is not an outrageous choice here.
+> >
+> > A subset of test_vmalloc.sh performance results:-
+> >
+> > fix_size_alloc_test             0.40%
+> > full_fit_alloc_test		2.08%
+> > long_busy_list_alloc_test	0.34%
+> > random_size_alloc_test		-0.25%
+> > random_size_align_alloc_test	0.06%
+> > ...
+> > all tests cycles                0.2%
+> >
+> > This represents a tiny reduction in performance that sits barely above
+> > noise.
+> >
+> How important to have many simultaneous users of vread()? I do not see a
+> big reason to switch into mutexes due to performance impact and making it
+> less atomic.
 
-Sie haben meine vorherige Nachricht erhalten? Ich habe Sie schon
-einmal kontaktiert, aber die Nachricht ist fehlgeschlagen, also habe
-ich beschlossen, noch einmal zu schreiben. Bitte best=C3=A4tigen Sie, ob
-Sie dies erhalten, damit ich fortfahren kann.
+It's less about simultaneous users of vread() and more about being able to write
+direct to user memory rather than via a bounce buffer and not hold a spinlock
+over possible page faults.
 
-warte auf deine Antwort.
+The performance impact is barely above noise (I got fairly widely varying
+results), so I don't think it's really much of a cost at all. I can't imagine
+there are many users critically dependent on a sub-single digit % reduction in
+speed in vmalloc() allocation.
 
-Gr=C3=BC=C3=9Fe,
-Fr=C3=A4ulein Sherri
+As I was saying to Willy, the code is already not atomic, or rather needs rework
+to become atomic-safe (there are a smattering of might_sleep()'s throughout)
+
+However, given your objection alongside Willy's, let me examine Willy's
+suggestion that we instead of doing this, prefault the user memory in advance of
+the vread call.
+
+>
+> So, how important for you to have this change?
+>
+
+Personally, always very important :)
+
+> --
+> Uladzislau Rezki
