@@ -2,613 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17266C25FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46BA6C25DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCTXqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S229674AbjCTXm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCTXqt (ORCPT
+        with ESMTP id S230059AbjCTXmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:46:49 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F63724CB1;
-        Mon, 20 Mar 2023 16:46:10 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w133so10016461oib.1;
-        Mon, 20 Mar 2023 16:46:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679355590;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lKkqDWJGSFmdYPuDTJS322SrO1PrieN1ZYpzK57ZFeg=;
-        b=Qi9z8AIT+rtD17PAFwb9qqBDy5lwBIaYg0XBaZZvJUwVJVdzgqywJVC9Ilo6juEuBh
-         KnGXQcl9pOLgNcye0RBtfLI9Kt3frGOkLa3vkYHUJ5f/tzXeqt1fKqECw+mLbmcNhFIl
-         YDBs0DozuiWDrnz+c7nJsqotudoXqgQKjobzaOpyCif+59dm0e3UflSPWgwrTVFw/xdO
-         VlHa6QSYSALjhA/w2X5Vt41AKZPPgiQCauweABERj0VagEObtqr1vV8hCwlJad04OGSN
-         4z19IJLqwByrTCAJXetJLxZFX89Rs0p00TIEWgOerYTxloUlIUiIF/kcO1ANv8rBaWjm
-         UNrQ==
-X-Gm-Message-State: AO0yUKUMl7OX/si5DrG/7/p0/en1I4dSPalTedmJd6aV/RGDUdioMVFB
-        Gi+AmXx/0wsL0N6u/eDvVQ==
-X-Google-Smtp-Source: AK7set//ZIyMD9UD/hveKMzpLp6ECZPUzPJb1Tgz36uPARtjfdQ87eLm5Mri+IO8/pEFxs4TkPXG3g==
-X-Received: by 2002:a05:6808:2d3:b0:363:a5fd:9cd5 with SMTP id a19-20020a05680802d300b00363a5fd9cd5mr128812oid.3.1679355590147;
-        Mon, 20 Mar 2023 16:39:50 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c9-20020a056808138900b00386f761db6esm2259720oiw.26.2023.03.20.16.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 16:39:49 -0700 (PDT)
-Received: (nullmailer pid 2921107 invoked by uid 1000);
-        Mon, 20 Mar 2023 23:39:48 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joe Tessler <jrt@google.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Benoit Parrot <bparrot@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] media: dt-bindings: Drop unneeded quotes
-Date:   Mon, 20 Mar 2023 18:39:42 -0500
-Message-Id: <20230320233944.2920964-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 20 Mar 2023 19:42:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ED03668D;
+        Mon, 20 Mar 2023 16:41:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CFC61811;
+        Mon, 20 Mar 2023 23:40:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4FCC433D2;
+        Mon, 20 Mar 2023 23:40:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679355636;
+        bh=g7mhOvFG+/kg/Y16MNEcyeKefaDdauSz4l/uJyKEdiI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gYeHatUeXstLOxstDvUNn3MdQv44uldXscn4z/4oM0ZIu7FS2vEuuDHiGs8d5q3Xs
+         +CUaQU+PqZlz79OTCS4yNVl0D4c0GyChXm3Ic+N1Emu1UuPuh+4SOrdjlcasdZvhPV
+         Js9Qu0B6OcP9MOLrkGjyL90LwN7uITx+CKuNjouQ+nPYZuQrcwtk1um59qbv9KziVJ
+         1LrA33LF9JTdxXt2vfwPT9I4o7ty9r2J587enhrXuPevRnYtpDyuOvInfoRtU8oQdN
+         WpuhH18TYjXiqhE5gW00QMTYaVCFnxEhDy76KIYv/3ScXQWRecJBdv2HWmrXiouIOw
+         vWZC5/oyKHQ3w==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fscrypt@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fscrypt: use WARN_ON_ONCE instead of WARN_ON
+Date:   Mon, 20 Mar 2023 16:39:43 -0700
+Message-Id: <20230320233943.73600-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-checking for this can be enabled in yamllint.
+From: Eric Biggers <ebiggers@google.com>
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+As per Linus's suggestion
+(https://lore.kernel.org/r/CAHk-=whefxRGyNGzCzG6BVeM=5vnvgb-XhSeFJVxJyAxAF8XRA@mail.gmail.com),
+use WARN_ON_ONCE instead of WARN_ON.  This barely adds any extra
+overhead, and it makes it so that if any of these ever becomes reachable
+(they shouldn't, but that's the point), the logs can't be flooded.
+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- .../devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml | 2 +-
- .../bindings/media/allwinner,sun50i-h6-vpu-g2.yaml        | 4 ++--
- .../devicetree/bindings/media/amlogic,axg-ge2d.yaml       | 4 ++--
- .../devicetree/bindings/media/amlogic,gx-vdec.yaml        | 4 ++--
- .../devicetree/bindings/media/amlogic,meson-ir-tx.yaml    | 4 ++--
- .../devicetree/bindings/media/i2c/chrontel,ch7322.yaml    | 4 ++--
- .../devicetree/bindings/media/i2c/dongwoon,dw9768.yaml    | 6 +++---
- .../devicetree/bindings/media/i2c/maxim,max9286.yaml      | 2 +-
- .../devicetree/bindings/media/i2c/ovti,ov02a10.yaml       | 2 +-
- .../devicetree/bindings/media/mediatek,mdp3-rdma.yaml     | 2 +-
- .../bindings/media/mediatek,vcodec-subdev-decoder.yaml    | 4 ++--
- .../devicetree/bindings/media/microchip,sama5d4-vdec.yaml | 4 ++--
- .../devicetree/bindings/media/nxp,imx8mq-vpu.yaml         | 4 ++--
- .../devicetree/bindings/media/qcom,msm8916-camss.yaml     | 4 ++--
- .../devicetree/bindings/media/qcom,msm8916-venus.yaml     | 8 ++++----
- .../devicetree/bindings/media/qcom,msm8996-camss.yaml     | 4 ++--
- .../devicetree/bindings/media/qcom,msm8996-venus.yaml     | 4 ++--
- .../devicetree/bindings/media/qcom,sc7180-venus.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sc7280-venus.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sdm660-camss.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sdm660-venus.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sdm845-camss.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml   | 4 ++--
- .../devicetree/bindings/media/qcom,sdm845-venus.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sm8250-camss.yaml      | 4 ++--
- .../devicetree/bindings/media/qcom,sm8250-venus.yaml      | 4 ++--
- Documentation/devicetree/bindings/media/rc.yaml           | 2 +-
- .../devicetree/bindings/media/rockchip,rk3568-vepu.yaml   | 4 ++--
- Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 4 ++--
- Documentation/devicetree/bindings/media/ti,cal.yaml       | 2 +-
- 30 files changed, 57 insertions(+), 57 deletions(-)
+ fs/crypto/bio.c             |  6 +++---
+ fs/crypto/fname.c           |  4 ++--
+ fs/crypto/fscrypt_private.h |  4 ++--
+ fs/crypto/hkdf.c            |  4 ++--
+ fs/crypto/hooks.c           |  2 +-
+ fs/crypto/keyring.c         | 14 +++++++-------
+ fs/crypto/keysetup.c        | 12 ++++++------
+ fs/crypto/policy.c          |  4 ++--
+ 8 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-index 53945c61325c..42dfe22ad5f1 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-@@ -11,7 +11,7 @@ maintainers:
-   - Maxime Ripard <mripard@kernel.org>
- 
- allOf:
--  - $ref: "rc.yaml#"
-+  - $ref: rc.yaml#
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml
-index 9d44236f2deb..a4f06bbdfe49 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/allwinner,sun50i-h6-vpu-g2.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/allwinner,sun50i-h6-vpu-g2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Hantro G2 VPU codec implemented on Allwinner H6 SoC
- 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml b/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-index e551be5e680e..f23fa6d06ad0 100644
---- a/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-+++ b/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-@@ -2,8 +2,8 @@
- # Copyright 2020 BayLibre, SAS
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/amlogic,axg-ge2d.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/amlogic,axg-ge2d.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Amlogic GE2D Acceleration Unit
- 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml b/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-index b827edabcafa..55930f6107c9 100644
---- a/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-+++ b/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-@@ -2,8 +2,8 @@
- # Copyright 2019 BayLibre, SAS
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/amlogic,gx-vdec.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/amlogic,gx-vdec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Amlogic Video Decoder
- 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml b/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-index 4432fea32650..377acce93423 100644
---- a/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-+++ b/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/amlogic,meson-ir-tx.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/amlogic,meson-ir-tx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Amlogic Meson IR transmitter
- 
-diff --git a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-index af8ada55b3f2..4e69b6a7ffcc 100644
---- a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/i2c/chrontel,ch7322.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/i2c/chrontel,ch7322.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Chrontel HDMI-CEC Controller
- 
-diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-index 82d3d18c16a1..a0855d3b7577 100644
---- a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-@@ -38,7 +38,7 @@ properties:
-   dongwoon,aac-mode:
-     description:
-       Indication of AAC mode select.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     enum:
-       - 1    #  AAC2 mode(operation time# 0.48 x Tvib)
-       - 2    #  AAC3 mode(operation time# 0.70 x Tvib)
-@@ -50,7 +50,7 @@ properties:
-     description:
-       Number of AAC Timing count that controlled by one 6-bit period of
-       vibration register AACT[5:0], the unit of which is 100 us.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     default: 0x20
-     minimum: 0x00
-     maximum: 0x3f
-@@ -59,7 +59,7 @@ properties:
-     description:
-       Indication of VCM internal clock dividing rate select, as one multiple
-       factor to calculate VCM ring periodic time Tvib.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     enum:
-       - 0    #  Dividing Rate -  2
-       - 1    #  Dividing Rate -  1
-diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-index 0c4213adbf6a..8df859136047 100644
---- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-@@ -86,7 +86,7 @@ properties:
-       is 100000 micro volts
- 
-   maxim,gpio-poc:
--    $ref: '/schemas/types.yaml#/definitions/uint32-array'
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-     minItems: 2
-     maxItems: 2
-     description: |
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-index 54df9d73dc86..763cebe03dc2 100644
---- a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-@@ -88,7 +88,7 @@ properties:
-         properties:
-           link-frequencies: true
-           ovti,mipi-clock-voltage:
--            $ref: "/schemas/types.yaml#/definitions/uint32"
-+            $ref: /schemas/types.yaml#/definitions/uint32
-             description:
-               Definition of MIPI clock voltage unit. This entry corresponds to
-               the link speed defined by the 'link-frequencies' property.
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-index 9cfc0c7d23e0..7032c7e15039 100644
---- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-@@ -27,7 +27,7 @@ properties:
-     maxItems: 1
- 
-   mediatek,gce-client-reg:
--    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-     items:
-       items:
-         - description: phandle of GCE
-diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-index c4f20acdc1f8..20675f9ba3cd 100644
---- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Mediatek Video Decode Accelerator With Multi Hardware
- 
-diff --git a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-index 4b77103ca913..59b805ca47c5 100644
---- a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-+++ b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Hantro G1 VPU codec implemented on Microchip SAMA5D4 SoCs
- 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-index 7dc13a4b1805..3d58f02b0c5d 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Hantro G1/G2 VPU codecs implemented on i.MX8M SoCs
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
-index 12ec3e1ea869..eb1499912c58 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,msm8916-camss.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,msm8916-camss.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm CAMSS ISP
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-index 2abb7d21c0d1..4ad42b8f19e6 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,msm8916-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,msm8916-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-@@ -47,7 +47,7 @@ properties:
- 
-     properties:
-       compatible:
--        const: "venus-decoder"
-+        const: venus-decoder
- 
-     required:
-       - compatible
-@@ -59,7 +59,7 @@ properties:
- 
-     properties:
-       compatible:
--        const: "venus-encoder"
-+        const: venus-encoder
- 
-     required:
-       - compatible
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-index 6aeb3d6d02d5..8a10aa1cafc5 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,msm8996-camss.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,msm8996-camss.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm CAMSS ISP
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-index 29d0cb6c6ebe..213247a43ef2 100644
---- a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,msm8996-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,msm8996-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-index 42ee3f06c6be..5128a254fd25 100644
---- a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sc7180-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sc7180-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-index cf361dd9de08..eb9ce438dbe0 100644
---- a/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sc7280-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sc7280-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-index b28c8e17f158..0a109e126064 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sdm660-camss.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sdm660-camss.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm CAMSS ISP
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-index 45e3f58f52bd..4a0a9ca33cad 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sdm660-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sdm660-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-index f9a003882f84..1530ad0d80bd 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sdm845-camss.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sdm845-camss.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm CAMSS ISP
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-index 8edc8a2f43a5..d81c3ee53ed6 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sdm845-venus-v2.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sdm845-venus-v2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-index 57d503373efe..1bf043c4c8fb 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sdm845-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sdm845-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-index 07a2af12f37d..fa5073c0fd1e 100644
---- a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sm8250-camss.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sm8250-camss.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm CAMSS ISP
- 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-index 4b7a12523dcf..8c8141723524 100644
---- a/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/qcom,sm8250-venus.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/qcom,sm8250-venus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Qualcomm Venus video encode and decode accelerators
- 
-diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
-index e732b7f3a635..6cecd7d941ca 100644
---- a/Documentation/devicetree/bindings/media/rc.yaml
-+++ b/Documentation/devicetree/bindings/media/rc.yaml
-@@ -18,7 +18,7 @@ properties:
-     description:
-       Specifies the scancode/key mapping table defined in-kernel for
-       the remote controller.
--    $ref: '/schemas/types.yaml#/definitions/string'
-+    $ref: /schemas/types.yaml#/definitions/string
-     enum:
-       - rc-adstech-dvb-t-pci
-       - rc-alink-dtu-m
-diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
-index 81b26eb4cd35..9d90d8d0565a 100644
---- a/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/rockchip,rk3568-vepu.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/rockchip,rk3568-vepu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Hantro G1 VPU encoders implemented on Rockchip SoCs
- 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-index 6cc4d3e5a61d..ee622a8ee1cc 100644
---- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-@@ -2,8 +2,8 @@
- 
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/media/rockchip-vpu.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/media/rockchip-vpu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Hantro G1 VPU codecs implemented on Rockchip SoCs
- 
-diff --git a/Documentation/devicetree/bindings/media/ti,cal.yaml b/Documentation/devicetree/bindings/media/ti,cal.yaml
-index 26b3fedef355..f1a940a110d2 100644
---- a/Documentation/devicetree/bindings/media/ti,cal.yaml
-+++ b/Documentation/devicetree/bindings/media/ti,cal.yaml
-@@ -47,7 +47,7 @@ properties:
-     maxItems: 1
- 
-   ti,camerrx-control:
--    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-     items:
-       - items:
-           - description: phandle to device control module
+diff --git a/fs/crypto/bio.c b/fs/crypto/bio.c
+index d57d0a020f71c..62e1a3dd83574 100644
+--- a/fs/crypto/bio.c
++++ b/fs/crypto/bio.c
+@@ -69,7 +69,7 @@ static int fscrypt_zeroout_range_inline_crypt(const struct inode *inode,
+ 					pblk << (blockbits - SECTOR_SHIFT);
+ 		}
+ 		ret = bio_add_page(bio, ZERO_PAGE(0), bytes_this_page, 0);
+-		if (WARN_ON(ret != bytes_this_page)) {
++		if (WARN_ON_ONCE(ret != bytes_this_page)) {
+ 			err = -EIO;
+ 			goto out;
+ 		}
+@@ -147,7 +147,7 @@ int fscrypt_zeroout_range(const struct inode *inode, pgoff_t lblk,
+ 			break;
+ 	}
+ 	nr_pages = i;
+-	if (WARN_ON(nr_pages <= 0))
++	if (WARN_ON_ONCE(nr_pages <= 0))
+ 		return -EINVAL;
+ 
+ 	/* This always succeeds since __GFP_DIRECT_RECLAIM is set. */
+@@ -170,7 +170,7 @@ int fscrypt_zeroout_range(const struct inode *inode, pgoff_t lblk,
+ 			offset += blocksize;
+ 			if (offset == PAGE_SIZE || len == 0) {
+ 				ret = bio_add_page(bio, pages[i++], offset, 0);
+-				if (WARN_ON(ret != offset)) {
++				if (WARN_ON_ONCE(ret != offset)) {
+ 					err = -EIO;
+ 					goto out;
+ 				}
+diff --git a/fs/crypto/fname.c b/fs/crypto/fname.c
+index 12bd61d20f694..6eae3f12ad503 100644
+--- a/fs/crypto/fname.c
++++ b/fs/crypto/fname.c
+@@ -110,7 +110,7 @@ int fscrypt_fname_encrypt(const struct inode *inode, const struct qstr *iname,
+ 	 * Copy the filename to the output buffer for encrypting in-place and
+ 	 * pad it with the needed number of NUL bytes.
+ 	 */
+-	if (WARN_ON(olen < iname->len))
++	if (WARN_ON_ONCE(olen < iname->len))
+ 		return -ENOBUFS;
+ 	memcpy(out, iname->name, iname->len);
+ 	memset(out + iname->len, 0, olen - iname->len);
+@@ -570,7 +570,7 @@ u64 fscrypt_fname_siphash(const struct inode *dir, const struct qstr *name)
+ {
+ 	const struct fscrypt_info *ci = dir->i_crypt_info;
+ 
+-	WARN_ON(!ci->ci_dirhash_key_initialized);
++	WARN_ON_ONCE(!ci->ci_dirhash_key_initialized);
+ 
+ 	return siphash(name->name, name->len, &ci->ci_dirhash_key);
+ }
+diff --git a/fs/crypto/fscrypt_private.h b/fs/crypto/fscrypt_private.h
+index 0fec2dfc36ebe..05310aa741fd6 100644
+--- a/fs/crypto/fscrypt_private.h
++++ b/fs/crypto/fscrypt_private.h
+@@ -101,7 +101,7 @@ static inline const u8 *fscrypt_context_nonce(const union fscrypt_context *ctx)
+ 	case FSCRYPT_CONTEXT_V2:
+ 		return ctx->v2.nonce;
+ 	}
+-	WARN_ON(1);
++	WARN_ON_ONCE(1);
+ 	return NULL;
+ }
+ 
+@@ -386,7 +386,7 @@ fscrypt_prepare_inline_crypt_key(struct fscrypt_prepared_key *prep_key,
+ 				 const u8 *raw_key,
+ 				 const struct fscrypt_info *ci)
+ {
+-	WARN_ON(1);
++	WARN_ON_ONCE(1);
+ 	return -EOPNOTSUPP;
+ }
+ 
+diff --git a/fs/crypto/hkdf.c b/fs/crypto/hkdf.c
+index 7607d18b35fc0..5a384dad2c72f 100644
+--- a/fs/crypto/hkdf.c
++++ b/fs/crypto/hkdf.c
+@@ -79,7 +79,7 @@ int fscrypt_init_hkdf(struct fscrypt_hkdf *hkdf, const u8 *master_key,
+ 		return PTR_ERR(hmac_tfm);
+ 	}
+ 
+-	if (WARN_ON(crypto_shash_digestsize(hmac_tfm) != sizeof(prk))) {
++	if (WARN_ON_ONCE(crypto_shash_digestsize(hmac_tfm) != sizeof(prk))) {
+ 		err = -EINVAL;
+ 		goto err_free_tfm;
+ 	}
+@@ -125,7 +125,7 @@ int fscrypt_hkdf_expand(const struct fscrypt_hkdf *hkdf, u8 context,
+ 	u8 counter = 1;
+ 	u8 tmp[HKDF_HASHLEN];
+ 
+-	if (WARN_ON(okmlen > 255 * HKDF_HASHLEN))
++	if (WARN_ON_ONCE(okmlen > 255 * HKDF_HASHLEN))
+ 		return -EINVAL;
+ 
+ 	desc->tfm = hkdf->hmac_tfm;
+diff --git a/fs/crypto/hooks.c b/fs/crypto/hooks.c
+index 9151934c50866..9e786ae66a134 100644
+--- a/fs/crypto/hooks.c
++++ b/fs/crypto/hooks.c
+@@ -345,7 +345,7 @@ const char *fscrypt_get_symlink(struct inode *inode, const void *caddr,
+ 	int err;
+ 
+ 	/* This is for encrypted symlinks only */
+-	if (WARN_ON(!IS_ENCRYPTED(inode)))
++	if (WARN_ON_ONCE(!IS_ENCRYPTED(inode)))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	/* If the decrypted target is already cached, just return it. */
+diff --git a/fs/crypto/keyring.c b/fs/crypto/keyring.c
+index 13d336a6cc5da..7cbb1fd872acc 100644
+--- a/fs/crypto/keyring.c
++++ b/fs/crypto/keyring.c
+@@ -73,7 +73,7 @@ void fscrypt_put_master_key(struct fscrypt_master_key *mk)
+ 	 * fscrypt_master_key struct itself after an RCU grace period ensures
+ 	 * that concurrent keyring lookups can no longer find it.
+ 	 */
+-	WARN_ON(refcount_read(&mk->mk_active_refs) != 0);
++	WARN_ON_ONCE(refcount_read(&mk->mk_active_refs) != 0);
+ 	key_put(mk->mk_users);
+ 	mk->mk_users = NULL;
+ 	call_rcu(&mk->mk_rcu_head, fscrypt_free_master_key);
+@@ -92,7 +92,7 @@ void fscrypt_put_master_key_activeref(struct super_block *sb,
+ 	 * destroying any subkeys embedded in it.
+ 	 */
+ 
+-	if (WARN_ON(!sb->s_master_keys))
++	if (WARN_ON_ONCE(!sb->s_master_keys))
+ 		return;
+ 	spin_lock(&sb->s_master_keys->lock);
+ 	hlist_del_rcu(&mk->mk_node);
+@@ -102,8 +102,8 @@ void fscrypt_put_master_key_activeref(struct super_block *sb,
+ 	 * ->mk_active_refs == 0 implies that ->mk_secret is not present and
+ 	 * that ->mk_decrypted_inodes is empty.
+ 	 */
+-	WARN_ON(is_master_key_secret_present(&mk->mk_secret));
+-	WARN_ON(!list_empty(&mk->mk_decrypted_inodes));
++	WARN_ON_ONCE(is_master_key_secret_present(&mk->mk_secret));
++	WARN_ON_ONCE(!list_empty(&mk->mk_decrypted_inodes));
+ 
+ 	for (i = 0; i <= FSCRYPT_MODE_MAX; i++) {
+ 		fscrypt_destroy_prepared_key(
+@@ -237,9 +237,9 @@ void fscrypt_destroy_keyring(struct super_block *sb)
+ 			 * with ->mk_secret.  There should be no structural refs
+ 			 * beyond the one associated with the active ref.
+ 			 */
+-			WARN_ON(refcount_read(&mk->mk_active_refs) != 1);
+-			WARN_ON(refcount_read(&mk->mk_struct_refs) != 1);
+-			WARN_ON(!is_master_key_secret_present(&mk->mk_secret));
++			WARN_ON_ONCE(refcount_read(&mk->mk_active_refs) != 1);
++			WARN_ON_ONCE(refcount_read(&mk->mk_struct_refs) != 1);
++			WARN_ON_ONCE(!is_master_key_secret_present(&mk->mk_secret));
+ 			wipe_master_key_secret(&mk->mk_secret);
+ 			fscrypt_put_master_key_activeref(sb, mk);
+ 		}
+diff --git a/fs/crypto/keysetup.c b/fs/crypto/keysetup.c
+index aa94fba9d17e7..84cdae3063280 100644
+--- a/fs/crypto/keysetup.c
++++ b/fs/crypto/keysetup.c
+@@ -125,7 +125,7 @@ fscrypt_allocate_skcipher(struct fscrypt_mode *mode, const u8 *raw_key,
+ 		pr_info("fscrypt: %s using implementation \"%s\"\n",
+ 			mode->friendly_name, crypto_skcipher_driver_name(tfm));
+ 	}
+-	if (WARN_ON(crypto_skcipher_ivsize(tfm) != mode->ivsize)) {
++	if (WARN_ON_ONCE(crypto_skcipher_ivsize(tfm) != mode->ivsize)) {
+ 		err = -EINVAL;
+ 		goto err_free_tfm;
+ 	}
+@@ -199,7 +199,7 @@ static int setup_per_mode_enc_key(struct fscrypt_info *ci,
+ 	unsigned int hkdf_infolen = 0;
+ 	int err;
+ 
+-	if (WARN_ON(mode_num > FSCRYPT_MODE_MAX))
++	if (WARN_ON_ONCE(mode_num > FSCRYPT_MODE_MAX))
+ 		return -EINVAL;
+ 
+ 	prep_key = &keys[mode_num];
+@@ -282,8 +282,8 @@ int fscrypt_derive_dirhash_key(struct fscrypt_info *ci,
+ void fscrypt_hash_inode_number(struct fscrypt_info *ci,
+ 			       const struct fscrypt_master_key *mk)
+ {
+-	WARN_ON(ci->ci_inode->i_ino == 0);
+-	WARN_ON(!mk->mk_ino_hash_key_initialized);
++	WARN_ON_ONCE(ci->ci_inode->i_ino == 0);
++	WARN_ON_ONCE(!mk->mk_ino_hash_key_initialized);
+ 
+ 	ci->ci_hashed_ino = (u32)siphash_1u64(ci->ci_inode->i_ino,
+ 					      &mk->mk_ino_hash_key);
+@@ -503,7 +503,7 @@ static int setup_file_encryption_key(struct fscrypt_info *ci,
+ 		err = fscrypt_setup_v2_file_key(ci, mk, need_dirhash_key);
+ 		break;
+ 	default:
+-		WARN_ON(1);
++		WARN_ON_ONCE(1);
+ 		err = -EINVAL;
+ 		break;
+ 	}
+@@ -577,7 +577,7 @@ fscrypt_setup_encryption_info(struct inode *inode,
+ 		res = PTR_ERR(mode);
+ 		goto out;
+ 	}
+-	WARN_ON(mode->ivsize > FSCRYPT_MAX_IV_SIZE);
++	WARN_ON_ONCE(mode->ivsize > FSCRYPT_MAX_IV_SIZE);
+ 	crypt_info->ci_mode = mode;
+ 
+ 	res = setup_file_encryption_key(crypt_info, need_dirhash_key, &mk);
+diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
+index 3b5fcb6402eae..f4456ecb3f877 100644
+--- a/fs/crypto/policy.c
++++ b/fs/crypto/policy.c
+@@ -48,7 +48,7 @@ int fscrypt_policy_to_key_spec(const union fscrypt_policy *policy,
+ 		       FSCRYPT_KEY_IDENTIFIER_SIZE);
+ 		return 0;
+ 	default:
+-		WARN_ON(1);
++		WARN_ON_ONCE(1);
+ 		return -EINVAL;
+ 	}
+ }
+@@ -463,7 +463,7 @@ static int set_encryption_policy(struct inode *inode,
+ 				     current->comm, current->pid);
+ 		break;
+ 	default:
+-		WARN_ON(1);
++		WARN_ON_ONCE(1);
+ 		return -EINVAL;
+ 	}
+ 
+
+base-commit: 704d0e7a9b7d3bfb8630f0ab735ea5330597baf7
 -- 
-2.39.2
+2.40.0
 
