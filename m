@@ -2,134 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0DE6C0FE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAD86C1007
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjCTK6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S230030AbjCTK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjCTK5p (ORCPT
+        with ESMTP id S229838AbjCTK6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:57:45 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6EA4EDE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:54:31 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso7187175wmq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fr24.com; s=google; t=1679309667;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VF6kF1o1a7cu8qLgevPU4rykmBSUA6+nY/q/8AQKG+s=;
-        b=J2QPCQwoQzZV/g7X/6BHpJif6dBwX1dXBsRVKz18ug9+/uaEsgiAv2Aupyjhy1gNW4
-         WnAo9zA74I9hVqOcjXv19lJ2UkTiagnI2f/SPiSW5TuqWyaACigxOg/aCp6N+gXfKNQM
-         S09UTTPTjCYJbxbcQBZoh2Un+zilCkcI9PmahyASmZ/1+12CLHHGNrP7Vc0iMfqBtkIe
-         rLGkB3Z/vZ8Kxcx/8WBKdaEZr9sr1nPEVcDzFZVeAcCQrNmN2nbufs86TEVnsfBH1TpC
-         YtPwbk8cyzz/XbHm4yS6YSYajanZuUDr6d+ceGb1n1xoAFKLJo26vcokTmiLfq1+G6oh
-         Kt8w==
+        Mon, 20 Mar 2023 06:58:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B152595A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:54:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679309655;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3tMCQDVzULAU4jofBrk3rYm7lirCI2ZuvfCFM/wFL08=;
+        b=GP2CH2fv3233vvImoMZ9DIEY6xhBWc+xYL2mgBwKqXEfZycJExQE7b3HzS3B7u0MP6J1F3
+        13jAKrZljqQIeoFPBVTSMeP/l1F0AEMueI33Bx0X7vLop6ecNSY2t8zEAymu7WgRLvg5NZ
+        CMydGcfT8H1rLGiugmWJjJnLiNUCIZk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-277-6KG8mVOXM72MotgGVhybLQ-1; Mon, 20 Mar 2023 06:54:14 -0400
+X-MC-Unique: 6KG8mVOXM72MotgGVhybLQ-1
+Received: by mail-wm1-f72.google.com with SMTP id iv10-20020a05600c548a00b003ee112e6df1so401712wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:54:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679309667;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679309653;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VF6kF1o1a7cu8qLgevPU4rykmBSUA6+nY/q/8AQKG+s=;
-        b=TNSTXUydG3OUAccBxahtEWsouSeWBGm6gGT51nmIbFApzYs2NFqS9oZmsSXtlJuM0Q
-         9eRX0ZvcPVyS4lKGQgG1WdmN39/3vNME1Pi7i1MP+I4jcMcEEMGoyJNAsY4BLtwWyuO8
-         18O6M9llTFlgdojMDs0SqriGVNLx355J8j89WwMfaaoiFWMZnuaBTVmzFG1ZscCnbKJE
-         Li8Njd65Ay1f+GdNB0T7pvSdOj+5JhqRrX86wlCCwuAu6yziipwZrMmfdTKxRhteeg3v
-         1JUNni9A8PeiYlr37weR2OUKqH/0eqSMCyQ3DThs2b1koVAQ4NvxQUWdbKxQVry4Cjv5
-         vdug==
-X-Gm-Message-State: AO0yUKVfJ4oJV48Z0ugP7M/4isGl9iwZRp+zT0MUDf5aM5G3Y6OATFZF
-        rOR6C1Hpz6FD7qzCKxV48MBF4A==
-X-Google-Smtp-Source: AK7set9xRggsNfxxmQrR3m54yS4IVWcKjDjcEgoObH5Xno7a4mIpVQm4JFF9+5fbYXFD88l9WZ2J1g==
-X-Received: by 2002:a05:600c:a0a:b0:3ed:2105:9ac6 with SMTP id z10-20020a05600c0a0a00b003ed21059ac6mr26330403wmp.28.1679309667180;
-        Mon, 20 Mar 2023 03:54:27 -0700 (PDT)
-Received: from sky20.lan (bl20-118-143.dsl.telepac.pt. [2.81.118.143])
-        by smtp.googlemail.com with ESMTPSA id q14-20020a05600000ce00b002be505ab59asm8561969wrx.97.2023.03.20.03.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 03:54:26 -0700 (PDT)
-From:   =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
-Date:   Mon, 20 Mar 2023 10:53:23 +0000
-Message-Id: <20230320105323.187307-1-nunog@fr24.com>
-X-Mailer: git-send-email 2.40.0
+        bh=3tMCQDVzULAU4jofBrk3rYm7lirCI2ZuvfCFM/wFL08=;
+        b=q6YURQHK+oUvdvndQWgNxgVbPHQJGPMN4iuETPeWUXaQL5ZWGAFzMGacLSZ3kRLxb2
+         LH0PWruHVPZoVmjkDGh3p++sSD+d0umGGbwub2qLs6/d5OsBmTgdcyYr1is6i64OK7Wv
+         ax4tFdzFchGQ5I0oqHdYvDMOLmj2KxRcbeW7mx1XHCMEuK68nsN2iJY35VjDEzTB+HAW
+         qrL2opRpDnBcxt63jLGzgJCPZV56GT1mrhMnSCOKJWgkA5yDDWxe8wYEgEwn7Dv/unFn
+         7y9bDXjMvYtlqBaSvchH6KkTOwkkfqf1BHkWL/cSfExZZ11rtRC+2yh+ug4Ll0U5/kzn
+         fDHg==
+X-Gm-Message-State: AO0yUKUvTE9KqPN/K7Ti6hAS2HTU4V75pQy3rA01TUGaCBBaZBnzRwHY
+        xqjf159fy6bTKXJA3N2RU5Aqd97t/IKAV2KzWP27bTQv1Q45XuiimvxEFTLILTiZ/BKFt6ga7qk
+        B4pHSPuxvDBt+LxtP5bD5kzW5
+X-Received: by 2002:a7b:c8cc:0:b0:3ed:a5df:cf52 with SMTP id f12-20020a7bc8cc000000b003eda5dfcf52mr6949898wml.13.1679309653017;
+        Mon, 20 Mar 2023 03:54:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9d5YjWFuqRhbzglWL5WNl+1FjRpHrjEMlJMUOl8DuqOurWcJPI5w6n84yTGENjzP/cbJwiSw==
+X-Received: by 2002:a7b:c8cc:0:b0:3ed:a5df:cf52 with SMTP id f12-20020a7bc8cc000000b003eda5dfcf52mr6949885wml.13.1679309652719;
+        Mon, 20 Mar 2023 03:54:12 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
+        by smtp.gmail.com with ESMTPSA id f20-20020a7bcd14000000b003e203681b26sm10131233wmj.29.2023.03.20.03.54.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:54:12 -0700 (PDT)
+Message-ID: <27b9cb5b-0118-f989-80c2-6a143a4232af@redhat.com>
+Date:   Mon, 20 Mar 2023 11:54:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Wupeng Ma <mawupeng1@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kuleshovmail@gmail.com, aneesh.kumar@linux.ibm.com
+References: <20230320024739.224850-1-mawupeng1@huawei.com>
+ <20230320024739.224850-2-mawupeng1@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4 1/4] mm/mlock: return EINVAL if len overflows for
+ mlock/munlock
+In-Reply-To: <20230320024739.224850-2-mawupeng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The remap of fill and completion rings was frowned upon as they
-control the usage of UMEM which does not support concurrent use.
-At the same time this would disallow the remap of this rings
-into another process.
+On 20.03.23 03:47, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
+> 
+> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
+> The return value of mlock is zero. But nothing will be locked since the
+> len in do_mlock overflows to zero due to the following code in mlock:
+> 
+>    len = PAGE_ALIGN(len + (offset_in_page(start)));
+> 
+> The same problem happens in munlock.
+> 
+> Add new check and return -EINVAL to fix this overflowing scenarios since
+> they are absolutely wrong.
 
-A possible use case is that the user wants to transfer the socket/
-UMEM ownerwhip to another process (via SYS_pidfd_getfd) and so
-would need to also remap this rings.
+Thinking again, wouldn't we reject mlock(0, ULONG_MAX) now as well?
 
-This will have no impact on current usages and just relaxes the
-remap limitation.
+> 
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>   mm/mlock.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index 617469fce96d..eb68476da497 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -568,6 +568,7 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+>   	unsigned long locked;
+>   	unsigned long lock_limit;
+>   	int error = -ENOMEM;
+> +	size_t old_len = len;
+>   
+>   	start = untagged_addr(start);
+>   
+> @@ -577,6 +578,9 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+>   	len = PAGE_ALIGN(len + (offset_in_page(start)));
+>   	start &= PAGE_MASK;
+>   
+> +	if (old_len != 0 && len == 0)
 
-Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
----
- net/xdp/xsk.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+if (old_len && !len)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 2ac58b282b5eb..2af4ff64b22bd 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -1300,10 +1300,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
- {
- 	loff_t offset = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
- 	unsigned long size = vma->vm_end - vma->vm_start;
-+	int state = READ_ONCE(xs->state);
- 	struct xdp_sock *xs = xdp_sk(sock->sk);
- 	struct xsk_queue *q = NULL;
- 
--	if (READ_ONCE(xs->state) != XSK_READY)
-+	if (!(state == XSK_READY || state == XSK_BOUND))
- 		return -EBUSY;
- 
- 	if (offset == XDP_PGOFF_RX_RING) {
-@@ -1314,9 +1315,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
- 		/* Matches the smp_wmb() in XDP_UMEM_REG */
- 		smp_rmb();
- 		if (offset == XDP_UMEM_PGOFF_FILL_RING)
--			q = READ_ONCE(xs->fq_tmp);
-+			q = READ_ONCE(state == XSK_READY ? xs->fq_tmp :
-+							   xs->pool->fq);
- 		else if (offset == XDP_UMEM_PGOFF_COMPLETION_RING)
--			q = READ_ONCE(xs->cq_tmp);
-+			q = READ_ONCE(state == XSK_READY ? xs->cq_tmp :
-+							   xs->pool->cq);
- 	}
- 
- 	if (!q)
+> +		return -EINVAL;
+> +
+>   	lock_limit = rlimit(RLIMIT_MEMLOCK);
+>   	lock_limit >>= PAGE_SHIFT;
+>   	locked = len >> PAGE_SHIFT;
+> @@ -631,12 +635,16 @@ SYSCALL_DEFINE3(mlock2, unsigned long, start, size_t, len, int, flags)
+>   SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+>   {
+>   	int ret;
+> +	size_t old_len = len;
+>   
+>   	start = untagged_addr(start);
+>   
+>   	len = PAGE_ALIGN(len + (offset_in_page(start)));
+>   	start &= PAGE_MASK;
+>   
+> +	if (old_len != 0 && len == 0)
+
+if (old_len && !len)
+
+> +		return -EINVAL;
+> +
+>   	if (mmap_write_lock_killable(current->mm))
+>   		return -EINTR;
+>   	ret = apply_vma_lock_flags(start, len, 0);
+
 -- 
-2.40.0
+Thanks,
+
+David / dhildenb
 
