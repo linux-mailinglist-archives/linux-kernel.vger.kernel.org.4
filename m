@@ -2,184 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A456C2232
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCC56C2236
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCTUGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S230233AbjCTUGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjCTUG2 (ORCPT
+        with ESMTP id S229685AbjCTUGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:06:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E410FBBB0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679342735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vLGqq2dkr4d+qChfROhQzB1nvGWWiqjAAUgEiPWsWfk=;
-        b=QKLNv1rhjW8T39/4DXb/tRsT9UOxnTd+tFBX+IkZVN6NvkO2gEXh2rOfqqzPQe6RpSm1r9
-        lxaECuW2UAwduQlJbBEy/LU4vWfzrNI9KycyyAoxdmifG3m+1j7PrGswaqDG62VFIEGL6E
-        ysV34252cvQR9T6KnQRUSma3of56/OA=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-502-FhKvPKXQOKu5gJZ_TBIVoA-1; Mon, 20 Mar 2023 16:05:33 -0400
-X-MC-Unique: FhKvPKXQOKu5gJZ_TBIVoA-1
-Received: by mail-qt1-f200.google.com with SMTP id u22-20020a05622a011600b003dfd61e8594so3068247qtw.15
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:05:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679342733;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLGqq2dkr4d+qChfROhQzB1nvGWWiqjAAUgEiPWsWfk=;
-        b=Hi2zR+xZwbCRJzci4PJ4HMR1FIGOF2PgVnqEKC4lVf9ToAfPfhIXvzneo56LNMerEO
-         fdz+++PUApALQWsn72bVfP8rtXbo3k+geXu+oaMbh9RPaq3htRp4Y3VVUjds40amFUeC
-         mPTwRvayjrkNdh+uiikBcBfHUytJ0GI9EsTH4ZCIhJXdUfslo0mYQnQ+rb8X2IWhHE1j
-         4jv4pFVjQh+VzSkN/aFc7HSeAOt/USNJKl/04Fngemg/m0Hf2Zf4bP/dr4IN619CWyZ0
-         xYRrBnQvKSPrOKnI2x69Gd5v6VZqR/g4M1BPLK0XxW99iDDskGDI+TfySIE0FlXgOndi
-         Hnng==
-X-Gm-Message-State: AO0yUKV0pR3fwJRBwrqbcdubrozeWzrkgdk5PNdfcd7P28H1xce9I4RU
-        C0jpjMywp1I3AeK+H/W8GshkNQPY+j6UTVgekId2BNCg5WQvAP2T1lgtP/mjKb1vF6kYAFLdqn+
-        2r29pjTt9zNEPMZKjwL3E4JJAeXcoFTK4
-X-Received: by 2002:ac8:7f4e:0:b0:3bf:d149:8966 with SMTP id g14-20020ac87f4e000000b003bfd1498966mr617501qtk.62.1679342733243;
-        Mon, 20 Mar 2023 13:05:33 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8EYVn9VEzuCjZa06sZPyJPdqRWwwdN6xTMK4QNdqi2czOa4Al3y0wS1AbtorjeGXE8yHikrQ==
-X-Received: by 2002:ac8:7f4e:0:b0:3bf:d149:8966 with SMTP id g14-20020ac87f4e000000b003bfd1498966mr617464qtk.62.1679342732969;
-        Mon, 20 Mar 2023 13:05:32 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bk12-20020a05620a1a0c00b0074357a6529asm7968058qkb.105.2023.03.20.13.05.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 13:05:32 -0700 (PDT)
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
- xlnx_pr_decouple_read function
-From:   Tom Rix <trix@redhat.com>
-To:     Xu Yilun <yilun.xu@intel.com>, Michal Simek <michal.simek@amd.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230317230617.1673923-1-trix@redhat.com>
- <c8eaefed-e1fd-e0c1-7e8f-561c20632646@amd.com>
- <ZBhqutJChvRkUsRL@yilunxu-OptiPlex-7050>
- <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
-Message-ID: <5fb2fa11-5a58-1856-7cb9-9687637d0741@redhat.com>
-Date:   Mon, 20 Mar 2023 13:05:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 20 Mar 2023 16:06:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36685C64F;
+        Mon, 20 Mar 2023 13:06:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA13CB810A7;
+        Mon, 20 Mar 2023 20:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF00C433D2;
+        Mon, 20 Mar 2023 20:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679342801;
+        bh=RuqwWdFBmmRhgzI7VwXcy9qkadNZFYSQgKYwk08C8Ls=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=RvIri+10udHBazMLPnhLIu3CWRdAqtA+IfdBHB3swkc3AcD9x0/YRo30/8KBj0syf
+         Cork1VxCPT6/1V2IaryiPH2DzQnQ8s793rb4e+yVOOPxkCIGQqzMWg65yLCIu1LHpM
+         rYEarlpubwnkn62b0rfLmDT08zg7tEzC+b//6LrAoOPhlJkekYvMj3KAlaF2j39gf+
+         7Y9EhtUguMq10LymWOzdWlmkV6sxTwQXNmoQhLcKoXQ6sQdBNHPTPpIkI7sFljh/Kb
+         Bg6XShbWwkspIAU6nmxTxzRUII/Aa+vRle8hKzXAvP75K2WyjjBGG3V3HhcDMBDCx1
+         VxHLdcMxa6qHg==
+Message-ID: <21872a93cb09d6c0d9aa3593c0ec489e.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230316104707.236034-4-keguang.zhang@gmail.com>
+References: <20230316104707.236034-1-keguang.zhang@gmail.com> <20230316104707.236034-4-keguang.zhang@gmail.com>
+Subject: Re: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Date:   Mon, 20 Mar 2023 13:06:39 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Keguang Zhang (2023-03-16 03:47:06)
+> diff --git a/drivers/clk/clk-loongson1.c b/drivers/clk/clk-loongson1.c
+> new file mode 100644
+> index 000000000000..4fda55c67d8d
+> --- /dev/null
+> +++ b/drivers/clk/clk-loongson1.c
+> @@ -0,0 +1,301 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Clock driver for Loongson-1 SoC
+> + *
+> + * Copyright (C) 2012-2023 Keguang Zhang <keguang.zhang@gmail.com>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/of_address.h>
+> +#include <linux/slab.h>
 
-On 3/20/23 9:24 AM, Tom Rix wrote:
->
-> On 3/20/23 7:16 AM, Xu Yilun wrote:
->> On 2023-03-20 at 08:40:22 +0100, Michal Simek wrote:
->>>
->>> On 3/18/23 00:06, Tom Rix wrote:
->>>> CAUTION: This message has originated from an External Source. 
->>>> Please use proper judgment and caution when opening attachments, 
->>>> clicking links, or responding to this email.
->>>>
->>>>
->>>> clang with W=1 reports
->>>> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 
->>>> 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
->>>> static inline u32 xlnx_pr_decouple_read(const struct 
->>>> xlnx_pr_decoupler_data *d,
->>>>                     ^
->>>> This static function is not used, so remove it.
->>>>
->>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>> ---
->>>>    drivers/fpga/xilinx-pr-decoupler.c | 6 ------
->>>>    1 file changed, 6 deletions(-)
->>>>
->>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
->>>> b/drivers/fpga/xilinx-pr-decoupler.c
->>>> index 2d9c491f7be9..b6f18c07c752 100644
->>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
->>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
->>>> @@ -34,12 +34,6 @@ static inline void 
->>>> xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
->>>>           writel(val, d->io_base + offset);
->>>>    }
->>>>
->>>> -static inline u32 xlnx_pr_decouple_read(const struct 
->>>> xlnx_pr_decoupler_data *d,
->>>> -                                       u32 offset)
->>>> -{
->>>> -       return readl(d->io_base + offset);
->>>> -}
->>>> -
->>>>    static int xlnx_pr_decoupler_enable_set(struct fpga_bridge 
->>>> *bridge, bool enable)
->>>>    {
->>>>           int err;
->>>> -- 
->>>> 2.27.0
->>>>
->>> It should be fixed like this instead.
->>>
->>> Thanks,
->>> Michal
->>>
->>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
->>> b/drivers/fpga/xilinx-pr-decoupler.c
->>> index 2d9c491f7be9..58508f44cd49 100644
->>> --- a/drivers/fpga/xilinx-pr-decoupler.c
->>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
->>> @@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct
->>> fpga_bridge *bridge)
->>>          if (err)
->>>                  return err;
->>>
->>> -       status = readl(priv->io_base);
->>> +       status = xlnx_pr_decouple_read(priv);
->> OK, I'll drop the previous fix, and waiting for the new one.
->
-> Michal,
->
-> Will you make this change ?
+Need some more includes here, for container_of() and GENMASK(), readl(),
+etc.
 
-Let me provide some context.
+> +
+> +#include <dt-bindings/clock/loongson,ls1x-clk.h>
+> +
+> +/* Loongson 1 Clock Register Definitions */
+> +#define CLK_PLL_FREQ           0x0
+> +#define CLK_PLL_DIV            0x4
+> +
+> +static DEFINE_SPINLOCK(ls1x_clk_div_lock);
+> +
 
-I am cleaning up about 70 similar unused functions all over the tree.
+Needs include.
 
-I have removed a lot of one liner wrappers that look like this.
+> +struct ls1x_clk_pll_data {
+> +       u32 fixed;
+> +       u8 shift;
+> +       u8 int_shift;
+> +       u8 int_width;
+> +       u8 frac_shift;
+> +       u8 frac_width;
+> +};
+> +
+> +struct ls1x_clk_div_data {
+> +       u8 shift;
+> +       u8 width;
+> +       unsigned long flags;
+> +       const struct clk_div_table *table;
+> +       u8 bypass_shift;
+> +       u8 bypass_inv;
+> +       spinlock_t *lock;       /* protect access to DIV registers */
+> +};
+> +
+> +struct ls1x_clk {
+> +       void __iomem *reg;
+> +       unsigned int offset;
+> +       struct clk_hw hw;
+> +       void *data;
+> +};
+> +
+> +#define to_ls1x_clk(_hw) container_of(_hw, struct ls1x_clk, hw)
+> +
+> +static inline unsigned long ls1x_pll_rate_part(unsigned int val,
 
-My opinion, to be useful the wrapper needs to be used multiple places 
-and/or do something non trival otherwise we will bloat the codebase with 
-with 5x lines of code to do a simple readl.
+return a u32?
 
-But this is subjection. If you want this change, you should make it.
+> +                                              unsigned int shift,
+> +                                              unsigned int width)
+> +{
+> +       return (val & GENMASK(shift + width, shift)) >> shift;
+> +}
+> +
+> +static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
+> +                                         unsigned long parent_rate)
+> +{
+> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
+> +       const struct ls1x_clk_pll_data *d =3D ls1x_clk->data;
+> +       u32 val, rate;
+> +
+> +       val =3D readl(ls1x_clk->reg);
+> +       rate =3D d->fixed;
+> +       rate +=3D ls1x_pll_rate_part(val, d->int_shift, d->int_width);
+> +       if (d->frac_width)
+> +               rate +=3D ls1x_pll_rate_part(val, d->frac_shift, d->frac_=
+width);
+> +       rate *=3D parent_rate;
+> +       rate >>=3D d->shift;
+> +
+> +       return rate;
+> +}
+> +
+> +static const struct clk_ops ls1x_pll_clk_ops =3D {
+> +       .recalc_rate =3D ls1x_pll_recalc_rate,
+> +};
+> +
+> +static unsigned long ls1x_divider_recalc_rate(struct clk_hw *hw,
+> +                                             unsigned long parent_rate)
+> +{
+> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
+> +       const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
+> +       unsigned int val;
+> +
+> +       val =3D readl(ls1x_clk->reg) >> d->shift;
+> +       val &=3D clk_div_mask(d->width);
+> +
+> +       return divider_recalc_rate(hw, parent_rate, val, d->table,
+> +                                  d->flags, d->width);
+> +}
+> +
+> +static long ls1x_divider_round_rate(struct clk_hw *hw, unsigned long rat=
+e,
+> +                                   unsigned long *prate)
+> +{
+> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
+> +       const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
+> +
+> +       return divider_round_rate(hw, rate, prate, d->table,
+> +                                 d->width, d->flags);
+> +}
+> +
+> +static int ls1x_divider_set_rate(struct clk_hw *hw, unsigned long rate,
+> +                                unsigned long parent_rate)
+> +{
+> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
+> +       const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
+> +       int val, div_val;
+> +       unsigned long flags =3D 0;
+> +
+> +       div_val =3D divider_get_val(rate, parent_rate, d->table,
+> +                                 d->width, d->flags);
+> +       if (div_val < 0)
+> +               return div_val;
+> +
+> +       if (d->lock)
+> +               spin_lock_irqsave(d->lock, flags);
+> +       else
+> +               __acquire(d->lock);
+> +
+> +       /* Bypass the clock */
+> +       val =3D readl(ls1x_clk->reg);
+> +       if (d->bypass_inv)
+> +               val &=3D ~BIT(d->bypass_shift);
+> +       else
+> +               val |=3D BIT(d->bypass_shift);
+> +       writel(val, ls1x_clk->reg);
+> +
+> +       val =3D readl(ls1x_clk->reg);
+> +       val &=3D ~(clk_div_mask(d->width) << d->shift);
+> +       val |=3D (u32)div_val << d->shift;
+> +       writel(val, ls1x_clk->reg);
+> +
+> +       /* Restore the clock */
+> +       val =3D readl(ls1x_clk->reg);
+> +       if (d->bypass_inv)
+> +               val |=3D BIT(d->bypass_shift);
+> +       else
+> +               val &=3D ~BIT(d->bypass_shift);
+> +       writel(val, ls1x_clk->reg);
+> +
+> +       if (d->lock)
+> +               spin_unlock_irqrestore(d->lock, flags);
+> +       else
+> +               __release(d->lock);
 
-Tom
+Is there a case where there isn't a lock? It would be easier to read if
+this always had a lock and it wasn't optional.
 
->
-> Tom
->
->>
->> Thanks,
->> Yilun
->>
->>>          clk_disable(priv->clk);
->>>
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct clk_ops ls1x_clk_divider_ops =3D {
+> +       .recalc_rate =3D ls1x_divider_recalc_rate,
+> +       .round_rate =3D ls1x_divider_round_rate,
+> +       .set_rate =3D ls1x_divider_set_rate,
+> +};
+> +
+> +#define LS1X_CLK_PLL(_name, _offset, _fixed, _shift,                   \
+> +                    f_shift, f_width, i_shift, i_width)                \
+> +struct ls1x_clk _name =3D {                                             =
+ \
+> +       .offset =3D (_offset),                                           =
+ \
+> +       .data =3D &(struct ls1x_clk_pll_data) {                          =
+ \
+> +               .fixed =3D (_fixed),                                     =
+ \
+> +               .shift =3D (_shift),                                     =
+ \
+> +               .int_shift =3D (i_shift),                                =
+ \
+> +               .int_width =3D (i_width),                                =
+ \
+> +               .frac_shift =3D (f_shift),                               =
+ \
+> +               .frac_width =3D (f_width),                               =
+ \
+> +       },                                                              \
+> +       .hw.init =3D &(struct clk_init_data) {                           =
+ \
+> +               .name =3D #_name,                                        =
+ \
+> +               .ops =3D &ls1x_pll_clk_ops,                              =
+ \
+> +               .parent_data =3D &(const struct clk_parent_data) {       =
+ \
+> +                       .fw_name =3D "xtal",                             =
+ \
+> +                       .name =3D "xtal",                                =
+ \
+> +                       .index =3D -1,                                   =
+ \
+> +               },                                                      \
+> +               .num_parents =3D 1,                                      =
+ \
+> +       },                                                              \
+> +}
+> +
+> +#define LS1X_CLK_DIV(_name, _pname, _offset, _shift, _width,           \
+> +                    _table, _bypass_shift, _bypass_inv, _flags)        \
+> +struct ls1x_clk _name =3D {                                             =
+ \
+> +       .offset =3D (_offset),                                           =
+ \
+> +       .data =3D &(struct ls1x_clk_div_data){                           =
+ \
+> +               .shift =3D (_shift),                                     =
+ \
+> +               .width =3D (_width),                                     =
+ \
+> +               .table =3D (_table),                                     =
+ \
+> +               .flags =3D (_flags),                                     =
+ \
+> +               .bypass_shift =3D (_bypass_shift),                       =
+ \
+> +               .bypass_inv =3D (_bypass_inv),                           =
+ \
+> +               .lock =3D &ls1x_clk_div_lock,                            =
+ \
+> +       },                                                              \
+> +       .hw.init =3D &(struct clk_init_data) {                           =
+ \
 
+Can be const.
+
+> +               .name =3D #_name,                                        =
+ \
+> +               .ops =3D &ls1x_clk_divider_ops,                          =
+ \
+> +               .parent_hws =3D (const struct clk_hw *[]) { _pname },    =
+ \
+> +               .num_parents =3D 1,                                      =
+ \
+> +               .flags =3D CLK_GET_RATE_NOCACHE,                         =
+ \
+> +       },                                                              \
+> +}
+> +
+> +static LS1X_CLK_PLL(ls1b_clk_pll, CLK_PLL_FREQ, 12, 1, 0, 5, 0, 0);
+> +static LS1X_CLK_DIV(ls1b_clk_cpu, &ls1b_clk_pll.hw, CLK_PLL_DIV,
+> +                   20, 4, NULL, 8, 0,
+> +                   CLK_DIVIDER_ONE_BASED | CLK_DIVIDER_ROUND_CLOSEST);
+> +static LS1X_CLK_DIV(ls1b_clk_dc, &ls1b_clk_pll.hw, CLK_PLL_DIV,
+> +                   26, 4, NULL, 12, 0, CLK_DIVIDER_ONE_BASED);
+> +static LS1X_CLK_DIV(ls1b_clk_ahb, &ls1b_clk_pll.hw, CLK_PLL_DIV,
+> +                   14, 4, NULL, 10, 0, CLK_DIVIDER_ONE_BASED);
+> +static CLK_FIXED_FACTOR(ls1b_clk_apb, "ls1b_clk_apb", "ls1b_clk_ahb", 2,=
+ 1,
+> +                       CLK_SET_RATE_PARENT);
+> +
+> +static struct clk_hw_onecell_data ls1b_clk_hw_data =3D {
+> +       .hws =3D {
+> +               [LS1X_CLKID_PLL] =3D &ls1b_clk_pll.hw,
+> +               [LS1X_CLKID_CPU] =3D &ls1b_clk_cpu.hw,
+> +               [LS1X_CLKID_DC] =3D &ls1b_clk_dc.hw,
+> +               [LS1X_CLKID_AHB] =3D &ls1b_clk_ahb.hw,
+> +               [LS1X_CLKID_APB] =3D &ls1b_clk_apb.hw,
+> +               [CLK_NR_CLKS] =3D NULL,
+
+Do you need a CLK_NR_CLKS sentinel entry?
+
+> +       },
+> +       .num =3D CLK_NR_CLKS,
+> +};
+> +
+> +static const struct clk_div_table ls1c_ahb_div_table[] =3D {
+> +       [0] =3D { .val =3D 0, .div =3D 2 },
+> +       [1] =3D { .val =3D 1, .div =3D 4 },
+> +       [2] =3D { .val =3D 2, .div =3D 3 },
+> +       [3] =3D { .val =3D 3, .div =3D 3 },
+> +       [4] =3D { /* sentinel */ }
+> +};
+> +
+> +static LS1X_CLK_PLL(ls1c_clk_pll, CLK_PLL_FREQ, 0, 2, 8, 8, 16, 8);
+> +static LS1X_CLK_DIV(ls1c_clk_cpu, &ls1c_clk_pll.hw, CLK_PLL_DIV,
+> +                   8, 7, NULL, 0, 1,
+> +                   CLK_DIVIDER_ONE_BASED | CLK_DIVIDER_ROUND_CLOSEST);
+> +static LS1X_CLK_DIV(ls1c_clk_dc, &ls1c_clk_pll.hw, CLK_PLL_DIV,
+> +                   24, 7, NULL, 4, 1, CLK_DIVIDER_ONE_BASED);
+> +static LS1X_CLK_DIV(ls1c_clk_ahb, &ls1c_clk_cpu.hw, CLK_PLL_FREQ,
+> +                   0, 2, ls1c_ahb_div_table, 0, 0, CLK_DIVIDER_ALLOW_ZER=
+O);
+> +static CLK_FIXED_FACTOR(ls1c_clk_apb, "ls1c_clk_apb", "ls1c_clk_ahb", 1,=
+ 1,
+> +                       CLK_SET_RATE_PARENT);
+> +
+> +static struct clk_hw_onecell_data ls1c_clk_hw_data =3D {
+> +       .hws =3D {
+> +               [LS1X_CLKID_PLL] =3D &ls1c_clk_pll.hw,
+> +               [LS1X_CLKID_CPU] =3D &ls1c_clk_cpu.hw,
+> +               [LS1X_CLKID_DC] =3D &ls1c_clk_dc.hw,
+> +               [LS1X_CLKID_AHB] =3D &ls1c_clk_ahb.hw,
+> +               [LS1X_CLKID_APB] =3D &ls1c_clk_apb.hw,
+> +               [CLK_NR_CLKS] =3D NULL,
+> +       },
+> +       .num =3D CLK_NR_CLKS,
+> +};
+> +
+> +static void __init ls1x_clk_init(struct device_node *np,
+> +                                struct clk_hw_onecell_data *hw_data)
+> +{
+> +       struct ls1x_clk *ls1x_clk;
+> +       void __iomem *reg;
+> +       int i, ret;
+> +
+> +       reg =3D of_iomap(np, 0);
+> +       if (!reg) {
+> +               pr_err("Unable to map base for %pOF\n", np);
+
+Needs include.
+
+> +               return;
+> +       }
+> +
+> +       for (i =3D 0; i < CLK_NR_CLKS; i++) {
+> +               /* array might be sparse */
+> +               if (!hw_data->hws[i])
+> +                       continue;
+> +
+> +               if (i !=3D LS1X_CLKID_APB) {
+> +                       ls1x_clk =3D to_ls1x_clk(hw_data->hws[i]);
+> +                       ls1x_clk->reg =3D reg + ls1x_clk->offset;
+> +               }
+> +
+> +               ret =3D of_clk_hw_register(np, hw_data->hws[i]);
+> +               if (ret)
+> +                       return;
+
+unmap memory on failure? and unregister clks?
+
+> +       }
+> +
+> +       ret =3D of_clk_add_hw_provider(np, of_clk_hw_onecell_get, hw_data=
+);
+> +       if (ret)
+> +               pr_err("Failed to register %pOF\n", np);
+
+unmap memory on failure? And unregister clks?
+
+> +}
+> +
+> +static void __init ls1b_clk_init(struct device_node *np)
+> +{
+> +       return ls1x_clk_init(np, &ls1b_clk_hw_data);
+> +}
+> +
+> +static void __init ls1c_clk_init(struct device_node *np)
+> +{
+> +       return ls1x_clk_init(np, &ls1c_clk_hw_data);
+> +}
+> +
+> +CLK_OF_DECLARE(ls1b_clk, "loongson,ls1b-clk", ls1b_clk_init);
+> +CLK_OF_DECLARE(ls1c_clk, "loongson,ls1c-clk", ls1c_clk_init);
+
+Any reason these can't be platform device drivers?
+
+> +
+> +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+> +MODULE_DESCRIPTION("Loongson1 clock driver");
+
+It's not a module. So these are useless macros. Drop them?
