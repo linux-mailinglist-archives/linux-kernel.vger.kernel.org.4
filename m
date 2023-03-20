@@ -2,119 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD046C0D53
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97ADA6C0D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCTJbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S230143AbjCTJce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCTJbP (ORCPT
+        with ESMTP id S230159AbjCTJc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:31:15 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2079.outbound.protection.outlook.com [40.107.22.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C117126F2;
-        Mon, 20 Mar 2023 02:31:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OBjyrK/Hxo1+LG+VOGp4dFUm28bcaYN7bmk5/dpLizRCyBuGMChoB5laJ/bZ+dgiTvZ/NgawtmBnbh3fowyC8sa0s89RxiwmJX0zxPdOCwEQpQFS0ev+DjMuLLiMy63FRNgjOXtxQ1P+I4boVH1HMC3VpPfNeRXo8HRJbqzfx0fkwPDttxo9yUFZe7gg2wXD14YG4iCipnzzk2s9yb5OcvI57PZhFrRrNfzdfskw+kShStsXN1fpiKsvAbNz470YcqZGHQo/xWS1HBhsDXofNoyLHfILMT9KXlkLW+0FCBuJ72ktERJuvLHUIINC5j3VYFlAuu4Xd1lt8DRTMFD7Cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HvlGAbCRl8Lrr5cO5zhmeFe9/ypxS28cV24o1Shc38g=;
- b=UMyncatFtTaWEUn0AfQXTpp31wp/IaVG4b2YFtD+NlpZk003JCZ10TlBReJzVL9BdAEfNjTeLIAGDh4mQjfWzK3E9L5hZp+RjkLkAhlqYxGZDAWo8zE6FQMA/YE37kSRdTxw2YsdBdCs2MJeCmgj49t3lZm5hgDFbN9Y/LAYw3i1pKxgsyVmjRpHW3hF/hGva5tFvV+k4tybA0I8LBTRqqnUaiQYPhSW6UuQyYrnF5Iu9tsz98wQwigfynmWmrIUsNMShV0bn5mtAVZgDLnhLgM0usuLx6gycVQkRLzy1jVITj03MB2Bnc+GCjbO68mQMBc0jI3zGmY15Ts1DzCFsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HvlGAbCRl8Lrr5cO5zhmeFe9/ypxS28cV24o1Shc38g=;
- b=fd71Ns+43hRHl8hFLEcdQXlt1WFf0W0XEWewE1Qd53CYRgR00pqvqs3X93STOyic7RvPJt5tYl+dlR0DstdCiK6kE/Ps8+/wGiKkvg5Gm9LCdDGlG/y1uLvKaUTH4nUl1gG8ELQwJGQblwVwXj75UoXfoWKoNJBiTnQwkQtMBvY=
-Received: from AM0PR04MB6004.eurprd04.prod.outlook.com (2603:10a6:208:11a::11)
- by VI1PR04MB6832.eurprd04.prod.outlook.com (2603:10a6:803:139::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 09:31:10 +0000
-Received: from AM0PR04MB6004.eurprd04.prod.outlook.com
- ([fe80::c2c7:5798:7033:5f87]) by AM0PR04MB6004.eurprd04.prod.outlook.com
- ([fe80::c2c7:5798:7033:5f87%7]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 09:31:10 +0000
-From:   Gaurav Jain <gaurav.jain@nxp.com>
-To:     Yu Zhe <yuzhe@nfschina.com>, Horia Geanta <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "liqiong@nfschina.com" <liqiong@nfschina.com>
-Subject: RE: [EXT] [PATCH] crypto: caam - remove unnecessary (void*)
- conversions
-Thread-Topic: [EXT] [PATCH] crypto: caam - remove unnecessary (void*)
- conversions
-Thread-Index: AQHZWJr2GFYKyb+ilkyJEsC+bgKkFK8Da/qw
-Date:   Mon, 20 Mar 2023 09:31:10 +0000
-Message-ID: <AM0PR04MB600425038BDAE435B44E60A3E7809@AM0PR04MB6004.eurprd04.prod.outlook.com>
-References: <20230317063643.27075-1-yuzhe@nfschina.com>
-In-Reply-To: <20230317063643.27075-1-yuzhe@nfschina.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR04MB6004:EE_|VI1PR04MB6832:EE_
-x-ms-office365-filtering-correlation-id: b0fe6c42-2be3-4911-4ead-08db2925d70e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f30rG2CDzuI81aPHoIwdz/oVuwCJ580/N1WdSgub5QA4FcI06DJBiS04pqUxMr7KvroBoqgkTPGoWvrjK+97+8V9nKdJSC5K1NWOSXIhpFQuTxGhbqywvarzoVgX/BrexgvD6rP7/bhNcX5PCiXWdwKOcc3KwvDh7rSjlslokkwSY9boLAx889zREpchF91JOAqt2LNV+7cp6+EkoGqOv0Ii5RjxmPNkCdF3drAMmrcnHOiWfmIsFuu3Ijj2JROBiq/Vw5GXD2/BlHLMqBwjNpT/2sTjZv6+bYBJlExZvLLdEIHQzKtcMCTLjC5+7zCSDBrUrBA5lwZAUeEJUMHZhe2HclB2Ei3Z94nTC+LsbWkOlNo8kAR0DUMoCYPSIOAjdONbXz8dw+6w7f+simirrtNrDymyoUmcbHpbZEK1w6jylpjCV6kS0IRylrMyVpO4c8lmMvpJZidKKYMgBWBIHaFTcb3fFWJvF3GxIQWp5RSXG2nZKge+Rui1caz4sQL/ze6Ugqr2qmUkFcJ2nV3/ckjobIxmPN0S5Ue9SPBZzNDyRX59PkLRlpRJAAg+1jYzRMp282xczWhEC6E75uTrSo+8G5oirqvuse0Ctxmlq8I1WAlLWNTYL7Rr3WVz4H/vzafOwwCWwo4M+ssdFyceb9G4swE9sA4TeJj1juGm5YdfayXXsdab/vhBdd28Yj/nOKo2FPbD4Y2Nv3M5aK2StQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6004.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(136003)(346002)(39860400002)(396003)(451199018)(8936002)(5660300002)(44832011)(52536014)(41300700001)(55016003)(86362001)(33656002)(38070700005)(38100700002)(2906002)(122000001)(4326008)(83380400001)(478600001)(71200400001)(7696005)(186003)(26005)(6506007)(53546011)(55236004)(9686003)(54906003)(110136005)(316002)(66476007)(8676002)(66556008)(66946007)(64756008)(66446008)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4cSZR0FN5BNt8ddEjABAtcvmIGw8TEJK8eZdqRBCeQlCHFf9+AoOK5PGO6Tm?=
- =?us-ascii?Q?3EQBsDWdVcLIAVSC89JwPLepbP/SgNWe/QNVy9zhjCij9OFyGbqQllzi+F1L?=
- =?us-ascii?Q?TNj25q4mcqkWi7Qnpm5phHIqpQrP0maCmtRF60Sv3q6af0hG8wHWyKVLVbRk?=
- =?us-ascii?Q?7nxXr+og+JaYqC9z+KuVkSEzl88E0nl/TDlQgyrsGkCb+Ivd9Ulmc+ii/sKk?=
- =?us-ascii?Q?md1WHhRJN7nZVXeukhf14TgBGH6ObNv4rQ5mOLE4wNjB4Wt/pMD+ixbGQD5k?=
- =?us-ascii?Q?Qaag7YjsfRYA6KZM+DPHV4Am9DV1bDXd/ISwPuVZ45X342pF0YmH8TQYk5cM?=
- =?us-ascii?Q?dKYACTJzpyK1sU9v+6UGxx8KRNg2bwkvP/xoOeX5XB9ZgVvOJalvXnHwkm3Z?=
- =?us-ascii?Q?T8NuqUp2vuP4W8FslMscxQTFwPVJwVKfLWdjSNaVEuaPA3KsCp0PB4g9iEWr?=
- =?us-ascii?Q?Ttzeu0UlGGR7NNY230Lmk/idKxaEq2K+zk7/v5NhWkO84TMjiYpEvmMu3Ifb?=
- =?us-ascii?Q?jeOGzBzzu7SeVxwlAcisQgFa9L1/ZFnf2faFrUvc6bDiGiEqLDxACvvPSbAX?=
- =?us-ascii?Q?od4uK/DXyDKg0oYE+j69Qo/TYs6SB0QJmbnZxrC0dwk/9JKg+28Webgg/ZIm?=
- =?us-ascii?Q?DnwIMrLPwkjsp8kR6qmltLx/OaEq/Znj3VnFnGsHbxx95aPqhjtOX2kp2WPe?=
- =?us-ascii?Q?FL7tmtYpMAgxCntVp+UbHwqS6xExz3XhAxIMRxMySbPVJwyjQGf1Lsu8f/W6?=
- =?us-ascii?Q?DfPoSX1L8sfaIchQMGAIPsX53HiIzua2j3i2A9Xzypufl3XDTfQZg8/XcLPT?=
- =?us-ascii?Q?dI4KLwyB0e9JojrGcK3qHh7i5zVwGvzRoMElLd7RutW4GD+VtrGnYp8c+7fx?=
- =?us-ascii?Q?HDPpoBW3PyCxsFQg9dZEilAOdJHZlb5FYlRVu+LdzrdipnZefgoRPEQILLcJ?=
- =?us-ascii?Q?LeRBC9qU3KZ8EqAjlvDKEbBRUHFGF+txjI4E45xweqmGuwLEKWr/pljoDmPR?=
- =?us-ascii?Q?gOPOmVqgjMwATvJ1r1SacOn+4J5Aps+vrq7FBAqOBSv/8frmV30K4LTA3g3n?=
- =?us-ascii?Q?+J12MyBJ8mpFx9pYtdAMaJXF5ttzY2HYTSyS81qXPcNh79NYyfLp+A1MpIOZ?=
- =?us-ascii?Q?2H673A8NTroH0GOcIxAsdKk95f4p/YnYTj4ullIqKApDCEHqbEQnysDXDUvw?=
- =?us-ascii?Q?F2FqdVF9GPHsAZYXheDI1fdB7nUCQWDqv5R1wqX8YfxMyka24uQ/J/doIxwd?=
- =?us-ascii?Q?6mEcqgkJioBiRL9kY5HH6bYPHyGHI5TnECEf4AZgIMDzthIPrN8+DcJ/90cI?=
- =?us-ascii?Q?sH2mvtg5eZb77fTu8c4Nx7JBAzvg94fHZnym88ax4ocYEL2NqMkLM7mMJIr0?=
- =?us-ascii?Q?jArlZzTnx6WMGLmUdNv4e9V2qd3V6M5WpBoSa3b9WaQDy+ucQeX5fiQhB2KQ?=
- =?us-ascii?Q?4z6r7zxMaarVkB5HrwqYS/Y80e9K5qVh6JcORU6JrIsS0unxlyyeAjWWjvx5?=
- =?us-ascii?Q?Ae0ym9KRu4QWUZeLScwZXE5o14wrloajrcpplCAUpgloAqOZnap2n7a18Opv?=
- =?us-ascii?Q?dlsHNuSlRr0IWrpWVqJ1CW0XXBxeU5Zs0wBN1Tdd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 20 Mar 2023 05:32:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9DE126F2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679304702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mZX3eaTeGESwliREyoFlZikVNeBe1KovW4PqQ67m4Eo=;
+        b=AW5ZzyIQT75Beg/4k7R25dVMaBoNx+X94PWcstRcwTnLAcghGwBeLmuYcFKyUYZO0S5RaE
+        JRyQpBWANCfn09mxLdOtaqNYDBubXT8GA0Zl6aTkNYv/Jgmb4pcTYdxOrulduoZQx5fmzo
+        bNON5VfaKyAZWEXXSNl3BjL0HTocNmE=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-170-EscVreDyOX-Paj8lqvXnwg-1; Mon, 20 Mar 2023 05:31:40 -0400
+X-MC-Unique: EscVreDyOX-Paj8lqvXnwg-1
+Received: by mail-ot1-f70.google.com with SMTP id j18-20020a9d7392000000b0069f087dd4d5so2688518otk.17
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 02:31:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679304700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mZX3eaTeGESwliREyoFlZikVNeBe1KovW4PqQ67m4Eo=;
+        b=27q5oH62TVNNvdx8AdPfpZNljNGVQv209xJfpYKe8fMnVh7+DLq9N0Pn3uVDPO6sUJ
+         1t3q662SJuTskiUzqwwXHnIXGVt5nqLbwDtNnZYgccMZTRSKmZqbU03ruiue46h/sT5z
+         3l7w9m8ebah/3m46xc1RrqZLWyNtQVdX8GnoGeUWdv87Ej17VdtTv/GUF5F1IPNqZ9yV
+         OWZshu7ykV8zjhXq17Bayqco2r3rMUyZx/WdZKOhGrYIhGU7qlZzr9EAHxDnKJZuy/gz
+         zD7qT9+ZIxsJ98EvSm7Tn5kBFDzoA1pR/OxjRnCX11DUQWzqOvov2+co9PTF0PxF28sF
+         P6ww==
+X-Gm-Message-State: AO0yUKWIkXve41eFq+vdt6iKEPLbB3LKVK42AA5V/CsxBTDi2y9S1fXl
+        gRSdJnfidO/ZwLWYlKs8bp60WUj6wajYAzOuNXx12zJb1KEldkWtunwJrokwKtlzdKhYiWC1jVf
+        Fi82VzgoFgL212pqBLamthh1qmND0r6oSAFT+oU5E
+X-Received: by 2002:a05:6870:13d1:b0:17a:d3d2:dc75 with SMTP id 17-20020a05687013d100b0017ad3d2dc75mr1627755oat.3.1679304700243;
+        Mon, 20 Mar 2023 02:31:40 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/AzSlQ1b+GDVzES3em9nxy5zseXTLWqkB/LLpnFsI/CCnMLxmsP3+gER2yMh5adqsgAxzYfOQku/yQeDGq+48=
+X-Received: by 2002:a05:6870:13d1:b0:17a:d3d2:dc75 with SMTP id
+ 17-20020a05687013d100b0017ad3d2dc75mr1627748oat.3.1679304700009; Mon, 20 Mar
+ 2023 02:31:40 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6004.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0fe6c42-2be3-4911-4ead-08db2925d70e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 09:31:10.1312
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fpKkBkH7Sh9UCh08WP9k5/DJhTQZF+ZuoJgYP1CBdJWqe6zxgEfjo5kmFrWa1soA8kvUQewEoYJavvGoLm49wQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6832
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230228094110.37-1-xieyongji@bytedance.com> <20230228094110.37-4-xieyongji@bytedance.com>
+ <CACGkMEvmV7xKc7VnaZT+DGcN2hg64ksGHxRAihW2f=RpXydZoQ@mail.gmail.com> <CACycT3t+n4MXzva7w_yh-iTmzU0M--O4RNXDPxumpY-LmPb6Zg@mail.gmail.com>
+In-Reply-To: <CACycT3t+n4MXzva7w_yh-iTmzU0M--O4RNXDPxumpY-LmPb6Zg@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 20 Mar 2023 17:31:29 +0800
+Message-ID: <CACGkMEuMSo+wjD1tiT8agbbwymXL9Od+ayQWmMKLXd627YWvMg@mail.gmail.com>
+Subject: Re: [PATCH v3 03/11] vdpa: Add set_irq_affinity callback in vdpa_config_ops
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,43 +79,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Gaurav Jain <Gaurav.jain@nxp.com>
+On Fri, Mar 17, 2023 at 3:45=E2=80=AFPM Yongji Xie <xieyongji@bytedance.com=
+> wrote:
+>
+> On Thu, Mar 16, 2023 at 12:03=E2=80=AFPM Jason Wang <jasowang@redhat.com>=
+ wrote:
+> >
+> > On Tue, Feb 28, 2023 at 5:42=E2=80=AFPM Xie Yongji <xieyongji@bytedance=
+.com> wrote:
+> > >
+> > > This introduces set_irq_affinity callback in
+> > > vdpa_config_ops so that vdpa device driver can
+> > > get the interrupt affinity hint from the virtio
+> > > device driver. The interrupt affinity hint would
+> > > be needed by the interrupt affinity spreading
+> > > mechanism.
+> > >
+> > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > ---
+> > >  drivers/virtio/virtio_vdpa.c | 4 ++++
+> > >  include/linux/vdpa.h         | 9 +++++++++
+> > >  2 files changed, 13 insertions(+)
+> > >
+> > > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdp=
+a.c
+> > > index f72696b4c1c2..9eee8afabda8 100644
+> > > --- a/drivers/virtio/virtio_vdpa.c
+> > > +++ b/drivers/virtio/virtio_vdpa.c
+> > > @@ -282,9 +282,13 @@ static int virtio_vdpa_find_vqs(struct virtio_de=
+vice *vdev, unsigned int nvqs,
+> > >         struct virtio_vdpa_device *vd_dev =3D to_virtio_vdpa_device(v=
+dev);
+> > >         struct vdpa_device *vdpa =3D vd_get_vdpa(vdev);
+> > >         const struct vdpa_config_ops *ops =3D vdpa->config;
+> > > +       struct irq_affinity default_affd =3D { 0 };
+> > >         struct vdpa_callback cb;
+> > >         int i, err, queue_idx =3D 0;
+> > >
+> > > +       if (ops->set_irq_affinity)
+> > > +               ops->set_irq_affinity(vdpa, desc ? desc : &default_af=
+fd);
+> > > +
+> > >         for (i =3D 0; i < nvqs; ++i) {
+> > >                 if (!names[i]) {
+> > >                         vqs[i] =3D NULL;
+> > > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> > > index d61f369f9cd6..10bd22387276 100644
+> > > --- a/include/linux/vdpa.h
+> > > +++ b/include/linux/vdpa.h
+> > > @@ -259,6 +259,13 @@ struct vdpa_map_file {
+> > >   *                             @vdev: vdpa device
+> > >   *                             @idx: virtqueue index
+> > >   *                             Returns the irq affinity mask
+> > > + * @set_irq_affinity:          Pass the irq affinity hint (best effo=
+rt)
+> >
+> > Note that this could easily confuse the users. I wonder if we can
+> > unify it with set_irq_affinity. Looking at vduse's implementation, it
+> > should be possible.
+> >
+>
+> Do you mean unify set_irq_affinity() with set_vq_affinity()? Actually
+> I didn't get how to achieve that. The set_vq_affinity() callback is
+> called by virtio_config_ops.set_vq_affinity() but the set_irq_affinity
+> is called by virtio_config_ops.find_vqs(), I don't know where to call
+> the unified callback.
 
-> -----Original Message-----
-> From: Yu Zhe <yuzhe@nfschina.com>
-> Sent: Friday, March 17, 2023 12:07 PM
-> To: Horia Geanta <horia.geanta@nxp.com>; Pankaj Gupta
-> <pankaj.gupta@nxp.com>; Gaurav Jain <gaurav.jain@nxp.com>;
-> herbert@gondor.apana.org.au; davem@davemloft.net
-> Cc: linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org; kernel-
-> janitors@vger.kernel.org; liqiong@nfschina.com; Yu Zhe <yuzhe@nfschina.co=
-m>
-> Subject: [EXT] [PATCH] crypto: caam - remove unnecessary (void*) conversi=
-ons
->=20
-> Caution: EXT Email
->=20
-> Pointer variables of void * type do not require type cast.
->=20
-> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
-> ---
->  drivers/crypto/caam/dpseci-debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/crypto/caam/dpseci-debugfs.c
-> b/drivers/crypto/caam/dpseci-debugfs.c
-> index 0eca8c2fd916..020a9d8a8a07 100644
-> --- a/drivers/crypto/caam/dpseci-debugfs.c
-> +++ b/drivers/crypto/caam/dpseci-debugfs.c
-> @@ -8,7 +8,7 @@
->=20
->  static int dpseci_dbg_fqs_show(struct seq_file *file, void *offset)  {
-> -       struct dpaa2_caam_priv *priv =3D (struct dpaa2_caam_priv *)file->=
-private;
-> +       struct dpaa2_caam_priv *priv =3D file->private;
->         u32 fqid, fcnt, bcnt;
->         int i, err;
->=20
-> --
-> 2.11.0
+I meant, can we stick a single per vq affinity config ops then use
+that in virtio-vpda's find_vqs() by something like:
+
+masks =3D create_affinity_masks(dev->vq_num, desc);
+for (i =3D 0; i < dev->vq_num; i++)
+        config->set_vq_affinity()
+...
+
+?
+
+Thanks
+
+>
+> Thanks,
+> Yongji
+>
 
