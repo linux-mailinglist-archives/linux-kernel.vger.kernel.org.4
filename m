@@ -2,129 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075A66C11A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B116C11A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCTMP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S231279AbjCTMPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjCTMPS (ORCPT
+        with ESMTP id S229835AbjCTMPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:15:18 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75AF93CA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:15:15 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id w9so45902599edc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1679314514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q4rLpiklQSLUGu8en3KYDb4lZcdoMaRER+VnV6x571E=;
-        b=YKG8m+Aqdx5YPl39zn6iGSYyHWV38GeeAbZ4FOt093BNQjCN5XOysHyXUnn/sBKF/S
-         3NjqnlNtFKkOZk+F2DJXk3svD8HbUx1uIHgbNR+bWnhURgI9VUhsBqlw2026DyrHmwAs
-         sQ+QKnIn7SNz2O46PZTu67AIoBQYMg1zCDMKQnXjzbznOF9042meTj8aU0UIkbrcjD30
-         BlAQMqJBznlgMdpFtoPrqnSZAfel8UqOlQGZRbsbeH7lv1Q0RP/Il+O3kjSRj1q4e16V
-         lzaQehfi5HWsOw8e4J8Hy0BVGvfyv0vygZR+rxkI7CplCBe9oh77SNfuazQ5o3ik/uKC
-         L/fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679314514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q4rLpiklQSLUGu8en3KYDb4lZcdoMaRER+VnV6x571E=;
-        b=FWwTRc30K43YT2DjWBSPk1f8mTXLaQBJW37QsuDFwEx78pkvNXcca+RZUwCxxZSYRV
-         KF7G2Eyy+9sLF7XjhxES83O76Q+76VZAyH3DEuiFghBvtXYPyiiTD6vosf779fYPcGsi
-         aMaLZSmGwaYoK3ZgCwzkqYm3q507NMe+My4qIBJJRqIjnxKafAQdMRsgZua+AuDtb8TN
-         4EyhTBhdVc2VOB5gCJNg5nKofYrofugECbd/ackY82KDOoTNmmNoTisemyjNOs6coCsL
-         G7z4J97dK3H+qVLp2ighbeWZ02le/fOp6Oik8762xGiPVysPTF8q+l7WJrXkoYnXLxZu
-         hDpQ==
-X-Gm-Message-State: AO0yUKV9xvLgwBQyOYXAaye5ZbaSVkBakHnHRlBURTm4RN2hHcuWNxCB
-        R9PS/aG0KpSLOLOcjqcLvcIpT+doc5yNlyWQjnrhqQ==
-X-Google-Smtp-Source: AK7set8CdlHV303cHjYGX5Ktv/xbOxfBljEZYOn0HpF69QJIC+i8LkWfVEEgefDscUWRlJ/tuSIIQXZTfF+bGPJa4Ys=
-X-Received: by 2002:a50:d58b:0:b0:4fa:d8aa:74ad with SMTP id
- v11-20020a50d58b000000b004fad8aa74admr6077014edi.8.1679314514201; Mon, 20 Mar
- 2023 05:15:14 -0700 (PDT)
+        Mon, 20 Mar 2023 08:15:17 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735511FDA;
+        Mon, 20 Mar 2023 05:15:15 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id D4CEF5C015B;
+        Mon, 20 Mar 2023 08:15:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 20 Mar 2023 08:15:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679314511; x=1679400911; bh=AM
+        KjngKCGDPM4qU6X+zgz9Yn6n9G/CtVavTksA2xQO4=; b=jiS7Rg+8pmUrPyxxuQ
+        gZtugJut/Tc1y0ZhrGaKsS2ngy50j6mvngypc92dwI2MFg3xWQI1pnntlATaXCf4
+        jQHMNMx9TA0YNTfhUe8Jdb5v+9mKrhPCpmG8aSHgqJ4hRVQhXnc5Pea0M+pk9kcI
+        pBA77DyReT7sHATEIw0rJ5LSC7DMAJgVEw7wGx1+0PrICj8i3Bh1swQ+9QPw0ShY
+        SLdEF0zO6XpGr4y7FdWQsWt+GBTvytbgtitSWh9CYL6MreUJ2paV7ve/6BZmfuu3
+        BEOwYxJnJASxK0XraV8NAlPOuaSgpZ5LU/BvJ/iW/Rp1MdW0IidEKkDzMkWaVPpD
+        PUFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679314511; x=1679400911; bh=AMKjngKCGDPM4
+        qU6X+zgz9Yn6n9G/CtVavTksA2xQO4=; b=Qo+m5GPKenmirPQ82U7Iu3cBcM7WZ
+        KzLrIFU+wdJhDQc0HJbcX780BfVf7HLNBzWWoMxt3V9ujbbecvDdCtIM7uTQHyGe
+        mD0jW/QV5Q98rBAOnhzRD/0eSrFiEiPzLiW0ot8IRBXrTrK46D/X7JeeMpcPQbjz
+        9eTq3bqkv9hQ7Go8eeUXerIeI3L+SlIYoHIgSmoi8R3NPruciGXCp4f6aIMJn4ES
+        GQyW2zlyyUKzVUDIfwxnlCFqqA9RD7DRyocVkpRes6s1Y/Tcfh1Z/XjLtx+SWMPy
+        t1X15XHjBdpXyRosdV7S/I0Wu0ugXlZ+r9Z9FlKof5+O9sIKewkjegcxQ==
+X-ME-Sender: <xms:T04YZEES2S2ZfWytOrqUsoeTVqIAyrlnR-2pTKVsCpGJdbaCXcIgnw>
+    <xme:T04YZNVHtQWrj48BCjALZDE7XX_Nqjsr6riqbiTIn2IT64WLbmbygrESwqzMCeYtY
+    rmsqhbgaAZy6g>
+X-ME-Received: <xmr:T04YZOJLdTLQjruVVf6MwsHVZ86XCzjD6swUMApthtbERKWP7Wngnu6bON0oLMW8xGmUrjClbBhw661yuOCIqWdlGcNP8GCDvyJHSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefkedgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:T04YZGHHWRPxl9s92osqlte0HXBhidH4nxz0ekSV-EmYHb8FbqooNA>
+    <xmx:T04YZKXOCg7YMkec-5UitHkczSioRDGBL15a6j3VmSz4qJInj3YerQ>
+    <xmx:T04YZJPWRMemsAGA2Xo0QsWIyiW0IeZ8GpG0rPPFRxdMGoAX2ftEhA>
+    <xmx:T04YZOrwdhTcO1xPTKP8nzeH8MKu1QVkbQmWgGftKMpLLjYpfHxPXw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Mar 2023 08:15:10 -0400 (EDT)
+Date:   Mon, 20 Mar 2023 13:15:09 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the extcon tree with the driver-core
+ tree
+Message-ID: <ZBhOTW9v9jzJVY7e@kroah.com>
+References: <20230320115839.5e645bb0@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230320104658.22186-1-johan+linaro@kernel.org> <20230320104658.22186-3-johan+linaro@kernel.org>
-In-Reply-To: <20230320104658.22186-3-johan+linaro@kernel.org>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Mon, 20 Mar 2023 07:15:04 -0500
-Message-ID: <CAKXuJqhOGcPrOROGJdbBGM47FriNjojWBvCMUs2hRYHkCG4qLg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: sc8280xp-x13s: add wifi calibration variant
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320115839.5e645bb0@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 5:52=E2=80=AFAM Johan Hovold <johan+linaro@kernel.o=
-rg> wrote:
->
-> Describe the bus topology for PCIe domain 6 and add the ath11k
-> calibration variant so that the board file (calibration data) can be
-> loaded.
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216246
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts  | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b=
-/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index 150f51f1db37..0051025e0aa8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -711,6 +711,23 @@ &pcie4 {
->         pinctrl-0 =3D <&pcie4_default>;
->
->         status =3D "okay";
-> +
-> +       pcie@0 {
-> +               device_type =3D "pci";
-> +               reg =3D <0x0 0x0 0x0 0x0 0x0>;
-> +               #address-cells =3D <3>;
-> +               #size-cells =3D <2>;
-> +               ranges;
-> +
-> +               bus-range =3D <0x01 0xff>;
-> +
-> +               wifi@0 {
-> +                       compatible =3D "pci17cb,1103";
-> +                       reg =3D <0x10000 0x0 0x0 0x0 0x0>;
-> +
-> +                       qcom,ath11k-calibration-variant =3D "LE_X13S";
-> +               };
-> +       };
->  };
->
->  &pcie4_phy {
-> --
-> 2.39.2
->
+On Mon, Mar 20, 2023 at 11:58:39AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the extcon tree got a conflict in:
+> 
+>   drivers/extcon/extcon.c
+> 
+> between commit:
+> 
+>   1aaba11da9aa ("driver core: class: remove module * from class_create()")
+> 
+> from the driver-core tree and commit:
+> 
+>   6384c02f33a9 ("extcon: Remove redundant null checking for class")
+> 
+> from the extcon tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/extcon/extcon.c
+> index d43ba8e7260d,adcf01132f70..000000000000
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@@ -1012,12 -1012,13 +1012,13 @@@ ATTRIBUTE_GROUPS(extcon)
+>   
+>   static int create_extcon_class(void)
+>   {
+> - 	if (!extcon_class) {
+> - 		extcon_class = class_create("extcon");
+> - 		if (IS_ERR(extcon_class))
+> - 			return PTR_ERR(extcon_class);
+> - 		extcon_class->dev_groups = extcon_groups;
+> - 	}
+> + 	if (extcon_class)
+> + 		return 0;
+> + 
+>  -	extcon_class = class_create(THIS_MODULE, "extcon");
+> ++	extcon_class = class_create("extcon");
+> + 	if (IS_ERR(extcon_class))
+> + 		return PTR_ERR(extcon_class);
+> + 	extcon_class->dev_groups = extcon_groups;
+>   
+>   	return 0;
+>   }
 
-So glad to finally see this and confirm that it works!
+Thanks, the merge resolution looks good to me.
 
-Tested-by: Steev Klimaszewski <steev@kali.org> #Thinkpad X13s
+greg k-h
