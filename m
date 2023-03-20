@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DBD6C2213
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CFF6C2219
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjCTT6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S230472AbjCTUAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjCTT6x (ORCPT
+        with ESMTP id S229538AbjCTUAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:58:53 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C367234C8;
-        Mon, 20 Mar 2023 12:58:45 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id l16so5048425ybe.6;
-        Mon, 20 Mar 2023 12:58:45 -0700 (PDT)
+        Mon, 20 Mar 2023 16:00:05 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFFC23A4D;
+        Mon, 20 Mar 2023 12:59:57 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id m5so8755017uae.11;
+        Mon, 20 Mar 2023 12:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679342324;
+        d=gmail.com; s=20210112; t=1679342396;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zBybbIP1ZIep/Xag1gH0yWaOUYHUoiApZF58mzTvpoQ=;
-        b=jfDYGuEJ7Sk9BUlWQQWsY8a84vHVcuqzZ/wlxPbrtzCkpdp//LzrXSSBMG0n/5k8g4
-         zs4RYJByuhulZPyGdb2mRZ0+iEBo95Af/XiDPTN9j2g7FtYqKp+11g0gKx7lyzf8hRvo
-         dGFIM8cCxSfqOiLmkJ+5q6mxFti+V5oV3Q67Eo5M3USLcQW6/gKyy7Zde/nwjwRynXSC
-         xNQIskhvLEMIMssFsL2w+AfxXQwuoogFfHBh0yjIkek8g0WZ9vaGrsMSHPYAKpJJp8c3
-         YAdY2em6Seuj83l/xz/o8uSrJ+7WVRYgEDn6ZiRkmJogBnZ7Wfoq6ROpPiSNEOB3OL0Z
-         QB4w==
+        bh=m268vwb6IaI3qBMpS+7PChbpVqUmmxk80Jug+90O9CQ=;
+        b=nZNN4R8Miq9/MYS8QBKHgu/h6SpYTKBf1vmLjZNtTI/ZF/JuqRehg7vnfJnvRG3053
+         tCbEuJMyw7+qg4ovYVB3SOGggNqfn9ThHd+FtBjXsW3DLHWFi6zjFGDTncB9JHczF/Fg
+         bibN5YsH15Q6uiRwRPtFOvKpF1KDo+ygA+oFUxZHI5R9ACSLt4r/7Z5XjxHnD4Q3DR0U
+         TNwiGezVrgWDYMWqwmkFBAn1RtMj6NdG8CfLVFhEa75aF9scfhn0bQLTLhz7+no2L2RH
+         tK+tHmkw+0IbWC0YIwxIMvdspdHAzKZI2sOz1mnCcBH3x0tiemrGVWJtVCnzUmx+uKBS
+         TmgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679342324;
+        d=1e100.net; s=20210112; t=1679342396;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zBybbIP1ZIep/Xag1gH0yWaOUYHUoiApZF58mzTvpoQ=;
-        b=jfXTI6l6R7kWgpvslwmjcXPGfdvIrTZzNZcIY+mWvGk+hZDSQC+PFPm6uy1ozFvFIL
-         h4L8VGiaRLxywgXDpIlEj7qedK4VX71flMsvSbP0z5VSSV7q3pchkReUfGi6Csv0KWcH
-         ovO0dV/b6xEcBH16QXECbuxc8kpUJswal4933Hm/qj8pWg4RbtC1OFT5f7xcp504qOZu
-         O4SGHYv8XZJDTkFA20EX0L3+GHH8qHzgMQ1lmYI5uKcSDw8g3/T0VR0bJ8cOK4T18kRa
-         lsd18CrAN4j0qIy6eJlMXHTO+e8fcKA7mpaKhkDPd3dpEnooMUCIqPrwCGp5MGErXFfS
-         Iehw==
-X-Gm-Message-State: AAQBX9cpcggKJFkHYFgYuxKytxoT7vq+vITP5H6MH8SldColtIphn7f8
-        Q/3mUVYgeS/sBi1MBwQFGKptgcsuk4FbCPFkCKA=
-X-Google-Smtp-Source: AKy350bYqvlm/IXOASpeOVYsJca1qwOldz8palom9n2LnTNgYKmcjLXMqDj48xAeHMF9G4aNt20aEcLBQj5rGEo8Csc=
-X-Received: by 2002:a25:ab11:0:b0:b6b:79a2:8cff with SMTP id
- u17-20020a25ab11000000b00b6b79a28cffmr290575ybi.9.1679342324028; Mon, 20 Mar
- 2023 12:58:44 -0700 (PDT)
+        bh=m268vwb6IaI3qBMpS+7PChbpVqUmmxk80Jug+90O9CQ=;
+        b=GHVIyBZqPEAhq+TJybslVYoHpOcleqWMfWitT8cqNYUNkYGnHgU+3mP2PFKH53ulC1
+         Zetgb+e5VCqt9wMeg2+ZQ6ya7o4F4zrRrUYT+TJdmtwdBM/LscfQbLB8kWEPJgBQQafD
+         7+ylwS5aYTDZePRXmfKYjhVRNzXy9xHix8tj1PGW+6BnvNhK/voXm6tzhocrU2yvX4rO
+         8/byuhMilKZEvG0fzKREtiB5GOOfoimlRhvPPXRorIAAE6OhDA1GXNyF73FuCiLMIYxY
+         zNmFJYvwnA8HIMtlf3bM6nNIwndEuIJjLjsnCe7KT/tkMWaXiepv/rq9qByMYTxHfyiS
+         wBog==
+X-Gm-Message-State: AO0yUKXYBDnGep7xKn6x1IBFcJojQ/kAUkgzBtSoagjtgfq2XbiQCg8Z
+        T0v8a7UQ4wKVfpVLpyV0b7LXjZ4gjpY1229V2QE=
+X-Google-Smtp-Source: AK7set8/Ce+FNEu9yXXd72gGd87EtZWexme2N1mtw1BEBfcXxjWoDLv1OlA6rhYnzlavcw1KYnr/Vqsd4r4cqYUoj6g=
+X-Received: by 2002:a05:6130:304:b0:68b:8665:a73b with SMTP id
+ ay4-20020a056130030400b0068b8665a73bmr6485927uab.1.1679342394843; Mon, 20 Mar
+ 2023 12:59:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230320182813.963508-1-noltari@gmail.com> <95e106fd-d1ce-b9d4-a4f7-03fb69bd4aaa@gmail.com>
-In-Reply-To: <95e106fd-d1ce-b9d4-a4f7-03fb69bd4aaa@gmail.com>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Mon, 20 Mar 2023 20:58:32 +0100
-Message-ID: <CAKR-sGcxa06mJbcN4jRyVEO6sGQpvCA6BHjBmzu4fehSpFrfwQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] drivers: net: dsa: b53: mmap: add phy ops
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     jonas.gorski@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+ <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
+In-Reply-To: <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
+From:   jim.cromie@gmail.com
+Date:   Mon, 20 Mar 2023 13:59:28 -0600
+Message-ID: <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in /proc/dynamic_debug/control
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-kbuild@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_AS_SEEN autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,142 +71,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-El lun, 20 mar 2023 a las 20:06, Florian Fainelli
-(<f.fainelli@gmail.com>) escribi=C3=B3:
+On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Jason Baron <jbaron@akamai.com> wr=
+ote:
 >
-> On 3/20/23 11:28, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> > Currently, B53 MMAP BCM63xx devices with an external switch hang when
-> > performing PHY read and write operations due to invalid registers acces=
-s.
-> > This adds support for PHY ops by using the internal bus from mdio-mux-b=
-cm6368
-> > when probed by device tree and also falls back to direct MDIO registers=
- if not.
-> >
-> > This is an alternative to:
-> > - https://patchwork.kernel.org/project/netdevbpf/cover/20230317113427.3=
-02162-1-noltari@gmail.com/
-> > - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.3=
-02162-2-noltari@gmail.com/
-> > - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.3=
-02162-3-noltari@gmail.com/
-> > - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.3=
-02162-4-noltari@gmail.com/
-> > As discussed, it was an ABI break and not the correct way of fixing the=
- issue.
 >
-> Looks good for the most part, just a few questions below.
 >
+> On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
+> > dynamic-debug METADATA uses KBUILD_MODNAME as:
 > >
-> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> > ---
-> >   drivers/net/dsa/b53/b53_mmap.c    | 86 ++++++++++++++++++++++++++++++=
-+
-> >   include/linux/platform_data/b53.h |  1 +
-> >   2 files changed, 87 insertions(+)
+> > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> >          static struct _ddebug  __aligned(8)                     \
+> >          __section("__dyndbg") name =3D {                          \
+> >                  .modname =3D KBUILD_MODNAME,                      \
 > >
-> > diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_m=
-map.c
-> > index 706df04b6cee..7deca1c557c5 100644
-> > --- a/drivers/net/dsa/b53/b53_mmap.c
-> > +++ b/drivers/net/dsa/b53/b53_mmap.c
-> > @@ -19,14 +19,25 @@
-> >   #include <linux/bits.h>
-> >   #include <linux/kernel.h>
-> >   #include <linux/module.h>
-> > +#include <linux/of_mdio.h>
-> >   #include <linux/io.h>
-> >   #include <linux/platform_device.h>
-> >   #include <linux/platform_data/b53.h>
+> > This is going amiss for some builtins, ie those enabled here, by:
 > >
-> >   #include "b53_priv.h"
+> >      echo module main +pmf > /proc/dynamic_debug_control
+> >      grep =3Dpmf /proc/dynamic_debug/control
 > >
-> > +#define REG_MDIOC            0xb0
-> > +#define  REG_MDIOC_EXT_MASK  BIT(16)
-> > +#define  REG_MDIOC_REG_SHIFT 20
-> > +#define  REG_MDIOC_PHYID_SHIFT       25
-> > +#define  REG_MDIOC_RD_MASK   BIT(30)
-> > +#define  REG_MDIOC_WR_MASK   BIT(31)
+> > init/main.c:1187 [main]initcall_blacklist =3Dpmf "blacklisting initcall=
+ %s\n"
+> > init/main.c:1226 [main]initcall_blacklisted =3Dpmf "initcall %s blackli=
+sted\n"
+> > init/main.c:1432 [main]run_init_process =3Dpmf "  with arguments:\n"
+> > init/main.c:1434 [main]run_init_process =3Dpmf "    %s\n"
+> > init/main.c:1435 [main]run_init_process =3Dpmf "  with environment:\n"
+> > init/main.c:1437 [main]run_init_process =3Dpmf "    %s\n"
 >
-> For some reason, there was no bit introduced to tell us when a
-> transaction has finished, so we have to poll after a certain delay has
-> elapsed...
+>
+> Hi Jim,
+>
+> So if I'm following correctly, this is not a new issue, the 'module'
+> name for dynamic debug has always been this way for builtin.
 
-Yeah... :(
+It is not a new issue - both PM and init-main have been in [main] for some =
+time.
+
+I believe that with
+cfc1d277891e module: Move all into module/
+
+module's module-name joined them, changing from [module] to [main]
+
+
+We could do
+> something simple and just normalize it when we initially create the
+> table, but setting the 'module name' to 'core' or 'builtin' or something
+> for all these?
+
+core and builtin would both lump all those separate modules together,
+making it less meaningful.
+
+having stable names independent of M vs Y config choices is imperative, IST=
+M.
+
+Also, I dont think "only builtins are affected" captures the whole problem.
+I dont recall amdgpu or other modules changing when built with =3Dy
+
+Theres some subtlety in how KBUILD_MODNAME is set,
+and probably many current users who like its current behavior.
+A new var ?
+
+1st, I think that anything tristate gets a sensible value,
+but at least some of the builtin-only "modules" get basenames, by default.
+
+arch/x86/events/amd/ibs.c:1398 [ibs]force_ibs_eilvt_setup =3D_ "No EILVT
+entry available\n"
+arch/x86/events/intel/pt.c:797 [pt]pt_topa_dump =3D_ "# table @%p, off
+%llx size %zx\n"w=3D%16llx\n"
+
+kvm gets a solid name, because tristate ?
+
+arch/x86/kvm/mmu/mmu.c:6661 [kvm]kvm_mmu_invalidate_mmio_sptes =3D_
+"kvm: kvm [%i]: zapping shadow pages for mmio generation wraparound\n"
+arch/x86/kvm/hyperv.c:1402 [kvm]kvm_hv_set_msr_pw =3D_ "kvm [%i]: vcpu%i
+hv crash (0x%llx 0x%llx 0x%llx 0x%llx 0x%llx)\n"
+
+kvm-intel and kvm-amd get their names elsewhere.
+
+arch/x86/kvm/vmx/nested.c:207 [kvm_intel]nested_vmx_abort =3D_
+"kvm_intel: nested vmx abort, indicator %d\n"
+arch/x86/kvm/vmx/nested.c:913 [kvm_intel]nested_vmx_load_msr =3D_
+"kvm_intel: %s cannot read MSR entry (%u, 0x%08llx)\n"
+
+arch/x86/kvm/svm/avic.c:860 [kvm_amd]get_pi_vcpu_info =3D_ "SVM: %s: use
+GA mode for irq %u\n"
+arch/x86/kvm/svm/avic.c:889 [kvm_amd]avic_pi_update_irte =3D_ "SVM: %s:
+host_irq=3D%#x, guest_irq=3D%#x, set=3D%#x\n"
+
+iow, I dont know..
 
 >
-> > +
-> > +#define REG_MDIOD            0xb4
-> > +
-> >   struct b53_mmap_priv {
-> >       void __iomem *regs;
-> > +     struct mii_bus *bus;
-> >   };
-> >
-> >   static int b53_mmap_read8(struct b53_device *dev, u8 page, u8 reg, u8=
- *val)
-> > @@ -216,6 +227,69 @@ static int b53_mmap_write64(struct b53_device *dev=
-, u8 page, u8 reg,
-> >       return 0;
-> >   }
-> >
-> > +static inline void b53_mmap_mdio_read(struct b53_device *dev, int phy_=
-id,
-> > +                                   int loc, u16 *val)
-> > +{
-> > +     uint32_t reg;
-> > +
-> > +     b53_mmap_write32(dev, 0, REG_MDIOC, 0);
-> > +
-> > +     reg =3D REG_MDIOC_RD_MASK |
-> > +           (phy_id << REG_MDIOC_PHYID_SHIFT) |
-> > +           (loc << REG_MDIOC_REG_SHIFT);
-> > +
-> > +     b53_mmap_write32(dev, 0, REG_MDIOC, reg);
-> > +     udelay(50);
-> > +     b53_mmap_read16(dev, 0, REG_MDIOD, val);
-> > +}
-> > +
-> > +static inline int b53_mmap_mdio_write(struct b53_device *dev, int phy_=
-id,
-> > +                                   int loc, u16 val)
-> > +{
-> > +     uint32_t reg;
-> > +
-> > +     b53_mmap_write32(dev, 0, REG_MDIOC, 0);
-> > +
-> > +     reg =3D REG_MDIOC_WR_MASK |
-> > +           (phy_id << REG_MDIOC_PHYID_SHIFT) |
-> > +           (loc << REG_MDIOC_REG_SHIFT) |
-> > +           val;
-> > +
-> > +     b53_mmap_write32(dev, 0, REG_MDIOC, reg);
-> > +     udelay(50);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int b53_mmap_phy_read16(struct b53_device *dev, int addr, int r=
-eg,
-> > +                            u16 *value)
-> > +{
-> > +     struct b53_mmap_priv *priv =3D dev->priv;
-> > +     struct mii_bus *bus =3D priv->bus;
-> > +
-> > +     if (bus)
-> > +             *value =3D mdiobus_read_nested(bus, addr, reg);
+> Thanks,
 >
-> Since you make the 'mii-bus' property and 'priv->bus' necessary
-> prerequisites for the driver to finish probing successfully, when shall
-> we not have valid priv->bus reference to work with? Do we end-up taking
-> the other path at all?
-
-Yes, but only if the driver is probed from platform data and not from
-device tree.
-
-> --
-> Florian
->
-
---
-=C3=81lvaro.
+> -Jason
