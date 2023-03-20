@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20966C1A07
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612526C19FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCTPnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
+        id S233289AbjCTPlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbjCTPmh (ORCPT
+        with ESMTP id S233279AbjCTPlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:42:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE9C36463
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:33:46 -0700 (PDT)
+        Mon, 20 Mar 2023 11:41:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69641399C8;
+        Mon, 20 Mar 2023 08:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679326427; x=1710862427;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Oq7Wui3I94lahNhshgANSPuzTUgQnDPMOCGMMVDE6/o=;
-  b=j8Yz2kt9vLoefJ6ta7wQuOaLGW8IqElKYQRthO3UY234QcPL4+uSsk5g
-   doFBbnQqvgvGQeT9kGMfUGleZr40VfWFxOx0T4VDQTwNNiLxMYrGWLiv+
-   Gtl1/Qk8niF587u+s44KYWwb7Li2i2xYL5KHyq+CaaVOnpQt9G/rwATix
-   GR2TUyakIlwT06qXm9ZBsk5j9GECbczNU541tvTQAZWmLkoEZ4aWyCGnO
-   dcA5AREdWLEocSEh3lyn0i2GTlIfdRuI4kkY57A6n6DRkqVTj+t1+WLU8
-   GHrQrU4UiGVyPV60bPF/3Xk+fkPEebc5Nnt8nKgndHwVF100S828IN2VW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="322534146"
+  t=1679326367; x=1710862367;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kgkj6Y8F+5Jx6zTUBcgjZbkpzW1rHfF/zDqpvU7TZ9Q=;
+  b=gZgfANx+OoPM4sPSKewq9yha07+D0tP+XyQbH9Q7HXWRbZgC5CdI7O5f
+   0ZciB5DshVLGqSd9xnj+ACEt3mEKK8SrVkixXLjw8hfMJmYFDF8liSrc5
+   SqVMDZvJTRh+WwBmtlTUhcH9oVF4pnJjGeH2KxQSDZFvriVvory3q+tb4
+   pIyR5g+C1PmqoXKHz73TZdVnXDZKFZu7TXOIV690h4nZeIYHxnxFfkWy3
+   kh3E5EszYbyzIvp4RE7YOFTYeGqQFL4BjVOnAABVjg/totCfdGwDHjt1V
+   warYSQvIokyI/ptgDhTBwikSLrqXtLOtbprpagNdsqJHzqRaaM+aLol3y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="341055247"
 X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="322534146"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:31:49 -0700
+   d="scan'208";a="341055247"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:32:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="770239461"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674427438"
 X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="770239461"
-Received: from vrchili-mobl2.amr.corp.intel.com (HELO [10.209.117.85]) ([10.209.117.85])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:31:48 -0700
-Message-ID: <422b2b56-499e-da5c-b071-7c5f2cd27569@intel.com>
-Date:   Mon, 20 Mar 2023 08:31:47 -0700
+   d="scan'208";a="674427438"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 08:32:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1peHUk-006KXt-2i;
+        Mon, 20 Mar 2023 17:32:22 +0200
+Date:   Mon, 20 Mar 2023 17:32:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Drop map from handle_mask_sync() parameters
+Message-ID: <ZBh8hgdRq+kydPBw@smile.fi.intel.com>
+References: <cover.1679323449.git.william.gray@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 07/12] x86/mtrr: allocate mtrr_value array dynamically
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-References: <20230306163425.8324-1-jgross@suse.com>
- <20230306163425.8324-8-jgross@suse.com>
- <cad6b9d384c3a87803023289ae4ade1ba1a4c49b.camel@intel.com>
- <d1ed7b07-d485-6f73-901b-25478fa4f303@suse.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <d1ed7b07-d485-6f73-901b-25478fa4f303@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1679323449.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 06:49, Juergen Gross wrote:
->>>
->>> @@ -750,6 +750,7 @@ static int __init mtrr_init_finialize(void)
->>>        * TBD: is there any system with such CPU which supports
->>>        * suspend/resume? If no, we should remove the code.
->>>        */
->>> +    mtrr_value = kcalloc(num_var_ranges, sizeof(*mtrr_value),
->>> GFP_KERNEL);
->>
->> Theoretically dynamic allocation can fail, although it should not
->> happen as this
->> happens during kernel boot and the size is small.  Maybe a WARN()?
+On Mon, Mar 20, 2023 at 10:50:14AM -0400, William Breathitt Gray wrote:
+> Changes in v3:
+>  - Inline dio48gpio->map usage in dio48e_handle_mask_sync() to avoid
+>    redefining map parameter
 > 
-> Fine with me.
+> Remove the map parameter from the struct regmap_irq_chip callback
+> handle_mask_sync() because it can be passed via the irq_drv_data
+> parameter instead. The gpio-104-dio-48e driver is the only consumer of
+> this callback and is thus updated accordingly.
+> 
+> A couple pending patchsets also utilize handle_mask_sync() [0][1], so
+> it'll be useful to merge the changes in this series first to avoid
+> subsequent noise adjusting the dependent drivers.
 
-What *actually* happens if the system is running out of memory and this
-is the _first_ failure?  Does a WARN_ON() here help someone debug what
-is going on?
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+I believe this should go to the immutable branch somewhere, so GPIO and regmap
+subsystems can pull from.
+
+> [0] https://lore.kernel.org/r/cover.1677515341.git.william.gray@linaro.org/
+> [1] https://lore.kernel.org/r/cover.1678106722.git.william.gray@linaro.org/
+> 
+> William Breathitt Gray (2):
+>   gpio: 104-dio-48e: Implement struct dio48e_gpio
+>   regmap-irq: Drop map from handle_mask_sync() parameters
+> 
+>  drivers/base/regmap/regmap-irq.c |  5 ++---
+>  drivers/gpio/gpio-104-dio-48e.c  | 37 +++++++++++++++++++++-----------
+>  include/linux/regmap.h           |  3 +--
+>  3 files changed, 28 insertions(+), 17 deletions(-)
+> 
+> 
+> base-commit: 03810031c91dfe448cd116ee987d5dc4139006f4
+> -- 
+> 2.39.2
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
