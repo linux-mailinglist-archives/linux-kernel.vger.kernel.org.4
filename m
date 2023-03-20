@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8286C1617
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B8B6C162B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjCTPB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S232147AbjCTPCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbjCTPB1 (ORCPT
+        with ESMTP id S231846AbjCTPCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:01:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C55D2C642;
-        Mon, 20 Mar 2023 07:58:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47E521063;
-        Mon, 20 Mar 2023 07:58:18 -0700 (PDT)
-Received: from e127643.arm.com (unknown [10.57.18.95])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2FEC73F71E;
-        Mon, 20 Mar 2023 07:57:31 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        michal.simek@amd.com, Jonathan.Cameron@huawei.com
-Cc:     James Clark <james.clark@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v3 4/4] serial: qcom_geni: Comment use of devm_krealloc rather than devm_krealloc_array
-Date:   Mon, 20 Mar 2023 14:57:09 +0000
-Message-Id: <20230320145710.1120469-5-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230320145710.1120469-1-james.clark@arm.com>
-References: <20230320145710.1120469-1-james.clark@arm.com>
+        Mon, 20 Mar 2023 11:02:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAF11B33F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679324246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OQtFmm4KZTwh3zjk0Ct7Wnh43xep01cq4SPytfY48TY=;
+        b=EeL6ij6N0TObiZ9G+j16TtpgIdYV2KHi3MEVsCyhARlpVNvUW4as1U0dtbiluNB8c9SiYO
+        T72UohG+LiQe2tp7GTQBE+hIY3C1vXgVXFJUubAT4r7Mfad7IpyFOa3FNwtG8Y2SnL4RiP
+        G/kxUuJ7rFwMckuqUwZKSRtmK595080=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-408-tDn3-CXTMhWMyFf9kZktSQ-1; Mon, 20 Mar 2023 10:57:25 -0400
+X-MC-Unique: tDn3-CXTMhWMyFf9kZktSQ-1
+Received: by mail-wm1-f69.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so8565439wmj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:57:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679324244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OQtFmm4KZTwh3zjk0Ct7Wnh43xep01cq4SPytfY48TY=;
+        b=FWxUnAlkTRwn6wCruDJK8a8gKOAqNprxXdI++uHIdjkzErZA8Ji7wlMBlqYHhwuxpR
+         BMtFU9Grwn5JsH9iceRUWxnmxlRM9oD3Fy2YjAJVJGTKGI0VIb8zxj6LT33ILqlqTZQG
+         vjfNbdOiLOyCv5dNvyJmAbf9UZqdcEOYaA37eTGg7kXX8MiimY2VzznYLxvplp9D6/PX
+         NSxi7N5q7PW0n5icLsyfvOZL77NkE+fKtjA1JE4uOYw+4XKOmXF6EELQrC6DFMDpBgT/
+         N/HMN1FKPk7TzdXR/nRqGrjwyyc74+y8c+eNFTASZpfAJtMURxLYGFxiSTe1Pu83ui2T
+         KQaQ==
+X-Gm-Message-State: AO0yUKUW50MsAw7OSbJkjBMyp5/IOZMCJDDmSKRxLlLuuOD66wIazxk6
+        aBHABRULnlzcLRE2UJFvytdn8k584zBitcI/pRaBy0eG/cnNFr3e3lAgk4zjWhkLk2e/reacDtl
+        UFegxC9Wsm9HzcVCZ7Amclzml
+X-Received: by 2002:a05:600c:350f:b0:3eb:3843:9f31 with SMTP id h15-20020a05600c350f00b003eb38439f31mr32779751wmq.10.1679324244392;
+        Mon, 20 Mar 2023 07:57:24 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+H3q9948VZ11zwy3FuyhsaXEplz4rpzcboLvqOLEhb7JocoduN7nI4hrj2vQBstLG8pNpEyw==
+X-Received: by 2002:a05:600c:350f:b0:3eb:3843:9f31 with SMTP id h15-20020a05600c350f00b003eb38439f31mr32779734wmq.10.1679324244157;
+        Mon, 20 Mar 2023 07:57:24 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b003e7f1086660sm16977466wmb.15.2023.03.20.07.57.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 07:57:23 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 15:57:18 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v1 1/3] virtio/vsock: fix header length on skb merging
+Message-ID: <20230320145718.5gytg6t5pcz5rpnm@sgarzare-redhat>
+References: <e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru>
+ <63445f2f-a0bb-153c-0e15-74a09ea26dc1@sberdevices.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <63445f2f-a0bb-153c-0e15-74a09ea26dc1@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that devm_krealloc_array is available, add a comment justifying not
-changing this occurrence to avoid any future auto fixups.
+On Sun, Mar 19, 2023 at 09:51:06PM +0300, Arseniy Krasnov wrote:
+>This fixes header length calculation of skbuff during data appending to
+>it. When such skbuff is processed in dequeue callbacks, e.g. 'skb_pull()'
+>is called on it, 'skb->len' is dynamic value, so it is impossible to use
+>it in header, because value from header must be permanent for valid
+>credit calculation ('rx_bytes'/'fwd_cnt').
+>
+>Fixes: 077706165717 ("virtio/vsock: don't use skbuff state to account credit")
 
-Link: https://lore.kernel.org/all/20230318173402.20a4f60d@jic23-huawei/
-Signed-off-by: James Clark <james.clark@arm.com>
----
- drivers/tty/serial/qcom_geni_serial.c | 5 +++++
- 1 file changed, 5 insertions(+)
+I don't understand how this commit introduced this problem, can you
+explain it better?
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 28fbc927a546..8ae1fb7c2636 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1055,6 +1055,11 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
- 		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
- 
- 	if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
-+		/*
-+		 * Use krealloc rather than krealloc_array because rx_buf is
-+		 * accessed as 1 byte entries as well as 4 byte entries so it's
-+		 * not necessarily an array.
-+		 */
- 		port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
- 					     port->rx_fifo_depth * sizeof(u32),
- 					     GFP_KERNEL);
--- 
-2.34.1
+Is it related more to the credit than to the size in the header itself?
+
+Anyway, the patch LGTM, but we should explain better the issue.
+
+Thanks,
+Stefano
+
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/virtio_transport_common.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>index 6d15cd4d090a..3c75986e16c2 100644
+>--- a/net/vmw_vsock/virtio_transport_common.c
+>+++ b/net/vmw_vsock/virtio_transport_common.c
+>@@ -1091,7 +1091,7 @@ virtio_transport_recv_enqueue(struct vsock_sock *vsk,
+> 			memcpy(skb_put(last_skb, skb->len), skb->data, skb->len);
+> 			free_pkt = true;
+> 			last_hdr->flags |= hdr->flags;
+>-			last_hdr->len = cpu_to_le32(last_skb->len);
+>+			le32_add_cpu(&last_hdr->len, len);
+> 			goto out;
+> 		}
+> 	}
+>-- 
+>2.25.1
+>
 
