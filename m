@@ -2,120 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795446C1F28
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7736C1F2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjCTSLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S230369AbjCTSLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjCTSKX (ORCPT
+        with ESMTP id S230169AbjCTSLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:10:23 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B049B3E617
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:04:34 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b20so17261978edd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679335464;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nlbvOvcRdjikHkGUAlyi2gafrmdSiUtbdmOmB2pwxAQ=;
-        b=vF7FFDLUxwbbu19+9bi9lG2X3u9NftQ5nmLJ3gRFUsq1cLs0kxIhqz/Z20haoPEqYU
-         gKGXtaz67MTUrptzTWpNiRsRBLmqwAqIijoCeZsEUeCgwWX8w3cQJbqPOHHMvH/UxYG5
-         Catw6Y0mRkhSLO+GEkiKkJyetu3DNTQ4hLLICj7Qi08leeZ+syj20rY90xGFAiVvPswq
-         XYBKI1KjP6IyNr796auFZIqgSBRGbm7XSiGAdyNh//c8D2urdRZaPvtt7RmvdMcCRLio
-         /7VgJQuByjEM2ASpHDzmIoaXyL/GfF/y0/7tqZkx7aZkZ0Dop2YTNZyoaucJ842gj4e4
-         vShA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679335464;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nlbvOvcRdjikHkGUAlyi2gafrmdSiUtbdmOmB2pwxAQ=;
-        b=3RJEoD0UJL2tW6GbW1jO+wFPImAdLlzpgNV5I2Dvhb0/NdWx8VMRXr5NtK45r3NTya
-         GxHNvuz72ltqwc/IEALcpsKONDwl6h036mx2xBZ6c+3ZxHvIAwfQ6KC1S6vWSBYrwf7K
-         6kNyp4NS3/xfCeFtK0RJYyMC4Q6sxs0NFf6Qx37ODyoxWC1sP30cDh6qUtOJ6KUR/v6K
-         dY1JDQ1WuRTud0eAQGRRNpycdMMZKGEBXMtWr499A6PBsbJFYn73p/DA1UC4f4nl3MEU
-         8fb4gplyLOOBdmUHfqzP4B9No8AnAk8Wo6vPHL/w6elreOABkr/AyiNKwSxyNiiieWL5
-         55XQ==
-X-Gm-Message-State: AO0yUKXRzRMWs8EEr8DzyUT2EyCcfIWEYoI/9nVp01jP0U8eeQpDzzJ2
-        lB5xRhdzpaf3MXuadAhnU7Shrg==
-X-Google-Smtp-Source: AK7set+3A23KwD3p9Eh/ZVXzZ3ZMSeEl55VrVNQ0P3GLWZqCiYEP3aXfFUQWpAk/8Ym3CRDLeTbQIg==
-X-Received: by 2002:aa7:c7c2:0:b0:4fb:9372:f837 with SMTP id o2-20020aa7c7c2000000b004fb9372f837mr482985eds.4.1679335463946;
-        Mon, 20 Mar 2023 11:04:23 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
-        by smtp.gmail.com with ESMTPSA id q30-20020a50aa9e000000b004fadc041e13sm5239875edc.42.2023.03.20.11.04.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 11:04:23 -0700 (PDT)
-Message-ID: <922eab51-6931-8533-db51-51cd911a36b3@linaro.org>
-Date:   Mon, 20 Mar 2023 19:04:22 +0100
+        Mon, 20 Mar 2023 14:11:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905373754A
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:05:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C75C61760
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 18:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A3CC433EF;
+        Mon, 20 Mar 2023 18:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679335503;
+        bh=8np/lbjjJ8FCVyjL6iQLvblXqr7n0c7bPvXEH9MwKbE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PVhKuCK81gyCbt2F0XSDTdoqnqHLkkLR6w7sbAyxyyRHgzPsA/51b07az4zQ9Ealq
+         C3qnFJQxHicSx/XpZwuyEMJi+jnCKOlvI+OFUFPzTKPUdcI7OjSMl62E+qQIOfjVoI
+         XCq4hu23ApqbOex9a8OAp4oUgAn5PHAMEhwvuBdNDoNnl3MCh9AvaiBVYlGvtS9hgP
+         +D+MmwUBy3saoHMiRhCpjdvQ9C2HG6gbVMy1TcNFWnRc9MOkckFso4uA/gpqv5yt24
+         dC1MnxF0MXPpvzgQjdce2+qiRStI5/0ayrLgEc5I4hATrwdkXJK8U7aBHUjs1A0pHy
+         P8pSDQyL6BoGA==
+Date:   Mon, 20 Mar 2023 11:05:01 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: Linux 6.3-rc3
+Message-ID: <20230320180501.GA598084@dev-arch.thelio-3990X>
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: leds: aw2013: Document vddio-supply
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230320174949.174600-1-linmengbo0689@protonmail.com>
- <20230320175131.174657-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230320175131.174657-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 18:55, Lin, Meng-Bo wrote:
-> Some LEDs controllers are used with external pull-up for the interrupt
-> line and the I2C lines, so we might need to enable a regulator to bring
-> the lines into usable state.
+On Sun, Mar 19, 2023 at 01:50:21PM -0700, Linus Torvalds wrote:
+> So rc3 is fairly big, but that's not hugely usual: it's when a lot of
+> the fixes tick up as it takes a while before people find and start
+> reporting issues.
 
-Not a property of this device.
+...
 
-> Otherwise, this might cause spurious
-> interrupts and reading from I2C will fail.
-> 
-> Document support for "vddio-supply" that is enabled by the aw2013 driver
-> so that the regulator gets enabled when needed.
-> 
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> ---
->  Documentation/devicetree/bindings/leds/leds-aw2013.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
-> index 08f3e1cfc1b1..79b69cf1d1fe 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
-> @@ -23,6 +23,11 @@ properties:
->    vcc-supply:
->      description: Regulator providing power to the "VCC" pin.
->  
-> +  vddio-supply:
-> +    description: |
-> +      Optional regulator that provides digital I/O voltage,
+> Please test and report any issues you find,
 
-NAK. I responded to your patch and you just send a v2 without explanation.
+On the clang front, I am still seeing the following warning turned error
+for arm64 allmodconfig at least:
 
-The device does not have VDDIO pin, either.
+  drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+          if (syncpt_irq < 0)
+              ^~~~~~~~~~
+  drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_irq' to silence this warning
+          int syncpt_irq;
+                        ^
+                         = 0
+  1 error generated.
 
-Best regards,
-Krzysztof
+There is an obvious fix that has been available on the mailing list for
+some time:
 
+https://lore.kernel.org/20230127221418.2522612-1-arnd@kernel.org/
+
+It appears there was some sort of process snafu, since the fix never got
+applied to the drm tree before the main pull for 6.3 and I have not been
+able to get anyone to apply it to a tree targeting -rc releases.
+
+https://lore.kernel.org/Y%2FeULFO4jbivQ679@dev-arch.thelio-3990X/
+https://lore.kernel.org/67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com/
+
+If that does not come to you through other means before -rc4, could you
+just apply it directly so that I can stop applying it to our CI? :)
+
+Cheers,
+Nathan
