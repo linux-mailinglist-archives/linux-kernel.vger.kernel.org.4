@@ -2,164 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8546C0FDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0DE6C0FE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjCTK5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S230420AbjCTK6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCTK4w (ORCPT
+        with ESMTP id S230365AbjCTK5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:56:52 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC99C2823D;
-        Mon, 20 Mar 2023 03:53:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ACdCtQXczCcu+TBPpfYItOyAyVb3xuwqPdiQN/EOF9AWWWukEFjLzgGKrNArgdRvsZrQ6wrcplru8P25uwk66p5UBGNzEIDnTtWAf2chOgSpnx6t1d/u018ecbT38z+JmgGF9V6cuNf0TQq/Tm/TiDn/LKLUIY6hh5y8kabruFQ9VNL2ughvOFvvCvNq20fJKkg/MthQqjf8wnPwt/n0+VLYkv8TutQ3OwYfrNbb7nr/zBB2KWhHyE587b5V1JkXfTH6Qe3RFJXxBJdP/6yOb+7MjNC3ZrmNLQ+v2/t2op8yOiMddN8YqztyHxb1x9vRU3GfunUD43Z6iQoZ2U7iaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9G5x9tVVA8+tjN9Skd3JGVYtnjetlYUwM8hAeUgGsiY=;
- b=DpavIvBx+tao5U0oLkpWDaZ8s7g79UTSFVkkyeCp9IqlBpBFkyW2ZVQ38yJ247/YU0Dp6kXSbGmwb0kuha66qAj0irsEi2DsP3LVJTZ//670xYsR+Yf5baN7LtvgUP/RYOYP6grlVJV0L+22vJIpO6Fz7HsbMjRF9Ot+S2wbiGsobSQzJ6xdUQ535A12rHjR6J33T0BHw4k4MTTJrSUoVAvWzMB+s6VwwDV5NNkOxpAu2+LojBjjsygBFKcIwSGuzJ++/KNndPIIZssnnRXt+CKc2FKWgk9iF1t8qnbD3f0QZj9xQA7QUd+KqsBFrnncn15oAsp7aHs//DLB5VGHnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9G5x9tVVA8+tjN9Skd3JGVYtnjetlYUwM8hAeUgGsiY=;
- b=1ojHXRY3jmrk6cr8RooBHCH/9Pyxz2olUj1YN1p7INv+mmEopPmEn3+ZPygn/2s1dVyv4h0eFcjpceDgEGV9Qg035AAR6O7Lzd0x8rr99LVwePR3+AVS5LKThZZqc+Q6LJf4MvoW3VM9nSp4heGa57qYMtAeDS0tKntx7hA1i98=
-Received: from DS7PR03CA0238.namprd03.prod.outlook.com (2603:10b6:5:3ba::33)
- by DM4PR12MB5296.namprd12.prod.outlook.com (2603:10b6:5:39d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 10:52:58 +0000
-Received: from DM6NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ba:cafe::bc) by DS7PR03CA0238.outlook.office365.com
- (2603:10b6:5:3ba::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Mon, 20 Mar 2023 10:52:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT035.mail.protection.outlook.com (10.13.172.100) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6222.15 via Frontend Transport; Mon, 20 Mar 2023 10:52:58 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 20 Mar
- 2023 05:52:57 -0500
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <michal.simek@xilinx.com>,
-        <linux-fpga@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] fpga: zynq: Add parse_header ops support
-Date:   Mon, 20 Mar 2023 16:22:54 +0530
-Message-ID: <20230320105254.2214736-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 20 Mar 2023 06:57:45 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6EA4EDE
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:54:31 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso7187175wmq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fr24.com; s=google; t=1679309667;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VF6kF1o1a7cu8qLgevPU4rykmBSUA6+nY/q/8AQKG+s=;
+        b=J2QPCQwoQzZV/g7X/6BHpJif6dBwX1dXBsRVKz18ug9+/uaEsgiAv2Aupyjhy1gNW4
+         WnAo9zA74I9hVqOcjXv19lJ2UkTiagnI2f/SPiSW5TuqWyaACigxOg/aCp6N+gXfKNQM
+         S09UTTPTjCYJbxbcQBZoh2Un+zilCkcI9PmahyASmZ/1+12CLHHGNrP7Vc0iMfqBtkIe
+         rLGkB3Z/vZ8Kxcx/8WBKdaEZr9sr1nPEVcDzFZVeAcCQrNmN2nbufs86TEVnsfBH1TpC
+         YtPwbk8cyzz/XbHm4yS6YSYajanZuUDr6d+ceGb1n1xoAFKLJo26vcokTmiLfq1+G6oh
+         Kt8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679309667;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VF6kF1o1a7cu8qLgevPU4rykmBSUA6+nY/q/8AQKG+s=;
+        b=TNSTXUydG3OUAccBxahtEWsouSeWBGm6gGT51nmIbFApzYs2NFqS9oZmsSXtlJuM0Q
+         9eRX0ZvcPVyS4lKGQgG1WdmN39/3vNME1Pi7i1MP+I4jcMcEEMGoyJNAsY4BLtwWyuO8
+         18O6M9llTFlgdojMDs0SqriGVNLx355J8j89WwMfaaoiFWMZnuaBTVmzFG1ZscCnbKJE
+         Li8Njd65Ay1f+GdNB0T7pvSdOj+5JhqRrX86wlCCwuAu6yziipwZrMmfdTKxRhteeg3v
+         1JUNni9A8PeiYlr37weR2OUKqH/0eqSMCyQ3DThs2b1koVAQ4NvxQUWdbKxQVry4Cjv5
+         vdug==
+X-Gm-Message-State: AO0yUKVfJ4oJV48Z0ugP7M/4isGl9iwZRp+zT0MUDf5aM5G3Y6OATFZF
+        rOR6C1Hpz6FD7qzCKxV48MBF4A==
+X-Google-Smtp-Source: AK7set9xRggsNfxxmQrR3m54yS4IVWcKjDjcEgoObH5Xno7a4mIpVQm4JFF9+5fbYXFD88l9WZ2J1g==
+X-Received: by 2002:a05:600c:a0a:b0:3ed:2105:9ac6 with SMTP id z10-20020a05600c0a0a00b003ed21059ac6mr26330403wmp.28.1679309667180;
+        Mon, 20 Mar 2023 03:54:27 -0700 (PDT)
+Received: from sky20.lan (bl20-118-143.dsl.telepac.pt. [2.81.118.143])
+        by smtp.googlemail.com with ESMTPSA id q14-20020a05600000ce00b002be505ab59asm8561969wrx.97.2023.03.20.03.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 03:54:26 -0700 (PDT)
+From:   =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
+Date:   Mon, 20 Mar 2023 10:53:23 +0000
+Message-Id: <20230320105323.187307-1-nunog@fr24.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT035:EE_|DM4PR12MB5296:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c096865-08ba-46a6-bf51-08db293144a7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FWV+t0+kM+xdDCdQv+Kj1rTbARR09B9+WNYkSixeLJzdPqWGTmYNDKdm3WkqwENrypNezexi0n8fRhIN8VPBAHCOw8CYxWEx8rPs04IJXAEXzcKw+eFVlAU0Ncyk8pDdwQSXHFqvSZwJlvO+BXwinodQSh0LuXKI1556F0draMibkmmSoHh3pCv+YCgDQXbIO8Cw5YB/gvvzFltOP2PH9jegm7/f6Eq3uin0HTor40obfbKt4AoQEGj3nrAPcogglMB3C9VIsfUxxuK2SExIW/9wP0/3L6418w7W9E9jFRLXBHJLIQXJtj6UjCUyJZ3Ck6lrsKQm7CG2UUxDZhST/5TKYlIc62RJOZ4zQUJVMEDVlVr9VY91S1RueOUbFp6xp08+HTPPEPNYaAHUqTmM6Xsu8fWHDSe230dbULL+zsNi8UhE1OHaeRgvmIEJB8+XzYABY0sAquZttMAwbyNT4fj1gs8Ccf1tESZ//IXYtgNMQCeEO+satkAiUlhGQ3jBMfRetSH1drzlkn5vNCJaWNEo6fEwdzK321f86OUNJjjZE655M/2LjdUnfRfzIJ2TLKr451K3ru5WUH1EKBPzVOo1qAt8tGZsYqLXh5Dm9R2fwBSOjgIwga4QZSyrgjA+dqpvSSAAr8UtoOIg7jEHepOemzvkgYEmYoabU2CAVUKGhFEImNpulqRROdSI7tNKxs/zh1ohofUFqSXxGKRaPpEwRiEMsxqXD61R1baXpGWiYQKpdY6rI8ggGsf4QsoR
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199018)(40470700004)(46966006)(36840700001)(82310400005)(83380400001)(426003)(2616005)(47076005)(336012)(40460700003)(86362001)(356005)(36860700001)(70206006)(40480700001)(82740400003)(70586007)(36756003)(8676002)(41300700001)(81166007)(2906002)(5660300002)(8936002)(110136005)(103116003)(16526019)(1076003)(186003)(26005)(316002)(478600001)(6666004)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 10:52:58.4256
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c096865-08ba-46a6-bf51-08db293144a7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT035.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5296
-X-Spam-Status: No, score=-0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 3cc624beba63 ("fpga: fpga-mgr: support bitstream offset in
-image buffer") added a new parse_header ops to handle the header related
-stuff in the fpga framework. So moved the header validation logic from
-write_init() to parse_header().
+The remap of fill and completion rings was frowned upon as they
+control the usage of UMEM which does not support concurrent use.
+At the same time this would disallow the remap of this rings
+into another process.
 
-Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+A possible use case is that the user wants to transfer the socket/
+UMEM ownerwhip to another process (via SYS_pidfd_getfd) and so
+would need to also remap this rings.
+
+This will have no impact on current usages and just relaxes the
+remap limitation.
+
+Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
 ---
-Changes for v2:
-              - Limit the sync pattern validation size to header_size
-                as suggested Yilun.
+ net/xdp/xsk.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
- drivers/fpga/zynq-fpga.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index ae0da361e6c6..61024434a3d0 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -248,6 +248,21 @@ static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
- 	return false;
- }
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 2ac58b282b5eb..2af4ff64b22bd 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1300,10 +1300,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
+ {
+ 	loff_t offset = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
+ 	unsigned long size = vma->vm_end - vma->vm_start;
++	int state = READ_ONCE(xs->state);
+ 	struct xdp_sock *xs = xdp_sk(sock->sk);
+ 	struct xsk_queue *q = NULL;
  
-+static int zynq_fpga_ops_parse_header(struct fpga_manager *mgr,
-+				      struct fpga_image_info *info,
-+				      const char *buf, size_t count)
-+{
-+	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
-+		if (!zynq_fpga_has_sync(buf, info->header_size)) {
-+			dev_err(&mgr->dev,
-+				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
- 				    struct fpga_image_info *info,
- 				    const char *buf, size_t count)
-@@ -275,13 +290,6 @@ static int zynq_fpga_ops_write_init(struct fpga_manager *mgr,
+-	if (READ_ONCE(xs->state) != XSK_READY)
++	if (!(state == XSK_READY || state == XSK_BOUND))
+ 		return -EBUSY;
  
- 	/* don't globally reset PL if we're doing partial reconfig */
- 	if (!(info->flags & FPGA_MGR_PARTIAL_RECONFIG)) {
--		if (!zynq_fpga_has_sync(buf, count)) {
--			dev_err(&mgr->dev,
--				"Invalid bitstream, could not find a sync word. Bitstream must be a byte swapped .bin file\n");
--			err = -EINVAL;
--			goto out_err;
--		}
--
- 		/* assert AXI interface resets */
- 		regmap_write(priv->slcr, SLCR_FPGA_RST_CTRL_OFFSET,
- 			     FPGA_RST_ALL_MASK);
-@@ -545,6 +553,7 @@ static enum fpga_mgr_states zynq_fpga_ops_state(struct fpga_manager *mgr)
- static const struct fpga_manager_ops zynq_fpga_ops = {
- 	.initial_header_size = 128,
- 	.state = zynq_fpga_ops_state,
-+	.parse_header = zynq_fpga_ops_parse_header,
- 	.write_init = zynq_fpga_ops_write_init,
- 	.write_sg = zynq_fpga_ops_write,
- 	.write_complete = zynq_fpga_ops_write_complete,
+ 	if (offset == XDP_PGOFF_RX_RING) {
+@@ -1314,9 +1315,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
+ 		/* Matches the smp_wmb() in XDP_UMEM_REG */
+ 		smp_rmb();
+ 		if (offset == XDP_UMEM_PGOFF_FILL_RING)
+-			q = READ_ONCE(xs->fq_tmp);
++			q = READ_ONCE(state == XSK_READY ? xs->fq_tmp :
++							   xs->pool->fq);
+ 		else if (offset == XDP_UMEM_PGOFF_COMPLETION_RING)
+-			q = READ_ONCE(xs->cq_tmp);
++			q = READ_ONCE(state == XSK_READY ? xs->cq_tmp :
++							   xs->pool->cq);
+ 	}
+ 
+ 	if (!q)
 -- 
-2.25.1
+2.40.0
 
