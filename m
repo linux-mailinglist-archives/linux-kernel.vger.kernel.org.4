@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7C96C2552
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153F26C2554
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjCTXCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
+        id S229912AbjCTXCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCTXCD (ORCPT
+        with ESMTP id S229869AbjCTXCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:02:03 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495851CF53
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:02:00 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id p17so4451821ioj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:02:00 -0700 (PDT)
+        Mon, 20 Mar 2023 19:02:16 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C582D2A998;
+        Mon, 20 Mar 2023 16:02:14 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id w4so6066768plg.9;
+        Mon, 20 Mar 2023 16:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679353319; x=1681945319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ol+B8Rm7LVaQanwklijT53+0nw4R6I7B4CbLiSGN/Pk=;
-        b=PR98NuIACi6GbtffTTQ7GRyP4Rm4we7JytqtLL0DNMowMIpj6lwi+zMMLMW357zcV6
-         YdebfM1/BAdRQY3RkxPHtNVbJ0GYit4yBNH7E1whw/0NeFAWrn4AEkkLVkT+jZmar9oD
-         SSq8qzXDLWndR0TLSaixDGX1C/o57uvdI+4N8=
+        d=gmail.com; s=20210112; t=1679353334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pQTnX0bMfKbYGJwMixkUOT6RG4X+okEUFeKSoqg7iTo=;
+        b=c9FZ2V3ReMf/oMa6/BuHFlFCRR4IRu2XhLE8LdXnMuS4CmtPf6MoQdJf2e+pPee72B
+         p9yZTdfvqUO2Rx9OJEjQ6QCGdWrhueWbl1zEiZD43rYbMCnDB8VdffX+89rRtAxKx2nE
+         z2vrZ9UVMMqVipvOvme5XzqfocLlq/hEXSNvOm2f4Gx1xY919xqJILpyGnxqomabPhmi
+         6qXbNpEiwR/onTQ8rHezcIlHMdQ5Dj4IlserMqyc5/9Wjtg8pVCoyfluDqFm9P8pR4hP
+         1flLyjyFxp8dgChxehMX77r0a8KPEGa6UR1wP8fRHFwMjjcx2jiZFZq+hrK9NH7t307M
+         QxOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679353319; x=1681945319;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ol+B8Rm7LVaQanwklijT53+0nw4R6I7B4CbLiSGN/Pk=;
-        b=Z9TzMRvRhq8Gepf5wQvy8YxyteLo1uVxQ9nvYmybXarwDWfzM41qsUdIfY9dhfR8U5
-         kd6j8oZhdMJpnoHhO5+h4YXENh5DarLK8qCAT84PoZzKph6nB9APGBgxhcxo/CXycywO
-         jSQKNRT7NkWhGL6dx1OYGx7Y0q1D2AAPLCx1Zj/iuwgIJrJQuJv8Ywkbq7SiravijIH8
-         /7WeryjDzbva+LhjGFXisQi6vmrXRjcOkSHNzH8AWiKMgiWc28uZY4mtc7HawwfOc5ru
-         ce/36Z95tZH7kYr9kp0U+XHkVxfbUTHGBPerVuIzzYkOtSnNto7Ef7CHf2vaQ4fOWGf+
-         WxIA==
-X-Gm-Message-State: AO0yUKXoksFA6BWJZ6oPhcPZaoJBjFLNyC/tc1G2NcFhzAbuAKI/WdIP
-        v2TFaHon1k4qpg2tFx4PgieRuw==
-X-Google-Smtp-Source: AK7set+J2U/lAYm7gRWd7YMrfKnfYIGgwX40P085kk4oMiavf4S1Ehp5iZ4v8YfjrYKAmn+dfxfwDg==
-X-Received: by 2002:a5e:c817:0:b0:752:f9b6:386b with SMTP id y23-20020a5ec817000000b00752f9b6386bmr690135iol.0.1679353319570;
-        Mon, 20 Mar 2023 16:01:59 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g21-20020a05663810f500b00405f36ed05asm3553624jae.55.2023.03.20.16.01.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 16:01:59 -0700 (PDT)
-Message-ID: <9d8e16ec-4336-f26c-a132-d95cdde2a4a1@linuxfoundation.org>
-Date:   Mon, 20 Mar 2023 17:01:58 -0600
+        d=1e100.net; s=20210112; t=1679353334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pQTnX0bMfKbYGJwMixkUOT6RG4X+okEUFeKSoqg7iTo=;
+        b=dNI6vmF+R4ydgnSt3GJlH50pOZBdQFm3PnK4GCI4lDLY7cd1iDC8/HiWy9VJm1h+Os
+         W2SLem199n4bSB37QEqt2FkijsQ8i9pyF298RRHlVDR0N7QhmtuW4OgIXpIpBGCNdpi/
+         fPlzbelBlKDDqPgVYb0a4WVSvdP59eZ2cO0Fp+QTX4hhb3lfBhJudqoN7+p8OxUglGq7
+         9LSimM1y5y1Wj6XNMH3xXyHIypxaILgEh+R+y1Z2wuC9kE8Z/PRRZx3LZpCyfc1/7c2g
+         jtgIzHiUt8Q1jsHHwUG+5NBkHcx/fy2Gkn8qmtK+iUPyJgirMpqWcIKjOTw+uC48yplU
+         SzyA==
+X-Gm-Message-State: AO0yUKVlELvGbne10DlP6ufSFESpXMOtC5hxWJNNzLVmIHuhPYlU/OkO
+        SQjSxhv5sBDH34YpPKO7FOqMYXgyslZUxspnPos=
+X-Google-Smtp-Source: AK7set/2NdZhhmQO5d6e9xSkCffYHJdBbggPTveFkSs06tcd9zy4WRFcK2Gmk3YxchcdNwrKviVCcWEkAKuzyKT8e1g=
+X-Received: by 2002:a17:90a:6082:b0:23b:36cc:f347 with SMTP id
+ z2-20020a17090a608200b0023b36ccf347mr82605pji.9.1679353333727; Mon, 20 Mar
+ 2023 16:02:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6.2 000/211] 6.2.8-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230320145513.305686421@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230320145513.305686421@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20230320221826.2728078-1-mathieu.poirier@linaro.org> <20230320221826.2728078-6-mathieu.poirier@linaro.org>
+In-Reply-To: <20230320221826.2728078-6-mathieu.poirier@linaro.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 20 Mar 2023 20:02:04 -0300
+Message-ID: <CAOMZO5Dh0mQEhjT2Wx_T9Kf9aTkNpJ7PbMfocQ24sh+yGtw+ww@mail.gmail.com>
+Subject: Re: [PATCH 5/5] retmoteproc: imx_dsp_rproc: Call of_node_put() on
+ iteration error
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        patrice.chotard@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, arnaud.pouliquen@st.com,
+        hongxing.zhu@nxp.com, peng.fan@nxp.com, shengjiu.wang@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,29 +75,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 08:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.8 release.
-> There are 211 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Mar 2023 14:54:32 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, Mar 20, 2023 at 7:18=E2=80=AFPM Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+>
+> Function of_phandle_iterator_next() calls of_node_put() on the last
+> device_node it iterated over, but when the loop exits prematurely it has
+> to be called explicitly.
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Typo on the Subject: s/retmoteproc/remoteproc
