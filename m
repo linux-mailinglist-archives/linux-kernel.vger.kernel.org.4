@@ -2,355 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E2A6C0ACB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508CF6C0ACD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCTGlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 02:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S229970AbjCTGnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 02:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjCTGld (ORCPT
+        with ESMTP id S229592AbjCTGng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 02:41:33 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B40BEC56;
-        Sun, 19 Mar 2023 23:41:30 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 1D8A41A00A79;
-        Mon, 20 Mar 2023 14:41:31 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hwkE0LwDQW1n; Mon, 20 Mar 2023 14:41:30 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id A56951A00940;
-        Mon, 20 Mar 2023 14:41:29 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] media: dvb: remove unnecessary (void*) conversions
-Date:   Mon, 20 Mar 2023 14:40:39 +0800
-Message-Id: <20230320064039.5670-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,RCVD_IN_VALIDITY_RPBL,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 20 Mar 2023 02:43:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CFC11653
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679294615; x=1710830615;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+OgF6i+BZh2OJXlMybbmZvp2a9ZZUmfvzH0nhBmB+z8=;
+  b=dmUhbe0WbexwKgkKTp9ik35PKFY/9AFitsN+FLheH2NI4RaiZnoj+0qt
+   qBHaupySMB/NyNmnTLkFdXvb5Ai/V+W7z6xpjygMwYlYCBVQhBPdWucyP
+   vOK0qAiPjIhpmETjoa/YQTPn1whQtrViT8vQgOKbOE5FaY1Q7GPLiiNkx
+   Pw67ApSDSWCHgWLXyGwLS/FF4N1TnTkREuBbFSQjmcn3GvJQH/YCBl4wj
+   OU3q1okjKfFDCreGkeCYsyDnpKySC8cBnDCq1l5vKGcBT3/oq91P1MQnd
+   6mXtJdHgkhP19bJnZtkH32HXEpEymZSjEWTF4KMghLk1SCERqit/w5xYY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="336087229"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="336087229"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 23:43:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="824363942"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="824363942"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Mar 2023 23:43:32 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pe9Ey-000AsA-0g;
+        Mon, 20 Mar 2023 06:43:32 +0000
+Date:   Mon, 20 Mar 2023 14:42:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:ras/core] BUILD SUCCESS
+ 4c1cdec319b9aadb65737c3eb1f5cb74bd6aa156
+Message-ID: <6418005a.xtmbkONH/7yY3pYd%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
+branch HEAD: 4c1cdec319b9aadb65737c3eb1f5cb74bd6aa156  x86/MCE/AMD: Use an u64 for bank_map
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- drivers/media/usb/dvb-usb/af9005-fe.c  |  3 +--
- drivers/media/usb/dvb-usb/az6027.c     | 34 +++++++++++++++++-----------------
- drivers/media/usb/dvb-usb/dtt200u-fe.c |  2 +-
- drivers/media/usb/dvb-usb/dw2102.c     | 20 ++++++++------------
- drivers/media/usb/dvb-usb/opera1.c     |  3 +--
- drivers/media/usb/dvb-usb/pctv452e.c   | 20 ++++++++++----------
- 6 files changed, 38 insertions(+), 44 deletions(-)
+elapsed time: 720m
 
-diff --git a/drivers/media/usb/dvb-usb/af9005-fe.c b/drivers/media/usb/dvb-usb/af9005-fe.c
-index 9d6fa0556d7b..404e56b32145 100644
---- a/drivers/media/usb/dvb-usb/af9005-fe.c
-+++ b/drivers/media/usb/dvb-usb/af9005-fe.c
-@@ -1412,8 +1412,7 @@ static int af9005_fe_get_frontend(struct dvb_frontend *fe,
- 
- static void af9005_fe_release(struct dvb_frontend *fe)
- {
--	struct af9005_fe_state *state =
--	    (struct af9005_fe_state *)fe->demodulator_priv;
-+	struct af9005_fe_state *state = fe->demodulator_priv;
- 	kfree(state);
- }
- 
-diff --git a/drivers/media/usb/dvb-usb/az6027.c b/drivers/media/usb/dvb-usb/az6027.c
-index 7d78ee09be5e..9d0847190748 100644
---- a/drivers/media/usb/dvb-usb/az6027.c
-+++ b/drivers/media/usb/dvb-usb/az6027.c
-@@ -407,8 +407,8 @@ static int az6027_ci_read_attribute_mem(struct dvb_ca_en50221 *ca,
- 					int slot,
- 					int address)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 
- 	int ret;
- 	u8 req;
-@@ -449,8 +449,8 @@ static int az6027_ci_write_attribute_mem(struct dvb_ca_en50221 *ca,
- 					 int address,
- 					 u8 value)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 
- 	int ret;
- 	u8 req;
-@@ -480,8 +480,8 @@ static int az6027_ci_read_cam_control(struct dvb_ca_en50221 *ca,
- 				      int slot,
- 				      u8 address)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 
- 	int ret;
- 	u8 req;
-@@ -526,8 +526,8 @@ static int az6027_ci_write_cam_control(struct dvb_ca_en50221 *ca,
- 				       u8 address,
- 				       u8 value)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 
- 	int ret;
- 	u8 req;
-@@ -557,7 +557,7 @@ static int az6027_ci_write_cam_control(struct dvb_ca_en50221 *ca,
- 
- static int CI_CamReady(struct dvb_ca_en50221 *ca, int slot)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
-+	struct dvb_usb_device *d = ca->data;
- 
- 	int ret;
- 	u8 req;
-@@ -588,8 +588,8 @@ static int CI_CamReady(struct dvb_ca_en50221 *ca, int slot)
- 
- static int az6027_ci_slot_reset(struct dvb_ca_en50221 *ca, int slot)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 
- 	int ret, i;
- 	u8 req;
-@@ -644,8 +644,8 @@ static int az6027_ci_slot_shutdown(struct dvb_ca_en50221 *ca, int slot)
- 
- static int az6027_ci_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 
- 	int ret;
- 	u8 req;
-@@ -673,8 +673,8 @@ static int az6027_ci_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
- 
- static int az6027_ci_poll_slot_status(struct dvb_ca_en50221 *ca, int slot, int open)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct az6027_device_state *state = d->priv;
- 	int ret;
- 	u8 req;
- 	u16 value;
-@@ -719,7 +719,7 @@ static void az6027_ci_uninit(struct dvb_usb_device *d)
- 	if (NULL == d)
- 		return;
- 
--	state = (struct az6027_device_state *)d->priv;
-+	state = d->priv;
- 	if (NULL == state)
- 		return;
- 
-@@ -735,7 +735,7 @@ static void az6027_ci_uninit(struct dvb_usb_device *d)
- static int az6027_ci_init(struct dvb_usb_adapter *a)
- {
- 	struct dvb_usb_device *d = a->dev;
--	struct az6027_device_state *state = (struct az6027_device_state *)d->priv;
-+	struct az6027_device_state *state = d->priv;
- 	int ret;
- 
- 	deb_info("%s", __func__);
-diff --git a/drivers/media/usb/dvb-usb/dtt200u-fe.c b/drivers/media/usb/dvb-usb/dtt200u-fe.c
-index 9f83560ba63d..586afe22d817 100644
---- a/drivers/media/usb/dvb-usb/dtt200u-fe.c
-+++ b/drivers/media/usb/dvb-usb/dtt200u-fe.c
-@@ -195,7 +195,7 @@ static int dtt200u_fe_get_frontend(struct dvb_frontend* fe,
- 
- static void dtt200u_fe_release(struct dvb_frontend* fe)
- {
--	struct dtt200u_fe_state *state = (struct dtt200u_fe_state*) fe->demodulator_priv;
-+	struct dtt200u_fe_state *state = fe->demodulator_priv;
- 	kfree(state);
- }
- 
-diff --git a/drivers/media/usb/dvb-usb/dw2102.c b/drivers/media/usb/dvb-usb/dw2102.c
-index 0ca764282c76..0477f024e585 100644
---- a/drivers/media/usb/dvb-usb/dw2102.c
-+++ b/drivers/media/usb/dvb-usb/dw2102.c
-@@ -903,7 +903,7 @@ static int su3000_streaming_ctrl(struct dvb_usb_adapter *adap, int onoff)
- 
- static int su3000_power_ctrl(struct dvb_usb_device *d, int i)
- {
--	struct dw2102_state *state = (struct dw2102_state *)d->priv;
-+	struct dw2102_state *state = d->priv;
- 	int ret = 0;
- 
- 	info("%s: %d, initialized %d", __func__, i, state->initialized);
-@@ -978,8 +978,7 @@ static int dw210x_set_voltage(struct dvb_frontend *fe,
- 		.len = 2,
- 	};
- 
--	struct dvb_usb_adapter *udev_adap =
--		(struct dvb_usb_adapter *)(fe->dvb->priv);
-+	struct dvb_usb_adapter *udev_adap = fe->dvb->priv;
- 	if (voltage == SEC_VOLTAGE_18)
- 		msg.buf = command_18v;
- 	else if (voltage == SEC_VOLTAGE_13)
-@@ -993,9 +992,8 @@ static int dw210x_set_voltage(struct dvb_frontend *fe,
- static int s660_set_voltage(struct dvb_frontend *fe,
- 			    enum fe_sec_voltage voltage)
- {
--	struct dvb_usb_adapter *d =
--		(struct dvb_usb_adapter *)(fe->dvb->priv);
--	struct dw2102_state *st = (struct dw2102_state *)d->dev->priv;
-+	struct dvb_usb_adapter *d = fe->dvb->priv;
-+	struct dw2102_state *st = d->dev->priv;
- 
- 	dw210x_set_voltage(fe, voltage);
- 	if (st->old_set_voltage)
-@@ -1014,8 +1012,7 @@ static void dw210x_led_ctrl(struct dvb_frontend *fe, int offon)
- 		.buf = led_off,
- 		.len = 1
- 	};
--	struct dvb_usb_adapter *udev_adap =
--		(struct dvb_usb_adapter *)(fe->dvb->priv);
-+	struct dvb_usb_adapter *udev_adap = fe->dvb->priv;
- 
- 	if (offon)
- 		msg.buf = led_on;
-@@ -1025,9 +1022,8 @@ static void dw210x_led_ctrl(struct dvb_frontend *fe, int offon)
- static int tt_s2_4600_read_status(struct dvb_frontend *fe,
- 				  enum fe_status *status)
- {
--	struct dvb_usb_adapter *d =
--		(struct dvb_usb_adapter *)(fe->dvb->priv);
--	struct dw2102_state *st = (struct dw2102_state *)d->dev->priv;
-+	struct dvb_usb_adapter *d = fe->dvb->priv;
-+	struct dw2102_state *st = d->dev->priv;
- 	int ret;
- 
- 	ret = st->fe_read_status(fe, status);
-@@ -2576,7 +2572,7 @@ static int dw2102_probe(struct usb_interface *intf,
- static void dw2102_disconnect(struct usb_interface *intf)
- {
- 	struct dvb_usb_device *d = usb_get_intfdata(intf);
--	struct dw2102_state *st = (struct dw2102_state *)d->priv;
-+	struct dw2102_state *st = d->priv;
- 	struct i2c_client *client;
- 
- 	/* remove I2C client for tuner */
-diff --git a/drivers/media/usb/dvb-usb/opera1.c b/drivers/media/usb/dvb-usb/opera1.c
-index 0da86f58aff6..98b2177667d2 100644
---- a/drivers/media/usb/dvb-usb/opera1.c
-+++ b/drivers/media/usb/dvb-usb/opera1.c
-@@ -172,8 +172,7 @@ static int opera1_set_voltage(struct dvb_frontend *fe,
- 	struct i2c_msg msg[] = {
- 		{.addr = ADDR_B600_VOLTAGE_13V,.flags = 0,.buf = command_13v,.len = 1},
- 	};
--	struct dvb_usb_adapter *udev_adap =
--	    (struct dvb_usb_adapter *)(fe->dvb->priv);
-+	struct dvb_usb_adapter *udev_adap = fe->dvb->priv;
- 	if (voltage == SEC_VOLTAGE_18) {
- 		msg[0].addr = ADDR_B601_VOLTAGE_18V;
- 		msg[0].buf = command_18v;
-diff --git a/drivers/media/usb/dvb-usb/pctv452e.c b/drivers/media/usb/dvb-usb/pctv452e.c
-index f0794c68c622..445aabde61e9 100644
---- a/drivers/media/usb/dvb-usb/pctv452e.c
-+++ b/drivers/media/usb/dvb-usb/pctv452e.c
-@@ -106,7 +106,7 @@ struct pctv452e_state {
- static int tt3650_ci_msg(struct dvb_usb_device *d, u8 cmd, u8 *data,
- 			 unsigned int write_len, unsigned int read_len)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *buf;
- 	u8 id;
- 	unsigned int rlen;
-@@ -157,8 +157,8 @@ static int tt3650_ci_msg_locked(struct dvb_ca_en50221 *ca,
- 				u8 cmd, u8 *data, unsigned int write_len,
- 				unsigned int read_len)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct pctv452e_state *state = d->priv;
- 	int ret;
- 
- 	mutex_lock(&state->ca_mutex);
-@@ -290,8 +290,8 @@ static int tt3650_ci_slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
- 
- static int tt3650_ci_slot_reset(struct dvb_ca_en50221 *ca, int slot)
- {
--	struct dvb_usb_device *d = (struct dvb_usb_device *)ca->data;
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct dvb_usb_device *d = ca->data;
-+	struct pctv452e_state *state = d->priv;
- 	u8 buf[1];
- 	int ret;
- 
-@@ -359,7 +359,7 @@ static void tt3650_ci_uninit(struct dvb_usb_device *d)
- 	if (NULL == d)
- 		return;
- 
--	state = (struct pctv452e_state *)d->priv;
-+	state = d->priv;
- 	if (NULL == state)
- 		return;
- 
-@@ -377,7 +377,7 @@ static void tt3650_ci_uninit(struct dvb_usb_device *d)
- static int tt3650_ci_init(struct dvb_usb_adapter *a)
- {
- 	struct dvb_usb_device *d = a->dev;
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	int ret;
- 
- 	ci_dbg("%s", __func__);
-@@ -415,7 +415,7 @@ static int pctv452e_i2c_msg(struct dvb_usb_device *d, u8 addr,
- 				const u8 *snd_buf, u8 snd_len,
- 				u8 *rcv_buf, u8 rcv_len)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *buf;
- 	u8 id;
- 	int ret;
-@@ -514,7 +514,7 @@ static u32 pctv452e_i2c_func(struct i2c_adapter *adapter)
- 
- static int pctv452e_power_ctrl(struct dvb_usb_device *d, int i)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *b0, *rx;
- 	int ret;
- 
-@@ -565,7 +565,7 @@ static int pctv452e_power_ctrl(struct dvb_usb_device *d, int i)
- 
- static int pctv452e_rc_query(struct dvb_usb_device *d)
- {
--	struct pctv452e_state *state = (struct pctv452e_state *)d->priv;
-+	struct pctv452e_state *state = d->priv;
- 	u8 *b, *rx;
- 	int ret, i;
- 	u8 id;
+configs tested: 117
+configs skipped: 115
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230319   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r023-20230319   gcc  
+alpha                randconfig-r033-20230319   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs103_defconfig   gcc  
+arc                                 defconfig   gcc  
+arm                         nhk8815_defconfig   gcc  
+arm                        oxnas_v6_defconfig   gcc  
+arm                  randconfig-r012-20230319   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r022-20230319   gcc  
+hexagon              randconfig-r003-20230319   clang
+hexagon              randconfig-r006-20230319   clang
+hexagon              randconfig-r041-20230319   clang
+hexagon              randconfig-r045-20230319   clang
+i386                             allyesconfig   gcc  
+i386                         debian-10.3-func   gcc  
+i386                   debian-10.3-kselftests   gcc  
+i386                        debian-10.3-kunit   gcc  
+i386                          debian-10.3-kvm   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+i386                          randconfig-c001   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch            randconfig-r014-20230319   gcc  
+m68k                             allmodconfig   gcc  
+m68k                          amiga_defconfig   gcc  
+m68k                         apollo_defconfig   gcc  
+m68k         buildonly-randconfig-r001-20230319   gcc  
+m68k                                defconfig   gcc  
+m68k                        mvme16x_defconfig   gcc  
+m68k                 randconfig-r026-20230319   gcc  
+m68k                           virt_defconfig   gcc  
+microblaze           randconfig-r013-20230319   gcc  
+microblaze           randconfig-r032-20230319   gcc  
+mips                             allmodconfig   gcc  
+mips                            gpr_defconfig   gcc  
+mips                      maltasmvp_defconfig   gcc  
+mips                 randconfig-r002-20230319   clang
+nios2                         3c120_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r011-20230319   gcc  
+nios2                randconfig-r015-20230319   gcc  
+nios2                randconfig-r031-20230319   gcc  
+nios2                randconfig-r034-20230319   gcc  
+openrisc             randconfig-r034-20230319   gcc  
+openrisc             randconfig-r035-20230319   gcc  
+parisc       buildonly-randconfig-r004-20230319   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r025-20230319   gcc  
+parisc               randconfig-r033-20230319   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                 canyonlands_defconfig   gcc  
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                    klondike_defconfig   gcc  
+powerpc                      mgcoge_defconfig   gcc  
+powerpc                 mpc85xx_cds_defconfig   gcc  
+powerpc                     pq2fads_defconfig   gcc  
+riscv                    nommu_k210_defconfig   gcc  
+riscv                randconfig-r016-20230319   clang
+riscv                randconfig-r032-20230319   gcc  
+riscv                randconfig-r036-20230319   gcc  
+riscv                randconfig-r042-20230319   clang
+s390                 randconfig-r015-20230319   clang
+s390                 randconfig-r044-20230319   clang
+sh                               allmodconfig   gcc  
+sh                        apsh4ad0a_defconfig   gcc  
+sh           buildonly-randconfig-r003-20230319   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                          rsk7269_defconfig   gcc  
+sh                           se7721_defconfig   gcc  
+sh                           se7722_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sh                        sh7785lcr_defconfig   gcc  
+sparc        buildonly-randconfig-r006-20230319   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r021-20230319   gcc  
+sparc64                             defconfig   gcc  
+sparc64              randconfig-r035-20230319   gcc  
+um                               alldefconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa                          iss_defconfig   gcc  
+xtensa               randconfig-r031-20230319   gcc  
+
 -- 
-2.11.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
