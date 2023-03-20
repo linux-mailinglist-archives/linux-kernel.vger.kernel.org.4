@@ -2,283 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDDC6C0EA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6208F6C0EB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjCTKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S229886AbjCTKY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjCTKWb (ORCPT
+        with ESMTP id S230000AbjCTKYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:22:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529611E5E6
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679307678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BgSWj3zSpvR+t6erekcaSg4yxSMvQy9o3Bkd3DNLF24=;
-        b=XPdjKZ9lEZsgWYGc/KZ3YiqnsjzQhQIcLllEgACbdQT0m2PJmgL7I2iNqNOla1SeQIxDqH
-        4KWN0Vnp23mai2+/KHj+PNP+KOj62wpZeiqnxsE5MwJ5Ud277o92DEuynYabIZY1kK1/IX
-        ycSOHICiGYDy2hHgmMZ7+PLjSc6ML68=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-638-85qoikPQOQWE8uK9HyzwaA-1; Mon, 20 Mar 2023 06:21:16 -0400
-X-MC-Unique: 85qoikPQOQWE8uK9HyzwaA-1
-Received: by mail-wr1-f70.google.com with SMTP id g7-20020a5d6987000000b002cea7acd26fso1345446wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:21:16 -0700 (PDT)
+        Mon, 20 Mar 2023 06:24:50 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2744CB44F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:24:47 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id by13so9997257vsb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679307886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MMr1WoTvszkHMn826fWIWzwxgXcAXUrmwDv+A43kxrw=;
+        b=HC0Ol9AjVA6fsxwuasIjT+8fB4dMQKcPk8dZP3YbCa6ryA6GJVYaZuLfgQOYP4oF3C
+         ee1FCMyZUlA1dqhvMtsrybitPi5eshAyrybZDDOHKlHJkCPsXPfuWSnrP8nfWRxmgkJx
+         GwVUtzid5QicAj69sqw4TN2KO0mxrsmKVcT4Evs7dh8Us3ZJp3OrEfsERMmyDfN6hdt1
+         oQMs1xFoUSfkwyy4cCRE1DvDBv4fw/CPWHHH+WieOEPgYUIBfZRoFC26VM8WxiWqhW5E
+         B2IBubyGKRWItXGMJcDGQEdcBTubZ675+8phT19v9xtl8lbIcC4FPXlY1kLn184kMAUH
+         zklg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679307675;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BgSWj3zSpvR+t6erekcaSg4yxSMvQy9o3Bkd3DNLF24=;
-        b=3EWSG25H80Vnc4ML9Dq/YofIJi7qACz4Mqy7b8kG9lgRkJJwoT66a6PaHyZzrxvrhT
-         Y9bMIX3eNQXWYfDWNVmyozLns8IUthpx/SHgBP+9NlAk3BuBv/TTCPcLl0orM/jHT+T2
-         eJwFswrwE9tfIECdGUSEEvHdMPdSdpsXruKDHAql7sdZSHK5rVIshhHXFlNguJ07a8e+
-         NLiP9X1QvRhTykrIa+KrNjjVRgTojgNpYva8dQpLupmN0TftDiR6Jw6ye7ctAo6LJzqb
-         vKdUpA3TL0n3ve3618SW0U0cTrrS/Cm60Zv4A91Ut/EHqFnqlVDX+KtUrvMtW4oCTGNu
-         7i+w==
-X-Gm-Message-State: AO0yUKXSAYb2UMHe6/Xg4QWQpk746lRd3NtcGEsbLmkpVUU6uugtZN6g
-        8PgW03B8TDzI+QXeDmF2ZL9QyjIfX5ejNgg1ZOXKfgqgWyKov9fQce1My6Dg8pJNTx4VxzBYmHA
-        eMCcTW+ealrmjuQrfYr3ystK5
-X-Received: by 2002:a05:600c:4ecf:b0:3eb:29fe:70ec with SMTP id g15-20020a05600c4ecf00b003eb29fe70ecmr36012809wmq.27.1679307675668;
-        Mon, 20 Mar 2023 03:21:15 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+vItu0U3zmhAl3fXtHhWhsS19G9xFs9rpMm3JTWvnO8fUtGK+E9HJKmLUIHcQQoJKjWjITsg==
-X-Received: by 2002:a05:600c:4ecf:b0:3eb:29fe:70ec with SMTP id g15-20020a05600c4ecf00b003eb29fe70ecmr36012793wmq.27.1679307675309;
-        Mon, 20 Mar 2023 03:21:15 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id n15-20020a1c720f000000b003ee0fc6244asm861481wmc.32.2023.03.20.03.21.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:21:14 -0700 (PDT)
-Message-ID: <cf338070-246e-25d3-e624-53f4beda8158@redhat.com>
-Date:   Mon, 20 Mar 2023 11:21:13 +0100
+        d=1e100.net; s=20210112; t=1679307886;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MMr1WoTvszkHMn826fWIWzwxgXcAXUrmwDv+A43kxrw=;
+        b=J5d4MJ5jK2JNOpEipR8EO0EDwMeoPMUXu8CsUZdXsMmPbRDDHT1H194FZ67VkeWgJp
+         yqeByuLe2oswFkbC8N+YDla/2vHz+MFHBdpik7pXxcdl116zhgTcibOseIyl2ROUWTu0
+         BH+afCdsK/FNXNjyTqwipKG0BDO0uJOP1HOhT11mW4kbhwQdQs6iULAVvTFaEOCMERdb
+         UW1EvYE6ehyqQRYmD8v1EJfNB3tLfBkJwGelm4JB4blktIxO3a2ybp7wDZlyuZ+EhLW+
+         oC9O4SBr7eRKc+ad7uTJU6Q2+ynLV65GqUG8EKNviPla08LCo11TBUG16Ob32L0EYk+H
+         ReYw==
+X-Gm-Message-State: AO0yUKUqMVnli8GaYe80dxcBbhlTNC4QjtRum3xkai1f8qmFhxqrKFee
+        pEqFpaFuBVUOzHV84W1BcRgv9kiGCXxGDqpmvxowUA==
+X-Google-Smtp-Source: AK7set+QVBe9J3CJc30jBUPlLxhp9RAGQykt/RN2GdLJJ1f2BAGM9XTNEP1fhBJxspkysoECoTvry9uuwZ2wiscA4y8=
+X-Received: by 2002:a67:ca18:0:b0:425:b61a:9c13 with SMTP id
+ z24-20020a67ca18000000b00425b61a9c13mr3780116vsk.0.1679307886261; Mon, 20 Mar
+ 2023 03:24:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230309223711.823547-1-peterx@redhat.com>
- <20230309223711.823547-2-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4 1/2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
-In-Reply-To: <20230309223711.823547-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314183043.619997-1-brgl@bgdev.pl> <20230314183043.619997-6-brgl@bgdev.pl>
+ <08dff56d-227a-a791-549c-15ac0f1ac08b@linaro.org>
+In-Reply-To: <08dff56d-227a-a791-549c-15ac0f1ac08b@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 20 Mar 2023 11:24:35 +0100
+Message-ID: <CAMRc=MdSRY8w0pWuhprB1ALPFpcCdYOnyQZ63BSzJPa3u1a-jA@mail.gmail.com>
+Subject: Re: [PATCH 05/14] arm64: dts: qcom: sa8775p: add support for the
+ on-board PMICs
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 14, 2023 at 9:22=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
+>
+>
+>
+> On 14.03.2023 19:30, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > Add a new .dtsi file for sa8775p PMICs and add the four PMICs interface=
+d
+> > to the SoC via SPMI.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 37 +++++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/b=
+oot/dts/qcom/sa8775p-pmics.dtsi
+> > new file mode 100644
+> > index 000000000000..77e2515a7ab9
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> > @@ -0,0 +1,37 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2023, Linaro Limited
+> > + */
+> > +
+> > +#include <dt-bindings/input/input.h>
+> > +#include <dt-bindings/spmi/spmi.h>
+> > +
+> > +&spmi_bus {
+> > +     pmk8775_0: pmic@0 {
+> pmk8775..
+>
+> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
+> ..or pmm8654au?
+>
 
->    (1) With huge page disabled
->    echo madvise > /sys/kernel/mm/transparent_hugepage/enabled
->    ./uffd_wp_perf
->    Test DEFAULT: 4
->    Test PRE-READ: 1111453 (pre-fault 1101011)
->    Test MADVISE: 278276 (pre-fault 266378)
+Honestly, I got inspired by this bit from sc8280xp-pmics.dtsi:
 
-Thinking about it, I guess the biggest slowdown here is the "one fake 
-pagefault at a time" handling.
+ 54 &spmi_bus {
+ 55         pmk8280: pmic@0 {
+ 56                 compatible =3D "qcom,pmk8350", "qcom,spmi-pmic";
+ 57                 reg =3D <0x0 SPMI_USID>;
+ 58                 #address-cells =3D <1>;
+ 59                 #size-cells =3D <0>;
 
->    Test WP-UNPOPULATE: 11712
-> 
->    (2) With Huge page enabled
->    echo always > /sys/kernel/mm/transparent_hugepage/enabled
->    ./uffd_wp_perf
->    Test DEFAULT: 4
->    Test PRE-READ: 22521 (pre-fault 22348)
->    Test MADVISE: 4909 (pre-fault 4743)
->    Test WP-UNPOPULATE: 14448
-> 
-> There'll be a great perf boost for no-thp case, while for thp enabled with
-> extreme case of all-thp-zero WP_UNPOPULATED can be slower than MADVISE, but
-> that's low possibility in reality, also the overhead was not reduced but
-> postponed until a follow up write on any huge zero thp, so potentially it
-> is faster by making the follow up writes slower.
-> 
-> [1] https://lore.kernel.org/all/20210401092226.102804-4-andrey.gruzdev@virtuozzo.com/
-> [2] https://lore.kernel.org/all/Y+v2HJ8+3i%2FKzDBu@x1n/
-> [3] https://lore.kernel.org/all/d0eb0a13-16dc-1ac1-653a-78b7273781e3@collabora.com/
-> [4] https://github.com/xzpeter/clibs/blob/master/uffd-test/uffd-wp-perf.c
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   Documentation/admin-guide/mm/userfaultfd.rst | 17 ++++++
->   fs/userfaultfd.c                             | 16 ++++++
->   include/linux/mm_inline.h                    |  6 +++
->   include/linux/userfaultfd_k.h                | 23 ++++++++
->   include/uapi/linux/userfaultfd.h             | 10 +++-
->   mm/memory.c                                  | 56 +++++++++++++++-----
->   mm/mprotect.c                                | 51 ++++++++++++++----
->   7 files changed, 154 insertions(+), 25 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> index 7dc823b56ca4..c86b56c95ea6 100644
-> --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> @@ -219,6 +219,23 @@ former will have ``UFFD_PAGEFAULT_FLAG_WP`` set, the latter
->   you still need to supply a page when ``UFFDIO_REGISTER_MODE_MISSING`` was
->   used.
->   
-> +Userfaultfd write-protect mode currently behave differently on none ptes
-> +(when e.g. page is missing) over different types of memories.
-> +
-> +For anonymous memory, ``ioctl(UFFDIO_WRITEPROTECT)`` will ignore none ptes
-> +(e.g. when pages are missing and not populated).  For file-backed memories
-> +like shmem and hugetlbfs, none ptes will be write protected just like a
-> +present pte.  In other words, there will be a userfaultfd write fault
-> +message generated when writting to a missing page on file typed memories,
+Where the label seems to follow the SoC's numbering. Do you think it
+would be better to consistently use the pmic's name?
 
-s/writting/writing/
+Bartosz
 
-> +as long as the page range was write-protected before.  Such a message will
-> +not be generated on anonymous memories by default.
-> +
-> +If the application wants to be able to write protect none ptes on anonymous
-> +memory, one can pre-populate the memory with e.g. MADV_POPULATE_READ.  On
-> +newer kernels, one can also detect the feature UFFD_FEATURE_WP_UNPOPULATED
-> +and set the feature bit in advance to make sure none ptes will also be
-> +write protected even upon anonymous memory.
-> +
-
-[...]
-
->   /*
->    * A number of key systems in x86 including ioremap() rely on the assumption
-> @@ -1350,6 +1364,10 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
->   			      unsigned long addr, pte_t *pte,
->   			      struct zap_details *details, pte_t pteval)
->   {
-> +	/* Zap on anonymous always means dropping everything */
-> +	if (vma_is_anonymous(vma))
-> +		return;
-> +
->   	if (zap_drop_file_uffd_wp(details))
->   		return;
->   
-> @@ -1456,8 +1474,12 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
->   				continue;
->   			rss[mm_counter(page)]--;
->   		} else if (pte_marker_entry_uffd_wp(entry)) {
-> -			/* Only drop the uffd-wp marker if explicitly requested */
-> -			if (!zap_drop_file_uffd_wp(details))
-> +			/*
-> +			 * For anon: always drop the marker; for file: only
-> +			 * drop the marker if explicitly requested.
-> +			 */
-
-So MADV_DONTNEED a pte marker in an anonymous VMA will always remove 
-that marker. Is that the same handling as for MADV_DONTNEED on shmem or 
-on fallocate(PUNCHHOLE) on shmem?
-
-> +			if (!vma_is_anonymous(vma) &&
-> +			    !zap_drop_file_uffd_wp(details))
->   				continue;
-
-Maybe it would be nicer to have a zap_drop_uffd_wp_marker(vma, details) 
-and have the comment in there. Especially because of the other hunk above.
-
-So zap_drop_file_uffd_wp(details) -> zap_drop_uffd_wp_marker(vma, 
-details) and move the anon handling + comment in there.
-
-
->   		} else if (is_hwpoison_entry(entry) ||
->   			   is_swapin_error_entry(entry)) {
-> @@ -3624,6 +3646,14 @@ static vm_fault_t pte_marker_clear(struct vm_fault *vmf)
->   	return 0;
->   }
->   
-> +static vm_fault_t do_pte_missing(struct vm_fault *vmf)
-> +{
-> +	if (vma_is_anonymous(vmf->vma))
-> +		return do_anonymous_page(vmf);
-> +	else
-> +		return do_fault(vmf);
-
-No need for the "else" statement.
-
-> +}
-> +
->   /*
->    * This is actually a page-missing access, but with uffd-wp special pte
->    * installed.  It means this pte was wr-protected before being unmapped.
-> @@ -3634,11 +3664,10 @@ static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf)
->   	 * Just in case there're leftover special ptes even after the region
->   	 * got unregistered - we can simply clear them.
->   	 */
-> -	if (unlikely(!userfaultfd_wp(vmf->vma) || vma_is_anonymous(vmf->vma)))
-> +	if (unlikely(!userfaultfd_wp(vmf->vma)))
->   		return pte_marker_clear(vmf);
->   
-> -	/* do_fault() can handle pte markers too like none pte */
-> -	return do_fault(vmf);
-> +	return do_pte_missing(vmf);
->   }
->   
-
-[...]
-
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 231929f119d9..455f7051098f 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -276,7 +276,15 @@ static long change_pte_range(struct mmu_gather *tlb,
->   		} else {
->   			/* It must be an none page, or what else?.. */
->   			WARN_ON_ONCE(!pte_none(oldpte));
-> -			if (unlikely(uffd_wp && !vma_is_anonymous(vma))) {
-> +
-> +			/*
-> +			 * Nobody plays with any none ptes besides
-> +			 * userfaultfd when applying the protections.
-> +			 */
-> +			if (likely(!uffd_wp))
-> +				continue;
-> +
-> +			if (userfaultfd_wp_use_markers(vma)) {
->   				/*
->   				 * For file-backed mem, we need to be able to
->   				 * wr-protect a none pte, because even if the
-> @@ -320,23 +328,46 @@ static inline int pmd_none_or_clear_bad_unless_trans_huge(pmd_t *pmd)
->   	return 0;
->   }
->   
-> -/* Return true if we're uffd wr-protecting file-backed memory, or false */
-> +/*
-> + * Return true if we want to split huge thps in change protection
-
-"huge thps" sounds redundant. "if we want to PTE-map a huge PMD" ?
-
-> + * procedure, false otherwise.
-
-
-In general,
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+> Konrad
+> > +             reg =3D <0x0 SPMI_USID>;
+> > +             #address-cells =3D <1>;
+> > +             #size-cells =3D <0>;
+> > +     };
+> > +
+> > +     pmk8775_1: pmic@2 {
+> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
+> > +             reg =3D <0x2 SPMI_USID>;
+> > +             #address-cells =3D <1>;
+> > +             #size-cells =3D <0>;
+> > +     };
+> > +
+> > +     pmk8775_2: pmic@4 {
+> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
+> > +             reg =3D <0x4 SPMI_USID>;
+> > +             #address-cells =3D <1>;
+> > +             #size-cells =3D <0>;
+> > +     };
+> > +
+> > +     pmk8775_3: pmic@6 {
+> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
+> > +             reg =3D <0x6 SPMI_USID>;
+> > +             #address-cells =3D <1>;
+> > +             #size-cells =3D <0>;
+> > +     };
+> > +};
