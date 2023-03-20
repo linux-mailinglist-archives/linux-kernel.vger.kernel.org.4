@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B24E6C1D84
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C446C1DB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbjCTRQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S233222AbjCTRWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbjCTRPn (ORCPT
+        with ESMTP id S233007AbjCTRVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:15:43 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A3126C1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:11:43 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso7976137wmq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679332184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rGCOrM4FMzTeub5/ravYucAeRNAx4GgviWtRpjAsQwg=;
-        b=E9AQrjlOsm+l+iOQUD4pwk+AqM5R1bYmm58QOXDqblfoHm3MXvqAnhkeZN1+9EJwx7
-         Aao5iFJHH0B+mn/jwjGJmeso7WXJ5F2aZyjaUtvEkl5jVMNpvuSMGyPsyTziEhgtTFAa
-         BuolEZoDnl7tyKvrhf0Rf85bDtLcuczss0wphoiDB+N0FVSaPh+AE29x/qfvOBpXr2mc
-         WnbcTA7ZTvbvYc0lQ1M3AhAbtHk8EfDzhEe2fiWZFxJ1inn4a8kVx2BStf/uhiHHRC+w
-         CNp6Sn25eOTd3ZUqxtUCAfXDfIWMutOmjzzMtKSkHmICuvZPEczGURMj78dS+DfQCBHo
-         eSBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679332184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rGCOrM4FMzTeub5/ravYucAeRNAx4GgviWtRpjAsQwg=;
-        b=knXcH64B6T4olj8I8gInrcT08JSNzWTzahOUOffCgGpNQqxPpYdZkypDwmAksu2yPM
-         fnjVifQNVhbC1gIGTkiJRhHNP8Pil2a+15rqE8BIs3aYjPFry/omLfwtJWV80JacMYJG
-         brSTVq7msf9/YrsXFybBOUIe43r3rY/N/KQBLPM1pwZHTsSfFtvyaIJYDLj2h/ntHMli
-         4sxOPLCSOk9KaErxkMDtQaTnkFQCLTeCBDSrUz7GVKULw4GCJ3umTgGRYz5RoU8pe4Zc
-         L30f7ORLFbARiIaqJpVW6X4xUQKWmRjUV19g/8O9ghqpcJdoW+iViXbyQnpHjhwlkmws
-         +N8A==
-X-Gm-Message-State: AO0yUKV9LjqWAyYvNVkzJZ+Z+9W6LiL1uK61FFFIAl5grOcpBGm+xnZw
-        Wk0mIHhEEIqojmW2QDfu+D8=
-X-Google-Smtp-Source: AK7set8Zn5kiOPJpzlqDnRjE14OR99eyKESo6ny4jIJtj32Vsx+m/y8wwatZPjlZILI0qLL/qeeWlw==
-X-Received: by 2002:a7b:c7cf:0:b0:3ee:12cd:dfa7 with SMTP id z15-20020a7bc7cf000000b003ee12cddfa7mr221076wmk.13.1679332183603;
-        Mon, 20 Mar 2023 10:09:43 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id ay38-20020a05600c1e2600b003df7b40f99fsm16986271wmb.11.2023.03.20.10.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 10:09:42 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 17:09:41 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        maple-tree@lists.infradead.org
-Subject: Re: [PATCH 0/4] further cleanup of vma_merge()
-Message-ID: <a52f4521-8d02-496e-ac40-e8da5b1ec268@lucifer.local>
-References: <cover.1679137163.git.lstoakes@gmail.com>
- <20230320164707.zpjhcwplkrp4tvgf@revolver>
+        Mon, 20 Mar 2023 13:21:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FDC16A45;
+        Mon, 20 Mar 2023 10:17:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC28DAD7;
+        Mon, 20 Mar 2023 10:11:31 -0700 (PDT)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BAB363F67D;
+        Mon, 20 Mar 2023 10:10:42 -0700 (PDT)
+Message-ID: <f4808265-f136-631e-0220-9019e64ee9d3@arm.com>
+Date:   Mon, 20 Mar 2023 17:10:40 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320164707.zpjhcwplkrp4tvgf@revolver>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 5/7] x86/resctrl: Display the RMID and COSID for
+ resctrl groups
+Content-Language: en-GB
+To:     Babu Moger <babu.moger@amd.com>, corbet@lwn.net,
+        reinette.chatre@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com,
+        christophe.leroy@csgroup.eu, jarkko@kernel.org,
+        adrian.hunter@intel.com, quic_jiles@quicinc.com,
+        peternewman@google.com
+References: <167778850105.1053859.14596357862185564029.stgit@bmoger-ubuntu>
+ <167778869402.1053859.6094569492538617564.stgit@bmoger-ubuntu>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <167778869402.1053859.6094569492538617564.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,53 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:47:07PM -0400, Liam R. Howlett wrote:
-> * Lorenzo Stoakes <lstoakes@gmail.com> [230318 07:15]:
-> > Following on from Vlastimil Babka's patch series "cleanup vma_merge() and
-> > improve mergeability tests" which was in turn based on Liam's prior
-> > cleanups, this patch series introduces changes discussed in review of
-> > Vlastimil's series and goes further in attempting to make the logic as
-> > clear as possible.
-> >
-> > Nearly all of this should have absolutely no functional impact, however it
-> > does add a singular VM_WARN_ON() case.
->
-> Thanks for looking at this function and adding more clarity.  I'm happy
-> to have comments within the code, especially tricky areas.  But I find
-> that adding almost 50 lines to this function makes it rather hard to
-> follow.
->
-> Can we remove the more obvious comments and possibly reduce the nesting
-> of others so there are less lines?
->
-> For example in patch 2:
->         /*
->          * If there is a previous VMA specified, find the next, otherwise find
->          * the first.
->          */
->         vma = find_vma(mm, prev ? prev->vm_end : 0);
->
-> Is rather verbose for something that can be seen in the code itself.
->
-> I think we are risking over-documenting what is going on here which is
-> making the code harder to read; the function is pushing 200 lines now.
->
-> >
-> > Lorenzo Stoakes (4):
-> >   mm/mmap/vma_merge: further improve prev/next VMA naming
-> >   mm/mmap/vma_merge: set next to NULL if not applicable
-> >   mm/mmap/vma_merge: extend invariants, avoid invalid res, vma
-> >   mm/mmap/vma_merge: be explicit about the non-mergeable case
-> >
-> >  mm/mmap.c | 165 +++++++++++++++++++++++++++++++++++-------------------
-> >  1 file changed, 107 insertions(+), 58 deletions(-)
-> >
-> > --
-> > 2.39.2
->
+Hi Babu,
 
-Sure, I did try not to overdo things (once you start simplifying you can go
-too far), but it seems like I _did_ go too far on the commenting (perhaps
-pushing too far the other way).
+On 02/03/2023 20:24, Babu Moger wrote:
+> When a user creates a control or monitor group, the CLOSID or RMID
+> are not visible to the user. These are architecturally defined entities.
 
-I will simplify, remove things implied by the code and strip down + respin.
+On x86. Any other architecture is going to have a hard time supporting this.
+
+
+> There is no harm in displaying these in resctrl groups. Sometimes it
+> can help to debug the issues.
+
+By comparing it with what? Unless user-space can see into the hardware, resctrl is the
+only gateway to this stuff. What difference does the allocated value here make?
+
+Could you elaborate on what issues this can help debug?
+
+
+> Add CLOSID and RMID to the control/monitor groups display in resctrl
+> interface.
+> 
+> $cat /sys/fs/resctrl/clos1/closid
+> 1
+> $cat /sys/fs/resctrl/mon_groups/mon1/rmid
+> 3
+
+Er. Please don't expose this to user-space!
+MPAM has no equivalent value to RMID, so whatever this is for, can't work on MPAM.
+
+
+Where I have needed this value for MPAM is to pass the closid/rmid to another kernel
+interface. Because the user-space interface needs to be architecture agnostic, I proposed
+it as a u64 called 'id' that each architecture can encode/decode as appropriate. [0]
+
+To prevent user-space trying to base anything on the raw closid/rmid values, I went as far
+as obfuscating them with a random value picked at boot, to ensure scripts always read the
+current value when passing the control/monitor group.
+
+
+I'm curious what the raw value is useful for.
+
+
+Thanks,
+
+James
+
+[0]
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?h=mpam/snapshot/v6.2&id=d568cf2ba58b7c4970ce41a8d4d6224e285a177e
+
+
+
+
