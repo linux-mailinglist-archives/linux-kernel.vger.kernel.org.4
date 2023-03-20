@@ -2,235 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B376C1F90
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E956C1F83
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjCTSYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S231293AbjCTSXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjCTSYB (ORCPT
+        with ESMTP id S231274AbjCTSWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:24:01 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11C92F05D;
-        Mon, 20 Mar 2023 11:17:07 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 4ADCD5FD2B;
-        Mon, 20 Mar 2023 21:16:10 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679336170;
-        bh=Z0sIPCgypIi4TJB1GHQVuu6GyCfp9PpEyQgtrxUo/uE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=nUayYhiu9fWaTn9R7yZrd1X5dNwV3wQEnj4/V5MWZVPxKkk9qO0/MfMCQ9LMVI1n2
-         7r6skOA2qFMqgBysM+fHLH66/ljkFXXQ2ZeT5XiHlXdxMhWSmWeSESgrR7LkiAREU9
-         h2tGH/Vb5YCeqrbsPVDHeFLE0Pa6IJWlgUUlJ1lVN5MfpBz3oTOqVFNKz7XwM9ZnFr
-         L9sgdTb+JWMabL8bS1Tm9Q5wV8sujgI+EPvdVPkrtJ06cMiN6m3q2DOTivyT2UKEyq
-         HNFUaa0amH8HU+cIkTykxEapLy22gqgBf3WhNTx3C1JM3YkPfPZjC4JMNimYXgMJbU
-         tRheMUtc26WjQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 20 Mar 2023 21:16:09 +0300 (MSK)
-Message-ID: <77cab994-5ef6-0561-0faf-4510ec5f3d79@sberdevices.ru>
-Date:   Mon, 20 Mar 2023 21:12:48 +0300
+        Mon, 20 Mar 2023 14:22:49 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A193B2DE76
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:15:48 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y4so50401535edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679336124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XClxnA6CuNm9Jv3g/SBjzKVTxx9V3YQWxRpzWOtZeK0=;
+        b=gjbNIiRFV4g3/umiBJrM9XjVfQCtaP89f5l2xEApmWsocYAhxCKeUEMydKzCjUFGFo
+         zma9mS/+UYlB62DjSHaAIt1386w45pBuwKloGXJeb6Qhh0AvEGwz0TXijZuj/0gbhB9c
+         2Y6w0xF/iRpCt4Jk3DS1kmkxoiF03Ps/6slZOhQn/9/1PhalgRyPUcNGuFd9v8ozgrqo
+         jYq3Twd//95CysQGQzIuOz9gNn0dhsjhB12xmC6duZVhzhCCuruE4W+vOaAT5XHao18y
+         7ZoDvoPKzBq200bNsrs6KsSYB4IPFwdI4F+U6hLO9EzYOddnv6MI1wpg5YBMAtrMW2CL
+         4uFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679336124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XClxnA6CuNm9Jv3g/SBjzKVTxx9V3YQWxRpzWOtZeK0=;
+        b=m/0upgIij3zU7xhdpJH5ToT+egsfXlUJ0WPWQdUj5kxsdaDpGsG4mXoguvtLkS5N6K
+         CN92BdeWPOvM1tyaIUC99BM51SLD6znLqe6PxLF0kX+XvlyXYIwjQZRd+420dQb+2ySy
+         jBiKjgKwfQ6QRt7bKWSD1R9F3DiLf4lFpbCVc8QFnssAWhajqukUl1c9VLmPyYoiMZ2T
+         +m4euY2BAC+EWtwqmv6Sb8xzOSItgWaRLectGvd2QPrKEfGmyzWYx2sQm42BO8jWU6GS
+         PIdECPSlBWJkQyHUy/86zmtnr0CfHSVkrBEu0WJttki63MFk685VeZpxqUbKIzeFxTXC
+         aVug==
+X-Gm-Message-State: AO0yUKV04Cq+YEYB6V1u436iXO/dHKLglb719qP6txwMkI8NiVGW2RJI
+        71TkRVnq8F02qI9oqUjmwoVzUHl3AYyXt/R8XcM=
+X-Google-Smtp-Source: AK7set+1kFbo8VjwA55qZFsLE6aSvLHmQeKoBcRT0nvPAsSumlCBBsHtwVA/rSAVBc20ka2J5qQcFw==
+X-Received: by 2002:a17:907:d9f:b0:930:ba36:2211 with SMTP id go31-20020a1709070d9f00b00930ba362211mr92543ejc.0.1679336124367;
+        Mon, 20 Mar 2023 11:15:24 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
+        by smtp.gmail.com with ESMTPSA id a10-20020a1709065f8a00b0092595899cfcsm4722308eju.53.2023.03.20.11.15.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 11:15:24 -0700 (PDT)
+Message-ID: <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
+Date:   Mon, 20 Mar 2023 19:15:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v1 3/3] test/vsock: skbuff merging test
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
 Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru>
- <14ca87d1-3e07-85e9-d11c-39789a9d17d4@sberdevices.ru>
- <20230320153132.o3xvwxmn3722lin4@sgarzare-redhat>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230320153132.o3xvwxmn3722lin4@sgarzare-redhat>
-Content-Type: text/plain; charset="UTF-8"
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+ <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+ <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
+ <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/20 09:56:00 #20977321
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20.03.2023 18:31, Stefano Garzarella wrote:
-> On Sun, Mar 19, 2023 at 09:53:54PM +0300, Arseniy Krasnov wrote:
->> This adds test which checks case when data of newly received skbuff is
->> appended to the last skbuff in the socket's queue.
+On 20/03/2023 19:09, Arınç ÜNAL wrote:
+>>> Would mediatek,mtmips-clock.yaml make sense?
 >>
->> This test is actual only for virtio transport.
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->> tools/testing/vsock/vsock_test.c | 81 ++++++++++++++++++++++++++++++++
->> 1 file changed, 81 insertions(+)
->>
->> diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->> index 3de10dbb50f5..00216c52d8b6 100644
->> --- a/tools/testing/vsock/vsock_test.c
->> +++ b/tools/testing/vsock/vsock_test.c
->> @@ -968,6 +968,82 @@ static void test_seqpacket_inv_buf_server(const struct test_opts *opts)
->>     test_inv_buf_server(opts, false);
->> }
->>
->> +static void test_stream_virtio_skb_merge_client(const struct test_opts *opts)
->> +{
->> +    ssize_t res;
->> +    int fd;
->> +
->> +    fd = vsock_stream_connect(opts->peer_cid, 1234);
->> +    if (fd < 0) {
->> +        perror("connect");
->> +        exit(EXIT_FAILURE);
->> +    }
->> +
+>> More, except:
+>> 1. This is not clock, but sysc.
 > 
-> Please use a macro for "HELLO" or a variabile, e.g.
-> 
->         char *buf;
->         ...
-> 
->         buf = "HELLO";
->         res = send(fd, buf, strlen(buf), 0);
->         ...
-> 
->> +    res = send(fd, "HELLO", strlen("HELLO"), 0);
->> +    if (res != strlen("HELLO")) {
->> +        fprintf(stderr, "unexpected send(2) result %zi\n", res);
->> +        exit(EXIT_FAILURE);
->> +    }
->> +
->> +    control_writeln("SEND0");
->> +    /* Peer reads part of first packet. */
->> +    control_expectln("REPLY0");
->> +
->> +    /* Send second skbuff, it will be merged. */
->> +    res = send(fd, "WORLD", strlen("WORLD"), 0);
-> 
-> Ditto.
-> 
->> +    if (res != strlen("WORLD")) {
->> +        fprintf(stderr, "unexpected send(2) result %zi\n", res);
->> +        exit(EXIT_FAILURE);
->> +    }
->> +
->> +    control_writeln("SEND1");
->> +    /* Peer reads merged skbuff packet. */
->> +    control_expectln("REPLY1");
->> +
->> +    close(fd);
->> +}
->> +
->> +static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
->> +{
->> +    unsigned char buf[64];
->> +    ssize_t res;
->> +    int fd;
->> +
->> +    fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
->> +    if (fd < 0) {
->> +        perror("accept");
->> +        exit(EXIT_FAILURE);
->> +    }
->> +
->> +    control_expectln("SEND0");
->> +
->> +    /* Read skbuff partially. */
->> +    res = recv(fd, buf, 2, 0);
->> +    if (res != 2) {
->> +        fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-> 
-> We don't expect a failure, so please update the error message and make
-> it easy to figure out which recv() is failing. For example by saying
-> how many bytes you expected and how many you received.
-> 
->> +        exit(EXIT_FAILURE);
->> +    }
->> +
->> +    control_writeln("REPLY0");
->> +    control_expectln("SEND1");
->> +
->> +
->> +    res = recv(fd, buf, sizeof(buf), 0);
-> 
-> Perhaps a comment here to explain why we expect only 8 bytes.
-> 
->> +    if (res != 8) {
->> +        fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
-> 
-> Ditto.
-> 
->> +        exit(EXIT_FAILURE);
->> +    }
->> +
->> +    res = recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
->> +    if (res != -1) {
->> +        fprintf(stderr, "expected recv(2) success, got %zi\n", res);
-> 
-> It's the other way around, isn't it?
-> Here you expect it to fail instead it is not failing.
-> 
->> +        exit(EXIT_FAILURE);
->> +    }
-> 
-> Moving the pointer correctly, I would also check that there is
-> HELLOWORLD in the buffer.
-> 
-> Thanks for adding tests in this suite!
-> Stefano
+> Sergio, beware.
 
-Thanks for review, i didn't pay any attention on this test, because it is
-just bug reproducer. But if we are going to add it, of course i'll clean
-it's code.
-
-Thanks, Arseniy
+I meant, that's what I understood from what Sergio said. :)
 
 > 
->> +
->> +    control_writeln("REPLY1");
->> +
->> +    close(fd);
->> +}
->> +
->> static struct test_case test_cases[] = {
->>     {
->>         .name = "SOCK_STREAM connection reset",
->> @@ -1038,6 +1114,11 @@ static struct test_case test_cases[] = {
->>         .run_client = test_seqpacket_inv_buf_client,
->>         .run_server = test_seqpacket_inv_buf_server,
->>     },
->> +    {
->> +        .name = "SOCK_STREAM virtio skb merge",
->> +        .run_client = test_stream_virtio_skb_merge_client,
->> +        .run_server = test_stream_virtio_skb_merge_server,
->> +    },
->>     {},
->> };
->>
->> -- 
->> 2.25.1
->>
+>> 2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which are ARM?
 > 
+> All of the SoCs, RTXXXX, MT7620, MT7621, MT7628, MT7688 are MIPS. So I 
+> decided to call this platform MTMIPS as I've seen MediaTek use this on 
+> other projects like U-Boot. This is what I did on my pinctrl patch 
+> series as well.
+
+Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs which are
+ARM, so mediatek,mtmips-sysc would work.
+
+Best regards,
+Krzysztof
+
