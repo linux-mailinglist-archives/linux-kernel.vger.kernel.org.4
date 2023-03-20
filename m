@@ -2,191 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6336C2257
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C318A6C2196
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjCTUPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
+        id S230127AbjCTTdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjCTUPj (ORCPT
+        with ESMTP id S229731AbjCTTdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:15:39 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A8EBB9C;
-        Mon, 20 Mar 2023 13:15:38 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KGpOTU055351;
-        Mon, 20 Mar 2023 11:51:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679331084;
-        bh=0pwAPVt55qANQ3edlNlefDJYj9k4VUUfhH8XLfJHC1c=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=p2DxzZI7bZmu3NP93SbPFZQLu9oD0ZeuSm4+QdrSKqz3ttxaa5aLFXcToFoC9q/Qu
-         vLR8vipcL/PCc6pUvELrWV6ZUK8Ed++XTc8MqKRbht+jpFbsScOt2M65O2Aac784Xw
-         rV7+vXCjMPpwqqSOMxQpUBYBkLaWlzOV47Yefj+g=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KGpODY004012
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 11:51:24 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 11:51:24 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 11:51:24 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KGpOQf033288;
-        Mon, 20 Mar 2023 11:51:24 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Julien Panis <jpanis@baylibre.com>, <bb@ti.com>,
-        <d-gole@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH V3 2/2] arm64: dts: ti: k3-am62: Add watchdog nodes
-Date:   Mon, 20 Mar 2023 11:51:23 -0500
-Message-ID: <20230320165123.80561-3-nm@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230320165123.80561-1-nm@ti.com>
-References: <20230320165123.80561-1-nm@ti.com>
+        Mon, 20 Mar 2023 15:33:03 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C48440F5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 12:27:44 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id BC9905FD1C;
+        Mon, 20 Mar 2023 20:28:47 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679333327;
+        bh=+9A+OBPp9h/vWXiJ3aZ/vtEgB5t551UfABhAqc1sk4I=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=KIzlT7C3tUe5cHopaddRjJnl7+eQjPDqggzwkPkiOVFccXNLs0k4uMW/qXHxTeRqN
+         k84vE/NVJ7bcwZ9QfGsbTprcyTgJXo5rolxtKYbiAQFq8bDLH0yFZqM88uFj0Kfrb6
+         V9A88zVQigTzr7OwxCy/Xld7tGkJAd6qS7wuB3fa/LYhIbCGEi65mcUSjQvZMTPj08
+         OrVee6mNkx2VS19fm0egCTB3ws57z224vv11PRXfpOj1APt0tB4XNhJzaFt5NCSvRb
+         sNxVTOKSvYAL9I15VbT82F6Tc7d2HTdNeE3HTyflCUcT1huR1vCKBoXFUF4DWM3/nH
+         JZYOUGlNNcqDA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 20:28:46 +0300 (MSK)
+Date:   Mon, 20 Mar 2023 20:28:45 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Joe Perches <joe@perches.com>
+CC:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
+        <apw@canonical.com>, <dwaipayanray1@gmail.com>,
+        <lukas.bulwahn@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-kernel@vger.kernel.org>, <rockosov@gmail.com>
+Subject: Re: [PATCH v2] checkpatch: add missing bindings license check
+Message-ID: <20230320172845.eaqbbrdxrafylbtn@CAB-WSD-L081021>
+References: <20230320100027.27788-1-ddrokosov@sberdevices.ru>
+ <cb29cc23e6b2a261eafa0a2baf6acf61e44829de.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cb29cc23e6b2a261eafa0a2baf6acf61e44829de.camel@perches.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/20 09:56:00 #20977321
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Julien Panis <jpanis@baylibre.com>
+On Mon, Mar 20, 2023 at 10:12:27AM -0700, Joe Perches wrote:
+> On Mon, 2023-03-20 at 13:00 +0300, Dmitry Rokosov wrote:
+> > All headers from 'include/dt-bindings/' must be verified by checkpatch
+> > together with Documentation bindings, because all of them are part of
+> > the whole DT bindings system.
+> > 
+> > The requirement is dual licensed and matching pattern:
+> >     /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+> > 
+> > The issue was found during patch review:
+> > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> > Changes v2 since v1 at [1]:
+> >     - include/dt-bindings check is aligned to open parens
+> >     - introduce more strict pattern for bindings license:
+> >       /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+> > 
+> > Links:
+> >     [1] https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
+> > ---
+> >  scripts/checkpatch.pl | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> OK but:
+> 
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+> > @@ -3709,8 +3709,9 @@ sub process {
+> >  						WARN("SPDX_LICENSE_TAG",
+> >  						     "'$spdx_license' is not supported in LICENSES/...\n" . $herecurr);
+> >  					}
+> > -					if ($realfile =~ m@^Documentation/devicetree/bindings/@ &&
+> > -					    not $spdx_license =~ /GPL-2\.0.*BSD-2-Clause/) {
+> > +					if (($realfile =~ m@^Documentation/devicetree/bindings/@ ||
+> > +					     $realfile =~ m@^include/dt-bindings/@) &&
+> > +					    not $spdx_license =~ /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/) {
+> 
+> I believe this is the only checkpatch use of
+> 	not <foo> =~ <bar>
+> instead of
+> 	<foo> !~ <bar>
+> 
+> I prefer !~
+> 
 
-Add nodes for watchdogs :
-- 5 in main domain
-- 1 in MCU domain
-- 1 in wakeup domain
+You are totally right. Only this place uses such strange comparing. Let
+me fix it and prepare new version quickly :)
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
-Reviewed-by: Bryan Brattlof <bb@ti.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-Changes since v2:
-- s/main_rti4/main_rti15 to matchup with TRM naming convention
-- Picked up reviewed by
-
-V2: https://lore.kernel.org/all/20230315170706.1598977-3-nm@ti.com/
-V1: https://lore.kernel.org/r/20230311105850.21811-3-nm@ti.com
-
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 45 ++++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    | 11 ++++++
- arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 11 ++++++
- 3 files changed, 67 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index a143ea5e78a5..16e14863d7df 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -758,6 +758,51 @@ main_mcan0: can@20701000 {
- 		status = "disabled";
- 	};
- 
-+	main_rti0: watchdog@e000000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e000000 0x00 0x100>;
-+		clocks = <&k3_clks 125 0>;
-+		power-domains = <&k3_pds 125 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 125 0>;
-+		assigned-clock-parents = <&k3_clks 125 2>;
-+	};
-+
-+	main_rti1: watchdog@e010000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e010000 0x00 0x100>;
-+		clocks = <&k3_clks 126 0>;
-+		power-domains = <&k3_pds 126 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 126 0>;
-+		assigned-clock-parents = <&k3_clks 126 2>;
-+	};
-+
-+	main_rti2: watchdog@e020000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e020000 0x00 0x100>;
-+		clocks = <&k3_clks 127 0>;
-+		power-domains = <&k3_pds 127 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 127 0>;
-+		assigned-clock-parents = <&k3_clks 127 2>;
-+	};
-+
-+	main_rti3: watchdog@e030000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e030000 0x00 0x100>;
-+		clocks = <&k3_clks 128 0>;
-+		power-domains = <&k3_pds 128 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 128 0>;
-+		assigned-clock-parents = <&k3_clks 128 2>;
-+	};
-+
-+	main_rti15: watchdog@e0f0000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e0f0000 0x00 0x100>;
-+		clocks = <&k3_clks 130 0>;
-+		power-domains = <&k3_pds 130 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 130 0>;
-+		assigned-clock-parents = <&k3_clks 130 2>;
-+	};
-+
- 	epwm0: pwm@23000000 {
- 		compatible = "ti,am64-epwm", "ti,am3352-ehrpwm";
- 		#pwm-cells = <3>;
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-index a427231527c3..076601a41e84 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-@@ -130,4 +130,15 @@ mcu_gpio0: gpio@4201000 {
- 		clocks = <&k3_clks 79 0>;
- 		clock-names = "gpio";
- 	};
-+
-+	mcu_rti0: watchdog@4880000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x04880000 0x00 0x100>;
-+		clocks = <&k3_clks 131 0>;
-+		power-domains = <&k3_pds 131 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 131 0>;
-+		assigned-clock-parents = <&k3_clks 131 2>;
-+		/* Tightly coupled to M4F */
-+		status = "reserved";
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-index fec81546fbbd..7726ebae2539 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-@@ -50,4 +50,15 @@ wkup_rtc0: rtc@2b1f0000 {
- 		power-domains = <&k3_pds 117 TI_SCI_PD_EXCLUSIVE>;
- 		wakeup-source;
- 	};
-+
-+	wkup_rti0: watchdog@2b000000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x2b000000 0x00 0x100>;
-+		clocks = <&k3_clks 132 0>;
-+		power-domains = <&k3_pds 132 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 132 0>;
-+		assigned-clock-parents = <&k3_clks 132 2>;
-+		/* Used by DM firmware */
-+		status = "reserved";
-+	};
- };
 -- 
-2.40.0
-
+Thank you,
+Dmitry
