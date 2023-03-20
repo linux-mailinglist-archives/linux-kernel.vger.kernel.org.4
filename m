@@ -2,224 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550676C0C32
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197B56C0C33
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjCTI0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S229920AbjCTI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjCTI0W (ORCPT
+        with ESMTP id S230298AbjCTI0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:26:22 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118AA188;
-        Mon, 20 Mar 2023 01:26:20 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 2A62824E284;
-        Mon, 20 Mar 2023 16:26:18 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 16:26:18 +0800
-Received: from [192.168.125.128] (183.27.97.64) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 16:26:17 +0800
-Message-ID: <2eb0380e-bbb7-83fd-3916-9bdd8b068334@starfivetech.com>
-Date:   Mon, 20 Mar 2023 16:26:09 +0800
+        Mon, 20 Mar 2023 04:26:33 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58EC1F5F2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:26:31 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eh3so43318204edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:26:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679300789;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MLz3hRBfX2H9kEvnXukqy9ngVwHdXnfaWeWONnLje10=;
+        b=VwD/cTCpK2eod5z/7muOl6+J7Tq9jX8bgEJzMWuM6UWdUmscthpSF17CqC/LzichUE
+         SnhGfHT3d9QJyGIwg6NbGJREF+XzogXguXf3m4V43gTbbQktn8vI7sfgR0TG0wVa0wHj
+         8n1mI24Uwvcrq2flFXFJVIWpz6D7BM6UMlpgi8JyzIeDYq3CkpO5SsPCtqB9NiVmx0v9
+         BnznADdg7QWsC9s5wJLQAeJ3wFST5xoFhEfxr9scPqIje/qO5mjWKT9SHp3zO1GAxVkh
+         lhphJpVsfuTfdvSxHNiAu7Y6xtYuza+RgWWMmdvMLn/a4C1Qn0jKnBcRl5XpkLNp5UQy
+         uzJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679300789;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MLz3hRBfX2H9kEvnXukqy9ngVwHdXnfaWeWONnLje10=;
+        b=Twqxtu1j2PgDYwgWdVgrnOia6DBiGUsl0xApechQo+uuA2nBuZ19gFKEpfYo1Lpkte
+         HmgVTQmciYBoASEskTo4eGN5sBfB9YQ+oF97e1bCQR/44QIGymPKUxaqxzcxHjjPgKvV
+         5s4mynxeWqreAGMn4JMJpbU6nuvnrymEKMJrXHOhfz/sJmwpV+Kq15zs+HT6eN+5DJTk
+         jfyaCeWmenDuhHMHSkMDQUD+gDI3gZnwTm2R88uEFqPc8+T3ZVo3ifZmGe3X/FKZL5H6
+         k1xDVh93Ptu8EarsEO8hG22vzhQGDSBkgYoZ73u709eMSU60g/9lANvo9s7Pq+S35XI3
+         hdRw==
+X-Gm-Message-State: AO0yUKVsa1Jgjpuk6Ij0/0VuvSv4iEqlsVJGZIdF2E7FgHHOlwVjLOdb
+        OtXlHwE5Fnl+bA5GqP7N0G0JldQOqs9bWlikYC0=
+X-Google-Smtp-Source: AK7set8d9sgILfZHW+akuoOmIEj/S+YtcQwxysXg+R+z+yF04NSZlFIinm9t2bQRA4dZlz+2IKBR3A==
+X-Received: by 2002:a17:906:3c4b:b0:886:7e24:82eb with SMTP id i11-20020a1709063c4b00b008867e2482ebmr7155552ejg.21.1679300789202;
+        Mon, 20 Mar 2023 01:26:29 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id hf8-20020a1709072c4800b0092b65c54379sm4100679ejc.104.2023.03.20.01.26.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 01:26:28 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 13:26:26 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: greybus: merge split lines
+Message-ID: <ZBgYsqkpdYpGQniB@khadija-virtual-machine>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
- patternProperties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        William Qiu <william.qiu@starfivetech.com>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
- <20230316030514.137427-4-xingyu.wu@starfivetech.com>
- <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
- <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
- <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
- <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
- <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.64]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/20 15:40, Krzysztof Kozlowski wrote:
-> On 20/03/2023 08:29, Xingyu Wu wrote:
->> On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
->>> On 20/03/2023 04:54, Xingyu Wu wrote:
->>>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
->>>>> On 16/03/2023 04:05, Xingyu Wu wrote:
->>>>>> Add optional compatible and patternProperties.
->>>>>>
->>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>>> ---
->>>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
->>>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>>> index ae7f1d6916af..b61d8921ef42 100644
->>>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>>>>> @@ -15,16 +15,31 @@ description: |
->>>>>>  
->>>>>>  properties:
->>>>>>    compatible:
->>>>>> -    items:
->>>>>> -      - enum:
->>>>>> -          - starfive,jh7110-aon-syscon
->>>>>> -          - starfive,jh7110-stg-syscon
->>>>>> -          - starfive,jh7110-sys-syscon
->>>>>> -      - const: syscon
->>>>>> +    oneOf:
->>>>>> +      - items:
->>>>>> +          - enum:
->>>>>> +              - starfive,jh7110-aon-syscon
->>>>>> +              - starfive,jh7110-stg-syscon
->>>>>> +              - starfive,jh7110-sys-syscon
->>>>>> +          - const: syscon
->>>>>> +      - items:
->>>>>> +          - enum:
->>>>>> +              - starfive,jh7110-aon-syscon
->>>>>> +              - starfive,jh7110-stg-syscon
->>>>>> +              - starfive,jh7110-sys-syscon
->>>>>> +          - const: syscon
->>>>>> +          - const: simple-mfd
-> 
-> BTW, this also looks wrong. You just said that clock controller exists
-> only in few variants. Also, why sometimes the same device  goes with
-> simple-mfd and sometimies without? It's the same device.
+If condition and spin_unlock_...() call is split into two lines, merge
+them to form a single line.
 
-Oh yes, If modified to:
+Suggested-by: Deepak R Varma drv@mailo.com
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+---
 
-oneOf:
-      - items:
-          - enum:
-              - starfive,jh7110-aon-syscon
-              - starfive,jh7110-stg-syscon
-          - const: syscon
-      - items:
-          - const: starfive,jh7110-sys-syscon
-          - const: syscon
-          - const: simple-mfd
+Changes in v3:
+ - Removing tab to fix line length results in a new checkpatch warning,
+   so let the fix length be as it is.
+Changes in v2:
+ - Rephrased he subject and description
+ - Merged if_condition() and spin_unlock...() into one line
+ - Link to patch:
+ https://lore.kernel.org/outreachy/ZAusnKYVTGvO5zoi@khadija-virtual-machine/
 
-Or:
+Link to first patch:
+https://lore.kernel.org/outreachy/ZAtkW6g6DwPg%2FpDp@khadija-virtual-machine/
 
-     - minItems: 2
-       items:
-         - enum:
-             - starfive,jh7110-aon-syscon
-             - starfive,jh7110-stg-syscon
-             - starfive,jh7110-sys-syscon
-         - const: syscon
-         - const: simple-mfd
+ drivers/staging/greybus/arche-platform.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-
-Which one is better?
-
-> 
->>>>>>  
->>>>>>    reg:
->>>>>>      maxItems: 1
->>>>>>  
->>>>>> +patternProperties:
->>>>>> +  # Optional children
->>>>>> +  "pll-clock-controller":
->>>>>
->>>>> It's not a pattern.
->>>>
->>>> Does it use 'properties' instead of 'patternProperties'?
->>>
->>> Yes.
->>>
->>>>
->>>>>
->>>>> Anyway should be clock-controller
->>>>
->>>> Will fix.
->>>>
->>>>>
->>>>>> +    type: object
->>>>>> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
->>>>>> +    description: Clock provider for PLL.
->>>>>> +
->>>>>
->>>>> You just added these bindings! So the initial submission was incomplete
->>>>> on purpose?
->>>>>
->>>>> No, add complete bindings.
->>>>
->>>> Does you mean that it should drop the 'description', or add complete 'description',
->>>> or add 'compatible', 'clocks' and 'clock-cells' of complete clock-controller bindings?
->>>
->>> It means it should be squashed with the patch which adds it.
->> 
->> Should I drop the 'decription' here and keep the 'decription' in patch1?
-> 
-> There should be no this patch at all. However I do not understand what
-> you want to do with description. What's wrong with description?
-
-I thought you were commenting under description, saying a conflict with pll dtbindings' description.
-Is that mean I should add it in the syscon patch fo william not this patchset?
-
->> 
->>>
->>>>
->>>>>
->>>>>>  required:
->>>>>>    - compatible
->>>>>>    - reg
->>>>>> @@ -38,4 +53,16 @@ examples:
->>>>>>          reg = <0x10240000 0x1000>;
->>>>>>      };
->>>>>>  
->>>>>> +  - |
->>>>>> +    syscon@13030000 {
->>>>>
->>>>> No need for new example... Just put it in existing one.
->>>>>
->>>>
->>>> Actually, the PLL clock-controller are just set in sys-syscon resgisters. The stg-syscon and
->>>> aon-syscon don't need it. So PLL clock-controller node only is added in sys-syscon node.
->>>
->>> So why having other examples if they are included here? Drop them.
->>>
->> 
->> Should I drop the old example of stg-syscon and add a new example of sys-syscon which
->> include clock-controller child node?
-> 
-> No, there should be no stg-syscon example, it's useless.
-> 
-
-Thanks. I will remind william to use sys-syscon example instead.
-
-Best regards,
-Xingyu Wu
+diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+index fcbd5f71eff2..6890710afdfc 100644
+--- a/drivers/staging/greybus/arche-platform.c
++++ b/drivers/staging/greybus/arche-platform.c
+@@ -176,12 +176,10 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+ 				 * Check we are not in middle of irq thread
+ 				 * already
+ 				 */
+-				if (arche_pdata->wake_detect_state !=
+-						WD_STATE_COLDBOOT_START) {
++				if (arche_pdata->wake_detect_state != WD_STATE_COLDBOOT_START) {
+ 					arche_platform_set_wake_detect_state(arche_pdata,
+ 									     WD_STATE_COLDBOOT_TRIG);
+-					spin_unlock_irqrestore(&arche_pdata->wake_lock,
+-							       flags);
++					spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+ 					return IRQ_WAKE_THREAD;
+ 				}
+ 			}
+--
+2.34.1
 
