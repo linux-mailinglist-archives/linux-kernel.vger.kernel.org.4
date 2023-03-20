@@ -2,124 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2453E6C0CA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B081E6C0CAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjCTI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S231159AbjCTJA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjCTI7q (ORCPT
+        with ESMTP id S230240AbjCTJAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:59:46 -0400
-Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD724113E3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:59:41 -0700 (PDT)
-Received: from [192.168.1.56] ([79.0.204.227])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id eBMgpEZyvnXXEeBMgpM5nB; Mon, 20 Mar 2023 09:59:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1679302778; bh=Cq5Dye8X8O5trw79lQdPEWPbKgS8o+caztlPpau7VzQ=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=cCDs2P8kSEWkiruSOrTLmKFg7Cs9c77fM6PVAt/uvhqix7yADtPNf+zUOXSFcfoaR
-         mzQX0zJfICWIQ3k1N1XyWmmIN9Wa9RIBplxsL4Dh9Lqt5E1+JaYNFBc5rykJJ5B/Qn
-         BSXTheyPitQnxM/Fr5kSwQvQU1jKNJLbALh0q5a8T4JJd/MmbwGLUR2vZUzZiZViUG
-         Sdx1JnS6YW93V3c5USUnN4i4yndeUgxQRg/n1j+DWr44YJ+9TW6kFhMaWMPJ93C67M
-         UkPEBOJxGxlgNwA9h7Hhbv5ReKGtkB0ZYDkdhczEx3LkFIBxAgI6qwz66326kd9lv/
-         bZvcN9WiSMglg==
-Message-ID: <9febcd8e-bc03-8ad9-3f22-ffdeeb92e512@enneenne.com>
-Date:   Mon, 20 Mar 2023 09:59:38 +0100
+        Mon, 20 Mar 2023 05:00:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1888974A;
+        Mon, 20 Mar 2023 02:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679302822; x=1710838822;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=Ds82R3aLyID+1VGsHfWdZtKBC3BhEztxpsHjVaC2+mo=;
+  b=m3VUY8T8FE7Ck8tmhBFNc9EF2gGfM1x0LSNbvgN6OHjQDxQcUpSREzKD
+   LxjxzfXOIQl+ZKQuXNN3Sm4O1UD349NY5rn0SkuDiXPRSvYY0a9i9zJaR
+   qlNp3BoaMaCdiHz8BKiQttHBfQzJh4h+NDk/6b86t5NM5gJZcPPTF1ZeH
+   yUaxvurr0GUHpDN2Lhw3FrWvFyDU7PlHnezMCRR8ibj57xsdtZ37/aB0j
+   ulq1HDhsv0KF777LTJHxPac+jtC5G6VXpw3E2hwPDH0l5793z/aBd36dv
+   LHMEjx7kanu35s0xJZXTJ5Ks+w3bXsOmgk9ixCJGp8ZNmtsMYv0P2CUrg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="338635707"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="338635707"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:00:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="674279824"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="674279824"
+Received: from mbouhaou-mobl1.ger.corp.intel.com ([10.252.61.151])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:00:20 -0700
+Date:   Mon, 20 Mar 2023 11:00:11 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] serial: 8250: Fix serial8250_tx_empty() race with
+ DMA Tx
+In-Reply-To: <52fae6e3e7254a96beefd2774f7d6254@AcuMS.aculab.com>
+Message-ID: <396842cd-4ed5-cd46-6d13-c258c3fb836f@linux.intel.com>
+References: <20230317113318.31327-1-ilpo.jarvinen@linux.intel.com> <20230317113318.31327-3-ilpo.jarvinen@linux.intel.com> <52fae6e3e7254a96beefd2774f7d6254@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] pps: Add elapsed realtime timestamping
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alex Komrakov <alexander.komrakov@broadcom.com>,
-        linux-kernel@vger.kernel.org
-References: <20230317074739.193965-1-alexander.komrakov@broadcom.com>
- <ZBQdWRHzakFLzSkb@kroah.com>
- <CAMedr-_ssg-baCz94ExMVTeXr2Qivzop1kEpx0S4PWuQdAiGaw@mail.gmail.com>
- <2713f092-5d21-ad5e-c5f4-87c927b18a27@enneenne.com>
- <ZBR3t0D0JEl8feRt@kroah.com>
- <f8ea9ab9-e1c1-7962-dab4-126beda74046@enneenne.com>
- <ZBSeGjBEEzeBv35c@kroah.com>
-From:   Rodolfo Giometti <giometti@enneenne.com>
-In-Reply-To: <ZBSeGjBEEzeBv35c@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfKrHUnG4hqwdF3LKKFwEcp5HTw8Ou7w7yQLpsmhwk8FjQe1ZAUHKqj+GLH1ACkXDD3/Y94Cuyt/i5xIT/FVb/5VafQUqdUZHBcqHGkoA1sQ52TPfoQiO
- Nt2N7Zupq5w90pTIQlmoa9eVUfClPDdjlKM2+rvATOLDPGfVtvvZ3IbogtZFuW/6xpOeQnnuoOy8Sk80enxA7R5kSYHfeGQuz71rpMnzrF2mQi8N+9VLy4Tq
- agzixRZElJJZbvGRXvdBEwGz3ZFYQV48JhiDgMZG2D4BD1eoWH+C4VxoIr6vkhgS
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1060030904-1679300990=:2177"
+Content-ID: <276915e2-fe2f-7337-97b5-4e58ad22bf7@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/23 18:06, Greg KH wrote:
-> On Fri, Mar 17, 2023 at 05:34:28PM +0100, Rodolfo Giometti wrote:
->> On 17/03/23 15:22, Greg KH wrote:
->>> On Fri, Mar 17, 2023 at 03:04:31PM +0100, Rodolfo Giometti wrote:
->>>> On 17/03/23 10:51, Alex Komrakov wrote:
->>>>>> +     if (!(pps->info.mode & PPS_CAPTURECLEAR))
->>>>>> +             return 0;   Why are you not returning an error?
->>>>> [AK] I used the style in this file sysfs.c.
->>>>>     assert_show() and clear_show()  have the same condition.
->>>>> When '& PPS_CAPTURECLEAR' -- 0 means no interrupt asserted  and it is not error
->>>>> Probably Rodolfo can get more info why return 0
->>>>
->>>> It's just as Alex said, if the PPS source has no PPS_CAPTUREASSERT or
->>>> PPS_CAPTURECLEAR mode it should not print ASSERT and CLEAR info.
->>>
->>> But shouldn't you return an error instead of an empty string?
->>
->> This is not an error... it's just a disabled capability. :)
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1060030904-1679300990=:2177
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <e5ed4fa8-e9d2-1886-f1cc-3e9f17d5eb3e@linux.intel.com>
+
+On Sat, 18 Mar 2023, David Laight wrote:
+
+> From: Ilpo J�rvinen
+> > Sent: 17 March 2023 11:33
+> > To: linux-serial@vger.kernel.org; Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Jiri Slaby
+> > 
+> > There's a potential race before THRE/TEMT deasserts when DMA Tx is
+> > starting up (or the next batch of continuous Tx is being submitted).
+> > This can lead to misdetecting Tx empty condition.
+> > 
+> > It is entirely normal for THRE/TEMT to be set for some time after the
+> > DMA Tx had been setup in serial8250_tx_dma(). As Tx side is definitely
+> > not empty at that point, it seems incorrect for serial8250_tx_empty()
+> > claim Tx is empty.
+> > 
+> > Fix the race by also checking in serial8250_tx_empty() whether there's
+> > DMA Tx active.
+> > 
+> > Note: This fix only addresses in-kernel race mainly to make using
+> > TCSADRAIN/FLUSH robust. Userspace can still cause other races but they
+> > seem userspace concurrency control problems.
 > 
-> Then maybe return "0" or something like that?
-
-Yes, it could be a valid solution.
-
->>>>> And why are these sysfs files even present if the mode is not set
->>>>> properly?  Can the mode be set while the device is attached or is this
->>>>> only defined at probe time?  If at probe time, just never create these
->>>>> files.
->>>>> [AK] we can understand mode is set when interrupts asserted and
->>>>> file assert_elapsed will be updated.
->>>>
->>>> PPS source's "mode bits" can be set at runtime via PPS_SETPARAMS.
->>>
->>> Ok, that's good to know.  But I think the error return value is a better
->>> indication that something went wrong here and this attribute does not
->>> work for this device at this point in time.
->>
->> I see... however I suppose several code relays on this behavior.
+> Looks better, but I'm not sure it actually works.
 > 
-> If that's the case, then you are right, you can't change it, and I'll
-> stop complaining here :)
+> If interrupts are being used to copy data to the tx fifo then
+> (depending on interrupt latency and exactly when the interrupt
+> is requested) the code might report 'tx empty' when the ISR
+> is about to copy in more data.
+>
+> Now the drain/flush code might already have checked there is
+> no more data queued in the driver before calling this,
+
+Thanks for taking a look, it's really appreciated.
+
+Yes, set_termios() checks for tty_chars_in_buffer() which calls into 
+serial_core's ->chars_in_buffer(). This does check 
+uart_circ_chars_pending() so it's not possible to have such chars in the 
+circular buffer in the drain/flush case.
+
+> but more generally shouldn't it be checking:
+> 	no_data_queued_in_driver && hardware_fifo_empty.
 > 
-> What tools use these sysfs files?
+> Any 'no_data_queued_in_driver' check would probably include
+> data that dma is copying - so the explicit dma check might
+> not be needed.
 
-Mainly are debugging tools via scripts. Normal usage should be via C API.
+What for you'd want this change? Refactor the code? uart_get_lsr_info() 
+already does check for uart_circ_chars_pending() so what you'd want more?
 
-> How did you test your changes?
+I suppose uart_get_lsr_info() should hold port's lock across the checks 
+though, having that wishful comment about a racing interrupt messing 
+things up doesn't really help that much :-).
 
-As above, I use scripts whose get access to sysfs to test a PPS source 
-functionality. Regarding the C API I use the pps-tools:
+Also, now that I looked into uart_get_lsr_info() I guess 
+uart_chars_in_buffer() should also consider x_char like 
+uart_get_lsr_info() does.
 
-https://github.com/redlab-i/pps-tools
-
-Ciao,
-
-Rodolfo
 
 -- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming                     skype:  rodolfo.giometti
+ i.
 
+> > Fixes: 9ee4b83e51f74 ("serial: 8250: Add support for dmaengine")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Ilpo J�rvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/tty/serial/8250/8250.h      | 12 ++++++++++++
+> >  drivers/tty/serial/8250/8250_port.c |  7 ++++---
+> >  2 files changed, 16 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+> > index 287153d32536..1e8fe44a7099 100644
+> > --- a/drivers/tty/serial/8250/8250.h
+> > +++ b/drivers/tty/serial/8250/8250.h
+> > @@ -365,6 +365,13 @@ static inline void serial8250_do_prepare_rx_dma(struct uart_8250_port *p)
+> >  	if (dma->prepare_rx_dma)
+> >  		dma->prepare_rx_dma(p);
+> >  }
+> > +
+> > +static inline bool serial8250_tx_dma_running(struct uart_8250_port *p)
+> > +{
+> > +	struct uart_8250_dma *dma = p->dma;
+> > +
+> > +	return dma && dma->tx_running;
+> > +}
+> >  #else
+> >  static inline int serial8250_tx_dma(struct uart_8250_port *p)
+> >  {
+> > @@ -380,6 +387,11 @@ static inline int serial8250_request_dma(struct uart_8250_port *p)
+> >  	return -1;
+> >  }
+> >  static inline void serial8250_release_dma(struct uart_8250_port *p) { }
+> > +
+> > +static inline bool serial8250_tx_dma_running(struct uart_8250_port *p)
+> > +{
+> > +	return false;
+> > +}
+> >  #endif
+> > 
+> >  static inline int ns16550a_goto_highspeed(struct uart_8250_port *up)
+> > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> > index fa43df05342b..107bcdfb119c 100644
+> > --- a/drivers/tty/serial/8250/8250_port.c
+> > +++ b/drivers/tty/serial/8250/8250_port.c
+> > @@ -2005,18 +2005,19 @@ static int serial8250_tx_threshold_handle_irq(struct uart_port *port)
+> >  static unsigned int serial8250_tx_empty(struct uart_port *port)
+> >  {
+> >  	struct uart_8250_port *up = up_to_u8250p(port);
+> > +	unsigned int result = 0;
+> >  	unsigned long flags;
+> > -	u16 lsr;
+> > 
+> >  	serial8250_rpm_get(up);
+> > 
+> >  	spin_lock_irqsave(&port->lock, flags);
+> > -	lsr = serial_lsr_in(up);
+> > +	if (!serial8250_tx_dma_running(up) && uart_lsr_tx_empty(serial_lsr_in(up)))
+> > +		result = TIOCSER_TEMT;
+> >  	spin_unlock_irqrestore(&port->lock, flags);
+> > 
+> >  	serial8250_rpm_put(up);
+> > 
+> > -	return uart_lsr_tx_empty(lsr) ? TIOCSER_TEMT : 0;
+> > +	return result;
+> >  }
+> > 
+> >  unsigned int serial8250_do_get_mctrl(struct uart_port *port)
+> > --
+> > 2.30.2
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+--8323329-1060030904-1679300990=:2177--
