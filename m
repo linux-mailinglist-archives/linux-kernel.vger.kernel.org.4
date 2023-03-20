@@ -2,186 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A216C22E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D10A6C22EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjCTUgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S230137AbjCTUh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjCTUge (ORCPT
+        with ESMTP id S229810AbjCTUh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:36:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3702FCD1;
-        Mon, 20 Mar 2023 13:36:14 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KKFS8v021944;
-        Mon, 20 Mar 2023 20:35:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=b4EsHisSM6dNxIEpDD9ukTMeDjGa/aILuPEgRRZ0YaU=;
- b=rcAw8lNInFWVvgZ9qd8RJjHnc+ahTP15ecAorh5D4OClETIbw5iCprvvV8dlj/G9f5fB
- Q1hVhmV6yKKjRGzEO3VGfLStVV4CozgHyH+OhVBrxoZ+hKPaPerEs5722aarP6p482Mk
- +0JavtH1JX9vfBblstY/t72ogdqUnrjYZLhZQix+xs2iuGPX9TvjXHIDAceOgOh4i4fY
- KrZ7oL/Y9VTwngTv4eBLvsvanoEQ2xbtHDfESZoWfniGv/zKuVbWuqvU2kfDDsJY5Sop
- 0Uk9CFmDBb5/3leDbrXFcJ63YTZRJkxpG1evq4E3XwN8bCRYNAHW8ZKq48ioeylOQo3+ eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pevekcajv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 20:35:39 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32KKDmnF010835;
-        Mon, 20 Mar 2023 20:35:38 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pevekcajj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 20:35:38 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32KJ9JrK022620;
-        Mon, 20 Mar 2023 20:35:37 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3pd4x6prtd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 20:35:37 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32KKZaSD26345844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Mar 2023 20:35:37 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B285258045;
-        Mon, 20 Mar 2023 20:35:36 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEA7558054;
-        Mon, 20 Mar 2023 20:35:33 +0000 (GMT)
-Received: from sig-9-65-214-169.ibm.com (unknown [9.65.214.169])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Mar 2023 20:35:33 +0000 (GMT)
-Message-ID: <84d46fb108f6ce2a322b6486529fc6dd0f8deea5.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 5/6] KEYS: CA link restriction
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "erpalmer@linux.vnet.ibm.com" <erpalmer@linux.vnet.ibm.com>,
-        "coxu@redhat.com" <coxu@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Mon, 20 Mar 2023 16:35:33 -0400
-In-Reply-To: <20230320182822.6xyh6ibatrz5yrhb@kernel.org>
-References: <20230302164652.83571-1-eric.snowberg@oracle.com>
-         <20230302164652.83571-6-eric.snowberg@oracle.com>
-         <ZAz8QlynTSMD7kuE@kernel.org>
-         <07FFED83-501D-418C-A4BB-862A547DD7B0@oracle.com>
-         <20230320182822.6xyh6ibatrz5yrhb@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: RYrTid9Y4dDrlCFlblE-R68GyJhJmpEc
-X-Proofpoint-ORIG-GUID: Sg6y4qrDLdNPkCDytCT0qvkqxTJniA98
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_16,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- spamscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303200174
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 16:37:26 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329B730191
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:36:53 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id ay14so8828775uab.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:36:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679344610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UNFVgDWAxfZd6z5ADUjqj4/aMzP9FIHByCOteARm1ys=;
+        b=KJJe0UwWV4QjhRnYE3CvmlT41cgjiD0vT3se1oKJvN4UK2IT0GlQWgPJ4jIxUVhvRa
+         ALXB2+YgHDcqMqsxlwFaEItFtN+Z+8xX6xvaPB2mpc1wO2LQ7nyC9YJo5f6Z49zDFllL
+         v8KfaZbRJhn8gOLXJgmQvkWscG8C7bvsh8a/bvJ/C2El/gt0Djkk4ss2cUSYe5mxmOUv
+         F1PAKctEzX7fBqzYNMp8CEMKWU0EniesstBn7m9HKUsFrVevHrBqPK0OznRXuRRaBFy3
+         Gqj+x6d35S6ZahxK0U+BgN1E2+6R7k9htyFwAhwiamd3Z/e4Kpq5o5/nn4UrvrTCL6BC
+         Patg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679344610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UNFVgDWAxfZd6z5ADUjqj4/aMzP9FIHByCOteARm1ys=;
+        b=v/ny5yb2K5sua+Oe+s3Gz+lXGPS4hRcKAflmbPNI29A41m6KXtxe3Mjcr7EodM3gsL
+         ZdhilSaWcfrjky0VoITLX0axmprMC3QqLVlxACh8NhA3+OhGGzF6a6BxwtIPI/mhJ3JS
+         fhNoainzV4xY95ktdBUGuOVjRwwYtWticEDHc2lkF59UziC2NbHga/jHd+aqKlLNcSFh
+         QmAhEQjj7LZuF/9dwwk0mKQKxjw9g8ZStERh30WwMft4XDZaTH8pluP3GkIwbtQFAjjN
+         37J8rvVnYWu7dlI2VWreQ6Z7sdQ8psLsrmM0TG36Mk3qfU0R10OGbqylY3Sl53xQw6+S
+         TO3g==
+X-Gm-Message-State: AO0yUKVLsYrmpeIEjHh+7oTj+n0Yk1ghDCJeRcwdIIP63ZvGbzpDoQ6p
+        /M68ioNZmiULXBzNc8t/WLoGgL19/IDw7V530lyK9g==
+X-Google-Smtp-Source: AK7set/zpLOC8SNehffSFXMB1rwH25iIiVTVu2SJzVZ6/uX6VEqNFaJqMpjlico03breMJc9bVk4nt0kfgZEhEaH4FE=
+X-Received: by 2002:ab0:78c8:0:b0:68a:8f33:9567 with SMTP id
+ e8-20020ab078c8000000b0068a8f339567mr5199591uau.2.1679344609565; Mon, 20 Mar
+ 2023 13:36:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230320145430.861072439@linuxfoundation.org>
+In-Reply-To: <20230320145430.861072439@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Mar 2023 02:06:38 +0530
+Message-ID: <CA+G9fYv+NfAzwuzanTG9HLWRV4gYu72SsP3qjnYL+WbSxf0GEA@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/60] 5.4.238-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-20 at 20:28 +0200, Jarkko Sakkinen wrote:
-> On Mon, Mar 20, 2023 at 05:35:05PM +0000, Eric Snowberg wrote:
-> > 
-> > 
-> > > On Mar 11, 2023, at 3:10 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > 
-> > > On Thu, Mar 02, 2023 at 11:46:51AM -0500, Eric Snowberg wrote:
-> > >> Add a new link restriction.  Restrict the addition of keys in a keyring
-> > >> based on the key to be added being a CA.
-> > >> 
-> > >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> > >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > >> ---
-> > >> crypto/asymmetric_keys/restrict.c | 38 +++++++++++++++++++++++++++++++
-> > >> include/crypto/public_key.h       | 15 ++++++++++++
-> > >> 2 files changed, 53 insertions(+)
-> > >> 
-> > >> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
-> > >> index 6b1ac5f5896a..48457c6f33f9 100644
-> > >> --- a/crypto/asymmetric_keys/restrict.c
-> > >> +++ b/crypto/asymmetric_keys/restrict.c
-> > >> @@ -108,6 +108,44 @@ int restrict_link_by_signature(struct key *dest_keyring,
-> > >> 	return ret;
-> > >> }
-> > >> 
-> > >> +/**
-> > >> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
-> > >> + * @dest_keyring: Keyring being linked to.
-> > >> + * @type: The type of key being added.
-> > >> + * @payload: The payload of the new key.
-> > >> + * @trust_keyring: Unused.
-> > >> + *
-> > >> + * Check if the new certificate is a CA. If it is a CA, then mark the new
-> > >> + * certificate as being ok to link.
-> > >> + *
-> > >> + * Returns 0 if the new certificate was accepted, -ENOKEY if the
-> > >> + * certificate is not a CA. -ENOPKG if the signature uses unsupported
-> > >> + * crypto, or some other error if there is a matching certificate but
-> > >> + * the signature check cannot be performed.
-> > >> + */
-> > >> +int restrict_link_by_ca(struct key *dest_keyring,
-> > >> +			const struct key_type *type,
-> > >> +			const union key_payload *payload,
-> > >> +			struct key *trust_keyring)
-> > >> +{
-> > >> +	const struct public_key *pkey;
-> > >> +
-> > >> +	if (type != &key_type_asymmetric)
-> > >> +		return -EOPNOTSUPP;
-> > >> +
-> > >> +	pkey = payload->data[asym_crypto];
-> > >> +	if (!pkey)
-> > >> +		return -ENOPKG;
-> > >> +	if (!test_bit(KEY_EFLAG_CA, &pkey->key_eflags))
-> > >> +		return -ENOKEY;
-> > >> +	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
-> > >> +		return -ENOKEY;
-> > >> +	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
-> > >> +		return -ENOKEY;
-> > > 
-> > > nit: would be more readable, if conditions were separated by
-> > > empty lines.
-> > 
-> > Ok, I will make this change in the next round.  Thanks.
-> 
-> Cool! Mimi have you tested these patches with IMA applied?
+On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.238 release.
+> There are 60 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Mar 2023 14:54:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.238-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Yes, it's working as expected.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-Mimi
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.4.238-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 1f8869b1deb887d66df4ca79b9e905f21ddfe1e0
+* git describe: v5.4.237-61-g1f8869b1deb8
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+37-61-g1f8869b1deb8
+
+## Test Regressions (compared to v5.4.237)
+
+## Metric Regressions (compared to v5.4.237)
+
+## Test Fixes (compared to v5.4.237)
+
+## Metric Fixes (compared to v5.4.237)
+
+## Test result summary
+total: 92175, pass: 73460, fail: 2062, skip: 16591, xfail: 62
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 146 total, 145 passed, 1 failed
+* arm64: 46 total, 42 passed, 4 failed
+* i386: 28 total, 22 passed, 6 failed
+* mips: 30 total, 29 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 33 total, 32 passed, 1 failed
+* riscv: 15 total, 12 passed, 3 failed
+* s390: 8 total, 8 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 39 total, 37 passed, 2 failed
+
+## Test suites summary
+* boot
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-crypto
+* ltp-cve
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* perf
+* rcutorture
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org
