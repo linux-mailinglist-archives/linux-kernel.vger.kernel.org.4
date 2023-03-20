@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53896C08A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 02:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8236C0843
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 02:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCTBjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 21:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        id S229652AbjCTBIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 21:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjCTBjZ (ORCPT
+        with ESMTP id S231136AbjCTBHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 21:39:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0539E1E2BD;
-        Sun, 19 Mar 2023 18:34:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 19 Mar 2023 21:07:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8251B2D8;
+        Sun, 19 Mar 2023 18:00:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF891B80D4D;
-        Mon, 20 Mar 2023 00:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE6EC433EF;
-        Mon, 20 Mar 2023 00:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273876;
-        bh=Q24NRcEzhgVm8UiR9gH3LzWlYm2ehh+5ZgK6JcpA32o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LnQdgeL/KBZR9NO8fuCw1aYsQEO/cMMpZ+WuB/XAPP9wBvK68JSncVYTAFSeW3gSu
-         1Y2lXJ1/OGLia4+0B8ctftXaLRf069QvYKzy5GS5PV2dHeOS+HoKdk7zzQrb72aHQO
-         sMqIWr4NHal1YdfXTNVp2RMMJyr1HMeZ/2L72F9HIk3L1ipk+dWFUxjWRG+KYGqsnM
-         EwywAOvF329T+mZ9XWKWqIDyuagYcQHyVrL3Qxug4kWmfvWGpKOhjHoWdGdG/3ZOHd
-         j3+Wy0Z3ycHAMim/dm83ti2VeC1T5iVwHd9aWutdMfAhLjRjrXq4JzStK5/Vg56rS3
-         XfoVrWSJiDtyA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Rich Felker <dalias@libc.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, ysato@users.sourceforge.jp,
-        catalin.marinas@arm.com, mpe@ellerman.id.au, geert@linux-m68k.org,
-        akpm@linux-foundation.org, shorne@gmail.com,
-        wangkefeng.wang@huawei.com, linux-sh@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 9/9] sh: sanitize the flags on sigreturn
-Date:   Sun, 19 Mar 2023 20:57:32 -0400
-Message-Id: <20230320005732.1429533-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005732.1429533-1-sashal@kernel.org>
-References: <20230320005732.1429533-1-sashal@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PfxFD6GFQz4xFM;
+        Mon, 20 Mar 2023 11:58:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679273921;
+        bh=MI0XYywYczG3K7bOaIATz4F8xLX9bPF1QWo/wnhTVbM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EjoNjXUaHJYcaGK8LCNq9tx487dNSkl8O22usVQYG7n0BflA6InYfZXvJGRHHdKdx
+         Oq6sXbruo5dECZD6UWRco8/zZCVdiE1GwB2PD+zxv1fBJkmwOHXNB2X+RQVe2pDXnW
+         Sc25u1BlRUZdljNWvAWpfr0G77MZDaYGvhGzu+CBdzAfdr7yKNOGlXnvmAISvIWMLP
+         aDIvqx49U7bRAA23K3GGjW7heGEy+qy1zKIIz6MoNI/ez3SCrhkgQftH3zWDvKmYFV
+         H6H54oBir/bS4cuKb17E1NbKP+BKmSbXvrilENsDomoYkmCkIhbgZUERAXAJ5brTfa
+         og1pGpDOSsmWA==
+Date:   Mon, 20 Mar 2023 11:58:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chanwoo Choi <cw00.choi@samsung.com>, Greg KH <greg@kroah.com>
+Cc:     Bumwoo Lee <bw365.lee@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the extcon tree with the driver-core
+ tree
+Message-ID: <20230320115839.5e645bb0@canb.auug.org.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/0x8HCvzLhbJihMlPQzTJxu1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+--Sig_/0x8HCvzLhbJihMlPQzTJxu1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[ Upstream commit 573b22ccb7ce9ab7f0539a2e11a9d3609a8783f5 ]
+Hi all,
 
-We fetch %SR value from sigframe; it might have been modified by signal
-handler, so we can't trust it with any bits that are not modifiable in
-user mode.
+Today's linux-next merge of the extcon tree got a conflict in:
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Rich Felker <dalias@libc.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/sh/include/asm/processor_32.h | 1 +
- arch/sh/kernel/signal_32.c         | 3 +++
- 2 files changed, 4 insertions(+)
+  drivers/extcon/extcon.c
 
-diff --git a/arch/sh/include/asm/processor_32.h b/arch/sh/include/asm/processor_32.h
-index 95100d8a0b7b4..fc94603724b86 100644
---- a/arch/sh/include/asm/processor_32.h
-+++ b/arch/sh/include/asm/processor_32.h
-@@ -57,6 +57,7 @@
- #define SR_FD		0x00008000
- #define SR_MD		0x40000000
- 
-+#define SR_USER_MASK	0x00000303	// M, Q, S, T bits
- /*
-  * DSP structure and data
-  */
-diff --git a/arch/sh/kernel/signal_32.c b/arch/sh/kernel/signal_32.c
-index c46c0020ff55e..ce93ae78c3002 100644
---- a/arch/sh/kernel/signal_32.c
-+++ b/arch/sh/kernel/signal_32.c
-@@ -116,6 +116,7 @@ static int
- restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc, int *r0_p)
- {
- 	unsigned int err = 0;
-+	unsigned int sr = regs->sr & ~SR_USER_MASK;
- 
- #define COPY(x)		err |= __get_user(regs->x, &sc->sc_##x)
- 			COPY(regs[1]);
-@@ -131,6 +132,8 @@ restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc, int *r0_p
- 	COPY(sr);	COPY(pc);
- #undef COPY
- 
-+	regs->sr = (regs->sr & SR_USER_MASK) | sr;
-+
- #ifdef CONFIG_SH_FPU
- 	if (boot_cpu_data.flags & CPU_HAS_FPU) {
- 		int owned_fp;
--- 
-2.39.2
+between commit:
 
+  1aaba11da9aa ("driver core: class: remove module * from class_create()")
+
+from the driver-core tree and commit:
+
+  6384c02f33a9 ("extcon: Remove redundant null checking for class")
+
+from the extcon tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/extcon/extcon.c
+index d43ba8e7260d,adcf01132f70..000000000000
+--- a/drivers/extcon/extcon.c
++++ b/drivers/extcon/extcon.c
+@@@ -1012,12 -1012,13 +1012,13 @@@ ATTRIBUTE_GROUPS(extcon)
+ =20
+  static int create_extcon_class(void)
+  {
+- 	if (!extcon_class) {
+- 		extcon_class =3D class_create("extcon");
+- 		if (IS_ERR(extcon_class))
+- 			return PTR_ERR(extcon_class);
+- 		extcon_class->dev_groups =3D extcon_groups;
+- 	}
++ 	if (extcon_class)
++ 		return 0;
++=20
+ -	extcon_class =3D class_create(THIS_MODULE, "extcon");
+++	extcon_class =3D class_create("extcon");
++ 	if (IS_ERR(extcon_class))
++ 		return PTR_ERR(extcon_class);
++ 	extcon_class->dev_groups =3D extcon_groups;
+ =20
+  	return 0;
+  }
+
+--Sig_/0x8HCvzLhbJihMlPQzTJxu1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXr78ACgkQAVBC80lX
+0GwhvggAnjMc+pdxTWPFLXElgxvzQBFwoqvSAw8pMnYb8D01Mko1U/L6W30SN4MM
+N8KRzeYgYJrIq/kBEknbhMJSxtJAPs9zMAXzYYjkdmPC8F2nLzbBQkMaro6xEJpP
+WFjudA0yzxB0DtTK++e6aHr/js37Qubxh0kR69mc9rJK71trs7Z+OjYc0oFCfWXC
+E9FSoiChjvgFyAGXhP63RboO+hFxTdKTCiAK59sJoP/rOWfFyt3unNMK1uQVHvmO
+xkRHF6ITgKQMvVF/s+4YLLHmOv984Wa0RHCjhsTyGhZwpIwjKowuU7Eksae8PgRG
+sPADgFN+b5kLrld7vs25G2u8BIIfJA==
+=p4XR
+-----END PGP SIGNATURE-----
+
+--Sig_/0x8HCvzLhbJihMlPQzTJxu1--
