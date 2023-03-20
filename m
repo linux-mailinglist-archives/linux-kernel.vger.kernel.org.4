@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F4F6C0FB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C546C0FA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjCTKwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S230469AbjCTKvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCTKvp (ORCPT
+        with ESMTP id S230049AbjCTKvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:51:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A52BCC0D;
-        Mon, 20 Mar 2023 03:49:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A13C8B80E14;
-        Mon, 20 Mar 2023 10:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C708C4339C;
-        Mon, 20 Mar 2023 10:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679309288;
-        bh=TfrBhlCQseTHJXPXBcl5b1+T9R2FW/TX2/AG/Cm/hAI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pqE6oFvtG38Ej2exQfy3v9PMKXNQxEZwOkXCAJOdemspvQMF9HFIp256o9KXfF3P0
-         abIoAZ0SKfffD1SBmE1YAO7QlhNQKXums8AWIb18qYG2VayVQ4zMDbBU+g2UFSJajY
-         aQ/TVoRMv0kUhBc1GxenY2/d1gLzioMBAsqmfU0NJ9WWARtXKh8cCzFN0zkdW07CCq
-         TvtIOHIk+Xirc6vRzhQP1m6a4e8jIHcyTyw6G244Bu4JchIVjcbuh6ewVUrldOBsQZ
-         Xw9N24MDdQNJS0AMZTGV5Oq5OqVfqtCI+EBU5So14sCQp0ckMeKeDcMD2xL60jqJD9
-         aauetD5xC9FRw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1peD4z-0005nZ-8T; Mon, 20 Mar 2023 11:49:29 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: sc8280xp-crd: add wifi calibration variant
-Date:   Mon, 20 Mar 2023 11:46:58 +0100
-Message-Id: <20230320104658.22186-4-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320104658.22186-1-johan+linaro@kernel.org>
-References: <20230320104658.22186-1-johan+linaro@kernel.org>
+        Mon, 20 Mar 2023 06:51:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC34E298C8;
+        Mon, 20 Mar 2023 03:48:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D103FEC;
+        Mon, 20 Mar 2023 03:48:39 -0700 (PDT)
+Received: from bogus (unknown [10.57.52.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4B463F67D;
+        Mon, 20 Mar 2023 03:47:52 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 10:47:19 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v5] irqchip/gicv3: Workaround for NVIDIA erratum
+ T241-FABRIC-4
+Message-ID: <20230320104719.mane5faxvv6ofpiv@bogus>
+References: <20230319024314.3540573-1-sdonthineni@nvidia.com>
+ <20230319024314.3540573-2-sdonthineni@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319024314.3540573-2-sdonthineni@nvidia.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the bus topology for PCIe domain 6 and add the ath11k
-calibration variant so that the board file (calibration data) can be
-loaded.
+On Sat, Mar 18, 2023 at 09:43:14PM -0500, Shanker Donthineni wrote:
+> The T241 platform suffers from the T241-FABRIC-4 erratum which causes
+> unexpected behavior in the GIC when multiple transactions are received
+> simultaneously from different sources. This hardware issue impacts
+> NVIDIA server platforms that use more than two T241 chips
+> interconnected. Each chip has support for 320 {E}SPIs.
+> 
+> This issue occurs when multiple packets from different GICs are
+> incorrectly interleaved at the target chip. The erratum text below
+> specifies exactly what can cause multiple transfer packets susceptible
+> to interleaving and GIC state corruption. GIC state corruption can
+> lead to a range of problems, including kernel panics, and unexpected
+> behavior.
+> 
+> From the erratum text:
+>   "In some cases, inter-socket AXI4 Stream packets with multiple
+>   transfers, may be interleaved by the fabric when presented to ARM
+>   Generic Interrupt Controller. GIC expects all transfers of a packet
+>   to be delivered without any interleaving.
+> 
+>   The following GICv3 commands may result in multiple transfer packets
+>   over inter-socket AXI4 Stream interface:
+>    - Register reads from GICD_I* and GICD_N*
+>    - Register writes to 64-bit GICD registers other than GICD_IROUTERn*
+>    - ITS command MOVALL
+> 
+>   Multiple commands in GICv4+ utilize multiple transfer packets,
+>   including VMOVP, VMOVI, VMAPP, and 64-bit register accesses."
+> 
+>   This issue impacts system configurations with more than 2 sockets,
+>   that require multi-transfer packets to be sent over inter-socket
+>   AXI4 Stream interface between GIC instances on different sockets.
+>   GICv4 cannot be supported. GICv3 SW model can only be supported
+>   with the workaround. Single and Dual socket configurations are not
+>   impacted by this issue and support GICv3 and GICv4."
+> 
+> Link: https://developer.nvidia.com/docs/t241-fabric-4/nvidia-t241-fabric-4-errata.pdf
+> 
+> Writing to the chip alias region of the GICD_In{E} registers except
+> GICD_ICENABLERn has an equivalent effect as writing to the global
+> distributor. The SPI interrupt deactivate path is not impacted by
+> the erratum.
+> 
+> To fix this problem, implement a workaround that ensures read accesses
+> to the GICD_In{E} registers are directed to the chip that owns the
+> SPI, and disable GICv4.x features. To simplify code changes, the
+> gic_configure_irq() function uses the same alias region for both read
+> and write operations to GICD_ICFGR.
+> 
+> Co-developed-by: Vikram Sethi <vsethi@nvidia.com>
+> Signed-off-by: Vikram Sethi <vsethi@nvidia.com>
+> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
+> ---
+> Changes since v4:
+>  - Resolve Marc's comments https://lore.kernel.org/all/871qlqif9v.wl-maz@kernel.org/
+> Changes since v3:
+>  - Fix the build issue for the 32bit arch
+> Changes since v2:
+>  - Add accessors for the SOC-ID version & revision
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216036
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+SMCCC/SOC ID part looks good to me. In case you spin another version for any
+reason, I would prefer you split those changes into separate patch. Otherwise
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-index 90a5df9c7a24..5dfda12f669b 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-@@ -579,6 +579,23 @@ &pcie4 {
- 	pinctrl-0 = <&pcie4_default>;
- 
- 	status = "okay";
-+
-+	pcie@0 {
-+		device_type = "pci";
-+		reg = <0x0 0x0 0x0 0x0 0x0>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		bus-range = <0x01 0xff>;
-+
-+		wifi@0 {
-+			compatible = "pci17cb,1103";
-+			reg = <0x10000 0x0 0x0 0x0 0x0>;
-+
-+			qcom,ath11k-calibration-variant = "LE_X13S";
-+		};
-+	};
- };
- 
- &pcie4_phy {
+Acked-by: Sudeep Holla <sudeep.holla@arm.com> (for SMCCC/SOC ID bits)
+
 -- 
-2.39.2
-
+Regards,
+Sudeep
