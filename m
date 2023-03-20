@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17F66C0D0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DFC6C0D0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjCTJUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S231273AbjCTJUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCTJUX (ORCPT
+        with ESMTP id S230450AbjCTJUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:20:23 -0400
+        Mon, 20 Mar 2023 05:20:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25D512F1A;
-        Mon, 20 Mar 2023 02:20:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5C5AF20;
+        Mon, 20 Mar 2023 02:20:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07A49B80DB4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2328FB80DB5;
+        Mon, 20 Mar 2023 09:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB099C4339B;
         Mon, 20 Mar 2023 09:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC617C4339C;
-        Mon, 20 Mar 2023 09:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679304017;
-        bh=pIc4REO26VA4fV9d9grTiPVMmQaAS83Z9ApkwNAfUiQ=;
+        s=k20201202; t=1679304019;
+        bh=aRfWzyfuMD/6LDTt48kesyPO7X9IlFJAhbBlvoIsV28=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AcaNYHMQuzqFfP+ruOymMYBRZk9X/jQ2naJ4Z2hN48sRtjDItcSEe8ZibwuT7eoAU
-         f8InAsAs942GvOYEsE3SFgoOA1LIOw3wrVnXIlYTpkwAt00xwBE36kokrDPx2FQsc3
-         jf2B56kLAS7n5/dp5yCKHmL4EAhsM45S3xOGblCMmc5YUbY9d8VppE4BJ9XN6Jc3z0
-         Jriyrlm1+TXs3L+jp8HPfveWDDlPX19gOiyWEgpQ9kGL6g/LIeEEsSsKftqjQpa8iQ
-         YH/fZMt5qBE8tI/C5Vs6U+fJxVrjzsBiZTi/afLHZsZH8J0a7UaxC8jTpnKjcIYeQi
-         nCJzYQlAOL/Ig==
+        b=ZJnCPupcqPglYwWfYGoYPdwkoBIFV6ImH5xtJRdOe1+42ehZX/+VyoThZYrmNr5rk
+         FpRlXbTTrbioNzykR0+8T2ACi4MVab1y6Azpczq4yJ1DkKQktK8q7fQtFhFHKr3yHg
+         C96TsURdZOdpbTijCLHJYMofdnEQpro2d5BwuHJLLt2X4NmpQTNDxjVwzVoIJuLYKt
+         jk2R4BHImjNl+3lzdQ+X4jUhMcNlSQQmHBPLmsURtEXvxfAokcyRUGBdPVU9d+JrI4
+         Cmyb/QPWEF9kSA+3seyGDTLYNJ0DbICSEteFOEkggmoSGA0aA9NbqyxxJQJAt3xNyf
+         Y4i1rDiJnkecA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 880FAE4F0D8;
-        Mon, 20 Mar 2023 09:20:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C44D8C395F4;
+        Mon, 20 Mar 2023 09:20:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: dsa: report rx_bytes unadjusted for ETH_HLEN
+Subject: Re: [PATCH v2 net-next 0/9] add support for ocelot external ports
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167930401755.16850.9444829347109631863.git-patchwork-notify@kernel.org>
-Date:   Mon, 20 Mar 2023 09:20:17 +0000
-References: <20230317231900.3944446-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230317231900.3944446-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org
+Message-Id: <167930401979.16850.3612356547133103899.git-patchwork-notify@kernel.org>
+Date:   Mon, 20 Mar 2023 09:20:19 +0000
+References: <20230317185415.2000564-1-colin.foster@in-advantage.com>
+In-Reply-To: <20230317185415.2000564-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        kishon@kernel.org, vkoul@kernel.org, pabeni@redhat.com,
+        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
+        f.fainelli@gmail.com, andrew@lunn.ch, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
+        vladimir.oltean@nxp.com, lee@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,25 +63,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
+This series was applied to netdev/net-next.git (main)
 by David S. Miller <davem@davemloft.net>:
 
-On Sat, 18 Mar 2023 01:19:00 +0200 you wrote:
-> We collect the software statistics counters for RX bytes (reported to
-> /proc/net/dev and to ethtool -S $dev | grep 'rx_bytes: ") at a time when
-> skb->len has already been adjusted by the eth_type_trans() ->
-> skb_pull_inline(skb, ETH_HLEN) call to exclude the L2 header.
+On Fri, 17 Mar 2023 11:54:06 -0700 you wrote:
+> This is the start of part 3 of what is hopefully a 3-part series to add
+> Ethernet switching support to Ocelot chips.
 > 
-> This means that when connecting 2 DSA interfaces back to back and
-> sending 1 packet with length 100, the sending interface will report
-> tx_bytes as incrementing by 100, and the receiving interface will report
-> rx_bytes as incrementing by 86.
+> Part 1 of the series (A New Chip) added general support for Ocelot chips
+> that were controlled externally via SPI.
+> https://lore.kernel.org/all/20220815005553.1450359-1-colin.foster@in-advantage.com/
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] net: dsa: report rx_bytes unadjusted for ETH_HLEN
-    https://git.kernel.org/netdev/net/c/a8eff03545d4
+  - [v2,net-next,1/9] phy: phy-ocelot-serdes: add ability to be used in a non-syscon configuration
+    https://git.kernel.org/netdev/net-next/c/672faa7bbf60
+  - [v2,net-next,2/9] mfd: ocelot: add ocelot-serdes capability
+    https://git.kernel.org/netdev/net-next/c/c21ff0939d1d
+  - [v2,net-next,3/9] net: mscc: ocelot: expose ocelot_pll5_init routine
+    https://git.kernel.org/netdev/net-next/c/fec53f449458
+  - [v2,net-next,4/9] net: mscc: ocelot: expose generic phylink_mac_config routine
+    https://git.kernel.org/netdev/net-next/c/69f7f89c0db5
+  - [v2,net-next,5/9] net: mscc: ocelot: expose serdes configuration function
+    https://git.kernel.org/netdev/net-next/c/dfca93ed51a7
+  - [v2,net-next,6/9] net: dsa: felix: attempt to initialize internal hsio plls
+    https://git.kernel.org/netdev/net-next/c/3821fd0107b0
+  - [v2,net-next,7/9] net: dsa: felix: allow configurable phylink_mac_config
+    https://git.kernel.org/netdev/net-next/c/544435c9346a
+  - [v2,net-next,8/9] net: dsa: felix: allow serdes configuration for dsa ports
+    https://git.kernel.org/netdev/net-next/c/6865ecee385b
+  - [v2,net-next,9/9] net: dsa: ocelot: add support for external phys
+    https://git.kernel.org/netdev/net-next/c/4c05e5ceecbb
 
 You are awesome, thank you!
 -- 
