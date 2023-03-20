@@ -2,169 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4146C1A23
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35336C1A28
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjCTPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
+        id S231196AbjCTPsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbjCTPri (ORCPT
+        with ESMTP id S229749AbjCTPrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:47:38 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB2C64B;
-        Mon, 20 Mar 2023 08:39:04 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so16913052pjv.5;
-        Mon, 20 Mar 2023 08:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679326743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gE0cE5gTx1TulJ/p8gXBQMe9jpH4tyJlUCYbcVwZyoc=;
-        b=CimXe3p7Be6lTDyAxAZ4RGXdGxAy4tKPJeew/tWaCvgppYwwCmMx3YCmnQ6iBC+RCa
-         VAYwZ7/Am+WUNP5/np4L7IbSMCVyEhv3UqsQGrc/ltMdx06Qktf2Ob5S724mz13BIe7d
-         CNb2UvBOjQLmtr8OISD8o10qup+9dKJLZXprCFQ2vovnRe6CTl2jO+aLLWtJYbZ9m54u
-         kpFpuNB09yNvCwTccJm3FR05zaMbPoxN3fho6P0azb7LbTiJmlJTiphpo3v/XUec7Lzs
-         QB3yxNjH0NYSbgrkbCSgF1Cf/Ztr0aSmqZftisUndLstR8074ak31iElXUC4Kq/T+xtq
-         UtQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gE0cE5gTx1TulJ/p8gXBQMe9jpH4tyJlUCYbcVwZyoc=;
-        b=NgjC3NFxhAG1AIq+ABkjgTX9/4u7SIAVnOQpEb/MR63Es60+N+CoF2BpTg0O886M7b
-         GI7Ghj0O0ZUB7htfHe9bba92EJyDEAzrF+JCz9boAlx3FtcTU+zx9Wu6uwrkWXmzKj1H
-         ePwseYJxbu1UhpUq3XSTI0qxCKQveIF9JYrDfK62fySV2a3Nw1reeAKwR8NWiHgdqhEP
-         0uSVCHQPv8K7MKL+EkE+CkiMdNGYv5V5x0IiAyGS9CYemMM3FT3PeMlEMVs3gAcEPIuG
-         sZcfSgirgDIFIy+sUX3v2xpfLxGXnkR0QddvKGjtIVdCSDtoZpX6DomvsbMvLg0b6iPv
-         3MOQ==
-X-Gm-Message-State: AO0yUKU4+6LwduWYweo+cKorYfYOfzjGEmhw6YPvDYLMI8oN908fURRJ
-        ntIPCOSsLQVtDLOpVVjHfWU=
-X-Google-Smtp-Source: AK7set+HgBorRFvv0+hZ8QWB1uWn6efvYd2XrJpvIiCVC+B1A5KY6U4FPYUYrqBDSiLEgqx6KkdbIA==
-X-Received: by 2002:a17:903:138c:b0:1a1:918e:4129 with SMTP id jx12-20020a170903138c00b001a1918e4129mr15972090plb.30.1679326743362;
-        Mon, 20 Mar 2023 08:39:03 -0700 (PDT)
-Received: from [192.168.1.101] (1-160-164-133.dynamic-ip.hinet.net. [1.160.164.133])
-        by smtp.gmail.com with ESMTPSA id jj2-20020a170903048200b0019fea4bb887sm6923879plb.157.2023.03.20.08.39.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 08:39:03 -0700 (PDT)
-Message-ID: <13b4ac3c-d650-c646-b76f-3de69946d321@gmail.com>
-Date:   Mon, 20 Mar 2023 23:38:59 +0800
+        Mon, 20 Mar 2023 11:47:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BBB16316;
+        Mon, 20 Mar 2023 08:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679326759; x=1710862759;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AckTwTsRgSS0tF1Fo3oVzXYwW3h6OGeppI3JzCspk7c=;
+  b=CjI0dOJDTTgnYUDJc5wn/TGen7Hze9kHKAvoM+H0U+onAUYnkyWMESm4
+   V6Thdw1JSYNviGJKoRG6IrEQSn1hpnFjnhKQUC+jI06BbuU23/Be6BJNV
+   TkkMSd54tU7Jt79++Xm92YGw1dxAJUPrvMuS5Zgxwjn+IJeBAlee0COnW
+   vruE8NKDX0hoTmcNHGIq+EN4X56AH0nWO75ABQbNHXZ7CMDG1SOZ1l3ql
+   S/jWtw1Vncb/5J1KbZ/cYdXZSAiwfTI2P9u475B1TzbyzCARlcm/AtbS4
+   J/hBVR1Ja0oPCWoSSURGw+VwPyFLpzC1x5yy+Lw0y/kuE6ArQRTdmDe42
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="337413220"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="337413220"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:39:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="681118839"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="681118839"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.6.65]) ([10.213.6.65])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 08:39:03 -0700
+Message-ID: <81ae464f-ade8-fb3c-6bfa-11de19c21845@intel.com>
+Date:   Mon, 20 Mar 2023 16:39:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 11/15] arm64: dts: nuvoton: Add initial ma35d1 device tree
-To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-12-ychuang570808@gmail.com>
- <2063c6d1-85ed-43d9-b572-a762b6ce18c1@app.fastmail.com>
- <7cc8258c-3a77-5387-aaa4-658761fbb0ae@gmail.com>
- <12298b67-3012-4902-9dcc-61c3c9907a47@app.fastmail.com>
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [Intel-gfx] [PATCH v4 02/10] lib/ref_tracker:
+ __ref_tracker_dir_print improve printing
 Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <12298b67-3012-4902-9dcc-61c3c9907a47@app.fastmail.com>
+To:     Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <20230224-track_gt-v4-0-464e8ab4c9ab@intel.com>
+ <20230224-track_gt-v4-2-464e8ab4c9ab@intel.com>
+ <ZBeWnKmLiGOOMOiG@ashyti-mobl2.lan>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <ZBeWnKmLiGOOMOiG@ashyti-mobl2.lan>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Arnd,
-
-
-On 2023/3/18 下午 10:04, Arnd Bergmann wrote:
-> On Sat, Mar 18, 2023, at 14:17, Jacky Huang wrote:
->> On 2023/3/16 下午 10:17, Arnd Bergmann wrote:
->>> On Wed, Mar 15, 2023, at 08:28, Jacky Huang wrote:
->>>> +	mem: memory@80000000 {
->>>> +		device_type = "memory";
->>>> +		reg = <0x00000000 0x80000000 0 0x20000000>; /* 512M DRAM */
->>>> +	};
->>>> +};
->>> In most machines, the memory size is detected by the boot loader
->>> and filled in the dtb in memory before starting the kernel, so
->>> you should not need two separate files here for the two common
->>> memory configurations.
+On 20.03.2023 00:11, Andi Shyti wrote:
+> Hi Andrzej,
+> 
+> looks good, few comments below,
+> 
+> On Mon, Mar 06, 2023 at 05:31:58PM +0100, Andrzej Hajda wrote:
+>> To improve readability of ref_tracker printing following changes
+>> have been performed:
+>> - reports are printed per stack_handle - log is more compact,
+>> - added display name for ref_tracker_dir,
+>> - stack trace is printed indented, in the same printk call,
+>> - total number of references is printed every time,
+>> - print info about dropped references.
+> 
+> nit: I think you can do better with the log :)
+> 
+>> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>> ---
+>>   include/linux/ref_tracker.h | 15 ++++++--
+>>   lib/ref_tracker.c           | 90 +++++++++++++++++++++++++++++++++++++++------
+>>   2 files changed, 91 insertions(+), 14 deletions(-)
 >>
->> On ma35d1, memory size is determined early before uboot.
+>> diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
+>> index 3e9e9df2a41f5f..a2cf1f6309adb2 100644
+>> --- a/include/linux/ref_tracker.h
+>> +++ b/include/linux/ref_tracker.h
+>> @@ -17,12 +17,19 @@ struct ref_tracker_dir {
+>>   	bool			dead;
+>>   	struct list_head	list; /* List of active trackers */
+>>   	struct list_head	quarantine; /* List of dead trackers */
+>> +	char			name[32];
+>>   #endif
+>>   };
+>>   
+>>   #ifdef CONFIG_REF_TRACKER
+>> -static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
+>> -					unsigned int quarantine_count)
+>> +
+>> +// Temporary allow two and three arguments, until consumers are converted
+> 
+> I thought only Linus was allowed to use '//' :)
+> 
+>> +#define ref_tracker_dir_init(_d, _q, args...) _ref_tracker_dir_init(_d, _q, ##args, #_d)
+>> +#define _ref_tracker_dir_init(_d, _q, _n, ...) __ref_tracker_dir_init(_d, _q, _n)
+> 
+> [...]
+> 
+>> +void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
+>> +			   unsigned int display_limit)
+>> +{
+>> +	struct ref_tracker_dir_stats *stats;
+>> +	unsigned int i = 0, skipped;
+>> +	depot_stack_handle_t stack;
+>> +	char *sbuf;
+>> +
+>> +	lockdep_assert_held(&dir->lock);
+>> +
+>> +	if (list_empty(&dir->list))
+>> +		return;
+>> +
+>> +	stats = ref_tracker_get_stats(dir, display_limit);
+>> +	if (IS_ERR(stats)) {
+>> +		pr_err("%s@%pK: couldn't get stats, error %pe\n",
+>> +		       dir->name, dir, stats);
+>> +		return;
+>>   	}
+>> +
+>> +	sbuf = kmalloc(STACK_BUF_SIZE, GFP_NOWAIT | __GFP_NOWARN);
+>> +
+>> +	for (i = 0, skipped = stats->total; i < stats->count; ++i) {
+>> +		stack = stats->stacks[i].stack_handle;
+>> +		if (sbuf && !stack_depot_snprint(stack, sbuf, STACK_BUF_SIZE, 4))
+>> +			sbuf[0] = 0;
+>> +		pr_err("%s@%pK has %d/%d users at\n%s\n", dir->name, dir,
+>> +		       stats->stacks[i].count, stats->total, sbuf);
+> 
+> what if sbuf is NULL?
+
+Then "(NULL)" will be printed, I suspect it will occur only on very rare 
+occasions.
+
+> 
+>> +		skipped -= stats->stacks[i].count;
+>> +	}
+>> +
+>> +	if (skipped)
+> 
+> is skipped used to double check whether stats->count is equal to
+> all the stacks[].conunts? What are the cases when skipped is > 0?
+
+There is display_limit parameter, so the function prints up to 
+display_limit reports, and brief summary on remaining ones - the skipped 
+ones.
+
+Regards
+Andrzej
+
+
+> 
+> Andi
+> 
+>> +		pr_err("%s@%pK skipped reports about %d/%d users.\n",
+>> +		       dir->name, dir, skipped, stats->total);
+>> +
+>> +	kfree(sbuf);
+>> +
+>> +	kfree(stats);
+>>   }
+>>   EXPORT_SYMBOL(__ref_tracker_dir_print);
+>>   
 >>
->> BL1 (MaskROM boot code) -> BL2 (arm-trust-firmware) -> BL32 (op-tee) &
->> BL33 (uboot).
->> The DDR was initialized in BL2 stage with a selected DDR setting, which
->> is hard coded, including DDR size.
->>
->> We searched the arm64 dts and found that almost all vendors claimed
->> memory size in board level dtsi/dts. This seems to be common.
->>
->> So, can we have it unchanged?
-> I see the memory size encoded in about one out of three .dts files,
-> which is more than I expected. It's clearly not harmful to have it
-> listed in the dts, it just shouldn't be necessary.
->
-> If it helps you with your current u-boot, then leave it in, but
-> consider adding detection logic into u-boot so it can override
-> the value in the dtb file at boot time.
-
-
-Thank you for your understanding. As more drivers are added, I think 
-this memory
-
-size encoded will look less conspicuous. In fact, in the previous arm9 
-project, we
-
-did detect the memory size by uboot, and then passed it to the kernel. 
-If there is
-
-a need in the future, we will consider to support it in ma35d1.
-
->>> Since the machine is called 'som', I would assume that this is a
->>> module that is integrated on another board, so more commonly one
->>> would have a dtsi file for the som in addition to the one for the
->>> soc, and have all the components of the module listed in this
->>> file, while the dts file that includes the som.dtsi lists the
->>> devices on the carrier board and enables the on-chip devices
->>> that are connected to the outside.
->>>
->> You are right, ma35d1 som have a base board, and a cpu board on it.
->>
->> It is a good suggestion that we should have a dtsi for som base board.
->>
->> Consider that we are in the initial submit, and such a dtsi will be an empty
->> file at this stage. So, I would like to do it when peripheral drivers
->> upstream started. Is it ok?
-> It's not a big deal either way. I if you want to keep it only with
-> one dts file and one dtsi file, that's fine, but maybe rename the dts
-> file based on the name of the carrier rather than the SoM in this
-> case.
->
->       Arnd
-
-
-Thank you. As the dts names are consistent with the ma35d1 BSP on 
-linux-5.10.y,
-
-we would like to keep the consistence still.
-
-
-Best regards,
-
-Jacky Huang
-
+>> -- 
+>> 2.34.1
 
