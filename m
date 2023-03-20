@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B583A6C24F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC356C24F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCTWww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S229842AbjCTW4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCTWwv (ORCPT
+        with ESMTP id S229453AbjCTW4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:52:51 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5DB2FCCC;
-        Mon, 20 Mar 2023 15:52:49 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMqgHg022739;
-        Mon, 20 Mar 2023 17:52:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679352762;
-        bh=Wrl+pdsJ7Yy8iawkVu9UhlYUAMXjyKrDWM6jikSpajY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=iOu7k7sWpWlqQSE/uL8oofFsTHcLh/WYGXAdlwwv75JO4lEOes6bRkKt9IQHnOOqH
-         31F0ttLmMRlY9YBB4bwdN/y70uiuPPR3rbn3MOmfW+A2FV984gfrkBwW4ysfgjkKEN
-         s/sRRItADT0MB9MMnEaRCNBHoFjmJAy+9JcM01VA=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMqgBI042584
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 17:52:42 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 17:52:42 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 17:52:42 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMqgDm016833;
-        Mon, 20 Mar 2023 17:52:42 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     <vigneshr@ti.com>, Jayesh Choudhary <j-choudhary@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <a-nandan@ti.com>, <hnagalla@ti.com>, <vaishnav.a@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: (subset) [PATCH v2 0/2] Add Crypto Support for J784S4 SoC
-Date:   Mon, 20 Mar 2023 17:52:41 -0500
-Message-ID: <167935272979.212397.5705926679911778715.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230314152611.140969-1-j-choudhary@ti.com>
-References: <20230314152611.140969-1-j-choudhary@ti.com>
+        Mon, 20 Mar 2023 18:56:42 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB15B2CFC0;
+        Mon, 20 Mar 2023 15:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679353001; x=1710889001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=L8dkAazkP6gp+tUnia7Go6L7A/IteNz5613YzTAF6qw=;
+  b=UEoSwDu3QSQRhOrksgVNA3/fpU41OoPSJHXoe0aXAnmJg72jKYXvv72Z
+   1XPM+pXw5M22pRYj61LtZhbENbsrAlvRThVBYFOAlFCjq3YGZHToKhh8g
+   qM+/JzObvl5umAmROttJVk3cz8JXZLcSKKluVidA0uPbWql1MySHhc7b5
+   poCY+5V0TpjIfO1yCCDdI9jFAjrdnvQdGX8jZbkTFqb5U8Mja0VWqJxTg
+   lXEVKhKzhUuUi2yfGI7uIkLC8w5kiK7GV2f+efWEtShlrKePHWqSYmqlU
+   1TzKCZ1tAdoc3p7K3qz7uYE6BSvcQlPvzZRekKFLwL7fzhEZDyJlGBPrB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="322639145"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="322639145"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 15:56:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="745590000"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="745590000"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by fmsmga008.fm.intel.com with SMTP; 20 Mar 2023 15:56:36 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Mar 2023 00:56:35 +0200
+Date:   Tue, 21 Mar 2023 00:56:35 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH V10 4/4] PCI: vmd: Add quirk to configure PCIe ASPM and
+ LTR
+Message-ID: <ZBjko/ifunIwsK2v@intel.com>
+References: <20230120031522.2304439-1-david.e.box@linux.intel.com>
+ <20230120031522.2304439-5-david.e.box@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230120031522.2304439-5-david.e.box@linux.intel.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jayesh Choudhary,
+On Thu, Jan 19, 2023 at 07:15:22PM -0800, David E. Box wrote:
+> +/*
+> + * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
+> + */
+> +static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
+> +{
+> +	unsigned long features = *(unsigned long *)userdata;
+> +	u16 ltr = VMD_BIOS_PM_QUIRK_LTR;
+> +	u32 ltr_reg;
+> +	int pos;
+> +
+> +	if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
+> +		return 0;
+> +
+> +	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
 
-On Tue, 14 Mar 2023 20:56:09 +0530, Jayesh Choudhary wrote:
-> This series adds the crypto node for sa2ul for j784s4 platform.
-> 
-> First patch adds the device-id for NAVSS without which the probe
-> for dma-controller fails due to 'ti,sci-dev-id' read failure.
-> Second patch adds the crypto node.
-> 
-> This series has functional dependency on j784s4 k3_soc_id[1] and
-> PSIL-thread support[2] but it does not affect the boot.
-> 
-> [...]
+Hi,
 
-I have applied the following to branch ti-k3-dts-next on [1].
-This takes care of the missing patch for actually enabling crypto.
+This is tripping lockdep on one our CI ADL machines.
 
-Thank you!
+https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_12814/bat-adlp-6/boot0.txt
 
-[2/2] arm64: dts: ti: k3-j784s4-main: Enable crypto accelerator
-      commit: a43f0ac3851833302174567dadd60f58e24d0f30
+<4>[   13.815380] ============================================
+<4>[   13.815382] WARNING: possible recursive locking detected
+<4>[   13.815384] 6.3.0-rc1-CI_DRM_12814-g4753bbc2a817+ #1 Not tainted
+<4>[   13.815386] --------------------------------------------
+<4>[   13.815387] swapper/0/1 is trying to acquire lock:
+<4>[   13.815389] ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3}, at: pci_enable_link_state+0x69/0x1d0
+<4>[   13.815396] 
+                  but task is already holding lock:
+<4>[   13.815398] ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3}, at: pci_walk_bus+0x24/0x90
+<4>[   13.815403] 
+                  other info that might help us debug this:
+<4>[   13.815404]  Possible unsafe locking scenario:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+<4>[   13.815406]        CPU0
+<4>[   13.815407]        ----
+<4>[   13.815408]   lock(pci_bus_sem);
+<4>[   13.815410]   lock(pci_bus_sem);
+<4>[   13.815411] 
+                   *** DEADLOCK ***
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+<4>[   13.815413]  May be due to missing lock nesting notation
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+<4>[   13.815414] 2 locks held by swapper/0/1:
+<4>[   13.815416]  #0: ffff8881029511b8 (&dev->mutex){....}-{3:3}, at: __driver_attach+0xab/0x180
+<4>[   13.815422]  #1: ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3}, at: pci_walk_bus+0x24/0x90
+<4>[   13.815426] 
+                  stack backtrace:
+<4>[   13.815428] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.0-rc1-CI_DRM_12814-g4753bbc2a817+ #1
+<4>[   13.815431] Hardware name: Intel Corporation Alder Lake Client Platform/AlderLake-P DDR4 RVP, BIOS ADLPFWI1.R00.3135.A00.2203251419 03/25/2022
+<4>[   13.815434] Call Trace:
+<4>[   13.815436]  <TASK>
+<4>[   13.815437]  dump_stack_lvl+0x64/0xb0
+<4>[   13.815443]  __lock_acquire+0x9b5/0x2550
+<4>[   13.815461]  lock_acquire+0xd7/0x330
+<4>[   13.815463]  ? pci_enable_link_state+0x69/0x1d0
+<4>[   13.815466]  down_read+0x3d/0x180
+<4>[   13.815480]  ? pci_enable_link_state+0x69/0x1d0
+<4>[   13.815482]  pci_enable_link_state+0x69/0x1d0
+<4>[   13.815485]  ? __pfx_vmd_pm_enable_quirk+0x10/0x10
+<4>[   13.815488]  vmd_pm_enable_quirk+0x49/0xb0
+<4>[   13.815490]  pci_walk_bus+0x6d/0x90
+<4>[   13.815492]  vmd_probe+0x75f/0x9d0
+<4>[   13.815495]  pci_device_probe+0x95/0x120
+<4>[   13.815498]  really_probe+0x164/0x3c0
+<4>[   13.815500]  ? __pfx___driver_attach+0x10/0x10
+<4>[   13.815503]  __driver_probe_device+0x73/0x170
+<4>[   13.815506]  driver_probe_device+0x19/0xa0
+<4>[   13.815508]  __driver_attach+0xb6/0x180
+<4>[   13.815511]  ? __pfx___driver_attach+0x10/0x10
+<4>[   13.815513]  bus_for_each_dev+0x77/0xd0
+<4>[   13.815516]  bus_add_driver+0x114/0x210
+<4>[   13.815518]  driver_register+0x5b/0x110
+<4>[   13.815520]  ? __pfx_vmd_drv_init+0x10/0x10
+<4>[   13.815523]  do_one_initcall+0x57/0x330
+<4>[   13.815527]  kernel_init_freeable+0x181/0x3a0
+<4>[   13.815529]  ? __pfx_kernel_init+0x10/0x10
+<4>[   13.815532]  kernel_init+0x15/0x120
+<4>[   13.815534]  ret_from_fork+0x29/0x50
+<4>[   13.815537]  </TASK>
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
+Ville Syrjälä
+Intel
