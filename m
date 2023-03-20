@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A496C1A2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FE26C1A2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjCTPsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S230332AbjCTPtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbjCTPrz (ORCPT
+        with ESMTP id S233007AbjCTPsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:47:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C0AC662
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:39:59 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so48314148edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1679326798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HjfBd8LURFBkQCdmjFasI4BK9MyPMfZVc7ZkAGHyr88=;
-        b=cuC3vyLjdxS4aJOpnFsyjzb1G4OFCfk1JCOE0a/2IgM+a2rkfQ79ipGDHj14qaNG5Q
-         tRhYTA9pP5eDgwpb8xSUm32EA3fQPjAN7V1MG7UU+SXOksLA2TZYnhSjKV4dnn46RNyy
-         Yd5PtN23/77DR8v3yNA8UR6rX8B5hg6F84Zu/XDk9ii893U3PH943WfW+zatpgn0PQcR
-         WaFNBvP29dYRAFIxjANDty+1HtEP/NpYMM4T4mMQSdU625fZjVSvzRsusK/VCRYj9E04
-         5+wZwnI4QQp2hCajwTfBZlk+9lC0nRvqzdV96GnI16QXvfbTmMYICejnUHJaZnslGlHe
-         a4Iw==
+        Mon, 20 Mar 2023 11:48:12 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D413F33454;
+        Mon, 20 Mar 2023 08:40:07 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-177ca271cb8so13460508fac.2;
+        Mon, 20 Mar 2023 08:40:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HjfBd8LURFBkQCdmjFasI4BK9MyPMfZVc7ZkAGHyr88=;
-        b=hg8CWopV+mZtYDhxBtGNjyCZS77170ZNxj5Xm5+0MprWUMAjfKVqcvjxG8VhnTpQqE
-         RIxygxU2E5rKCZV8U3/JPxmncR+06yaAQTvtJvPVaPxp2sgcO1xEZg8k3S7yl6uv2wo2
-         mRaejJP9u8eKWr9dVnDiTzl1O0fzB11/hr/zpcZJVHIjDb6Fazh5tcT/QiaN/kdQ611t
-         1j44gmnZY49V6pg9uzw6tzRYXhas5EpQYFHibw0uAOWVI2e9ga83/rDutgLFT2VqPZVl
-         xxVr+VqBBhbYoYuKYj9BrIVDLW5v36YQI8YlJh2C6lIHZVxKFxJUaiIWR1SyfZdh53/V
-         ZfQg==
-X-Gm-Message-State: AO0yUKUfRDVU/KYpSHq0zJ9f9Yqr7JHQlOdb/fPmqZzG/zr8pFBT2u2f
-        Jt+LQxROnY3tC/v9bmKuVRGKmKdUd3geMi27RI0=
-X-Google-Smtp-Source: AK7set/cQBOAzSg9oecwjRF7YkwtVtmfSxm23V2lUrmLZDrszp1xZ1Wb1UUB49bxl+AyY283GL+7LtnaTaMovp6OuMQ=
-X-Received: by 2002:a17:906:95c6:b0:92f:41e4:e48b with SMTP id
- n6-20020a17090695c600b0092f41e4e48bmr3950471ejy.6.1679326797634; Mon, 20 Mar
- 2023 08:39:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679326807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jgk3KZtzxxXItnf/+rB0VTBN9p0dTxRpbFOr+Nh5gQo=;
+        b=VZNeo0puhsbgqKNUAvBZYuCJYjJdQMdqjh25it533X6n7z+6Ai1QYuJJTzUp/2isbA
+         43ND6b3mDmhCpEiWX7mc2yIjA11oSurFIYgP1KQTudPR/hEofjx9fzkNDZox516pSFsz
+         oMpDrazVqaeYEy80ylGn4jcYNsEaXMyfmBO+HxrcvnH9BHamf14NHLBBFZrlvh5tiER/
+         H5BpHatpgQFBzK65dTu7bOJzzHmbJzxXaDOBHmqwvUm2JwHobUHdPRYpzS8uesyL8Vfp
+         iM8laxAgjmy2o+gokUFBwrerXIVSGs2m+sbBZOWiuLqyIB2031YMezJ1PwMRXnIqgcIU
+         w2Ng==
+X-Gm-Message-State: AO0yUKWhzgKppxYRhoBM5jMTdLwl8aSS4gqIgDP/SJRUQrdEgqE8SdCX
+        4ccXyJq4YQulTAh4rCTPug==
+X-Google-Smtp-Source: AK7set87VF+yIaIfxL/PlV0G1miQvufThf1triexklF4keCIjfhdIpG9fdtEZpA/DP+1tMLyJ5YfXw==
+X-Received: by 2002:a05:6870:c351:b0:177:b62d:cc26 with SMTP id e17-20020a056870c35100b00177b62dcc26mr5085501oak.8.1679326807020;
+        Mon, 20 Mar 2023 08:40:07 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k126-20020acaba84000000b00386eff32f58sm2155846oif.13.2023.03.20.08.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 08:40:06 -0700 (PDT)
+Received: (nullmailer pid 1739413 invoked by uid 1000);
+        Mon, 20 Mar 2023 15:40:05 -0000
+Date:   Mon, 20 Mar 2023 10:40:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+Subject: Re: [PATCH v2 0/4] TI TPS6594 PMIC support (Core, ESM, PFSM)
+Message-ID: <20230320154005.GA1733616-robh@kernel.org>
+References: <20230315110736.35506-1-jpanis@baylibre.com>
 MIME-Version: 1.0
-References: <d846047f-b714-3fd1-d8c6-9f774902fb9f@gmail.com> <6dbdf458-9f46-613e-de58-b4a56a6cdd9f@gmail.com>
-In-Reply-To: <6dbdf458-9f46-613e-de58-b4a56a6cdd9f@gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 20 Mar 2023 16:39:46 +0100
-Message-ID: <CAFBinCBHLEAJo8r8kKU-Tou0esM0J=dnh-RO5heO+O9w0jRS5g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] base: soc: populate machine name in
- soc_device_register if empty
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315110736.35506-1-jpanis@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,23 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 1:37=E2=80=AFPM Heiner Kallweit <hkallweit1@gmail.c=
-om> wrote:
-[...]
-> +static void soc_device_get_machine(struct soc_device_attribute *soc_dev_=
-attr)
-> +{
-> +       struct device_node *np;
-> +
-> +       if (soc_dev_attr->machine)
-> +               return;
-> +
-> +       np =3D of_find_node_by_path("/");
-> +       of_property_read_string(np, "model", &soc_dev_attr->machine);
-> +       of_node_put(np);
-At first I thought there's a problem with non-OF machines here.
-But if CONFIG_OF is disabled the code above is a no-op because we're
-not checking any error/return codes.
+On Wed, Mar 15, 2023 at 12:07:32PM +0100, Julien Panis wrote:
+> TPS6594 is a Power Management IC which provides regulators and others
+> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+> PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+> communicate through the I2C or SPI interfaces.
+> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+> 
+> This series adds support to TI TPS6594 PMIC and its derivatives.
+> 
+> The features implemented in this series are:
+> - Core (MFD I2C and SPI entry points)
+> - ESM (child device)
+> - PFSM (child device)
+> 
+> - Core description:
+> I2C and SPI interface protocols are implemented, with and without
+> the bit-integrity error detection feature (CRC mode).
+> In multi-PMIC configuration, all instances share a single GPIO of
+> the SoC to generate interrupt requests via their respective nINT
+> output pin.
+> 
+> - ESM description:
+> This device monitors the SoC error output signal at its nERR_SOC
+> input pin. In error condition, ESM toggles its nRSTOUT_SOC pin
+> to reset the SoC.
+> Basically, ESM driver starts ESM hardware.
+> 
+> - PFSM description:
+> Strictly speaking, PFSM is not hardware. It is a piece of code.
+> PMIC integrates a state machine which manages operational modes.
+> Depending on the current operational mode, some voltage domains
+> remain energized while others can be off.
+> PFSM driver can be used to trigger transitions between configured
+> states.
+> 
+> Link to v1:
+> https://lore.kernel.org/all/20230216114410.183489-1-jpanis@baylibre.com/
+> 
+> Others series will be submitted over the next few weeks, providing
+> drivers for others child devices like GPIOs (pinctrl), RTC, and
+> regulators. Board support will also be added (device trees).
 
-So this gets my:
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+I don't care about the drivers, but I need a complete binding for 
+the device to review it.
+
+Rob
