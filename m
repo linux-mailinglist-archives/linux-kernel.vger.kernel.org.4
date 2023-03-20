@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A150D6C2390
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7706C2391
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCTVXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S230158AbjCTVYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCTVXr (ORCPT
+        with ESMTP id S230032AbjCTVX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:23:47 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0F538036
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:23:20 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id i11-20020a256d0b000000b0086349255277so14350575ybc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:23:20 -0700 (PDT)
+        Mon, 20 Mar 2023 17:23:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1103757C
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:23:28 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so13476511ybl.19
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679347398;
+        d=google.com; s=20210112; t=1679347405;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nwfJHR3uDeVFPoUwsnTQRvdix/5zBLz6Y91JeFwQQFU=;
-        b=DTesJb6co4v+Onwn+ESWXt32fvvJwVx+xUKTOHNVG3OqyqACcokI6XcSXYR4/Xmul2
-         GtyEEJUnK1H12dwyrzOEl2pGP2wE7voxJ2GhOAYkxmQdk1DikSIV2oM/0vdDHdQXHLPQ
-         aF/8fSaSI0yd7E+Xkos4lRUHjWqUFnnGLlsiYQ7E3P249m2DeXRj+goPxTkQK5SI9Nm/
-         Swyl6G1YP222hINlKXdmp4LBvfFWJfRGXeA1I2t9cig1hs7d/G3IC+iW+1tVWBVsQjAK
-         uKxpND8wSJDRW2eaG1HyUju6Vl5R177FEy5Venm+fGN1tgUSgdwZu2vs2dFADSoJK5pJ
-         WpDA==
+        bh=jlo12XpcFaWTYtJM5rXRVFgodkiIGL4KsQD9FBA5xgk=;
+        b=EahGboGwU25X8k80EJSCCa5jqq29D85/uOc4Aw9ou1wNfOHA4P8oDWumuHEhoh/qUp
+         d+B+hNy+Uqdjn872skIfQrDKOXDsIwYi/0laxOCdseGekQK1QXJmC8AnqDKgYVa3Ihu4
+         O1DFopRZ3u8I0wD+FUylzcG7zz0tuCBE5SV9Y57O5QgcAtoyXoL9bGs5gWqvpVRo0XwA
+         X/CAbymrX2wqt+cYFoC1z/+fxe2EB1VGQgq6OE0Y3iYreykUhsAUVJR0NPnVJWHlQsWd
+         k7DJw9uUw8Ai0M+ViOPtf5BzFIcZphmcZXbLBY+dkWKEsS3xkN+8hQ6h0yMlBROMH0IU
+         qhMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679347398;
+        d=1e100.net; s=20210112; t=1679347405;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nwfJHR3uDeVFPoUwsnTQRvdix/5zBLz6Y91JeFwQQFU=;
-        b=TzwLmDePuKpVc//4hrB0dsjEWN2hUFL5RGmCW9GegOv0zGufFVxrGOm2vT6/GXguIA
-         0l//mwtGpzVhHE78HZEIy8/Z/pGH+cgLTAR6kGJJ7uOesggHp45rMEJKbA+y23/eDKYd
-         OmB1xBKt2bUxCoiilqO2syAwF69U1xXIMTO/grwhU8XKS+0geQti6QxN4O5T6euCXOLg
-         hiPKNVnp0zRYOTSL0kEMFd/VvZ0SZVm/iP4fNEhm1f/X3l1i64sBSAFmCYdR6UldfzUK
-         wWze3WAzHtBjscTrfX/pU2DBW74bMXnRvQCo8ONqVfTMON7Wz4DjyI7W9c2UNERaWeLg
-         WS6g==
-X-Gm-Message-State: AAQBX9eqF0zl9HGqcSP6w7uNEPsJFqq5ikY5pOJLSbPgJr1h256/QTSp
-        +nUdRzMFgclL4WqbCeZkLIWyFtqpcTLm
-X-Google-Smtp-Source: AKy350bBf9o0wCHgoGW3qE82LYrMMACmPs658gYzT2A7fqiGwAm+qQdCre3/yIK6dqzwL1UVqji7FtbC2vlE
+        bh=jlo12XpcFaWTYtJM5rXRVFgodkiIGL4KsQD9FBA5xgk=;
+        b=4Eqv5KSqnhKvpmGMjFOZks8Emk6SJWoAfK2eZLT2G8gySu097Txff9vhA2uLvD1CLi
+         FHbVPdcygdYKKnuNOA+rHXIYjZOjA+rzqoBky37AiS5UNlBCxyMa4IxEfhyI6yCmJ6Fj
+         jOXqk1rYlXlDAFkeF6oh9eVISLTL4Mm2sTZttm/DOCmVFd5qr+E/tvAd8ql5DGm9dQT3
+         LWU+qEyKU/PncInUV1kN6trhEA/2eqV2FlZUDuZrxm/r6/GOT5+jDi6/9KMUQvYnbKwG
+         a12CSlv+ROHh24RCyxI44ysyRxaX1ZGKQTxyvHR25VKQ/KXYlCq1/n+8VO0P6lWGx5W2
+         HHDw==
+X-Gm-Message-State: AAQBX9eETPRGM1VaiY1NIbouG0WJJrbI/Sslyz+AYw3PpAw82BGyQIYv
+        kUVOgD9G2zK9j5QY7h90LLUXXeab8Mi9
+X-Google-Smtp-Source: AKy350bvZNdC8+nFETj3PI6z1zvvfaaf0JazllMwdXWBSMTb/ueiLyjHhNovTTLQHlU9G/YWtI+s7+mtCiy7
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a30f:d1e2:fcd8:aa4d])
- (user=irogers job=sendgmr) by 2002:a05:6902:1003:b0:b3c:637f:ad00 with SMTP
- id w3-20020a056902100300b00b3c637fad00mr6160ybt.5.1679347398084; Mon, 20 Mar
- 2023 14:23:18 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 14:22:33 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:168d:b0:b3b:fb47:8534 with SMTP
+ id bx13-20020a056902168d00b00b3bfb478534mr484339ybb.5.1679347405424; Mon, 20
+ Mar 2023 14:23:25 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 14:22:34 -0700
 In-Reply-To: <20230320212248.1175731-1-irogers@google.com>
-Message-Id: <20230320212248.1175731-3-irogers@google.com>
+Message-Id: <20230320212248.1175731-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230320212248.1175731-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v5 02/17] perf maps: Remove rb_node from struct map
+Subject: [PATCH v5 03/17] perf maps: Add functions to access maps
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -92,7 +92,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,1268 +100,940 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct map is reference counted, having it also be a node in an
-red-black tree complicates the reference counting. Switch to having a
-map_rb_node which is a red-block tree node but points at the reference
-counted struct map. This reference is responsible for a single reference
-count.
+Introduce functions to access struct maps. These functions reduce the
+number of places reference counting is necessary. While tidying APIs do
+some small const-ification, in particlar to unwind_libunwind_ops.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/arch/x86/util/event.c      |  13 +-
- tools/perf/builtin-report.c           |   6 +-
- tools/perf/tests/maps.c               |   8 +-
- tools/perf/tests/vmlinux-kallsyms.c   |  17 ++-
- tools/perf/util/bpf_lock_contention.c |   2 +-
- tools/perf/util/machine.c             |  68 ++++++----
- tools/perf/util/map.c                 |  16 ---
- tools/perf/util/map.h                 |   1 -
- tools/perf/util/maps.c                | 180 +++++++++++++++++---------
- tools/perf/util/maps.h                |  17 ++-
- tools/perf/util/probe-event.c         |  18 ++-
- tools/perf/util/symbol-elf.c          |   9 +-
- tools/perf/util/symbol.c              |  77 +++++++----
- tools/perf/util/synthetic-events.c    |  26 ++--
- tools/perf/util/thread.c              |  10 +-
- tools/perf/util/vdso.c                |   7 +-
- 16 files changed, 291 insertions(+), 184 deletions(-)
+ .../scripts/python/Perf-Trace-Util/Context.c  |  7 +-
+ tools/perf/tests/code-reading.c               |  2 +-
+ tools/perf/ui/browsers/hists.c                |  3 +-
+ tools/perf/util/callchain.c                   |  9 +--
+ tools/perf/util/db-export.c                   | 12 ++--
+ tools/perf/util/dlfilter.c                    |  8 ++-
+ tools/perf/util/event.c                       |  4 +-
+ tools/perf/util/hist.c                        |  2 +-
+ tools/perf/util/machine.c                     |  2 +-
+ tools/perf/util/map.c                         | 14 ++--
+ tools/perf/util/maps.c                        | 71 +++++++++++--------
+ tools/perf/util/maps.h                        | 47 +++++++++---
+ .../scripting-engines/trace-event-python.c    |  2 +-
+ tools/perf/util/sort.c                        |  2 +-
+ tools/perf/util/symbol-elf.c                  |  2 +-
+ tools/perf/util/symbol.c                      | 44 ++++++------
+ tools/perf/util/thread-stack.c                |  4 +-
+ tools/perf/util/thread.c                      |  4 +-
+ tools/perf/util/unwind-libunwind-local.c      | 16 +++--
+ tools/perf/util/unwind-libunwind.c            | 31 ++++----
+ 20 files changed, 175 insertions(+), 111 deletions(-)
 
-diff --git a/tools/perf/arch/x86/util/event.c b/tools/perf/arch/x86/util/event.c
-index e4288d09f3a0..17bf60babfbd 100644
---- a/tools/perf/arch/x86/util/event.c
-+++ b/tools/perf/arch/x86/util/event.c
-@@ -19,7 +19,7 @@ int perf_event__synthesize_extra_kmaps(struct perf_tool *tool,
- 				       struct machine *machine)
- {
- 	int rc = 0;
--	struct map *pos;
-+	struct map_rb_node *pos;
- 	struct maps *kmaps = machine__kernel_maps(machine);
- 	union perf_event *event = zalloc(sizeof(event->mmap) +
- 					 machine->id_hdr_size);
-@@ -33,11 +33,12 @@ int perf_event__synthesize_extra_kmaps(struct perf_tool *tool,
- 	maps__for_each_entry(kmaps, pos) {
- 		struct kmap *kmap;
- 		size_t size;
-+		struct map *map = pos->map;
- 
--		if (!__map__is_extra_kernel_map(pos))
-+		if (!__map__is_extra_kernel_map(map))
- 			continue;
- 
--		kmap = map__kmap(pos);
-+		kmap = map__kmap(map);
- 
- 		size = sizeof(event->mmap) - sizeof(event->mmap.filename) +
- 		       PERF_ALIGN(strlen(kmap->name) + 1, sizeof(u64)) +
-@@ -58,9 +59,9 @@ int perf_event__synthesize_extra_kmaps(struct perf_tool *tool,
- 
- 		event->mmap.header.size = size;
- 
--		event->mmap.start = pos->start;
--		event->mmap.len   = pos->end - pos->start;
--		event->mmap.pgoff = pos->pgoff;
-+		event->mmap.start = map->start;
-+		event->mmap.len   = map->end - map->start;
-+		event->mmap.pgoff = map->pgoff;
- 		event->mmap.pid   = machine->pid;
- 
- 		strlcpy(event->mmap.filename, kmap->name, PATH_MAX);
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 6400615b5e98..c453b7fa7418 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -840,9 +840,11 @@ static struct task *tasks_list(struct task *task, struct machine *machine)
- static size_t maps__fprintf_task(struct maps *maps, int indent, FILE *fp)
- {
- 	size_t printed = 0;
--	struct map *map;
-+	struct map_rb_node *rb_node;
-+
-+	maps__for_each_entry(maps, rb_node) {
-+		struct map *map = rb_node->map;
- 
--	maps__for_each_entry(maps, map) {
- 		printed += fprintf(fp, "%*s  %" PRIx64 "-%" PRIx64 " %c%c%c%c %08" PRIx64 " %" PRIu64 " %s\n",
- 				   indent, "", map->start, map->end,
- 				   map->prot & PROT_READ ? 'r' : '-',
-diff --git a/tools/perf/tests/maps.c b/tools/perf/tests/maps.c
-index a69988a89d26..8246d37e4b7a 100644
---- a/tools/perf/tests/maps.c
-+++ b/tools/perf/tests/maps.c
-@@ -15,10 +15,12 @@ struct map_def {
- 
- static int check_maps(struct map_def *merged, unsigned int size, struct maps *maps)
- {
--	struct map *map;
-+	struct map_rb_node *rb_node;
- 	unsigned int i = 0;
- 
--	maps__for_each_entry(maps, map) {
-+	maps__for_each_entry(maps, rb_node) {
-+		struct map *map = rb_node->map;
-+
- 		if (i > 0)
- 			TEST_ASSERT_VAL("less maps expected", (map && i < size) || (!map && i == size));
- 
-@@ -74,7 +76,7 @@ static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest
- 
- 		map->start = bpf_progs[i].start;
- 		map->end   = bpf_progs[i].end;
--		maps__insert(maps, map);
-+		TEST_ASSERT_VAL("failed to insert map", maps__insert(maps, map) == 0);
- 		map__put(map);
- 	}
- 
-diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
-index 8ab035b55875..c8abb3ca8347 100644
---- a/tools/perf/tests/vmlinux-kallsyms.c
-+++ b/tools/perf/tests/vmlinux-kallsyms.c
-@@ -118,7 +118,8 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
- 	int err = TEST_FAIL;
- 	struct rb_node *nd;
- 	struct symbol *sym;
--	struct map *kallsyms_map, *vmlinux_map, *map;
-+	struct map *kallsyms_map, *vmlinux_map;
-+	struct map_rb_node *rb_node;
- 	struct machine kallsyms, vmlinux;
- 	struct maps *maps;
- 	u64 mem_start, mem_end;
-@@ -290,15 +291,15 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
- 
- 	header_printed = false;
- 
--	maps__for_each_entry(maps, map) {
--		struct map *
-+	maps__for_each_entry(maps, rb_node) {
-+		struct map *map = rb_node->map;
- 		/*
- 		 * If it is the kernel, kallsyms is always "[kernel.kallsyms]", while
- 		 * the kernel will have the path for the vmlinux file being used,
- 		 * so use the short name, less descriptive but the same ("[kernel]" in
- 		 * both cases.
- 		 */
--		pair = maps__find_by_name(kallsyms.kmaps, (map->dso->kernel ?
-+		struct map *pair = maps__find_by_name(kallsyms.kmaps, (map->dso->kernel ?
- 								map->dso->short_name :
- 								map->dso->name));
- 		if (pair) {
-@@ -314,8 +315,8 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
- 
- 	header_printed = false;
- 
--	maps__for_each_entry(maps, map) {
--		struct map *pair;
-+	maps__for_each_entry(maps, rb_node) {
-+		struct map *pair, *map = rb_node->map;
- 
- 		mem_start = vmlinux_map->unmap_ip(vmlinux_map, map->start);
- 		mem_end = vmlinux_map->unmap_ip(vmlinux_map, map->end);
-@@ -344,7 +345,9 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
- 
- 	maps = machine__kernel_maps(&kallsyms);
- 
--	maps__for_each_entry(maps, map) {
-+	maps__for_each_entry(maps, rb_node) {
-+		struct map *map = rb_node->map;
-+
- 		if (!map->priv) {
- 			if (!header_printed) {
- 				pr_info("WARN: Maps only in kallsyms:\n");
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index 235fc7150545..0b47863d2460 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -282,7 +282,7 @@ int lock_contention_read(struct lock_contention *con)
- 	}
- 
- 	/* make sure it loads the kernel map */
--	map__load(maps__first(machine->kmaps));
-+	map__load(maps__first(machine->kmaps)->map);
- 
- 	prev_key = NULL;
- 	while (!bpf_map_get_next_key(fd, prev_key, &key)) {
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 803c9d1803dd..93a07079d174 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -882,6 +882,7 @@ static int machine__process_ksymbol_register(struct machine *machine,
- 
- 	if (!map) {
- 		struct dso *dso = dso__new(event->ksymbol.name);
-+		int err;
- 
- 		if (dso) {
- 			dso->kernel = DSO_SPACE__KERNEL;
-@@ -901,8 +902,11 @@ static int machine__process_ksymbol_register(struct machine *machine,
- 
- 		map->start = event->ksymbol.addr;
- 		map->end = map->start + event->ksymbol.len;
--		maps__insert(machine__kernel_maps(machine), map);
-+		err = maps__insert(machine__kernel_maps(machine), map);
- 		map__put(map);
-+		if (err)
-+			return err;
-+
- 		dso__set_loaded(dso);
- 
- 		if (is_bpf_image(event->ksymbol.name)) {
-@@ -1002,6 +1006,7 @@ static struct map *machine__addnew_module_map(struct machine *machine, u64 start
- 	struct map *map = NULL;
- 	struct kmod_path m;
- 	struct dso *dso;
-+	int err;
- 
- 	if (kmod_path__parse_name(&m, filename))
+diff --git a/tools/perf/scripts/python/Perf-Trace-Util/Context.c b/tools/perf/scripts/python/Perf-Trace-Util/Context.c
+index b0d449f41650..feedd02b3b3d 100644
+--- a/tools/perf/scripts/python/Perf-Trace-Util/Context.c
++++ b/tools/perf/scripts/python/Perf-Trace-Util/Context.c
+@@ -100,10 +100,11 @@ static PyObject *perf_sample_insn(PyObject *obj, PyObject *args)
+ 	if (!c)
  		return NULL;
-@@ -1014,10 +1019,14 @@ static struct map *machine__addnew_module_map(struct machine *machine, u64 start
- 	if (map == NULL)
- 		goto out;
  
--	maps__insert(machine__kernel_maps(machine), map);
-+	err = maps__insert(machine__kernel_maps(machine), map);
+-	if (c->sample->ip && !c->sample->insn_len &&
+-	    c->al->thread->maps && c->al->thread->maps->machine)
+-		script_fetch_insn(c->sample, c->al->thread, c->al->thread->maps->machine);
++	if (c->sample->ip && !c->sample->insn_len && c->al->thread->maps) {
++		struct machine *machine =  maps__machine(c->al->thread->maps);
  
- 	/* Put the map here because maps__insert already got it */
- 	map__put(map);
-+
-+	/* If maps__insert failed, return NULL. */
-+	if (err)
-+		map = NULL;
- out:
- 	/* put the dso here, corresponding to  machine__findnew_module_dso */
- 	dso__put(dso);
-@@ -1184,10 +1193,11 @@ int machine__create_extra_kernel_map(struct machine *machine,
- {
- 	struct kmap *kmap;
- 	struct map *map;
-+	int err;
- 
- 	map = map__new2(xm->start, kernel);
- 	if (!map)
--		return -1;
-+		return -ENOMEM;
- 
- 	map->end   = xm->end;
- 	map->pgoff = xm->pgoff;
-@@ -1196,14 +1206,16 @@ int machine__create_extra_kernel_map(struct machine *machine,
- 
- 	strlcpy(kmap->name, xm->name, KMAP_NAME_LEN);
- 
--	maps__insert(machine__kernel_maps(machine), map);
-+	err = maps__insert(machine__kernel_maps(machine), map);
- 
--	pr_debug2("Added extra kernel map %s %" PRIx64 "-%" PRIx64 "\n",
--		  kmap->name, map->start, map->end);
-+	if (!err) {
-+		pr_debug2("Added extra kernel map %s %" PRIx64 "-%" PRIx64 "\n",
-+			kmap->name, map->start, map->end);
++		script_fetch_insn(c->sample, c->al->thread, machine);
 +	}
+ 	if (!c->sample->insn_len)
+ 		Py_RETURN_NONE; /* N.B. This is a return statement */
  
- 	map__put(map);
+diff --git a/tools/perf/tests/code-reading.c b/tools/perf/tests/code-reading.c
+index fb67fd5ebd9f..8d2036f2f944 100644
+--- a/tools/perf/tests/code-reading.c
++++ b/tools/perf/tests/code-reading.c
+@@ -269,7 +269,7 @@ static int read_object_code(u64 addr, size_t len, u8 cpumode,
+ 		len = al.map->end - addr;
  
--	return 0;
-+	return err;
- }
- 
- static u64 find_entry_trampoline(struct dso *dso)
-@@ -1244,16 +1256,16 @@ int machine__map_x86_64_entry_trampolines(struct machine *machine,
- 	struct maps *kmaps = machine__kernel_maps(machine);
- 	int nr_cpus_avail, cpu;
- 	bool found = false;
--	struct map *map;
-+	struct map_rb_node *rb_node;
- 	u64 pgoff;
- 
- 	/*
- 	 * In the vmlinux case, pgoff is a virtual address which must now be
- 	 * mapped to a vmlinux offset.
- 	 */
--	maps__for_each_entry(kmaps, map) {
-+	maps__for_each_entry(kmaps, rb_node) {
-+		struct map *dest_map, *map = rb_node->map;
- 		struct kmap *kmap = __map__kmap(map);
--		struct map *dest_map;
- 
- 		if (!kmap || !is_entry_trampoline(kmap->name))
+ 	/* Read the object code using perf */
+-	ret_len = dso__data_read_offset(al.map->dso, thread->maps->machine,
++	ret_len = dso__data_read_offset(al.map->dso, maps__machine(thread->maps),
+ 					al.addr, buf1, len);
+ 	if (ret_len != len) {
+ 		pr_debug("dso__data_read_offset failed\n");
+diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
+index b72ee6822222..572ff38ceb0f 100644
+--- a/tools/perf/ui/browsers/hists.c
++++ b/tools/perf/ui/browsers/hists.c
+@@ -3139,7 +3139,8 @@ static int evsel__hists_browse(struct evsel *evsel, int nr_events, const char *h
  			continue;
-@@ -1308,11 +1320,10 @@ __machine__create_kernel_maps(struct machine *machine, struct dso *kernel)
- 
- 	machine->vmlinux_map = map__new2(0, kernel);
- 	if (machine->vmlinux_map == NULL)
--		return -1;
-+		return -ENOMEM;
- 
- 	machine->vmlinux_map->map_ip = machine->vmlinux_map->unmap_ip = identity__map_ip;
--	maps__insert(machine__kernel_maps(machine), machine->vmlinux_map);
--	return 0;
-+	return maps__insert(machine__kernel_maps(machine), machine->vmlinux_map);
- }
- 
- void machine__destroy_kernel_maps(struct machine *machine)
-@@ -1634,25 +1645,26 @@ static void machine__set_kernel_mmap(struct machine *machine,
- 		machine->vmlinux_map->end = ~0ULL;
- }
- 
--static void machine__update_kernel_mmap(struct machine *machine,
-+static int machine__update_kernel_mmap(struct machine *machine,
- 				     u64 start, u64 end)
- {
- 	struct map *map = machine__kernel_map(machine);
-+	int err;
- 
- 	map__get(map);
- 	maps__remove(machine__kernel_maps(machine), map);
- 
- 	machine__set_kernel_mmap(machine, start, end);
- 
--	maps__insert(machine__kernel_maps(machine), map);
-+	err = maps__insert(machine__kernel_maps(machine), map);
- 	map__put(map);
-+	return err;
- }
- 
- int machine__create_kernel_maps(struct machine *machine)
- {
- 	struct dso *kernel = machine__get_kernel(machine);
- 	const char *name = NULL;
--	struct map *map;
- 	u64 start = 0, end = ~0ULL;
- 	int ret;
- 
-@@ -1684,7 +1696,9 @@ int machine__create_kernel_maps(struct machine *machine)
- 		 * we have a real start address now, so re-order the kmaps
- 		 * assume it's the last in the kmaps
- 		 */
--		machine__update_kernel_mmap(machine, start, end);
-+		ret = machine__update_kernel_mmap(machine, start, end);
-+		if (ret < 0)
-+			goto out_put;
- 	}
- 
- 	if (machine__create_extra_kernel_maps(machine, kernel))
-@@ -1692,9 +1706,12 @@ int machine__create_kernel_maps(struct machine *machine)
- 
- 	if (end == ~0ULL) {
- 		/* update end address of the kernel map using adjacent module address */
--		map = map__next(machine__kernel_map(machine));
--		if (map)
--			machine__set_kernel_mmap(machine, start, map->start);
-+		struct map_rb_node *rb_node = maps__find_node(machine__kernel_maps(machine),
-+							machine__kernel_map(machine));
-+		struct map_rb_node *next = map_rb_node__next(rb_node);
-+
-+		if (next)
-+			machine__set_kernel_mmap(machine, start, next->map->start);
- 	}
- 
- out_put:
-@@ -1827,7 +1844,10 @@ static int machine__process_kernel_mmap_event(struct machine *machine,
- 		if (strstr(kernel->long_name, "vmlinux"))
- 			dso__set_short_name(kernel, "[kernel.vmlinux]", false);
- 
--		machine__update_kernel_mmap(machine, xm->start, xm->end);
-+		if (machine__update_kernel_mmap(machine, xm->start, xm->end) < 0) {
-+			dso__put(kernel);
-+			goto out_problem;
-+		}
- 
- 		if (build_id__is_defined(bid))
- 			dso__set_build_id(kernel, bid);
-@@ -3325,11 +3345,11 @@ int machine__for_each_dso(struct machine *machine, machine__dso_t fn, void *priv
- int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn, void *priv)
- {
- 	struct maps *maps = machine__kernel_maps(machine);
--	struct map *map;
-+	struct map_rb_node *pos;
- 	int err = 0;
- 
--	for (map = maps__first(maps); map != NULL; map = map__next(map)) {
--		err = fn(map, priv);
-+	maps__for_each_entry(maps, pos) {
-+		err = fn(pos->map, priv);
- 		if (err != 0) {
- 			break;
- 		}
-diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-index f3a3d9b3a40d..7620cfa114d4 100644
---- a/tools/perf/util/map.c
-+++ b/tools/perf/util/map.c
-@@ -111,7 +111,6 @@ void map__init(struct map *map, u64 start, u64 end, u64 pgoff, struct dso *dso)
- 	map->dso      = dso__get(dso);
- 	map->map_ip   = map__map_ip;
- 	map->unmap_ip = map__unmap_ip;
--	RB_CLEAR_NODE(&map->rb_node);
- 	map->erange_warned = false;
- 	refcount_set(&map->refcnt, 1);
- }
-@@ -397,7 +396,6 @@ struct map *map__clone(struct map *from)
- 	map = memdup(from, size);
- 	if (map != NULL) {
- 		refcount_set(&map->refcnt, 1);
--		RB_CLEAR_NODE(&map->rb_node);
- 		dso__get(map->dso);
- 	}
- 
-@@ -537,20 +535,6 @@ bool map__contains_symbol(const struct map *map, const struct symbol *sym)
- 	return ip >= map->start && ip < map->end;
- }
- 
--static struct map *__map__next(struct map *map)
--{
--	struct rb_node *next = rb_next(&map->rb_node);
--
--	if (next)
--		return rb_entry(next, struct map, rb_node);
--	return NULL;
--}
--
--struct map *map__next(struct map *map)
--{
--	return map ? __map__next(map) : NULL;
--}
--
- struct kmap *__map__kmap(struct map *map)
- {
- 	if (!map->dso || !map->dso->kernel)
-diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
-index 2879cae05ee0..d1a6f85fd31d 100644
---- a/tools/perf/util/map.h
-+++ b/tools/perf/util/map.h
-@@ -16,7 +16,6 @@ struct maps;
- struct machine;
- 
- struct map {
--	struct rb_node		rb_node;
- 	u64			start;
- 	u64			end;
- 	bool			erange_warned:1;
-diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
-index 37bd5b40000d..83ec126bcbe5 100644
---- a/tools/perf/util/maps.c
-+++ b/tools/perf/util/maps.c
-@@ -10,8 +10,6 @@
- #include "ui/ui.h"
- #include "unwind.h"
- 
--static void __maps__insert(struct maps *maps, struct map *map);
--
- static void maps__init(struct maps *maps, struct machine *machine)
- {
- 	maps->entries = RB_ROOT;
-@@ -32,10 +30,44 @@ static void __maps__free_maps_by_name(struct maps *maps)
- 	maps->nr_maps_allocated = 0;
- }
- 
--void maps__insert(struct maps *maps, struct map *map)
-+static int __maps__insert(struct maps *maps, struct map *map)
- {
-+	struct rb_node **p = &maps->entries.rb_node;
-+	struct rb_node *parent = NULL;
-+	const u64 ip = map->start;
-+	struct map_rb_node *m, *new_rb_node;
-+
-+	new_rb_node = malloc(sizeof(*new_rb_node));
-+	if (!new_rb_node)
-+		return -ENOMEM;
-+
-+	RB_CLEAR_NODE(&new_rb_node->rb_node);
-+	new_rb_node->map = map;
-+
-+	while (*p != NULL) {
-+		parent = *p;
-+		m = rb_entry(parent, struct map_rb_node, rb_node);
-+		if (ip < m->map->start)
-+			p = &(*p)->rb_left;
-+		else
-+			p = &(*p)->rb_right;
-+	}
-+
-+	rb_link_node(&new_rb_node->rb_node, parent, p);
-+	rb_insert_color(&new_rb_node->rb_node, &maps->entries);
-+	map__get(map);
-+	return 0;
-+}
-+
-+int maps__insert(struct maps *maps, struct map *map)
-+{
-+	int err;
-+
- 	down_write(&maps->lock);
--	__maps__insert(maps, map);
-+	err = __maps__insert(maps, map);
-+	if (err)
-+		goto out;
-+
- 	++maps->nr_maps;
- 
- 	if (map->dso && map->dso->kernel) {
-@@ -59,32 +91,39 @@ void maps__insert(struct maps *maps, struct map *map)
- 
- 			if (maps_by_name == NULL) {
- 				__maps__free_maps_by_name(maps);
--				up_write(&maps->lock);
--				return;
-+				err = -ENOMEM;
-+				goto out;
- 			}
- 
- 			maps->maps_by_name = maps_by_name;
- 			maps->nr_maps_allocated = nr_allocate;
--		}
-+}
- 		maps->maps_by_name[maps->nr_maps - 1] = map;
- 		__maps__sort_by_name(maps);
- 	}
-+ out:
- 	up_write(&maps->lock);
-+	return err;
- }
- 
--static void __maps__remove(struct maps *maps, struct map *map)
-+static void __maps__remove(struct maps *maps, struct map_rb_node *rb_node)
- {
--	rb_erase_init(&map->rb_node, &maps->entries);
--	map__put(map);
-+	rb_erase_init(&rb_node->rb_node, &maps->entries);
-+	map__put(rb_node->map);
-+	free(rb_node);
- }
- 
- void maps__remove(struct maps *maps, struct map *map)
- {
-+	struct map_rb_node *rb_node;
-+
- 	down_write(&maps->lock);
- 	if (maps->last_search_by_name == map)
- 		maps->last_search_by_name = NULL;
- 
--	__maps__remove(maps, map);
-+	rb_node = maps__find_node(maps, map);
-+	assert(rb_node->map == map);
-+	__maps__remove(maps, rb_node);
- 	--maps->nr_maps;
- 	if (maps->maps_by_name)
- 		__maps__free_maps_by_name(maps);
-@@ -93,11 +132,12 @@ void maps__remove(struct maps *maps, struct map *map)
- 
- static void __maps__purge(struct maps *maps)
- {
--	struct map *pos, *next;
-+	struct map_rb_node *pos, *next;
- 
- 	maps__for_each_entry_safe(maps, pos, next) {
- 		rb_erase_init(&pos->rb_node,  &maps->entries);
--		map__put(pos);
-+		map__put(pos->map);
-+		free(pos);
- 	}
- }
- 
-@@ -153,21 +193,21 @@ struct symbol *maps__find_symbol(struct maps *maps, u64 addr, struct map **mapp)
- struct symbol *maps__find_symbol_by_name(struct maps *maps, const char *name, struct map **mapp)
- {
- 	struct symbol *sym;
--	struct map *pos;
-+	struct map_rb_node *pos;
- 
- 	down_read(&maps->lock);
- 
- 	maps__for_each_entry(maps, pos) {
--		sym = map__find_symbol_by_name(pos, name);
-+		sym = map__find_symbol_by_name(pos->map, name);
- 
- 		if (sym == NULL)
+ 		case 'k':
+ 			if (browser->selection != NULL)
+-				hists_browser__zoom_map(browser, browser->selection->maps->machine->vmlinux_map);
++				hists_browser__zoom_map(browser,
++					      maps__machine(browser->selection->maps)->vmlinux_map);
  			continue;
--		if (!map__contains_symbol(pos, sym)) {
-+		if (!map__contains_symbol(pos->map, sym)) {
- 			sym = NULL;
- 			continue;
- 		}
- 		if (mapp != NULL)
--			*mapp = pos;
-+			*mapp = pos->map;
- 		goto out;
- 	}
- 
-@@ -196,15 +236,15 @@ int maps__find_ams(struct maps *maps, struct addr_map_symbol *ams)
- size_t maps__fprintf(struct maps *maps, FILE *fp)
+ 		case 'V':
+ 			verbose = (verbose + 1) % 4;
+diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
+index a093a15f048f..0aa979f64565 100644
+--- a/tools/perf/util/callchain.c
++++ b/tools/perf/util/callchain.c
+@@ -1112,6 +1112,8 @@ int hist_entry__append_callchain(struct hist_entry *he, struct perf_sample *samp
+ int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *node,
+ 			bool hide_unresolved)
  {
- 	size_t printed = 0;
--	struct map *pos;
-+	struct map_rb_node *pos;
- 
- 	down_read(&maps->lock);
- 
- 	maps__for_each_entry(maps, pos) {
- 		printed += fprintf(fp, "Map:");
--		printed += map__fprintf(pos, fp);
-+		printed += map__fprintf(pos->map, fp);
- 		if (verbose > 2) {
--			printed += dso__fprintf(pos->dso, fp);
-+			printed += dso__fprintf(pos->map->dso, fp);
- 			printed += fprintf(fp, "--\n");
- 		}
- 	}
-@@ -231,11 +271,11 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 	next = root->rb_node;
- 	first = NULL;
- 	while (next) {
--		struct map *pos = rb_entry(next, struct map, rb_node);
-+		struct map_rb_node *pos = rb_entry(next, struct map_rb_node, rb_node);
- 
--		if (pos->end > map->start) {
-+		if (pos->map->end > map->start) {
- 			first = next;
--			if (pos->start <= map->start)
-+			if (pos->map->start <= map->start)
- 				break;
- 			next = next->rb_left;
- 		} else
-@@ -244,14 +284,14 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 
- 	next = first;
- 	while (next) {
--		struct map *pos = rb_entry(next, struct map, rb_node);
-+		struct map_rb_node *pos = rb_entry(next, struct map_rb_node, rb_node);
- 		next = rb_next(&pos->rb_node);
- 
- 		/*
- 		 * Stop if current map starts after map->end.
- 		 * Maps are ordered by start: next will not overlap for sure.
- 		 */
--		if (pos->start >= map->end)
-+		if (pos->map->start >= map->end)
- 			break;
- 
- 		if (verbose >= 2) {
-@@ -262,7 +302,7 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 			} else {
- 				fputs("overlapping maps:\n", fp);
- 				map__fprintf(map, fp);
--				map__fprintf(pos, fp);
-+				map__fprintf(pos->map, fp);
- 			}
- 		}
- 
-@@ -271,8 +311,8 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 		 * Now check if we need to create new maps for areas not
- 		 * overlapped by the new map:
- 		 */
--		if (map->start > pos->start) {
--			struct map *before = map__clone(pos);
-+		if (map->start > pos->map->start) {
-+			struct map *before = map__clone(pos->map);
- 
- 			if (before == NULL) {
- 				err = -ENOMEM;
-@@ -280,14 +320,17 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 			}
- 
- 			before->end = map->start;
--			__maps__insert(maps, before);
-+			err = __maps__insert(maps, before);
-+			if (err)
-+				goto put_map;
++	struct machine *machine = maps__machine(node->ms.maps);
 +
- 			if (verbose >= 2 && !use_browser)
- 				map__fprintf(before, fp);
- 			map__put(before);
- 		}
- 
--		if (map->end < pos->end) {
--			struct map *after = map__clone(pos);
-+		if (map->end < pos->map->end) {
-+			struct map *after = map__clone(pos->map);
- 
- 			if (after == NULL) {
- 				err = -ENOMEM;
-@@ -295,15 +338,19 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 			}
- 
- 			after->start = map->end;
--			after->pgoff += map->end - pos->start;
--			assert(pos->map_ip(pos, map->end) == after->map_ip(after, map->end));
--			__maps__insert(maps, after);
-+			after->pgoff += map->end - pos->map->start;
-+			assert(pos->map->map_ip(pos->map, map->end) ==
-+				after->map_ip(after, map->end));
-+			err = __maps__insert(maps, after);
-+			if (err)
-+				goto put_map;
-+
- 			if (verbose >= 2 && !use_browser)
- 				map__fprintf(after, fp);
- 			map__put(after);
- 		}
- put_map:
--		map__put(pos);
-+		map__put(pos->map);
- 
- 		if (err)
+ 	al->maps = node->ms.maps;
+ 	al->map = node->ms.map;
+ 	al->sym = node->ms.sym;
+@@ -1124,9 +1126,8 @@ int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *
+ 		if (al->map == NULL)
  			goto out;
-@@ -322,12 +369,12 @@ int maps__clone(struct thread *thread, struct maps *parent)
- {
- 	struct maps *maps = thread->maps;
- 	int err;
--	struct map *map;
-+	struct map_rb_node *rb_node;
- 
- 	down_read(&parent->lock);
- 
--	maps__for_each_entry(parent, map) {
--		struct map *new = map__clone(map);
-+	maps__for_each_entry(parent, rb_node) {
-+		struct map *new = map__clone(rb_node->map);
- 
- 		if (new == NULL) {
- 			err = -ENOMEM;
-@@ -338,7 +385,10 @@ int maps__clone(struct thread *thread, struct maps *parent)
- 		if (err)
- 			goto out_unlock;
- 
--		maps__insert(maps, new);
-+		err = maps__insert(maps, new);
-+		if (err)
-+			goto out_unlock;
-+
- 		map__put(new);
- 	}
- 
-@@ -348,40 +398,31 @@ int maps__clone(struct thread *thread, struct maps *parent)
- 	return err;
- }
- 
--static void __maps__insert(struct maps *maps, struct map *map)
-+struct map_rb_node *maps__find_node(struct maps *maps, struct map *map)
- {
--	struct rb_node **p = &maps->entries.rb_node;
--	struct rb_node *parent = NULL;
--	const u64 ip = map->start;
--	struct map *m;
-+	struct map_rb_node *rb_node;
- 
--	while (*p != NULL) {
--		parent = *p;
--		m = rb_entry(parent, struct map, rb_node);
--		if (ip < m->start)
--			p = &(*p)->rb_left;
--		else
--			p = &(*p)->rb_right;
-+	maps__for_each_entry(maps, rb_node) {
-+		if (rb_node->map == map)
-+			return rb_node;
  	}
 -
--	rb_link_node(&map->rb_node, parent, p);
--	rb_insert_color(&map->rb_node, &maps->entries);
--	map__get(map);
-+	return NULL;
- }
- 
- struct map *maps__find(struct maps *maps, u64 ip)
- {
- 	struct rb_node *p;
--	struct map *m;
-+	struct map_rb_node *m;
-+
- 
- 	down_read(&maps->lock);
- 
- 	p = maps->entries.rb_node;
- 	while (p != NULL) {
--		m = rb_entry(p, struct map, rb_node);
--		if (ip < m->start)
-+		m = rb_entry(p, struct map_rb_node, rb_node);
-+		if (ip < m->map->start)
- 			p = p->rb_left;
--		else if (ip >= m->end)
-+		else if (ip >= m->map->end)
- 			p = p->rb_right;
- 		else
- 			goto out;
-@@ -390,14 +431,29 @@ struct map *maps__find(struct maps *maps, u64 ip)
- 	m = NULL;
- out:
- 	up_read(&maps->lock);
--	return m;
-+	return m ? m->map : NULL;
- }
- 
--struct map *maps__first(struct maps *maps)
-+struct map_rb_node *maps__first(struct maps *maps)
- {
- 	struct rb_node *first = rb_first(&maps->entries);
- 
- 	if (first)
--		return rb_entry(first, struct map, rb_node);
-+		return rb_entry(first, struct map_rb_node, rb_node);
- 	return NULL;
- }
-+
-+struct map_rb_node *map_rb_node__next(struct map_rb_node *node)
-+{
-+	struct rb_node *next;
-+
-+	if (!node)
-+		return NULL;
-+
-+	next = rb_next(&node->rb_node);
-+
-+	if (!next)
-+		return NULL;
-+
-+	return rb_entry(next, struct map_rb_node, rb_node);
-+}
-diff --git a/tools/perf/util/maps.h b/tools/perf/util/maps.h
-index 7e729ff42749..512746ec0f9a 100644
---- a/tools/perf/util/maps.h
-+++ b/tools/perf/util/maps.h
-@@ -15,15 +15,22 @@ struct map;
- struct maps;
- struct thread;
- 
-+struct map_rb_node {
-+	struct rb_node rb_node;
-+	struct map *map;
-+};
-+
-+struct map_rb_node *maps__first(struct maps *maps);
-+struct map_rb_node *map_rb_node__next(struct map_rb_node *node);
-+struct map_rb_node *maps__find_node(struct maps *maps, struct map *map);
- struct map *maps__find(struct maps *maps, u64 addr);
--struct map *maps__first(struct maps *maps);
--struct map *map__next(struct map *map);
- 
- #define maps__for_each_entry(maps, map) \
--	for (map = maps__first(maps); map; map = map__next(map))
-+	for (map = maps__first(maps); map; map = map_rb_node__next(map))
- 
- #define maps__for_each_entry_safe(maps, map, next) \
--	for (map = maps__first(maps), next = map__next(map); map; map = next, next = map__next(map))
-+	for (map = maps__first(maps), next = map_rb_node__next(map); map; \
-+	     map = next, next = map_rb_node__next(map))
- 
- struct maps {
- 	struct rb_root      entries;
-@@ -63,7 +70,7 @@ void maps__put(struct maps *maps);
- int maps__clone(struct thread *thread, struct maps *parent);
- size_t maps__fprintf(struct maps *maps, FILE *fp);
- 
--void maps__insert(struct maps *maps, struct map *map);
-+int maps__insert(struct maps *maps, struct map *map);
- 
- void maps__remove(struct maps *maps, struct map *map);
- 
-diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-index 881d94f65a6b..cdf5d655d84c 100644
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -151,23 +151,27 @@ static int kernel_get_symbol_address_by_name(const char *name, u64 *addr,
- static struct map *kernel_get_module_map(const char *module)
- {
- 	struct maps *maps = machine__kernel_maps(host_machine);
--	struct map *pos;
-+	struct map_rb_node *pos;
- 
- 	/* A file path -- this is an offline module */
- 	if (module && strchr(module, '/'))
- 		return dso__new_map(module);
- 
- 	if (!module) {
--		pos = machine__kernel_map(host_machine);
--		return map__get(pos);
-+		struct map *map = machine__kernel_map(host_machine);
-+
-+		return map__get(map);
- 	}
- 
- 	maps__for_each_entry(maps, pos) {
- 		/* short_name is "[module]" */
--		if (strncmp(pos->dso->short_name + 1, module,
--			    pos->dso->short_name_len - 2) == 0 &&
--		    module[pos->dso->short_name_len - 2] == '\0') {
--			return map__get(pos);
-+		const char *short_name = pos->map->dso->short_name;
-+		u16 short_name_len =  pos->map->dso->short_name_len;
-+
-+		if (strncmp(short_name + 1, module,
-+			    short_name_len - 2) == 0 &&
-+		    module[short_name_len - 2] == '\0') {
-+			return map__get(pos->map);
+-	if (al->maps == machine__kernel_maps(al->maps->machine)) {
+-		if (machine__is_host(al->maps->machine)) {
++	if (al->maps == machine__kernel_maps(machine)) {
++		if (machine__is_host(machine)) {
+ 			al->cpumode = PERF_RECORD_MISC_KERNEL;
+ 			al->level = 'k';
+ 		} else {
+@@ -1134,7 +1135,7 @@ int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *
+ 			al->level = 'g';
  		}
- 	}
- 	return NULL;
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index c0a2de42c51b..325fbeea8dff 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -1355,10 +1355,14 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
- 			map->unmap_ip = map__unmap_ip;
- 			/* Ensure maps are correctly ordered */
- 			if (kmaps) {
-+				int err;
-+
- 				map__get(map);
- 				maps__remove(kmaps, map);
--				maps__insert(kmaps, map);
-+				err = maps__insert(kmaps, map);
- 				map__put(map);
-+				if (err)
-+					return err;
- 			}
- 		}
+ 	} else {
+-		if (machine__is_host(al->maps->machine)) {
++		if (machine__is_host(machine)) {
+ 			al->cpumode = PERF_RECORD_MISC_USER;
+ 			al->level = '.';
+ 		} else if (perf_guest) {
+diff --git a/tools/perf/util/db-export.c b/tools/perf/util/db-export.c
+index e0d4f08839fb..1cfcfdd3cf52 100644
+--- a/tools/perf/util/db-export.c
++++ b/tools/perf/util/db-export.c
+@@ -181,7 +181,7 @@ static int db_ids_from_al(struct db_export *dbe, struct addr_location *al,
+ 	if (al->map) {
+ 		struct dso *dso = al->map->dso;
  
-@@ -1411,7 +1415,8 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
- 			curr_map->map_ip = curr_map->unmap_ip = identity__map_ip;
- 		}
- 		curr_dso->symtab_type = dso->symtab_type;
--		maps__insert(kmaps, curr_map);
-+		if (maps__insert(kmaps, curr_map))
-+			return -1;
- 		/*
- 		 * Add it before we drop the reference to curr_map, i.e. while
- 		 * we still are sure to have a reference to this DSO via
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 65e0c3d126f1..d9aa41e20d5f 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -273,13 +273,13 @@ void symbols__fixup_end(struct rb_root_cached *symbols, bool is_kallsyms)
- 
- void maps__fixup_end(struct maps *maps)
- {
--	struct map *prev = NULL, *curr;
-+	struct map_rb_node *prev = NULL, *curr;
- 
- 	down_write(&maps->lock);
- 
- 	maps__for_each_entry(maps, curr) {
--		if (prev != NULL && !prev->end)
--			prev->end = curr->start;
-+		if (prev != NULL && !prev->map->end)
-+			prev->map->end = curr->map->start;
- 
- 		prev = curr;
- 	}
-@@ -288,8 +288,8 @@ void maps__fixup_end(struct maps *maps)
- 	 * We still haven't the actual symbols, so guess the
- 	 * last map final address.
- 	 */
--	if (curr && !curr->end)
--		curr->end = ~0ULL;
-+	if (curr && !curr->map->end)
-+		curr->map->end = ~0ULL;
- 
- 	up_write(&maps->lock);
- }
-@@ -942,7 +942,10 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
- 			}
- 
- 			curr_map->map_ip = curr_map->unmap_ip = identity__map_ip;
--			maps__insert(kmaps, curr_map);
-+			if (maps__insert(kmaps, curr_map)) {
-+				dso__put(ndso);
-+				return -1;
-+			}
- 			++kernel_range;
- 		} else if (delta) {
- 			/* Kernel was relocated at boot time */
-@@ -1130,14 +1133,15 @@ int compare_proc_modules(const char *from, const char *to)
- static int do_validate_kcore_modules(const char *filename, struct maps *kmaps)
- {
- 	struct rb_root modules = RB_ROOT;
--	struct map *old_map;
-+	struct map_rb_node *old_node;
+-		err = db_export__dso(dbe, dso, al->maps->machine);
++		err = db_export__dso(dbe, dso, maps__machine(al->maps));
+ 		if (err)
+ 			return err;
+ 		*dso_db_id = dso->db_id;
+@@ -354,19 +354,21 @@ int db_export__sample(struct db_export *dbe, union perf_event *event,
+ 	};
+ 	struct thread *main_thread;
+ 	struct comm *comm = NULL;
++	struct machine *machine;
  	int err;
  
- 	err = read_proc_modules(filename, &modules);
+ 	err = db_export__evsel(dbe, evsel);
  	if (err)
  		return err;
  
--	maps__for_each_entry(kmaps, old_map) {
-+	maps__for_each_entry(kmaps, old_node) {
-+		struct map *old_map = old_node->map;
- 		struct module_info *mi;
+-	err = db_export__machine(dbe, al->maps->machine);
++	machine = maps__machine(al->maps);
++	err = db_export__machine(dbe, machine);
+ 	if (err)
+ 		return err;
  
- 		if (!__map__is_kmodule(old_map)) {
-@@ -1254,10 +1258,13 @@ static int kcore_mapfn(u64 start, u64 len, u64 pgoff, void *data)
-  */
- int maps__merge_in(struct maps *kmaps, struct map *new_map)
- {
--	struct map *old_map;
-+	struct map_rb_node *rb_node;
- 	LIST_HEAD(merged);
-+	int err = 0;
+-	main_thread = thread__main_thread(al->maps->machine, thread);
++	main_thread = thread__main_thread(machine, thread);
+ 
+-	err = db_export__threads(dbe, thread, main_thread, al->maps->machine, &comm);
++	err = db_export__threads(dbe, thread, main_thread, machine, &comm);
+ 	if (err)
+ 		goto out_put;
+ 
+@@ -380,7 +382,7 @@ int db_export__sample(struct db_export *dbe, union perf_event *event,
+ 		goto out_put;
+ 
+ 	if (dbe->cpr) {
+-		struct call_path *cp = call_path_from_sample(dbe, al->maps->machine,
++		struct call_path *cp = call_path_from_sample(dbe, machine,
+ 							     thread, sample,
+ 							     evsel);
+ 		if (cp) {
+diff --git a/tools/perf/util/dlfilter.c b/tools/perf/util/dlfilter.c
+index 37beb7530288..fe2a0752a0f6 100644
+--- a/tools/perf/util/dlfilter.c
++++ b/tools/perf/util/dlfilter.c
+@@ -197,8 +197,12 @@ static const __u8 *dlfilter__insn(void *ctx, __u32 *len)
+ 		if (!al->thread && machine__resolve(d->machine, al, d->sample) < 0)
+ 			return NULL;
+ 
+-		if (al->thread->maps && al->thread->maps->machine)
+-			script_fetch_insn(d->sample, al->thread, al->thread->maps->machine);
++		if (al->thread->maps) {
++			struct machine *machine = maps__machine(al->thread->maps);
 +
-+	maps__for_each_entry(kmaps, rb_node) {
-+		struct map *old_map = rb_node->map;
++			if (machine)
++				script_fetch_insn(d->sample, al->thread, machine);
++		}
+ 	}
  
--	maps__for_each_entry(kmaps, old_map) {
- 		/* no overload with this one */
- 		if (new_map->end < old_map->start ||
- 		    new_map->start >= old_map->end)
-@@ -1281,13 +1288,16 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
- 				 */
- 				struct map_list_node *m = map_list_node__new();
+ 	if (!d->sample->insn_len)
+diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+index 1fa14598b916..f40cdd6ac126 100644
+--- a/tools/perf/util/event.c
++++ b/tools/perf/util/event.c
+@@ -572,7 +572,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+ 			     struct addr_location *al)
+ {
+ 	struct maps *maps = thread->maps;
+-	struct machine *machine = maps->machine;
++	struct machine *machine = maps__machine(maps);
+ 	bool load_map = false;
  
--				if (!m)
--					return -ENOMEM;
-+				if (!m) {
-+					err = -ENOMEM;
-+					goto out;
-+				}
+ 	al->maps = maps;
+@@ -637,7 +637,7 @@ struct map *thread__find_map_fb(struct thread *thread, u8 cpumode, u64 addr,
+ 				struct addr_location *al)
+ {
+ 	struct map *map = thread__find_map(thread, cpumode, addr, al);
+-	struct machine *machine = thread->maps->machine;
++	struct machine *machine = maps__machine(thread->maps);
+ 	u8 addr_cpumode = machine__addr_cpumode(machine, cpumode, addr);
  
- 				m->map = map__clone(new_map);
- 				if (!m->map) {
- 					free(m);
--					return -ENOMEM;
-+					err = -ENOMEM;
-+					goto out;
- 				}
+ 	if (map || addr_cpumode == cpumode)
+diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+index 3670136a0074..1b0e89cd5d99 100644
+--- a/tools/perf/util/hist.c
++++ b/tools/perf/util/hist.c
+@@ -241,7 +241,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
  
- 				m->map->end = old_map->start;
-@@ -1319,21 +1329,24 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
+ 	if (h->cgroup) {
+ 		const char *cgrp_name = "unknown";
+-		struct cgroup *cgrp = cgroup__find(h->ms.maps->machine->env,
++		struct cgroup *cgrp = cgroup__find(maps__machine(h->ms.maps)->env,
+ 						   h->cgroup);
+ 		if (cgrp != NULL)
+ 			cgrp_name = cgrp->name;
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 93a07079d174..446c0273259d 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -2842,7 +2842,7 @@ static int find_prev_cpumode(struct ip_callchain *chain, struct thread *thread,
+ static u64 get_leaf_frame_caller(struct perf_sample *sample,
+ 		struct thread *thread, int usr_idx)
+ {
+-	if (machine__normalized_is(thread->maps->machine, "arm64"))
++	if (machine__normalized_is(maps__machine(thread->maps), "arm64"))
+ 		return get_leaf_frame_caller_aarch64(sample, thread, usr_idx);
+ 	else
+ 		return 0;
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index 7620cfa114d4..a99dbde656a2 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -234,7 +234,7 @@ bool __map__is_kernel(const struct map *map)
+ {
+ 	if (!map->dso->kernel)
+ 		return false;
+-	return machine__kernel_map(map__kmaps((struct map *)map)->machine) == map;
++	return machine__kernel_map(maps__machine(map__kmaps((struct map *)map))) == map;
+ }
+ 
+ bool __map__is_extra_kernel_map(const struct map *map)
+@@ -475,11 +475,15 @@ u64 map__rip_2objdump(struct map *map, u64 rip)
+ 	 * kcore may not either. However the trampoline object code is on the
+ 	 * main kernel map, so just use that instead.
+ 	 */
+-	if (kmap && is_entry_trampoline(kmap->name) && kmap->kmaps && kmap->kmaps->machine) {
+-		struct map *kernel_map = machine__kernel_map(kmap->kmaps->machine);
++	if (kmap && is_entry_trampoline(kmap->name) && kmap->kmaps) {
++		struct machine *machine = maps__machine(kmap->kmaps);
+ 
+-		if (kernel_map)
+-			map = kernel_map;
++		if (machine) {
++			struct map *kernel_map = machine__kernel_map(machine);
++
++			if (kernel_map)
++				map = kernel_map;
++		}
+ 	}
+ 
+ 	if (!map->dso->adjust_symbols)
+diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
+index 83ec126bcbe5..91bb015caede 100644
+--- a/tools/perf/util/maps.c
++++ b/tools/perf/util/maps.c
+@@ -13,7 +13,7 @@
+ static void maps__init(struct maps *maps, struct machine *machine)
+ {
+ 	maps->entries = RB_ROOT;
+-	init_rwsem(&maps->lock);
++	init_rwsem(maps__lock(maps));
+ 	maps->machine = machine;
+ 	maps->last_search_by_name = NULL;
+ 	maps->nr_maps = 0;
+@@ -32,7 +32,7 @@ static void __maps__free_maps_by_name(struct maps *maps)
+ 
+ static int __maps__insert(struct maps *maps, struct map *map)
+ {
+-	struct rb_node **p = &maps->entries.rb_node;
++	struct rb_node **p = &maps__entries(maps)->rb_node;
+ 	struct rb_node *parent = NULL;
+ 	const u64 ip = map->start;
+ 	struct map_rb_node *m, *new_rb_node;
+@@ -54,7 +54,7 @@ static int __maps__insert(struct maps *maps, struct map *map)
+ 	}
+ 
+ 	rb_link_node(&new_rb_node->rb_node, parent, p);
+-	rb_insert_color(&new_rb_node->rb_node, &maps->entries);
++	rb_insert_color(&new_rb_node->rb_node, maps__entries(maps));
+ 	map__get(map);
+ 	return 0;
+ }
+@@ -63,7 +63,7 @@ int maps__insert(struct maps *maps, struct map *map)
+ {
+ 	int err;
+ 
+-	down_write(&maps->lock);
++	down_write(maps__lock(maps));
+ 	err = __maps__insert(maps, map);
+ 	if (err)
+ 		goto out;
+@@ -84,10 +84,11 @@ int maps__insert(struct maps *maps, struct map *map)
+ 	 * If we already performed some search by name, then we need to add the just
+ 	 * inserted map and resort.
+ 	 */
+-	if (maps->maps_by_name) {
+-		if (maps->nr_maps > maps->nr_maps_allocated) {
+-			int nr_allocate = maps->nr_maps * 2;
+-			struct map **maps_by_name = realloc(maps->maps_by_name, nr_allocate * sizeof(map));
++	if (maps__maps_by_name(maps)) {
++		if (maps__nr_maps(maps) > maps->nr_maps_allocated) {
++			int nr_allocate = maps__nr_maps(maps) * 2;
++			struct map **maps_by_name = realloc(maps__maps_by_name(maps),
++							    nr_allocate * sizeof(map));
+ 
+ 			if (maps_by_name == NULL) {
+ 				__maps__free_maps_by_name(maps);
+@@ -97,18 +98,18 @@ int maps__insert(struct maps *maps, struct map *map)
+ 
+ 			maps->maps_by_name = maps_by_name;
+ 			maps->nr_maps_allocated = nr_allocate;
+-}
+-		maps->maps_by_name[maps->nr_maps - 1] = map;
++		}
++		maps__maps_by_name(maps)[maps__nr_maps(maps) - 1] = map;
+ 		__maps__sort_by_name(maps);
+ 	}
+  out:
+-	up_write(&maps->lock);
++	up_write(maps__lock(maps));
+ 	return err;
+ }
+ 
+ static void __maps__remove(struct maps *maps, struct map_rb_node *rb_node)
+ {
+-	rb_erase_init(&rb_node->rb_node, &maps->entries);
++	rb_erase_init(&rb_node->rb_node, maps__entries(maps));
+ 	map__put(rb_node->map);
+ 	free(rb_node);
+ }
+@@ -117,7 +118,7 @@ void maps__remove(struct maps *maps, struct map *map)
+ {
+ 	struct map_rb_node *rb_node;
+ 
+-	down_write(&maps->lock);
++	down_write(maps__lock(maps));
+ 	if (maps->last_search_by_name == map)
+ 		maps->last_search_by_name = NULL;
+ 
+@@ -125,9 +126,9 @@ void maps__remove(struct maps *maps, struct map *map)
+ 	assert(rb_node->map == map);
+ 	__maps__remove(maps, rb_node);
+ 	--maps->nr_maps;
+-	if (maps->maps_by_name)
++	if (maps__maps_by_name(maps))
+ 		__maps__free_maps_by_name(maps);
+-	up_write(&maps->lock);
++	up_write(maps__lock(maps));
+ }
+ 
+ static void __maps__purge(struct maps *maps)
+@@ -135,7 +136,7 @@ static void __maps__purge(struct maps *maps)
+ 	struct map_rb_node *pos, *next;
+ 
+ 	maps__for_each_entry_safe(maps, pos, next) {
+-		rb_erase_init(&pos->rb_node,  &maps->entries);
++		rb_erase_init(&pos->rb_node,  maps__entries(maps));
+ 		map__put(pos->map);
+ 		free(pos);
+ 	}
+@@ -143,9 +144,9 @@ static void __maps__purge(struct maps *maps)
+ 
+ static void maps__exit(struct maps *maps)
+ {
+-	down_write(&maps->lock);
++	down_write(maps__lock(maps));
+ 	__maps__purge(maps);
+-	up_write(&maps->lock);
++	up_write(maps__lock(maps));
+ }
+ 
+ bool maps__empty(struct maps *maps)
+@@ -170,6 +171,14 @@ void maps__delete(struct maps *maps)
+ 	free(maps);
+ }
+ 
++struct maps *maps__get(struct maps *maps)
++{
++	if (maps)
++		refcount_inc(&maps->refcnt);
++
++	return maps;
++}
++
+ void maps__put(struct maps *maps)
+ {
+ 	if (maps && refcount_dec_and_test(&maps->refcnt))
+@@ -195,7 +204,7 @@ struct symbol *maps__find_symbol_by_name(struct maps *maps, const char *name, st
+ 	struct symbol *sym;
+ 	struct map_rb_node *pos;
+ 
+-	down_read(&maps->lock);
++	down_read(maps__lock(maps));
+ 
+ 	maps__for_each_entry(maps, pos) {
+ 		sym = map__find_symbol_by_name(pos->map, name);
+@@ -213,7 +222,7 @@ struct symbol *maps__find_symbol_by_name(struct maps *maps, const char *name, st
+ 
+ 	sym = NULL;
+ out:
+-	up_read(&maps->lock);
++	up_read(maps__lock(maps));
+ 	return sym;
+ }
+ 
+@@ -238,7 +247,7 @@ size_t maps__fprintf(struct maps *maps, FILE *fp)
+ 	size_t printed = 0;
+ 	struct map_rb_node *pos;
+ 
+-	down_read(&maps->lock);
++	down_read(maps__lock(maps));
+ 
+ 	maps__for_each_entry(maps, pos) {
+ 		printed += fprintf(fp, "Map:");
+@@ -249,7 +258,7 @@ size_t maps__fprintf(struct maps *maps, FILE *fp)
  		}
  	}
  
-+out:
- 	while (!list_empty(&merged)) {
- 		struct map_list_node *old_node;
+-	up_read(&maps->lock);
++	up_read(maps__lock(maps));
  
- 		old_node = list_entry(merged.next, struct map_list_node, node);
- 		list_del_init(&old_node->node);
--		maps__insert(kmaps, old_node->map);
-+		if (!err)
-+			err = maps__insert(kmaps, old_node->map);
- 		map__put(old_node->map);
- 		free(old_node);
- 	}
+ 	return printed;
+ }
+@@ -260,9 +269,9 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
+ 	struct rb_node *next, *first;
+ 	int err = 0;
  
- 	if (new_map) {
--		maps__insert(kmaps, new_map);
-+		if (!err)
-+			err = maps__insert(kmaps, new_map);
- 		map__put(new_map);
- 	}
--	return 0;
-+	return err;
+-	down_write(&maps->lock);
++	down_write(maps__lock(maps));
+ 
+-	root = &maps->entries;
++	root = maps__entries(maps);
+ 
+ 	/*
+ 	 * Find first map where end > map->start.
+@@ -358,7 +367,7 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
+ 
+ 	err = 0;
+ out:
+-	up_write(&maps->lock);
++	up_write(maps__lock(maps));
+ 	return err;
  }
  
- static int dso__load_kcore(struct dso *dso, struct map *map,
-@@ -1341,7 +1354,8 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+@@ -371,7 +380,7 @@ int maps__clone(struct thread *thread, struct maps *parent)
+ 	int err;
+ 	struct map_rb_node *rb_node;
+ 
+-	down_read(&parent->lock);
++	down_read(maps__lock(parent));
+ 
+ 	maps__for_each_entry(parent, rb_node) {
+ 		struct map *new = map__clone(rb_node->map);
+@@ -394,7 +403,7 @@ int maps__clone(struct thread *thread, struct maps *parent)
+ 
+ 	err = 0;
+ out_unlock:
+-	up_read(&parent->lock);
++	up_read(maps__lock(parent));
+ 	return err;
+ }
+ 
+@@ -415,9 +424,9 @@ struct map *maps__find(struct maps *maps, u64 ip)
+ 	struct map_rb_node *m;
+ 
+ 
+-	down_read(&maps->lock);
++	down_read(maps__lock(maps));
+ 
+-	p = maps->entries.rb_node;
++	p = maps__entries(maps)->rb_node;
+ 	while (p != NULL) {
+ 		m = rb_entry(p, struct map_rb_node, rb_node);
+ 		if (ip < m->map->start)
+@@ -430,13 +439,13 @@ struct map *maps__find(struct maps *maps, u64 ip)
+ 
+ 	m = NULL;
+ out:
+-	up_read(&maps->lock);
++	up_read(maps__lock(maps));
+ 	return m ? m->map : NULL;
+ }
+ 
+ struct map_rb_node *maps__first(struct maps *maps)
  {
- 	struct maps *kmaps = map__kmaps(map);
- 	struct kcore_mapfn_data md;
--	struct map *old_map, *replacement_map = NULL, *next;
-+	struct map *replacement_map = NULL;
-+	struct map_rb_node *old_node, *next;
- 	struct machine *machine;
- 	bool is_64_bit;
- 	int err, fd;
-@@ -1388,7 +1402,9 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
- 	}
+-	struct rb_node *first = rb_first(&maps->entries);
++	struct rb_node *first = rb_first(maps__entries(maps));
  
- 	/* Remove old maps */
--	maps__for_each_entry_safe(kmaps, old_map, next) {
-+	maps__for_each_entry_safe(kmaps, old_node, next) {
-+		struct map *old_map = old_node->map;
+ 	if (first)
+ 		return rb_entry(first, struct map_rb_node, rb_node);
+diff --git a/tools/perf/util/maps.h b/tools/perf/util/maps.h
+index 512746ec0f9a..bde3390c7096 100644
+--- a/tools/perf/util/maps.h
++++ b/tools/perf/util/maps.h
+@@ -43,7 +43,7 @@ struct maps {
+ 	unsigned int	 nr_maps_allocated;
+ #ifdef HAVE_LIBUNWIND_SUPPORT
+ 	void				*addr_space;
+-	struct unwind_libunwind_ops	*unwind_libunwind_ops;
++	const struct unwind_libunwind_ops *unwind_libunwind_ops;
+ #endif
+ };
+ 
+@@ -58,20 +58,51 @@ struct kmap {
+ struct maps *maps__new(struct machine *machine);
+ void maps__delete(struct maps *maps);
+ bool maps__empty(struct maps *maps);
++int maps__clone(struct thread *thread, struct maps *parent);
 +
- 		/*
- 		 * We need to preserve eBPF maps even if they are
- 		 * covered by kcore, because we need to access
-@@ -1441,17 +1457,21 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
- 			/* Ensure maps are correctly ordered */
- 			map__get(map);
- 			maps__remove(kmaps, map);
--			maps__insert(kmaps, map);
-+			err = maps__insert(kmaps, map);
- 			map__put(map);
- 			map__put(new_node->map);
-+			if (err)
-+				goto out_err;
- 		} else {
- 			/*
- 			 * Merge kcore map into existing maps,
- 			 * and ensure that current maps (eBPF)
- 			 * stay intact.
- 			 */
--			if (maps__merge_in(kmaps, new_node->map))
-+			if (maps__merge_in(kmaps, new_node->map)) {
-+				err = -EINVAL;
- 				goto out_err;
-+			}
- 		}
- 		free(new_node);
- 	}
-@@ -1498,7 +1518,7 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
- 		free(list_node);
- 	}
- 	close(fd);
--	return -EINVAL;
-+	return err;
++struct maps *maps__get(struct maps *maps);
++void maps__put(struct maps *maps);
+ 
+-static inline struct maps *maps__get(struct maps *maps)
++static inline struct rb_root *maps__entries(struct maps *maps)
+ {
+-	if (maps)
+-		refcount_inc(&maps->refcnt);
+-	return maps;
++	return &maps->entries;
  }
  
- /*
-@@ -2042,8 +2062,9 @@ void __maps__sort_by_name(struct maps *maps)
+-void maps__put(struct maps *maps);
+-int maps__clone(struct thread *thread, struct maps *parent);
++static inline struct machine *maps__machine(struct maps *maps)
++{
++	return maps->machine;
++}
++
++static inline struct rw_semaphore *maps__lock(struct maps *maps)
++{
++	return &maps->lock;
++}
++
++static inline struct map **maps__maps_by_name(struct maps *maps)
++{
++	return maps->maps_by_name;
++}
++
++static inline unsigned int maps__nr_maps(const struct maps *maps)
++{
++	return maps->nr_maps;
++}
++
++#ifdef HAVE_LIBUNWIND_SUPPORT
++static inline void *maps__addr_space(struct maps *maps)
++{
++	return maps->addr_space;
++}
++
++static inline const struct unwind_libunwind_ops *maps__unwind_libunwind_ops(const struct maps *maps)
++{
++	return maps->unwind_libunwind_ops;
++}
++#endif
++
+ size_t maps__fprintf(struct maps *maps, FILE *fp);
+ 
+ int maps__insert(struct maps *maps, struct map *map);
+-
+ void maps__remove(struct maps *maps, struct map *map);
+ 
+ struct symbol *maps__find_symbol(struct maps *maps, u64 addr, struct map **mapp);
+diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+index 0f4ef61f2ffa..e5cc18f6fcda 100644
+--- a/tools/perf/util/scripting-engines/trace-event-python.c
++++ b/tools/perf/util/scripting-engines/trace-event-python.c
+@@ -1288,7 +1288,7 @@ static void python_export_sample_table(struct db_export *dbe,
+ 
+ 	tuple_set_d64(t, 0, es->db_id);
+ 	tuple_set_d64(t, 1, es->evsel->db_id);
+-	tuple_set_d64(t, 2, es->al->maps->machine->db_id);
++	tuple_set_d64(t, 2, maps__machine(es->al->maps)->db_id);
+ 	tuple_set_d64(t, 3, es->al->thread->db_id);
+ 	tuple_set_d64(t, 4, es->comm_db_id);
+ 	tuple_set_d64(t, 5, es->dso_db_id);
+diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+index 093a0c8b2e3d..e04d9bddba11 100644
+--- a/tools/perf/util/sort.c
++++ b/tools/perf/util/sort.c
+@@ -762,7 +762,7 @@ static int hist_entry__cgroup_snprintf(struct hist_entry *he,
+ 	const char *cgrp_name = "N/A";
+ 
+ 	if (he->cgroup) {
+-		struct cgroup *cgrp = cgroup__find(he->ms.maps->machine->env,
++		struct cgroup *cgrp = cgroup__find(maps__machine(he->ms.maps)->env,
+ 						   he->cgroup);
+ 		if (cgrp != NULL)
+ 			cgrp_name = cgrp->name;
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index 325fbeea8dff..ccdafc3971ac 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -1422,7 +1422,7 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
+ 		 * we still are sure to have a reference to this DSO via
+ 		 * *curr_map->dso.
+ 		 */
+-		dsos__add(&kmaps->machine->dsos, curr_dso);
++		dsos__add(&maps__machine(kmaps)->dsos, curr_dso);
+ 		/* kmaps already got it */
+ 		map__put(curr_map);
+ 		dso__set_loaded(curr_dso);
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index d9aa41e20d5f..efd047bab373 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -275,7 +275,7 @@ void maps__fixup_end(struct maps *maps)
+ {
+ 	struct map_rb_node *prev = NULL, *curr;
+ 
+-	down_write(&maps->lock);
++	down_write(maps__lock(maps));
+ 
+ 	maps__for_each_entry(maps, curr) {
+ 		if (prev != NULL && !prev->map->end)
+@@ -291,7 +291,7 @@ void maps__fixup_end(struct maps *maps)
+ 	if (curr && !curr->map->end)
+ 		curr->map->end = ~0ULL;
+ 
+-	up_write(&maps->lock);
++	up_write(maps__lock(maps));
+ }
+ 
+ struct symbol *symbol__new(u64 start, u64 len, u8 binding, u8 type, const char *name)
+@@ -844,7 +844,7 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
+ 	if (!kmaps)
+ 		return -1;
+ 
+-	machine = kmaps->machine;
++	machine = maps__machine(kmaps);
+ 
+ 	x86_64 = machine__is(machine, "x86_64");
+ 
+@@ -968,7 +968,7 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
+ 
+ 	if (curr_map != initial_map &&
+ 	    dso->kernel == DSO_SPACE__KERNEL_GUEST &&
+-	    machine__is_default_guest(kmaps->machine)) {
++	    machine__is_default_guest(maps__machine(kmaps))) {
+ 		dso__set_loaded(curr_map->dso);
+ 	}
+ 
+@@ -1365,7 +1365,7 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+ 	if (!kmaps)
+ 		return -EINVAL;
+ 
+-	machine = kmaps->machine;
++	machine = maps__machine(kmaps);
+ 
+ 	/* This function requires that the map is the kernel map */
+ 	if (!__map__is_kernel(map))
+@@ -1892,7 +1892,7 @@ int dso__load(struct dso *dso, struct map *map)
+ 		else if (dso->kernel == DSO_SPACE__KERNEL_GUEST)
+ 			ret = dso__load_guest_kernel_sym(dso, map);
+ 
+-		machine = map__kmaps(map)->machine;
++		machine = maps__machine(map__kmaps(map));
+ 		if (machine__is(machine, "x86_64"))
+ 			machine__map_x86_64_entry_trampolines(machine, dso);
+ 		goto out;
+@@ -2057,32 +2057,32 @@ static int map__strcmp_name(const void *name, const void *b)
+ 
+ void __maps__sort_by_name(struct maps *maps)
+ {
+-	qsort(maps->maps_by_name, maps->nr_maps, sizeof(struct map *), map__strcmp);
++	qsort(maps__maps_by_name(maps), maps__nr_maps(maps), sizeof(struct map *), map__strcmp);
+ }
  
  static int map__groups__sort_by_name_from_rbtree(struct maps *maps)
  {
--	struct map *map;
--	struct map **maps_by_name = realloc(maps->maps_by_name, maps->nr_maps * sizeof(map));
-+	struct map_rb_node *rb_node;
-+	struct map **maps_by_name = realloc(maps->maps_by_name,
-+					    maps->nr_maps * sizeof(struct map *));
+ 	struct map_rb_node *rb_node;
+-	struct map **maps_by_name = realloc(maps->maps_by_name,
+-					    maps->nr_maps * sizeof(struct map *));
++	struct map **maps_by_name = realloc(maps__maps_by_name(maps),
++					    maps__nr_maps(maps) * sizeof(struct map *));
  	int i = 0;
  
  	if (maps_by_name == NULL)
-@@ -2055,8 +2076,8 @@ static int map__groups__sort_by_name_from_rbtree(struct maps *maps)
- 	maps->maps_by_name = maps_by_name;
- 	maps->nr_maps_allocated = maps->nr_maps;
+ 		return -1;
  
--	maps__for_each_entry(maps, map)
--		maps_by_name[i++] = map;
-+	maps__for_each_entry(maps, rb_node)
-+		maps_by_name[i++] = rb_node->map;
+-	up_read(&maps->lock);
+-	down_write(&maps->lock);
++	up_read(maps__lock(maps));
++	down_write(maps__lock(maps));
+ 
+ 	maps->maps_by_name = maps_by_name;
+-	maps->nr_maps_allocated = maps->nr_maps;
++	maps->nr_maps_allocated = maps__nr_maps(maps);
+ 
+ 	maps__for_each_entry(maps, rb_node)
+ 		maps_by_name[i++] = rb_node->map;
  
  	__maps__sort_by_name(maps);
  
-@@ -2082,6 +2103,7 @@ static struct map *__maps__find_by_name(struct maps *maps, const char *name)
+-	up_write(&maps->lock);
+-	down_read(&maps->lock);
++	up_write(maps__lock(maps));
++	down_read(maps__lock(maps));
  
- struct map *maps__find_by_name(struct maps *maps, const char *name)
+ 	return 0;
+ }
+@@ -2091,11 +2091,12 @@ static struct map *__maps__find_by_name(struct maps *maps, const char *name)
  {
-+	struct map_rb_node *rb_node;
+ 	struct map **mapp;
+ 
+-	if (maps->maps_by_name == NULL &&
++	if (maps__maps_by_name(maps) == NULL &&
+ 	    map__groups__sort_by_name_from_rbtree(maps))
+ 		return NULL;
+ 
+-	mapp = bsearch(name, maps->maps_by_name, maps->nr_maps, sizeof(*mapp), map__strcmp_name);
++	mapp = bsearch(name, maps__maps_by_name(maps), maps__nr_maps(maps),
++		       sizeof(*mapp), map__strcmp_name);
+ 	if (mapp)
+ 		return *mapp;
+ 	return NULL;
+@@ -2106,9 +2107,10 @@ struct map *maps__find_by_name(struct maps *maps, const char *name)
+ 	struct map_rb_node *rb_node;
  	struct map *map;
  
- 	down_read(&maps->lock);
-@@ -2100,12 +2122,13 @@ struct map *maps__find_by_name(struct maps *maps, const char *name)
+-	down_read(&maps->lock);
++	down_read(maps__lock(maps));
+ 
+-	if (maps->last_search_by_name && strcmp(maps->last_search_by_name->dso->short_name, name) == 0) {
++	if (maps->last_search_by_name &&
++	    strcmp(maps->last_search_by_name->dso->short_name, name) == 0) {
+ 		map = maps->last_search_by_name;
+ 		goto out_unlock;
+ 	}
+@@ -2118,7 +2120,7 @@ struct map *maps__find_by_name(struct maps *maps, const char *name)
+ 	 * made.
+ 	 */
+ 	map = __maps__find_by_name(maps, name);
+-	if (map || maps->maps_by_name != NULL)
++	if (map || maps__maps_by_name(maps) != NULL)
  		goto out_unlock;
  
  	/* Fallback to traversing the rbtree... */
--	maps__for_each_entry(maps, map)
-+	maps__for_each_entry(maps, rb_node) {
-+		map = rb_node->map;
- 		if (strcmp(map->dso->short_name, name) == 0) {
- 			maps->last_search_by_name = map;
- 			goto out_unlock;
- 		}
--
-+	}
+@@ -2132,7 +2134,7 @@ struct map *maps__find_by_name(struct maps *maps, const char *name)
  	map = NULL;
  
  out_unlock:
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 6def01036eb5..57b95c1d7e39 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -669,7 +669,7 @@ int perf_event__synthesize_modules(struct perf_tool *tool, perf_event__handler_t
- 				   struct machine *machine)
- {
- 	int rc = 0;
--	struct map *pos;
-+	struct map_rb_node *pos;
- 	struct maps *maps = machine__kernel_maps(machine);
- 	union perf_event *event;
- 	size_t size = symbol_conf.buildid_mmap2 ?
-@@ -692,37 +692,39 @@ int perf_event__synthesize_modules(struct perf_tool *tool, perf_event__handler_t
- 		event->header.misc = PERF_RECORD_MISC_GUEST_KERNEL;
- 
- 	maps__for_each_entry(maps, pos) {
--		if (!__map__is_kmodule(pos))
-+		struct map *map = pos->map;
-+
-+		if (!__map__is_kmodule(map))
- 			continue;
- 
- 		if (symbol_conf.buildid_mmap2) {
--			size = PERF_ALIGN(pos->dso->long_name_len + 1, sizeof(u64));
-+			size = PERF_ALIGN(map->dso->long_name_len + 1, sizeof(u64));
- 			event->mmap2.header.type = PERF_RECORD_MMAP2;
- 			event->mmap2.header.size = (sizeof(event->mmap2) -
- 						(sizeof(event->mmap2.filename) - size));
- 			memset(event->mmap2.filename + size, 0, machine->id_hdr_size);
- 			event->mmap2.header.size += machine->id_hdr_size;
--			event->mmap2.start = pos->start;
--			event->mmap2.len   = pos->end - pos->start;
-+			event->mmap2.start = map->start;
-+			event->mmap2.len   = map->end - map->start;
- 			event->mmap2.pid   = machine->pid;
- 
--			memcpy(event->mmap2.filename, pos->dso->long_name,
--			       pos->dso->long_name_len + 1);
-+			memcpy(event->mmap2.filename, map->dso->long_name,
-+			       map->dso->long_name_len + 1);
- 
- 			perf_record_mmap2__read_build_id(&event->mmap2, machine, false);
- 		} else {
--			size = PERF_ALIGN(pos->dso->long_name_len + 1, sizeof(u64));
-+			size = PERF_ALIGN(map->dso->long_name_len + 1, sizeof(u64));
- 			event->mmap.header.type = PERF_RECORD_MMAP;
- 			event->mmap.header.size = (sizeof(event->mmap) -
- 						(sizeof(event->mmap.filename) - size));
- 			memset(event->mmap.filename + size, 0, machine->id_hdr_size);
- 			event->mmap.header.size += machine->id_hdr_size;
--			event->mmap.start = pos->start;
--			event->mmap.len   = pos->end - pos->start;
-+			event->mmap.start = map->start;
-+			event->mmap.len   = map->end - map->start;
- 			event->mmap.pid   = machine->pid;
- 
--			memcpy(event->mmap.filename, pos->dso->long_name,
--			       pos->dso->long_name_len + 1);
-+			memcpy(event->mmap.filename, map->dso->long_name,
-+			       map->dso->long_name_len + 1);
- 		}
- 
- 		if (perf_tool__process_synth_event(tool, event, machine, process) != 0) {
-diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
-index a2490a20eb56..24e53bd55f7d 100644
---- a/tools/perf/util/thread.c
-+++ b/tools/perf/util/thread.c
-@@ -352,9 +352,7 @@ int thread__insert_map(struct thread *thread, struct map *map)
- 		return ret;
- 
- 	maps__fixup_overlappings(thread->maps, map, stderr);
--	maps__insert(thread->maps, map);
--
--	return 0;
-+	return maps__insert(thread->maps, map);
+-	up_read(&maps->lock);
++	up_read(maps__lock(maps));
+ 	return map;
  }
  
- static int __thread__prepare_access(struct thread *thread)
-@@ -362,12 +360,12 @@ static int __thread__prepare_access(struct thread *thread)
- 	bool initialized = false;
- 	int err = 0;
+@@ -2384,7 +2386,7 @@ static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map)
+ {
+ 	int err;
+ 	const char *kallsyms_filename;
+-	struct machine *machine = map__kmaps(map)->machine;
++	struct machine *machine = maps__machine(map__kmaps(map));
+ 	char path[PATH_MAX];
+ 
+ 	if (machine->kallsyms_filename) {
+diff --git a/tools/perf/util/thread-stack.c b/tools/perf/util/thread-stack.c
+index 1b992bbba4e8..4b85c1728012 100644
+--- a/tools/perf/util/thread-stack.c
++++ b/tools/perf/util/thread-stack.c
+@@ -155,8 +155,8 @@ static int thread_stack__init(struct thread_stack *ts, struct thread *thread,
+ 		ts->br_stack_sz = br_stack_sz;
+ 	}
+ 
+-	if (thread->maps && thread->maps->machine) {
+-		struct machine *machine = thread->maps->machine;
++	if (thread->maps && maps__machine(thread->maps)) {
++		struct machine *machine = maps__machine(thread->maps);
+ 		const char *arch = perf_env__arch(machine->env);
+ 
+ 		ts->kernel_start = machine__kernel_start(machine);
+diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
+index 24e53bd55f7d..292585a52281 100644
+--- a/tools/perf/util/thread.c
++++ b/tools/perf/util/thread.c
+@@ -362,7 +362,7 @@ static int __thread__prepare_access(struct thread *thread)
  	struct maps *maps = thread->maps;
--	struct map *map;
-+	struct map_rb_node *rb_node;
+ 	struct map_rb_node *rb_node;
  
- 	down_read(&maps->lock);
+-	down_read(&maps->lock);
++	down_read(maps__lock(maps));
  
--	maps__for_each_entry(maps, map) {
--		err = unwind__prepare_access(thread->maps, map, &initialized);
-+	maps__for_each_entry(maps, rb_node) {
-+		err = unwind__prepare_access(thread->maps, rb_node->map, &initialized);
- 		if (err || initialized)
+ 	maps__for_each_entry(maps, rb_node) {
+ 		err = unwind__prepare_access(thread->maps, rb_node->map, &initialized);
+@@ -370,7 +370,7 @@ static int __thread__prepare_access(struct thread *thread)
  			break;
  	}
-diff --git a/tools/perf/util/vdso.c b/tools/perf/util/vdso.c
-index 43beb169631d..835c39efb80d 100644
---- a/tools/perf/util/vdso.c
-+++ b/tools/perf/util/vdso.c
-@@ -144,10 +144,11 @@ static enum dso_type machine__thread_dso_type(struct machine *machine,
- 					      struct thread *thread)
- {
- 	enum dso_type dso_type = DSO__TYPE_UNKNOWN;
--	struct map *map;
-+	struct map_rb_node *rb_node;
-+
-+	maps__for_each_entry(thread->maps, rb_node) {
-+		struct dso *dso = rb_node->map->dso;
  
--	maps__for_each_entry(thread->maps, map) {
--		struct dso *dso = map->dso;
- 		if (!dso || dso->long_name[0] != '/')
- 			continue;
- 		dso_type = dso__type(dso, machine);
+-	up_read(&maps->lock);
++	up_read(maps__lock(maps));
+ 
+ 	return err;
+ }
+diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+index 81b6bd6e1536..952c5ee66fe7 100644
+--- a/tools/perf/util/unwind-libunwind-local.c
++++ b/tools/perf/util/unwind-libunwind-local.c
+@@ -665,24 +665,26 @@ static unw_accessors_t accessors = {
+ 
+ static int _unwind__prepare_access(struct maps *maps)
+ {
+-	maps->addr_space = unw_create_addr_space(&accessors, 0);
+-	if (!maps->addr_space) {
++	void *addr_space = unw_create_addr_space(&accessors, 0);
++
++	maps->addr_space = addr_space;
++	if (!addr_space) {
+ 		pr_err("unwind: Can't create unwind address space.\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	unw_set_caching_policy(maps->addr_space, UNW_CACHE_GLOBAL);
++	unw_set_caching_policy(addr_space, UNW_CACHE_GLOBAL);
+ 	return 0;
+ }
+ 
+ static void _unwind__flush_access(struct maps *maps)
+ {
+-	unw_flush_cache(maps->addr_space, 0, 0);
++	unw_flush_cache(maps__addr_space(maps), 0, 0);
+ }
+ 
+ static void _unwind__finish_access(struct maps *maps)
+ {
+-	unw_destroy_addr_space(maps->addr_space);
++	unw_destroy_addr_space(maps__addr_space(maps));
+ }
+ 
+ static int get_entries(struct unwind_info *ui, unwind_entry_cb_t cb,
+@@ -707,7 +709,7 @@ static int get_entries(struct unwind_info *ui, unwind_entry_cb_t cb,
+ 	 */
+ 	if (max_stack - 1 > 0) {
+ 		WARN_ONCE(!ui->thread, "WARNING: ui->thread is NULL");
+-		addr_space = ui->thread->maps->addr_space;
++		addr_space = maps__addr_space(ui->thread->maps);
+ 
+ 		if (addr_space == NULL)
+ 			return -1;
+@@ -757,7 +759,7 @@ static int _unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 	struct unwind_info ui = {
+ 		.sample       = data,
+ 		.thread       = thread,
+-		.machine      = thread->maps->machine,
++		.machine      = maps__machine(thread->maps),
+ 		.best_effort  = best_effort
+ 	};
+ 
+diff --git a/tools/perf/util/unwind-libunwind.c b/tools/perf/util/unwind-libunwind.c
+index 509c287ee762..c14f04082377 100644
+--- a/tools/perf/util/unwind-libunwind.c
++++ b/tools/perf/util/unwind-libunwind.c
+@@ -22,12 +22,13 @@ int unwind__prepare_access(struct maps *maps, struct map *map, bool *initialized
+ 	const char *arch;
+ 	enum dso_type dso_type;
+ 	struct unwind_libunwind_ops *ops = local_unwind_libunwind_ops;
++	struct machine *machine;
+ 	int err;
+ 
+ 	if (!dwarf_callchain_users)
+ 		return 0;
+ 
+-	if (maps->addr_space) {
++	if (maps__addr_space(maps)) {
+ 		pr_debug("unwind: thread map already set, dso=%s\n",
+ 			 map->dso->name);
+ 		if (initialized)
+@@ -35,15 +36,16 @@ int unwind__prepare_access(struct maps *maps, struct map *map, bool *initialized
+ 		return 0;
+ 	}
+ 
++	machine = maps__machine(maps);
+ 	/* env->arch is NULL for live-mode (i.e. perf top) */
+-	if (!maps->machine->env || !maps->machine->env->arch)
++	if (!machine->env || !machine->env->arch)
+ 		goto out_register;
+ 
+-	dso_type = dso__type(map->dso, maps->machine);
++	dso_type = dso__type(map->dso, machine);
+ 	if (dso_type == DSO__TYPE_UNKNOWN)
+ 		return 0;
+ 
+-	arch = perf_env__arch(maps->machine->env);
++	arch = perf_env__arch(machine->env);
+ 
+ 	if (!strcmp(arch, "x86")) {
+ 		if (dso_type != DSO__TYPE_64BIT)
+@@ -60,7 +62,7 @@ int unwind__prepare_access(struct maps *maps, struct map *map, bool *initialized
+ out_register:
+ 	unwind__register_ops(maps, ops);
+ 
+-	err = maps->unwind_libunwind_ops->prepare_access(maps);
++	err = maps__unwind_libunwind_ops(maps)->prepare_access(maps);
+ 	if (initialized)
+ 		*initialized = err ? false : true;
+ 	return err;
+@@ -68,14 +70,18 @@ int unwind__prepare_access(struct maps *maps, struct map *map, bool *initialized
+ 
+ void unwind__flush_access(struct maps *maps)
+ {
+-	if (maps->unwind_libunwind_ops)
+-		maps->unwind_libunwind_ops->flush_access(maps);
++	const struct unwind_libunwind_ops *ops = maps__unwind_libunwind_ops(maps);
++
++	if (ops)
++		ops->flush_access(maps);
+ }
+ 
+ void unwind__finish_access(struct maps *maps)
+ {
+-	if (maps->unwind_libunwind_ops)
+-		maps->unwind_libunwind_ops->finish_access(maps);
++	const struct unwind_libunwind_ops *ops = maps__unwind_libunwind_ops(maps);
++
++	if (ops)
++		ops->finish_access(maps);
+ }
+ 
+ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+@@ -83,8 +89,9 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 			 struct perf_sample *data, int max_stack,
+ 			 bool best_effort)
+ {
+-	if (thread->maps->unwind_libunwind_ops)
+-		return thread->maps->unwind_libunwind_ops->get_entries(cb, arg, thread, data,
+-								       max_stack, best_effort);
++	const struct unwind_libunwind_ops *ops = maps__unwind_libunwind_ops(thread->maps);
++
++	if (ops)
++		return ops->get_entries(cb, arg, thread, data, max_stack);
+ 	return 0;
+ }
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
