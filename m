@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D3B6C21A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22346C21A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjCTTgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S229916AbjCTTgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjCTTfd (ORCPT
+        with ESMTP id S229949AbjCTTfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Mar 2023 15:35:33 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03C40144A0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01D2E136CA;
         Mon, 20 Mar 2023 12:30:20 -0700 (PDT)
 Received: from vm02.corp.microsoft.com (unknown [167.220.197.27])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 15EF420FB1B2;
-        Mon, 20 Mar 2023 12:20:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 15EF420FB1B2
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6FB7E20FB1BC;
+        Mon, 20 Mar 2023 12:20:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6FB7E20FB1BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679340030;
-        bh=JLW993L7KNZ43aI6v0ynXV6I6nnprRROSEVuJCp8QVo=;
+        s=default; t=1679340031;
+        bh=yubtDMU1v+j6puBmAVgHQ5Fbx/QE7P8/F/J6/XMCF5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jZdE92xkSlNsSdtRY8SG1L72AfSgg+/UasdFbiQcPghgRMaTIcGcQI7O/GdJjG+2g
-         aWqacbBFkt1YwcRsXRt//5OyRFmExbllwk6D5Dauo/wgqJENztvMcvlC21wtD1AULa
-         6T9tnRofIADsnQym6v0uN3sS6lgk2IRXtyo1dh+M=
+        b=qRsn/jD8/Zhfxs1pKJpuzggNoPqR1eQ/83CCyFv542Int3WEAgis1VYGpxm8RnqUQ
+         4D05Nv7bUNSZ2kZfJQ4Q8bKcmJT9ZrvL9pFeAgj12h94reMER9x9GDNMjI0HnZ5Pnr
+         j95Ck8CVgd9rc9C0WxRtfkN+CKDfHxKsX4nGUk64=
 From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        "Brijesh Singh" <brijesh.singh@amd.com>,
         "Tom Lendacky" <thomas.lendacky@amd.com>,
         "Kalra, Ashish" <ashish.kalra@amd.com>,
         linux-crypto@vger.kernel.org
-Subject: [PATCH v3 5/8] crypto: cpp - Bind to psp platform device on x86
-Date:   Mon, 20 Mar 2023 19:19:53 +0000
-Message-Id: <20230320191956.1354602-6-jpiotrowski@linux.microsoft.com>
+Subject: [PATCH v3 6/8] crypto: ccp - Add vdata for platform device
+Date:   Mon, 20 Mar 2023 19:19:54 +0000
+Message-Id: <20230320191956.1354602-7-jpiotrowski@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
 References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
@@ -50,69 +51,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PSP in Hyper-V VMs is exposed through the ASP ACPI table and is
-represented as a platform_device. Allow the ccp driver to bind to it by
-adding an id_table and initing the platform_driver also on x86. At this
-point probe is called for the psp device but init fails due to missing
-driver data.
+When matching the "psp" platform_device, the register offsets are
+determined at runtime from the ASP ACPI table. The structure containing
+the offset is passed through the platform data field provided before
+registering the platform device.
+
+To support this scenario, dynamically allocate vdata structs and fill
+those in with offsets provided by the platform. Due to the fields of the
+structs being const, it was necessary to use temporary structs and
+memcpy, as any assignment of the whole struct fails with an 'read-only
+location' compiler error.
 
 Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
 Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
 ---
- drivers/crypto/ccp/sp-dev.c      | 7 +++++++
- drivers/crypto/ccp/sp-platform.c | 7 +++++++
- 2 files changed, 14 insertions(+)
+ drivers/crypto/ccp/sp-platform.c | 57 ++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/drivers/crypto/ccp/sp-dev.c b/drivers/crypto/ccp/sp-dev.c
-index 7eb3e4668286..4c9f442b8a11 100644
---- a/drivers/crypto/ccp/sp-dev.c
-+++ b/drivers/crypto/ccp/sp-dev.c
-@@ -259,6 +259,12 @@ static int __init sp_mod_init(void)
- 	if (ret)
- 		return ret;
- 
-+	ret = sp_platform_init();
-+	if (ret) {
-+		sp_pci_exit();
-+		return ret;
-+	}
-+
- #ifdef CONFIG_CRYPTO_DEV_SP_PSP
- 	psp_pci_init();
- #endif
-@@ -286,6 +292,7 @@ static void __exit sp_mod_exit(void)
- #ifdef CONFIG_CRYPTO_DEV_SP_PSP
- 	psp_pci_exit();
- #endif
-+	sp_platform_exit();
- 
- 	sp_pci_exit();
- #endif
 diff --git a/drivers/crypto/ccp/sp-platform.c b/drivers/crypto/ccp/sp-platform.c
-index 7d79a8744f9a..5dcc834deb72 100644
+index 5dcc834deb72..2e57ec15046b 100644
 --- a/drivers/crypto/ccp/sp-platform.c
 +++ b/drivers/crypto/ccp/sp-platform.c
-@@ -56,6 +56,12 @@ static const struct of_device_id sp_of_match[] = {
- MODULE_DEVICE_TABLE(of, sp_of_match);
- #endif
+@@ -22,6 +22,7 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/acpi.h>
++#include <linux/platform_data/psp.h>
  
-+static const struct platform_device_id sp_platform_match[] = {
-+	{ "psp" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(platform, sp_platform_match);
+ #include "ccp-dev.h"
+ 
+@@ -86,6 +87,60 @@ static struct sp_dev_vdata *sp_get_acpi_version(struct platform_device *pdev)
+ 	return NULL;
+ }
+ 
++static void sp_platform_fill_vdata(struct sp_dev_vdata *vdata, struct psp_vdata *psp,
++				   struct sev_vdata *sev, const struct psp_platform_data *pdata)
++{
++	struct sev_vdata sevtmp = {
++		.cmdresp_reg = pdata->sev_cmd_resp_reg,
++		.cmdbuff_addr_lo_reg = pdata->sev_cmd_buf_lo_reg,
++		.cmdbuff_addr_hi_reg = pdata->sev_cmd_buf_hi_reg,
++	};
++	struct psp_vdata psptmp = {
++		.sev = sev,
++		.feature_reg = pdata->feature_reg,
++		.inten_reg = pdata->irq_en_reg,
++		.intsts_reg = pdata->irq_st_reg,
++	};
 +
- static struct sp_dev_vdata *sp_get_of_version(struct platform_device *pdev)
++	memcpy(sev, &sevtmp, sizeof(*sev));
++	memcpy(psp, &psptmp, sizeof(*psp));
++	vdata->psp_vdata = psp;
++}
++
++static struct sp_dev_vdata *sp_get_platform_version(struct sp_device *sp)
++{
++	struct psp_platform_data *pdata;
++	struct device *dev = sp->dev;
++	struct sp_dev_vdata *vdata;
++	struct psp_vdata *psp;
++	struct sev_vdata *sev;
++
++	pdata = dev_get_platdata(dev);
++	if (!pdata) {
++		dev_err(dev, "missing platform data\n");
++		return NULL;
++	}
++
++	vdata = devm_kzalloc(dev, sizeof(*vdata) + sizeof(*psp) + sizeof(*sev), GFP_KERNEL);
++	if (!vdata)
++		return NULL;
++
++	psp = (void *)vdata + sizeof(*vdata);
++	sev = (void *)psp + sizeof(*psp);
++	sp_platform_fill_vdata(vdata, psp, sev, pdata);
++
++	dev_dbg(dev, "PSP feature register:\t%x\n", psp->feature_reg);
++	dev_dbg(dev, "PSP IRQ enable register:\t%x\n", psp->inten_reg);
++	dev_dbg(dev, "PSP IRQ status register:\t%x\n", psp->intsts_reg);
++	dev_dbg(dev, "SEV cmdresp register:\t%x\n", sev->cmdresp_reg);
++	dev_dbg(dev, "SEV cmdbuf lo register:\t%x\n", sev->cmdbuff_addr_lo_reg);
++	dev_dbg(dev, "SEV cmdbuf hi register:\t%x\n", sev->cmdbuff_addr_hi_reg);
++	dev_dbg(dev, "SEV cmdresp IRQ:\t%x\n", pdata->mbox_irq_id);
++	dev_dbg(dev, "ACPI cmdresp register:\t%x\n", pdata->acpi_cmd_resp_reg);
++
++	return vdata;
++}
++
+ static int sp_get_irqs(struct sp_device *sp)
  {
- #ifdef CONFIG_OF
-@@ -212,6 +218,7 @@ static int sp_platform_resume(struct platform_device *pdev)
- #endif
- 
- static struct platform_driver sp_platform_driver = {
-+	.id_table = sp_platform_match,
- 	.driver = {
- 		.name = "ccp",
- #ifdef CONFIG_ACPI
+ 	struct sp_platform *sp_platform = sp->dev_specific;
+@@ -137,6 +192,8 @@ static int sp_platform_probe(struct platform_device *pdev)
+ 	sp->dev_specific = sp_platform;
+ 	sp->dev_vdata = pdev->dev.of_node ? sp_get_of_version(pdev)
+ 					 : sp_get_acpi_version(pdev);
++	if (!sp->dev_vdata)
++		sp->dev_vdata = sp_get_platform_version(sp);
+ 	if (!sp->dev_vdata) {
+ 		ret = -ENODEV;
+ 		dev_err(dev, "missing driver data\n");
 -- 
 2.34.1
 
