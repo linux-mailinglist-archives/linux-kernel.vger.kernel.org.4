@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD8B6C0C5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A91A6C0C60
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCTIis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S230436AbjCTIkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjCTIiq (ORCPT
+        with ESMTP id S230007AbjCTIko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:38:46 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADF3C177;
-        Mon, 20 Mar 2023 01:38:44 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id w4so3575019plg.9;
-        Mon, 20 Mar 2023 01:38:44 -0700 (PDT)
+        Mon, 20 Mar 2023 04:40:44 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B330728B;
+        Mon, 20 Mar 2023 01:40:43 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso8634204wmb.0;
+        Mon, 20 Mar 2023 01:40:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679301524;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mJC3AQ7lV8EAfEonQK8BPgGYXPUwRyy9bVVTnAJzNlE=;
-        b=Q+r+wwIxMmaN2/gtgWy01jZrITAFEMqLNMeZuGydYBHdGAs6j5cgPfi9HDpisA1eqt
-         HD0NYC1mLwQmrv9A/QdHHL9Xjoj5jWg+bdsoGjFBxlM83NhEKCscESdt2KGEWmbhrVpj
-         RaaA7MLnqPRzMOkrcDdMoIElGn6lcr4HEoq2TMFXptrHY5tFqbHsRJ/umzEfDIjKu2MP
-         /H3GDFS7HCXEtuNAHcCyhluJMULfmIhWKY462qgWfDaGtZAA922shs+8OKSFY7Jc7G+0
-         FQTM8KUtejIe8W9gApZ0owD3v4P2DRlphi9YW7TGugPgcvfrlZXT8y6F+6+b3McRe2yL
-         CqEQ==
+        d=gmail.com; s=20210112; t=1679301642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zcKnhemYdKHWThhsxV1AhOlClFynUX4pt1AKusVZUtM=;
+        b=ERS1o6I1GyJB1x/Owu+aLzg/wa7KALPuXw34Y5/nyy/FPpP/dQAR5s65Sh+cpgQSUu
+         2WeXVR2YxURM6pF79L/vGRAHBTxBarR59IUS+PiP5dj2gULIVjfPD8KJT6ZbmmZGa55l
+         HD/gjEvlaOpZNvho7lOMiOcEGfJ43sYrTM+Wo0qM9pqaL3DnjhLRlfkXbtQjc6/1Laj6
+         HH/PGtwgiA2+UhopsFytxDyc2BROSOZT7bdRokzb9/NpsLXY+DVHJ89IE5Rj3O4PUR5I
+         xuX1PIIwK6DR6izzjFtsik1xfU4aTCr6bGydAA5AWzpaTySlU1uZ6uqqxokT35DkuPlS
+         q3zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679301524;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mJC3AQ7lV8EAfEonQK8BPgGYXPUwRyy9bVVTnAJzNlE=;
-        b=BU0x86OnnhV6dHOkcEzBvf2e/kymJnjgE3vAiZmeWZ5kCYbCNzscPxmztFldGQvDFL
-         N61ob8J9UXFm9DKPY4mjz7lPBSBPAAj+FQyxJsKzS5IedfHEq/ZaSIxB0MktZJY6xrqc
-         n1yTVPpYmlTCZ7KdxEoJMurDu8qfQV0f+4FWnn7f+KQHolc0pf3pUnWI2AFPa54M128Z
-         RUwhboICH6I1kyWTUjVw4iTTqoeoV0DpR8BRJ7sC3v88/BFxNpN/3XDyIFD9uOzx0Ovf
-         xfqGc3t/r9+iiF3nms6Wfgh9QmlHkZrvZkpfQz7xF3Ks5O1XRoqvZ2hycLRLqjNiCHZT
-         6uRg==
-X-Gm-Message-State: AO0yUKXiZthbEDTPMELnSj4DBnpD2uEyO24TKyJPvwOrxEHR9YCATxsF
-        1Mh8HAnGcpPZP2H2qb7HLOt1B8D0xhOk6FBVeK8=
-X-Google-Smtp-Source: AK7set9AI/fgSRifR7ibuLz98o6z22kyg3h8QsUnojunVooC/NtabxqvOtIcPD9gQzxSGf9JhSj68Ol/aGs5ZCsC8XE=
-X-Received: by 2002:a17:902:a3c7:b0:1a0:51f6:a252 with SMTP id
- q7-20020a170902a3c700b001a051f6a252mr6393901plb.3.1679301524355; Mon, 20 Mar
- 2023 01:38:44 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679301642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zcKnhemYdKHWThhsxV1AhOlClFynUX4pt1AKusVZUtM=;
+        b=qcbWOTLMO/LmMAFIcs+28OaSLRMJkJyylbzNdPuA03GrioytNP0SQB1IhY5Dt4rg48
+         ZOTUFq04WoSHG6LxETgrweZR6BKY+insAQ5OAZ+NaCSVSxsEt3otDDGcHnJEyc4KJ/nR
+         fJiWrUPhcdaB2EUHl2i5Hc0pMWJegcs29jQHMLSiYjcXyzNhsU7JNho1GMuurSS9shtT
+         eIHk4gqKtss7cfSv+m8nKRlqYabd+TAtYquFlAOTfnwWEFXQg8z0MIVSdl0IPj4oDChr
+         CLR7BpJUbYzEAohQJ8/FtdPECpfSeOn/mT5nGC8WVI2kr0H3SF1xA8efvxl8Fyn6oYfa
+         p8QA==
+X-Gm-Message-State: AO0yUKVebC1s0UKqo29eaJwvZwOeuhicVsLk6skbXhfkDDum0hXyJnPG
+        gk6XZ3gVbvzEM1JLQ/80xks=
+X-Google-Smtp-Source: AK7set/x80FQjPZUn/3XtHXtVyfMUipTNm59Yq+rktAgdqJxPhM28LN40nX/xK7/Rl6DFvAQKJtv4A==
+X-Received: by 2002:a05:600c:2053:b0:3ed:5cf7:3080 with SMTP id p19-20020a05600c205300b003ed5cf73080mr12180070wmg.5.1679301642106;
+        Mon, 20 Mar 2023 01:40:42 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id i7-20020adffc07000000b002c5706f7c6dsm8295961wrr.94.2023.03.20.01.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 01:40:41 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 08:40:40 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <ce89fe94-dc8d-4e10-9181-e01760939ef6@lucifer.local>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <20230319131047.174fa4e29cabe4371b298ed0@linux-foundation.org>
+ <fadd8558-8917-4012-b5ea-c6376c835cc8@lucifer.local>
+ <ZBd00i7fvwrMX/FY@casper.infradead.org>
+ <b4233383-2c87-422f-9f66-3815a6c77372@lucifer.local>
 MIME-Version: 1.0
-References: <20230316122322.339316-1-korantwork@gmail.com> <44b1519b-f9e0-476a-ff47-8d21f004b3cd@linux.intel.com>
-In-Reply-To: <44b1519b-f9e0-476a-ff47-8d21f004b3cd@linux.intel.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Mon, 20 Mar 2023 16:39:50 +0800
-Message-ID: <CAEm4hYV8tz=1J_VwnMVH8+wsoWnJFtZFXawVPCuUgzVC1-8uZg@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: vmd: Add the module param to adjust MSI mode
-To:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-Cc:     helgaas@kernel.org, kbusch@kernel.org, jonathan.derrick@linux.dev,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4233383-2c87-422f-9f66-3815a6c77372@lucifer.local>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -70,19 +82,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 5:31=E2=80=AFAM Patel, Nirmal
-<nirmal.patel@linux.intel.com> wrote:
-> configuring
+On Sun, Mar 19, 2023 at 09:16:18PM +0000, Lorenzo Stoakes wrote:
+> On Sun, Mar 19, 2023 at 08:47:14PM +0000, Matthew Wilcox wrote:
+> > I wonder if we can't do something like prefaulting the page before
+> > taking the spinlock, then use copy_page_to_iter_atomic()
 >
-Sorry for the typo.
-> What about this?
-> off: disable MSI remapping
->
-That's OK~
-> Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
->
-> Thanks
->
-I'll resend the patch with your Reviewed-by if no one else has other commen=
-ts.
-Thanks for your review~
+<snip>
+
+On second thoughts, and discussing with Uladzislau, this seems like a more
+sensible approach.
+
+I'm going to respin with prefaulting and revert to the previous locking.
