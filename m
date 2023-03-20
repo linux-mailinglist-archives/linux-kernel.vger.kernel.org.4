@@ -2,441 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCC56C2236
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40D06C2239
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCTUGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S230356AbjCTUHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjCTUGu (ORCPT
+        with ESMTP id S229791AbjCTUHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:06:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36685C64F;
-        Mon, 20 Mar 2023 13:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA13CB810A7;
-        Mon, 20 Mar 2023 20:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF00C433D2;
-        Mon, 20 Mar 2023 20:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679342801;
-        bh=RuqwWdFBmmRhgzI7VwXcy9qkadNZFYSQgKYwk08C8Ls=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=RvIri+10udHBazMLPnhLIu3CWRdAqtA+IfdBHB3swkc3AcD9x0/YRo30/8KBj0syf
-         Cork1VxCPT6/1V2IaryiPH2DzQnQ8s793rb4e+yVOOPxkCIGQqzMWg65yLCIu1LHpM
-         rYEarlpubwnkn62b0rfLmDT08zg7tEzC+b//6LrAoOPhlJkekYvMj3KAlaF2j39gf+
-         7Y9EhtUguMq10LymWOzdWlmkV6sxTwQXNmoQhLcKoXQ6sQdBNHPTPpIkI7sFljh/Kb
-         Bg6XShbWwkspIAU6nmxTxzRUII/Aa+vRle8hKzXAvP75K2WyjjBGG3V3HhcDMBDCx1
-         VxHLdcMxa6qHg==
-Message-ID: <21872a93cb09d6c0d9aa3593c0ec489e.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Mon, 20 Mar 2023 16:07:31 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2103.outbound.protection.outlook.com [40.107.92.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF4AEFB8;
+        Mon, 20 Mar 2023 13:07:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d+xXkHNLY5WbX7omX0sGIzKAEBR1fJR/wbZNBFkB3+XOviJlUBTy8vrP/aAeepHzceidZMC0ETlnfqAA8U0EANLaLNu58NMXho2rA+hYp+OqOmJCiMeYQwewcEiZCdLaYFFEhaX2zLFwEX0DEG7CEoYmvbS8nwd50NwVBUnB8Nik9CXwY7G+oJpMbu1AGHQXaWGb/3cGsgMaP7CEI12+I8Vs2e44srBjHRGhb0TcxAxl0y5wX5wVlqaQ0y7tAZPsDvUUeZGHvihKeieFoGyHhbdGmyKK2FYUBoZnMwoczrUPgG1CG/w+lz2PkL69L4O29a9w/wYu9WFvF0Gp979NkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hY5uEtFgUJ2MrwOQjLDRZwwXndPHBBl4vjgfrhmfdM0=;
+ b=kUM4BaBCCIcOhal/LSRHD75s3WmP6nofC0LwktLjBKRTI4eXq4Z4n8PSxw7OFCE403Yh6061LKhorTJqe7JSrRyOWKnLf/nm+uIWjTZ/lThn/mP5xQOKaDQxetr4BTtmmEtPqepjsf+zk+BMM/5ttLvVsWiAErCh+El0v5RUsNr0ujcfPLyAXElBsBUp+9uWS7/2FWCTh1yyyKXLB7bnmkEkQoMO03r8+O4FGjJCrPIZMAxlZg4oJeoN46PtynV82ueT0FdYu28MZZoRasZUiojykqQr19p1/7D6xKZ3eUxacIHGXO2uyEZZoiYzE9qZaluHMjL+4l6nYQZDGxONxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hY5uEtFgUJ2MrwOQjLDRZwwXndPHBBl4vjgfrhmfdM0=;
+ b=XD4GvnNcLiZLdpB87V3U8/ai+MzQm6iHm/Fp/3PONrdTmcZk64xYbr3pINLY70U/ck9SnrTil6qDcySVHgRQsPZOlOjJbX1MXLRCj+jYXv5TqM/RFm5UsiOX9WLnasmdPLGgFYT3qZhUJctXw6jY8NVUD/fIJoD8RSabZq9FbDA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3675.namprd13.prod.outlook.com (2603:10b6:5:1::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Mon, 20 Mar 2023 20:07:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 20:07:17 +0000
+Date:   Mon, 20 Mar 2023 21:07:10 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     =?utf-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
+Cc:     f.fainelli@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] net: dsa: b53: add BCM63268 RGMII configuration
+Message-ID: <ZBi87pSJYUqOWUp9@corigine.com>
+References: <20230320155024.164523-1-noltari@gmail.com>
+ <20230320155024.164523-5-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230320155024.164523-5-noltari@gmail.com>
+X-ClientProxiedBy: AS4P190CA0051.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:656::25) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230316104707.236034-4-keguang.zhang@gmail.com>
-References: <20230316104707.236034-1-keguang.zhang@gmail.com> <20230316104707.236034-4-keguang.zhang@gmail.com>
-Subject: Re: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Date:   Mon, 20 Mar 2023 13:06:39 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3675:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4eb6978-4f77-44b7-8022-08db297eb4a3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vZAt0WsjsnpIbO3ZdvCpn+ww+dBv30iWR5q/FtjlrxT9PkqiQ9knW4b807XjjKhJ2bM2jucaAuaebiQq0zH/0xEs4kMWW0bF+SDlq0acw6yBFd4AhFCU8vgDqQI4qv6lFYG4o1kk5QHBd29PvqE9zAOIT3jvOpMu0Am8ZbONLvyv+cLNPxCkgPPV0CRcXd0fluoMwTP0TRNEhe6nrGS8zHb9cXvveU2HwvQrmsqAyn7pK/EqXHBMFKGn3uaEzlQYJsoyVnJhjPJ+6TnoSqfrsD0lWOL3ui+wahfLXJyls1os4RHawCcUpL/X5OqlataFGeQxWcay/Sp+xQf2VCU2EygRhyxt8x9jj6Ef8ai2DuALGw0xIWolqUYisWanoLQETZvPSZJ79uzO8a1WG4DGaagUkeyyR52mkcdvYNXfwdFeUCB9atSBR2tQz5mw3t7ZSlu6TX6MsvKhlzgU28Qisu5Z3bvbFe87a42iX8PmyX9iETIoHqGh3DSDfgSrxt+RtZHQ9GNjkf6OSNmhJrSyNTgp0IgKnCnAu763L7na6R5gunmel2mQd6Vn8XfXZefr8Uwc81Sv5nCUOzLulFRuAzfjjC6vGMqt9cZ+0Wc4Jp+zEIKdOk1HfBamIpe+FbRPEuYa8p9q/kz85ldsa1RCZg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39840400004)(136003)(396003)(346002)(451199018)(7416002)(44832011)(6666004)(41300700001)(8936002)(6486002)(5660300002)(186003)(2616005)(478600001)(558084003)(38100700002)(2906002)(316002)(6506007)(6512007)(86362001)(4326008)(36756003)(66556008)(66476007)(66946007)(8676002)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VG9JT1dKb3BmZXJ4R2JhM1krM21nOUl5RWR5a2REbERpRUQzbUNLNmduN2R5?=
+ =?utf-8?B?alZrRjVIdGtCb29CUTB6RWZsRDM0Lzh3TVhBOWhxWXpmbGxibjVldXZsclRF?=
+ =?utf-8?B?Zm1VVnVTMGsvb1NxekdoeksxWnd5R2RHRkVCUmVLRm5JZ2dFSW5mSm1DV20v?=
+ =?utf-8?B?Zy9tWk5uRDExbDhDWGxTTEoxZlZ1UEZOSFptUEQzWlZFbHVrdjROYkJqbFhW?=
+ =?utf-8?B?S3JjdzFQZUdaUk53NmFEekZmMEFEVUVWRTlldE9hVG5XN1I4MURMdEtZekhn?=
+ =?utf-8?B?eEdweDU4Q0J5bW9BNmpBZjZpdzdOUThkNitpQk1LK3M4VWgzR0MrY3lvWDR5?=
+ =?utf-8?B?R0k2NnUwUGlvUFZFWFdMbVNHR2ZvNkQwRWM0QlFQSVNHZWQwZzNyZEd5dDJ0?=
+ =?utf-8?B?Q2FtWWNHejFjdlhqVWtzb0QvRERhNjBnTFBmRUhYU0hUS1VxaTRFc3lWc3hs?=
+ =?utf-8?B?WHJPUVhlalRGaHYzV1FDWGI1RjArNEw0Q3JuVzlSZ3BHdzJkaHhKWGE5OHZD?=
+ =?utf-8?B?d1M2ckJRdmdZVFNWUUFvTXY5R3NwYU9yM3FCblhIaGNZakpHRWdvWGYwOWFP?=
+ =?utf-8?B?eUFTOVI2V29iS1pQMGdPelgweFNCYVZVY21DU0xzSHVrVkNwWStIcitNSit4?=
+ =?utf-8?B?RDRsQ2dnOEJheVBOT1RjOXBXQ1dLV0ZEeS9BK2h1RGJIVm5GVnVjOGp2d2Z3?=
+ =?utf-8?B?RmJBMzEvYXA1T1FFcTRVTDNiaS91Ym9vSHUxT2Rkcm0zWEU2cTN6Z01nRE1N?=
+ =?utf-8?B?WUVqZ1Nnam9RRmo1WEV6aE1CWXNoYkJvanQzZ0dIVG40L3hJQWRKVzJzWjVX?=
+ =?utf-8?B?MXVXRk52ckRJc1I3ODU2MklON3RlRjltRmp2ampTd2w5MTF1WExHdVRuRTF6?=
+ =?utf-8?B?ZGt4WWJNR25paG44V2hqdkVmYVhQREg5Q2tBUXA3L2pGVUhzM2R0YnVMYXI0?=
+ =?utf-8?B?UldwQ3Y3V21UR3hYUDdpUXBHQkhIRWI0Y0lhN0tXQjRTajBMekxTT1M0ZVJu?=
+ =?utf-8?B?elhzaXovVThURnhRSDNhS3FjOUdKcnUzSkZlZUVMQUprUE8zZjlnMEp5Ny94?=
+ =?utf-8?B?anMzNmtUa2tMS0VBWm1Wb3dpdmpWQnQzOFVybEVQNlNhSU9sbHZ2bDJyZ1Vt?=
+ =?utf-8?B?Z3ZMMVFzaEdDcmhLVnl2Nk1USEpsQWhKRW1QbWw0N0d6NW1LbFIyZCtidG5l?=
+ =?utf-8?B?b0lGRTJUaVBlRXAwNk9Id0NObXVJazhMaHNhbU05akdRM21SV0ZPRUYzL0xS?=
+ =?utf-8?B?OUhqdUhPY1J0YWVNV0cwMm5ER0d5Mzd1NzRCSFRKL3V0VHA5eEdNTStkOWxh?=
+ =?utf-8?B?WWJVc0J5TDNIMCtUd0IwVlpJa0tDTlpNVHJhd3RsU1NaUm9lNFRQaFl3d28v?=
+ =?utf-8?B?NmU3dXQzMzJYQmlMdUR4bTBLZDVLUVhIZ1k4YllZTzR2a1FNeCtDRGoyMDJP?=
+ =?utf-8?B?U0RNUUIxL2crVFJPTG9HS3orUFZxd1NMb2FUS2hBZ05SekZzNHM0dFZmUDI1?=
+ =?utf-8?B?c21YTmdQR2VjcFU1SGI3Y0dkYnQvV2JpZ2t4b090bGlVeHFSdUppWXhYNmp5?=
+ =?utf-8?B?aXp5Zm8wN0p0RjBYNm1QNVZ4K1JwRktjTVRnNm1uRk5Ud0Zuc3dySnJWVmRL?=
+ =?utf-8?B?WFE3UzdZYjhrT1RuWi9kNDB2S3hDa0NRRGFJMGdVVXh0cEFGSHdGMEdEMHM2?=
+ =?utf-8?B?dXRtb3E3eVJDOUp6SzNaeFFzaTJOcG5oczJaUUt4YmRwRmZDN2FqQmJKRURZ?=
+ =?utf-8?B?ZUUwZVVQTXU2N0YxTlFsUHBwcjY0LzVJUU1LNzlsNUIxWlp1eXhYYTc0em9l?=
+ =?utf-8?B?azZRRGZCT1FNM1RxODZRTGVhVlltdFQ2ZlRHcVo0THBCNHhObEVicDFSYmhh?=
+ =?utf-8?B?d2pXZ3hCT0tDdFhESlduVWp6Qng5QjZZNm1Od1Vqa1ZmQ3lWWXN3YVdoTDdC?=
+ =?utf-8?B?R2tzYUxucGd0bDVNbDV4QmRxdkY5UVdhYjJYYkZnbWZxRHUzMmkvUFhtR1dG?=
+ =?utf-8?B?RTBUSEJJaVg4czJOajBZNEVRSXEyZzFyTHo2Z2R1NEp2cmt0TFdKMmRvanpU?=
+ =?utf-8?B?VzhwQTlPQkMvU0IydVU4ejhiZXV2RVJSU25xWWhTKzhPNGVCdjhBdGZSdWJ4?=
+ =?utf-8?B?U0Q0YXZaOVBWK1Z4TmI3NThvOWx5Zm9NUTF2bWVKR0VFUjBaZ2dLWVhZVGdn?=
+ =?utf-8?B?cXpvaEVCVDE2dWJod1R3VWNJQmRpaFdWTGgyNVpscGpQUDk0bGRPQitJVWRQ?=
+ =?utf-8?B?OUNobzZSSmN5eWI0Z2FPSHNpRGxRPT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4eb6978-4f77-44b7-8022-08db297eb4a3
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 20:07:17.8163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9TXXd+RR6ugt0EdkH4rECd4vDqCH6F6f9zX15OWjqSUpzx9bpJZeONblMfdR3sQpsXuxnHHSpF6jOE2sEwpyE3PVjMax5+Ein/MPRJRxXec=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3675
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Keguang Zhang (2023-03-16 03:47:06)
-> diff --git a/drivers/clk/clk-loongson1.c b/drivers/clk/clk-loongson1.c
-> new file mode 100644
-> index 000000000000..4fda55c67d8d
-> --- /dev/null
-> +++ b/drivers/clk/clk-loongson1.c
-> @@ -0,0 +1,301 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Clock driver for Loongson-1 SoC
-> + *
-> + * Copyright (C) 2012-2023 Keguang Zhang <keguang.zhang@gmail.com>
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/of_address.h>
-> +#include <linux/slab.h>
+On Mon, Mar 20, 2023 at 04:50:24PM +0100, Álvaro Fernández Rojas wrote:
+> BCM63268 requires special RGMII configuration to work.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-Need some more includes here, for container_of() and GENMASK(), readl(),
-etc.
-
-> +
-> +#include <dt-bindings/clock/loongson,ls1x-clk.h>
-> +
-> +/* Loongson 1 Clock Register Definitions */
-> +#define CLK_PLL_FREQ           0x0
-> +#define CLK_PLL_DIV            0x4
-> +
-> +static DEFINE_SPINLOCK(ls1x_clk_div_lock);
-> +
-
-Needs include.
-
-> +struct ls1x_clk_pll_data {
-> +       u32 fixed;
-> +       u8 shift;
-> +       u8 int_shift;
-> +       u8 int_width;
-> +       u8 frac_shift;
-> +       u8 frac_width;
-> +};
-> +
-> +struct ls1x_clk_div_data {
-> +       u8 shift;
-> +       u8 width;
-> +       unsigned long flags;
-> +       const struct clk_div_table *table;
-> +       u8 bypass_shift;
-> +       u8 bypass_inv;
-> +       spinlock_t *lock;       /* protect access to DIV registers */
-> +};
-> +
-> +struct ls1x_clk {
-> +       void __iomem *reg;
-> +       unsigned int offset;
-> +       struct clk_hw hw;
-> +       void *data;
-> +};
-> +
-> +#define to_ls1x_clk(_hw) container_of(_hw, struct ls1x_clk, hw)
-> +
-> +static inline unsigned long ls1x_pll_rate_part(unsigned int val,
-
-return a u32?
-
-> +                                              unsigned int shift,
-> +                                              unsigned int width)
-> +{
-> +       return (val & GENMASK(shift + width, shift)) >> shift;
-> +}
-> +
-> +static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
-> +                                         unsigned long parent_rate)
-> +{
-> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
-> +       const struct ls1x_clk_pll_data *d =3D ls1x_clk->data;
-> +       u32 val, rate;
-> +
-> +       val =3D readl(ls1x_clk->reg);
-> +       rate =3D d->fixed;
-> +       rate +=3D ls1x_pll_rate_part(val, d->int_shift, d->int_width);
-> +       if (d->frac_width)
-> +               rate +=3D ls1x_pll_rate_part(val, d->frac_shift, d->frac_=
-width);
-> +       rate *=3D parent_rate;
-> +       rate >>=3D d->shift;
-> +
-> +       return rate;
-> +}
-> +
-> +static const struct clk_ops ls1x_pll_clk_ops =3D {
-> +       .recalc_rate =3D ls1x_pll_recalc_rate,
-> +};
-> +
-> +static unsigned long ls1x_divider_recalc_rate(struct clk_hw *hw,
-> +                                             unsigned long parent_rate)
-> +{
-> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
-> +       const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
-> +       unsigned int val;
-> +
-> +       val =3D readl(ls1x_clk->reg) >> d->shift;
-> +       val &=3D clk_div_mask(d->width);
-> +
-> +       return divider_recalc_rate(hw, parent_rate, val, d->table,
-> +                                  d->flags, d->width);
-> +}
-> +
-> +static long ls1x_divider_round_rate(struct clk_hw *hw, unsigned long rat=
-e,
-> +                                   unsigned long *prate)
-> +{
-> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
-> +       const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
-> +
-> +       return divider_round_rate(hw, rate, prate, d->table,
-> +                                 d->width, d->flags);
-> +}
-> +
-> +static int ls1x_divider_set_rate(struct clk_hw *hw, unsigned long rate,
-> +                                unsigned long parent_rate)
-> +{
-> +       struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
-> +       const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
-> +       int val, div_val;
-> +       unsigned long flags =3D 0;
-> +
-> +       div_val =3D divider_get_val(rate, parent_rate, d->table,
-> +                                 d->width, d->flags);
-> +       if (div_val < 0)
-> +               return div_val;
-> +
-> +       if (d->lock)
-> +               spin_lock_irqsave(d->lock, flags);
-> +       else
-> +               __acquire(d->lock);
-> +
-> +       /* Bypass the clock */
-> +       val =3D readl(ls1x_clk->reg);
-> +       if (d->bypass_inv)
-> +               val &=3D ~BIT(d->bypass_shift);
-> +       else
-> +               val |=3D BIT(d->bypass_shift);
-> +       writel(val, ls1x_clk->reg);
-> +
-> +       val =3D readl(ls1x_clk->reg);
-> +       val &=3D ~(clk_div_mask(d->width) << d->shift);
-> +       val |=3D (u32)div_val << d->shift;
-> +       writel(val, ls1x_clk->reg);
-> +
-> +       /* Restore the clock */
-> +       val =3D readl(ls1x_clk->reg);
-> +       if (d->bypass_inv)
-> +               val |=3D BIT(d->bypass_shift);
-> +       else
-> +               val &=3D ~BIT(d->bypass_shift);
-> +       writel(val, ls1x_clk->reg);
-> +
-> +       if (d->lock)
-> +               spin_unlock_irqrestore(d->lock, flags);
-> +       else
-> +               __release(d->lock);
-
-Is there a case where there isn't a lock? It would be easier to read if
-this always had a lock and it wasn't optional.
-
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct clk_ops ls1x_clk_divider_ops =3D {
-> +       .recalc_rate =3D ls1x_divider_recalc_rate,
-> +       .round_rate =3D ls1x_divider_round_rate,
-> +       .set_rate =3D ls1x_divider_set_rate,
-> +};
-> +
-> +#define LS1X_CLK_PLL(_name, _offset, _fixed, _shift,                   \
-> +                    f_shift, f_width, i_shift, i_width)                \
-> +struct ls1x_clk _name =3D {                                             =
- \
-> +       .offset =3D (_offset),                                           =
- \
-> +       .data =3D &(struct ls1x_clk_pll_data) {                          =
- \
-> +               .fixed =3D (_fixed),                                     =
- \
-> +               .shift =3D (_shift),                                     =
- \
-> +               .int_shift =3D (i_shift),                                =
- \
-> +               .int_width =3D (i_width),                                =
- \
-> +               .frac_shift =3D (f_shift),                               =
- \
-> +               .frac_width =3D (f_width),                               =
- \
-> +       },                                                              \
-> +       .hw.init =3D &(struct clk_init_data) {                           =
- \
-> +               .name =3D #_name,                                        =
- \
-> +               .ops =3D &ls1x_pll_clk_ops,                              =
- \
-> +               .parent_data =3D &(const struct clk_parent_data) {       =
- \
-> +                       .fw_name =3D "xtal",                             =
- \
-> +                       .name =3D "xtal",                                =
- \
-> +                       .index =3D -1,                                   =
- \
-> +               },                                                      \
-> +               .num_parents =3D 1,                                      =
- \
-> +       },                                                              \
-> +}
-> +
-> +#define LS1X_CLK_DIV(_name, _pname, _offset, _shift, _width,           \
-> +                    _table, _bypass_shift, _bypass_inv, _flags)        \
-> +struct ls1x_clk _name =3D {                                             =
- \
-> +       .offset =3D (_offset),                                           =
- \
-> +       .data =3D &(struct ls1x_clk_div_data){                           =
- \
-> +               .shift =3D (_shift),                                     =
- \
-> +               .width =3D (_width),                                     =
- \
-> +               .table =3D (_table),                                     =
- \
-> +               .flags =3D (_flags),                                     =
- \
-> +               .bypass_shift =3D (_bypass_shift),                       =
- \
-> +               .bypass_inv =3D (_bypass_inv),                           =
- \
-> +               .lock =3D &ls1x_clk_div_lock,                            =
- \
-> +       },                                                              \
-> +       .hw.init =3D &(struct clk_init_data) {                           =
- \
-
-Can be const.
-
-> +               .name =3D #_name,                                        =
- \
-> +               .ops =3D &ls1x_clk_divider_ops,                          =
- \
-> +               .parent_hws =3D (const struct clk_hw *[]) { _pname },    =
- \
-> +               .num_parents =3D 1,                                      =
- \
-> +               .flags =3D CLK_GET_RATE_NOCACHE,                         =
- \
-> +       },                                                              \
-> +}
-> +
-> +static LS1X_CLK_PLL(ls1b_clk_pll, CLK_PLL_FREQ, 12, 1, 0, 5, 0, 0);
-> +static LS1X_CLK_DIV(ls1b_clk_cpu, &ls1b_clk_pll.hw, CLK_PLL_DIV,
-> +                   20, 4, NULL, 8, 0,
-> +                   CLK_DIVIDER_ONE_BASED | CLK_DIVIDER_ROUND_CLOSEST);
-> +static LS1X_CLK_DIV(ls1b_clk_dc, &ls1b_clk_pll.hw, CLK_PLL_DIV,
-> +                   26, 4, NULL, 12, 0, CLK_DIVIDER_ONE_BASED);
-> +static LS1X_CLK_DIV(ls1b_clk_ahb, &ls1b_clk_pll.hw, CLK_PLL_DIV,
-> +                   14, 4, NULL, 10, 0, CLK_DIVIDER_ONE_BASED);
-> +static CLK_FIXED_FACTOR(ls1b_clk_apb, "ls1b_clk_apb", "ls1b_clk_ahb", 2,=
- 1,
-> +                       CLK_SET_RATE_PARENT);
-> +
-> +static struct clk_hw_onecell_data ls1b_clk_hw_data =3D {
-> +       .hws =3D {
-> +               [LS1X_CLKID_PLL] =3D &ls1b_clk_pll.hw,
-> +               [LS1X_CLKID_CPU] =3D &ls1b_clk_cpu.hw,
-> +               [LS1X_CLKID_DC] =3D &ls1b_clk_dc.hw,
-> +               [LS1X_CLKID_AHB] =3D &ls1b_clk_ahb.hw,
-> +               [LS1X_CLKID_APB] =3D &ls1b_clk_apb.hw,
-> +               [CLK_NR_CLKS] =3D NULL,
-
-Do you need a CLK_NR_CLKS sentinel entry?
-
-> +       },
-> +       .num =3D CLK_NR_CLKS,
-> +};
-> +
-> +static const struct clk_div_table ls1c_ahb_div_table[] =3D {
-> +       [0] =3D { .val =3D 0, .div =3D 2 },
-> +       [1] =3D { .val =3D 1, .div =3D 4 },
-> +       [2] =3D { .val =3D 2, .div =3D 3 },
-> +       [3] =3D { .val =3D 3, .div =3D 3 },
-> +       [4] =3D { /* sentinel */ }
-> +};
-> +
-> +static LS1X_CLK_PLL(ls1c_clk_pll, CLK_PLL_FREQ, 0, 2, 8, 8, 16, 8);
-> +static LS1X_CLK_DIV(ls1c_clk_cpu, &ls1c_clk_pll.hw, CLK_PLL_DIV,
-> +                   8, 7, NULL, 0, 1,
-> +                   CLK_DIVIDER_ONE_BASED | CLK_DIVIDER_ROUND_CLOSEST);
-> +static LS1X_CLK_DIV(ls1c_clk_dc, &ls1c_clk_pll.hw, CLK_PLL_DIV,
-> +                   24, 7, NULL, 4, 1, CLK_DIVIDER_ONE_BASED);
-> +static LS1X_CLK_DIV(ls1c_clk_ahb, &ls1c_clk_cpu.hw, CLK_PLL_FREQ,
-> +                   0, 2, ls1c_ahb_div_table, 0, 0, CLK_DIVIDER_ALLOW_ZER=
-O);
-> +static CLK_FIXED_FACTOR(ls1c_clk_apb, "ls1c_clk_apb", "ls1c_clk_ahb", 1,=
- 1,
-> +                       CLK_SET_RATE_PARENT);
-> +
-> +static struct clk_hw_onecell_data ls1c_clk_hw_data =3D {
-> +       .hws =3D {
-> +               [LS1X_CLKID_PLL] =3D &ls1c_clk_pll.hw,
-> +               [LS1X_CLKID_CPU] =3D &ls1c_clk_cpu.hw,
-> +               [LS1X_CLKID_DC] =3D &ls1c_clk_dc.hw,
-> +               [LS1X_CLKID_AHB] =3D &ls1c_clk_ahb.hw,
-> +               [LS1X_CLKID_APB] =3D &ls1c_clk_apb.hw,
-> +               [CLK_NR_CLKS] =3D NULL,
-> +       },
-> +       .num =3D CLK_NR_CLKS,
-> +};
-> +
-> +static void __init ls1x_clk_init(struct device_node *np,
-> +                                struct clk_hw_onecell_data *hw_data)
-> +{
-> +       struct ls1x_clk *ls1x_clk;
-> +       void __iomem *reg;
-> +       int i, ret;
-> +
-> +       reg =3D of_iomap(np, 0);
-> +       if (!reg) {
-> +               pr_err("Unable to map base for %pOF\n", np);
-
-Needs include.
-
-> +               return;
-> +       }
-> +
-> +       for (i =3D 0; i < CLK_NR_CLKS; i++) {
-> +               /* array might be sparse */
-> +               if (!hw_data->hws[i])
-> +                       continue;
-> +
-> +               if (i !=3D LS1X_CLKID_APB) {
-> +                       ls1x_clk =3D to_ls1x_clk(hw_data->hws[i]);
-> +                       ls1x_clk->reg =3D reg + ls1x_clk->offset;
-> +               }
-> +
-> +               ret =3D of_clk_hw_register(np, hw_data->hws[i]);
-> +               if (ret)
-> +                       return;
-
-unmap memory on failure? and unregister clks?
-
-> +       }
-> +
-> +       ret =3D of_clk_add_hw_provider(np, of_clk_hw_onecell_get, hw_data=
-);
-> +       if (ret)
-> +               pr_err("Failed to register %pOF\n", np);
-
-unmap memory on failure? And unregister clks?
-
-> +}
-> +
-> +static void __init ls1b_clk_init(struct device_node *np)
-> +{
-> +       return ls1x_clk_init(np, &ls1b_clk_hw_data);
-> +}
-> +
-> +static void __init ls1c_clk_init(struct device_node *np)
-> +{
-> +       return ls1x_clk_init(np, &ls1c_clk_hw_data);
-> +}
-> +
-> +CLK_OF_DECLARE(ls1b_clk, "loongson,ls1b-clk", ls1b_clk_init);
-> +CLK_OF_DECLARE(ls1c_clk, "loongson,ls1c-clk", ls1c_clk_init);
-
-Any reason these can't be platform device drivers?
-
-> +
-> +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-> +MODULE_DESCRIPTION("Loongson1 clock driver");
-
-It's not a module. So these are useless macros. Drop them?
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
