@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF3F6C2312
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1AE6C22FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCTUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        id S230175AbjCTUlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCTUoT (ORCPT
+        with ESMTP id S230195AbjCTUlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:44:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22338EC68
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679345027; x=1710881027;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Z0cSL+M1qbeo4dWHqt9xR8/EfLh7XeU49eCBlMRw1+A=;
-  b=RNkLegqSz3SjUZQxlTn8jRGoxUDUX5cxCOA+IIoRDfPLiyhaiwqLIYmN
-   eLsRc8m+YItzJo2sAgls/jhD36JVxXFIj/sfptnB9z1PuoK721ZYvGW+/
-   VsHgFHLtYwVIDKigkiso9Cwrb30DF2e9oYlZV7H3qkmwgd70yV/tu5fCV
-   SrWTJPsOraqgrKEHvO9IBVhZQ6qXHeexMAsnNiXDKlXDQULkox5Z3SDuC
-   O6fwHXqGvJt6gcQk/uERkD+nx11rRwP/TtmbOUecmNPEFu5SxZ4h08RBm
-   Ap0ByoT4mqX2xipFSc9LTp6FL4FRytCOI43ycTRF7yichD0Xst8brBoLb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="403646053"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="403646053"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:43:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="927101749"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="927101749"
-Received: from tblanzy-mobl.amr.corp.intel.com (HELO [10.209.0.34]) ([10.209.0.34])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:43:10 -0700
-Message-ID: <93b293341866a4366b2f2a614f8742ca94ff4e3c.camel@linux.intel.com>
-Subject: Re: [PATCH v7 13/13] vmstat: add pcp remote node draining via
- cpu_vm_stats_fold
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>
-Date:   Mon, 20 Mar 2023 13:43:09 -0700
-In-Reply-To: <20230320180745.858515310@redhat.com>
-References: <20230320180332.102837832@redhat.com>
-         <20230320180745.858515310@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 20 Mar 2023 16:41:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA34793DA
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:40:39 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id cy23so51743321edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=grsecurity.net; s=grsec; t=1679344835;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f/ZypMx/b01ZgNj3OinSf736LSydchf0R68wqu47xTs=;
+        b=Hhd46sEaSHU0HwYikVXe+fSnIaRZxVJtPSE/pCqFj72haGohXzr/69LP4SE5LyZDN0
+         9VEIcAC2lH/kQLsdMaG6XwMWnc1Dn7VMdSKNs0TxQW16TeodmTZzVabT9PcmfvXf+tgQ
+         E/P4gWq6kERZDATWYRFDITZs0uuKD9BmuPjtuOxe4kZZnxoko9UggbtJMrOUkYpZSq3j
+         P9Mzzo+VOai3p603weFo5vnHRKHduQpjMFTU6BE/byOl32mGRsKLhn2Wzf0VrXJy2mIU
+         yaHC8P9vuum3JWJYA1P9OjxoZy2kKLOCnfJ1LA3kn1OY6LnISpGONaEDxtnCM0xf+cCE
+         dyRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679344835;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/ZypMx/b01ZgNj3OinSf736LSydchf0R68wqu47xTs=;
+        b=QXlKLB9x/yQ3Vh+5ndJZjiL+jfDebiBLqSx0MTXFBcmclOd1aTHxvM/VZNruWdzP4z
+         Ev5e5svChGg0oGo+LA2qkcibO8bSseQ7k5jw12D9PtBmlUqns/QdfmWtIChTTtV/GDcQ
+         Erz91gsbUuUe7jKhiN9qtz8H31TQ5WE+9MhQbnkjX1Z6w4r3EpHHgTocoOKrKtUbV9/h
+         zZ2HDgKu3R5fuRJmq8qbGJ+5mwEQRD1HM8ej16UFw56n2uVY6HG6EQCCgdaAa7yHZzCX
+         a7RrhWxzzpTcNKDslqeJE6hpoglGEHR7i9DfMrjgAQ31nN3boBFzhbnAZjkkCZXzR5Rr
+         0gxw==
+X-Gm-Message-State: AO0yUKVlvJnpDfZXtWcJ+hYeFN3w34w33grmhEw6DJsaAjv2IvJbWXsZ
+        OngkUhHnt2x1xFmT+LclYqZnNQ==
+X-Google-Smtp-Source: AK7set9ofWG4xh3BpNaeuCw13nPeto8NQdtvNfH62MJ7wDiAYjGuwcezicUWwgZNIleLGpL2SX0r5Q==
+X-Received: by 2002:a17:907:78cd:b0:8f1:4bef:b0e7 with SMTP id kv13-20020a17090778cd00b008f14befb0e7mr10485357ejc.1.1679344834868;
+        Mon, 20 Mar 2023 13:40:34 -0700 (PDT)
+Received: from nuc.fritz.box (p200300f6af11100024b425f5505ca0af.dip0.t-ipconnect.de. [2003:f6:af11:1000:24b4:25f5:505c:a0af])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1709060f0a00b009324e7e8b0asm4272252eji.154.2023.03.20.13.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 13:40:34 -0700 (PDT)
+From:   Mathias Krause <minipli@grsecurity.net>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Mathias Krause <minipli@grsecurity.net>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 2/6] KVM: VMX: Avoid retpoline call for control
+ register caused exits
+Date:   Mon, 20 Mar 2023 21:43:44 +0100
+Message-Id: <20230320204344.24109-1-minipli@grsecurity.net>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <ZBI62RUnMB3ppRqO@google.com>
+References: <20230201194604.11135-1-minipli@grsecurity.net>
+ <20230201194604.11135-3-minipli@grsecurity.net>
+ <ZBI62RUnMB3ppRqO@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +77,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-20 at 15:03 -0300, Marcelo Tosatti wrote:
->=20
-> +
-> +		if (do_pagesets) {
-> +			cond_resched();
-> +			/*
-> +			 * Deal with draining the remote pageset of a
-> +			 * processor
-> +			 *
-> +			 * Check if there are pages remaining in this pageset
-> +			 * if not then there is nothing to expire.
-> +			 */
-> +			if (!pcp->expire || !pcp->count)
-> +				continue;refresh_cpu_vm_stats
-> +
-> +			/*
-> +			 * We never drain zones local to this processor.
-> +			 */
-> +			if (zone_to_nid(zone) =3D=3D cpu_to_node(cpu)) {
-> +				pcp->expire =3D 0;
-> +				continue;
-> +			}
-> +
-> +			WARN_ON(pcp->expire < 0);
-> +			/*
-> +			 * pcp->expire is only accessed from vmstat_shepherd context,
-> +			 * therefore no locking is required.
-> +			 */
-> +			if (--pcp->expire)
-> +				continue;
-> +
-> +			if (pcp->count)
-> +				drain_zone_pages(zone, pcp);
-> +		}
-
-This logic is the same to that for the do_pagesets portion of code in refre=
-sh_cpu_vm_stats().
-Is it possible to consolidate to avoid replicating the logic across two fun=
-ctions?
-
-Tim=20
+On Wed, Mar 15, 2023 at 02:38:33PM -0700, Sean Christopherson wrote:=0D
+> On Wed, Feb 01, 2023, Mathias Krause wrote:=0D
+> > Complement commit 4289d2728664 ("KVM: retpolines: x86: eliminate=0D
+> > retpoline from vmx.c exit handlers") and avoid a retpoline call for=0D
+> > control register accesses as well.=0D
+> > =0D
+> > This speeds up guests that make heavy use of it, like grsecurity=0D
+> > kernels toggling CR0.WP to implement kernel W^X.=0D
+> =0D
+> I would rather drop this patch for VMX and instead unconditionally make C=
+R0.WP=0D
+> guest owned when TDP (EPT) is enabled, i.e. drop the module param from pa=
+tch 6.=0D
+=0D
+That's fine with me. As EPT usually implies TDP (if neither of both was=0D
+explicitly disabled) that should be no limitation and as the non-EPT=0D
+case only saw a very small gain from this change anyways (less than 1%)=0D
+we can drop it.=0D
+=0D
+> =0D
+> > Signed-off-by: Mathias Krause <minipli@grsecurity.net>=0D
+> > ---=0D
+> > =0D
+> > Meanwhile I got my hands on a AMD system and while doing a similar chan=
+ge=0D
+> > for SVM gives a small measurable win (1.1% faster for grsecurity guests=
+),=0D
+> =0D
+> Mostly out of curiosity...=0D
+> =0D
+> Is the 1.1% roughly aligned with the gains for VMX?  If VMX sees a signif=
+icantly=0D
+> larger improvement, any idea why SVM doesn't benefit as much?  E.g. did y=
+ou double=0D
+> check that the kernel was actually using RETPOLINE?=0D
+=0D
+I measured the runtime of the ssdd test I used before and got 3.98s for=0D
+a kernel with the whole series applied and 3.94s with the below change=0D
+on top:=0D
+=0D
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c=0D
+index d13cf53e7390..2a471eae11c6 100644=0D
+--- a/arch/x86/kvm/svm/svm.c=0D
++++ b/arch/x86/kvm/svm/svm.c=0D
+@@ -3369,6 +3369,10 @@ int svm_invoke_exit_handler(struct kvm_vcpu *vcpu, u=
+64 exit_code)=0D
+ 		return intr_interception(vcpu);=0D
+ 	else if (exit_code =3D=3D SVM_EXIT_HLT)=0D
+ 		return kvm_emulate_halt(vcpu);=0D
++	else if (exit_code =3D=3D SVM_EXIT_READ_CR0 ||=0D
++		 exit_code =3D=3D SVM_EXIT_WRITE_CR0 ||=0D
++		 exit_code =3D=3D SVM_EXIT_CR0_SEL_WRITE)=0D
++		return cr_interception(vcpu);=0D
+ 	else if (exit_code =3D=3D SVM_EXIT_NPF)=0D
+ 		return npf_interception(vcpu);=0D
+ #endif=0D
+=0D
+Inspecting svm_invoke_exit_handler() on the host with perf confirmed it=0D
+could use the direct call of cr_interception() most of the time, thereby=0D
+could avoid the retpoline for it:=0D
+(My version of perf is, apparently, unable to detect tail calls properly=0D
+and therefore lacks symbol information for the jump targets in the below=0D
+assembly dump. I therefore added these manually.)=0D
+=0D
+Percent=E2=94=82=0D
+       =E2=94=82=0D
+       =E2=94=82     ffffffffc194c410 <load0>:	# svm_invoke_exit_handler=0D
+  5.00 =E2=94=82       nop=0D
+  7.44 =E2=94=82       push   %rbp=0D
+ 10.43 =E2=94=82       cmp    $0x403,%rsi=0D
+  5.86 =E2=94=82       mov    %rdi,%rbp=0D
+  1.23 =E2=94=82       push   %rbx=0D
+  2.11 =E2=94=82       mov    %rsi,%rbx=0D
+  4.60 =E2=94=82       jbe    7a=0D
+       =E2=94=82 16:   [svm_handle_invalid_exit() path removed]=0D
+  4.59 =E2=94=82 7a:   mov    -0x3e6a5b00(,%rsi,8),%rax=0D
+  4.52 =E2=94=82       test   %rax,%rax=0D
+       =E2=94=82       je     16=0D
+  6.25 =E2=94=82       cmp    $0x7c,%rsi=0D
+       =E2=94=82       je     dd=0D
+  4.18 =E2=94=82       cmp    $0x64,%rsi=0D
+       =E2=94=82       je     f2=0D
+  3.26 =E2=94=82       cmp    $0x60,%rsi=0D
+       =E2=94=82       je     ca=0D
+  4.57 =E2=94=82       cmp    $0x78,%rsi=0D
+       =E2=94=82       je     f9=0D
+  1.27 =E2=94=82       test   $0xffffffffffffffef,%rsi=0D
+       =E2=94=82       je     c3=0D
+  1.67 =E2=94=82       cmp    $0x65,%rsi=0D
+       =E2=94=82       je     c3=0D
+       =E2=94=82       cmp    $0x400,%rsi=0D
+       =E2=94=82       je     13d=0D
+       =E2=94=82       pop    %rbx=0D
+       =E2=94=82       pop    %rbp=0D
+       =E2=94=82       jmp    0xffffffffa0487d80	# __x86_indirect_thunk_rax=
+=0D
+       =E2=94=82       int3=0D
+ 11.68 =E2=94=82 c3:   pop    %rbx=0D
+ 10.01 =E2=94=82       pop    %rbp=0D
+ 10.47 =E2=94=82       jmp    0xffffffffc19482a0	# cr_interception=0D
+       =E2=94=82 ca:   incq   0x1940(%rdi)=0D
+       =E2=94=82       mov    $0x1,%eax=0D
+       =E2=94=82       pop    %rbx=0D
+  0.42 =E2=94=82       pop    %rbp=0D
+       =E2=94=82       ret=0D
+       =E2=94=82       int3=0D
+       =E2=94=82       int3=0D
+       =E2=94=82       int3=0D
+       =E2=94=82       int3=0D
+       =E2=94=82 dd:   mov    0x1a20(%rdi),%rax=0D
+       =E2=94=82       cmpq   $0x0,0x78(%rax)=0D
+       =E2=94=82       je     100=0D
+       =E2=94=82       pop    %rbx=0D
+       =E2=94=82       pop    %rbp=0D
+       =E2=94=82       jmp    0xffffffffc185af20	# kvm_emulate_wrmsr=0D
+       =E2=94=82 f2:   pop    %rbx=0D
+       =E2=94=82       pop    %rbp=0D
+  0.42 =E2=94=82       jmp    0xffffffffc19472b0	# interrupt_window_interce=
+ption=0D
+       =E2=94=82 f9:   pop    %rbx=0D
+       =E2=94=82       pop    %rbp=0D
+       =E2=94=82       jmp    0xffffffffc185a6a0	# kvm_emulate_halt=0D
+       =E2=94=82100:   pop    %rbx=0D
+       =E2=94=82       pop    %rbp=0D
+       =E2=94=82       jmp    0xffffffffc18602a0	# kvm_emulate_rdmsr=0D
+       =E2=94=82107:   mov    %rbp,%rdi=0D
+       =E2=94=82       mov    $0x10,%esi=0D
+       =E2=94=82       call   kvm_register_read_raw=0D
+       =E2=94=82       mov    0x24(%rbp),%edx=0D
+       =E2=94=82       mov    %rax,%rcx=0D
+       =E2=94=82       mov    %rbx,%r8=0D
+       =E2=94=82       mov    %gs:0x2ac00,%rax=0D
+       =E2=94=82       mov    0x95c(%rax),%esi=0D
+       =E2=94=82       mov    $0xffffffffc195dc28,%rdi=0D
+       =E2=94=82       call   _printk=0D
+       =E2=94=82       jmp    31=0D
+       =E2=94=8213d:   pop    %rbx=0D
+       =E2=94=82       pop    %rbp=0D
+       =E2=94=82       jmp    0xffffffffc1946b90	# npf_interception=0D
+=0D
+What's clear from above (or so I hope!), cr_interception() is *the* reason =
+to=0D
+cause a VM exit for my test run and by taking the shortcut via a direct cal=
+l,=0D
+it doesn't have to do the retpoline dance which might be the explanation fo=
+r=0D
+the ~1.1% performance gain (even in the face of three additional compare=0D
+instructions). However! As I realized that these three more instructions=0D
+probably "hurt" all other workloads (that don't toggle CR0.WP as often as a=
+=0D
+grsecurity kernel would do), I didn't include the above change as a patch o=
+f=0D
+the series. If you think it's worth it nonetheless, as VM exits shouldn't=0D
+happen often anyways, I can do a proper patch.=0D
+=0D
+> =0D
+> > it would provide nothing for other guests, as the change I was testing =
+was=0D
+> > specifically targeting CR0 caused exits.=0D
+> > =0D
+> > A more general approach would instead cover CR3 and, maybe, CR4 as well=
+.=0D
+> > However, that would require a lot more exit code compares, likely=0D
+> > vanishing the gains in the general case. So this tweak is VMX only.=0D
+> =0D
+> I don't think targeting on CR0 exits is a reason to not do this for SVM. =
+ With=0D
+> NPT enabled, CR3 isn't intercepted, and CR4 exits should be very rare.  I=
+f the=0D
+> performance benefits are marginal (I don't have a good frame of reference=
+ for the=0D
+> 1.1%), then _that's_ a good reason to leave SVM alone.  But not giving CR=
+3 and CR4=0D
+> priority is a non-issue.=0D
+=0D
+Ok. But yeah, the win isn't all the big either, less so in real=0D
+workloads that won't exercise this code path so often.=0D
+=0D
+> =0D
+> >  arch/x86/kvm/vmx/vmx.c | 2 ++=0D
+> >  1 file changed, 2 insertions(+)=0D
+> > =0D
+> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c=0D
+> > index c788aa382611..c8198c8a9b55 100644=0D
+> > --- a/arch/x86/kvm/vmx/vmx.c=0D
+> > +++ b/arch/x86/kvm/vmx/vmx.c=0D
+> > @@ -6538,6 +6538,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcp=
+u, fastpath_t exit_fastpath)=0D
+> >  		return handle_external_interrupt(vcpu);=0D
+> >  	else if (exit_reason.basic =3D=3D EXIT_REASON_HLT)=0D
+> >  		return kvm_emulate_halt(vcpu);=0D
+> > +	else if (exit_reason.basic =3D=3D EXIT_REASON_CR_ACCESS)=0D
+> > +		return handle_cr(vcpu);=0D
+> >  	else if (exit_reason.basic =3D=3D EXIT_REASON_EPT_MISCONFIG)=0D
+> >  		return handle_ept_misconfig(vcpu);=0D
+> >  #endif=0D
+> > -- =0D
+> > 2.39.1=0D
+> > =0D
+=0D
