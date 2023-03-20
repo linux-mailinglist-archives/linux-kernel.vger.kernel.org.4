@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13EF6C14EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13E96C14D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjCTOhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
+        id S231513AbjCTOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbjCTOhn (ORCPT
+        with ESMTP id S231445AbjCTOgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:37:43 -0400
+        Mon, 20 Mar 2023 10:36:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755A724107;
-        Mon, 20 Mar 2023 07:37:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E91B1A651;
+        Mon, 20 Mar 2023 07:36:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22E98614D6;
-        Mon, 20 Mar 2023 14:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACE4C4339B;
-        Mon, 20 Mar 2023 14:37:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE7126155F;
+        Mon, 20 Mar 2023 14:36:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C70BC433EF;
+        Mon, 20 Mar 2023 14:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679323041;
-        bh=OfZgDqFXBUdIMyEH4oAv+asfs2VQIn/ZVquHlPB1Saw=;
+        s=k20201202; t=1679322964;
+        bh=xq2tMD+B7ia6JNh3O/9A7b/U2XKkAO4qVKedNe/qPK0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mePrb7L1qo6GFjZ+3oszM9GYvUm5Z5vLScmvI8JzM/ZNKNBUfwEYNcKwzAzTLEOgm
-         Ckmn9rJmyHQIVVbogmyIwW8D+bzk77R1l+ZbjWZ+fuxY2ZmXjf3Tc4cQb2DO+XE3zQ
-         o6e65hvEssUKre2r+kDZswa7udIh9lAcYis4L8jp2nowJGyb6R26vhxZqVsoc9wRGX
-         eWg1GQRQIunmaKgvpBAJYph0Pgy7QSmOGpD4tIWXmQGczGazwKZ9vgYkE1hbHW1gmU
-         itlTWjoGRVPD46Y5ZLt/LCjyUHjkOggzmu+VdVH6c6zUldzOhVOl3V9NQ9LGPgbOE5
-         EX/xP5LIpIBCw==
-Date:   Mon, 20 Mar 2023 15:37:14 +0100
-From:   Simon Horman <horms@kernel.org>
-To:     Chen Jiahao <chenjiahao16@huawei.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, guoren@kernel.org, heiko@sntech.de,
-        bjorn@rivosinc.com, alex@ghiti.fr, akpm@linux-foundation.org,
-        atishp@rivosinc.com, bhe@redhat.com, thunder.leizhen@huawei.com,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH -next 2/2] docs: kdump: Update the crashkernel
- description for riscv
-Message-ID: <ZBhvmqlyyvLOUot1@kernel.org>
-References: <20230320204244.1637821-1-chenjiahao16@huawei.com>
- <20230320204244.1637821-3-chenjiahao16@huawei.com>
+        b=nOYhbdUn0Z+Lrg4yhdALBN5lZPnLW7Zu7MTUXbyKk8ywMf+RXwQ6WAqVGDsm8s2Kf
+         Dus4RK7zmd+QMO1ri7UeoB9U0mfytcUVlNKHpAoEFEbAPYlcQ+O2UFu3QlgbGkEwjT
+         TFPEsR79BVl6Q4qQZ0BmPvYjEUW4d2MgAJCyMAzPmJE20NwtfChcqKUEBBG7ORh6F3
+         Ca3Eouma7zAU24FteDpe+Ht7JV2fOSpN5D++75cUg0oIQPt8XdDBf/qRSGwvAVjHhH
+         RN5mkt4aLKwTM+rPAPwyxFoc25f9xp5mttO0RNttw+NyowUViBFqQ9RR3DVcduXLSf
+         XJDIWPubNG1Gg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1peGdZ-0000mf-5E; Mon, 20 Mar 2023 15:37:25 +0100
+Date:   Mon, 20 Mar 2023 15:37:25 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>, Lee Jones <lee@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: sc8280xp-pmics: fix sdam 'reg'
+ property
+Message-ID: <ZBhvpXTZu/rwPvyt@hovoldconsulting.com>
+References: <20230320135710.1989-1-johan+linaro@kernel.org>
+ <20230320135710.1989-3-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320204244.1637821-3-chenjiahao16@huawei.com>
+In-Reply-To: <20230320135710.1989-3-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,14 +64,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 04:42:44AM +0800, Chen Jiahao wrote:
-> Now "crashkernel=" parameter on riscv has been updated to support
-> crashkernel=X,[high,low]. Through which we can reserve memory region
-> above/within 32bit addressible DMA zone.
+On Mon, Mar 20, 2023 at 02:57:09PM +0100, Johan Hovold wrote:
+> The SPMI PMIC register region width is fixed and should not be encoded
+> in the devicetree.
 > 
-> Here update the parameter description accordingly.
-> 
-> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
+> Fixes: 42f45cc655d0 ("arm64: dts: qcom: sc8280xp-pmics: add pmk8280 sdam nvram")
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Bah, that should have been:
 
+Fixes: d6dbbda37ab5 ("arm64: dts: qcom: sc8280xp-pmics: add pmk8280 sdam nvram")
+
+Can you fix that up when applying, Bjorn?
+
+Johan
