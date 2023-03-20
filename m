@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C6A6C0A27
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 06:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB31A6C0A31
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 06:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjCTFgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 01:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S229596AbjCTFiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 01:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCTFfv (ORCPT
+        with ESMTP id S229449AbjCTFiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 01:35:51 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C7A1F5E2;
-        Sun, 19 Mar 2023 22:34:42 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32K5YVie127523;
-        Mon, 20 Mar 2023 00:34:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679290471;
-        bh=lG2X9obZvuudtgH7UvF290nF5C4M8JC2K0ve+oiB1Yc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=L2I6tXX1VUQrYBJcS/o/W6iOnnxjxfXACgh5e4O66kXS3TwdhxPjKMVWfl5v5JHTx
-         lPjtdLwUtwE5bt1zG5egkkv5vyNk1JYYuQimWh0yIystN9JbmO9ZPOyiJfp5lvRzGd
-         4ljSmRH+VMc2Yw+5Fu5z49+JqpYMf5Av9EUmON4E=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32K5YVTG013581
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 00:34:31 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 00:34:30 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 00:34:30 -0500
-Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32K5YOas089474;
-        Mon, 20 Mar 2023 00:34:25 -0500
-Message-ID: <8ed02bb8-b1a3-519f-d0c6-d36756e7e2c2@ti.com>
-Date:   Mon, 20 Mar 2023 11:04:24 +0530
+        Mon, 20 Mar 2023 01:38:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E27E6EBA;
+        Sun, 19 Mar 2023 22:38:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 848C9FEC;
+        Sun, 19 Mar 2023 22:38:43 -0700 (PDT)
+Received: from [10.162.41.7] (a077893.blr.arm.com [10.162.41.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61EE93F67D;
+        Sun, 19 Mar 2023 22:37:54 -0700 (PDT)
+Message-ID: <6ac7d093-b11c-b37f-8058-72c8d41fba73@arm.com>
+Date:   Mon, 20 Mar 2023 11:07:51 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 13/13] media: dt-bindings: Convert Cadence CSI2RX
- binding to YAML
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 6/7] of/platform: Skip coresight etm4x devices from AMBA
+ bus
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <laurent.pinchart@ideasonboard.com>,
-        <sakari.ailus@linux.intel.com>, <tomi.valkeinen@ideasonboard.com>
-CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
-        <niklas.soderlund+renesas@ragnatech.se>, <j-luthra@ti.com>,
-        <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
-        <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>
-References: <20230314115516.667-1-vaishnav.a@ti.com>
- <20230314115516.667-14-vaishnav.a@ti.com>
- <f97ed61d-71d0-f05a-e4f8-abae8f9fbdd8@linaro.org>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <f97ed61d-71d0-f05a-e4f8-abae8f9fbdd8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        scclevenger@os.amperecomputing.com,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
+ <20230317030501.1811905-7-anshuman.khandual@arm.com>
+ <CAL_JsqK8vnwTZ3-nTd-S+dpCrQebAUm-NRiaJBE6KkoAVq=Ovg@mail.gmail.com>
+ <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,36 +62,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi Krzysztof,
 
-On 15/03/23 13:15, Krzysztof Kozlowski wrote:
-> On 14/03/2023 12:55, Vaishnav Achath wrote:
->> From: Pratyush Yadav <p.yadav@ti.com>
+On 3/17/23 21:33, Suzuki K Poulose wrote:
+>>>   drivers/of/platform.c | 10 +++++++++-
+>>>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+>>> index b2bd2e783445..59ff1a38ccaa 100644
+>>> --- a/drivers/of/platform.c
+>>> +++ b/drivers/of/platform.c
+>>> @@ -325,6 +325,13 @@ static const struct of_dev_auxdata *of_dev_lookup(const struct of_dev_auxdata *l
+>>>          return NULL;
+>>>   }
+>>>
+>>> +static const struct of_device_id of_ignore_amba_table[] = {
+>>> +#ifdef CONFIG_CORESIGHT_SOURCE_ETM4X
+>>> +       { .compatible = "arm,coresight-etm4x" },
+>>> +#endif
+>>> +       {}    /* NULL terminated */
+>>> +};
+>>> +
+>>>   /**
+>>>    * of_platform_bus_create() - Create a device for a node and its children.
+>>>    * @bus: device node of the bus to instantiate
+>>> @@ -373,7 +380,8 @@ static int of_platform_bus_create(struct device_node *bus,
+>>>                  platform_data = auxdata->platform_data;
+>>>          }
+>>>
+>>> -       if (of_device_is_compatible(bus, "arm,primecell")) {
+>>> +       if (of_device_is_compatible(bus, "arm,primecell") &&
+>>> +           unlikely(!of_match_node(of_ignore_amba_table, bus))) {
 >>
->> Convert the Cadence CSI2RX binding to use YAML schema.
->>
->> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
->> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> ---
->>
->> (no changes since v5)
->>
+>> of_match_node is going to take orders of magnitude longer than any
+>> difference unlikely() would make. Drop it.
 > 
-> So it seems your patchset is not bisectable. Fix this and test
-> bisectability. All patchsets are expected to be fully bisectable.
-> 
+> Agreed.
 
-Thank you for the review, I will fix for bisect and address the rest of your
-feedback in next revision and fix the order of bindings vs driver changes (will
-wait for few more days for more feedback on the main j721e-csirx driver).
-
--- 
-Thanks and Regards,
-Vaishnav
-
-> Best regards,
-> Krzysztof
-> 
-
+Sure, will drop the unlikely() here.
