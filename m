@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CC06C1FB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5576C1FB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCTS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S231433AbjCTS3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjCTS3A (ORCPT
+        with ESMTP id S230500AbjCTS3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:29:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99389AD25;
-        Mon, 20 Mar 2023 11:21:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43B38B80E6B;
-        Mon, 20 Mar 2023 18:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07ACDC4339C;
-        Mon, 20 Mar 2023 18:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679336483;
-        bh=90Js5AXKAuYFcX6gyojlhCPyfPNMYTsfiXawUSspkjQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nFB6ZtkrHJ98/KzRB+ukoV03uculXitgCJB5bL1y2j5b2PXCRVU8czdtKvQeQ9WFW
-         EmfdiXHNRIcKQdBx8Zxce/xHPlJThb1sh3vxhVdxeSZ04AD/R9IDUAB7HPoMwZDn/p
-         mLdBgznbugfq8pqdIVq7LgRwD3oz9ynpd+SHi/Sz1rYhkK+8qfrzDS+5WwBHnZGE11
-         r9RqAkCtNF2vfrDiIfjirYhi0xe8c3uXW6HkqXxMH1P3U3Q4sYoreWBWvO/yXyv02I
-         1KlkDdenat45WWzcult4Q463clJ4KJGlqykH1KhNoeKCE0x0MnT+b/diLdTEM4xstG
-         HXWMjz5NRo/5w==
-Received: by mail-ua1-f42.google.com with SMTP id g9so4071756uam.9;
-        Mon, 20 Mar 2023 11:21:22 -0700 (PDT)
-X-Gm-Message-State: AO0yUKVeV2yoIdPg1ld6eA+PJ8JhleJBjFXWh5otIJDVh+HZ9jYs0erG
-        8G0yP/nsG1u0D+Ch32ai2rAFnrbBzYuiqA5Tbg==
-X-Google-Smtp-Source: AK7set/OvN8aYUC9NkIqrZpBU3dUWhruxYt0hxPWmbNFknRenQlNBhAulaCUdwLMAukgz53ZrJzUKQftgDPBPI5Ok4E=
-X-Received: by 2002:a1f:2982:0:b0:401:8898:ea44 with SMTP id
- p124-20020a1f2982000000b004018898ea44mr149758vkp.3.1679336481957; Mon, 20 Mar
- 2023 11:21:21 -0700 (PDT)
+        Mon, 20 Mar 2023 14:29:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9E317CCB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:22:02 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id cy23so50285062edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679336501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/X9WXUcUsiurfEv5uSz+kyXpuEydk+JbwaKqCGJ/9xc=;
+        b=FRrtmnC2erBBSvcnfzAxZ0K+BNPrRJi9gvV+Y0DLpIQtW9/q8vTte52DHucVARi5H/
+         iclHcJca1gpjlufGutbrbuwc00BP02ijcdvHXFUkU25oUNNbWEEKyoQvEZDbdZtn8t1h
+         98euk1Ifedp56RVTl6lrri/uS/bNgxHQKaeinYrOOHIO3N9/vUDJ1EqYl5aEbE1iGOOR
+         IUR3ZXzHvz1cNRsN/VPaWWMvImetsMXlGM8sS6wmyZAF3qOADyXPbR2B8aBL+nYhZ0UQ
+         TTKzSsx2aI4XnTJWxlbglCJ+4TdHPspN3cb4xSfJze97oV18jxT1eC5k5ZXCzqeT4UIH
+         34Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679336501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/X9WXUcUsiurfEv5uSz+kyXpuEydk+JbwaKqCGJ/9xc=;
+        b=M6CpTqj1Zk8bFjm+Tvi7ssh9tH66ij2oPjscp7ZVWEClTxX+T4Ru8o+oZE6eJ39+U7
+         R1P8VAzkGQDAYJyuS/SP5igaybHa7xp5STSCDcqq2MYzQAI8Vz1rEXTYnujyxHm4qxWA
+         /flk+SyyTc2N+SsUDNyqZG+j6XefunoMvOhlZWyVgI45Iam0SjCcNzis1be5x6JJ95Ob
+         NwMzTrj35l8fh5lGNFLj+I1dVuyIR1wfFGCBgzxGxaDdRXOWQ85DXcMor9ugk8UmPnuM
+         bpzGBRqCBA9IDYkEhLadNZDKcc4ojZmqsdBrw1d+gnbQl9Jrx+2DA9HXhZLZzUGkhg2X
+         SDGA==
+X-Gm-Message-State: AO0yUKXGfjjz7xZ3Xv04kC8bc/YL8q6aEEOc4oHQPfByKR4yuy8ALrxN
+        DKzjgI5OAMr5HB2WXa3drSKBIA==
+X-Google-Smtp-Source: AK7set/TzLbyJz/SUqgVkIflRB13JN7Q1OB7bH1C/bWuRTHbXNImEIuhuCpFYE0Hfc2BS6vLAusRJw==
+X-Received: by 2002:a17:906:7fcb:b0:930:6ead:f81 with SMTP id r11-20020a1709067fcb00b009306ead0f81mr9440396ejs.71.1679336500884;
+        Mon, 20 Mar 2023 11:21:40 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
+        by smtp.gmail.com with ESMTPSA id i27-20020a170906251b00b0093128426980sm4743489ejb.48.2023.03.20.11.21.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 11:21:40 -0700 (PDT)
+Message-ID: <f8227202-95ba-7dae-8f41-2023d7a08691@linaro.org>
+Date:   Mon, 20 Mar 2023 19:21:39 +0100
 MIME-Version: 1.0
-References: <20220914-arm-perf-tool-spe1-2-v2-v5-0-2cf5210b2f77@kernel.org>
- <20220914-arm-perf-tool-spe1-2-v2-v5-1-2cf5210b2f77@kernel.org> <Y/DQ7Y+FD4cMn29J@kernel.org>
-In-Reply-To: <Y/DQ7Y+FD4cMn29J@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 20 Mar 2023 13:21:10 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLD_P1X1+vKODgZP1vaie2+c__X_HM8kWWzSb7PxZqZew@mail.gmail.com>
-Message-ID: <CAL_JsqLD_P1X1+vKODgZP1vaie2+c__X_HM8kWWzSb7PxZqZew@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] perf tools: Sync perf_event_attr::config3 addition
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/7] dt-bindings: sound: Add support for the Lantiq
+ PEF2256 codec
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230316122741.577663-1-herve.codina@bootlin.com>
+ <20230316122741.577663-6-herve.codina@bootlin.com>
+ <2d4dae57-e46d-7e81-9b56-2148074c8406@linaro.org>
+ <20230320191700.3d48e264@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230320191700.3d48e264@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +89,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 7:21=E2=80=AFAM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Feb 17, 2023 at 04:32:10PM -0600, Rob Herring escreveu:
-> > Arm SPEv1.2 adds another 64-bits of event filtering control. As the
-> > existing perf_event_attr::configN fields are all used up for SPE PMU, a=
-n
-> > additional field is needed. Add a new 'config3' field.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > This matches commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
-> > for the kernel queued in linux-next.
->
-> When you mention linux-next where was it that it picked this from?
->
-> For me to get this merged into the perf tools "next" (perf/core) it must
-> already have been merged in the kernel counterpart (tip/perf/core).
->
-> Ok so it is not in tip/perf/core, but got in next yesterday, and PeterZ
-> acked it, good, will process it soon.
+On 20/03/2023 19:17, Herve Codina wrote:
+> Hi Krzysztof
+> 
+> On Fri, 17 Mar 2023 09:57:11 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> On 16/03/2023 13:27, Herve Codina wrote:
+>>> The Lantiq PEF2256, also known as Infineon PEF2256 or FALC256, is a
+>>> framer and line interface component designed to fulfill all required
+>>> interfacing between an analog E1/T1/J1 line and the digital PCM system
+>>> highway/H.100 bus.
+>>>
+>>> The codec support allows to use some of the PCM system highway
+>>> time-slots as audio channels to transport audio data over the E1/T1/J1
+>>> lines.
+>>>   
+>>
+>> Your other file should also have specific compatible, unless this codec
+>> is actually part of the framer. Did not look like this in the binding -
+>> not $ref.
+> 
+> No sure to understand what you mean.
 
-Hi Arnaldo, Are you going to apply this or are you expecting something from=
- me?
+Compatible "lantiq,pef2256" in the context of this file is confusing.
+Two devices without parent-child having similar but different
+compatibles, of which one is generic (covers entire device) and one is
+function (codec) specific.
 
-Rob
+
+> 
+> Anyway, I plan to use a MFD device for pef2256 and reference this yaml
+> from the lantiq,pef2256.yaml in the node related to the codec.
+
+It should be part of these series. Submit complete bindings.
+
+> 
+> One question related to bindings and related checks:
+> Is there a way to check the compatible property of the parent node.
+> I mean, here is the binding of a child node of a MFD node.
+> From this binding, I would like to be sure that the parent is really a
+> pef2256 MFD node.
+
+You cannot and you shouldn't. Parent checks children, not vice-versa.
+
+> 
+> May be something like:
+>   parent-properties:
+>     allOf:
+>       compatible:
+>         contains:
+>           const: lantiq,pef2256
+> 
+> The idea is to have dtbs_check raise an error if the parent's compatible
+> property is not 'lantiq,pef2256'.
+
+But it does not matter. Why your device cannot be used in
+lantiq,foobar-9999?
+
+
+Best regards,
+Krzysztof
+
