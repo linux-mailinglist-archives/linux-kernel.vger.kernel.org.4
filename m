@@ -2,98 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB7D6C10D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE1D6C10E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjCTLdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S231229AbjCTLgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 07:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCTLdr (ORCPT
+        with ESMTP id S231219AbjCTLgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:33:47 -0400
-Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD6510A9E;
-        Mon, 20 Mar 2023 04:33:42 -0700 (PDT)
-Received: from violet.fr.zoreil.com ([127.0.0.1])
-        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 32KBXHVs290814;
-        Mon, 20 Mar 2023 12:33:18 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 32KBXHVs290814
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
-        s=v20220413; t=1679311998;
-        bh=WDBibh0YJk9V2rl30DaTNzmEwy/kTkf6Jqnw+Jv0vCQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LxU0ZjtxV29BTvZ4EaJ6UwdLMsISR+m3DjCFANETqElAHpwz7Y4gob+saJaUVQdZp
-         aCHP5hhn530PCShBI9og+FP5PRoFCxhB8IB/ptvdQcaQISaLsZDko5+FCsQtjaZdJo
-         c3JkigHJiSTH5EjjkCbD98pooRTtJiaDj9bnTTVs=
-Received: (from romieu@localhost)
-        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 32KBXHtp290813;
-        Mon, 20 Mar 2023 12:33:17 +0100
-Date:   Mon, 20 Mar 2023 12:33:17 +0100
-From:   Francois Romieu <romieu@fr.zoreil.com>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: mana: Add support for jumbo frame
-Message-ID: <20230320113317.GA290683@electric-eye.fr.zoreil.com>
-References: <1679261264-26375-1-git-send-email-haiyangz@microsoft.com>
- <20230319224642.GA239003@electric-eye.fr.zoreil.com>
- <PH7PR21MB31162F5F9E5C8C146760AF10CA809@PH7PR21MB3116.namprd21.prod.outlook.com>
+        Mon, 20 Mar 2023 07:36:11 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F9F1114A;
+        Mon, 20 Mar 2023 04:35:23 -0700 (PDT)
+Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Mon, 20 Mar 2023
+ 19:35:20 +0800
+From:   Yu Tu <yu.tu@amlogic.com>
+To:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>
+CC:     <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>,
+        Yu Tu <yu.tu@amlogic.com>
+Subject: [PATCH V2] clk: meson: vid-pll-div: added meson_vid_pll_div_ops support
+Date:   Mon, 20 Mar 2023 19:34:45 +0800
+Message-ID: <20230320113445.17260-1-yu.tu@amlogic.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR21MB31162F5F9E5C8C146760AF10CA809@PH7PR21MB3116.namprd21.prod.outlook.com>
-X-Organisation: Land of Sunshine Inc.
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.18.11.248]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Haiyang Zhang <haiyangz@microsoft.com> :
-> > From: Francois Romieu <romieu@fr.zoreil.com>
-[...]
-> > I do not see where the driver could depend on the MTU. Even if it fails,
-> > a single call to mana_change_mtu should thus never wreck the old working
-> > state/configuration.
-> > 
-> > Stated differently, the detach/attach implementation is simple but
-> > it makes the driver less reliable than it could be.
-> > 
-> > No ?
-> 
-> No, it doesn't make the driver less reliable. To safely remove and reallocate 
-> DMA buffers with different size, we have to stop the traffic. So, mana_detach() 
-> is called. We also call mana_detach() in mana_close(). So the process in 
-> mana_change_mtu() is no more risky than ifdown/ifup of the NIC. 
-> 
-> In some rare cases, if the system memory is running really low, the bigger 
-> buffer allocation may fail, so we re-try with the previous MTU. I don't expect 
-> it to fail again. But we still check & log the error code for completeness and 
-> debugging.
+Since the previous code only provides "ro_ops" for the vid_pll_div
+clock. In fact, the clock can be set. So add "ops" that can set the
+clock, especially for later chips like S4 SOC and so on.
 
-In a ideal world, I would expect change_mtu() to allocate the new resources,
-bail out if some allocation fails, stop the traffic, swap the old and new
-resources, then restart the traffic and release the old resources.
-This way the device is never left in a failed state.
+Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+---
+ drivers/clk/meson/vid-pll-div.c | 67 +++++++++++++++++++++++++++++++++
+ drivers/clk/meson/vid-pll-div.h |  3 ++
+ 2 files changed, 70 insertions(+)
 
+diff --git a/drivers/clk/meson/vid-pll-div.c b/drivers/clk/meson/vid-pll-div.c
+index daff235bc763..3c9015944f24 100644
+--- a/drivers/clk/meson/vid-pll-div.c
++++ b/drivers/clk/meson/vid-pll-div.c
+@@ -89,6 +89,73 @@ static unsigned long meson_vid_pll_div_recalc_rate(struct clk_hw *hw,
+ 	return DIV_ROUND_UP_ULL(parent_rate * div->multiplier, div->divider);
+ }
+ 
++static int meson_vid_pll_div_determine_rate(struct clk_hw *hw,
++					    struct clk_rate_request *req)
++{
++	unsigned long parent_rate, best = 0, now = 0, rate;
++	unsigned long parent_rate_saved = req->best_parent_rate;
++	unsigned int i, best_i = 0;
++
++	for (i = 0 ; i < VID_PLL_DIV_TABLE_SIZE; ++i) {
++		rate = DIV_ROUND_CLOSEST_ULL(req->rate * vid_pll_div_table[i].divider,
++					     vid_pll_div_table[i].multiplier);
++		if (parent_rate_saved == rate) {
++			req->best_parent_rate = parent_rate_saved;
++			best_i = i;
++			break;
++		}
++
++		parent_rate = clk_hw_round_rate(req->best_parent_hw, rate);
++		now = DIV_ROUND_CLOSEST_ULL(parent_rate *
++					    vid_pll_div_table[i].multiplier,
++					    vid_pll_div_table[i].divider);
++		if (abs(now - req->rate) < abs(best - req->rate)) {
++			best = now;
++			best_i = i;
++			req->best_parent_rate = parent_rate;
++		}
++	}
++
++	req->rate = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
++					  vid_pll_div_table[best_i].multiplier,
++					  vid_pll_div_table[best_i].divider);
++
++	return 0;
++}
++
++static int meson_vid_pll_div_set_rate(struct clk_hw *hw, unsigned long rate,
++				      unsigned long parent_rate)
++{
++	struct clk_regmap *clk = to_clk_regmap(hw);
++	struct meson_vid_pll_div_data *pll_div = meson_vid_pll_div_data(clk);
++	unsigned long best = 0, now = 0;
++	unsigned int i, best_i = 0;
++
++	for (i = 0 ; i < VID_PLL_DIV_TABLE_SIZE; ++i) {
++		now = DIV_ROUND_CLOSEST_ULL(parent_rate * vid_pll_div_table[i].multiplier,
++					    vid_pll_div_table[i].divider);
++		if (now == rate) {
++			best_i = i;
++			break;
++		} else if (abs(now - rate) < abs(best - rate)) {
++			best = now;
++			best_i = i;
++		}
++	}
++
++	meson_parm_write(clk->map, &pll_div->val, vid_pll_div_table[best_i].shift_val);
++	meson_parm_write(clk->map, &pll_div->sel, vid_pll_div_table[best_i].shift_sel);
++
++	return 0;
++}
++
++const struct clk_ops meson_vid_pll_div_ops = {
++	.recalc_rate	= meson_vid_pll_div_recalc_rate,
++	.determine_rate	= meson_vid_pll_div_determine_rate,
++	.set_rate	= meson_vid_pll_div_set_rate,
++};
++EXPORT_SYMBOL_GPL(meson_vid_pll_div_ops);
++
+ const struct clk_ops meson_vid_pll_div_ro_ops = {
+ 	.recalc_rate	= meson_vid_pll_div_recalc_rate,
+ };
+diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vid-pll-div.h
+index c0128e33ccf9..bbccab340910 100644
+--- a/drivers/clk/meson/vid-pll-div.h
++++ b/drivers/clk/meson/vid-pll-div.h
+@@ -10,11 +10,14 @@
+ #include <linux/clk-provider.h>
+ #include "parm.h"
+ 
++#define VID_PLL_DIV_TABLE_SIZE		14
++
+ struct meson_vid_pll_div_data {
+ 	struct parm val;
+ 	struct parm sel;
+ };
+ 
+ extern const struct clk_ops meson_vid_pll_div_ro_ops;
++extern const struct clk_ops meson_vid_pll_div_ops;
+ 
+ #endif /* __MESON_VID_PLL_DIV_H */
 -- 
-Ueimor
+2.33.1
+
