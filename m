@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12C06C0E52
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A476C0E5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjCTKLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S229956AbjCTKMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCTKLS (ORCPT
+        with ESMTP id S229878AbjCTKMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:11:18 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806C61BD9;
-        Mon, 20 Mar 2023 03:11:15 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id bz27so609177qtb.1;
-        Mon, 20 Mar 2023 03:11:15 -0700 (PDT)
+        Mon, 20 Mar 2023 06:12:02 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75C793EE;
+        Mon, 20 Mar 2023 03:11:56 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id n13so523046qkh.5;
+        Mon, 20 Mar 2023 03:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679307074;
+        d=gmail.com; s=20210112; t=1679307115;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yVu+5LM+n5S+m3afYfpgcD0EeRGmLNpp+tXakDwzmT8=;
-        b=beWuDmyL+NNsrvkK7dFnUmnYw04XKdrb13EeNF9Px9lt6H5FFNrH6JdvPf4+NOVRbW
-         UmEdZ9NJTRhTvjGJuV7GLe5wwPXQw516KPGlgxFMg4AXNDkjB2z1HJp0v/+9ebI8ynBX
-         3qtKBzEtxu+8mh1pAR6BgraUkxLRQqtUCn0O63niGzZnYvNrFB8RUEzftYvWxoqqkPtC
-         C34/aZNEmUvXUiBrAEkti0IENYv63XGjTczE1c8SH6OGJTYPhk08alV3aJsJ1uW88fzA
-         wZeiSGiM1C34wXrunmox3djy4K8/HHe0utwlH785SRutcG1OeSvBigKYkBkMgUxc08wZ
-         BYgA==
+        bh=VEHX2H3FPvonaNoZg4d3ZXKZZZCxjwbRPNv3Abil3kY=;
+        b=pGRG8DR8czC6mIySn8c+XY/QyPsxNJby0FDmm6hU8zH3srOc1pzYmcAtzW++zTsVST
+         oIKxOe+AVWw3Q/vF2tZU81xD0VZuk+6u66OpAtC8p6jZyD8wmZhAZSJFOAuerqDP/Vo7
+         TBo9jbf5dZR5AvNjqQ8y4q31DORWt/TGC1jexEA460NOlL8vYpwY1zSiFzLLTZMDoQuI
+         2IZbSZnw6mQl4D81ehGAV4TERB7EvlqTNvfy4Mr9ntcUMQjf2WYyzSa68Nbzy2ZU3Koa
+         P3KZ1aMChHLD6su7o5vLa3LQ+d2V6OaFKe2DagbmdM9TKAlM4Ol7RHA3UY53SbomsUy8
+         z5cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679307074;
+        d=1e100.net; s=20210112; t=1679307115;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yVu+5LM+n5S+m3afYfpgcD0EeRGmLNpp+tXakDwzmT8=;
-        b=Nc6U3exIHFIHQSqrOmLLcXSkGCs/ltdJ9nYhKz4LN34xHU6nRJsgPdqry+SJEDiNlG
-         r8q3y1MMqM969hKriPxLCg1dJdfuEFSisz3/u3TCT8VIOaIv9FL4JOyBTa7ijkScLhiN
-         nhalfLcJjmUpe4oWxsueRbnnr/QFyRRw/19leMpkAsdtlGMR4fOnPmRaarOIy/2yPpJK
-         74lVcLHICIeANdtXT0be/1pzKzFAVvdA7Kh9zZI0C3F6e/Q/G83TpqQxgZ7Vbjrf1ZHq
-         33cmBqejdCjpYWuRJ4n7XcY2AVPbNO4qydWrqG+pCuql+U1cK6SKgdvuzeYqZ9TYRTBf
-         VoUg==
-X-Gm-Message-State: AO0yUKWn2vH2ii4fSLGj1hNNrVjeMKdklv3DHyvAn0cOO3Ty3vFrBYh/
-        E/GzoxKWUT99VBLZB4YLDgHSz1M4Of0aYYG4k0U=
-X-Google-Smtp-Source: AK7set/N/c1j9jpxMoJtOx8hIYRYm3z6xjz0i0SNt/oDvYWlcoKOLY50Y1BWLlTU5klU113E28kOdzETszUS/8JqKvY=
-X-Received: by 2002:a05:622a:1aa8:b0:3df:58e7:4aa5 with SMTP id
- s40-20020a05622a1aa800b003df58e74aa5mr1704739qtc.0.1679307074525; Mon, 20 Mar
- 2023 03:11:14 -0700 (PDT)
+        bh=VEHX2H3FPvonaNoZg4d3ZXKZZZCxjwbRPNv3Abil3kY=;
+        b=gDMwWkABYDLCxNPiH5+aIukMq1V+wLK91mhRjvPoKjbljqOMLTNbW6YuYWn0zYfUjv
+         emJ/dF791PAyftOp8O8ExSDI1rntFMUJhtSNgZAHBywTPlU197fnvFPwEyfj6wi5FRUZ
+         9TWFF3qUYzxOGCkiMK6TxxgR0hpSmjxsKaxmblnWSpC6NhSE0w1+73kCecUrYMXcNWUz
+         DMakMW5Ljaovd+95gtsF7jfRwGPN+l/vj/a2HzSN5Pbzmrns2t+BNO0/ux6NHvug5eoE
+         cV9GXAv4r8WyRK5pJJpebd8yvq4YC9d0N0obT7DtsEO3XGVbItDZHxT9Lh8qoC7kdC2e
+         wWTQ==
+X-Gm-Message-State: AO0yUKVkMmSu/PayECjGngfBMkS2RuR0k333lfE5Jwh/eYeFFZHpJL0b
+        MvPNKBsbG1UtMBgsG7HGsrcAQHNH/HQ6tzHVG9M=
+X-Google-Smtp-Source: AK7set/7f2o3MXyyuIp0oW2dzmomSD1AeJIwa/bkGf1KaepstcBoZ2oGQTq2OW/QrKdEOrRxx9NAQwjPPU8J1KTvGK8=
+X-Received: by 2002:a37:e119:0:b0:746:3c7f:7524 with SMTP id
+ c25-20020a37e119000000b007463c7f7524mr2618315qkm.14.1679307115447; Mon, 20
+ Mar 2023 03:11:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230319115925.1317654-1-sensor1010@163.com>
-In-Reply-To: <20230319115925.1317654-1-sensor1010@163.com>
+References: <20230319115925.1317654-1-sensor1010@163.com> <CAHp75Vf9kwhbZaGjZeN5Jq0Wr_yJtDdj9N48-3o79AMORqmS3w@mail.gmail.com>
+In-Reply-To: <CAHp75Vf9kwhbZaGjZeN5Jq0Wr_yJtDdj9N48-3o79AMORqmS3w@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Mar 2023 12:10:38 +0200
-Message-ID: <CAHp75Vf9kwhbZaGjZeN5Jq0Wr_yJtDdj9N48-3o79AMORqmS3w@mail.gmail.com>
+Date:   Mon, 20 Mar 2023 12:11:19 +0200
+Message-ID: <CAHp75VeLoMPtTU8TCuPjXD_YTY-_V-TmVJYeZiBB_BPqh8EVrQ@mail.gmail.com>
 Subject: Re: [PATCH v2] drivers/gpio : Remove redundant platform_set_drvdata().
 To:     Lizhe <sensor1010@163.com>
 Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, geert+renesas@glider.be,
@@ -89,21 +89,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 2:01=E2=80=AFPM Lizhe <sensor1010@163.com> wrote:
+On Mon, Mar 20, 2023 at 12:10=E2=80=AFPM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Sun, Mar 19, 2023 at 2:01=E2=80=AFPM Lizhe <sensor1010@163.com> wrote:
+> >
+> > platform_set_drvdata() is redundant in these functions.
+> > the purpose of calling this function is to place data
+> > in *driver_data. but the data is not retrieved in these
+> > functions
 >
-> platform_set_drvdata() is redundant in these functions.
-> the purpose of calling this function is to place data
-> in *driver_data. but the data is not retrieved in these
-> functions
+> You need to:
+> 1) split the series on per driver basis (not all of the drivers are
+> going thru the same subsystem);
 
-You need to:
-1) split the series on per driver basis (not all of the drivers are
-going thru the same subsystem);
-2) improve English grammar and style in your commit message;
-3) carefully explain in the cover letter your methods of finding the
-places you think need to be improved.
+s/subsystem/tree/
 
-Before that it's a waste of time to look at your contributions.
+> 2) improve English grammar and style in your commit message;
+> 3) carefully explain in the cover letter your methods of finding the
+> places you think need to be improved.
+>
+> Before that it's a waste of time to look at your contributions.
+
 
 --=20
 With Best Regards,
