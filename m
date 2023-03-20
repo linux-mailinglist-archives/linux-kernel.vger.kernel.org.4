@@ -2,28 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E566C18FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32926C18FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjCTP3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S232900AbjCTP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232894AbjCTP2j (ORCPT
+        with ESMTP id S232884AbjCTP2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:28:39 -0400
+        Mon, 20 Mar 2023 11:28:38 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32ADA26594;
-        Mon, 20 Mar 2023 08:21:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 058BD302B8;
+        Mon, 20 Mar 2023 08:21:50 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E183CAD7;
-        Mon, 20 Mar 2023 08:16:01 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53D99FEC;
+        Mon, 20 Mar 2023 08:16:05 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9A7D93F71E;
-        Mon, 20 Mar 2023 08:15:15 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E301C3F71E;
+        Mon, 20 Mar 2023 08:15:18 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-perf-users@vger.kernel.org, Anshuman.Khandual@arm.com
-Cc:     James Clark <james.clark@arm.com>,
+Cc:     German Gomez <german.gomez@arm.com>,
+        James Clark <james.clark@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -38,10 +39,12 @@ Cc:     James Clark <james.clark@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
         Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 0/4] Enable display of partial and empty SVE predicates from Arm SPE data
-Date:   Mon, 20 Mar 2023 15:15:04 +0000
-Message-Id: <20230320151509.1137462-1-james.clark@arm.com>
+Subject: [PATCH v2 1/4] perf event: Add simd_flags field to perf_sample
+Date:   Mon, 20 Mar 2023 15:15:05 +0000
+Message-Id: <20230320151509.1137462-2-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230320151509.1137462-1-james.clark@arm.com>
+References: <20230320151509.1137462-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -52,53 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v1:
- * Rebase onto perf/core because it no longer applied cleanly
+From: German Gomez <german.gomez@arm.com>
 
-------------
+Add new field to the struct perf_sample to store flags related to SIMD
+ops.
 
-Hi,
+It will be used to store SIMD information from SVE and NEON when
+profiling using ARM SPE.
 
-I'm submitting this on behalf of German who moved on to work on other
-things in Arm before he could finish it off.
+Signed-off-by: German Gomez <german.gomez@arm.com>
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ tools/perf/util/sample.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-The predicate information is available on SPE samples from 
-Armv8.3 (FEAT_SPEv1p1), this could be useful info for profiling SVE
-code as partial and empty predicates indicate that the full vector
-width isn't being used. There is a good example in the last commit
-message.
-
-Though currently, there isn't a suitable field to store the info
-on Perf samples, so this change also adds a new SIMD field.
-This field could be used by other architectures, but currently there
-is only one bit reserved to identify SVE. It's only added to
-struct perf_sample on the userspace side, and isn't part of the kernel
-ABI, so it doesn't survive a perf inject. Although this is the
-same behavior for some other fields like branch flags, so I don't
-think it should be an issue to do something similar here. Perhaps in
-the future we could make sure everything that is synthesised from
-auxtrace data also makes it back into the new Perf inject file without
-being lost.
-
-German Gomez (4):
-  perf event: Add simd_flags field to perf_sample
-  perf arm-spe: Refactor arm-spe to support operation packet type
-  perf arm-spe: Add SVE flags to the SPE samples
-  perf report: Add 'simd' sort field
-
- tools/perf/Documentation/perf-report.txt      |  1 +
- .../util/arm-spe-decoder/arm-spe-decoder.c    | 30 ++++++++++--
- .../util/arm-spe-decoder/arm-spe-decoder.h    | 47 +++++++++++++++----
- tools/perf/util/arm-spe.c                     | 28 +++++++++--
- tools/perf/util/hist.c                        |  1 +
- tools/perf/util/hist.h                        |  1 +
- tools/perf/util/sample.h                      | 13 +++++
- tools/perf/util/sort.c                        | 47 +++++++++++++++++++
- tools/perf/util/sort.h                        |  2 +
- 9 files changed, 152 insertions(+), 18 deletions(-)
-
-
-base-commit: 96d541699e5c50b1bc2d50c83cd7145994d5f071
+diff --git a/tools/perf/util/sample.h b/tools/perf/util/sample.h
+index 33b08e0ac746..c92ad0f51ecd 100644
+--- a/tools/perf/util/sample.h
++++ b/tools/perf/util/sample.h
+@@ -66,6 +66,18 @@ struct aux_sample {
+ 	void *data;
+ };
+ 
++struct simd_flags {
++	u64	arch:1,	/* architecture (isa) */
++		pred:2;	/* predication */
++};
++
++/* simd architecture flags */
++#define SIMD_OP_FLAGS_ARCH_SVE		0x01	/* ARM SVE */
++
++/* simd predicate flags */
++#define SIMD_OP_FLAGS_PRED_PARTIAL	0x01	/* partial predicate */
++#define SIMD_OP_FLAGS_PRED_EMPTY	0x02	/* empty predicate */
++
+ struct perf_sample {
+ 	u64 ip;
+ 	u32 pid, tid;
+@@ -106,6 +118,7 @@ struct perf_sample {
+ 	struct stack_dump user_stack;
+ 	struct sample_read read;
+ 	struct aux_sample aux_sample;
++	struct simd_flags simd_flags;
+ };
+ 
+ /*
 -- 
 2.34.1
 
