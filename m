@@ -2,129 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06296C0FA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB466C0FBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjCTKvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S230495AbjCTKwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjCTKts (ORCPT
+        with ESMTP id S229956AbjCTKwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:49:48 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC48A28EAC
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:47:24 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id eg48so44716292edb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679309184;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QE4spIUhieywTPmbfU5JkyQsvGJhPjI5IlXn9hUlyMg=;
-        b=kSbyDQSDa9jw+RK3Cwwnsv8iwMfCrBT5KPAbXGEUWz8YFFLIE0g5Sbj5uFYNhIjM3t
-         vrspPZse/wL3z/ANq52hXK0oJjf87+AlXJOog5nWkyx0KirJKXpuSaSaqh6eZ2C12/fa
-         oW+E8KVxwsjJsqeU0mdmw8DuTk8qxpcdmyXQFtfCeMp7KwgTf4qk5e/dpQR7AkfQTEs0
-         dP5xc1Bi4HGuQpQdHr1rwP8P0wj1ciWgKiCDSlCWEmA3Wc7/b+4CBTVDVUfU4Io1Om6/
-         3lhHRB6Ea01qo2q0oIDTwluPYBykkFUjN25QdGt7FCuiphvnFFIjpEFkRVNiQ74nmXOE
-         7bsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679309184;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QE4spIUhieywTPmbfU5JkyQsvGJhPjI5IlXn9hUlyMg=;
-        b=OhE1iD7KU+NKju60k+zROMRtg2RexlPPGnKJNEKkJjjPT8LE2Oe6ztK5ZS63OAlZ6e
-         zDepS59fbS2IkRIA8frmtFcGZjmEDsWA0x3qLoeJRx+DIpiZovjDd4lUrDQPC8rTi5ND
-         3ksc6Ky8hDCAjp1SjCGfCt60bhmcXyc2C8hQhUAToxOy45pl/CiztgLOi0+bZSEID4QH
-         EHW9ybS2Mqfr0Iowp1Tmr6abCa9zF9vaB5GfW7HvPfng+5X6tG/cfsrHxnxf22LTaA+2
-         Eyrcl/76PbNXhAyx9U+tEgunIcxHQ5J77Km3SQUWO3Q7xlpncFQw6GZ3YclbpwLWxEUq
-         fE/g==
-X-Gm-Message-State: AO0yUKUbjqFJi9qDb6lOil+xL6Rb01HeREJsnU08okVR95hI3D6Aa79P
-        1pHxKPxgGtTIjLylwXFmPHTlIeIRoA8=
-X-Google-Smtp-Source: AK7set9foj5JTf3GpQW2uMkxmSxrU69hOx1A+Sbbm6/DmpdIlp/WVoyJqf0+SvMKxiwVLxIloqbwxQ==
-X-Received: by 2002:aa7:c857:0:b0:4fb:d10e:d9b4 with SMTP id g23-20020aa7c857000000b004fbd10ed9b4mr12028226edt.16.1679309183843;
-        Mon, 20 Mar 2023 03:46:23 -0700 (PDT)
-Received: from [192.168.1.16] ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id w3-20020a50c443000000b004ac54d4da22sm4726760edf.71.2023.03.20.03.46.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:46:23 -0700 (PDT)
-Message-ID: <3d433474-93bd-b62c-1de5-7b029b1353f9@gmail.com>
-Date:   Mon, 20 Mar 2023 12:46:21 +0200
+        Mon, 20 Mar 2023 06:52:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDD312070;
+        Mon, 20 Mar 2023 03:49:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFA9961444;
+        Mon, 20 Mar 2023 10:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F1AC433EF;
+        Mon, 20 Mar 2023 10:48:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679309288;
+        bh=H362FRaRLTPpqbrdTPkO0txUWwDidvve8th1nvkt7zI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I+QRlUmEiDRUtHEY1ZiKIg+xPMvpxGs4m0hits6Hj1zmwHTytcqkabSDMBjiwFS/C
+         BqVePcP/xOJeS0+cp4EiVoXAFKDh94FI1IgjjiAdbqiJtPVUgQLpEo4iuM+c6kTLJS
+         uBLht59rWc9F3dRttLePDkBHKFLr9k9+9anfk6jfxpkogkGuAmemVcZcQCBlum8Dy+
+         ax7sWyxfEkusC9tzx5RoDo0vrdC+bRPsInzw2ndIC/eKxKZbp1FJCBB4fQZIf+ngrh
+         6UfbJEHSV9sCkgkuKBm7VA1e97ZZl/ThNWy8B+LporPKQPlI0Vxy9xtlSI1/FhaiN+
+         Es0BxAgAbQWUw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1peD4y-0005nT-86; Mon, 20 Mar 2023 11:49:28 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/3] arm64: dts: qcom: sc8280xp-x13s: add wifi calibration variant
+Date:   Mon, 20 Mar 2023 11:46:55 +0100
+Message-Id: <20230320104658.22186-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] staging: rtl8723bs: use inline functions for
- dev_to_sdio_func
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, Julia Lawall <julia.lawall@inria.fr>
-References: <20230320103441.6537-1-eng.mennamahmoud.mm@gmail.com>
- <ZBg4tGlY+Epz0Vhd@kroah.com>
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-In-Reply-To: <ZBg4tGlY+Epz0Vhd@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds the missing calibration variant devicetree property
+which is needed to load the (just released) calibration data and use the
+ath11k wifi on the X13s and sc8280xp-crd.
 
-On ٢٠‏/٣‏/٢٠٢٣ ١٢:٤٣, Greg KH wrote:
-> On Mon, Mar 20, 2023 at 12:34:41PM +0200, Menna Mahmoud wrote:
->> Convert `dev_to_sdio_func` macro into a static inline function.
->> it is not great to have macro that use `container_of` macro,
->> because from looking at the definition one cannot tell
->> what type it applies to.
->>
->> One can get the same benefit from an efficiency point of view
->> by making an inline function.
->>
->> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
->> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
->> ---
->>   drivers/staging/rtl8723bs/os_dep/sdio_intf.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
->> index 490431484524..7ee821dbbae0 100644
->> --- a/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
->> +++ b/drivers/staging/rtl8723bs/os_dep/sdio_intf.c
->> @@ -10,7 +10,10 @@
->>   #include <linux/jiffies.h>
->>   
->>   #ifndef dev_to_sdio_func
->> -#define dev_to_sdio_func(d)     container_of(d, struct sdio_func, dev)
->> +static inline struct sdio_func *dev_to_sdio_func(struct device *d)
->> +{
->> +	return container_of(d, struct sdio_func, dev);
->> +}
->>   #endif
-> Why is the "#ifndef" check still needed now?  Really it was never
-> needed, but now would be a great time to remove it as it doubly does not
-> make any sense here.
->
-> Oh wait, no, this whole thing can just be removed entirely, right?
-> There already is a dev_to_sdio_func macro defined, so the #ifndef check
-> catches that so your change doesn't actually modify any code that is
-> used.  So this should all be removed, not changed to an inline function.
+Kalle, do you want to take the binding through your tree or should Bjorn
+take it all through the Qualcomm tree?
 
-yes, got it.
+Johan
 
 
-Thanks,
+Johan Hovold (3):
+  dt-bindings: wireless: add ath11k pcie bindings
+  arm64: dts: qcom: sc8280xp-x13s: add wifi calibration variant
+  arm64: dts: qcom: sc8280xp-crd: add wifi calibration variant
 
-Menna
+ .../bindings/net/wireless/pci17cb,1103.yaml   | 56 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     | 17 ++++++
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 17 ++++++
+ 3 files changed, 90 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml
 
->
-> thanks,
->
-> greg k-h
+-- 
+2.39.2
+
