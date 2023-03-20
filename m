@@ -2,54 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1AF6C1D73
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15856C1F0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjCTRNA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 13:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S230375AbjCTSHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233382AbjCTRMX (ORCPT
+        with ESMTP id S230017AbjCTSH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:12:23 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC861AD32;
-        Mon, 20 Mar 2023 10:08:26 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id t5so12695811edd.7;
-        Mon, 20 Mar 2023 10:08:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679331978;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oFVHNlRMO76HDr09YoyKDoaw0W+v/H++bh6zzUPwciw=;
-        b=1TpIvmuf5RRr/+Ef1XQg3wfORoZaksFe7eTknMWF28h6AqZuOyeUt81tOZ022eoCcF
-         2+sYH8WxxjztUTeUBonsCa2mxhqLlxk8iKly9Z0I00TAHVnj+hyv0JL8JXwjC85K8g7C
-         lsi0H6A3q8UjdMoYIIjQrU5d0CHmgT/4KeMmOXEgU3y43oioiHup9YbEg20YIIGJnZqV
-         TNHr63nF/Nmb63JIKd9OxTPL8eOWxKjvQfPcb+IIq6tMiggz84bBaFr3MevVRmg2mHpx
-         iDUe8ZpjAvvKCwyoPnSEyvYeQVw4DedWwJiQVUfQK3e3u3KSkGib4D4sUIN/9iuTbrbm
-         inxg==
-X-Gm-Message-State: AO0yUKWLB5hcWuvyl2xiHm2sBejQHMZn3X9qb1ZY8C2Fm5xDOqE2ainJ
-        dpyK9eKvjbb6Jq3FzTked3rYQG5W3LkppqmgvxQ=
-X-Google-Smtp-Source: AK7set8IWNc6rCvCSTt6Cym0dRfcEV5QnQDpcJYfUxxoh/DMQBcvBVdd0baimYZFBpozt4CsK/yJCoQLzw7v4RbpoRE=
-X-Received: by 2002:a50:d70e:0:b0:501:d60a:da6d with SMTP id
- t14-20020a50d70e000000b00501d60ada6dmr122065edi.3.1679331978195; Mon, 20 Mar
- 2023 10:06:18 -0700 (PDT)
+        Mon, 20 Mar 2023 14:07:26 -0400
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B406A7D;
+        Mon, 20 Mar 2023 11:01:33 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 64594541B01;
+        Mon, 20 Mar 2023 17:36:03 +0000 (UTC)
+Received: from pdx1-sub0-mail-a273.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id AC63D541B75;
+        Mon, 20 Mar 2023 17:36:02 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1679333762; a=rsa-sha256;
+        cv=none;
+        b=PIAShpVwyvpJZnCyPWAogg0YGrBqfZEm4Q+ZadyqsY3jqC+TKlBiW7CiNi8HDs199z0HhL
+        UZDTTWMybXaSZdlpfS+b4rFyWxrRztP3AN3eA8eiNRYbCiUdeLGMf1i2JAQabBOv3zONQf
+        zqbcqYK6hJpBZc4l3ktthB66XdXX58AEkOatFAt4Xl9BlNMy7YEfCA9yRU5ZN0kXvF307a
+        KShaNtSfMOqOwbLTW+ati2ek3euuO5WO4Iu2Mjhq/l7JLRH/wJqsasnO4JEGOmvAlBNxvS
+        E0sXrMTkgDtlkxoH+RmDoRBvv+RPfUOtNIFSLO9OcqwL7jWFDJLrpgsKU4cG/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1679333762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=6cUWCy5BondAFKhr1G1eG0K7rK06l9QCNh+5bql75bQ=;
+        b=n2tZs5125yPkZ3CNlnlmBdUkXF+A6S55sIFIf1EIqfNvNGAwTVqkgl1tbc7k9PeZP0kXal
+        Qzd4+wzB8mc2cbswJjOJhKMOxUhCRt+mY8c6E2ef6iGeSf49rEYdYqDG/36qdnHFGQcjwf
+        /53eS7QniZWeYhUNWAgyYRRW2NwNIXzEpTosK1soXulqq7LSG/BKtUATMO4bUE7kHodfpi
+        QTaolxWC/XVJvnMhhyP9pH1q+HO2sd8ygbAMr3NhyjMD1yhIG/7rr1Ud1n7DyZWieKYC9O
+        uoz4OvRlwJ9010bLz6bjkMSvRmfEpa//K57cqegAgbxpu/y3oJgJDzNICU0PSA==
+ARC-Authentication-Results: i=1;
+        rspamd-59dbd69698-w6jh5;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Shelf-Vacuous: 42b4d09114e22d43_1679333763159_1412504491
+X-MC-Loop-Signature: 1679333763159:3813855172
+X-MC-Ingress-Time: 1679333763159
+Received: from pdx1-sub0-mail-a273.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.126.30.4 (trex/6.7.2);
+        Mon, 20 Mar 2023 17:36:03 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a273.dreamhost.com (Postfix) with ESMTPSA id 4PgMN11nK7z6n;
+        Mon, 20 Mar 2023 10:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1679333762;
+        bh=6cUWCy5BondAFKhr1G1eG0K7rK06l9QCNh+5bql75bQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=CwnkROYHSiF5vVjQxFm7PpBoKPLNDkWQ8TJ8eA7pIPE9Ucf0bc7rCMQwdsA9Wc2GW
+         MA3tMlJHZDdgqu5b6L+jlt2vZrwjZjLobaVg3Oetf3YaAE02W8lkNrhG63cbe1PRTl
+         yfZz/dB1D6oborELmDZLut8DQzgzx62Op6iFr6LSZ50rdai861KsrG5lwMaQYR3UzD
+         4GyA3XrQ2WhwCd/yNRXBVEzlJ/88/M43JoEWy2N9nQdIYoNGzG4OGcSUh9Ugqp+r2S
+         59ZjxvZrI5EuU/Zzyh5BIcHoN8LSFsK2LZ89+7u24DEfxDtK4WtX+TmfQcbvxwSS0L
+         bAKXtXDEneEWQ==
+Date:   Mon, 20 Mar 2023 10:06:14 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH rcu 1/7] locking/lockdep: Introduce lock_sync()
+Message-ID: <20230320170614.ttnqyhemnelgmzgd@offworld>
+References: <20230317031339.10277-1-boqun.feng@gmail.com>
+ <20230317031339.10277-2-boqun.feng@gmail.com>
 MIME-Version: 1.0
-References: <20230226055427.2512453-1-void0red@gmail.com>
-In-Reply-To: <20230226055427.2512453-1-void0red@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 20 Mar 2023 18:06:07 +0100
-Message-ID: <CAJZ5v0jwQwepjFhWQXnQndGp060WGD4LjBqot5VrV-gpL46vHg@mail.gmail.com>
-Subject: Re: [PATCH] acpi: check for null return of devm_kzalloc in fch_misc_setup
-To:     Kang Chen <void0red@gmail.com>
-Cc:     lenb@kernel.org, rafael@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230317031339.10277-2-boqun.feng@gmail.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +112,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 6:54 AM Kang Chen <void0red@gmail.com> wrote:
->
-> devm_kzalloc may fail, clk_data->name might be null and will
-> cause illegal address access later.
->
-> Signed-off-by: Kang Chen <void0red@gmail.com>
-> ---
->  drivers/acpi/acpi_apd.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-> index 3bbe2276c..80f945cbe 100644
-> --- a/drivers/acpi/acpi_apd.c
-> +++ b/drivers/acpi/acpi_apd.c
-> @@ -83,6 +83,8 @@ static int fch_misc_setup(struct apd_private_data *pdata)
->         if (!acpi_dev_get_property(adev, "clk-name", ACPI_TYPE_STRING, &obj)) {
->                 clk_data->name = devm_kzalloc(&adev->dev, obj->string.length,
->                                               GFP_KERNEL);
-> +               if (!clk_data->name)
-> +                       return -ENOMEM;
->
->                 strcpy(clk_data->name, obj->string.pointer);
->         } else {
-> --
+On Thu, 16 Mar 2023, Boqun Feng wrote:
 
-Applied as 6.4 material with some edits in the subject and changelog, thanks!
+>+/*
+>+ * lock_sync() - A special annotation for synchronize_{s,}rcu()-like API.
+>+ *
+>+ * No actual critical section is created by the APIs annotated with this: these
+>+ * APIs are used to wait for one or multiple critical sections (on other CPUs
+>+ * or threads), and it means that calling these APIs inside these critical
+>+ * sections is potential deadlock.
+>+ *
+>+ * This annotation acts as an acqurie+release anontation pair with hardirqoff
+				^acquire
