@@ -2,163 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00466C1458
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F5D6C1461
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjCTOHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S231559AbjCTOIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjCTOHP (ORCPT
+        with ESMTP id S231520AbjCTOIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:07:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB591043A;
-        Mon, 20 Mar 2023 07:07:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 50C4521AD5;
-        Mon, 20 Mar 2023 14:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679321233; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yo1ljBh40qQ38I7yL67r8GgZpmVGkTyCyvYo1Klawvg=;
-        b=gR30Tzc5M9vXNhyEAWGCYnexklKeLqzCLnNVhaQReCr/JHWJZBZuM4DXKq4zlS4igtjSNv
-        uBFSYBYrVNwXejkUBZg4Pq11nia2TqEKwDQsj5yfS5dW+i6GgYUqGNRpKDxtAjnTJn+zO+
-        q73LV5ZvLVqsUe2XIdbpvqpVu4TtnUU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679321233;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yo1ljBh40qQ38I7yL67r8GgZpmVGkTyCyvYo1Klawvg=;
-        b=9KuzEM+WEuNP7Vy/Mkhq7JBgi8U4cSO7u10W/ngmR6YhNf8EZGHw2zx6f4EbIjrnqZ6cpG
-        K3bdRR/bNEOPdFCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B2A0213416;
-        Mon, 20 Mar 2023 14:07:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YF0OKJBoGGSKFwAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Mon, 20 Mar 2023 14:07:12 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 03fb36ae;
-        Mon, 20 Mar 2023 14:07:10 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] ceph: fscrypt: fix atomic open bug for encrypted
- directories
-References: <20230316181413.26916-1-lhenriques@suse.de>
-        <568da52f-18a6-5f96-cd51-5b07dedefb2d@redhat.com>
-Date:   Mon, 20 Mar 2023 14:07:10 +0000
-In-Reply-To: <568da52f-18a6-5f96-cd51-5b07dedefb2d@redhat.com> (Xiubo Li's
-        message of "Mon, 20 Mar 2023 09:06:50 +0800")
-Message-ID: <871qljv7n5.fsf@suse.de>
+        Mon, 20 Mar 2023 10:08:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3603A49FB;
+        Mon, 20 Mar 2023 07:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MJxCjOddyT7A7I/gLOdqBjGGzMXJDL0bQXHZfHiA2i4=; b=tpRr5kRvwQtlBuB+YU/YMpXZFe
+        KxoTKMD3RPkaZixl8ji082MY6W6IC05IZ5EVl+lm4vGGDvWSL0bMXHKu8zsqz0Wf3qmNN5p8nt+3R
+        2PXoaoQjnkfGBIrOCSH8IK0DlDCSOmgrvTMKbfGmtNSkU8QyKRWpU1hRap8MXPW3V/Rb13adp/kI9
+        nnBl+L484LzrirsbKQ2hjfIMqec40/FLok8E9n6gVmiAT1dkoFC2UyAs48Ng2YXO3CaNZPA0uJ/zr
+        Mdlom7lZgT+JQeJUG7UEdSoxs0jMdSjuWVbAKg3DLuAwFsO7E8tUB73N94rCPMgH7WYqWkLR6d2xW
+        K1/AU9Tw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1peGBl-0015zY-V2; Mon, 20 Mar 2023 14:08:41 +0000
+Date:   Mon, 20 Mar 2023 14:08:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Yin, Fengwei" <fengwei.yin@intel.com>
+Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-arch@vger.kernel.org,
+        will@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
+Message-ID: <ZBho6Q6Xq/YqRmBT@casper.infradead.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-36-willy@infradead.org>
+ <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
+ <b39f4816-2064-e402-4e02-908f40c396d4@intel.com>
+ <2fa5a911-8432-2fce-c6e1-de4e592219d8@arm.com>
+ <ZBNXcmOrrOS4Rydg@casper.infradead.org>
+ <b2c00aab-82ad-ea7a-df9d-c816b216b0f1@intel.com>
+ <ZBPiOgYDLYBmVwOc@casper.infradead.org>
+ <483fd440-df7b-fab3-b138-f3789f2dc078@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <483fd440-df7b-fab3-b138-f3789f2dc078@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+On Mon, Mar 20, 2023 at 09:38:55PM +0800, Yin, Fengwei wrote:
+> Thanks a lot to Ryan for helping to test the debug patch I made.
+> 
+> Ryan confirmed that the following change could fix the kernel build regression:
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index db86e459dde6..343d6ff36b2c 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -3557,7 +3557,7 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+> 
+>                 ret |= filemap_map_folio_range(vmf, folio,
+>                                 xas.xa_index - folio->index, addr, nr_pages);
+> -               xas.xa_index += nr_pages;
+> +               xas.xa_index += folio_test_large(folio) ? nr_pages : 0;
+> 
+>                 folio_unlock(folio);
+>                 folio_put(folio);
+> 
+> I will make upstream-able change as "xas.xa_index += nr_pages - 1;"
 
-> On 17/03/2023 02:14, Lu=C3=ADs Henriques wrote:
->> Hi!
->>
->> I started seeing fstest generic/123 failing in ceph fscrypt, when runnin=
-g it
->> with 'test_dummy_encryption'.  This test is quite simple:
->>
->> 1. Creates a directory with write permissions for root only
->> 2. Writes into a file in that directory
->> 3. Uses 'su' to try to modify that file as a different user, and
->>     gets -EPERM
->>
->> All the test steps succeed, but the test fails to cleanup: 'rm -rf <dir>'
->> will fail with -ENOTEMPTY.  'strace' shows that calling unlinkat() to re=
-move
->> the file got a -ENOENT and then -ENOTEMPTY for the directory.
->>
->> This is because 'su' does a drop_caches ('su (874): drop_caches: 2' in
->> dmesg), and ceph's atomic open will do:
->>
->> 	if (IS_ENCRYPTED(dir)) {
->> 		set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
->> 		if (!fscrypt_has_encryption_key(dir)) {
->> 			spin_lock(&dentry->d_lock);
->> 			dentry->d_flags |=3D DCACHE_NOKEY_NAME;
->> 			spin_unlock(&dentry->d_lock);
->> 		}
->> 	}
->>
->> Although 'dir' has the encryption key available, fscrypt_has_encryption_=
-key()
->> will return 'false' because fscrypt info isn't yet set after the cache
->> cleanup.
->>
->> The first patch will add a new helper for the atomic_open that will force
->> the fscrypt info to be loaded into an inode that has been evicted recent=
-ly
->> but for which the key is still available.
->>
->> The second patch switches ceph atomic_open to use the new fscrypt helper.
->>
->> Cheers,
->> --
->> Lu=C3=ADs
->>
->> Changes since v2:
->> - Make helper more generic and to be used both in lookup and atomic open
->>    operations
->> - Modify ceph_lookup (patch 0002) and ceph_atomic_open (patch 0003) to u=
-se
->>    the new helper
->>
->> Changes since v1:
->> - Dropped IS_ENCRYPTED() from helper function because kerneldoc says
->>    already that it applies to encrypted directories and, most importantl=
-y,
->>    because it would introduce a different behaviour for
->>    CONFIG_FS_ENCRYPTION and !CONFIG_FS_ENCRYPTION.
->> - Rephrased helper kerneldoc
->>
->> Changes since initial RFC (after Eric's review):
->> - Added kerneldoc comments to the new fscrypt helper
->> - Dropped '__' from helper name (now fscrypt_prepare_atomic_open())
->> - Added IS_ENCRYPTED() check in helper
->> - DCACHE_NOKEY_NAME is not set if fscrypt_get_encryption_info() returns =
-an
->>    error
->> - Fixed helper for !CONFIG_FS_ENCRYPTION (now defined 'static inline')
->
-> This series looks good to me.
->
-> And I have run the test locally and worked well.
+Thanks to both of you!
 
-Awesome, thanks a lot Xiubo.  I've been testing it locally as well and I
-haven't observed any breakage either.
+Really, we shouldn't need to interfere with xas.xa_index at all.
+Does this work?
 
-Cheers,
---=20
-Lu=C3=ADs
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 8e4f95c5b65a..e40c967dde5f 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3420,10 +3420,10 @@ static bool filemap_map_pmd(struct vm_fault *vmf, struct folio *folio,
+ 	return false;
+ }
+ 
+-static struct folio *next_uptodate_page(struct folio *folio,
+-				       struct address_space *mapping,
+-				       struct xa_state *xas, pgoff_t end_pgoff)
++static struct folio *next_uptodate_folio(struct xa_state *xas,
++		struct address_space *mapping, pgoff_t end_pgoff)
+ {
++	struct folio *folio = xas_next_entry(xas, end_pgoff);
+ 	unsigned long max_idx;
+ 
+ 	do {
+@@ -3461,22 +3461,6 @@ static struct folio *next_uptodate_page(struct folio *folio,
+ 	return NULL;
+ }
+ 
+-static inline struct folio *first_map_page(struct address_space *mapping,
+-					  struct xa_state *xas,
+-					  pgoff_t end_pgoff)
+-{
+-	return next_uptodate_page(xas_find(xas, end_pgoff),
+-				  mapping, xas, end_pgoff);
+-}
+-
+-static inline struct folio *next_map_page(struct address_space *mapping,
+-					 struct xa_state *xas,
+-					 pgoff_t end_pgoff)
+-{
+-	return next_uptodate_page(xas_next_entry(xas, end_pgoff),
+-				  mapping, xas, end_pgoff);
+-}
+-
+ /*
+  * Map page range [start_page, start_page + nr_pages) of folio.
+  * start_page is gotten from start by folio_page(folio, start)
+@@ -3552,7 +3536,7 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 	int nr_pages = 0;
+ 
+ 	rcu_read_lock();
+-	folio = first_map_page(mapping, &xas, end_pgoff);
++	folio = next_uptodate_folio(&xas, mapping, end_pgoff);
+ 	if (!folio)
+ 		goto out;
+ 
+@@ -3574,11 +3558,11 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 
+ 		ret |= filemap_map_folio_range(vmf, folio,
+ 				xas.xa_index - folio->index, addr, nr_pages);
+-		xas.xa_index += nr_pages;
+ 
+ 		folio_unlock(folio);
+ 		folio_put(folio);
+-	} while ((folio = next_map_page(mapping, &xas, end_pgoff)) != NULL);
++		folio = next_uptodate_folio(&xas, mapping, end_pgoff);
++	} while (folio);
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
+ out:
+ 	rcu_read_unlock();
+
+> Ryan and I also identify some other changes needed. I am not sure how to
+> integrate those changes to this series. Maybe an add-on patch after this
+> series? Thanks.
+
+Up to you; I'm happy to integrate fixup patches into the current series
+or add on new ones.
