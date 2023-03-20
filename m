@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335196C0798
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDE56C078B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjCTA7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 20:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S230440AbjCTA7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 20:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCTA6a (ORCPT
+        with ESMTP id S230217AbjCTA6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 20:58:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7412056F;
-        Sun, 19 Mar 2023 17:55:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 19 Mar 2023 20:58:00 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ED81E1F9;
+        Sun, 19 Mar 2023 17:55:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27449B80B48;
-        Mon, 20 Mar 2023 00:55:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79138C433D2;
-        Mon, 20 Mar 2023 00:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273718;
-        bh=o2hSVSgxLu9H00c5eClJaIkDhqs030/SP8ijcu8C2BU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q9r/hhL8oX3WD0icCuVtkIEF76r7/IVuC95dPVNrotDtUVKECWjeu6I0cSqCBcoo6
-         ISZPZGlxLPhKhoziqurkLaqrd6/2k7JRILVkIonSi0bbbHpxAGUvGRntpoytAO1s3J
-         vYMtuK6p129y50h2gHdfzcdajy7IdX0QNOynuwjvYn/w250G5eN5VmJv98q3j+0i0M
-         CNvCKyFy2GQQidiznuuegBfWQdZjUQ4o9v35GTPfKpPVBM5xJOfVbr7D3D5qAnh6lg
-         LJn4K1DmcM2t61W1LgWIjbsJWGhTN1qhl5hHHt0KaTuEDDtubdFqU9LHNQm4ftCA2/
-         DdDByT+3/oufw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Thomas Glanzmann <thomas@glanzmann.de>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        evan.quan@amd.com, Hawking.Zhang@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.1 29/29] drm/amd: Fix initialization mistake for NBIO 7.3.0
-Date:   Sun, 19 Mar 2023 20:54:11 -0400
-Message-Id: <20230320005413.1428452-29-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005413.1428452-1-sashal@kernel.org>
-References: <20230320005413.1428452-1-sashal@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pfx8R4x99z4xFM;
+        Mon, 20 Mar 2023 11:54:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679273672;
+        bh=jCYWUFqeEcq/iKk9UVbJulf34mhqjekmp+jzoMspAKE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Jql0g2mioz1pb4aUO97w+SldgnyDL5hiBtRO9P+uK69BiFH2jnbjIAawp+Eii1TJV
+         /N52S3PdzBDUvu0R1xEphOgZMSXhBVRdD1mJ/JyKJWmyXeqAvphvDjGcR79/fMI4yX
+         Sjk6OI6OVaaerkXtBhDETRgEGmSPEN369c2rkKePUGu2+R7mlc1DOLewGTgyx4p0+H
+         hnl2jid74xgfXhD0zuAU1a2skSJKRoZ3gKxuCdgCUOzrIDfUwmUMe6HJ4Zoz0wokil
+         2B5T/J7xUpXnJOSaFGczoS9e0GblrGR6C1Xd9ZBCht4hfk7WNHDKZOhW68hIXbwk1k
+         bQjgLfN1Itybw==
+Date:   Mon, 20 Mar 2023 11:54:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?UTF-8?B?SsOk?= =?UTF-8?B?cnZpbmVu?= 
+        <ilpo.jarvinen@linux.intel.com>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the char-misc tree with the driver-core
+ and tty trees
+Message-ID: <20230320115430.06f26c33@canb.auug.org.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/u9oc98YIT5GZz45tPttyH3e";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+--Sig_/u9oc98YIT5GZz45tPttyH3e
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[ Upstream commit 1717cc5f2962a4652c76ed3858b499ccae6c277c ]
+Hi all,
 
-The same strapping initialization issue that happened on NBIO 7.5.1
-appears to be happening on NBIO 7.3.0.
-Apply the same fix to 7.3.0 as well.
+Today's linux-next merge of the char-misc tree got conflicts in:
 
-Note: This workaround relies upon the integrated GPU being enabled
-in BIOS. If the integrated GPU is disabled in BIOS a different
-workaround will be required.
+  drivers/char/pcmcia/cm4000_cs.c
+  drivers/char/pcmcia/cm4040_cs.c
+  drivers/char/pcmcia/scr24x_cs.c
+  drivers/char/pcmcia/synclink_cs.c
 
-Reported-by: Thomas Glanzmann <thomas@glanzmann.de>
-Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Link: https://lore.kernel.org/linux-usb/Y%2Fz9GdHjPyF2rNG3@glanzmann.de/T/#u
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/amd/amdgpu/nbio_v7_2.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+between commits:
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/nbio_v7_2.c b/drivers/gpu/drm/amd/amdgpu/nbio_v7_2.c
-index 4b0d563c6522c..4ef1fa4603c8e 100644
---- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_2.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_2.c
-@@ -382,11 +382,6 @@ static void nbio_v7_2_init_registers(struct amdgpu_device *adev)
- 		if (def != data)
- 			WREG32_PCIE_PORT(SOC15_REG_OFFSET(NBIO, 0, regBIF1_PCIE_MST_CTRL_3), data);
- 		break;
--	case IP_VERSION(7, 5, 1):
--		data = RREG32_SOC15(NBIO, 0, regRCC_DEV2_EPF0_STRAP2);
--		data &= ~RCC_DEV2_EPF0_STRAP2__STRAP_NO_SOFT_RESET_DEV2_F0_MASK;
--		WREG32_SOC15(NBIO, 0, regRCC_DEV2_EPF0_STRAP2, data);
--		fallthrough;
- 	default:
- 		def = data = RREG32_PCIE_PORT(SOC15_REG_OFFSET(NBIO, 0, regPCIE_CONFIG_CNTL));
- 		data = REG_SET_FIELD(data, PCIE_CONFIG_CNTL,
-@@ -399,6 +394,15 @@ static void nbio_v7_2_init_registers(struct amdgpu_device *adev)
- 		break;
- 	}
- 
-+	switch (adev->ip_versions[NBIO_HWIP][0]) {
-+	case IP_VERSION(7, 3, 0):
-+	case IP_VERSION(7, 5, 1):
-+		data = RREG32_SOC15(NBIO, 0, regRCC_DEV2_EPF0_STRAP2);
-+		data &= ~RCC_DEV2_EPF0_STRAP2__STRAP_NO_SOFT_RESET_DEV2_F0_MASK;
-+		WREG32_SOC15(NBIO, 0, regRCC_DEV2_EPF0_STRAP2, data);
-+		break;
-+	}
-+
- 	if (amdgpu_sriov_vf(adev))
- 		adev->rmmio_remap.reg_offset = SOC15_REG_OFFSET(NBIO, 0,
- 			regBIF_BX_PF0_HDP_MEM_COHERENCY_FLUSH_CNTL) << 2;
--- 
-2.39.2
+  1aaba11da9aa ("driver core: class: remove module * from class_create()")
+  035173c91c6b ("tty: Convert hw_stopped in tty_struct to bool")
 
+from the driver-core, tty trees and commit:
+
+  9b12f050c76f ("char: pcmcia: remove all the drivers")
+
+from the char-misc tree.
+
+I fixed it up (I removed the files) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/u9oc98YIT5GZz45tPttyH3e
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQXrsYACgkQAVBC80lX
+0GxFTQf+J9cw/QqUJh0Fasg5+N1H8N3DrdK4/jiSwlQw5WyHRrJ/najgsLvx3m0q
+hiXv7kaOBXPuKGEi8xyGrxR+jcoGvncJicuE7gFfR/L7Jchj6BwceOWInQM1zLpi
+ceIDljHU3IECvLjnRdgZESzFdMjSgoM756YKCFfA5rbZ5+YHU7Jf0HQ7idiLgJJj
+gyXA9OM4v9RTIFFtbQ2/kAch8QVhyUv/TjrBL9fprCa1LusXkod33zUa26qWBbfC
+v0bLIp0yBJOSKubkXDinqPA2fu6RGDh9h8F2UmNAUrvKaMDSPxuFRKqPCu9QftaX
+fAdwgQsDA5lyBVF9dFUowM63XOpc5Q==
+=Gx97
+-----END PGP SIGNATURE-----
+
+--Sig_/u9oc98YIT5GZz45tPttyH3e--
