@@ -2,205 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6716C1BB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B8C6C1BD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjCTQcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S230115AbjCTQgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjCTQbn (ORCPT
+        with ESMTP id S231786AbjCTQfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:31:43 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893027ABD;
-        Mon, 20 Mar 2023 09:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679329484; x=1710865484;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YkPKy6HrZ89gUO3WdmC9FV2zbtAO4V6xBqAXDdNHMg4=;
-  b=aSURlZ8ssUI/oMIV/oQjjYUX2A8u5/25sDkAJsx7Z4BoNtWs5gAm5Hdg
-   f2Bm3uR9cd/lC8eSDO6kCabeGVhNUpdFBIelsxhWX3lPb9I5ErlEumOpp
-   bR1rNKh72L/qRkPP3dHY6B82iczpT9vA3bR/El1EuHY5RlWCZ8ot7jiZ5
-   5rsh3On8pJDvVe6UyGaQe+Y6L9RsQBGzd2EclvtVsqsUsHIrsTXRmD0Ls
-   wPUvkH+BkAHm99dxfo1SlPbgdEtIDCIx8WWAa0Zr4uepjzLgXlpsILeS6
-   76gvl9HgKyPih++7H5JPU20P8QMSxgVpdHccT4A4Edi/q6dIhd9w+ksy7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="337426871"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="337426871"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 09:24:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855322397"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="855322397"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 09:24:43 -0700
-Date:   Mon, 20 Mar 2023 09:28:42 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux.dev, dmaengine@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 5/5] iommu/vt-d: Move PRI handling to IOPF feature
- path
-Message-ID: <20230320092842.05287fb1@jacob-builder>
-In-Reply-To: <20230309025639.26109-6-baolu.lu@linux.intel.com>
-References: <20230309025639.26109-1-baolu.lu@linux.intel.com>
-        <20230309025639.26109-6-baolu.lu@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 20 Mar 2023 12:35:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749F112046;
+        Mon, 20 Mar 2023 09:29:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6A147CE1307;
+        Mon, 20 Mar 2023 16:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758DDC433A0;
+        Mon, 20 Mar 2023 16:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679329744;
+        bh=kjNE+xZqCrD8iMoVdwZ7yuZZfBEJymUt10XwIxYh2IY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vv4sNgoQPQYZIt80kDvbscTGV8EyAOBLnvQJNKOVjOIWof8MSUsP1pcxCF0mz9ilD
+         QdNVhF/zy/ob6sZsf7Np9llMREtIsDd3VQEp4F26Of52jZ44R5ryPsOTBtdIMQ1AE3
+         8dugyBf2AOcS1qqBnqPzyb8hdBKvxChJ65hR7ns4FF8TnD9anxfVvrRrE8LbXM1ve5
+         QeLODxSRqLl/EnwXRwUB96JZfcfb4trlUcc8RSaE5/6lvDa6NAaYzoT08VoT55/Onn
+         37iXDFAs1+YyXU9uqijre8jtsuOUDS2/Zhf52EXBvYN8x3ECX6pphoxUdsqZ4YacrU
+         +51lo3tKKklTA==
+Date:   Mon, 20 Mar 2023 16:28:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Drake <drake@endlessm.com>,
+        Katsuhiro Suzuki <katsuhiro@katsuster.net>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 02/11] dt-bindings: serial: snps-dw-apb-uart: Relax
+ dma-names order constraint
+Message-ID: <3f544569-553c-40c5-9d9a-31dfc48d06a4@sirena.org.uk>
+References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
+ <20230315114806.3819515-3-cristian.ciocaltea@collabora.com>
+ <3679f2d0-55f0-1710-abc2-b268b6fc6969@linaro.org>
+ <167904851367.26.16449705310108549543@mailman-core.alsa-project.org>
+ <20230320155812.GA1755078-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SSpxkFyPmL3iEqN+"
+Content-Disposition: inline
+In-Reply-To: <20230320155812.GA1755078-robh@kernel.org>
+X-Cookie: Keep away from fire or flame.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi BaoLu,
 
-On Thu,  9 Mar 2023 10:56:39 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-wrote:
+--SSpxkFyPmL3iEqN+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> PRI is only used for IOPF. With this move, the PCI/PRI feature could be
-> controlled by the device driver through iommu_dev_enable/disable_feature()
-> interfaces.
-This move is good for DMA API PASID as well, it will not turn on PRI when
-enabling PASID, ATS cap.
+On Mon, Mar 20, 2023 at 10:58:12AM -0500, Rob Herring wrote:
+> On Fri, Mar 17, 2023 at 12:21:41PM +0200, Cristian Ciocaltea via Alsa-dev=
+el wrote:
 
-Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com> 
+> >  dma-names order constraint
+> > Message-ID: <8ae57fe3-56aa-7e50-3eaa-a12a40657baf@collabora.com>
+> > User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+> >  Thunderbird/102.7.2
 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  drivers/iommu/intel/iommu.c | 59 ++++++++++++++++++++++++-------------
->  1 file changed, 39 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index fb64ab8358a9..4ed32bde4287 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -1415,11 +1415,6 @@ static void iommu_enable_pci_caps(struct
-> device_domain_info *info) if (info->pasid_supported &&
-> !pci_enable_pasid(pdev, info->pasid_supported & ~1)) info->pasid_enabled
-> = 1; 
-> -	if (info->pri_supported &&
-> -	    (info->pasid_enabled ? pci_prg_resp_pasid_required(pdev) :
-> 1)  &&
-> -	    !pci_reset_pri(pdev) && !pci_enable_pri(pdev, PRQ_DEPTH))
-> -		info->pri_enabled = 1;
-> -
->  	if (info->ats_supported && pci_ats_page_aligned(pdev) &&
->  	    !pci_enable_ats(pdev, VTD_PAGE_SHIFT)) {
->  		info->ats_enabled = 1;
-> @@ -1442,11 +1437,6 @@ static void iommu_disable_pci_caps(struct
-> device_domain_info *info) domain_update_iotlb(info->domain);
->  	}
->  
-> -	if (info->pri_enabled) {
-> -		pci_disable_pri(pdev);
-> -		info->pri_enabled = 0;
-> -	}
-> -
->  	if (info->pasid_enabled) {
->  		pci_disable_pasid(pdev);
->  		info->pasid_enabled = 0;
-> @@ -4664,23 +4654,48 @@ static int intel_iommu_enable_sva(struct device
-> *dev) 
->  static int intel_iommu_enable_iopf(struct device *dev)
->  {
-> +	struct pci_dev *pdev = dev_is_pci(dev) ? to_pci_dev(dev) : NULL;
->  	struct device_domain_info *info = dev_iommu_priv_get(dev);
->  	struct intel_iommu *iommu;
->  	int ret;
->  
-> -	if (!info || !info->ats_enabled || !info->pri_enabled)
-> +	if (!pdev || !info || !info->ats_enabled || !info->pri_supported)
->  		return -ENODEV;
-> +
-> +	if (info->pri_enabled)
-> +		return -EBUSY;
-> +
->  	iommu = info->iommu;
->  	if (!iommu)
->  		return -EINVAL;
->  
-> +	/* PASID is required in PRG Response Message. */
-> +	if (info->pasid_enabled && !pci_prg_resp_pasid_required(pdev))
-> +		return -EINVAL;
-> +
-> +	ret = pci_reset_pri(pdev);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = iopf_queue_add_device(iommu->iopf_queue, dev);
->  	if (ret)
->  		return ret;
->  
->  	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf,
-> dev); if (ret)
-> -		iopf_queue_remove_device(iommu->iopf_queue, dev);
-> +		goto iopf_remove_device;
-> +
-> +	ret = pci_enable_pri(pdev, PRQ_DEPTH);
-> +	if (ret)
-> +		goto iopf_unregister_handler;
-> +	info->pri_enabled = 1;
-> +
-> +	return 0;
-> +
-> +iopf_unregister_handler:
-> +	iommu_unregister_device_fault_handler(dev);
-> +iopf_remove_device:
-> +	iopf_queue_remove_device(iommu->iopf_queue, dev);
->  
->  	return ret;
->  }
-> @@ -4689,17 +4704,21 @@ static int intel_iommu_disable_iopf(struct device
-> *dev) {
->  	struct device_domain_info *info = dev_iommu_priv_get(dev);
->  	struct intel_iommu *iommu = info->iommu;
-> -	int ret;
->  
-> -	ret = iommu_unregister_device_fault_handler(dev);
-> -	if (ret)
-> -		return ret;
-> +	if (!info->pri_enabled)
-> +		return -EINVAL;
->  
-> -	ret = iopf_queue_remove_device(iommu->iopf_queue, dev);
-> -	if (ret)
-> -		iommu_register_device_fault_handler(dev,
-> iommu_queue_iopf, dev);
-> +	pci_disable_pri(to_pci_dev(dev));
-> +	info->pri_enabled = 0;
->  
-> -	return ret;
-> +	/*
-> +	 * With pri_enabled checked, unregistering fault handler and
-> +	 * removing device from iopf queue should never fail.
-> +	 */
-> +	iommu_unregister_device_fault_handler(dev);
-> +	iopf_queue_remove_device(iommu->iopf_queue, dev);
-> +
-> +	return 0;
->  }
->  
->  static int
+> There is something strange going on with your mails as there are 2=20
+> copies in the archives with the 2nd one getting the header twice. It's=20
+> coming from the alsa-devel list.
 
+This is probably caused by alsa-devel, it'll be mailman rewriting bits
+of the message.  There's stuff coming up with other people's mails too.
 
-Thanks,
+--SSpxkFyPmL3iEqN+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Jacob
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQYiccACgkQJNaLcl1U
+h9AWWgf+NrPa0MYP5i63yT+84rj5CMEVq9erNCfVLLi4aX7Rk2t3p7OHm6nPT5iH
+nEuh1CIOa+avBw3wouVQt6nokWi+mq6QbmYustWX7hPq0Gz2FRTJyXl78DNWj8Ys
+fZ4osjdXbr7f0Sa5lZVvImuVpGh7z03Fg9XbLkMXt7FDacubv1DY6RwJdphesoG7
+C99xjwHv55veTyp/QbwCuyctpKWo1Dn4HvkL8XU//892rRaHt6enBBju6DWo8GTF
+tr89XuM3flXYbOGumon2KSlsbzAXV7QKwnK9RCPsLaXuvO36PRBMippV/VmwnJCh
+dYBmTNrePnumx6r2BbCzk0Gx8LMfdw==
+=+3s7
+-----END PGP SIGNATURE-----
+
+--SSpxkFyPmL3iEqN+--
