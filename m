@@ -2,176 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37936C259F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7126C25AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjCTXal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S229511AbjCTXfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjCTXah (ORCPT
+        with ESMTP id S229453AbjCTXfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:30:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E918145;
-        Mon, 20 Mar 2023 16:30:35 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KLWsQL029937;
-        Mon, 20 Mar 2023 23:30:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=oS8WmOQq4N8R288gAT5pXvGxE25jWqUFgIue5/beRb8=;
- b=Dj5EMs6asYb/B1Wi/ZE5rsaVB8UrQZNGMokOE1CFEYyvLopWdjsu4LLBDsqHCcoUOoUQ
- e0r2FXSZ2kl7h71lw6HRkbCs6402nbkOKoVfjCDUieaIiSTo40jFiOredjFFnlZHhmlD
- uD/YApv6nyw6tZPwNc3e4s2yxo2UEWU0/w9OO4QjFRj3Hk4qzWaRsQqQLeC+CvGoBO3F
- ujPT2E+9l8tc9Lz8vURrD6lcQpOpCfl67fWCkqFmBCj0CwAqj5CzUgwUnO744ByZyDBY
- 1Pa4UhGbLMcNY7w6V6XCuatVxKa65wTPEqci3f/P2/+Ev4UXFjzCr23cxQEj5arguGR1 1A== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pes8p189k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 23:30:31 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32KNUUZB019246
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 23:30:30 GMT
-Received: from [10.110.115.97] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 20 Mar
- 2023 16:30:29 -0700
-Message-ID: <394ed3a3-678e-d2bb-a032-aee135acaee2@quicinc.com>
-Date:   Mon, 20 Mar 2023 16:30:29 -0700
+        Mon, 20 Mar 2023 19:35:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A320E32CDA
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679355293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eLRNau9yfu5hUtNACbqD47eGjINw3xSx6xkN8nR2nXo=;
+        b=ftsUeORo919szKTO1NisJUIbZ98MbRl142IwhMnQRmUP7ToeRFgyRNvIruhYgRODrTwp/P
+        HFtkWD3Gd7bwct2L7i2XGuVP6Zz5KZCAsazfu4G1BlZFhP9gvrHLo/PwF3kKus9ZbtxSCY
+        OtRzp+C6v64LrLk7SM8fhCJi+V9OH3M=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-NgfrCnvdNUyQY9iC6NRZHA-1; Mon, 20 Mar 2023 19:34:52 -0400
+X-MC-Unique: NgfrCnvdNUyQY9iC6NRZHA-1
+Received: by mail-qt1-f198.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so1251741qta.16
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:34:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679355292;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eLRNau9yfu5hUtNACbqD47eGjINw3xSx6xkN8nR2nXo=;
+        b=Z025chv6CL5d+OR3CPhjgnWKcFBbho6HEIm/cegxzMK7/GggeMjxoEJQuzULjXJW1r
+         s9U3v1+iHYLTGZUoOA+wbaUkV5Lk82yf8aZ8jJPCFY/TZNg9pPqbzJj5SyigooESpSTt
+         SZ9hHoBXTYUy1o3MOjMNMcZGjL31rV9bssVklI5OGwKbM6YIRR+xFvbYZCe7yiD5RP7x
+         yfXYxUrY5/tMMsZAHK7nIe6vYlgfcZDUBY1STA5xczKyqVe6pkKn9Iy5LuV5svPuclbV
+         YHSXLN7bBnvrHJ7EWc2Ltgqu2Ouy7AvFefyJn5aJZEeqciIPh7/yY+KzqmvJEGTu/R69
+         ruag==
+X-Gm-Message-State: AO0yUKWcAVVLO1t6bfnyFbrrSxALFjlqFY/6lrkDWEwJFVGw6zktPlWM
+        ve8QhjoMuBoYcUadAQtwEE7hnRD7+g0rhhw35cZO+U61tamw4Kjq0EHONnnCTrJWUHufb7LSmUA
+        z7hsRK8mmYEnHGkm7mw3za9XA
+X-Received: by 2002:ac8:590d:0:b0:3bf:c407:10c6 with SMTP id 13-20020ac8590d000000b003bfc40710c6mr1680916qty.13.1679355292033;
+        Mon, 20 Mar 2023 16:34:52 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/MSGMYSq3HoZIhVmyS6T1eXwZz2enrFbuKq9nPI2QR/JAsY9RsSg0g8FFAWo/GPQAdeced0g==
+X-Received: by 2002:ac8:590d:0:b0:3bf:c407:10c6 with SMTP id 13-20020ac8590d000000b003bfc40710c6mr1680898qty.13.1679355291794;
+        Mon, 20 Mar 2023 16:34:51 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 5-20020a370b05000000b0071eddd3bebbsm8312839qkl.81.2023.03.20.16.34.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 16:34:51 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     tony0620emma@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
+Date:   Mon, 20 Mar 2023 19:34:48 -0400
+Message-Id: <20230320233448.1729899-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 5/7] remoteproc: qcom: q6v5: Add support for q6 rmb
- registers
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20230306231202.12223-1-quic_molvera@quicinc.com>
- <20230306231202.12223-6-quic_molvera@quicinc.com>
- <20230316021736.d53quam5eew5fr6m@ripper>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <20230316021736.d53quam5eew5fr6m@ripper>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rcdnS3O8jz_GPnWPvXR5YtvdQ2TTR5CQ
-X-Proofpoint-ORIG-GUID: rcdnS3O8jz_GPnWPvXR5YtvdQ2TTR5CQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_16,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 impostorscore=0 malwarescore=0 phishscore=0 clxscore=1015
- adultscore=0 bulkscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303200198
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/net/wireless/realtek/rtw88/pci.c:92:21: error:
+  unused function 'rtw_pci_get_tx_desc' [-Werror,-Wunused-function]
+static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
+                    ^
+This function is not used, so remove it.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/realtek/rtw88/pci.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-On 3/15/2023 7:17 PM, Bjorn Andersson wrote:
-> On Mon, Mar 06, 2023 at 03:12:00PM -0800, Melody Olvera wrote:
->> When attaching a running Q6, the remoteproc driver needs a way
->> to communicate with the Q6 using rmb registers, so allow the
->> rmb register to be gotten from the device tree if present.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  drivers/remoteproc/qcom_q6v5.c | 9 +++++++++
->>  drivers/remoteproc/qcom_q6v5.h | 8 ++++++++
->>  2 files changed, 17 insertions(+)
->>
->> diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
->> index 192c7aa0e39e..e8c6be70ebfd 100644
->> --- a/drivers/remoteproc/qcom_q6v5.c
->> +++ b/drivers/remoteproc/qcom_q6v5.c
->> @@ -254,6 +254,7 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
->>  		   void (*handover)(struct qcom_q6v5 *q6v5))
->>  {
->>  	int ret;
->> +	struct resource *res;
->>  
->>  	q6v5->rproc = rproc;
->>  	q6v5->dev = &pdev->dev;
->> @@ -263,6 +264,14 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
->>  	init_completion(&q6v5->start_done);
->>  	init_completion(&q6v5->stop_done);
->>  
->> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> In addition to the PAS driver, __func__ is being invoked by the non-PAS
-> ADSP and MPSS drivers as well, which both uses reg[1] for other
-> purposes. So this won't work.
->
-> Perhaps I'm missing some possibility of reuse, but it seems reasonable
-> for this to move to the pas-driver.
-
-Yeah that's fairly sensible. I'll move this to the pas driver.
-
-Thanks,
-Melody
->
-> Thanks,
-> Bjorn
->
->> +	if (res) {
->> +		q6v5->rmb_base = devm_ioremap_resource(&pdev->dev, res);
->> +		if (IS_ERR(q6v5->rmb_base))
->> +			q6v5->rmb_base = NULL;
->> +	} else
->> +		q6v5->rmb_base = NULL;
->> +
->>  	q6v5->wdog_irq = platform_get_irq_byname(pdev, "wdog");
->>  	if (q6v5->wdog_irq < 0)
->>  		return q6v5->wdog_irq;
->> diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
->> index 5a859c41896e..95824d5b64ce 100644
->> --- a/drivers/remoteproc/qcom_q6v5.h
->> +++ b/drivers/remoteproc/qcom_q6v5.h
->> @@ -7,6 +7,12 @@
->>  #include <linux/completion.h>
->>  #include <linux/soc/qcom/qcom_aoss.h>
->>  
->> +#define RMB_BOOT_WAIT_REG 0x8
->> +#define RMB_BOOT_CONT_REG 0xC
->> +#define RMB_Q6_BOOT_STATUS_REG 0x10
->> +
->> +#define RMB_POLL_MAX_TIMES 250
->> +
->>  struct icc_path;
->>  struct rproc;
->>  struct qcom_smem_state;
->> @@ -16,6 +22,8 @@ struct qcom_q6v5 {
->>  	struct device *dev;
->>  	struct rproc *rproc;
->>  
->> +	void __iomem *rmb_base;
->> +
->>  	struct qcom_smem_state *state;
->>  	struct qmp *qmp;
->>  
->> -- 
->> 2.25.1
->>
+diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
+index b4bd831c9845..6a8e6ee82069 100644
+--- a/drivers/net/wireless/realtek/rtw88/pci.c
++++ b/drivers/net/wireless/realtek/rtw88/pci.c
+@@ -89,13 +89,6 @@ static void rtw_pci_write32(struct rtw_dev *rtwdev, u32 addr, u32 val)
+ 	writel(val, rtwpci->mmap + addr);
+ }
+ 
+-static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
+-{
+-	int offset = tx_ring->r.desc_size * idx;
+-
+-	return tx_ring->r.head + offset;
+-}
+-
+ static void rtw_pci_free_tx_ring_skbs(struct rtw_dev *rtwdev,
+ 				      struct rtw_pci_tx_ring *tx_ring)
+ {
+-- 
+2.27.0
 
