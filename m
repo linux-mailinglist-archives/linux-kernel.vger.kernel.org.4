@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0387C6C1BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD956C1BEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjCTQhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S231529AbjCTQh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjCTQgn (ORCPT
+        with ESMTP id S231786AbjCTQgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:36:43 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C905B9F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:30:48 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id r4so6734189ilt.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679329847; x=1681921847;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c4Un7hNW3PbeTCXI5xRR+XbSkcB6FcIO6dt2utn+YNg=;
-        b=OohrWwiOo/ZhWbFxtukvDzjgLrFJ28VUXWtFECfAHhUmfLVjlsgXPrSdQCYzsEcD52
-         GpBfA3ZAr7XGBbJM9sLaZh8QIO0cFr3B7lHFMnKXw3Lxif2mU4KVClNB4t3IN/Rvh4xC
-         vkhba0qDnAb/biH14OdO3FBPNgDvq+w1rkPDQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679329847; x=1681921847;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c4Un7hNW3PbeTCXI5xRR+XbSkcB6FcIO6dt2utn+YNg=;
-        b=JehdU91NDEyW5cswEYIYurEW3MbUqTWOQuoG7penpoU9NF/9S/kWutVRMSziTyt5rr
-         VEnW2kiGvPIoocr23zHzgly7YUIEG2cjc3i78SAPhwz4xEj39gJ/62O6nV49xjFvlJpS
-         VH6oxZr+tYHw+XFahG4eSpUi60jPgz9SdImLgtu4+cVVQA5K0OCS78V9o/enlCvm2r+G
-         t0qZkVN/eidvB6m1iXAK5W8iCTOAmDFLkGsg9wkx5AoyCMMRtROCbp+OYqQUoG2t2aCM
-         7F9SbFkpzNXkOHKmgfYR5aN+6GK6pESFoXeOGzItWuF54W782rI6hUHRROZR1MEU0/uH
-         VGaw==
-X-Gm-Message-State: AO0yUKUsl1PSWmI2YYDIszFpc4FWSOnLk277DIpafdxzW/ApQP9/Wljy
-        Ua0qUSF2gXEgNEGG3D4mL3ihgQ==
-X-Google-Smtp-Source: AK7set8nn77jxn+h0hPf4b4DAaQcTmnI1pCVRft2K1evGr2c5JLGE1L5UMPitisPYvAQ2j8IaV1ssQ==
-X-Received: by 2002:a05:6e02:12c8:b0:317:2f8d:528f with SMTP id i8-20020a056e0212c800b003172f8d528fmr105330ilm.2.1679329847628;
-        Mon, 20 Mar 2023 09:30:47 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t23-20020a02b197000000b003c4ec576030sm3354853jah.4.2023.03.20.09.30.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 09:30:45 -0700 (PDT)
-Message-ID: <495eb06b-9a86-ff55-d0c9-66d836ce456a@linuxfoundation.org>
-Date:   Mon, 20 Mar 2023 10:30:44 -0600
+        Mon, 20 Mar 2023 12:36:49 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61A36182;
+        Mon, 20 Mar 2023 09:31:03 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PgKwX1sP2z6J7CV;
+        Tue, 21 Mar 2023 00:30:36 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 20 Mar
+ 2023 16:31:00 +0000
+Date:   Mon, 20 Mar 2023 16:30:59 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v9 5/6] cxl/trace: Add an HPA to cxl_poison trace events
+Message-ID: <20230320163059.00003b7a@Huawei.com>
+In-Reply-To: <00b34ab93ffd2737b33d4f1c74fbd98968a58a60.1679284567.git.alison.schofield@intel.com>
+References: <cover.1679284567.git.alison.schofield@intel.com>
+        <00b34ab93ffd2737b33d4f1c74fbd98968a58a60.1679284567.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] tracing/selftests: Ignore __pfx_ symbols in kprobe test
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230207135147.5ce618d6@gandalf.local.home>
- <20230213204643.39f86987@rorschach.local.home>
- <20230318144202.486c43d1@rorschach.local.home>
- <8579dfaf-11bf-cefa-c3ed-eb9b2d9d1a22@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <8579dfaf-11bf-cefa-c3ed-eb9b2d9d1a22@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,32 +55,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 06:56, Shuah Khan wrote:
-> On 3/18/23 12:42, Steven Rostedt wrote:
->> On Mon, 13 Feb 2023 20:46:43 -0500
->> Steven Rostedt <rostedt@goodmis.org> wrote:
->>
->>> Shuah,
->>>
->>> Can you pick this patch up?
->>
->> ping?
->>
->> -- Steve
+On Sun, 19 Mar 2023 21:31:50 -0700
+alison.schofield@intel.com wrote:
+
+> From: Alison Schofield <alison.schofield@intel.com>
 > 
-> l I will queue this up. Sorry for the delay.
+> When a cxl_poison trace event is reported for a region, the poisoned
+> Device Physical Address (DPA) can be translated to a Host Physical
+> Address (HPA) for consumption by user space.
 > 
+> Translate and add the resulting HPA to the cxl_poison trace event.
+> Follow the device decode logic as defined in the CXL Spec 3.0 Section
+> 8.2.4.19.13.
+> 
+> If no region currently maps the poison, assign ULLONG_MAX to the
+> cxl_poison event hpa field.
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-Steve,
+Hi Alison,
 
-The patch doesn't apply to linux-kselftest fixes branch.
-Please rebase and resend with cc to linux-kselftest.
-Makes sense why it got buried in my regular Inbox.
+I poked this with a few more test cases in QEMU and ran into a corner that
+probably wants addressing.
 
-This one didn't show up in kselftest list. Fixes tag SHA
-is 13 char long. I fixed it and tried to apply. When you
-resend, please fix the Fixes tag as well.
+What should the tracepoints contain if the poisoned DPA length of a single
+record returned by the device is greater than the interleave granularity of
+of an interleaved region?
 
-thanks,
--- Shuah
+That didn't matter until HPA was added as we were just reporting a DPA
+base and length, but with the HPA present, the length is only in DPA space
+not HPA space.  Userspace can figure this out, but that's rather inelegant
+and would require ras-daemon or similar to go and query the interleave granularity
+and ways.
+
+I think the best thing to do in this case would be to break the single returned DPA
+base record up into multiple trace points at the interleave granual boundaries.
+
+What do you think we should do?
+
+Jonathan
+
+> ---
+>  drivers/cxl/core/trace.c | 94 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/cxl/core/trace.h |  9 +++-
+>  2 files changed, 102 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/trace.c b/drivers/cxl/core/trace.c
+> index 29ae7ce81dc5..d0403dc3c8ab 100644
+> --- a/drivers/cxl/core/trace.c
+> +++ b/drivers/cxl/core/trace.c
+> @@ -1,5 +1,99 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright(c) 2022 Intel Corporation. All rights reserved. */
+>  
+> +#include <cxl.h>
+> +#include "core.h"
+> +
+>  #define CREATE_TRACE_POINTS
+>  #include "trace.h"
+> +
+> +static bool cxl_is_hpa_in_range(u64 hpa, struct cxl_region *cxlr, int pos)
+> +{
+> +	struct cxl_region_params *p = &cxlr->params;
+> +	int gran = p->interleave_granularity;
+> +	int ways = p->interleave_ways;
+> +	u64 offset;
+> +
+> +	/* Is the hpa within this region at all */
+> +	if (hpa < p->res->start || hpa > p->res->end) {
+> +		dev_dbg(&cxlr->dev,
+> +			"Addr trans fail: hpa 0x%llx not in region\n", hpa);
+> +		return false;
+> +	}
+> +
+> +	/* Is the hpa in an expected chunk for its pos(-ition) */
+> +	offset = hpa - p->res->start;
+> +	offset = do_div(offset, gran * ways);
+> +	if ((offset >= pos * gran) && (offset < (pos + 1) * gran))
+> +		return true;
+> +
+> +	dev_dbg(&cxlr->dev,
+> +		"Addr trans fail: hpa 0x%llx not in expected chunk\n", hpa);
+> +
+> +	return false;
+> +}
+> +
+> +static u64 cxl_dpa_to_hpa(u64 dpa,  struct cxl_region *cxlr,
+> +			  struct cxl_endpoint_decoder *cxled)
+> +{
+> +	u64 dpa_offset, hpa_offset, bits_upper, mask_upper, hpa;
+> +	struct cxl_region_params *p = &cxlr->params;
+> +	int pos = cxled->pos;
+> +	u16 eig = 0;
+> +	u8 eiw = 0;
+> +
+> +	ways_to_eiw(p->interleave_ways, &eiw);
+> +	granularity_to_eig(p->interleave_granularity, &eig);
+> +
+> +	/*
+> +	 * The device position in the region interleave set was removed
+> +	 * from the offset at HPA->DPA translation. To reconstruct the
+> +	 * HPA, place the 'pos' in the offset.
+> +	 *
+> +	 * The placement of 'pos' in the HPA is determined by interleave
+> +	 * ways and granularity and is defined in the CXL Spec 3.0 Section
+> +	 * 8.2.4.19.13 Implementation Note: Device Decode Logic
+> +	 */
+> +
+> +	/* Remove the dpa base */
+> +	dpa_offset = dpa - cxl_dpa_resource_start(cxled);
+> +
+> +	mask_upper = GENMASK_ULL(51, eig + 8);
+> +
+> +	if (eiw < 8) {
+> +		hpa_offset = (dpa_offset & mask_upper) << eiw;
+> +		hpa_offset |= pos << (eig + 8);
+> +	} else {
+> +		bits_upper = (dpa_offset & mask_upper) >> (eig + 8);
+> +		bits_upper = bits_upper * 3;
+> +		hpa_offset = ((bits_upper << (eiw - 8)) + pos) << (eig + 8);
+> +	}
+> +
+> +	/* The lower bits remain unchanged */
+> +	hpa_offset |= dpa_offset & GENMASK_ULL(eig + 7, 0);
+> +
+> +	/* Apply the hpa_offset to the region base address */
+> +	hpa = hpa_offset + p->res->start;
+> +
+> +	if (!cxl_is_hpa_in_range(hpa, cxlr, cxled->pos))
+> +		return ULLONG_MAX;
+> +
+> +	return hpa;
+> +}
+> +
+> +u64 cxl_trace_hpa(struct cxl_region *cxlr, struct cxl_memdev *cxlmd,
+> +		  u64 dpa)
+> +{
+> +	struct cxl_region_params *p = &cxlr->params;
+> +	struct cxl_endpoint_decoder *cxled = NULL;
+> +
+> +	for (int i = 0; i <  p->nr_targets; i++) {
+> +		cxled = p->targets[i];
+> +		if (cxlmd == cxled_to_memdev(cxled))
+> +			break;
+> +	}
+> +	if (!cxled || cxlmd != cxled_to_memdev(cxled))
+> +		return ULLONG_MAX;
+> +
+> +	return cxl_dpa_to_hpa(dpa, cxlr, cxled);
+> +}
+> diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
+> index 33a22d26e742..25dbf52ac327 100644
+> --- a/drivers/cxl/core/trace.h
+> +++ b/drivers/cxl/core/trace.h
+> @@ -631,6 +631,8 @@ TRACE_EVENT(cxl_memory_module,
+>  #define cxl_poison_overflow(flags, time)				\
+>  	(flags & CXL_POISON_FLAG_OVERFLOW ? le64_to_cpu(time) : 0)
+>  
+> +u64 cxl_trace_hpa(struct cxl_region *cxlr, struct cxl_memdev *memdev, u64 dpa);
+> +
+>  TRACE_EVENT(cxl_poison,
+>  
+>  	TP_PROTO(struct cxl_memdev *cxlmd, struct cxl_region *region,
+> @@ -645,6 +647,7 @@ TRACE_EVENT(cxl_poison,
+>  		__field(u64, serial)
+>  		__string(region, region)
+>  		__field(u64, overflow_t)
+> +		__field(u64, hpa)
+>  		__field(u64, dpa)
+>  		__field(u32, length)
+>  		__array(char, uuid, 16)
+> @@ -664,18 +667,22 @@ TRACE_EVENT(cxl_poison,
+>  		if (region) {
+>  			__assign_str(region, dev_name(&region->dev));
+>  			memcpy(__entry->uuid, &region->params.uuid, 16);
+> +			__entry->hpa = cxl_trace_hpa(region, cxlmd,
+> +						     __entry->dpa);
+>  		} else {
+>  			__assign_str(region, "");
+>  			memset(__entry->uuid, 0, 16);
+> +			__entry->hpa = ULLONG_MAX;
+>  		}
+>  	    ),
+>  
+> -	TP_printk("memdev=%s host=%s serial=%lld region=%s region_uuid=%pU dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
+> +	TP_printk("memdev=%s host=%s serial=%lld region=%s region_uuid=%pU hpa=0x%llx dpa=0x%llx length=0x%x source=%s flags=%s overflow_time=%llu",
+>  		__get_str(memdev),
+>  		__get_str(host),
+>  		__entry->serial,
+>  		__get_str(region),
+>  		__entry->uuid,
+> +		__entry->hpa,
+>  		__entry->dpa,
+>  		__entry->length,
+>  		show_poison_source(__entry->source),
 
