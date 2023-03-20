@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D10A6C22EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4693A6C22EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjCTUh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S230254AbjCTUiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 16:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjCTUh0 (ORCPT
+        with ESMTP id S229998AbjCTUh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:37:26 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329B730191
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:36:53 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id ay14so8828775uab.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679344610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UNFVgDWAxfZd6z5ADUjqj4/aMzP9FIHByCOteARm1ys=;
-        b=KJJe0UwWV4QjhRnYE3CvmlT41cgjiD0vT3se1oKJvN4UK2IT0GlQWgPJ4jIxUVhvRa
-         ALXB2+YgHDcqMqsxlwFaEItFtN+Z+8xX6xvaPB2mpc1wO2LQ7nyC9YJo5f6Z49zDFllL
-         v8KfaZbRJhn8gOLXJgmQvkWscG8C7bvsh8a/bvJ/C2El/gt0Djkk4ss2cUSYe5mxmOUv
-         F1PAKctEzX7fBqzYNMp8CEMKWU0EniesstBn7m9HKUsFrVevHrBqPK0OznRXuRRaBFy3
-         Gqj+x6d35S6ZahxK0U+BgN1E2+6R7k9htyFwAhwiamd3Z/e4Kpq5o5/nn4UrvrTCL6BC
-         Patg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679344610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UNFVgDWAxfZd6z5ADUjqj4/aMzP9FIHByCOteARm1ys=;
-        b=v/ny5yb2K5sua+Oe+s3Gz+lXGPS4hRcKAflmbPNI29A41m6KXtxe3Mjcr7EodM3gsL
-         ZdhilSaWcfrjky0VoITLX0axmprMC3QqLVlxACh8NhA3+OhGGzF6a6BxwtIPI/mhJ3JS
-         fhNoainzV4xY95ktdBUGuOVjRwwYtWticEDHc2lkF59UziC2NbHga/jHd+aqKlLNcSFh
-         QmAhEQjj7LZuF/9dwwk0mKQKxjw9g8ZStERh30WwMft4XDZaTH8pluP3GkIwbtQFAjjN
-         37J8rvVnYWu7dlI2VWreQ6Z7sdQ8psLsrmM0TG36Mk3qfU0R10OGbqylY3Sl53xQw6+S
-         TO3g==
-X-Gm-Message-State: AO0yUKVLsYrmpeIEjHh+7oTj+n0Yk1ghDCJeRcwdIIP63ZvGbzpDoQ6p
-        /M68ioNZmiULXBzNc8t/WLoGgL19/IDw7V530lyK9g==
-X-Google-Smtp-Source: AK7set/zpLOC8SNehffSFXMB1rwH25iIiVTVu2SJzVZ6/uX6VEqNFaJqMpjlico03breMJc9bVk4nt0kfgZEhEaH4FE=
-X-Received: by 2002:ab0:78c8:0:b0:68a:8f33:9567 with SMTP id
- e8-20020ab078c8000000b0068a8f339567mr5199591uau.2.1679344609565; Mon, 20 Mar
- 2023 13:36:49 -0700 (PDT)
+        Mon, 20 Mar 2023 16:37:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AF431E18;
+        Mon, 20 Mar 2023 13:37:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C1FE617EF;
+        Mon, 20 Mar 2023 20:36:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF857C433D2;
+        Mon, 20 Mar 2023 20:36:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679344606;
+        bh=vn+hUtkg2wtTqJXkP3zjOszVVaMmqUnlJhW49CFtJ4A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=EWELxYwhqMlGkHNoTLaiyl+3GVFk4RDvvm8ThvlLKQgs01lbdtflxnutQuRA2wdE0
+         2R9+oXc4TeU8GfQkExN5X0JVKtD90MdNbqQ2AF5NhveCLWeOC0H88DjluFnA8saxwQ
+         468+rhpFmXU0K8Ru+KC+ET0ItvfvPMLZGK/wHAQBT57eNPM3rqqXJR+oYl3smehDcl
+         2NyySMJjZjyhYcikw06GfMFqxpn8nv7OkhcHkF7VeXcbpNhSw/PhTSanh9yOLLYdIs
+         e5j76GinIEcHVx0gGVVEnlORpSY3kkiyJXSxeCD0KrHMIONe/PZArw+TKPOGFhTZ/s
+         5EnK7tnnWU1xA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 7322F1540395; Mon, 20 Mar 2023 13:36:46 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 13:36:46 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH rcu 7/7] rcutorture: Add srcu_lockdep.sh
+Message-ID: <0178c178-68b9-4d3d-ac03-e25326c7ac15@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230317031339.10277-1-boqun.feng@gmail.com>
+ <20230317031339.10277-8-boqun.feng@gmail.com>
+ <ZBijmdz2ucql+BSb@boqun-archlinux>
+ <bed30db4-d998-4382-a9a1-716c6f428263@paulmck-laptop>
+ <ZBizxQ9BY/hQk8+Y@boqun-archlinux>
+ <15e799a8-0e63-4bd9-9a01-028c9d906904@paulmck-laptop>
+ <ZBjBf1JpeOP/1EXP@boqun-archlinux>
 MIME-Version: 1.0
-References: <20230320145430.861072439@linuxfoundation.org>
-In-Reply-To: <20230320145430.861072439@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Mar 2023 02:06:38 +0530
-Message-ID: <CA+G9fYv+NfAzwuzanTG9HLWRV4gYu72SsP3qjnYL+WbSxf0GEA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/60] 5.4.238-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBjBf1JpeOP/1EXP@boqun-archlinux>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,155 +76,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.238 release.
-> There are 60 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Mar 2023 14:54:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.238-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Mar 20, 2023 at 01:26:39PM -0700, Boqun Feng wrote:
+> On Mon, Mar 20, 2023 at 01:22:24PM -0700, Paul E. McKenney wrote:
+> > On Mon, Mar 20, 2023 at 12:28:05PM -0700, Boqun Feng wrote:
+> > > On Mon, Mar 20, 2023 at 12:09:00PM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Mar 20, 2023 at 11:19:05AM -0700, Boqun Feng wrote:
+> > > > > Hi Paul,
+> > > > > 
+> > > > > On Thu, Mar 16, 2023 at 08:13:39PM -0700, Boqun Feng wrote:
+> > > > > > From: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > > > 
+> > > > > > This commit adds an srcu_lockdep.sh script that checks whether lockdep
+> > > > > > correctly classifies SRCU-based, SRCU/mutex-based, and SRCU/rwsem-based
+> > > > > > deadlocks.
+> > > > > > 
+> > > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > [ boqun: Fix "RCUTORTURE" with "$RCUTORTURE" ]
+> > > > > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > > > > > ---
+> > > > > >  .../selftests/rcutorture/bin/srcu_lockdep.sh  | 73 +++++++++++++++++++
+> > > > > >  1 file changed, 73 insertions(+)
+> > > > > >  create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > > > > > 
+> > > > > > diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > > > > > new file mode 100755
+> > > > > > index 000000000000..961932754684
+> > > > > > --- /dev/null
+> > > > > > +++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > > > > 
+> > > > > Could you provide the SPDX header and copyright bits for this newly
+> > > > > added file? For small changes I can do it myself, however this is about
+> > > > > licenses and copyright, so I need it from you, thanks!
+> > > > 
+> > > > Good catch, thank you!
+> > > > 
+> > > > Would you like a delta patch to merge into your existing one, or would
+> > > > you prefer a replacement patch?  Either way works for me.
+> > > > 
+> > > 
+> > > A delta patch if that's not much trouble. I will fold it into this one.
+> > 
+> > Here you go!
+> 
+> Thanks! Fold it in patch #7.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Thank you!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+And this might be a problem in my current process when handing off
+to others.  I normally don't run checkpatch until just before a send
+out the patches, which means that none of the commits I handed off to
+you guys had been checkpatched.  There was I time I tried a checkpatch
+hook in git, but the false-positive rate made that a non-starter.
 
-## Build
-* kernel: 5.4.238-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 1f8869b1deb887d66df4ca79b9e905f21ddfe1e0
-* git describe: v5.4.237-61-g1f8869b1deb8
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-37-61-g1f8869b1deb8
+							Thanx, Paul
 
-## Test Regressions (compared to v5.4.237)
-
-## Metric Regressions (compared to v5.4.237)
-
-## Test Fixes (compared to v5.4.237)
-
-## Metric Fixes (compared to v5.4.237)
-
-## Test result summary
-total: 92175, pass: 73460, fail: 2062, skip: 16591, xfail: 62
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 146 total, 145 passed, 1 failed
-* arm64: 46 total, 42 passed, 4 failed
-* i386: 28 total, 22 passed, 6 failed
-* mips: 30 total, 29 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 33 total, 32 passed, 1 failed
-* riscv: 15 total, 12 passed, 3 failed
-* s390: 8 total, 8 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 39 total, 37 passed, 2 failed
-
-## Test suites summary
-* boot
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-crypto
-* ltp-cve
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* perf
-* rcutorture
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Regards,
+> Boqun
+> 
+> > 							Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > rcutorture: Add proper comment header to srcu_lockdep.sh
+> > 
+> > This patch adds a proper comment header to srcu_lockdep.sh,
+> > and is intended to be folded into 9dc68f40c665 ("rcutorture: Add
+> > srcu_lockdep.sh").
+> > 
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > index 961932754684..2e63ef009d59 100755
+> > --- a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > +++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+> > @@ -1,6 +1,11 @@
+> >  #!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0+
+> >  #
+> >  # Run SRCU-lockdep tests and report any that fail to meet expectations.
+> > +#
+> > +# Copyright (C) 2021 Meta Platforms, Inc.
+> > +#
+> > +# Authors: Paul E. McKenney <paulmck@kernel.org>
+> >  
+> >  usage () {
+> >  	echo "Usage: $scriptname optional arguments:"
