@@ -2,93 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2516C224C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DDF6C224F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 21:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjCTUMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S230220AbjCTUNl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 16:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjCTUMN (ORCPT
+        with ESMTP id S229865AbjCTUNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:12:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2EF2C667
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679343128; x=1710879128;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zjNn1ywdRNLSuGeL/20uua/uF3ufV4klWvILdjrCBuk=;
-  b=XO54q1P2iqxYNQ6pjrG4RSq96/QArR73sYh/KOB9OnZ4MPc3B+7mz3J3
-   1I1E3LwIiN+VGtKeGdqEONTSBXTRMu35Q8ewrnvaTZ+CCKvSS5GxExWNR
-   JqZG2h+LHdUh5qmumL4wd7uvkddO0bbKIqf8l0R8zCIQ6IRLSnXAt2Cwa
-   IBbVmPlJkwyR8VQZdRkZDIrFjXDox5VT/z5OBZk2qiha9rEffe70b3yJt
-   4oUMPO7NnVHVDKt6d7+o//qxReZDf2qIdbRaFQxr6+itE7hB/iLr4UFls
-   /ET9dF35Jt3UoPfP9BqSxU8pfYTK/zMO5kx+PQiNaxfNShdEgQKKYFLf+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="425042918"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="425042918"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:12:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="750250748"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="750250748"
-Received: from vrchili-mobl2.amr.corp.intel.com (HELO [10.209.117.85]) ([10.209.117.85])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:12:07 -0700
-Message-ID: <e8a36925-2965-1dae-da01-5d06ba6747c8@intel.com>
-Date:   Mon, 20 Mar 2023 13:12:07 -0700
+        Mon, 20 Mar 2023 16:13:40 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DCE14230;
+        Mon, 20 Mar 2023 13:13:39 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1peLsv-0008lQ-JN; Mon, 20 Mar 2023 21:13:37 +0100
+Received: from p57bd9952.dip0.t-ipconnect.de ([87.189.153.82] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1peLsv-0038P7-Bz; Mon, 20 Mar 2023 21:13:37 +0100
+Message-ID: <c9a748cb2ee6145a3ffe85ca55a28b990f6be68c.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
+Date:   Mon, 20 Mar 2023 21:13:36 +0100
+In-Reply-To: <2186c0e97e6747e71ebceade317f88a7cc016772.camel@physik.fu-berlin.de>
+References: <20230306040037.20350-1-rdunlap@infradead.org>
+         <20230306040037.20350-7-rdunlap@infradead.org>
+         <2186c0e97e6747e71ebceade317f88a7cc016772.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5] x86: Avoid relocation information in final vmlinux
-Content-Language: en-US
-To:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com
-Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        corbet@lwn.net, linux-kernel@vger.kernel.org
-References: <20230320121006.4863-1-petr.pavlu@suse.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230320121006.4863-1-petr.pavlu@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.153.82
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 05:10, Petr Pavlu wrote:
-> The issue is then that the collected vmlinux file and hence distribution
-> packages end up unnecessarily large because of this extra data. The
-> following is a size comparison of vmlinux v6.0 with and without the
-> relocation information:
-> | Configuration      | With relocs | Stripped relocs |
-> | x86_64_defconfig   |       70 MB |           43 MB |
-> | +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
+Hi Randy!
+
+On Sun, 2023-03-19 at 21:20 +0100, John Paul Adrian Glaubitz wrote:
+> On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> > Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+> > SYS_SUPPORTS_SMP and SMP.
+> > 
+> > kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
+> > code + data inside topology.c is only built when CONFIG_NUMA is
+> > set/enabled, so these arch/sh/ configs need to select SMP and
+> > SYS_SUPPORTS_SMP to build the NUMA support.
+> > 
+> > Fixes this build error in multiple SUPERH configs:
+> > 
+> > mm/page_alloc.o: In function `get_page_from_freelist':
+> > page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
+> > 
+> > Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
+> > Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: linux-sh@vger.kernel.org
+> > Cc: stable@vger.kernel.org
+> > ---
+> > v2: skipped
+> > v3: skipped
+> > v4: refresh & resend
+> > 
+> >  arch/sh/Kconfig |    4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff -- a/arch/sh/Kconfig b/arch/sh/Kconfig
+> > --- a/arch/sh/Kconfig
+> > +++ b/arch/sh/Kconfig
+> > @@ -477,6 +477,8 @@ config CPU_SUBTYPE_SH7722
+> >  	select CPU_SHX2
+> >  	select ARCH_SHMOBILE
+> >  	select ARCH_SPARSEMEM_ENABLE
+> > +	select SYS_SUPPORTS_SMP
+> > +	select SMP
+> >  	select SYS_SUPPORTS_NUMA
+> >  	select SYS_SUPPORTS_SH_CMT
+> >  	select PINCTRL
+> > @@ -487,6 +489,8 @@ config CPU_SUBTYPE_SH7366
+> >  	select CPU_SHX2
+> >  	select ARCH_SHMOBILE
+> >  	select ARCH_SPARSEMEM_ENABLE
+> > +	select SYS_SUPPORTS_SMP
+> > +	select SMP
+> >  	select SYS_SUPPORTS_NUMA
+> >  	select SYS_SUPPORTS_SH_CMT
+> >  
 > 
-> Optimize a resulting vmlinux by adding a postlink step that splits the
-> relocation information into vmlinux.relocs and then strips it from the
-> vmlinux binary.
+> It seems that we need this change for these configurations as well:
+> 
+> - config CPU_SHX3
+> - config CPU_SUBTYPE_SH7785
+> 
+> Although I can trigger a build failure for CPU_SUBTYPE_SH7785 only when
+> setting CONFIG_NUMA=y:
+> 
+>   CC      net/ipv6/addrconf_core.o
+> mm/slab.c: In function 'slab_memory_callback':
+> mm/slab.c:1127:23: error: implicit declaration of function 'init_cache_node_node'; did you mean 'drain_cache_node_node'? [-Werror=implicit-function-declaration]
+>  1127 |                 ret = init_cache_node_node(nid);
+>       |                       ^~~~~~~~~~~~~~~~~~~~
+>       |                       drain_cache_node_node
+> 
+> I would expect this error to be reproducible for CPU_SHX3 as well when
+> CONFIG_NUMA=y but CONFIG_SMP=n. But for some reason, I am not seeing
+> the error then.
 
-When I saw that this adds a postlink step, I read that as, "adds another
-step to the unbearably slow single-threaded part of kernel builds". :)
+Can you make this change for config CPU_SUBTYPE_SH7785 as well?
 
-But, here's one data point that made me feel a lot better.  Using a
-random .config:
+Then the change should be fine.
 
-> https://sr71.net/~dave/intel/config-reloctest
+Adrian
 
-the builds get a _bit_ slower, going from 37.0s->37.7s.  This is pretty
-arbitrary of course, using my compiler on my hardware, so YMMV.  But,
-for me, this seems like a reasonable tradeoff given the space savings.
-
-I'd be curious what other people are seeing.
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
