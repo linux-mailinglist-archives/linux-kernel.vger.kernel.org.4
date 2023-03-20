@@ -2,111 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482676C1F1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2A96C1F22
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCTSJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S230010AbjCTSKf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 14:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjCTSJD (ORCPT
+        with ESMTP id S231341AbjCTSKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:09:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2D930B3F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:02:51 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id x3so50130181edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679335370;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s0eoWfmO41fcTesmFbumMelX1mm4aMPERyhh0espiXY=;
-        b=qmP95LEReUwzh5aFhObeTYcZF8mkRX+F2NKB82E7CMqOUN2qq7XLyh8EJXDIKkvQ9M
-         iRMAPlV3qmDQl46VrmXFD9r16xGdGc3riIb3SX5cjcxqca9Ixlf95ni69oIUH9yfMHPj
-         ya6DT8n8KRcHpeIZ8EaCGlaOlDPu+h6b1PvZCW/1ZnwJSe+cxxA4RNuPd6I964iA7un5
-         PKDxsMcZIbVOtW5IHFoJcXGK/Hb5N4WV8jtUOWRWQ0WzGbkuWtW+qPzLRYVZ9J8rR1yZ
-         jZxLhkTneuUUVn/AlSD3jYviJfqOdXocoPv/ztf0jF1GLiOiYxY6NwhNb7uAkrtM5Qfs
-         +2Sg==
+        Mon, 20 Mar 2023 14:10:08 -0400
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB5CC27;
+        Mon, 20 Mar 2023 11:04:17 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id i5so3277681eda.0;
+        Mon, 20 Mar 2023 11:04:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679335370;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0eoWfmO41fcTesmFbumMelX1mm4aMPERyhh0espiXY=;
-        b=uhp9AI1e4XNxG11f5RYphf6Lc5EUPGObcZIJAz4M497Y9CdRTliNGiWW+PQOX5XGjx
-         NbVK50+leLnKWZLQYsuTAaDzHHLL1+9l6kEnjeUsmWYiL0j4TsuZem6N74GKNDyS04Jp
-         IH99jx3tSpUka6xUU1QKT6PNiFRgSaQ4OWhE8+mtc90KIC2CCsYLJvWkv/Bcj/x6UV2u
-         iPAaSTKLS8W4p0dMumJewwlWuYe350bCvyaWwYcE6IFOPooiQlapx1gL+/jnp1PDB45U
-         QLgXSghX6JABEmc31by8mh0GUN0ThjZNIbIAjf7QEi6/4gw/XSZ3D3dwxjCe4KmozoaD
-         mE1Q==
-X-Gm-Message-State: AO0yUKXaEwyexFUJH5pM2pohDCSBZTr/dt9SOdEii8x1egHgDdzM+9Ok
-        gpdLt/rzIxeLN3dzvlfbpOgaxg==
-X-Google-Smtp-Source: AK7set+X8Ws3lSJorXAGlLHIxDKllor1Be8KbnrGdbc3YDiOHCp60p/e04Sg1zXSgKAnrXNGG2uQuw==
-X-Received: by 2002:a17:906:2b15:b0:922:8fc9:d235 with SMTP id a21-20020a1709062b1500b009228fc9d235mr533372ejg.9.1679335370626;
-        Mon, 20 Mar 2023 11:02:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:458e:64e7:8cf1:78b0? ([2a02:810d:15c0:828:458e:64e7:8cf1:78b0])
-        by smtp.gmail.com with ESMTPSA id gv27-20020a1709072bdb00b008b9b4ab6ad1sm4705102ejc.102.2023.03.20.11.02.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 11:02:50 -0700 (PDT)
-Message-ID: <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
-Date:   Mon, 20 Mar 2023 19:02:49 +0100
+        d=1e100.net; s=20210112; t=1679335405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U1j6/P8OlulkqQ7bmZeujv6O1AXCl23IcsS+L7vXJYI=;
+        b=b+ridgtyoyBPLsYldXU4n7IkWtS0lCfxH7DK7Cu2OhQoRkCzRlUq/eBUHplkLePl27
+         ycZazFDNZ84dCH8w42/3iEUTnX/asnkTRQr8Ym7U7r5Oh9C/KNvGAmpxhR0sJM5NoVzk
+         KAFuj1Vq4eVVkdtlkwiYwwX6Y6rGjBAqYvk+9VVhwG4sBtUyFmCIu/84aBMTI7z+1Y6v
+         aW2hWz9fWWDVc2vwyRZVewsexumQxbXDivcVXD1HklBmPjQs2FjOFzHi26QHILYsh0Cc
+         3plKULcKASeME5SUc/Fp01WUo3KKC6d5lqQdU0pXtZ0k7RdBdH/n6uquLZLNE6X8d+3R
+         Agxg==
+X-Gm-Message-State: AO0yUKVhkrGEQViK6tnm4QWEiSDXUR4DTxtou71ZL9GtuyCAXjZYStQ0
+        g8bCJHbU8POj1M8Tusp4wF7jc2XiZEIDtK425To=
+X-Google-Smtp-Source: AK7set8AGdLETaqUJtnhhgevZ8nVMVu9R5T4Uenh2BbM8CA/P3BMq25yTIsEdnWVxP5t/hwZ6Xl5jcM1Ls1Y84CYR3o=
+X-Received: by 2002:a50:9995:0:b0:4fa:3c0b:74b with SMTP id
+ m21-20020a509995000000b004fa3c0b074bmr220250edb.3.1679335405361; Mon, 20 Mar
+ 2023 11:03:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
- <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
- <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
- <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
- <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com> <20230317072443.3189-1-xueshuai@linux.alibaba.com>
+In-Reply-To: <20230317072443.3189-1-xueshuai@linux.alibaba.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 20 Mar 2023 19:03:14 +0100
+Message-ID: <CAJZ5v0gXTbxP5VkNWY+UiXM9oiGmtQbnCsMrCW8n40TvQehcWA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] ACPI: APEI: handle synchronous exceptions with
+ proper si_code
+To:     Shuai Xue <xueshuai@linux.alibaba.com>, tony.luck@intel.com,
+        james.morse@arm.com, bp@alien8.de
+Cc:     naoya.horiguchi@nec.com, linux-acpi@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        justin.he@arm.com, akpm@linux-foundation.org, ardb@kernel.org,
+        ashish.kalra@amd.com, baolin.wang@linux.alibaba.com,
+        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
+        jarkko@kernel.org, lenb@kernel.org, linmiaohe@huawei.com,
+        lvying6@huawei.com, xiexiuqi@huawei.com,
+        zhuo.song@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 18:57, Arınç ÜNAL wrote:
->>> All of these are at the end the
->>> way we can properly match compatible-data to write a proper driver.
->>> The current ralink dtsi files which are in tree now
->>> are totally incomplete and not documented so we are planning to align
->>
->> Nothing like this was said in commit msg, so how can we know?
->>
->>> all of this with openWRT used files and others soon. That's the reason
->>> we are not touching
->>> 'arch/mips/boot/dts' at all now. I don't think anybody is using any of
->>> this but mt7621 which is properly completed and documented.
->>
->> Anyway, none of this explains exception from naming convention - vendor,
->> device or family name.
-> 
-> Would mediatek,mtmips-clock.yaml make sense?
+On Fri, Mar 17, 2023 at 8:25 AM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>
+> changes since v2 by addressing comments from Naoya:
+> - rename mce_task_work to sync_task_work
+> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+> - add steps to reproduce this problem in cover letter
+> - Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/T/#mb3dede6b7a6d189dc8de3cf9310071e38a192f8e
+>
+> changes since v1:
+> - synchronous events by notify type
+> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
+>
+> Currently, both synchronous and asynchronous error are queued and handled
+> by a dedicated kthread in workqueue. And Memory failure for synchronous
+> error is synced by a cancel_work_sync trick which ensures that the
+> corrupted page is unmapped and poisoned. And after returning to user-space,
+> the task starts at current instruction which triggering a page fault in
+> which kernel will send SIGBUS to current process due to VM_FAULT_HWPOISON.
+>
+> However, the memory failure recovery for hwpoison-aware mechanisms does not
+> work as expected. For example, hwpoison-aware user-space processes like
+> QEMU register their customized SIGBUS handler and enable early kill mode by
+> seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
+> the process by sending a SIGBUS signal in memory failure with wrong
+> si_code: BUS_MCEERR_AO si_code to the actual user-space process instead of
+> BUS_MCEERR_AR.
+>
+> To address this problem:
+>
+> - PATCH 1 sets mf_flags as MF_ACTION_REQUIRED on synchronous events which
+>   indicates error happened in current execution context
+> - PATCH 2 separates synchronous error handling into task work so that the
+>   current context in memory failure is exactly belongs to the task
+>   consuming poison data.
+>
+> Then, kernel will send SIGBUS with proper si_code in kill_proc().
+>
+> Lv Ying and XiuQi also proposed to address similar problem and we discussed
+> about new solution to add a new flag(acpi_hest_generic_data::flags bit 8) to
+> distinguish synchronous event. [2][3] The UEFI community still has no response.
+> After a deep dive into the SDEI TRM, the SDEI notification should be used for
+> asynchronous error. As SDEI TRM[1] describes "the dispatcher can simulate an
+> exception-like entry into the client, **with the client providing an additional
+> asynchronous entry point similar to an interrupt entry point**". The client
+> (kernel) lacks complete synchronous context, e.g. systeam register (ELR, ESR,
+> etc). So notify type is enough to distinguish synchronous event.
+>
+> To reproduce this problem:
+>
+>         # STEP1: enable early kill mode
+>         #sysctl -w vm.memory_failure_early_kill=1
+>         vm.memory_failure_early_kill = 1
+>
+>         # STEP2: inject an UCE error and consume it to trigger a synchronous error
+>         #einj_mem_uc single
+>         0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+>         injecting ...
+>         triggering ...
+>         signal 7 code 5 addr 0xffffb0d75000
+>         page not present
+>         Test passed
+>
+> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
+> and it is not fact.
+>
+> After this patch set:
+>
+>         # STEP1: enable early kill mode
+>         #sysctl -w vm.memory_failure_early_kill=1
+>         vm.memory_failure_early_kill = 1
+>
+>         # STEP2: inject an UCE error and consume it to trigger a synchronous error
+>         #einj_mem_uc single
+>         0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+>         injecting ...
+>         triggering ...
+>         signal 7 code 4 addr 0xffffb0d75000
+>         page not present
+>         Test passed
+>
+> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
+> as we expected.
+>
+> [1] https://developer.arm.com/documentation/den0054/latest/
+> [2] https://lore.kernel.org/linux-arm-kernel/20221205160043.57465-4-xiexiuqi@huawei.com/T/
+> [3] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+>
+> Shuai Xue (2):
+>   ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+>     synchronous events
+>   ACPI: APEI: handle synchronous exceptions in task work
+>
+>  drivers/acpi/apei/ghes.c | 135 ++++++++++++++++++++++++---------------
+>  include/acpi/ghes.h      |   3 -
+>  mm/memory-failure.c      |  13 ----
+>  3 files changed, 83 insertions(+), 68 deletions(-)
+>
+> --
 
-More, except:
-1. This is not clock, but sysc.
-2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which are ARM?
-
-Best regards,
-Krzysztof
-
+I really need the designated APEI reviewers to give their feedback on this.
