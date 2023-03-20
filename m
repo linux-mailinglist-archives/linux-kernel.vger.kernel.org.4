@@ -2,120 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A996C0906
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A6F6C090B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 03:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjCTCy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 22:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S229910AbjCTCzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 22:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjCTCy0 (ORCPT
+        with ESMTP id S229665AbjCTCzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 22:54:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D002A5F0;
-        Sun, 19 Mar 2023 19:54:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D21FCFEC;
-        Sun, 19 Mar 2023 19:55:07 -0700 (PDT)
-Received: from [10.162.41.7] (a077893.blr.arm.com [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C41163F67D;
-        Sun, 19 Mar 2023 19:54:17 -0700 (PDT)
-Message-ID: <f4f20cb2-de05-fbde-172e-03fa3ed7b390@arm.com>
-Date:   Mon, 20 Mar 2023 08:24:14 +0530
+        Sun, 19 Mar 2023 22:55:09 -0400
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C603B767;
+        Sun, 19 Mar 2023 19:55:05 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowACXn8_1yhdkQAdvBg--.527S2;
+        Mon, 20 Mar 2023 10:54:47 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     simon.horman@corigine.com
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v2] Bluetooth: 6LoWPAN: Add missing check for skb_clone
+Date:   Mon, 20 Mar 2023 10:54:44 +0800
+Message-Id: <20230320025444.18428-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/7] coresight: etm4x: Drop pid argument from etm4_probe()
-To:     kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com
-Cc:     oe-kbuild-all@lists.linux.dev, scclevenger@os.amperecomputing.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230317030501.1811905-4-anshuman.khandual@arm.com>
- <202303181632.wBUDE5wa-lkp@intel.com>
-Content-Language: en-US
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <202303181632.wBUDE5wa-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowACXn8_1yhdkQAdvBg--.527S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4xCr13uw4rJFyrJw4Dtwb_yoWfWwc_Wr
+        n5Z3s2k3yFkr4xu3ZFyrW2yFs5K3sxGF9agwn0van8A3s5ArZ7KrWkKryftr1xGay0vFnI
+        9FW2yFZ5Xr9rujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 18, 2023 at 05:03:21AM +0800, Simon Horman wrote:
+> On Wed, Mar 15, 2023 at 03:06:21PM +0800, Jiasheng Jiang wrote:
+>> Add the check for the return value of skb_clone since it may return NULL
+>> pointer and cause NULL pointer dereference in send_pkt.
+>> 
+>> Fixes: 18722c247023 ("Bluetooth: Enable 6LoWPAN support for BT LE devices")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>> ---
+>> Changelog:
+>> 
+>> v1 -> v2:
+>> 
+>> 1. Modify the error handling in the loop.
+> 
+> I think that at a minimum this needs to be included in the patch description.
+> Or better, in it's own patch with it's own fixes tag.
+> It seems like a fundamental change to the error handling to me.
 
+I will submit a separate patch to modify the error handling in the loop.
+You can directly review the v1.
+Link:https://lore.kernel.org/all/20230313090346.48778-1-jiasheng@iscas.ac.cn/
 
-On 3/18/23 13:51, kernel test robot wrote:
-> Hi Anshuman,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on soc/for-next rafael-pm/linux-next linus/master v6.3-rc2 next-20230317]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230317030501.1811905-4-anshuman.khandual%40arm.com
-> patch subject: [PATCH 3/7] coresight: etm4x: Drop pid argument from etm4_probe()
-> config: arm64-randconfig-r021-20230312 (https://download.01.org/0day-ci/archive/20230318/202303181632.wBUDE5wa-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/39e224e4248f0f7b2c59b97c12a12f8343ab900e
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
->         git checkout 39e224e4248f0f7b2c59b97c12a12f8343ab900e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303181632.wBUDE5wa-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/hwtracing/coresight/coresight-etm4x-core.c: In function 'etm4_init_arch_data':
->>> drivers/hwtracing/coresight/coresight-etm4x-core.c:1169:43: warning: passing argument 2 of 'etm4_check_arch_features' makes integer from pointer without a cast [-Wint-conversion]
->     1169 |         etm4_check_arch_features(drvdata, csa);
->          |                                           ^~~
->          |                                           |
->          |                                           struct csdev_access *
->    drivers/hwtracing/coresight/coresight-etm4x-core.c:389:51: note: expected 'unsigned int' but argument is of type 'struct csdev_access *'
->      389 |                                      unsigned int id)
->          |                                      ~~~~~~~~~~~~~^~
+Thanks,
+Jiang
 
-Fallback stub's signature also needs an update. I will fold this change in next series.
-
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -388,7 +388,7 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
- }
- 
- static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
--                                    unsigned int id)
-+                                    struct csdev_access *csa)
- {
- }
- #endif /* CONFIG_ETM4X_IMPDEF_FEATURE */
