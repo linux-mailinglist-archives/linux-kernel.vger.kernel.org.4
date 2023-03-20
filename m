@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E656C1C5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CD56C1C63
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbjCTQpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
+        id S232342AbjCTQp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbjCTQpN (ORCPT
+        with ESMTP id S233283AbjCTQpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:45:13 -0400
+        Mon, 20 Mar 2023 12:45:12 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900D630CA;
-        Mon, 20 Mar 2023 09:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B65D2129;
+        Mon, 20 Mar 2023 09:39:57 -0700 (PDT)
 Date:   Mon, 20 Mar 2023 16:39:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1679330361;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=rjpBlRIEkiRjeG/YGii0IEWLu14WrcXSZOEa8g3ri5k=;
-        b=eGPUUYt/4pIeg5RHnowFoX/VhN2WBMM6YQUqIzxHNrIPotMe6gdvsCJpjKCWPnvxcaZIhw
-        Wnx+39JmDgg8S3ulyjkBWb4RWGZQqTdFsVGjpsYTBUyTOD4Pd9GtkoveH6C4Dt6u9qpzOH
-        rZUPBFcxYkbah11jRVaMi6t9p3RnhPtBnWpc+lvBQkWEdLt5FO8H1y2s0gZVlM7hj5c06r
-        vAVl5sw2xTEfOHFVqwKCTYod0YXmGrndu46jSgQ+lb7v8hj5WnWLewF9NkCGVCSV4d7KLK
-        rfRDRzil2bMX9+JgI0S/81+Y+WFKRqoIw2zuzhrBRXNappTHNsXdljpjPQDqcg==
+        bh=dIU1i6VAAC+PPenySMMRs1Furx1wkOhlznqptFW08zs=;
+        b=42QwscWPoGiB6KBXsKK3xXTHrgXZ4PFRdkar7DNChv6bit67DtNAhm95LQHMlMUuugEixZ
+        KQOgDM+FtRqVqXM7w1DnrIwzujE3AW8lnTl+gN4WAMJClcU/IKfofhpr/eJ2xBgVSEUIkU
+        kzW2XpR14+4//UdgyiZBKuan5jty2jalNZnAojFXDQqgVtewM+zGt96q3R18ElIidzZZRk
+        cFsnr95wx3/pIzCwYDdz17KO5n57b0tr4Op+RuzOj9xbWUDv1KQdduo4Hh5w4qRxxixxs6
+        uxVM1fLH3X81fXHC6CoMXJUN/JDMBV4U0UCQ4cJCwGXjHjKh5gkHyv2aSPXQIA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1679330361;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=rjpBlRIEkiRjeG/YGii0IEWLu14WrcXSZOEa8g3ri5k=;
-        b=+oEFFtdExWZikOoisnPmbeLnyhPCH2emSMknPxFwFHIOYSmnrkbU7spoeWWf9Pps5Pf1kL
-        C8oAnGVDTYaFEKBA==
+        bh=dIU1i6VAAC+PPenySMMRs1Furx1wkOhlznqptFW08zs=;
+        b=PxRYE0yHgwPU/11ZlGQXbdgAoWNf2LJFFhvoroRsqHBgAS1pch1xRzOZLt1IzyFApQQlkw
+        rAb4SIXCuNX5A8Cw==
 From:   "tip-bot2 for Rick Edgecombe" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/shstk] selftests/x86: Add shadow stack test
+Subject: [tip: x86/shstk] x86: Add PTRACE interface for shadow stack
 Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -50,7 +50,7 @@ Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
         John Allen <john.allen@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167933036132.5837.17442002737289887654.tip-bot2@tip-bot2>
+Message-ID: <167933036111.5837.6779214733347870430.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,23 +66,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/shstk branch of tip:
 
-Commit-ID:     d2a302007b48f596f04e54712eca7378f0720bf6
-Gitweb:        https://git.kernel.org/tip/d2a302007b48f596f04e54712eca7378f0720bf6
+Commit-ID:     d84e6ee122e562b3c0d04cd28dabad0ce0414b77
+Gitweb:        https://git.kernel.org/tip/d84e6ee122e562b3c0d04cd28dabad0ce0414b77
 Author:        Rick Edgecombe <rick.p.edgecombe@intel.com>
-AuthorDate:    Sat, 18 Mar 2023 17:15:32 -07:00
+AuthorDate:    Sat, 18 Mar 2023 17:15:33 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Mon, 20 Mar 2023 09:01:12 -07:00
 
-selftests/x86: Add shadow stack test
+x86: Add PTRACE interface for shadow stack
 
-Add a simple selftest for exercising some shadow stack behavior:
- - map_shadow_stack syscall and pivot
- - Faulting in shadow stack memory
- - Handling shadow stack violations
- - GUP of shadow stack memory
- - mprotect() of shadow stack memory
- - Userfaultfd on shadow stack memory
- - 32 bit segmentation
+Some applications (like GDB) would like to tweak shadow stack state via
+ptrace. This allows for existing functionality to continue to work for
+seized shadow stack applications. Provide a regset interface for
+manipulating the shadow stack pointer (SSP).
+
+There is already ptrace functionality for accessing xstate, but this
+does not include supervisor xfeatures. So there is not a completely
+clear place for where to put the shadow stack state. Adding it to the
+user xfeatures regset would complicate that code, as it currently shares
+logic with signals which should not have supervisor features.
+
+Don't add a general supervisor xfeature regset like the user one,
+because it is better to maintain flexibility for other supervisor
+xfeatures to define their own interface. For example, an xfeature may
+decide not to expose all of it's state to userspace, as is actually the
+case for  shadow stack ptrace functionality. A lot of enum values remain
+to be used, so just put it in dedicated shadow stack regset.
+
+The only downside to not having a generic supervisor xfeature regset,
+is that apps need to be enlightened of any new supervisor xfeature
+exposed this way (i.e. they can't try to have generic save/restore
+logic). But maybe that is a good thing, because they have to think
+through each new xfeature instead of encountering issues when a new
+supervisor xfeature was added.
+
+By adding a shadow stack regset, it also has the effect of including the
+shadow stack state in a core dump, which could be useful for debugging.
+
+The shadow stack specific xstate includes the SSP, and the shadow stack
+and WRSS enablement status. Enabling shadow stack or WRSS in the kernel
+involves more than just flipping the bit. The kernel is made aware that
+it has to do extra things when cloning or handling signals. That logic
+is triggered off of separate feature enablement state kept in the task
+struct. So the flipping on HW shadow stack enforcement without notifying
+the kernel to change its behavior would severely limit what an application
+could do without crashing, and the results would depend on kernel
+internal implementation details. There is also no known use for controlling
+this state via ptrace today. So only expose the SSP, which is something
+that userspace already has indirect control over.
 
 Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -94,724 +125,170 @@ Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/20230319001535.23210-38-rick.p.edgecombe%40intel.com
+Link: https://lore.kernel.org/all/20230319001535.23210-39-rick.p.edgecombe%40intel.com
 ---
- tools/testing/selftests/x86/Makefile            |   2 +-
- tools/testing/selftests/x86/test_shadow_stack.c | 695 +++++++++++++++-
- 2 files changed, 696 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/test_shadow_stack.c
+ arch/x86/include/asm/fpu/regset.h |  7 +--
+ arch/x86/kernel/fpu/regset.c      | 78 ++++++++++++++++++++++++++++++-
+ arch/x86/kernel/ptrace.c          | 12 +++++-
+ include/uapi/linux/elf.h          |  2 +-
+ 4 files changed, 96 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index ca9374b..cfc8a26 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
- TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
--			corrupt_xstate_header amx
-+			corrupt_xstate_header amx test_shadow_stack
- # Some selftests require 32bit support enabled also on 64bit systems
- TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+diff --git a/arch/x86/include/asm/fpu/regset.h b/arch/x86/include/asm/fpu/regset.h
+index 4f928d6..697b77e 100644
+--- a/arch/x86/include/asm/fpu/regset.h
++++ b/arch/x86/include/asm/fpu/regset.h
+@@ -7,11 +7,12 @@
  
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-new file mode 100644
-index 0000000..94eb223
---- /dev/null
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -0,0 +1,695 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This program test's basic kernel shadow stack support. It enables shadow
-+ * stack manual via the arch_prctl(), instead of relying on glibc. It's
-+ * Makefile doesn't compile with shadow stack support, so it doesn't rely on
-+ * any particular glibc. As a result it can't do any operations that require
-+ * special glibc shadow stack support (longjmp(), swapcontext(), etc). Just
-+ * stick to the basics and hope the compiler doesn't do anything strange.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <sys/syscall.h>
-+#include <asm/mman.h>
-+#include <sys/mman.h>
-+#include <sys/stat.h>
-+#include <sys/wait.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <x86intrin.h>
+ #include <linux/regset.h>
+ 
+-extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active;
++extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active,
++				ssp_active;
+ extern user_regset_get2_fn fpregs_get, xfpregs_get, fpregs_soft_get,
+-				 xstateregs_get;
++				 xstateregs_get, ssp_get;
+ extern user_regset_set_fn fpregs_set, xfpregs_set, fpregs_soft_set,
+-				 xstateregs_set;
++				 xstateregs_set, ssp_set;
+ 
+ /*
+  * xstateregs_active == regset_fpregs_active. Please refer to the comment
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 6d056b6..f0a8eaf 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -8,6 +8,7 @@
+ #include <asm/fpu/api.h>
+ #include <asm/fpu/signal.h>
+ #include <asm/fpu/regset.h>
 +#include <asm/prctl.h>
-+#include <sys/prctl.h>
-+#include <stdint.h>
-+#include <signal.h>
-+#include <pthread.h>
-+#include <sys/ioctl.h>
-+#include <linux/userfaultfd.h>
-+#include <setjmp.h>
+ 
+ #include "context.h"
+ #include "internal.h"
+@@ -174,6 +175,83 @@ out:
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++int ssp_active(struct task_struct *target, const struct user_regset *regset)
++{
++	if (target->thread.features & ARCH_SHSTK_SHSTK)
++		return regset->n;
 +
-+/*
-+ * Define the ABI defines if needed, so people can run the tests
-+ * without building the headers.
-+ */
-+#ifndef __NR_map_shadow_stack
-+#define __NR_map_shadow_stack	451
++	return 0;
++}
 +
-+#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)
++int ssp_get(struct task_struct *target, const struct user_regset *regset,
++	    struct membuf to)
++{
++	struct fpu *fpu = &target->thread.fpu;
++	struct cet_user_state *cetregs;
 +
-+#define ARCH_SHSTK_ENABLE	0x5001
-+#define ARCH_SHSTK_DISABLE	0x5002
-+#define ARCH_SHSTK_LOCK		0x5003
-+#define ARCH_SHSTK_UNLOCK	0x5004
-+#define ARCH_SHSTK_STATUS	0x5005
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++		return -ENODEV;
 +
-+#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
-+#define ARCH_SHSTK_WRSS		(1ULL <<  1)
++	sync_fpstate(fpu);
++	cetregs = get_xsave_addr(&fpu->fpstate->regs.xsave, XFEATURE_CET_USER);
++	if (WARN_ON(!cetregs)) {
++		/*
++		 * This shouldn't ever be NULL because shadow stack was
++		 * verified to be enabled above. This means
++		 * MSR_IA32_U_CET.CET_SHSTK_EN should be 1 and so
++		 * XFEATURE_CET_USER should not be in the init state.
++		 */
++		return -ENODEV;
++	}
++
++	return membuf_write(&to, (unsigned long *)&cetregs->user_ssp,
++			    sizeof(cetregs->user_ssp));
++}
++
++int ssp_set(struct task_struct *target, const struct user_regset *regset,
++	    unsigned int pos, unsigned int count,
++	    const void *kbuf, const void __user *ubuf)
++{
++	struct fpu *fpu = &target->thread.fpu;
++	struct xregs_state *xsave = &fpu->fpstate->regs.xsave;
++	struct cet_user_state *cetregs;
++	unsigned long user_ssp;
++	int r;
++
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
++	    !ssp_active(target, regset))
++		return -ENODEV;
++
++	r = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_ssp, 0, -1);
++	if (r)
++		return r;
++
++	/*
++	 * Some kernel instructions (IRET, etc) can cause exceptions in the case
++	 * of disallowed CET register values. Just prevent invalid values.
++	 */
++	if (user_ssp >= TASK_SIZE_MAX || !IS_ALIGNED(user_ssp, 8))
++		return -EINVAL;
++
++	fpu_force_restore(fpu);
++
++	cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
++	if (WARN_ON(!cetregs)) {
++		/*
++		 * This shouldn't ever be NULL because shadow stack was
++		 * verified to be enabled above. This means
++		 * MSR_IA32_U_CET.CET_SHSTK_EN should be 1 and so
++		 * XFEATURE_CET_USER should not be in the init state.
++		 */
++		return -ENODEV;
++	}
++
++	cetregs->user_ssp = user_ssp;
++	return 0;
++}
++#endif /* CONFIG_X86_USER_SHADOW_STACK */
++
+ #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
+ 
+ /*
+diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+index dfaa270..095f04b 100644
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -58,6 +58,7 @@ enum x86_regset_64 {
+ 	REGSET64_FP,
+ 	REGSET64_IOPERM,
+ 	REGSET64_XSTATE,
++	REGSET64_SSP,
+ };
+ 
+ #define REGSET_GENERAL \
+@@ -1267,6 +1268,17 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
+ 		.active		= ioperm_active,
+ 		.regset_get	= ioperm_get
+ 	},
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++	[REGSET64_SSP] = {
++		.core_note_type	= NT_X86_SHSTK,
++		.n		= 1,
++		.size		= sizeof(u64),
++		.align		= sizeof(u64),
++		.active		= ssp_active,
++		.regset_get	= ssp_get,
++		.set		= ssp_set
++	},
 +#endif
-+
-+#define SS_SIZE 0x200000
-+
-+#if (__GNUC__ < 8) || (__GNUC__ == 8 && __GNUC_MINOR__ < 5)
-+int main(int argc, char *argv[])
-+{
-+	printf("[SKIP]\tCompiler does not support CET.\n");
-+	return 0;
-+}
-+#else
-+void write_shstk(unsigned long *addr, unsigned long val)
-+{
-+	asm volatile("wrssq %[val], (%[addr])\n"
-+		     : "=m" (addr)
-+		     : [addr] "r" (addr), [val] "r" (val));
-+}
-+
-+static inline unsigned long __attribute__((always_inline)) get_ssp(void)
-+{
-+	unsigned long ret = 0;
-+
-+	asm volatile("xor %0, %0; rdsspq %0" : "=r" (ret));
-+	return ret;
-+}
-+
-+/*
-+ * For use in inline enablement of shadow stack.
-+ *
-+ * The program can't return from the point where shadow stack gets enabled
-+ * because there will be no address on the shadow stack. So it can't use
-+ * syscall() for enablement, since it is a function.
-+ *
-+ * Based on code from nolibc.h. Keep a copy here because this can't pull in all
-+ * of nolibc.h.
-+ */
-+#define ARCH_PRCTL(arg1, arg2)					\
-+({								\
-+	long _ret;						\
-+	register long _num  asm("eax") = __NR_arch_prctl;	\
-+	register long _arg1 asm("rdi") = (long)(arg1);		\
-+	register long _arg2 asm("rsi") = (long)(arg2);		\
-+								\
-+	asm volatile (						\
-+		"syscall\n"					\
-+		: "=a"(_ret)					\
-+		: "r"(_arg1), "r"(_arg2),			\
-+		  "0"(_num)					\
-+		: "rcx", "r11", "memory", "cc"			\
-+	);							\
-+	_ret;							\
-+})
-+
-+void *create_shstk(void *addr)
-+{
-+	return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
-+}
-+
-+void *create_normal_mem(void *addr)
-+{
-+	return mmap(addr, SS_SIZE, PROT_READ | PROT_WRITE,
-+		    MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-+}
-+
-+void free_shstk(void *shstk)
-+{
-+	munmap(shstk, SS_SIZE);
-+}
-+
-+int reset_shstk(void *shstk)
-+{
-+	return madvise(shstk, SS_SIZE, MADV_DONTNEED);
-+}
-+
-+void try_shstk(unsigned long new_ssp)
-+{
-+	unsigned long ssp;
-+
-+	printf("[INFO]\tnew_ssp = %lx, *new_ssp = %lx\n",
-+	       new_ssp, *((unsigned long *)new_ssp));
-+
-+	ssp = get_ssp();
-+	printf("[INFO]\tchanging ssp from %lx to %lx\n", ssp, new_ssp);
-+
-+	asm volatile("rstorssp (%0)\n":: "r" (new_ssp));
-+	asm volatile("saveprevssp");
-+	printf("[INFO]\tssp is now %lx\n", get_ssp());
-+
-+	/* Switch back to original shadow stack */
-+	ssp -= 8;
-+	asm volatile("rstorssp (%0)\n":: "r" (ssp));
-+	asm volatile("saveprevssp");
-+}
-+
-+int test_shstk_pivot(void)
-+{
-+	void *shstk = create_shstk(0);
-+
-+	if (shstk == MAP_FAILED) {
-+		printf("[FAIL]\tError creating shadow stack: %d\n", errno);
-+		return 1;
-+	}
-+	try_shstk((unsigned long)shstk + SS_SIZE - 8);
-+	free_shstk(shstk);
-+
-+	printf("[OK]\tShadow stack pivot\n");
-+	return 0;
-+}
-+
-+int test_shstk_faults(void)
-+{
-+	unsigned long *shstk = create_shstk(0);
-+
-+	/* Read shadow stack, test if it's zero to not get read optimized out */
-+	if (*shstk != 0)
-+		goto err;
-+
-+	/* Wrss memory that was already read. */
-+	write_shstk(shstk, 1);
-+	if (*shstk != 1)
-+		goto err;
-+
-+	/* Page out memory, so we can wrss it again. */
-+	if (reset_shstk((void *)shstk))
-+		goto err;
-+
-+	write_shstk(shstk, 1);
-+	if (*shstk != 1)
-+		goto err;
-+
-+	printf("[OK]\tShadow stack faults\n");
-+	return 0;
-+
-+err:
-+	return 1;
-+}
-+
-+unsigned long saved_ssp;
-+unsigned long saved_ssp_val;
-+volatile bool segv_triggered;
-+
-+void __attribute__((noinline)) violate_ss(void)
-+{
-+	saved_ssp = get_ssp();
-+	saved_ssp_val = *(unsigned long *)saved_ssp;
-+
-+	/* Corrupt shadow stack */
-+	printf("[INFO]\tCorrupting shadow stack\n");
-+	write_shstk((void *)saved_ssp, 0);
-+}
-+
-+void segv_handler(int signum, siginfo_t *si, void *uc)
-+{
-+	printf("[INFO]\tGenerated shadow stack violation successfully\n");
-+
-+	segv_triggered = true;
-+
-+	/* Fix shadow stack */
-+	write_shstk((void *)saved_ssp, saved_ssp_val);
-+}
-+
-+int test_shstk_violation(void)
-+{
-+	struct sigaction sa;
-+
-+	sa.sa_sigaction = segv_handler;
-+	if (sigaction(SIGSEGV, &sa, NULL))
-+		return 1;
-+	sa.sa_flags = SA_SIGINFO;
-+
-+	segv_triggered = false;
-+
-+	/* Make sure segv_triggered is set before violate_ss() */
-+	asm volatile("" : : : "memory");
-+
-+	violate_ss();
-+
-+	signal(SIGSEGV, SIG_DFL);
-+
-+	printf("[OK]\tShadow stack violation test\n");
-+
-+	return !segv_triggered;
-+}
-+
-+/* Gup test state */
-+#define MAGIC_VAL 0x12345678
-+bool is_shstk_access;
-+void *shstk_ptr;
-+int fd;
-+
-+void reset_test_shstk(void *addr)
-+{
-+	if (shstk_ptr)
-+		free_shstk(shstk_ptr);
-+	shstk_ptr = create_shstk(addr);
-+}
-+
-+void test_access_fix_handler(int signum, siginfo_t *si, void *uc)
-+{
-+	printf("[INFO]\tViolation from %s\n", is_shstk_access ? "shstk access" : "normal write");
-+
-+	segv_triggered = true;
-+
-+	/* Fix shadow stack */
-+	if (is_shstk_access) {
-+		reset_test_shstk(shstk_ptr);
-+		return;
-+	}
-+
-+	free_shstk(shstk_ptr);
-+	create_normal_mem(shstk_ptr);
-+}
-+
-+bool test_shstk_access(void *ptr)
-+{
-+	is_shstk_access = true;
-+	segv_triggered = false;
-+	write_shstk(ptr, MAGIC_VAL);
-+
-+	asm volatile("" : : : "memory");
-+
-+	return segv_triggered;
-+}
-+
-+bool test_write_access(void *ptr)
-+{
-+	is_shstk_access = false;
-+	segv_triggered = false;
-+	*(unsigned long *)ptr = MAGIC_VAL;
-+
-+	asm volatile("" : : : "memory");
-+
-+	return segv_triggered;
-+}
-+
-+bool gup_write(void *ptr)
-+{
-+	unsigned long val;
-+
-+	lseek(fd, (unsigned long)ptr, SEEK_SET);
-+	if (write(fd, &val, sizeof(val)) < 0)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+bool gup_read(void *ptr)
-+{
-+	unsigned long val;
-+
-+	lseek(fd, (unsigned long)ptr, SEEK_SET);
-+	if (read(fd, &val, sizeof(val)) < 0)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+int test_gup(void)
-+{
-+	struct sigaction sa;
-+	int status;
-+	pid_t pid;
-+
-+	sa.sa_sigaction = test_access_fix_handler;
-+	if (sigaction(SIGSEGV, &sa, NULL))
-+		return 1;
-+	sa.sa_flags = SA_SIGINFO;
-+
-+	segv_triggered = false;
-+
-+	fd = open("/proc/self/mem", O_RDWR);
-+	if (fd == -1)
-+		return 1;
-+
-+	reset_test_shstk(0);
-+	if (gup_read(shstk_ptr))
-+		return 1;
-+	if (test_shstk_access(shstk_ptr))
-+		return 1;
-+	printf("[INFO]\tGup read -> shstk access success\n");
-+
-+	reset_test_shstk(0);
-+	if (gup_write(shstk_ptr))
-+		return 1;
-+	if (test_shstk_access(shstk_ptr))
-+		return 1;
-+	printf("[INFO]\tGup write -> shstk access success\n");
-+
-+	reset_test_shstk(0);
-+	if (gup_read(shstk_ptr))
-+		return 1;
-+	if (!test_write_access(shstk_ptr))
-+		return 1;
-+	printf("[INFO]\tGup read -> write access success\n");
-+
-+	reset_test_shstk(0);
-+	if (gup_write(shstk_ptr))
-+		return 1;
-+	if (!test_write_access(shstk_ptr))
-+		return 1;
-+	printf("[INFO]\tGup write -> write access success\n");
-+
-+	close(fd);
-+
-+	/* COW/gup test */
-+	reset_test_shstk(0);
-+	pid = fork();
-+	if (!pid) {
-+		fd = open("/proc/self/mem", O_RDWR);
-+		if (fd == -1)
-+			exit(1);
-+
-+		if (gup_write(shstk_ptr)) {
-+			close(fd);
-+			exit(1);
-+		}
-+		close(fd);
-+		exit(0);
-+	}
-+	waitpid(pid, &status, 0);
-+	if (WEXITSTATUS(status)) {
-+		printf("[FAIL]\tWrite in child failed\n");
-+		return 1;
-+	}
-+	if (*(unsigned long *)shstk_ptr == MAGIC_VAL) {
-+		printf("[FAIL]\tWrite in child wrote through to shared memory\n");
-+		return 1;
-+	}
-+
-+	printf("[INFO]\tCow gup write -> write access success\n");
-+
-+	free_shstk(shstk_ptr);
-+
-+	signal(SIGSEGV, SIG_DFL);
-+
-+	printf("[OK]\tShadow gup test\n");
-+
-+	return 0;
-+}
-+
-+int test_mprotect(void)
-+{
-+	struct sigaction sa;
-+
-+	sa.sa_sigaction = test_access_fix_handler;
-+	if (sigaction(SIGSEGV, &sa, NULL))
-+		return 1;
-+	sa.sa_flags = SA_SIGINFO;
-+
-+	segv_triggered = false;
-+
-+	/* mprotect a shadow stack as read only */
-+	reset_test_shstk(0);
-+	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
-+		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
-+		return 1;
-+	}
-+
-+	/* try to wrss it and fail */
-+	if (!test_shstk_access(shstk_ptr)) {
-+		printf("[FAIL]\tShadow stack access to read-only memory succeeded\n");
-+		return 1;
-+	}
-+
-+	/*
-+	 * The shadow stack was reset above to resolve the fault, make the new one
-+	 * read-only.
-+	 */
-+	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
-+		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
-+		return 1;
-+	}
-+
-+	/* then back to writable */
-+	if (mprotect(shstk_ptr, SS_SIZE, PROT_WRITE | PROT_READ) < 0) {
-+		printf("[FAIL]\tmprotect(PROT_WRITE) failed\n");
-+		return 1;
-+	}
-+
-+	/* then wrss to it and succeed */
-+	if (test_shstk_access(shstk_ptr)) {
-+		printf("[FAIL]\tShadow stack access to mprotect() writable memory failed\n");
-+		return 1;
-+	}
-+
-+	free_shstk(shstk_ptr);
-+
-+	signal(SIGSEGV, SIG_DFL);
-+
-+	printf("[OK]\tmprotect() test\n");
-+
-+	return 0;
-+}
-+
-+char zero[4096];
-+
-+static void *uffd_thread(void *arg)
-+{
-+	struct uffdio_copy req;
-+	int uffd = *(int *)arg;
-+	struct uffd_msg msg;
-+
-+	if (read(uffd, &msg, sizeof(msg)) <= 0)
-+		return (void *)1;
-+
-+	req.dst = msg.arg.pagefault.address;
-+	req.src = (__u64)zero;
-+	req.len = 4096;
-+	req.mode = 0;
-+
-+	if (ioctl(uffd, UFFDIO_COPY, &req))
-+		return (void *)1;
-+
-+	return (void *)0;
-+}
-+
-+int test_userfaultfd(void)
-+{
-+	struct uffdio_register uffdio_register;
-+	struct uffdio_api uffdio_api;
-+	struct sigaction sa;
-+	pthread_t thread;
-+	void *res;
-+	int uffd;
-+
-+	sa.sa_sigaction = test_access_fix_handler;
-+	if (sigaction(SIGSEGV, &sa, NULL))
-+		return 1;
-+	sa.sa_flags = SA_SIGINFO;
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-+	if (uffd < 0) {
-+		printf("[SKIP]\tUserfaultfd unavailable.\n");
-+		return 0;
-+	}
-+
-+	reset_test_shstk(0);
-+
-+	uffdio_api.api = UFFD_API;
-+	uffdio_api.features = 0;
-+	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
-+		goto err;
-+
-+	uffdio_register.range.start = (__u64)shstk_ptr;
-+	uffdio_register.range.len = 4096;
-+	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
-+		goto err;
-+
-+	if (pthread_create(&thread, NULL, &uffd_thread, &uffd))
-+		goto err;
-+
-+	reset_shstk(shstk_ptr);
-+	test_shstk_access(shstk_ptr);
-+
-+	if (pthread_join(thread, &res))
-+		goto err;
-+
-+	if (test_shstk_access(shstk_ptr))
-+		goto err;
-+
-+	free_shstk(shstk_ptr);
-+
-+	signal(SIGSEGV, SIG_DFL);
-+
-+	if (!res)
-+		printf("[OK]\tUserfaultfd test\n");
-+	return !!res;
-+err:
-+	free_shstk(shstk_ptr);
-+	close(uffd);
-+	signal(SIGSEGV, SIG_DFL);
-+	return 1;
-+}
-+
-+/*
-+ * Too complicated to pull it out of the 32 bit header, but also get the
-+ * 64 bit one needed above. Just define a copy here.
-+ */
-+#define __NR_compat_sigaction 67
-+
-+/*
-+ * Call 32 bit signal handler to get 32 bit signals ABI. Make sure
-+ * to push the registers that will get clobbered.
-+ */
-+int sigaction32(int signum, const struct sigaction *restrict act,
-+		struct sigaction *restrict oldact)
-+{
-+	register long syscall_reg asm("eax") = __NR_compat_sigaction;
-+	register long signum_reg asm("ebx") = signum;
-+	register long act_reg asm("ecx") = (long)act;
-+	register long oldact_reg asm("edx") = (long)oldact;
-+	int ret = 0;
-+
-+	asm volatile ("int $0x80;"
-+		      : "=a"(ret), "=m"(oldact)
-+		      : "r"(syscall_reg), "r"(signum_reg), "r"(act_reg),
-+			"r"(oldact_reg)
-+		      : "r8", "r9", "r10", "r11"
-+		     );
-+
-+	return ret;
-+}
-+
-+sigjmp_buf jmp_buffer;
-+
-+void segv_gp_handler(int signum, siginfo_t *si, void *uc)
-+{
-+	segv_triggered = true;
-+
-+	/*
-+	 * To work with old glibc, this can't rely on siglongjmp working with
-+	 * shadow stack enabled, so disable shadow stack before siglongjmp().
-+	 */
-+	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-+	siglongjmp(jmp_buffer, -1);
-+}
-+
-+/*
-+ * Transition to 32 bit mode and check that a #GP triggers a segfault.
-+ */
-+int test_32bit(void)
-+{
-+	struct sigaction sa;
-+	struct sigaction *sa32;
-+
-+	/* Create sigaction in 32 bit address range */
-+	sa32 = mmap(0, 4096, PROT_READ | PROT_WRITE,
-+		    MAP_32BIT | MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-+	sa32->sa_flags = SA_SIGINFO;
-+
-+	sa.sa_sigaction = segv_gp_handler;
-+	if (sigaction(SIGSEGV, &sa, NULL))
-+		return 1;
-+	sa.sa_flags = SA_SIGINFO;
-+
-+	segv_triggered = false;
-+
-+	/* Make sure segv_triggered is set before triggering the #GP */
-+	asm volatile("" : : : "memory");
-+
-+	/*
-+	 * Set handler to somewhere in 32 bit address space
-+	 */
-+	sa32->sa_handler = (void *)sa32;
-+	if (sigaction32(SIGUSR1, sa32, NULL))
-+		return 1;
-+
-+	if (!sigsetjmp(jmp_buffer, 1))
-+		raise(SIGUSR1);
-+
-+	if (segv_triggered)
-+		printf("[OK]\t32 bit test\n");
-+
-+	return !segv_triggered;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int ret = 0;
-+
-+	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
-+		printf("[SKIP]\tCould not enable Shadow stack\n");
-+		return 1;
-+	}
-+
-+	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-+		ret = 1;
-+		printf("[FAIL]\tDisabling shadow stack failed\n");
-+	}
-+
-+	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
-+		printf("[SKIP]\tCould not re-enable Shadow stack\n");
-+		return 1;
-+	}
-+
-+	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
-+		printf("[SKIP]\tCould not enable WRSS\n");
-+		ret = 1;
-+		goto out;
-+	}
-+
-+	/* Should have succeeded if here, but this is a test, so double check. */
-+	if (!get_ssp()) {
-+		printf("[FAIL]\tShadow stack disabled\n");
-+		return 1;
-+	}
-+
-+	if (test_shstk_pivot()) {
-+		ret = 1;
-+		printf("[FAIL]\tShadow stack pivot\n");
-+		goto out;
-+	}
-+
-+	if (test_shstk_faults()) {
-+		ret = 1;
-+		printf("[FAIL]\tShadow stack fault test\n");
-+		goto out;
-+	}
-+
-+	if (test_shstk_violation()) {
-+		ret = 1;
-+		printf("[FAIL]\tShadow stack violation test\n");
-+		goto out;
-+	}
-+
-+	if (test_gup()) {
-+		ret = 1;
-+		printf("[FAIL]\tShadow shadow stack gup\n");
-+		goto out;
-+	}
-+
-+	if (test_mprotect()) {
-+		ret = 1;
-+		printf("[FAIL]\tShadow shadow mprotect test\n");
-+		goto out;
-+	}
-+
-+	if (test_userfaultfd()) {
-+		ret = 1;
-+		printf("[FAIL]\tUserfaultfd test\n");
-+		goto out;
-+	}
-+
-+	if (test_32bit()) {
-+		ret = 1;
-+		printf("[FAIL]\t32 bit test\n");
-+	}
-+
-+	return ret;
-+
-+out:
-+	/*
-+	 * Disable shadow stack before the function returns, or there will be a
-+	 * shadow stack violation.
-+	 */
-+	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-+		ret = 1;
-+		printf("[FAIL]\tDisabling shadow stack failed\n");
-+	}
-+
-+	return ret;
-+}
-+#endif
+ };
+ 
+ static const struct user_regset_view user_x86_64_view = {
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index ac3da85..fa1ceea 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -406,6 +406,8 @@ typedef struct elf64_shdr {
+ #define NT_386_TLS	0x200		/* i386 TLS slots (struct user_desc) */
+ #define NT_386_IOPERM	0x201		/* x86 io permission bitmap (1=deny) */
+ #define NT_X86_XSTATE	0x202		/* x86 extended state using xsave */
++/* Old binutils treats 0x203 as a CET state */
++#define NT_X86_SHSTK	0x204		/* x86 SHSTK state */
+ #define NT_S390_HIGH_GPRS	0x300	/* s390 upper register halves */
+ #define NT_S390_TIMER	0x301		/* s390 timer register */
+ #define NT_S390_TODCMP	0x302		/* s390 TOD clock comparator register */
