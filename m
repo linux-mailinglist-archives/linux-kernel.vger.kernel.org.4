@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0DF6C1A1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B00C6C1A1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjCTPqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S229696AbjCTPqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbjCTPqI (ORCPT
+        with ESMTP id S232172AbjCTPqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:46:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F43E0B3;
-        Mon, 20 Mar 2023 08:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Pf02v7GC1tO+yNx151tkhuYDiX/K0UPtxvGyi0kyS0Q=; b=Ws9scCdv2b60pN4Jzze9OlmzQm
-        owZlezWNaOBKwpGZdhhvTGcN9rTHrC7IOwrcdnFvq537Tq4gLom5uSTFNBhcx7QBWrEffimZ+9Dvx
-        3ZNZfXfj5+HdgmabWGxADlvn+T/JCG1e+Yr8iBfMlMVCInUAWRAApt7XLnklSXZLMNansj5teduJs
-        aEWmkLHsslytbI3VSmbjo/iK5okbJyBrRiAw26dNzSWRZidTxaXVo/U8zBmUTgtElXcLI7fneamY3
-        qV8g+BZApotfuKgV1c+CMIQm8On4RIsY9IvRGdiPki106BGHpxVsfTwNF/94b2cAGRx3l2Rdp3fTM
-        Mp0kmEow==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1peHYm-0019xE-87; Mon, 20 Mar 2023 15:36:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A42AB30006D;
-        Mon, 20 Mar 2023 16:36:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 46D70240AD5BE; Mon, 20 Mar 2023 16:36:30 +0100 (CET)
-Date:   Mon, 20 Mar 2023 16:36:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v5 04/34] x86/traps: add external_interrupt() to dispatch
- external interrupts
-Message-ID: <20230320153630.GO2194297@hirez.programming.kicks-ass.net>
-References: <20230307023946.14516-1-xin3.li@intel.com>
- <20230307023946.14516-5-xin3.li@intel.com>
+        Mon, 20 Mar 2023 11:46:11 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ED71449B;
+        Mon, 20 Mar 2023 08:37:04 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KFanmp004337;
+        Mon, 20 Mar 2023 10:36:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679326609;
+        bh=FB9V7ot/l1vqWyvOklMmEs6w7A6C77GIOnMJLjkxaFo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=YhgBtifD/VG87/BGJN7RrRUEbGUhVV+ohIjJxccre6NZirrT2ulffgjMHs0deG5lR
+         vfaQD/VCXyCQNV6tQMLUAfsTtdnEEZ2N+B6GyRcZAVYj7MtKamO03sEz12pLO6/v32
+         zyZMzjCjTN/oY/cP477s0R8P92bOxVNUSO+pxy5M=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KFanx7092023
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Mar 2023 10:36:49 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
+ Mar 2023 10:36:49 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 20 Mar 2023 10:36:49 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KFanVZ094827;
+        Mon, 20 Mar 2023 10:36:49 -0500
+Date:   Mon, 20 Mar 2023 10:36:49 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Julien Panis <jpanis@baylibre.com>
+Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-am62: Add watchdog nodes
+Message-ID: <20230320153649.zfmyhk65ngh4u35d@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20230311105850.21811-1-nm@ti.com>
+ <20230311105850.21811-3-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230307023946.14516-5-xin3.li@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230311105850.21811-3-nm@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:39:16PM -0800, Xin Li wrote:
+On March 11, 2023 thus sayeth Nishanth Menon:
+> From: Julien Panis <jpanis@baylibre.com>
+> 
+> Add nodes for watchdogs :
+> - 5 in main domain
+> - 1 in MCU domain
+> - 1 in wakeup domain
+> 
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+> Changes since V3:
+> - Dropped the board level wdt reservation, do that with overlays based on
+>   modifiable firmware dependencies.
+> 
+> V3: https://lore.kernel.org/all/20221109093026.103790-2-jpanis@baylibre.com/
+> 
+>  arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 45 ++++++++++++++++++++++
+>  arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    |  9 +++++
+>  arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 11 ++++++
+>  3 files changed, 65 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> index ea683fd77d6a..90d5f145de4f 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> @@ -758,6 +758,51 @@ main_mcan0: can@20701000 {
+>  		status = "disabled";
+>  	};
+>  
+> +	main_rti0: watchdog@e000000 {
+> +		compatible = "ti,j7-rti-wdt";
+> +		reg = <0x00 0x0e000000 0x00 0x100>;
+> +		clocks = <&k3_clks 125 0>;
+> +		power-domains = <&k3_pds 125 TI_SCI_PD_EXCLUSIVE>;
+> +		assigned-clocks = <&k3_clks 125 0>;
+> +		assigned-clock-parents = <&k3_clks 125 2>;
+> +	};
+> +
+> +	main_rti1: watchdog@e010000 {
+> +		compatible = "ti,j7-rti-wdt";
+> +		reg = <0x00 0x0e010000 0x00 0x100>;
+> +		clocks = <&k3_clks 126 0>;
+> +		power-domains = <&k3_pds 126 TI_SCI_PD_EXCLUSIVE>;
+> +		assigned-clocks = <&k3_clks 126 0>;
+> +		assigned-clock-parents = <&k3_clks 126 2>;
+> +	};
+> +
+> +	main_rti2: watchdog@e020000 {
+> +		compatible = "ti,j7-rti-wdt";
+> +		reg = <0x00 0x0e020000 0x00 0x100>;
+> +		clocks = <&k3_clks 127 0>;
+> +		power-domains = <&k3_pds 127 TI_SCI_PD_EXCLUSIVE>;
+> +		assigned-clocks = <&k3_clks 127 0>;
+> +		assigned-clock-parents = <&k3_clks 127 2>;
+> +	};
+> +
+> +	main_rti3: watchdog@e030000 {
+> +		compatible = "ti,j7-rti-wdt";
+> +		reg = <0x00 0x0e030000 0x00 0x100>;
+> +		clocks = <&k3_clks 128 0>;
+> +		power-domains = <&k3_pds 128 TI_SCI_PD_EXCLUSIVE>;
+> +		assigned-clocks = <&k3_clks 128 0>;
+> +		assigned-clock-parents = <&k3_clks 128 2>;
+> +	};
+> +
+> +	main_rti4: watchdog@e0f0000 {
+> +		compatible = "ti,j7-rti-wdt";
+> +		reg = <0x00 0x0e0f0000 0x00 0x100>;
+> +		clocks = <&k3_clks 130 0>;
+> +		power-domains = <&k3_pds 130 TI_SCI_PD_EXCLUSIVE>;
+> +		assigned-clocks = <&k3_clks 130 0>;
+> +		assigned-clock-parents = <&k3_clks 130 2>;
+> +	};
+> +
 
-> +#ifndef CONFIG_X86_LOCAL_APIC
-> +/*
-> + * Used when local APIC is not compiled into the kernel, but
-> + * external_interrupt() needs dispatch_spurious_interrupt().
-> + */
-> +DEFINE_IDTENTRY_IRQ(spurious_interrupt)
-> +{
-> +	pr_info("Spurious interrupt (vector 0x%x) on CPU#%d, should never happen.\n",
-> +		vector, smp_processor_id());
-> +}
-> +#endif
-> +
-> +/*
-> + * External interrupt dispatch function.
-> + *
-> + * Until/unless dispatch_common_interrupt() can be taught to deal with the
-> + * special system vectors, split the dispatch.
-> + *
-> + * Note: dispatch_common_interrupt() already deals with IRQ_MOVE_CLEANUP_VECTOR.
-> + */
-> +int external_interrupt(struct pt_regs *regs, unsigned int vector)
-> +{
-> +	unsigned int sysvec = vector - FIRST_SYSTEM_VECTOR;
-> +
-> +	if (vector < FIRST_EXTERNAL_VECTOR) {
-> +		pr_err("invalid external interrupt vector %d\n", vector);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (sysvec < NR_SYSTEM_VECTORS) {
-> +		if (system_interrupt_handlers[sysvec])
-> +			system_interrupt_handlers[sysvec](regs);
-> +		else
-> +			dispatch_spurious_interrupt(regs, vector);
+This may be a dumb question, though the ti-sci and TRM documentation is 
+labeling this as rti15? idk if we should label this the same? it might 
+make grepping a little easier :)
 
-ISTR suggesting you can get rid of this branch if you stuff
-system_interrupt_handlers[] with dispatch_spurious_interrupt instead of
-NULL.
-
-> +	} else {
-> +		dispatch_common_interrupt(regs, vector);
-> +	}
-> +
-> +	return 0;
-> +}
+~Bryan
