@@ -2,159 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A176C10BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F706C10C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjCTLXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S230330AbjCTLZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 07:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjCTLXX (ORCPT
+        with ESMTP id S230218AbjCTLZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:23:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4E8C67D;
-        Mon, 20 Mar 2023 04:23:05 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D531F1EC0531;
-        Mon, 20 Mar 2023 12:23:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679311383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JHX6LI9jJmsbEsBfZqSHSOd2XPlLSGzi7teSPbRUpc8=;
-        b=d4AGbS54cHbrOmAlC2TeA8RAdxFydCPUxwHuWE7LG94VZK/I81tDgXPPZMWVpf4DNq8Y7P
-        2Q52sQOzeJnEVE+hMv3/j20c4Y2TKQi8M0j1bP07zCuNMpJ6+F7LmQvyK1uwJWvQtLv0p8
-        g3UvKNX3SFkQ0BWBa8xO/48ku3u2ygY=
-Date:   Mon, 20 Mar 2023 12:22:58 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use
- standard coco mechanisms
-Message-ID: <20230320112258.GCZBhCEpNAIk0rUDnx@fat_crate.local>
-References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
- <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
+        Mon, 20 Mar 2023 07:25:43 -0400
+Received: from 163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18FF41A94F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=JwFBS8AukYvIVWQyHgw3tatudmc/+MbXUT7y0zY9n+U=; b=d
+        CmYZYPkbzYgnWwcCkaUF796RIc6KxITFWScSkY/B7QUjRE/Y1R2DK0efc2qRB0IM
+        fBoIHhQ5jE5Q7leKxLVCfTLIztj1gjF+cXe1wA/4tygAZAJjoXt1AwHQwGmRLst7
+        jpQR302KQRFCzqXici2EwfiXuytPPNhLCGN7h4Jl48=
+Received: from 00107082$163.com ( [222.64.154.91] ) by ajax-webmail-wmsvr57
+ (Coremail) ; Mon, 20 Mar 2023 19:24:28 +0800 (CST)
+X-Originating-IP: [222.64.154.91]
+Date:   Mon, 20 Mar 2023 19:24:28 +0800 (CST)
+From:   "David Wang" <00107082@163.com>
+To:     "Bagas Sanjaya" <bagasdotme@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, masahiroy@kernel.org
+Subject: Re:Re: [Debian Package]Regression 6.3-rc3: version is empty  for
+ linux-headers installation dir
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <ZBgl6tbOT0GdIqb4@debian.me>
+References: <33233f0e.3970.186fdf28bc7.Coremail.00107082@163.com>
+ <ZBgl6tbOT0GdIqb4@debian.me>
+X-NTES-SC: AL_QuycC/+avkwt7imQYekXn0oTju85XMCzuv8j3YJeN500uSrR1wEMWlVxN0fx8PqJBA+imjKQWRZI2spje6J/Zr9gMYG89sbub/6Tmk3ilmVA
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <50f29163.57b5.186fec379bc.Coremail.00107082@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: _____wDnoIxtQhhk4FgXAA--.20797W
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiFgw4ql44XLAjgAACsj
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 06:40:07PM -0800, Michael Kelley wrote:
-> diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> index 49b44f8..d1c3306 100644
-> --- a/arch/x86/coco/core.c
-> +++ b/arch/x86/coco/core.c
-> @@ -88,8 +106,6 @@ bool cc_platform_has(enum cc_attr attr)
->  		return amd_cc_platform_has(attr);
->  	case CC_VENDOR_INTEL:
->  		return intel_cc_platform_has(attr);
-> -	case CC_VENDOR_HYPERV:
-> -		return hyperv_cc_platform_has(attr);
->  	default:
->  		return false;
->  	}
-> @@ -103,11 +119,14 @@ u64 cc_mkenc(u64 val)
->  	 * encryption status of the page.
->  	 *
->  	 * - for AMD, bit *set* means the page is encrypted
-> -	 * - for Intel *clear* means encrypted.
-> +	 * - for AMD with vTOM and for Intel, *clear* means encrypted
->  	 */
->  	switch (vendor) {
->  	case CC_VENDOR_AMD:
-> -		return val | cc_mask;
-> +		if (sev_status & MSR_AMD64_SNP_VTOM)
-> +			return val & ~cc_mask;
-
-This is silly. It should simply be:
-
-		if (sev_status & MSR_AMD64_SNP_VTOM)
-			return val;
-
-
-> +		else
-> +			return val | cc_mask;
->  	case CC_VENDOR_INTEL:
->  		return val & ~cc_mask;
->  	default:
-> @@ -120,7 +139,10 @@ u64 cc_mkdec(u64 val)
->  	/* See comment in cc_mkenc() */
->  	switch (vendor) {
->  	case CC_VENDOR_AMD:
-> -		return val & ~cc_mask;
-> +		if (sev_status & MSR_AMD64_SNP_VTOM)
-> +			return val | cc_mask;
-
-So if you set the C-bit, that doesn't make it decrypted on AMD. cc_mask
-on VTOM is 0 so why even bother?
-
-Same as the above.
-
-> +		else
-> +			return val & ~cc_mask;
->  	case CC_VENDOR_INTEL:
->  		return val | cc_mask;
->  	default:
-
-...
-
-> +void __init hv_vtom_init(void)
-> +{
-> +	/*
-> +	 * By design, a VM using vTOM doesn't see the SEV setting,
-> +	 * so SEV initialization is bypassed and sev_status isn't set.
-> +	 * Set it here to indicate a vTOM VM.
-> +	 */
-
-This looks like a hack. The SEV status MSR cannot be intercepted so the
-guest should see vTOM. How are you running vTOM without setting it even up?!
-
-> +	sev_status = MSR_AMD64_SNP_VTOM;
-> +	cc_set_vendor(CC_VENDOR_AMD);
-> +	cc_set_mask(ms_hyperv.shared_gpa_boundary);
-> +	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
-> +
-> +	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
-> +	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
-> +	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
-> +	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
-> +}
-> +
-> +#endif /* CONFIG_AMD_MEM_ENCRYPT */
-> +
->  /*
->   * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
->   */
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+VGhhbmtzIGZvciB0aGUgaW5mb3JtYXRpb24sIEkgd2FzIG1lYW5pbmcgdG8ganVzdCByZXBvcnQg
+dGhlIHJlZ3Jlc3Npb24uCkFuZCBJIGp1c3Qgc2VuZCBhIHBhdGNoIHdpdGggdGhlIHNpbXBsZSBm
+aXggaW4gYW5vdGhlciBtYWlsLCBob3BlIHRoZSBmb3JtYXQgaXMgb2suCgoKVGhhbmtzCkRhdmlk
+CgoKCgoKCgpBdCAyMDIzLTAzLTIwIDE3OjIyOjUwLCAiQmFnYXMgU2FuamF5YSIgPGJhZ2FzZG90
+bWVAZ21haWwuY29tPiB3cm90ZToKPk9uIE1vbiwgTWFyIDIwLCAyMDIzIGF0IDAzOjM2OjE2UE0g
+KzA4MDAsIERhdmlkIFdhbmcgd3JvdGU6Cj4+IFRoaXMgY291bGQgYmUgZml4ZWQgYnkgYWRkaW5n
+IGJhY2sgdGhlIGRlZmluaXRpb24gZm9yIHZlcnNpb24KPj4gCj4+IGRpZmYgLS1naXQgYS9zY3Jp
+cHRzL3BhY2thZ2UvYnVpbGRkZWIgYi9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKPj4gaW5kZXgg
+YzVhZTU3MTY3ZDdjLi4xODcwYjI0ODUyMTcgMTAwNzU1Cj4+IC0tLSBhL3NjcmlwdHMvcGFja2Fn
+ZS9idWlsZGRlYgo+PiArKysgYi9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKPj4gQEAgLTIxNiw2
+ICsyMTYsNyBAQCBpbnN0YWxsX2xpYmNfaGVhZGVycyAoKSB7Cj4+ICBybSAtZiBkZWJpYW4vZmls
+ZXMKPj4gIAo+PiAgcGFja2FnZXNfZW5hYmxlZD0kKGRoX2xpc3RwYWNrYWdlcykKPj4gK3ZlcnNp
+b249JEtFUk5FTFJFTEVBU0UKPj4gIAo+PiAgZm9yIHBhY2thZ2UgaW4gJHtwYWNrYWdlc19lbmFi
+bGVkfQo+PiAgZG8KPj4gLS0KPgo+SGksCj4KPkxvb2tzIGxpa2UgeW91ciBmaXh1cCBpcyBjb3Jy
+dXB0ZWQgKHRhYnMgY29udmVydGVkIHRvIHNwYWNlcykuIENhbiB5b3UKPnBsZWFzZSBzZW5kIHRo
+ZSBwcm9wZXIgcGF0Y2ggKHNlZQo+RG9jdW1lbnRhdGlvbi9wcm9jZXNzL3N1Ym1pdHRpbmctcGF0
+Y2hlcy5yc3QpPwo+Cj5BbHNvLCBzZWUgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL2VtYWlsLWNsaWVu
+dHMucnN0KSBmb3IgZ3VpZGVzIG9uCj5jb25maWd1cmluZyB5b3VyIGVtYWlsIGNsaWVudCBmb3Ig
+a2VybmVsIGRldmVsb3BtZW50Lgo+Cj5UaGFua3MuCj4KPi0tIAo+QW4gb2xkIG1hbiBkb2xsLi4u
+IGp1c3Qgd2hhdCBJIGFsd2F5cyB3YW50ZWQhIC0gQ2xhcmEK
