@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAA16C1D04
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E75CA6C1D0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbjCTQ7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S231995AbjCTRAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbjCTQ6s (ORCPT
+        with ESMTP id S232956AbjCTQ7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:58:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D0018B14
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:51:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23650616FE
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C5BC433D2;
-        Mon, 20 Mar 2023 16:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679331037;
-        bh=E0ClaU5YCHQBfzgXU30uuxfmPFXZyvuONYhWTPogYUE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H0EscW+DR0mPhT3QtBlpDa7AOZkr5gLAthRiYn5FTINn2m90qil1B2yyqIHijePVs
-         zspxjDzllLPFn1fdAITUAWbNdv2DkFYdqY++kgTjz6l+QY3K/pzAWQo0WVmp2+JYLN
-         Cxpyo4zAmRvMEPOry+Dm1/XLc6WjmyBrFi/X0ma0FOZro2f8vpMFy316vH1PhzSNqK
-         JmEAketSXrwiWemVSyfGFg9u44CtxUxoQA82N+E/nV5QKERvDTWQCypTMrRMQBP1/N
-         oAjgk+pSFFOSaR5o3iWB3PKg6+9be1t4OoWxEEGlSOPztqHMfNef9QloTia7GwcCRy
-         NTnghhXpPkJ1g==
-Date:   Mon, 20 Mar 2023 16:50:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Shenghao Ding <13916275206@139.com>, lgirdwood@gmail.com,
-        perex@perex.cz, kevin-lu@ti.com, shenghao-ding@ti.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        x1077012@ti.com, peeyush@ti.com, navada@ti.com
-Subject: Re: [PATCH v4] ASoC: tas2781: Add tas2781 driver
-Message-ID: <160416ce-a262-4012-84af-16873588cee7@sirena.org.uk>
-References: <20230320150726.20573-1-13916275206@139.com>
- <aea0c730-898d-7326-d245-79bc124bca0d@linux.intel.com>
+        Mon, 20 Mar 2023 12:59:38 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FDD199F1;
+        Mon, 20 Mar 2023 09:53:00 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KGpOJY021129;
+        Mon, 20 Mar 2023 11:51:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679331084;
+        bh=QPyC/DbvOyWHYeXOzG9GugyttVskkFsiS09ljjL/M7g=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=fdgnjN4CmGalQTfpdpRkDjUlSwy9FxKuWVGKHdnmm/PBkh9wbGgcqawSZywMz+ViJ
+         aehcilXnlO1V+xLHUSo5VPgDNkwjrAIrCS1JQb1KBdD+TyldpesqxT9IJlxT/9fjEO
+         dXbPOhfMBCNEvL3VKw8XWXLP/GuPoJ/mLUEGZ0pw=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KGpOdC094500
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Mar 2023 11:51:24 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
+ Mar 2023 11:51:24 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 20 Mar 2023 11:51:24 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KGpOQo021931;
+        Mon, 20 Mar 2023 11:51:24 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Julien Panis <jpanis@baylibre.com>, <bb@ti.com>,
+        <d-gole@ti.com>, Nishanth Menon <nm@ti.com>
+Subject: [PATCH V3 1/2] arm64: dts: ti: k3-am62-wakeup: Introduce RTC node
+Date:   Mon, 20 Mar 2023 11:51:22 -0500
+Message-ID: <20230320165123.80561-2-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230320165123.80561-1-nm@ti.com>
+References: <20230320165123.80561-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kyRgx4I2BnEQBwi+"
-Content-Disposition: inline
-In-Reply-To: <aea0c730-898d-7326-d245-79bc124bca0d@linux.intel.com>
-X-Cookie: Keep away from fire or flame.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Introduce digital RTC node in wakeup domain. Even though this has
+no specific battery backup supply, this on-chip RTC is used in
+cost-optimized board designs as a wakeup source.
 
---kyRgx4I2BnEQBwi+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+Changes since v2:
+- Just reviewed-by pickups
 
-On Mon, Mar 20, 2023 at 10:47:08AM -0500, Pierre-Louis Bossart wrote:
+V2: https://lore.kernel.org/all/20230315170706.1598977-2-nm@ti.com/
+V1: https://lore.kernel.org/all/20230311105850.21811-2-nm@ti.com/
 
-> > +#define BINFILE_VER				0
-> > +#define DRV_VER				1
-> > +#define	PPC_DRIVER_CRCCHK			0x00000200
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> indentation after define?
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+index 38dced6b4fef..fec81546fbbd 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+@@ -40,4 +40,14 @@ wkup_i2c0: i2c@2b200000 {
+ 		clock-names = "fck";
+ 		status = "disabled";
+ 	};
++
++	wkup_rtc0: rtc@2b1f0000 {
++		compatible = "ti,am62-rtc";
++		reg = <0x00 0x2b1f0000 0x00 0x100>;
++		interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 117 6> , <&k3_clks 117 0>;
++		clock-names = "vbus", "osc32k";
++		power-domains = <&k3_pds 117 TI_SCI_PD_EXCLUSIVE>;
++		wakeup-source;
++	};
+ };
+-- 
+2.40.0
 
-That's a value for the DRV_VER field - that's a thing people do, it's
-fine.
-
---kyRgx4I2BnEQBwi+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQYjtcACgkQJNaLcl1U
-h9DHXAf/dpmPmlYmze3xNFrCCmS8YhPy8RbOsqEPQQtXoRhNxk8Jg8Pb2Tc//eSh
-kogvV04aaVs0dDKiU94nsGwPT1nR7FNjMXEKCS/OIgcLQajxRHNnvESp7gFSWzFu
-igWlcABy646MPtds6ttgiakT97/SX9bOKyyXi1YPWCYN+5Isr6IpJed++oY2w2k5
-F4gJDthUKk8S2FgJyDqvlwcLgY/iJ+5TMb7M2ZbR7T8Ot9gXXiUEEkzbZRjuAg6/
-LcNibrXeY429OZqT6Qw3jxApz8RiNlSKEA9EECOIIQJuBb+ARKcg5rAXyoDnpCbh
-wu/x1va0GRzwvK2OEOA/93T0XqdVXA==
-=GzKh
------END PGP SIGNATURE-----
-
---kyRgx4I2BnEQBwi+--
