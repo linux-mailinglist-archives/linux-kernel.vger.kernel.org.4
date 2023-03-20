@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18696C0E33
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A9C6C0E35
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjCTKG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S230008AbjCTKHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjCTKGF (ORCPT
+        with ESMTP id S229987AbjCTKGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:06:05 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C2E10409
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:05:23 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5419d4c340aso214192357b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679306717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RS5uQJNZ1THmu6+X8Hb2Mm7jDWUuSU7jbDW+7hVrlos=;
-        b=Jb44Xtwe8Y35yQASV5loMBMF0QSIw63XrGakD6XtfCfAbvOm/HWXnpBAI64kBYyRja
-         EtjRUUqT7GecQtZ/BTNM5wRh4mR1Dm8X3/ssSlR4WrS3am1pjSalNEiiQ8H9Wgm6U90V
-         ro+43zgOVBPrGYB+9BM/NCet5EDqRr/W6CZWsZczhIe7pGbZhPL1t9kSNfrfMuvL0Mvf
-         IECWpKRYes/oJjCN7apQea6V64VE1ZrtE1TsJfdIqVCohFh0MFJCsUluLwlF9SuACccX
-         sG5yYxWZVewAKIH2g38PHEJXouanmQ4QgPA4A1T1H1yttKK7iDPC4/NHn1rVaUyJNmTF
-         XOtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679306717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RS5uQJNZ1THmu6+X8Hb2Mm7jDWUuSU7jbDW+7hVrlos=;
-        b=eE5qEYSblfI9et3vImZYckchXmF3cEukysbwx1Ve1k0HUl96owv3cTOy4TjPOEGeEm
-         RKnOSFHqonHRxV1o8d1kFKok0pDR0YHOt6i4LObkdMRwiPVSq5mccK+AtCkSbsN6jYoo
-         p3CGyuzsCFzH3nK4FWKYK/SZ0e0OGRs80Wchf5NxCRNGN+SuIWYKDTjcXQ9EzdMXuXDs
-         aPhyye0Tt3p5+a/irc3XUBFlppQjyfp34Gn3OAQze/C4Icn0XbdzkoCjuKD1wTpAnysV
-         CVVKvQitJqx/sW20agytlMyb6bgfuVz70arrWXDBLixbF61OtT3/nBG3iwwsYNDsHV9y
-         A0gg==
-X-Gm-Message-State: AO0yUKUIV0CYp6aYDcvlRd64U8ETYDcE4bWgalh02RXd+FmNBQwLSh+U
-        0dibH9UQVShet0oEupkLinBR13rrr6+tJIoBLs4cuw==
-X-Google-Smtp-Source: AK7set8yZJJ7PcEpWeL3Q3EKXcvp1UnUYfow+xu3cIExi7jlM4OJrw0lvCr1Ce3+4bMfd/5sBwGklabDX6Mfswnfh78=
-X-Received: by 2002:a81:ae5f:0:b0:532:e887:2c23 with SMTP id
- g31-20020a81ae5f000000b00532e8872c23mr9961200ywk.9.1679306717628; Mon, 20 Mar
- 2023 03:05:17 -0700 (PDT)
+        Mon, 20 Mar 2023 06:06:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEFFBB9E
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:06:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 339DFB80DB5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:05:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7589C433A0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679306755;
+        bh=EJED1ShfWKQvBJNubHm1lrg1azTOoYBqPX7dOmP91rg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CfVbS1PLNVSHYdWsW0GjW6QNasm92Wzzyzc8sMxnnCnwLXBkvwZTWQSUMQg0xUbEc
+         FpxdL+RdnQNHoPMUTco3dtzAyeiIM48cqmOdXj9Rwbqnu/2l3Mp2chNZ7dK6GPKYYS
+         Dh2DAkbv3PhihrlhiXrd4xeCLcNxOLKlmVTdVgqRdMfGHaCTSxvpkeTEeULLK9yduY
+         yQBbJUq7+HdRnTXbffwRwXUs2ubJrCUV1zLwHuGxZF0jMYbF032tff8EWFp2oNttCI
+         iQxjc6bgqpHKSpjVLoQ30Rgu0Ra0upXDGqfrFcqwF4IA+eL93FXEWkY9iqyVe+KCR7
+         HPI54uW54YsZg==
+Received: by mail-pj1-f44.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso13107145pjc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:05:55 -0700 (PDT)
+X-Gm-Message-State: AO0yUKWLEK1XH3+HOroj5E1WRxz9RMkcgh6lzWH2OwuPGYtTFEtZddNZ
+        rdqrm4YxAffzKM6UVS7IMteuJWLZPnEwlvzv+LsqFg==
+X-Google-Smtp-Source: AK7set+odoSEkgb1pU4bOMstbyrx2MxwMOCCFrUYV7wcccsQVKE0mnOPywKSDxeE+ihHDdvuO+hjlPxA1gzBo5MF26g=
+X-Received: by 2002:a17:902:aa86:b0:19f:39f8:88c4 with SMTP id
+ d6-20020a170902aa8600b0019f39f888c4mr3741745plr.2.1679306755195; Mon, 20 Mar
+ 2023 03:05:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230320093259.845178-1-korneld@chromium.org>
-In-Reply-To: <20230320093259.845178-1-korneld@chromium.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 20 Mar 2023 11:05:06 +0100
-Message-ID: <CACRpkdbhV1qE+Kx4cqAKiv4Zacv6tQ8wKF8C6+0kZ-Dw=0cx7Q@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: amd: Disable and mask interrupts on resume
-To:     =?UTF-8?Q?Kornel_Dul=C4=99ba?= <korneld@chromium.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        upstream@semihalf.com, rad@semihalf.com, mattedavis@google.com
+References: <20230319125524.58803-1-aford173@gmail.com>
+In-Reply-To: <20230319125524.58803-1-aford173@gmail.com>
+From:   Robert Foss <rfoss@kernel.org>
+Date:   Mon, 20 Mar 2023 11:05:44 +0100
+X-Gmail-Original-Message-ID: <CAN6tsi5N8iir-nNH2SV6-jJizgg92cJEPb-0BoSdprsjWQfG7A@mail.gmail.com>
+Message-ID: <CAN6tsi5N8iir-nNH2SV6-jJizgg92cJEPb-0BoSdprsjWQfG7A@mail.gmail.com>
+Subject: Re: [PATCH V2] drm/bridge: adv7533: Fix adv7533_mode_valid for
+ adv7533 and adv7535
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, dmitry.baryshkov@linaro.org,
+        aford@beaconembedded.com, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,25 +71,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 10:33=E2=80=AFAM Kornel Dul=C4=99ba <korneld@chromi=
-um.org> wrote:
-
-> This fixes a similar problem to the one observed in:
-> commit 4e5a04be88fe ("pinctrl: amd: disable and mask interrupts on probe"=
-).
+On Sun, Mar 19, 2023 at 1:55=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
+e:
 >
-> On some systems, during suspend/resume cycle firmware leaves
-> an interrupt enabled on a pin that is not used by the kernel.
-> This confuses the AMD pinctrl driver and causes spurious interrupts.
+> When dynamically switching lanes was removed, the intent of the code
+> was to check to make sure that higher speed items used 4 lanes, but
+> it had the unintended consequence of removing the slower speeds for
+> 4-lane users.
 >
-> The driver already has logic to detect if a pin is used by the kernel.
-> Leverage it to re-initialize interrupt fields of a pin only if it's not
-> used by us.
+> This attempts to remedy this by doing a check to see that the
+> max frequency doesn't exceed the chip limit, and a second
+> check to make sure that the max bit-rate doesn't exceed the
+> number of lanes * max bit rate / lane.
 >
-> Signed-off-by: Kornel Dul=C4=99ba <korneld@chromium.org>
+> Fixes: 9a0cdcd6649b ("drm/bridge: adv7533: remove dynamic lane switching =
+from adv7533 bridge")
+> Reviewed-by: Robert Foss <rfoss@kernel.org>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+>
+> V2:  Fix whitespace in comment
+>      Remove TODO comment
+>      Add R-B from Robert.
+>
+> diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm/b=
+ridge/adv7511/adv7533.c
+> index fdfeadcefe80..7e3e56441aed 100644
+> --- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> +++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> @@ -103,22 +103,19 @@ void adv7533_dsi_power_off(struct adv7511 *adv)
+>  enum drm_mode_status adv7533_mode_valid(struct adv7511 *adv,
+>                                         const struct drm_display_mode *mo=
+de)
+>  {
+> -       int lanes;
+> +       unsigned long max_lane_freq;
+>         struct mipi_dsi_device *dsi =3D adv->dsi;
+> +       u8 bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
+>
+> -       if (mode->clock > 80000)
+> -               lanes =3D 4;
+> -       else
+> -               lanes =3D 3;
+> -
+> -       /*
+> -        * TODO: add support for dynamic switching of lanes
+> -        * by using the bridge pre_enable() op . Till then filter
+> -        * out the modes which shall need different number of lanes
+> -        * than what was configured in the device tree.
+> -        */
+> -       if (lanes !=3D dsi->lanes)
+> -               return MODE_BAD;
+> +       /* Check max clock for either 7533 or 7535 */
+> +       if (mode->clock > (adv->type =3D=3D ADV7533 ? 80000 : 148500))
+> +               return MODE_CLOCK_HIGH;
+> +
+> +       /* Check max clock for each lane */
+> +       max_lane_freq =3D (adv->type =3D=3D ADV7533 ? 800000 : 891000);
+> +
+> +       if (mode->clock * bpp > max_lane_freq * adv->num_dsi_lanes)
+> +               return MODE_CLOCK_HIGH;
+>
+>         return MODE_OK;
+>  }
+> --
+> 2.34.1
+>
 
-Uh oh this looks serious.
-Do we need a Fixes: tag and Cc: stable on this patch?
+Applied, thanks!
 
-Yours,
-Linus Walleij
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
+
+
+Rob.
