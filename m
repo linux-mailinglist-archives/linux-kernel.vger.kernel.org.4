@@ -2,250 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A266C1241
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1D56C1251
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbjCTMrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S231614AbjCTMu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjCTMrf (ORCPT
+        with ESMTP id S231726AbjCTMuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:47:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBCF1449F;
-        Mon, 20 Mar 2023 05:47:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 97A4D1F85D;
-        Mon, 20 Mar 2023 12:47:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679316446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3oV8n86ezE3PDuESxSyzDj8V5HvxjQXuG2gXNZlLh2k=;
-        b=W7FuxtZKswgPfhF2X4ZAQGI304brinRgKfzkZS/EkyoTPkg/dOy3jZS+6jH4DvJxzL9LkC
-        V011yHOL9H2cmWI0Z6qKRgvXSGKa87/nnSghlt97EJ5vr164eizMgramgoGHFT7hkComCo
-        GbCutZCsr4kYevk6qUDvBOigjSNtx4I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679316446;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3oV8n86ezE3PDuESxSyzDj8V5HvxjQXuG2gXNZlLh2k=;
-        b=GqtUi8yRoTwkqfIrCl/GRY++xtu4GBzluATScvLcp3xOEuERstepm41uMn3eDGnSEI7sRV
-        kHyf8/j1VHXHgKAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8867A13A00;
-        Mon, 20 Mar 2023 12:47:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6u1DId5VGGTyZgAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 20 Mar 2023 12:47:26 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E380AA0719; Mon, 20 Mar 2023 13:47:25 +0100 (CET)
-Date:   Mon, 20 Mar 2023 13:47:25 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git sysv pile
-Message-ID: <20230320124725.pe4jqdsp4o47kmdp@quack3>
-References: <Y/gugbqq858QXJBY@ZenIV>
- <20230316090035.ynjejgcd72ynvd36@quack3>
- <2766007.BEx9A2HvPv@suse>
- <4214717.mogB4TqSGs@suse>
+        Mon, 20 Mar 2023 08:50:02 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5BA13D;
+        Mon, 20 Mar 2023 05:49:04 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id w9so46288438edc.3;
+        Mon, 20 Mar 2023 05:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679316543;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=csxAzmG1ZxKtRVplzZVDXPj/0poXWCzMsfVoYIpxsHo=;
+        b=psP7AcHp6cs05EyNdk/JlAmNSWWp/abjwa4VMtyGVWtp5N1SwktW+/5uEcOrIA150T
+         /6HjoS6ZYJyFracc8i1TaJhVew4dUJa1pSDDnlKInLJWkibXoUblSs3hRJliF0oGdtlG
+         +7NY/g9s3a/bz+vbQFFM578m3cmqLyYHx1w6NA89zpScfH0Q1+qPtoNtAHCKaPyolUnE
+         I0xD0eJi1J5J+H6azy/zgrtxSCHGTvgVTVT64inFDe382vpd/bSJ9GiFWcyFLj62IVwF
+         GLzg+XRH/P8fBQ1l81STEFO+y62S0luvD7JHRv2MW7D8MxnHaER4On3SUaS1/QX2ylTS
+         tdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679316543;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=csxAzmG1ZxKtRVplzZVDXPj/0poXWCzMsfVoYIpxsHo=;
+        b=bVV2ALJsFtmDp7e6kTLixlK9n7hPd+TbVM3NqO+lAF5M+Z3G40H4S2AvfqJNuP4I0L
+         I59TQDL7sdZHlg6nrK2tq06/TGh3N9ffY3bf6wPOjKt3k24GUT3kvvI7RrVVAgWVBFik
+         D3cPWCgDpNutDrhYNbklpU5QpqKpvlmTR26Br33b09uChoBszmKFRXRHDZ0902uo0onb
+         /jckDzPIKkWnr7mVQlQV/vwnQhf+gwvTD4IUkVd4v0P1cFGY1Vg6uE/PYpAHX+fFEr+t
+         2I+UJRo5S6RBCUiNaxjcj1/jO8W4DW7a9wK97c5fMVRYKIEQAYligpzObZEvKgXOVwuG
+         yt+Q==
+X-Gm-Message-State: AO0yUKXJUvjo6Az10qtfIehH11f/+UP8tg6LOu6aKjqVHitsuI2sdxu6
+        95m2sWtC5w7uUre2fpy9Nsk=
+X-Google-Smtp-Source: AK7set9nqiT/JpUhH6DDvPBLRfg/UjuncOawlqG5xE/I+ZlQ89l4YxS91ZHtVhWVEIXGEfESH+gY8g==
+X-Received: by 2002:a17:906:5655:b0:921:da99:f39c with SMTP id v21-20020a170906565500b00921da99f39cmr10203540ejr.12.1679316542823;
+        Mon, 20 Mar 2023 05:49:02 -0700 (PDT)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id g26-20020a1709064e5a00b00930525d89e2sm4353779ejw.89.2023.03.20.05.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 05:49:02 -0700 (PDT)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Mon, 20 Mar 2023 13:48:15 +0100
+Subject: [PATCH net v2] ice: fix invalid check for empty list in
+ ice_sched_assoc_vsi_to_agg()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4214717.mogB4TqSGs@suse>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230301-ice-fix-invalid-iterator-found-check-v2-1-7a352ee4f5ac@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAA5WGGQC/5WOSw7CMBBDr1LNmkFpwq+suAfqIp9pM4KmKCkRq
+ OrdSXsDlrblZ8+QKDIluFYzRMqceAxFyF0F1uvQE7IrGqSQSihRI1vCjj/IIesnO+SJop7GiN3
+ 4Dg6tJ/tAoRUdzUG5zigoKKMToYk6WL/CBp1Kaw1ekQps279DoAnaYnpOBfjdPuV6i/6bzzXWe
+ DlbeXJErmmaWz9ofu7tOEC7LMsPhAedC/YAAAA=
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679316541; l=2523;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=k5p5ktQnCBxgX1LUGONT7ZulaFqVVOQWI0ZWXkqT+M4=;
+ b=+pHQ+5iJaOQJSjxW6v3N28uZ6Z/ilNRaLOfE4c8rCRFUbcBfIoHTWsM/bC5vPTiDSjoQ5orqddMb
+ VYTZv8IaBA7yJV/myuce+ivFL3EzbuFKs2Q4HSRZjwsAtKHHLI9a
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
-> On giovedì 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wrote:
-> > On giovedì 16 marzo 2023 10:00:35 CET Jan Kara wrote:
-> > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
-> > > > On mercoledì 1 marzo 2023 15:14:16 CET Al Viro wrote:
-> > > > > On Wed, Mar 01, 2023 at 02:00:18PM +0100, Jan Kara wrote:
-> > > > > > On Wed 01-03-23 12:20:56, Fabio M. De Francesco wrote:
-> > > > > > > On venerdì 24 febbraio 2023 04:26:57 CET Al Viro wrote:
-> > > > > > > > 	Fabio's "switch to kmap_local_page()" patchset (originally
-> > 
-> > after
-> > 
-> > > > > > > > 	the
-> > > > > > > > 
-> > > > > > > > ext2 counterpart, with a lot of cleaning up done to it; as the
-> > > > > > > > matter
-> > > > 
-> > > > of
-> > > > 
-> > > > > > > > fact, ext2 side is in need of similar cleanups - calling
-> > 
-> > conventions
-> > 
-> > > > > > > > there
-> > > > > > > > are bloody awful).
-> > > > 
-> > > > [snip]
-> > > > 
-> > > > > I think I've pushed a demo patchset to vfs.git at some point back in
-> > > > > January... Yep - see #work.ext2 in there; completely untested, though.
-> > > > 
-> > > > The following commits from the VFS tree, #work.ext2 look good to me.
-> > > > 
-> > > > f5b399373756 ("ext2: use offset_in_page() instead of open-coding it as
-> > > > subtraction")
-> > > > c7248e221fb5 ("ext2_get_page(): saner type")
-> > > > 470e54a09898 ("ext2_put_page(): accept any pointer within the page")
-> > > > 15abcc147cf7 ("ext2_{set_link,delete_entry}(): don't bother with
-> > 
-> > page_addr")
-> > 
-> > > > 16a5ee2027b7 ("ext2_find_entry()/ext2_dotdot(): callers don't need
-> > 
-> > page_addr
-> > 
-> > > > anymore")
-> > > > 
-> > > > Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > > 
-> > > Thanks!
-> > > 
-> > > > I could only read the code but I could not test it in the same QEMU/KVM
-> > > > x86_32 VM where I test all my HIGHMEM related work.
-> > > > 
-> > > > Btrfs as well as all the other filesystems I converted to
-> > 
-> > kmap_local_page()
-> > 
-> > > > don't make the processes in the VM to crash, whereas the xfstests on 
-> ext2
-> > > > trigger the OOM killer at random tests (only sometimes they exit
-> > > > gracefully).
-> > > > 
-> > > > FYI, I tried to run the tests with 6GB of RAM, booting a kernel with
-> > > > HIGHMEM64GB enabled. I cannot add my "Tested-by" tag.
-> > > 
-> > > Hum, interesting. Reading your previous emails this didn't seem to happen
-> > > before applying this series, did it?
-> > 
-> > I wrote too many messages but was probably not able to explain the facts
-> > properly. Please let me summarize...
-> > 
-> > 1) When testing ext2 with "./check -g quick" in a QEMU/KVM x86_32 VM, 6GB 
-> RAM,
-> > booting a Vanilla kernel 6.3.0-rc1 with HIGHMEM64GB enabled, the OOM Killer
-> > kicks in at random tests _with_ and _without_ Al's patches.
-> > 
-> > 2) The only case which does never trigger the OOM Killer is running the 
-> tests
-> > on ext2 formatted filesystems in loop disks with the stock openSUSE kernel
-> > which is the 6.2.1-1-pae.
-> > 
-> > 3) The same "./check -g quick" on 6.3.0-rc1 runs always to completion with
-> > other filesystems. I ran xfstests several times on Btrfs and I had no
-> > problems.
-> > 
-> > 4) I cannot git-bisect this issue with ext2 because I cannot trust the 
-> results
-> > on any particular Kernel version. I mean that I cannot mark any specific
-> > version neither "good" or "bad" because it happens that the same "good"
-> > version instead make xfstests crash at the next run.
-> > 
-> > My conclusion is that we probably have some kind of race that makes the 
-> random
-> > tests crash at random runs of random Kernel versions between (at least) SUSE
-> > 6.2.1 and Vanilla current.
-> > 
-> > But it may be very well the case that I'm doing something stupid (e.g., with
-> > QEMU configuration or setup_disks or I can't imagine whatever else) and that
-> > I'm unable to see where I make mistakes. After all, I'm still a newcomer 
-> with
-> > little experience :-)
-> > 
-> > Therefore, I'd suggest that someone else try to test ext2 in an x86_32 VM.
-> > However, I'm 99.5% sure that Al's patches are good by the mere inspection of
-> > his code.
-> > 
-> > I hope that this summary contains everything that may help.
-> > 
-> > However, I remain available to provide any further information and to give 
-> my
-> > contribution if you ask me for specific tasks.
-> > 
-> > For my part I have no idea how to investigate what is happening. In these
-> > months I have run the VM hundreds of times on the most disparate filesystems
-> > to test my conversions to kmap_local_page() and I have never seen anything
-> > like this happen.
-> > 
-> > Thanks,
-> > 
-> > Fabio
-> > 
-> > 
-> > Honza
-> > 
-> > > --
-> > > Jan Kara <jack@suse.com>
-> > > SUSE Labs, CR
-> 
-> I can't yet figure out which conditions lead to trigger the OOM Killer to kill 
-> the XFCE Desktop Environment, and the xfstests (which I usually run into the 
-> latter). After all, reserving 6GB of main memory to a QEMU/KVM x86_32 VM had 
-> always been more than adequate.
-> 
-> So, I thought I'd better ignore that 6GB for a 32 bit architecture are a 
-> notable amount of RAM and squeezed some more from the host until I went to 
-> reserve 8GB. I know that this is not what who is able to find out what 
-> consumes so much main memory would do, but wanted to get the output from the 
-> tests, one way or the other... :-(
-> 
-> OK, I could finally run my tests to completion and had no crashes at all. I 
-> ran "./check -g quick" on one "test" + three "scratch" loop devices formatted 
-> with "mkfs.ext2 -c". I ran three times _with_ and then three times _without_ 
-> Al's following patches cloned from his vfs tree, #work.ext2 branch:
-> 
-> f5b399373756 ("ext2: use offset_in_page() instead of open-coding it as 
-> subtraction")
-> c7248e221fb5 ("ext2_get_page(): saner type")
-> 470e54a09898 ("ext2_put_page(): accept any pointer within the page")
-> 15abcc147cf7 ("ext2_{set_link,delete_entry}(): don't bother with page_addr")
-> 16a5ee2027b7 ("ext2_find_entry()/ext2_dotdot(): callers don't need
-> 
-> All the six tests were no longer killed by the Kernel :-)
-> 
-> I got 144 failures on 597 tests, regardless of the above listed patches.
-> 
-> My final conclusion is that these patches don't introduce regressions. I see 
-> several tests that produce memory leaks but, I want to stress it again, the 
-> failing tests are always the same with and without the patches.
-> 
-> therefore, I think that now I can safely add my tag to all five patches listed 
-> above...
-> 
-> Tested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+The code implicitly assumes that the list iterator finds a correct
+handle. If 'vsi_handle' is not found the 'old_agg_vsi_info' was
+pointing to an bogus memory location. For safety a separate list
+iterator variable should be used to make the != NULL check on
+'old_agg_vsi_info' correct under any circumstances.
 
-Thanks for the effort! Al, will you submit these patches or should I just
-pull your branch into my tree?
+Additionally Linus proposed to avoid any use of the list iterator
+variable after the loop, in the attempt to move the list iterator
+variable declaration into the macro to avoid any potential misuse after
+the loop. Using it in a pointer comparison after the loop is undefined
+behavior and should be omitted if possible [1].
 
-								Honza
+Fixes: 37c592062b16 ("ice: remove the VSI info from previous agg")
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+Changes in v2:
+- add Fixes tag
+- Link to v1: https://lore.kernel.org/r/20230301-ice-fix-invalid-iterator-found-check-v1-1-87c26deed999@gmail.com
+---
+ drivers/net/ethernet/intel/ice/ice_sched.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_sched.c b/drivers/net/ethernet/intel/ice/ice_sched.c
+index 4eca8d195ef0..b7682de0ae05 100644
+--- a/drivers/net/ethernet/intel/ice/ice_sched.c
++++ b/drivers/net/ethernet/intel/ice/ice_sched.c
+@@ -2788,7 +2788,7 @@ static int
+ ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
+ 			   u16 vsi_handle, unsigned long *tc_bitmap)
+ {
+-	struct ice_sched_agg_vsi_info *agg_vsi_info, *old_agg_vsi_info = NULL;
++	struct ice_sched_agg_vsi_info *agg_vsi_info, *iter, *old_agg_vsi_info = NULL;
+ 	struct ice_sched_agg_info *agg_info, *old_agg_info;
+ 	struct ice_hw *hw = pi->hw;
+ 	int status = 0;
+@@ -2806,11 +2806,13 @@ ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
+ 	if (old_agg_info && old_agg_info != agg_info) {
+ 		struct ice_sched_agg_vsi_info *vtmp;
+ 
+-		list_for_each_entry_safe(old_agg_vsi_info, vtmp,
++		list_for_each_entry_safe(iter, vtmp,
+ 					 &old_agg_info->agg_vsi_list,
+ 					 list_entry)
+-			if (old_agg_vsi_info->vsi_handle == vsi_handle)
++			if (iter->vsi_handle == vsi_handle) {
++				old_agg_vsi_info = iter;
+ 				break;
++			}
+ 	}
+ 
+ 	/* check if entry already exist */
+
+---
+base-commit: eeac8ede17557680855031c6f305ece2378af326
+change-id: 20230301-ice-fix-invalid-iterator-found-check-0a3e5b43dfb3
+
+Best regards,
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jakob Koschel <jkl820.git@gmail.com>
+
