@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2215A6C0F9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CEB6C0F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjCTKt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S230492AbjCTKqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbjCTKst (ORCPT
+        with ESMTP id S230428AbjCTKpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:48:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DEA25BB4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679309078;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i/zfm/iMBqjihSZrFF9A/S4gBRsOTN99Y8OwQCdHpx4=;
-        b=VxmvtzQbBAEQcjdZTKbISqnq8vFLpcjmMu/7Xtx5ZkMHPMI3/fRRMfDPULPun1nRj3G6ce
-        PRe4Z3Kj1Efy3uOAs72Q/pP2+MGilMHTcCi4jcvwrK7QsF5oe/i04XyUHgIGJ0jIV9BdCQ
-        Oj9aPDgxI0XBmWxdywAvPqdpQN+IbY8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-280-BqEfC6oQMjmgPdraA7atiQ-1; Mon, 20 Mar 2023 06:41:24 -0400
-X-MC-Unique: BqEfC6oQMjmgPdraA7atiQ-1
-Received: by mail-wm1-f71.google.com with SMTP id v8-20020a05600c470800b003ed3b575374so5316803wmo.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:41:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308883;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i/zfm/iMBqjihSZrFF9A/S4gBRsOTN99Y8OwQCdHpx4=;
-        b=ggJ+vWHcEEq6UhnZV8iETGPOuSBaurDJJa4mKOoQIsKJuchROwcfXxILOjrG9axQ7l
-         1RGijC+5mwXJ0C8AWUSTHaCSqPk9xzsQRgRjjJpvTWp2phgvwnvX9i2H0r143DIkEQbA
-         tf5akbcx1sXxaXqyYT0AKRLxKIH6nlqCEsW63JQOv3HJAVzTvfV2xYsXLsgj5orLAnlo
-         J3YDCZEXOmg2CkzIAZSTrST7m9SbHykr0BXC9Rs19/AJh2rD/AfLiOej9WwSBljC+DFN
-         gz1N4JZ92kTZ6yQ/BiIFzulKOpFWr1y4I+lp8IZz5dpdIf19J7VepJEpJ0f76cVdxAnf
-         xkXw==
-X-Gm-Message-State: AO0yUKXL1WnItzUGgHBMgOkGYcBcyUl6lHuSCX2IoxtbmfjqEchSNXUA
-        6X5nVg7i/dmGp9xRC0mM0bX9Mdp+M9RgMwWg+/6Gr8kZsBFl7euofExkvO8XTJ7oKrmPAnQHAI7
-        QxLm5r8mp6bpfpF9YuF3SOx0Q
-X-Received: by 2002:a7b:ce03:0:b0:3ed:5a7d:fcfe with SMTP id m3-20020a7bce03000000b003ed5a7dfcfemr12841653wmc.3.1679308883702;
-        Mon, 20 Mar 2023 03:41:23 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8VZjkq7GCgobpz8BUvT0F46hv0XS185gY9bV0RE1/Uo0GRuPBNbY0rUOAkJA7byaVeIEmCUA==
-X-Received: by 2002:a7b:ce03:0:b0:3ed:5a7d:fcfe with SMTP id m3-20020a7bce03000000b003ed5a7dfcfemr12841637wmc.3.1679308883377;
-        Mon, 20 Mar 2023 03:41:23 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id q13-20020a05600c46cd00b003e1202744f2sm16423888wmo.31.2023.03.20.03.41.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:41:22 -0700 (PDT)
-Message-ID: <078af8b0-4f4f-41f0-40d8-2beba34d0e76@redhat.com>
-Date:   Mon, 20 Mar 2023 11:41:21 +0100
+        Mon, 20 Mar 2023 06:45:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20E57A9D;
+        Mon, 20 Mar 2023 03:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Date:MIME-Version:
+        Content-Transfer-Encoding:Content-Type:References:In-Reply-To:To:From:Subject
+        :Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=S6PJWXorYfxubci0Llo4uduSyji2uSjy0wjtwS9/tr8=; b=aROtAmz/Rxblox23+2ut2cqkb6
+        sJNg3+qL1gw1ETWn6T8umzSrt1A2B+jolBZ6Q/mbL1Q1JgLvCbnHg3R/0jYt8gyF3k+Q00zD3KRiY
+        zDSMxK5AOLVsFA9gJIKqJe6yw+x+CcYUala7PIt9nTnwEFAuj28EuLQy0WANsgGQ6pthweqFFka9Z
+        EekcbYXTN6HN9kB+aQ8o0vVqYeikpetPHQL4/sAZ2Rjaa5nTPiOLLmVRbF7aB9mES5p9iC8PPHMeC
+        AV1HwEbRa/FXTW4udynlYKX+QZ0CCrKy5ZQOGlJ1IRr9EAQQMEYv/c943lcMusLj9/SMkSXNnvV2M
+        t/on2o8A==;
+Received: from [54.239.6.186] (helo=edge-cache-203.e-hkg50.amazon.com)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1peCy4-003tXs-0r;
+        Mon, 20 Mar 2023 10:42:20 +0000
+Message-ID: <8e05c7e2af238cdbcce1177e8684e192a71421b9.camel@infradead.org>
+Subject: Re: [PATCH v2 0/2] [RFC] virtio-rng entropy leak reporting feature
+From:   Amit Shah <amit@infradead.org>
+To:     bchalios@amazon.es, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
+        amit@kernel.org, graf@amazon.de, xmarcalx@amazon.co.uk
+In-Reply-To: <5441d09dc213998042a337b7f411bd1662b604bc.camel@infradead.org>
+References: <20230131145543.86369-1-bchalios@amazon.es>
+         <Y9lBeymca9eFaJ33@zx2c4.com>
+         <65d872db2e1be29bb03b43ed606e7cc9e74ec08d.camel@infradead.org>
+         <e1c03136-b873-1f1d-8b06-d9186566fc0c@amazon.es>
+         <5441d09dc213998042a337b7f411bd1662b604bc.camel@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 14/15] mm: move vmalloc_init() declaration to
- mm/internal.h
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230319220008.2138576-1-rppt@kernel.org>
- <20230319220008.2138576-15-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230319220008.2138576-15-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Mon, 20 Mar 2023 11:42:02 +0100
+User-Agent: Evolution 3.44.4-0ubuntu1 
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.03.23 23:00, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> vmalloc_init() is called only from mm_core_init(), there is no need to
-> declare it in include/linux/vmalloc.h
-> 
-> Move vmalloc_init() declaration to mm/internal.h
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
+On Mon, 2023-03-13 at 19:05 +0100, Amit Shah wrote:
+> Hey Herbert / Jason / crypto maintainers,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+[...]
 
--- 
-Thanks,
+> Let's wait a couple more days for responses, otherwise I suggest you
+> resubmit to kickstart a new discussion, with the note that Jason had
+> something else in mind - so that it doesn't appear as though we're
+> trying to override that.
 
-David / dhildenb
+I reached out to Jason on IRC, and he mentioned he will follow up with
+a patch that incorporates ideas from your patch plus hooking into
+random.c.  Sounds promising!
 
+		Amit
