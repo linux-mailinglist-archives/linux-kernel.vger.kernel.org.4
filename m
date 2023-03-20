@@ -2,123 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FFC6C2360
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7266C235E
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjCTVHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
+        id S229934AbjCTVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCTVHC (ORCPT
+        with ESMTP id S229651AbjCTVGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:07:02 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599851A940
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679346420; x=1710882420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I7r2Eq0nu0HGl1sKy5dr2EgRKhSMPbOzLMrVxRcHU1s=;
-  b=UQG5zBJs/nCK8wRghXI+iN6UVlZyMPrAXRancbX0P2V5+i/GGziFbjrz
-   la65SBG4IaNNyPHr74hISUcAEkF+E3Tg2WPyDcJocbHdy/t0YNcM5217u
-   JaFPAzqILMLMlkx8HPZdZnerXB8UL+5Teifq9eb+FikcWjLSAXGyWzoSQ
-   YFGI++yPbcu5fOXtHT+hodP5kHrUapCcvpAq7HYisJvq1oormRK5DXdZf
-   Eyd7bWQ+5LUFhmR0MnSrw7hll75KOXWwtf6i72lNqyp/5QK3E8jbW+b+n
-   5RVx1e9uyXRXFDlTATHtwKM1+ci7n7lhDkfK8vUUt5C9vLahxEMC8AnLF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="366503852"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="366503852"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 14:06:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="658508854"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="658508854"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2023 14:06:57 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peMiX-000BJy-0K;
-        Mon, 20 Mar 2023 21:06:57 +0000
-Date:   Tue, 21 Mar 2023 05:06:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Viktor Prutyanov <viktor@daynix.com>, mst@redhat.com,
-        jasowang@redhat.com
-Cc:     oe-kbuild-all@lists.linux.dev,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
-Subject: Re: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-Message-ID: <202303210441.xoa05PBS-lkp@intel.com>
-References: <20230320115451.1232171-1-viktor@daynix.com>
+        Mon, 20 Mar 2023 17:06:50 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3671B193DB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:06:43 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id h1-20020a92d841000000b0031b4d3294dfso6827176ilq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:06:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679346402;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T3Im1iotephzHTArso9JzNxY2sG0ihvzovoTm2quEmw=;
+        b=7Jx8/vqwC6Jm5Yn9+LuDtaQSBjturdWYQnodXAobAkwggDQz2xY+A7TfEx1v1nqomc
+         mcqTLRvwVeFggsVMA9JRA8Qj68o6BE1D5Es5zp4qdhfsk6nSAtCMKvyhrpFHT5e6tSp6
+         ZLiSwALKX1UYw9F49trTTBgeom3L4Q3GEks09PYc6LvlfodTbcgZv1Jj9xAmJeBlFAKM
+         Ufgrm4BHeLG/SHSxIlTXx9BNHT1DR1x7xx1ZIlw9Dv622rPL8ThsixNvRP0MpgWpzBTB
+         hEWmcXgHEeMeST6gDOkCQWhVqt+cW583HAapBRH2rzINR4Wr2PWmBah8crFHA04VlwQg
+         UJ5Q==
+X-Gm-Message-State: AO0yUKXURQcWxkwsoIqwvWwwqxzvzrsjPw/Qdjrk6cJX+H1p1CNgzAm8
+        ZpsJl8o6L6fOaTg2z2z1+ctevLvUYgNO0L4C2zHELq76gcMl
+X-Google-Smtp-Source: AK7set8KtlUE2+vk3LTvNYhn04bytoou0egQwD9Gj82l5pYzyxhz8hVnyM/JuhZMSxLtVCREXukf1/K+mFIs9AW6HCgWwxMj1frF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320115451.1232171-1-viktor@daynix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:3109:0:b0:755:ba1c:1452 with SMTP id
+ j9-20020a6b3109000000b00755ba1c1452mr128358ioa.4.1679346402513; Mon, 20 Mar
+ 2023 14:06:42 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 14:06:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c6dc0305f75b4d74@google.com>
+Subject: [syzbot] [fs?] INFO: task hung in eventpoll_release_file
+From:   syzbot <syzbot+e6dab35a08df7f7aa260@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viktor,
+Hello,
 
-Thank you for the patch! Perhaps something to improve:
+syzbot found the following issue on:
 
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on linus/master v6.3-rc3 next-20230320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    6f72958a49f6 Add linux-next specific files for 20230316
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=178faee6c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd64232230d3a0d8
+dashboard link: https://syzkaller.appspot.com/bug?extid=e6dab35a08df7f7aa260
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1156a6ecc80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=179e9648c80000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Viktor-Prutyanov/virtio-add-VIRTIO_F_NOTIFICATION_DATA-feature-support/20230320-195725
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-patch link:    https://lore.kernel.org/r/20230320115451.1232171-1-viktor%40daynix.com
-patch subject: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-config: loongarch-randconfig-s032-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210441.xoa05PBS-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/b6212a12ca1691dc346e5de046ec46bd3ce11247
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Viktor-Prutyanov/virtio-add-VIRTIO_F_NOTIFICATION_DATA-feature-support/20230320-195725
-        git checkout b6212a12ca1691dc346e5de046ec46bd3ce11247
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/virtio/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3fcac83e3d53/disk-6f72958a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/37b457d3103a/vmlinux-6f72958a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b82735625cce/bzImage-6f72958a.xz
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210441.xoa05PBS-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e6dab35a08df7f7aa260@syzkaller.appspotmail.com
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/virtio/virtio_pci_common.c:54:19: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] data @@
-   drivers/virtio/virtio_pci_common.c:54:19: sparse:     expected unsigned int [usertype] value
-   drivers/virtio/virtio_pci_common.c:54:19: sparse:     got restricted __le32 [usertype] data
+INFO: task syz-executor397:5874 blocked for more than 143 seconds.
+      Not tainted 6.3.0-rc2-next-20230316-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor397 state:D stack:27072 pid:5874  ppid:5147   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5305 [inline]
+ __schedule+0x1d23/0x5650 kernel/sched/core.c:6623
+ schedule+0xde/0x1a0 kernel/sched/core.c:6699
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6758
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa3b/0x1350 kernel/locking/mutex.c:747
+ eventpoll_release_file+0xe2/0x1d0 fs/eventpoll.c:962
+ eventpoll_release include/linux/eventpoll.h:53 [inline]
+ __fput+0x7da/0xa90 fs/file_table.c:312
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0183a1b0b9
+RSP: 002b:00007f01831bf208 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
+RAX: 0000000000000116 RBX: 00007f0183a9d4a8 RCX: 00007f0183a1b0b9
+RDX: 0000000000000318 RSI: 00000000200bd000 RDI: 0000000000000004
+RBP: 00007f0183a9d4a0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f0183a9d4ac
+R13: 00007fff8a59281f R14: 00007f01831bf300 R15: 0000000000022000
+ </TASK>
 
-vim +54 drivers/virtio/virtio_pci_common.c
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/13:
+ #0: ffffffff8c795830 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:516
+1 lock held by rcu_tasks_trace/14:
+ #0: ffffffff8c795530 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:516
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c796400 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x51/0x390 kernel/locking/lockdep.c:6545
+2 locks held by getty/4761:
+ #0: ffff88814a34b098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:243
+ #1: ffffc900015902f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2177
+1 lock held by syz-executor397/5873:
+1 lock held by syz-executor397/5874:
+ #0: ffff88801e3d5c68 (&ep->mtx){+.+.}-{3:3}, at: eventpoll_release_file+0xe2/0x1d0 fs/eventpoll.c:962
 
-    49	
-    50	bool vp_notify_with_data(struct virtqueue *vq)
-    51	{
-    52		__le32 data = vring_fill_notification_data(vq);
-    53	
-  > 54		iowrite32(data, (void __iomem *)vq->priv);
-    55	
-    56		return true;
-    57	}
-    58	
+=============================================
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.3.0-rc2-next-20230316-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x29c/0x350 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x2a4/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0xe16/0x1090 kernel/hung_task.c:379
+ kthread+0x33e/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 5873 Comm: syz-executor397 Not tainted 6.3.0-rc2-next-20230316-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:arch_atomic_read arch/x86/include/asm/atomic.h:29 [inline]
+RIP: 0010:rcu_dynticks_curr_cpu_in_eqs include/linux/context_tracking.h:121 [inline]
+RIP: 0010:rcu_is_watching+0x47/0xb0 kernel/rcu/tree.c:695
+Code: c5 77 7a 48 8d 3c ed 00 fa 10 8c 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 54 48 03 1c ed 00 fa 10 8c <48> b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 0f b6 14 02 48
+RSP: 0018:ffffc90004c9fc58 EFLAGS: 00000282
+RAX: dffffc0000000000 RBX: ffff8880b9936c68 RCX: ffffffff8164cf65
+RDX: 1ffffffff1821f41 RSI: 0000000000000002 RDI: ffffffff8c10fa08
+RBP: 0000000000000001 R08: 0000000000000000 R09: ffffffff8e784717
+R10: fffffbfff1cf08e2 R11: 0000000000000000 R12: ffff8880772cf1c8
+R13: ffff88801e3d5c00 R14: ffff8880772cf180 R15: 0000000000000000
+FS:  0000555556477400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005642a1c9c5c0 CR3: 0000000025100000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ trace_lock_release include/trace/events/lock.h:69 [inline]
+ lock_release+0x4fb/0x670 kernel/locking/lockdep.c:5702
+ __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
+ _raw_spin_unlock+0x16/0x40 kernel/locking/spinlock.c:186
+ spin_unlock include/linux/spinlock.h:390 [inline]
+ __ep_remove+0x6ce/0xa50 fs/eventpoll.c:737
+ ep_remove_safe fs/eventpoll.c:782 [inline]
+ ep_clear_and_put+0x21c/0x3b0 fs/eventpoll.c:815
+ ep_eventpoll_release+0x45/0x60 fs/eventpoll.c:831
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f01839d3dfb
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007fff8a592880 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000006 RCX: 00007f01839d3dfb
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
+RBP: 0000000000152fad R08: 0000000000000000 R09: 00007fff8a5a7080
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007f0183a9d4bc
+R13: 00007fff8a592900 R14: 00007fff8a5929a0 R15: 00007f0183a9d4a0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
