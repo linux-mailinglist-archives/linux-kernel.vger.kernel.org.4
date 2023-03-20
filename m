@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9D36C2571
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7B96C2577
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCTXI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
+        id S229997AbjCTXNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjCTXIZ (ORCPT
+        with ESMTP id S229836AbjCTXND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:08:25 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880CA6185
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:08:24 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id h5so7290752ile.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1679353703; x=1681945703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=193ZdOl7SmXU5xeY7DK97JfDt7Ox2MJXhwHZJWEZhv0=;
-        b=Ei4NGEDrdfbAmexe2XLEWXKkrttTK+tBPNy6BhvhSViPqVyVK2uDrXir2qrLOp1DCQ
-         23gx0NOvw9hfNRI5xFN5P8n8a6a6jLGjyyH5mLfNvyKqF+jeIxCym7vz1VjGF91WgadU
-         /lQQT/IiKeBbMuCKOjkSjA6Mo1DhbdbAR/0qQ=
+        Mon, 20 Mar 2023 19:13:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6B34008
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679353935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8OXg4VI8cm6vRN/hId3npmgyDD4BW9c8No9p4EZybmM=;
+        b=L4zSnDCMUYQAY40Hrih5mRwlizyvJRgT90kfHwx7fIs+a/QVxWSnp6TRHexEqgsNVUOJzH
+        HGN/on9bQe/L1PAsCE/OBdpIiquQpcm88vxtjG0fCzwRMhGN4mEXxdyS08hqqz4ml9myNx
+        VFGIaHMK9sUep6bFcZtoMeaPeAua95g=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-463-_BmeWqlQNwuGXuGWA0CFow-1; Mon, 20 Mar 2023 19:12:13 -0400
+X-MC-Unique: _BmeWqlQNwuGXuGWA0CFow-1
+Received: by mail-qk1-f198.google.com with SMTP id 72-20020a37044b000000b0074694114c09so1231909qke.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:12:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679353703; x=1681945703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=193ZdOl7SmXU5xeY7DK97JfDt7Ox2MJXhwHZJWEZhv0=;
-        b=p+Lt9uDY6m8yzuXobaKT/776GGlVF6m4kccTsU3Sk8JDrhLaUpmBtyisCdaQKKHW8H
-         irQJ4PJHJwrCxohrvKaVTmkaDAI3zBHo2Nwz/w8JEaMuwAXeF2SOGk92idScS7zDcfuS
-         +3eReLepW1/T3IoRm1W3JZ+PdLQCvpX9FihGTHBH2ZbIVSl13ZpMJXM1qs5WcYUksjKO
-         VNrz50Hr5+ODJXGTvC5wQ01CWmWS16UC9ULa9uIdPE5Z7Fls1MD81ckHK85/gCUeCp4k
-         wSFrPk/yhPaU0sRdfmtf0wU6HLq1ty4+j39kLvvKuwGyZcuLt8LJZCQDdOwfCORcDa03
-         P9zQ==
-X-Gm-Message-State: AO0yUKUY4yQzudI/xqxRPTPwwgxegHPSDtQQ2wqVDnG+Pvo0cwIeesB0
-        qkSng3nMnT2TSmQ8eCIBbUxgCA==
-X-Google-Smtp-Source: AK7set95aLMy7g+Tk9W3WMdi8i2FWNkdvVdRafgY7l8+4MqpL62RhoOp8c1KBTH3hwOZXZnBezefnw==
-X-Received: by 2002:a05:6e02:12c8:b0:317:2f8d:528f with SMTP id i8-20020a056e0212c800b003172f8d528fmr817655ilm.2.1679353703656;
-        Mon, 20 Mar 2023 16:08:23 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p17-20020a927411000000b00317f477b039sm3154582ilc.4.2023.03.20.16.08.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 16:08:23 -0700 (PDT)
-Message-ID: <2301a5b9-bfb0-07c0-5c1e-b92bbcd286a6@linuxfoundation.org>
-Date:   Mon, 20 Mar 2023 17:08:22 -0600
+        d=1e100.net; s=20210112; t=1679353933;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8OXg4VI8cm6vRN/hId3npmgyDD4BW9c8No9p4EZybmM=;
+        b=CVpLoNF9RdpkDrtaw0zpnS1J7mPsU0HHVbP8Xxt8oBD8N7VvSNQmeGV453O7Wj7cuv
+         FaXiYoghM8a/gbZQrunRXn6DpNPmbl3OhPhUtP9cXZNBLwnXMlr4pJmKCPcO29fODsso
+         OUc94KzX+e380/g2q4ho3MebOrfN1kHUu289xPxD9MYoA/OeP9DyLELWYzcYdDdGt6RP
+         9mQNs/Q1IwRUwv4rKVeS86zC8eMrI7CLp+RsWH9rO5lM/YQRFr0IcccDQhjVpVCVFdJs
+         e+UJVT3iUKsw6wWOfyDfWYXLQKb22upbsYEvVJR1XxO/iM0QtaksszXpwtSZZWAu0o+X
+         Qd+Q==
+X-Gm-Message-State: AO0yUKWPrvLi1WUB90hepJTYoJsjlfLtofCnqAYBeIzHu9Lv3tZudX90
+        mUi5xm6bcefry1V2wV3Yq28TW6aCQITnKoBxpjkEg7KWsB0c0wBW/7508ulCwDA7vuhwivjp8M0
+        03MV0YwVZAGLeNPyfPlgLmJac
+X-Received: by 2002:a05:6214:e6a:b0:5b3:4b99:7af8 with SMTP id jz10-20020a0562140e6a00b005b34b997af8mr998492qvb.21.1679353933197;
+        Mon, 20 Mar 2023 16:12:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+WMLf2/hC3NpULLTuNzWukCaLGaPzgM3n1zv6eFgYYW5UjHVNHtsaQFRkKcay04SkrmfZlyQ==
+X-Received: by 2002:a05:6214:e6a:b0:5b3:4b99:7af8 with SMTP id jz10-20020a0562140e6a00b005b34b997af8mr998476qvb.21.1679353932932;
+        Mon, 20 Mar 2023 16:12:12 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o10-20020a05620a0d4a00b0074281812276sm1755579qkl.97.2023.03.20.16.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 16:12:12 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     peter.ujfalusi@gmail.com, vkoul@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] dmaengine: ti: edma: remove unused edma_and function
+Date:   Mon, 20 Mar 2023 19:12:09 -0400
+Message-Id: <20230320231209.1728940-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.10 00/99] 5.10.176-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230320145443.333824603@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230320145443.333824603@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,29 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 08:53, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.176 release.
-> There are 99 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Mar 2023 14:54:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.176-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+clang with W=1 reports
+drivers/dma/ti/edma.c:321:20: error: unused function
+  'edma_and' [-Werror,-Wunused-function]
+static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
+                   ^
+This function is not used, so remove it.
 
-Compiled and booted on my test system. No dmesg regressions.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/dma/ti/edma.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+index fa06d7e6d8e3..9ea91c640c32 100644
+--- a/drivers/dma/ti/edma.c
++++ b/drivers/dma/ti/edma.c
+@@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
+ 	edma_write(ecc, offset, val);
+ }
+ 
+-static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
+-{
+-	unsigned val = edma_read(ecc, offset);
+-
+-	val &= and;
+-	edma_write(ecc, offset, val);
+-}
+-
+ static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
+ {
+ 	unsigned val = edma_read(ecc, offset);
+-- 
+2.27.0
 
-thanks,
--- Shuah
