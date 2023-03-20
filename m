@@ -2,119 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F8A6C0982
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A050D6C0995
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 05:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCTDzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S229473AbjCTEJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 00:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjCTDzO (ORCPT
+        with ESMTP id S229972AbjCTEJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:55:14 -0400
-Received: from 163.com (m12.mail.163.com [220.181.12.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CC231DBA3;
-        Sun, 19 Mar 2023 20:55:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=NoZ6Yv3m5eH5XJcKyA2YOme8UsgLpMm+h1N1F+fx0Jg=; b=m
-        1JmAR+SS1nkRLRKRuCvaVNFYLVtAZsmKb+DU64vk7PslFaOAF6FRKFNUJZcObIQ/
-        Abd6seucL0xJrkPA98GbOCUpbW/KigSll9Dt5/FJqKXXtfaHSz2jB9NKFjv15JyK
-        KRDTaUyxLvE+9c0AT7N7lA3El6l4MaGurJuBtY4Lik=
-Received: from zyytlz.wz$163.com ( [111.206.145.21] ) by
- ajax-webmail-wmsvr12 (Coremail) ; Mon, 20 Mar 2023 11:54:27 +0800 (CST)
-X-Originating-IP: [111.206.145.21]
-Date:   Mon, 20 Mar 2023 11:54:27 +0800 (CST)
-From:   =?GBK?B?zfXV9w==?= <zyytlz.wz@163.com>
-To:     "Jonathan Cameron" <jic23@kernel.org>
-Cc:     eugen.hristev@collabora.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Lars-Peter Clausen" <lars@metafoo.de>, hackerzheng666@gmail.com,
-        alex000young@gmail.com, 1395428693sheep@gmail.com
-Subject: Re:Re: [PATCH] iio: at91-sama5d2_adc: Fix use after free bug in
- at91_adc_remove due to race condition
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <20230319152222.0b02fb51@jic23-huawei>
-References: <20230310091239.1440279-1-zyytlz.wz@163.com>
- <20230318173913.19e8a1b1@jic23-huawei>
- <d62ece80-4d88-36a6-9561-fa0f5afc40c1@metafoo.de>
- <20230319152222.0b02fb51@jic23-huawei>
-X-NTES-SC: AL_QuycC/6Tu0wt4SefZ+kXn0oRjuY8XsK3v/kl3YNXP5k0vynH/gsFYl9FHVb32ci2LieikDinXz9i2/5fbZt4RoQ1HuBST22Vvm8uYK7tJP/b
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 20 Mar 2023 00:09:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06631EF99;
+        Sun, 19 Mar 2023 21:09:00 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32K239vM007733;
+        Mon, 20 Mar 2023 04:09:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=+c0v0f+QowBSsrYxlfwLSKzDuPmAMcXRbidWbkS9Di0=;
+ b=AqC2cZxbpptE9ygbWlD4eLnIMhV5eIjL8MMS4ZYRnwT2D6mQDlGGX/0eILzcvQtRT7a2
+ 64n9IfIKKK0TNsVX2Emu2FcJwjCTbjzMBM15aLFyn5RQu0Iy84sOBBlstRvrnZNwFIan
+ vK60k4TZNNZ/MN/VvJj2uqAeaNfjRFu1+932++ZfI23SnJla3eF/AiXiQNwwbm5ZXeJ3
+ D/HC03lB0GB6PA72PUEIyxQ0Lry9JaF0c//bfaOzoNC+ekdvBaeh5+L8cR3S4iunRwRY
+ RyzZHW5fP6n7kruR/xWocuQGSyjkYQXk/yNGfIOjTZRxzpI7sqyPbGWytYDa9fbxRS3l FA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pdq5p54b6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 04:08:59 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32JARoTU017094;
+        Mon, 20 Mar 2023 04:08:58 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6an1k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 04:08:57 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32K48tKo23396922
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Mar 2023 04:08:55 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 580112004D;
+        Mon, 20 Mar 2023 04:08:55 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CBAD220040;
+        Mon, 20 Mar 2023 04:08:54 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 04:08:54 +0000 (GMT)
+Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id E247E602FE;
+        Mon, 20 Mar 2023 15:08:49 +1100 (AEDT)
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Cc:     Benjamin Gray <bgray@linux.ibm.com>
+Subject: [PATCH 1/2] initramfs: Check negative timestamp to prevent broken cpio archive
+Date:   Mon, 20 Mar 2023 15:08:38 +1100
+Message-Id: <20230320040839.660475-1-bgray@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <275f7404.51b6.186fd27783f.Coremail.zyytlz.wz@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: _____wC3RSXz2BdkPhETAA--.4938W
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRM4U1WBo+DaWQAAsx
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EMHSJnVCmMQhS9ullXJc7ze42ztu3ZUs
+X-Proofpoint-GUID: EMHSJnVCmMQhS9ullXJc7ze42ztu3ZUs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_01,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 adultscore=0 spamscore=0
+ mlxlogscore=999 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303200029
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjMtMDMtMTkgMjI6MjI6MjIsICJKb25hdGhhbiBDYW1lcm9u
-IiA8amljMjNAa2VybmVsLm9yZz4gd3JvdGU6Cj5PbiBTYXQsIDE4IE1hciAyMDIzIDEwOjM2OjA0
-IC0wNzAwCj5MYXJzLVBldGVyIENsYXVzZW4gPGxhcnNAbWV0YWZvby5kZT4gd3JvdGU6Cj4KPj4g
-T24gMy8xOC8yMyAxMDozOSwgSm9uYXRoYW4gQ2FtZXJvbiB3cm90ZToKPj4gPiBPbiBGcmksIDEw
-IE1hciAyMDIzIDE3OjEyOjM5ICswODAwCj4+ID4gWmhlbmcgV2FuZyA8enl5dGx6Lnd6QDE2My5j
-b20+IHdyb3RlOgo+PiA+ICAKPj4gPj4gSW4gYXQ5MV9hZGNfcHJvYmUsICZzdC0+dG91Y2hfc3Qu
-d29ya3EgaXMgYm91bmQgd2l0aAo+PiA+PiBhdDkxX2FkY193b3JrcV9oYW5kbGVyLiBUaGVuIGl0
-IHdpbGwgYmUgc3RhcnRlZCBieSBpcnEKPj4gPj4gaGFuZGxlciBhdDkxX2FkY190b3VjaF9kYXRh
-X2hhbmRsZXIKPj4gPj4KPj4gPj4gSWYgd2UgcmVtb3ZlIHRoZSBkcml2ZXIgd2hpY2ggd2lsbCBj
-YWxsIGF0OTFfYWRjX3JlbW92ZQo+PiA+PiAgICB0byBtYWtlIGNsZWFudXAsIHRoZXJlIG1heSBi
-ZSBhIHVuZmluaXNoZWQgd29yay4KPj4gPj4KPj4gPj4gVGhlIHBvc3NpYmxlIHNlcXVlbmNlIGlz
-IGFzIGZvbGxvd3M6Cj4+ID4+Cj4+ID4+IEZpeCBpdCBieSBmaW5pc2hpbmcgdGhlIHdvcmsgYmVm
-b3JlIGNsZWFudXAgaW4gdGhlIGF0OTFfYWRjX3JlbW92ZQo+PiA+Pgo+PiA+PiBDUFUwICAgICAg
-ICAgICAgICAgICAgQ1BVMQo+PiA+Pgo+PiA+PiAgICAgICAgICAgICAgICAgICAgICB8YXQ5MV9h
-ZGNfd29ya3FfaGFuZGxlcgo+PiA+PiBhdDkxX2FkY19yZW1vdmUgICAgIHwKPj4gPj4gaWlvX2Rl
-dmljZV91bnJlZ2lzdGVyfAo+PiA+PiBpaW9fZGV2X3JlbGVhc2UgICAgIHwKPj4gPj4ga2ZyZWUo
-aWlvX2Rldl9vcGFxdWUpO3wKPj4gPj4gICAgICAgICAgICAgICAgICAgICAgfAo+PiA+PiAgICAg
-ICAgICAgICAgICAgICAgICB8aWlvX3B1c2hfdG9fYnVmZmVycwo+PiA+PiAgICAgICAgICAgICAg
-ICAgICAgICB8Jmlpb19kZXZfb3BhcXVlLT5idWZmZXJfbGlzdAo+PiA+PiAgICAgICAgICAgICAg
-ICAgICAgICB8Ly91c2UKPj4gPj4gRml4ZXM6IDIzZWMyNzc0ZjFjYyAoImlpbzogYWRjOiBhdDkx
-LXNhbWE1ZDJfYWRjOiBhZGQgc3VwcG9ydCBmb3IgcG9zaXRpb24gYW5kIHByZXNzdXJlIGNoYW5u
-ZWxzIikKPj4gPj4gU2lnbmVkLW9mZi1ieTogWmhlbmcgV2FuZyA8enl5dGx6Lnd6QDE2My5jb20+
-Cj4+ID4+IC0tLQo+PiA+PiAgIGRyaXZlcnMvaWlvL2FkYy9hdDkxLXNhbWE1ZDJfYWRjLmMgfCAy
-ICsrCj4+ID4+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQo+PiA+Pgo+PiA+PiBk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9paW8vYWRjL2F0OTEtc2FtYTVkMl9hZGMuYyBiL2RyaXZlcnMv
-aWlvL2FkYy9hdDkxLXNhbWE1ZDJfYWRjLmMKPj4gPj4gaW5kZXggNTBkMDJlNWZjNmZjLi4xYjk1
-ZDE4ZDllMGIgMTAwNjQ0Cj4+ID4+IC0tLSBhL2RyaXZlcnMvaWlvL2FkYy9hdDkxLXNhbWE1ZDJf
-YWRjLmMKPj4gPj4gKysrIGIvZHJpdmVycy9paW8vYWRjL2F0OTEtc2FtYTVkMl9hZGMuYwo+PiA+
-PiBAQCAtMjQ5NSw2ICsyNDk1LDggQEAgc3RhdGljIGludCBhdDkxX2FkY19yZW1vdmUoc3RydWN0
-IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4gPj4gICAJc3RydWN0IGlpb19kZXYgKmluZGlvX2Rl
-diA9IHBsYXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOwo+PiA+PiAgIAlzdHJ1Y3QgYXQ5MV9hZGNf
-c3RhdGUgKnN0ID0gaWlvX3ByaXYoaW5kaW9fZGV2KTsKPj4gPj4gICAKPj4gPj4gKwlkaXNhYmxl
-X2lycV9ub3N5bmMoc3QtPmlycSk7Cj4+ID4+ICsJY2FuY2VsX3dvcmtfc3luYygmc3QtPnRvdWNo
-X3N0LndvcmtxKTsgIAo+PiA+IEknZCBsaWtlIHNvbWUgaW5wdXQgZm9ybSBzb21lb25lIG1vcmUg
-ZmFtaWxpYXIgd2l0aCB0aGlzIGRyaXZlciB0aGFuIEkgYW0uCj4+ID4KPj4gPiBJbiBwYXJ0aWN1
-bGFyLCB3aGlsc3QgaXQgZml4ZXMgdGhlIGJ1ZyBzZWVuIEknbSBub3Qgc3VyZSB3aGF0IHRoZSBt
-b3N0Cj4+ID4gbG9naWNhbCBvcmRlcmluZyBmb3IgdGhlIGRpc2FibGUgaXMgb3IgdGhlIGJlc3Qg
-d2F5IHRvIGRvIGl0Lgo+PiA+Cj4+ID4gSSdkIHByZWZlciB0byBzZWUgdGhlIGlycSBjdXQgb2Zm
-IGF0IHNvdXJjZSBieSBkaXNhYmxpbmcgaXQgYXQgdGhlIGRldmljZQo+PiA+IGZlYXR1cmUgdGhh
-dCBpcyBnZW5lcmF0aW5nIHRoZSBpcnEgZm9sbG93ZWQgYnkgY2FuY2VsbGluZyBvciB3YWl0aW5n
-IGZvcgo+PiA+IGNvbXBsZXRpb24gb2YgYW55IGluIGZsaWdodCB3b3JrLiAgCj4+IFRoZSB1c3Vh
-bGx5IHdheSB5b3UnZCBkbyB0aGlzIGJ5IGNhbGxpbmcgZnJlZV9pcnEoKSBiZWZvcmUgdGhlIAo+
-PiBjYW5jZWxfd29ya19zeW5jKCkuCj4KPkknZCBnbyBhIGxpdHRsZSBmdXJ0aGVyIHRoYW4gdGhh
-dCBhbmQgZGlzYWJsZSB0aGUgaW50ZXJydXB0IHNvdXJjZSBhdCB0aGUKPmRldmljZSAoaWYgcG9z
-c2libGUpIHRoZW4gY2FsbCBmcmVlX2lycSgpIHRoZW4gY2FuY2VsX3dvcmtfc3luYygpCj4KPk90
-aGVyd2lzZSB0aGUgZGV2aWNlIGlzIG1lcnJpbHkgbW9uaXRvcmluZyBzb21ldGhpbmcgYW5kIGdl
-bmVyYXRpbmcgaW50ZXJydXB0cwo+dGhhdCB3ZSBkb24ndCBjYXJlIGFib3V0LiAgTWlnaHQgd2Vs
-bCBiZSB3YXN0aW5nIHBvd2VyIGRvaW5nIHRoYXQsIHRob3VnaCBJIGhhdmVuJ3QKPmNoZWNrZWQg
-dGhlIGZsb3cgaW4gdGhpcyBwYXJ0aWN1bGFyIGNhc2UuCgo+CgoKCkRlYXIgTGFycy1QZXRlciBD
-bGF1c2VuLApUaGFuayB5b3UgZm9yIHlvdXIgcmVzcG9uc2UgdG8gbXkgcXVlc3Rpb24uIEkgYXBw
-cmVjaWF0ZSB5b3VyIHN1Z2dlc3Rpb24gdG8gZGlzYWJsZSB0aGUgaW50ZXJydXB0IHNvdXJjZSBh
-dCB0aGUgZGV2aWNlIGJlZm9yZSBjYWxsaW5nIGZyZWVfaXJxKCkgYW5kIGNhbmNlbF93b3JrX3N5
-bmMoKS4gCkhvd2V2ZXIsIEkgYW0gbm90IHN1cmUgd2hpY2ggc3BlY2lmaWMgZnVuY3Rpb24gdG8g
-dXNlIGluIG9yZGVyIHRvIGFjaGlldmUgdGhpcy4gCkNhbiB5b3UgcGxlYXNlIHByb3ZpZGUgbW9y
-ZSBpbmZvcm1hdGlvbiBvbiB3aGljaCBmdW5jdGlvbiB0byB1c2UgYW5kIGhvdyB0byB1c2UgaXQ/
-CgpUaGFuayB5b3UgdmVyeSBtdWNoIGZvciB5b3VyIGhlbHAuCgpCZXN0IHJlZ2FyZHMsClpoZW5n
-IFdhbmcKCj5Kb25hdGhhbgo=
+Similar to commit 4c9d410f32b3 ("initramfs: Check timestamp to prevent
+broken cpio archive"), except asserts that the timestamp is
+non-negative. This can happen when the KBUILD_BUILD_TIMESTAMP is a value
+before UNIX epoch, which may be set when making reproducible builds that
+don't want to look like they use a valid date.
+
+While support for dates before 1970 might not be supported, this is more
+about preventing undetected CPIO corruption. The printf's use a minimum
+length format specifier, and will happily make the field longer than 8
+characters if they need to.
+
+Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+
+---
+
+Ran into this when setting KBUILD_BUILD_TIMESTAMP=0000-01-01. The kernel
+builds and boots to an initramfs just fine, but inexplicably failed to
+load any root disks. It was a pain to debug, because the first sign of
+an issue was so deep into the boot sequence.
+---
+ usr/gen_init_cpio.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/usr/gen_init_cpio.c b/usr/gen_init_cpio.c
+index ee01e40e8bc6..61230532fef1 100644
+--- a/usr/gen_init_cpio.c
++++ b/usr/gen_init_cpio.c
+@@ -353,6 +353,12 @@ static int cpio_mkfile(const char *name, const char *location,
+ 		buf.st_mtime = 0xffffffff;
+ 	}
+ 
++	if (buf.st_mtime < 0) {
++		fprintf(stderr, "%s: Timestamp negative, clipping.\n",
++			location);
++		buf.st_mtime = 0;
++	}
++
+ 	if (buf.st_size > 0xffffffff) {
+ 		fprintf(stderr, "%s: Size exceeds maximum cpio file size\n",
+ 			location);
+@@ -602,10 +608,10 @@ int main (int argc, char *argv[])
+ 	/*
+ 	 * Timestamps after 2106-02-07 06:28:15 UTC have an ascii hex time_t
+ 	 * representation that exceeds 8 chars and breaks the cpio header
+-	 * specification.
++	 * specification. Negative timestamps similarly exceed 8 chars.
+ 	 */
+-	if (default_mtime > 0xffffffff) {
+-		fprintf(stderr, "ERROR: Timestamp too large for cpio format\n");
++	if (default_mtime > 0xffffffff || default_mtime < 0) {
++		fprintf(stderr, "ERROR: Timestamp out of range for cpio format\n");
+ 		exit(1);
+ 	}
+ 
+
+base-commit: 065ffaee73892e8a3629b4cfbe635697807a3c6f
+-- 
+2.39.2
+
