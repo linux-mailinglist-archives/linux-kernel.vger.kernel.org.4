@@ -2,179 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ED96C0A7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769F96C0A83
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjCTGUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 02:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S229810AbjCTGW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 02:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCTGUr (ORCPT
+        with ESMTP id S229561AbjCTGW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 02:20:47 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0C7C646
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:20:46 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id ja10so11375628plb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 23:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679293246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mPw1aq0QjTgBTki7NjgMvgDoXxaJ95IR1hFLPYWhd+w=;
-        b=AwL0laUVjYeqTC3RqjeRLaH81efCtRGmrjT71+7rJRogyZR1KS8rfNZjdoHkYrYZhy
-         BvSOJVcY9Sb+kqwsqKYPHqlCReTAMxrFpkp9ZWa7Dfz4N3X0kO7b5hrWQO30Tt1JMzDV
-         yuzZIesJruzAvdFmo/4VZGWBq1gwPDFO3cP2Oil7xAxLMC5nwFSIe4ty9r7DmnzUpQl4
-         PnG3IZtpU8n22IHR7QRHublm95XumcSmsM+RnCEBkMfHYp9dfDsUHsFmFzS2V2JPvZQm
-         +NOikiD/S4fZHleSpgf+c5pWkENYj6iWLqqCghE5ddLfj8ToifvCxby9bLVTPdt5qJoo
-         bAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679293246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mPw1aq0QjTgBTki7NjgMvgDoXxaJ95IR1hFLPYWhd+w=;
-        b=DkSrn+XmKd8MDyf4aarVj8h79Tlcv1gJ+HqI6nbegjzQKTDvF3wthRbvf9YxnM+1Qx
-         OcGhc93YEVBThL1/52NlJ4ds8ukm47Et0ME3pF7n2iSnt7Dql5Vh7HOenZ92Qshd7DNE
-         YpNuA5sMeLK6qpVO+1RgjpeYrMJjeNMutIUJAXkmlD1UibCbaJiGWTfrliEdRKTQBDxo
-         bYwNrEbYAlDcrBw0hPoTGjRbvpYsipAVJGCUQB5e+x3dwvq1n32TiEM8pCA1Gwx5nudK
-         yO+YbMgsrI9gZe5D+yHT00D9yWx/JxQBlpSC5E6oqwTUUNcPEx0zbdfYQgW3xtqcUCUa
-         B1Rg==
-X-Gm-Message-State: AO0yUKVr/t4GMWLT7ddb/9Rkma6RNAjH0NBrV3kekrhMF1Sf0A7SaeQB
-        3p6UMefvKDq5ds6DQc8B6kDCrEwWsUnEnbL41b8=
-X-Google-Smtp-Source: AK7set/mXfRkG7aQIPSvOo0VukP3QBTwGWfLvotTux9/SlnYhi09Ssmv1YJC+EGM+zeHnyw5ntEtIEySyftHxoDHbg4=
-X-Received: by 2002:a17:903:2344:b0:1a0:561c:7276 with SMTP id
- c4-20020a170903234400b001a0561c7276mr6357569plh.1.1679293245834; Sun, 19 Mar
- 2023 23:20:45 -0700 (PDT)
+        Mon, 20 Mar 2023 02:22:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7E4C646;
+        Sun, 19 Mar 2023 23:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=kADwawNixqcaICDRyDtL0mB8imeCk2jqYVpaKH63jgI=; b=A/OgCFWm0cIkr+Qzit0XL1+4Tz
+        rL5i5OQa9fZUH9Eqx/cs+6DdIGxizJekL6tFgcvxz67QGPfLWYKyRSqhO4BdOdHcJJKv+xL8H4hNy
+        wZowZTLX5HinGbP0UBCXA1CeNPx8xCL3ZfX4VitR+lFDfnn5UGKBxP/STrnGEfbMJj6uXxxCDscLW
+        Svs7j76A6jbghTCAPZa1X7p0G0VZ76WJIVrpLFAf+dckgnHdISHQH8Hu0A3hjkCHPxAv0rEn2SIkE
+        STEfVOUmwGAcD2c47WHRIt+htexq12QHE3ek7vN3peCRYXh+vbUGEOrfiZZ+ny2dcHH+FxVN3w4Y4
+        q6klqTcg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pe8uX-008DwH-1A;
+        Mon, 20 Mar 2023 06:22:25 +0000
+Date:   Sun, 19 Mar 2023 23:22:25 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        Martijn Coenen <maco@android.com>, linux-block@vger.kernel.org
+Subject: Re: [PATCH v2] loop: LOOP_CONFIGURE: send uevents for partitions
+Message-ID: <ZBf7oYDLoFzOSabH@infradead.org>
+References: <20230312191031.551204-1-hi@alyssa.is>
+ <ZBHo2AXYM0iVkXvO@infradead.org>
+ <20230318015005.czydsbqpw6hnej3z@x220>
 MIME-Version: 1.0
-References: <20230314075345.1325187-1-suagrfillet@gmail.com>
- <20230316092910.doolw3xiuwwakile@bogus> <CAAYs2=gaTkA2f65SXkexxAUkSPxgaPNQGdkSKS4pYmJ3hO7z-Q@mail.gmail.com>
- <20230316145045.if3iw5qdtfjyroea@bogus>
-In-Reply-To: <20230316145045.if3iw5qdtfjyroea@bogus>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Mon, 20 Mar 2023 06:20:34 +0000
-Message-ID: <CAAYs2=gtgcKthFyb=Vz6VJZamyfedoXJRXfsrAtLzj0-d=D89w@mail.gmail.com>
-Subject: Re: [PATCH V2] arch_topology: Clear LLC sibling when cacheinfo teardown
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        conor.dooley@microchip.com, ionela.voinescu@arm.com,
-        Pierre.Gondois@arm.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230318015005.czydsbqpw6hnej3z@x220>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sudeep Holla <sudeep.holla@arm.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8816=E6=
-=97=A5=E5=91=A8=E5=9B=9B 14:51=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Mar 16, 2023 at 10:30:52AM +0000, Song Shuai wrote:
-> > Sudeep Holla <sudeep.holla@arm.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8816=
-=E6=97=A5=E5=91=A8=E5=9B=9B 09:29=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > On Tue, Mar 14, 2023 at 03:53:45PM +0800, Song Shuai wrote:
-> > > > The teardown of CPUHP_AP_BASE_CACHEINFO_ONLINE now only invokes
-> > > > free_cache_attributes() to clear share_cpu_map of cacheinfo list.
-> > > > At the same time, clearing cpu_topology[].llc_sibling is
-> > > > called quite late at the teardown code in hotplug STARTING section.
-> > > >
-> > > > To avoid the incorrect LLC sibling masks generated, move its cleari=
-ng
-> > > > right after free_cache_attributes().
-> > > >
-> > >
-> > > Technically in terms of flow/timing this is correct. However I would =
-like
-> > > to know if you are seeing any issues without this change ?
-> > >
-> > > Technically, if a cpu is hotplugged out, the cacheinfo is reset first
-> > > and then the topology. Until the cpu is removes, the LLC info in the
-> > > topology is still valid. Also I am not sure if anything gets schedule=
-d
-> > > and this LLC info is utilised once the teardown of CPUHP_AP_BASE_CACH=
-EINFO_ONLINE
-> > > has started.
-> >
-> > There is no visible issue in the entire offline process(eg: echo 0 > on=
-line).
-> >
-> > However, when I hotplugged out the CPU into the state before CACHEINFO_=
-ONLINE on
-> > my kernel with the CONFIG_CPU_HOTPLUG_STATE_CONTROL configured,
-> > the share_cpu_map had been updated but llc_sibling had not, which
-> > would result in a trivial issue:
-> >
-> > At the end of stepped hotplugging out, the cpuset_hotplug_work would
-> > be flushed and then sched domain would be rebuilt
-> > where the **cpu_coregroup_mask** in sched_domain_topology got
-> > incorrect llc_sibling, but the result of rebuilding was correct due
-> > to the protection of cpu_active_mask.
-> >
->
-> Wait, I would like to disagree there. While I agree there is inconsistenc=
-y
-> between cacheinfo cpu_shared_map and the llc_sibling in the tear down pat=
-h,
-> it is still correct and terming it as "incorrect" llc_sibling is wrong.
-> The cpu is not yet completely offline yet and hence the llc_sibling
-> represents all the cpus it shares LLC. When the cpu is offlined, the
-> cpu_topology is anyway removed. So I don't see it as an issue at all.
-> If you follow __cpu_disable()->remove_cpu_topology(), it gets updated the=
-re.
-> If the sched_domain_topology is not rebuilt after that, then we may have
-> other issues. What am I missing ?
->
-> I am not bothered by cacheinfo cpu_shared_map and cpu_topology llc_siblin=
-g
-> mismatch for short window during the teardown as technically until the cp=
-u
-> is torndown, it is sharing llc with llc_sibling and it is definitely not
-> wrong to have it in there.
->
-> > The stepped hotplugging may not be used in the production environment,
-> > but the issue existed.
->
-> What issue ? If it is just inconsistency, then I am fine to ignore. That
-> is just artificial and momentary and it impacts nothing.
+On Sat, Mar 18, 2023 at 01:50:05AM +0000, Alyssa Ross wrote:
+> If you say so!  I had trouble understanding which parts of the function
+> uevents needed to be suppressed for, so I was trying to move as little
+> as possible out of that section.
+> 
+> What happens next?  I'm still getting up to speed on the kernel
+> development process — will you submit this as a patch with a patch body
+> and a S-o-b?  Or am I supposed to do something with it?
 
-My original point is to clear the llc_sibling right after clearing of
-share_cpu_map
-like what you did in 3fcbf1c77d08.
+Given that you're done all the hard work, and I've just reduced the
+critical section, I'd prefer to give all the credit to you.  If you're
+fine with it, I'll send out this version later:
 
-And the ~~issue~~ I described above was found when I manually tested
-the 'base/cacheinfo:online' hpstate,
-which can be triggered by the following commands:
+---
+From 4648015b4193c81d3de8c1632876314b4a2ab40d Mon Sep 17 00:00:00 2001
+Subject: loop: LOOP_CONFIGURE: send uevents for partitions
 
-```
-hpid=3D$(sed -n '/cacheinfo/s/:.*//p' /sys/devices/system/cpu/hotplug/state=
-s)
-echo $((hpid-1)) > /sys/devices/system/cpu/cpu2/hotplug/target
+LOOP_CONFIGURE is, as far as I understand it, supposed to be a way to
+combine LOOP_SET_FD and LOOP_SET_STATUS64 into a single syscall.  When
+using LOOP_SET_FD+LOOP_SET_STATUS64, a single uevent would be sent for
+each partition found on the loop device after the second ioctl(), but
+when using LOOP_CONFIGURE, no such uevent was being sent.
 
-```
+In the old setup, uevents are disabled for LOOP_SET_FD, but not for
+LOOP_SET_STATUS64.  This makes sense, as it prevents uevents being
+sent for a partially configured device during LOOP_SET_FD - they're
+only sent at the end of LOOP_SET_STATUS64.  But for LOOP_CONFIGURE,
+uevents were disabled for the entire operation, so that final
+notification was never issued.  To fix this, reduce the critical
+section to exclude the loop_reread_partitions() call, which causes
+the uevents to be issued, to after uevents are re-enabled, matching
+the behaviour of the LOOP_SET_FD+LOOP_SET_STATUS64 combination.
 
-Anyway, the short inconsistency window you explained seems acceptable to me=
-.
+I noticed this because Busybox's losetup program recently changed from
+using LOOP_SET_FD+LOOP_SET_STATUS64 to LOOP_CONFIGURE, and this broke
+my setup, for which I want a notification from the kernel any time a
+new partition becomes available.
 
->
-> > Even in the entire offline process, it's possible that a future user
-> > gets wrong the llc_sibling when accessing it concurrently or right
-> > after the teardown of CACHEINFO_ONLINE.
->
-> As I said, even if someone access it, it is not wrong information.
->
-> --
-> Regards,
-> Sudeep
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+[hch: reduced the critical section]
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
+---
+ drivers/block/loop.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index 839373451c2b7d..9d61c027185141 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1010,9 +1010,6 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+ 	/* This is safe, since we have a reference from open(). */
+ 	__module_get(THIS_MODULE);
+ 
+-	/* suppress uevents while reconfiguring the device */
+-	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 1);
+-
+ 	/*
+ 	 * If we don't hold exclusive handle for the device, upgrade to it
+ 	 * here to avoid changing device under exclusive owner.
+@@ -1067,6 +1064,9 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+ 		}
+ 	}
+ 
++	/* suppress uevents while reconfiguring the device */
++	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 1);
++
+ 	disk_force_media_change(lo->lo_disk, DISK_EVENT_MEDIA_CHANGE);
+ 	set_disk_ro(lo->lo_disk, (lo->lo_flags & LO_FLAGS_READ_ONLY) != 0);
+ 
+@@ -1109,17 +1109,17 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+ 	if (partscan)
+ 		clear_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
+ 
++	/* enable and uncork uevent now that we are done */
++	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
++
+ 	loop_global_unlock(lo, is_loop);
+ 	if (partscan)
+ 		loop_reread_partitions(lo);
++
+ 	if (!(mode & FMODE_EXCL))
+ 		bd_abort_claiming(bdev, loop_configure);
+ 
+-	error = 0;
+-done:
+-	/* enable and uncork uevent now that we are done */
+-	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
+-	return error;
++	return 0;
+ 
+ out_unlock:
+ 	loop_global_unlock(lo, is_loop);
+@@ -1130,7 +1130,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+ 	fput(file);
+ 	/* This is safe: open() is still holding a reference. */
+ 	module_put(THIS_MODULE);
+-	goto done;
++	return error;
+ }
+ 
+ static void __loop_clr_fd(struct loop_device *lo, bool release)
+-- 
+2.39.2
 
-
---=20
-Thanks,
-Song
