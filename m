@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1006C1215
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B35696C121B
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjCTMnD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 08:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S231448AbjCTMnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjCTMnB (ORCPT
+        with ESMTP id S231438AbjCTMni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:43:01 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFEA10263;
-        Mon, 20 Mar 2023 05:42:57 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id i24so12778425qtm.6;
-        Mon, 20 Mar 2023 05:42:57 -0700 (PDT)
+        Mon, 20 Mar 2023 08:43:38 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2E59776;
+        Mon, 20 Mar 2023 05:43:34 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id x15so1662301pjk.2;
+        Mon, 20 Mar 2023 05:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679316214;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CuPNRur3NtDnFJVCvDkEsVvpqOyVBKyvwyaXnfO9pqQ=;
+        b=QMgf8Le2567Br9ksKL7GWK1o3CI5/d/geLI8q2Tpae+sN4p5dtWy0TU8d154IWd9el
+         k2eHxUtxg18PFCvrZv3gGPh9Yu+3x9+CdOyl/alM0efOpo4jys4fk0iLr6xWv+lvxVSb
+         8LX4tkFuQRp3DNPaY8qW90NokPcLNXzF5uhztu8SmG2W3b3eBEqjNuWo4JSRHPtV6CSL
+         w6bzCX8NhIdahw8f31d9/B8Sonxo7V4u/iijvJ0H26p4dvAIssh4cvlVD+HYYN/tiArX
+         aHbbMJ5/nJFCHZeqY4DBSFtuZdd27bGIAqxaH1dCR1WteITU5JG/oSO0FIfONDsuJGeQ
+         ZI5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679316176;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=//iKM8WVSdTXQc3NnhUQiu6Eif/KvpjKLv29xeD+zvo=;
-        b=R6VkeLDSE6HjxGrNFV7Tl8nWkInxTTCCwLIrvIwyHicgnT3LICnaDm/lVeZnZ8oaaj
-         rCYpWXwbtDWtpAG2QijQGFsNJpzeDY8IRW26CfRigUsRHCZb2w1x1ovlBEAGLWjyZPxT
-         a2tx+EQnPVjddK5VyHtY23vuS6BrRlXAn63AfOhKB9XxoblkHZN0Wq6u8Y7NQL4MulHa
-         +a+bfI4tgPhDpbra1/E9O7pmUcgXPK8iCKU8YL40lucmqld3+FP/j/M9BZUeFxxYSMYv
-         a4sTlI3MJ71qjaAy6IFNjPZV7/78QpLUlFFSZU291vfXiA2hnRnoLqDiAVogF0asPHe8
-         urSw==
-X-Gm-Message-State: AO0yUKWgYwDuSpOrM0nSH350MjRvePbTsP9fO8gjuY11aoKKCCllFNuK
-        BccUFTsmbim32A+te5fpIxTnkrhO2OmdKA==
-X-Google-Smtp-Source: AK7set91qQVVDWqrLQwdgARRsRvtjQyGR3O2u7aLS7S3h7iInfJ+oJ230bq4ENVWyYd8IKQmh+7tCA==
-X-Received: by 2002:a05:622a:174c:b0:3bf:d0c7:12df with SMTP id l12-20020a05622a174c00b003bfd0c712dfmr25493480qtk.63.1679316175894;
-        Mon, 20 Mar 2023 05:42:55 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id x16-20020ae9e910000000b007435a646354sm528189qkf.0.2023.03.20.05.42.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 05:42:55 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id e194so12861160ybf.1;
-        Mon, 20 Mar 2023 05:42:55 -0700 (PDT)
-X-Received: by 2002:a5b:c47:0:b0:b56:1f24:7e9f with SMTP id
- d7-20020a5b0c47000000b00b561f247e9fmr5448318ybr.12.1679316174827; Mon, 20 Mar
- 2023 05:42:54 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679316214;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CuPNRur3NtDnFJVCvDkEsVvpqOyVBKyvwyaXnfO9pqQ=;
+        b=g7YMRlcF91a78Xi+8w+c8lKfDxZs4/3GuUgNkyOKgb4D/KJKaUz3jMwu/+TS4VVkEO
+         jKWjHIyTCGmimqJnLGDaIZrQ3BSzlEJuq5zfZjBxr0VrMElrIjh6FsJnhfaEdBMXLUWH
+         sMo98FEFtfZqoCDYJ2PF/fpUVL9AC6Gz9DjnPMBME2FDR4wkf0PK6LSleSnDq2w4xCCp
+         CotCl1av24ZbIVyo9JFSyxfHTFU4donsDjyruln113RZJy234gqps7U8jHcc5ruQizb/
+         9EofxxZU1p8/qD5e+BJ3l32sAGEAz0pycwg9yoDSQr9h2eEsnZ1OOfXPW5ZtPIA3Wzpv
+         yPPg==
+X-Gm-Message-State: AO0yUKUWfw11uQESVXWgzH1Nm2PKO05Kz9qQ1fHr+lnlan6Bb6afhqvU
+        4RxtQj+ALUa1d6Alfvg+5Z8=
+X-Google-Smtp-Source: AK7set9exICfpZxGY8h+eBzFIKrFFkrk0yOXMxizkoAm5tACLSpbGCmlrUA5F82wFem4X1ugpyK80A==
+X-Received: by 2002:a17:90b:4acf:b0:23d:9a3:f571 with SMTP id mh15-20020a17090b4acf00b0023d09a3f571mr19188670pjb.20.1679316214106;
+        Mon, 20 Mar 2023 05:43:34 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-6.three.co.id. [180.214.232.6])
+        by smtp.gmail.com with ESMTPSA id p12-20020a17090a2d8c00b0023440af7aafsm6114484pjd.9.2023.03.20.05.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 05:43:33 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7343A1065D0; Mon, 20 Mar 2023 19:43:29 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH] Documentation: maintainer-tip: Rectify link to "Describe your changes" section of submitting-patches.rst
+Date:   Mon, 20 Mar 2023 19:43:27 +0700
+Message-Id: <20230320124327.174881-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230306040037.20350-1-rdunlap@infradead.org> <20230306040037.20350-8-rdunlap@infradead.org>
- <056df6d548ad0e4f7f4ccb2782744b165ce20578.camel@physik.fu-berlin.de>
- <CAMuHMdU+tsKuONm9iPqqTFSnRT2zaV3zogYgc-+vCp6x-ruQ_w@mail.gmail.com> <01f84314b2499b6859a4826ecf7363635e66a4fc.camel@physik.fu-berlin.de>
-In-Reply-To: <01f84314b2499b6859a4826ecf7363635e66a4fc.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 20 Mar 2023 13:42:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVR78EXTVd7ThUEv6rxL8aHSyAoC_5z8KyAPmiTyww85w@mail.gmail.com>
-Message-ID: <CAMuHMdVR78EXTVd7ThUEv6rxL8aHSyAoC_5z8KyAPmiTyww85w@mail.gmail.com>
-Subject: Re: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1511; i=bagasdotme@gmail.com; h=from:subject; bh=FAEl/7SkBqFPoHqShwOaCVSmuT0ZoOhqKjAWrvmRTI8=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkSIa8U3zaEsvBwi3b9MjvFo2LWZiqYvyjNcfopsfPiY Xftf6zuKGVhEONikBVTZJmUyNd0epeRyIX2tY4wc1iZQIYwcHEKwETCMhn+qXt+UL5/0Lpl1bbP e0IXNxxJX/GE/ZBJSv8CYQnuBvvjqxj+R3zxWmVvsKvj2htVnsUpqQ83ld7a+WzHCZ65otdnv7V cwQcA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,141 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+The general changelog rules for the tip tree refers to "Describe your
+changes" section of submitting patches guide. However, the internal link
+reference targets to non-existent "submittingpatches" label, which
+brings reader to the top of the linked doc.
 
-On Mon, Mar 20, 2023 at 10:13 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Mon, 2023-03-20 at 09:16 +0100, Geert Uytterhoeven wrote:
-> > On Sun, Mar 19, 2023 at 9:49 PM John Paul Adrian Glaubitz
-> > <glaubitz@physik.fu-berlin.de> wrote:
-> > > On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
-> > > > Fix a build error in mcount.S when CONFIG_PRINTK is not enabled.
-> > > > Fixes this build error:
-> > > >
-> > > > sh2-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
-> > > > (.text+0xec): undefined reference to `dump_stack'
-> > > >
-> > > > Fixes: e460ab27b6c3 ("sh: Fix up stack overflow check with ftrace disabled.")
-> > > > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> > > > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> > > > Cc: Rich Felker <dalias@libc.org>
-> > > > Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > Cc: stable@vger.kernel.org
-> > > > ---
-> > > > v2: add PRINTK to STACK_DEBUG dependency (thanks, Geert)
-> > > > v3: skipped
-> > > > v4: refresh & resend
-> > > >
-> > > >  arch/sh/Kconfig.debug |    2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff -- a/arch/sh/Kconfig.debug b/arch/sh/Kconfig.debug
-> > > > --- a/arch/sh/Kconfig.debug
-> > > > +++ b/arch/sh/Kconfig.debug
-> > > > @@ -15,7 +15,7 @@ config SH_STANDARD_BIOS
-> > > >
-> > > >  config STACK_DEBUG
-> > > >       bool "Check for stack overflows"
-> > > > -     depends on DEBUG_KERNEL
-> > > > +     depends on DEBUG_KERNEL && PRINTK
-> > > >       help
-> > > >         This option will cause messages to be printed if free stack space
-> > > >         drops below a certain limit. Saying Y here will add overhead to
-> > >
-> > > I can't really test this change as the moment I am enabling CONFIG_STACK_DEBUG,
-> > > the build fails with:
-> > >
-> > >   CC      scripts/mod/devicetable-offsets.s
-> > > sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
-> > > make[1]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
-> > > make[1]: *** Waiting for unfinished jobs....
-> > > sh4-linux-gcc: error: -pg and -fomit-frame-pointer are incompatible
-> > > make[1]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
-> > > make: *** [Makefile:1286: prepare0] Error 2
-> > >
-> > > So, I assume we need to strip -fomit-frame-pointer from KBUILD_CFLAGS, correct?
-> > >
-> > > I tried this change, but that doesn't fix it for me:
-> > >
-> > > diff --git a/arch/sh/Makefile b/arch/sh/Makefile
-> > > index 5c8776482530..83f535b73835 100644
-> > > --- a/arch/sh/Makefile
-> > > +++ b/arch/sh/Makefile
-> > > @@ -173,6 +173,7 @@ KBUILD_AFLAGS               += $(cflags-y)
-> > >
-> > >  ifeq ($(CONFIG_MCOUNT),y)
-> > >    KBUILD_CFLAGS += -pg
-> > > +  KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS))
-> > >  endif
-> > >
-> > >  ifeq ($(CONFIG_DWARF_UNWINDER),y)
-> > >
-> > > Any ideas?
-> >
-> > Please try with "+=" instead of ":=".
->
-> That doesn't work either. I tried the following, but that didn't strip -fomit-frame-pointer:
+Correct the target. No changes to submitting-patches.rst since the
+required label is already there.
 
-Oops, obviously all of that happened before my morning coffee ;-)
+Fixes: 31c9d7c8297558 ("Documentation/process: Add tip tree handbook")
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ This patch is based on core/urgent branch of tip tree.
 
-Makefile has:
+ Documentation/process/maintainer-tip.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    ifdef CONFIG_FRAME_POINTER
-    KBUILD_CFLAGS   += -fno-omit-frame-pointer -fno-optimize-sibling-calls
-    KBUILD_RUSTFLAGS += -Cforce-frame-pointers=y
-    else
-    # Some targets (ARM with Thumb2, for example), can't be built with frame
-    # pointers.  For those, we don't have FUNCTION_TRACER automatically
-    # select FRAME_POINTER.  However, FUNCTION_TRACER adds -pg, and this is
-    # incompatible with -fomit-frame-pointer with current GCC, so we don't use
-    # -fomit-frame-pointer with FUNCTION_TRACER.
-    # In the Rust target specification, "frame-pointer" is set explicitly
-    # to "may-omit".
-    ifndef CONFIG_FUNCTION_TRACER
-    KBUILD_CFLAGS   += -fomit-frame-pointer
-    endif
-    endif
+diff --git a/Documentation/process/maintainer-tip.rst b/Documentation/process/maintainer-tip.rst
+index 572a3289c9cbf3..178c95fd17dcad 100644
+--- a/Documentation/process/maintainer-tip.rst
++++ b/Documentation/process/maintainer-tip.rst
+@@ -128,8 +128,8 @@ uppercase letter and should be written in imperative tone.
+ Changelog
+ ^^^^^^^^^
+ 
+-The general rules about changelogs in the process documentation, see
+-:ref:`Documentation/process/ <submittingpatches>`, apply.
++The general rules about changelogs in the :ref:`Submitting patches guide
++<describe_changes>`, apply.
+ 
+ The tip tree maintainers set value on following these rules, especially on
+ the request to write changelogs in imperative mood and not impersonating
 
-Your config probably has CONFIG_FRAME_POINTER set?
-
-    arch/sh/Kconfig.debug=config DWARF_UNWINDER
-    arch/sh/Kconfig.debug-  bool "Enable the DWARF unwinder for stacktraces"
-    arch/sh/Kconfig.debug-  depends on DEBUG_KERNEL
-    arch/sh/Kconfig.debug:  select FRAME_POINTER
-
-You should make sure that cannot happen when CONFIG_FUNCTION_TRACER
-is enabled. I.e. make DWARF_UNWINDER depend on !FUNCTION_TRACER?
-
-Other architectures do something similar:
-
-    arch/sparc/Kconfig.debug:config FRAME_POINTER
-    arch/sparc/Kconfig.debug-       bool
-    arch/sparc/Kconfig.debug-       depends on MCOUNT
-
-    arch/x86/Kconfig.debug:config FRAME_POINTER
-    arch/x86/Kconfig.debug- depends on !UNWINDER_ORC && !UNWINDER_GUESS
-    arch/x86/Kconfig.debug- bool
-
-Probably you need to adjust the following, too:
-
-    lib/Kconfig.debug:config FRAME_POINTER
-    lib/Kconfig.debug-      bool "Compile the kernel with frame pointers"
-    lib/Kconfig.debug-      depends on DEBUG_KERNEL && (M68K || UML ||
-SUPERH) || ARCH_WANT_FRAME_POINTERS
-    lib/Kconfig.debug-      default y if (DEBUG_INFO && UML) ||
-ARCH_WANT_FRAME_POINTERS
-
-i.e. drop SUPERH from the list above, and select ARCH_WANT_FRAME_POINTERS
-if !FUNCTION_TRACER.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+base-commit: 3e2619c4ebba2cab8414c55b131b7a28f628de3b
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+An old man doll... just what I always wanted! - Clara
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
