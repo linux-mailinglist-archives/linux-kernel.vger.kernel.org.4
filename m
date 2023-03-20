@@ -2,125 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4238B6C2382
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE2B6C237F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjCTVVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S230109AbjCTVUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCTVV2 (ORCPT
+        with ESMTP id S229819AbjCTVUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:21:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DE22B639;
-        Mon, 20 Mar 2023 14:21:25 -0700 (PDT)
+        Mon, 20 Mar 2023 17:20:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5FB2887D;
+        Mon, 20 Mar 2023 14:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679347286; x=1710883286;
+  t=1679347231; x=1710883231;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=ee0MocZZvuzZtMlJQpwzZ7fSZHmdq283DMPVpuyM/Bk=;
-  b=oDjREvV2oqxkqRWffqQ+BQxUZdZZOPBgHLYmBgbTG5vp+f2olT0OqROW
-   jTPbSei4aISrFR9vjHV7zYZ7Lj3J34FcKS5Ews2xriacxWF2aIcbyF4ev
-   /7+enHvQXsBRJSmLHt4Faj1Dkll+ValyAxZQRX7BolyD2y3EmMEGjENL/
-   2cACVeS5cQ6xXfO0EhsDy6jlU7+OIGJUWGkqbFpszsDOwpbNDueJMTk7V
-   /vE7vAjt1Sq7JxkNqv9ZBBya4oDB2yjawtFpk2b3PBTA06+lJUnsCySVY
-   l3csFbbscJq3wOzAPKM7GesCTOXurVOp4hWCg6JDCwiYip7EJV9s/nvCi
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="366507044"
+  bh=7xQHgXbzZUle4rIgGnDA5qyL/krFHQPTUEfjR3Qvmg8=;
+  b=hqVgUx+zFEatCoEdkpRFHWfnHddunI7CQduuktFIwOzY7sxTkKRgQK5y
+   p7D2zwE0ueu2A0/sSkgE863NHdsbNBGvE3KOKnm/Cem5hzUj/liT6ixAN
+   MvIqb7kSVmMbnlHEaBrWsH3Z8ueSBfHv0Zfs6ptgbxS09arFWGrI3/Q36
+   w2IT3DzuJddlA71nW/vLkGpP8hIdio8FG3GRmMrddaUUBajIuQEYn3rkD
+   d+lyNqMekUlDFhk8RxfjPfOoffa8TW+qU16CabtBM9QW5+B60EKuzzIYf
+   D01fHxwkWS9hedoQ1Z5UDIcL34AaRO4ppgmwgAXOpT+npLayaxMrA9mu0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="337498886"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="366507044"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 14:21:25 -0700
+   d="scan'208";a="337498886"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 14:20:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="683583767"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674565826"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="683583767"
-Received: from jcardiel-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.212.226.30])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 14:21:25 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Rafael J Wysocki <rjw@rjwysocki.net>
-Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [PATCH v2] ACPI: sysfs: Enable ACPI sysfs support for CCEL records
-Date:   Mon, 20 Mar 2023 14:20:19 -0700
-Message-Id: <20230320212019.2479101-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+   d="scan'208";a="674565826"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 14:20:31 -0700
+Received: from debox1-desk4.intel.com (unknown [10.251.19.209])
+        by linux.intel.com (Postfix) with ESMTP id EDEDF580110;
+        Mon, 20 Mar 2023 14:20:30 -0700 (PDT)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     irenic.rajneesh@gmail.com, rajvi.jingar@linux.intel.com,
+        david.e.box@linux.intel.com, hdegoede@redhat.com,
+        markgross@kernel.org, andy.shevchenko@gmail.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: [PATCH] platform/x86/intel/pmc: Alder Lake PCH slp_s0_residency fix
+Date:   Mon, 20 Mar 2023 14:20:29 -0700
+Message-Id: <20230320212029.3154407-1-david.e.box@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Confidential Computing Event Log (CCEL) table provides the address
-and length of the CCEL records area in UEFI reserved memory. To access
-these records, userspace can use /dev/mem to retrieve them. But
-'/dev/mem' is not enabled on many systems for security reasons.
+From: Rajvi Jingar <rajvi.jingar@linux.intel.com>
 
-So to allow user space access these event log records without the
-/dev/mem interface, add support to access it via sysfs interface. The
-ACPI driver has provided read only access to BERT records area via
-'/sys/firmware/acpi/tables/data/BERT' in sysfs. So follow the same way,
-and add support for /sys/firmware/acpi/tables/data/CCEL to enable
-read-only access to the CCEL recorids area.
+For platforms with Alder Lake PCH (Alder Lake S and Raptor Lake S) the
+slp_s0_residency attribute has been reporting the wrong value. Unlike other
+platforms, ADL PCH does not have a counter for the time that the SLP_S0
+signal was asserted. Instead, firmware uses the aggregate of the Low Power
+Mode (LPM) substate counters as the S0ix value.  Since the LPM counters run
+at a different frequency, this lead to misreporting of the S0ix time.
 
-More details about the CCEL table can be found in ACPI specification
-r6.5, sec titled "CC Event Log ACPI Table".
+Add a check for Alder Lake PCH and adjust the frequency accordingly when
+display slp_s0_residency.
 
-Original-patch-by: Haibo Xu <haibo1.xu@intel.com>
-[Original patch is for TDEL table, modified it for CCEL support]
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Fixes: bbab31101f44 ("platform/x86/intel: pmc/core: Add Alderlake support to pmc core driver")
+Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 ---
+ drivers/platform/x86/intel/pmc/core.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Changes since v1:
- * Removed unnecessary parenthesis as per Rafael's suggestion..
-
- drivers/acpi/sysfs.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-index 7f4ff56c9d42..687524b50085 100644
---- a/drivers/acpi/sysfs.c
-+++ b/drivers/acpi/sysfs.c
-@@ -458,11 +458,28 @@ static int acpi_bert_data_init(void *th, struct acpi_data_attr *data_attr)
- 	return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index e489d2175e42..61ca7c37fb02 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -66,7 +66,18 @@ static inline void pmc_core_reg_write(struct pmc_dev *pmcdev, int reg_offset,
+ 
+ static inline u64 pmc_core_adjust_slp_s0_step(struct pmc_dev *pmcdev, u32 value)
+ {
+-	return (u64)value * pmcdev->map->slp_s0_res_counter_step;
++	/*
++	 * ADL PCH does not have the SLP_S0 counter and LPM Residency counters are
++	 * used as a workaround which uses 30.5 usec tick. All other client
++	 * programs have the legacy SLP_S0 residency counter that is using the 122
++	 * usec tick.
++	 */
++	const int lpm_adj_x2 = pmcdev->map->lpm_res_counter_step_x2;
++
++	if (pmcdev->map == &adl_reg_map)
++		return (u64)value * GET_X2_COUNTER((u64)lpm_adj_x2);
++	else
++		return (u64)value * pmcdev->map->slp_s0_res_counter_step;
  }
  
-+static int acpi_ccel_data_init(void *th, struct acpi_data_attr *data_attr)
-+{
-+	struct acpi_table_ccel *ccel = th;
-+
-+	if (ccel->header.length < sizeof(struct acpi_table_ccel) ||
-+	    !ccel->log_area_start_address || !ccel->log_area_minimum_length) {
-+		kfree(data_attr);
-+		return -EINVAL;
-+	}
-+	data_attr->addr = ccel->log_area_start_address;
-+	data_attr->attr.size = ccel->log_area_minimum_length;
-+	data_attr->attr.attr.name = "CCEL";
-+
-+	return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
-+}
-+
- static struct acpi_data_obj {
- 	char *name;
- 	int (*fn)(void *, struct acpi_data_attr *);
- } acpi_data_objs[] = {
- 	{ ACPI_SIG_BERT, acpi_bert_data_init },
-+	{ ACPI_SIG_CCEL, acpi_ccel_data_init },
- };
- 
- #define NUM_ACPI_DATA_OBJS ARRAY_SIZE(acpi_data_objs)
+ static int set_etr3(struct pmc_dev *pmcdev)
+
+base-commit: 02c464b73645404654359ad21f368a13735e2850
 -- 
 2.34.1
 
