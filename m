@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF36A6C12C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82FF6C12CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjCTNKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S231570AbjCTNLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCTNKT (ORCPT
+        with ESMTP id S229684AbjCTNLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:10:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3400F970
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 06:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C3B614B7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 13:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE61C433D2;
-        Mon, 20 Mar 2023 13:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679317816;
-        bh=+ISdV6ZYvcWZ8PwpMZtUIgNfgk0uRP/Q4D+J9OXgG8s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pCpIY+wRVieNcNhhKYG5dQJSmivu8kDrwjaeQuVZXCiNuFBeWeB0ZbQJdv5dN7rGO
-         fnNsGM1zrz2i31UgJaYgIf6IVpL2G9luCA5rj7/wgi3tCj5lqze5zJMqFxGIEbKFMz
-         tz6U6sdnDs/1xL7eipu4X2lTuIc9Xfo7mcX4vpPVUyvwIXcDibZsu1TWN+hx5QZdT2
-         epjshh6W4yqfnyIaVAUQ36ORizaKwWvlg7L5FGsY6w8afbaXQL1iFHd9qcQD4pbwRP
-         cwyeg25M2cW9RkXf0FBk/cir8RSMjij0G95/GtyLrfpvxJDHKSP3E6P/QiLnFH3nx0
-         xvY/Oc545gCqA==
-Message-ID: <c2275a29-a241-8c36-0dc9-16fc8955243e@kernel.org>
-Date:   Mon, 20 Mar 2023 15:10:12 +0200
+        Mon, 20 Mar 2023 09:11:14 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914FFB76A;
+        Mon, 20 Mar 2023 06:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+/9FCDUcz/9yyumayNm7HvxGQ4k/d4p/8qwiRrkpHdI=; b=X4GyKsIv0QTVIz6ae3YmM33lHX
+        VBU9O+UrtEDNpJX70qptJmPQKFA3abRRe+j9f5PYJLaMjfBHzf6YU1XTRsWEF2tcqoWJ60HZw/ZY9
+        t6HL2p0DIxaFiiV5kemuIZVAGq682ctS2u/pInLxhO5QbmB+g835D/22Pb3Vgv1KhfDDzSDsbZy9i
+        lmpR3y1YYr6inC257Kit2JShOphUvvLieE79DRyIJFZX2I/WTKHZJQWoWcATKxDcwaJ51gtOSvX8F
+        8ycRRX0udJsYRVCLiqXafKmJKeqAWwW6QvJgu8P321g8h6kVt1ESX9K9Y+0haeuwZSWlPWykgOLCa
+        oLesLzCg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1peFHu-0093xe-1V;
+        Mon, 20 Mar 2023 13:10:58 +0000
+Date:   Mon, 20 Mar 2023 06:10:58 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v19 00/15] splice, block: Use page pinning and kill
+ ITER_PIPE
+Message-ID: <ZBhbYkTonYVY1xa4@infradead.org>
+References: <20230315163549.295454-1-dhowells@redhat.com>
+ <167890243414.54517.7660243890362126266.b4-ty@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] phy: ti: j721e-wiz: Add SGMII support in WIZ driver for
- J721E
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, vkoul@kernel.org,
-        kishon@kernel.org
-Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com
-References: <20230309092434.443550-1-s-vadapalli@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230309092434.443550-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167890243414.54517.7660243890362126266.b4-ty@kernel.dk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 09/03/2023 11:24, Siddharth Vadapalli wrote:
-> Enable full rate divider configuration support for J721E_WIZ_16G for SGMII.
+On Wed, Mar 15, 2023 at 11:47:14AM -0600, Jens Axboe wrote:
+> > [...]
 > 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Applied, thanks!
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+Dave, now that the basic patchset is in, can you resurrect the
+patch to conver the legacy direct-io code?  That would allow
+us to instantly the PAGE_REF version of the bio_release_pages,
+and also be a giant step toward never modifying page contents
+from a regular get_user_pages, and thus fix the file system
+problems around that.
