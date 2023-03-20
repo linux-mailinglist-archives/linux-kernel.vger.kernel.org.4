@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268E76C25E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60A66C25EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCTXn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S230000AbjCTXoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCTXnz (ORCPT
+        with ESMTP id S229646AbjCTXoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:43:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9799CC20
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:43:08 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id h8so53257780ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:43:08 -0700 (PDT)
+        Mon, 20 Mar 2023 19:44:20 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900E21CAFB;
+        Mon, 20 Mar 2023 16:43:43 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id o40-20020a05600c512800b003eddedc47aeso3053087wms.3;
+        Mon, 20 Mar 2023 16:43:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679355730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yh9V5oLNl71ZE8wLJrHU90qn5FMul3QSy4jMGg+s0h4=;
-        b=N4wVROOxKzQ4OoNcx8r5uTzsGb3CGCAyBDkN21Yg7Ibmi8awtnbTHYbFslExfamja/
-         XTM1YvfD/UrKoD1ItfOmSDYXiKENfbGZQ5liaJggvBqVMf0Hs+UTvdbIxy95Kszei7pp
-         Wo0DXOsYVQZLQVXcTOkM9muZUJt416sTmJ7z4=
+        d=gmail.com; s=20210112; t=1679355775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPQG/I/mhAvQC4xeeznjLyrdZONKek1qCY1BYNNuVGw=;
+        b=hBKYIOkkfobPOor7ReMCrt7R/APu69Pn4BJpGo/9oflmlHdVtXJGb8EauDM+ueIWcE
+         aEJW9pLLVIjPs70C6QZEsvrpd/dsWjCMQ/QSAWBQ4H0S4o6EzOK1zMscFf+JRpD+1WTM
+         rgbvF//M5D17ecnc/LVfbJhoEShmR2UfaGs55FqvuZCFnrKfsZCYsnyNPnVRJYZKhdNl
+         CQd5EL2C2rm5i4ZdVKKfvBGTWcN4vByDq/hyypqkGcNx30MMQUhnce51iOHJ7RL9gTN2
+         ZnjNd+OlZBCZbleglq+pfsAlG/V8ms9WrUuo22u9hBE60uA3s8VDThehSXKqXBK2qXTe
+         XWWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679355730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yh9V5oLNl71ZE8wLJrHU90qn5FMul3QSy4jMGg+s0h4=;
-        b=R7dndEarCA+IgJjGYJL+bWDslLMOwWFoVI8rymhHI80xSxHCgEBnnX2ZJ9SilIB9FI
-         M8EU37BnSG0wSynA96IWlXz1q70vCilRQxkQQg/2j4FZObrbboAaWQ1N+iivEQfa/4vd
-         wIUgKvl3iHemcLNh+13jIACQrR6YwqbpkKUIqSfVg+yWScHcyXZFX85FT4TpfLFy6zZN
-         ap72aoO58ZDm1Az3yYZ7OGBcl75ctCZBen662HrTpzPczB5xCJyWMd3GHYga07Tz9nKi
-         /hpc7mxdczv77M5jC2uhR6nCwlmfnN7YERy7RQKKSMmbr+3Mzc2i2hOXMs3TWCPmeXc6
-         DGUg==
-X-Gm-Message-State: AO0yUKVTsahmJvBjQonQADCpVVYNWEU3IGjYPAzbnUALBeCYj2ngk19c
-        bsTL7bH3immgpsISIi68QT1vOD/RE4MxLJpb02HfTWuf
-X-Google-Smtp-Source: AK7set/4CATuHkGltX0UpZX3i1BiXDCFaWTl/twDFoMWzuZentxOBSke+IktDz69iH+k/B6dZop8YQ==
-X-Received: by 2002:a17:906:2a57:b0:930:9f89:65ef with SMTP id k23-20020a1709062a5700b009309f8965efmr767210eje.11.1679355730503;
-        Mon, 20 Mar 2023 16:42:10 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id h27-20020a17090634db00b00933f31034f2sm2241594ejb.38.2023.03.20.16.42.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 16:42:10 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id eg48so53177607edb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:42:09 -0700 (PDT)
-X-Received: by 2002:a17:906:13d3:b0:931:2bcd:ee00 with SMTP id
- g19-20020a17090613d300b009312bcdee00mr395674ejc.15.1679355729667; Mon, 20 Mar
- 2023 16:42:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679355775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aPQG/I/mhAvQC4xeeznjLyrdZONKek1qCY1BYNNuVGw=;
+        b=QOP8yaVu3d4az6uqsTlbv13OzY9M9VSWQP2D6rfr98bXAqivpeC1tViFUZAVeEFoHp
+         ndq6zK/oARseff4JHu9odjRxToiJricbZdp/9dt6AHAWC3o94sj0U+9xw/aqgREL9CTe
+         gmujtiv8qqw0BHJ+2TaoSySZrpZNv6B3U3BiY4fpdb2No6+OOLX2TiaAflaxutLARm+t
+         hx7An8VOvT623yY8BI7rMVd29JzSh+ku1kBEbXpRNuBsOPDAs/UG9yRXuertSkkKXhye
+         U3lvekz7o16dZrBSQsj2Z+ow3kpBODGphQ7Pl6WCKU/ibRNrjhs36arONOtpr+lqIK8h
+         I6jw==
+X-Gm-Message-State: AO0yUKXPFgzYjcCcOgPShM+a50OmBn1vXjZXlp1qbmkYkM5GCU/W3GHS
+        xVDa3NJZNkoAHjztow/fUzM=
+X-Google-Smtp-Source: AK7set8uPDcbvle2xiXNDQ1TbFeBZlmpL7r2uUyucIn52DSXIFQckL3tCLQSdqrhjoQy+ZIwrJE6WA==
+X-Received: by 2002:a1c:6a08:0:b0:3ea:ed4d:38eb with SMTP id f8-20020a1c6a08000000b003eaed4d38ebmr869636wmc.24.1679355774582;
+        Mon, 20 Mar 2023 16:42:54 -0700 (PDT)
+Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.googlemail.com with ESMTPSA id u1-20020a05600c440100b003e209186c07sm17504541wmn.19.2023.03.20.16.42.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 16:42:52 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v3 0/4] convert read_kcore(), vread() to use iterators
+Date:   Mon, 20 Mar 2023 23:42:41 +0000
+Message-Id: <cover.1679354384.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
- <20230320180501.GA598084@dev-arch.thelio-3990X> <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
- <4adbed5a-6f73-42ac-b7be-e12c764ae808@roeck-us.net> <CAHk-=wgyJREUR1WgfFmie5XVJnBLr1VPVbSibh1+Cq57Bh4Tag@mail.gmail.com>
- <20230320220631.GA637514@dev-arch.thelio-3990X>
-In-Reply-To: <20230320220631.GA637514@dev-arch.thelio-3990X>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Mar 2023 16:41:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whf82-im76ovESE2RZBh5=Y3uR1GDbae60=TWjM7OkLdA@mail.gmail.com>
-Message-ID: <CAHk-=whf82-im76ovESE2RZBh5=Y3uR1GDbae60=TWjM7OkLdA@mail.gmail.com>
-Subject: Re: Linux 6.3-rc3
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,39 +76,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 3:06=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Right, this seems like a subtle difference in semantics between
-> -Wuninitialized between clang and GCC.
+While reviewing Baoquan's recent changes to permit vread() access to
+vm_map_ram regions of vmalloc allocations, Willy pointed out [1] that it
+would be nice to refactor vread() as a whole, since its only user is
+read_kcore() and the existing form of vread() necessitates the use of a
+bounce buffer.
 
-I guess it's a bit ambiguous whether it's
+This patch series does exactly that, as well as adjusting how we read the
+kernel text section to avoid the use of a bounce buffer in this case as
+well.
 
- "X may be USED uninitialized"
+This has been tested against the test case which motivated Baoquan's
+changes in the first place [2] which continues to function correctly, as do
+the vmalloc self tests.
 
-or whether it is
+[1] https://lore.kernel.org/all/Y8WfDSRkc%2FOHP3oD@casper.infradead.org/
+[2] https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
 
- "X may BE uninitialized"
+v3:
+- Revert introduction of mutex/rwsem in vmalloc
+- Introduce copy_page_to_iter_atomic() iovec function
+- Update vread_iter() and descendent functions to use only this
+- Fault in user pages before calling vread_iter()
+- Use const char* in vread_iter() and descendent functions
+- Updated commit messages based on feedback
+- Extend vread functions to always check how many bytes we could copy. If
+  at any stage we are unable to copy/zero, abort and return the number of
+  bytes we did copy.
 
-and then depending on how you see that ambiguity, the control flow matters.
+v2:
+- Fix ordering of vread_iter() parameters
+- Fix nommu vread() -> vread_iter()
+https://lore.kernel.org/all/cover.1679209395.git.lstoakes@gmail.com/
 
-In this case, there is absolutely no question that the variable is
-uninitialized (since there is no write to it at all).
+v1:
+https://lore.kernel.org/all/cover.1679183626.git.lstoakes@gmail.com/
 
-So it is very clearly and unambiguously uninitialized. And I do think
-that as a result, "-Wuninitialized" should warn.
+Lorenzo Stoakes (4):
+  fs/proc/kcore: Avoid bounce buffer for ktext data
+  fs/proc/kcore: convert read_kcore() to read_kcore_iter()
+  iov_iter: add copy_page_to_iter_atomic()
+  mm: vmalloc: convert vread() to vread_iter()
 
-But at the same time, whether it is *used* or not depends on that
-conditional, so I can see how it could be confusing and not be so
-clear an unambiguous.
+ fs/proc/kcore.c         |  89 ++++++---------
+ include/linux/uio.h     |   2 +
+ include/linux/vmalloc.h |   3 +-
+ lib/iov_iter.c          |  28 +++++
+ mm/nommu.c              |  10 +-
+ mm/vmalloc.c            | 234 +++++++++++++++++++++++++---------------
+ 6 files changed, 218 insertions(+), 148 deletions(-)
 
-On the whole, I do wish that the logic would be "after dead code
-removal, if some pseudo has no initializer, it should always warn,
-regardless of any remaining dynamic conditoinals".
-
-That "after dead code removal" might matter, because I could see where
-config things (#ifdef's etc) would just remove the initialization of
-some variable, and if the use is behind some static "if (0)", then
-warning about it is all kinds of silly.
-
-                     Linus
+--
+2.39.2
