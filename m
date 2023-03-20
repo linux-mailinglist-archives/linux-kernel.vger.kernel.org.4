@@ -2,52 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C066C1EE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A402B6C1EEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjCTSC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S231177AbjCTSDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjCTSBy (ORCPT
+        with ESMTP id S229747AbjCTSCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:01:54 -0400
-Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F86166D3;
-        Mon, 20 Mar 2023 10:56:23 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 17:55:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1679334922; x=1679594122;
-        bh=WnTjqPoCH078vNV00BMZ3l8kftmBf3Xp4U/sMRslT94=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=MEYoC3t/S7+Cl2DFKbnGn+joi2EOIGRG8NbXBUdvvDmTwrW+iv1JFwuqVK2VekocQ
-         feJ+ZQ7K2HPAH39NR/yLVH/UhA4AUkU4IBFyUYMyeOWc23d43rbbp7JBnRCT2Qh9k3
-         GT6vShagPTjGnJ8RDYq/3xhY9hN8jkkftq5yH8nLlL4JW+wqfjQ9QudSLqcEJxyG36
-         ZuZ2EgCc1EWyCy3uqbPJXVfubFCrx1e+h7d+Tn/skCFhhaJYD505j884lvUT71+GPr
-         NSE20pxHef+72UF823jyQE01KS9dxMLY8JxEbmGrTjoGs+7AkYkQDc4xQyXOM02xU6
-         jXkuVz6RThn7g==
-To:     linux-kernel@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v2 2/2] leds: aw2013: Add vddio regulator
-Message-ID: <20230320175150.174711-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20230320174949.174600-1-linmengbo0689@protonmail.com>
-References: <20230320174949.174600-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Mon, 20 Mar 2023 14:02:48 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2125.outbound.protection.outlook.com [40.107.117.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DCD25969;
+        Mon, 20 Mar 2023 10:56:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=feMaeoJObiF6g9ioNkNtBHMLvmEUma+SOop9+sfHrK1hs+2WAyrZCogSIYHFkVah5BQCmnVEplXdbeuCYi7w+wBblt7V2TNvxZyOpuGiWIF4pk2BOZS/aDjrhsJxPRsNZzAOVGhDP16VV8dxZA5cwMYeyJci8zBsPZkqObSyUyhg9GC3nq/Ro5BuzdHzULYcDAB7O1ZyZ6FmlNg+XXtFuRm3XnNgmfmXU6KNpZr8zszvLklMNdZMw6HEAB06r74DIkJl5rHT+DM24ikZ4c3/1/H0jWZU5E0ix62w9Blaqi2AYRRwnxjVyrbMzvE6wpKYOHZDX7a2uTZoDfVj9KI5wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eVnC0dCMA7l0X0Uqw3Q1PT4CR3SQSE4oWtY9DF8V08g=;
+ b=PvF11ML/pd3GkFhMysMFFHoMTfiGu+DGMAAWkgw15hi8ZUCR/cFxvJGtP8dk16YUm2AuPNBjn9CYB9LsgmAizqVPaNBGia9Wd4g1ToiNgu+RL+rdCIbCITcSER3mI+wOiFtAApmvOTF/LfMv4bZMXr/Hyp2b3JiMebk5igHFYecERqHPpaCB9o/zACQ4MFWjCMpixn0Y7ZMjYxU0P4YXhCtefIzeLvzAUrp5cnkTNABlZ8byjYlhTrmSeVo4E9Q6jaU/fEIevUETEE+bQOQkNmAgUpPRJHtzJkKsY08hyKYo8orGt9fot2QKIg5LX0ql6Xo5fE73zuLOXYBrMjSPHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eVnC0dCMA7l0X0Uqw3Q1PT4CR3SQSE4oWtY9DF8V08g=;
+ b=G+oO7OJVbcn48GfxHwAVsTVkMiW9vjA0BHxoWXn0hlBLv3/NVpQn8Tbishc3Q0V08Sz4gjhpdSXbxmy9WBDUv3WKa++4MXIDuvut0MHIBYyDJtclwuuUgB3F7dVtu7QUr8YamueplIegx38o6eXNVbo2lYbrBdp7EsDnIuXrqjqbVqZsd1e6V14fereOkDTbDahJqa1+bNB/b0H319d2M/ZICLoWm2pKUOi20Hv+eMimuPsNphm9HwZ+qpHFrWkYsfdASt0AUX0Ll4Olpeh3LHHk2KeWcDAWNoN0ovSZIz2OXmMWjsm2DpvCGBskXZt5bPHq7C+PZMHmAfaSnTtnDg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 17:55:45 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 17:55:45 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v2] f2fs: add iostat latency statistics support for discard
+Date:   Tue, 21 Mar 2023 01:55:29 +0800
+Message-Id: <20230320175529.39129-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0003.APCP153.PROD.OUTLOOK.COM (2603:1096::13) To
+ SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f5eb618-79d2-4371-af9f-08db296c547a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aDk/FQCNo8R9EGxf0IUCZrn8gKhaTJBP+m8UMjYz7U2Giv2HxGXcKQdCKOk+oHqTd97mLKhPuD4jQjgPKwCAuNeEL1W58hgA4FxcqyXqGN+BrsU4np+f8DU3gSnaPTRi3irzwlpCO6UbiIt2CT55FaUzmiMqdU0GdHVOM66lGLYsdmsb/qReupUNNXFObHtVopKUYl7wAD1M0g2NRysOBWuXOCWQKNVErOpSC3y09aMwbXPV48sUyGjTnvL/srhZJEj2Ry2+M5v73f+EdAZI/AImF2AYcVitdeBnNTW4iFKU25Hrz2B2TlDsCWXBuqzFDCOx4LJQT7YxAQ84xZqhq0+Y2wMWGPC8oeXQNX0FnwGzY/xBRsTrSlnAdYf6e9XzDG/pM1tkgpnEaNr6IuetuIm/ygb8r+bqGfklDIFD/jqvSaLRs1y3d45oISYcuIcgnVFJqmYcO5s4UvLEKfYteiyq9l7uF9iUTCNWYJBTfRtdo5RZsueguKNXruUgvxK20gtZUqf3P4SCu2eoGgcAp7q3XiDBgL1j/d4JDfzguRwpVGeaFx7FVCZ1IywotGJQRn3bqIt7DsdTsMpVuFBnkaQ3YMqt1J8Zp/jQoLi8IXe3YM4X54P4g1Ic/Jj9KO5sS0qCn1HbRkJKzateqMRgDxhKluHMPxL1tWGvObCndsHddpBjSJso8JeEAwofwxr5wFyLT0zdHp69pNH4WtckLw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199018)(2616005)(83380400001)(86362001)(38350700002)(38100700002)(110136005)(4326008)(8676002)(66556008)(36756003)(66476007)(2906002)(66946007)(8936002)(30864003)(41300700001)(478600001)(316002)(5660300002)(186003)(6666004)(1076003)(26005)(6486002)(6506007)(6512007)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g+Br6yzrGReO4HRsK1hutFNw4WokKxQsOrHDkkl6A7xwTN8htvsvDXgZsAXY?=
+ =?us-ascii?Q?o7bJhosu6RuUOIaOjcAHAf8Bm2wzKZknW3fl5oIbrqIWVF8IWJPhpHQmma6p?=
+ =?us-ascii?Q?zKLtE6MJM79xJlHWyJLBbGZuPDVOp00yc41J2vThcLloBkjtvXAcnr/QGZt8?=
+ =?us-ascii?Q?yxesAetRPhU5M/l+whDjnlh4NWqSavzMBUDp665dU02CvrG2gP3wDhtgZNwa?=
+ =?us-ascii?Q?rdSaq0ySJzDmxBYBLVjkbZ9hKGYWvwoww0TT0XLKLsDKvAUHW+mkiv17vZp9?=
+ =?us-ascii?Q?12KuCtf952riya7j2iUBZMMtHf1P2nrB5apIIKSbalqoFqt7nkmNSvQkcPiU?=
+ =?us-ascii?Q?iZPjZgubKW+KC4NIKLJZ7kFTp3KTreS0BHLbJ6MV4k7MIOHRYcBtUHWuhQbv?=
+ =?us-ascii?Q?0Shf/z6rbJvva63vf6QdNZnPRufZ9j845mcnqLoQ09+wu405YkhQH46Ss04c?=
+ =?us-ascii?Q?TxTt/LN667n+M6cUj3XqSshTEQRY6sQ1i2etIgIqBXSWGJkG/TtVjoRub/pm?=
+ =?us-ascii?Q?dkJ1vS7VrSGGuVCXZaTUp17dlauOgERpovNXngdgvfZbAUduM89gUGChkgXO?=
+ =?us-ascii?Q?pmzREnuQPTqAfNZqXKb0T0hcuAmQpw9e2F+93dz2Nu6/b+MLebAcdt2PrWhV?=
+ =?us-ascii?Q?9SsMFXsT6LHBWGcYDDRvif20dHKG7wqiunIOY5AQo6lJoNiGHA6bEzS5Nqb1?=
+ =?us-ascii?Q?fAY0mU/OgjmzVXnkGw2+9tFJYKiTf5wtLdsPKqkMXS23bQm6TtE3DyAWfJpw?=
+ =?us-ascii?Q?bRWBL4V3cSm/41IaI+9FKE15Y0Pd/DOfbe9kmxP2TeQ2BU7JlK1G+Wl+A8XJ?=
+ =?us-ascii?Q?ZNxH07MGADHqc1oR/T1P2Bb3gPHkc5sek9Ufl+ycrE3x/3VDEn2i96QR+I/Y?=
+ =?us-ascii?Q?r10jJYTMTratPCdjK6Ff9mPSFl1deC7OmgvCFgR3PSJF1R2PsrdSqh00/xZe?=
+ =?us-ascii?Q?53tXDgwMHrUh1lgzaZx7Vb4M7/Gs+bVvnHqcWyg+p/52vvcImvMNXUjQS0oO?=
+ =?us-ascii?Q?rv7AilvvgfVX5d1Hn5+SEed3rlRoztMi2X1SjMLL97a8jGWacOICJs0biznV?=
+ =?us-ascii?Q?9snq0PkSj5O73xAbasGWwOz0WT1X8ohVFIcstYSTvX/98eASp7+9eKv+GVBW?=
+ =?us-ascii?Q?HW8dHiR2fRP7NGL2Pr+2a9vDsvsIU7hz4Jl4Zd4RryaeiGoGaGlZAL5FDq3I?=
+ =?us-ascii?Q?zBffS7ZVsQ8ZDjfHDKxFAvOI6x8ouVCZm4/n1aghbfcsKH0tXh4JJtC+qaEA?=
+ =?us-ascii?Q?kmVAO3ktqz+b5er64X5yiLdWEhMqUXFqUUWuo/MPGrTDXy1oluYcL6sUzM4x?=
+ =?us-ascii?Q?m++HYbmKKeFed9KcZsVkf91Pwqmfh4oO6y7wP8OrUjOMhOROYLF9MRy9kIwz?=
+ =?us-ascii?Q?Ll6btVVUiu1x3b9E2FlvH+3uBIg54nRiXPdQdZovpjmJOHIRKldlCtOi8vGe?=
+ =?us-ascii?Q?G++gBgaLLMrpJbq9D+PtFEUL4szFel5yJdoIpIXK9DF3SOXie3Nn6niQW8f7?=
+ =?us-ascii?Q?RKMOWjrLigpTnL8arsxhxb+S/+P+0ugpfK6jmKpFJS2/7+dLSSqzowPoNKlk?=
+ =?us-ascii?Q?m/QjXZpyeG9PzxMWlkak3CKW369NKzes30IdZAPD?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f5eb618-79d2-4371-af9f-08db296c547a
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 17:55:45.5152
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3MWsGgUtHE5mWa/3rTq3Xuw8bjxJ3wRMydmsK2AD6ph2v8DZT1prZL0/pyuOo1wi3y98KROoAWFLbxSKhBpchQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5288
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,98 +113,412 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some LEDs controllers are used with external pull-up for the interrupt
-line and the I2C lines, so we might need to enable a regulator to bring
-the lines into usable state. Otherwise, this might cause spurious
-interrupts and reading from I2C will fail.
+In this patch, it adds to account discard latency.
 
-Implement support for "vddio-supply" that is enabled by the aw2013 driver
-so that the regulator gets enabled when needed.
-
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- drivers/leds/leds-aw2013.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+v2:
+-rename get_bio_iostat_private to iostat_get_bio_private
+ fs/f2fs/data.c              |  2 +-
+ fs/f2fs/f2fs.h              |  1 +
+ fs/f2fs/iostat.c            | 83 +++++++++++++++++++++----------------
+ fs/f2fs/iostat.h            | 49 +++++++++++-----------
+ fs/f2fs/segment.c           |  8 +++-
+ include/trace/events/f2fs.h | 68 ++++++++++++++++--------------
+ 6 files changed, 118 insertions(+), 93 deletions(-)
 
-diff --git a/drivers/leds/leds-aw2013.c b/drivers/leds/leds-aw2013.c
-index 0b52fc9097c6..95f2f9bf95ee 100644
---- a/drivers/leds/leds-aw2013.c
-+++ b/drivers/leds/leds-aw2013.c
-@@ -62,7 +62,7 @@ struct aw2013_led {
-=20
- struct aw2013 {
- =09struct mutex mutex; /* held when writing to registers */
--=09struct regulator *vcc_regulator;
-+=09struct regulator_bulk_data regulators[2];
- =09struct i2c_client *client;
- =09struct aw2013_led leds[AW2013_MAX_LEDS];
- =09struct regmap *regmap;
-@@ -106,7 +106,8 @@ static void aw2013_chip_disable(struct aw2013 *chip)
-=20
- =09regmap_write(chip->regmap, AW2013_GCR, 0);
-=20
--=09ret =3D regulator_disable(chip->vcc_regulator);
-+=09ret =3D regulator_bulk_disable(ARRAY_SIZE(chip->regulators),
-+=09=09=09=09     chip->regulators);
- =09if (ret) {
- =09=09dev_err(&chip->client->dev,
- =09=09=09"Failed to disable regulator: %d\n", ret);
-@@ -123,7 +124,8 @@ static int aw2013_chip_enable(struct aw2013 *chip)
- =09if (chip->enabled)
- =09=09return 0;
-=20
--=09ret =3D regulator_enable(chip->vcc_regulator);
-+=09ret =3D regulator_bulk_enable(ARRAY_SIZE(chip->regulators),
-+=09=09=09=09    chip->regulators);
- =09if (ret) {
- =09=09dev_err(&chip->client->dev,
- =09=09=09"Failed to enable regulator: %d\n", ret);
-@@ -348,16 +350,20 @@ static int aw2013_probe(struct i2c_client *client)
- =09=09goto error;
- =09}
-=20
--=09chip->vcc_regulator =3D devm_regulator_get(&client->dev, "vcc");
--=09ret =3D PTR_ERR_OR_ZERO(chip->vcc_regulator);
--=09if (ret) {
-+=09chip->regulators[0].supply =3D "vcc";
-+=09chip->regulators[1].supply =3D "vddio";
-+=09ret =3D devm_regulator_bulk_get(&client->dev,
-+=09=09=09=09      ARRAY_SIZE(chip->regulators),
-+=09=09=09=09      chip->regulators);
-+=09if (ret < 0) {
- =09=09if (ret !=3D -EPROBE_DEFER)
- =09=09=09dev_err(&client->dev,
- =09=09=09=09"Failed to request regulator: %d\n", ret);
- =09=09goto error;
- =09}
-=20
--=09ret =3D regulator_enable(chip->vcc_regulator);
-+=09ret =3D regulator_bulk_enable(ARRAY_SIZE(chip->regulators),
-+=09=09=09=09    chip->regulators);
- =09if (ret) {
- =09=09dev_err(&client->dev,
- =09=09=09"Failed to enable regulator: %d\n", ret);
-@@ -382,7 +388,8 @@ static int aw2013_probe(struct i2c_client *client)
- =09if (ret < 0)
- =09=09goto error_reg;
-=20
--=09ret =3D regulator_disable(chip->vcc_regulator);
-+=09ret =3D regulator_bulk_disable(ARRAY_SIZE(chip->regulators),
-+=09=09=09=09     chip->regulators);
- =09if (ret) {
- =09=09dev_err(&client->dev,
- =09=09=09"Failed to disable regulator: %d\n", ret);
-@@ -394,7 +401,8 @@ static int aw2013_probe(struct i2c_client *client)
- =09return 0;
-=20
- error_reg:
--=09regulator_disable(chip->vcc_regulator);
-+=09regulator_bulk_disable(ARRAY_SIZE(chip->regulators),
-+=09=09=09       chip->regulators);
-=20
- error:
- =09mutex_destroy(&chip->mutex);
---=20
-2.30.2
-
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index bf51e6e4eb64..b80aaf5e6f50 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2311,7 +2311,7 @@ int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
+ 		if (bio_add_page(bio, page, blocksize, 0) < blocksize)
+ 			goto submit_and_realloc;
+ 
+-		ctx = get_post_read_ctx(bio);
++		ctx = iostat_get_bio_private(bio);
+ 		ctx->enabled_steps |= STEP_DECOMPRESS;
+ 		refcount_inc(&dic->refcnt);
+ 
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 9c3ddebd28e3..26de577fb98f 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1131,6 +1131,7 @@ enum page_type {
+ 	META_FLUSH,
+ 	IPU,		/* the below types are used by tracepoints only. */
+ 	OPU,
++	DISCARD,	/* used by iostat */
+ };
+ 
+ enum temp_type {
+diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+index 3d5bfb1ad585..304235b4f543 100644
+--- a/fs/f2fs/iostat.c
++++ b/fs/f2fs/iostat.c
+@@ -86,23 +86,21 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
+ 
+ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
+ {
+-	int io, idx;
+-	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
++	struct f2fs_iostat_latency iostat_lat[MAX_LAT_TYPE];
+ 	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
++	unsigned int lat_type;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
+-	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
+-		for (io = 0; io < NR_PAGE_TYPE; io++) {
+-			iostat_lat[idx][io].peak_lat =
+-			   jiffies_to_msecs(io_lat->peak_lat[idx][io]);
+-			iostat_lat[idx][io].cnt = io_lat->bio_cnt[idx][io];
+-			iostat_lat[idx][io].avg_lat = iostat_lat[idx][io].cnt ?
+-			   jiffies_to_msecs(io_lat->sum_lat[idx][io]) / iostat_lat[idx][io].cnt : 0;
+-			io_lat->sum_lat[idx][io] = 0;
+-			io_lat->peak_lat[idx][io] = 0;
+-			io_lat->bio_cnt[idx][io] = 0;
+-		}
++	for (lat_type = 0; lat_type < MAX_LAT_TYPE; lat_type++) {
++		iostat_lat[lat_type].peak_lat =
++		   jiffies_to_msecs(io_lat->peak_lat[lat_type]);
++		iostat_lat[lat_type].cnt = io_lat->bio_cnt[lat_type];
++		iostat_lat[lat_type].avg_lat = iostat_lat[lat_type].cnt ?
++		   jiffies_to_msecs(io_lat->sum_lat[lat_type]) / iostat_lat[lat_type].cnt : 0;
++		io_lat->sum_lat[lat_type] = 0;
++		io_lat->peak_lat[lat_type] = 0;
++		io_lat->bio_cnt[lat_type] = 0;
+ 	}
+ 	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
+ 
+@@ -208,62 +206,75 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
+ 	f2fs_record_iostat(sbi);
+ }
+ 
+-static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
+-				enum iostat_lat_type lat_type)
++static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx)
+ {
+-	unsigned long ts_diff;
+-	unsigned int page_type = iostat_ctx->type;
+ 	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
+ 	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
++	unsigned int lat_type = iostat_ctx->lat_type;
++	unsigned long ts_diff;
+ 	unsigned long flags;
+ 
+ 	if (!sbi->iostat_enable)
+ 		return;
+ 
+-	ts_diff = jiffies - iostat_ctx->submit_ts;
+-	if (page_type == META_FLUSH) {
+-		page_type = META;
+-	} else if (page_type >= NR_PAGE_TYPE) {
+-		f2fs_warn(sbi, "%s: %d over NR_PAGE_TYPE", __func__, page_type);
++	if (lat_type >= MAX_LAT_TYPE) {
++		f2fs_warn(sbi, "%s: %d over MAX_LAT_TYPE", __func__, lat_type);
+ 		return;
+ 	}
++	ts_diff = jiffies - iostat_ctx->submit_ts;
+ 
+ 	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
+-	io_lat->sum_lat[lat_type][page_type] += ts_diff;
+-	io_lat->bio_cnt[lat_type][page_type]++;
+-	if (ts_diff > io_lat->peak_lat[lat_type][page_type])
+-		io_lat->peak_lat[lat_type][page_type] = ts_diff;
++	io_lat->sum_lat[lat_type] += ts_diff;
++	io_lat->bio_cnt[lat_type]++;
++	if (ts_diff > io_lat->peak_lat[lat_type])
++		io_lat->peak_lat[lat_type] = ts_diff;
+ 	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
+ }
+ 
+ void iostat_update_and_unbind_ctx(struct bio *bio)
++{
++	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
++
++	if (op_is_write(bio_op(bio)) && !op_is_discard(bio_op(bio)))
++		bio->bi_private = iostat_ctx->sbi;
++	else
++		bio->bi_private = iostat_ctx->iostat_private;
++
++	__update_iostat_latency(iostat_ctx);
++	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
++}
++
++void iostat_update_submit_ctx(struct bio *bio, enum page_type type)
+ {
+ 	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
+ 	enum iostat_lat_type lat_type;
+ 
+-	if (op_is_write(bio_op(bio))) {
++	iostat_ctx->submit_ts = jiffies;
++
++	if (type == DISCARD) {
++		lat_type = DISCARD_LAT;
++	} else if (op_is_write(bio_op(bio))) {
+ 		lat_type = bio->bi_opf & REQ_SYNC ?
+-				WRITE_SYNC_IO : WRITE_ASYNC_IO;
+-		bio->bi_private = iostat_ctx->sbi;
++				WRITE_SYNC_DATA_LAT : WRITE_ASYNC_DATA_LAT;
++		lat_type += type;
+ 	} else {
+-		lat_type = READ_IO;
+-		bio->bi_private = iostat_ctx->post_read_ctx;
++		lat_type = READ_DATA_LAT;
++		lat_type += type;
+ 	}
+ 
+-	__update_iostat_latency(iostat_ctx, lat_type);
+-	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
++	iostat_ctx->lat_type = lat_type;
+ }
+ 
+ void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
+-		struct bio *bio, struct bio_post_read_ctx *ctx)
++		struct bio *bio, void *private)
+ {
+ 	struct bio_iostat_ctx *iostat_ctx;
+ 	/* Due to the mempool, this never fails. */
+ 	iostat_ctx = mempool_alloc(bio_iostat_ctx_pool, GFP_NOFS);
+ 	iostat_ctx->sbi = sbi;
+ 	iostat_ctx->submit_ts = 0;
+-	iostat_ctx->type = 0;
+-	iostat_ctx->post_read_ctx = ctx;
++	iostat_ctx->lat_type = 0;
++	iostat_ctx->iostat_private = private;
+ 	bio->bi_private = iostat_ctx;
+ }
+ 
+diff --git a/fs/f2fs/iostat.h b/fs/f2fs/iostat.h
+index eb99d05cf272..67b468691498 100644
+--- a/fs/f2fs/iostat.h
++++ b/fs/f2fs/iostat.h
+@@ -6,17 +6,24 @@
+ #ifndef __F2FS_IOSTAT_H__
+ #define __F2FS_IOSTAT_H__
+ 
++#ifdef CONFIG_F2FS_IOSTAT
++
+ struct bio_post_read_ctx;
+ 
+ enum iostat_lat_type {
+-	READ_IO = 0,
+-	WRITE_SYNC_IO,
+-	WRITE_ASYNC_IO,
+-	MAX_IO_TYPE,
++	READ_DATA_LAT = 0,
++	READ_NODE_LAT,
++	READ_META_LAT,
++	WRITE_SYNC_DATA_LAT,
++	WRITE_SYNC_NODE_LAT,
++	WRITE_SYNC_META_LAT,
++	WRITE_ASYNC_DATA_LAT,
++	WRITE_ASYNC_NODE_LAT,
++	WRITE_ASYNC_META_LAT,
++	DISCARD_LAT,
++	MAX_LAT_TYPE,
+ };
+ 
+-#ifdef CONFIG_F2FS_IOSTAT
+-
+ #define NUM_PREALLOC_IOSTAT_CTXS	128
+ #define DEFAULT_IOSTAT_PERIOD_MS	3000
+ #define MIN_IOSTAT_PERIOD_MS		100
+@@ -24,9 +31,9 @@ enum iostat_lat_type {
+ #define MAX_IOSTAT_PERIOD_MS		8640000
+ 
+ struct iostat_lat_info {
+-	unsigned long sum_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* sum of io latencies */
+-	unsigned long peak_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* peak io latency */
+-	unsigned int bio_cnt[MAX_IO_TYPE][NR_PAGE_TYPE];	/* bio count */
++	unsigned long sum_lat[MAX_LAT_TYPE];	/* sum of io latencies */
++	unsigned long peak_lat[MAX_LAT_TYPE];	/* peak io latency */
++	unsigned int bio_cnt[MAX_LAT_TYPE];	/* bio count */
+ };
+ 
+ extern int __maybe_unused iostat_info_seq_show(struct seq_file *seq,
+@@ -38,29 +45,21 @@ extern void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
+ struct bio_iostat_ctx {
+ 	struct f2fs_sb_info *sbi;
+ 	unsigned long submit_ts;
+-	enum page_type type;
+-	struct bio_post_read_ctx *post_read_ctx;
++	enum iostat_lat_type lat_type;
++	void *iostat_private;
+ };
+ 
+-static inline void iostat_update_submit_ctx(struct bio *bio,
+-			enum page_type type)
+-{
+-	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
+-
+-	iostat_ctx->submit_ts = jiffies;
+-	iostat_ctx->type = type;
+-}
+-
+-static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
++static inline struct bio_post_read_ctx *iostat_get_bio_private(struct bio *bio)
+ {
+ 	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
+ 
+-	return iostat_ctx->post_read_ctx;
++	return iostat_ctx->iostat_private;
+ }
+ 
++extern void iostat_update_submit_ctx(struct bio *bio, enum page_type type);
+ extern void iostat_update_and_unbind_ctx(struct bio *bio);
+ extern void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
+-		struct bio *bio, struct bio_post_read_ctx *ctx);
++		struct bio *bio, void *private);
+ extern int f2fs_init_iostat_processing(void);
+ extern void f2fs_destroy_iostat_processing(void);
+ extern int f2fs_init_iostat(struct f2fs_sb_info *sbi);
+@@ -70,10 +69,10 @@ static inline void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *in
+ 		enum iostat_type type, unsigned long long io_bytes) {}
+ static inline void iostat_update_and_unbind_ctx(struct bio *bio) {}
+ static inline void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
+-		struct bio *bio, struct bio_post_read_ctx *ctx) {}
++		struct bio *bio, void *private) {}
+ static inline void iostat_update_submit_ctx(struct bio *bio,
+ 		enum page_type type) {}
+-static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
++static inline struct bio_post_read_ctx *iostat_get_bio_private(struct bio *bio)
+ {
+ 	return bio->bi_private;
+ }
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 227e25836173..9a6c45a62e8b 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -1012,9 +1012,12 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
+ 
+ static void f2fs_submit_discard_endio(struct bio *bio)
+ {
+-	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
++	struct discard_cmd *dc;
+ 	unsigned long flags;
+ 
++	iostat_update_and_unbind_ctx(bio);
++	dc = bio->bi_private;
++
+ 	spin_lock_irqsave(&dc->lock, flags);
+ 	if (!dc->error)
+ 		dc->error = blk_status_to_errno(bio->bi_status);
+@@ -1188,6 +1191,9 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+ 		bio->bi_private = dc;
+ 		bio->bi_end_io = f2fs_submit_discard_endio;
+ 		bio->bi_opf |= flag;
++
++		iostat_alloc_and_bind_ctx(sbi, bio, dc);
++		iostat_update_submit_ctx(bio, DISCARD);
+ 		submit_bio(bio);
+ 
+ 		atomic_inc(&dcc->issued_discard);
+diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+index 99cbc5949e3c..385291ac9ad5 100644
+--- a/include/trace/events/f2fs.h
++++ b/include/trace/events/f2fs.h
+@@ -2045,7 +2045,7 @@ struct f2fs_iostat_latency {
+ 
+ TRACE_EVENT(f2fs_iostat_latency,
+ 
+-	TP_PROTO(struct f2fs_sb_info *sbi, struct f2fs_iostat_latency (*iostat_lat)[NR_PAGE_TYPE]),
++	TP_PROTO(struct f2fs_sb_info *sbi, struct f2fs_iostat_latency *iostat_lat),
+ 
+ 	TP_ARGS(sbi, iostat_lat),
+ 
+@@ -2078,37 +2078,43 @@ TRACE_EVENT(f2fs_iostat_latency,
+ 		__field(unsigned int,	m_wr_as_peak)
+ 		__field(unsigned int,	m_wr_as_avg)
+ 		__field(unsigned int,	m_wr_as_cnt)
++		__field(unsigned int,	discard_peak)
++		__field(unsigned int,	discard_avg)
++		__field(unsigned int,	discard_cnt)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->dev		= sbi->sb->s_dev;
+-		__entry->d_rd_peak	= iostat_lat[READ_IO][DATA].peak_lat;
+-		__entry->d_rd_avg	= iostat_lat[READ_IO][DATA].avg_lat;
+-		__entry->d_rd_cnt	= iostat_lat[READ_IO][DATA].cnt;
+-		__entry->n_rd_peak	= iostat_lat[READ_IO][NODE].peak_lat;
+-		__entry->n_rd_avg	= iostat_lat[READ_IO][NODE].avg_lat;
+-		__entry->n_rd_cnt	= iostat_lat[READ_IO][NODE].cnt;
+-		__entry->m_rd_peak	= iostat_lat[READ_IO][META].peak_lat;
+-		__entry->m_rd_avg	= iostat_lat[READ_IO][META].avg_lat;
+-		__entry->m_rd_cnt	= iostat_lat[READ_IO][META].cnt;
+-		__entry->d_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][DATA].peak_lat;
+-		__entry->d_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][DATA].avg_lat;
+-		__entry->d_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][DATA].cnt;
+-		__entry->n_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][NODE].peak_lat;
+-		__entry->n_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][NODE].avg_lat;
+-		__entry->n_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][NODE].cnt;
+-		__entry->m_wr_s_peak	= iostat_lat[WRITE_SYNC_IO][META].peak_lat;
+-		__entry->m_wr_s_avg	= iostat_lat[WRITE_SYNC_IO][META].avg_lat;
+-		__entry->m_wr_s_cnt	= iostat_lat[WRITE_SYNC_IO][META].cnt;
+-		__entry->d_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][DATA].peak_lat;
+-		__entry->d_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][DATA].avg_lat;
+-		__entry->d_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][DATA].cnt;
+-		__entry->n_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][NODE].peak_lat;
+-		__entry->n_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][NODE].avg_lat;
+-		__entry->n_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][NODE].cnt;
+-		__entry->m_wr_as_peak	= iostat_lat[WRITE_ASYNC_IO][META].peak_lat;
+-		__entry->m_wr_as_avg	= iostat_lat[WRITE_ASYNC_IO][META].avg_lat;
+-		__entry->m_wr_as_cnt	= iostat_lat[WRITE_ASYNC_IO][META].cnt;
++		__entry->d_rd_peak	= iostat_lat[READ_DATA_LAT].peak_lat;
++		__entry->d_rd_avg	= iostat_lat[READ_DATA_LAT].avg_lat;
++		__entry->d_rd_cnt	= iostat_lat[READ_DATA_LAT].cnt;
++		__entry->n_rd_peak	= iostat_lat[READ_NODE_LAT].peak_lat;
++		__entry->n_rd_avg	= iostat_lat[READ_NODE_LAT].avg_lat;
++		__entry->n_rd_cnt	= iostat_lat[READ_NODE_LAT].cnt;
++		__entry->m_rd_peak	= iostat_lat[READ_META_LAT].peak_lat;
++		__entry->m_rd_avg	= iostat_lat[READ_META_LAT].avg_lat;
++		__entry->m_rd_cnt	= iostat_lat[READ_META_LAT].cnt;
++		__entry->d_wr_s_peak	= iostat_lat[WRITE_SYNC_DATA_LAT].peak_lat;
++		__entry->d_wr_s_avg	= iostat_lat[WRITE_SYNC_DATA_LAT].avg_lat;
++		__entry->d_wr_s_cnt	= iostat_lat[WRITE_SYNC_DATA_LAT].cnt;
++		__entry->n_wr_s_peak	= iostat_lat[WRITE_SYNC_NODE_LAT].peak_lat;
++		__entry->n_wr_s_avg	= iostat_lat[WRITE_SYNC_NODE_LAT].avg_lat;
++		__entry->n_wr_s_cnt	= iostat_lat[WRITE_SYNC_NODE_LAT].cnt;
++		__entry->m_wr_s_peak	= iostat_lat[WRITE_SYNC_META_LAT].peak_lat;
++		__entry->m_wr_s_avg	= iostat_lat[WRITE_SYNC_META_LAT].avg_lat;
++		__entry->m_wr_s_cnt	= iostat_lat[WRITE_SYNC_META_LAT].cnt;
++		__entry->d_wr_as_peak	= iostat_lat[WRITE_ASYNC_DATA_LAT].peak_lat;
++		__entry->d_wr_as_avg	= iostat_lat[WRITE_ASYNC_DATA_LAT].avg_lat;
++		__entry->d_wr_as_cnt	= iostat_lat[WRITE_ASYNC_DATA_LAT].cnt;
++		__entry->n_wr_as_peak	= iostat_lat[WRITE_ASYNC_NODE_LAT].peak_lat;
++		__entry->n_wr_as_avg	= iostat_lat[WRITE_ASYNC_NODE_LAT].avg_lat;
++		__entry->n_wr_as_cnt	= iostat_lat[WRITE_ASYNC_NODE_LAT].cnt;
++		__entry->m_wr_as_peak	= iostat_lat[WRITE_ASYNC_META_LAT].peak_lat;
++		__entry->m_wr_as_avg	= iostat_lat[WRITE_ASYNC_META_LAT].avg_lat;
++		__entry->m_wr_as_cnt	= iostat_lat[WRITE_ASYNC_META_LAT].cnt;
++		__entry->discard_peak	= iostat_lat[DISCARD_LAT].peak_lat;
++		__entry->discard_avg	= iostat_lat[DISCARD_LAT].avg_lat;
++		__entry->discard_cnt	= iostat_lat[DISCARD_LAT].cnt;
+ 	),
+ 
+ 	TP_printk("dev = (%d,%d), "
+@@ -2116,7 +2122,8 @@ TRACE_EVENT(f2fs_iostat_latency,
+ 		"rd_data [%u/%u/%u], rd_node [%u/%u/%u], rd_meta [%u/%u/%u], "
+ 		"wr_sync_data [%u/%u/%u], wr_sync_node [%u/%u/%u], "
+ 		"wr_sync_meta [%u/%u/%u], wr_async_data [%u/%u/%u], "
+-		"wr_async_node [%u/%u/%u], wr_async_meta [%u/%u/%u]",
++		"wr_async_node [%u/%u/%u], wr_async_meta [%u/%u/%u], "
++		"discard [%u/%u/%u]",
+ 		show_dev(__entry->dev),
+ 		__entry->d_rd_peak, __entry->d_rd_avg, __entry->d_rd_cnt,
+ 		__entry->n_rd_peak, __entry->n_rd_avg, __entry->n_rd_cnt,
+@@ -2126,7 +2133,8 @@ TRACE_EVENT(f2fs_iostat_latency,
+ 		__entry->m_wr_s_peak, __entry->m_wr_s_avg, __entry->m_wr_s_cnt,
+ 		__entry->d_wr_as_peak, __entry->d_wr_as_avg, __entry->d_wr_as_cnt,
+ 		__entry->n_wr_as_peak, __entry->n_wr_as_avg, __entry->n_wr_as_cnt,
+-		__entry->m_wr_as_peak, __entry->m_wr_as_avg, __entry->m_wr_as_cnt)
++		__entry->m_wr_as_peak, __entry->m_wr_as_avg, __entry->m_wr_as_cnt,
++		__entry->discard_peak, __entry->discard_avg, __entry->discard_cnt)
+ );
+ #endif
+ 
+-- 
+2.35.1
 
