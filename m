@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2185B6C24EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B583A6C24F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 23:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjCTWvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 18:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S229746AbjCTWww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 18:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCTWvv (ORCPT
+        with ESMTP id S229579AbjCTWwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 18:51:51 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51DC618D;
-        Mon, 20 Mar 2023 15:51:50 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMpcEx073323;
-        Mon, 20 Mar 2023 17:51:38 -0500
+        Mon, 20 Mar 2023 18:52:51 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5DB2FCCC;
+        Mon, 20 Mar 2023 15:52:49 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KMqgHg022739;
+        Mon, 20 Mar 2023 17:52:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679352698;
-        bh=MbZ+XusRii1Zr2oBrUBsSXvshFMoC8qFnlsIDV2dSJk=;
+        s=ti-com-17Q1; t=1679352762;
+        bh=Wrl+pdsJ7Yy8iawkVu9UhlYUAMXjyKrDWM6jikSpajY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=cbD4765Zx/NVzHop9GaDA9/qLELx8cIHqAfcS6BNwAHWa3Ifb09PwlaD9WmjBGj8q
-         IUSmd/iRV3JWqg4Ojm97+cXwtiKACYgwiZOUzdtc8nyfz07dkJfYswaWX7efQAsIz4
-         Z18Nlfb80rlV05x4I8G0B1fvMQZCrAeJh//I+f/I=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMpcvS085675
+        b=iOu7k7sWpWlqQSE/uL8oofFsTHcLh/WYGXAdlwwv75JO4lEOes6bRkKt9IQHnOOqH
+         31F0ttLmMRlY9YBB4bwdN/y70uiuPPR3rbn3MOmfW+A2FV984gfrkBwW4ysfgjkKEN
+         s/sRRItADT0MB9MMnEaRCNBHoFjmJAy+9JcM01VA=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KMqgBI042584
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 17:51:38 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 20 Mar 2023 17:52:42 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 17:51:38 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 17:52:42 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 17:51:38 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMpcrq105587;
-        Mon, 20 Mar 2023 17:51:38 -0500
+ Frontend Transport; Mon, 20 Mar 2023 17:52:42 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KMqgDm016833;
+        Mon, 20 Mar 2023 17:52:42 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, Nishanth Menon <nm@ti.com>
-CC:     Sekhar Nori <nsekhar@ti.com>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH V2 0/3] pinctrl/arm: dt-bindings: k3: Deprecate header with register constants
-Date:   Mon, 20 Mar 2023 17:51:37 -0500
-Message-ID: <167935265938.210951.6816039958932466588.b4-ty@ti.com>
+To:     <vigneshr@ti.com>, Jayesh Choudhary <j-choudhary@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <a-nandan@ti.com>, <hnagalla@ti.com>, <vaishnav.a@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: (subset) [PATCH v2 0/2] Add Crypto Support for J784S4 SoC
+Date:   Mon, 20 Mar 2023 17:52:41 -0500
+Message-ID: <167935272979.212397.5705926679911778715.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230315155228.1566883-1-nm@ti.com>
-References: <20230315155228.1566883-1-nm@ti.com>
+In-Reply-To: <20230314152611.140969-1-j-choudhary@ti.com>
+References: <20230314152611.140969-1-j-choudhary@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,27 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
+Hi Jayesh Choudhary,
 
-On Wed, 15 Mar 2023 10:52:25 -0500, Nishanth Menon wrote:
-> This is an updated series to move the pinctrl bindings over to arch as
-> the definitions are hardware definitions without driver usage.
+On Tue, 14 Mar 2023 20:56:09 +0530, Jayesh Choudhary wrote:
+> This series adds the crypto node for sa2ul for j784s4 platform.
 > 
-> This series was triggered by the discussion in [1]
+> First patch adds the device-id for NAVSS without which the probe
+> for dma-controller fails due to 'ti,sci-dev-id' read failure.
+> Second patch adds the crypto node.
 > 
-> v1: https://lore.kernel.org/linux-arm-kernel/20230311131325.9750-1-nm@ti.com/
+> This series has functional dependency on j784s4 k3_soc_id[1] and
+> PSIL-thread support[2] but it does not affect the boot.
 > 
 > [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
+This takes care of the missing patch for actually enabling crypto.
+
 Thank you!
 
-[1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Drop pinmux header
-      commit: c680fa2a09a9550284546d2deeb31640ec3b56c8
-[2/3] arm64: dts: ti: Use local header for pinctrl register values
-      commit: fe49f2d776f7994dc60dd04712a437fd0bdc67a0
-[3/3] dt-bindings: pinctrl: k3: Deprecate header with register constants
-      commit: f2de003e1426ccbefa281a066040da7699f6d461
+[2/2] arm64: dts: ti: k3-j784s4-main: Enable crypto accelerator
+      commit: a43f0ac3851833302174567dadd60f58e24d0f30
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
