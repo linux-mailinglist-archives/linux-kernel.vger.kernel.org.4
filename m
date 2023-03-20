@@ -2,136 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B33F6C19F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D706C1A2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbjCTPkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S232008AbjCTPst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbjCTPjm (ORCPT
+        with ESMTP id S231967AbjCTPsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:39:42 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3DB38E95
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:31:18 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5447d217bc6so230521257b3.7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679326275;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IdjIm567qkBcR6Zk87uH5J+4skizW7Cn2uLqlnBIrks=;
-        b=hxMkhDzFS4HWReDlRUh9SLZWjk6bX0nr5ikB2yOlyEAyFdpYWCN/Enb8EirYJu00x9
-         pKKwomng7ND7yObX5o6OAwN+Rcng04Zw3Xpg+xWhjq7jsR2Oisd3TfVEVP0T8k5ZyD/m
-         om4t9R8q701NHBN14oCxf4D5Ft4WLWGX0yjih7oR1AEy7Be4SUKll+vFUrVewJ7eYEyN
-         MezvG8VBIcsvKQl3fIBWxj0VPEylka1XPaP3Ufi6nqSzq+ErcmgzAzt4ILBziUwVfwb1
-         8erazUdnjCR1pWHnh2D9b17sJFAy1skVqveQotTFaKFWEVaXzk3cHtp/AWCbQ6e4gmnQ
-         /VNw==
+        Mon, 20 Mar 2023 11:48:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDD437F2D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679326681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4kPJZ32Y+l53box6ko+ne5cwDvp4Win8rdXeR0QS2JU=;
+        b=enMJvpLHndoWX8pxFosX08g9AnjeoJLQTJIvgSsqIYOEDbqSD98YEWKNzgCM59y5v+54YQ
+        VsSbn6HF2g4TsJ0AaD9MpObDd89c98/9R2wJSNEJMTQofirwhRZUWE2JEoMRLAFPlWYQHJ
+        ofeT4KhbKRRKBeWF60qj1fSow87zViE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-148-hUBHHRubNouH9vzsOfE59Q-1; Mon, 20 Mar 2023 11:31:39 -0400
+X-MC-Unique: hUBHHRubNouH9vzsOfE59Q-1
+Received: by mail-wm1-f70.google.com with SMTP id j36-20020a05600c1c2400b003ed245a452fso5707444wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:31:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326275;
+        d=1e100.net; s=20210112; t=1679326298;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IdjIm567qkBcR6Zk87uH5J+4skizW7Cn2uLqlnBIrks=;
-        b=A9uQPBp8ctY0XpggMzfFhDt/Fwe3oiaxTshBfsiqksGniiEJgtUnaP3lPghJ8xsVcH
-         vtng8RAxYuvUpzphffccbhM59I5VhRmhU93JFIBczy/TgLT/bbfOoaEfbZHqZJ2J6uQi
-         0iFoqz4d7zaeNIwcrR6kbpug6B42daM4YvokEuIEj7scYnTVrMD7NgStsKtTSY3mex32
-         hYZuqGhBm9tUSKubk1BP5WA0VnhH3NvUpO2emTzXRM6sl+UlRgh7Z9IaK4J4vWE/JVSK
-         uA+oTpi3zG6vXAG3eXJVNN6/8GQOOvosaaRfyi+wNnHZGzCgKB0BWsA/Wr9IqiMlTI0Y
-         zcIg==
-X-Gm-Message-State: AO0yUKWqOrrNZnl0zSMWK5A1yrWb30196IC45Iq8tJHeovTqnco5dBG/
-        P9KJhlhKLufQavJtMhAW2uedaQ==
-X-Google-Smtp-Source: AK7set9CmF/trI8O1BIyJ63UJAKQ5IO8hYkR0e7JraXdD+1qJQVOENDxW3WJFg3ivDhu2Vtvb3e5qw==
-X-Received: by 2002:a81:a148:0:b0:541:96c1:495f with SMTP id y69-20020a81a148000000b0054196c1495fmr14818974ywg.18.1679326275188;
-        Mon, 20 Mar 2023 08:31:15 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id s128-20020a37a986000000b00741a984943fsm7585311qke.40.2023.03.20.08.31.09
+        bh=4kPJZ32Y+l53box6ko+ne5cwDvp4Win8rdXeR0QS2JU=;
+        b=Jqm33MKPMoEwEPqtnZ257k0Bgbjg6KiVU8RXURIcM1qxjCTK5Y0qo6Fp53WhAbNu7h
+         9wsMiJ8xR24Y027faE/TX8p12lt+FYbyPJfV51zFB/UCn+FwTil8oiuwvWd4nmGz2r3G
+         HpiPMLb8oZ683k/OZl5CLZS6CwPdAV/RnM2rgPSj0xzDt8zw0APth03xJyipqTGZ5zKt
+         Iz1hJjojF/m2zIc3a0dEgnfLSpesrhEjvvwhYYB77EXUlpWnR8Rfgtduoa54aQT1P4xi
+         UxBFElfKfXVXk55aAPC89Cm9Cm7BXcIvL0L4xtaT5svwqOF5SwlQmx4jjKtbUlSN8tPw
+         3yOQ==
+X-Gm-Message-State: AO0yUKWV8ynO1xngiph62J7FzX+Eoq00oLH05lBXTmsTfSOcVDDirJPe
+        vhNFFuRXiCaTtW3T2QjFdH5PThDY9viTCm4BwRqeY29FaWiU6IGznojag3e3wfWXXgv+2gKjLB1
+        MHjDKBVmZxO2m969d+m1swMo9SfKqWKNd
+X-Received: by 2002:a05:600c:3aca:b0:3ed:6049:a5ae with SMTP id d10-20020a05600c3aca00b003ed6049a5aemr9662596wms.4.1679326298129;
+        Mon, 20 Mar 2023 08:31:38 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+K/iSPqBhOxqnDWry6nMA6XFyLEMJvZ5BagJzhVQg80QiS5si7gT89jIVKwdv6jvS+LcnPCg==
+X-Received: by 2002:a05:600c:3aca:b0:3ed:6049:a5ae with SMTP id d10-20020a05600c3aca00b003ed6049a5aemr9662575wms.4.1679326297864;
+        Mon, 20 Mar 2023 08:31:37 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id h11-20020a05600c314b00b003e7c89b3514sm7332828wmo.23.2023.03.20.08.31.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 08:31:10 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 11:31:07 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] counter: 104-quad-8: Utilize helper functions to
- handle PR, FLAG and PSC
-Message-ID: <ZBh8O5oOL0TB9wzT@fedora>
-References: <cover.1679149542.git.william.gray@linaro.org>
- <71496f9295e68388ce07f3051bf5882177be83c5.1679149543.git.william.gray@linaro.org>
- <ZBhRb+v/8+vSwjz6@smile.fi.intel.com>
+        Mon, 20 Mar 2023 08:31:37 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 16:31:32 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v1 3/3] test/vsock: skbuff merging test
+Message-ID: <20230320153132.o3xvwxmn3722lin4@sgarzare-redhat>
+References: <e141e6f1-00ae-232c-b840-b146bdb10e99@sberdevices.ru>
+ <14ca87d1-3e07-85e9-d11c-39789a9d17d4@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/gEyjofsgQlHKWQq"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <ZBhRb+v/8+vSwjz6@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <14ca87d1-3e07-85e9-d11c-39789a9d17d4@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Mar 19, 2023 at 09:53:54PM +0300, Arseniy Krasnov wrote:
+>This adds test which checks case when data of newly received skbuff is
+>appended to the last skbuff in the socket's queue.
+>
+>This test is actual only for virtio transport.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/vsock_test.c | 81 ++++++++++++++++++++++++++++++++
+> 1 file changed, 81 insertions(+)
+>
+>diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+>index 3de10dbb50f5..00216c52d8b6 100644
+>--- a/tools/testing/vsock/vsock_test.c
+>+++ b/tools/testing/vsock/vsock_test.c
+>@@ -968,6 +968,82 @@ static void test_seqpacket_inv_buf_server(const struct test_opts *opts)
+> 	test_inv_buf_server(opts, false);
+> }
+>
+>+static void test_stream_virtio_skb_merge_client(const struct test_opts *opts)
+>+{
+>+	ssize_t res;
+>+	int fd;
+>+
+>+	fd = vsock_stream_connect(opts->peer_cid, 1234);
+>+	if (fd < 0) {
+>+		perror("connect");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
 
---/gEyjofsgQlHKWQq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please use a macro for "HELLO" or a variabile, e.g.
 
-On Mon, Mar 20, 2023 at 02:28:31PM +0200, Andy Shevchenko wrote:
-> On Sat, Mar 18, 2023 at 10:59:51AM -0400, William Breathitt Gray wrote:
-> > The Preset Register (PR), Flag Register (FLAG), and Filter Clock
-> > Prescaler (PSC) have common usage patterns. Wrap up such usage into
-> > dedicated functions to improve code clarity.
->=20
-> ...
->=20
-> > +static void quad8_preset_register_set(struct quad8 *const priv, const =
-size_t id,
-> > +				      const unsigned long preset)
-> > +{
-> > +	struct channel_reg __iomem *const chan =3D priv->reg->channel + id;
-> > +	int i;
-> > +
-> > +	/* Reset Byte Pointer */
-> > +	iowrite8(SELECT_RLD | RESET_BP, &chan->control);
-> > +
-> > +	/* Set Preset Register */
-> > +	for (i =3D 0; i < 3; i++)
-> > +		iowrite8(preset >> (8 * i), &chan->data);
-> > +}
->=20
-> May we add generic __iowrite8_copy() / __ioread8_copy() instead?
->=20
-> It seems that even current __ioread32_copy() and __iowrite32_copy() has to
-> be amended to support IO.
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
+         char *buf;
+         ...
 
-Sure, I would use __iowrite8_copy() / __ioread8_copy() for these
-situations if it were available.
+         buf = "HELLO";
+         res = send(fd, buf, strlen(buf), 0);
+         ...
 
-Is something equivalent available for the regmap API? I'm planning to
-migrate this driver to the regmap API soon after this patch series is
-merged, so the *_copy() calls would need to migrated as well.
+>+	res = send(fd, "HELLO", strlen("HELLO"), 0);
+>+	if (res != strlen("HELLO")) {
+>+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	control_writeln("SEND0");
+>+	/* Peer reads part of first packet. */
+>+	control_expectln("REPLY0");
+>+
+>+	/* Send second skbuff, it will be merged. */
+>+	res = send(fd, "WORLD", strlen("WORLD"), 0);
 
-William Breathitt Gray
+Ditto.
 
---/gEyjofsgQlHKWQq
-Content-Type: application/pgp-signature; name="signature.asc"
+>+	if (res != strlen("WORLD")) {
+>+		fprintf(stderr, "unexpected send(2) result %zi\n", res);
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	control_writeln("SEND1");
+>+	/* Peer reads merged skbuff packet. */
+>+	control_expectln("REPLY1");
+>+
+>+	close(fd);
+>+}
+>+
+>+static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
+>+{
+>+	unsigned char buf[64];
+>+	ssize_t res;
+>+	int fd;
+>+
+>+	fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
+>+	if (fd < 0) {
+>+		perror("accept");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	control_expectln("SEND0");
+>+
+>+	/* Read skbuff partially. */
+>+	res = recv(fd, buf, 2, 0);
+>+	if (res != 2) {
+>+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
 
------BEGIN PGP SIGNATURE-----
+We don't expect a failure, so please update the error message and make
+it easy to figure out which recv() is failing. For example by saying
+how many bytes you expected and how many you received.
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZBh8OwAKCRC1SFbKvhIj
-K+NBAP96JxKPh81zqyRL1AQgZuFfPFCsB8KcMETcK9WYBXfPRgEAvjNWudfdxTqs
-CKrHqQ/dRgxfGdXMfwGXCSRw+YuofQU=
-=/91A
------END PGP SIGNATURE-----
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	control_writeln("REPLY0");
+>+	control_expectln("SEND1");
+>+
+>+
+>+	res = recv(fd, buf, sizeof(buf), 0);
 
---/gEyjofsgQlHKWQq--
+Perhaps a comment here to explain why we expect only 8 bytes.
+
+>+	if (res != 8) {
+>+		fprintf(stderr, "expected recv(2) failure, got %zi\n", res);
+
+Ditto.
+
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	res = recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
+>+	if (res != -1) {
+>+		fprintf(stderr, "expected recv(2) success, got %zi\n", res);
+
+It's the other way around, isn't it?
+Here you expect it to fail instead it is not failing.
+
+>+		exit(EXIT_FAILURE);
+>+	}
+
+Moving the pointer correctly, I would also check that there is
+HELLOWORLD in the buffer.
+
+Thanks for adding tests in this suite!
+Stefano
+
+>+
+>+	control_writeln("REPLY1");
+>+
+>+	close(fd);
+>+}
+>+
+> static struct test_case test_cases[] = {
+> 	{
+> 		.name = "SOCK_STREAM connection reset",
+>@@ -1038,6 +1114,11 @@ static struct test_case test_cases[] = {
+> 		.run_client = test_seqpacket_inv_buf_client,
+> 		.run_server = test_seqpacket_inv_buf_server,
+> 	},
+>+	{
+>+		.name = "SOCK_STREAM virtio skb merge",
+>+		.run_client = test_stream_virtio_skb_merge_client,
+>+		.run_server = test_stream_virtio_skb_merge_server,
+>+	},
+> 	{},
+> };
+>
+>-- 
+>2.25.1
+>
+
