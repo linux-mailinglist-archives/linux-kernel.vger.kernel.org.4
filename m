@@ -2,158 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6208F6C0EB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77EB6C0EB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCTKY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S230000AbjCTKZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjCTKYu (ORCPT
+        with ESMTP id S229449AbjCTKZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:24:50 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2744CB44F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:24:47 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id by13so9997257vsb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:24:47 -0700 (PDT)
+        Mon, 20 Mar 2023 06:25:36 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2121.outbound.protection.outlook.com [40.107.237.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B761BAD3F;
+        Mon, 20 Mar 2023 03:25:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J3jnjT8fltPi+pLEStBk4seSTlHpTYNwnkeiH3w3AQXx0vb+LB15sm+jBOBJ2YrS00mO8hnMqYgxvw7LPqNl73B3BCZ9+CizR+FTGfdxzJXCzM11O6s9bz6p4QUP4MYqAnJcjYP/mLly5ockzzwX+nCZpu10/giMZbSZV8S/KjTc9WW8PKiCBXZz7CgjSgSSu/yrrg/02UscGuvtgvnINZtTcJsAOF3BAaIiFYSowLF+uxeNjKlV2WGF2nY7w+pgcQZWeLr28ttG26H69Q9Kni18V0tjpkr1puDZcIINA+5HiHUEKAAjf5JxZi4p0oMNl3bnztaUfaWXt2J4VAYPKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iVD6ZgXSZSbxDUYfZvIK63SvDVkJCsk2rXux0/LI2R0=;
+ b=m2wltoc6TQwfV9QKUWOGAFYbOu3hu+v7NotqFJhTQ7ipo0p314mYl9nSYfD3rIBnlrp4dc1AHtZvtmU5WI+6pdgzv087APZ7Uab3olD0/uRjVxBd7NV7zeEaqnzZHbX9Z65QClgj6bz3OUF/KvHZPTGpz7kuL4z5sO/k74y6d4zcUJNjS9+WUhzrZKKP4SEOPFe3CgSZlnErkYnbmfNnGzw47OUwMzY55qzRviC2VJ5lB4aFYSd8489c4eMNNHriYISgXWzM1TszLOYwSUkRZ2/chICjbRHJk15r8sQGPkE+z/omvgvApP5Hox4MIyZf2j/pf9NKM/OpZuU5SqJywA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679307886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MMr1WoTvszkHMn826fWIWzwxgXcAXUrmwDv+A43kxrw=;
-        b=HC0Ol9AjVA6fsxwuasIjT+8fB4dMQKcPk8dZP3YbCa6ryA6GJVYaZuLfgQOYP4oF3C
-         ee1FCMyZUlA1dqhvMtsrybitPi5eshAyrybZDDOHKlHJkCPsXPfuWSnrP8nfWRxmgkJx
-         GwVUtzid5QicAj69sqw4TN2KO0mxrsmKVcT4Evs7dh8Us3ZJp3OrEfsERMmyDfN6hdt1
-         oQMs1xFoUSfkwyy4cCRE1DvDBv4fw/CPWHHH+WieOEPgYUIBfZRoFC26VM8WxiWqhW5E
-         B2IBubyGKRWItXGMJcDGQEdcBTubZ675+8phT19v9xtl8lbIcC4FPXlY1kLn184kMAUH
-         zklg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679307886;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MMr1WoTvszkHMn826fWIWzwxgXcAXUrmwDv+A43kxrw=;
-        b=J5d4MJ5jK2JNOpEipR8EO0EDwMeoPMUXu8CsUZdXsMmPbRDDHT1H194FZ67VkeWgJp
-         yqeByuLe2oswFkbC8N+YDla/2vHz+MFHBdpik7pXxcdl116zhgTcibOseIyl2ROUWTu0
-         BH+afCdsK/FNXNjyTqwipKG0BDO0uJOP1HOhT11mW4kbhwQdQs6iULAVvTFaEOCMERdb
-         UW1EvYE6ehyqQRYmD8v1EJfNB3tLfBkJwGelm4JB4blktIxO3a2ybp7wDZlyuZ+EhLW+
-         oC9O4SBr7eRKc+ad7uTJU6Q2+ynLV65GqUG8EKNviPla08LCo11TBUG16Ob32L0EYk+H
-         ReYw==
-X-Gm-Message-State: AO0yUKUqMVnli8GaYe80dxcBbhlTNC4QjtRum3xkai1f8qmFhxqrKFee
-        pEqFpaFuBVUOzHV84W1BcRgv9kiGCXxGDqpmvxowUA==
-X-Google-Smtp-Source: AK7set+QVBe9J3CJc30jBUPlLxhp9RAGQykt/RN2GdLJJ1f2BAGM9XTNEP1fhBJxspkysoECoTvry9uuwZ2wiscA4y8=
-X-Received: by 2002:a67:ca18:0:b0:425:b61a:9c13 with SMTP id
- z24-20020a67ca18000000b00425b61a9c13mr3780116vsk.0.1679307886261; Mon, 20 Mar
- 2023 03:24:46 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iVD6ZgXSZSbxDUYfZvIK63SvDVkJCsk2rXux0/LI2R0=;
+ b=fb7VUaC/XrTq4+6GghX9hvqOi3rYx685oftbUs48vsp90ioZmDGZPhk2O4Opoo//1dIu8YMV4HoZhDCvaCY4+37l2FpuC3YAk5L/hs2PQ4Zu8rrCfM1shObJuZofVVSPFT0D/RiCINrRdWRcNG0Pvj5rsAf83BtWvp25uO89+N4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM8PR13MB5096.namprd13.prod.outlook.com (2603:10b6:8:23::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 10:25:33 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 10:25:33 +0000
+Date:   Mon, 20 Mar 2023 11:25:26 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v2] Bluetooth: 6LoWPAN: Add missing check for
+ skb_clone
+Message-ID: <ZBg0ljeZVSpyf6E9@corigine.com>
+References: <20230320030846.18481-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320030846.18481-1-jiasheng@iscas.ac.cn>
+X-ClientProxiedBy: AM0PR02CA0079.eurprd02.prod.outlook.com
+ (2603:10a6:208:154::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230314183043.619997-1-brgl@bgdev.pl> <20230314183043.619997-6-brgl@bgdev.pl>
- <08dff56d-227a-a791-549c-15ac0f1ac08b@linaro.org>
-In-Reply-To: <08dff56d-227a-a791-549c-15ac0f1ac08b@linaro.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 20 Mar 2023 11:24:35 +0100
-Message-ID: <CAMRc=MdSRY8w0pWuhprB1ALPFpcCdYOnyQZ63BSzJPa3u1a-jA@mail.gmail.com>
-Subject: Re: [PATCH 05/14] arm64: dts: qcom: sa8775p: add support for the
- on-board PMICs
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM8PR13MB5096:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5afdc1f8-613c-473d-466e-08db292d6fcb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jNgdi+AAeLHJ/D2jEjCiktLwqAvlGrLxlozGem4ZheWEAyQ7zFEe+5oXPkGHn4QvoA1OWchk6yah36GvZga7+pk5fHRs0fPqWUo3Rwv15OsERfs+1Wgnab+Wa2FAUSfOXzzzUrj+kLQoMg60XAIqYjHmZOgnBMlEyTS71CpGzV+xHo+IhtbQZOJ5cqB5MqN9nB4ABUV28r+MBewpFzPlpQ5EeNdlvqgbxID0Os5G0fmnuNT5vHZ70I4IV92nrjY+1qanA0tNjExl4EOOU2giDCjG9M2RfSl+gQYDDIqzpEtfuWaYeJGLWeh/NDjVbdSY+Q5rolCBK8OlyjDzUtWtDO38JdH7OjzArcFV/FeGsoKbMBaGsiLxVrp9Ta0YC3GhvvSudzN8SU0BO0EJjioQDiqBbe4cmDdfLaM5YAc45pJLvirVqOhcBJ1qb6Mj3819JLt0yYCAvhNicEdeCWrMJaEfFjwEcp+RIMgGapa1p1V698Pc9/cfg1FSsqlC4elsfbPsep91WyL9xusH9nadoIYe7ehEDSnQcASsFkYLCOO5JgE9G5FDv0xbsGbrI0rCJeFmeHWy+odtBB7cQKu/Ack7uAukcajGlbAeKHyStmw5VgOW0AaApdG7R5KN/bvIkGtuKRQv6y7fj3peK6yyovM4puwNZpIJJljWn6Nn0ifSriH/2710tOkBBwPpxreA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(366004)(39830400003)(396003)(451199018)(2616005)(6666004)(6506007)(6512007)(186003)(6486002)(4326008)(66556008)(66476007)(8676002)(66946007)(6916009)(316002)(478600001)(7416002)(44832011)(41300700001)(8936002)(2906002)(5660300002)(38100700002)(36756003)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dkFWlKLZcwuDrUeXU0/HY/C++UaL1TONnqnhkT+2wVqs1VOSm9GEBTTi2eM0?=
+ =?us-ascii?Q?YxDuaX+75BRFO3lOQ8ocilxtSuBe9znb9h+KFaQZgITbqw992bgFTN+aUZXU?=
+ =?us-ascii?Q?8J6XqqBUue3qmQNTBnxEghcWoOC/SJ1VuiyUP47s95VlkbXrVHmNLj0icXgb?=
+ =?us-ascii?Q?qI1v1AlfQZsjMAeyx3dQyZvphSXMXfvH7wrxyMmHT9o2zPESEE+YOREmJZkN?=
+ =?us-ascii?Q?etzFuUKk7iDnDbJZDp2mGG1grkvldnswJsRalyWHBB0M8xh/Ko2PmJ3FNmro?=
+ =?us-ascii?Q?O99+bO0SNlRCD9ZyLSZQyUMyuf+6onkpbm2+R9RJPIM/mxebi7SOYHVi4ju9?=
+ =?us-ascii?Q?ZYlGqKuG4ThLQZ/mk/5nLZYUtSh60mZ30QbcFJADwMjOYj5302qO/A94I9Rr?=
+ =?us-ascii?Q?9hz8/ox9Bf2pWjKHBKwxgcP29v0MeFt8aO/iF/5NfQMroezc4eIzgs5vaR4T?=
+ =?us-ascii?Q?gqa/6SITR2jzoRzr+tBQXYLkEzjpNYyLn7hSWvoCj/0NuqiiyG2LIdZ2jF6X?=
+ =?us-ascii?Q?TH8CIYkXheWigHiTs6UWCKAp7HEqkJ3XRCDKf/zBn7mcbWGTjSbAqJ2uHe/z?=
+ =?us-ascii?Q?zrdufCS+zLRa3jqnyR2RKdvJzc3o88rLLplfStxbgW3jtdg6Yy/3AludlMU3?=
+ =?us-ascii?Q?804vS1xzOce1BZZICiiQkj8mZIdUBg0DtH8G4++uwT0f3Xs6Unl1dnr6MJAZ?=
+ =?us-ascii?Q?x4aJvV4imQrAQSeLTg6dMolC0dcmKm5td7OaIYp8OEz4/vBnkPoXWm9amPkK?=
+ =?us-ascii?Q?o7Jy+HtycHW6XM/UX/8FT9KHqOI2H6LKCZDeSxNKASRT+n5Zw0Fs/uF2gw+S?=
+ =?us-ascii?Q?WgUKf8jF7h12Tr1qiAjOiF84jDe6mviGt3p1cbGSOAlWU5B4yi3qeQqdsFNl?=
+ =?us-ascii?Q?nc6VnuW43eWL1lLAwpfiDEDxV/dMw5mC/Va34txTn0gaHD5lOSI8ctP6eXOV?=
+ =?us-ascii?Q?FME8xgSdY52qog2aT1vVWxqnMabRGOBZhUUqaLkAKqltn8/EHaa2ap0FFsab?=
+ =?us-ascii?Q?GpFhIpZY8WcPJ/YdEvTSweTOPDkecSzcjfRPtvaNJ+NAsPYfHOGF4hZ+ktDg?=
+ =?us-ascii?Q?yKZvTR4hCEH7mU/PENIWMXib6sAW9B0D04P5PUgUup/4muTA8lsbIvOhPxGp?=
+ =?us-ascii?Q?Vqxbrp0OzD6uxVpgst0KIEtzRYEjtCARM8KxkZK0/DoBs2Irk5NRSJMdn1dq?=
+ =?us-ascii?Q?YMkArJKFDJQy4OGIPfDdQQG7gt69gYYh1iMk2tSyRrAIm6GOy3Bd5+30rJEm?=
+ =?us-ascii?Q?ij+myDOUvl9wor952nZxqNbw9WHqAl8HxPnXIe8AduQu3Nzsc1zrSGuT13CK?=
+ =?us-ascii?Q?qQL03bv0EtFujSVKTeyCWIuX/vVV337mCysOeA+2Ws49qwtXBKmoCnVv7EDN?=
+ =?us-ascii?Q?+/5xEgYtE0M/H1ySO90xjkz4v1AnvjjhPDoxV/7cECZZOQlsCBB/xvpIRZgA?=
+ =?us-ascii?Q?qZfot7j4fxYX98/OJ/yIWn8QEkyEb5dFgU0qgNmKwRiQmKIkfxTqoi2hnLQk?=
+ =?us-ascii?Q?24ZyE6InDkfqwrQ6frJnoBJjwJhFijwVPvK4hQ9OXGwoGiq/ie3zLEDvSFlR?=
+ =?us-ascii?Q?QOiyrnRccp48D6NhaN3kwqz/MWVXgZSV/ZsU/RLhtvu/EB+G96KMBeFaoMBC?=
+ =?us-ascii?Q?wpAoq4FSjTf59HvWytVLXvXz4mikarOt+1hZg0pmJaX9QCxGVy8HA07fQyyW?=
+ =?us-ascii?Q?s1NPbg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5afdc1f8-613c-473d-466e-08db292d6fcb
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 10:25:33.0802
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uQ/ex1bqxsQUCxWtlqY69ZcnPgchjLrN0Z4zHjlT9m4erjC+xYmQ6xW11W0d45Iu0zTE8Q+cqliklSjCcMKFv3aLiKUhMXR8doYmQOO8QX4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR13MB5096
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 9:22=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
-.org> wrote:
->
->
->
-> On 14.03.2023 19:30, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Add a new .dtsi file for sa8775p PMICs and add the four PMICs interface=
-d
-> > to the SoC via SPMI.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 37 +++++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/b=
-oot/dts/qcom/sa8775p-pmics.dtsi
-> > new file mode 100644
-> > index 000000000000..77e2515a7ab9
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> > @@ -0,0 +1,37 @@
-> > +// SPDX-License-Identifier: BSD-3-Clause
-> > +/*
-> > + * Copyright (c) 2023, Linaro Limited
-> > + */
-> > +
-> > +#include <dt-bindings/input/input.h>
-> > +#include <dt-bindings/spmi/spmi.h>
-> > +
-> > +&spmi_bus {
-> > +     pmk8775_0: pmic@0 {
-> pmk8775..
->
-> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
-> ..or pmm8654au?
->
+On Mon, Mar 20, 2023 at 11:08:46AM +0800, Jiasheng Jiang wrote:
+> On Mon, Mar 20, 2023 at 10:54:40AM +0800, Jiasheng Jiang wrote:
+> > On Sat, Mar 18, 2023 at 05:03:21AM +0800, Simon Horman wrote:
+> >> On Wed, Mar 15, 2023 at 03:06:21PM +0800, Jiasheng Jiang wrote:
+> >>> Add the check for the return value of skb_clone since it may return NULL
+> >>> pointer and cause NULL pointer dereference in send_pkt.
+> >>> 
+> >>> Fixes: 18722c247023 ("Bluetooth: Enable 6LoWPAN support for BT LE devices")
+> >>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> >>> ---
+> >>> Changelog:
+> >>> 
+> >>> v1 -> v2:
+> >>> 
+> >>> 1. Modify the error handling in the loop.
+> >> 
+> >> I think that at a minimum this needs to be included in the patch description.
+> >> Or better, in it's own patch with it's own fixes tag.
+> >> It seems like a fundamental change to the error handling to me.
+> > 
+> > I will submit a separate patch to modify the error handling in the loop.
+> > You can directly review the v1.
+> > Link:https://lore.kernel.org/all/20230313090346.48778-1-jiasheng@iscas.ac.cn/
+> 
+> I think it would be better to send a patch series.
 
-Honestly, I got inspired by this bit from sc8280xp-pmics.dtsi:
-
- 54 &spmi_bus {
- 55         pmk8280: pmic@0 {
- 56                 compatible =3D "qcom,pmk8350", "qcom,spmi-pmic";
- 57                 reg =3D <0x0 SPMI_USID>;
- 58                 #address-cells =3D <1>;
- 59                 #size-cells =3D <0>;
-
-Where the label seems to follow the SoC's numbering. Do you think it
-would be better to consistently use the pmic's name?
-
-Bartosz
-
-> Konrad
-> > +             reg =3D <0x0 SPMI_USID>;
-> > +             #address-cells =3D <1>;
-> > +             #size-cells =3D <0>;
-> > +     };
-> > +
-> > +     pmk8775_1: pmic@2 {
-> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
-> > +             reg =3D <0x2 SPMI_USID>;
-> > +             #address-cells =3D <1>;
-> > +             #size-cells =3D <0>;
-> > +     };
-> > +
-> > +     pmk8775_2: pmic@4 {
-> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
-> > +             reg =3D <0x4 SPMI_USID>;
-> > +             #address-cells =3D <1>;
-> > +             #size-cells =3D <0>;
-> > +     };
-> > +
-> > +     pmk8775_3: pmic@6 {
-> > +             compatible =3D "qcom,pmm8654au", "qcom,spmi-pmic";
-> > +             reg =3D <0x6 SPMI_USID>;
-> > +             #address-cells =3D <1>;
-> > +             #size-cells =3D <0>;
-> > +     };
-> > +};
+Yes, agreed.
