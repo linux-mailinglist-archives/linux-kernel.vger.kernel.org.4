@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8066C0C71
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40E56C0C79
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCTIqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S230028AbjCTIsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjCTIqI (ORCPT
+        with ESMTP id S230060AbjCTIsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:46:08 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19E720D1E;
-        Mon, 20 Mar 2023 01:45:52 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 7769E1A00A34;
-        Mon, 20 Mar 2023 16:45:54 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6jm06hZJpQeJ; Mon, 20 Mar 2023 16:45:53 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 517EC1A0091B;
-        Mon, 20 Mar 2023 16:45:53 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     awalls@md.metrocast.net, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] media: cx18: remove unnecessary (void*) conversions
-Date:   Mon, 20 Mar 2023 16:45:02 +0800
-Message-Id: <20230320084502.29478-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,RCVD_IN_VALIDITY_RPBL,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 20 Mar 2023 04:48:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B9E55A0;
+        Mon, 20 Mar 2023 01:48:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FA5461263;
+        Mon, 20 Mar 2023 08:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA5BC433EF;
+        Mon, 20 Mar 2023 08:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679302084;
+        bh=ujA6Uw61/p6mzFCHl2TPNTrn3EeopZSQcSvdx284HS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZoB1JsImlGki7ySeaRm7mmOXjE2Q7Pjj4iLMOA86bMnJH4CZaGmQd3JOhuSTrw9qL
+         YzhHE79drltHGj1OyeQXqpWTmpi90mogbicQIxYTc3zA3dH4r9C3FKGkAyAWIvzDHD
+         7oBBGHNQbxU2m0wWqENh0YqTxcqMbj5nUSuneiSo=
+Date:   Mon, 20 Mar 2023 09:47:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: Consider picking up "scsi: core: Fix a procfs host directory
+ removal regression" for stable
+Message-ID: <ZBgdvX4hV3zmdZOc@kroah.com>
+References: <472c53aa-4803-cde9-8f80-cbd7d33dc9c5@leemhuis.info>
+ <e6314dd6-df75-fff8-1e3c-546b2b44be5b@leemhuis.info>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6314dd6-df75-fff8-1e3c-546b2b44be5b@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+On Mon, Mar 20, 2023 at 07:45:04AM +0100, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 20.03.23 07:19, Linux regression tracking (Thorsten Leemhuis) wrote:
+> > Hi Greg. From https://bugzilla.kernel.org/show_bug.cgi?id=217215 it
+> > looks like you want to add be03df3d4bfe ("scsi: core: Fix a procfs host
+> > directory removal regression") to your stable queue. It lacks a stable
+> > tag, but fixes a bug in a commit that afaics was backported to all
+> > stable series last week.
+> > 
+> > Side note: would you scripts have noticed this automatically and added
+> > it to the queue today? (Just wondering if this mail actually makes any
+> > difference.)
+> 
+> Sorry, ignore that, I noticed that fix is already in your queue (I
+> looked at it before writing that mail, but it seems I somehow missed it
+> and only noticed now; sorry for the noise).
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- drivers/media/pci/cx18/cx18-dvb.c  | 4 ++--
- drivers/media/pci/cx18/cx18-gpio.c | 2 +-
- drivers/media/pci/cx18/cx18-irq.c  | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+It's not noise, verifying that we actually picked up known fixes is
+good, I'd much rather a few "do you really have this fix" emails get
+sent than not sent at all and we miss things.
 
-diff --git a/drivers/media/pci/cx18/cx18-dvb.c b/drivers/media/pci/cx18/cx18-dvb.c
-index 33e5a5b5fab4..cf82360a503d 100644
---- a/drivers/media/pci/cx18/cx18-dvb.c
-+++ b/drivers/media/pci/cx18/cx18-dvb.c
-@@ -234,7 +234,7 @@ static int dvb_register(struct cx18_stream *stream);
- static int cx18_dvb_start_feed(struct dvb_demux_feed *feed)
- {
- 	struct dvb_demux *demux = feed->demux;
--	struct cx18_stream *stream = (struct cx18_stream *) demux->priv;
-+	struct cx18_stream *stream = demux->priv;
- 	struct cx18 *cx;
- 	int ret;
- 	u32 v;
-@@ -305,7 +305,7 @@ static int cx18_dvb_start_feed(struct dvb_demux_feed *feed)
- static int cx18_dvb_stop_feed(struct dvb_demux_feed *feed)
- {
- 	struct dvb_demux *demux = feed->demux;
--	struct cx18_stream *stream = (struct cx18_stream *)demux->priv;
-+	struct cx18_stream *stream = demux->priv;
- 	struct cx18 *cx;
- 	int ret = -EINVAL;
- 
-diff --git a/drivers/media/pci/cx18/cx18-gpio.c b/drivers/media/pci/cx18/cx18-gpio.c
-index 160c8377e352..c85eb8d25837 100644
---- a/drivers/media/pci/cx18/cx18-gpio.c
-+++ b/drivers/media/pci/cx18/cx18-gpio.c
-@@ -307,7 +307,7 @@ int cx18_gpio_register(struct cx18 *cx, u32 hw)
- 
- void cx18_reset_ir_gpio(void *data)
- {
--	struct cx18 *cx = to_cx18((struct v4l2_device *)data);
-+	struct cx18 *cx = to_cx18(data);
- 
- 	if (cx->card->gpio_i2c_slave_reset.ir_reset_mask == 0)
- 		return;
-diff --git a/drivers/media/pci/cx18/cx18-irq.c b/drivers/media/pci/cx18/cx18-irq.c
-index fb10e9c2c5b8..db63077821b1 100644
---- a/drivers/media/pci/cx18/cx18-irq.c
-+++ b/drivers/media/pci/cx18/cx18-irq.c
-@@ -30,7 +30,7 @@ static void epu_cmd(struct cx18 *cx, u32 sw1)
- 
- irqreturn_t cx18_irq_handler(int irq, void *dev_id)
- {
--	struct cx18 *cx = (struct cx18 *)dev_id;
-+	struct cx18 *cx = dev_id;
- 	u32 sw1, sw2, hw2;
- 
- 	sw1 = cx18_read_reg(cx, SW1_INT_STATUS) & cx->sw1_irq_mask;
--- 
-2.11.0
+And I just checked, yes, if Sasha hadn't picked this up with his
+scripts, my scripts would have caught it as well, so it was a good test
+that our independant processes are working.
 
+thanks,
+
+greg k-h
