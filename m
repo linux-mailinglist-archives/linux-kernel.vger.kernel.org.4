@@ -2,148 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447F16C20A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9BD6C20AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 20:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjCTTAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 15:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S231176AbjCTTBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 15:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjCTS74 (ORCPT
+        with ESMTP id S230030AbjCTTBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:59:56 -0400
-Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on20728.outbound.protection.outlook.com [IPv6:2a01:111:f403:7053::728])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074E04AFE0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 11:51:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VKbMmI2GEngf8HNc4bHpV712GjlyMWXqK4aKMxKC/h0f69XeAFhHEYzwniGjLhOO9GZU++wSA7Q4ZwVjg8kUIqOFxwQJdItfO+wBYOjPuVZKt18nSHr1gWslQakjSmKqLrLD7KCraB2hgeSZQ5BA4AcMO5XldeGnkhmmhOtEQ5b0GtxWGOXiy37+IL2mPZAwb44tW2uF0QTLznTcwnKIjeUaCKqhMZTEy0IEq0Jj4K7dWkGyVpdkaxvz+pRtppO/LgWK7WEAwekdYOj/x91fmFlAxyL/ZAYFM7sDR95opvdbKs1cR0c5Kwj7qvGr9cAYQasHUezuoamRgWpDdt9+dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gUJB1i0KYo0cKGiWNm7Iovhc8JGkxra+ws6YFiON1o4=;
- b=SlodpHpwkBVzcP8iCcqql1Ad14+ikg0e35J0hTHYnMC4YYYR5YKcqmVIIF7bsHcrOZ47ug5HzNADy2yqncZK4qxhrbOrdPI/rPQgqtPVG9J2JcuGjZ4+Mfm0VV6yAHmo3IVLjdwkpPG1N2eBcJx5hkd52OoSv7ys6pZ6R9RCh3uqQY8OKn2M+47H5uvQ/10msp9ni+kAzdDMBhPzgJsZHYlFw5ffwDJK1F5GqO7rNkLjSYkbhVD8LSrHvR3/6UyKAXRpMY0NrEadcomVAVbpP6ehqZqznrFwwIF/GZQTTTFRoCevrjn0zynV17Nrl1cfT+R8VIxa5Hl3gGofYz5aKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=lenbrook.com; dmarc=pass action=none header.from=lenbrook.com;
- dkim=pass header.d=lenbrook.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenbrook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gUJB1i0KYo0cKGiWNm7Iovhc8JGkxra+ws6YFiON1o4=;
- b=Hii1pci+2QSnh395SKgn9pyf30bT/nN5m3CNDbSbgloNDsp8z/BBSUdynq+VnNzr4cr3b8Pb7cmzgDlHdN8kEub3fJRybRGlOv32GPCKtyWVHhgsJ4aQc84llLJo9iErPcz7l3wZLf1rvwP/UQwOfu4Sbc4e5OnoetET2UCfNFM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=lenbrook.com;
-Received: from YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::12)
- by YQBPR0101MB8862.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:59::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 18:51:15 +0000
-Received: from YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::2a76:b922:37e2:e1d2]) by YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::2a76:b922:37e2:e1d2%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 18:51:15 +0000
-Message-ID: <b488edb8-ba78-5a6a-55e3-7b95d704bc82@lenbrook.com>
-Date:   Mon, 20 Mar 2023 14:51:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/bridge: nwl-dsi: fix packet read ISR handling
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230318223621.4239-1-kgroeneveld@lenbrook.com>
- <afc44c13-0863-d1de-df03-30b83f5a015a@linaro.org>
-From:   Kevin Groeneveld <kgroeneveld@lenbrook.com>
-In-Reply-To: <afc44c13-0863-d1de-df03-30b83f5a015a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0250.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10f::22) To YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:e8::12)
+        Mon, 20 Mar 2023 15:01:12 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C4A272A;
+        Mon, 20 Mar 2023 11:53:16 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id r36so9457424oiw.7;
+        Mon, 20 Mar 2023 11:53:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679338289;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zy+uHtGeEkfIqZQQa8hhdrfId4RR8Z97pUxZtUSj9PA=;
+        b=6yJ2zRt7E22Jzr1x69ypeXkUjPi00jcejs22GsgOWICb/zV05Oy+nZfL8D8JrQZMLM
+         /57kWhSm8oFDNyLdnRW3zKe2Bzx10RJtEWbdNbLFR+Tel9mKMAPgJVuZTlS5hNqNc8tY
+         vH0apQ19uExCWNQihKVIPGijLzCcmG3Cl/20gBlO0taxVYC+dpK/KCiL22Y74fI+a/G9
+         csTzsszjpI8fhdrg4oL+IbHxIJKDwgpKWjnGua8uRKX9ngoZdg0/kyYdpa3VRF1hpNJ3
+         K+LMsy4O9njREPJfDZ19fIG67I8eotA4CnVFvd9ZZ+ycaajdJZrelFmpWZZqDHWTTKFB
+         o+hg==
+X-Gm-Message-State: AO0yUKWKrCobc9CGhp5damWu/JAsudqKEcTrpIOvg7B94ct80tftlRRC
+        JwxXtPXsThnj8hwpofCAaw==
+X-Google-Smtp-Source: AK7set9jXZc51gZ66cNWRgvGJ0XOwRR+9Ihp6etk3fE60Cj/RzLnr6UVsEVIP2Y4rWDRiNW97j4Ryg==
+X-Received: by 2002:a05:6808:698:b0:387:a25:c5eb with SMTP id k24-20020a056808069800b003870a25c5ebmr377119oig.19.1679338288833;
+        Mon, 20 Mar 2023 11:51:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s7-20020a05687050c700b0016e8726f0d4sm3578282oaf.3.2023.03.20.11.51.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 11:51:28 -0700 (PDT)
+Received: (nullmailer pid 2240797 invoked by uid 1000);
+        Mon, 20 Mar 2023 18:51:27 -0000
+Date:   Mon, 20 Mar 2023 13:51:27 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466
+ E1/T1/J1 framer
+Message-ID: <20230320185127.GA2233912-robh@kernel.org>
+References: <20230316122741.577663-1-herve.codina@bootlin.com>
+ <20230316122741.577663-2-herve.codina@bootlin.com>
+ <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+ <167930560089.26.8624952010101991814@mailman-core.alsa-project.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB9670:EE_|YQBPR0101MB8862:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3caf8bdd-e19c-446e-bda3-08db29741526
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sIBwf1cqGSRBdQPbZ/re3W5eRX5pPD3apQwKOYTOELv3ZqCW69ayhgXNqugVvJ0UDkiV/RtxA6XfBe0h1cIPGA3TLv5mrPSk7TdnyHPhwVJ0rrNFXCgtJmc98fR2TgrixmLdd5HOkjtJoh8CZRQh6qXoZBADmOqF0ZgN1bBlNKPuj0I9drH47JRP7o4uD6p0ZwAVcBm6f2fvbDKg3L7koGypInkrY67uPbJqR1rxuhmn7Z+kqQAVrR9w/7pQmSoO3RhY7ASipmiDUlq91GSGsTn1bjUONx1lcEWZbMiAbZkThJEsOvbE3pCJX1LZG/drOwHNTqWR4EM1giSmuo7OilLrDsyzyUgHo5j7K8b+usluCCsR7ELg7kzeMl0QG8yanXpDPExkDFsMZ7DItkKgQQ7FW8MnxErxivsgaMcavhRPti+IB7Jg175Czyud0O2F0uG+XuxoDHS966jBXwhpTwwyW17AvL9wDP3XNenLhLN1vEmmyVbRJ0iaslIf57joPSPM9xqT6H68WX/z6PB9n/Rh4yiQZQzWTe6zJz77DB2n2+rGivteyjoUp5dJyHwPcDxcxiIV2paN7+Qsl0kwgQaYnPQK97cb5g4GSuPQR5SZgziaV/eTbhb06TpxEZz5nSgZwtb8PX1CE7rm+r5/k8wIadF2LgF7HxWF77wC0kzpI7uNcDK/GiJg4IHGKD0NhANAbvT8sIH7C0n/SStaHdKJYrpjU5Had0ZjnmxSaDs+ECmwrul1sclbIPGtkfiu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(39850400004)(366004)(396003)(136003)(451199018)(31686004)(2616005)(110136005)(6512007)(478600001)(6486002)(6506007)(316002)(26005)(186003)(5660300002)(53546011)(7416002)(31696002)(921005)(86362001)(38100700002)(8936002)(2906002)(66946007)(41300700001)(4744005)(8676002)(66476007)(36756003)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1FhcFNtV3BSbUZDckR2THM5UWZCSmdtTERiMFFWNGNxek1tbGlZbE5TVm1n?=
- =?utf-8?B?bDZaZlhmMytoMkVieUNCaWJCK3dvMmdnLy9pMmgzL3BoSlp2MWR0bmdTYTA4?=
- =?utf-8?B?ZjQ4bE1HaU5TSEhiY1BnU1RCOThFY0dvNHBUN0FQNkVmclc2WjhKdVZEcUNl?=
- =?utf-8?B?OE5ZbEhLbDVGeTFKNnBlMW10bkZwaGVlalFLazBQbHBDNWpORDI3eGNUQUFm?=
- =?utf-8?B?TVFMQTN4NlYwb29rekZUamtUWDJGL3VES2k5cStxWTE5T1dkN2NhSjNQQUNQ?=
- =?utf-8?B?Z3pyQnhIcUljTXdEV2N1S3RKRU5OSUh4amRSa1ZGRGVxZ004eWlhUXVxL05t?=
- =?utf-8?B?UTlRYTVWMmJXUVFOVG1nWXFhMUkrMFFsTXhhWkFQdDdvTTh5WUwyY2FMUE82?=
- =?utf-8?B?bWUrMFE1Z3VrbXlJTXB2TWVoVThLQUp2aWJwRng3d2h0dUM5SVlTbWpmZnFF?=
- =?utf-8?B?T0dmNlpIV1ZyQTNraUZ0czdHL0VvalVmUXJJTFJpNGdqTGgyUllqdkNDR1dp?=
- =?utf-8?B?NlhORmNBVVVpcXprUmQwYmVEeUJtR0IwdTNOMHk3SnEvYWRlVmhKN1BRWm5n?=
- =?utf-8?B?cHBhRHg4dlJNcDF3NStudEtHMVZNSkx1c0g1K1ZUbnJWaHJtaVZxaFkwRnNp?=
- =?utf-8?B?bEJaYVpldHRKSmpXdm5YMnZ3am04cFpTTzhSMWFURUlCdnhuL3MzWVNQTEhk?=
- =?utf-8?B?Y3drUmFuSTQ0Nk1lZElrQ1BlQjJsbUxybURORFIwNHkxZmUzaTJGNThrdGs3?=
- =?utf-8?B?aW5DRkg5bGZjbXMrMkdIbUJ5N0hVWTh3aFQwRUJ0THBzL1pUN0xqc01mOFdk?=
- =?utf-8?B?a0lyb3RxUU5qWjVjanRrYWlsWWdwMU5ydVJnVGRSb3BOK0dLWmxJWkh3UTdB?=
- =?utf-8?B?OTJkaTBDc0g1anpWTExMK2JMT1J2bFREYStXWUV5TjZ2czFhY1dTVDFhOHVT?=
- =?utf-8?B?MHFlVnNLY1BRY01EWk52OCtPSysyZTA3MTA0YTJEVlhDYVJYbHhuT1RXQlZB?=
- =?utf-8?B?UFErTUdqOXByMmJmRDJvTmVDaUxlVGw2Q1A4R3FXMWdRc05kYnlYTUlzNm1W?=
- =?utf-8?B?Unhmd1ZXbFY2bDBTRTNiZXpsNWp5MWZRMnpFWXFWa3E4WFI2dTU0Y3FIYVQ0?=
- =?utf-8?B?Tm50TVNSd1U4NElkTmVDMGN1cnMxN1BPMURnQmNvRDdHamlFQjdWSjZyZXE5?=
- =?utf-8?B?cnBjd1l1cnA3YVo4eGg1VGhFUEJ6THZLa2NSUGlFLzVhTk9kSzlsV1pzS1Qv?=
- =?utf-8?B?Nzl4MEd6QWY0Mm9RMWNxblFiNnd5NXc1azh6MHZQY2xLVDhhNFpqS1lYTE1F?=
- =?utf-8?B?RG1RZE5IVlpWTVFGaFhleWRSeml4YWlZZUg3Qk9sMWMwaE9xQ1JiNnh0ai9J?=
- =?utf-8?B?Ukh2K21USnRGMFl4UU5qVTVRRWhLZktiRVpKM2FVSHh1alZFUDUyeHg0bTJ4?=
- =?utf-8?B?SW5SSjhkTXFJdjVNRTlqZ0c2elJGVUtCVmhIMDQra2lxZ3VrL3F0VlVacERv?=
- =?utf-8?B?R082czl6YVZxYlY2WUFmbjBMS09oenRYcC8yZVhSZS9aS2JkelQ1bDZGWjhR?=
- =?utf-8?B?VG5sMkUwRk8yU21DRWtSN0JEWXlTT2UzR3YydGxFYnNUMVRkdW5qUWFDaW0y?=
- =?utf-8?B?bFN2cjNLMnMrNE5pQ2E4TlM2MjlySDZJSVR4SS9HMG1FaWhtNHBmZ3A2Vi9S?=
- =?utf-8?B?K3lqVTYraXI1aDRrRHlkTjZEVUowalF0Tk0xdEdXcVBmekw1c0UrQUJzajhE?=
- =?utf-8?B?KzdVb0UyTEtiQU14c090aHVGRERBOWVCT0RpdTFGOUlHU1k5M3dsbzAzdDFx?=
- =?utf-8?B?K0JZMXJ2RUQzMzhtbVpncVkrRzg4dldTcEo4TUUrckxGR3EraVVzbDB5WFQ0?=
- =?utf-8?B?cWtwRU9hV3pCZGJDejErN08zNGxhMnlhcmNSbk9YV0djemU4UUFtYk9hb0dC?=
- =?utf-8?B?UzdESGtCalBqc3NhTkxxVkFJYkZPTlpqc2lhY3l0OEpRQ2lsQ0tpdWQzaDQz?=
- =?utf-8?B?NjZPNWRBRnY1V1poYkVvR1JvdHgrUS9vMzdOUmdlVGZ1OXlCbE5LVWdNL2Yz?=
- =?utf-8?B?VzdrS2tKTzk5RFdHbTVtWmUyTjJBNDVscUpUSU05V2EvaXJuZjlicUxlNE90?=
- =?utf-8?B?WUpCaUxWbmU1NDF1TkgzR01oVzM2dE14TFlhcTZyMjFTa2dYTzBPd3FjMXBV?=
- =?utf-8?B?eHc9PQ==?=
-X-OriginatorOrg: lenbrook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3caf8bdd-e19c-446e-bda3-08db29741526
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB9670.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 18:51:15.1800
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3089fb55-f9f3-4ac8-ba44-52ac0e467cb6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xkeJ3l1nbKzN5Xi8WD4QuG3E4o05JTfnG1KnVb28W96Har4ZvtfnLTSt+bpS6+7saSdnZwva0oHfpRVnuFb+7OK6LTd6PXvgY3ZhW1nB+yI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB8862
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167930560089.26.8624952010101991814@mailman-core.alsa-project.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+On Mon, Mar 20, 2023 at 10:46:19AM +0100, Herve Codina via Alsa-devel wrote:
+> Received: by alsa1.perex.cz (Postfix, from userid 50401) id 16494F8027B;
+>  Mon, 20 Mar 2023 10:46:37 +0100 (CET)
+> X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on alsa1.perex.cz
+> X-Spam-Level: 
+> X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+>  DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+>  URIBL_BLOCKED shortcircuit=no autolearn=ham autolearn_force=no
+>  version=3.4.6
+> Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+>  [217.70.183.198]) (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384
+>  (256/256 bits)) (No client certificate requested) by alsa1.perex.cz
+>  (Postfix) with ESMTPS id 3FF5FF80105 for <alsa-devel@alsa-project.org>;
+>  Mon, 20 Mar 2023 10:46:22 +0100 (CET)
+> DKIM-Filter: OpenDKIM Filter v2.11.0 alsa1.perex.cz 3FF5FF80105
+> Authentication-Results: alsa1.perex.cz; dkim=pass (2048-bit key,
+>  unprotected) header.d=bootlin.com header.i=@bootlin.com
+>  header.a=rsa-sha256 header.s=gm1 header.b=m4O7nLC1
+> Received: (Authenticated sender: herve.codina@bootlin.com) by
+>  mail.gandi.net (Postfix) with ESMTPSA id 40453C0009; Mon, 20 Mar 2023
+>  09:46:20 +0000 (UTC)
+> DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+>  t=1679305582;
+>  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+>   to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+>   content-transfer-encoding:content-transfer-encoding:
+>   in-reply-to:in-reply-to:references:references;
+>  bh=Ieu9Fv38se4lD4z/BVXUHLrVJL9Tx5iKWZgvO8X+VoY=;
+>  b=m4O7nLC1LPZDOI5eM/hmgqouxdkin2veA6CvJhT9kU9rGQALB3ya2fuybMfDvrkTqqBjEd
+>  j6DAxXMgOKgwuUfEsZsp3BFJpoii00hSaf0r2uIbnnGcUrDGVQqUQVEqv51O6VBqnrViQk
+>  PstlJM0lcE9R/AFASd5D/HQGoYYyRY+NKT7xt8g1Ax23Yk/tUG59LXku/skn/4faSLodnU
+>  vV2ng3VMUcoLuvSMJtdYY3hrXEWqUrW1ZogxAFHJNiKuyOELmqZGmNo4B4yAFOEcqqyano
+>  /f4m/7BtT7X1wwPvGu29gg+0aOFrGQq5kb4UNrMoriSQyKnxPRha8zL3J2Jckw==
+> Date: Mon, 20 Mar 2023 10:46:19 +0100
+> From: Herve Codina <herve.codina@bootlin.com>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466
+>  E1/T1/J1 framer
+> Message-ID: <20230320104619.468a304b@bootlin.com>
+> In-Reply-To: <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+> References: <20230316122741.577663-1-herve.codina@bootlin.com>
+>  <20230316122741.577663-2-herve.codina@bootlin.com>
+>  <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+> Organization: Bootlin
+> X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: quoted-printable
+> Message-ID-Hash: AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB
+> X-Message-ID-Hash: AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB
+> X-MailFrom: herve.codina@bootlin.com
+> X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
+>  loop; banned-address; member-moderation;
+>  header-match-alsa-devel.alsa-project.org-0;
+>  header-match-alsa-devel.alsa-project.org-1; nonmember-moderation;
+>  administrivia; implicit-dest; max-recipients; max-size; news-moderation;
+>  no-subject; digests; suspicious-header
+> CC: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+>  <krzysztof.kozlowski+dt@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>,
+>  Mark Brown <broonie@kernel.org>, Derek Kiernan <derek.kiernan@xilinx.com>,
+>  Dragan Cvetic <dragan.cvetic@xilinx.com>, Arnd Bergmann <arnd@arndb.de>,
+>  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Takashi Iwai
+>  <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+>  devicetree@vger.kernel.org, alsa-devel@alsa-project.org, Christophe Leroy
+>  <christophe.leroy@csgroup.eu>, Thomas Petazzoni
+>  <thomas.petazzoni@bootlin.com>
+> X-Mailman-Version: 3.3.8
+> Precedence: list
+> List-Id: "Alsa-devel mailing list for ALSA developers -
+>  http://www.alsa-project.org" <alsa-devel.alsa-project.org>
+> Archived-At: <https://mailman.alsa-project.org/hyperkitty/list/alsa-devel@alsa-project.org/message/AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB/>
+> List-Archive: <https://mailman.alsa-project.org/hyperkitty/list/alsa-devel@alsa-project.org/>
+> List-Help: <mailto:alsa-devel-request@alsa-project.org?subject=help>
+> List-Owner: <mailto:alsa-devel-owner@alsa-project.org>
+> List-Post: <mailto:alsa-devel@alsa-project.org>
+> List-Subscribe: <mailto:alsa-devel-join@alsa-project.org>
+> List-Unsubscribe: <mailto:alsa-devel-leave@alsa-project.org>
 
-On 2023-03-20 06:44, Neil Armstrong wrote:
-> Thanks for the patch, can you provide a Fixes tag ?
-> 
-> Neil
+The alsa-devel list doesn't seem to like your emails. The archives 
+(lore) has 2 copies with the 2nd having the original headers in the 
+body. I'm seeing this recently on other senders too. Best I can tell is  
+you sent this as quoted-printable.
 
-
-As with my other recent patch I did not think of adding a fixes tag as 
-this bug is not a regressions but has existed since the first commit of 
-the driver. If there should be a fixes tags then it would be:
-
-Fixes: 44cfc6233447 ("drm/bridge: Add NWL MIPI DSI host controller support")
-
-Kevin
+Rob
