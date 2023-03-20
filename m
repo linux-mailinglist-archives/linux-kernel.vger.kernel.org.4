@@ -2,102 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01D56C1E5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1B56C1E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjCTRnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S229453AbjCTRoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjCTRnb (ORCPT
+        with ESMTP id S229497AbjCTRoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:43:31 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B86CA32
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:39:14 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id n20so2825277pfa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679333953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Mj8BMtgaqpcJ2izjHoCa3UBL6C1oS24zpeZ0O+klY+Q=;
-        b=Z3+VpLz+lOm8RKdKSJ/nRK4OcwRzXaiergdD3dh/LHJwXIL43nZZXSZvvei1uxJrrW
-         FKrtsg2XIWSzkx7w5Hte2o0ryKqwv7ugIIeLufW35kLDiwULMkpcynmBfHqmBFbGsA6l
-         OCIpwyBBoWAbT93Gxp+UflYk914/xh5zEO180=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mj8BMtgaqpcJ2izjHoCa3UBL6C1oS24zpeZ0O+klY+Q=;
-        b=50gOjEyzKAG8aBDE0TlnbV7dhu8uo34NZN14YHqW5nH23DZX53FebbOJV6tD5xoOhn
-         vloZAijZ+IO93HPVkBJ7bmlTCk48wLE+77jEOKqEjxr/iZsy15lTV7HDZLOX/tpKxngz
-         wG714WlRZh4URc6gfKpVF79MSCSfwYgnUJM1DtePcqJ/K76PiQ+g38S9KkHj+K4NENWY
-         /k790+pokeTSm3oJ+EfwRJkSwfC+Rzk3QpouMcJjQm32cwDfTu82LFoEKVmiA8SWCbb3
-         IKo3tfNldPMrJ/9Wr5lg6zQBAfkc40yYHDa1lDQbVsLatbHHVIrwGmiXpsoBhjnDLn2X
-         6cvg==
-X-Gm-Message-State: AO0yUKXDlCgbe8VxuO+1XQ5rx9SGoc0pjTWy2rkSHQIcyUPl1Vziurld
-        92PB3AMVvA/28+PeymII0ZX4HA==
-X-Google-Smtp-Source: AK7set8IIyRVLx7g0PGp9Q0H2+W3ieCdIjaAbxCxs39Qs/AxGF7FAqBfxjixUjvjyvOasatQ54Y7HQ==
-X-Received: by 2002:a62:1881:0:b0:623:dfdd:f7eb with SMTP id 123-20020a621881000000b00623dfddf7ebmr152756pfy.12.1679333952731;
-        Mon, 20 Mar 2023 10:39:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id b5-20020aa78105000000b005938f5b7231sm6573800pfi.201.2023.03.20.10.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 10:39:12 -0700 (PDT)
-Message-ID: <64189a40.a70a0220.70bd2.b03b@mx.google.com>
-X-Google-Original-Message-ID: <202303201039.@keescook>
-Date:   Mon, 20 Mar 2023 10:39:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] rxrpc: Replace fake flex-array with flexible-array
- member
-References: <ZAZT11n4q5bBttW0@work>
+        Mon, 20 Mar 2023 13:44:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 363241D921;
+        Mon, 20 Mar 2023 10:40:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2C8EFEC;
+        Mon, 20 Mar 2023 10:40:57 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BB4A3F67D;
+        Mon, 20 Mar 2023 10:40:12 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 17:40:01 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Paul McKenney <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org
+Subject: Re: [PATCH] rcu: Remove RCU_NONIDLE()
+Message-ID: <ZBiacVlnbOLiKO3D@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230320173751.GU2194297@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZAZT11n4q5bBttW0@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230320173751.GU2194297@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 02:57:59PM -0600, Gustavo A. R. Silva wrote:
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
+On Mon, Mar 20, 2023 at 06:37:51PM +0100, Peter Zijlstra wrote:
 > 
-> Transform zero-length array into flexible-array member in struct
-> rxrpc_ackpacket.
+> Since there are now exactly _zero_ users of RCU_NONIDLE(), make it go
+> away before someone else decides to (ab)use it.
 > 
-> Address the following warnings found with GCC-13 and
-> -fstrict-flex-arrays=3 enabled:
-> net/rxrpc/call_event.c:149:38: warning: array subscript i is outside array bounds of ‘uint8_t[0]’ {aka ‘unsigned char[]’} [-Warray-bounds=]
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/21
-> Link: https://github.com/KSPP/linux/issues/263
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
--- 
-Kees Cook
+Mark.
+
+> ---
+>  .../RCU/Design/Requirements/Requirements.rst       | 36 +---------------------
+>  Documentation/RCU/whatisRCU.rst                    |  1 -
+>  include/linux/rcupdate.h                           | 25 ---------------
+>  3 files changed, 1 insertion(+), 61 deletions(-)
+> 
+> diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
+> index 49387d823619..77155b51d4c2 100644
+> --- a/Documentation/RCU/Design/Requirements/Requirements.rst
+> +++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+> @@ -2071,41 +2071,7 @@ call.
+>  
+>  Because RCU avoids interrupting idle CPUs, it is illegal to execute an
+>  RCU read-side critical section on an idle CPU. (Kernels built with
+> -``CONFIG_PROVE_RCU=y`` will splat if you try it.) The RCU_NONIDLE()
+> -macro and ``_rcuidle`` event tracing is provided to work around this
+> -restriction. In addition, rcu_is_watching() may be used to test
+> -whether or not it is currently legal to run RCU read-side critical
+> -sections on this CPU. I learned of the need for diagnostics on the one
+> -hand and RCU_NONIDLE() on the other while inspecting idle-loop code.
+> -Steven Rostedt supplied ``_rcuidle`` event tracing, which is used quite
+> -heavily in the idle loop. However, there are some restrictions on the
+> -code placed within RCU_NONIDLE():
+> -
+> -#. Blocking is prohibited. In practice, this is not a serious
+> -   restriction given that idle tasks are prohibited from blocking to
+> -   begin with.
+> -#. Although nesting RCU_NONIDLE() is permitted, they cannot nest
+> -   indefinitely deeply. However, given that they can be nested on the
+> -   order of a million deep, even on 32-bit systems, this should not be a
+> -   serious restriction. This nesting limit would probably be reached
+> -   long after the compiler OOMed or the stack overflowed.
+> -#. Any code path that enters RCU_NONIDLE() must sequence out of that
+> -   same RCU_NONIDLE(). For example, the following is grossly
+> -   illegal:
+> -
+> -      ::
+> -
+> -	  1     RCU_NONIDLE({
+> -	  2       do_something();
+> -	  3       goto bad_idea;  /* BUG!!! */
+> -	  4       do_something_else();});
+> -	  5   bad_idea:
+> -
+> -
+> -   It is just as illegal to transfer control into the middle of
+> -   RCU_NONIDLE()'s argument. Yes, in theory, you could transfer in
+> -   as long as you also transferred out, but in practice you could also
+> -   expect to get sharply worded review comments.
+> +``CONFIG_PROVE_RCU=y`` will splat if you try it.) 
+>  
+>  It is similarly socially unacceptable to interrupt an ``nohz_full`` CPU
+>  running in userspace. RCU must therefore track ``nohz_full`` userspace
+> diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
+> index 2c5563a91998..c3b1cbfa1530 100644
+> --- a/Documentation/RCU/whatisRCU.rst
+> +++ b/Documentation/RCU/whatisRCU.rst
+> @@ -1117,7 +1117,6 @@ in docbook.  Here is the list, by category.
+>  
+>  	RCU_LOCKDEP_WARN
+>  	rcu_sleep_check
+> -	RCU_NONIDLE
+>  
+>  All: Unchecked RCU-protected pointer access::
+>  
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index 094321c17e48..ddd42efc6224 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -156,31 +156,6 @@ static inline int rcu_nocb_cpu_deoffload(int cpu) { return 0; }
+>  static inline void rcu_nocb_flush_deferred_wakeup(void) { }
+>  #endif /* #else #ifdef CONFIG_RCU_NOCB_CPU */
+>  
+> -/**
+> - * RCU_NONIDLE - Indicate idle-loop code that needs RCU readers
+> - * @a: Code that RCU needs to pay attention to.
+> - *
+> - * RCU read-side critical sections are forbidden in the inner idle loop,
+> - * that is, between the ct_idle_enter() and the ct_idle_exit() -- RCU
+> - * will happily ignore any such read-side critical sections.  However,
+> - * things like powertop need tracepoints in the inner idle loop.
+> - *
+> - * This macro provides the way out:  RCU_NONIDLE(do_something_with_RCU())
+> - * will tell RCU that it needs to pay attention, invoke its argument
+> - * (in this example, calling the do_something_with_RCU() function),
+> - * and then tell RCU to go back to ignoring this CPU.  It is permissible
+> - * to nest RCU_NONIDLE() wrappers, but not indefinitely (but the limit is
+> - * on the order of a million or so, even on 32-bit systems).  It is
+> - * not legal to block within RCU_NONIDLE(), nor is it permissible to
+> - * transfer control either into or out of RCU_NONIDLE()'s statement.
+> - */
+> -#define RCU_NONIDLE(a) \
+> -	do { \
+> -		ct_irq_enter_irqson(); \
+> -		do { a; } while (0); \
+> -		ct_irq_exit_irqson(); \
+> -	} while (0)
+> -
+>  /*
+>   * Note a quasi-voluntary context switch for RCU-tasks's benefit.
+>   * This is a macro rather than an inline function to avoid #include hell.
