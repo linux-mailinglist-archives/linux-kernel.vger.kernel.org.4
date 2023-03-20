@@ -2,132 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130576C123D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D646C1240
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbjCTMrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S231550AbjCTMrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbjCTMrY (ORCPT
+        with ESMTP id S231529AbjCTMrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:47:24 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2065.outbound.protection.outlook.com [40.107.223.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5380035A8;
-        Mon, 20 Mar 2023 05:47:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q1zfTnOJEBJlJBPNvmhqQZ+30/8LJStOoXGJ+jYAK0cD+MWqGDKlAYv5L1pn2ir+L/tkGdDkoBUwsfE975ZHKnyeTIOuxEoXAd2KJlXNO+faZ74c/3qnHL1i6eUqcLkoB5E6xuNaS+PzIKOS3smMmzCXYH82yGrClLGcX6nOfuaXKHBdEHttw1AuMOqxUhIXGu0WJznYzi5wnnGIXuN11pYHzEIRyfnszMPSswtAPkaxD2AvAVY4Q+/VQ3k7ZoLr0XtDDeCLGbZucbx90t87pHQbIsI2Zmw06i65w/enDSTX7dpW/HERA1zvYnFt/h3VzDub1X6fI5wkSpZ47M6ujA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=adpwqKhgHfQV2VjmstLGM6aYyKtitLuoqCoMdj1KJvM=;
- b=l8n/Bz9Qw0YmD9rbTm79cLDsEppecapMzwX8z5XiB7ODTlyCgF9nXtjGG8jVfXCB8JHJSJNQNm4sfuLFNPPqGiZFeDBEn5Ueuheu4Un/Sm7EnPHrZZf8FLmhrBQCaSKzjFDJCR8yXCYAgC/Y8doiu2JU0j09BdzGM7DHlRZvdp+V2uJDHrRw8SITjnSirVeJKABcqKGMSkXMznkIG5l1uLAtR0Wr+jmawlZr03tAdps7BfoJYfqj0edzR/Ce9+6vuKTkuPK9bD8xtPG4VCEWhCsklCILH5lZh5dMnbvr1SBzrn/eY07HCOfMdYLEpiCtNQF4mW5cvvcNIxktmmXnjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=adpwqKhgHfQV2VjmstLGM6aYyKtitLuoqCoMdj1KJvM=;
- b=tw2oWcwIcyKROl0plBwCmtAfRgy2fqivtnrqn+o2T6Q997D9s0pD7FJALuX/bLbZWTlwyh8MULCyefbWLF5cg9ognO4g2KcXfFRglyvjlVQ2tYQyVZ24FcxAMowmV/2HXEmyFAewNNSGHIVlqS4HZ+U4gWoeeiuUVk0AGEfTsMdgxJudbspaAskwQMKlY48oPAcLSMAnluMtDMG2Qydd1qeHS5IryFkvN6UWlV471kayvTJ8qSbkC6AdCBP4/rNwiPxH6xCmKBm/ypdVsm3h7beWK54CFYk2dTkAYcJFOxVKW5tsvXq6Sqn6bqaP8dS6cqAEMpTs7fv4cq0lrRVlzw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DS0PR12MB7584.namprd12.prod.outlook.com (2603:10b6:8:13b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 12:47:07 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
- 12:47:07 +0000
-Date:   Mon, 20 Mar 2023 09:47:06 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 04/12] iommufd: Pass parent hwpt and user_data to
- iommufd_hw_pagetable_alloc()
-Message-ID: <ZBhVyqEeAbnJJqNW@nvidia.com>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-5-yi.l.liu@intel.com>
- <BN9PR11MB5276815B943E2232F158C0128CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276815B943E2232F158C0128CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1P221CA0015.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::34) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 20 Mar 2023 08:47:25 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156C97DB1;
+        Mon, 20 Mar 2023 05:47:18 -0700 (PDT)
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 09CFDA25;
+        Mon, 20 Mar 2023 13:47:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679316436;
+        bh=8gQVnLQ7icM2cdxFjpNyr1Gr6yb1MMFoYDWr5iEDuHg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z5b+3l6oWPf8V+WI1dWAVma7rV7W6hcSwJTjorqTD/t+AOvyyEFSDpdjs22HWzEiP
+         nfQkP0N1tj6U1OVnw+pWlZR/WcDK2GupnJVnzNclv6k9NsnBfG4Yad58enwBX8rENy
+         Vhzu+/FL+9tE/yYYTuQ+p4zDenhFtg6A3bqnL3r4=
+Date:   Mon, 20 Mar 2023 13:47:12 +0100
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Francesco Dolcini <francesco@dolcini.it>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-media@vger.kernel.org, kernel@pengutronix.de,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Marco Felsch <m.felsch@pengutronix.de>
+Subject: Re: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
+Message-ID: <20230320124712.q67dqlldkqsdwyke@uno.localdomain>
+References: <ZBBk+h3EMSsacZ6v@valkosipuli.retiisi.eu>
+ <ZBBpUAhis8L5Dtuz@francesco-nb.int.toradex.com>
+ <ZBBsgW75Gc2FmuQ0@valkosipuli.retiisi.eu>
+ <ZBBvmjUZIn/g0/Nv@francesco-nb.int.toradex.com>
+ <20230320084844.tdjiv6kaxcosiwm2@uno.localdomain>
+ <ZBggtBU1TjlvVNCS@kekkonen.localdomain>
+ <20230320092602.GE20234@pendragon.ideasonboard.com>
+ <ZBgpXRtXcxg14OGv@kekkonen.localdomain>
+ <20230320095514.GF20234@pendragon.ideasonboard.com>
+ <9b4f0896a3a3e97b44197de263c30f0d31333abd.camel@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB7584:EE_
-X-MS-Office365-Filtering-Correlation-Id: b530ec7e-be6b-4e9e-2945-08db294136a7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qPb2Gwk6OZaeAznB0o1EbuT/6eplbwiu4/GTgl70eLgz+TU9C03xuZf29NoQRZJ57ozpnupv6M8svWnU05DSv9jHlV9RmWjQ4uBe9rQHmrt+dAtgW/x07sBI1zb23MPzfZx1A1YynVOvU9zW21JDYFXTFV7dz1gdPFv4PsYlXTU6HYX/oZ/jUakFKLLrOB6i5rU09lpYmrLY09LfWJcduUGQOfuFKMORrtG0HCXfuw0XEW3wOV5X+Npyqy2k3mKGax5xMibZfzVxuc9a8mcxBmYmd287rWpLcduOpAjqwon3oFQBMCZMXQd4aiWcr4QL3kE1xQb2UHM0cwzzEqQzar61DJEQo6v0AX1WaOF9cyTpT/zJyf+6Isb+7slFRSwkfP/a3lG6NIkTxx0514S4WapSqJeXHGe3AqO5opxv88WRhFjVw0whF5CyVL7Avn3bLzUb57HWUh5Dhp4VLxvxhIBewizihsXv1P+Zui98pXe02mOFLEnN8n8EAvIFj3x0kyztfaxf2onlO2f8oaZFDEwS+x6Jd2IeWZGgkaIcBjeW7eQVXCNccpXxbhLrNERsVFARz/RrqgJewpI61b+OBN5VCRX/UFGhwFRRd1fkBFtEzJLrWF6cgPonOdlIzTm0ARMRdnI40LPul5c+g9AVrQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199018)(2616005)(478600001)(86362001)(38100700002)(4326008)(66476007)(66556008)(8676002)(41300700001)(36756003)(66946007)(8936002)(2906002)(5660300002)(6916009)(4744005)(186003)(6506007)(26005)(7416002)(316002)(6512007)(6486002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?isAP+HDZ1A20a0yX/ePyWv0oEXM0YRgTqppR/1Zkwd7BwSn6nhv+26az2N9V?=
- =?us-ascii?Q?bo6bOWVew4mWShq4cs4taazku9QrqEAqaX2ECopc4wAwbXiMAWg+mm3SWHx5?=
- =?us-ascii?Q?gQNmlZGl21ZrCPJBOjX8pxJxft1+MmBz4BqKAhfZXXn6alfdeWKQEBM4xu7K?=
- =?us-ascii?Q?rHihEpqA3h9GLsVmsvYg4hPzq2EI6nb1MaO7wdMCstFS3xaH9wujGNl5RMhd?=
- =?us-ascii?Q?raUtuVaWTMhzi3KdnFd+TNlMcDrn2Y+5MfI+iz+e662Vs+gkvYbYF6YxAS/2?=
- =?us-ascii?Q?HQBK6uCATpZnChn9vzfF7gOPspFXnxJrn/HOrBc76eJ1Wq/gY7vEkC8f+ysm?=
- =?us-ascii?Q?9e6E8TRnTZSlLfiHPyq3QObFxDhbPvuJFLqvXpwfVI0NmaZZHysG6eYof7Om?=
- =?us-ascii?Q?TXXg9prOgjeKVwaKb/QoAIkeVewFCxsje6IqmjMUuqP1vmc1e0ByAj+iAwYS?=
- =?us-ascii?Q?yU5tGmqXLwyG14JN4NN1Rihh9TjVu43GL8mP/nMTTbm/xORfgXcSJQgrOrP5?=
- =?us-ascii?Q?6GtFpk2wS32mUjzFfkT6XAxb4xUFKl4YLJrF1q6AJsWtAijuVmN4sHBQR7Si?=
- =?us-ascii?Q?AwRCFW/1N6mSbmbDm57MQAm5gE9F5a9aM0ngWVyA8xJOSlFt4IXHF6QxYclI?=
- =?us-ascii?Q?bH7XTZPqYwam3U7r2ZdCKl8/mOqrxBi2oKeEy7PPrvJmORilxaKn3d8wPFtm?=
- =?us-ascii?Q?6yPdX3wzS376GoolC3r/L1SrBM4PCspjJirmK7MFBHJ0czJIjnlYeJ6SVzwZ?=
- =?us-ascii?Q?uWZVX1yXmRqtpYRRlAbVKxOzsWp7Kzq6xf5/XB6e+dcRmtpUyOBRkRaTOa6l?=
- =?us-ascii?Q?NVMixr784k6RtfIBAlf9aWZ9MzTgcLph8OSlRbjVQDE6r0ZQWGoZUXUaIdC2?=
- =?us-ascii?Q?NiDmma3qxVqCHaNu7d+jC4wHeKtMlYwUa8gQcSgCzCHTrHJxRDqKzDlh8hOS?=
- =?us-ascii?Q?z+r4hf2YDps6X8EevxoEgNfK4mjtLH9h1uvT8yHFxJHsOspkeisI+6HpmvYs?=
- =?us-ascii?Q?nEjfZC/hmbX523WkLlu5AKaH9bQ0xbxQmVOWFLkq3iesoZS1DWYnqYm/7QzN?=
- =?us-ascii?Q?zQI6vwTis8mwu8IRG11YZlwG32k+0K7j2oZiLP1dMqPwRAmcOjFG7YlEVcJ6?=
- =?us-ascii?Q?phv5WMhPnIj3tLmyTq6LOUrfg5hEAxupk9OMWKxahMXjimFCo6aC4k/EPlcg?=
- =?us-ascii?Q?wZ1xygzrG0vGKJLpvWTZKvMher12wE78F4A/j+f1PpvyIdMdvnq00g2wLG5P?=
- =?us-ascii?Q?xpymdHYrddt3jSX4MORFiATPuNIa9/zh/idiQxNWjNWoseTYvoLNhO5bNXIZ?=
- =?us-ascii?Q?iczM/1hNVcSzFApQHzTDscSYJ7q1xJHaE8/dACMVAgu+01npfEg9SFeEoRiA?=
- =?us-ascii?Q?ygMHgEYByQqbCYmwMT8JW9oBohY94MRtg8HYJHUg79tEOpdNNFxDgZmu1nP8?=
- =?us-ascii?Q?bsRWldxm9YjNGAB6viLmV4jnrtkr2XZ3mWN8b3x+iCmlauIalRERpuj6FiPt?=
- =?us-ascii?Q?vFOHTgLWhZyAxjt69gtdvJGwFcqD/0thaSRlxQqs6plJKwkzGET9mFJaN3PC?=
- =?us-ascii?Q?1oYFodvQ1IkVA2PtXF0E1PMQxApZWbi20lWHCgza?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b530ec7e-be6b-4e9e-2945-08db294136a7
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 12:47:07.0844
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C5U1HQx4eCyGeVW1AbYEWgWApPL18ZansoxrxYk1Hb7H11Ue+JF/AF8gnq4WNsw1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7584
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9b4f0896a3a3e97b44197de263c30f0d31333abd.camel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,21 +67,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:23:54AM +0000, Tian, Kevin wrote:
-> > From: Liu, Yi L <yi.l.liu@intel.com>
-> > Sent: Thursday, March 9, 2023 4:09 PM
-> > 
-> > +	/* It must be either NESTED or UNMANAGED, depending on
-> > parent_domain */
-> > +	if ((parent_domain && hwpt->domain->type !=
-> > IOMMU_DOMAIN_NESTED) ||
-> > +	    (!parent_domain && hwpt->domain->type !=
-> > IOMMU_DOMAIN_UNMANAGED))
-> > +		goto out_abort;
-> > +
-> 
-> WARN_ON()
+Hi Philipp
 
-Wouldn't that be userspace triggerable? It gets to pick the hwpt used.
+On Mon, Mar 20, 2023 at 12:26:26PM +0100, Philipp Zabel wrote:
+> On Mo, 2023-03-20 at 11:55 +0200, Laurent Pinchart wrote:
+> > On Mon, Mar 20, 2023 at 11:37:33AM +0200, Sakari Ailus wrote:
+> > > Hi Laurent,
+> > >
+> > > On Mon, Mar 20, 2023 at 11:26:02AM +0200, Laurent Pinchart wrote:
+> > > > In a (simplified) nutshell,
+> > > >
+> > > > ---------+     +----------+     +---------+     +-----+     +-----+
+> > > > > Camera | --> | CSI-2 RX | --> | CSI2IPU | --> | Mux | --> | IPU |
+> > > > > Sensor |     |          |     | Gasket  |     |     |     |     |
+> > > > ---------+     +----------+     +---------+     +-----+     +-----+
+> > >
+> > > Thank you, this is helpful.
+> > >
+> > > I suppose the mux here at least won't actively do anything to the data. So
+> > > presumably its endpoint won't contain the active configuration, but its
+> > > superset.
+> > >
+> > > >
+> > > > All those blocks, except for the gasket, have a node in DT.
+> > > >
+> > > > The IPU driver needs to know the number of CSI-2 data lanes, which is
+> > > > encoded in the data-lanes DT property present in both the sensor output
+> > > > endpoint and the CSI-2 RX input endpoint, but not the other endpoints in
+> > > > the pipeline.
+> > >
+> > > This doesn't yet explain why the sensor would need to implement
+> > > get_mbus_config if its bus configuration remains constant.
+> >
+> > If I recall correctly, the IPU driver calls .g_mbus_config() on the
+> > camera sensor to get the number of lanes, as it can't get it from its
+> > own endpoint. That's a hack, and as Jacopo proposed, calling
+> > .g_mbus_config() on the CSI-2 RX would be better, as the CSI-2 RX driver
+> > can then get the value from its own endpoint, without requiring all
+> > sensor drivers to implement .g_mbus_config().
+>
+> The IPU driver doesn't call get_mbus_config, the CSI-2 RX driver does
 
-Jason
+Am I confusing IPU CSI with CSI-2 ?
+https://elixir.bootlin.com/linux/latest/source/drivers/staging/media/imx/imx-media-csi.c#L211
+
+> (csi2_get_active_lanes in imx6-mipi-csi2.c). It could just fall back to
+> looking at its own endpoint if the upstream driver does not implement
+> get_mbus_config.
+>
+> Of course that will only help if the DT contains this information and
+> all connected lanes are active.
+
+We should assume DTs are correct, otherwise we're screwed most of the
+times...
+
+>
+> regards
+> Philipp
