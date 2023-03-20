@@ -2,103 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A114D6C238C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AEC6C2394
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCTVXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S230182AbjCTVY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjCTVXI (ORCPT
+        with ESMTP id S230032AbjCTVYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:23:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFF730B2C;
-        Mon, 20 Mar 2023 14:23:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C77061812;
-        Mon, 20 Mar 2023 21:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545A8C433EF;
-        Mon, 20 Mar 2023 21:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679347383;
-        bh=9HAxXDGx5xBbcjfjBF5G7zxK7OY/2qAbH411wxppUac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PUWAnrpI5ixthFY+eeRpKc8T09pJbyTVqFg9Uz2DOw2wSmOc0GjneDDSHQbw8sxJR
-         k1L+3C+UdS2G2J28GQzq+bIUfgc/ayNsWjuPZ115fUFOgjKdwUF71ckbzTizE+In+j
-         4XcjeBX250PyVs9lNsd1R/DRvbqb4pH3VJiKpmIDTVwZ2ot3Qfn9XS93j9uAbIWBQk
-         MCmYhlh1c8fzy4bt8Wjh7NzoSrHv9wftvRsfGBhtRTbXpXTw8/aGJwfDEqW15JG3n3
-         LizFnW1m0VTiXteYyitkkS4sRjiOqoNi6WBlS1Lv0z/s36ytn2CZ5t6iZH6NjcAd9D
-         oI19YBH1tFFYw==
-Date:   Mon, 20 Mar 2023 14:23:01 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Yeongjin Gil <youngjin.gil@samsung.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sungjong Seo <sj1557.seo@samsung.com>
-Subject: Re: [PATCH v2] dm verity: fix error handling for check_at_most_once
- on FEC
-Message-ID: <20230320212301.GD1434@sol.localdomain>
-References: <CGME20230320070011epcas1p12f0fe9f9f417dd1a3441efdde55a4132@epcas1p1.samsung.com>
- <20230320065932.28116-1-youngjin.gil@samsung.com>
+        Mon, 20 Mar 2023 17:24:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A529135ED1;
+        Mon, 20 Mar 2023 14:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/kDlpw47TTHOQh497IMH/PT4qyEkoNDw64tv3lyuGnU=; b=woGMX5dBRZBBV8tFoNvea9nz7e
+        mff3T8449NYWkL5S1yakwaew7bKRtPwTyJJML2uL3vszsaE44pvV79UrccNvdKvTZcHRg3xktBkpI
+        GabeN4KG+XAbomkvHR44nhWKott9ul1larreRgyrmAbkpHARz/KbSxpALnAzAoZzzLZqg9NnbKc5S
+        xSTywbx2lcQbfgLlgmyiAF63RFL1caPLWMQPkygJycb+39pO1HzYKtE6tptJLL51kMThNvfzk21mW
+        PXuGW4e/KUKGDCc8uGOvhMMcYoqBysNQs+eqfhsEMUBGNR4X/BTd5NzSeFkXMPOXoIcs6vh+yasiW
+        hhg8a4uA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1peMye-00AWpb-31;
+        Mon, 20 Mar 2023 21:23:36 +0000
+Date:   Mon, 20 Mar 2023 14:23:36 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Hildenbrand <david@redhat.com>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Message-ID: <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+References: <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
+ <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
+ <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
+ <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
+ <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+ <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
+ <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
+ <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
+ <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320065932.28116-1-youngjin.gil@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 03:59:32PM +0900, Yeongjin Gil wrote:
-> In verity_end_io(), if bi_status is not BLK_STS_OK, it can be return
-> directly. But if FEC configured, it is desired to correct the data page
-> through verity_verify_io. And the return value will be converted to
-> blk_status and passed to verity_finish_io().
+On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
+> On 20.03.23 22:09, Luis Chamberlain wrote:
+> > On Mon, Mar 20, 2023 at 08:40:07PM +0100, David Hildenbrand wrote:
+> > > On 20.03.23 10:38, David Hildenbrand wrote:
+> > > > On 18.03.23 01:11, Luis Chamberlain wrote:
+> > > > > On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
+> > > > > > On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
+> > > > > > > On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
+> > > > > > > > I expect to have a machine (with a crazy number of CPUs/devices) available
+> > > > > > > > in a couple of days (1-2), so no need to rush.
+> > > > > > > > 
+> > > > > > > > The original machine I was able to reproduce with is blocked for a little
+> > > > > > > > bit longer; so I hope the alternative I looked up will similarly trigger the
+> > > > > > > > issue easily.
+> > > > > > > 
+> > > > > > > OK give this a spin:
+> > > > > > > 
+> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
+> > > > > 
+> > > > > Today I am up to here:
+> > > > > 
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
+> > > > > 
+> > > > > The last patch really would have no justification yet at all unless it
+> > > > > does help your case.
+> > > > 
+> > > > Still waiting on the system (the replacement system I was able to grab
+> > > > broke ...).
+> > > > 
+> > > > I'll let you know once I succeeded in reproducing + testing your fixes.
+> > > 
+> > > Okay, I have a system where I can reproduce.
+> > > 
+> > > Should I give
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts
+> > > 
+> > > from yesterday a churn?
+> > 
+> > Yes please give that a run.
 > 
-> BTW, when a bit is set in v->validated_blocks, verity_verify_io() skips
-> verification regardless of I/O error for the corresponding bio. In this
-> case, the I/O error could not be returned properly, and as a result,
-> there is a problem that abnormal data could be read for the
-> corresponding block.
-> 
-> To fix this problem, when an I/O error occurs, do not skip verification
-> even if the bit related is set in v->validated_blocks.
-> 
-> Fixes: 843f38d382b1 ("dm verity: add 'check_at_most_once' option to only validate hashes once")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
-> Signed-off-by: Yeongjin Gil <youngjin.gil@samsung.com>
-> ---
-> v2:
-> -change commit message and tag
-> ---
->  drivers/md/dm-verity-target.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-> index ade83ef3b439..9316399b920e 100644
-> --- a/drivers/md/dm-verity-target.c
-> +++ b/drivers/md/dm-verity-target.c
-> @@ -523,7 +523,7 @@ static int verity_verify_io(struct dm_verity_io *io)
->  		sector_t cur_block = io->block + b;
->  		struct ahash_request *req = verity_io_hash_req(v, io);
->  
-> -		if (v->validated_blocks &&
-> +		if (v->validated_blocks && bio->bi_status == BLK_STS_OK &&
->  		    likely(test_bit(cur_block, v->validated_blocks))) {
->  			verity_bv_skip_block(v, io, iter);
->  			continue;
-> -- 
+> Reproduced with v6.3.0-rc1 (on 1st try)
 
-Looks good now, thanks!
+By reproduced, you mean it fails to boot?
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+> Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
 
-- Eric
+Oh wow, so to clarify, it boots OK?
+
+> > Please collect systemd-analyze given lack of any other tool to evaluate
+> > any deltas. Can't think of anything else to gather other than seeing if
+> > it booted.
+> 
+> Issue is that some services (kdump, tuned) seem to take sometimes ages on
+> that system to start for some reason, 
+
+How about disabling that?
+
+> and systemd-analyze refuses to do
+> something reasonable while the system is still booting up.
+
+I see.
+
+> I'll see if I can come up with some data.
+
+Thanks!
+
+> > If that boots works then try removing the last patch "module: add a
+> > sanity check prior to allowing kernel module auto-loading" to see if
+> > that last patch helped or was just noise. As it stands I'm not convinced
+> > yet if it did help, if it *does* help we probably need to rethink some
+> > finit_module() allocations things.
+> 
+> Okay, will try without the last patch tomorrow.
+
+Thanks!!
+
+  Luis
