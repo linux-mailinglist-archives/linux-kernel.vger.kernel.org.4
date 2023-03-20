@@ -2,116 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691C66C169C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F496C1717
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbjCTPHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S232113AbjCTPLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjCTPHd (ORCPT
+        with ESMTP id S232363AbjCTPLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:07:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F383EC7E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679324506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RRLo27GlsnaXOlM604FxZs8z99IITo0Vh+vZehLWrQY=;
-        b=dTPIJZAJvAgsrDkugdn/Gb5GqNuFtgJLZLbVczL0NPeN1IEQ7DZaWduxUfWYXRWG0ssrGI
-        u/GfTvEIpxedF6OprSClQ8o5M3YDr5pb+LgQ92jFg3sEFjWsv7B1PpPfVjJm4mY+avmuyh
-        E7JnhPgCHcjaTE2W8gdpQ5KYquAMEzM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-558sAMGXPMqpTyBMA-vAXw-1; Mon, 20 Mar 2023 11:01:43 -0400
-X-MC-Unique: 558sAMGXPMqpTyBMA-vAXw-1
-Received: by mail-wr1-f72.google.com with SMTP id u27-20020adfa19b000000b002d3b9266941so918838wru.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:01:42 -0700 (PDT)
+        Mon, 20 Mar 2023 11:11:20 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902B930EAD
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:06:20 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-544b959a971so195285367b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 08:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679324775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h7QKwmnDsultUs7P04JgZDKG6OgjB7qlJObVmRmggeo=;
+        b=p49FRkUpa1onj861owxR+cbfkVnBlLbJtuZi5TZBnMJXSSaIbhf/VQNWrSWgdlU1pM
+         0NyYbI3zjL8czjOnrV8W6ccHFFdPuz10pqO7O2q2cBZ86fDCnsE7jDPOtghpWBKEfH2f
+         b91PuoXNuBsH5i7DpJGcougkcijNYEOqAxTSA5d2fkiZYOMSJvkJrd+n4h/kEziooN/e
+         6j/LGmLE1nxkmnvlsZeWQZ07K2NARkAPyaRTceg9SzMnj8R9S3IbblvJYft79oh6gIvn
+         orsW5tfj7HNYrnD6tJqd5CJvGCZKBAHxW1AtMFMdXnrrP6d2njA6qmFfFoxOp58jTI9y
+         N6Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679324501;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RRLo27GlsnaXOlM604FxZs8z99IITo0Vh+vZehLWrQY=;
-        b=TUWvmNaCN9Pg9h26WMiApghD8b2dGj+ZSEjgiNTJzjIkblLIsoZuqEjTcIh6XuVju/
-         crdEM79m4dDvcRZrNzZDY9DTRZ/Tki58I0vGYnmN7/ZK6nwmM9zV8qc4OXY7oI5QcwAy
-         a1xgSAn37EKoGK/KzP9Ec2xAuhBzyAjOII4nYYlT6y5FwEnEc4sztAcOoFEFQgOaysC8
-         TaoMqKzDgGTNpeKwpi0ApH4cypkjJsbGfiv7rHOKI50/vWo10T5vYACwa426JBja81hM
-         vxh7xzd6ieeqeLCWt+vt7q2kt0JgkgoysH2yM6HOfYq8/4j/qoZ8vuOC1mJw34gkwYlf
-         +JYQ==
-X-Gm-Message-State: AO0yUKV4pZj7zMEGSEXnyXAos4mFwONMKroHkt0WwJpo644LtTugyljK
-        /6BP3VinNTg+QLMmwNREJMQyyWsuQFOrZG8z2wU7Xwk/H5Yn8pJkX2dL8xVpr/jDYMZ+F6ZW7N5
-        jURuOkGgvI4uPES1q9j2Lw71u
-X-Received: by 2002:a05:600c:a4c:b0:3dc:d5c:76d9 with SMTP id c12-20020a05600c0a4c00b003dc0d5c76d9mr35551091wmq.0.1679324501086;
-        Mon, 20 Mar 2023 08:01:41 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+Rv9ADJ0RLrT3u7b/PN3mJMTqyoZ1JFg/0Z64iMZgTe0nU39Ivpjcl6439Qs4YPquJhUtMqw==
-X-Received: by 2002:a05:600c:a4c:b0:3dc:d5c:76d9 with SMTP id c12-20020a05600c0a4c00b003dc0d5c76d9mr35551066wmq.0.1679324500767;
-        Mon, 20 Mar 2023 08:01:40 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id f1-20020a1c6a01000000b003edcc2223c6sm5981913wmc.28.2023.03.20.08.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 08:01:40 -0700 (PDT)
-Message-ID: <460b50d3-579c-5dfa-7c1b-531cc9b1c2d5@redhat.com>
-Date:   Mon, 20 Mar 2023 16:01:39 +0100
+        d=1e100.net; s=20210112; t=1679324775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h7QKwmnDsultUs7P04JgZDKG6OgjB7qlJObVmRmggeo=;
+        b=vnkkjRjz0F2qltx5/qp2OVgZIfFep50zuqZJRrm4uIsFK6n9d7Q135cUfu8AeKkwPw
+         PRH6A+WGDuMt5mtIgdmiUFSxZp0IFtVL3Ia1PE/INYybE8/TZMo7FVkyn6bimbIow4XK
+         QjyueNzVkU/emCAK+NcOYwfDNlaL8FZdo+iZoahgzynDhWwU0r8vQIVH6U+djb9LmUIX
+         coMtdlR4P7s/KtOEB5DKXQzs2DnfMmfGEz6galZSOq489QLqbgGMfSklzI41mbiN+Rwh
+         E8RRPRUvAO/nUX9TnTCy7lDviXh72OU3oVb9ONbiyEoEFIgP4uq9Uxe/pGLobF39PaH4
+         SKBg==
+X-Gm-Message-State: AO0yUKXeba+Coo06FZG3mQwDMGACE3X0YAPlvKi99CA0n2NY7dRJVVkB
+        bdWUjZ2pDiIVCXaElGoKEX5Ktw==
+X-Google-Smtp-Source: AK7set8F5wtPeeMQXBQuil2kSxCrxL1PD/6MVTUn5/U8lzeifvdg4qgj0Gb6Lc6I0cIT5qV3t9CCYQ==
+X-Received: by 2002:a0d:dd86:0:b0:544:77f1:a0f3 with SMTP id g128-20020a0ddd86000000b0054477f1a0f3mr15939653ywe.37.1679324775631;
+        Mon, 20 Mar 2023 08:06:15 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id i22-20020a05620a249600b0074411b03972sm6394896qkn.51.2023.03.20.08.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 08:06:04 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 11:03:32 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/4] bitfield: Introduce the FIELD_MODIFY() macro
+Message-ID: <ZBh1xFkjAtZW6kaA@fedora>
+References: <cover.1679149542.git.william.gray@linaro.org>
+ <1c1492558c1a72b64bb26f7a44c4e69fff0e6b44.1679149543.git.william.gray@linaro.org>
+ <7cd746c7b585c5086cfbd9db22414a060356cdd8.camel@sipsolutions.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/2] selftests/mm: Smoke test
- UFFD_FEATURE_WP_UNPOPULATED
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230309223711.823547-1-peterx@redhat.com>
- <20230309223711.823547-3-peterx@redhat.com>
- <4ab36009-51c0-6583-4948-b267f8fbf32a@redhat.com> <ZBhxLOBocC7mCYDG@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZBhxLOBocC7mCYDG@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vugPevjziSdHkgiz"
+Content-Disposition: inline
+In-Reply-To: <7cd746c7b585c5086cfbd9db22414a060356cdd8.camel@sipsolutions.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.03.23 15:43, Peter Xu wrote:
-> On Mon, Mar 20, 2023 at 11:25:43AM +0100, David Hildenbrand wrote:
->> On 09.03.23 23:37, Peter Xu wrote:
->>> Enable it by default on the stress test, and add some smoke tests for the
->>> pte markers on anonymous.
->>
->> Would it make sense to make kernel support optional and test both paths --
->> once with the feature enabled (if available on the kernel we're testing) and
->> once with the feature disabled?
-> 
-> Yeah, I think the current uffd selftest is not friendly to old kernels so I
-> made it simple - IOW the test should fail already on old kernels AFAIK.
-> Maybe I can prepare some patches this week or next to cleanup some parts of
-> it.
 
-Some people to tend to run upstream selftests on older kernels, but I 
-guess this is not high priority. Can always be added on top.
+--vugPevjziSdHkgiz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Thanks,
+On Mon, Mar 20, 2023 at 09:50:35AM +0100, Johannes Berg wrote:
+> On Sat, 2023-03-18 at 14:59 +0000, William Breathitt Gray wrote:
+> > It is a common code pattern to modify a bitfield by masking the field
+> > and performing a bitwise OR with the respective FIELD_PREP. Wrap such a
+> > task into a macro by introducing FIELD_MODIFY() which modifies the field
+> > specified by a mask from a bitfield by putting a val in the field.
+>=20
+> So I have no objection to adding this and you using FIELD_* macros, but
+> just wanted to say that personally I've come to prefer the typed
+> versions declared later in the fiel, and there we have
+> <type>_replace_bits() already.
+>=20
+> Hmm. And now that I mentioned that, maybe that means FIELD_REPLACE()
+> would be nicer as a name?
+>=20
+> johannes
 
-David / dhildenb
+Perhaps I can convert all of these FIELD_GET(), FIELD_MODIFY(), and
+FIELD_GET() to the equivalent of u8_get_bits(), u8p_replace_bits(), and
+u8_encode_bits(). If that works, then I'll just drop the FIELD_MODIFY()
+patch in the v2 patchset submission.
 
+William Breathitt Gray
+
+--vugPevjziSdHkgiz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZBh1xAAKCRC1SFbKvhIj
+KyfzAP4y6u/CyvcL+6NIZgavaoJSI9BCKLnRx+nR1KvhGcC8RwD/eXnjHRFHPLhG
+WTSVwvraLRUk/0p/rf8R3oFrzkgehgQ=
+=O7Vi
+-----END PGP SIGNATURE-----
+
+--vugPevjziSdHkgiz--
