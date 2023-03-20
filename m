@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D996C0D05
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BAF6C0D08
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbjCTJUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S230250AbjCTJUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjCTJTx (ORCPT
+        with ESMTP id S231209AbjCTJUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:19:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF91740EB;
-        Mon, 20 Mar 2023 02:19:52 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 20 Mar 2023 05:20:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCA2168A9;
+        Mon, 20 Mar 2023 02:20:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 758246603094;
-        Mon, 20 Mar 2023 09:19:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679303990;
-        bh=utAuSiXq9t9asWlSaVXjc3XBcR0qMIczkPYrz6Mqa4M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LVwHGguKGFeWIsDZqnn4aC6Ghva6sfTpwAQEo7JbwFP+Cp4DSciwsakPGIPfsDbo1
-         k4sBsEKGto6v21Vv4nq8zlbZTpBat/TmZnZU1D5LAhZvaW/qgPupOkAPq2/I27L6iF
-         7dDM++r29XEu7AAtpfaluXPot1bdPutATLQ4cDUpNGTo0bmiXKrspBRBreFPFcW055
-         Mj6PtRA8VUuTxlQQbI47N8uvWDp+PJRWdGbhnkarP0B7A7zh/gLxszIlDOLUIs+Z1i
-         EWEgmEWztrst3Mt7ImuWktfNRk1qQWTR6i42o9zhSmxHtsiwXNB9MpatbOOMz3T8Yl
-         N58/sbrz4w4Ng==
-Message-ID: <582a4a00-5189-7aa7-f19c-04f006baaf75@collabora.com>
-Date:   Mon, 20 Mar 2023 10:19:47 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3765D612D4;
+        Mon, 20 Mar 2023 09:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94AA6C433D2;
+        Mon, 20 Mar 2023 09:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679304017;
+        bh=S8HH+qBdaVGjjcJuyjt9fd3I+oThX2xyyWH+nsgaglI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jYaUeoE1pbQKpQo14r/8NoAAKS+c3zcvx3YJQLj41K7/qwXhkDvx21cApWaIMAzGv
+         KDGte3S8Gs3RNgjJD9xDN/46HVBmNSF3UnSXHLairKFhScrUN9nVjh9ymf6RM9rRDK
+         1tC5jAfWcJWHCyJcZwusJcjXsjQGYUuZR0h3N50K8oHTv61EjQiosFJUy5z5VB+w9B
+         9AJLBQVIod68a3fiEjReJsvfhbpQHht3zMSDX5IQl/kDYITWDefB2rtCXYSqelVloD
+         iwG7udPyynL1Z4kvogjIuHAgP8589NeFEWV4HzloKtyaPRsZc+o9cyjuUrqKEBl/nv
+         YWe0wuoMVPplw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D018C395F4;
+        Mon, 20 Mar 2023 09:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] thermal: mediatek: Use of_address_to_resource()
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230319163231.226738-1-robh@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230319163231.226738-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] net: qcom/emac: Fix use after free bug in emac_remove
+ due to  race condition
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167930401750.16850.14731742864962914143.git-patchwork-notify@kernel.org>
+Date:   Mon, 20 Mar 2023 09:20:17 +0000
+References: <20230318080526.785457-1-zyytlz.wz@163.com>
+In-Reply-To: <20230318080526.785457-1-zyytlz.wz@163.com>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     timur@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/03/23 17:32, Rob Herring ha scritto:
-> Replace of_get_address() and of_translate_address() calls with single
-> call to of_address_to_resource().
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hello:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Sat, 18 Mar 2023 16:05:26 +0800 you wrote:
+> In emac_probe, &adpt->work_thread is bound with
+> emac_work_thread. Then it will be started by timeout
+> handler emac_tx_timeout or a IRQ handler emac_isr.
+> 
+> If we remove the driver which will call emac_remove
+>   to make cleanup, there may be a unfinished work.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2] net: qcom/emac: Fix use after free bug in emac_remove due to race condition
+    https://git.kernel.org/netdev/net/c/6b6bc5b8bd2d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
