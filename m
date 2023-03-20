@@ -2,157 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34876C12FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740006C1311
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjCTNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S231774AbjCTNSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbjCTNRK (ORCPT
+        with ESMTP id S231770AbjCTNSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:17:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A56623A5B;
-        Mon, 20 Mar 2023 06:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679318218; x=1710854218;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3Bu5KEQ7VbEZVFxJWJ3dCxTl63qFR3TMO6ewhBoLJ+8=;
-  b=YG/JG+F3Aqb1j82yUubccWeA3qgzUxGZQyifGITwbZX5BqMTBtFM7zIX
-   hka5uYgFVTCRwkzK5oZLXN4KcCwNf5LEJ41pOqdXwpovzql4HwDwHhTxD
-   HqaVa44Uc0vBZ+47FXk8LWjrW9dnECrD3zWp+6AYeJcx5zOBTqQcyh52P
-   6Sk2NIz9mEPlBRxKJxbZ0PJaP6DU660vLaHvZYHF1FA2mqxz7HrulG1/H
-   2y4hrTfynGVcIJUe0xKS4UBYgZ/jTPUdnwoSXTCT8ZaJ2Xk/fQdgvMali
-   gbsj8Avz8gR5NV4jKKanwfcjtf5cq/42r4PfAGIXo6EX/60q0i5s6n5Zz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="424932250"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="424932250"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 06:16:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="674382651"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="674382651"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 06:15:58 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2B4BE638; Mon, 20 Mar 2023 15:16:44 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: [PATCH v6 4/4] pcmcia: Convert to use pci_bus_for_each_resource_p()
-Date:   Mon, 20 Mar 2023 15:16:33 +0200
-Message-Id: <20230320131633.61680-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320131633.61680-1-andriy.shevchenko@linux.intel.com>
-References: <20230320131633.61680-1-andriy.shevchenko@linux.intel.com>
+        Mon, 20 Mar 2023 09:18:09 -0400
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93D723A64;
+        Mon, 20 Mar 2023 06:17:50 -0700 (PDT)
+Received: from localhost.localdomain (unknown [117.133.56.22])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 5AFCC5801D9;
+        Mon, 20 Mar 2023 21:17:35 +0800 (CST)
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
+        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com
+Cc:     linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Donglin Peng <pengdonglin@sangfor.com.cn>
+Subject: [PATCH v5 0/2] function_graph: Support recording and printing the return value of function
+Date:   Mon, 20 Mar 2023 06:16:48 -0700
+Message-Id: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDTE5CVk1MHklMSU5PTk5MSVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpISkJIT1VKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NxQ6OCo5Cj0QCxEeNwkNGCMr
+        ASkaCUNVSlVKTUxCSEpDSU5NTElDVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFNS01DNwY+
+X-HM-Tid: 0a86ff2b0a2a2eb7kusn5afcc5801d9
+X-HM-MType: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pci_bus_for_each_resource_p() hides the iterator loop since
-it may be not used otherwise. With this, we may drop that iterator
-variable definition.
+When using the function_graph tracer to analyze system call failures,
+it can be time-consuming to analyze the trace logs and locate the kernel
+function that first returns an error. This change aims to simplify the
+process by recording the function return value to the 'retval' member of
+'ftrace_graph_ent' and printing it when outputing the trace log.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/pcmcia/rsrc_nonstatic.c | 9 +++------
- drivers/pcmcia/yenta_socket.c   | 3 +--
- 2 files changed, 4 insertions(+), 8 deletions(-)
+Note that even if a function's return type is void, a return value will
+still be printed, so it should be ignored. If you care about this, the
+BTF file can be used to obtain the details of function return type. We
+can implement a tool to process the trace log and display the return
+value based on its actual type.
 
-diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
-index ad1141fddb4c..9d92d4bb6239 100644
---- a/drivers/pcmcia/rsrc_nonstatic.c
-+++ b/drivers/pcmcia/rsrc_nonstatic.c
-@@ -934,7 +934,7 @@ static int adjust_io(struct pcmcia_socket *s, unsigned int action, unsigned long
- static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- {
- 	struct resource *res;
--	int i, done = 0;
-+	int done = 0;
- 
- 	if (!s->cb_dev || !s->cb_dev->bus)
- 		return -ENODEV;
-@@ -960,12 +960,9 @@ static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- 	 */
- 	if (s->cb_dev->bus->number == 0)
- 		return -EINVAL;
--
--	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
--		res = s->cb_dev->bus->resource[i];
--#else
--	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
- #endif
-+
-+	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
- 		if (!res)
- 			continue;
- 
-diff --git a/drivers/pcmcia/yenta_socket.c b/drivers/pcmcia/yenta_socket.c
-index 1365eaa20ff4..2e5bdf3db0ba 100644
---- a/drivers/pcmcia/yenta_socket.c
-+++ b/drivers/pcmcia/yenta_socket.c
-@@ -673,9 +673,8 @@ static int yenta_search_res(struct yenta_socket *socket, struct resource *res,
- 			    u32 min)
- {
- 	struct resource *root;
--	int i;
- 
--	pci_bus_for_each_resource(socket->dev->bus, root, i) {
-+	pci_bus_for_each_resource_p(socket->dev->bus, root) {
- 		if (!root)
- 			continue;
- 
+Here is an example:
+
+...
+
+ 1)               |  cgroup_attach_task() {
+ 1)               |    cgroup_migrate_add_src() {
+ 1)   1.403 us    |      cset_cgroup_from_root(); /* = 0xffff93fc86f58010 */
+ 1)   2.154 us    |    } /* cgroup_migrate_add_src = 0xffffb286c1297d00 */
+ 1) ! 386.538 us  |    cgroup_migrate_prepare_dst(); /* = 0x0 */
+ 1)               |    cgroup_migrate() {
+ 1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
+ 1)               |      cgroup_migrate_execute() {
+ 1)               |        cpu_cgroup_can_attach() {
+ 1)               |          cgroup_taskset_first() {
+ 1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+ 1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+ 1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
+ 1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+ 1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+ 1)   7.143 us    |    } /* cgroup_migrate = -22 */
+ 1)               |    cgroup_migrate_finish() {
+ 1)   0.411 us    |      put_css_set_locked(); /* = 0x8 */
+ 1) + 62.397 us   |      put_css_set_locked(); /* = 0x80000001 */
+ 1) + 64.742 us   |    } /* cgroup_migrate_finish = 0x80000000 */
+ 1) ! 465.605 us  |  } /* cgroup_attach_task = -22 */
+
+...
+
+After processing the above trace logs using BTF information:
+
+...
+
+ 1)               |  cgroup_attach_task() {
+ 1)               |    cgroup_migrate_add_src() {
+ 1)   1.403 us    |      cset_cgroup_from_root(); /* = 0xffff93fc86f58010 */
+ 1)   2.154 us    |    } /* cgroup_migrate_add_src */
+ 1) ! 386.538 us  |    cgroup_migrate_prepare_dst(); /* = 0 */
+ 1)               |    cgroup_migrate() {
+ 1)   0.651 us    |      cgroup_migrate_add_task();
+ 1)               |      cgroup_migrate_execute() {
+ 1)               |        cpu_cgroup_can_attach() {
+ 1)               |          cgroup_taskset_first() {
+ 1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
+ 1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
+ 1)   0.380 us    |          sched_rt_can_attach(); /* = 0 */
+ 1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
+ 1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
+ 1)   7.143 us    |    } /* cgroup_migrate = -22 */
+ 1)               |    cgroup_migrate_finish() {
+ 1)   0.411 us    |      put_css_set_locked();
+ 1) + 62.397 us   |      put_css_set_locked();
+ 1) + 64.742 us   |    } /* cgroup_migrate_finish */
+ 1) ! 465.605 us  |  } /* cgroup_attach_task = -22 */
+
+...
+
+Donglin Peng (2):
+  function_graph: Support recording and printing the return value of
+    function
+  tracing: Add documentation for funcgraph-retval and graph_retval_hex
+
+ Documentation/trace/ftrace.rst       | 75 ++++++++++++++++++++++
+ arch/arm/Kconfig                     |  1 +
+ arch/arm/kernel/entry-ftrace.S       |  8 +++
+ arch/arm64/Kconfig                   |  1 +
+ arch/arm64/kernel/entry-ftrace.S     |  8 +++
+ arch/riscv/Kconfig                   |  1 +
+ arch/riscv/kernel/mcount.S           | 12 +++-
+ arch/x86/Kconfig                     |  1 +
+ arch/x86/kernel/ftrace_32.S          |  8 +++
+ arch/x86/kernel/ftrace_64.S          | 10 +++
+ include/linux/ftrace.h               |  3 +
+ kernel/trace/Kconfig                 |  8 +++
+ kernel/trace/fgraph.c                | 25 +++++++-
+ kernel/trace/trace.h                 |  2 +
+ kernel/trace/trace_entries.h         | 26 ++++++++
+ kernel/trace/trace_functions_graph.c | 95 +++++++++++++++++++++++++---
+ 16 files changed, 272 insertions(+), 12 deletions(-)
+
 -- 
-2.39.2
+2.25.1
 
