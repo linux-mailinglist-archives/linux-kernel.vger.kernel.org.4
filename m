@@ -2,136 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8F66C158E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC306C1593
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjCTOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S232032AbjCTOwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 10:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjCTOvb (ORCPT
+        with ESMTP id S231949AbjCTOvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:51:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A340265B9;
-        Mon, 20 Mar 2023 07:50:08 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 13979660212C;
-        Mon, 20 Mar 2023 14:49:39 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679323779;
-        bh=b0evVStbmjbebTg7JnPsa981Y/oOfL5M+cclKuYMXd0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GYRb86+aryGONKFjqeSPCtp73ReTpHeVIYtvviGDWsTH85KWMsUYqYnxQeCg3aQfQ
-         LbtIYr46t3CCTuc4NYj/IDFtKOihGcpIDDx5Bcd1q0Fppui5Rm1R5d8ShoIiz6UnFu
-         c2rfcOoIwdMpmS4ykyWz0btoUYbvzUThzpE/S8KlpYcbBOAxKP2Py5dbVsH29RzJMJ
-         0CVtWOpDblwdhVl6HBrby6IAxqJiXk/CONk8s/QbWPBV/EthJFJk3ZPEUC4s4BQo0o
-         MWQCjk4MztswjODewvbHJvFTY1ElNGP9aIF2uM0vDiwYOcRQtPLHDGTQce551QC27j
-         8YOxLMiOO/j4g==
-Message-ID: <100a6c2e-f65f-5297-919a-06b8f73444fa@collabora.com>
-Date:   Mon, 20 Mar 2023 15:49:36 +0100
+        Mon, 20 Mar 2023 10:51:44 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DBC2A99A;
+        Mon, 20 Mar 2023 07:50:10 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso13302709fac.4;
+        Mon, 20 Mar 2023 07:50:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679323784;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=24gLtemlwEwclYk97xQS3tgIiOLty5AImjT/aeDGFUU=;
+        b=OwgEJApZxGZEEEwdblDsB3ZaQxjElwpHGGuBAzOdzg2yNCmCuJjdhzpC/lS9LD6gR9
+         HUZt/gN91IlQY3r0a2/6fi1uNAf/FYZ87EVFkpyn6zqTdWnUOZIjGHHplH8gn0fTTIms
+         zvwDBKMaSYua1JfQQxq/B00jVUUYYEI2WklLQLuzsdPhTCrdpq0x6lEyKCfQgn9zGqaI
+         80gNEJHc8kiFXkWuEij0uBVmoHlMKLaGL971sGghzQcuN16LUYSRi7vYSc1K/62Cp8S1
+         DDd/JSm/hu/qw04xzcmqivT3ZdbmoJWPnUsRXLciSHG0zH4d/tjYczcNGk+827bNCFaI
+         m47Q==
+X-Gm-Message-State: AO0yUKWmoy+GCeZdnGxqyQQ6KQqy57sZrOSulMJVhYLY+8ggRsjHqUSF
+        4MY0ef4KbujJAPLoCHFlyw==
+X-Google-Smtp-Source: AK7set+RqlXkEMahjquygOnExk5k9/cbtl8ORARJq5x3F2i+ux3p2b42vHbNFUCMROqdgqtZnFU/nA==
+X-Received: by 2002:a05:6870:8a1e:b0:17a:a825:6be9 with SMTP id p30-20020a0568708a1e00b0017aa8256be9mr5620143oaq.43.1679323783824;
+        Mon, 20 Mar 2023 07:49:43 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t1-20020a9d7741000000b0068bc48c61a5sm140647otl.19.2023.03.20.07.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 07:49:43 -0700 (PDT)
+Received: (nullmailer pid 1616110 invoked by uid 1000);
+        Mon, 20 Mar 2023 14:49:42 -0000
+Date:   Mon, 20 Mar 2023 09:49:42 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     devicetree@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH 04/14] dt-bindings: mfd: qcom,spmi-pmic: add compatible
+ for pmm8654au
+Message-ID: <167932378237.1616052.3467011584315312595.robh@kernel.org>
+References: <20230314183043.619997-1-brgl@bgdev.pl>
+ <20230314183043.619997-5-brgl@bgdev.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/6 RESEND] media: mediatek: vcodec: Add a debugfs file to
- get different useful information
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230320102838.8313-1-yunfei.dong@mediatek.com>
- <20230320102838.8313-4-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230320102838.8313-4-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314183043.619997-5-brgl@bgdev.pl>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/03/23 11:28, Yunfei Dong ha scritto:
-> In oder to get each instance information according to test command, adding
-> one file node "vdec".
+
+On Tue, 14 Mar 2023 19:30:33 +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Can use echo command to set different string value as 'echo -picinfo > vdec'
-> to get real and aligned resolution.
+> PMM8654au is the SPMI PMIC variant used on sa8775p-ride. Add a compatible
+> for it.
 > 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Cc: Lee Jones <lee@kernel.org>
 > ---
->   .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 85 +++++++++++++++++++
->   .../mediatek/vcodec/mtk_vcodec_dbgfs.h        | 20 +++++
->   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  2 +
->   3 files changed, 107 insertions(+)
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-> index bef78c028a75..9e7d57d21cea 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-> @@ -10,6 +10,86 @@
->   #include "mtk_vcodec_drv.h"
->   #include "mtk_vcodec_util.h"
->   
-> +static ssize_t mtk_vdec_dbgfs_write(struct file *filp, const char __user *ubuf,
-> +				    size_t count, loff_t *ppos)
-> +{
-> +	struct mtk_vcodec_dev *vcodec_dev = filp->private_data;
-> +	char buf[32] = { 0 };
-> +	int len, str_count = 0;
-> +	struct mtk_vcodec_dbgfs_inst *dbgfs_inst;
-> +	struct mtk_vcodec_ctx *ctx;
-> +
-> +	len = simple_write_to_buffer(buf, sizeof(buf) - 1, ppos, ubuf, count);
-> +	if (len <= 0)
-> +		return len;
-> +
-> +	list_for_each_entry(dbgfs_inst, &vcodec_dev->dbgfs.dbgfs_head, node) {
-> +		pr_info("dbgfs_inst id: %d\n", dbgfs_inst->inst_id);
-> +		ctx = dbgfs_inst->vcodec_ctx;
-> +
-> +		if (strstr(buf, "-picinfo")) {
-> +			str_count++;
-> +			pr_info("resolution: real(%dx%d)=>align(%dx%d)\n",
-> +				ctx->picinfo.pic_w, ctx->picinfo.pic_h,
-> +				ctx->picinfo.buf_w, ctx->picinfo.buf_h);
 
-If you want to use debugfs (which is a good choice!), you should use debugfs!
-This means that you shouldn't print this kind of information to the kernel,
-but rather to a debugfs entry.
-
-Example:
-
-$ echo "-picinfo" > vdec
-$ cat vdec
-
-resolution: real(1024x768)=>align(something)
-
-This is the same for all of the commits of this series, so, please properly
-use debugfs.
-
-
-Regards,
-Angelo
+Acked-by: Rob Herring <robh@kernel.org>
 
