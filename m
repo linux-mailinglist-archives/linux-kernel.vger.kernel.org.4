@@ -2,186 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8321D6C260D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8D86C2612
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjCTXtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S230171AbjCTXuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCTXtm (ORCPT
+        with ESMTP id S229786AbjCTXus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:49:42 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF6530E5;
-        Mon, 20 Mar 2023 16:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679356139; x=1710892139;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Zk4O7hF9bYpxYM+W34JdePDf+JKxL5hj+UwYmKmEWtg=;
-  b=S3c/4btKhCW2gIvIL/GXXqUr5Jh+44dxr4Z0QZa/ldqj0BjpdnzQCh7T
-   qHuMZ885FrWO+tVKRA1e7SMQxqH4ie2zLIy0Dnx5gNcn8yM3W4mgJ/Ujh
-   YXI4akC9DdgYisB9NuGcXFZnrJmLK1X/Nj5U6ijjMyGr9SVC96OHnbbnk
-   MQVl7OaAE9h8YR+EJ+kW1LROnXupwldehzosnqr6qlIypGLf1tE+S7+v+
-   4fxw9GCFYHn6uXyaaw9960ClD+atMNlnnpYgBPn4vbH7tZOMaTDvlIi+f
-   dCHSQW8vlDSYv5jrkcNA1lCoyNMScNJ7qTl/f5zxBc5BOTV3ksNvGvG+x
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="336310637"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="336310637"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 16:48:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855458463"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="855458463"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 16:47:59 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 16:47:25 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 16:47:25 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 20 Mar 2023 16:47:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UdfCN/VXKITcIt9Vz+T8EitcCVWv6HRIXCZa4vQRdIofcopy1W+YZB8y88HbhFEwB6WkkXgbDMFxJAHdnFU9Cgks9VeFspc2msdXATWzCd594oLWi+c1/Ktux7MN3h3KGrH0kqdMy7ZNpbQRpVjEgfieXlUdqiSotd3nN6BVkuqTGpLyCyjVMbbMi3UFoNDBYYF8URpQaCziKW39aC2Rj3c5qV5HPndT7rKJONIQeeo5+zRl4IJtq7zhz9vnJZ4stKRsLKv+sS8rpXaTutQau0N4+iMRJgLqAUxUYupUsipQXoS5sbfrCIKrYHVS2JLq/CdXBKrdnjXoUP3fbLsVgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=85me2D9qsSEiLlGqtoCuGgG9Og5XF+pjeQ8IazlNWJk=;
- b=hSvcbngnp3GrCjFM5G33OGU9zCiEBQfmqqgMZpG3epL5YC+Kb0XNkAgn9RDBx+Jbuia+jQIPPJ/EbtzLvc64on8h0TevokWQGzvIjocVzone0BEcL+GV54UCdo6APUSQUbdctfl1IDyssfgDu9QV71EvyGSdaFg8n5KocP/Cu/HhYVFXjQpZ0n3crlLew2aBgfxAxIy0j8DpyQA4W9cbf79tozn5cVHEFbxW5hGTcWsplH6b9fXc4fmP2knpwMXYLSRd5C2KP5qTpUSTKQT16TYyKzGhRWF4JjHrsrG/HTCXwo2gtUnAkXFT0lahGpJIPTEI8CqDOQ3LaKWf+oC6KQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by SJ0PR11MB6792.namprd11.prod.outlook.com (2603:10b6:a03:485::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
- 2023 23:47:23 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::7576:1f4a:2a6c:72f7]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::7576:1f4a:2a6c:72f7%2]) with mapi id 15.20.6178.029; Mon, 20 Mar 2023
- 23:47:23 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v5 04/34] x86/traps: add external_interrupt() to dispatch
- external interrupts
-Thread-Topic: [PATCH v5 04/34] x86/traps: add external_interrupt() to dispatch
- external interrupts
-Thread-Index: AQHZUKGztfjifB1+wEenbg44nnnakK8D4jgAgAAjLICAAGT1oA==
-Date:   Mon, 20 Mar 2023 23:47:23 +0000
-Message-ID: <SA1PR11MB673441665AA79735E5EA60C6A8809@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230307023946.14516-1-xin3.li@intel.com>
- <20230307023946.14516-5-xin3.li@intel.com>
- <20230320153630.GO2194297@hirez.programming.kicks-ass.net>
- <20230320174223.GC2196776@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230320174223.GC2196776@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|SJ0PR11MB6792:EE_
-x-ms-office365-filtering-correlation-id: 8e2780b2-82d1-4114-903c-08db299d73e8
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Mm/Gxk6H9fM3m+O0+ICmmbincncRwEj4uBSEl1ykvsqDWY17tty9vwm2ZyBO3ocYOto72Xrgw/RH485/RbQ+hmt4gkQycC/LSE/VrdcdxEZADyEoMi47+z5d2czSIB6otMEdxa2iR1Gt3dJeznQN9eaxOMLXAcLySiuYOvvWDJs7xrmSqFSe8Nvu5Iei+swN3egOvqQZWFYOOJAwSL+kE+nsGiZivSRT5HkzF4+sjtU8dB6Qq8LTZLKsKFPJCJsoS9pp8PGyrOvHRWR8JTrK7wIQrOsuXbvln9+I32BL+gsgcdw+14HlmPrrTauopoDkyeEGRMz+/S0T1WKLCHWsKJ0V42ZTDgU3HJ+V9InsAOolsqKqEiKeAadu4i1h/u9u8N5FV6AVdkUbJohMkjDkZptjMNnfcJxSuuhz/tewTt4Z+9lxzO0/TpMYvMUZCcvkNOQ8ekpyPEJQRasdAv7VZH2r08oLINdIV0rSRu705m5nNH8kDCrHUqTeJabUoHdXDMokB7Eh68CEY6p/WfvJFbpMdrv9vWhu1WJBlfUiyboLaSXzwMQFcTXVSOaodCQmuDFdlmZ4tHcJSIBGiRp0vamPB5nuvtksvq8Wcv51SZBiC4oTHzn0MN345BonyMU7ue6/z2nbaxB0PlmeaRTGtkCBB69hqfX3IfZWIQSohwUlTPX/b+fDIMjAUh1XgsgmXFGnFe4pSC6mAfd96+u03A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(136003)(366004)(39860400002)(396003)(451199018)(82960400001)(186003)(9686003)(38100700002)(122000001)(2906002)(26005)(6506007)(38070700005)(5660300002)(7416002)(4744005)(8936002)(66446008)(76116006)(52536014)(55016003)(66946007)(41300700001)(86362001)(7696005)(54906003)(4326008)(66556008)(66476007)(64756008)(8676002)(6916009)(33656002)(478600001)(71200400001)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1Ey2FioZ3LIbDad0z6WM/bAkr8yUoOtqtryvoZV8eMeyVVOpN5i8PowdRgwK?=
- =?us-ascii?Q?iNrXE6L4AOsOA1hdEaNplULUPUokV+HwdC4O5E6HYvOH06Z6vDWdFNxbIP4O?=
- =?us-ascii?Q?qSOpShul/xU3nr7Q+NpyCW3XkAgjugqAS3JBRm6xJ5z/MHhU+sd/ikppVL3/?=
- =?us-ascii?Q?dIvKBwictE1LUbo6RI33e/nQwLWc6ZmanbAVjBUsLET7CWzB6v8zaZICZSxI?=
- =?us-ascii?Q?aJaT/VniERcaz2Aiggxml9XrXbBTYbz/ccRKk0GflJx/XxD8avzDvNMUaNxF?=
- =?us-ascii?Q?xj1E72gdly39tWXcJGJuaM9jTySeGeQVFofMIWVK/HSXovsbYHRGTpVHGJZ3?=
- =?us-ascii?Q?C/I+h1i2Uzv/ykE/yBvxjZLKaddqNGBKJQj69gSwyrb+2sNalpvVBYDtJcxs?=
- =?us-ascii?Q?nmuya5IKu4ovMlR8tLhA8iaFfQ7Q3k5n1tiAY1giOTNJkbI8h8CE3dM1rD2B?=
- =?us-ascii?Q?4IMKhW7HAHh1ag9esLdWpli3mGsiRBgLSr5jYhmgQekhYV3VmKYFhZkVWxT9?=
- =?us-ascii?Q?FkJQ3+ZOSoGK2+26x5/52wSD2MoTdY1UZcFa4tWJBJeUOnILkDG6r23DcfzI?=
- =?us-ascii?Q?dgT5K7MZDkYw2euIBdzcRg9lNsci+UJadTsPdnH6X92F9fC7aXW8VcTIKToS?=
- =?us-ascii?Q?gOMLNXunnzWbhmG6+lPRfIVf0c5THT4DLoIfvfPU1yU813e1sA/V9eDvAiak?=
- =?us-ascii?Q?s58dpaPEY95+SomQBp02cyWrmndfqS+CCViM//+e326CVj5hwjG3jsb5rXy1?=
- =?us-ascii?Q?WkiR1ExkAGBDbznHyWqMQxViYGBXcBNu9yV3jpKacEXiGYZyMuxEIdQGNZ9z?=
- =?us-ascii?Q?xGDBzEuCeULJVdUjojg/UyWAksFIZiJx7wsa9NY/cFWShTYRNhErEWeu7E9M?=
- =?us-ascii?Q?LSs+TLiaD09R87tqTQ+clCTMEmh0oeIeTrNgwlgNEhTtK+apWcdKxJJahesK?=
- =?us-ascii?Q?W7CuPi3HmkvCF9NmduwBGbVWYkEh0blmuSG5p+20jQr3lJBREr0g05UEF5g0?=
- =?us-ascii?Q?KEX53Lp3mVjjR6Np8ReNDL58Cy/ct5n+V+55YPptqRS09xZ4YABEV94FP++K?=
- =?us-ascii?Q?PBAudBB5UHrG5lGfTEYNW+K+tXwwIo+VsDsqQ/3E97GmMZPa/1ijtFTCRy1I?=
- =?us-ascii?Q?oHS9YzBIaci2RC9hQd+8FA/eb+cuQ3NI8/1meBPbegIMyKIrW2yTyPOBU5yo?=
- =?us-ascii?Q?K+8xvRSZfDbxTVbPstVMI3b1L3Z7oFhH7K+w+bDyk+phdefTkzqb5asHhij4?=
- =?us-ascii?Q?0BEnx/vsOTmyRc3Xxr5ITItDvsbh1aBjN63dulNHXbdREwkgI7ku3aVQlKYL?=
- =?us-ascii?Q?h2rkUfI7dOFydGR2Zg9dYvrSfi5HK3M+wGbmxouhL3nkf3MdZULckm6Hva6c?=
- =?us-ascii?Q?rH1FHhY7wU54GgZs2bX3rm3sTMIb2Jf61EgqOOk14JH0hXZK5CYHYyJjNkWE?=
- =?us-ascii?Q?DrL1OK8wCscMFj7huaefIFXAmpc3Zf6mox1nXaSoc+Jh1yt5frjUvt2WVRHk?=
- =?us-ascii?Q?f7X96LIsMLcSTuIkJ0QxNvTSIrDDNVrpARwROnii9CjhRjirDCwlqSvAoDx/?=
- =?us-ascii?Q?b79xLTje4krh+gf12cM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 20 Mar 2023 19:50:48 -0400
+Received: from out198-153.us.a.mail.aliyun.com (out198-153.us.a.mail.aliyun.com [47.90.198.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960D6EC5A;
+        Mon, 20 Mar 2023 16:50:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.04438621|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.00185546-0.00012679-0.998018;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047193;MF=wangyugui@e16-tech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.RvYBynT_1679356099;
+Received: from 192.168.2.112(mailfrom:wangyugui@e16-tech.com fp:SMTPD_---.RvYBynT_1679356099)
+          by smtp.aliyun-inc.com;
+          Tue, 21 Mar 2023 07:48:20 +0800
+Date:   Tue, 21 Mar 2023 07:48:20 +0800
+From:   Wang Yugui <wangyugui@e16-tech.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc1 review
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
+References: <20230320145507.420176832@linuxfoundation.org>
+Message-Id: <20230321074819.2A17.409509F4@e16-tech.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e2780b2-82d1-4114-903c-08db299d73e8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 23:47:23.3970
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PT6EN0cdX3R+iMNBYA9kJfZYXW1H8oSOIkxrBQQDacByKYaVVbJ3lPTbCQZ4v1XMWhHKw6sy+3sX7dILoKcsjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6792
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Becky! ver. 2.81.04 [en]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > +	if (sysvec < NR_SYSTEM_VECTORS) {
-> > > +		if (system_interrupt_handlers[sysvec])
-> > > +			system_interrupt_handlers[sysvec](regs);
-> > > +		else
-> > > +			dispatch_spurious_interrupt(regs, vector);
-> >
-> > ISTR suggesting you can get rid of this branch if you stuff
-> > system_interrupt_handlers[] with dispatch_spurious_interrupt instead
-> > of NULL.
->=20
-> Ah, I suggested that for another function vector, but it applies here too=
- I suppose :-)
+Hi,
 
-Of course!
 
-We just need to use a wrapper as dispatch_spurious_interrupt() takes an ext=
-ra
-parameter "vector".
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 198 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 22 Mar 2023 14:54:29 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.21-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
 
-Thanks!
-  Xin
+fstests btrfs/056 triggered a panic for 6.1.21-rc1, but the panic does not
+happen on 6.1.20.
+
+the patch *1 dropped in 6.1.9-rc is added to 6.1.21-rc1 again.
+*1 Subject: blk-mq: move the srcu_struct used for quiescing to the tagset
+
+we need to drop it again, or need more patches.
+
+dmesg output:
+[  144.826161] run fstests btrfs/056 at 2023-03-21 07:38:22
+[  145.218508] BTRFS: device fsid f51b57f4-387d-4cad-9abb-7d564b046644 devid 1 transid 26305 /dev/nvme0n1p1 scanned by mount (2411)
+[  145.232873] BTRFS info (device nvme0n1p1): using crc32c (crc32c-intel) checksum algorithm
+[  145.242079] BTRFS info (device nvme0n1p1): using free space tree
+[  145.254748] BTRFS info (device nvme0n1p1): enabling ssd optimizations
+[  145.767372] BTRFS: device fsid 6c57e1ae-86b5-416b-9583-ced6f290ee2c devid 1 transid 6 /dev/nvme0n1p2 scanned by systemd-udevd (2087)
+[  145.863002] BTRFS info (device dm-0): using crc32c (crc32c-intel) checksum algorithm
+[  145.871720] BTRFS info (device dm-0): using free space tree
+[  145.881697] BTRFS info (device dm-0): enabling ssd optimizations
+[  145.889144] BTRFS info (device dm-0): checking UUID tree
+[  145.986698] BTRFS info: devid 1 device path /dev/mapper/flakey-test changed to /dev/dm-0 scanned by systemd-udevd (2087)
+[  146.000451] BTRFS info: devid 1 device path /dev/dm-0 changed to /dev/mapper/flakey-test scanned by systemd-udevd (2087)
+[  146.079464] BTRFS: device fsid 6c57e1ae-86b5-416b-9583-ced6f290ee2c devid 1 transid 6 /dev/dm-0 scanned by systemd-udevd (2087)
+[  146.109496] BTRFS info (device dm-0): using crc32c (crc32c-intel) checksum algorithm
+[  146.118224] BTRFS info (device dm-0): using free space tree
+[  146.127288] BTRFS info (device dm-0): enabling ssd optimizations
+[  146.134034] BTRFS info (device dm-0): start tree-log replay
+[  146.142813] BTRFS info (device dm-0): checking UUID tree
+[  146.228077] BUG: kernel NULL pointer dereference, address: 0000000000000058
+[  146.235907] #PF: supervisor read access in kernel mode
+[  146.241662] #PF: error_code(0x0000) - not-present page
+[  146.247420] PGD 0 P4D 0
+[  146.251227] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  146.257016] CPU: 35 PID: 2661 Comm: dmsetup Not tainted 6.1.21-0.1.el7.x86_64 #1
+[  146.266227] Hardware name: Dell Inc. PowerEdge T620/02CD1V, BIOS 2.9.0 12/06/2019
+[  146.275524] RIP: 0010:blk_mq_wait_quiesce_done+0xc/0x30
+[  146.282294] Code: 00 00 00 e8 66 48 ff ff 4c 89 e6 5b 48 89 ef 5d 41 5c e9 a7 7c 65 00 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 87 50 03 00 00 <f6> 40 58 20 74 0c 48 8b b8 a8 00 00 00 e9 e2 69 c4 ff e9 dd e4 c4
+[  146.305208] RSP: 0018:ffffb03ecea6bbd0 EFLAGS: 00010286
+[  146.312029] RAX: 0000000000000000 RBX: ffffa086c7523800 RCX: 0000000000000000
+[  146.320997] RDX: 0000000000000000 RSI: 0000000000000246 RDI: ffffa086f1c27500
+[  146.329955] RBP: ffffa086f1c27500 R08: ffffa0a64dd9b300 R09: ffffa0a64d9ae800
+[  146.338913] R10: 0000000000000001 R11: ffffa086c7527400 R12: 0000000000000000
+[  146.347884] R13: ffffa086f5403e80 R14: ffffa086cd0dee00 R15: ffffffffc188a5d0
+[  146.356836] FS:  00007f7636967840(0000) GS:ffffa0b5ffc40000(0000) knlGS:0000000000000000
+[  146.366839] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  146.374211] CR2: 0000000000000058 CR3: 000000209451a001 CR4: 00000000001706e0
+[  146.383146] Call Trace:
+[  146.386841]  <TASK>
+[  146.390144]  del_gendisk+0x1ec/0x2c0
+[  146.395096]  cleanup_mapped_device+0x130/0x140 [dm_mod]
+[  146.401893]  __dm_destroy+0x13d/0x1e0 [dm_mod]
+[  146.407796]  ? remove_all+0x30/0x30 [dm_mod]
+[  146.413505]  dev_remove+0x119/0x1a0 [dm_mod]
+[  146.419199]  ctl_ioctl+0x1ee/0x520 [dm_mod]
+[  146.424802]  dm_ctl_ioctl+0xa/0x20 [dm_mod]
+[  146.430378]  __x64_sys_ioctl+0x89/0xc0
+[  146.435433]  do_syscall_64+0x58/0x80
+[  146.440272]  ? ksys_semctl.constprop.21+0x13e/0x170
+[  146.446568]  ? syscall_exit_to_user_mode+0x12/0x30
+[  146.452760]  ? do_syscall_64+0x67/0x80
+[  146.457766]  ? do_syscall_64+0x67/0x80
+[  146.462740]  ? syscall_exit_to_user_mode+0x12/0x30
+[  146.468866]  ? do_syscall_64+0x67/0x80
+[  146.473827]  ? exc_page_fault+0x64/0x140
+[  146.478985]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  146.485414] RIP: 0033:0x7f7634af54a7
+[  146.490172] Code: 44 00 00 48 8b 05 c9 19 2d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 99 19 2d 00 f7 d8 64 89 01 48
+[  146.512729] RSP: 002b:00007ffd0354ac08 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  146.521970] RAX: ffffffffffffffda RBX: 00007f763620d0a0 RCX: 00007f7634af54a7
+[  146.530718] RDX: 0000555d423aa110 RSI: 00000000c138fd04 RDI: 0000000000000003
+[  146.539465] RBP: 00007f76362482c3 R08: 00007f7636248e68 R09: 00007ffd0354ab30
+[  146.548212] R10: 0000000000000006 R11: 0000000000000246 R12: 0000555d423aa110
+[  146.556971] R13: 00007f76362482c3 R14: 0000555d423aa030 R15: 00007f76362482c3
+[  146.565738]  </TASK>
+[  146.568961] Modules linked in: dm_flakey rpcsec_gss_krb5 nfsv4 dns_resolver nfs fscache netfs rfkill ib_core dm_multipath intel_rapl_msr intel_rapl_common sb_edac x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel btrfs kvm acpi_power_meter acpi_ipmi nfsd irqbypass crct10dif_pclmul crc32_pclmul ghash_clmulni_intel blake2b_generic xor rapl auth_rpcgss raid6_pq intel_cstate iTCO_wdt nfs_acl dm_mod iTCO_vendor_support dcdbas zstd_compress intel_uncore lockd mei_me ipmi_si pcspkr mei grace joydev lpc_ich sg ipmi_devintf wmi ipmi_msghandler sunrpc ip_tables x_tables xfs sd_mod ahci nvme libahci mpt3sas nvme_core igb libata megaraid_sas raid_class nvme_common crc32c_intel mgag200 dca scsi_transport_sas t10_pi
+[  146.644444] CR2: 0000000000000058
+[  146.649073] ---[ end trace 0000000000000000 ]---
+[  146.662547] RIP: 0010:blk_mq_wait_quiesce_done+0xc/0x30
+[  146.669275] Code: 00 00 00 e8 66 48 ff ff 4c 89 e6 5b 48 89 ef 5d 41 5c e9 a7 7c 65 00 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 87 50 03 00 00 <f6> 40 58 20 74 0c 48 8b b8 a8 00 00 00 e9 e2 69 c4 ff e9 dd e4 c4
+[  146.691900] RSP: 0018:ffffb03ecea6bbd0 EFLAGS: 00010286
+[  146.698578] RAX: 0000000000000000 RBX: ffffa086c7523800 RCX: 0000000000000000
+[  146.707395] RDX: 0000000000000000 RSI: 0000000000000246 RDI: ffffa086f1c27500
+[  146.716212] RBP: ffffa086f1c27500 R08: ffffa0a64dd9b300 R09: ffffa0a64d9ae800
+[  146.725028] R10: 0000000000000001 R11: ffffa086c7527400 R12: 0000000000000000
+[  146.733834] R13: ffffa086f5403e80 R14: ffffa086cd0dee00 R15: ffffffffc188a5d0
+[  146.742637] FS:  00007f7636967840(0000) GS:ffffa0b5ffc40000(0000) knlGS:0000000000000000
+[  146.752516] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  146.759773] CR2: 0000000000000058 CR3: 000000209451a001 CR4: 00000000001706e0
+[  146.768597] Kernel panic - not syncing: Fatal exception
+[  147.210009] Kernel Offset: 0x16200000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[  147.225480] ---[ end Kernel panic - not syncing: Fatal exception ]---
+
+Best Regards
+Wang Yugui (wangyugui@e16-tech.com)
+2023/03/21
+
 
 
