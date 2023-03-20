@@ -2,227 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279FF6C0EA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865F76C0EA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjCTKV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S229846AbjCTKWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjCTKVS (ORCPT
+        with ESMTP id S230001AbjCTKVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:21:18 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301F312CCA;
-        Mon, 20 Mar 2023 03:20:57 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 629DD3200124;
-        Mon, 20 Mar 2023 06:20:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 20 Mar 2023 06:20:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679307655; x=1679394055; bh=zd
-        tu/EQoS4ubonz91LB5myB03/gZeyMcyiaiN6cyoaE=; b=BscOjOIfRtg01UNhWL
-        eOf7KYzmUIvK5Fyn/YjgIY2FR3+XPNsXRHu7WNoJJAVg8+Ihzkpt5cQ5y1/Z5/gM
-        IGKBZi1E7LTKNBCp6wlMTFm+2OvQVXFP2TKfIyK//2mOihm0J3d+7Fi+B6spQGZs
-        slHRq47MegU/ypRvjX6Kh0SEGF68cfFo2lWTB7W5Qtq7WRLE8foES+Y5RVI/Nnvv
-        FlNVwniD7MoeHmx28E9ia1UKAZF3ZOiTG0vZ7K/C8DAzMlxdDg2ejdYajKHnA92C
-        O/pfkPUBjHWN8MIAFDBa7ClzKOXj79sNzt8D92x6nNSweoDbmqtrFTTST3cPUSjU
-        b6LA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679307655; x=1679394055; bh=zdtu/EQoS4ubo
-        nz91LB5myB03/gZeyMcyiaiN6cyoaE=; b=ggjv5A0oCEO/8Xk+Kp33JmNhhWwET
-        W7m3u0J19xpVYFZrGot9sRr45UOsfmLpDV2m9e+4r13ut1G8++2KziHU7lB9ZRVy
-        6FWpQkjO+sgfIlJeu3c5iolXFP0o5d3TCjIqMdG/nvkftb6Ine1XTPXnEUAzzPP0
-        cNwLDgoMlZ6iEsGa3LrpjqQEvDd51a1duKNpx0WYlXRA6Abcy+yX8AEMQuZV1Wwl
-        QmUtcuPZTKCg+gUl45N8nkkMVWzyBXbf3HRHTcnaEfCSodjPr7kkH1OTfdNkvRBY
-        bet8PbKdtkzTsJnNXlMIcHtkBE0uv/N9OMSryQUK7VscxMWoPfH4tZZ/g==
-X-ME-Sender: <xms:hTMYZGOZwh5MJ3SD24xBCvE-spjxwuw7d7POwQdOyznH8e4z2bSOHw>
-    <xme:hTMYZE9d5HfoaHowCM2ba8MkSwZYewFlaXet1M5NhbrqS0Odf9PunutqDunpHQqBG
-    _KIKBhc8H_pGZuLQg>
-X-ME-Received: <xmr:hTMYZNQMRbbEzh3Ix8DYJ7c155VOu7bmKMkAu6V42Hmc0Spkl8DPwUgaYZNBF7xP5wjAvtTviT1EN23FO4ic40l-o6VLmKPq>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefkedgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomheptehlhihs
-    shgrucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepge
-    ejieegjefhgfffheeuleduvefhiefffedugedvgeduhfdujeehfefhuefggefhnecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhephhhisegrlhihsh
-    hsrgdrihhs
-X-ME-Proxy: <xmx:hTMYZGtaQJWQBkRaKzjDu038fkGEYQXmcU_zle5xRW7Vcf80FAH_vA>
-    <xmx:hTMYZOdlir5PwvIEWT0Nx9RImPLz89Vi6zyJY2LM62FUQtO_DYGz8w>
-    <xmx:hTMYZK2JVTyYb5uAImN5upRndyAWG9zoPNpNi6M1Yhfppo2tpqCsEA>
-    <xmx:hzMYZO6XMiZQGhTKw9zqwJxzPdjPP2VVxYBl9pLCl6S6xCmEDH75gQ>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Mar 2023 06:20:53 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-        id 861151452D2; Mon, 20 Mar 2023 10:20:51 +0000 (UTC)
-Date:   Mon, 20 Mar 2023 10:20:51 +0000
-From:   Alyssa Ross <hi@alyssa.is>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        Martijn Coenen <maco@android.com>, linux-block@vger.kernel.org
-Subject: Re: [PATCH v2] loop: LOOP_CONFIGURE: send uevents for partitions
-Message-ID: <20230320102051.p4rrvjjhaq35amcr@x220>
-References: <20230312191031.551204-1-hi@alyssa.is>
- <ZBHo2AXYM0iVkXvO@infradead.org>
- <20230318015005.czydsbqpw6hnej3z@x220>
- <ZBf7oYDLoFzOSabH@infradead.org>
+        Mon, 20 Mar 2023 06:21:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C0C126D1;
+        Mon, 20 Mar 2023 03:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679307672; x=1710843672;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ptgEEDnEf7sjIU2+4VSiuwlR9WoohHPih28INcG26Ys=;
+  b=IlSurYH3qGTCtaVU8zHFT5KV5yvGTNsN3WzHKXXF0bIb1BmCfhqG5hzq
+   31JwfYXzsEzKkW+VT0M1V+q55WvjlW7cYc7M8sabhBFXDeiUwyJgm6E9A
+   O/PGVO+XtDFDTzVNslfkvofedLDyKfWU87HRXG49s7WFGkJ444WKnBXVQ
+   Ry8kbIFqv398rmeGBWynaUdEE3d3p6xL9DSm8+dEavJz9EjhB81p5GkZB
+   cAw6XG2Kqf1758wlRXjeGSIDdq34UezgaeICJ/vDEdsJCpVGgGeYgnddf
+   S3+gdNzmbsIJYcf2M7jr3aym3/HvV9b4VGDYqwrfyTQHTvGvP1CwI+oAN
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
+   d="scan'208";a="217071513"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 03:21:11 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 03:21:11 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 20 Mar 2023 03:21:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ee3fbfF6aF/gRdsyEDKKLciSNLoGAiiZ66FJzDyHG9Nw30WR9wzphFfnm+dpxpzDeNVKezuSYjb1EM7Fuvx+z0tqBJDJY5VqScEOVSBLgNOiW0J1ruYOdT/lQO8zelVXtucXdhoNdcYQkaA5lv3VaZvSPF3fUEKW+cVhKhuDdoSWVMUrnxL+QUXURiUDeRHhifH4wXxhiYHJ0sVTwq4T9hOtMlGSm6xJH7tzVnoumpcS2Wg7M4j58SdDMCHAciR5lM+6NegYGX4up1YjrM4zQ9M2WuK+UyFqy6dBH14KFhIsWzTPTNcEW5Spm2lUe4TxZ0oqTB6ghDLxsMoUfNiM9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ptgEEDnEf7sjIU2+4VSiuwlR9WoohHPih28INcG26Ys=;
+ b=FpqQKlytRM80qmMrY5f2WfcAdAQXSanMJ/g0RTSlcZsBCfJp6OU+mcxFTYo3YtjyMuBlAdBQD1eveBUuYj+eLZCLPRHaR41Pt4THnVaRHq2YWIeTn/oep3ymkp/HYF8VaMepBz+Tj07qvUNLokz/3/GvvIXIpLoSYSasNJiuTT37oNZVwWUr0Pc4amWCkneroonaUz5QXvuW1Px7oRgXmFcFBzAfogmD5JpIaYIf8sjNhDgPYkSOijaH5h/IEIzXqq9UjS4+bLCsY+FO4mWSAgtB649llm8cubmMoeZsPXlg52aQaeMvjxuZ3XQxc28oq9zt1/cQtiu7dCtY6cX/Fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ptgEEDnEf7sjIU2+4VSiuwlR9WoohHPih28INcG26Ys=;
+ b=ZtaW5qwBvjXkZ4yqlE/iqkUG2XBdZs76tbk0XFMO/fBisut6vG9ajo5emIpbaULZVdVhS71M66ObAlFcmwEKwvIvqrEnKdqiREH2MxDD5b2reuBxoORqzaRwmc0gk6l3kDZ3ff/p8X7eXSVpqFjNpbXUFQ9UYuDjxetjPEsnVlw=
+Received: from DM4PR11MB5358.namprd11.prod.outlook.com (2603:10b6:5:395::7) by
+ PH8PR11MB8259.namprd11.prod.outlook.com (2603:10b6:510:1c2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 10:21:08 +0000
+Received: from DM4PR11MB5358.namprd11.prod.outlook.com
+ ([fe80::6c5d:5b92:1599:ce9]) by DM4PR11MB5358.namprd11.prod.outlook.com
+ ([fe80::6c5d:5b92:1599:ce9%4]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 10:21:07 +0000
+From:   <Steen.Hegelund@microchip.com>
+To:     <peter_hong@fintek.com.tw>, <wg@grandegger.com>,
+        <mkl@pengutronix.de>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mailhol.vincent@wanadoo.fr>,
+        <frank.jungclaus@esd.eu>, <linux-kernel@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <hpeter+linux_kernel@gmail.com>
+Subject: Re: [PATCH] can: usb: f81604: add Fintek F81604 support
+Thread-Topic: [PATCH] can: usb: f81604: add Fintek F81604 support
+Thread-Index: AQHZWL+KXCc33Xm+FUG9YEYYnE7ChK8Ded6A
+Date:   Mon, 20 Mar 2023 10:21:07 +0000
+Message-ID: <CRB4VW859JPC.253TLOWY0XT6S@den-dk-m31857>
+References: <20230317093352.3979-1-peter_hong@fintek.com.tw>
+In-Reply-To: <20230317093352.3979-1-peter_hong@fintek.com.tw>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: aerc 0.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR11MB5358:EE_|PH8PR11MB8259:EE_
+x-ms-office365-filtering-correlation-id: 756393fc-8077-42d4-1925-08db292cd1df
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 62Lg91s1opoXE/PpTrpfwB0ZmbcWurnDesuq8/6ucekeonU+Eg2+SB8KoiG1LeEZ8jP8MGm4+PFblJHhziWqQpu+kW1PI2mQYkiArmu7q42j5eKWIl462TsgLKt/n+kH4IM2PlOvjXZP2ZkQj0K9EYvHT0D2pgs4Of4L8QqOTm/pFyPcoO83dmXD4DJ/SGd0MOi105DOqJWYzZy/gq6jFYwvB3GtXSExcOKzXH311n7gwENMXfehenY9K2NKiLqf5hgR+KT/N57GpzNb/yLNPU9uhZ5JaUnE2YqWps3yjAoEgDc/SO/VH2s4WFZWMG/lWBP16QhInOqBcEqOLz02lu0psPSQw90SzsiZ0Ti3m5leKarfYNIoloD+p3ErsD++hH0cUyLHfcunmqQqweD/i3bz9eggD0jbmBqNDLiJamDoTRl2sYpVv/ZIGoHrYvXD9D3DqyyIVS31fG9tr9UBgDzdajYVEZk05KgafYSqFMtkzA8OOQs5iXru/bNO/6mf7kJs4uWIhd+gTvrY9u2lrk0SYHUe7Q9vyya19JkuS2hsxZaKtkaqwkv2t8fCNCDyPdoW/bGZH46Da7IL4nUxTOqV9jH9+SUhKGsYABTSJQF2flV7LiyO3Jshi+wXlCWYNrRDKB2zL442QlEQNG/jrcztmW+Qz6fsicBs+i7DP5B4f7ca66w3F7uwWZfkSnP+BPsDdFcYVRuvaQEc573T1Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5358.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(39860400002)(396003)(376002)(136003)(366004)(451199018)(54906003)(110136005)(316002)(86362001)(33716001)(83380400001)(9686003)(38100700002)(122000001)(38070700005)(966005)(71200400001)(478600001)(6486002)(33656002)(26005)(186003)(6512007)(6506007)(2906002)(41300700001)(8936002)(7416002)(5660300002)(66446008)(66556008)(8676002)(66476007)(66946007)(64756008)(91956017)(76116006)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OWxQd3VrMnQ2b2c4VFplNjJnVmhLZnp5MU5sa0IxMVdmM1EwTi9UWjFSTUxn?=
+ =?utf-8?B?Y2ZTRXYxSm5zVnhVNGhSS3NIOG9TVDIxN0FGYWc4OGlIaUQweU94TlFlNHFJ?=
+ =?utf-8?B?QUpXamxvQ2NnVThESDhHY2dEdGlVZmdUbW1OcDlmb1hyd1lFMzVtaHBzYXpp?=
+ =?utf-8?B?NE0yV1RGVUZPSUU4a2V2dXhDQUZrbk5NM01GODNLL2gwbW1ZV3JsNGtmaGlU?=
+ =?utf-8?B?dlJJSnNzLzRwTkRjZktPeGlwZ0hWWTJKdHgxSU56ZzFLajNRVXNMNGQrVUda?=
+ =?utf-8?B?NENhOFhJcEk4MURFOUJkVUlsRzRQTWsyWm1qVEpDdFRycktJRGw5bFZmb2VM?=
+ =?utf-8?B?SjFQdFBRODBVbG51SnJrQkRKOUdPcXdHaXE4ZnFuaVF0YWx2QnI5UE1aZXhl?=
+ =?utf-8?B?T3Fob1B1WWU1SmhMWGVEV0hlQmlMNXNiMis0SjBubVZtZkRpM3ExZHV2U3d0?=
+ =?utf-8?B?elp6ZlhoaS9YTGNpQ3YxZVhDeEFJT1hPUnBDQ01Jd2p0OHYxbGdpOUM5Q1pw?=
+ =?utf-8?B?SEUrNVpsNGNTR1BHWnRsRmkrZndpb0ZuUlJ6VTNtaUI1S0EreHltdUdPSWNv?=
+ =?utf-8?B?SWY4VE5GMGRjS0t5ek1GM0E3WjJMTDlwMzAvMXl5VFl4em5qaEg0VDJaUjVm?=
+ =?utf-8?B?Z1I2K2F2YUk1Q243aFY5ZFRqMGY0cUhSZmtHREFyMnNsVy90cjdOM1VyQzVB?=
+ =?utf-8?B?QTVWNWxPRFpuVzdPQnU2OXhqeVk0VU9CajdaVndzY0cydkRmSFU4eHV1cEZH?=
+ =?utf-8?B?ZWp5RkgxTncrNzlaZUg2VzdWV1MyMVNtSE43ZlpZNHg2Zm1yTWptUG9aQXh6?=
+ =?utf-8?B?NEgvWFA4bDVId1ZzT1ZLYXdxS3B6a3VIcHFDMFMrSktpOElhOWFqSUJSdzRI?=
+ =?utf-8?B?am44cWVlOU9nVEJKUUJ4eFhpS2xpU2hNbkxVL0FpM2hUMjFHM1E4blJjb0tQ?=
+ =?utf-8?B?TzJ6TEZtRm8xeW5heEhMQnFhTlJXcENzbU1keHJha3pkQnFmMVY4eTFaUUt4?=
+ =?utf-8?B?aWoxNThiOUVhazk2ek9jc1ExQ1NldVdzTEhYelRSMFBzTGsycmcrSkMrZVJD?=
+ =?utf-8?B?WDE5UGJqSmY2b2RyOGRVb2szaFVjT3J1YVBXMVFZNFp4SjNSTEJuQmdWSnZz?=
+ =?utf-8?B?elgyQ2RRR3NiSUNqVG5QM1F3Q3BiQWd6YWZ6d294STlMNUxUZ2RwZytvNllN?=
+ =?utf-8?B?cGJnMUN4VUcyd09ibDBFaUFwcHZyeVgrUEhoa3FJYW5FY1d5dWVqRTBlODdE?=
+ =?utf-8?B?R0xmZ1lTOGkwWEQyRlM2eld0ZVlZWkFjUk1jWkpwWG80V2IrNWlEOTgxWFV6?=
+ =?utf-8?B?WkVpSWx4T3BvNXZGRFJSZHlMZjhqVFNaVDFGbC9MQlYycHhhY3FlODVsVkNU?=
+ =?utf-8?B?OEhtQ3pEQjhxckY5UDFaaWpIdEFjZDE4Yk81NTY3aCtVSFFwaXE3N21QVjNV?=
+ =?utf-8?B?empPN2YvN2l3ay8vMGJTdkNnVTRjNjE1OERYLzZ1dWF1SkpDUW5MNHQ4eWZO?=
+ =?utf-8?B?b0liRjhUaVFhSm9xTjIybHBLNW1hZ3hGcHBteUxtTytmc0o3SXYzSnZVTTRl?=
+ =?utf-8?B?U09YaTRueG41WmQxSWpCSlMvMnI3dDFhMEc1bEZFQzVzMTlqdllCeHNTQXdO?=
+ =?utf-8?B?UkNZZFMrazBoUGpXWnBPZU0zWEhKYzlSMVRwUXVIenBVU0xqZ2VjZnZSRzYz?=
+ =?utf-8?B?SUhhMGhid0k5b0FRSmVWSWdqZU9JSzVxR3c2NWxXU1p2R2RCVktDT1VPV0lW?=
+ =?utf-8?B?QUpxS3o4UHU1d29RelQxL1dXOThhazJoYjUzSjFFUzZqM1huK0k2NStpV0M1?=
+ =?utf-8?B?OS8xbE1IZHpBRW9jdDRGNUgyUnY0Ymh1Z08zNVpWODJYeXovZFljWDdJSU5x?=
+ =?utf-8?B?aTBNdllFMTVUWkRTQXY4ZS9TNVYvRHpvcWoyWkk2M2lmc3RQeU5tMFBQNnJX?=
+ =?utf-8?B?d3BJamxhYXd0NitTT0lVUWZXb1ZlQ050L05rSER5bjhZQU5sSmZOaFZnWk9H?=
+ =?utf-8?B?NVRJN2liZ0ljcFRLT1dKeGdUU25Nb0NQRmk1dkM4VkhiY3JjSkpmSForVGc5?=
+ =?utf-8?B?cVhmSDhoSU0yS3VuY1kzSk1hc3R4dDFzRmNLTlF6ek1mMVBMRW9Bc09yYmtQ?=
+ =?utf-8?B?NjA5Yzd1Um1nbEVBYmNXNXZSOTZvYUxtQVI2dVVjb0JnNE9tUzJ6bS9MUTR5?=
+ =?utf-8?Q?um+HB0oNNjPr8jpVlF70PpQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <52AD49A200097A4FBD088A341A6694E7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qzb5e35alucfu2fx"
-Content-Disposition: inline
-In-Reply-To: <ZBf7oYDLoFzOSabH@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5358.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 756393fc-8077-42d4-1925-08db292cd1df
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 10:21:07.9103
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WZOncXpkIskloQWSqefD8nrUp0b61zuvJy0f1kyguXXRx0geO+E6htMdrVWVGjGIzcpKfqK7PFB9WuZJTpZ6ltdeolj4cxk9zSqTgH5wo9E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8259
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---qzb5e35alucfu2fx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Mar 19, 2023 at 11:22:25PM -0700, Christoph Hellwig wrote:
-> On Sat, Mar 18, 2023 at 01:50:05AM +0000, Alyssa Ross wrote:
-> > What happens next?  I'm still getting up to speed on the kernel
-> > development process =E2=80=94 will you submit this as a patch with a pa=
-tch body
-> > and a S-o-b?  Or am I supposed to do something with it?
->
-> Given that you're done all the hard work, and I've just reduced the
-> critical section, I'd prefer to give all the credit to you.  If you're
-> fine with it, I'll send out this version later:
-
-LGTM, thanks!
-
-> ---
-> From 4648015b4193c81d3de8c1632876314b4a2ab40d Mon Sep 17 00:00:00 2001
-> Subject: loop: LOOP_CONFIGURE: send uevents for partitions
->
-> LOOP_CONFIGURE is, as far as I understand it, supposed to be a way to
-> combine LOOP_SET_FD and LOOP_SET_STATUS64 into a single syscall.  When
-> using LOOP_SET_FD+LOOP_SET_STATUS64, a single uevent would be sent for
-> each partition found on the loop device after the second ioctl(), but
-> when using LOOP_CONFIGURE, no such uevent was being sent.
->
-> In the old setup, uevents are disabled for LOOP_SET_FD, but not for
-> LOOP_SET_STATUS64.  This makes sense, as it prevents uevents being
-> sent for a partially configured device during LOOP_SET_FD - they're
-> only sent at the end of LOOP_SET_STATUS64.  But for LOOP_CONFIGURE,
-> uevents were disabled for the entire operation, so that final
-> notification was never issued.  To fix this, reduce the critical
-> section to exclude the loop_reread_partitions() call, which causes
-> the uevents to be issued, to after uevents are re-enabled, matching
-> the behaviour of the LOOP_SET_FD+LOOP_SET_STATUS64 combination.
->
-> I noticed this because Busybox's losetup program recently changed from
-> using LOOP_SET_FD+LOOP_SET_STATUS64 to LOOP_CONFIGURE, and this broke
-> my setup, for which I want a notification from the kernel any time a
-> new partition becomes available.
->
-> Signed-off-by: Alyssa Ross <hi@alyssa.is>
-> [hch: reduced the critical section]
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
-> ---
->  drivers/block/loop.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-> index 839373451c2b7d..9d61c027185141 100644
-> --- a/drivers/block/loop.c
-> +++ b/drivers/block/loop.c
-> @@ -1010,9 +1010,6 @@ static int loop_configure(struct loop_device *lo, f=
-mode_t mode,
->  	/* This is safe, since we have a reference from open(). */
->  	__module_get(THIS_MODULE);
->
-> -	/* suppress uevents while reconfiguring the device */
-> -	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 1);
-> -
->  	/*
->  	 * If we don't hold exclusive handle for the device, upgrade to it
->  	 * here to avoid changing device under exclusive owner.
-> @@ -1067,6 +1064,9 @@ static int loop_configure(struct loop_device *lo, f=
-mode_t mode,
->  		}
->  	}
->
-> +	/* suppress uevents while reconfiguring the device */
-> +	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 1);
-> +
->  	disk_force_media_change(lo->lo_disk, DISK_EVENT_MEDIA_CHANGE);
->  	set_disk_ro(lo->lo_disk, (lo->lo_flags & LO_FLAGS_READ_ONLY) !=3D 0);
->
-> @@ -1109,17 +1109,17 @@ static int loop_configure(struct loop_device *lo,=
- fmode_t mode,
->  	if (partscan)
->  		clear_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
->
-> +	/* enable and uncork uevent now that we are done */
-> +	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
-> +
->  	loop_global_unlock(lo, is_loop);
->  	if (partscan)
->  		loop_reread_partitions(lo);
-> +
->  	if (!(mode & FMODE_EXCL))
->  		bd_abort_claiming(bdev, loop_configure);
->
-> -	error =3D 0;
-> -done:
-> -	/* enable and uncork uevent now that we are done */
-> -	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
-> -	return error;
-> +	return 0;
->
->  out_unlock:
->  	loop_global_unlock(lo, is_loop);
-> @@ -1130,7 +1130,7 @@ static int loop_configure(struct loop_device *lo, f=
-mode_t mode,
->  	fput(file);
->  	/* This is safe: open() is still holding a reference. */
->  	module_put(THIS_MODULE);
-> -	goto done;
-> +	return error;
->  }
->
->  static void __loop_clr_fd(struct loop_device *lo, bool release)
-> --
-> 2.39.2
->
-
---qzb5e35alucfu2fx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEH9wgcxqlHM/ARR3h+dvtSFmyccAFAmQYM4AACgkQ+dvtSFmy
-ccBnEA//VgWoGC9VRthd9MXyOEndaz8Y9hLh6rAshgTLfyfUIEUzSzB+l0qJr+IZ
-oD9OTVgRoouDTOH6ze88ft4E8rxFk+Dhbg/lci0vkj/j7tTfOOpxQ62O4p1d6kTf
-pTHpjd7KtL44B4cEnUX6B9yBmZypJ77994qL6L/62mySRri0CjTiboXUVC/UTiEr
-cjpP0FF8sQfg4vBmD6/ht3CS7HOrZE7RDrGXqU5+6rDcZIDwJCfJ1sHUbqQZimGu
-MZXVJhhKvMBaJ/8r+HSuNgHOsFdGdPIqqmw4rOF0p5AnMq6PkwlR6C8ScPYfJgu9
-KSjsTC3fLMaR+oOa7f1ImQlBro+vuYNmd4liiz3Dbor2Y6S+LC0+tCWAtPgDxbTt
-Ri4rz/orq2mB2zRy8MX3wlJSaFu7cNHR81xjNs2PIm8EC/O38EkevD2AL+bth1vm
-kHfW7RDTXwigugwRpgKruNbd39zc6MDKCSQaH+S+e+JKUaNGnrWbeGlsQrBlapmZ
-cwKSu5Z+E+/hG5wDxbrqEE2RqUXD8UAPAh1x3wOjC6S2chWtuw3mRmgnuImrU7XV
-4P/WCP4Iwn4MR2nmQqoTbmGe1lZ1COGO1RgW8LaTBO11J9+ZIMJ17NOz+lLxwDFv
-EEdEQ0KGkX3+iUf9g0fgxbQL5F42aJM68Wm+IAKbvcR1jtl9BbU=
-=4M5M
------END PGP SIGNATURE-----
-
---qzb5e35alucfu2fx--
+SGkgUGV0ZXIsDQoNCkJlc2lkZXMgd2hhdCBNaWNoYWwgaGFzIG1lbnRpb25lZCwgSSBub3RlZCB0
+aGlzOg0KDQpPbiBGcmkgTWFyIDE3LCAyMDIzIGF0IDEwOjMzIEFNIENFVCwgSmktWmUgSG9uZyAo
+UGV0ZXIgSG9uZykgd3JvdGU6DQo+IFtTb21lIHBlb3BsZSB3aG8gcmVjZWl2ZWQgdGhpcyBtZXNz
+YWdlIGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIHBldGVyX2hvbmdAZmludGVrLmNvbS50dy4g
+TGVhcm4gd2h5IHRoaXMgaXMgaW1wb3J0YW50IGF0IGh0dHBzOi8vYWthLm1zL0xlYXJuQWJvdXRT
+ZW5kZXJJZGVudGlmaWNhdGlvbiBdDQo+DQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sg
+bGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlIGNvbnRlbnQgaXMg
+c2FmZQ0KPg0KPiBUaGlzIHBhdGNoIGFkZCBzdXBwb3J0IGZvciBGaW50ZWsgVVNCIHRvIDJDQU4g
+Y29udHJvbGxlciBzdXBwb3J0Lg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBKaS1aZSBIb25nIChQZXRl
+ciBIb25nKSA8cGV0ZXJfaG9uZ0BmaW50ZWsuY29tLnR3Pg0KPiAtLS0NCg0KLi5zbmlwLi4uDQoN
+Cj4gK3N0YXRpYyBpbnQgZjgxNjA0X3ByZXBhcmVfdXJicyhzdHJ1Y3QgbmV0X2RldmljZSAqbmV0
+ZGV2KQ0KPiArew0KPiArICAgICAgIHN0YXRpYyB1OCBidWxrX2luX2FkZHJbRjgxNjA0X01BWF9E
+RVZdID0geyAweDgyLCAweDg0IH07DQo+ICsgICAgICAgc3RhdGljIHU4IGJ1bGtfb3V0X2FkZHJb
+RjgxNjA0X01BWF9ERVZdID0geyAweDAxLCAweDAzIH07DQo+ICsgICAgICAgc3RhdGljIHU4IGlu
+dF9pbl9hZGRyW0Y4MTYwNF9NQVhfREVWXSA9IHsgMHg4MSwgMHg4MyB9Ow0KDQpUaGVzZSAzIHNo
+b3VsZCBiZSBtYWRlIGNvbnN0DQoNCj4gKyAgICAgICBzdHJ1Y3QgZjgxNjA0X3BvcnRfcHJpdiAq
+cHJpdjsNCj4gKyAgICAgICBpbnQgaWQ7DQoNCi4uc25pcC4uLg0KDQo+ICsgICAgICAgaW50IGk7
+DQo+ICtNT0RVTEVfQVVUSE9SKCJKaS1aZSBIb25nIChQZXRlciBIb25nKSA8cGV0ZXJfaG9uZ0Bm
+aW50ZWsuY29tLnR3PiIpOw0KPiArTU9EVUxFX0RFU0NSSVBUSU9OKCJGaW50ZWsgRjgxNjA0IFVT
+QiB0byAyeENBTkJVUyIpOw0KPiArTU9EVUxFX0xJQ0VOU0UoIkdQTCIpOw0KPiAtLQ0KPiAyLjE3
+LjENCg0KDQpCUg0KU3RlZW4=
