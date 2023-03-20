@@ -2,144 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26246C0E0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED74D6C0E1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjCTKDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S229911AbjCTKEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCTKDj (ORCPT
+        with ESMTP id S229837AbjCTKE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:03:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 429002D76;
-        Mon, 20 Mar 2023 03:03:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88CDFFEC;
-        Mon, 20 Mar 2023 03:03:47 -0700 (PDT)
-Received: from [10.57.20.45] (unknown [10.57.20.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6ABB3F67D;
-        Mon, 20 Mar 2023 03:03:00 -0700 (PDT)
-Message-ID: <25b5fb44-fc33-cc2d-5a36-64e780015824@arm.com>
-Date:   Mon, 20 Mar 2023 10:03:06 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 4/4] serial: qcom_geni: Use devm_krealloc_array
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        michal.simek@amd.com, Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20230309150334.216760-1-james.clark@arm.com>
- <20230309150334.216760-5-james.clark@arm.com>
- <20230311191800.74ec2b84@jic23-huawei>
- <74d8b579-6ea8-d6f3-170f-ea13534b4565@arm.com>
- <20230318173402.20a4f60d@jic23-huawei>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230318173402.20a4f60d@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 06:04:29 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26981F742;
+        Mon, 20 Mar 2023 03:03:54 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id BA19820FAACE;
+        Mon, 20 Mar 2023 03:03:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BA19820FAACE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679306622;
+        bh=FtXfq6t14W8wRg84Ahg76WKseeVUXWFLWJc0iPV2wLA=;
+        h=From:To:Subject:Date:From;
+        b=eXTfTuo+P9FkVD43Ja9RyMHLIz/xN7jrFeKaO5VYBEVXYQwPsv65XW5bwLTdeunrD
+         RLKdwK/k/Roawysa1ZUEEDO0gG8mRc54Q6/64sMXveZcq/K1WY//9GItZQ7ZJ52yNZ
+         VpZGll6djnxfpv1416Co7IH5q23/scL2DMJQs7Os=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH v3 0/5] Hyper-V VTL support
+Date:   Mon, 20 Mar 2023 03:03:33 -0700
+Message-Id: <1679306618-31484-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URI_TRY_3LD,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series introduces support for Virtual Trust Level (VTL)
+in Hyper-V systems. It provide a foundation for the implementation
+of Hyper-V VSM support in the Linux kernel, providing a secure
+platform for the development and deployment of applications.
 
+Virtual Secure Mode (VSM) is a critical aspect of the security
+infrastructure in Hyper-V systems. It provides a set of hypervisor
+capabilities and enlightenments that enable the creation and
+management of new security boundaries within operating system
+software. The VSM achieves and maintains isolation through Virtual
+Trust Levels, which are hierarchical, with higher levels being more
+privileged than lower levels. Please refer to this link for further
+information: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm
 
-On 18/03/2023 17:34, Jonathan Cameron wrote:
-> On Fri, 17 Mar 2023 11:34:49 +0000
-> James Clark <james.clark@arm.com> wrote:
-> 
->> On 11/03/2023 19:18, Jonathan Cameron wrote:
->>> On Thu,  9 Mar 2023 15:03:33 +0000
->>> James Clark <james.clark@arm.com> wrote:
->>>   
->>>> Now that it exists, use it instead of doing the multiplication manually.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>  
->>>
->>> Hmm. I've stared at the users of this for a bit, and it's not actually obvious
->>> that it's being used as an array of u32.  The only typed user of this is as
->>> the 2nd parameter of  
->>> tty_insert_flip_string() which is an unsigned char *
->>>
->>> I wonder if that sizeof(u32) isn't a 'correct' description of where the 4 is coming
->>> from even if it has the right value?  Perhaps the fifo depth is just a multiple of 4?
->>>
->>> Jonathan
->>>   
->>
->> The commit that added it (b8caf69a6946) seems to hint that something
->> reads from it in words. And I see this:
->>
->>   /* We always configure 4 bytes per FIFO word */
->>   #define BYTES_PER_FIFO_WORD		4U
->>
->> Perhaps sizeof(u32) isn't as accurate of a description as using
->> BYTES_PER_FIFO_WORD but I'd be reluctant to make a change because I
->> don't really understand the implications.
-> 
-> Agreed with your analysis.  + fully understand why you don't want to change
-> it. 
-> 
-> I'd be tempted to take the view that whilst it's allocated in 4 byte chunks
-> because it's accessed elsewhere as a set of 1 byte entries, krealloc_array
-> isn't appropriate and so just leave it with devm_krealloc()
-> 
-> Risk is that a steady stream of patches will turn up 'fixing' this as
-> it will be easy for people to find with a script.  Maybe better to just add
-> a comment (either with or without your patch).
+This patch series adds the initialization of the x86 platform for VTL
+systems. This also adds the VTL early bootup code for initializing
+and bringing up secondary cpus to targeted VTL context. In VTL, AP
+has to start directly in the 64-bit mode, bypassing the usual
+16-bit -> 32-bit -> 64-bit mode transition sequence that occurs after
+waking up an AP with SIPI whose vector points to the 16-bit AP
+startup trampoline code.
 
-Ok that makes sense to me. I can add a comment instead this patch to
-change this one.
+Currently only VTL level supprted is '2'. This patch series is tested
+extensively on VTL2 systems.
 
->>
->> There is also this in handle_rx_console():
->>
->>   unsigned char buf[sizeof(u32)];
->>
->> James
->>
->>>
->>>   
->>>> ---
->>>>  drivers/tty/serial/qcom_geni_serial.c | 6 +++---
->>>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->>>> index d69592e5e2ec..23fc33d182ac 100644
->>>> --- a/drivers/tty/serial/qcom_geni_serial.c
->>>> +++ b/drivers/tty/serial/qcom_geni_serial.c
->>>> @@ -1056,9 +1056,9 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
->>>>  		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
->>>>  
->>>>  	if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
->>>> -		port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
->>>> -					     port->rx_fifo_depth * sizeof(u32),
->>>> -					     GFP_KERNEL);
->>>> +		port->rx_buf = devm_krealloc_array(uport->dev, port->rx_buf,
->>>> +						   port->rx_fifo_depth, sizeof(u32),
->>>> +						   GFP_KERNEL);
->>>>  		if (!port->rx_buf)
->>>>  			return -ENOMEM;
->>>>  	}  
->>>   
-> 
+[V3]
+ - Break in to 5 patches
+ - hv_init_vp_context_t -> hv_init_vp_context
+ - HYPERV_VTL -> HYPERV_VTL_MODE
+ - Modify description of HYPERV_VTL_MODE
+ - VTL 0 and VTL 2 -> VTL0 and VTL2
+ - Remove casting for this_cpu_ptr pointer
+
+[V2]
+ - Remove the code for reserve 1 IRQ.
+ - boot_cpu_has -> cpu_feature_enabled.
+ - Improved commit message for 0002 patch.
+ - Improved Kconfig flag description for HYPERV_VTL.
+ - Removed hv_result as a wrapper around hv_do_hypercall().
+ - The value of output[0] copied to a local variable before returning.
+
+Saurabh Sengar (5):
+  x86/init: Make get/set_rtc_noop() public
+  x86/hyperv: Add VTL specific structs and hypercalls
+  x86/hyperv: Make hv_get_nmi_reason public
+  x86/hyperv: VTL support for Hyper-V
+  x86/Kconfig: Add HYPERV_VTL_MODE
+
+ arch/x86/Kconfig                   |  24 +++
+ arch/x86/hyperv/Makefile           |   1 +
+ arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
+ arch/x86/include/asm/mshyperv.h    |  15 ++
+ arch/x86/include/asm/x86_init.h    |   2 +
+ arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+ arch/x86/kernel/x86_init.c         |   4 +-
+ include/asm-generic/hyperv-tlfs.h  |   4 +
+ 9 files changed, 351 insertions(+), 7 deletions(-)
+ create mode 100644 arch/x86/hyperv/hv_vtl.c
+
+-- 
+2.34.1
+
