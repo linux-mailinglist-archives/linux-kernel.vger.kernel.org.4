@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF78B6C1A25
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4146C1A23
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjCTPsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S231598AbjCTPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbjCTPrl (ORCPT
+        with ESMTP id S232131AbjCTPri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:47:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A671D13501;
-        Mon, 20 Mar 2023 08:39:07 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KFHSFe022310;
-        Mon, 20 Mar 2023 15:38:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=tF9DPR4BziRpIYNIxnHYz1rUjU1J1WPHeaPCtVN4Vy0=;
- b=H4ehmhdJR7vvqAhDkTDpDUy6pvdFwBfibNmi9y8msPYVIt6vt5PKMwfY2qgEkibBgjpV
- T054dBChtf7ChrcrxZttx/NZ3+0C8YB1hBetfc/+kr0tqm6A0N7sD7y2+3ZsBUcADfJN
- Vxl7AMy+EKN/JEuT6edr0R/wgjBvZ3GiIAfzpW1AB0cgnCBvAWM4Gp4z5WIAWilxKmW/
- KCakSYDRuuOiktmqvAoWjjGbtcN06/y6UybPhN260gFFE/OG/sNEDAaJ728BINJBPKXv
- Blu2Ekiz1sCWNaM+9bSDQ6jKX6hJkXAtR1j3Xc4aONug65o3JLselHC/4f66AItLXTb1 xA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pdqf3546u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 15:38:54 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32KENu8h008070;
-        Mon, 20 Mar 2023 15:38:54 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pdqf3546m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 15:38:54 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32KF8i3C024217;
-        Mon, 20 Mar 2023 15:38:53 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pd4x70x2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Mar 2023 15:38:52 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32KFcppB63504820
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Mar 2023 15:38:51 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87D7058043;
-        Mon, 20 Mar 2023 15:38:51 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5EA375805D;
-        Mon, 20 Mar 2023 15:38:51 +0000 (GMT)
-Received: from localhost (unknown [9.211.100.146])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Mar 2023 15:38:51 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linuxppc-dev@lists.ozlabs.org, kernel-janitors@vger.kernel.org
-Subject: Re: powerpc/pseries: Fix exception handling in
- pSeries_reconfig_add_node()
-In-Reply-To: <2f5a00f6-f3fb-9f00-676a-acdcbef90c6c@web.de>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <0981dc33-95d0-4a1b-51d9-168907da99e6@web.de>
- <871qln8quw.fsf@linux.ibm.com>
- <a01643fd-1e4a-1183-2fa6-000465bc81f3@web.de>
- <87v8iz75ck.fsf@linux.ibm.com>
- <2f5a00f6-f3fb-9f00-676a-acdcbef90c6c@web.de>
-Date:   Mon, 20 Mar 2023 10:38:50 -0500
-Message-ID: <87pm9377qt.fsf@linux.ibm.com>
+        Mon, 20 Mar 2023 11:47:38 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB2C64B;
+        Mon, 20 Mar 2023 08:39:04 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so16913052pjv.5;
+        Mon, 20 Mar 2023 08:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679326743;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gE0cE5gTx1TulJ/p8gXBQMe9jpH4tyJlUCYbcVwZyoc=;
+        b=CimXe3p7Be6lTDyAxAZ4RGXdGxAy4tKPJeew/tWaCvgppYwwCmMx3YCmnQ6iBC+RCa
+         VAYwZ7/Am+WUNP5/np4L7IbSMCVyEhv3UqsQGrc/ltMdx06Qktf2Ob5S724mz13BIe7d
+         CNb2UvBOjQLmtr8OISD8o10qup+9dKJLZXprCFQ2vovnRe6CTl2jO+aLLWtJYbZ9m54u
+         kpFpuNB09yNvCwTccJm3FR05zaMbPoxN3fho6P0azb7LbTiJmlJTiphpo3v/XUec7Lzs
+         QB3yxNjH0NYSbgrkbCSgF1Cf/Ztr0aSmqZftisUndLstR8074ak31iElXUC4Kq/T+xtq
+         UtQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679326743;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gE0cE5gTx1TulJ/p8gXBQMe9jpH4tyJlUCYbcVwZyoc=;
+        b=NgjC3NFxhAG1AIq+ABkjgTX9/4u7SIAVnOQpEb/MR63Es60+N+CoF2BpTg0O886M7b
+         GI7Ghj0O0ZUB7htfHe9bba92EJyDEAzrF+JCz9boAlx3FtcTU+zx9Wu6uwrkWXmzKj1H
+         ePwseYJxbu1UhpUq3XSTI0qxCKQveIF9JYrDfK62fySV2a3Nw1reeAKwR8NWiHgdqhEP
+         0uSVCHQPv8K7MKL+EkE+CkiMdNGYv5V5x0IiAyGS9CYemMM3FT3PeMlEMVs3gAcEPIuG
+         sZcfSgirgDIFIy+sUX3v2xpfLxGXnkR0QddvKGjtIVdCSDtoZpX6DomvsbMvLg0b6iPv
+         3MOQ==
+X-Gm-Message-State: AO0yUKU4+6LwduWYweo+cKorYfYOfzjGEmhw6YPvDYLMI8oN908fURRJ
+        ntIPCOSsLQVtDLOpVVjHfWU=
+X-Google-Smtp-Source: AK7set+HgBorRFvv0+hZ8QWB1uWn6efvYd2XrJpvIiCVC+B1A5KY6U4FPYUYrqBDSiLEgqx6KkdbIA==
+X-Received: by 2002:a17:903:138c:b0:1a1:918e:4129 with SMTP id jx12-20020a170903138c00b001a1918e4129mr15972090plb.30.1679326743362;
+        Mon, 20 Mar 2023 08:39:03 -0700 (PDT)
+Received: from [192.168.1.101] (1-160-164-133.dynamic-ip.hinet.net. [1.160.164.133])
+        by smtp.gmail.com with ESMTPSA id jj2-20020a170903048200b0019fea4bb887sm6923879plb.157.2023.03.20.08.39.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 08:39:03 -0700 (PDT)
+Message-ID: <13b4ac3c-d650-c646-b76f-3de69946d321@gmail.com>
+Date:   Mon, 20 Mar 2023 23:38:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: F9folt-ke6hPsK5kwyUnxRyoAE_QFa5l
-X-Proofpoint-ORIG-GUID: oHG_wXOFkuavUcnxh9y4s7Bxzj34q6ny
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-20_10,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- clxscore=1015 mlxscore=0 adultscore=0 mlxlogscore=587 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303200128
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 11/15] arm64: dts: nuvoton: Add initial ma35d1 device tree
+To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-12-ychuang570808@gmail.com>
+ <2063c6d1-85ed-43d9-b572-a762b6ce18c1@app.fastmail.com>
+ <7cc8258c-3a77-5387-aaa4-658761fbb0ae@gmail.com>
+ <12298b67-3012-4902-9dcc-61c3c9907a47@app.fastmail.com>
+Content-Language: en-US
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <12298b67-3012-4902-9dcc-61c3c9907a47@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,57 +86,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Markus Elfring <Markus.Elfring@web.de> writes:
->>>>> The label =E2=80=9Cout_err=E2=80=9D was used to jump to another point=
-er check despite of
->>>>> the detail in the implementation of the function =E2=80=9CpSeries_rec=
-onfig_add_node=E2=80=9D
->>>>> that it was determined already that the corresponding variable contai=
-ned
->>>>> a null pointer (because of a failed function call in two cases).
->>>>>
->>>>> 1. Thus return directly after a call of the function =E2=80=9Ckzalloc=
-=E2=80=9D failed.
->>>>>
->>>>> 2. Use more appropriate labels instead.
->>>>>
->>>>> 3. Delete a redundant check.
->>>>>
->>>>> 4. Omit an explicit initialisation for the local variable =E2=80=9Cer=
-r=E2=80=9D.
->>>>>
->>>>> This issue was detected by using the Coccinelle software.
->>>> Is there a correctness or safety issue here?
->>> I got the impression that the application of only a single label like =
-=E2=80=9Cout_err=E2=80=9D
->>> resulted in improvable implementation details.
->> I don't understand what you're trying to say here.
->
-> What does hinder you to understand the presented change description better
-> at the moment?
->
->
->> It doesn't seem to answer my question.
->
->
-> I hope that my answer will trigger further helpful considerations.
+Dear Arnd,
 
-I don't consider this response constructive, but I want to get this back
-on track. It's been brought to my attention that there is in fact a
-crash bug in this function's error path:
 
-	np->parent =3D pseries_of_derive_parent(path);
-	if (IS_ERR(np->parent)) {
-		err =3D PTR_ERR(np->parent);
-		goto out_err;
-	}
-...
-out_err:
-	if (np) {
-		of_node_put(np->parent);
+On 2023/3/18 下午 10:04, Arnd Bergmann wrote:
+> On Sat, Mar 18, 2023, at 14:17, Jacky Huang wrote:
+>> On 2023/3/16 下午 10:17, Arnd Bergmann wrote:
+>>> On Wed, Mar 15, 2023, at 08:28, Jacky Huang wrote:
+>>>> +	mem: memory@80000000 {
+>>>> +		device_type = "memory";
+>>>> +		reg = <0x00000000 0x80000000 0 0x20000000>; /* 512M DRAM */
+>>>> +	};
+>>>> +};
+>>> In most machines, the memory size is detected by the boot loader
+>>> and filled in the dtb in memory before starting the kernel, so
+>>> you should not need two separate files here for the two common
+>>> memory configurations.
+>>
+>> On ma35d1, memory size is determined early before uboot.
+>>
+>> BL1 (MaskROM boot code) -> BL2 (arm-trust-firmware) -> BL32 (op-tee) &
+>> BL33 (uboot).
+>> The DDR was initialized in BL2 stage with a selected DDR setting, which
+>> is hard coded, including DDR size.
+>>
+>> We searched the arm64 dts and found that almost all vendors claimed
+>> memory size in board level dtsi/dts. This seems to be common.
+>>
+>> So, can we have it unchanged?
+> I see the memory size encoded in about one out of three .dts files,
+> which is more than I expected. It's clearly not harmful to have it
+> listed in the dts, it just shouldn't be necessary.
+>
+> If it helps you with your current u-boot, then leave it in, but
+> consider adding detection logic into u-boot so it can override
+> the value in the dtb file at boot time.
 
-np->parent can be an encoded error value, we don't want to of_node_put()
-that.
 
-I believe the patch as written happens to fix the issue. Will you please
-write it up as a bug fix and resubmit?
+Thank you for your understanding. As more drivers are added, I think 
+this memory
+
+size encoded will look less conspicuous. In fact, in the previous arm9 
+project, we
+
+did detect the memory size by uboot, and then passed it to the kernel. 
+If there is
+
+a need in the future, we will consider to support it in ma35d1.
+
+>>> Since the machine is called 'som', I would assume that this is a
+>>> module that is integrated on another board, so more commonly one
+>>> would have a dtsi file for the som in addition to the one for the
+>>> soc, and have all the components of the module listed in this
+>>> file, while the dts file that includes the som.dtsi lists the
+>>> devices on the carrier board and enables the on-chip devices
+>>> that are connected to the outside.
+>>>
+>> You are right, ma35d1 som have a base board, and a cpu board on it.
+>>
+>> It is a good suggestion that we should have a dtsi for som base board.
+>>
+>> Consider that we are in the initial submit, and such a dtsi will be an empty
+>> file at this stage. So, I would like to do it when peripheral drivers
+>> upstream started. Is it ok?
+> It's not a big deal either way. I if you want to keep it only with
+> one dts file and one dtsi file, that's fine, but maybe rename the dts
+> file based on the name of the carrier rather than the SoM in this
+> case.
+>
+>       Arnd
+
+
+Thank you. As the dts names are consistent with the ma35d1 BSP on 
+linux-5.10.y,
+
+we would like to keep the consistence still.
+
+
+Best regards,
+
+Jacky Huang
+
+
