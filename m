@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD56A6C1A69
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07AC6C1A6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 16:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjCTPy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 11:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S231510AbjCTPzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 11:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjCTPxv (ORCPT
+        with ESMTP id S231745AbjCTPy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:53:51 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCB8211D7;
-        Mon, 20 Mar 2023 08:44:51 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KFigfq115213;
-        Mon, 20 Mar 2023 10:44:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679327082;
-        bh=Ntbt3xetiAjZRPKMf2HTsISMNMfIDQyqghSutE6dyFw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=c2wXWOT4klV67IQqpM4p7NLWZLHEM7HPeG5PHgpW5FiYZf3wIJGIIkZb0Q2cJD3EA
-         AIUQG3qC9mtPttwN28KO0/77YM6svSRpBzxx16SZ4k3Q8/BzZ5Md9RPnnLiMz3Urbf
-         avVaPjJt60YQ7ji1Z2WuKYhJp5Ecg2xiJrYQQrww=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KFig2t096753
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 10:44:42 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 10:44:41 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 10:44:41 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KFifFZ023804;
-        Mon, 20 Mar 2023 10:44:41 -0500
-Date:   Mon, 20 Mar 2023 10:44:41 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Bryan Brattlof <bb@ti.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Julien Panis <jpanis@baylibre.com>
-Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-am62: Add watchdog nodes
-Message-ID: <20230320154441.ayijqbxcdgv4lzkn@cyclist>
-References: <20230311105850.21811-1-nm@ti.com>
- <20230311105850.21811-3-nm@ti.com>
- <20230320153649.zfmyhk65ngh4u35d@bryanbrattlof.com>
+        Mon, 20 Mar 2023 11:54:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC9F24BDD;
+        Mon, 20 Mar 2023 08:45:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1435161593;
+        Mon, 20 Mar 2023 15:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F402C4339C;
+        Mon, 20 Mar 2023 15:45:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679327158;
+        bh=naN7vYGGVLWCjR2kPZSIxwtVmyaeIFB9eQqFu3TA8Nw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OA5fKq0LDPfIHqSiT7B7jys6/bCyUxVBCoN80b72LItAJT+xQ2+ieD3dPo/KS7FQP
+         QhybIzKoHGyx9vkLDRwqNXDIN9SETtLzAkvBVcFHEBKrJhBfbGjErJIccqT4u7WG8p
+         NVxFF4UwkIheXKTfKitXGeui0iITJUctw0bAU3iA=
+Date:   Mon, 20 Mar 2023 16:45:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Marc Dietrich <marvin24@gmx.de>, ac100@lists.launchpad.net,
+        linux-tegra@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] Staging: nvec: Convert to_nvec_led from a macro to an
+ inline function
+Message-ID: <ZBh/s5lyONaF37gs@kroah.com>
+References: <20230318175250.GA49618@sumitra.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320153649.zfmyhk65ngh4u35d@bryanbrattlof.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230318175250.GA49618@sumitra.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10:36-20230320, Bryan Brattlof wrote:
-> > +	main_rti4: watchdog@e0f0000 {
-> > +		compatible = "ti,j7-rti-wdt";
-> > +		reg = <0x00 0x0e0f0000 0x00 0x100>;
-> > +		clocks = <&k3_clks 130 0>;
-> > +		power-domains = <&k3_pds 130 TI_SCI_PD_EXCLUSIVE>;
-> > +		assigned-clocks = <&k3_clks 130 0>;
-> > +		assigned-clock-parents = <&k3_clks 130 2>;
-> > +	};
-> > +
+On Sat, Mar 18, 2023 at 10:52:50AM -0700, Sumitra Sharma wrote:
+> Convert to_nvec_led from a macro to a static inline function, to make the
+> relevant types apparent in the definition and to benefit from the type
+> checking performed by the compiler at call sites.
 > 
-> This may be a dumb question, though the ti-sci and TRM documentation is 
-> labeling this as rti15? idk if we should label this the same? it might 
-> make grepping a little easier :)
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+> 
+> v2: Change patch subject and description, noted by 
+> Julia Lawall <julia.lawall@inria.fr> 
+> 
+>  drivers/staging/nvec/nvec_paz00.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/nvec/nvec_paz00.c b/drivers/staging/nvec/nvec_paz00.c
+> index 8b4da95081c8..9573ba762cdd 100644
+> --- a/drivers/staging/nvec/nvec_paz00.c
+> +++ b/drivers/staging/nvec/nvec_paz00.c
+> @@ -14,8 +14,10 @@
+>  #include <linux/platform_device.h>
+>  #include "nvec.h"
+>  
+> -#define to_nvec_led(led_cdev) \
+> -	container_of(led_cdev, struct nvec_led, cdev)
+> +static inline struct nvec_led *to_nvec_led(struct led_classdev *led_cdev)
+> +{
+> +	return container_of(led_cdev, struct nvec_led, cdev);
+> +}
 
-Sure, will fix.
+There is no need for a function, or a macro, for this, as it is only
+used once.  Please just open-code it in the one place it is used
+instead.
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+thanks,
+
+greg k-h
