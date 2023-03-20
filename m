@@ -2,116 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE196C1DFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF076C1E03
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbjCTRa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S232524AbjCTRcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 13:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbjCTRaO (ORCPT
+        with ESMTP id S232810AbjCTRcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:30:14 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894D034C18
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:26:04 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s20so5725781ljp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679333144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V+Ms8Ww2VSBx+DdhMNxA/2llIoFpC8BcQm28rl49gls=;
-        b=t3ns0CecKOK/rF2h/744F/AGGdZnNaeQ7nU5HVDRHHVIUTEHKsLWhJ3zwch3kJz9Nj
-         e/a0dIgJlcpozKsMnhXT9pvEXncmCHE04t507vvHgNzVdaz7qU8YfhBshl7NnZCp/a14
-         cs3HScQ971AwsvRd0Z+/KWO/Qm5K+UwDSYemZH9nY2Pi3K5zjk7LbAW5p4FnyOIVZoSX
-         1Ne3eGZrCw2Gumwmxg7Vz5b3lQBsIPIVp3pRxwhIAeWRAGDDarKj676Wlgbq2f0pzHIY
-         a52PIt55EEYdx00WVM2R6Q344AT9tZrSgtg1SQFeGVtEjpjuJ7BbAYlYRfYjYMXrTBsY
-         yE5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679333144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+Ms8Ww2VSBx+DdhMNxA/2llIoFpC8BcQm28rl49gls=;
-        b=QHffxsAoh2uXj2RQUIDlI7FKy0pIoh/R1nZ9+I7wj0mezzw/H/UsWjgq2FBYBXSKY/
-         e2E00zh3ykBkWpC394L8Qfsj5lO2OicgviDiRwDuEvaIzE7UoMFtbQsI40s4y11VT7F7
-         ZZultRfITi0z3bJbk4Dbtr1+8+dpcKJgJIIgFVBbW5EtRR1OKrC1FdCtECAeBYj/tY4S
-         gTZlYFOrWYg3HeKL3N+0Ps2PmP1iHRnLjNBsuwpcUK8EiVr04ouzhKkus4afKv1+sYBw
-         mKOyJb0ZNGtt3NzxiuePSAp1GI0St8KyvzCnVXdIqo7HzOqej5m57RLEiKNfjc4u+7kQ
-         kU0A==
-X-Gm-Message-State: AO0yUKV2JJhyvjFkjh3N5swRrQfFVriCyQXeMTN9M/2JQSW6Fgqpb7pv
-        IvKgZSj8RQhOXNl48Sk1l377Vg==
-X-Google-Smtp-Source: AK7set++ZBqvf2vhiSYk8O4j0YKLRe79wz1p11zp8IM5tl/0bIPRhqNRpnVcOHQjyOuEXvyLABFcYg==
-X-Received: by 2002:a2e:9d82:0:b0:29b:ad30:ed6c with SMTP id c2-20020a2e9d82000000b0029bad30ed6cmr235246ljj.27.1679333143890;
-        Mon, 20 Mar 2023 10:25:43 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id m2-20020a2e9342000000b00295965f7495sm1832816ljh.0.2023.03.20.10.25.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 10:25:43 -0700 (PDT)
-Message-ID: <d36956b3-cba5-8738-2de2-1e79012bc66d@linaro.org>
-Date:   Mon, 20 Mar 2023 18:25:42 +0100
+        Mon, 20 Mar 2023 13:32:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A30A439CF9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:27:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC6E41FB;
+        Mon, 20 Mar 2023 10:27:24 -0700 (PDT)
+Received: from merodach.members.linode.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45E173F67D;
+        Mon, 20 Mar 2023 10:26:38 -0700 (PDT)
+From:   James Morse <james.morse@arm.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        James Morse <james.morse@arm.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+Subject: [PATCH v3 00/19] x86/resctrl: monitored closid+rmid together, separate arch/fs locking
+Date:   Mon, 20 Mar 2023 17:26:01 +0000
+Message-Id: <20230320172620.18254-1-james.morse@arm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 11/15] arm64: dts: qcom: sa8775p: pmic: add support for
- the pmm8654 RESIN input
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230320154841.327908-1-brgl@bgdev.pl>
- <20230320154841.327908-12-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230320154841.327908-12-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
+
+The largest change since v2 is to avoid running work on nohz_full CPUs.
+Otherwise changes since v2 are noted in each patch.
+~
+This series does two things, it changes resctrl to call resctrl_arch_rmid_read()
+in a way that works for MPAM, and it separates the locking so that the arch code
+and filesystem code don't have to share a mutex. I tried to split this as two
+series, but these touch similar call sites, so it would create more work.
+
+(What's MPAM? See the cover letter of the first series. [1])
+
+On x86 the RMID is an independent number. MPAMs equivalent is PMG, but this
+isn't an independent number - it extends the PARTID (same as CLOSID) space
+with bits that aren't used to select the configuration. The monitors can
+then be told to match specific PMG values, allowing monitor-groups to be
+created.
+
+But, MPAM expects the monitors to always monitor by PARTID. The
+Cache-storage-utilisation counters can only work this way.
+(In the MPAM spec not setting the MATCH_PARTID bit is made CONSTRAINED
+UNPREDICTABLE - which is Arm's term to mean portable software can't rely on
+this)
+
+It gets worse, as some SoCs may have very few PMG bits. I've seen the
+datasheet for one that has a single bit of PMG space.
+
+To be usable, MPAM's counters always need the PARTID and the PMG.
+For resctrl, this means always making the CLOSID available when the RMID
+is used.
+
+To ensure RMID are always unique, this series combines the CLOSID and RMID
+into an index, and manages RMID based on that. For x86, the index and RMID
+would always be the same.
 
 
-On 20.03.2023 16:48, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add the RESIN input for sa8775p platforms' PMIC.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Currently the architecture specific code in the cpuhp callbacks takes the
+rdtgroup_mutex. This means the filesystem code would have to export this
+lock, resulting in an ill-defined interface between the two, and the possibility
+of cross-architecture lock-ordering head aches.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> index f421d4d64c8e..8616ead3daf5 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
-> @@ -26,6 +26,13 @@ pmm8654au_0_pon_pwrkey: pwrkey {
->  				linux,code = <KEY_POWER>;
->  				debounce = <15625>;
->  			};
-> +
-> +			pmm8654au_0_pon_resin: resin {
-> +				compatible = "qcom,pmk8350-resin";
-> +				interrupts-extended = <&spmi_bus 0x0 0x12 0x6 IRQ_TYPE_EDGE_BOTH>;
-> +				debounce = <15625>;
-> +				status = "disabled";
-> +			};
->  		};
->  	};
->  
+The second part of this series adds a domain_list_lock to protect writes to the
+domain list, and protects the domain list with RCU - or read_cpus_lock().
+
+Use of RCU is to allow lockless readers of the domain list, today resctrl only has
+one, rdt_bit_usage_show(). But to get MPAMs monitors working, its very likely
+they'll need to be plumbed up to perf. The uncore PMU driver would be a second
+lockless reader of the domain list.
+
+This series is based on v6.3-rc1, and can be retrieved from:
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/monitors_and_locking/v3
+
+Bugs welcome,
+
+
+Thanks,
+
+James
+
+
+[1] https://lore.kernel.org/lkml/20210728170637.25610-1-james.morse@arm.com/
+[v1] https://lore.kernel.org/all/20221021131204.5581-1-james.morse@arm.com/
+[v2] https://lore.kernel.org/lkml/20230113175459.14825-1-james.morse@arm.com/
+
+James Morse (19):
+  x86/resctrl: Track the closid with the rmid
+  x86/resctrl: Access per-rmid structures by index
+  x86/resctrl: Create helper for RMID allocation and mondata dir
+    creation
+  x86/resctrl: Move rmid allocation out of mkdir_rdt_prepare()
+  x86/resctrl: Allow RMID allocation to be scoped by CLOSID
+  x86/resctrl: Allow the allocator to check if a CLOSID can allocate
+    clean RMID
+  x86/resctrl: Move CLOSID/RMID matching and setting to use helpers
+  x86/resctrl: Add cpumask_any_housekeeping() for limbo/overflow
+  x86/resctrl: Queue mon_event_read() instead of sending an IPI
+  x86/resctrl: Allow resctrl_arch_rmid_read() to sleep
+  x86/resctrl: Allow arch to allocate memory needed in
+    resctrl_arch_rmid_read()
+  x86/resctrl: Make resctrl_mounted checks explicit
+  x86/resctrl: Move alloc/mon static keys into helpers
+  x86/resctrl: Make rdt_enable_key the arch's decision to switch
+  x86/resctrl: Add helpers for system wide mon/alloc capable
+  x86/resctrl: Add cpu online callback for resctrl work
+  x86/resctrl: Allow overflow/limbo handlers to be scheduled on any-but
+    cpu
+  x86/resctrl: Add cpu offline callback for resctrl work
+  x86/resctrl: Separate arch and fs resctrl locks
+
+ arch/x86/include/asm/resctrl.h            |  90 ++++++
+ arch/x86/kernel/cpu/resctrl/core.c        |  78 ++---
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c |  23 +-
+ arch/x86/kernel/cpu/resctrl/internal.h    |  77 ++++-
+ arch/x86/kernel/cpu/resctrl/monitor.c     | 372 ++++++++++++++++------
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  15 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 319 ++++++++++++++-----
+ include/linux/resctrl.h                   |  21 +-
+ include/linux/tick.h                      |   3 +-
+ 9 files changed, 750 insertions(+), 248 deletions(-)
+
+-- 
+2.39.2
+
