@@ -2,258 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE236C11F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E8A6C11F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCTMeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S231191AbjCTMdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjCTMeO (ORCPT
+        with ESMTP id S229696AbjCTMdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:34:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E9659D0;
-        Mon, 20 Mar 2023 05:34:11 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PgDfM6fkLz6J71p;
-        Mon, 20 Mar 2023 20:32:59 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 20 Mar
- 2023 12:34:08 +0000
-Date:   Mon, 20 Mar 2023 12:34:08 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-CC:     Mehdi Djait <mehdi.djait.k@gmail.com>, <jic23@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <andriy.shevchenko@linux.intel.com>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 2/3] iio: accel: kionix-kx022a: Add chip_info structure
-Message-ID: <20230320123408.000008c0@Huawei.com>
-In-Reply-To: <4c28925d-c07c-61b7-8863-9c00e6846687@gmail.com>
-References: <cover.1679009443.git.mehdi.djait.k@gmail.com>
-        <3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k@gmail.com>
-        <4c28925d-c07c-61b7-8863-9c00e6846687@gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 20 Mar 2023 08:33:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07956BDFB;
+        Mon, 20 Mar 2023 05:33:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB794B80D34;
+        Mon, 20 Mar 2023 12:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B62C433D2;
+        Mon, 20 Mar 2023 12:33:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679315590;
+        bh=fygr3RG8uPn2NJhUjRYDEIiWMomuFV1zegC03XGS6KQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hKg0abvV0cEb5PGRSB82iHUWHBJizmJD+PvS0W/6Sl1jG4M9malqAGiz0p36sscB2
+         N1lgy+Y52c3Y4wfPAkxucNRF4EdSelH3TdZ26TRxGSo3/bN4jV8HJ5iBykmy8H2/5c
+         HL+AI8PzSKe4j9pBTZComTIzyKGMWpY8/341aHWsKIDDiR1rSLJ+gTK6ZLFVfnYL9v
+         ezoZA4IryyFq57ahqVO4UES3SGbHBKAqxBEGljP/SeIUktQgSv846/Cfa2v8562bNl
+         hac8e6fiuZhMiRKg5JI8K+ItQU7aMdSMwDe+cnvG9VlLtM2ruhbHtd9eVBV7GZUMXk
+         lHLI+dbD7oZLg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1peEic-0006WP-E0; Mon, 20 Mar 2023 13:34:31 +0100
+Date:   Mon, 20 Mar 2023 13:34:30 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sc8280xp-crd: add wifi calibration
+ variant
+Message-ID: <ZBhS1rV2+9ivOVUi@hovoldconsulting.com>
+References: <20230320104658.22186-1-johan+linaro@kernel.org>
+ <20230320104658.22186-4-johan+linaro@kernel.org>
+ <244a59c6-2dc0-83c7-07d2-6bae04022605@linaro.org>
+ <ZBg7tA8NLDnjPp+k@hovoldconsulting.com>
+ <ZBg+ixekH+Ou7jMd@hovoldconsulting.com>
+ <87y1nrhazs.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y1nrhazs.fsf@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 11:35:06 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Mon, Mar 20, 2023 at 02:18:31PM +0200, Kalle Valo wrote:
+> Johan Hovold <johan@kernel.org> writes:
 
-> On 3/17/23 01:48, Mehdi Djait wrote:
-> > Refactor the kx022a driver implementation to make it more
-> > generic and extensible.
-> > Add the chip_info structure will to the driver's private
-> > data to hold all the device specific infos.
-> > Move the enum, struct and constants definitions to the header
-> > file.
-> > 
-> > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
-> > ---
-> >   drivers/iio/accel/kionix-kx022a-i2c.c |  19 +-
-> >   drivers/iio/accel/kionix-kx022a-spi.c |  22 +-
-> >   drivers/iio/accel/kionix-kx022a.c     | 289 ++++++++++++--------------
-> >   drivers/iio/accel/kionix-kx022a.h     | 128 ++++++++++--
-> >   4 files changed, 274 insertions(+), 184 deletions(-)
-> > 
-> > diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
-> > index e6fd02d931b6..21c4c0ae1a68 100644
-> > --- a/drivers/iio/accel/kionix-kx022a-i2c.c
-> > +++ b/drivers/iio/accel/kionix-kx022a-i2c.c
-> > @@ -15,23 +15,35 @@
-> >   static int kx022a_i2c_probe(struct i2c_client *i2c)
-> >   {
-> >   	struct device *dev = &i2c->dev;
-> > +	struct kx022a_chip_info *chip_info;
-> >   	struct regmap *regmap;
-> > +	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
-> >   
-> >   	if (!i2c->irq) {
-> >   		dev_err(dev, "No IRQ configured\n");
-> >   		return -EINVAL;
-> >   	}
-> >   
-> > -	regmap = devm_regmap_init_i2c(i2c, &kx022a_regmap);
-> > +	chip_info = device_get_match_data(&i2c->dev);
-> > +	if (!chip_info)
-> > +		chip_info = (const struct kx022a_chip_info *) id->driver_data;
-> > +
-> > +	regmap = devm_regmap_init_i2c(i2c, chip_info->regmap_config);
-> >   	if (IS_ERR(regmap))
-> >   		return dev_err_probe(dev, PTR_ERR(regmap),
-> >   				     "Failed to initialize Regmap\n");  
+> >> > > +			qcom,ath11k-calibration-variant = "LE_X13S";
+> >> > Intentional? Especially given Kalle's comment on bugzilla?
+> >> 
+> >> Yes, it is intentional. The corresponding calibration data allows the
+> >> wifi to be used on the CRD. I measure 150 MBits/s which may a bit lower
+> >> than expected, but it's better than having no wifi at all.
+> >
+> > I was going back and forth about mentioning this in the commit message
+> > and we could off on this one until someone confirms that the
+> > corresponding calibration data can (or should) be used for the X13s.
+
+Hopefully clear from context, but that was supposed to say "CRD" and not
+"X13s"...
+
+> > Note that there is no other match for
+> >
+> > 	'bus=pci,vendor=17cb,device=1103,subsystem-vendor=17cb,subsystem-device=0108,qmi-chip-id=2,qmi-board-id=140'
+> >
+> > in the new board-2.bin.
 > 
-> Hm. I would like to pull the regmap_config out of the chip_info struct. 
-> As far as I see, the regmap_config is only needed in these bus specific 
-> files. On the other hand, the chip-info is only needed in the 
-> kionix-kx022a.c file, right?
-> 
+> If the device in question is something else than Lenovo X13s, I would
+> prefer that the variant is not set. Just in case we need different board
+> files for different models. It's easy to add aliases to board-2.bin.
 
-I disagree.  We've moved quite a few drivers away from the enum route
-because the indirection doesn't add anything useful and leads to
-nasty casting to enums.  In particular, we have to avoid using enum
-value of 0 if we want to check if there is a match. For a pointer that's
-an easy check against NULL.
+The sc8280xp CRD is the Qualcomm "compute" reference design for this
+platform and is very similar to the X13s but they are not identical.
 
-The regmap is product specific so makes sense as part of the chip_info
-structure.
+For ath11k and wcn6855, the CRD I have reports a chip_id of 2 and
+"hw2.0", while the X13s reports chip_id 18 and "hw2.1".
 
-> So, maybe you could here just get the regmap_config based on the chip-id 
-> (enum value you added - the data pointer in match tables could be just 
-> the enum value indicating the IC type). Then, you could pass this enum 
-> value to kx022a_probe_internal() - and the chip-info struct could be 
-> selected in the kionix-kx022a.c based on it. That way you would not need 
-> the struct chip-info here or regmap_config in kionix-kx022a.c. Same in 
-> the *-spi.c
-> 
-> Something like:
-> 
-> enum {
-> 	KIONIX_IC_KX022A,
-> 	KIONIX_IC_KX132_xxx, /* xxx denotes accurate model suffix */
-> };
-> 	
-> static const struct of_device_id kx022a_of_match[] = {
-> 	{ .compatible = "kionix,kx022a", .data = KIONIX_IC_KX022A },
-> 	...
-> 
-> chip_id = device_get_match_data(&i2c->dev);
+The new board-2.bin notably adds two entries that match these chip_ids
+but with the variant specified as "LE_X13S" for both.
 
-This fails for probes using the i2c_device_id table entries.
-So you need to check for invalid entry.  Unfortunately that is
-a NULL return which you can't detect if your enum has a value of 0.
+> I need to check internally what board file should be used for this CRD.
+> If the speed is only 150 Mbit/s I suspect it needs a different board
+> file.
 
-> 
-> regmap_cfg = kx022a_kx_regmap_cfg[chip_id];
-> regmap = devm_regmap_init_i2c(i2c, regmap_cfg);
-> ...
-> return kx022a_probe_internal(dev, chip_id);
-> 
-> Do you think that would work?
+Sounds good. Let's drop this one for now then.
 
-It would work with the enum starting at 1, and it's a pattern that
-used to be common. Less so now because with multiple firmware types
-we want to be able to check trivially if we have a match.
-
-> 
-> OTOH, to really benefit from this we should probably pull out the 
-> regmap-configs from the kionix-kx022a.c. I am not really sure where we 
-> should put it then though. Hence, if there is no good ideas how to split 
-> the config and chip-info so they are only available/used where needed - 
-> then I am also Ok with the current approach.
-
-Definitely stick to current approach.  If I had the time I'd
-rip out all the code useing enums in match tables. It's bitten us
-a few times with nasty to track down bugs that only affect more obscure
-ways of binding the driver.
-
-...
-
-> 
-> >   
-> > +static int kx022a_get_fifo_bytes(struct kx022a_data *data)
-> > +{
-> > +	struct device *dev = regmap_get_device(data->regmap);
-> > +	__le16 buf_status;
-> > +	int ret, fifo_bytes;
-> > +
-> > +	ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1, &buf_status, sizeof(buf_status));
-> > +	if (ret) {
-> > +		dev_err(dev, "Error reading buffer status\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	buf_status &= data->chip_info->buf_smp_lvl_mask;
-> > +	fifo_bytes = le16_to_cpu(buf_status);
-> > +
-> > +	/*
-> > +	 * The KX022A has FIFO which can store 43 samples of HiRes data from 2
-> > +	 * channels. This equals to 43 (samples) * 3 (channels) * 2 (bytes/sample) to
-> > +	 * 258 bytes of sample data. The quirk to know is that the amount of bytes in
-> > +	 * the FIFO is advertised via 8 bit register (max value 255). The thing to note
-> > +	 * is that full 258 bytes of data is indicated using the max value 255.
-> > +	 */
-> > +	if (data->chip_info->type == KX022A && fifo_bytes == KX022A_FIFO_FULL_VALUE)
-> > +		fifo_bytes = KX022A_FIFO_MAX_BYTES;
-> > +
-> > +	if (fifo_bytes % KX_FIFO_SAMPLES_SIZE_BYTES)
-> > +		dev_warn(data->dev, "Bad FIFO alignment. Data may be corrupt\n");
-> > +
-> > +	return fifo_bytes;
-> > +}  
-> 
-> I like adding this function. Here I agree with Jonathan - having a 
-> device specific functions would clarify this a bit. The KX022A "quirk" 
-> is a bit confusing. You could then get rid of the buf_smp_lvl_mask.
-
-I'd missed the type quirk. Good point, definitely have a callback.
-Get rid of that 'type' element of the chip_info.
-That is a bad design pattern as it doesn't scale to lots of devices
-as you end up with big switch statements.
-
-
-> 
-> > +
-> >   static int kx022a_drop_fifo_contents(struct kx022a_data *data)
-> >   {
-> >   	/*
-> > @@ -593,35 +588,22 @@ static int kx022a_drop_fifo_contents(struct kx022a_data *data)
-> >   	 */
-> >   	data->timestamp = 0;
-> >   
-> > -	return regmap_write(data->regmap, KX022A_REG_BUF_CLEAR, 0x0);
-> > +	return regmap_write(data->regmap, data->chip_info->buf_clear, 0x0);
-> >   }
-> >   
-> >   static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
-> >   			       bool irq)
-> >   {
-> >   	struct kx022a_data *data = iio_priv(idev);
-> > -	struct device *dev = regmap_get_device(data->regmap);
-> > -	__le16 buffer[KX022A_FIFO_LENGTH * 3];
-> > +	__le16 buffer[data->chip_info->fifo_length * 3];  
-> 
-> I don't like this. Having the length of an array decided at run-time is 
-> not something I appreciate. Maybe you could just always reserve the 
-> memory so that the largest FIFO gets supported. I am just wondering how 
-> large arrays we can safely allocate from the stack?
-
-I'd missed this as well.  Definitely don't have a variable length array.
-Allocate it as a buffer accessed via a pointer in kx022a_data
-
-> 
-
-> 
-> >   	if (ret)
-> >   		goto unlock_out;
-> >     
-> 
-> > -int kx022a_probe_internal(struct device *dev)
-> > +int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info)  
-> 
-> As mentioned elsewhere, this might also work if the chip-type enum was 
-> passed here as parameter. That way the bus specific part would not need 
-> to know about the struct chip_info...
-
-It only knows there is a pointer.  Doesn't need to know more than that.
-+ argument against as above.
-
-
-Jonathan
-
+Johan
