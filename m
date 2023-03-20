@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684216C1C78
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6C26C1C5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbjCTQq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S231905AbjCTQpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjCTQpe (ORCPT
+        with ESMTP id S233119AbjCTQo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:45:34 -0400
+        Mon, 20 Mar 2023 12:44:59 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EF22C679;
-        Mon, 20 Mar 2023 09:40:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC8893DF;
+        Mon, 20 Mar 2023 09:39:48 -0700 (PDT)
 Date:   Mon, 20 Mar 2023 16:39:22 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679330363;
+        s=2020; t=1679330362;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=N3g/H7X0vKHy23DLH09nFe5+vMN+aAJNOUAvGPsE/1Y=;
-        b=CGQF0OiCxBRW8HVrsfKE3EweJVTSmZWfJR0NEjn4F/3hSYEpSISy8KQ9YKXzBpFNUpmA5f
-        0HOkb2V0bX/lkQEMZHcB3gSLqxd+2X6kGMeUhKIG16vydvsLVl2Un9C/jK8X2qZBeVAXsv
-        ivYybGMtw7BUbY1G+fLjrM1xKk8C3EJDSaxpru++jWBnunHAa5azfRdtEahKf4VeMArYyr
-        Fjoq9mROfL9gqyCTErMCmULTIdwV2VjVh0T8TyFv6f0qcLZSCaKx2frlKcL4jpv1r1Sxkk
-        AiVt8uymhNH9tQzR0pkV7uZAnwQoXK8iAG3dsJzhh2No4cmjW01LQDX6IWQgaQ==
+        bh=SYX4JrBzvsAozuT32nb5plzdVhVp9zTKH6jDVtQCFjE=;
+        b=Goivp7qQyBo4Ma9nooMFVcTdpdMORyHk3zdgpKox/3XpUVuiloJ+FgKNJRlDJoMuXNv0cN
+        dEGFm6Pu6OVHEJbqcbBDDUVvJJrQGia3d+DYbHQOnfFKRHEeU0dxhat4XCxRJxSu6SeTiS
+        XsJyG941aMNxiaa0Nd8rrn9UI/kXD+N7yN/T8iP7OV5V/a5lgtEZji9GWyEI0jQH2ydNs/
+        9LboHyyYJ48xi5Ue/wz/TkwSmdX8wD2i8I9z3fEW15wI0+4b3rZr4qdtA+db3WGnUGuBaX
+        p5w4qfYgs6a93Zxdu9tmd309skJ1CITBQYk6UpYF9fzlZDoaIzfPoIFPKHDZBg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679330363;
+        s=2020e; t=1679330362;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=N3g/H7X0vKHy23DLH09nFe5+vMN+aAJNOUAvGPsE/1Y=;
-        b=0Ism8uzxjqu4y7Qm4Vu4+3KqaSrn010SjovKBY6d2b/88dIQVVzYzEcUZtj7rEPq8XqmGF
-        SJzVdAYXfIRkPZCA==
+        bh=SYX4JrBzvsAozuT32nb5plzdVhVp9zTKH6jDVtQCFjE=;
+        b=0IridW++BCfm7hffUPSec0l/YCgjH2/7bh+8YKhZxyYhaOxtXQ02HzvxBIGjSSQmFVsHaw
+        /wNLgzE2fL0n6IBw==
 From:   "tip-bot2 for Rick Edgecombe" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/shstk] x86/shstk: Introduce routines modifying shstk
-Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+Subject: [tip: x86/shstk] x86/shstk: Support WRSS for userspace
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
         Kees Cook <keescook@chromium.org>,
@@ -50,7 +49,7 @@ Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
         John Allen <john.allen@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167933036287.5837.10678955367611362717.tip-bot2@tip-bot2>
+Message-ID: <167933036208.5837.13674378381944912365.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,41 +65,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/shstk branch of tip:
 
-Commit-ID:     da07286f0c9a33f8254630b319796ea186642713
-Gitweb:        https://git.kernel.org/tip/da07286f0c9a33f8254630b319796ea186642713
+Commit-ID:     44600eec3f2b708c711e811339e1034d9f0d0680
+Gitweb:        https://git.kernel.org/tip/44600eec3f2b708c711e811339e1034d9f0d0680
 Author:        Rick Edgecombe <rick.p.edgecombe@intel.com>
-AuthorDate:    Sat, 18 Mar 2023 17:15:26 -07:00
+AuthorDate:    Sat, 18 Mar 2023 17:15:29 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Mon, 20 Mar 2023 09:01:11 -07:00
+CommitterDate: Mon, 20 Mar 2023 09:01:12 -07:00
 
-x86/shstk: Introduce routines modifying shstk
+x86/shstk: Support WRSS for userspace
 
-Shadow stacks are normally written to via CALL/RET or specific CET
-instructions like RSTORSSP/SAVEPREVSSP. However, sometimes the kernel will
-need to write to the shadow stack directly using the ring-0 only WRUSS
-instruction.
+For the current shadow stack implementation, shadow stacks contents can't
+easily be provisioned with arbitrary data. This property helps apps
+protect themselves better, but also restricts any potential apps that may
+want to do exotic things at the expense of a little security.
 
-A shadow stack restore token marks a restore point of the shadow stack, and
-the address in a token must point directly above the token, which is within
-the same shadow stack. This is distinctively different from other pointers
-on the shadow stack, since those pointers point to executable code area.
+The x86 shadow stack feature introduces a new instruction, WRSS, which
+can be enabled to write directly to shadow stack memory from userspace.
+Allow it to get enabled via the prctl interface.
 
-Introduce token setup and verify routines. Also introduce WRUSS, which is
-a kernel-mode instruction but writes directly to user shadow stack.
+Only enable the userspace WRSS instruction, which allows writes to
+userspace shadow stacks from userspace. Do not allow it to be enabled
+independently of shadow stack, as HW does not support using WRSS when
+shadow stack is disabled.
 
-In future patches that enable shadow stack to work with signals, the kernel
-will need something to denote the point in the stack where sigreturn may be
-called. This will prevent attackers calling sigreturn at arbitrary places
-in the stack, in order to help prevent SROP attacks.
+>From a fault handler perspective, WRSS will behave very similar to WRUSS,
+which is treated like a user access from a #PF err code perspective.
 
-To do this, something that can only be written by the kernel needs to be
-placed on the shadow stack. This can be accomplished by setting bit 63 in
-the frame written to the shadow stack. Userspace return addresses can't
-have this bit set as it is in the kernel range. It also can't be a valid
-restore token.
-
-Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
@@ -109,133 +99,81 @@ Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/20230319001535.23210-32-rick.p.edgecombe%40intel.com
+Link: https://lore.kernel.org/all/20230319001535.23210-35-rick.p.edgecombe%40intel.com
 ---
- arch/x86/include/asm/special_insns.h | 13 +++++-
- arch/x86/kernel/shstk.c              | 75 +++++++++++++++++++++++++++-
- 2 files changed, 88 insertions(+)
+ arch/x86/include/uapi/asm/prctl.h |  1 +-
+ arch/x86/kernel/shstk.c           | 43 +++++++++++++++++++++++++++++-
+ 2 files changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index de48d13..d6cd934 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -202,6 +202,19 @@ static inline void clwb(volatile void *__p)
- 		: [pax] "a" (p));
- }
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 7dfd9dc..e314956 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -28,5 +28,6 @@
  
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+static inline int write_user_shstk_64(u64 __user *addr, u64 val)
-+{
-+	asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
-+			  _ASM_EXTABLE(1b, %l[fail])
-+			  :: [addr] "r" (addr), [val] "r" (val)
-+			  :: fail);
-+	return 0;
-+fail:
-+	return -EFAULT;
-+}
-+#endif /* CONFIG_X86_USER_SHADOW_STACK */
-+
- #define nop() asm volatile ("nop")
+ /* ARCH_SHSTK_ features bits */
+ #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
++#define ARCH_SHSTK_WRSS			(1ULL <<  1)
  
- static inline void serialize(void)
+ #endif /* _ASM_X86_PRCTL_H */
 diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index bd9cdc3..e22928c 100644
+index 6d2531c..01b4566 100644
 --- a/arch/x86/kernel/shstk.c
 +++ b/arch/x86/kernel/shstk.c
-@@ -25,6 +25,8 @@
- #include <asm/fpu/api.h>
- #include <asm/prctl.h>
- 
-+#define SS_FRAME_SIZE 8
-+
- static bool features_enabled(unsigned long features)
- {
- 	return current->thread.features & features;
-@@ -40,6 +42,35 @@ static void features_clr(unsigned long features)
- 	current->thread.features &= ~features;
+@@ -360,6 +360,47 @@ void shstk_free(struct task_struct *tsk)
+ 	unmap_shadow_stack(shstk->base, shstk->size);
  }
  
-+/*
-+ * Create a restore token on the shadow stack.  A token is always 8-byte
-+ * and aligned to 8.
-+ */
-+static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
++static int wrss_control(bool enable)
 +{
-+	unsigned long addr;
++	u64 msrval;
 +
-+	/* Token must be aligned */
-+	if (!IS_ALIGNED(ssp, 8))
-+		return -EINVAL;
-+
-+	addr = ssp - SS_FRAME_SIZE;
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++		return -EOPNOTSUPP;
 +
 +	/*
-+	 * SSP is aligned, so reserved bits and mode bit are a zero, just mark
-+	 * the token 64-bit.
++	 * Only enable WRSS if shadow stack is enabled. If shadow stack is not
++	 * enabled, WRSS will already be disabled, so don't bother clearing it
++	 * when disabling.
 +	 */
-+	ssp |= BIT(0);
++	if (!features_enabled(ARCH_SHSTK_SHSTK))
++		return -EPERM;
 +
-+	if (write_user_shstk_64((u64 __user *)addr, (u64)ssp))
-+		return -EFAULT;
-+
-+	if (token_addr)
-+		*token_addr = addr;
-+
-+	return 0;
-+}
-+
- static unsigned long alloc_shstk(unsigned long size)
- {
- 	int flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_ABOVE4G;
-@@ -157,6 +188,50 @@ unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long cl
- 	return addr + size;
- }
- 
-+static unsigned long get_user_shstk_addr(void)
-+{
-+	unsigned long long ssp;
++	/* Already enabled/disabled? */
++	if (features_enabled(ARCH_SHSTK_WRSS) == enable)
++		return 0;
 +
 +	fpregs_lock_and_load();
++	rdmsrl(MSR_IA32_U_CET, msrval);
 +
-+	rdmsrl(MSR_IA32_PL3_SSP, ssp);
++	if (enable) {
++		features_set(ARCH_SHSTK_WRSS);
++		msrval |= CET_WRSS_EN;
++	} else {
++		features_clr(ARCH_SHSTK_WRSS);
++		if (!(msrval & CET_WRSS_EN))
++			goto unlock;
 +
++		msrval &= ~CET_WRSS_EN;
++	}
++
++	wrmsrl(MSR_IA32_U_CET, msrval);
++
++unlock:
 +	fpregs_unlock();
 +
-+	return ssp;
-+}
-+
-+#define SHSTK_DATA_BIT BIT(63)
-+
-+static int put_shstk_data(u64 __user *addr, u64 data)
-+{
-+	if (WARN_ON_ONCE(data & SHSTK_DATA_BIT))
-+		return -EINVAL;
-+
-+	/*
-+	 * Mark the high bit so that the sigframe can't be processed as a
-+	 * return address.
-+	 */
-+	if (write_user_shstk_64(addr, data | SHSTK_DATA_BIT))
-+		return -EFAULT;
 +	return 0;
 +}
 +
-+static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
-+{
-+	unsigned long ldata;
-+
-+	if (unlikely(get_user(ldata, addr)))
-+		return -EFAULT;
-+
-+	if (!(ldata & SHSTK_DATA_BIT))
-+		return -EINVAL;
-+
-+	*data = ldata & ~SHSTK_DATA_BIT;
-+
-+	return 0;
-+}
-+
- void shstk_free(struct task_struct *tsk)
+ static int shstk_disable(void)
  {
- 	struct thread_shstk *shstk = &tsk->thread.shstk;
+ 	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
+@@ -376,7 +417,7 @@ static int shstk_disable(void)
+ 	fpregs_unlock();
+ 
+ 	shstk_free(current);
+-	features_clr(ARCH_SHSTK_SHSTK);
++	features_clr(ARCH_SHSTK_SHSTK | ARCH_SHSTK_WRSS);
+ 
+ 	return 0;
+ }
