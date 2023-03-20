@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5718A6C1CB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9CE6C1CB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 17:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjCTQuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 12:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S232720AbjCTQup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 12:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbjCTQt3 (ORCPT
+        with ESMTP id S232865AbjCTQtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:49:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F8A28EB5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 09:42:02 -0700 (PDT)
+        Mon, 20 Mar 2023 12:49:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FD3173F;
+        Mon, 20 Mar 2023 09:42:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF102616F2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:41:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA93C433EF;
-        Mon, 20 Mar 2023 16:41:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4748EB80F9C;
+        Mon, 20 Mar 2023 16:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A25C3C433EF;
+        Mon, 20 Mar 2023 16:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679330494;
-        bh=lN/KIewXkXIxyysAXNK65g3bJDzRG2lqUTNvfeaMf4o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=QWFoDCsklTTvKolrKhwK6yxMLGkJwgjnCBzaJYnT7to6XmhSN4IpQEHbw5C2db6PM
-         wxfkDhjlvqt982abOB1XaCj64Nkn0Ov/m/grlCVAeGtg90CWNV3H3Pw4iZmtE/iAOi
-         EoeTRpBw5DbON2BA7FrZzDnBTgRmM70JcfTom0yJuTOOT6nSD3PgZsVVbNZ6kU2lOK
-         SI+d0KXwml4I+moge7ZWw8mmPIUnDSfABd2erR3SKAlBS1Tizq2phGqcbMS8vcTOQu
-         EQ2rU69GEH2ZM8E8NgMLLNGGKhMHgLI0OIDC7bUaCad+9VZd15QqLnM+OeOW7NUwSn
-         kJMxLmkLyM8Yg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C44C71540395; Mon, 20 Mar 2023 09:41:33 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 09:41:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux@weissschuh.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] tools/nolibc: always disable stack protector for
- tests
-Message-ID: <c6ed0408-a84e-4950-9259-3807d352f9a7@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230319135100.31952-1-w@1wt.eu>
- <5c2fdd86-4e6a-4f48-ab57-95a223f39e94@paulmck-laptop>
- <ZBdsZ61bt7aLdbSo@1wt.eu>
- <b8badcd8-44a0-4380-a5f1-381f058ea276@paulmck-laptop>
- <ZBfNXlUBBB6c6Btw@1wt.eu>
+        s=k20201202; t=1679330502;
+        bh=j6QNvV6H6eDt02wjxkiTvHZcQhOub+6iicJVNt8AiKc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ABDM8gSrZx5kc8OL/cA9piN5bghBYggzRStcFDbwGlZqI1jRBM+7elOaAMCnSkqlo
+         f0QGSia0zpPEELZeH+fR2d7BdDayswnu+zKSXHAKy0bZiZz+cuTjfDyZ7MbVSvSghB
+         vxtZAWN9I53zhXjXvTQT56TNpsO1xcxp9YZakJM7Q15bzF2Hv75FhefWKU1Pi5721m
+         bJCBSQ9Re1gg2gjW01D4wFXIgEEdKuHzZ4CTkCatJxMf8KjX+KJWLpzlUE3vvnhjkK
+         AQbk4krJEBDjgjC9ZWjaWLNGhBXD9XAH1O6KrKXhaNbHuV6atuYRflGNbeYQCbzvCa
+         Vdkg5y+ND7Hfw==
+Date:   Mon, 20 Mar 2023 16:41:36 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v2 net-next 1/9] phy: phy-ocelot-serdes: add ability to
+ be used in a non-syscon configuration
+Message-ID: <20230320164136.GC2673958@google.com>
+References: <20230317185415.2000564-1-colin.foster@in-advantage.com>
+ <20230317185415.2000564-2-colin.foster@in-advantage.com>
+ <ZBgeKM50e1vt+ho1@matsya>
+ <ZBgmXplfA/Q3/1dC@shell.armlinux.org.uk>
+ <20230320133431.GB2673958@google.com>
+ <ZBhtOw4Ftj3Sa3JU@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZBfNXlUBBB6c6Btw@1wt.eu>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZBhtOw4Ftj3Sa3JU@shell.armlinux.org.uk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,70 +72,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 04:05:02AM +0100, Willy Tarreau wrote:
-> On Sun, Mar 19, 2023 at 04:54:53PM -0700, Paul E. McKenney wrote:
-> > On Sun, Mar 19, 2023 at 09:11:19PM +0100, Willy Tarreau wrote:
-> > > Hi Paul,
-> > > 
-> > > On Sun, Mar 19, 2023 at 11:05:15AM -0700, Paul E. McKenney wrote:
-> > > > Queued and pushed, thank you both!
-> > > 
-> > > Thank you!
-> > > 
-> > > > Just to make sure I understand, you would like me to add this to the
-> > > > serieses from Vincent, yourself, and Feiyang that are set up to go into
-> > > > the next merge window, correct?
-> > > > 
-> > > > If you instead would like me to push it to Linus directly into the v6.3
-> > > > release as a regression fix late this coming week, please let me know.
-> > > 
-> > > It would indeed be preferable for 6.3 as it fixes issues, but it's not
-> > > critical at all, just an annoyance for some developers. So if you have a
-> > > series of fixes pending to be sent soon, it would be nice to add it there.
-> > 
-> > Very well, here is what I currently have for nolibc, from newest to
-> > oldest:
-> > 
-> > 7712ec32cbda selftests/nolibc: Adjust indentation for Makefile
-> > 96218cfc79eb selftests/nolibc: Add support for LoongArch
-> > cab6bbd00f2a tools/nolibc: Add support for LoongArch
-> > 496921e4724c tools/nolibc: Add statx() and make stat() rely on statx() if necessary
-> > 97a15c47b98c tools/nolibc: Include linux/fcntl.h and remove duplicate code
-> > de06f2fe1aac tools/nolibc: check for S_I* macros before defining them
-> > 7fb54b517d44 selftests/nolibc: skip the chroot_root and link_dir tests when not privileged
-> > 296659c6e551 tools/nolibc: add getuid() and geteuid()
-> > bd9a87d64994 tools/nolibc: add tests for the integer limits in stdint.h
-> > 2d1813a7ef67 tools/nolibc: enlarge column width of tests
-> > 5dbcbb2da574 tools/nolibc: add integer types and integer limit macros
-> > 111bb94f67eb tools/nolibc: add stdint.h
-> > 2dbf8575b2da tools/nolibc: Add gitignore to avoid git complaints about sysroot
-> > 
-> > I will take the new commit, rebase it to precede the first of the above,
-> > so that the stack will look like this:
-> > 
-> > 7712ec32cbda selftests/nolibc: Adjust indentation for Makefile
-> > 96218cfc79eb selftests/nolibc: Add support for LoongArch
-> > cab6bbd00f2a tools/nolibc: Add support for LoongArch
-> > 496921e4724c tools/nolibc: Add statx() and make stat() rely on statx() if necessary
-> > 97a15c47b98c tools/nolibc: Include linux/fcntl.h and remove duplicate code
-> > de06f2fe1aac tools/nolibc: check for S_I* macros before defining them
-> > 7fb54b517d44 selftests/nolibc: skip the chroot_root and link_dir tests when not privileged
-> > 296659c6e551 tools/nolibc: add getuid() and geteuid()
-> > bd9a87d64994 tools/nolibc: add tests for the integer limits in stdint.h
-> > 2d1813a7ef67 tools/nolibc: enlarge column width of tests
-> > 5dbcbb2da574 tools/nolibc: add integer types and integer limit macros
-> > 111bb94f67eb tools/nolibc: add stdint.h
-> > 2dbf8575b2da tools/nolibc: Add gitignore to avoid git complaints about sysroot
-> > ???????????? tools/nolibc: always disable stack protector for tests
-> > 
-> > Then if tests, -next, and kernel test robot are kind, I will send a
-> > pull request to Linus for the "always disable stack protector for tests"
-> > commit.  The rest I send for the upcoming merge window.
-> > 
-> > Please let me know if I am missing something.
-> 
-> This is perfect, thank you very much, Paul!
+On Mon, 20 Mar 2023, Russell King (Oracle) wrote:
 
-Done!
+> On Mon, Mar 20, 2023 at 01:34:31PM +0000, Lee Jones wrote:
+> > On Mon, 20 Mar 2023, Russell King (Oracle) wrote:
+> >
+> > > On Mon, Mar 20, 2023 at 02:19:44PM +0530, Vinod Koul wrote:
+> > > > On 17-03-23, 11:54, Colin Foster wrote:
+> > > > > The phy-ocelot-serdes module has exclusively been used in a syscon setup,
+> > > > > from an internal CPU. The addition of external control of ocelot switches
+> > > > > via an existing MFD implementation means that syscon is no longer the only
+> > > > > interface that phy-ocelot-serdes will see.
+> > > > >
+> > > > > In the MFD configuration, an IORESOURCE_REG resource will exist for the
+> > > > > device. Utilize this resource to be able to function in both syscon and
+> > > > > non-syscon configurations.
+> > > >
+> > > > Applied to phy/next, thanks
+> > >
+> > > Please read the netdev FAQ. Patches sent to netdev contain the tree that
+> > > the submitter wishes the patches to be applied to.
+> > >
+> > > As a result, I see davem has just picked up the *entire* series which
+> > > means that all patches are in net-next now. net-next is immutable.
+> > >
+> > > In any case, IMHO if this kind of fly-by cherry-picking from patch
+> > > series is intended, it should be mentioned during review to give a
+> > > chance for other maintainers to respond and give feedback. Not all
+> > > submitters will know how individual maintainers work. Not all
+> > > maintainers know how other maintainers work.
+> >
+> > Once again netdev seems to have applied patches from other subsystems
+> > without review/ack.  What makes netdev different to any other kernel
+> > subsystem?  What would happen if other random maintainers started
+> > applying netdev patches without appropriate review?  I suspect someone
+> > would become understandably grumpy.
+>
+> Why again are you addressing your whinge to me? I'm not one of the
+> netdev maintainers, but I've pointed out what happens in netdev
+> land. However, you seem to *not* want to discuss it directly with
+> DaveM/Jakub/Paolo - as illustrated again with yet another response
+> to *me* rather than addressing your concerns *to* the people who
+> you have an issue with.
+>
+> This is not communication. Effectively, this is sniping, because
+> rather than discussing it with the individuals concerned, you are
+> instead preferring to discuss it with others.
+>
+> Please stop this.
 
-							Thanx, Paul
+Read the above paragraph again.
+
+It was an open question, *intentionally* not directed *at* anyone.
+
+You just happen to be the one describing yet another unfortunate
+situation.  Consider yourself a victim of circumstance and try not to
+take any of it personally.
+
+It's the workflow and the assumptions that I'm unhappy about and that I
+think should be improved upon.  The gripe is not against any one
+individual or individuals.
+
+--
+Lee Jones [李琼斯]
