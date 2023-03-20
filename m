@@ -2,109 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D7F6C0C3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFCC6C0C45
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 09:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjCTIaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 04:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S230354AbjCTIcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 04:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCTIaI (ORCPT
+        with ESMTP id S230229AbjCTIcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:30:08 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC703CC1B;
-        Mon, 20 Mar 2023 01:30:06 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id h17so9456239wrt.8;
-        Mon, 20 Mar 2023 01:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679301005;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IOF4ZXLbqCUFP0rJHH2mzd0wteSSnr5LaAAXjkDeZsI=;
-        b=qqzTKoX6mjNXfOi1lncIPMjRKAtzBqwnFFPw+i/pc7L0cD+zJMKHzmGTmCxGt8um0g
-         UE2yiBmZopbmFLyVnd+83qZClYw2gI3s4zVheaCIJUYZvYERTdE5qYrZvhwYWgR6LZzX
-         6eP81zC/vO3yVa8wi2ppKow1ZeOGaDrRtyRu8o0MSRPrwnbOuCtpv2fpgEoe7mxKT/6Z
-         2MIxQTHZeLWK9yd+tC70pZW+jzB4RxdNxVtqQtTDd3tisB5oez4PMxU/y1OC+JBb+W3Q
-         6nd0EtcbtEuKE/eu+y6I1aBhfYDJU4B3MxrS13E3nSY+vdEiUmwyyPGHemR+y0Bu+6Bt
-         drXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679301005;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IOF4ZXLbqCUFP0rJHH2mzd0wteSSnr5LaAAXjkDeZsI=;
-        b=NOtKoyAnwOyvmgf/+bBV5b2IA2CAETxZQ8M5+Fnov50iqflN19r70W02qzLYBO1+/P
-         h7lm6b+e11MIVi1+L7Q6x+0RfbXnyyHsrrGMqBOrvPs3+biflTc382ajE4NFDxvPy/8S
-         eYq0XFGgQw63G7YQL6JK07yVUX2Ln/iM83CE8jwV+ZuaE48Z4HvRJay+2njFpDQ3qSiC
-         2241CWbycsLjKLdCaVgly725cw1ZPqvXr1zAx3XMnBChdAwJAmxE6L/xGk39038OYssx
-         Sj6TJfl4zYmIJwdNPiFBU7ezTilPsjt176Xlnja0ostIR+QcupiVe17LpwpPzdprfiY2
-         l4OA==
-X-Gm-Message-State: AO0yUKWyWZ3SfYxnQY9wcqrC1jc1WVX3kbRYgvjj3vKTAnY99NdhV1qn
-        602UHfMXaB5EqHBzalpg88msFLHIzDs=
-X-Google-Smtp-Source: AK7set9V17xN1GV2zmXnzgZRsia56c9Egzq/+s2UUqUAebggUDpwcq2uZ0zAI5tFk9trI2loLG5L+g==
-X-Received: by 2002:a5d:56c8:0:b0:2c8:c440:cb05 with SMTP id m8-20020a5d56c8000000b002c8c440cb05mr12763870wrw.55.1679301005101;
-        Mon, 20 Mar 2023 01:30:05 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id p5-20020a5d4e05000000b002d75909c76esm1396888wrt.73.2023.03.20.01.30.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 01:30:04 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 08:30:03 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Matthew Wilcox' <willy@infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH 4/4] mm: vmalloc: convert vread() to vread_iter()
-Message-ID: <ec321d33-37de-4b0e-bce9-c8539a9b1c5d@lucifer.local>
-References: <cover.1679183626.git.lstoakes@gmail.com>
- <119871ea9507eac7be5d91db38acdb03981e049e.1679183626.git.lstoakes@gmail.com>
- <ZBZ4kLnFz9MEiyhM@casper.infradead.org>
- <63c98c518c1e4bfbb36c5295ba7c959d@AcuMS.aculab.com>
+        Mon, 20 Mar 2023 04:32:05 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F3D15141
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 01:31:54 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 6FE3B5FD0A;
+        Mon, 20 Mar 2023 11:31:51 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679301111;
+        bh=nCjWaZrZpveRJdJhStKp788sVaok0j0QE/XqyN78228=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=RyU+MUJ9Lc8lrCzACtmLWzV+hCAXUxm6kEskUIkw1eqVeusbNiZrNULwv9EpSsJOp
+         j3MwKQidCiyGanpUBTTt+pCBs455WSFV9Ai0Axre9jdb8mlw0dGfLy7fvKKLFfgW9O
+         xnCAKdm+bc4RuRxd9HqqtdmElaCOEXx3DPh1+aHO3z4jqAiGQsKyZKTy9P5HEMc8CC
+         7DchiC6MbyB2A1C6S9CHqU1jdF/tQ1VliqxnpaVzVaRjcDCgzUuVpd0bwQkan5vQ0F
+         8/6AVkL53mWejXzFMBFpmYfPnpLClEsC/ts5F5nTsi0qrstLcdhll2IULkbBTRRthc
+         faAqilZ9Npn7A==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 20 Mar 2023 11:31:50 +0300 (MSK)
+Date:   Mon, 20 Mar 2023 11:31:49 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Joe Perches <joe@perches.com>
+CC:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
+        <apw@canonical.com>, <dwaipayanray1@gmail.com>,
+        <lukas.bulwahn@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-kernel@vger.kernel.org>, <rockosov@gmail.com>
+Subject: Re: [PATCH v1] checkpatch: add missing bindings license check
+Message-ID: <20230320083149.3adlrk7cpyec6gde@CAB-WSD-L081021>
+References: <20230317201621.15518-1-ddrokosov@sberdevices.ru>
+ <8dcc23061db363d894a5c8219076cd41f99163c1.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <63c98c518c1e4bfbb36c5295ba7c959d@AcuMS.aculab.com>
+In-Reply-To: <8dcc23061db363d894a5c8219076cd41f99163c1.camel@perches.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/20 04:57:00 #20976224
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 10:28:12PM +0000, David Laight wrote:
-> From: Matthew Wilcox
-> > Sent: 19 March 2023 02:51
-> >
-> > On Sun, Mar 19, 2023 at 12:20:12AM +0000, Lorenzo Stoakes wrote:
-> > >  /* for /proc/kcore */
-> > > -extern long vread(char *buf, char *addr, unsigned long count);
-> > > +extern long vread_iter(char *addr, size_t count, struct iov_iter *iter);
-> >
-> > I don't love the order of the arguments here.  Usually we follow
-> > memcpy() and have (dst, src, len).  This sometimes gets a bit more
-> > complex when either src or dst need two arguments, but that's not the
-> > case here.
->
-> And, if 'addr' is the source (which Matthew's comment implies)
-> it ought to be 'const char *' (or probably even 'const void *').
->
+Hello Joe,
 
-Ack, I'll update on the next respin.
+Thank you for quick review. Please find my comments below.
 
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
+On Fri, Mar 17, 2023 at 03:28:16PM -0700, Joe Perches wrote:
+> On Fri, 2023-03-17 at 23:16 +0300, Dmitry Rokosov wrote:
+> > All headers from 'include/dt-bindings/' must be verified by checkpatch
+> > together with Documentation bindings, because all of them are part of
+> > the whole DT bindings system.
+> > 
+> > The requirement is dual licensed and matching string:
+> >     'GPL-2.0-only OR BSD-2-Clause'
+> > 
+> > The issue was found during patch review:
+> > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >  scripts/checkpatch.pl | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+> > @@ -3709,7 +3709,8 @@ sub process {
+> >  						WARN("SPDX_LICENSE_TAG",
+> >  						     "'$spdx_license' is not supported in LICENSES/...\n" . $herecurr);
+> >  					}
+> > -					if ($realfile =~ m@^Documentation/devicetree/bindings/@ &&
+> > +					if (($realfile =~ m@^Documentation/devicetree/bindings/@ ||
+> > +					    $realfile =~ m@^include/dt-bindings/@) &&
+> 
+> I prefer aligning to open parens
+> 
+> >  					    not $spdx_license =~ /GPL-2\.0.*BSD-2-Clause/) {
+
+Okay, no problem, will send new version today.
+> 
+> And if it's really a strict bit about the required license,
+> why not make it match exactly?
+> 
+>  					    $spdx_license !~ /GPL-2\.0(?:-only|-or-later|\+)? OR BSD-2-Clause/) {
+> 
+
+I think, it's a good idea.
+
+> >  						my $msg_level = \&WARN;
+> >  						$msg_level = \&CHK if ($file);
+> 
+> $ git grep -oh 'SPDX-License.*$' -- Documentation/devicetree/bindings/ include/dt-bindings/ | \
+>   sort | uniq -c | sort -rn
+>    1597 SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>     611 SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>     540 SPDX-License-Identifier: GPL-2.0
+>     355 SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>     285 SPDX-License-Identifier: GPL-2.0 */
+>     179 SPDX-License-Identifier: GPL-2.0-only */
+>     102 SPDX-License-Identifier: GPL-2.0-only
+>      93 SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>      56 SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+>      47 SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+>      36 SPDX-License-Identifier: GPL-2.0+ */
+>      34 SPDX-License-Identifier: GPL-2.0-or-later */
+>      33 SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>      28 SPDX-License-Identifier: GPL-2.0+
+>      21 SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>      19 SPDX-License-Identifier: (GPL-2.0+ or MIT) */
+>      17 SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+>      12 SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause)
+>      11 SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>       9 SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+>       8 SPDX-License-Identifier: GPL-2.0 OR MIT */
+>       8 SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
+>       7 SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+>       7 SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
+>       7 SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
+>       6 SPDX-License-Identifier: (GPL-2.0)
+>       5 SPDX-License-Identifier: GPL-2.0+ OR MIT */
+>       5 SPDX-License-Identifier: (GPL-2.0 OR MIT)
+>       5 SPDX-License-Identifier: (GPL-2.0 or MIT) */
+>       4 SPDX-License-Identifier: GPL-2.0-or-later
+>       3 SPDX-License-Identifier: (GPL-2.0+ OR X11)
+>       3 SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause) */
+>       3 SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+>       3 SPDX-License-Identifier: GPL-2.0 or BSD-3-Clause */
+>       3 SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause) */
+>       3 SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
+>       3 SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
+>       2 SPDX-License-Identifier: (GPL-2.0+ or MIT)
+>       2 SPDX-License-Identifier: GPL-2.0-or-later OR MIT */
+>       2 SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
+>       2 SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause */
+>       2 SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)*/
+>       1 SPDX-License-Identifier: (GPL-2.0-or-later OR MIT) */
+>       1 SPDX-License-Identifier: (GPL-2.0-or-later or MIT) */
+>       1 SPDX-License-Identifier: GPL-2.0-or-later or BSD-2-Clause */
+>       1 SPDX-License-Identifier: (GPL-2.0-or-later)
+>       1 SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
+>       1 SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
+>       1 SPDX-License-Identifier: GPL-2.0-only or X11 */
+>       1 SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
+>       1 SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause */
+>       1 SPDX-License-Identifier: (GPL-2.0-only)
+>       1 SPDX-License-Identifier: BSD-2-Clause
+> 
+
+I've noticed it too, asked Krzysztof about this situation in the below
+review:
+
+https://lore.kernel.org/all/9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org/
+
+Krzysztof mentioned, that he checked the purpose to have different
+license each time manually. But by default, it should be strict.
+
+-- 
+Thank you,
+Dmitry
