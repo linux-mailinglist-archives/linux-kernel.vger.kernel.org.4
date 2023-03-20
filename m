@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0FE6C122C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95F96C122D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjCTMp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S231492AbjCTMp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbjCTMpN (ORCPT
+        with ESMTP id S231533AbjCTMpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:45:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972D1525A;
-        Mon, 20 Mar 2023 05:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679316287; x=1710852287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tdLDCcBx+GEfk7tj+nGn51mFKS2z+cvwXx7rQAgBk1k=;
-  b=nHHVp6O4JM5zhtayvRd7xrDy9PLTwyg7CdOQR4GpgfUWDuYylm6knkFs
-   vrS/yE1LF8V+GZkbN+4nzrG10U5i1tuJc33G5ElvZNlthQ/WdK/CfWjox
-   p67kJDnG10rQWuK4kQppy4us789ZeZJ4Hrnj3T2xTuwSC3KnmcagF+U55
-   9pwZalr8iIwPr+Zu1W1mOgPjkCKJRJEYKfSOFQT3GuxQeF1dGUB4UuBYg
-   GwfgBRAHOfemKckvhiaEQq0j6EWsroJikGjHF/2fbco1pZKPv6Ppyt2QW
-   cA78k8si+0VNc7oI72Yh6ooZtTyv721SU9vm5+wyPvapjkrfrAEDxeOQM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="318300662"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="318300662"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 05:44:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="681058814"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="681058814"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 20 Mar 2023 05:44:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1peEsV-006Gif-13;
-        Mon, 20 Mar 2023 14:44:43 +0200
-Date:   Mon, 20 Mar 2023 14:44:43 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] regmap-irq: Drop map from handle_mask_sync()
- parameters
-Message-ID: <ZBhVOziLz6WL6vv7@smile.fi.intel.com>
-References: <cover.1679259085.git.william.gray@linaro.org>
+        Mon, 20 Mar 2023 08:45:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43F5C67C;
+        Mon, 20 Mar 2023 05:44:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5B43F1F86C;
+        Mon, 20 Mar 2023 12:44:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679316285; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=csb4A/GteL7sk6OWuZo8wtDFvG6wLJAej3F6d9wonWM=;
+        b=BF/wbRGhwSoWqJjgX/ILwVnn1R/mNxSiPXfU8njNErZvQns2PrdZvgXVBOmT/BGHTqBaV/
+        yLN5fHWc9uykN18/5p2CAcTTHeqTBB4IHtmWBHfMGVQwW/NCZZ4/zsa13k5nlP0Z9OdpLp
+        ZluulV6ziGnelgY5Q0PtQ1khAjVddrE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679316285;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=csb4A/GteL7sk6OWuZo8wtDFvG6wLJAej3F6d9wonWM=;
+        b=93OYhAZFDIDPEt4KKwCA1czSGoIpnWvo7DsK8xXn/X8UD4kx/eSF7YyO21V7yRvlxzBatL
+        ec6DDmaQYe2JwyBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4885113A00;
+        Mon, 20 Mar 2023 12:44:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HbSzET1VGGRNZQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 20 Mar 2023 12:44:45 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id AD839A0719; Mon, 20 Mar 2023 13:44:44 +0100 (CET)
+Date:   Mon, 20 Mar 2023 13:44:44 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] ext4: improve inode table blocks counting in
+ ext4_num_overhead_clusters
+Message-ID: <20230320124444.kkp4es2wyke7vqgx@quack3>
+References: <20230221115919.1918161-1-shikemeng@huaweicloud.com>
+ <20230221115919.1918161-8-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1679259085.git.william.gray@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230221115919.1918161-8-shikemeng@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 05:02:00PM -0400, William Breathitt Gray wrote:
-> Changes in v2:
->  - Pull out 104-dio-48e refactor to a precursor patch
+On Tue 21-02-23 19:59:19, Kemeng Shi wrote:
+> As inode table blocks are contiguous, inode table blocks inside the
+> block_group can be represented as range [itbl_cluster_start,
+> itbl_cluster_last]. Then we can simply account inode table cluters and
+> check cluster overlap with [itbl_cluster_start, itbl_cluster_last] instead
+> of traverse each block of inode table.
+> By the way, this patch fixes code style problem of comment for
+> ext4_num_overhead_clusters.
 > 
-> Remove the map parameter from the struct regmap_irq_chip callback
-> handle_mask_sync() because it can be passed via the irq_drv_data
-> parameter instead. The gpio-104-dio-48e driver is the only consumer of
-> this callback and is thus updated accordingly.
-> 
-> A couple pending patchsets also utilize handle_mask_sync() [0][1], so
-> it'll be useful to merge the changes in this series first to avoid
-> subsequent noise adjusting the dependent drivers.
-> 
-> [0] https://lore.kernel.org/r/cover.1677515341.git.william.gray@linaro.org/
-> [1] https://lore.kernel.org/r/cover.1678106722.git.william.gray@linaro.org/
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-Good idea and intention, but something went wrong with bisectability as pointed
-out by the build bot. As a last resort you would need to squash these two, but
-try first another possible patch series split.
+FWIW this is triggering Coverity warning:
 
+*** CID 1536792:  Uninitialized variables  (UNINIT)
+/fs/ext4/balloc.c: 153 in ext4_num_overhead_clusters()
+147                     inode_cluster = EXT4_B2C(sbi,
+148                                              ext4_inode_bitmap(sb, gdp) - st
+149                     /*
+150                      * Additional check if inode bitmap is in just accounted
+151                      * block_cluster
+152                      */
+>>>     CID 1536792:  Uninitialized variables  (UNINIT)
+>>>     Using uninitialized value "block_cluster".
+153                     if (inode_cluster != block_cluster &&
+154                         inode_cluster >= base_clusters &&
+155                         (inode_cluster < itbl_cluster_start ||
+156                         inode_cluster > itbl_cluster_end))
+157                             num_clusters++;
+158             }
+
+which actually looks valid AFAICT.
+
+								Honza
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
