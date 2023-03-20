@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B081E6C0CAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501436C0CB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 10:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjCTJA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 05:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S231165AbjCTJA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 05:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjCTJAZ (ORCPT
+        with ESMTP id S231161AbjCTJAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:00:25 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1888974A;
-        Mon, 20 Mar 2023 02:00:22 -0700 (PDT)
+        Mon, 20 Mar 2023 05:00:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA4C22DE2;
+        Mon, 20 Mar 2023 02:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679302822; x=1710838822;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=Ds82R3aLyID+1VGsHfWdZtKBC3BhEztxpsHjVaC2+mo=;
-  b=m3VUY8T8FE7Ck8tmhBFNc9EF2gGfM1x0LSNbvgN6OHjQDxQcUpSREzKD
-   LxjxzfXOIQl+ZKQuXNN3Sm4O1UD349NY5rn0SkuDiXPRSvYY0a9i9zJaR
-   qlNp3BoaMaCdiHz8BKiQttHBfQzJh4h+NDk/6b86t5NM5gJZcPPTF1ZeH
-   yUaxvurr0GUHpDN2Lhw3FrWvFyDU7PlHnezMCRR8ibj57xsdtZ37/aB0j
-   ulq1HDhsv0KF777LTJHxPac+jtC5G6VXpw3E2hwPDH0l5793z/aBd36dv
-   LHMEjx7kanu35s0xJZXTJ5Ks+w3bXsOmgk9ixCJGp8ZNmtsMYv0P2CUrg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="338635707"
+  t=1679302843; x=1710838843;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y23nGeC8XGjSZ/6/uDVln0o7535QhkIE8p+eamnfZBM=;
+  b=mSextLij9IQoc7HnITMp+74CNLsFss3XjSc4RpxWBGCkJftYcBaZlpkj
+   XK26Ok8xI9BhxtovYV7i0ID0EAPhGTjusqEflQIDAUtMOo2/kyS3Pkp2/
+   +15+SB8jeU9YevssswqG3WRBziBGAX34lWluDbqp8ETzOrOMK0wAa44Gr
+   Op8ecpjfb0aSGTwjxL1kOZeGEQ+8E+Yd0Wpbhd/AIBU0C21Oln4zBOvND
+   yp4sCmYxKCuadd8wK6QzGNrgRHndccEyC8mrOpQdLU8KtjsJtXGIP3OP3
+   CLdSTTOYM6iF8Dz2kXvDMUohPVtkp88WR4eCvWpGf3Pt5oa1OOL47VAVn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="319011047"
 X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="338635707"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:00:22 -0700
+   d="scan'208";a="319011047"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:00:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="674279824"
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="770119631"
 X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="674279824"
-Received: from mbouhaou-mobl1.ger.corp.intel.com ([10.252.61.151])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:00:20 -0700
-Date:   Mon, 20 Mar 2023 11:00:11 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] serial: 8250: Fix serial8250_tx_empty() race with
- DMA Tx
-In-Reply-To: <52fae6e3e7254a96beefd2774f7d6254@AcuMS.aculab.com>
-Message-ID: <396842cd-4ed5-cd46-6d13-c258c3fb836f@linux.intel.com>
-References: <20230317113318.31327-1-ilpo.jarvinen@linux.intel.com> <20230317113318.31327-3-ilpo.jarvinen@linux.intel.com> <52fae6e3e7254a96beefd2774f7d6254@AcuMS.aculab.com>
+   d="scan'208";a="770119631"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 02:00:39 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 25BC4122400;
+        Mon, 20 Mar 2023 11:00:36 +0200 (EET)
+Date:   Mon, 20 Mar 2023 11:00:36 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Marco Felsch <m.felsch@pengutronix.de>
+Subject: Re: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
+Message-ID: <ZBggtBU1TjlvVNCS@kekkonen.localdomain>
+References: <20230306063649.7387-1-marcel@ziswiler.com>
+ <ZBBk+h3EMSsacZ6v@valkosipuli.retiisi.eu>
+ <ZBBpUAhis8L5Dtuz@francesco-nb.int.toradex.com>
+ <ZBBsgW75Gc2FmuQ0@valkosipuli.retiisi.eu>
+ <ZBBvmjUZIn/g0/Nv@francesco-nb.int.toradex.com>
+ <20230320084844.tdjiv6kaxcosiwm2@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1060030904-1679300990=:2177"
-Content-ID: <276915e2-fe2f-7337-97b5-4e58ad22bf7@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320084844.tdjiv6kaxcosiwm2@uno.localdomain>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,145 +79,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Jacopo,
 
---8323329-1060030904-1679300990=:2177
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <e5ed4fa8-e9d2-1886-f1cc-3e9f17d5eb3e@linux.intel.com>
-
-On Sat, 18 Mar 2023, David Laight wrote:
-
-> From: Ilpo Järvinen
-> > Sent: 17 March 2023 11:33
-> > To: linux-serial@vger.kernel.org; Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Jiri Slaby
-> > 
-> > There's a potential race before THRE/TEMT deasserts when DMA Tx is
-> > starting up (or the next batch of continuous Tx is being submitted).
-> > This can lead to misdetecting Tx empty condition.
-> > 
-> > It is entirely normal for THRE/TEMT to be set for some time after the
-> > DMA Tx had been setup in serial8250_tx_dma(). As Tx side is definitely
-> > not empty at that point, it seems incorrect for serial8250_tx_empty()
-> > claim Tx is empty.
-> > 
-> > Fix the race by also checking in serial8250_tx_empty() whether there's
-> > DMA Tx active.
-> > 
-> > Note: This fix only addresses in-kernel race mainly to make using
-> > TCSADRAIN/FLUSH robust. Userspace can still cause other races but they
-> > seem userspace concurrency control problems.
+On Mon, Mar 20, 2023 at 09:48:44AM +0100, Jacopo Mondi wrote:
+> Hello
 > 
-> Looks better, but I'm not sure it actually works.
+> On Tue, Mar 14, 2023 at 01:59:06PM +0100, Francesco Dolcini wrote:
+> > +Marco
+> >
+> > On Tue, Mar 14, 2023 at 02:45:53PM +0200, Sakari Ailus wrote:
+> > > On Tue, Mar 14, 2023 at 01:32:16PM +0100, Francesco Dolcini wrote:
+> > > > On Tue, Mar 14, 2023 at 02:13:46PM +0200, Sakari Ailus wrote:
+> > > > > On Mon, Mar 06, 2023 at 07:36:49AM +0100, Marcel Ziswiler wrote:
+> > > > > > From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+> > > > > >
+> > > > > > Implement the introduced get_mbus_config operation to report the
+> > > > > > config of the MIPI CSI-2, BT.656 and Parallel interface.
+> > > > > >
+> > > > > > Signed-off-by: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+> > > > > > Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> > > > >
+> > > > > What's the reasoning for this patch?
+> > > >
+> > > > Without this it's not possible to use it on i.MX6,
+> > > > drivers/staging/media/imx/imx6-mipi-csi2.c requires it, some more
+> > > > details from Jacopo here [0].
+> > > >
+> > > > Everything used to work fine up to v5.18, after that kernel version
+> > > > various changes broke it [1][2] (I assume you are pretty much aware of
+> > > > the history here, you commented on a few emails).
+> > > >
+> > > > [0] https://lore.kernel.org/all/20230128100611.7ulsfqqqgscg54gy@uno.localdomain/
+> > > > [1] https://lore.kernel.org/all/081cc2d3-1f3a-6c14-6dc7-53f976be7b2b@gmail.com/
+> > > > [2] https://lore.kernel.org/all/cacfe146-101b-35b3-5f66-1a1cabfd342f@gmail.com/
+> > > >
+> > > > > Drivers that don't have e.g. dynamic lane configuration shouldn't need to
+> > > > > implement get_mbus_config.
+> > >
+> > > Not even for staging drivers. The driver should be fixed to get that
+> > > information from the endpoint instead.
+> >
+> > This seems exactly the opposite of what commit
+> > 7318abface48 ("media: imx: Use get_mbus_config instead of parsing upstream DT endpoints")
+> > did.
+> >
+> > Given that I am somehow confused, but I am not that familiar with this
+> > subsystem, so I guess this is expected :-). Can someone provide some
+> > additional hint here?
+> >
 > 
-> If interrupts are being used to copy data to the tx fifo then
-> (depending on interrupt latency and exactly when the interrupt
-> is requested) the code might report 'tx empty' when the ISR
-> is about to copy in more data.
->
-> Now the drain/flush code might already have checked there is
-> no more data queued in the driver before calling this,
+> As per my understanding, the i.MX6 IPU CSI driver connects to the
+> CSI-2 receiver and/or two video muxes. One figure's worth a thousands
+> words: "Figure 19-1. CSI2IPU gasket connectivity" of the IMX6DQRM TRM.
 
-Thanks for taking a look, it's really appreciated.
+I don't have that document.
 
-Yes, set_termios() checks for tty_chars_in_buffer() which calls into 
-serial_core's ->chars_in_buffer(). This does check 
-uart_circ_chars_pending() so it's not possible to have such chars in the 
-circular buffer in the drain/flush case.
-
-> but more generally shouldn't it be checking:
-> 	no_data_queued_in_driver && hardware_fifo_empty.
 > 
-> Any 'no_data_queued_in_driver' check would probably include
-> data that dma is copying - so the explicit dma check might
-> not be needed.
+> So the local endpoint might not provide the required information on
+> the bus configuration as it connects to a video-mux.
+> 
+> That's why the imx_media_pipeline_subdev() helper is used in
+> csi_get_upstream_mbus_config().
+> 
+> My gut feeling is that it would be better to always call
+> get_mbus_config() on the next subdev (the mux or the CSI-2 rx) and
+> there parse the local endpoint as it's the mux or the CSI-2 rx that
+> connect to the actual source.
 
-What for you'd want this change? Refactor the code? uart_get_lsr_info() 
-already does check for uart_circ_chars_pending() so what you'd want more?
-
-I suppose uart_get_lsr_info() should hold port's lock across the checks 
-though, having that wishful comment about a racing interrupt messing 
-things up doesn't really help that much :-).
-
-Also, now that I looked into uart_get_lsr_info() I guess 
-uart_chars_in_buffer() should also consider x_char like 
-uart_get_lsr_info() does.
-
+Isn't this still a different endpoint in DT? I understand you have a single
+pad with two links?
 
 -- 
- i.
+Kind regards,
 
-> > Fixes: 9ee4b83e51f74 ("serial: 8250: Add support for dmaengine")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/tty/serial/8250/8250.h      | 12 ++++++++++++
-> >  drivers/tty/serial/8250/8250_port.c |  7 ++++---
-> >  2 files changed, 16 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-> > index 287153d32536..1e8fe44a7099 100644
-> > --- a/drivers/tty/serial/8250/8250.h
-> > +++ b/drivers/tty/serial/8250/8250.h
-> > @@ -365,6 +365,13 @@ static inline void serial8250_do_prepare_rx_dma(struct uart_8250_port *p)
-> >  	if (dma->prepare_rx_dma)
-> >  		dma->prepare_rx_dma(p);
-> >  }
-> > +
-> > +static inline bool serial8250_tx_dma_running(struct uart_8250_port *p)
-> > +{
-> > +	struct uart_8250_dma *dma = p->dma;
-> > +
-> > +	return dma && dma->tx_running;
-> > +}
-> >  #else
-> >  static inline int serial8250_tx_dma(struct uart_8250_port *p)
-> >  {
-> > @@ -380,6 +387,11 @@ static inline int serial8250_request_dma(struct uart_8250_port *p)
-> >  	return -1;
-> >  }
-> >  static inline void serial8250_release_dma(struct uart_8250_port *p) { }
-> > +
-> > +static inline bool serial8250_tx_dma_running(struct uart_8250_port *p)
-> > +{
-> > +	return false;
-> > +}
-> >  #endif
-> > 
-> >  static inline int ns16550a_goto_highspeed(struct uart_8250_port *up)
-> > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > index fa43df05342b..107bcdfb119c 100644
-> > --- a/drivers/tty/serial/8250/8250_port.c
-> > +++ b/drivers/tty/serial/8250/8250_port.c
-> > @@ -2005,18 +2005,19 @@ static int serial8250_tx_threshold_handle_irq(struct uart_port *port)
-> >  static unsigned int serial8250_tx_empty(struct uart_port *port)
-> >  {
-> >  	struct uart_8250_port *up = up_to_u8250p(port);
-> > +	unsigned int result = 0;
-> >  	unsigned long flags;
-> > -	u16 lsr;
-> > 
-> >  	serial8250_rpm_get(up);
-> > 
-> >  	spin_lock_irqsave(&port->lock, flags);
-> > -	lsr = serial_lsr_in(up);
-> > +	if (!serial8250_tx_dma_running(up) && uart_lsr_tx_empty(serial_lsr_in(up)))
-> > +		result = TIOCSER_TEMT;
-> >  	spin_unlock_irqrestore(&port->lock, flags);
-> > 
-> >  	serial8250_rpm_put(up);
-> > 
-> > -	return uart_lsr_tx_empty(lsr) ? TIOCSER_TEMT : 0;
-> > +	return result;
-> >  }
-> > 
-> >  unsigned int serial8250_do_get_mctrl(struct uart_port *port)
-> > --
-> > 2.30.2
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
---8323329-1060030904-1679300990=:2177--
+Sakari Ailus
