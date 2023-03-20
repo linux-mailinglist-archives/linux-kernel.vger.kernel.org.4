@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D318C6C0728
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CCC6C06EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 01:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjCTAzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 20:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S229527AbjCTAxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 20:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjCTAyX (ORCPT
+        with ESMTP id S229446AbjCTAxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 20:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A641E5EE;
+        Sun, 19 Mar 2023 20:53:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E65C19F28;
+        Sun, 19 Mar 2023 17:53:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BF40FEC;
         Sun, 19 Mar 2023 17:53:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD7B611F3;
-        Mon, 20 Mar 2023 00:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C58C4339C;
-        Mon, 20 Mar 2023 00:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273624;
-        bh=SdOk40AzdtEARY4waWJeAh1gvbyptGVEnJMaObhKGtE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qIufIf/rHRnOdUbbEDMrECau/ECiR68U52gpnM9x0/z56DQ/MO0jm4h0VY6OMvlLx
-         pavXsnN49RdH/GKdGMq+IyPUotP+fcH9BG9OM974up90VFepigcO/qpkyInXoFL/HV
-         9J8owVJHLu2YHOAtx4wdPgC94ty+HVP5riZexShBfLLLPrl3SGmgrDPC2p9/OPMHeN
-         yzzoP8grzj/S0Qa2Jzo0qSIuEoyMJFxmoF/Obd7+YduPesmXxssBz5ADA/SSx8eugA
-         bL1lN1jERBNhG/BSHNxXLlYlthTcqwNFH05sIw23pLiumMRmnY4X/TmQiH7ffXRPLl
-         McYtP6fWZXODg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ranjan Kumar <ranjan.kumar@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, sathya.prakash@broadcom.com,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        jejb@linux.ibm.com, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 19/30] scsi: mpi3mr: Return proper values for failures in firmware init path
-Date:   Sun, 19 Mar 2023 20:52:44 -0400
-Message-Id: <20230320005258.1428043-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005258.1428043-1-sashal@kernel.org>
-References: <20230320005258.1428043-1-sashal@kernel.org>
+Received: from slackpad.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E3DD53F885;
+        Sun, 19 Mar 2023 17:52:59 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?q?Andr=C3=A1s=20Szemz=C3=B6?= <szemzo.andras@gmail.com>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Fabien Poussin <fabien.poussin@gmail.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Belisko Marek <marek.belisko@gmail.com>
+Subject: [PATCH v2 0/4] ARM: dts: sunxi: Add MangoPi MQ-R board support
+Date:   Mon, 20 Mar 2023 00:52:45 +0000
+Message-Id: <20230320005249.13403-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.35.7
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ranjan Kumar <ranjan.kumar@broadcom.com>
+Hi,
 
-[ Upstream commit ba8a9ba41fbde250fd8b0ed1e5dad0dc9318df46 ]
+this is v2, mostly acknowledging the fact that there is an Allwinner D1s
+version of the board as well, thus splitting the board .dts into a
+shared .dtsi and a stub .dts for the ARM version. I don't have the RISC-V
+version, so cannot provide (nor test) this .dts file, but creation should
+be easy, being based on the shared board .dtsi file.
+Since the D1/D1s .dts files are now merged, this patch set should compile
+cleanly now.
 
-Return proper non-zero return values for all the cases when the controller
-initialization and re-initialization fails.
+======================================
 
-Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Link: https://lore.kernel.org/r/20230228140835.4075-5-ranjan.kumar@broadcom.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/mpi3mr/mpi3mr_fw.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+The MangoPi MQ-R-T113 is a small SBC with the Allwinner T113-s3 SoC.
+That is a very close relative to the Allwinner D1/D1s SoCs, but with
+Arm Cortex-A7 cores, and 128 MB of SIP co-packaged DDR3 DRAM.
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-index fa903a70baac8..29acf6111db30 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-@@ -3840,8 +3840,10 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
- 	dprint_init(mrioc, "allocating config page buffers\n");
- 	mrioc->cfg_page = dma_alloc_coherent(&mrioc->pdev->dev,
- 	    MPI3MR_DEFAULT_CFG_PAGE_SZ, &mrioc->cfg_page_dma, GFP_KERNEL);
--	if (!mrioc->cfg_page)
-+	if (!mrioc->cfg_page) {
-+		retval = -1;
- 		goto out_failed_noretry;
-+	}
- 
- 	mrioc->cfg_page_sz = MPI3MR_DEFAULT_CFG_PAGE_SZ;
- 
-@@ -3903,8 +3905,10 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
- 		dprint_init(mrioc, "allocating memory for throttle groups\n");
- 		sz = sizeof(struct mpi3mr_throttle_group_info);
- 		mrioc->throttle_groups = kcalloc(mrioc->num_io_throttle_group, sz, GFP_KERNEL);
--		if (!mrioc->throttle_groups)
-+		if (!mrioc->throttle_groups) {
-+			retval = -1;
- 			goto out_failed_noretry;
-+		}
- 	}
- 
- 	retval = mpi3mr_enable_events(mrioc);
-@@ -3924,6 +3928,7 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
- 		mpi3mr_memset_buffers(mrioc);
- 		goto retry_init;
- 	}
-+	retval = -1;
- out_failed_noretry:
- 	ioc_err(mrioc, "controller initialization failed\n");
- 	mpi3mr_issue_reset(mrioc, MPI3_SYSIF_HOST_DIAG_RESET_ACTION_DIAG_FAULT,
-@@ -4036,6 +4041,7 @@ int mpi3mr_reinit_ioc(struct mpi3mr_ioc *mrioc, u8 is_resume)
- 		ioc_err(mrioc,
- 		    "cannot create minimum number of operational queues expected:%d created:%d\n",
- 		    mrioc->shost->nr_hw_queues, mrioc->num_op_reply_q);
-+		retval = -1;
- 		goto out_failed_noretry;
- 	}
- 
-@@ -4102,6 +4108,7 @@ int mpi3mr_reinit_ioc(struct mpi3mr_ioc *mrioc, u8 is_resume)
- 		mpi3mr_memset_buffers(mrioc);
- 		goto retry_init;
- 	}
-+	retval = -1;
- out_failed_noretry:
- 	ioc_err(mrioc, "controller %s is failed\n",
- 	    (is_resume)?"resume":"re-initialization");
+This series introduces the missing T113-s .dtsi, which builds on top of
+the D1/D1s .dtsi, but adds the ARM specific peripherals, like the CPU
+cores, the arch timer, the GIC and the PMU.
+This requires to add a symlink to the RISC-V DT directory in patch 1/4,
+to be able to easily reference the base .dtsi from other architecture
+directories.
+Since there are versions of the MQ-R boards with the Allwinner D1s,
+there is shared .dtsi describing the board peripherals, plus a small
+stub .dts to tie together all bits for the actual board.
+
+Cheers,
+Andre
+
+Changelog v1 ... v2:
+- rebase on top of v6.3-rc3 (including now merged D1/D1s .dtsi files)
+- refine board naming, stating both RISC-V and ARM versions
+- move board .dts into a shared .dtsi (to cover RISC-V version)
+- fix 5V regulator node name
+
+Andre Przywara (4):
+  dts: add riscv include prefix link
+  ARM: dts: sunxi: add Allwinner T113-s SoC .dtsi
+  dt-bindings: arm: sunxi: document MangoPi MQ-R board names
+  ARM: dts: sunxi: add MangoPi MQ-R-T113 board
+
+ .../devicetree/bindings/arm/sunxi.yaml        |   5 +
+ .../devicetree/bindings/riscv/sunxi.yaml      |   5 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/sun8i-t113s-mangopi-mq-r-t113.dts     |  35 +++++
+ arch/arm/boot/dts/sun8i-t113s.dtsi            |  59 ++++++++
+ .../boot/dts/sunxi-d1s-t113-mangopi-mq-r.dtsi | 126 ++++++++++++++++++
+ scripts/dtc/include-prefixes/riscv            |   1 +
+ 7 files changed, 232 insertions(+)
+ create mode 100644 arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r-t113.dts
+ create mode 100644 arch/arm/boot/dts/sun8i-t113s.dtsi
+ create mode 100644 arch/arm/boot/dts/sunxi-d1s-t113-mangopi-mq-r.dtsi
+ create mode 120000 scripts/dtc/include-prefixes/riscv
+
 -- 
-2.39.2
+2.35.7
 
