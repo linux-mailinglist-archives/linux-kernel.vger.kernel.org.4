@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CD96C095E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57AA6C095F
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjCTDi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S229655AbjCTDjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjCTDiv (ORCPT
+        with ESMTP id S229734AbjCTDiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:38:51 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED36122039
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:38:45 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id d7-20020a25adc7000000b00953ffdfbe1aso11925900ybe.23
-        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:38:45 -0700 (PDT)
+        Sun, 19 Mar 2023 23:38:54 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1EA1ABF7
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:38:52 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-544781e30easo108370047b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 19 Mar 2023 20:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679283525;
+        d=google.com; s=20210112; t=1679283532;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=viZfwPvf0caSxtFGqLDwlsYO52BarmzoWX8M5eoZoBk=;
-        b=OrtovnaInILlCIRf6L7NJjDGfa5k9Acce0mhfYh+s2Wus1VqddW29oleoAHbBhIYMW
-         CLvXLUKZdLagltpnwPsXblMivLI1AhDXqhqEcM2yE+7p7ApY/HG4ppObxPG8d3YwOiv8
-         dflRvDhpHRs4mqPmCyGWkPo4ZkqxvbKa1DJk6JP2BdaS5UUsqWwJPNWzHj5HDtWlvRe8
-         xeBVg7JpyIWD9gZA+mLvpjfG2mbGsaCsa/Dw+5Xj2zgu5SidlZpOPFoXoVplKR0O+i8L
-         XwkrQFXf2VtuRN9zTLijz4IxotpxF1jgCM7/+p1HQW4tD/vzxBewwT1c4opH5TBvo3Hv
-         DdxA==
+        bh=Xrt9Ph5px6prAvTQhXAecI3U6Lfan0vmOke50ovWG1M=;
+        b=SLm8pysaaJPDn3tarDhYFdN0EoWhscBYsdzIjuWTUUtB0j5tEwe9R6xoqXPNrT+h5K
+         qKOSI+OR5Q//CyRQL5Y6rR4Tls8LUt0f2xYILflCtzDTTw6Vur94Fe97Ks5zz4Eawyz1
+         lvxTNIpHcD/epo6xo2SUaNrFgX5A3JIn8sFS+kHVL9WNcJdiXjHODNVfbnVsGYg9IhBo
+         g4MAGQT5FE1aYb8pbG9MqU7Pxjcm09dDr6JOyE0OASTf7Ogit8u8Bg++uq+JkKagUiXg
+         o0ib7riT4+5/P3/WoHSyQinzMlXTvfshQjEhhHhn3+y5jiWSMlnMjrIj5eIR0pFeTPCG
+         WEEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679283525;
+        d=1e100.net; s=20210112; t=1679283532;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=viZfwPvf0caSxtFGqLDwlsYO52BarmzoWX8M5eoZoBk=;
-        b=CT158hlaLGDT3Q6bfeW2ImQ3ciBiPYhqShHzuXBWHzt7lMlxb/OmFeU7GgixREAOWM
-         ux3p1V2gPxoELA1q1eR4hf8Ws/IoajAY3V38aSyF28amfR+Zs8Pn7MLprPbmObYDraDo
-         55m+gE2RGYymJg/zPGJhbr7Dm9g+Z0HDqhn6yYc4QFCzz2d3tVrUZxgOAbiaAIPl35Kb
-         7vIFFlkYs3PbWXvm5PmKRCE/TV/sLrWMsdVUdYOUJ1fskAFo0e8fuK7gcsU1dSWlGAbt
-         VSwKjOxV6oPGnWB1+yorptkJvt6CJXnogIqFEcB5R0JdIBrgh4+qSjguzmSDrbYje8SC
-         9Eng==
-X-Gm-Message-State: AO0yUKUm0A6krHfzNK+rN+TGtE1Uul/auN2EvrAU22St90N98YxnLT/s
-        7Kgw1AuU13KZXbJKHwyXJiTzTFEk+ogo
-X-Google-Smtp-Source: AK7set9HA6GCjS7rQXIB5sBheW9QzDYpHx1Wud7NltgUnVFzU4bZ2gsYo7N/ovZdaIdTTmaYEv6lK0iOD5xj
+        bh=Xrt9Ph5px6prAvTQhXAecI3U6Lfan0vmOke50ovWG1M=;
+        b=FQ++Xf2K0JMY0GNGZiUutWK7SD1B3DZllbgXJ1LLpShOElMTFweOSQWgE10uu7bwtc
+         fIU6ylDCrU6Lz4SvmiyaZPvaI4Gls+3pVB/K0HGPKRDRbPzy2K2wDHLvMPeOCdZChuc5
+         xvtU318Vg4N2oF3gZVT3oRzTRWEhbboAlANhhdAdlD2pyQSTa1b9aen07BQESfCxHbWr
+         fOp8Q9FKmN1B+zcx/wzR5kpem6/9CxpkGfzJyRhRFQM49GfGGWJtW0h7SeNE4Gd6qj97
+         Cc25/Ig0B71URgRmP7dgvAdLA5a6HN9BjunoZn7zfVzhxUUkoFU1f55Z/eaQ6X/iOsMO
+         nDZw==
+X-Gm-Message-State: AO0yUKVZy7b5UY6ak7QynMEjRy4WGLWCWCdfxEn8cH4zkJLwPbCYXuhA
+        9PNZZKunlN7TQnmpzf3sqhlAtnmFUroe
+X-Google-Smtp-Source: AK7set9NhHU82JjZxbfhBgezTbXM9VYgl0aEqn4whSpWEHhQgRIw//AI/wwz8OmvRhylECrv+kV3c4/TOqdR
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:1895:9fa0:27f5:cb71])
- (user=irogers job=sendgmr) by 2002:a05:6902:1002:b0:a27:3ecc:ffe7 with SMTP
- id w2-20020a056902100200b00a273eccffe7mr4343205ybt.3.1679283525119; Sun, 19
- Mar 2023 20:38:45 -0700 (PDT)
-Date:   Sun, 19 Mar 2023 20:37:49 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:1002:b0:b4a:e062:3576 with SMTP
+ id w2-20020a056902100200b00b4ae0623576mr3589232ybt.13.1679283531762; Sun, 19
+ Mar 2023 20:38:51 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 20:37:50 -0700
 In-Reply-To: <20230320033810.980165-1-irogers@google.com>
-Message-Id: <20230320033810.980165-2-irogers@google.com>
+Message-Id: <20230320033810.980165-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230320033810.980165-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v4 01/22] perf symbol: Avoid memory leak from abi::__cxa_demangle
+Subject: [PATCH v4 02/22] perf bpf_counter: Use public cpumap accessors
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -93,7 +93,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,34 +101,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than allocate memory, allow abi::__cxa_demangle to do
-that. This avoids a problem where on error NULL was returned
-triggering a memory leak.
+Avoid the use of internal apis via the cpumap accessor functions.
 
-Fixes: 3b4e4efe88f6 ("perf symbol: Add abi::__cxa_demangle C++ demangling support")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/demangle-cxx.cpp | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ tools/perf/util/bpf_counter.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/util/demangle-cxx.cpp b/tools/perf/util/demangle-cxx.cpp
-index 8708bcafd370..85b706641837 100644
---- a/tools/perf/util/demangle-cxx.cpp
-+++ b/tools/perf/util/demangle-cxx.cpp
-@@ -38,11 +38,10 @@ char *cxx_demangle_sym(const char *str, bool params __maybe_unused,
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index 1b77436e067e..76ee3e86824a 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -545,7 +545,7 @@ static int bperf__load(struct evsel *evsel, struct target *target)
+ 		    filter_type == BPERF_FILTER_TGID)
+ 			key = perf_thread_map__pid(evsel->core.threads, i);
+ 		else if (filter_type == BPERF_FILTER_CPU)
+-			key = evsel->core.cpus->map[i].cpu;
++			key = perf_cpu_map__cpu(evsel->core.cpus, i).cpu;
+ 		else
+ 			break;
  
-         return cplus_demangle(str, flags);
- #elif defined(HAVE_CXA_DEMANGLE_SUPPORT)
--        size_t len = strlen(str);
--        char *output = (char*)malloc(len);
-+        char *output;
-         int status;
+@@ -587,9 +587,9 @@ static int bperf_sync_counters(struct evsel *evsel)
+ {
+ 	int num_cpu, i, cpu;
  
--        output = abi::__cxa_demangle(str, output, &len, &status);
-+        output = abi::__cxa_demangle(str, /*output_buffer=*/NULL, /*length=*/NULL, &status);
-         return output;
- #else
-         return NULL;
+-	num_cpu = all_cpu_map->nr;
++	num_cpu = perf_cpu_map__nr(all_cpu_map);
+ 	for (i = 0; i < num_cpu; i++) {
+-		cpu = all_cpu_map->map[i].cpu;
++		cpu = perf_cpu_map__cpu(all_cpu_map, i).cpu;
+ 		bperf_trigger_reading(evsel->bperf_leader_prog_fd, cpu);
+ 	}
+ 	return 0;
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
