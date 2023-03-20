@@ -2,365 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6426C0F63
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953366C0F66
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCTKlK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 06:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S230469AbjCTKlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjCTKjv (ORCPT
+        with ESMTP id S231276AbjCTKkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:39:51 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D243CCA16;
-        Mon, 20 Mar 2023 03:38:39 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3351724E2EE;
-        Mon, 20 Mar 2023 18:38:10 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 18:38:10 +0800
-Received: from ubuntu.localdomain (183.27.97.64) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
- 2023 18:38:09 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 21/21] riscv: dts: starfive: Add StarFive JH7110 VisionFive 2 board device tree
-Date:   Mon, 20 Mar 2023 18:37:50 +0800
-Message-ID: <20230320103750.60295-22-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230320103750.60295-1-hal.feng@starfivetech.com>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com>
+        Mon, 20 Mar 2023 06:40:01 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795711A961
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:38:51 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id a32so11553658ljr.9
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679308727;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aqMd1/bvzkJr2S5YOFkrY+D78y5J8naNvqIi32NoRCM=;
+        b=uku/WQWhs3h922mxzqwiwM8cijN2GAkl9AYbzt/KPND/Efj9p75M94A8lYS6oOTWxO
+         SYdScdI1wmySbPtpi/v9382GFKGT+d3zisfwRFzGKC76eJnT473QT2sJdn+Ni1AVy+RA
+         dL74bUrG2fTHSM0Y+n7IA+FEVzLBz9IBei0Prz/0x9wqKeypUP2xAmNG78waWUS1Kag1
+         9gZ8e9IupnLUOF4OrepR9XSW8SKYldmFV0lO1i/9s3+8gGnHdiHXaCIEIlUgDPjVO4dG
+         0kbRxzsNKfw+r1VieL3TLLa2FC8stqIhurHQvt3FU4VtSqX07VhNsbd89mvpNS5CicTj
+         2Oxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679308727;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aqMd1/bvzkJr2S5YOFkrY+D78y5J8naNvqIi32NoRCM=;
+        b=1ow4mZk/pJ41xpecESXalm6vPapeGkIr275W1gBus4S69jzCaNzSf+EztQOj4z4b0B
+         Otjb/PZ+F/rRkMaVTdqOdA+MalwlHoLK9E5H73eY8L2DYOCMfL+YZgTJoxikONGVtQGc
+         OD1AQM92sp18JkU2IkJ++2PnVlYf5DknMGnKK7F49puzbH5nSxQwCLm57rikJjUQb0p2
+         lJbk1uYlNAGeKLaWOnyX/DneG65uJtCj9m1OZCjPNAerBtniTmhSUnfq5aaqm4fKK5Fc
+         dX2rJ5TjUV5xb2BAjQGCX+hg3y8VLSUSfZaXlGCqTLBXKyH+i4ZjnOAROxpIuwCqMF+E
+         9nyA==
+X-Gm-Message-State: AO0yUKX/a0QQd8wsAxVh4pUwdr6tPUalgu1twJwAgvj80MN4D46QF88Y
+        OSFY0YWRUbeQs5+hThRjymr949ivRZ4UxY+y36I=
+X-Google-Smtp-Source: AK7set8My2CPrAzRUr2Uo6cI/0kZXyHszzZeIovquOsX7Pif/PtdFm1/JfqQQA8MuaBpztgKz9A0jQ==
+X-Received: by 2002:a2e:9281:0:b0:295:b0cd:519 with SMTP id d1-20020a2e9281000000b00295b0cd0519mr5460138ljh.3.1679308727473;
+        Mon, 20 Mar 2023 03:38:47 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id v18-20020a2e9252000000b002934abfb109sm1688825ljg.45.2023.03.20.03.38.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 03:38:47 -0700 (PDT)
+Message-ID: <c9485ea6-e419-947e-4d5e-bcaf5d0cfeb2@linaro.org>
+Date:   Mon, 20 Mar 2023 11:38:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.64]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 05/14] arm64: dts: qcom: sa8775p: add support for the
+ on-board PMICs
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230314183043.619997-1-brgl@bgdev.pl>
+ <20230314183043.619997-6-brgl@bgdev.pl>
+ <08dff56d-227a-a791-549c-15ac0f1ac08b@linaro.org>
+ <CAMRc=MdSRY8w0pWuhprB1ALPFpcCdYOnyQZ63BSzJPa3u1a-jA@mail.gmail.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAMRc=MdSRY8w0pWuhprB1ALPFpcCdYOnyQZ63BSzJPa3u1a-jA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
 
-Add a minimal device tree for StarFive JH7110 VisionFive 2 board
-which has version A and version B. Support booting and basic
-clock/reset/pinctrl/uart drivers.
 
-Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/Makefile         |   6 +-
- .../jh7110-starfive-visionfive-2-v1.2a.dts    |  13 ++
- .../jh7110-starfive-visionfive-2-v1.3b.dts    |  13 ++
- .../jh7110-starfive-visionfive-2.dtsi         | 215 ++++++++++++++++++
- 4 files changed, 246 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+On 20.03.2023 11:24, Bartosz Golaszewski wrote:
+> On Tue, Mar 14, 2023 at 9:22 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 14.03.2023 19:30, Bartosz Golaszewski wrote:
+>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>
+>>> Add a new .dtsi file for sa8775p PMICs and add the four PMICs interfaced
+>>> to the SoC via SPMI.
+>>>
+>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 37 +++++++++++++++++++++
+>>>  1 file changed, 37 insertions(+)
+>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+>>> new file mode 100644
+>>> index 000000000000..77e2515a7ab9
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+>>> @@ -0,0 +1,37 @@
+>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>> +/*
+>>> + * Copyright (c) 2023, Linaro Limited
+>>> + */
+>>> +
+>>> +#include <dt-bindings/input/input.h>
+>>> +#include <dt-bindings/spmi/spmi.h>
+>>> +
+>>> +&spmi_bus {
+>>> +     pmk8775_0: pmic@0 {
+>> pmk8775..
+>>
+>>> +             compatible = "qcom,pmm8654au", "qcom,spmi-pmic";
+>> ..or pmm8654au?
+>>
+> 
+> Honestly, I got inspired by this bit from sc8280xp-pmics.dtsi:
+> 
+>  54 &spmi_bus {
+>  55         pmk8280: pmic@0 {
+>  56                 compatible = "qcom,pmk8350", "qcom,spmi-pmic";
+>  57                 reg = <0x0 SPMI_USID>;
+>  58                 #address-cells = <1>;
+>  59                 #size-cells = <0>;
+> 
+> Where the label seems to follow the SoC's numbering. Do you think it
+> would be better to consistently use the pmic's name?
+Generally, the automotive PMICs seem to be carbon copies of their non-AU
+relatives, except they're built to a better electrical spec (because well..
+they're gonna be used in cars) or very very slightly modified, so I propose:
 
-diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/starfive/Makefile
-index 7b00a48580ca..170956846d49 100644
---- a/arch/riscv/boot/dts/starfive/Makefile
-+++ b/arch/riscv/boot/dts/starfive/Makefile
-@@ -1,2 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-beaglev-starlight.dtb jh7100-starfive-visionfive-v1.dtb
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-beaglev-starlight.dtb
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-starfive-visionfive-v1.dtb
-+
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7110-starfive-visionfive-2-v1.2a.dtb
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7110-starfive-visionfive-2-v1.3b.dtb
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
-new file mode 100644
-index 000000000000..4af3300f3cf3
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+/dts-v1/;
-+#include "jh7110-starfive-visionfive-2.dtsi"
-+
-+/ {
-+	model = "StarFive VisionFive 2 v1.2A";
-+	compatible = "starfive,visionfive-2-v1.2a", "starfive,jh7110";
-+};
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
-new file mode 100644
-index 000000000000..9230cc3d8946
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+/dts-v1/;
-+#include "jh7110-starfive-visionfive-2.dtsi"
-+
-+/ {
-+	model = "StarFive VisionFive 2 v1.3B";
-+	compatible = "starfive,visionfive-2-v1.3b", "starfive,jh7110";
-+};
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-new file mode 100644
-index 000000000000..2a6d81609284
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-@@ -0,0 +1,215 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+/dts-v1/;
-+#include "jh7110.dtsi"
-+#include "jh7110-pinfunc.h"
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	aliases {
-+		i2c0 = &i2c0;
-+		i2c2 = &i2c2;
-+		i2c5 = &i2c5;
-+		i2c6 = &i2c6;
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	cpus {
-+		timebase-frequency = <4000000>;
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x40000000 0x1 0x0>;
-+	};
-+
-+	gpio-restart {
-+		compatible = "gpio-restart";
-+		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
-+		priority = <224>;
-+	};
-+};
-+
-+&gmac0_rgmii_rxin {
-+	clock-frequency = <125000000>;
-+};
-+
-+&gmac0_rmii_refin {
-+	clock-frequency = <50000000>;
-+};
-+
-+&gmac1_rgmii_rxin {
-+	clock-frequency = <125000000>;
-+};
-+
-+&gmac1_rmii_refin {
-+	clock-frequency = <50000000>;
-+};
-+
-+&i2srx_bclk_ext {
-+	clock-frequency = <12288000>;
-+};
-+
-+&i2srx_lrck_ext {
-+	clock-frequency = <192000>;
-+};
-+
-+&i2stx_bclk_ext {
-+	clock-frequency = <12288000>;
-+};
-+
-+&i2stx_lrck_ext {
-+	clock-frequency = <192000>;
-+};
-+
-+&mclk_ext {
-+	clock-frequency = <12288000>;
-+};
-+
-+&osc {
-+	clock-frequency = <24000000>;
-+};
-+
-+&rtc_osc {
-+	clock-frequency = <32768>;
-+};
-+
-+&tdm_ext {
-+	clock-frequency = <49152000>;
-+};
-+
-+&i2c0 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pins>;
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pins>;
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c5_pins>;
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c6_pins>;
-+	status = "okay";
-+};
-+
-+&sysgpio {
-+	i2c0_pins: i2c0-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(57, GPOUT_LOW,
-+					      GPOEN_SYS_I2C0_CLK,
-+					      GPI_SYS_I2C0_CLK)>,
-+				 <GPIOMUX(58, GPOUT_LOW,
-+					      GPOEN_SYS_I2C0_DATA,
-+					      GPI_SYS_I2C0_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c2_pins: i2c2-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(3, GPOUT_LOW,
-+					     GPOEN_SYS_I2C2_CLK,
-+					     GPI_SYS_I2C2_CLK)>,
-+				 <GPIOMUX(2, GPOUT_LOW,
-+					     GPOEN_SYS_I2C2_DATA,
-+					     GPI_SYS_I2C2_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c5_pins: i2c5-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(19, GPOUT_LOW,
-+					      GPOEN_SYS_I2C5_CLK,
-+					      GPI_SYS_I2C5_CLK)>,
-+				 <GPIOMUX(20, GPOUT_LOW,
-+					      GPOEN_SYS_I2C5_DATA,
-+					      GPI_SYS_I2C5_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c6_pins: i2c6-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(16, GPOUT_LOW,
-+					      GPOEN_SYS_I2C6_CLK,
-+					      GPI_SYS_I2C6_CLK)>,
-+				 <GPIOMUX(17, GPOUT_LOW,
-+					      GPOEN_SYS_I2C6_DATA,
-+					      GPI_SYS_I2C6_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	uart0_pins: uart0-0 {
-+		tx-pins {
-+			pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX,
-+					     GPOEN_ENABLE,
-+					     GPI_NONE)>;
-+			bias-disable;
-+			drive-strength = <12>;
-+			input-disable;
-+			input-schmitt-disable;
-+			slew-rate = <0>;
-+		};
-+
-+		rx-pins {
-+			pinmux = <GPIOMUX(6, GPOUT_LOW,
-+					     GPOEN_DISABLE,
-+					     GPI_SYS_UART0_RX)>;
-+			bias-disable; /* external pull-up */
-+			drive-strength = <2>;
-+			input-enable;
-+			input-schmitt-enable;
-+			slew-rate = <0>;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pins>;
-+	status = "okay";
-+};
--- 
-2.38.1
+actual_pmic: pmic@sid {
+	compatbile = "qcom,actualpmic", "qcom,pmic-its-based-on";
+}
 
+Konrad
+> 
+> Bartosz
+> 
+>> Konrad
+>>> +             reg = <0x0 SPMI_USID>;
+>>> +             #address-cells = <1>;
+>>> +             #size-cells = <0>;
+>>> +     };
+>>> +
+>>> +     pmk8775_1: pmic@2 {
+>>> +             compatible = "qcom,pmm8654au", "qcom,spmi-pmic";
+>>> +             reg = <0x2 SPMI_USID>;
+>>> +             #address-cells = <1>;
+>>> +             #size-cells = <0>;
+>>> +     };
+>>> +
+>>> +     pmk8775_2: pmic@4 {
+>>> +             compatible = "qcom,pmm8654au", "qcom,spmi-pmic";
+>>> +             reg = <0x4 SPMI_USID>;
+>>> +             #address-cells = <1>;
+>>> +             #size-cells = <0>;
+>>> +     };
+>>> +
+>>> +     pmk8775_3: pmic@6 {
+>>> +             compatible = "qcom,pmm8654au", "qcom,spmi-pmic";
+>>> +             reg = <0x6 SPMI_USID>;
+>>> +             #address-cells = <1>;
+>>> +             #size-cells = <0>;
+>>> +     };
+>>> +};
