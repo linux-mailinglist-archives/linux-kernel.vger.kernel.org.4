@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0C36C0930
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640BB6C0939
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 04:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjCTDGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 19 Mar 2023 23:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S229657AbjCTDMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 19 Mar 2023 23:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCTDF4 (ORCPT
+        with ESMTP id S229486AbjCTDM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 19 Mar 2023 23:05:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A03411E80;
-        Sun, 19 Mar 2023 20:05:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B65F9FEC;
-        Sun, 19 Mar 2023 20:06:16 -0700 (PDT)
-Received: from [10.162.41.7] (a077893.blr.arm.com [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B1343F67D;
-        Sun, 19 Mar 2023 20:05:26 -0700 (PDT)
-Message-ID: <4d3fa526-f108-3f8c-71db-ebfb2734f9fa@arm.com>
-Date:   Mon, 20 Mar 2023 08:35:23 +0530
+        Sun, 19 Mar 2023 23:12:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA98B83D0;
+        Sun, 19 Mar 2023 20:12:25 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pg08w2XsmzKs5v;
+        Mon, 20 Mar 2023 11:10:08 +0800 (CST)
+Received: from ci.huawei.com (10.67.175.89) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 20 Mar
+ 2023 11:12:22 +0800
+From:   Cai Xinchen <caixinchen1@huawei.com>
+To:     <songmuchun@bytedance.com>, <akpm@linux-foundation.org>,
+        <hannes@cmpxchg.org>, <longman@redhat.com>, <mhocko@kernel.org>,
+        <roman.gushchin@linux.dev>, <shakeelb@google.com>
+CC:     <cgroups@vger.kernel.org>, <duanxiongchun@bytedance.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <yosryahmed@google.com>, <mpenttil@redhat.com>
+Subject: [PATCH 0/1] Fix vmstat_percpu incorrect subtraction after reparent
+Date:   Mon, 20 Mar 2023 03:06:47 +0000
+Message-ID: <20230320030648.50663-1-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver
- for MMIO devices
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        scclevenger@os.amperecomputing.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230317030501.1811905-5-anshuman.khandual@arm.com>
- <202303181800.KxbuwjRT-lkp@intel.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <202303181800.KxbuwjRT-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.89]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello, I see the patch-series (Use obj_cgroup APIs to charge the LRU
+pages).
+Link: https://lore.kernel.org/all/20220621125658.64935-1-songmuchun@bytedance.com/
 
+There are two problems left:
 
-On 3/18/23 15:54, kernel test robot wrote:
-> Hi Anshuman,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on soc/for-next rafael-pm/linux-next linus/master v6.3-rc2 next-20230317]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230317030501.1811905-5-anshuman.khandual%40arm.com
-> patch subject: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver for MMIO devices
-> config: arm64-buildonly-randconfig-r002-20230312 (https://download.01.org/0day-ci/archive/20230318/202303181800.KxbuwjRT-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
->         git checkout f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303181800.KxbuwjRT-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/hwtracing/coresight/coresight-etm4x-core.c:2336:32: warning: unused variable 'etm4_dev_pm_ops' [-Wunused-const-variable]
->    static const struct dev_pm_ops etm4_dev_pm_ops = {
+     root
+     /  \
+    A    B
+   / \    \
+  C   E    D
 
-These pm_ops needs to tagged along with the platform driver.
+1. In some case of reparent, some page cache may be used by other memcg
+D but it charges to the parent memcg A of dying memcg E. D is getting
+away with using the page for free while A is taxed.
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index 3ce2b4911a49..fe10dd91183e 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -2280,6 +2280,7 @@ static struct platform_driver etm4_platform_driver = {
-                .of_match_table         = etm4_match,
-                .acpi_match_table       = ACPI_PTR(etm4x_acpi_ids),
-                .suppress_bind_attrs    = true,
-+               .pm                     = &etm4_dev_pm_ops,
-        },
- };
+For this problem, the page may be shared by many memcgs. Which memcg
+should be recharged to? It is hard to select. And for recharge method,
+for example, the user rmdir E. If we recharge the page to D, some pages
+of process attached to D may be reclaimed. The user may feel confused
+about the phenomenon that I rmdir E but the processes attached to D are
+reclaiming their pages and running slower.
+
+And for cgroup v2, the page is charged to the memcg when it alloc and the
+stats is counted to its parent. The method of reparent seems to follow
+the rule.
+
+2. The stats problem of vmstats_percpu. When memcg C is offllined, its 
+pages are reparented to memcg P, so far P->vmstats (hierarchical) have
+those pages, and P->vmstats_percpu (non-hierarchical) don't. When those
+ pages get uncharged, P->vmstats (hierachical) decreases, which is correct,
+but P->vmstats_percpu (non-hierarchical) also decreases, which is wrong, 
+as those stats were never added to P->vmstats_percpu to begin with. If the
+reparented memory exceeds the original non-hierarchical memory in P, some
+arg such as cache which is show in memory.stat will be zero (if x < 0, it
+shows 0)
+
+I think propagate vmstats_percpu stats of dying memcg to its parent can 
+solve this problem. If we do not propagate, the reparented memory exceeds
+the original non-hierarchical memory in P, (hierarchical_usage -
+non-hierarchical_usage(shows 0, but exactly negative number) - 
+children_hierarchical_usage) may be meaningless.
+
+And I want to ask for your opinions about problem 1, how to define the 
+actions of charging pages to memcg when the memcg is died.
+
+Cai Xinchen (1):
+  mm: memcontrol: fix vmstats_percpu state incorrect subtraction after
+    reparent
+
+ kernel/cgroup/cgroup.c |  5 +++++
+ mm/memcontrol.c        | 43 +++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 47 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
+
