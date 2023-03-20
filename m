@@ -2,114 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF2D6C254F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403476C2550
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCTXAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S229902AbjCTXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCTXAw (ORCPT
+        with ESMTP id S229635AbjCTXBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:00:52 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9E483CE;
-        Mon, 20 Mar 2023 16:00:51 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32KN0idr024180;
-        Mon, 20 Mar 2023 18:00:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679353244;
-        bh=RQOIEpCSGYjhwGa7ZpvSmcbm5++KjQDdyIMwuBvzfPg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=w75XUw1UDclBUMUud0wsCvVk+PTI4agX7owjXXq17FA7yZO0at+pgeFje0RPZbNDM
-         YlV++jYfoVWFWmTZ3J2TppyQUbKFInm83lrDv2iycSOfLkFC5o5/4K/VezL40oK2IV
-         vNEFTmjhQTvXaMkjqZGlGrpUyzvGIiXNAVsqepgw=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32KN0ijn104946
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Mar 2023 18:00:44 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
- Mar 2023 18:00:44 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 20 Mar 2023 18:00:44 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32KN0iGg096961;
-        Mon, 20 Mar 2023 18:00:44 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
-Subject: Re: [PATCH v3 0/4] Add DT support for J721E CPSW9G and J7200 CPSW5G
-Date:   Mon, 20 Mar 2023 18:00:43 -0500
-Message-ID: <167935322172.215185.12851063500203208364.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230315062307.1612220-1-s-vadapalli@ti.com>
-References: <20230315062307.1612220-1-s-vadapalli@ti.com>
+        Mon, 20 Mar 2023 19:01:00 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03E9193D5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:00:58 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-536af432ee5so251786477b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679353258;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vspmQc3JDpsi+UTHxEZIu3eH7ZE8AqrnMjkOoGXoeD8=;
+        b=CxTVfnU0Fvu8KqXA0gYr9Fwgp4S0NFyt58jK8Glp806aMat0X3sHnQUrz7lo/H5iUH
+         57Rk9b/qj9qvyGUGZnqgOjhmJ73vAjRaihJ2gxiKYJplNNZQYx1mx4OKXqkHgf4EQxXV
+         WQbRuk4yAeIHM4v+m7P04aalG13/pd15SzuGqwFSzo3AaIfLpxXlxx01tkOudVOS3YB6
+         yKbga7EigI2ynqbh7qlisDDcBZdV1qlV1xmBgwZBP9xjXnh8gfWWadPLlhD8fQF1t16k
+         3sncA7Zpx+Kr63JylZzd5fSo9YfOGuPsUj9M/pGzNgK9XgebZCHCZ5USj8LQ5H0OzyOw
+         UaBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679353258;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vspmQc3JDpsi+UTHxEZIu3eH7ZE8AqrnMjkOoGXoeD8=;
+        b=cB5Rs5jy73U4Ckh7MPdejGPx11EmcGvl07kwQ+ZRX9SKBQ7rNhozSpXVNCvrXuzW3J
+         ALFSIETl3PqCK1VIgHYh52HbXNh0m8Sv+LUevRBxb7JH7YcUkhQwK+Jd5fcRJapHxJtS
+         vT0Clp/nUHmiCZIc8w4OmICekXgzCDqmIEcBElOYFNtbq32vjYegqBQkSWiYAFitZslW
+         XgyHRn+pN2fjvo7l5CeHMeBNw08+NX/MKaOCGton/pcM1yuaNNM+dRFhtxKdtsenE0Qn
+         FrsIDl3boqg0TQ+GGgQWaTB/c4BHNeK3jaVZ/g+SR9yOk2jmzVWqqRtpIUnS4OKVrsQn
+         57lQ==
+X-Gm-Message-State: AO0yUKWBLwz1GZhoezLOEq/U2eMLJ1jtW76tU+rTC/3fI5dcrVCimLly
+        JbYcbkeV1VcHNPz7GczK0uoljXmO362T6qQ98YIFZw==
+X-Google-Smtp-Source: AK7set93KNjCrR7yh8Yn/FAOZ63fe9YnG03KkGBEDRWJq8mBAwo31qgl9tS3X6UasPkhS+23FD4KzwqiwQCGX2RB0xQ=
+X-Received: by 2002:a05:690c:731:b0:544:8405:e1f9 with SMTP id
+ bt17-20020a05690c073100b005448405e1f9mr10760518ywb.1.1679353257953; Mon, 20
+ Mar 2023 16:00:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309170756.52927-1-cerasuolodomenico@gmail.com> <20230309170756.52927-4-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230309170756.52927-4-cerasuolodomenico@gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 20 Mar 2023 16:00:46 -0700
+Message-ID: <CAJuCfpE18RYymcpzKZDapQg35ew5BiUPepnbS7cj+z6H5--Huw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] sched/psi: extract update_triggers side effect
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        brauner@kernel.org, chris@chrisdown.name, hannes@cmpxchg.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddharth Vadapalli,
+On Thu, Mar 9, 2023 at 9:08=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
+>
+> The update of rtpoll_total inside update_triggers can be moved out of
+> the function since changed_states has the same information as the
+> update_total flag used in the function. Besides the simplification of
+> the function, with the next patch it would become an unwanted side
+> effect needed only for PSI_POLL.
 
-On Wed, 15 Mar 2023 11:53:03 +0530, Siddharth Vadapalli wrote:
-> This series adds the device-tree nodes for the CPSW9G instance of CPSW
-> Ethernet Switch on TI's J721E SoC and the CPSW5G instance of CPSW
-> Ethernet Switch on TI's J7200 SoC. Additionally, overlays are also added
-> to individually enable CPSW9G on J721E SoC and CPSW5G on J7200 SoC in
-> QSGMII mode with the Add-On J7 QUAD Port Ethernet expansion QSGMII
-> daughtercard.
-> 
-> [...]
+(changed_states & group->rtpoll_states) and update_total flag are not
+really equivalent. update_total flag depends on the difference between
+group->polling_total[state] and group->total[PSI_POLL][state] while
+changed_states depends on the difference between groupc->times and
+groupc->times_prev. groupc->times_prev is updated every time
+collect_percpu_times() is called and there are 3 places where that
+happens: from psi_avgs_work(), from psi_poll_work() and from
+psi_show(). group->polling_total[state] is updated only from
+psi_poll_work(). Therefore the deltas between these values might not
+always be in-sync.
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+Consider the following sequence as an example:
 
-[1/4] arm64: dts: ti: k3-j721e: Add CPSW9G nodes
-      commit: a2ff7f1108f6eeaa73a60378ed891b634a3bba61
-[2/4] arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports in QSGMII mode
-      commit: 86e7de8bf908a03ac8fba4afeef25c54a1c2ef4a
-[3/4] arm64: dts: ti: j7200-main: Add CPSW5G nodes
-      commit: d3bac98015da55866891054a2aeb42af7904fca8
-[4/4] arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII mode
-      commit: 496cdc82e05f5683cdca5ab157938091e7744c95
+psi_poll_work()
+...
+psi_avgs_work()/psi_show()
+  collect_percpu_times() // we detect a change in a monitored state
+...
+psi_poll_work()
+  collect_percpu_times() // this time no change in monitored states
+  update_triggers() // group->polling_total[state] !=3D
+group->total[PSI_POLL][state]
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+In the last psi_poll_work() collect_percpu_times() recorded no change
+in monitored states, so (changed_states & group->rtpoll_states) =3D=3D 0,
+however since the last time psi_poll_work() was called there was
+actually a change in monitored states recorded by the first
+collect_percpu_times(), therefore (group->polling_total[t->state] !=3D
+total[t->state]) and we should update the totals. With your change we
+will miss that update.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+I think you can easily fix that by introducing update_triggers as an
+output parameter in window_update() like this:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+static u64 window_update(struct psi_window *win, u64 now, u64 value,
+bool *update_triggers) {
+    *update_total =3D false;
+...
+    if (new_stall) {
+        *update_total =3D true;
+...
+}
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+static void psi_rtpoll_work(struct psi_group *group) {
++       bool update_triggers;
+...
+-       if (now >=3D group->rtpoll_next_update)
++       if (now >=3D group->rtpoll_next_update) {
+                group->rtpoll_next_update =3D update_triggers(group,
+now, &update_triggers);
++               if (update_triggers)
++                       memcpy(group->rtpoll_total, group->total[PSI_POLL],
++                                  sizeof(group->rtpoll_total));
++       }
+}
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
+>
+> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> ---
+>  kernel/sched/psi.c | 20 +++++---------------
+>  1 file changed, 5 insertions(+), 15 deletions(-)
+>
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index a3d0b5cf797a..476941c1cbea 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -433,7 +433,6 @@ static u64 window_update(struct psi_window *win, u64 =
+now, u64 value)
+>  static u64 update_triggers(struct psi_group *group, u64 now)
+>  {
+>         struct psi_trigger *t;
+> -       bool update_total =3D false;
+>         u64 *total =3D group->total[PSI_POLL];
+>
+>         /*
+> @@ -456,14 +455,6 @@ static u64 update_triggers(struct psi_group *group, =
+u64 now)
+>                  * events without dropping any).
+>                  */
+>                 if (new_stall) {
+> -                       /*
+> -                        * Multiple triggers might be looking at the same=
+ state,
+> -                        * remember to update group->polling_total[] once=
+ we've
+> -                        * been through all of them. Also remember to ext=
+end the
+> -                        * polling time if we see new stall activity.
+> -                        */
+> -                       update_total =3D true;
+> -
+>                         /* Calculate growth since last update */
+>                         growth =3D window_update(&t->win, now, total[t->s=
+tate]);
+>                         if (!t->pending_event) {
+> @@ -484,11 +475,6 @@ static u64 update_triggers(struct psi_group *group, =
+u64 now)
+>                 /* Reset threshold breach flag once event got generated *=
+/
+>                 t->pending_event =3D false;
+>         }
+> -
+> -       if (update_total)
+> -               memcpy(group->rtpoll_total, total,
+> -                               sizeof(group->rtpoll_total));
+> -
+>         return now + group->rtpoll_min_period;
+>  }
+>
+> @@ -686,8 +672,12 @@ static void psi_rtpoll_work(struct psi_group *group)
+>                 goto out;
+>         }
+>
+> -       if (now >=3D group->rtpoll_next_update)
+> +       if (now >=3D group->rtpoll_next_update) {
+>                 group->rtpoll_next_update =3D update_triggers(group, now)=
+;
+> +               if (changed_states & group->rtpoll_states)
+> +                       memcpy(group->rtpoll_total, group->total[PSI_POLL=
+],
+> +                                  sizeof(group->rtpoll_total));
+> +       }
+>
+>         psi_schedule_rtpoll_work(group,
+>                 nsecs_to_jiffies(group->rtpoll_next_update - now) + 1,
+> --
+> 2.34.1
+>
