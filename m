@@ -2,66 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2776C1F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FDA6C1F4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCTSVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S229958AbjCTSPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjCTSUL (ORCPT
+        with ESMTP id S230239AbjCTSOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:20:11 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9323B23F;
-        Mon, 20 Mar 2023 11:13:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679335659; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=hr7AJp53V6fqL0E6c2EPDnnB8E+/xEg/7PrArQUOuc/HnFqHTRDkFUY2CEA78cqiuXeI5PDaEW9Xi6XXKUcYdw82MOlMy8iK/sqixIKZ8K1pI4mXmc7hs9u34eE7PyMyI60+iUMe0+hTYzV+TZItxuI5NZwFq77uVkKzTXC/kNI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1679335659; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=wjxScLsbYnvFFmnITRMrmQqYNfvNZcrcBQFkGHy1K58=; 
-        b=SRY3bB3aoHAaPLhGHdmnZf4LqBiQZdRyGHcORQdNe0mrFSuKhPyvyrDHui8ZgyJb28u9g2gMVQ/CI5IopntXcGcnVXAR81kJ+ZrMJuZ4K6r3ll8KTYUMRoBLkFDVHyQSr7leZYUZ8Upe5y7XNYvQqlrCZhpgyTPKkOp5qI9KMuA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679335659;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=wjxScLsbYnvFFmnITRMrmQqYNfvNZcrcBQFkGHy1K58=;
-        b=HNaZ3yVErqBAPMmJk5PNHvWrhX24ENG/chaxq2h6Yg4/gzaBVQi0gqCP342iHkp/
-        /pr3Qk4rVpxgJ2v40hWYXYpk6DqiLke6O2Mmc5JJmfW7N6HPa7iutBQUJapBX8uOSO+
-        coxMGpiixRiKGyB7lA/ajft2c+NHYe8TNNp3IqVg=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1679335657962195.85580421693794; Mon, 20 Mar 2023 11:07:37 -0700 (PDT)
-Message-ID: <9cfd5bc1-64e9-5250-5a8d-18ac4c205584@arinc9.com>
-Date:   Mon, 20 Mar 2023 21:07:33 +0300
+        Mon, 20 Mar 2023 14:14:30 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FED1F5E4;
+        Mon, 20 Mar 2023 11:08:19 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id ay22so2805213qtb.2;
+        Mon, 20 Mar 2023 11:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679335698;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uTfm42DRLF/pqyQQSDFQRYTghzUDIMmwNt3uFt+5ZVo=;
+        b=BDEvdS3CLR83im0McPFo89WtIVScQY2XOoudmTKAtD+7y6l2VP8PolUya8K44BjpOC
+         UNhptTv7tYmCF7587hlCu8wMCjxh3UlzW5YI7dIYr2IqaThnuB5vjuElL/8yFG/TbL1u
+         g+bxDQ3cpl37yZ4mJXvqzSkaXlAJmhxktqwjnGEv5/8GcgybHyB88Xjcdb6LcJid2CMG
+         Tgr/6vkH+C3QbX1Vx02hmuMBA2JuYYZbfQ3PwVMq/VHZ7xqc1ObultPvPHLmrgbQ7utT
+         1YhGEzJpkmML5NEYRh0oX96np+sJT36GRFFdEr3HeaujoCmlj4II5jXEKyIK/wCmGChO
+         FKAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679335698;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uTfm42DRLF/pqyQQSDFQRYTghzUDIMmwNt3uFt+5ZVo=;
+        b=8KjoxOtsqVa6DPz/LZ9QAWL2qumQJmfoE+KGbcs3OA6n06DFsrcnldi5r9njH2Zx/s
+         EaMJKC2TMcCbkHZ3DfW4NuvgEjn+g24Y/PAb64B6p1/Tij6ZF+TexKD7eJTP/9q5KDrj
+         8nPh3lqsFg5B80ZP1TtD+M/rZQ6Ye7zqDl+1d8jWAmL9LV9NAPmFxY7bAG8gSB+B8FwH
+         9573JuirBimgTQuJRhVAK4xWyrXCd3C37D3ukHYDjOmrtE+9pj8GG+IvhY6O49Ow8hfM
+         tRau5nZUxKYwFQ19TpOsmd50xD1Wn+8ZjKP6mdJo4J9QOABw3FGisAXHLSSl1Oi9hnzz
+         UnBw==
+X-Gm-Message-State: AO0yUKV9m76o5dPZTVteKqmH4NcMNGZpJashL3MgrkLkEJwmi7ptxG+h
+        ntajfayFmS303mR8ZY1rgx4=
+X-Google-Smtp-Source: AK7set+ZUF3yUcqPxvT5JrSdC2gQaXGTs/LVLEDznrAr6g4pl8nC/T/ix9WBdEtY73cm15/2Ejntww==
+X-Received: by 2002:a05:622a:144b:b0:3b6:3a12:2bf9 with SMTP id v11-20020a05622a144b00b003b63a122bf9mr278501qtx.2.1679335698248;
+        Mon, 20 Mar 2023 11:08:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id v26-20020ac8729a000000b003e2e919bcf7sm1297578qto.78.2023.03.20.11.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 11:08:17 -0700 (PDT)
+Message-ID: <bbea4d6e-4435-7337-adf8-325c2f534bba@gmail.com>
+Date:   Mon, 20 Mar 2023 11:08:03 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings: watchdog: Drop unneeded quotes
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
- <5109c01b-48bd-2854-3f42-bf8ef8b4a821@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <5109c01b-48bd-2854-3f42-bf8ef8b4a821@linaro.org>
+To:     Rob Herring <robh@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20230317233643.3969019-1-robh@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230317233643.3969019-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,30 +102,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.03.2023 21:01, Krzysztof Kozlowski wrote:
-> On 20/03/2023 17:18, Sergio Paracuellos wrote:
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - ralink,rt2880-sysc
->> +          - ralink,rt3050-sysc
->> +          - ralink,rt3052-sysc
->> +          - ralink,rt3352-sysc
->> +          - ralink,rt3883-sysc
->> +          - ralink,rt5350-sysc
->> +          - ralink,mt7620-sysc
->> +          - ralink,mt7620a-sysc
->> +          - ralink,mt7628-sysc
->> +          - ralink,mt7688-sysc
+On 3/17/23 16:36, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 > 
-> One more comment - this and maybe other compatibles - have wrong vendor
-> prefix. This is mediatek, not ralink.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>   .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 +-
+>   Documentation/devicetree/bindings/watchdog/apple,wdt.yaml       | 2 +-
+>   Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml     | 2 +-
+>   .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml         | 2 +-
+>   .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml          | 2 +-
 
-This platform was acquired from Ralink by MediaTek. I couldn't change 
-some existing ralink compatible strings to mediatek as Rob explained on 
-my pinctrl patch series that we don't do that. The compatible strings on 
-this patch series here are new but I'd rather keep the compatible 
-strings ralink to keep things consistent.
+Acked-by: Florian Fainelli <f.fainelli@gmail.com> #brcm,bcm7038-wdt.yaml
+-- 
+Florian
 
-Arınç
