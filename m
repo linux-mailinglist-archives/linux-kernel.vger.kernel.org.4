@@ -2,75 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F706C10C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6256C10C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 12:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjCTLZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 07:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S229832AbjCTL0t convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 07:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjCTLZn (ORCPT
+        with ESMTP id S229460AbjCTL0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 07:25:43 -0400
-Received: from 163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18FF41A94F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=JwFBS8AukYvIVWQyHgw3tatudmc/+MbXUT7y0zY9n+U=; b=d
-        CmYZYPkbzYgnWwcCkaUF796RIc6KxITFWScSkY/B7QUjRE/Y1R2DK0efc2qRB0IM
-        fBoIHhQ5jE5Q7leKxLVCfTLIztj1gjF+cXe1wA/4tygAZAJjoXt1AwHQwGmRLst7
-        jpQR302KQRFCzqXici2EwfiXuytPPNhLCGN7h4Jl48=
-Received: from 00107082$163.com ( [222.64.154.91] ) by ajax-webmail-wmsvr57
- (Coremail) ; Mon, 20 Mar 2023 19:24:28 +0800 (CST)
-X-Originating-IP: [222.64.154.91]
-Date:   Mon, 20 Mar 2023 19:24:28 +0800 (CST)
-From:   "David Wang" <00107082@163.com>
-To:     "Bagas Sanjaya" <bagasdotme@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, masahiroy@kernel.org
-Subject: Re:Re: [Debian Package]Regression 6.3-rc3: version is empty  for
- linux-headers installation dir
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <ZBgl6tbOT0GdIqb4@debian.me>
-References: <33233f0e.3970.186fdf28bc7.Coremail.00107082@163.com>
- <ZBgl6tbOT0GdIqb4@debian.me>
-X-NTES-SC: AL_QuycC/+avkwt7imQYekXn0oTju85XMCzuv8j3YJeN500uSrR1wEMWlVxN0fx8PqJBA+imjKQWRZI2spje6J/Zr9gMYG89sbub/6Tmk3ilmVA
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 20 Mar 2023 07:26:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AC9A2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 04:26:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1peDen-0004Ow-78; Mon, 20 Mar 2023 12:26:29 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1peDel-005RfN-Aw; Mon, 20 Mar 2023 12:26:27 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1peDek-00073e-LS; Mon, 20 Mar 2023 12:26:26 +0100
+Message-ID: <9b4f0896a3a3e97b44197de263c30f0d31333abd.camel@pengutronix.de>
+Subject: Re: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Francesco Dolcini <francesco@dolcini.it>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-media@vger.kernel.org, kernel@pengutronix.de,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Marco Felsch <m.felsch@pengutronix.de>
+Date:   Mon, 20 Mar 2023 12:26:26 +0100
+In-Reply-To: <20230320095514.GF20234@pendragon.ideasonboard.com>
+References: <20230306063649.7387-1-marcel@ziswiler.com>
+         <ZBBk+h3EMSsacZ6v@valkosipuli.retiisi.eu>
+         <ZBBpUAhis8L5Dtuz@francesco-nb.int.toradex.com>
+         <ZBBsgW75Gc2FmuQ0@valkosipuli.retiisi.eu>
+         <ZBBvmjUZIn/g0/Nv@francesco-nb.int.toradex.com>
+         <20230320084844.tdjiv6kaxcosiwm2@uno.localdomain>
+         <ZBggtBU1TjlvVNCS@kekkonen.localdomain>
+         <20230320092602.GE20234@pendragon.ideasonboard.com>
+         <ZBgpXRtXcxg14OGv@kekkonen.localdomain>
+         <20230320095514.GF20234@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1+deb11u1 
 MIME-Version: 1.0
-Message-ID: <50f29163.57b5.186fec379bc.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: _____wDnoIxtQhhk4FgXAA--.20797W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiFgw4ql44XLAjgAACsj
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIGZvciB0aGUgaW5mb3JtYXRpb24sIEkgd2FzIG1lYW5pbmcgdG8ganVzdCByZXBvcnQg
-dGhlIHJlZ3Jlc3Npb24uCkFuZCBJIGp1c3Qgc2VuZCBhIHBhdGNoIHdpdGggdGhlIHNpbXBsZSBm
-aXggaW4gYW5vdGhlciBtYWlsLCBob3BlIHRoZSBmb3JtYXQgaXMgb2suCgoKVGhhbmtzCkRhdmlk
-CgoKCgoKCgpBdCAyMDIzLTAzLTIwIDE3OjIyOjUwLCAiQmFnYXMgU2FuamF5YSIgPGJhZ2FzZG90
-bWVAZ21haWwuY29tPiB3cm90ZToKPk9uIE1vbiwgTWFyIDIwLCAyMDIzIGF0IDAzOjM2OjE2UE0g
-KzA4MDAsIERhdmlkIFdhbmcgd3JvdGU6Cj4+IFRoaXMgY291bGQgYmUgZml4ZWQgYnkgYWRkaW5n
-IGJhY2sgdGhlIGRlZmluaXRpb24gZm9yIHZlcnNpb24KPj4gCj4+IGRpZmYgLS1naXQgYS9zY3Jp
-cHRzL3BhY2thZ2UvYnVpbGRkZWIgYi9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKPj4gaW5kZXgg
-YzVhZTU3MTY3ZDdjLi4xODcwYjI0ODUyMTcgMTAwNzU1Cj4+IC0tLSBhL3NjcmlwdHMvcGFja2Fn
-ZS9idWlsZGRlYgo+PiArKysgYi9zY3JpcHRzL3BhY2thZ2UvYnVpbGRkZWIKPj4gQEAgLTIxNiw2
-ICsyMTYsNyBAQCBpbnN0YWxsX2xpYmNfaGVhZGVycyAoKSB7Cj4+ICBybSAtZiBkZWJpYW4vZmls
-ZXMKPj4gIAo+PiAgcGFja2FnZXNfZW5hYmxlZD0kKGRoX2xpc3RwYWNrYWdlcykKPj4gK3ZlcnNp
-b249JEtFUk5FTFJFTEVBU0UKPj4gIAo+PiAgZm9yIHBhY2thZ2UgaW4gJHtwYWNrYWdlc19lbmFi
-bGVkfQo+PiAgZG8KPj4gLS0KPgo+SGksCj4KPkxvb2tzIGxpa2UgeW91ciBmaXh1cCBpcyBjb3Jy
-dXB0ZWQgKHRhYnMgY29udmVydGVkIHRvIHNwYWNlcykuIENhbiB5b3UKPnBsZWFzZSBzZW5kIHRo
-ZSBwcm9wZXIgcGF0Y2ggKHNlZQo+RG9jdW1lbnRhdGlvbi9wcm9jZXNzL3N1Ym1pdHRpbmctcGF0
-Y2hlcy5yc3QpPwo+Cj5BbHNvLCBzZWUgRG9jdW1lbnRhdGlvbi9wcm9jZXNzL2VtYWlsLWNsaWVu
-dHMucnN0KSBmb3IgZ3VpZGVzIG9uCj5jb25maWd1cmluZyB5b3VyIGVtYWlsIGNsaWVudCBmb3Ig
-a2VybmVsIGRldmVsb3BtZW50Lgo+Cj5UaGFua3MuCj4KPi0tIAo+QW4gb2xkIG1hbiBkb2xsLi4u
-IGp1c3Qgd2hhdCBJIGFsd2F5cyB3YW50ZWQhIC0gQ2xhcmEK
+On Mo, 2023-03-20 at 11:55 +0200, Laurent Pinchart wrote:
+> On Mon, Mar 20, 2023 at 11:37:33AM +0200, Sakari Ailus wrote:
+> > Hi Laurent,
+> > 
+> > On Mon, Mar 20, 2023 at 11:26:02AM +0200, Laurent Pinchart wrote:
+> > > In a (simplified) nutshell,
+> > > 
+> > > ---------+     +----------+     +---------+     +-----+     +-----+
+> > > > Camera | --> | CSI-2 RX | --> | CSI2IPU | --> | Mux | --> | IPU |
+> > > > Sensor |     |          |     | Gasket  |     |     |     |     |
+> > > ---------+     +----------+     +---------+     +-----+     +-----+
+> > 
+> > Thank you, this is helpful.
+> > 
+> > I suppose the mux here at least won't actively do anything to the data. So
+> > presumably its endpoint won't contain the active configuration, but its
+> > superset.
+> > 
+> > > 
+> > > All those blocks, except for the gasket, have a node in DT.
+> > > 
+> > > The IPU driver needs to know the number of CSI-2 data lanes, which is
+> > > encoded in the data-lanes DT property present in both the sensor output
+> > > endpoint and the CSI-2 RX input endpoint, but not the other endpoints in
+> > > the pipeline.
+> > 
+> > This doesn't yet explain why the sensor would need to implement
+> > get_mbus_config if its bus configuration remains constant.
+> 
+> If I recall correctly, the IPU driver calls .g_mbus_config() on the
+> camera sensor to get the number of lanes, as it can't get it from its
+> own endpoint. That's a hack, and as Jacopo proposed, calling
+> .g_mbus_config() on the CSI-2 RX would be better, as the CSI-2 RX driver
+> can then get the value from its own endpoint, without requiring all
+> sensor drivers to implement .g_mbus_config().
+
+The IPU driver doesn't call get_mbus_config, the CSI-2 RX driver does
+(csi2_get_active_lanes in imx6-mipi-csi2.c). It could just fall back to
+looking at its own endpoint if the upstream driver does not implement
+get_mbus_config.
+
+Of course that will only help if the DT contains this information and
+all connected lanes are active.
+
+regards
+Philipp
