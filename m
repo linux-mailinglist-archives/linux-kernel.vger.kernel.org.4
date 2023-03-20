@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5506C234D
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76F56C2352
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjCTU7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 16:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S229993AbjCTVBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjCTU7s (ORCPT
+        with ESMTP id S230200AbjCTVBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 16:59:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0870334026;
-        Mon, 20 Mar 2023 13:59:40 -0700 (PDT)
+        Mon, 20 Mar 2023 17:01:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824CDDBE3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 14:01:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 460426182E;
-        Mon, 20 Mar 2023 20:59:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D52C433EF;
-        Mon, 20 Mar 2023 20:59:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30F14B810E5
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842A5C433EF;
+        Mon, 20 Mar 2023 21:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679345979;
-        bh=RSEgHvtt3CggVhM3Oq6w2XSZQEHDdD+8wzZxlP4dmH0=;
+        s=k20201202; t=1679346076;
+        bh=u3MqWhlNO9Ez1oFr9MAB0V4YaP3aY5B7Rle7IvtQ/h0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WmMyNozfbwl692K876/r+x8HJJghuCPAqMJAzA917D2JHSjKUuBiIv4VYUEGZpQ/C
-         8W2Ss49KTE8Wl3SO/fu2kydd2TMAAb2rcCZOPxN390DR0dRi2Tjhi8xrc19iocHBW/
-         WbltPF631voPaw21dowIfWe17TA6JOKYusqtf7fOucDpam0s5RTE5OTsunGioJpD8a
-         F3dIZvBTTLFJIqgyDORiLFQMQwMF3rH0x8jAodHjlFqr0ty7kdDGbIxupY0OJSYJWM
-         zlj/64QY1yMrIuN+J/WXF0bQNiAzM06v/TcGatfuWPIhgUbvR97zzKCBU5EN0WDqiz
-         CmPSOmKNSRAJg==
-Received: by pali.im (Postfix)
-        id 350C260F; Mon, 20 Mar 2023 21:59:36 +0100 (CET)
-Date:   Mon, 20 Mar 2023 21:59:36 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Marek =?utf-8?B?QmVow7pu?= <marek.behun@nic.cz>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v2] PCI: Assign PCI domain by ida_alloc()
-Message-ID: <20230320205936.wd6pj3trljsduj5c@pali>
-References: <20220702204737.7719-1-pali@kernel.org>
- <20220714184130.5436-1-pali@kernel.org>
- <b529cb69-0602-9eed-fc02-2f068707a006@nvidia.com>
+        b=XL6OBdByFzSN/Jbjx0IDvRNV1JHope619zvo7lq6xNy4Sq6SZtNZwvsy5YFG+dWxY
+         WXEY8wdUWnv1wKXDHA0efPGenPHaSgnim9X8Uy0mx21Zalaaq8Oqy696EXPl9Vn3HH
+         /WmEmvvAjBv/9Ygg+CnDqX+f9mdPEKEvS8w3zeXsCJgl/3LouKTHB5TD37tztkCqsq
+         H7YvJVDxoulwcpB8Gcdkib+WaR/lLr942LHugV8ZEmmyE1LafhTvmdf0PEAQ/0/fyd
+         IISmlWmPtCEjuYceZ5Nj1bQMluPWa+jpirAT9QLKT4GPfTaR35B0CGvuAa8WNJ2SLj
+         JQG3Z1Gk1vEhg==
+Date:   Mon, 20 Mar 2023 21:01:12 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marian Postevca <posteuca@mutex.one>
+Cc:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 4/4] ASoC: amd: acp: Improve support for speaker power
+ events
+Message-ID: <0989fc51-fee7-4558-ba2c-084cc4fb6833@sirena.org.uk>
+References: <20230320203519.20137-1-posteuca@mutex.one>
+ <20230320203519.20137-5-posteuca@mutex.one>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gK7rshqe2sdB/wQi"
 Content-Disposition: inline
-In-Reply-To: <b529cb69-0602-9eed-fc02-2f068707a006@nvidia.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230320203519.20137-5-posteuca@mutex.one>
+X-Cookie: Keep away from fire or flame.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,131 +58,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On Monday 20 March 2023 20:26:05 Jon Hunter wrote:
-> Hi Pali,
-> 
-> After this change was made we are seeing the following bug
-> report on a Tegra234 Jetson Orin board ...
-> 
-> [   17.172346] tegra194-pcie 141a0000.pcie: host bridge /pcie@141a0000 ranges:
-> [   17.172470] tegra194-pcie 141a0000.pcie:      MEM 0x2800000000..0x2b27ffffff -> 0x2800000000
-> [   17.172519] tegra194-pcie 141a0000.pcie:      MEM 0x2b28000000..0x2b2fffffff -> 0x0040000000
-> [   17.172548] tegra194-pcie 141a0000.pcie:       IO 0x003a100000..0x003a1fffff -> 0x003a100000
-> [   17.173449] tegra194-pcie 141a0000.pcie: iATU: unroll T, 8 ob, 2 ib, align 64K, limit 32G
-> [   18.279048] tegra194-pcie 141a0000.pcie: Phy link never came up
-> [   19.279285] tegra194-pcie 141a0000.pcie: Phy link never came up
-> [   19.279599] tegra194-pcie 141a0000.pcie: PCI host bridge to bus 0005:00
-> [   19.279613] pci_bus 0005:00: root bus resource [bus 00-ff]
-> [   19.279622] pci_bus 0005:00: root bus resource [mem 0x2800000000-0x2b27ffffff pref]
-> [   19.279631] pci_bus 0005:00: root bus resource [mem 0x2b28000000-0x2b2fffffff] (bus address [0x40000000-0x47ffffff])
-> [   19.279639] pci_bus 0005:00: root bus resource [io  0x200000-0x2fffff] (bus address [0x3a100000-0x3a1fffff])
-> [   19.279687] pci 0005:00:00.0: [10de:229a] type 01 class 0x060400
-> [   19.279886] pci 0005:00:00.0: PME# supported from D0 D3hot
-> [   19.283256] pci 0005:00:00.0: PCI bridge to [bus 01-ff]
-> [   19.283590] pcieport 0005:00:00.0: Adding to iommu group 26
-> [   19.283991] pcieport 0005:00:00.0: PME: Signaling with IRQ 174
-> [   19.284429] pcieport 0005:00:00.0: AER: enabled with IRQ 174
-> [   19.285003] pci_bus 0005:01: busn_res: [bus 01-ff] is released
-> [   19.285591] pci 0005:00:00.0: Removing from iommu group 26
-> [   19.285751] pci_bus 0005:00: busn_res: [bus 00-ff] is released
-> [   19.285870] ==================================================================
-> [   19.293351] BUG: KFENCE: use-after-free read in pci_bus_release_domain_nr+0x10/0x70
-> 
-> [   19.302817] Use-after-free read at 0x000000007f3b80eb (in kfence-#115):
-> [   19.309677]  pci_bus_release_domain_nr+0x10/0x70
-> [   19.309691]  dw_pcie_host_deinit+0x28/0x78
-> [   19.309702]  tegra_pcie_deinit_controller+0x1c/0x38 [pcie_tegra194]
-> [   19.309734]  tegra_pcie_dw_probe+0x648/0xb28 [pcie_tegra194]
-> [   19.309752]  platform_probe+0x90/0xd8
-> [   19.309764]  really_probe+0xb8/0x298
-> [   19.309777]  __driver_probe_device+0x78/0xd8
-> [   19.309788]  driver_probe_device+0x38/0x120
-> [   19.309799]  __device_attach_driver+0x94/0xe0
-> [   19.309812]  bus_for_each_drv+0x70/0xc8
-> [   19.309822]  __device_attach+0xfc/0x188
-> [   19.309833]  device_initial_probe+0x10/0x18
-> [   19.309844]  bus_probe_device+0x94/0xa0
-> [   19.309854]  deferred_probe_work_func+0x80/0xb8
-> [   19.309864]  process_one_work+0x1e0/0x348
-> [   19.309882]  worker_thread+0x48/0x410
-> [   19.309891]  kthread+0xf4/0x110
-> [   19.309904]  ret_from_fork+0x10/0x20
-> 
-> [   19.311457] kfence-#115: 0x00000000063a155a-0x00000000ba698da8, size=1072, cache=kmalloc-2k
-> 
-> [   19.311469] allocated by task 96 on cpu 10 at 19.279323s:
-> [   19.311562]  __kmem_cache_alloc_node+0x260/0x278
-> [   19.311571]  kmalloc_trace+0x24/0x30
-> [   19.311580]  pci_alloc_bus+0x24/0xa0
-> [   19.311590]  pci_register_host_bridge+0x48/0x4b8
-> [   19.311601]  pci_scan_root_bus_bridge+0xc0/0xe8
-> [   19.311613]  pci_host_probe+0x18/0xc0
-> [   19.311623]  dw_pcie_host_init+0x2c0/0x568
-> [   19.311630]  tegra_pcie_dw_probe+0x610/0xb28 [pcie_tegra194]
-> [   19.311647]  platform_probe+0x90/0xd8
-> [   19.311653]  really_probe+0xb8/0x298
-> [   19.311663]  __driver_probe_device+0x78/0xd8
-> [   19.311672]  driver_probe_device+0x38/0x120
-> [   19.311682]  __device_attach_driver+0x94/0xe0
-> [   19.311694]  bus_for_each_drv+0x70/0xc8
-> [   19.311702]  __device_attach+0xfc/0x188
-> [   19.311713]  device_initial_probe+0x10/0x18
-> [   19.311724]  bus_probe_device+0x94/0xa0
-> [   19.311733]  deferred_probe_work_func+0x80/0xb8
-> [   19.311743]  process_one_work+0x1e0/0x348
-> [   19.311753]  worker_thread+0x48/0x410
-> [   19.311763]  kthread+0xf4/0x110
-> [   19.311771]  ret_from_fork+0x10/0x20
-> 
-> [   19.311782] freed by task 96 on cpu 10 at 19.285833s:
-> [   19.311799]  release_pcibus_dev+0x30/0x40
-> [   19.311808]  device_release+0x30/0x90
-> [   19.311814]  kobject_put+0xa8/0x120
-> [   19.311832]  device_unregister+0x20/0x30
-> [   19.311839]  pci_remove_bus+0x78/0x88
-> [   19.311850]  pci_remove_root_bus+0x5c/0x98
-> [   19.311860]  dw_pcie_host_deinit+0x28/0x78
-> [   19.311866]  tegra_pcie_deinit_controller+0x1c/0x38 [pcie_tegra194]
-> [   19.311883]  tegra_pcie_dw_probe+0x648/0xb28 [pcie_tegra194]
-> [   19.311900]  platform_probe+0x90/0xd8
-> [   19.311906]  really_probe+0xb8/0x298
-> [   19.311916]  __driver_probe_device+0x78/0xd8
-> [   19.311926]  driver_probe_device+0x38/0x120
-> [   19.311936]  __device_attach_driver+0x94/0xe0
-> [   19.311947]  bus_for_each_drv+0x70/0xc8
-> [   19.311956]  __device_attach+0xfc/0x188
-> [   19.311966]  device_initial_probe+0x10/0x18
-> [   19.311976]  bus_probe_device+0x94/0xa0
-> [   19.311985]  deferred_probe_work_func+0x80/0xb8
-> [   19.311995]  process_one_work+0x1e0/0x348
-> [   19.312005]  worker_thread+0x48/0x410
-> [   19.312014]  kthread+0xf4/0x110
-> [   19.312022]  ret_from_fork+0x10/0x20
+--gK7rshqe2sdB/wQi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Based on the above trace it looks like a double free of "pp->bridge"
-structure.
+On Mon, Mar 20, 2023 at 10:35:19PM +0200, Marian Postevca wrote:
+> In order to reduce the audible pops when speaker or headphones
+> are activated or disabled we need to delay the switching of the
+> GPIOs.
 
-Also, which kernel version are you using? Because from above third
-trace it looks like that dw_pcie_host_deinit() calls first
-pci_remove_root_bus() function and then (from first strace) it also
-calls pci_bus_release_domain_nr() function.
+The usual mechanism for doing this is with the standard kernel delay
+functions.  Why not use them in the DAPM event?
 
-Source code of the dw_pcie_host_deinit() is there:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-designware-host.c
-But I do not see where dw_pcie_host_deinit() calls
-pci_bus_release_domain_nr() function as visible in the first trace.
+> We need to also disable/enable the speaker/headphones GPIOs when
+> the audio stream is stopped/started. To avoid race conditions
+> between the speaker power event callback and the trigger callback
+> we use a ring buffer to save the events that we need to process
+> in the delayed work callback.
 
-> [   19.313579] CPU: 10 PID: 96 Comm: kworker/u24:2 Not tainted 6.2.0 #4
-> [   19.320171] Hardware name:  /, BIOS 1.0-d7fb19b 08/10/2022
-> [   19.325852] Workqueue: events_unbound deferred_probe_work_func
-> [   19.331919] ==================================================================
-> 
-> After reverting this change I no longer see this issue.
-> Let me know if you have any thoughts.
-> 
-> Thanks
-> Jon
-> -- 
-> nvpublic
+Why is this required?  DAPM is integrated with stream start and stop,
+and there's a mute callback to mask any noise played back from the SoC
+while it stops and starts without requiring all this complexity.  If
+there is any audible noise then why would it only affect the speaker?
+
+> +static int acp3x_es83xx_trigger(struct snd_pcm_substream *substream, int cmd)
+> +{
+> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+> +	struct snd_soc_card *card = rtd->card;
+> +	struct acp3x_es83xx_private *priv = get_mach_priv(card);
+> +
+> +	switch (cmd) {
+> +	case SNDRV_PCM_TRIGGER_START:
+> +	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+> +	case SNDRV_PCM_TRIGGER_RESUME:
+> +		if (substream->stream == 0) {
+> +			dev_dbg(priv->codec_dev, "trigger start/release/resume, activating GPIOs\n");
+> +			mutex_lock(&priv->rb_lock);
+
+Triggers run in atomic context, you can't use mutexes in atomic context.
+lockdep should tell you this.
+
+--gK7rshqe2sdB/wQi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQYyZcACgkQJNaLcl1U
+h9DkaQf+OTpwoJCS9rupSqOFbQKX/TWXlrvy/kIF0A80++s1yYuhU/1GjGj8oGE/
+nqWgL6q2s0QHMENex4/EzSEL+OfQ++ibKPDOnILjgoNBmUP16Vmwz+bv2H/2Sruk
+L0CmSPokXA7y31gZ6TgD3bW+ixPIE5NEE5YxsQ+Dm1pGj5xhXHyKvm9O9AjqzSPk
+ltInh6wqRtlMTNOnGxNKpYGjLX20wKE5qZu1Kgih47iRUrvRqAozfusMd+cqBdo9
++ss1lnJyU9SQcq4PdD1YLZACjIaWnLotAPOjerFsjzEJvHTvtdxHGO2z+RdZfXz/
+Snlzbh9qHUrhFJxJLbgFlyXkV4gIHw==
+=lTjH
+-----END PGP SIGNATURE-----
+
+--gK7rshqe2sdB/wQi--
