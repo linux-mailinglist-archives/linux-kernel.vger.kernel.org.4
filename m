@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D64D6C1D53
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E966C1D5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 18:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbjCTRIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 13:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S232777AbjCTRJP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 13:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbjCTRHs (ORCPT
+        with ESMTP id S233283AbjCTRIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 13:07:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC141BE9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 10:02:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1816DCE136E
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:01:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E55CC4339B;
-        Mon, 20 Mar 2023 17:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679331660;
-        bh=KmJ/oFXmAm37DV4SuZPLCkjjERN6TSNmtSmlsR7nsUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fIUXguaAn3Smfj+ncepg6XqMZ00K09/+L1F6OcxR73uhTMI4IwNFis7TBBuORpYZ7
-         zXkRaVy1XqjoZ2j4yf2QZ8C+zia52EPL9mXanmwlwyhVvaVBv5iq4FJ1UMF7JWOn7I
-         HvB2AHcz8Ux8ZvSgJdJ+BC8a4f6s7qJS9HVmxSCiJ9Ev3hITezvV9J0ibXm8AAzq+k
-         uBuEdW+VDGOPSYJp4N50nky2T/yMqMJOuGv+zrNkH3QDuXm0IWqgZvCzyyiPh+bQBd
-         pWtuiGGmeT5MnBB/4JWqNODCaxI+tAtphC6nYubeDZ4GrhRIKD9vs4m6aq8LMoMuvB
-         /3Qw8n5fFFmLQ==
-Date:   Mon, 20 Mar 2023 10:00:57 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     hjc@rock-chips.com, heiko@sntech.de, airlied@gmail.com,
-        daniel@ffwll.ch, ndesaulniers@google.com,
-        michael.riesch@wolfvision.net, s.hauer@pengutronix.de,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/rockchip: vop2: fix uninitialized variable
- possible_crtcs
-Message-ID: <20230320170057.GA592480@dev-arch.thelio-3990X>
-References: <20230316132302.531724-1-trix@redhat.com>
+        Mon, 20 Mar 2023 13:08:53 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0705B32CE0;
+        Mon, 20 Mar 2023 10:04:07 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w9so49493313edc.3;
+        Mon, 20 Mar 2023 10:04:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679331734;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4jK8gh5sPVn7plj4DMWjVY4LumCmSzgEWBGR/d5MNzk=;
+        b=OmdFQlI6/xh2YzgDmVmQGwVePyfzazL3+mKcKR1Jndmx1APzLgK2kSSu9uc07ndMGm
+         qUzyJ5tsv/E4uKWzT85DDLlTvYO4Lo7V5eA2WkNy4IuqRLN6tSodTBJL/5ygb37gjzNq
+         Z22iTfWVp/ZPkb5x1egIBG5ZzwvhXcbF11Q841iXvxOOLXanlcq0Ij3tB8LM+XkRO2wd
+         lDDuLBZzLx5VYuh+PS3dQcX624Lm4RBvRRldWbNZR+xKw6y8mnytI+gZ+XNA5wWB8mQY
+         D69kVX6C+ENvZbaIIy34KPhXfmoZ/FI8R6CyvYTeyngXqNQfSs5DfQGo8BII1s8UluSL
+         HZAA==
+X-Gm-Message-State: AO0yUKWUBj4zNakmB20IeLbi11Vo+0lZRqyQglCQC8WRvTn6dkAUfRdg
+        ZbKvh9EhJj6qaHYrz1kzdB2s7fmt9ZAv7vlqVs0=
+X-Google-Smtp-Source: AK7set/yaQH79SPShN0Ft8Rn+W7KFso8X28Jo7X9BK0NLwxuQPr45ns2P9CMLo5z5VgZ3MH5TCCLgqt6sxcycLbRjXI=
+X-Received: by 2002:a50:c389:0:b0:4fb:f19:881 with SMTP id h9-20020a50c389000000b004fb0f190881mr154316edf.3.1679331734246;
+ Mon, 20 Mar 2023 10:02:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316132302.531724-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230226061912.2590679-1-void0red@gmail.com>
+In-Reply-To: <20230226061912.2590679-1-void0red@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 20 Mar 2023 18:02:02 +0100
+Message-ID: <CAJZ5v0gPUBFzuFiRWW8KHAwB1Agy+Le=CWuRD0RTr4MkNeEmQw@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: check null return of ACPI_ALLOCATE_ZEROED in acpi_db_display_objects
+To:     Kang Chen <void0red@gmail.com>
+Cc:     lenb@kernel.org, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:23:02AM -0400, Tom Rix wrote:
-> clang reportes this error
-> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error:
->   variable 'possible_crtcs' is used uninitialized whenever 'if'
->   condition is false [-Werror,-Wsometimes-uninitialized]
->                         if (vp) {
->                             ^~
-> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2336:36: note:
->   uninitialized use occurs here
->                 ret = vop2_plane_init(vop2, win, possible_crtcs);
->                                                  ^~~~~~~~~~~~~~
-> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:4:
->   note: remove the 'if' if its condition is always true
->                         if (vp) {
->                         ^~~~~~~~
-> 
-> The else-statement changes the win->type to OVERLAY without setting the
-> possible_crtcs variable.  Rework the block, initialize possible_crtcs to
-> 0 to remove the else-statement.  Split the else-if-statement out to its
-> own if-statement so the OVERLAY check will catch when the win-type has
-> been changed.
-> 
-> Fixes: 368419a2d429 ("drm/rockchip: vop2: initialize possible_crtcs properly")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Sun, Feb 26, 2023 at 7:19 AM Kang Chen <void0red@gmail.com> wrote:
+>
+> ACPI_ALLOCATE_ZEROED may fails, object_info might be null and will
+> cause null pointer dereference later.
+>
+> Signed-off-by: Kang Chen <void0red@gmail.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+As a rule, ACPICA changes need to be submitted as pull requests to the
+upstream ACPICA project on GitHub in the first place.
+
+When this happens, please resend the patch with a Link tag pointing to
+the corresponding upstream pull request.
 
 > ---
->  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-> index 03ca32cd2050..fce992c3506f 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-> @@ -2301,7 +2301,7 @@ static int vop2_create_crtcs(struct vop2 *vop2)
->  	nvp = 0;
->  	for (i = 0; i < vop2->registered_num_wins; i++) {
->  		struct vop2_win *win = &vop2->win[i];
-> -		u32 possible_crtcs;
-> +		u32 possible_crtcs = 0;
->  
->  		if (vop2->data->soc_id == 3566) {
->  			/*
-> @@ -2327,12 +2327,11 @@ static int vop2_create_crtcs(struct vop2 *vop2)
->  				/* change the unused primary window to overlay window */
->  				win->type = DRM_PLANE_TYPE_OVERLAY;
->  			}
-> -		} else if (win->type == DRM_PLANE_TYPE_OVERLAY) {
-> -			possible_crtcs = (1 << nvps) - 1;
-> -		} else {
-> -			possible_crtcs = 0;
->  		}
->  
-> +		if (win->type == DRM_PLANE_TYPE_OVERLAY)
-> +			possible_crtcs = (1 << nvps) - 1;
+>  drivers/acpi/acpica/dbnames.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/acpi/acpica/dbnames.c b/drivers/acpi/acpica/dbnames.c
+> index 3615e1a6e..b91155ea9 100644
+> --- a/drivers/acpi/acpica/dbnames.c
+> +++ b/drivers/acpi/acpica/dbnames.c
+> @@ -652,6 +652,9 @@ acpi_status acpi_db_display_objects(char *obj_type_arg, char *display_count_arg)
+>                 object_info =
+>                     ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_object_info));
+>
+> +               if (!object_info)
+> +                       return (AE_NO_MEMORY);
 > +
->  		ret = vop2_plane_init(vop2, win, possible_crtcs);
->  		if (ret) {
->  			drm_err(vop2->drm, "failed to init plane %s: %d\n",
-> -- 
-> 2.27.0
-> 
+>                 /* Walk the namespace from the root */
+>
+>                 (void)acpi_walk_namespace(ACPI_TYPE_ANY, ACPI_ROOT_OBJECT,
+> --
+> 2.34.1
+>
