@@ -2,163 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F2B6C1191
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7589D6C1197
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjCTMMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S231149AbjCTMMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjCTMMF (ORCPT
+        with ESMTP id S230049AbjCTMMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:12:05 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5877355B6;
-        Mon, 20 Mar 2023 05:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679314323; x=1710850323;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f0cFu0waq1sUq+AFu96iKtjuSciX3NLthHqTvv/AT2A=;
-  b=eMg1sYRUdPDJnjwMuCE0M2fZtTnbvC4m5tyJZ+CJYyUTqFa6WOhlUH+3
-   psIaUsOb2be857XaoLwmlD8wy8gZgU6kd6YwOZK2dU0CXtDjSFd3LamId
-   3kAbq1QbVG41Qce4Hwkd9AtD7Vn603nLc3w7t6VeaRGBLQ/CrQjL9niL9
-   emgHDX/nkmmbCHJVtMXmXjbowlnLpd/dwBOY3S64m7sFXT8mpPo5hZ3dH
-   jMs4ecPUBXPV67auiOuvd2jlfvJRvIo1T6R7kLV6cdCrcxIUtJelip3cx
-   bohqoYKBR8litpM1JIc9xfUATjUiIH5+DKzBxfzaa04aebr2dpNLyzHjE
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
-   d="asc'?scan'208";a="205502494"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 05:12:02 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 05:12:01 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 20 Mar 2023 05:11:59 -0700
-Date:   Mon, 20 Mar 2023 12:11:29 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-CC:     Mike Rapoport <rppt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <frowand.list@gmail.com>, <robh+dt@kernel.org>,
-        <mick@ics.forth.gr>, <paul.walmsley@sifive.com>,
-        <aou@eecs.berkeley.edu>, <Valentina.FernandezAlanis@microchip.com>,
-        <Daire.McNamara@microchip.com>
-Subject: Re: RISC-V reserved memory problems
-Message-ID: <e2203659-e1ac-4fbf-9b5d-2c561255b645@spud>
-References: <8e10bf15-9fa9-fe90-1656-35bf3e87e7f8@microchip.com>
- <f8e67f82-103d-156c-deb0-d6d6e2756f5e@microchip.com>
- <Y9wytv5KSt1ca+td@spud>
- <ZAchb/DfbIh+qaE4@kernel.org>
- <8abfb680-e1dd-8d1f-dd10-0a8bf086f5c3@ghiti.fr>
- <b797bd15-ef3d-4d28-9aad-ffe0a32aa0b0@spud>
- <de204b7c-7c1d-bd7b-0072-d128757258e2@ghiti.fr>
+        Mon, 20 Mar 2023 08:12:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E989D9036;
+        Mon, 20 Mar 2023 05:12:38 -0700 (PDT)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 35A3AA25;
+        Mon, 20 Mar 2023 13:12:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679314356;
+        bh=g9jYK9DPWNQVOtuPPK1BkPbDDKt4goUNff8cdNmOCbo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mS5e/Y9b6Gf7jl9X34sGX0ftdcAG8Kwbmt2UBPnBAQM3NAOjLyF1KvDP7s8/ydVbt
+         8ZcUMoe2HmdA1KKfRjOU3ML//iyd+VIFfN3yKp49RTOOFicakayvMXADo9+hLrZJwf
+         ZseWcEFatN3CVkq6nYNU5f/2IL0sEUfpP9xxC7RM=
+Message-ID: <a21fcab7-aa80-0228-7bd3-236fb4203d36@ideasonboard.com>
+Date:   Mon, 20 Mar 2023 14:12:32 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pKzsOyM01oqrnRqw"
-Content-Disposition: inline
-In-Reply-To: <de204b7c-7c1d-bd7b-0072-d128757258e2@ghiti.fr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>, zzam@gentoo.org
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
+ <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
+ <70323408-b823-1f1a-0202-434e6243b2af@gentoo.org>
+ <20230320092830.0431d042@booty>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230320092830.0431d042@booty>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---pKzsOyM01oqrnRqw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 20/03/2023 10:28, Luca Ceresoli wrote:
+> Hello Matthias,
+> 
+> thanks for the in-depth review!
+> 
+> On Mon, 20 Mar 2023 07:34:34 +0100
+> zzam@gentoo.org wrote:
+> 
+>> Some inline comments below.
+>>
+>> Regards
+>> Matthias
+>>
+>> Am 22.02.23 um 14:29 schrieb Tomi Valkeinen:
+>>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>>>
+>>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>>> slave "upstream" port and N master "downstream" ports, and forwards
+>>> transactions from upstream to the appropriate downstream port. But it
+>>> is different in that the forwarded transaction has a different slave
+>>> address. The address used on the upstream bus is called the "alias"
+>>> and is (potentially) different from the physical slave address of the
+>>> downstream chip.
+>>>
+>>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>>> implementing ATR features in a device driver. The helper takes care or
+>>> adapter creation/destruction and translates addresses at each transaction.
+>>>
+>>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>>> ---
+>>>    Documentation/i2c/index.rst         |   1 +
+>>>    Documentation/i2c/muxes/i2c-atr.rst |  97 +++++
+>>>    MAINTAINERS                         |   8 +
+>>>    drivers/i2c/Kconfig                 |   9 +
+>>>    drivers/i2c/Makefile                |   1 +
+>>>    drivers/i2c/i2c-atr.c               | 548 ++++++++++++++++++++++++++++
+>>>    include/linux/i2c-atr.h             | 116 ++++++
+>>>    7 files changed, 780 insertions(+)
+>>>    create mode 100644 Documentation/i2c/muxes/i2c-atr.rst
+>>>    create mode 100644 drivers/i2c/i2c-atr.c
+>>>    create mode 100644 include/linux/i2c-atr.h
+>>>    
+>> [...]
+>>> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+>>> new file mode 100644
+>>> index 000000000000..5ab890b83670
+>>> --- /dev/null
+>>> +++ b/drivers/i2c/i2c-atr.c
+>>> @@ -0,0 +1,548 @@
+>> [...]
+>>> +
+>>> +/*
+>>> + * Replace all message addresses with their aliases, saving the original
+>>> + * addresses.
+>>> + *
+>>> + * This function is internal for use in i2c_atr_master_xfer(). It must be
+>>> + * followed by i2c_atr_unmap_msgs() to restore the original addresses.
+>>> + */
+>>> +static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+>>> +			    int num)
+>>> +{
+>>> +	struct i2c_atr *atr = chan->atr;
+>>> +	static struct i2c_atr_cli2alias_pair *c2a;
+>>> +	int i;
+>>> +
+>>> +	/* Ensure we have enough room to save the original addresses */
+>>> +	if (unlikely(chan->orig_addrs_size < num)) {
+>>> +		u16 *new_buf;
+>>> +
+>>> +		/* We don't care about old data, hence no realloc() */
+>>> +		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
+>>> +		if (!new_buf)
+>>> +			return -ENOMEM;
+>>> +
+>>> +		kfree(chan->orig_addrs);
+>>> +		chan->orig_addrs = new_buf;
+>>> +		chan->orig_addrs_size = num;
+>>> +	}
+>>> +
+>>> +	for (i = 0; i < num; i++) {
+>>> +		chan->orig_addrs[i] = msgs[i].addr;
+>>> +
+>>> +		c2a = i2c_atr_find_mapping_by_addr(&chan->alias_list,
+>>> +						   msgs[i].addr);
+>>> +		if (!c2a) {
+>>> +			dev_err(atr->dev, "client 0x%02x not mapped!\n",
+>>> +				msgs[i].addr);
+>>> +			return -ENXIO;
+>> I miss the roll-back of previously modified msgs[].addr values.
+> 
+> Indeed you have a point. There is a subtle error in case all of the
+> following happen in a single i2c_atr_master_xfer() call:
+> 
+>   * there are 2+ messages, having different addresses
+>   * msg[0] is mapped correctly
+>   * msg[n] (n > 0) fails mapping
+> 
+> It's very unlikely, but in this case we'd get back to the caller with
+> an error and modified addresses for the first n messages. Which in turn
+> is unlikely to create any problems, but it could.
+> 
+> Tomi, do you agree?
+> 
+> This looks like a simple solution:
+> 
+>     if (!c2a) {
+> +    i2c_atr_unmap_msgs(chan, msgs, i);
+>       ...
+>     }
 
-On Thu, Mar 09, 2023 at 04:12:57PM +0100, Alexandre Ghiti wrote:
-> On 3/9/23 13:51, Conor Dooley wrote:
-> > On Thu, Mar 09, 2023 at 01:45:05PM +0100, Alexandre Ghiti wrote:
-> > > On 3/7/23 12:35, Mike Rapoport wrote:
-> > > > Hi Conor,
-> > > >=20
-> > > > Sorry for the delay, somehow this slipped between the cracks.
-> > > >=20
-> > > > On Thu, Feb 02, 2023 at 10:01:26PM +0000, Conor Dooley wrote:
-> > > > > Hullo Palmer, Mike & whoever else may read this,
-> > > > >=20
-> > > > > Just reviving this thread from a little while ago as I have been =
-in the
-> > > > > area again recently...
-> > > > TBH, I didn't really dig deep into the issues, but the thought I ha=
-d was
-> > > > what if DT was mapped via fixmap until the setup_vm_final() and the=
-n it
-> > > > would be possible to call DT methods early.
-> > > >=20
-> > > > Could be I'm shooting in the dark :)
-> > >=20
-> > > I think I understand the issue now, it's because In riscv, we establi=
-sh 2
-> > > different virtual mappings and we map the device tree at 2 different =
-virtual
-> > > addresses, which is the problem.
-> > >=20
-> > > So to me, the solution is:
-> > >=20
-> > > - to revert your previous fix, that is calling
-> > > early_init_fdt_scan_reserved_mem() before any call to memblock_alloc()
-> > > (which could result in an allocation in the area you want to reserve)
-> > >=20
-> > > - to map the device tree at the same virtual address, because
-> > > early_init_fdt_scan_reserved_mem() initializes reserved_mem with the =
-dtb
-> > > mapping established in setup_vm() and uses reserved_mem with the new =
-mapping
-> > > from setup_vm_final (which is what Mike proposes, we should use the f=
-ixmap
-> > > region to have the same virtual addresses)
-> > >=20
-> > > Hope that makes sense: I'll come up with something this afternoon for=
- you to
-> > > test!
-> > Sounds good. Please give me some ELI5 commit messages if you can,
-> > explanations for this stuff (which I found took a lot of archaeology to
-> > understand) would be very welcome next time we need to go back looking
-> > at this stuff.
->=20
->=20
-> Can you give it a try here:
-> https://github.com/AlexGhiti/riscv-linux/commits/dev/alex/conor_dtb_fixma=
-p_v1
-> ?
->=20
-> That works for me but I need to carefully explain and check that's correct
-> though, not upstreamable as is.
+Wouldn't that possibly restore the address from orig_addrs[x] also for 
+messages we haven't handled yet?
 
-Hey Alex,
+I think a simple
 
-So I ended up being pretty sick & had to take a week off. I gave this an
-initial spin today & it appears to work.
-I'll take it for a longer test-drive when you send a "real" patch for
-it, but I tested both the lookup by name & the situation that was
-allocating in reserved memory and both were not an issue.
+while (i--)
+	msgs[i].addr = chan->orig_addrs[i];
 
-Thanks for working on this,
-Conor.
+should do here. It is also, perhaps, a bit more clear this way, as you 
+can see the assignments to msgs[i].addr nearby, and the rollback here 
+with the above code. Instead of seeing a call to an unmap function, 
+having to go and see what exactly it will do.
 
---pKzsOyM01oqrnRqw
-Content-Type: application/pgp-signature; name="signature.asc"
+> While there, maybe switching to dev_err_probe would make code cleaner.
 
------BEGIN PGP SIGNATURE-----
+The while loop above has to be done after the print, if we use the same 
+i variable in both. dev_err_probe could still be used, but... I don't 
+know if it's worth trying to push it in.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBhNcQAKCRB4tDGHoIJi
-0jHSAQDYXV+uHHctZPqRy4OTzH84+s3JkFLcich/mv5xUvEIsAEAttjvErnc91Wo
-/sgB9RuUAHwyl42K555VXdhZIr5oHQg=
-=vZ1A
------END PGP SIGNATURE-----
+>>> +/*
+>>> + * Restore all message address aliases with the original addresses. This
+>>> + * function is internal for use in i2c_atr_master_xfer().
+>>> + *
+>>> + * @see i2c_atr_map_msgs()
+>>> + */
+>>> +static void i2c_atr_unmap_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+>>> +			       int num)
+>>> +{
+>>> +	int i;
+>>> +
+>>> +	for (i = 0; i < num; i++)
+>>> +		msgs[i].addr = chan->orig_addrs[i];
+>> Does this code needs null and size checks for orig_addrs/orig_addrs_size
+>> to protect from oopses?
+>> This cannot happen now as i2c_atr_master_xfer returns early when
+>> i2c_atr_map_msgs fails.
+> 
+> The map/unmap functions are really a part of i2c_atr_master_xfer() that
+> has been extracted for code readability, as the comments say, and I
+> can't think of a different use for them. So I think this code is OK as
+> is.
+> 
+> However a small comment might help future readers, especially in case
+> code will change and these functions gain new use cases.
+> E.g.
+> 
+>     This function is internal for use in i2c_atr_master_xfer()
+> +  and for this reason it needs no null and size checks on orig_addr.
+>     It must be followed by i2c_atr_unmap_msgs() to restore the original addresses.
 
---pKzsOyM01oqrnRqw--
+I can add a comment. as Luca said, it's an internal helper function, I 
+don't think we need to check the parameters there for cases which can't 
+happen.
+
+  Tomi
+
