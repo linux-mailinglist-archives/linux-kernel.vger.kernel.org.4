@@ -2,110 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC046C0F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19146C0F6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 11:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjCTKpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 06:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S230168AbjCTKmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 06:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCTKov (ORCPT
+        with ESMTP id S229832AbjCTKmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 06:44:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFC4E395
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679308798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZO4MUoeLtjuclC4IgasEW8PXFINyJxVwxeCYDhy+TRc=;
-        b=JeWj5G0U14sY5xB8XxlzPqMvvF5u2nl6937uKhYa/xVPcRZtQn9aaC9Kxd6SsegNhJqLJI
-        6RcTFcD9YO89ZKC+Mx2oW7O7fDJWWCT5mgyobQDtGBVYZapl449gcbKfzezMgiSoixNI82
-        spEgQIYlnlPKYQdtdDT1+df/Z6bUyuU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-319-woJ8ed2fN2Ovj3wnUhHRwQ-1; Mon, 20 Mar 2023 06:39:56 -0400
-X-MC-Unique: woJ8ed2fN2Ovj3wnUhHRwQ-1
-Received: by mail-wm1-f69.google.com with SMTP id bg13-20020a05600c3c8d00b003ed40f09355so5317156wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:39:56 -0700 (PDT)
+        Mon, 20 Mar 2023 06:42:18 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A5827993
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:40:25 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id g17so14296566lfv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 03:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679308798;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=grRH4NuVjt1XazQwua0TqeDWJzVjyHC+00bGvm+991w=;
+        b=j3Q/3iuFNvsMRY0v692DqUltXzp1dIJq6dJCikzycfPVfAImbd0U0oT6VgFfWMaQ8a
+         vOEgt7P4mtEIoFWZPFm58qC7xlX46jU12HvXM0aqO1rXWmA3jIBXDu+tQvFogRSwJ7Q4
+         1B6B6YP6K9m5IybKDJeapTeed9CxCP10C19Syg7a0bqXOvoetNfMsmeX3s7pleR+22Cf
+         rQNpScvjnF8GCG8Jbm4qfIlhBoJZO3HDLtUpNxeLgHP/Qz+0vpkhZWp+RZM+ZwlV1JlM
+         A2SFw9eZ8Mq66GFBkd39b69cpwSRiowEUdgpv5fbU4XyGasMBiGAHEhPL0d708gyAbZ3
+         BX6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679308795;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZO4MUoeLtjuclC4IgasEW8PXFINyJxVwxeCYDhy+TRc=;
-        b=VYDr80jwGWknfUAnCNdZGDazoRj0ytCyeAo0R1ESlDSR/oJcipSR/6DsCyfZdsdhtF
-         1MaVXi1Qik61nSoS1TrFt5PkHGocaAuuGSV5YZ0CQKOLMlSQ20wMe+zMZvpUCVrchZXa
-         j2Krb6jD0KGus1H1r3EV6WzLC2xtW3f+tVWX3tBKqFYeJJHPE8L1k3qKrXpuda41AL1d
-         riUdnTxKGuvn5mZqpCmAPOsosP/JkppL2eRqWDwWsAsUCCFo4VrnGlLUwd93WZCmCrzx
-         hyNsId1Vd+cGG0iUCB5zwu7wpKShmDvEVobpBRpFBARBmzD7E6uMAI6Lw39ytKqm5U/8
-         zt7Q==
-X-Gm-Message-State: AO0yUKVcNNOsgumq/hhkDktMj3Of+PIsx2LIXOhyTjcJthDA7EOGZ77p
-        6Yf3TXPIzZSs/4s/hB2LWAVFtzaO2RKKGXE1wqVykIiEmaj97v2FdIIrGB/dP7WXsd/9zCEutb6
-        1x9gW0yBEnMlJZaBRj1rvtuQ1
-X-Received: by 2002:adf:dc51:0:b0:2cf:ea5d:f607 with SMTP id m17-20020adfdc51000000b002cfea5df607mr13275616wrj.17.1679308795754;
-        Mon, 20 Mar 2023 03:39:55 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+aFiFmynk07qyywt6B8QhkodUnWOCgklLUU0oFHRWH7B4MoXZR6V1fEuEUm9GaNTsT0EPSnA==
-X-Received: by 2002:adf:dc51:0:b0:2cf:ea5d:f607 with SMTP id m17-20020adfdc51000000b002cfea5df607mr13275609wrj.17.1679308795562;
-        Mon, 20 Mar 2023 03:39:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id bl13-20020adfe24d000000b002d84f0266b0sm189659wrb.18.2023.03.20.03.39.54
+        d=1e100.net; s=20210112; t=1679308798;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=grRH4NuVjt1XazQwua0TqeDWJzVjyHC+00bGvm+991w=;
+        b=jcHYn1fUHk603GdxcLXJzcXDPBiFqX6byoX8Z/YcoSmJcLQmF1msx2VXhLnTiA4Ckx
+         VZFbwQu+twSqklcwuGJ0RznrYp2AJRMlLNa6JO4M/A1BJMqmimhrDyU7yLI2s4a3GYaZ
+         fp1TX4yHKvLvrD1T9kO6Y2VN5I+kgjDeRw44kdx5JWj3KrBtVFOO970Mw6eIzeuvGGOU
+         hjo8y8iGvyT9HKIrLg5IpdOW3J9uTpgA0ckh8WX2X7SylZwXNVEJlLq0pDTF5dLIJR2O
+         iV5dUhy6zXz+uTiN1FOYa6rtsrG3nPxbY1zgT9yuFklL6heQKXUdhXrimUXoR8LvWir/
+         5SSw==
+X-Gm-Message-State: AO0yUKVbVRiIgqFho+Q7yBzIHZjLp1HOBmjToVRNXE9CN4IDdyTSOn5d
+        Vaqj0LSQewNBQMgdJCMABdwgaA==
+X-Google-Smtp-Source: AK7set+36z+CyOiyN78yCcUMJLmwtnpXQyLubsOfMRU3Vx0PAfxfr+2Wvji0JpELECJNK6z8plNTSQ==
+X-Received: by 2002:a05:6512:3d24:b0:4d8:86c1:478c with SMTP id d36-20020a0565123d2400b004d886c1478cmr3521820lfv.33.1679308798457;
+        Mon, 20 Mar 2023 03:39:58 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id f2-20020a2e9502000000b00298591be990sm1683115ljh.40.2023.03.20.03.39.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:39:55 -0700 (PDT)
-Message-ID: <685de938-79e2-1120-daba-74bc541a1766@redhat.com>
-Date:   Mon, 20 Mar 2023 11:39:53 +0100
+        Mon, 20 Mar 2023 03:39:58 -0700 (PDT)
+Message-ID: <6ae97b26-b1e7-b382-b6f6-053afe26a1a2@linaro.org>
+Date:   Mon, 20 Mar 2023 11:39:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 11/15] init,mm: fold late call to page_ext_init() to
- page_alloc_init_late()
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: Split out SA8155P and use correct
+ RPMh power domains
 Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230319220008.2138576-1-rppt@kernel.org>
- <20230319220008.2138576-12-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230319220008.2138576-12-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214095435.2192153-1-konrad.dybcio@linaro.org>
+ <20230214095435.2192153-3-konrad.dybcio@linaro.org>
+ <20230314001052.7qvgbwkl73x22oll@ripper>
+ <eaf2ca0d-4d90-b68b-3b36-8bb0148cfb95@linaro.org>
+ <ee1ebac4-bf18-019a-f770-5cb88703d06b@linaro.org>
+ <20230315230024.wxuqthay74i5zgrq@ripper>
+ <3d3117d2-b3eb-1174-7061-b899cdcdf6ce@linaro.org>
+ <20230320021957.yzg6zhrhjr36rcz4@ripper>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230320021957.yzg6zhrhjr36rcz4@ripper>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.03.23 23:00, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+
+
+On 20.03.2023 03:19, Bjorn Andersson wrote:
+> On Thu, Mar 16, 2023 at 12:50:49AM +0100, Konrad Dybcio wrote:
+>> On 16.03.2023 00:00, Bjorn Andersson wrote:
+>>> On Tue, Mar 14, 2023 at 12:41:45PM +0100, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 14.03.2023 12:36, Konrad Dybcio wrote:
+>>>>>
+>>>>>
+>>>>> On 14.03.2023 01:10, Bjorn Andersson wrote:
+>>>>>> On Tue, Feb 14, 2023 at 10:54:35AM +0100, Konrad Dybcio wrote:
+>>>>>>> The RPMhPD setup on SA8155P is different compared to SM8150. Correct
+>>>>>>> it to ensure the platform will not try accessing forbidden/missing
+>>>>>>> RPMh entries at boot, as a bad vote will hang the machine.
+>>>>>>>
+>>>>>>
+>>>>>> I don't see that this will scale, as soon as someone adds a new device
+>>>>>> in sm8150.dtsi that has the need to scale a power rail this will be
+>>>>>> forgotten and we will have a mix of references to the SM8150 and SA8155P
+>>>>>> value space.
+>>>>>>
+>>>>>> That said, I think it's reasonable to avoid duplicating the entire
+>>>>>> sm8150.dtsi.
+>>>>> Yeah, this problem has no obvious good solutions and even though it's
+>>>>> not very elegant, this seems to be the less bad one..
+>>>>>
+>>>>>>
+>>>>>> How about making the SA8155P_* macros match the SM8150_* macros?
+>>>>>> That way things will fail gracefully if a device node references a
+>>>>>> resource not defined for either platform...
+>>>>> Okay, let's do that
+>>>> Re-thinking it, it's good that the indices don't match, as this way the
+>>>> board will (should) refuse to function properly if there's an oversight,
+>>>> which may have gone unnoticed if they were matching, so this only guards
+>>>> us against programmer error which is not great :/
+>>>>
+>>>
+>>> Right, ensuring that the resource indices never collides would be a good
+>>> way to capture this issue, as well as copy-paste errors etc. My
+>>> pragmatic proposal is that we make SA8155P_x == SM8150_x where a match
+>>> exist, and for the ones that doesn't match we pick numbers that doesn't
+>>> collide between the platforms.
+>>>
+>>> The alternative is to start SA8155P_x at 11, but it's different and
+>>> forces sa8155p.dtsi to redefine every single power-domains property...
+>>>
+>>>
+>>> This does bring back the feeling that it was a mistake to include the
+>>> platform name in these defines in the first place... Not sure if it's
+>>> worth mixing generic defines into the picture at this point, given that
+>>> we I don't see a way to use them on any existing platform.
+>> TBF we could, think:
+>>
+>> sm1234_rpmpds[] = {
+>> 	[CX] = &foobar1,
+>> 	[CX_AO] = &foobar1_ao,
+>>
+>> 	[...]
+>>
+>> 	/* Legacy DT bindings */
+>> 	[SM1234_CX] = &foobar1,
+>> 	[SM1234_CX_AO] = &foobar1_ao,
+>> };
+>>
+>> WDYT?
 > 
-> When deferred initialization of struct pages is enabled, page_ext_init()
-> must be called after all the deferred initialization is done, but there
-> is no point to keep it a separate call from kernel_init_freeable() right
-> after page_alloc_init_late().
+> Given that every platform got these defines different we'd have to start
+> at the new generic list at 17 (which would throw away 136 bytes per
+> platform), if we're going to allow the scheme for existing platforms.
+> Which I don't fancy.
 > 
-> Fold the call to page_ext_init() into page_alloc_init_late() and
-> localize deferred_struct_pages variable.
+> It's not super-pretty to mix and match, but I think I would be okay
+> switching to this scheme for new platforms.
 > 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> PS. We'd better prefix the defines with something (perhaps RPM_?)
+Perhaps just VDD_{CX/MX/..}? We reference the rpm(h)pd's phandle
+each time it's used, anyway.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+Konrad
+> 
+> Regards,
+> Bjorn
