@@ -2,97 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929C16C0989
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 05:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A72CD6C099A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 05:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjCTEHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 00:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S229593AbjCTEVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 00:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjCTEHK (ORCPT
+        with ESMTP id S229460AbjCTEVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 00:07:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1A2A5D3;
-        Sun, 19 Mar 2023 21:07:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 625F1B80D41;
-        Mon, 20 Mar 2023 04:07:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58156C433EF;
-        Mon, 20 Mar 2023 04:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679285223;
-        bh=LWrLSE3PjI2DAUNQSlxIRlBkpOj6wq3YhB8CFWL5u00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DGRdLnMul6m8B4CDoDa6CbkxrnVszS/ygTj4WxwMuRXmuLSvNjBqVRQljfQ6SctS/
-         IQ/wjpMjsYFAUMwHSOSWxuxiG8/Ij/MG6Ypr8NRVcOb9PkG/75BJtruB6aK5s26uQI
-         3Mucfp7kV7zoRw3EAYmbw/YfAoZxIo8xdkphguarPfG8SRcLSvVHNH2BrdLkXS7Maa
-         pWtF1vItEESGJcAj4oTWquhnMnqtUQf3oCBxmpYThCJmSkSA1qsVNsPP7RN89kKUmO
-         9idlyuNeDSihCZenmzPhxaKmVQ8mNliJcEIj9HyJNTW4L13OW7R6RQfrg9AO8Wb6Y5
-         YWNZgxmy5r9+g==
-Date:   Sun, 19 Mar 2023 21:10:19 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] pinctrl: qcom: Use qcom_scm_io_update_field()
-Message-ID: <20230320041019.5qs6qbztvv45pacs@ripper>
-References: <1679070482-8391-1-git-send-email-quic_mojha@quicinc.com>
- <1679070482-8391-3-git-send-email-quic_mojha@quicinc.com>
- <CACRpkdbA27buNiOTz6ad4gyS4FCvcoYru6QB5k9Lqwiu72sf9g@mail.gmail.com>
+        Mon, 20 Mar 2023 00:21:22 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A3C66E;
+        Sun, 19 Mar 2023 21:21:21 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id k2so11162495pll.8;
+        Sun, 19 Mar 2023 21:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679286081;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RS1w7jufLTgqj4IcYaB/yvHrW7A9zSSTjyhf1dZzfNM=;
+        b=UYZ4lXSE+fk2ch38kp24qVIB/g3NrO9tCkzEczF3dIhgdmMl48WycaRDmmxbb1lsLy
+         TNz/NY7Q2knzvZ30g7Dexjv6RqakQ5SZDBonPBUGxVOLqKrLIm45yHLScaGcoMRawAAB
+         Qo2tQSdCtJJtwXGjw7ixR1vXqS9VptmWqzUrVmjdGx0vjOb/jjufga1UOqIjcIwAv9et
+         Ds0zY2MTiocqUm4E/RMabAhvQB2ApkVInO3Kr5P22HrWGxpKle9+SCHtCPIw2ThgsJy6
+         UYGGNnwpc0KEnA5sMuSnq0NyTDVf1hdZ2X3lxfd1XW8R03bL5ftkuwUKP7e0ec8z/OUn
+         VUeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679286081;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RS1w7jufLTgqj4IcYaB/yvHrW7A9zSSTjyhf1dZzfNM=;
+        b=6oHt0JIt+xLyGPPUQlXh4ZZDCUyDHkM2YY+Uvs9al6JdmAA/OuKhxCDK7GPamNaulS
+         3aFw04hV66V/49THImH8LELSAjErWwX1ijgR6GtI3jwT0nlhJNeAu+jqEB+ibvxcrce4
+         N0PhgYu0Pq5OisGt917QYFvhDULmzApi0d1dR6pFzZiOHn+F5fAjaLznJmd0bLyPAHP1
+         ERz7xRKwk/Vu9yexPexarQYONGj/wRuJTvt9c8pqTncGUPA02K8HzSnRO4PJOKWDZAEU
+         npYOFhcV/RJhMrxhhrVUO6+WWww2g1HkOPMTvRw46T3EZojhLf7ickzeSyn1xb0fc9zm
+         9n7A==
+X-Gm-Message-State: AO0yUKUIyp18YnpVrSQidTnhlui89EAXFn3qCs2D5eNnrot9LAec2poh
+        m+a/0d4uw/PoqcADJsRucfU=
+X-Google-Smtp-Source: AK7set/OkIXlOAw6NRV+sFsu29XPd9i/eNuH4vDyF0QKBJE2m6aRrELRvriOwhclBp5/Tmr4BhgECQ==
+X-Received: by 2002:a17:903:2910:b0:19d:1c6e:d31f with SMTP id lh16-20020a170903291000b0019d1c6ed31fmr14313851plb.29.1679286080664;
+        Sun, 19 Mar 2023 21:21:20 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:687c:5175:b0b1:a145])
+        by smtp.gmail.com with ESMTPSA id jk5-20020a170903330500b001a01bb92273sm5494855plb.279.2023.03.19.21.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Mar 2023 21:21:19 -0700 (PDT)
+Date:   Sun, 19 Mar 2023 21:21:16 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-input@vger.kernel.org,
+        Hillf Danton <hdanton@sina.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Input: iforce - Fix exception handling in
+ iforce_usb_probe()
+Message-ID: <ZBffPEIWcmYcaXR3@google.com>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <521b63e1-9470-58ef-599e-50a1846e5380@web.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdbA27buNiOTz6ad4gyS4FCvcoYru6QB5k9Lqwiu72sf9g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <521b63e1-9470-58ef-599e-50a1846e5380@web.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 09:58:04PM +0100, Linus Walleij wrote:
-> On Fri, Mar 17, 2023 at 5:28 PM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+On Sun, Mar 19, 2023 at 07:03:00PM +0100, Markus Elfring wrote:
+> Date: Sun, 19 Mar 2023 18:50:51 +0100
 > 
-> > Use qcom_scm_io_update_field() exported function introduced
-> > in last commit.
-> >
-> > Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> The label “fail” was used to jump to another pointer check despite of
+> the detail in the implementation of the function “iforce_usb_probe”
+> that it was determined already that a corresponding variable contained
+> still a null pointer.
 > 
-> Fine by me, but I want you to first consider switching the
-> custom register accessors to regmap.
+> 1. Use more appropriate labels instead.
 > 
+> 2. Reorder jump targets at the end.
+> 
+> 3. Delete a redundant check.
+> 
+> 
+> This issue was detected by using the Coccinelle software.
 
-I took a quick look at it and there seem to be two ways that it can be
-done.
+I am sorry, but I do not understand what the actual issue is. The fact
+that come Coccinelle script complains is not enough to change the code.
 
-We can retain the MSM_ACCESSOR() macros that generates the custom
-register accessors, but plug in a regmap between these accessors and the
-mmio operations. But this just adds a few extra hops inbetween the
-driver and the volatile read/write, with a slight increase of memory,
-without any obvious benefits.
+Thanks.
 
-
-The more alluring alternative is to replace the custom accessors with
-reg_fields. This would allow us to replace some (perhaps many) of the
-bit-manipulation with regmap_update_bits().
-
-But at minimum we'd need one reg_field per register, per pin, so that's
-5 reg_fields per pin which adds up to ~10-24kb extra space, depending on
-platform.
-
-Even more alluring would be to have reg_fields describing the actual
-fields in the registers, which would allow us to better utilize the
-regmap API directly. This would cost us 35-75kb of heap.
-
-IMHO this is quite a significant effort, and given that the driver seems
-to be doing its job I'd rather see such efforts being focused elsewhere.
-
-Regards,
-Bjorn
+-- 
+Dmitry
