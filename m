@@ -2,221 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5856C2610
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8321D6C260D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjCTXuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S230189AbjCTXtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCTXuC (ORCPT
+        with ESMTP id S229684AbjCTXtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:50:02 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A02D5E;
-        Mon, 20 Mar 2023 16:49:21 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id s8so83939ois.2;
-        Mon, 20 Mar 2023 16:49:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679356047;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=09zhwGZdslyyy0wEVjKWFObTfJyiv32GzYkmakn90gk=;
-        b=MA/T70/CCgY7qQ/VDG+SBiDLHMmSuHrL4gVP3joV7QRe0tFBI/oVCJhj9xkn2Fc/Ec
-         2CWRscpjLn07BQGtFUUimQr1vpCOOrorwY5sq2KRbiGZtoKfcgPcpHH1MzfHV7y0/CX0
-         DlE8PHV+iu6FuxG8qSs0bIShrfNln9pajG694+35xr9CHBWh6bvYiHPcE5HCWxdoqBbq
-         cb0/yKHBvslt2Ig1/+juny1QWV4X43CaNBM4G2UVy3BraJ0gc84TD3TGpIUHRVPBadAk
-         +Q2SH/+u73pZebLad6Ep0sXVpHk/NhEBf2J4NXC45mk7fO0I+zyVLskf2VIwx/TwDwal
-         KPvQ==
-X-Gm-Message-State: AO0yUKVHhjmtYKN62BfSuC2mvJB3REKjweCncGSuyOGzR5VS+qeXnLDj
-        pFxYy/XQaEr3h5at7xDB3Q==
-X-Google-Smtp-Source: AK7set9WTfaJXM41TJy22yCuZh1qIWa2bJcddNw/957CohV/gMvQrnK7rg84XkJp//b3oWasSQ68WQ==
-X-Received: by 2002:a05:6808:656:b0:383:e7c8:4000 with SMTP id z22-20020a056808065600b00383e7c84000mr129044oih.13.1679356047370;
-        Mon, 20 Mar 2023 16:47:27 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b66-20020aca3445000000b0037d7c3cfac7sm4263116oia.15.2023.03.20.16.47.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 16:47:27 -0700 (PDT)
-Received: (nullmailer pid 2930320 invoked by uid 1000);
-        Mon, 20 Mar 2023 23:47:26 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: input: Drop unneeded quotes
-Date:   Mon, 20 Mar 2023 18:47:18 -0500
-Message-Id: <20230320234718.2930154-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 20 Mar 2023 19:49:42 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF6530E5;
+        Mon, 20 Mar 2023 16:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679356139; x=1710892139;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Zk4O7hF9bYpxYM+W34JdePDf+JKxL5hj+UwYmKmEWtg=;
+  b=S3c/4btKhCW2gIvIL/GXXqUr5Jh+44dxr4Z0QZa/ldqj0BjpdnzQCh7T
+   qHuMZ885FrWO+tVKRA1e7SMQxqH4ie2zLIy0Dnx5gNcn8yM3W4mgJ/Ujh
+   YXI4akC9DdgYisB9NuGcXFZnrJmLK1X/Nj5U6ijjMyGr9SVC96OHnbbnk
+   MQVl7OaAE9h8YR+EJ+kW1LROnXupwldehzosnqr6qlIypGLf1tE+S7+v+
+   4fxw9GCFYHn6uXyaaw9960ClD+atMNlnnpYgBPn4vbH7tZOMaTDvlIi+f
+   dCHSQW8vlDSYv5jrkcNA1lCoyNMScNJ7qTl/f5zxBc5BOTV3ksNvGvG+x
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="336310637"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="336310637"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 16:48:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855458463"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="855458463"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 16:47:59 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 16:47:25 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 16:47:25 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 20 Mar 2023 16:47:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UdfCN/VXKITcIt9Vz+T8EitcCVWv6HRIXCZa4vQRdIofcopy1W+YZB8y88HbhFEwB6WkkXgbDMFxJAHdnFU9Cgks9VeFspc2msdXATWzCd594oLWi+c1/Ktux7MN3h3KGrH0kqdMy7ZNpbQRpVjEgfieXlUdqiSotd3nN6BVkuqTGpLyCyjVMbbMi3UFoNDBYYF8URpQaCziKW39aC2Rj3c5qV5HPndT7rKJONIQeeo5+zRl4IJtq7zhz9vnJZ4stKRsLKv+sS8rpXaTutQau0N4+iMRJgLqAUxUYupUsipQXoS5sbfrCIKrYHVS2JLq/CdXBKrdnjXoUP3fbLsVgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=85me2D9qsSEiLlGqtoCuGgG9Og5XF+pjeQ8IazlNWJk=;
+ b=hSvcbngnp3GrCjFM5G33OGU9zCiEBQfmqqgMZpG3epL5YC+Kb0XNkAgn9RDBx+Jbuia+jQIPPJ/EbtzLvc64on8h0TevokWQGzvIjocVzone0BEcL+GV54UCdo6APUSQUbdctfl1IDyssfgDu9QV71EvyGSdaFg8n5KocP/Cu/HhYVFXjQpZ0n3crlLew2aBgfxAxIy0j8DpyQA4W9cbf79tozn5cVHEFbxW5hGTcWsplH6b9fXc4fmP2knpwMXYLSRd5C2KP5qTpUSTKQT16TYyKzGhRWF4JjHrsrG/HTCXwo2gtUnAkXFT0lahGpJIPTEI8CqDOQ3LaKWf+oC6KQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by SJ0PR11MB6792.namprd11.prod.outlook.com (2603:10b6:a03:485::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 23:47:23 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::7576:1f4a:2a6c:72f7]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::7576:1f4a:2a6c:72f7%2]) with mapi id 15.20.6178.029; Mon, 20 Mar 2023
+ 23:47:23 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: RE: [PATCH v5 04/34] x86/traps: add external_interrupt() to dispatch
+ external interrupts
+Thread-Topic: [PATCH v5 04/34] x86/traps: add external_interrupt() to dispatch
+ external interrupts
+Thread-Index: AQHZUKGztfjifB1+wEenbg44nnnakK8D4jgAgAAjLICAAGT1oA==
+Date:   Mon, 20 Mar 2023 23:47:23 +0000
+Message-ID: <SA1PR11MB673441665AA79735E5EA60C6A8809@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20230307023946.14516-1-xin3.li@intel.com>
+ <20230307023946.14516-5-xin3.li@intel.com>
+ <20230320153630.GO2194297@hirez.programming.kicks-ass.net>
+ <20230320174223.GC2196776@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230320174223.GC2196776@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|SJ0PR11MB6792:EE_
+x-ms-office365-filtering-correlation-id: 8e2780b2-82d1-4114-903c-08db299d73e8
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Mm/Gxk6H9fM3m+O0+ICmmbincncRwEj4uBSEl1ykvsqDWY17tty9vwm2ZyBO3ocYOto72Xrgw/RH485/RbQ+hmt4gkQycC/LSE/VrdcdxEZADyEoMi47+z5d2czSIB6otMEdxa2iR1Gt3dJeznQN9eaxOMLXAcLySiuYOvvWDJs7xrmSqFSe8Nvu5Iei+swN3egOvqQZWFYOOJAwSL+kE+nsGiZivSRT5HkzF4+sjtU8dB6Qq8LTZLKsKFPJCJsoS9pp8PGyrOvHRWR8JTrK7wIQrOsuXbvln9+I32BL+gsgcdw+14HlmPrrTauopoDkyeEGRMz+/S0T1WKLCHWsKJ0V42ZTDgU3HJ+V9InsAOolsqKqEiKeAadu4i1h/u9u8N5FV6AVdkUbJohMkjDkZptjMNnfcJxSuuhz/tewTt4Z+9lxzO0/TpMYvMUZCcvkNOQ8ekpyPEJQRasdAv7VZH2r08oLINdIV0rSRu705m5nNH8kDCrHUqTeJabUoHdXDMokB7Eh68CEY6p/WfvJFbpMdrv9vWhu1WJBlfUiyboLaSXzwMQFcTXVSOaodCQmuDFdlmZ4tHcJSIBGiRp0vamPB5nuvtksvq8Wcv51SZBiC4oTHzn0MN345BonyMU7ue6/z2nbaxB0PlmeaRTGtkCBB69hqfX3IfZWIQSohwUlTPX/b+fDIMjAUh1XgsgmXFGnFe4pSC6mAfd96+u03A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(136003)(366004)(39860400002)(396003)(451199018)(82960400001)(186003)(9686003)(38100700002)(122000001)(2906002)(26005)(6506007)(38070700005)(5660300002)(7416002)(4744005)(8936002)(66446008)(76116006)(52536014)(55016003)(66946007)(41300700001)(86362001)(7696005)(54906003)(4326008)(66556008)(66476007)(64756008)(8676002)(6916009)(33656002)(478600001)(71200400001)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1Ey2FioZ3LIbDad0z6WM/bAkr8yUoOtqtryvoZV8eMeyVVOpN5i8PowdRgwK?=
+ =?us-ascii?Q?iNrXE6L4AOsOA1hdEaNplULUPUokV+HwdC4O5E6HYvOH06Z6vDWdFNxbIP4O?=
+ =?us-ascii?Q?qSOpShul/xU3nr7Q+NpyCW3XkAgjugqAS3JBRm6xJ5z/MHhU+sd/ikppVL3/?=
+ =?us-ascii?Q?dIvKBwictE1LUbo6RI33e/nQwLWc6ZmanbAVjBUsLET7CWzB6v8zaZICZSxI?=
+ =?us-ascii?Q?aJaT/VniERcaz2Aiggxml9XrXbBTYbz/ccRKk0GflJx/XxD8avzDvNMUaNxF?=
+ =?us-ascii?Q?xj1E72gdly39tWXcJGJuaM9jTySeGeQVFofMIWVK/HSXovsbYHRGTpVHGJZ3?=
+ =?us-ascii?Q?C/I+h1i2Uzv/ykE/yBvxjZLKaddqNGBKJQj69gSwyrb+2sNalpvVBYDtJcxs?=
+ =?us-ascii?Q?nmuya5IKu4ovMlR8tLhA8iaFfQ7Q3k5n1tiAY1giOTNJkbI8h8CE3dM1rD2B?=
+ =?us-ascii?Q?4IMKhW7HAHh1ag9esLdWpli3mGsiRBgLSr5jYhmgQekhYV3VmKYFhZkVWxT9?=
+ =?us-ascii?Q?FkJQ3+ZOSoGK2+26x5/52wSD2MoTdY1UZcFa4tWJBJeUOnILkDG6r23DcfzI?=
+ =?us-ascii?Q?dgT5K7MZDkYw2euIBdzcRg9lNsci+UJadTsPdnH6X92F9fC7aXW8VcTIKToS?=
+ =?us-ascii?Q?gOMLNXunnzWbhmG6+lPRfIVf0c5THT4DLoIfvfPU1yU813e1sA/V9eDvAiak?=
+ =?us-ascii?Q?s58dpaPEY95+SomQBp02cyWrmndfqS+CCViM//+e326CVj5hwjG3jsb5rXy1?=
+ =?us-ascii?Q?WkiR1ExkAGBDbznHyWqMQxViYGBXcBNu9yV3jpKacEXiGYZyMuxEIdQGNZ9z?=
+ =?us-ascii?Q?xGDBzEuCeULJVdUjojg/UyWAksFIZiJx7wsa9NY/cFWShTYRNhErEWeu7E9M?=
+ =?us-ascii?Q?LSs+TLiaD09R87tqTQ+clCTMEmh0oeIeTrNgwlgNEhTtK+apWcdKxJJahesK?=
+ =?us-ascii?Q?W7CuPi3HmkvCF9NmduwBGbVWYkEh0blmuSG5p+20jQr3lJBREr0g05UEF5g0?=
+ =?us-ascii?Q?KEX53Lp3mVjjR6Np8ReNDL58Cy/ct5n+V+55YPptqRS09xZ4YABEV94FP++K?=
+ =?us-ascii?Q?PBAudBB5UHrG5lGfTEYNW+K+tXwwIo+VsDsqQ/3E97GmMZPa/1ijtFTCRy1I?=
+ =?us-ascii?Q?oHS9YzBIaci2RC9hQd+8FA/eb+cuQ3NI8/1meBPbegIMyKIrW2yTyPOBU5yo?=
+ =?us-ascii?Q?K+8xvRSZfDbxTVbPstVMI3b1L3Z7oFhH7K+w+bDyk+phdefTkzqb5asHhij4?=
+ =?us-ascii?Q?0BEnx/vsOTmyRc3Xxr5ITItDvsbh1aBjN63dulNHXbdREwkgI7ku3aVQlKYL?=
+ =?us-ascii?Q?h2rkUfI7dOFydGR2Zg9dYvrSfi5HK3M+wGbmxouhL3nkf3MdZULckm6Hva6c?=
+ =?us-ascii?Q?rH1FHhY7wU54GgZs2bX3rm3sTMIb2Jf61EgqOOk14JH0hXZK5CYHYyJjNkWE?=
+ =?us-ascii?Q?DrL1OK8wCscMFj7huaefIFXAmpc3Zf6mox1nXaSoc+Jh1yt5frjUvt2WVRHk?=
+ =?us-ascii?Q?f7X96LIsMLcSTuIkJ0QxNvTSIrDDNVrpARwROnii9CjhRjirDCwlqSvAoDx/?=
+ =?us-ascii?Q?b79xLTje4krh+gf12cM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e2780b2-82d1-4114-903c-08db299d73e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2023 23:47:23.3970
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PT6EN0cdX3R+iMNBYA9kJfZYXW1H8oSOIkxrBQQDacByKYaVVbJ3lPTbCQZ4v1XMWhHKw6sy+3sX7dILoKcsjA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6792
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-checking for this can be enabled in yamllint.
+> > > +	if (sysvec < NR_SYSTEM_VECTORS) {
+> > > +		if (system_interrupt_handlers[sysvec])
+> > > +			system_interrupt_handlers[sysvec](regs);
+> > > +		else
+> > > +			dispatch_spurious_interrupt(regs, vector);
+> >
+> > ISTR suggesting you can get rid of this branch if you stuff
+> > system_interrupt_handlers[] with dispatch_spurious_interrupt instead
+> > of NULL.
+>=20
+> Ah, I suggested that for another function vector, but it applies here too=
+ I suppose :-)
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/input/adc-joystick.yaml     | 4 ++--
- .../devicetree/bindings/input/google,cros-ec-keyb.yaml        | 2 +-
- Documentation/devicetree/bindings/input/imx-keypad.yaml       | 2 +-
- Documentation/devicetree/bindings/input/matrix-keymap.yaml    | 2 +-
- .../devicetree/bindings/input/mediatek,mt6779-keypad.yaml     | 2 +-
- .../devicetree/bindings/input/microchip,cap11xx.yaml          | 4 ++--
- Documentation/devicetree/bindings/input/pwm-vibrator.yaml     | 4 ++--
- Documentation/devicetree/bindings/input/regulator-haptic.yaml | 4 ++--
- .../bindings/input/touchscreen/elan,elants_i2c.yaml           | 4 ++--
- 9 files changed, 14 insertions(+), 14 deletions(-)
+Of course!
 
-diff --git a/Documentation/devicetree/bindings/input/adc-joystick.yaml b/Documentation/devicetree/bindings/input/adc-joystick.yaml
-index da0f8dfca8bf..6c244d66f8ce 100644
---- a/Documentation/devicetree/bindings/input/adc-joystick.yaml
-+++ b/Documentation/devicetree/bindings/input/adc-joystick.yaml
-@@ -2,8 +2,8 @@
- # Copyright 2019-2020 Artur Rojek
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/input/adc-joystick.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/input/adc-joystick.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: ADC attached joystick
- 
-diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-index e05690b3e963..3486c81699a8 100644
---- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-+++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-@@ -57,7 +57,7 @@ if:
-       contains:
-         const: google,cros-ec-keyb
- then:
--  $ref: "/schemas/input/matrix-keymap.yaml#"
-+  $ref: /schemas/input/matrix-keymap.yaml#
-   required:
-     - keypad,num-rows
-     - keypad,num-columns
-diff --git a/Documentation/devicetree/bindings/input/imx-keypad.yaml b/Documentation/devicetree/bindings/input/imx-keypad.yaml
-index 7514df62b592..b110eb1f3358 100644
---- a/Documentation/devicetree/bindings/input/imx-keypad.yaml
-+++ b/Documentation/devicetree/bindings/input/imx-keypad.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Liu Ying <gnuiyl@gmail.com>
- 
- allOf:
--  - $ref: "/schemas/input/matrix-keymap.yaml#"
-+  - $ref: /schemas/input/matrix-keymap.yaml#
- 
- description: |
-   The KPP is designed to interface with a keypad matrix with 2-point contact
-diff --git a/Documentation/devicetree/bindings/input/matrix-keymap.yaml b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-index 4d6dbe91646d..a715c2a773fe 100644
---- a/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-+++ b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-@@ -21,7 +21,7 @@ description: |
- 
- properties:
-   linux,keymap:
--    $ref: '/schemas/types.yaml#/definitions/uint32-array'
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-     description: |
-       An array of packed 1-cell entries containing the equivalent of row,
-       column and linux key-code. The 32-bit big endian cell is packed as:
-diff --git a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-index d768c30f48fb..47aac8794b68 100644
---- a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-+++ b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-@@ -10,7 +10,7 @@ maintainers:
-   - Mattijs Korpershoek <mkorpershoek@baylibre.com>
- 
- allOf:
--  - $ref: "/schemas/input/matrix-keymap.yaml#"
-+  - $ref: /schemas/input/matrix-keymap.yaml#
- 
- description: |
-   Mediatek's Keypad controller is used to interface a SoC with a matrix-type
-diff --git a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
-index 5fa625b5c5fb..5b5d4f7d3482 100644
---- a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
-+++ b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/input/microchip,cap11xx.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/input/microchip,cap11xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Microchip CAP11xx based capacitive touch sensors
- 
-diff --git a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-index a70a636ee112..d32716c604fe 100644
---- a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-+++ b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/input/pwm-vibrator.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/input/pwm-vibrator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: PWM vibrator
- 
-diff --git a/Documentation/devicetree/bindings/input/regulator-haptic.yaml b/Documentation/devicetree/bindings/input/regulator-haptic.yaml
-index 627891e1ef55..cf63f834dd7d 100644
---- a/Documentation/devicetree/bindings/input/regulator-haptic.yaml
-+++ b/Documentation/devicetree/bindings/input/regulator-haptic.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/input/regulator-haptic.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/input/regulator-haptic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Regulator Haptic
- 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml b/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
-index f9053e5e9b24..3255c2c8951a 100644
---- a/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
-+++ b/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/input/touchscreen/elan,elants_i2c.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/input/touchscreen/elan,elants_i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Elantech I2C Touchscreen
- 
--- 
-2.39.2
+We just need to use a wrapper as dispatch_spurious_interrupt() takes an ext=
+ra
+parameter "vector".
+
+Thanks!
+  Xin
+
 
