@@ -2,183 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5620C6C124C
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A266C1241
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbjCTMtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S231563AbjCTMrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjCTMs0 (ORCPT
+        with ESMTP id S231542AbjCTMrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:48:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D19A144A4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679316447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 20 Mar 2023 08:47:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBCF1449F;
+        Mon, 20 Mar 2023 05:47:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 97A4D1F85D;
+        Mon, 20 Mar 2023 12:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679316446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MCTZ2YEpD+DNcu1eqCJ1wevQ6rnwTmcbdNFcopJE5v0=;
-        b=Bu2VlutiK2wHeVMCGuP7QKn+J7sLVpDFjOkItxqmiR50WS55wP2qlil8zGCmn+BXd0EXCR
-        TE4La+nmhjr7swh3MPPcldhZHxdlkySTS1oqiQn543Nui6Kj9PYwT0Z5b0nh6dnWy/YsFc
-        SrGBpImNzVFWVbiKVAYu2IaJAQ/IbHM=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-311-wIs5ST7mOEWfgHl13IegBw-1; Mon, 20 Mar 2023 08:47:25 -0400
-X-MC-Unique: wIs5ST7mOEWfgHl13IegBw-1
-Received: by mail-pl1-f200.google.com with SMTP id l10-20020a17090270ca00b0019caa6e6bd1so7056500plt.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 05:47:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679316445;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MCTZ2YEpD+DNcu1eqCJ1wevQ6rnwTmcbdNFcopJE5v0=;
-        b=CYH2vxI127qag4wPr6PLFxpNZkKPf+1N38a2OS1ToN0KQ/bfVNldWQHhCWgaQdAomx
-         8xRPCAIqwGcx4oF4hrNXLKMHp5vKorhgnUco30CMEmglslPmjhDdwTGIlNJfeeMTTJMM
-         +yaXPe18Nu/00HpX1eQNorLjYTck6rIBjz4bRQA41vDX0eFhAGofZkmLoh+mcM1uAe5N
-         iIpJsQocWHn8+Y/ZFHOJf/eW/dWG2lxO77b5P/45QUxpvsvIj/oizbrZ8PwG8+upJFZA
-         jWKbI9ArMkzIoXG45tIaCKAVZiQTbYIVyOKOVSZ/3+SIelqy5mLUCvHqGfoaZhteeJc/
-         55cQ==
-X-Gm-Message-State: AO0yUKXAYsnmqDCS5t6xLvpsB32JYZT/Kr5LB1q2x1rcV2tbgXM2NdWw
-        JcAf41ac9wvfLOjWF6dvBUNuqIga41ERyVl4Nkq4zWL2ZHccUPRCNrRaiSrwsUAFpllkOgYEloK
-        DtZ2a3Sg73pstFQqc8jX4ihMZ
-X-Received: by 2002:a17:90a:354:b0:233:ee67:8eb3 with SMTP id 20-20020a17090a035400b00233ee678eb3mr20113196pjf.24.1679316444862;
-        Mon, 20 Mar 2023 05:47:24 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9NvQjuWxOqxvHTyhzTOo2bI7ogfxl2dHPoaHJN+qRIYINNczfbWhlBBbuhETGfpifCCMiNgw==
-X-Received: by 2002:a17:90a:354:b0:233:ee67:8eb3 with SMTP id 20-20020a17090a035400b00233ee678eb3mr20113160pjf.24.1679316444444;
-        Mon, 20 Mar 2023 05:47:24 -0700 (PDT)
-Received: from [10.72.12.59] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id gq21-20020a17090b105500b002342ccc8280sm6176676pjb.6.2023.03.20.05.47.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 05:47:24 -0700 (PDT)
-Message-ID: <0b51da52-bb38-2094-b9b2-bc3858066be5@redhat.com>
-Date:   Mon, 20 Mar 2023 20:47:18 +0800
+        bh=3oV8n86ezE3PDuESxSyzDj8V5HvxjQXuG2gXNZlLh2k=;
+        b=W7FuxtZKswgPfhF2X4ZAQGI304brinRgKfzkZS/EkyoTPkg/dOy3jZS+6jH4DvJxzL9LkC
+        V011yHOL9H2cmWI0Z6qKRgvXSGKa87/nnSghlt97EJ5vr164eizMgramgoGHFT7hkComCo
+        GbCutZCsr4kYevk6qUDvBOigjSNtx4I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679316446;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3oV8n86ezE3PDuESxSyzDj8V5HvxjQXuG2gXNZlLh2k=;
+        b=GqtUi8yRoTwkqfIrCl/GRY++xtu4GBzluATScvLcp3xOEuERstepm41uMn3eDGnSEI7sRV
+        kHyf8/j1VHXHgKAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8867A13A00;
+        Mon, 20 Mar 2023 12:47:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6u1DId5VGGTyZgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 20 Mar 2023 12:47:26 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E380AA0719; Mon, 20 Mar 2023 13:47:25 +0100 (CET)
+Date:   Mon, 20 Mar 2023 13:47:25 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git sysv pile
+Message-ID: <20230320124725.pe4jqdsp4o47kmdp@quack3>
+References: <Y/gugbqq858QXJBY@ZenIV>
+ <20230316090035.ynjejgcd72ynvd36@quack3>
+ <2766007.BEx9A2HvPv@suse>
+ <4214717.mogB4TqSGs@suse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 0/3] ceph: fscrypt: fix atomic open bug for encrypted
- directories
-Content-Language: en-US
-To:     Ilya Dryomov <idryomov@gmail.com>
-Cc:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230316181413.26916-1-lhenriques@suse.de>
- <568da52f-18a6-5f96-cd51-5b07dedefb2d@redhat.com>
- <CAOi1vP9QsbSUq9JNRcpQpV3XWM2Eurhk+6AkDDNmks5PLTx3YQ@mail.gmail.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <CAOi1vP9QsbSUq9JNRcpQpV3XWM2Eurhk+6AkDDNmks5PLTx3YQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <4214717.mogB4TqSGs@suse>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
+> On giovedì 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wrote:
+> > On giovedì 16 marzo 2023 10:00:35 CET Jan Kara wrote:
+> > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
+> > > > On mercoledì 1 marzo 2023 15:14:16 CET Al Viro wrote:
+> > > > > On Wed, Mar 01, 2023 at 02:00:18PM +0100, Jan Kara wrote:
+> > > > > > On Wed 01-03-23 12:20:56, Fabio M. De Francesco wrote:
+> > > > > > > On venerdì 24 febbraio 2023 04:26:57 CET Al Viro wrote:
+> > > > > > > > 	Fabio's "switch to kmap_local_page()" patchset (originally
+> > 
+> > after
+> > 
+> > > > > > > > 	the
+> > > > > > > > 
+> > > > > > > > ext2 counterpart, with a lot of cleaning up done to it; as the
+> > > > > > > > matter
+> > > > 
+> > > > of
+> > > > 
+> > > > > > > > fact, ext2 side is in need of similar cleanups - calling
+> > 
+> > conventions
+> > 
+> > > > > > > > there
+> > > > > > > > are bloody awful).
+> > > > 
+> > > > [snip]
+> > > > 
+> > > > > I think I've pushed a demo patchset to vfs.git at some point back in
+> > > > > January... Yep - see #work.ext2 in there; completely untested, though.
+> > > > 
+> > > > The following commits from the VFS tree, #work.ext2 look good to me.
+> > > > 
+> > > > f5b399373756 ("ext2: use offset_in_page() instead of open-coding it as
+> > > > subtraction")
+> > > > c7248e221fb5 ("ext2_get_page(): saner type")
+> > > > 470e54a09898 ("ext2_put_page(): accept any pointer within the page")
+> > > > 15abcc147cf7 ("ext2_{set_link,delete_entry}(): don't bother with
+> > 
+> > page_addr")
+> > 
+> > > > 16a5ee2027b7 ("ext2_find_entry()/ext2_dotdot(): callers don't need
+> > 
+> > page_addr
+> > 
+> > > > anymore")
+> > > > 
+> > > > Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > 
+> > > Thanks!
+> > > 
+> > > > I could only read the code but I could not test it in the same QEMU/KVM
+> > > > x86_32 VM where I test all my HIGHMEM related work.
+> > > > 
+> > > > Btrfs as well as all the other filesystems I converted to
+> > 
+> > kmap_local_page()
+> > 
+> > > > don't make the processes in the VM to crash, whereas the xfstests on 
+> ext2
+> > > > trigger the OOM killer at random tests (only sometimes they exit
+> > > > gracefully).
+> > > > 
+> > > > FYI, I tried to run the tests with 6GB of RAM, booting a kernel with
+> > > > HIGHMEM64GB enabled. I cannot add my "Tested-by" tag.
+> > > 
+> > > Hum, interesting. Reading your previous emails this didn't seem to happen
+> > > before applying this series, did it?
+> > 
+> > I wrote too many messages but was probably not able to explain the facts
+> > properly. Please let me summarize...
+> > 
+> > 1) When testing ext2 with "./check -g quick" in a QEMU/KVM x86_32 VM, 6GB 
+> RAM,
+> > booting a Vanilla kernel 6.3.0-rc1 with HIGHMEM64GB enabled, the OOM Killer
+> > kicks in at random tests _with_ and _without_ Al's patches.
+> > 
+> > 2) The only case which does never trigger the OOM Killer is running the 
+> tests
+> > on ext2 formatted filesystems in loop disks with the stock openSUSE kernel
+> > which is the 6.2.1-1-pae.
+> > 
+> > 3) The same "./check -g quick" on 6.3.0-rc1 runs always to completion with
+> > other filesystems. I ran xfstests several times on Btrfs and I had no
+> > problems.
+> > 
+> > 4) I cannot git-bisect this issue with ext2 because I cannot trust the 
+> results
+> > on any particular Kernel version. I mean that I cannot mark any specific
+> > version neither "good" or "bad" because it happens that the same "good"
+> > version instead make xfstests crash at the next run.
+> > 
+> > My conclusion is that we probably have some kind of race that makes the 
+> random
+> > tests crash at random runs of random Kernel versions between (at least) SUSE
+> > 6.2.1 and Vanilla current.
+> > 
+> > But it may be very well the case that I'm doing something stupid (e.g., with
+> > QEMU configuration or setup_disks or I can't imagine whatever else) and that
+> > I'm unable to see where I make mistakes. After all, I'm still a newcomer 
+> with
+> > little experience :-)
+> > 
+> > Therefore, I'd suggest that someone else try to test ext2 in an x86_32 VM.
+> > However, I'm 99.5% sure that Al's patches are good by the mere inspection of
+> > his code.
+> > 
+> > I hope that this summary contains everything that may help.
+> > 
+> > However, I remain available to provide any further information and to give 
+> my
+> > contribution if you ask me for specific tasks.
+> > 
+> > For my part I have no idea how to investigate what is happening. In these
+> > months I have run the VM hundreds of times on the most disparate filesystems
+> > to test my conversions to kmap_local_page() and I have never seen anything
+> > like this happen.
+> > 
+> > Thanks,
+> > 
+> > Fabio
+> > 
+> > 
+> > Honza
+> > 
+> > > --
+> > > Jan Kara <jack@suse.com>
+> > > SUSE Labs, CR
+> 
+> I can't yet figure out which conditions lead to trigger the OOM Killer to kill 
+> the XFCE Desktop Environment, and the xfstests (which I usually run into the 
+> latter). After all, reserving 6GB of main memory to a QEMU/KVM x86_32 VM had 
+> always been more than adequate.
+> 
+> So, I thought I'd better ignore that 6GB for a 32 bit architecture are a 
+> notable amount of RAM and squeezed some more from the host until I went to 
+> reserve 8GB. I know that this is not what who is able to find out what 
+> consumes so much main memory would do, but wanted to get the output from the 
+> tests, one way or the other... :-(
+> 
+> OK, I could finally run my tests to completion and had no crashes at all. I 
+> ran "./check -g quick" on one "test" + three "scratch" loop devices formatted 
+> with "mkfs.ext2 -c". I ran three times _with_ and then three times _without_ 
+> Al's following patches cloned from his vfs tree, #work.ext2 branch:
+> 
+> f5b399373756 ("ext2: use offset_in_page() instead of open-coding it as 
+> subtraction")
+> c7248e221fb5 ("ext2_get_page(): saner type")
+> 470e54a09898 ("ext2_put_page(): accept any pointer within the page")
+> 15abcc147cf7 ("ext2_{set_link,delete_entry}(): don't bother with page_addr")
+> 16a5ee2027b7 ("ext2_find_entry()/ext2_dotdot(): callers don't need
+> 
+> All the six tests were no longer killed by the Kernel :-)
+> 
+> I got 144 failures on 597 tests, regardless of the above listed patches.
+> 
+> My final conclusion is that these patches don't introduce regressions. I see 
+> several tests that produce memory leaks but, I want to stress it again, the 
+> failing tests are always the same with and without the patches.
+> 
+> therefore, I think that now I can safely add my tag to all five patches listed 
+> above...
+> 
+> Tested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-On 20/03/2023 19:20, Ilya Dryomov wrote:
-> On Mon, Mar 20, 2023 at 2:07â€¯AM Xiubo Li <xiubli@redhat.com> wrote:
->>
->> On 17/03/2023 02:14, LuÃ­s Henriques wrote:
->>> Hi!
->>>
->>> I started seeing fstest generic/123 failing in ceph fscrypt, when running it
->>> with 'test_dummy_encryption'.  This test is quite simple:
->>>
->>> 1. Creates a directory with write permissions for root only
->>> 2. Writes into a file in that directory
->>> 3. Uses 'su' to try to modify that file as a different user, and
->>>      gets -EPERM
->>>
->>> All the test steps succeed, but the test fails to cleanup: 'rm -rf <dir>'
->>> will fail with -ENOTEMPTY.  'strace' shows that calling unlinkat() to remove
->>> the file got a -ENOENT and then -ENOTEMPTY for the directory.
->>>
->>> This is because 'su' does a drop_caches ('su (874): drop_caches: 2' in
->>> dmesg), and ceph's atomic open will do:
->>>
->>>        if (IS_ENCRYPTED(dir)) {
->>>                set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
->>>                if (!fscrypt_has_encryption_key(dir)) {
->>>                        spin_lock(&dentry->d_lock);
->>>                        dentry->d_flags |= DCACHE_NOKEY_NAME;
->>>                        spin_unlock(&dentry->d_lock);
->>>                }
->>>        }
->>>
->>> Although 'dir' has the encryption key available, fscrypt_has_encryption_key()
->>> will return 'false' because fscrypt info isn't yet set after the cache
->>> cleanup.
->>>
->>> The first patch will add a new helper for the atomic_open that will force
->>> the fscrypt info to be loaded into an inode that has been evicted recently
->>> but for which the key is still available.
->>>
->>> The second patch switches ceph atomic_open to use the new fscrypt helper.
->>>
->>> Cheers,
->>> --
->>> LuÃ­s
->>>
->>> Changes since v2:
->>> - Make helper more generic and to be used both in lookup and atomic open
->>>     operations
->>> - Modify ceph_lookup (patch 0002) and ceph_atomic_open (patch 0003) to use
->>>     the new helper
->>>
->>> Changes since v1:
->>> - Dropped IS_ENCRYPTED() from helper function because kerneldoc says
->>>     already that it applies to encrypted directories and, most importantly,
->>>     because it would introduce a different behaviour for
->>>     CONFIG_FS_ENCRYPTION and !CONFIG_FS_ENCRYPTION.
->>> - Rephrased helper kerneldoc
->>>
->>> Changes since initial RFC (after Eric's review):
->>> - Added kerneldoc comments to the new fscrypt helper
->>> - Dropped '__' from helper name (now fscrypt_prepare_atomic_open())
->>> - Added IS_ENCRYPTED() check in helper
->>> - DCACHE_NOKEY_NAME is not set if fscrypt_get_encryption_info() returns an
->>>     error
->>> - Fixed helper for !CONFIG_FS_ENCRYPTION (now defined 'static inline')
->> This series looks good to me.
->>
->> And I have run the test locally and worked well.
->>
->>
->>> LuÃ­s Henriques (3):
->>>     fscrypt: new helper function - fscrypt_prepare_lookup_partial()
->> Eric,
->>
->> If possible I we can pick this together to ceph repo and need your ack
->> about this. Or you can pick it to the crypto repo then please feel free
->> to add:
->>
->> Tested-by: Xiubo Li <xiubli@redhat.com> and Reviewed-by: Xiubo Li
->> <xiubli@redhat.com>
-> I would prefer the fscrypt helper to go through the fscrypt tree.
+Thanks for the effort! Al, will you submit these patches or should I just
+pull your branch into my tree?
 
-Sure. This also LGTM.
-
-Thanks
-
-- Xiubo
-
-> Thanks,
->
->                  Ilya
->
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
