@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7B96C2577
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD636C257A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 00:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCTXNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 19:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S230018AbjCTXNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 19:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjCTXND (ORCPT
+        with ESMTP id S229912AbjCTXNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 19:13:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6B34008
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679353935;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8OXg4VI8cm6vRN/hId3npmgyDD4BW9c8No9p4EZybmM=;
-        b=L4zSnDCMUYQAY40Hrih5mRwlizyvJRgT90kfHwx7fIs+a/QVxWSnp6TRHexEqgsNVUOJzH
-        HGN/on9bQe/L1PAsCE/OBdpIiquQpcm88vxtjG0fCzwRMhGN4mEXxdyS08hqqz4ml9myNx
-        VFGIaHMK9sUep6bFcZtoMeaPeAua95g=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-463-_BmeWqlQNwuGXuGWA0CFow-1; Mon, 20 Mar 2023 19:12:13 -0400
-X-MC-Unique: _BmeWqlQNwuGXuGWA0CFow-1
-Received: by mail-qk1-f198.google.com with SMTP id 72-20020a37044b000000b0074694114c09so1231909qke.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 16:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679353933;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8OXg4VI8cm6vRN/hId3npmgyDD4BW9c8No9p4EZybmM=;
-        b=CVpLoNF9RdpkDrtaw0zpnS1J7mPsU0HHVbP8Xxt8oBD8N7VvSNQmeGV453O7Wj7cuv
-         FaXiYoghM8a/gbZQrunRXn6DpNPmbl3OhPhUtP9cXZNBLwnXMlr4pJmKCPcO29fODsso
-         OUc94KzX+e380/g2q4ho3MebOrfN1kHUu289xPxD9MYoA/OeP9DyLELWYzcYdDdGt6RP
-         9mQNs/Q1IwRUwv4rKVeS86zC8eMrI7CLp+RsWH9rO5lM/YQRFr0IcccDQhjVpVCVFdJs
-         e+UJVT3iUKsw6wWOfyDfWYXLQKb22upbsYEvVJR1XxO/iM0QtaksszXpwtSZZWAu0o+X
-         Qd+Q==
-X-Gm-Message-State: AO0yUKWPrvLi1WUB90hepJTYoJsjlfLtofCnqAYBeIzHu9Lv3tZudX90
-        mUi5xm6bcefry1V2wV3Yq28TW6aCQITnKoBxpjkEg7KWsB0c0wBW/7508ulCwDA7vuhwivjp8M0
-        03MV0YwVZAGLeNPyfPlgLmJac
-X-Received: by 2002:a05:6214:e6a:b0:5b3:4b99:7af8 with SMTP id jz10-20020a0562140e6a00b005b34b997af8mr998492qvb.21.1679353933197;
-        Mon, 20 Mar 2023 16:12:13 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+WMLf2/hC3NpULLTuNzWukCaLGaPzgM3n1zv6eFgYYW5UjHVNHtsaQFRkKcay04SkrmfZlyQ==
-X-Received: by 2002:a05:6214:e6a:b0:5b3:4b99:7af8 with SMTP id jz10-20020a0562140e6a00b005b34b997af8mr998476qvb.21.1679353932932;
-        Mon, 20 Mar 2023 16:12:12 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o10-20020a05620a0d4a00b0074281812276sm1755579qkl.97.2023.03.20.16.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 16:12:12 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     peter.ujfalusi@gmail.com, vkoul@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] dmaengine: ti: edma: remove unused edma_and function
-Date:   Mon, 20 Mar 2023 19:12:09 -0400
-Message-Id: <20230320231209.1728940-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 20 Mar 2023 19:13:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BD434C0C;
+        Mon, 20 Mar 2023 16:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=VBdK0/Y4JqBgPMxacPgxZ9ztvbW86iUY79ITNsMQ6C8=; b=KeaDk1eTpGWhCEvi/fOy/KW+mV
+        Yj1EzTN1s1jEKgM1aUneB5PVBdgtOLsO8O3e2TTwfWOggZd2TFr0D2XKquZtSIOnpfchSaif4+hCP
+        RkACncjUU4NkgE8bJ5GXTk698BqcfOrpQRk6mQdlwkUajGCqsnXHiGWUBSkO2lTPJy/xC5SCkYN3u
+        73g2+E8HWFGKqSrlFsTZTeQpx8xWV8g1giW5efCg5Gwizm0HkkvxEFiJhXXWVHjySxnvkFOOtGY6h
+        jJpXGi+X0dg/v5N6ZZA87/kFKQGqGqRBltNMbdjHh3c+XMdVpM8kNgl+jmJegRghVGzi/GwpsCT0r
+        Bu4QGKBQ==;
+Received: from [2601:1c2:980:9ec0::21b4] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1peOgh-00Al4N-29;
+        Mon, 20 Mar 2023 23:13:11 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Kuninori Morimoto <morimoto.kuninori@renesas.com>,
+        linux-sh@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH 6/7 v5] sh: fix Kconfig entry for NUMA => SMP
+Date:   Mon, 20 Mar 2023 16:13:10 -0700
+Message-Id: <20230320231310.28841-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/dma/ti/edma.c:321:20: error: unused function
-  'edma_and' [-Werror,-Wunused-function]
-static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
-                   ^
-This function is not used, so remove it.
+Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+SYS_SUPPORTS_SMP and SMP.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
+code + data inside topology.c is only built when CONFIG_NUMA is
+set/enabled, so these arch/sh/ configs need to select SMP and
+SYS_SUPPORTS_SMP to build the NUMA support.
+
+Fixes this build error in multiple SUPERH configs:
+
+mm/page_alloc.o: In function `get_page_from_freelist':
+page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
+
+Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
+Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
+Fixes: 55ba99eb211a ("sh: Add support for SH7786 CPU subtype.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Kuninori Morimoto <morimoto.kuninori@renesas.com>
+Cc: linux-sh@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- drivers/dma/ti/edma.c | 8 --------
- 1 file changed, 8 deletions(-)
+v2: skipped
+v3: skipped
+v4: refresh & resend
+v5: include CPU_SUBTYPE_SH7785 in this patch (Adrian)
 
-diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-index fa06d7e6d8e3..9ea91c640c32 100644
---- a/drivers/dma/ti/edma.c
-+++ b/drivers/dma/ti/edma.c
-@@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
- 	edma_write(ecc, offset, val);
- }
+ arch/sh/Kconfig |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff -- a/arch/sh/Kconfig b/arch/sh/Kconfig
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -442,6 +442,8 @@ config CPU_SUBTYPE_SH7785
+ 	select CPU_SHX2
+ 	select ARCH_SPARSEMEM_ENABLE
+ 	select SYS_SUPPORTS_NUMA
++	select SYS_SUPPORTS_SMP
++	select SMP
+ 	select PINCTRL
  
--static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
--{
--	unsigned val = edma_read(ecc, offset);
--
--	val &= and;
--	edma_write(ecc, offset, val);
--}
--
- static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
- {
- 	unsigned val = edma_read(ecc, offset);
--- 
-2.27.0
-
+ config CPU_SUBTYPE_SH7786
+@@ -476,6 +478,8 @@ config CPU_SUBTYPE_SH7722
+ 	select CPU_SHX2
+ 	select ARCH_SHMOBILE
+ 	select ARCH_SPARSEMEM_ENABLE
++	select SYS_SUPPORTS_SMP
++	select SMP
+ 	select SYS_SUPPORTS_NUMA
+ 	select SYS_SUPPORTS_SH_CMT
+ 	select PINCTRL
+@@ -486,6 +490,8 @@ config CPU_SUBTYPE_SH7366
+ 	select CPU_SHX2
+ 	select ARCH_SHMOBILE
+ 	select ARCH_SPARSEMEM_ENABLE
++	select SYS_SUPPORTS_SMP
++	select SMP
+ 	select SYS_SUPPORTS_NUMA
+ 	select SYS_SUPPORTS_SH_CMT
+ 
