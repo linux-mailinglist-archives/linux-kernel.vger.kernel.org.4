@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04E36C1312
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F786C1321
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbjCTNSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S231689AbjCTNUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjCTNSK (ORCPT
+        with ESMTP id S231836AbjCTNTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:18:10 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C8723869;
-        Mon, 20 Mar 2023 06:17:52 -0700 (PDT)
-Received: from localhost.localdomain (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 427315801C3;
-        Mon, 20 Mar 2023 21:17:38 +0800 (CST)
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com
-Cc:     linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH v5 2/2] tracing: Add documentation for funcgraph-retval and graph_retval_hex
-Date:   Mon, 20 Mar 2023 06:16:50 -0700
-Message-Id: <20230320131650.482594-3-pengdonglin@sangfor.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
+        Mon, 20 Mar 2023 09:19:50 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6A924134;
+        Mon, 20 Mar 2023 06:19:42 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PgFh93yN6z4f3jQb;
+        Mon, 20 Mar 2023 21:19:37 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgDHeq5pXRhkOUPvFg--.63166S2;
+        Mon, 20 Mar 2023 21:19:39 +0800 (CST)
+Subject: Re: [PATCH 7/7] ext4: improve inode table blocks counting in
+ ext4_num_overhead_clusters
+To:     Jan Kara <jack@suse.cz>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230221115919.1918161-1-shikemeng@huaweicloud.com>
+ <20230221115919.1918161-8-shikemeng@huaweicloud.com>
+ <20230320124444.kkp4es2wyke7vqgx@quack3>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <afde9290-39d4-0273-40de-153a53f60e31@huaweicloud.com>
+Date:   Mon, 20 Mar 2023 21:19:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZS0hMVk4YSEgdTE8dHU0dGlUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpISkJIT1VKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NQw6SDo4DD0VPRFJThQ8GAs#
-        NzpPCzBVSlVKTUxCSEpDSU5CT0NNVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFMS0pONwY+
-X-HM-Tid: 0a86ff2b15712eb7kusn427315801c3
-X-HM-MType: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230320124444.kkp4es2wyke7vqgx@quack3>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgDHeq5pXRhkOUPvFg--.63166S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWfJrW7Ww4kCw15Cw18uFg_yoW8Xr4rpr
+        4xta45tr45urWqgr4SyF9rXrWFga15Kr47Ja13Gr13GayDuws2gr9xtrs0vF12gw47Aw1q
+        qFW3C3yUu3sxA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,113 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the two newly introduced options for the
-function_graph tracer. The new option funcgraph-retval is used to
-control whether or not to display the return value. The new option
-graph_retval_hex is used to control the display format of the return
-value.
 
-Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
----
-v5:
- - Describe the limitations of funcgraph-retval
----
- Documentation/trace/ftrace.rst | 75 ++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
 
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index b927fb2b94dc..797841d15da9 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -1328,6 +1328,19 @@ Options for function_graph tracer:
- 	only a closing curly bracket "}" is displayed for
- 	the return of a function.
- 
-+  funcgraph-retval
-+	When set, the return event will include the function and
-+	its return value. Note that even if the function return
-+	type is void, a return value will also be printed, you
-+	should ignore it. This option is off by default.
-+
-+  graph_retval_hex
-+	Depend on function-retval. When set, the function return
-+	value will be printed in hexadecimal format. If this is not
-+	set and the return value looks like an error code, it will
-+	be printed in signed decimal format, else in hexadecimal
-+	format. This option is off by default.
-+
-   sleep-time
- 	When running function graph tracer, to include
- 	the time a task schedules out in its function.
-@@ -2673,6 +2686,68 @@ It is default disabled.
-     0)   1.757 us    |        } /* kmem_cache_free() */
-     0)   2.861 us    |      } /* putname() */
- 
-+The return value of each traced function can be displayed. This
-+feature can be very useful when you encounter system call failures
-+and want to locate the function that return errors firstly.
-+
-+	- hide: echo nofuncgraph-retval > trace_options
-+	- show: echo funcgraph-retval > trace_options
-+
-+  Example with funcgraph-retval::
-+
-+    1)               |    cgroup_migrate() {
-+    1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-+    1)               |      cgroup_migrate_execute() {
-+    1)               |        cpu_cgroup_can_attach() {
-+    1)               |          cgroup_taskset_first() {
-+    1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-+    1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-+    1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
-+    1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
-+    1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
-+    1)   7.143 us    |    } /* cgroup_migrate = -22 */
-+
-+The above example shows that the cgroup function cpu_cgroup_can_attach
-+returned the error code -22 firstly, then we can read the code of this
-+function to get the root cause.
-+
-+If the option graph_retval_hex is not set and the return value looks
-+like an error code, it will be printed in signed decimal format. In
-+other cases, it will be printed in hexadecimal format.
-+
-+	- hexadecimal or signed decimal: echo nograph_retval_hex > trace_options
-+	- hexadecimal: echo graph_retval_hex > trace_options
-+
-+  Example with graph_retval_hex::
-+
-+    1)               |      cgroup_migrate() {
-+    1)   0.651 us    |        cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-+    1)               |        cgroup_migrate_execute() {
-+    1)               |          cpu_cgroup_can_attach() {
-+    1)               |            cgroup_taskset_first() {
-+    1)   0.732 us    |              cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-+    1)   1.232 us    |            } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-+    1)   0.380 us    |            sched_rt_can_attach(); /* = 0x0 */
-+    1)   2.335 us    |          } /* cpu_cgroup_can_attach = 0xffffffea */
-+    1)   4.369 us    |        } /* cgroup_migrate_execute = 0xffffffea */
-+    1)   7.143 us    |      } /* cgroup_migrate = 0xffffffea */
-+
-+There are some limitations when using the funcgraph-retval currently:
-+
-+- Even if the function return type is void, a return value will still
-+  be printed, and you can just ignore it.
-+
-+- Even if the return value is not an error code actually, it may be
-+  displayed as an error code. You should read the code to check.
-+  For example, both 0xfe and 0xfffe are be interpreted as -2.
-+
-+- Only the value of the first return register will be recorded and
-+  printed even if the return values may be stored in two registers
-+  actually. For example, both the eax and edx are used to store a
-+  64 bit return value in the x86 architecture, and the eax stores
-+  the low 32 bit, the edx stores the high 32 bit, however only the
-+  value stored in eax will be recorded and printed.
-+
- You can put some comments on specific functions by using
- trace_printk() For example, if you want to put a comment inside
- the __might_sleep() function, you just have to include
+on 3/20/2023 8:44 PM, Jan Kara wrote:
+> On Tue 21-02-23 19:59:19, Kemeng Shi wrote:
+>> As inode table blocks are contiguous, inode table blocks inside the
+>> block_group can be represented as range [itbl_cluster_start,
+>> itbl_cluster_last]. Then we can simply account inode table cluters and
+>> check cluster overlap with [itbl_cluster_start, itbl_cluster_last] instead
+>> of traverse each block of inode table.
+>> By the way, this patch fixes code style problem of comment for
+>> ext4_num_overhead_clusters.
+>>
+>> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> 
+> FWIW this is triggering Coverity warning:
+> 
+> *** CID 1536792:  Uninitialized variables  (UNINIT)
+> /fs/ext4/balloc.c: 153 in ext4_num_overhead_clusters()
+> 147                     inode_cluster = EXT4_B2C(sbi,
+> 148                                              ext4_inode_bitmap(sb, gdp) - st
+> 149                     /*
+> 150                      * Additional check if inode bitmap is in just accounted
+> 151                      * block_cluster
+> 152                      */
+>>>>     CID 1536792:  Uninitialized variables  (UNINIT)
+>>>>     Using uninitialized value "block_cluster".
+> 153                     if (inode_cluster != block_cluster &&
+> 154                         inode_cluster >= base_clusters &&
+> 155                         (inode_cluster < itbl_cluster_start ||
+> 156                         inode_cluster > itbl_cluster_end))
+> 157                             num_clusters++;
+> 158             }
+> 
+> which actually looks valid AFAICT.
+Yes, there is a risk to access uninitialized block_cluster if block bitmap block
+and inode bitmap block are in different groups. Patch to fix is just sent. Thanks!
+
 -- 
-2.25.1
+Best wishes
+Kemeng Shi
 
