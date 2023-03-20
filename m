@@ -2,149 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0278F6C1407
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F666C140D
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbjCTNw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S229684AbjCTNy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCTNw5 (ORCPT
+        with ESMTP id S231330AbjCTNyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:52:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 738F3768B;
-        Mon, 20 Mar 2023 06:52:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9FD5FEC;
-        Mon, 20 Mar 2023 06:53:38 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED1F43F71E;
-        Mon, 20 Mar 2023 06:52:52 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 13:52:47 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexey Klimov <alexey.klimov@linaro.org>
-Cc:     peterz@infradead.org, draszik@google.com, peter.griffin@linaro.org,
-        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
-        tony@atomide.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        alim.akhtar@samsung.com, regressions@lists.linux.dev,
-        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com
-Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
- and slow-stuck reboots
-Message-ID: <ZBhlL4tqSUi/c3qk@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230314230004.961993-1-alexey.klimov@linaro.org>
-MIME-Version: 1.0
+        Mon, 20 Mar 2023 09:54:23 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9950B59D0;
+        Mon, 20 Mar 2023 06:54:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=juSXxUS5qzHIB9KdT2XXmLCSgWeI+PBHm7Q9oegdmCtSzZVXD5+AiYHADG/w917/xNGYXaYXpVH8IiBAaN6eirtsRSSMOGh+bEWRReakGTXbc8qpN8Z6z+SZMbtN/n73XXBCRPVzMsw11CtAKLRS4/flL4oShpunmWvhapd4/bVJngr5JuOGJem0qVeytuuwSH3EgbbJgPp2EKNqL43yNqso2fkSduflisq+oxWeqmbqia3xjnNxeNWO4RO/G/LOeP8Fr+6J+f/sxVFYCjskX3FSQ4zAZ663GK41Zi5P7eV4ib7VbH6H71kH5c1p8LMfucmjTQ6pvyKFzVWK8TeuUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sLiuWgCapn1oGXN3CuCdD7SwzlkXws8/4vyW6MsSPiw=;
+ b=EB/8e54UODJF45gFnIu5Vc0Cxh/9JScnFZOOVtdQReYMZofqo+HwoXND/8f70QQ6aXOB/6RHa/hoeZczksK8TwTRDKM24wjF85Od6Cdjqx0keXmZiV+DEKSLy+nwI3yqUjAviK5HTIqKb8/WdJfnL/FMY+R2LJxlPLAJ++rzBCr/rF1gdzyvzxsH4NxPLARDPxip7GxMb5FDH31hHSOHMddrKLYoLJk6mnfPq7+rqWIXmzwAwJyHHSTAgNmWyCn00PAJTg/qmqOfcFtodJqW33UYXMQV+XfTCfW4Ws8OTHFnHgwS9NaSLOjqTB1d31ghi8iwV2OUinMVGsO95wQA+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sLiuWgCapn1oGXN3CuCdD7SwzlkXws8/4vyW6MsSPiw=;
+ b=MDOk60rUNnGODqN3V2RaxaE286WF9g8Le40rno7GZefEn49fJ/YBRHiVnrz0scJ/jP3tqm2DYj1gaHYTriBq5iUoB6LrnrJv1AtZffrJuob7i2aFJa9oY/l6kFRQHlODfQX0+QASu+gqC3hZBiMyPTZ4oE3jsou52bf7AClHOhtSCp4VTy6WLxG2EBkrVMyud7UFU+a/uz9UIdVMWBeh7iIVIPHA9OY4ekcffVDiMAYsHgFInvzX6fjXRbj/QwGNui4bzURmJk/KHq4ACnfMOcDE7V04G87Rdub6xPZF0eruyfPXhXkIa451cQ0/ccmBck7SOsCoafQLWAhj/k3uEQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MN2PR12MB4392.namprd12.prod.outlook.com (2603:10b6:208:264::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 13:54:18 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 13:54:18 +0000
+Date:   Mon, 20 Mar 2023 10:54:16 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
+        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
+        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] iommu/vt-d: Extend dmar_domain to support nested
+ domain
+Message-ID: <ZBhliHzXcbUxuyX1@nvidia.com>
+References: <20230309082207.612346-1-yi.l.liu@intel.com>
+ <20230309082207.612346-4-yi.l.liu@intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314230004.961993-1-alexey.klimov@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230309082207.612346-4-yi.l.liu@intel.com>
+X-ClientProxiedBy: MN2PR17CA0002.namprd17.prod.outlook.com
+ (2603:10b6:208:15e::15) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4392:EE_
+X-MS-Office365-Filtering-Correlation-Id: e08e61a1-0054-4044-e429-08db294a9960
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Vq8UE5MLRNwlV6IWSwl4rHdwhAYbv0ryM+6foHIGQ66Jm1qitsg2bYsHnzUMUVrbjor7DqcGTB3iyJQU1JgSWH6A4xzUfNfiSdkqrMem0hI6KR95Drq3M8/sdb7X72ntVXSUC+0lmYKEIBvMvIaNdkTVqDyN2OhKeuO+7aIPcbpPfl6aUXpCiajZTFiLpN9XIGjPK/d9RzwZRo/vGV2YyQ5TgA7iy0ZX8E1BEwRnsh9+fnApbHqTnWJ3lgZZFb7Jb4ErLjStKUMLFQqERlGDyZBGpWQZg1mFzV2Vz8s1aVH6CcDhElwPHzNG7MXptjfj9recbScJjCIOpuUrfDDhT77FF/Jh24fpVSiANAxDgHz9BgczXm+jsJ4WnkjTruOfmjS1da5drvLOXQJEvr2J0BjUK6qLrlUsY7q2uJXcvmhGAf3jiGKsUu3C5m8IuCLWdgoSfG8nTu5/cRfm+UvtIJObH7rGObAuIkjVGOrnjxreXl4njGz/3lJCtCAbzdxARbNc1TdEbT3N5EbzMjePHt9ROmsMJEpHvJl+9+Nd9fcPHb6atuHtRiKB1wLWKvgH7WT+slBf6Li20uNYnuWAHoOexz2cIproPv6TGq7N19mhFIiVQtvEihHUgU1Ci64PI35dFJRkHXEqVqZfge78Gg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(396003)(366004)(376002)(136003)(451199018)(2616005)(186003)(6486002)(4326008)(478600001)(83380400001)(316002)(66556008)(6916009)(66476007)(66946007)(8676002)(26005)(6506007)(6512007)(41300700001)(5660300002)(8936002)(7416002)(38100700002)(2906002)(86362001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vkDUyd6hBcmDbDKH1SVd5DL9HiaLxeFmoblhixf6BCCEcRrQY+ftKn9Bf9+l?=
+ =?us-ascii?Q?wwucIRymZ2C4IgjQe7jZp6Yx62IXjE/HfBsIxbllBPiufdfigwaf4U30OYJr?=
+ =?us-ascii?Q?jdnbjwxqXoRkyZYz3sYq7ZOIyEn8DHui98Y15ZeJtcPEa8WDdhLdbqm7rh6d?=
+ =?us-ascii?Q?c3aFSTZSLQfRy1cniTqlWJtUFM44AOelDyh1+oXH/4lSDxlBcr9amZl0M3ve?=
+ =?us-ascii?Q?c5k3Pj82lzFxzAEmrKEP+nnkiq23XbA9nOgvDYDcyMJXJaUDghtVvrGT+LIx?=
+ =?us-ascii?Q?7jk5OHLQiyP3kF9iy05yrDwdFlo5UbsiRg4JbV+vUW2HNMKVKJIXzxHkmJPZ?=
+ =?us-ascii?Q?1HJddEjVg//Le3AzPxBNX5VMo1ximwxRbSzIFMNzGfJf3JMCELzA21X0TlLd?=
+ =?us-ascii?Q?BNsod6mjdZ3oOG4arFwZEUKOH/RbIF2LFIvdlIxjOc9O8w8e9biJaLTuJ8MO?=
+ =?us-ascii?Q?pHlQdY1EQ5q8gelgSJJLbrcgu+uTgi9dh8cl22zVJW+ncNweW7xYU0U03F/w?=
+ =?us-ascii?Q?AVcP7zXhCVFWgmsnJbk1caKCK+7W7nshBIHV6ZB4zEeNO77ku0ode+g5f41z?=
+ =?us-ascii?Q?TiZAuMwsKq50XoDSmU0RAjbGlCW6+5tPBhTeJJ7lOj0n2JT5gdKD+GIq1b8p?=
+ =?us-ascii?Q?zF47TbgWrI/+xtUUTDlnQ8lFfLQqSZsxV0Te8DhyhuxGTvyuV1aCO6U76oVC?=
+ =?us-ascii?Q?5zbtRLqc36lKEYIQSvyLQ/xVsMBVWRN3nYGZJ8M6GGxw+X8IYYZXI65RyeLk?=
+ =?us-ascii?Q?9T9f558k6dXOTqUI6FsWveJjLuiQ8b1C54/THVZbqQeak0DJLJxPrP6R8GQ/?=
+ =?us-ascii?Q?gcGA+l11evUksbyMzFJSoYVTmG65EzQqvoYpEZCgiT0KVWEekTCvdWKD2dkA?=
+ =?us-ascii?Q?AciBDwE6hwa9CHWSMrJcQlxPTyL6yHsCmPj0+Wa8qskZHdASLtLVuPrKG2mM?=
+ =?us-ascii?Q?UOtWmLMPsSksBz/DDwxFJKGzahABjYjM7OeED9yL6AvCnr6ekNpzuyHogHkf?=
+ =?us-ascii?Q?aqPtPibKt6lUkMzqUSngXOlHlIUpq+IHDZ6y9ycf1IPz+0rCuH7mSRiZ6aHw?=
+ =?us-ascii?Q?pzCQJrMeEqI3d99h+5BmgAGElZ1KOfxKxTPLDXN7CtfjoscYftE6b0hfDWbl?=
+ =?us-ascii?Q?lGp2O+8bI5TEGGBLzAAt/0AAYgbnQZWGbfdzXO60WaBd/w+c7/1R/f1DpfP8?=
+ =?us-ascii?Q?uZD/fLDiOLp6jdfFQW5aAUtQhzwVkd1B5ztxLOeZ8mhNCoGwOszt1eO3aPkY?=
+ =?us-ascii?Q?S1fYh0/MflOlTLSb1Mt28KT2p2RzaVJxPkwE80yiqOtVkpGnpCo4BNkDK4CX?=
+ =?us-ascii?Q?hfrKKmZTGZRURqcVqYtPslQniiiIXgSdFlDuWUwZUXlg7/FpL23iMvvXbJB7?=
+ =?us-ascii?Q?qwpdMDzEqvb2JIPMc846MEh7K3Df04TyWUaa5ZcBhUQhiusBoSzYuirurtfK?=
+ =?us-ascii?Q?bya08OuKDRHxH1OHTwIYTVcUClAO5ioflL+MZDKMhbiKYXgZyIMUeq5/GWpX?=
+ =?us-ascii?Q?O3UBcTJuKNp8PZz3AkJiBm/gSa07hyZaxbMGPhm/0PUeVWakI5TrqrdId0lE?=
+ =?us-ascii?Q?TqnSohm27z6F/dI1MmN6a8pRz/qxK/k2RUT9AcXH?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e08e61a1-0054-4044-e429-08db294a9960
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 13:54:18.2045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jVkwl4i8ixTf1hbags9w3Ee3ai2fmqCW+gKe7Isr841kyne/UP6nB6/miUL6Pree
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4392
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:
-> #regzbot introduced: 0c5ffc3d7b15
-> #regzbot title: CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and slow-stuck reboots
+On Thu, Mar 09, 2023 at 12:22:05AM -0800, Yi Liu wrote:
+> From: Lu Baolu <baolu.lu@linux.intel.com>
 > 
-> The upstream changes are being merged into android-mainline repo and at some
-> point we started to observe kernel panics on reboot or long reboot times.
+> The nested domain fields are exclusive to those that used for a DMA
+> remapping domain. Use union to avoid memory waste.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>  drivers/iommu/intel/iommu.h | 35 +++++++++++++++++++++++++++++------
+>  1 file changed, 29 insertions(+), 6 deletions(-)
 
-Where can I find the android-mainline repo, and which specific branch/commit
-from that repo is being merged in?
+Using unions like this often devolves into a mess.
 
-> The merge commit is 1f2d9ffc7a5f Merge tag 'sched-core-2023-02-20' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.
-> Before, the reboot usually took significantly less than 15 seconds and after merge the reboot time fall in the range of 60-100 seconds.
-> At some point watchdog-like functionality or softdog start to worry about the system stuck somewhere nd panic the system.
-> 
-> The delay is found to be in device's ->shutdown() methods called from kernel_restart():
-> void kernel_restart_prepare(char *cmd)
-> {
-> 	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
-> 	system_state = SYSTEM_RESTART;
-> 	usermodehelper_disable();
-> 	device_shutdown();	<---- here
-> }
-> 
-> The driver in question is ufshcd and its ufshcd_wl_shutdown() shutdown method. It often blocks on scsi_device_quiesce() and upon manual checking it seems that it sleeps on blk_mq_freeze_queue_wait()/wait_event() in blk_freeze_queue():
-> 
-> scsi_device_quiesce(struct scsi_device *sdev)
-> {
-> 	...
-> 	blk_mq_freeze_queue(q);
-> 	...
-> }
-> 	||
-> 	V
-> void blk_freeze_queue(struct request_queue *q)
-> {
-> 	/*
-> 	 * In the !blk_mq case we are only calling this to kill the
-> 	 * q_usage_counter, otherwise this increases the freeze depth
-> 	 * and waits for it to return to zero.  For this reason there is
-> 	 * no blk_unfreeze_queue(), and blk_freeze_queue() is not
-> 	 * exported to drivers as the only user for unfreeze is blk_mq.
-> 	 */
-> 	blk_freeze_queue_start(q);
-> 	blk_mq_freeze_queue_wait(q);	<--- sleeps on wait_event() here
-> }
-> 
-> Or in other words:
-> 
-> [   34.785050][    C4] sysrq: Show Blocked State
-> [   34.785132][    C4] task:init            state:D stack:9680  pid:1     ppid:0      flags:0x04000008
-> [   34.785301][    C4] Call trace:
-> [   34.785360][    C4]  __switch_to+0x180/0x308
-> [   34.785452][    C4]  __schedule+0x61c/0x9f0
-> [   34.785530][    C4]  schedule+0x84/0xf4
-> [   34.785602][    C4]  blk_mq_freeze_queue_wait+0x78/0xbc
-> [   34.785707][    C4]  blk_freeze_queue+0x74/0x8c
-> [   34.785850][    C4]  blk_mq_freeze_queue+0x18/0x2c
-> [   34.786033][    C4]  scsi_device_quiesce+0x54/0xec
-> [   34.786216][    C4]  ufshcd_wl_shutdown+0x98/0xc0
-> [   34.786396][    C4]  device_shutdown+0x1a8/0x264
-> [   34.786572][    C4]  kernel_restart+0x48/0x11c
-> [   34.786742][    C4]  __arm64_sys_reboot+0x1a8/0x27c
-> [   34.786927][    C4]  invoke_syscall+0x60/0x130
-> [   34.787096][    C4]  el0_svc_common+0xbc/0x100
-> [   34.787266][    C4]  do_el0_svc+0x38/0xc4
-> [   34.787420][    C4]  el0_svc+0x34/0xc4
-> [   34.787563][    C4]  el0t_64_sync_handler+0x8c/0xfc
-> [   34.787749][    C4]  el0t_64_sync+0x1a4/0x1a8
-> 
-> 
-> However, bisect pointed to 0c5ffc3d7b15 cpuidle, dt: Push RCU-idle into driver
-> 
-> ->BAD 924aed1646bf cpuidle, cpu_pm: Remove RCU fiddling from cpu_pm_{enter,exit}()
-> ->BAD a01353cf1896 cpuidle: Fix ct_idle_*() usage
-> ->BAD (doesn't compile, needs one missing header file) 0c5ffc3d7b15 cpuidle, dt: Push RCU-idle into driver
-> ->good c3d42418dca5 cpuidle, OMAP4: Push RCU-idle into driver
-> 
-> Looks like adding CPUIDLE_FLAG_RCU_IDLE flag to idle driver caused this behaviour.
-> The minimal change that is required for this system to avoid the regression
-> would be one liner that removes the flag (below).
-> 
-> But if it is a real regression, then other idle drivers if used will likely
-> cause this regression too withe same ufshcd driver. There is also a suspicion
-> that CPUIDLE_FLAG_RCU_IDLE just revealed or uncovered some other problem.
-> 
-> Any thoughts on this? Some missing __cpuidle or noinstr annotations?
+You'd be better to have more structures
 
-As Peter has suggested in another reply, this might not be an *upstream*
-regression, but rather an interaction with those out-of-tree patches. If you
-can provide a pointer to the branch above that, it'll make it much easier to
-figure out what's going on.
+struct intel_iommu_domain {
+   struct iommu_domain domain;
+   [general fields about attachment]
+};
 
-The code in mainline is unfortunately convoluted, but it doesn't look to be
-obviously wrong.
+struct intel_iopte_domain {
+    struct intel_iommu_domain domain;
+    [stuff describing the io page table data, pgd, format, etc]
+};
 
-FWIW, I've just tried v6.3-rc3 on Juno R2 in a few configurations (ACPI, DT,
-with PROVE_LOCKING=y and DEBUG_LOCKDEP=y, with PSCI_CHECKER=y) and I'm not
-seeing similar issues. So either I'm not tickling the same code path, or
-something else is involved.
+strut intel_s1_domain {
+     struct intel_iommu_domain domain;
+     struct dmar_domain *s2_domain;
+     /* user page table pointer (in GPA) */
+     unsigned long s1_pgtbl;
+     /* page table attributes */
+     struct iommu_hwpt_intel_vtd s1_cfg;
+};
+static_assert(offset_of(struct intel_s1_domain, domain.domain) ==
+              offset_of(struct intel_iommu_domain, domain));
 
-Thanks,
-Mark.
+The per-domain ops allow to make this work sensibly
+
+Jason
