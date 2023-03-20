@@ -2,205 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD276C14C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D32216C14C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 15:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbjCTObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 10:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S231744AbjCTOa7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 10:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjCTOa4 (ORCPT
+        with ESMTP id S231640AbjCTOax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 10:30:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D487A8A
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679322607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fYYltObAoBAJHBew4d0/wtXHVG5SadqFvZoyE4YqRs0=;
-        b=Sv4E2Fkci6TxMi4RmVEVZg3veBkRz3rVwTuCZyVB0l6rn1RxEeodpWsY+tB41I0Fi+v9Ov
-        DGzg6wikaVv4sO6798x5sowQYujy2vmkVXrQ2ubs/E2mFoGpCHN5U+1a66/cL42+B3laY2
-        +XQpmlS7vQGSRuGozqu3LzAvGRk9pIQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-211--GcYInNGP4ScPI94FYi5Cw-1; Mon, 20 Mar 2023 10:30:06 -0400
-X-MC-Unique: -GcYInNGP4ScPI94FYi5Cw-1
-Received: by mail-qt1-f200.google.com with SMTP id j4-20020ac85f84000000b003d864ebfc20so6731485qta.14
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:30:05 -0700 (PDT)
+        Mon, 20 Mar 2023 10:30:53 -0400
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8765588;
+        Mon, 20 Mar 2023 07:30:52 -0700 (PDT)
+Received: by mail-vs1-f51.google.com with SMTP id s1so10651674vsk.5;
+        Mon, 20 Mar 2023 07:30:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679322605;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fYYltObAoBAJHBew4d0/wtXHVG5SadqFvZoyE4YqRs0=;
-        b=69sJKVcQMH58muGF49tcNNlU1zguMy+yKEtm8Izc4Gm2/iHu5Ypf5YPPhEOEhrbvA+
-         OxY5zLlVh/N9vM0cleIYbRfkS20gkIVCvzjys1j8JMGy0JMquADXEAhAsnbLvq+uY6ZB
-         qGkBCkp5LUTNe/hwruDYCOGy9oqeq3uRtVvBNW5qCzZX3n7t5EPOEGk+saIxgjA4hCZe
-         OHfdeGI6AVPCJS75Tvug/eCl7PoWA5Uscp2cPWv59TCao0qV3AR5E2TKPHnNkW4zym7B
-         1eDQlN3JLcXQtKA16nMyACRkWcagFmLERhtyIH0kY3NpIWHzLBb2iv5uBro+SFpEXMNX
-         iQxg==
-X-Gm-Message-State: AO0yUKUs02AuOXKEBcteYFvplWqFx03xJ6iE0Kldopimj8HtY8mG1EpH
-        XDrYC4p2HyCYuk60bxcJsW8/xOnMO66DkwgANhkCnZG3DlDw8BTD+R9ObAjRUXFLi5LRks6DkTP
-        FgZmXwZFUkKa0hW7ooyZFzhyj
-X-Received: by 2002:ac8:4e42:0:b0:3d7:57b:467c with SMTP id e2-20020ac84e42000000b003d7057b467cmr29522674qtw.43.1679322605280;
-        Mon, 20 Mar 2023 07:30:05 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9hlZuyivlx1H18m4rYyb3oaING8patBHWuxdHYD2CvI9lsFliZKypqpOpiOcNd9X094fyYsg==
-X-Received: by 2002:ac8:4e42:0:b0:3d7:57b:467c with SMTP id e2-20020ac84e42000000b003d7057b467cmr29522623qtw.43.1679322604965;
-        Mon, 20 Mar 2023 07:30:04 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id t10-20020ac86a0a000000b003b9b48cdbe8sm6446788qtr.58.2023.03.20.07.30.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 07:30:04 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 15:29:59 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v2] virtio/vsock: allocate multiple skbuffs on tx
-Message-ID: <20230320142959.2wwf474fiyp3ex5z@sgarzare-redhat>
-References: <ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru>
+        d=1e100.net; s=20210112; t=1679322651;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=00l8z9oqCvhZjLEVBuQ8DT4Wwg7fPUKvNuCrA1BQAAo=;
+        b=6KoaDDm5VtMfO8OxtEQjF3SnmBPjhJ3L4zCP2K5YNI3wprsSACCyHHBa7oyiURVISv
+         E7L6TzBkMJM5aoT7vE6NvSaNr+IUNBB1eSGQeLMKZw4nTed/8cQZ6HM6KGOKvDZ/otPR
+         uS8vmpzhCY5U5FiyZOElMaaw6heAtzNadFqhIL0eRj+oGhMBbFwKAXMQFxPZpFwsiJAo
+         Zo5dY0Q+igbh3ZCF0jhiX0R273QSpLC5vjBao0gGV1usLtvu2486Px/di55QejdVji0z
+         kp8nMUkxG8h0eLJCgAkJdZwJ+CkhKInDK9CS4KX2zpRjgH/160fn5PoZO6WdatOhxMrb
+         92dg==
+X-Gm-Message-State: AO0yUKXUx+W85pjoPT4GFGWnzPQpDPsY2bjUUbWkV5dJIr+xw2IZXubu
+        ntQweRvMwUPZGAjrhlRP1K02sWw8RSIv5g==
+X-Google-Smtp-Source: AK7set9bAqHMlltsd43E+DDzGNQsKLNMNS/7FDbwzojJ5iJogJKAJ8ukG1sY+G96VMd6CGMe9hY+DQ==
+X-Received: by 2002:a67:b308:0:b0:425:d658:5861 with SMTP id a8-20020a67b308000000b00425d6585861mr2295650vsm.10.1679322651195;
+        Mon, 20 Mar 2023 07:30:51 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id 68-20020a370747000000b007426e664cdcsm7294402qkh.133.2023.03.20.07.30.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 07:30:50 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id n125so13282275ybg.7;
+        Mon, 20 Mar 2023 07:30:50 -0700 (PDT)
+X-Received: by 2002:a25:3249:0:b0:a02:a3a6:78fa with SMTP id
+ y70-20020a253249000000b00a02a3a678famr4214330yby.12.1679322650227; Mon, 20
+ Mar 2023 07:30:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230320135418.2055-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20230320135418.2055-1-lukas.bulwahn@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Mar 2023 15:30:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWpYZr=v-pm4c2nCoHGv3ygdKiV+TKQ8jLkJOGQcYtreQ@mail.gmail.com>
+Message-ID: <CAMuHMdWpYZr=v-pm4c2nCoHGv3ygdKiV+TKQ8jLkJOGQcYtreQ@mail.gmail.com>
+Subject: Re: [PATCH] m68k: Kconfig.machine: remove obsolete configs ROMBASE
+ and ROMSIZE
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-m68k@lists.linux-m68k.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 09:46:10PM +0300, Arseniy Krasnov wrote:
->This adds small optimization for tx path: instead of allocating single
->skbuff on every call to transport, allocate multiple skbuff's until
->credit space allows, thus trying to send as much as possible data without
->return to af_vsock.c.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> Link to v1:
-> https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
->
-> Changelog:
-> v1 -> v2:
-> - If sent something, return number of bytes sent (even in
->   case of error). Return error only if failed to sent first
->   skbuff.
->
-> net/vmw_vsock/virtio_transport_common.c | 53 ++++++++++++++++++-------
-> 1 file changed, 39 insertions(+), 14 deletions(-)
->
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index 6564192e7f20..3fdf1433ec28 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
-> 	const struct virtio_transport *t_ops;
-> 	struct virtio_vsock_sock *vvs;
-> 	u32 pkt_len = info->pkt_len;
->-	struct sk_buff *skb;
->+	u32 rest_len;
->+	int ret;
->
-> 	info->type = virtio_transport_get_type(sk_vsock(vsk));
->
->@@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->
-> 	vvs = vsk->trans;
->
->-	/* we can send less than pkt_len bytes */
->-	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
->-		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
->-
-> 	/* virtio_transport_get_credit might return less than pkt_len credit */
-> 	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
->
->@@ -227,17 +224,45 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
-> 	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
-> 		return pkt_len;
->
->-	skb = virtio_transport_alloc_skb(info, pkt_len,
->-					 src_cid, src_port,
->-					 dst_cid, dst_port);
->-	if (!skb) {
->-		virtio_transport_put_credit(vvs, pkt_len);
->-		return -ENOMEM;
->-	}
->+	ret = 0;
->+	rest_len = pkt_len;
->+
->+	do {
->+		struct sk_buff *skb;
->+		size_t skb_len;
->+
->+		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
->+
->+		skb = virtio_transport_alloc_skb(info, skb_len,
->+						 src_cid, src_port,
->+						 dst_cid, dst_port);
->+		if (!skb) {
->+			ret = -ENOMEM;
->+			break;
->+		}
->+
->+		virtio_transport_inc_tx_pkt(vvs, skb);
->+
->+		ret = t_ops->send_pkt(skb);
->+
->+		if (ret < 0)
->+			break;
->
->-	virtio_transport_inc_tx_pkt(vvs, skb);
->+		rest_len -= skb_len;
+CC Greg
 
-t_ops->send_pkt() is returning the number of bytes sent. Current
-implementations always return `skb_len`, so there should be no problem,
-but it would be better to put a comment here, or we should handle the
-case where ret != skb_len to avoid future issues.
-
->+	} while (rest_len);
+On Mon, Mar 20, 2023 at 2:54 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> The configs ROMBASE and ROMSIZE were used in arch/m68k/68360/head-ram.S,
+> which was removed with commit a3595962d824 ("m68knommu: remove obsolete
+> 68360 support").
 >
->-	return t_ops->send_pkt(skb);
->+	/* Don't call this function with zero as argument:
->+	 * it tries to acquire spinlock and such argument
->+	 * makes this call useless.
-
-Good point, can we do the same also for virtio_transport_get_credit()?
-(Maybe in a separate patch)
-
-I'm thinking if may be better to do it directly inside the functions,
-but I don't have a strong opinion on that since we only call them here.
-
-Thanks,
-Stefano
-
->+	 */
->+	if (rest_len)
->+		virtio_transport_put_credit(vvs, rest_len);
->+
->+	/* Return number of bytes, if any data has been sent. */
->+	if (rest_len != pkt_len)
->+		ret = pkt_len - rest_len;
->+
->+	return ret;
-> }
+> Remove the obsolete configs ROMBASE and ROMSIZE.
 >
-> static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
->-- 
->2.25.1
->
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
+Fixes: a3595962d82495f5 ("m68knommu: remove obsolete 68360 support")
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+> --- a/arch/m68k/Kconfig.machine
+> +++ b/arch/m68k/Kconfig.machine
+> @@ -439,15 +439,6 @@ config ROM
+>           that can be stored in flash, with possibly the text, and data
+>           regions being copied out to RAM at startup.
+>
+> -config ROMBASE
+> -       hex "Address of the base of ROM device"
+> -       default "0"
+> -       depends on ROM
+> -       help
+> -         Define the address that the ROM region starts at. Some platforms
+> -         use this to set their chip select region accordingly for the boot
+> -         device.
+> -
+>  config ROMVEC
+>         hex "Address of the base of the ROM vectors"
+>         default "0"
+> @@ -465,14 +456,6 @@ config ROMSTART
+>           Define the start address of the system image in ROM. Commonly this
+>           is strait after the ROM vectors.
+>
+> -config ROMSIZE
+> -       hex "Size of the ROM device"
+> -       default "0x100000"
+> -       depends on ROM
+> -       help
+> -         Size of the ROM device. On some platforms this is used to setup
+> -         the chip select that controls the boot ROM device.
+> -
+>  choice
+>         prompt "Kernel executes from"
+>         help
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
