@@ -2,156 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBED36C132E
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253F76C1333
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCTNXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S231694AbjCTNZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjCTNXY (ORCPT
+        with ESMTP id S231453AbjCTNZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:23:24 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A12700;
-        Mon, 20 Mar 2023 06:23:21 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so12550762pjp.1;
-        Mon, 20 Mar 2023 06:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679318600;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LwCDKhpVotUuQMaBr5jTrfbX68cNb9ff470+ysZxzzQ=;
-        b=DbPUt+EfMJ+gN+n6cCxeLDCHK554tVu7xveqEz1ELZYrSZU538T3sIDkOC2iEjLIj3
-         vxyOtqP1ORPBGGeWWY46uhEHukWiZdqTrcJYK4WmRBV+BqNwsat4pGHhP2lpFDF6X8qY
-         wBmIMBPiigRbDggFkUwax/ZeAKqVtNKlUN7cLHY58OLU9kqmdvMT70JBWt3eNt0b6chR
-         9o8ugYkJBCfDbaPcUQ4/rc0MjCMCgNjWj+2RYSMV4u2rVtzUGNU0GTJk1Nt6ypxmTN9A
-         HRbkkDGmm7Xir+AWDuEMejFwBSvZp0Vqijsia2SVlSi3FPDyy4xAD4239RbBglvz8Ds/
-         Ynow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679318600;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LwCDKhpVotUuQMaBr5jTrfbX68cNb9ff470+ysZxzzQ=;
-        b=LwVGFqdirmwgB2zMNLQM/y/VhtGJBVP/4pGZWQoVAaviilX7VJfoW26awcJz0jAYbI
-         10onTQgrZeImbOtG7b8oMMS3DV+ItLeeZVZdDNxTTxy1ksMjwKhYql9D/Fy4FbDRlnJ0
-         6mHOKb7ws0RmGnatenb/RqgvFOSBUxW4mpm9SBDb3uMlSuHy5gxnb5t3rZNRFh9dTn9H
-         glDmQSWQh2zWMXM+Xqw8HnBoxG00ZpFIpQmdvg3lixf4T5kMynrEOVlab9yELXiUeKLH
-         3F0uB5S8Remqrq/gBd7IEMG6NQwTQkoaIFsrJEI42Jp2Dmv1t++rYJt6RG8SaTsen+vx
-         MqWw==
-X-Gm-Message-State: AO0yUKUlh2MbdCFNRKwYeOidRzcYSHI2skSUeZvSinovnB7zW8GH9qXQ
-        xzqJd+tk5fbdBLc+fmEVhPk=
-X-Google-Smtp-Source: AK7set8aYmCTfdKijx/Xv5EdBgScVTAJQugwVEr8ZpKjCsLK3YBjTocbHsvANkrz6b03DDcBWUhaGQ==
-X-Received: by 2002:a17:90b:380d:b0:232:fa13:4453 with SMTP id mq13-20020a17090b380d00b00232fa134453mr19012364pjb.13.1679318600483;
-        Mon, 20 Mar 2023 06:23:20 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090aa51300b00233db0db3dfsm9824478pjq.7.2023.03.20.06.23.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:23:20 -0700 (PDT)
-From:   korantwork@gmail.com
-To:     helgaas@kernel.org, nirmal.patel@linux.intel.com,
-        kbusch@kernel.org, jonathan.derrick@linux.dev,
-        lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Subject: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
-Date:   Mon, 20 Mar 2023 21:23:16 +0800
-Message-Id: <20230320132316.3126838-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 20 Mar 2023 09:25:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2279F1554C;
+        Mon, 20 Mar 2023 06:25:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BAF72CE128D;
+        Mon, 20 Mar 2023 13:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E84C433EF;
+        Mon, 20 Mar 2023 13:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679318721;
+        bh=UeZMrJPYit2H6JQDbNqKYT/xHNGfkb0l6hG4u2sVNTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tsUDZOPWN+/gURT53qoxbgTGzlRCItwc9ET4fXPeJWEypvPWQn/OmuGHFs3t0grIj
+         o82Z7dmBL9ynomFmKnKn++bDLIXgHuU4tBYnxkoGT1zIcHpXcq67mFMLbo2eSx/A72
+         KxI8atK1HXSI5RG+ZA7uSDEklYV0sLHjuSRyFriGcVAh3G/V7RygXeaQjqI7z/EhGr
+         VBFSWZ3hfWeS865lIb7s1zQmpRXw4YpvX4vQGcsvs5sOJNU3cnMkr0/7Kmqtn9/DGf
+         jjUPJUjWm6vS4MR3/u6AvquYNlusBnScitIOfVJjIsQQOkEtgZ1LT8Kr1I/qOsBrY2
+         80iLS9I6BkdVA==
+Date:   Mon, 20 Mar 2023 14:25:17 +0100
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     linux-next <linux-next@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [next-20230317][PPC/MLX5][bisected 4d5ab0a] Boot WARNING: CPU: 0
+ PID: 9 at net/core/dev.c:1928 call_netdevice_notifiers_info
+Message-ID: <ZBheva8pJ3VJq/pO@lore-desk>
+References: <7fe9d0b0-7d77-79cc-405d-3ca38b552782@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VPexZZeqZEVbmK5a"
+Content-Disposition: inline
+In-Reply-To: <7fe9d0b0-7d77-79cc-405d-3ca38b552782@linux.vnet.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
 
-In the legacy, the vmd MSI mode can only be adjusted by configuring
-vmd_ids table. This patch adds another way to adjust MSI mode by
-adjusting module param, which allows users easier to adjust the vmd
-according to the I/O scenario without rebuilding driver. There are two
-params that could be recognized: on, off. The default param is NULL,
-the goal is not to effect the existing settings of the device.
+--VPexZZeqZEVbmK5a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Xinghui Li <korantli@tencent.com>
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
----
- drivers/pci/controller/vmd.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+> Greeting's
+>=20
+> Warning is seen while booting kernels from 6.3.0-rc3-next-20230317 on my
+> powerpc Power 10 LPAR
+>=20
+> Boots fine without warnings when below patch is reverted
+>=20
+> commit 4d5ab0ad964df178beba031b89429a601893ff61
+> Author: Lorenzo Bianconi <lorenzo@kernel.org>
+> Date:   Thu Mar 9 13:25:31 2023 +0100
+>=20
+>     net/mlx5e: take into account device reconfiguration for xdp_features
+> flag
+>=20
+>     Take into account LRO and GRO configuration setting device xdp_featur=
+es
+>     flag. Consider channel rq_wq_type enabling rx scatter-gatter support =
+in
+>     xdp_features flag and disable NETDEV_XDP_ACT_NDO_XMIT_SG since it is =
+not
+>     supported yet by the driver.
+>     Moreover always enable NETDEV_XDP_ACT_NDO_XMIT as the ndo_xdp_xmit
+>=20
+> 4d5ab0ad got introduced in next-20230314
+>=20
+> @Lorenzo Could you please look into this
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 990630ec57c6..fb61181baa9e 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -34,6 +34,19 @@
- #define MB2_SHADOW_OFFSET	0x2000
- #define MB2_SHADOW_SIZE		16
- 
-+/*
-+ * The VMD msi_remap module parameter provides the alternative way
-+ * to adjust MSI mode when loading vmd.ko other than vmd_ids table.
-+ * There are two params could be recognized:
-+ *
-+ * off: disable MSI remapping
-+ * on:  enable MSI remapping
-+ *
-+ */
-+static char *msi_remap;
-+module_param(msi_remap, charp, 0444);
-+MODULE_PARM_DESC(msi_remap, "Whether to enable MSI remapping function");
-+
- enum vmd_features {
- 	/*
- 	 * Device may contain registers which hint the physical location of the
-@@ -875,6 +888,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 			return ret;
- 
- 		vmd_set_msi_remapping(vmd, true);
-+		dev_info(&vmd->dev->dev, "init vmd with remapping MSI\n");
- 
- 		ret = vmd_create_irq_domain(vmd);
- 		if (ret)
-@@ -887,6 +901,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
- 	} else {
- 		vmd_set_msi_remapping(vmd, false);
-+		dev_info(&vmd->dev->dev, "init vmd with bypass MSI\n");
- 	}
- 
- 	pci_add_resource(&resources, &vmd->resources[0]);
-@@ -955,6 +970,16 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 	return 0;
- }
- 
-+static void vmd_config_msi_remap_param(unsigned long *features)
-+{
-+	if (msi_remap) {
-+		if (strcmp(msi_remap, "on") == 0)
-+			*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
-+		else if (strcmp(msi_remap, "off") == 0)
-+			*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
-+	}
-+}
-+
- static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- {
- 	unsigned long features = (unsigned long) id->driver_data;
-@@ -984,6 +1009,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	if (err < 0)
- 		goto out_release_instance;
- 
-+	vmd_config_msi_remap_param(&features);
-+
- 	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
- 	if (!vmd->cfgbar) {
- 		err = -ENOMEM;
--- 
-2.31.1
+I would say this issue has been already fixed by Jakub here:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/net/c=
+ore/xdp.c?id=3D769639c1fe8a98129aa97c8ee981639db1e8955c
+
+Regards,
+Lorenzo
+
+>=20
+> Boot console logs
+>=20
+> sd 0:0:1:0: [sdb] Preferred minimum I/O size 32768 bytes
+>  sdb: sdb1 sdb2 sdb3
+> sd 0:0:1:0: [sdb] Attached SCSI disk
+> mlx5_core 4001:01:00.0: enabling device (0000 -> 0002)
+> mlx5_core 4001:01:00.0: firmware version: 14.32.1010
+> ------------[ cut here ]------------
+> RTNL: assertion failed at net/core/dev.c (1928)
+> WARNING: CPU: 0 PID: 9 at net/core/dev.c:1928
+> call_netdevice_notifiers_info+0xd8/0xe0
+> Modules linked in: mlx5_core(+) sd_mod t10_pi crc64_rocksoft crc64 sg ibm=
+vfc
+> mlxfw scsi_transport_fc ibmveth ptp pps_core dm_multipath dm_mirror
+> dm_region_hash dm_log dm_mod fuse
+> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.3.0-rc2-next-20230317-autot=
+est
+> #1
+> Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006
+> of:IBM,FW1030.00 (NH1030_029) hv:phyp pSeries
+> Workqueue: events work_for_cpu_fn
+> NIP:  c000000000aca1f8 LR: c000000000aca1f4 CTR: 0000000000725d40
+> REGS: c0000000038230a0 TRAP: 0700   Not tainted
+> (6.3.0-rc2-next-20230317-autotest)
+> MSR:  800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 48228824 XE=
+R:
+> 00000010
+> CFAR: c000000000154c40 IRQMASK: 0
+> GPR00: c000000000aca1f4 c000000003823340 c0000000011ccb00 000000000000002f
+> GPR04: 00000000ffff7fff c000000003823110 c000000003823108 0000000000000027
+> GPR08: c000000c7cc07e90 0000000000000001 0000000000000027 c0000000028f7c30
+> GPR12: 0000000048228824 c000000002d10000 c000000000191b58 c0000000032f1000
+> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR20: 0000000000000000 c0000000032f9200 fffffffffffff000 0000000000000000
+> GPR24: c000000076c001a0 c00800000042c588 c000000008d06c00 c000000008d069a0
+> GPR28: c000000076c301a0 c000000002d01780 0000000000000028 c0000000038233e8
+> NIP [c000000000aca1f8] call_netdevice_notifiers_info+0xd8/0xe0
+> LR [c000000000aca1f4] call_netdevice_notifiers_info+0xd4/0xe0
+> Call Trace:
+> [c000000003823340] [c000000000aca1f4]
+> call_netdevice_notifiers_info+0xd4/0xe0 (unreliable)
+> [c0000000038233c0] [c000000000aca23c] call_netdevice_notifiers+0x3c/0x70
+> [c000000003823400] [c000000000b1f64c] xdp_set_features_flag+0x3c/0x50
+> [c000000003823420] [c008000000c56db0] mlx5e_set_xdp_feature+0x48/0x90
+> [mlx5_core]
+> [c000000003823440] [c008000000c59414] mlx5e_probe+0x3cc/0x880 [mlx5_core]
+> [c000000003823500] [c00000000088561c] auxiliary_bus_probe+0x6c/0xf0
+> [c000000003823580] [c0000000008725e8] really_probe+0x108/0x530
+> [c000000003823610] [c000000000872ac4] __driver_probe_device+0xb4/0x230
+> [c000000003823690] [c000000000872c98] driver_probe_device+0x58/0x120
+> [c0000000038236d0] [c000000000872e7c] __device_attach_driver+0x11c/0x1e0
+> [c000000003823750] [c00000000086e994] bus_for_each_drv+0xb4/0x130
+> [c0000000038237b0] [c0000000008723cc] __device_attach+0x15c/0x250
+> [c000000003823850] [c0000000008704e8] bus_probe_device+0xf8/0x100
+> [c0000000038238a0] [c00000000086c258] device_add+0x798/0x9e0
+> [c000000003823960] [c0000000008857d8] __auxiliary_device_add+0x58/0xe0
+> [c0000000038239d0] [c008000000c35350] add_adev+0xb8/0x180 [mlx5_core]
+> [c000000003823a10] [c008000000c35614]
+> mlx5_rescan_drivers_locked.part.11+0x1fc/0x260 [mlx5_core]
+> [c000000003823ad0] [c008000000c35d88] mlx5_register_device+0xb0/0x100
+> [mlx5_core]
+> [c000000003823b10] [c008000000c02aa8] mlx5_init_one+0x340/0x680 [mlx5_cor=
+e]
+> [c000000003823ba0] [c008000000c03e10] probe_one+0x258/0x540 [mlx5_core]
+> [c000000003823c30] [c00000000077c2bc] local_pci_probe+0x6c/0x110
+> [c000000003823cb0] [c00000000017f9b8] work_for_cpu_fn+0x38/0x60
+> [c000000003823ce0] [c0000000001853d4] process_one_work+0x284/0x550
+> [c000000003823d80] [c0000000001858f0] worker_thread+0x250/0x5d0
+> [c000000003823e00] [c000000000191c88] kthread+0x138/0x140
+> [c000000003823e50] [c00000000000cf5c] ret_from_kernel_thread+0x5c/0x64
+> --- interrupt: 0 at 0x0
+> NIP:  0000000000000000 LR: 0000000000000000 CTR: 0000000000000000
+> REGS: c000000003823e80 TRAP: 0000   Not tainted
+> (6.3.0-rc2-next-20230317-autotest)
+> MSR:  0000000000000000 <>  CR: 00000000  XER: 00000000
+> CFAR: 0000000000000000 IRQMASK: 0
+> GPR00: 0000000000000000 c000000003824000 0000000000000000 0000000000000000
+> GPR04: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR12: 0000000000000000 0000000000000000 c000000000191b58 c0000000032f1000
+> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> GPR28: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> NIP [0000000000000000] 0x0
+> LR [0000000000000000] 0x0
+> --- interrupt: 0
+> Code: 2f890000 409eff9c 39200001 3c82fff1 3c62fff1 3d42017d 38a00788
+> 3884b3c8 3863b3d8 992a2141 4b68a969 60000000 <0fe00000> 60000000 3c4c0070
+> 38422900
+>=20
+> --=20
+> Regard's
+>=20
+> Abdul Haleem
+> IBM Linux Technology Center
+
+--VPexZZeqZEVbmK5a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZBhevQAKCRA6cBh0uS2t
+rHC1AP9464q9G7eiWdMYp9r0kTxoNmjn3XCE4+gZ0jAh1Dbx8QD/adB7MLFCBoEy
+H7IeCfpCjz4ZShdGWlS9uCJXUnD+kAs=
+=EuqL
+-----END PGP SIGNATURE-----
+
+--VPexZZeqZEVbmK5a--
