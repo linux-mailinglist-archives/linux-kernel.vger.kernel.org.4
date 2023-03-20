@@ -2,142 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9CC6C119B
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5706C11A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 13:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjCTMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 08:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S231163AbjCTMON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 08:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjCTMNe (ORCPT
+        with ESMTP id S231236AbjCTMOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 08:13:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657261CACA;
-        Mon, 20 Mar 2023 05:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GJdEKWPIVw/eEI9/Pcq9tAkhFXUieuQ+zft5brv7JyE=; b=LpgeE8Jgx0q339NgIGR6n5lQ0v
-        YQwk8La2zF1EGqr0bnc6UaAsX5unjmAakuBRdwnJV+zJfivazuJ1pbBGOo2QFqLOugy6Xw7JpBcok
-        qgGTYlZlMJHma92YD8AK50Xyc3TlcgBKryl/bMyT/eAqYLrj9BCz8XswU6oNufsWsegst9PE8FWv1
-        t/pJJ3YUxYABaOxX5dLwfxDM+F6x6/SG9nC7K68q7IxOTTGyheFVufWHIMRBheaDhEVaIh4r51bVL
-        w9yPoSfBrqZ6umPTdAtpz3hLdi6Hb3oOfO2zZwngs6HrUa/q6cgTFU6k0q/ov2PB9CTZ4hD5Q9bAE
-        SeeJh41A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1peENw-001046-Bb; Mon, 20 Mar 2023 12:13:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9FD0930031E;
-        Mon, 20 Mar 2023 13:13:05 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D09220EEFFC4; Mon, 20 Mar 2023 13:13:05 +0100 (CET)
-Date:   Mon, 20 Mar 2023 13:13:05 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     rcu@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Shuah Khan <shuah@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        seanjc@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH rcu 4/7] locking/lockdep: Improve the deadlock scenario
- print for sync and read lock
-Message-ID: <20230320121305.GK2194297@hirez.programming.kicks-ass.net>
-References: <20230317031339.10277-1-boqun.feng@gmail.com>
- <20230317031339.10277-5-boqun.feng@gmail.com>
+        Mon, 20 Mar 2023 08:14:08 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CA01FDA;
+        Mon, 20 Mar 2023 05:14:05 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a11so1340287lji.6;
+        Mon, 20 Mar 2023 05:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679314444;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t9LnjLbPanhFFeBnqt4/w6DoMU3P/cWwvDYe1wNCVYA=;
+        b=WoCxGdyRQUoaFeRCl2SxcsyXe8gXqBTSOAxx8j/EKrQ4iGU2PnPw7UjGmcFYMF5mNN
+         3EsbLQM8ZbWQaiNyXWTZZ+b7DHmk/EhfW3VeiqhpOCj1l8k4mYUS9LBEk/jFEwEPH03+
+         /8g075PpJceFOkTNij/58fUUZteuDVIrr2LFo2gschYPQb1T/YzT3hIQ1fOJRBMWfG7R
+         gzPxVsQJcRK/uZhFWZG3CGR6RD/bmauOPQgAByZ04Ha7FLpih16uEQST5/8SyxE/yd8o
+         J1/WY3tlOcE5yD9sZt0i7xmBTP0RQIElOkORYOKDI/EAUUQOv9dUXc80pIWCmeUOMms5
+         9qqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679314444;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t9LnjLbPanhFFeBnqt4/w6DoMU3P/cWwvDYe1wNCVYA=;
+        b=7f59ZEK0TJZMuh5RBQc659WDipw90K9YZHm03Ugb9hPpNFKwEfbrKoC64WMK7ATeiK
+         LZIISp891E9nPEMU5jZmGhG7s6QshGFlMNgEScTKpp2VNd99fqUdooh9AM0VnoE6oRWo
+         OwCd2dkIg+PoYwHfhnlXuZfjBdzVudfDfhNZIarpVtRTm/CKt5V3zHQ4cxeDISNsqafl
+         5sBsylAR6Eg3w4ZXintuBHiEc1luG5aR/KamoaNjKKb2qBJbAmEM0ASp/vNdZFEvyPFI
+         bK63t/l+Zpc9gyoDjvUBYPwwiEKECv8FrMkNjiVQH/VWYFLfaVCGXTtfA1O2kXp0QD+u
+         PfpA==
+X-Gm-Message-State: AO0yUKW8gAPi1k2uPDqr45E0jTrMMLd2wISYA71kv07cIJOUZgQHiJqO
+        97T64TZ5CCm6BFXL58YlxCQ=
+X-Google-Smtp-Source: AK7set/yWX5zDIOxdnEBzeOKx+t3YMNYMsGjravxokl7smUIBtcuptxPbjKE9nhED9ZxC5OoaFu/rQ==
+X-Received: by 2002:a2e:300e:0:b0:29e:5dc2:903a with SMTP id w14-20020a2e300e000000b0029e5dc2903amr684918ljw.23.1679314444011;
+        Mon, 20 Mar 2023 05:14:04 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id y21-20020a2e9d55000000b002989fc0a69csm1700190ljj.124.2023.03.20.05.14.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 05:14:03 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 15:14:01 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v7 0/5] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <20230320121401.zkcjbqmghzacpffh@mobilestation>
+References: <20230315012840.6986-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317031339.10277-5-boqun.feng@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230315012840.6986-1-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 08:13:36PM -0700, Boqun Feng wrote:
-> Lock scenario print is always a weak spot of lockdep splats. Improvement
-> can be made if we rework the dependency search and the error printing.
-> 
-> However without touching the graph search, we can improve a little for
-> the circular deadlock case, since we have the to-be-added lock
-> dependency, and know whether these two locks are read/write/sync.
-> 
-> In order to know whether a held_lock is sync or not, a bit was
-> "stolen" from ->references, which reduce our limit for the same lock
-> class nesting from 2^12 to 2^11, and it should still be good enough.
-> 
-> Besides, since we now have bit in held_lock for sync, we don't need the
-> "hardirqoffs being 1" trick, and also we can avoid the __lock_release()
-> if we jump out of __lock_acquire() before the held_lock stored.
-> 
-> With these changes, a deadlock case evolved with read lock and sync gets
-> a better print-out from:
-> 
-> 	[...]  Possible unsafe locking scenario:
-> 	[...]
-> 	[...]        CPU0                    CPU1
-> 	[...]        ----                    ----
-> 	[...]   lock(srcuA);
-> 	[...]                                lock(srcuB);
-> 	[...]                                lock(srcuA);
-> 	[...]   lock(srcuB);
-> 
-> to
-> 
-> 	[...]  Possible unsafe locking scenario:
-> 	[...]
-> 	[...]        CPU0                    CPU1
-> 	[...]        ----                    ----
-> 	[...]   rlock(srcuA);
-> 	[...]                                lock(srcuB);
-> 	[...]                                lock(srcuA);
-> 	[...]   sync(srcuB);
-> 
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  include/linux/lockdep.h  |  3 ++-
->  kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
->  2 files changed, 34 insertions(+), 17 deletions(-)
-> 
-> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-> index 14d9dbedc6c1..b32256e9e944 100644
-> --- a/include/linux/lockdep.h
-> +++ b/include/linux/lockdep.h
-> @@ -134,7 +134,8 @@ struct held_lock {
->  	unsigned int read:2;        /* see lock_acquire() comment */
->  	unsigned int check:1;       /* see lock_acquire() comment */
->  	unsigned int hardirqs_off:1;
-> -	unsigned int references:12;					/* 32 bits */
-> +	unsigned int sync:1;
-> +	unsigned int references:11;					/* 32 bits */
->  	unsigned int pin_count;
->  };
->  
+Hi Cai
 
-Yeah, I suppose we can do that -- another option is to steal some bits
-from pin_count, but whatever (references used to be 11 a long while ago,
-no problem going back to that).
+On Wed, Mar 15, 2023 at 09:28:31AM +0800, Cai Huoqing wrote:
+> Add support for HDMA NATIVE, as long the IP design has set
+> the compatible register map parameter-HDMA_NATIVE,
+> which allows compatibility for native HDMA register configuration.
+> 
+> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> And the native HDMA registers are different from eDMA,
+> so this patch add support for HDMA NATIVE mode.
+> 
+> HDMA write and read channels operate independently to maximize
+> the performance of the HDMA read and write data transfer over
+> the link When you configure the HDMA with multiple read channels,
+> then it uses a round robin (RR) arbitration scheme to select
+> the next read channel to be serviced.The same applies when
+> youhave multiple write channels.
+> 
+> The native HDMA driver also supports a maximum of 16 independent
+> channels (8 write + 8 read), which can run simultaneously.
+> Both SAR (Source Address Register) and DAR (Destination Address Register)
+> are aligned to byte.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+It seems like we are getting towards the series finalization. I'll
+test it out on my HW after v8 is submitted. Meanwhile could you please
+clarify whether you have a real device with DW HDMA engine on board?
+You keep submitting the DW eDMA driver core update, but there is no
+glue-driver or low-level device driver patch for a real device which
+would set the EDMA_MF_HDMA_NATIVE mapping.
+
+-Serge(y)
+
+> 
+> Cai Huoqing (2):
+>   dmaengine: dw-edma: Add support for native HDMA
+>   dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
+> 
+> Cai huoqing (3):
+>   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+>     dw_edma_plat_ops
+>   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+>     abstract controller operation
+>   dmaengine: dw-edma: Add HDMA DebugFS support
+> 
+> v6->v7:
+>   [1/5]
+>   1.Update the commit log.
+>   [2/5]
+>   2.Revert dw_edma_core_handle_int back to dw-edma-core.h.
+>   3.Fix code style.
+>   [3/5]
+>   4.Move the change of register file from patch[4/5] to patch[3/5].
+>   5.Fix code style.
+> 
+> v6 link:
+>   https://lore.kernel.org/lkml/20230310032342.17395-1-cai.huoqing@linux.dev/
+> 
+>  drivers/dma/dw-edma/Makefile                 |   8 +-
+>  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
+>  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
+>  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+>  drivers/dma/dw-edma/dw-edma-v0-core.c        |  91 ++++--
+>  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 277 +++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 176 ++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 130 +++++++++
+>  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+>  include/linux/dma/edma.h                     |   7 +-
+>  13 files changed, 785 insertions(+), 107 deletions(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> 
+> -- 
+> 2.34.1
+> 
