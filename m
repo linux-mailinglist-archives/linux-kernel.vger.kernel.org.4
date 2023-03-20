@@ -2,187 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2B36C0AF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 07:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2E06C0AFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 08:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjCTG7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 02:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S230042AbjCTHAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 03:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjCTG7c (ORCPT
+        with ESMTP id S229575AbjCTHAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 02:59:32 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2718519C4A;
-        Sun, 19 Mar 2023 23:59:29 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8AxJ_BOBBhktLkOAA--.21362S3;
-        Mon, 20 Mar 2023 14:59:26 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxfb5MBBhkkR0HAA--.19729S3;
-        Mon, 20 Mar 2023 14:59:24 +0800 (CST)
-Message-ID: <ac06cfa4-e6f8-a0ca-3181-86cd53f5d1af@loongson.cn>
-Date:   Mon, 20 Mar 2023 14:59:24 +0800
+        Mon, 20 Mar 2023 03:00:18 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3535211EB8
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 00:00:16 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230320070013epoutp01e74c9b123be9de2e40a755ae74073655~ODnaLZZY_0854208542epoutp01R
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 07:00:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230320070013epoutp01e74c9b123be9de2e40a755ae74073655~ODnaLZZY_0854208542epoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679295613;
+        bh=F2fna41vElCudBkEUtJkWpw4XuFauSPQHFQ+SyMQF44=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=XINSr5k4FTyx0NRf0m1vBAebzcezo0R7lE3WhuRpbntda3/RZ8nIZrIDFwA3gMMJQ
+         ak+1MbMvGyi/RMWkQ0IIhWbTnhzv6tz6E3yRCugtXyBlhXiT8Oq5XQ4EQ59L0J1o8u
+         UbfhGdu8egHxwX8heFUGY3K+lOYR52eeCRbjiMbU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20230320070012epcas1p36c5e1f20bd123cec8429b50e82a6f4e0~ODnZwRs1g1653816538epcas1p37;
+        Mon, 20 Mar 2023 07:00:12 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.243]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Pg5GN3m2qz4x9QY; Mon, 20 Mar
+        2023 07:00:12 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.29.37890.B7408146; Mon, 20 Mar 2023 16:00:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230320070011epcas1p12f0fe9f9f417dd1a3441efdde55a4132~ODnYa5gYz3100631006epcas1p1S;
+        Mon, 20 Mar 2023 07:00:11 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230320070011epsmtrp2f33d745215f7c0110b43a63ec5690021~ODnYZt3m11173411734epsmtrp2n;
+        Mon, 20 Mar 2023 07:00:11 +0000 (GMT)
+X-AuditID: b6c32a38-bbd3aa8000029402-6a-6418047b3fc6
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DA.9D.31821.B7408146; Mon, 20 Mar 2023 16:00:11 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.99.41]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230320070011epsmtip1f578457078a6d396ae62894c2ca4fb55~ODnYPeYYN1527015270epsmtip1f;
+        Mon, 20 Mar 2023 07:00:11 +0000 (GMT)
+From:   Yeongjin Gil <youngjin.gil@samsung.com>
+To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        ebiggers@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Yeongjin Gil <youngjin.gil@samsung.com>,
+        stable@vger.kernel.org, Sungjong Seo <sj1557.seo@samsung.com>
+Subject: [PATCH v2] dm verity: fix error handling for check_at_most_once on
+ FEC
+Date:   Mon, 20 Mar 2023 15:59:32 +0900
+Message-Id: <20230320065932.28116-1-youngjin.gil@samsung.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 2/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Li Yi <liyi@loongson.cn>
-References: <20230315211550.2620818-1-15330273260@189.cn>
- <20230315211550.2620818-3-15330273260@189.cn>
- <efcc3a66-78ca-4e0a-c0fb-527da376fc06@amd.com>
-From:   Sui jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <efcc3a66-78ca-4e0a-c0fb-527da376fc06@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxfb5MBBhkkR0HAA--.19729S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxurWkCry8KryxKrWDZr48Xrb_yoWrtw4fpF
-        Z5Kay3trZ8CF4kAr1DAw1UGFWYq3yrJa1DJryYyFyjk398GFnYqrWjqr1q9a47Zr4rWF1j
-        yF4UXrW29F17Aw7anT9S1TB71UUUUbUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8v_M3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIJsWRmVeSWpSXmKPExsWy7bCmrm41i0SKwdoVBhbrTx1jttj7bjar
+        xdo9f5gtLu+aw2ax5d8RVosTt6QtFmx8xGgxY/9TdgcOj02rOtk83u+7yubRt2UVo8fnTXIB
+        LFENjDaJRckZmWWpCql5yfkpmXnptkqhIW66FkoKGfnFJbZK0YaGRnqGBuZ6RkZGeqZGsVZG
+        pkoKeYm5qbZKFbpQvUoKRckFQLW5lcVAA3JS9aDiesWpeSkOWfmlIKfrFSfmFpfmpesl5+cq
+        KZQl5pQCjVDST/jGmLHg0CXWgi88FR/3L2BuYLzP1cXIwSEhYCKx6ZxDFyMXh5DADkaJmdcn
+        skE4nxglZt3uYIFwPjNKbJo3l6mLkROs40LrF0aIxC5GielLtrPCtZw+voQZpIpNQFdi6sun
+        rCC2iECQxJPmXWBzmQW6GCWae56CFQkLBErc2DeTBcRmEVCVeNE8gRHkKF4BW4lHPfUQ2+Ql
+        GjvOsYPYvAKCEidnPgErZwaKN2+dzQwyU0LgHLvE/4lbGCEaXCTuXdrADGELS7w6voUdwpaS
+        +PxuLxtEQzujxIqHcxghnBmMEn/f32eFqLKXaG5tZgO5gllAU2L9Ln2IsKLEzt9zoRYISpy+
+        1s0McQWfxLuvPayQkOSV6GgTgihRk7gy6RfURBmJvgezoG7wkGh6cw+sVUggVuJ31wyWCYwK
+        s5D8NgvJb7MQjljAyLyKUSy1oDg3PbXYsMAEOZY3MYJTq5bFDsa5bz/oHWJk4mA8xCjBwawk
+        wuvGLJEixJuSWFmVWpQfX1Sak1p8iDEZGNgTmaVEk/OByT2vJN7QzMzSwtLIxNDYzNCQsLCJ
+        pYGJmZGJhbGlsZmSOK+47clkIYH0xJLU7NTUgtQimC1MHJxSDUy8N3R2iwnLfbaOPfPglLdM
+        wdSnWqurzt5T37zjwobJ21//7fJTdLd+0XO+U2VFKUPnoub/7rMn9TyYPKVbX+y03K8jd9/9
+        faT5o/zxPeGS/Quq910RkNPYK1LD4DTF1ipT5l70MrZj2k39OemKLUsffH48VeNBxaeabStE
+        V+7qWfhpw+SeH/0m1x9bXD9x5F3sWgZmT7WpvVl9cffFp3tqTJ/3/swMi2IzeU7ePavcfqxU
+        3G537vJmh67NScrbou0dlWKW79zQ9y++QHitX79f+jTWqpcPpK80OXsZeNy2vLh9rt9Uzx9z
+        POLr9hkuX7G/j3VvyqutryKlmLY5rRAWv/YjfDLvRAbOctc3d1S0lViKMxINtZiLihMBWYP2
+        gGQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLLMWRmVeSWpSXmKPExsWy7bCSnG41i0SKwZwZEhbrTx1jttj7bjar
+        xdo9f5gtLu+aw2ax5d8RVosTt6QtFmx8xGgxY/9TdgcOj02rOtk83u+7yubRt2UVo8fnTXIB
+        LFFcNimpOZllqUX6dglcGQsOXWIt+MJT8XH/AuYGxvtcXYycHBICJhIXWr8wdjFycQgJ7GCU
+        +Pf2DTNEQkbiz8T3bF2MHEC2sMThw8UQNR8YJbZdv84KUsMmoCsx9eVTMFtEIEzix7Q7TCBF
+        zAJ9jBJ7L71lB0kIC/hL3Lj1C2woi4CqxIvmCYwgQ3kFbCUe9dRD7JKXaOw4B1bOKyAocXLm
+        ExYQmxko3rx1NvMERr5ZSFKzkKQWMDKtYpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQI
+        DlEtrR2Me1Z90DvEyMTBeIhRgoNZSYTXjVkiRYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T
+        8UIC6YklqdmpqQWpRTBZJg5OqQYmQZYzNuw/zb5EvMi/ob48IjD6xrnkoIAVfOG5L6K3nlhd
+        fPcXn5T5yx1XD1TWul9KTLB5793Q8WMLs/hZtjfpPCzbAncwPVrmfrIuQ9h9a73lLBd3yaiv
+        IZIVl/XV+QIkLp/U1PhR8f0xH5O3QyDHYtntXtp/ORlLvVNXVm77qJcUoRXvNuNc1+muk8Ua
+        Jv+bst0Ka3qe1htcXTbpi6FywuX5f0sjv7eFCkWc1p815ZnFTTUHhk0HZLNqODdJ7dBkdf+l
+        4i026WJ0T0r5s66iefFqt15nRQTdjNeqZ2h9ltFV9SR+j8S2Oc2hOZ35tTkfHrr4FDWt7d/x
+        wuNnqp3/Z80DJu8WGM2SmB/Zo8RSnJFoqMVcVJwIALLTqgLAAgAA
+X-CMS-MailID: 20230320070011epcas1p12f0fe9f9f417dd1a3441efdde55a4132
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230320070011epcas1p12f0fe9f9f417dd1a3441efdde55a4132
+References: <CGME20230320070011epcas1p12f0fe9f9f417dd1a3441efdde55a4132@epcas1p1.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In verity_end_io(), if bi_status is not BLK_STS_OK, it can be return
+directly. But if FEC configured, it is desired to correct the data page
+through verity_verify_io. And the return value will be converted to
+blk_status and passed to verity_finish_io().
 
-On 2023/3/16 15:18, Christian König wrote:
->
->
-> Am 15.03.23 um 22:15 schrieb Sui Jingfeng:
->> From: suijingfeng <suijingfeng@loongson.cn>
->>
->> Loongson display controller IP has been integrated in both Loongson
->> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
->> and ls2k2000 etc), it even has been included in Loongson BMC products.
->>
->> This display controller is a PCI device, it has two display pipe. For
->> the DC in LS7A1000 and LS2K1000 each way has a DVO output interface
->> which provide RGB888 signals, vertical & horizontal synchronisations,
->> and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
->> the maximum resolution is 2048x2048 according to the hardware spec.
->>
->> For the DC in LS7A2000, each display pipe is equipped with a built-in
->> HDMI encoder which is compliant with HDMI 1.4 specification, thus it
->> support 3840x2160@30Hz. The first display pipe is also equipped with
->> a transparent vga encoder which is parallel with the HDMI encoder.
->> The DC in LS7A2000 is more complete, besides above feature, it has
->> two hardware cursors, two hardware vblank counter and two scanout
->> position recorders.
->>
->>   v1 -> v2:
->>    1) Use hpd status reg when polling for ls7a2000
->>    2) Fix all warnings emerged when compile with W=1
->>
->>   v2 -> v3:
->>    1) Add COMPILE_TEST in Kconfig and make the driver off by default
->>    2) Alphabetical sorting headers (Thomas)
->>    3) Untangle register access functions as much as possible (Thomas)
->>    4) Switch to TTM based memory manager and prefer cached mapping
->>       for Loongson SoC (Thomas)
->>    5) Add chip id detection method, now all models are distinguishable.
->>    6) Revise builtin HDMI phy driver, nearly all main stream mode
->>       below 4K@30Hz is tested, this driver supported these mode very
->>       well including clone display mode and extend display mode.
->>
->>   v3 -> v4:
->>    1) Quickly fix a small mistake.
->>
->>   v4 -> v5:
->>    1) Drop potential support for Loongson 2K series SoC temporary,
->>       this part should be resend with the DT binding patch in the 
->> future.
->>    2) Add per display pipe debugfs support to the builtin HDMI encoder.
->>    3) Rewrite atomic_update() for hardware cursors plane(Thomas)
->>    4) Rewrite encoder and connector initialization part, untangle it
->>       according to the chip(Thomas).
->>
->>   v5 -> v6:
->>    1) Remove stray code which didn't get used, say 
->> lsdc_of_get_reserved_ram
->>    2) Fix all typos I could found, make sentences and code more readable
->>    3) Untange lsdc_hdmi*_connector_detect() function according to the 
->> pipe
->>    4) After a serious consideration, we rename this driver as loongson.
->>       Because we also have drivers toward the LoongGPU IP in LS7A2000 
->> and
->>       LS2K2000. Besides, there are also drivers about the external 
->> encoder,
->>       HDMI audio driver and vbios support etc. This patch only 
->> provide DC
->>       driver part, my teammate Li Yi believe that loongson will be more
->>       suitable for loongson graphics than lsdc in the long run.
->>
->>       loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
->>
->>    v6 -> v7:
->>    1) Add prime support, self-sharing is works. sharing buffer with 
->> etnaviv
->>       is also tested, and its works with limitation.
->>    2) Implement buffer objects tracking with list_head.
->>    3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
->>    4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
->>       during BO creation. Patch V1 ~ V6 of this series no longer works
->>       on latest kernel. Thus, we send V7.
->>
->> Signed-off-by: Li Yi <liyi@loongson.cn>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->
-> [SNIP]
->
->> +u64 lsdc_bo_gpu_offset(struct ttm_buffer_object *tbo)
->> +{
->> +    struct drm_device *ddev = tbo->base.dev;
->> +    struct ttm_resource *resource = tbo->resource;
->> +
->> +    if (drm_WARN_ON(ddev, !tbo->pin_count))
->> +        return -ENODEV;
->
-> Returning -ENODEV when the function return value is unsigned doesn't 
-> make much sense. I would also use 0 here.
->
-> Apart from that I briefly skimmed over the prime and TTM handling and 
-> couldn't find anything obviously wrong.
->
-> I obviously can't review the hw specific stuff, but over all looks 
-> pretty good to me.
->
-Yeah, this is very nice comments actually.
+BTW, when a bit is set in v->validated_blocks, verity_verify_io() skips
+verification regardless of I/O error for the corresponding bio. In this
+case, the I/O error could not be returned properly, and as a result,
+there is a problem that abnormal data could be read for the
+corresponding block.
 
-much better than NAK, complete NAK, big NAK or somethings like that.
+To fix this problem, when an I/O error occurs, do not skip verification
+even if the bit related is set in v->validated_blocks.
 
-Thanks a lot.
+Fixes: 843f38d382b1 ("dm verity: add 'check_at_most_once' option to only validate hashes once")
+Cc: stable@vger.kernel.org
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
+Signed-off-by: Yeongjin Gil <youngjin.gil@samsung.com>
+---
+v2:
+-change commit message and tag
+---
+ drivers/md/dm-verity-target.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Regards,
-> Christian.
+diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+index ade83ef3b439..9316399b920e 100644
+--- a/drivers/md/dm-verity-target.c
++++ b/drivers/md/dm-verity-target.c
+@@ -523,7 +523,7 @@ static int verity_verify_io(struct dm_verity_io *io)
+ 		sector_t cur_block = io->block + b;
+ 		struct ahash_request *req = verity_io_hash_req(v, io);
+ 
+-		if (v->validated_blocks &&
++		if (v->validated_blocks && bio->bi_status == BLK_STS_OK &&
+ 		    likely(test_bit(cur_block, v->validated_blocks))) {
+ 			verity_bv_skip_block(v, io, iter);
+ 			continue;
+-- 
+2.40.0
 
