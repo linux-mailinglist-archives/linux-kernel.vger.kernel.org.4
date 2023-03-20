@@ -2,137 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B576C1F52
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC6A6C1F50
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 19:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjCTSQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 14:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S230238AbjCTSQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 14:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjCTSPy (ORCPT
+        with ESMTP id S230451AbjCTSPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:15:54 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D27649F3;
+        Mon, 20 Mar 2023 14:15:53 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C479029;
         Mon, 20 Mar 2023 11:09:58 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id n2so14211254qtp.0;
-        Mon, 20 Mar 2023 11:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679335763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Ym0Aa6IJr35fCbX8wJyITkzyONp9K1eXcn9gLrMKEM=;
-        b=jV+wT9G9dMq++VXoHOITcaMwSKfT7Ne8l6voVfiCeH20VK0uzRJIf9CA2v8jn1mE42
-         9De/qJTXiN3NlwKDdk7NArH7WT5H+4m7s71wZTV+2BygDTiQuwk+mRLMpRhBukxFua9x
-         67hE9fL+3OgJ1dTRBMXtTwDXEznGIlnqEuoH6BXNz+DtDWm5LZSaKbCnlxFhePXKvQQw
-         biWPqZK1eoCZ6HeXFY1w+DmsNHS4W090fENE/el13ZE/cuRLHNVC7Li/p30/Ai1N8xhv
-         3ejM9NTyAoTh9dtKbufIgtWOwd6srKtNAzDZ9KiKE0PTE7Lb1wYokPUbe9HLqHLVnTp7
-         mdLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679335763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Ym0Aa6IJr35fCbX8wJyITkzyONp9K1eXcn9gLrMKEM=;
-        b=NHVzLYtMKdmsPkDgLcR0Hyt1XcwdYrZ7B7LtiPC1O0eiQeXLJE5a8q32RtCpnnmmcY
-         YDaKHsVM/VhH+pG+zQiieMGHhVbRjsaKATzEHtRTJ4gKGW06JAGUfSN6rIZLaYqi7tqh
-         t+gFFGmvcfDeZ0qH+ezUoIlCOCTBWgzCB5dP27sPitDx4P+NVwho/KiD+X6rUDZbjHQs
-         f6RknlOTBlTlNKxTHaUhHQ9+pMx8c8Qs1tiz5Y0XvTMy4uxsPG3ldAP8FmILHFuc+8Pv
-         z3T9KNERiVevWE4bZoEtZ5RYteukkWoO03Wg8R5it6IFxHrf3Y6Xz+r+YAa7IrQy+3MI
-         hYVQ==
-X-Gm-Message-State: AO0yUKV2sbjaC3xcTteESAd6/v2KVSJxbC5aao3XsB06ipmsbiP85cIq
-        nHlxVfLjV7/9+hgRoh/YVuY=
-X-Google-Smtp-Source: AK7set/rOHA8qVlayMALPx0FGjCcSWh/Kq1WvV8aodxfR3XsSBymHa1dS0evHblRHeVucdEeSCUF5g==
-X-Received: by 2002:a05:622a:190e:b0:3d7:1979:829e with SMTP id w14-20020a05622a190e00b003d71979829emr125230qtc.27.1679335763440;
-        Mon, 20 Mar 2023 11:09:23 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l16-20020ac84a90000000b003d4ee7879d0sm2042741qtq.56.2023.03.20.11.09.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 11:09:22 -0700 (PDT)
-Message-ID: <82ae9fd5-a4f9-89a6-8040-c64d22a85ebb@gmail.com>
-Date:   Mon, 20 Mar 2023 11:08:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mDaZYYZ9D8A8XMznK7rgomK0Ol3F1v8yKPtHL8cq+Lyypk8LTLAp1hlDc09j2ZHQpPGmjTWs9+lRlSoECduGj68jw/mTPAeSyynh08IktIEQG5hjYchroB4tn1WjhhXlfM+LDNT/yiQzZ5WmUDyH14TRxfLRMmtv2vqLtQv91J/aWrOQyb/cBE9/zBbet0Dn/5S13SIhlF4emHgJwavcxR3uO/oeYDFuicnaxkXYKMkEo3IKsuMjNP583qiRAsfpn3ixJrZMHtKQGKdtuhAn8I0epJJrXHCflyVVwJEPmq+2zaEvXQQgeCTKh1yNInw3GRKc7tg0kNgNECP+Zu5EFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gBqqtCCyNrjVVfmw0bqz563/qEySO7Z84R6+44BArg4=;
+ b=F/7qs86ON1ljUD6X+T0MPAZZufBRzwzdlHTa4k7W1MurxF5UwSPb8tP9/20v4zW6Cq1j+QXWjqp7b/6r1leEzdCo9thaVRVfFfylywFZSukLU4R1Z29wxzBYofoT8+V715YRsQC1uBhoZ6VpU/KP9slsxQfm3iKsvFv5BdC07nYG13+lhY+ArG0Iz2PK5KSNw/2c5ASwTZDQYcAwgSRgiHpN0aafupOnjsD/eAfEpABsJx1p0pWrzQOrSe+ixktnzfLmz7xMqvQwYrFQHIc9LyXARZUP/MBtq32S+iTfnPR6rx8mYpTy2HSpvV0mYFA8zd2weCtnfplWbJ/NnTHpRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gBqqtCCyNrjVVfmw0bqz563/qEySO7Z84R6+44BArg4=;
+ b=vxnpdECUpxjXKP7tFcv/8b9VZnSQoVzHMyh0HDNlx5np3wxSihkqmtnlWvMgnpPhKqvSO7yGsIdxwOw6OwQIVPWW0FhEMLsR+oPJ2sARP1WeT9LFmIFVytsTcD//gqFsTc1pO45YT4biVqNQo5NEGs3WN8jpf9ev4h93xQ+Bx6s=
+Received: from BN9PR03CA0739.namprd03.prod.outlook.com (2603:10b6:408:110::24)
+ by CY5PR12MB6202.namprd12.prod.outlook.com (2603:10b6:930:25::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 18:09:25 +0000
+Received: from BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:110:cafe::a8) by BN9PR03CA0739.outlook.office365.com
+ (2603:10b6:408:110::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Mon, 20 Mar 2023 18:09:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT110.mail.protection.outlook.com (10.13.176.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.15 via Frontend Transport; Mon, 20 Mar 2023 18:09:25 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 20 Mar
+ 2023 13:09:24 -0500
+Date:   Mon, 20 Mar 2023 13:09:09 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
+        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <jmattson@google.com>, <luto@kernel.org>,
+        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
+        <pgonda@google.com>, <peterz@infradead.org>,
+        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
+        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
+        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
+        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>
+Subject: Re: [PATCH RFC v8 03/56] KVM: x86: Add platform hooks for private
+ memory invalidations
+Message-ID: <20230320180909.gsffri3fdfdleewc@amd.com>
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-4-michael.roth@amd.com>
+ <20230318051322.GF408922@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: net: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-aspeed@lists.ozlabs.org,
-        linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-References: <20230317233605.3967621-1-robh@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230317233605.3967621-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230318051322.GF408922@ls.amr.corp.intel.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT110:EE_|CY5PR12MB6202:EE_
+X-MS-Office365-Filtering-Correlation-Id: 10fa67c9-8272-414d-2135-08db296e3d0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CAjiZp2+DdMErGjMGhW9oxqU39Qp8byZzx/+/ys8LIeIvgff6+5PyrJmaIO4CD0T7ue3UV0cUFr/ViRraB/yY8UQO1Ys7fNh/f/iADG/KMZ/4CryAQPkCF4IhC6+HNpkC2Zq9+KnamlhHpvQXYZ1RpKV52U350pQphuRZpm1aiu0zdyR0ux4I10gyzS+0uXy99zz4xTrGgjYRG5Lv/pLOFIaAzfwTU9vFlzU+PPAgeYPtIabtF9GHDETax204wN9BiimD/yVwgAP3lOiPsSeo3FbKlJFDiZV+xWwuRliy44iGKh2mHy7Lh/fuEsYCjmc3boSRar/WHrU6cBtgQuZiuKtnOBTsFmxvTbOfAnWhZpGonqImoN1hYIuXAVjciWyqHD4vH+Yd2NCq37NmSBDHEyUbj2njWIg0lj0tb/q+ueZ1eGNiSJaZHEcqcA4rp8hMq0T60/yY+iYT6zxwbpvgXpEdlNEALUSNmAYzfTXFthlPZAKN7WRHdmZ0JszRhn/vb3OBx374z+1m8i/gWFknHqIQPk+M5SoyrfMT5wEpNJ8MHzp2gODzUDWc8iVY9YoNsPjZCE4yPcKBuHCAFPIZzD88/z5n9jrdixPX5HfiBJdHBgFXWyRmqIiq7XqIwmSK1myy40Xa0c0a6A7ZsEE055bVHB5v8qij+NnA36NgNOIIjqZpFHkWmxxU/BE58Tniw2X4sa3LWhQxorYc1q2UblYRt6lM99c2sdF2QFWBMU=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(396003)(346002)(451199018)(36840700001)(40470700004)(46966006)(426003)(316002)(40480700001)(47076005)(44832011)(54906003)(70586007)(36860700001)(70206006)(36756003)(8936002)(8676002)(6916009)(4326008)(7416002)(7406005)(41300700001)(5660300002)(2906002)(478600001)(86362001)(40460700003)(81166007)(82740400003)(83380400001)(82310400005)(356005)(336012)(6666004)(2616005)(186003)(16526019)(1076003)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 18:09:25.0065
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10fa67c9-8272-414d-2135-08db296e3d0e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6202
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 16:36, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
+On Fri, Mar 17, 2023 at 10:13:22PM -0700, Isaku Yamahata wrote:
+> On Mon, Feb 20, 2023 at 12:37:54PM -0600,
+> Michael Roth <michael.roth@amd.com> wrote:
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../devicetree/bindings/net/actions,owl-emac.yaml  |  2 +-
->   .../bindings/net/allwinner,sun4i-a10-emac.yaml     |  2 +-
->   .../bindings/net/allwinner,sun4i-a10-mdio.yaml     |  2 +-
->   .../devicetree/bindings/net/altr,tse.yaml          |  2 +-
->   .../bindings/net/aspeed,ast2600-mdio.yaml          |  2 +-
->   .../devicetree/bindings/net/brcm,amac.yaml         |  2 +-
->   .../devicetree/bindings/net/brcm,systemport.yaml   |  2 +-
+> > In some cases, like with SEV-SNP, guest memory needs to be updated in a
+> > platform-specific manner before it can be safely freed back to the host.
+> > Add hooks to wire up handling of this sort to the invalidation notifiers
+> > for restricted memory.
+> > 
+> > Also issue invalidations of all allocated pages during notifier/memslot
+> > unbinding so that the pages are not left in an unusable state when
+> > they eventually get freed back to the host upon FD release.
+> 
+> I'm just curios. Could you please elaborate?
+> Unbind is happen only when memory slot is delete or vm is destroyed.  In the
+> case of memory slot deletion, the gpa region is zapped via
+> kvm_arch_commit_memory_region().  In the case of VM destroy, we have
+> kvm_flush_shadow_all() which calls
+> kvm_arch_flush_shadow_all() =>kvm_mmu_zap_all().  Doesn't it work?
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+The main thing here is unbind happens right before the restrictedmem
+pages are released back to the host, and for SNP we need to clear the
+associated RMP table entries to switch them from guest-owned to
+hypervisor-owned. It doesn't necessarily need to be a separate callback,
+but I'm not sure if it makes sense to squash that down into the various
+MMU zapping helpers.
 
+-Mike
+
+> 
+> Thanks,
+> -- 
+> Isaku Yamahata <isaku.yamahata@gmail.com>
