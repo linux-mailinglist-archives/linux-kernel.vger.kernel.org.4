@@ -2,75 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82FF6C12CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6854F6C12D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 14:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjCTNLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 09:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S231658AbjCTNL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 09:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCTNLO (ORCPT
+        with ESMTP id S231580AbjCTNLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 09:11:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914FFB76A;
-        Mon, 20 Mar 2023 06:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+/9FCDUcz/9yyumayNm7HvxGQ4k/d4p/8qwiRrkpHdI=; b=X4GyKsIv0QTVIz6ae3YmM33lHX
-        VBU9O+UrtEDNpJX70qptJmPQKFA3abRRe+j9f5PYJLaMjfBHzf6YU1XTRsWEF2tcqoWJ60HZw/ZY9
-        t6HL2p0DIxaFiiV5kemuIZVAGq682ctS2u/pInLxhO5QbmB+g835D/22Pb3Vgv1KhfDDzSDsbZy9i
-        lmpR3y1YYr6inC257Kit2JShOphUvvLieE79DRyIJFZX2I/WTKHZJQWoWcATKxDcwaJ51gtOSvX8F
-        8ycRRX0udJsYRVCLiqXafKmJKeqAWwW6QvJgu8P321g8h6kVt1ESX9K9Y+0haeuwZSWlPWykgOLCa
-        oLesLzCg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peFHu-0093xe-1V;
-        Mon, 20 Mar 2023 13:10:58 +0000
-Date:   Mon, 20 Mar 2023 06:10:58 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v19 00/15] splice, block: Use page pinning and kill
- ITER_PIPE
-Message-ID: <ZBhbYkTonYVY1xa4@infradead.org>
-References: <20230315163549.295454-1-dhowells@redhat.com>
- <167890243414.54517.7660243890362126266.b4-ty@kernel.dk>
+        Mon, 20 Mar 2023 09:11:22 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FF422104;
+        Mon, 20 Mar 2023 06:11:20 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-17683b570b8so12898911fac.13;
+        Mon, 20 Mar 2023 06:11:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679317879;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DBr9c5b67bRojO7ujP8kx0WSXnrTxlAuuYnRf7yafXk=;
+        b=H043XpUEn8F9JCTJ8bEBaWzeZ2M2hl4xdbvxNWd/nmI/ZZbX21GkDVx/QlJCr0SJbs
+         W1x4yA5IxBojnQltkrTz9/PGEvdxQTkSsmvvrvJoQXIknBJTZrBCtbCzmonHTXMVMN5e
+         FBT3aqTkDZEDHP6dLELb9XEUDPw9EszU2Aq0IfKaDP7z+VyMCfVCkBtQ6EiXDYF4bAF4
+         il+SH/E1OULxliB/bMCBx4oOWiQnL+9b6zJ42rkieN/MqUpRNhjOY2uLURxg6ntvwqst
+         4z7KSdx5eSmB7h4j6V0DZHEgh2YrG5uC9zcKHIbK4ZWpVFq14BraTHLrQNQWqxCvz5Q2
+         1d2g==
+X-Gm-Message-State: AO0yUKVAgTSJ+4bpM8H+wAWmTG0JirHMg5AaZ5qFA91aDbkuHj1UplVB
+        wim2UGqsLqOG6kQ+Eg4mqw==
+X-Google-Smtp-Source: AK7set+kAhkcOQ9jmYGffSEAwz3MqFLZgdXjIcCXTR5S4JEeE40EwhfCCF+T0rohxxxly9WNpXMOaw==
+X-Received: by 2002:a05:6871:5c6:b0:17e:cb7:29bc with SMTP id v6-20020a05687105c600b0017e0cb729bcmr4589960oan.13.1679317879289;
+        Mon, 20 Mar 2023 06:11:19 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id tl3-20020a0568718a0300b001777dc4dac1sm3246334oab.39.2023.03.20.06.11.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 06:11:18 -0700 (PDT)
+Received: (nullmailer pid 1433164 invoked by uid 1000);
+        Mon, 20 Mar 2023 13:11:18 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167890243414.54517.7660243890362126266.b4-ty@kernel.dk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     stern@rowland.harvard.edu, vigneshr@ti.com,
+        devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, srk@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, r-gunasekaran@ti.com
+In-Reply-To: <20230320093447.32105-2-rogerq@kernel.org>
+References: <20230320093447.32105-1-rogerq@kernel.org>
+ <20230320093447.32105-2-rogerq@kernel.org>
+Message-Id: <167931771710.1430059.457411418248576558.robh@kernel.org>
+Subject: Re: [RFC PATCH 1/2] dt-bindings: usb: snps,dwc3: Add
+ 'snps,gadget-keep-connect-sys-sleep'
+Date:   Mon, 20 Mar 2023 08:11:18 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 11:47:14AM -0600, Jens Axboe wrote:
-> > [...]
-> 
-> Applied, thanks!
 
-Dave, now that the basic patchset is in, can you resurrect the
-patch to conver the legacy direct-io code?  That would allow
-us to instantly the PAGE_REF version of the bio_release_pages,
-and also be a giant step toward never modifying page contents
-from a regular get_user_pages, and thus fix the file system
-problems around that.
+On Mon, 20 Mar 2023 11:34:46 +0200, Roger Quadros wrote:
+> The current USB gadget driver behaviour is to stop the controller
+> and disconnect from the bus during System sleep.
+> 
+> The 'snps,gadget-keep-connect-sys-sleep' property can be used to
+> change this behaviour and keep the controller active and connected
+> to the bus during System sleep. This is useful for applications
+> that want to enter a low power state when USB is suspended but
+> remain connected so they can resume activity on USB resume.
+> 
+> This feature introduces a new constraint if Gadget driver is connected
+> to USB host: i.e.  the gadget must be in USB suspend state to allow
+> a System sleep as we cannot process any USB transactions
+> when in System sleep.
+> 
+> The system hardware is responsible to detect the end of USB suspend
+> and wake up the system so we can begin processing the USB transactions
+> as soon as possible.
+> 
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/qcom,dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/rockchip,rk3399-dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,gadget-keep-connect-sys-sleep: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,gadget-keep-connect-sys-sleep: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml: properties:snps,gadget-keep-connect-sys-sleep: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+./Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+./Documentation/devicetree/bindings/usb/ti,am62-usb.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230320093447.32105-2-rogerq@kernel.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
