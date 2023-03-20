@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701EC6C23AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054786C23B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Mar 2023 22:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjCTV3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 17:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S230374AbjCTVbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 17:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCTV3P (ORCPT
+        with ESMTP id S230366AbjCTVbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:29:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2416A46;
-        Mon, 20 Mar 2023 14:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7+GIdFmD772nNedNSRkfi5ehiQ4I311T7kzgXJ4QrMI=; b=sdd+uQCb3+gOEFA3jSVzOgU6wv
-        r451TRpy2eQjyp394rh+54wTxOC6aLhl0S6J6sSsU0PCS5zhjDUxBFHfVcbdVv+Q623IBv174WKiO
-        x3L592ne+u4C4CH9TRoCQh3s/cmaeNvMLM10N9jWD5LxoUWHeK5nRsEjlzJ2p6pThTdAHtie+oJYU
-        DA0fdvptbbwpgow7G9Hhgs6kAUakCHhIhQJEuWyNon7uFu96TjLPKDkpw/rAiiScV7/QIb724sA96
-        fGxw6LmJu/RXsb1b4qMtNbBsypPwzM7FvRnMnwAAANlki5VtvkX/ZYE59h6O5q5CIf9tBLtfOrRu+
-        hqPqzFmA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peN2D-00AXVD-1m;
-        Mon, 20 Mar 2023 21:27:17 +0000
-Date:   Mon, 20 Mar 2023 14:27:17 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
-References: <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
- <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
- <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
- <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+        Mon, 20 Mar 2023 17:31:01 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6144305CE;
+        Mon, 20 Mar 2023 14:30:15 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PgSXd58H8z4whr;
+        Tue, 21 Mar 2023 08:28:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679347729;
+        bh=/891SqKTihULGqE584S2ffNFUuwiGnvxePH/HRWK3zA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DDLANSpHAnflOvMY9ODXLZ3SJnoQ+FofmI3Z3slv1TQ1u3VjB8cRZUihzUDbtRCE4
+         XxSD1bgYF0me3P3Se29fhSXXIEYDSUhYqhx0rFXs8EuyIWYk6OYv+LeiQuWQW6seJy
+         MWXn64VxRMHD2suGJGaasb7nwIq1YVfjCG/X5aFuKfyIBjOW0UgPqAb74cuW/LEvAl
+         19rKKIPywOUkYnP9XJhv0KYGM+c3DsKvr1HLXtDapZVMi79D1KZVQj6VmWT63K6kOa
+         qi8Vws2JgAzZx3gCnUGRaufrsriskkG//GSVU5a34Ytm9RyAvNIimGynO1xLPPIE3e
+         qYhkzshudoPgg==
+Date:   Tue, 21 Mar 2023 08:28:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Keith Busch <kbusch@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the block tree
+Message-ID: <20230321082848.25cfe9a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 02:23:36PM -0700, Luis Chamberlain wrote:
-> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
-> > Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
-> 
-> Oh wow, so to clarify, it boots OK?
-> 
+--Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Now that we know that tree works, I'm curious also now if you can
-confirm just re-ordering the patches still works (it should)
+Hi all,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts-adjust
+In commit
 
-And although it's *probably* just noise, but I'm very curious how much,
-if any difference there is if you just revert "module: use
-list_add_tail_rcu() when adding module".
+  aa939e415c6c ("blk-mq: remove hybrid polling")
 
-The data on that commit log is pretty small as I have a low end system,
-and I'm not yet done beating the hell out of a system with stress-ng,
-but getting some data froma  pretty large system would be great.
-Specially if this series seems to prove fixing boot on them.
+Fixes tags
 
-  Luis
+  Fixes: 9650b453a3d4b1, "block: ignore RWF_HIPRI hint for sync dio"
+  Fixes: d729cf9acb93119, "io_uring: don't sleep when polling for I/O"
+
+have these problem(s):
+
+  - missing space between the SHA1 and the subject
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+So:
+
+Fixes: 9650b453a3d4 ("block: ignore RWF_HIPRI hint for sync dio")
+Fixes: d729cf9acb93 ("io_uring: don't sleep when polling for I/O")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQY0BAACgkQAVBC80lX
+0GygXAf/Wi59ndcB/sQ5Nw4oaqnzkjCrQeqjY9APFigEtDHNznTLjzEmEUOdUOlu
+0UaJKA/CFTbjGIAGWRNJp4TCddLqvyVpn8mruobUNdDALI9opF8bPaRQ/HX93kDF
+I719LR75jETMZJIRW6LEIFA+BnbXlM5wYZs2gVARJlb5WJJv4i0HQyaovUPgND0L
+sCMuElM4T3W9FVK0ddHc/VJgjO3NEOvH5BykbzY1GzFfiEn/x/zlCr3EpVTDutM5
+FSR1eqiiBTkBVNlgdopuggn6ALtoQBrvzld1tLzHBl6EAwa+JqupNKAxyGKiivlS
+gqRXEvrY02LZBR/ZXyBDXZ7CSkgaog==
+=zfec
+-----END PGP SIGNATURE-----
+
+--Sig_/YhK9Dp1s3M_lAn5DRYLh5Uy--
