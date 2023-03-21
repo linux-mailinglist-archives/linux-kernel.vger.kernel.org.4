@@ -2,174 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2537D6C3591
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C65A66C35CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCUPYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        id S231697AbjCUPg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjCUPYc (ORCPT
+        with ESMTP id S231218AbjCUPg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:24:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E16A1B2CE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679412271; x=1710948271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aMLLh8V4kf7c9ciTlabKLcKZtNVTiRpS6IoNs5kWFIM=;
-  b=utSm9+yxu/Cme58DVnjcRnFqYQ9DPloTnxt/8F7BCDFTBBWaj7NDvgVQ
-   QqcbIUpwV9KunAzbNFLRMqycAOLXJ6QiZlLiROCnms45TASVk5Cwv6MHX
-   fzzurIZKdqxJtyujfXyLnQGNYawhBEtXCmF8j+x9ZBK4cIaF6bJrFPJti
-   We407WBdwWaK+/UlKWlY1/oXBoekHXPn/+i3Oc9FmJx2JbG7NS0njQzKE
-   WPa3fJBkn7oHrtFTo9sZBmwERkTy6Zb8BYdhDb89lmmc4XLwows61Knqk
-   fIdRG5sVlMsGbmwDDVqGOkZsMW1No7vKu8Ifua5dvbaYqmrrBGDjyKpgb
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,279,1673938800"; 
-   d="asc'?scan'208";a="202710844"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2023 08:24:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 08:24:29 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 21 Mar 2023 08:24:27 -0700
-Date:   Tue, 21 Mar 2023 15:35:38 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Torsten Duwe <duwe@lst.de>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Liao Chang <liaochang1@huawei.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <liubao918@huawei.com>
-Subject: Re: [PATCH] riscv: relocate R_RISCV_CALL_PLT in kexec_file
-Message-ID: <fc1a945d-368c-4385-b1cc-69978e0f4657@spud>
-References: <20230310182726.GA25154@lst.de>
- <e02fdfce-4574-8e7e-ec96-8e8eaa4067bc@huawei.com>
- <20230321160349.3b3a46df@blackhole.lan>
+        Tue, 21 Mar 2023 11:36:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F072200D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:36:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 195FE201C5;
+        Tue, 21 Mar 2023 15:36:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679413013; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8GR3nqVPTvIIUemQinUM3ZRWVv3nUcZCac4iLqxkiYA=;
+        b=Avdna0atBakXPjFjYggo5LoWoSf6DOuF45QWLuNb6ViEM6ZM89nQsnHxlI2Zunf128fqn9
+        ZuwEPZcQA/jTnnJ2HJYIxbyOdoigfnnusCoFmzoQuURX1ESsxhXE/RhB3jMNwMJJWGwNOS
+        d8jdPtYdVctX6h9LkkfoD27qvgdGIkQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id ABCDC2C141;
+        Tue, 21 Mar 2023 15:36:52 +0000 (UTC)
+Date:   Tue, 21 Mar 2023 16:36:49 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: simplify: was: Re: [PATCH printk v1 06/18] printk: nobkl: Add
+ acquire/release logic
+Message-ID: <ZBnPEaJKdHyTtUNS@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-7-john.ogness@linutronix.de>
+ <ZBSkoKCdG5uiVNPq@alley>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6Tf43noRFCb2ZP4i"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321160349.3b3a46df@blackhole.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZBSkoKCdG5uiVNPq@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---6Tf43noRFCb2ZP4i
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri 2023-03-17 18:34:30, Petr Mladek wrote:
+> Hi,
+> 
+> I send this before reading today's answers about the basic rules.
+> 
+> I have spent on this answer few days and I do not want to delay
+> it indefinitely. It documents my initial feelings about the code.
+> Also it describes some ideas that might or need not be useful
+> anyway.
+> 
+> Also there is a POC that slightly modifies the logic. But the basic
+> approach remains the same.
 
-On Tue, Mar 21, 2023 at 04:03:49PM +0100, Torsten Duwe wrote:
-> On Mon, 13 Mar 2023 11:13:17 +0800
-> Li Zhengyu <lizhengyu3@huawei.com> wrote:
->=20
-> > On Fri, 10 Mar 2023 19:27:03 +0100, Torsten Duwe <duwe@lst.de> wrote:
-> > > Depending on the toolchain (here: gcc-12, binutils-2.40) the
-> > > relocation entries for function calls are no longer R_RISCV_CALL, but
-> > > R_RISCV_CALL_PLT. When trying kexec_load_file on such kernels, it will
-> > > fail with
-> > >
-> > >   kexec_image: Unknown rela relocation: 19
-> > >   kexec_image: Error loading purgatory ret=3D-8
-> > >
-> > > The binary code at the call site remains the same, so tell
-> > > arch_kexec_apply_relocations_add() to handle _PLT alike.
-> >=20
-> > R_RISCV_CALL has already been deprecated, and replaced by R_RISCV_CALL_=
-PLT.
-> >=20
-> > See Enum 18-19 in Table 3. Relocation types from=20
-> > https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-=
-elf.adoc=20
-> > .
-> >=20
-> > It was deprecated in ("Deprecated R_RISCV_CALL, prefer=20
-> > R_RISCV_CALL_PLT")=20
-> > https://github.com/riscv-non-isa/riscv-elf-psabi-doc/commit/a0dced85018=
-d7a0ec17023c9389cbd70b1dbc1b0
-> >=20
-> > >
-> > > fixes: 838b3e28488f702 ("Load purgatory in kexec_file")
-> > > Signed-off-by: Torsten Duwe <duwe@suse.de>
-> > > Cc: stable@vger.kernel.org
-> > >
-> > > ---
-> > > --- a/arch/riscv/kernel/elf_kexec.c
-> > > +++ b/arch/riscv/kernel/elf_kexec.c
-> > > @@ -425,6 +425,7 @@ int arch_kexec_apply_relocations_add(struct purga=
-tory_info *pi,
-> > >   		 * sym, instead of searching the whole relsec.
-> > >   		 */
-> > >   		case R_RISCV_PCREL_HI20:
-> > > +		case R_RISCV_CALL_PLT:
-> > >   		case R_RISCV_CALL:
-> > >   			*(u64 *)loc =3D CLEAN_IMM(UITYPE, *(u64 *)loc) |
-> > >   				 ENCODE_UJTYPE_IMM(val - addr);
-> > >
-> > > .
-> >=20
-> > Palmer, please apply these references to the commit message.
-> >=20
-> > Reviewed-by: Li Zhengyu <lizhengyu3@huawei.com>
-> >=20
->=20
-> Ping?
+I looked at this with a "fresh" mind. I though if there was any real
+advantage in the proposed change of the cons_release() logic. I mean
+to just clear .cpu and .cur_prio and let cons_try_acquire() to take
+over the lock.
 
-It's not been all that longer than a week & you're in patchwork so you
-won't be forgotten, but I noticed a complaint when I went looking on
-patchwork about your fixes tag:
+I tried to describe my view below.
 
-Commit: f28b81e30b4b ("riscv: relocate R_RISCV_CALL_PLT in kexec_file")
-	Fixes tag: fixes: 838b3e28488f702 ("Load purgatory in kexec_file")
-	Has these problem(s):
-		- Subject does not match target commit subject
-		  Just use
-			git log -1 --format=3D'Fixes: %h ("%s")'
+> > +/**
+> > + * __cons_release - Release the console after output is done
+> > + * @ctxt:	The acquire context that contains the state
+> > + *		at cons_try_acquire()
+> > + *
+> > + * Returns:	True if the release was regular
+> > + *
+> > + *		False if the console is in unusable state or was handed over
+> > + *		with handshake or taken	over hostile without handshake.
+> > + *
+> > + * The return value tells the caller whether it needs to evaluate further
+> > + * printing.
+> > + */
+> > +static bool __cons_release(struct cons_context *ctxt)
+> > +{
+> > +	struct console *con = ctxt->console;
+> > +	short flags = console_srcu_read_flags(con);
+> > +	struct cons_state hstate;
+> > +	struct cons_state old;
+> > +	struct cons_state new;
+> > +
+> > +	if (WARN_ON_ONCE(!(flags & CON_NO_BKL)))
+> > +		return false;
+> > +
+> > +	cons_state_read(con, CON_STATE_CUR, &old);
+> > +again:
+> > +	if (!cons_state_bits_match(old, ctxt->state))
+> > +		return false;
+> > +
+> > +	/* Release it directly when no handover request is pending. */
+> > +	if (!old.req_prio)
+> > +		goto unlock;
+> > +
+> > +	/* Read the handover target state */
+> > +	cons_state_read(con, CON_STATE_REQ, &hstate);
+> > +
+> > +	/* If the waiter gave up hstate is 0 */
+> > +	if (!hstate.atom)
+> > +		goto unlock;
+> > +
+> > +	/*
+> > +	 * If a higher priority waiter raced against a lower priority
+> > +	 * waiter then unlock instead of handing over to either. The
+> > +	 * higher priority waiter will notice the updated state and
+> > +	 * retry.
+> > +	 */
+> > +	if (hstate.cur_prio != old.req_prio)
+> > +		goto unlock;
 
-The fixes tag should be:
-Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
+The above check might cause that CUR will be completely unlocked
+even when there is a request. It is a corner case. It would happen
+when a higher priority context is in the middle of over-ridding
+an older request (already took REQ but have not updated
+CUR.req_prio yet).
 
-Note the capital F & the missed RISC-V: prefix, checkpatch should have
-complained about this.
-Checkpatch also complains that your suse email in the Signoff doesn't
-match the lst.de email that you used to send the patch (IOW you're
-missing a From: header that send-email would add).
+As a result any context might take CUR while the higher priority
+context is re-starting the request and tries to get the lock with
+the updated CUR.
 
-Could you fix those things up please & I suppose you can take the
-opportunity to make the changes that Li Zhengyu suggested to the commit
-message itself at the same time.
+It is a bit pity but it is not end of the world. The higher priority
+context would just need to wait for another context.
 
-Thanks,
-Conor.
+That said, my proposal would solve this a bit cleaner way.
+CUR would stay blocked for the .req_prio context. As a result,
+the being-overridden REQ owner would become CUR owner.
+And the higher priority context would then need to setup
+new REQ against the previous REQ owner.
+
+> > +
+> > +	/* Switch the state and preserve the sequence on 64bit */
+> > +	copy_bit_state(new, hstate);
+> > +	copy_seq_state64(new, old);
+> > +	if (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new))
+> > +		goto again;
+
+The other difference is that the above code will do just half of
+the request-related manipulation. It will assing CUR to the REQ owner.
+The REQ owner will need to realize that it got the lock and
+clean up REQ part.
+
+Or by other words, there are 3 pieces of information:
+
+   + CUR owner is defined by CUR.cpu and CUR.cur_prio
+   + REQ owner is defined by REQ.cpu and REQ.cur_prio
+   + CUR knows about the request by CUR.req_prio
+
+The current code modifies the pieces in thie order:
+
+CPU0				CPU1
+
+// take a free lock
+set CUR.cpu
+set CUR.cur_prio
+
+				// set request
+				set REQ.cpu
+				set REQ.cur_prio
+
+				// notify CUR
+				set CUR.req_prio
+
+// re-assign the lock to CPU1
+set CUR.cpu = REQ.cpu
+set CUR.cur_prio = REQ.cur_prio
+set CUR.req_prio = 0
+
+				// clean REQ
+				REQ.cpu =0;
+				REQ.cur_prio = 0;
 
 
+In this case, CPU0 has to read REQ and does a job for CPU1.
 
---6Tf43noRFCb2ZP4i
-Content-Type: application/pgp-signature; name="signature.asc"
+Instead, my proposal does:
 
------BEGIN PGP SIGNATURE-----
+CPU0				CPU1
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBnOxAAKCRB4tDGHoIJi
-0hOtAQCLB6C9nIcVqUpFQ7xTtESnOBJTdvu8LY2vIaOeFiMjZwEAqc3Z6nZ80y9z
-M7VMSeGNvfoOb5RYfH7UWCUXAJ7SiQQ=
-=zuFb
------END PGP SIGNATURE-----
+// take a free lock
+set CUR.cpu
+set cur.prio
 
---6Tf43noRFCb2ZP4i--
+				// set request
+				set REQ.cpu
+				set REQ,cur_prio
+
+				// notify CUR
+				set CUR.req_prio
+
+// unlock CPU0
+set CUR.cpu = 0
+set CUR.cur_prio = 0;
+keep CUR.req_prio == REQ.cur_prio
+
+				// take the lock and clean notification
+				set CUR.cpu = REQ.cpu
+				set CUR.cur_prio = REQ.cur_prio
+				set CUR.req_prio = 0
+
+				// clean REQ
+				REQ.cpu =0;
+				REQ.cur_prio = 0;
+
+
+In this case:
+
+   + CPU0: It manipulates only CUR. And it keeps CUR.req_prio value.
+	   It does not check REQ at all.
+
+   + CPU1: Manipulates all REQ-related variables and fields.
+	   It modifies SEQ.cpu and SEQ.cur_prio only when
+	   they are free.
+
+It looks a bit cleaner. Also it might help to think about barriers
+because each side touches only its variables and fields. We might
+need less explicit barriers that might be needed when one CPU
+does a change for the other.
+
+
+My view:
+
+I would prefer to do the logic change. It might help with review
+and also with the long term maintenance.
+
+But I am not 100% sure if it is worth it. The original approach might
+be good enough. The important thing is that it modifies CUR and REQ
+variables and fields in the right order. And I do not see any
+chicken-and-egg problems. Also the barriers should be doable.
+
+Best Regards,
+Petr
