@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECE46C398E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C593A6C3997
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjCUSun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        id S230001AbjCUSxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjCUSul (ORCPT
+        with ESMTP id S229671AbjCUSxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:50:41 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5A26A1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:50:21 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id o14so7391668ioa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:50:21 -0700 (PDT)
+        Tue, 21 Mar 2023 14:53:22 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BA1252BF;
+        Tue, 21 Mar 2023 11:53:21 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso21331587pjb.0;
+        Tue, 21 Mar 2023 11:53:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1679424621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xDr70Nnl1VATn+QsQLIB3bXV6I1lenwh+WDqNDOsA0Q=;
-        b=DcTJTnyhiYLJeNioUDLmuSVg6UoVRxbbe5ZSgac+myOX2cLkzG9RbvRC5CNDWpB6uf
-         v83+q2Ltq1PlTNMTJ2tbM2GtMfQdEJF/z1MDcE00HTKDACl9T2hI05OTuPXTwc4EhkSE
-         btWd7/Cy/Vms+sGLosNbqH9xybP/DNMVyyGs0=
+        d=gmail.com; s=20210112; t=1679424801;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/8f05xxvJrWaCQ9xWwRvdj/1PDHRxufoOig+2JZZGSA=;
+        b=TX0/yqbkTKQJ/J3wZ6X2U31yWIIWEwfP6tNk5v4Uyy1kTq8GbFkfzUpK975x2jsNAG
+         3CT3LLndfm3jseSsDmvfps5V25J3w7Mc2pIxecr/ckUqjZLUSBiDbdkqRSJhUhRJPUL1
+         oUn1txkdWT6wPI6BI1NQOSV4C54icjP73J20AWaLfhuQxcYNzZF2nEYbiBjwGeZCAv6V
+         1UolI+9TNirID73fKTHeM03OPWIKhMlwCBr0Oh+/0NLMJldQ10pkZLGzDHRPCym/u7il
+         FFNC1u81Q2Owf2nFRO2z9ugIRXNSouhfhElvWY17tFI2WBaC+Ud2QCLORZqadzU/CXY7
+         o3iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xDr70Nnl1VATn+QsQLIB3bXV6I1lenwh+WDqNDOsA0Q=;
-        b=sibw02xQiWz7/URvankSQsGWxrgna9G22udiWDhqEJjWpXoDrgBJn5qv/O5cLwcJo9
-         A2AtqHZpJ+eIGGrOGniyMAju2eN+h3B9zPcTaGqDq13XvCcYF/dVfnsYwb7G4UjBfapp
-         t4UtBYslZqzOTDc4VI4/2xjiD5+4dD5YdR0yb0u+KymeH/RnhwJjNjOmKtkE29gQy9jn
-         Oe4bK1KZm6NIVZPeMUQXsApSEDNScQDwp7fLdKtMhB94yZ8zECVBnSqINl6zJ0xznx/E
-         6tIt+v3J7W5tcDHpVsdKiWZqp77Zq2bW8JD7wd/VQSl2pnNJFqVtQH6Y3VvysQOpF865
-         G62A==
-X-Gm-Message-State: AO0yUKXUDk/mN1lXvCEc1Jr+KqyxJjmhVfwIT+k8gJnP2T8sm39RG8Kt
-        o3zFS2VB5bICMttX6HYEWolrWHSc2ujVULJXI8g=
-X-Google-Smtp-Source: AK7set/4kVSlvtI2ppfTio176h7OTJNhkCUm3QA9gCe292hvJ6C5sdw+51ybOK5/SJkFjQYInjN53Q==
-X-Received: by 2002:a5e:de46:0:b0:752:ee32:322d with SMTP id e6-20020a5ede46000000b00752ee32322dmr2315828ioq.18.1679424620929;
-        Tue, 21 Mar 2023 11:50:20 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id c25-20020a5d8b59000000b0071664d0a4d7sm3875903iot.49.2023.03.21.11.50.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 11:50:20 -0700 (PDT)
-Message-ID: <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
-Date:   Tue, 21 Mar 2023 13:50:19 -0500
+        d=1e100.net; s=20210112; t=1679424801;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/8f05xxvJrWaCQ9xWwRvdj/1PDHRxufoOig+2JZZGSA=;
+        b=FgTfj26V85rFJocWBzt0ED1Lm0Baja4ILNSkA3jVVboxIOiD6MyE+rZ1lffDibTynU
+         RWCwzJnr0RunHmXGhxJ+Elw/Q1vCIDGREuhumey6yHMrcbh1XJBqiETApm1RIhGfOi9P
+         wH3p/Pil7gKOpHHgEU7fv/HiQxARXaZURudbBBebv93EIOdr22scf4wObWv7XUsyO8WS
+         xJnN78hCS4EL7ogz2oMUC6HuF72KJW0FeCHYGPquGnk1HF85PtQAPClYhh+SLMXg6/UF
+         WVKpjYgS73WOrtuyr6Rnie75b4JMvwXnsXbLMjQYs1hzXN4mp+DIn+d+NcU6PbbGOOpJ
+         N6kQ==
+X-Gm-Message-State: AO0yUKWq01aySQ5uNslwlDyS1XuZm8FwOYfFkb/m3RBvXYBrb5a/ojt6
+        p43lfixpqr7eT1hzDYXGssk=
+X-Google-Smtp-Source: AK7set/pAlIuGOVqkMOPzDe1xYDJ6P14joNgfPo5dRMJNUh9BVlAV9nzxoKgJUcnTxijPZ5jabtr/w==
+X-Received: by 2002:a05:6a20:1aa7:b0:cd:1ccf:246b with SMTP id ci39-20020a056a201aa700b000cd1ccf246bmr2750783pzb.57.1679424801047;
+        Tue, 21 Mar 2023 11:53:21 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:7d6f:600f:dc75:be38])
+        by smtp.gmail.com with ESMTPSA id e25-20020aa78c59000000b006254377ce44sm8548027pfd.43.2023.03.21.11.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:53:20 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 11:53:17 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Werner Sembach <wse@tuxedocomputers.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, tiwai@suse.de,
+        samuel@cavoj.net, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Input: i8042 - add TUXEDO devices to i8042 quirk
+ tables for partial fix
+Message-ID: <ZBn9HYw/NOvHFkrk@google.com>
+References: <20220708161005.1251929-1-wse@tuxedocomputers.com>
+ <20220708161005.1251929-3-wse@tuxedocomputers.com>
+ <37a7e536-252a-c8a9-1412-37d3f2052a6d@redhat.com>
+ <c5a7fa10-7b6a-fa0d-622e-4392fda1ee93@tuxedocomputers.com>
+ <e84a2cb3-ea2f-6ce4-aba8-4026b3e6bedd@redhat.com>
+ <f50b3db3-785d-3efd-b45d-13e1e93f60cc@tuxedocomputers.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
-Content-Language: en-US
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Julia Lawall <julia.lawall@inria.fr>
-References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f50b3db3-785d-3efd-b45d-13e1e93f60cc@tuxedocomputers.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,66 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 1:34 PM, Menna Mahmoud wrote:
-> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-> static inline function.
+Hi Werner,
+
+On Tue, Mar 21, 2023 at 05:10:19PM +0100, Werner Sembach wrote:
+> Am 11.07.22 um 14:55 schrieb Hans de Goede:
+> > Hi,
+> > 
+> > On 7/11/22 14:45, Werner Sembach wrote:
+> > > Hi,
+> > > 
+> > > On 7/8/22 21:39, Hans de Goede wrote:
+> > > > Hi,
+> > > > 
+> > > > On 7/8/22 18:10, Werner Sembach wrote:
+> > > > > A lot of modern Clevo barebones have touchpad and/or keyboard issues after
+> > > > > suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
+> > > > > have an external PS/2 port so this can safely be set for all of them.
+> > > > > 
+> > > > > I'm not entirely sure if every device listed really needs all four quirks,
+> > > > > but after testing and production use. No negative effects could be
+> > > > > observed when setting all four.
+> > > > > 
+> > > > > Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
+> > > > > and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
+> > > > > boot and sometimes also after resume. However both are required for the
+> > > > > keyboard to not fail completely sometimes after boot or resume.
+> > > > Hmm, the very laggy bit does not sound good. Have you looked into other
+> > > > solutions, e.g. what happens if you use just nomux without any of the
+> > > > other 3 options ?
+> > > I tried a lot of combinations, but it was some time ago.
+> > > 
+> > > iirc: at least nomux and reset are required and both individually cause the lagging.
+> > > 
+> > > So the issue is not fixed by just using a different set of quirks.
+> > Hmm, ok. So given that this seems to be the best we can do
+> > the patch looks good to me:
+> > 
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > 
+> > Regards,
+> > 
+> > Hans
 > 
-> It is not great to have macros that use the `container_of` macro,
-> because from looking at the definition one cannot tell what type
-> it applies to.
-> 
-> One can get the same benefit from an efficiency point of view
-> by making an inline function.
-> 
-> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> Afaik this patch never got merged. Sadly I still have no better solution, so
+> I wanted to bring the patch up for discussion again as it still makes the
+> situation better in my opinion.
 
-I'm sorry if this conflicts with what others have said.
+Could you rebase on top of the latest kernel?
 
-But the use of a macro (with a container_of() right-hand
-side) to get at the structure containing a field pointer
-is a widely-used idiom throughout the kernel.
+Thanks.
 
-What you propose achieves the same result but I would
-lean toward keeping it as a macro, mainly because it
-is so common.
-
-					-Alex
-> ---
-> changes in v2:
-> 	-send patch as a single patch.
-> 	-edit the name of struct object.
-> 	-edit commit message.
-> ---
->   drivers/staging/greybus/gbphy.h | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
-> index d4a225b76338..e7ba232bada1 100644
-> --- a/drivers/staging/greybus/gbphy.h
-> +++ b/drivers/staging/greybus/gbphy.h
-> @@ -15,7 +15,10 @@ struct gbphy_device {
->   	struct list_head list;
->   	struct device dev;
->   };
-> -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> +static inline struct gbphy_device *to_gbphy_dev(const struct device *_dev)
-> +{
-> +	return container_of(_dev, struct gbphy_device, dev);
-> +}
->   
->   static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
->   {
-> @@ -43,7 +46,10 @@ struct gbphy_driver {
->   
->   	struct device_driver driver;
->   };
-> -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
-> +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *drv)
-> +{
-> +	return container_of(drv, struct gbphy_driver, driver);
-> +}
->   
->   int gb_gbphy_register_driver(struct gbphy_driver *driver,
->   			     struct module *owner, const char *mod_name);
-
+-- 
+Dmitry
