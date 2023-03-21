@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E176C3262
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD0D6C3264
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjCUNNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S230349AbjCUNOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjCUNNQ (ORCPT
+        with ESMTP id S229783AbjCUNOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:13:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576EAA5E2;
-        Tue, 21 Mar 2023 06:13:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 948D5B81670;
-        Tue, 21 Mar 2023 13:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D874C433EF;
-        Tue, 21 Mar 2023 13:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679404392;
-        bh=Ie0I6DspmqUGmFzLY8M9p06FQQUjb9WBd6Z2Y5RxFMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WCELKUAO4DmRhWUevMaHTsfdWUOjmOwX6QDGRTGx8cr2tDflzYANu1EphfFEiuacN
-         73IJBFv8dFoFgJspV1c2kimtV/h9RslHEeXTHNU71iV2EBgXhherzoHszVgFNDN0Y+
-         SQEdUjvv4ttww2/mSl2jf4bmNKcGUD/3FSuCmYCoXHhZK3ojjR3yc8cHxkZ2MdqGDw
-         6zp/6BorvlCFtxWIlglrzjZLZjn8khx+muMaJjNKTzhW6I/CZ5/1CJX4uQLO80aQO2
-         T6Wec1E+zo0rJmtBFFf3unDCUrY/YYGRwClwRdqzpnsbNM7/shgpSK1BcTieLe2ZLh
-         4e8zFbiwUOlmw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pebox-000683-A5; Tue, 21 Mar 2023 14:14:36 +0100
-Date:   Tue, 21 Mar 2023 14:14:35 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] drm/meson: fix missing component unbind on bind errors
-Message-ID: <ZBmtu4klxYwQyN7R@hovoldconsulting.com>
-References: <20230306103533.4915-1-johan+linaro@kernel.org>
- <CAFBinCBsC+P=zvh6RF3UKiPnferUYU0QZvZfnn1oS5xWX-65Jw@mail.gmail.com>
+        Tue, 21 Mar 2023 09:14:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351AD20050
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:14:39 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id v14-20020a92c80e000000b0031faea6493cso7675544iln.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:14:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679404478;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d1E/CPVb6H8VyxRsyGiJWxP2UWi3TCzv8QPJdKDcVdk=;
+        b=UMvo08XUFzSx0gCDpg9lnbDliBP0QWIzkbfxbFhY0+Fx/Qb9elNrwtqfARNkvsPhir
+         nj2uWR55nRRVEvblfj0oESJNDbDJFevZ7OTxycB1F3BPXeskd3iGYb1XAB2G6DQUKTER
+         iLXBOO209qGroVe6uOoOW5EyAO8drJ+o9EF8xSZnxaiFuS2tJSPkq8NM6uEV70x/yLnQ
+         klB7/5uC8iMupZOfcelyJB1cNC052ix3Y9gMqnO/YOveUU5EyF2UAWMorCRsaD7ptMN+
+         iv6A9mQb4O5PnPMl5sZZPNm55IIOY80awIuEpw8m1K0UxfDX6nmzIu93bAwxVdIVGU1+
+         fzhg==
+X-Gm-Message-State: AO0yUKVNjG7FLBEOh42a0II65o/NkM7Mf6w8nSs0JbjLaeWlKLAgdjRJ
+        +URYUjvZPXOqHu9dLbiJF/evsNmTB6zV5GdIRHgLCd58mm41
+X-Google-Smtp-Source: AK7set/s6ej3JV3Xsl6KlLwe5mBRC4+3HQxIGvDZNFwhkHinh5peA+vo1p3wVHAfY3eJ5A7/xT9ehxiKPiehGXUDwIA3ROPqBwGS
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCBsC+P=zvh6RF3UKiPnferUYU0QZvZfnn1oS5xWX-65Jw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:8d46:0:b0:752:f038:6322 with SMTP id
+ p67-20020a6b8d46000000b00752f0386322mr846819iod.0.1679404478524; Tue, 21 Mar
+ 2023 06:14:38 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 06:14:38 -0700
+In-Reply-To: <000000000000ea7a5c05f051fd00@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006071aa05f768d333@google.com>
+Subject: Re: [syzbot] riscv/fixes boot error: WARNING in __apply_to_page_range (2)
+From:   syzbot <syzbot+5702f46b5b22bdb38b7e@syzkaller.appspotmail.com>
+To:     alex@ghiti.fr, andrii@kernel.org, aou@eecs.berkeley.edu,
+        ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, dvyukov@google.com, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        luke.r.nels@gmail.com, martin.lau@linux.dev, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, sdf@google.com, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, xi.wang@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:41:18PM +0100, Martin Blumenstingl wrote:
+This bug is marked as fixed by commit:
+riscv: Rework kasan population functions
 
-> On Mon, Mar 6, 2023 at 11:35 AM Johan Hovold <johan+linaro@kernel.org> wrote:
-> [...]
-> > @@ -325,23 +325,23 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
-> >
-> >         ret = meson_encoder_hdmi_init(priv);
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-> I'm wondering if component_bind_all() can be moved further down.
-> Right now it's between meson_encoder_cvbs_init() and
-> meson_encoder_hdmi_init(). So it seems that encoders don't rely on
-> component registration.
+#syz fix: exact-commit-title
 
-Perhaps it can, but that would be a separate change (unless there is
-something inherently wrong with the current initialisation order).
- 
-> Unfortunately I am also not familiar with this and I'm hoping that
-> Neil can comment on this.
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
-Any comments on this one, Neil?
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=5702f46b5b22bdb38b7e
 
-Johan
+---
+[1] I expect the commit to be present in:
+
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 10 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
