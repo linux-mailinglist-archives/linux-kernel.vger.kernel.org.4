@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9595C6C3582
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BCE6C3580
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjCUPVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S231680AbjCUPUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbjCUPVE (ORCPT
+        with ESMTP id S231686AbjCUPU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:21:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9F29ED0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679412014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8gbEQgLYjRS31cFyFQ/u7cPYuo5vW8jYBwx0JG55t7k=;
-        b=dR0JGE6WrB+H9xeIiDrrojzSNV3SfWjs6cc/Q262dWVVp5Um/0xc7nUGe8btwTjvepH7fy
-        KzK4aoOifcB/oDkzTDlTMK3n4PpbpfjxtrXDU3HshT8A38Pj4+bRY3Xq+K2X6aLlzC06XP
-        xKbOTgjjSVVackrj/wEbOHuYRnC99tM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-79-vprGBxSVPFi9K2mJDGV9pA-1; Tue, 21 Mar 2023 11:20:09 -0400
-X-MC-Unique: vprGBxSVPFi9K2mJDGV9pA-1
-Received: by mail-wm1-f72.google.com with SMTP id r35-20020a05600c322300b003edce6ff3b4so3138418wmp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:19:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679411999; x=1682003999;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        Tue, 21 Mar 2023 11:20:29 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E5523C7F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:20:26 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b20so28174394edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679412025;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8gbEQgLYjRS31cFyFQ/u7cPYuo5vW8jYBwx0JG55t7k=;
-        b=3SE8gxLFXHHsisrqmqdlc/Jaz1iV3aZydkPBhFGUNDZbIgUf0ZwONtXaYCMu9dFrFX
-         o9T7VjGljx0dgRKx4B4BExm5/YrdqeHSaIhllt4Xt0kvcXxyV6daM/P6dZklpmseYsgS
-         F/OQprr/vzMgBe5mm0hJ3lRvBzDxxXIR4L6bfvszo0cvviB1xtH8cG9hH9wCX1JUp5PL
-         Yg7K/mOVXVHVC7fF7N0o4+1GdnIGsIkrih1JsN71yat8uWhMLOMnj56VOAH6q+T9F7N3
-         NnBLtmMj2HjbK2423iFS3CUFAnBdfcQr9dJoiybgNFUdF+Wscr0pRt7uOGMeAOpbRK41
-         uJyg==
-X-Gm-Message-State: AO0yUKXeLluY/L7pL5DPfKwOON8yI3amI2CTXnVXQ+INiQR2epXADg7b
-        QZJs5A43jcSH+Mvz1GUFxnM4YqmBPOxpX+MVkJOF5Xx62m0HYewMU0jsszwEmW3Nj5ECEf4jh+L
-        d0EFKWlUjCVn6lkCmWk4z9l/S
-X-Received: by 2002:a05:600c:4fc7:b0:3eb:3135:11f8 with SMTP id o7-20020a05600c4fc700b003eb313511f8mr3137747wmq.4.1679411998900;
-        Tue, 21 Mar 2023 08:19:58 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9N2ci19eICPOnMdcBTjnB7OXCBxPD7oehEOP3BFy3O2nzb5elsh3iuuKD1njtVYEbAVIulpw==
-X-Received: by 2002:a05:600c:4fc7:b0:3eb:3135:11f8 with SMTP id o7-20020a05600c4fc700b003eb313511f8mr3137732wmq.4.1679411998569;
-        Tue, 21 Mar 2023 08:19:58 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-244-19.dyn.eolo.it. [146.241.244.19])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05600c154900b003ede03e4369sm8158288wmg.33.2023.03.21.08.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 08:19:57 -0700 (PDT)
-Message-ID: <26269528616bb41dcb2b5a3314f87fb36d45acac.camel@redhat.com>
-Subject: Re: syzbot + epoll
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, Xiumei Mu <xmu@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Hillf Danton <hdanton@sina.com>
-Date:   Tue, 21 Mar 2023 16:19:56 +0100
-In-Reply-To: <CANn89iLy+-rQDSKCg6g=xkNLL5SmgkB7gyMSgxCEPp13-+eLbw@mail.gmail.com>
-References: <CANn89iLy+-rQDSKCg6g=xkNLL5SmgkB7gyMSgxCEPp13-+eLbw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        bh=5Da2jxuDTdjMSjUZ5oJaHx1frHV9AyEaeWV3IO9K8Rs=;
+        b=RIZhyIZ9n0aS3DStByjSKQu/175aENkML4VQIuqDuR3TrTGuDi59cBsHTE2ZhqcIwd
+         rTx4kVX5fZoY9GU7W/OPKD4Rps8U1hUsSqnzkkytb/5KH95gWW8BVcSC1Y4Kv3oCY7bM
+         H4QUrxopAbXaCgr5BGAc+kmUs3WyY+ufwfnGEzXYIt22mDWF0WnoIaWKsm+GjRT9uwIO
+         KKwlC0CEdTABkp5bZcBCE1AxjjQXhIWG3gW8DNVYBgLBL4u1XzgFA4T5uCijk9yP7oWs
+         skNsxpAnAmm4Vj0yN8ZHUUcZv8mLj6rvLxWbnj7u2KrLMtdJSitv58VRNhVpfUdRatzm
+         dgbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679412025;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Da2jxuDTdjMSjUZ5oJaHx1frHV9AyEaeWV3IO9K8Rs=;
+        b=wbx4U3EfQYWDrBHPvdRUZLd5dMj9Q4jrFh9E9c+Nd8YnIsEA8wV4K3zlFe+59k8uwP
+         kZxu1ihlM2tCz7JgoevhVaB7zNoSrGXcN6mTSlVT0zzWvqXcPURL24ib1ir3V0rdHAED
+         +z1DXSao5GBvU5qvCyuo6CvHQhZhrcrErUmiTvlIUgoLdirCmhGW9IBLN5+RCNi9fdvM
+         W+bI5MXIgBtMGyLr3+bdMslIUnE1NmCbDK+64lREBh57zPbknD0ND/uFOu67YtlvQGLu
+         eCoViVroUW0aiaRa3gY59qr/rJGxPcbT1lDDzm34J90p2qulL3nrp+VIVHmvuiWIWK1r
+         ikFw==
+X-Gm-Message-State: AO0yUKUKPk8Rbvfq5dWD7WxeQdwdMFrCzk3BaE6nh4Mb5vw+YcxhYxC7
+        PH8v+Y7p8sNY3O/BBTIeqQpBxg==
+X-Google-Smtp-Source: AK7set93GdFlp6UxzAJRhP+TpVPdJfQCztzCBUEZMkFY2nmybXMPfjIo0Fvf6G9cxJLVi/gEQ8Umdg==
+X-Received: by 2002:aa7:d84d:0:b0:4ef:9bf0:7177 with SMTP id f13-20020aa7d84d000000b004ef9bf07177mr3338986eds.9.1679412025077;
+        Tue, 21 Mar 2023 08:20:25 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id y2-20020a50ce02000000b004c0057b478bsm6493930edi.34.2023.03.21.08.20.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 08:20:24 -0700 (PDT)
+Message-ID: <bad282d5-9e40-a99d-0abb-d04163dcf080@linaro.org>
+Date:   Tue, 21 Mar 2023 16:20:23 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/4] eeprom: ee1004: Add devicetree binding
+Content-Language: en-US
+To:     Eddie James <eajames@linux.ibm.com>, linux-kernel@vger.kernel.org
+Cc:     linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        andrew@aj.id.au, joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
+References: <20230321151642.461618-1-eajames@linux.ibm.com>
+ <20230321151642.461618-4-eajames@linux.ibm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230321151642.461618-4-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,79 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-20 at 14:17 -0700, Eric Dumazet wrote:
-> This is about this recent syzbot report (with a C repro)
->=20
-> https://lore.kernel.org/lkml/000000000000c6dc0305f75b4d74@google.com/T/#u
->=20
-> I think this is caused by:
->=20
-> commit fc02a95bb6d8bf58c6efd7e362814558eea2ef28
-> Author: Paolo Abeni <pabeni@redhat.com>
-> Date:   Tue Mar 7 19:46:37 2023 +0100
->=20
->     epoll: use refcount to reduce ep_mutex contention
->=20
-> Problem is that __ep_remove() might return early, without removing epi
-> from the rbtree (ep->rbr)
->=20
-> This happens when epi->dying has been set to true here :
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/=
-fs/eventpoll.c?id=3D6f72958a49f68553f2b6ff713e8c8e51a34c1e1e#n954
->=20
-> So we loop, while holding the ep->mtx held, meaning that the other
-> thread is blocked here
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/=
-fs/eventpoll.c?id=3D6f72958a49f68553f2b6ff713e8c8e51a34c1e1e#n962
->=20
-> So this dead locks.
->=20
-> Maybe fix this with:
->=20
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index 25a59640748a0fd22a84a5aecb90815fbbca9cef..1db56c6175aab5af7bc637a45=
-2b68ed8bc11fd7f
-> 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -784,7 +784,7 @@ static void ep_remove_safe(struct eventpoll *ep,
-> struct epitem *epi)
->=20
->  static void ep_clear_and_put(struct eventpoll *ep)
->  {
-> -       struct rb_node *rbp;
-> +       struct rb_node *rbp, *next;
->         struct epitem *epi;
->         bool dispose;
->=20
-> @@ -810,7 +810,8 @@ static void ep_clear_and_put(struct eventpoll *ep)
->          * Since we still own a reference to the eventpoll struct, the
-> loop can't
->          * dispose it.
->          */
-> -       while ((rbp =3D rb_first_cached(&ep->rbr)) !=3D NULL) {
-> +       for (rbp =3D rb_first_cached(&ep->rbr); rbp; rbp =3D next) {
-> +               next =3D rb_next(rbp);
->                 epi =3D rb_entry(rbp, struct epitem, rbn);
->                 ep_remove_safe(ep, epi);
->                 cond_resched();
+On 21/03/2023 16:16, Eddie James wrote:
+> Add an OF match table for devicetree instantiation of EE1004
+> devices.
 
-(adding Hillf, as was looking to this issue, too)
+Subject: There is no device tree binding here. You add OF matching (or
+support) to the driver.
 
-The fix LGTM and syzkaller says it addresses the issue:
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/misc/eeprom/ee1004.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-https://groups.google.com/g/syzkaller-bugs/c/oiBUmGsqz_Q/m/1IQ4vbROAgAJ
-
-I see Andrew removed the patch from the -mm tree. I guess at this point
-a new version of "epoll: use refcount to reduce ep_mutex contention",
-including the above is needed?
-
-If the above is correct, would a co-devel tag fit you Eric?
-
-Thanks,
-
-Paolo
-
+Best regards,
+Krzysztof
 
