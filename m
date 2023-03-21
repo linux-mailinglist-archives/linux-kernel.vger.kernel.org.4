@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831066C3788
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 209E86C378A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCUQ7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S230293AbjCUQ7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjCUQ7k (ORCPT
+        with ESMTP id S229782AbjCUQ7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:59:40 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746482822B;
-        Tue, 21 Mar 2023 09:59:26 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id s12so18636560qtq.11;
-        Tue, 21 Mar 2023 09:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679417965;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I06jlVpuoS7hc1UUHlUuFgOX+xLS2i4QEhtCoSjNuGU=;
-        b=PaEkV8snYe0mqpd6Mdw7rkKGqLTcCaUFkXrnLEdzvEPkLs6ynf3N/Rv5IHHi/sFof6
-         r36WO1vhjv7JrQrqSxgB3oF1fAVfO6YQ0ARgeDVvgd7ZOpX9MV+8YdZBl+BQXnqKhpP1
-         gKLTp6eXB5/yLjvA1f8go0Rh/peVXrVIquD+3BrEIwifnYc+zimt+kabWDiGqGiQfG9T
-         w5YZJTbjQPJ/aal7qZFLqcZMo26MJ2yct4tb8BtG+TCdjDvTGqAJ+tDKJLipooifJ+Zl
-         HAIcPqmmNS9BvEUjuu5JgDMp8BlAckZkcZ7OBFJVIC9OTACodiC1MVIsos5/sG6dDce8
-         lIMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679417965;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I06jlVpuoS7hc1UUHlUuFgOX+xLS2i4QEhtCoSjNuGU=;
-        b=Qfvv0MutiFuFgTuykMk5eJAPJdia5kHq9mHxggUPRvN91l1A2FZpUZM2sXQ5BBJHxP
-         d4ZDZL6obYcQyi2hBcj37YoXTvh/A+lrXCFRi7hqIeFW6n+8R59Oguwa8YWzYvg0Dycz
-         XWgplWa+wLBxHwC1AFCY04f9A9QrOkj+9UTnoAuMKjduCCh7/GPPsRLUEYJZO5phDmqK
-         6c71dEqX+j9DmMk02JcYQtfBS/9EF66Ey+yMq7Ta0mh+icf5Oyh7iGtivrpjJKdzkPiu
-         PmDh376mFolNV+/sm2hiyFX6aVuotrVdC4i39pyE5cULUj3jhAR6JCCm1l9Zne3jEC9W
-         ezMQ==
-X-Gm-Message-State: AO0yUKXbPpyEwtejEQexTOaHBtQ4SsXMfVTG9lOgfvIAakRDnCXYbOaA
-        x809AhQne6rirfkePje03g0=
-X-Google-Smtp-Source: AK7set+Nzp2zR/Mi25MRlxx3AJVgTI4FLqPCsMLSPn79OKDkCWjRNuHKvG9+PCujNwNo3W+km9D99Q==
-X-Received: by 2002:a05:622a:e:b0:3bf:d71e:5af4 with SMTP id x14-20020a05622a000e00b003bfd71e5af4mr980852qtw.26.1679417965607;
-        Tue, 21 Mar 2023 09:59:25 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y5-20020ac85245000000b003de68caf5b7sm5783159qtn.35.2023.03.21.09.59.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 09:59:24 -0700 (PDT)
-Message-ID: <355dc00f-8ccf-ef75-c511-3864b4f6c448@gmail.com>
-Date:   Tue, 21 Mar 2023 09:59:17 -0700
+        Tue, 21 Mar 2023 12:59:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C87521CC;
+        Tue, 21 Mar 2023 09:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bsYvFZRC1l1mRKF8zyfpXpF1SJmmtGNcW5sRV3d5hkk=; b=GCVTHQezRqRcsVVVvIrbaTt/yT
+        BJT5jUwrGLClyeLOLq4qr7qev15AItF0zaqWICUSwgCynez7ntPuyHVZWJDuzfd0r6xLRO8pulvXM
+        5AHStIwpURNTrOmM6cETzQagUM8L5J5Ye/hSEcJrRkP+u+oPRHx42RE5ZaWOYX8dbpJs/3atLbCBe
+        1YVMNcXsikjPztrMxDQnYBjslv42yo8EO2u2ePPYCMpWScmfzPq9Bu4ns9jyuO1bMfMpuAKBPGz4G
+        O4JrbXFjHC/b9VzPDsLmRGOvwmtepBGeZgaJhar24bk08CdV8FuMGln0lxlfmdRd7VMGaJJwUYtVV
+        swhE+/uA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pefKm-00D9Yk-26;
+        Tue, 21 Mar 2023 16:59:40 +0000
+Date:   Tue, 21 Mar 2023 09:59:40 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: next-20230321: arm64: Unable to handle kernel paging request at
+ virtual address
+Message-ID: <ZBnifM5B/E5weCnF@bombadil.infradead.org>
+References: <CA+G9fYsTk0GPOTEMm1KG2iJvMLG0SqUfG0JSenRYFHuOQTpuxw@mail.gmail.com>
+ <ZBl4Zi03pzURXkD9@alley>
+ <20230321155626.GA3765079@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net v2 1/2] smsc911x: only update stats when interface is
- up
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        netdev@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230320092041.1656-1-wsa+renesas@sang-engineering.com>
- <20230320092041.1656-2-wsa+renesas@sang-engineering.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230320092041.1656-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321155626.GA3765079@dev-arch.thelio-3990X>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,14 +64,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 02:20, Wolfram Sang wrote:
-> Otherwise the clocks are not enabled and reading registers will BUG.
+On Tue, Mar 21, 2023 at 08:56:26AM -0700, Nathan Chancellor wrote:
+> On Tue, Mar 21, 2023 at 10:27:02AM +0100, Petr Mladek wrote:
+> > Hi,
+> > 
+> > I add Luis into Cc.
+> > 
+> > On Tue 2023-03-21 11:42:56, Naresh Kamboju wrote:
+> > > The following kernel crash was noticed on arm64 Juno-r2 and Raspberry Pi 4
+> > > Model B on Linux next-20230321.
+> > > 
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > 
+> > > log:
+> > > ----
+> > > [    3.071500] Unable to handle kernel paging request at virtual
+> > > address 0000000000001000
+> > 
+> > I guess that this is exactly PAGE_SIZE (4k).
+> > 
+> > > [    3.079432] Mem abort info:
+> > > [    3.082225]   ESR = 0x0000000096000004
+> > > [    3.085977]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > > [    3.091295]   SET = 0, FnV = 0
+> > > [    3.094350]   EA = 0, S1PTW = 0
+> > > [    3.097491]   FSC = 0x04: level 0 translation fault
+> > > [    3.102373] Data abort info:
+> > > [    3.105252]   ISV = 0, ISS = 0x00000004
+> > > [    3.109089]   CM = 0, WnR = 0
+> > > [    3.112055] [0000000000001000] user address but active_mm is swapper
+> > > [    3.114230] usb 1-1: new high-speed USB device number 2 using ehci-platform
+> > > [    3.118418] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> > > [    3.118426] Modules linked in:
+> > > [    3.134717] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+> > > 6.3.0-rc3-next-20230321 #1
+> > > [    3.142126] Hardware name: ARM Juno development board (r2) (DT)
+> > > [    3.148052] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [    3.155027] pc : string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+> > > [    3.158443] lr : vsnprintf (lib/vsprintf.c:2817)
+> > > [    3.162196] sp : ffff80000b34b8f0
+> > > [    3.165511] x29: ffff80000b34b8f0 x28: ffff800009d7b1ca x27: ffff80000b34bab0
+> > > [    3.172666] x26: ffff800009d7b1ca x25: 0000000000000020 x24: 0000000000000008
+> > > [    3.179820] x23: 00000000ffffffd8 x22: ffff8000099858a0 x21: ffff80000b34bc30
+> > > [    3.186973] x20: ffff80000b34ba90 x19: ffff80000b34ba98 x18: 000000003c98bfdd
+> > > [    3.194127] x17: 000000000000001c x16: 00000000eec48da2 x15: 00000000a9dbdd17
+> > > [    3.201280] x14: ffff80000b0242e8 x13: 0000000057a049ef x12: 00000000cfa47237
+> > > [    3.208433] x11: 0000000000000001 x10: 00000000bd5b8780 x9 : ffff80000812cbec
+> > > [    3.215586] x8 : 00000000ffffffff x7 : 0000000000000002 x6 : ffff80000b34ba98
+> > > [    3.222739] x5 : ffffffffffffffff x4 : 0000000000000000 x3 : ffff0a00ffffff04
+> > > [    3.229891] x2 : 0000000000001000 x1 : 0000000000000000 x0 : ffff80000b34bab0
+> > > [    3.237044] Call trace:
+> > > [    3.239489] string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+> > 
+> > This is the line where vsprintf() reads a string to be printed:
+> > 
+> > static char *string_nocheck(char *buf, char *end, const char *s,
+> > 			    struct printf_spec spec)
+> > {
+> > 	int len = 0;
+> > 	int lim = spec.precision;
+> > 
+> > 	while (lim--) {
+> > ---->		char c = *s++;
+> > 
+> > 
+> > > [    3.242551] vsnprintf (lib/vsprintf.c:2817)
+> > > [    3.245954] vprintk_store (kernel/printk/printk.c:2200)
+> > > [    3.249712] vprintk_emit (kernel/printk/printk.c:2297)
+> > > [    3.253381] vprintk_default (kernel/printk/printk.c:2328)
+> > > [    3.257137] vprintk (kernel/printk/printk_safe.c:50)
+> > > [    3.260198] _printk (kernel/printk/printk.c:2341)
+> > > [    3.263257] sysctl_err (fs/proc/proc_sysctl.c:1109)
+> > > [    3.266577] __register_sysctl_table (fs/proc/proc_sysctl.c:1140
+> > > fs/proc/proc_sysctl.c:1383)
+> > > [    3.271202] __register_sysctl_init (fs/proc/proc_sysctl.c:1462)
+> > 
+> > The has been done some reractoring/modification of this code
+> > by the patchset ("[PATCH 00/11] sysctl: deprecate
+> > register_sysctl_paths()"), see
+> > https://lore.kernel.org/lkml/20230302202826.776286-1-mcgrof@kernel.org/
+> > 
+> > Luis, does it trigger any bell, please?
+> > Do you have an idea where this code could pass a pointer PAGE_SIZE
+> > as string to printk("%s")?
 > 
-> Fixes: 1e30b8d755b8 ("net: smsc911x: Make Runtime PM handling more fine-grained")
-> Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> My bisect actually landed on commit cfe7e6ea5ee2 ("mm: memory-failure:
+> Move memory failure sysctls to its own file"). The new sysctl table is
+> missing a sentinel. The following diff resolves it for me.
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 6367714af61d..b2377f12f062 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -143,6 +143,7 @@ static struct ctl_table memory_failure_table[] = {
+>  		.extra1		= SYSCTL_ZERO,
+>  		.extra2		= SYSCTL_ONE,
+>  	},
+> +	{ }
+>  };
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks pushed this fix in to sysctl-next.
 
+  Luis
