@@ -2,96 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017A56C31AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267E86C31B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjCUM1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S229473AbjCUM1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCUM1A (ORCPT
+        with ESMTP id S230143AbjCUM1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:27:00 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FA248E3E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:26:20 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id ek18so58933861edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:26:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679401575; x=1681993575;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=26c/PJlmYgWkbBmERwUyqF2dpBsoOH9Y3u2+yXmk3wc=;
-        b=NWi/rbNWlOWRm0KvJqKWK3AqEXqoEzpEAKHKS2mZqG+lP7vyUk6sS63hv7z131gFsd
-         OzBowG7iyefaEmekLam2JlQ7BmQJiqOiTE8hBZWw70Sijf0O/yFrFh7FSB6nZWtswnej
-         aTqezqVdQhaJO3gR477irgxyXMtqCW/a8/0zgDtSDZEZkhuMaxW5dxUEH7hvxjTuBmoi
-         6SSocg0KqDR+pVTRjtoQFQ4+QMrBjDOY+t1L07u9UrdqKXjafTrVsjcWs4USl+QlMdZP
-         doks5U3bSOad7Qe0PmlIUmmEXylVUP0WENI4zAVxBkevtPYbybeETTubdBxg/61VuwY5
-         lEGg==
-X-Gm-Message-State: AO0yUKVO8Tcv7joTYUYCWd/7Z/Q24HHhecB4kqoYi7KWVRSDq/HkT7ZN
-        K/MMriCcml9Wo4T+IewiVF8=
-X-Google-Smtp-Source: AK7set9BR+aUaX9jSI1+8SuxIhEkOn8iOy7MhwLuv4P3XYOXwQIiS4APbSbxzBudsHD9WeybjYQJMw==
-X-Received: by 2002:a17:906:10d0:b0:931:4285:ea16 with SMTP id v16-20020a17090610d000b009314285ea16mr2362836ejv.7.1679401574832;
-        Tue, 21 Mar 2023 05:26:14 -0700 (PDT)
-Received: from [10.100.102.14] (85.65.253.165.dynamic.barak-online.net. [85.65.253.165])
-        by smtp.gmail.com with ESMTPSA id bv1-20020a170906b1c100b00939e76a0cabsm795854ejb.111.2023.03.21.05.26.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 05:26:14 -0700 (PDT)
-Message-ID: <56620baf-6195-b987-6067-ae81d23e39c5@grimberg.me>
-Date:   Tue, 21 Mar 2023 14:26:13 +0200
+        Tue, 21 Mar 2023 08:27:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009D63E635
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uW6hcp6nJwytOeqeP4tIbrHPdMiAsq0Seo1YPugyfWc=; b=mJ0XuRIfQZsbhUGRZKXG2EU6LL
+        4f/Q/8rmiMU3YLJz5RySHpt+00wcIu/8FntV96d2to6aBPQupmAOTrg0AZ5rwjhex8hDZCRFIBu0k
+        vqD99FxhVMMIKRHgmldR/ddu2/Q9XIAeYFuwDNJv4tl9VolqEjHT+XdZCZmcvQdgIm+OmYrJzJCbd
+        P7z+OwFBkcgBGetJ8nPds8HtpPba+9nb0dAchByoFIo58gUr2LPGjEvbnUmpa7p9KdYFSkbmo7xRg
+        hN8mwXTT7dZdhj4RY8FG3ClyOCr+xwa8cYkWfAM6lB2BrWuvpANA4Nk6SO1orNNIEnyHHy+tC/6+C
+        1niCWdhA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1peb4p-004Ffx-2m;
+        Tue, 21 Mar 2023 12:26:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 06F3D30006D;
+        Tue, 21 Mar 2023 13:26:53 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B6910240B24A5; Tue, 21 Mar 2023 13:26:53 +0100 (CET)
+Date:   Tue, 21 Mar 2023 13:26:53 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
+        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Message-ID: <20230321122653.GJ2234901@hirez.programming.kicks-ass.net>
+References: <20230317160810.107988-1-vincent.guittot@linaro.org>
+ <20230321100206.GE2234901@hirez.programming.kicks-ass.net>
+ <7bba69e0-5261-9921-16b7-c8592b5d213b@arm.com>
+ <20230321104949.GI2234901@hirez.programming.kicks-ass.net>
+ <45741d41-3357-bffd-a244-954c32c9fe15@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [External] Re: [PATCH] nvme: fix heap-use-after-free and oops in
- bio_endio for nvme multipath
-Content-Language: en-US
-To:     Lei Lei2 Yin <yinlei2@lenovo.com>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>
-Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "cybeyond@foxmail.com" <cybeyond@foxmail.com>
-References: <PS1PR03MB493948DD1ECFAF150EE7B2F688819@PS1PR03MB4939.apcprd03.prod.outlook.com>
- <042385ef-285e-5179-941b-ab37f490c1d8@grimberg.me>
- <PS1PR03MB49395AC5BC73DDDA6A79E87488819@PS1PR03MB4939.apcprd03.prod.outlook.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <PS1PR03MB49395AC5BC73DDDA6A79E87488819@PS1PR03MB4939.apcprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <45741d41-3357-bffd-a244-954c32c9fe15@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> 	Thank you for your reply
+On Tue, Mar 21, 2023 at 12:13:06PM +0100, Dietmar Eggemann wrote:
+> On 21/03/2023 11:49, Peter Zijlstra wrote:
+> > On Tue, Mar 21, 2023 at 11:29:13AM +0100, Dietmar Eggemann wrote:
+> >> On 21/03/2023 11:02, Peter Zijlstra wrote:
+> >>> On Fri, Mar 17, 2023 at 05:08:10PM +0100, Vincent Guittot wrote:
+> >>>> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> >>>> fixes an overflowing bug, but ignore a case that se->exec_start is reset
+> >>>> after a migration.
+> >>>>
+> >>>> For fixing this case, we delay the reset of se->exec_start after
+> >>>> placing the entity which se->exec_start to detect long sleeping task.
+> >>>>
+> >>>> In order to take into account a possible divergence between the clock_task
+> >>>> of 2 rqs, we increase the threshold to around 104 days.
+> >>>>
+> >>>>
+> >>>> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> >>>> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+> >>>> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> >>>> ---
+> >>>
+> >>> Blergh, this just isn't going to be nice. I'll go queue this for
+> >>> sched/urgent and then we can forget about this for a little while.
+> >>>
+> >>> Thanks!
+> >>
+> >> Don't we miss setting `se->exec_start = 0` for fair task in
+> >> move_queued_task()? ( ... and __migrate_swap_task())
+> >>
+> >> https://lkml.kernel.org/r/df2cccda-1550-b06b-aa74-e0f054e9fb9d@arm.com
+> > 
+> > Ah, I see what you mean now... When I read your and Vincent's replies
+> > earlier today I though you mean to avoid the extra ENQUEUE_MIGRATED use,
+> > but your actual goal was to capure more sites.
+> > 
+> > Hmm, we could of course go add more ENQUEUE_MIGRATED, but you're right
+> > in that TASK_ON_RQ_MIGRATING already captures that.
 > 
-> 	This problem occurs in nvme over rdma and nvme over tcp with nvme generate multipath. Delete the ns gendisk is caused by nvmf target subsystem is faulty, then host detect all path keep alive overtime and io timeout. After ctrl-loss-tmo seconds, host will remove fail ctrl and ns gendisk.
+> And in case of move_queued_task() this would have to be conditioned on
+> SCHED_NORMAL.
 
-That is fine, but it is a problem if it does not correctly drain
-inflight I/O, weather it was split or not. And this looks like the wrong
-place to address this.
+I would prefer to not do that -- keep uniform rules. AFAICT the only
+other user of ENQUEUE_MIGRATED is deadline and that needs
+ENQUEUE_WAKEUP|ENQUEUE_MIGRATED combination to be effective and I don't
+think we've added any of those.
 
-> 	We have reappear this proble in Linux-5.10.136, Linux-5.10.167 and the latest commit in linux-5.10.y, and this patch is only applicable to Linux-5.10.y
-
-So my understanding that this does not reproduce upstream?
-
+> > An alternative is something like the below, that matches
+> > deactivate_task(), but still uses ENQUEUE_MIGRATED to pass it down into
+> > the class methods.
+> > 
+> > Hmm?
+> > 
+> > 
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -2084,6 +2084,9 @@ static inline void dequeue_task(struct r
+> >  
+> >  void activate_task(struct rq *rq, struct task_struct *p, int flags)
+> >  {
+> > +	if (task_on_rq_migrating(p))
+> > +		flags |= ENQUEUE_MIGRATED;
+> > +
+> >  	enqueue_task(rq, p, flags);
+> >  
+> >  	p->on_rq = TASK_ON_RQ_QUEUED;
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -8726,7 +8726,7 @@ static void attach_task(struct rq *rq, s
+> >  	lockdep_assert_rq_held(rq);
+> >  
+> >  	WARN_ON_ONCE(task_rq(p) != rq);
+> > -	activate_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_MIGRATED);
+> > +	activate_task(rq, p, ENQUEUE_NOCLOCK);
+> >  	check_preempt_curr(rq, p, 0);
+> >  }
 > 
-> 	Yes , this is absolutely the wrong place to do this . Can i move this modification after nvme_trace_bio_complete?
-> 
-> 	Do I need to resubmit a patch, if modifications are needed?
+> Would work too.
 
-Yes, but a backport fix needs to be sent to stable mailing list
-(stable@vger.kernel.org) and cc'd to linux-nvme mailing list.
-
-But I don't think that this fix is the correct one. What is needed is
-to identify where this was fixed upstream and backport that fix instead.
-If that is too involving because of code dependencies, it may be
-possible to send an alternative surgical fix, but it needs to be
-justified.
+OK, let me fold this in and then we can always tinker with it later if
+we're so motivated :-)
