@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABA56C300B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5866C300D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjCULPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
+        id S229685AbjCULPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjCULPB (ORCPT
+        with ESMTP id S230489AbjCULPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:15:01 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298FBEB5E;
-        Tue, 21 Mar 2023 04:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=h7qXc+1aUFElkMSM91nEtKXu81XN+Wf79m4It5ZDBKw=; b=CyDe9t+sVOvK634r9Puu4qv7Tr
-        Ovj0TAOGTUpoKFToWqG4+NPCKSvoEhRDyP69OUfOz0VzdqjnrOiyHZCrz3aQrySDxCqb/1a228oEq
-        nZXa1tj0tcBupnyAq5zoAPqrUcqdVRxC75ISxNKA8Ggm05IjXYSuFnn1pRhMu971AiRNMPlTTAR7J
-        xFGXcziwSsMUnBKXRQ7bVHBnEchFcfmUoqaD4KFX4It3vH1JWHEiByTrpn4YKJ/0W3HqGGGc6x0Id
-        vT+U8Qa7tA83tkCiQBDFvvOdRN/69noCxit8ddctZnzokmhZQ3dZwvFfMSS0uOSwIMvVuLh6J3wyf
-        kI1GDoIA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41428)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1peZwm-0000xL-KC; Tue, 21 Mar 2023 11:14:32 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1peZwk-0007gb-5R; Tue, 21 Mar 2023 11:14:30 +0000
-Date:   Tue, 21 Mar 2023 11:14:30 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH v2 net-next 1/9] phy: phy-ocelot-serdes: add ability to
- be used in a non-syscon configuration
-Message-ID: <ZBmRlnCKt7oJ/w9J@shell.armlinux.org.uk>
-References: <20230317185415.2000564-2-colin.foster@in-advantage.com>
- <ZBgeKM50e1vt+ho1@matsya>
- <ZBgmXplfA/Q3/1dC@shell.armlinux.org.uk>
- <20230320133431.GB2673958@google.com>
- <ZBhtOw4Ftj3Sa3JU@shell.armlinux.org.uk>
- <20230320164136.GC2673958@google.com>
- <ZBiRFNAqd94tbEJ9@shell.armlinux.org.uk>
- <20230321082658.GD2673958@google.com>
- <ZBmD+7pinpTzayep@shell.armlinux.org.uk>
- <20230321110851.GE2673958@google.com>
+        Tue, 21 Mar 2023 07:15:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143A021A36
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:14:57 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CCCFC66030D8;
+        Tue, 21 Mar 2023 11:14:52 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679397293;
+        bh=QBqSOn5L2dX/NeD+pFSVTpII5Gfyn4fJCYVfrwnSzG4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z4npLs9b8MuFPhsKike8ue/fPAYUU19SbOumdXC0IhrotMYvXc1AfBGAiZJvvNfWa
+         Fibv4Fe7iRgqw/2RIkFb6GzJw7XZzSpvRwQRoSC8bkNCLlX5FHR5F2/B/LD3EsUsUO
+         xF68mrp5bZgHSRM0eg1YcROelWTOyxW3gt/hCaQ4PrBAzEx4hw8PVwGPbuAEouKcCo
+         JivA8hWIWIeYy0xffFbiFw5s3/lstIXgu5N0AU0AGCjmMqBC3EIUhrBZvaOclsfReO
+         vwgD83J7dKO1yPI5wyE41hImyNIWmFqqJ/BbBuVc4ZJRnH+W0gWseFdFl6eWJRMSpB
+         J+85qHFDNDb0w==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     lee@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
+        daniel@ffwll.ch, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: [PATCH] drm/mediatek: Clarify/finish documentation for some driver structures
+Date:   Tue, 21 Mar 2023 12:14:48 +0100
+Message-Id: <20230321111448.270110-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321110851.GE2673958@google.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,76 +56,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:08:51AM +0000, Lee Jones wrote:
-> On Tue, 21 Mar 2023, Russell King (Oracle) wrote:
-> 
-> > On Tue, Mar 21, 2023 at 08:26:58AM +0000, Lee Jones wrote:
-> > > On Mon, 20 Mar 2023, Russell King (Oracle) wrote:
-> > >
-> > > > On Mon, Mar 20, 2023 at 04:41:36PM +0000, Lee Jones wrote:
-> > > > > On Mon, 20 Mar 2023, Russell King (Oracle) wrote:
-> > > > >
-> > > > > > On Mon, Mar 20, 2023 at 01:34:31PM +0000, Lee Jones wrote:
-> > > > > > > Once again netdev seems to have applied patches from other subsystems
-> > > > > > > without review/ack.  What makes netdev different to any other kernel
-> > > > > > > subsystem?  What would happen if other random maintainers started
-> > > > > > > applying netdev patches without appropriate review?  I suspect someone
-> > > > > > > would become understandably grumpy.
-> > > > > >
-> > > > > > Why again are you addressing your whinge to me? I'm not one of the
-> > > > > > netdev maintainers, but I've pointed out what happens in netdev
-> > > > > > land. However, you seem to *not* want to discuss it directly with
-> > > > > > DaveM/Jakub/Paolo - as illustrated again with yet another response
-> > > > > > to *me* rather than addressing your concerns *to* the people who
-> > > > > > you have an issue with.
-> > > > > >
-> > > > > > This is not communication. Effectively, this is sniping, because
-> > > > > > rather than discussing it with the individuals concerned, you are
-> > > > > > instead preferring to discuss it with others.
-> > > > > >
-> > > > > > Please stop this.
-> > > > >
-> > > > > Read the above paragraph again.
-> > > >
-> > > > You sent your email _TO_ me, that means you addressed your comments
-> > > > primarily _to_ me. RFC2822:
-> > > >
-> > > >    The "To:" field contains the address(es) of the primary recipient(s)
-> > > >    of the message.
-> > > >
-> > > >    The "Cc:" field (where the "Cc" means "Carbon Copy" in the sense of
-> > > >    making a copy on a typewriter using carbon paper) contains the
-> > > >    addresses of others who are to receive the message, though the
-> > > >    content of the message may not be directed at them.
-> > >
-> > > You're over-thinking it.  I replied to all.
-> >
-> > I've been thinking about this entire situation and there's something
-> > that summarises it. Kettle. Pot. Black.
-> >
-> > You complain about how netdev is run, but you also complain about how
-> > people interpret your emails.
-> >
-> > Sorry, but no. I think you need to be more accomodating towards how
-> > others perceive your emails, especially when there are widespread
-> > accepted conventions. The fact that you are seemingly not even willing
-> > to entertain that someone _might_ interpret your emails according to
-> > standard normals is frankly a problem for you.
-> 
-> This conversion has gone completely off-track.
-> 
-> If you wish to continue talking about email headers offline (instead of
-> filling people's inboxes with unrelated ramblings), you know where to
-> find me.
+The documentation for some of the driver structures in mediatek-drm
+was set to be kerneldoc but some code additions didn't actually update
+the comments accordingly and this caused triggering some warnings.
 
-I would prefer not to. I would much prefer it that if _you_ have a
-problem with how netdev operates, that _you_ talk directly _to_ the
-netdev maintainers, rather than latching on to one of my emails and
-replying to it. That is a reasonable request that _you_ appear to be
-completely immune to comprehending, instead wishing to effectively
-tell me that I'm wrong to request that - and start this idiotic
-thread to debate it.
+Add comments for the remaining undocumented entries; while at it, also
+clarify some acronyms for various display HW blocks and fix some comment
+blocks to actually get parsed as kerneldoc.
 
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c   |  8 +++++---
+ drivers/gpu/drm/mediatek/mtk_disp_ccorr.c |  8 +++++---
+ drivers/gpu/drm/mediatek/mtk_disp_color.c | 11 +++++++----
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c |  8 ++++++--
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c   | 13 +++++++++----
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c  | 12 +++++++++---
+ 6 files changed, 41 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+index 434e8a9ce8ab..12d1800c1d34 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+@@ -27,9 +27,11 @@ struct mtk_disp_aal_data {
+ };
+ 
+ /**
+- * struct mtk_disp_aal - DISP_AAL driver structure
+- * @ddp_comp - structure containing type enum and hardware resources
+- * @crtc - associated crtc to report irq events to
++ * struct mtk_disp_aal - Display Adaptive Ambient Light driver structure
++ * @clk:      clock for DISP_AAL controller
++ * @regs:     MMIO registers base
++ * @cmdq_reg: CMDQ Client register
++ * @data:     platform specific data for DISP_AAL
+  */
+ struct mtk_disp_aal {
+ 	struct clk *clk;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
+index 1773379b2439..b173aa058573 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
+@@ -35,9 +35,11 @@ struct mtk_disp_ccorr_data {
+ };
+ 
+ /**
+- * struct mtk_disp_ccorr - DISP_CCORR driver structure
+- * @ddp_comp - structure containing type enum and hardware resources
+- * @crtc - associated crtc to report irq events to
++ * struct mtk_disp_ccorr - Display Color Correction driver structure
++ * @clk:      clock for DISP_CCORR block
++ * @regs:     MMIO registers base
++ * @cmdq_reg: CMDQ Client register
++ * @data:     platform specific data for DISP_CCORR
+  */
+ struct mtk_disp_ccorr {
+ 	struct clk *clk;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_color.c b/drivers/gpu/drm/mediatek/mtk_disp_color.c
+index cac9206079e7..7884f4736b7c 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_color.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_color.c
+@@ -31,10 +31,13 @@ struct mtk_disp_color_data {
+ 	unsigned int color_offset;
+ };
+ 
+-/*
+- * struct mtk_disp_color - DISP_COLOR driver structure
+- * @crtc: associated crtc to report irq events to
+- * @data: platform colour driver data
++/**
++ * struct mtk_disp_color - DISP_COLOR (Display Color) driver structure
++ * @crtc:     associated crtc to report irq events to
++ * @clk:      clock for DISP_COLOR block
++ * @regs:     MMIO registers base
++ * @cmdq_reg: CMDQ Client register
++ * @data:     platform specific data for DISP_COLOR
+  */
+ struct mtk_disp_color {
+ 	struct drm_crtc				*crtc;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+index c844942603f7..7e748613fccb 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+@@ -31,8 +31,12 @@ struct mtk_disp_gamma_data {
+ 	bool lut_diff;
+ };
+ 
+-/*
+- * struct mtk_disp_gamma - DISP_GAMMA driver structure
++/**
++ * struct mtk_disp_gamma - Display Gamma driver structure
++ * @clk:      clock for DISP_GAMMA block
++ * @regs:     MMIO registers base
++ * @cmdq_reg: CMDQ Client register
++ * @data:     platform data for DISP_GAMMA
+  */
+ struct mtk_disp_gamma {
+ 	struct clk *clk;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index 9d8c986700ee..00f2871fd1a4 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -76,10 +76,15 @@ struct mtk_disp_ovl_data {
+ 	bool supports_afbc;
+ };
+ 
+-/*
+- * struct mtk_disp_ovl - DISP_OVL driver structure
+- * @crtc: associated crtc to report vblank events to
+- * @data: platform data
++/**
++ * struct mtk_disp_ovl - Display Overlay driver structure
++ * @crtc:           associated crtc to report vblank events to
++ * @clk:            clock for DISP_OVL block
++ * @regs:           MMIO registers base
++ * @cmdq_reg:       CMDQ Client register
++ * @data:           platform data
++ * @vblank_cb:      vblank callback function
++ * @vblank_cb_data: pointer to data that will be passed to vblank_cb()
+  */
+ struct mtk_disp_ovl {
+ 	struct drm_crtc			*crtc;
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+index e8e337903b0d..74f4a0bce5cc 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+@@ -59,9 +59,15 @@ struct mtk_disp_rdma_data {
+ 	unsigned int fifo_size;
+ };
+ 
+-/*
+- * struct mtk_disp_rdma - DISP_RDMA driver structure
+- * @data: local driver data
++/**
++ * struct mtk_disp_rdma - Display Read DMA driver structure
++ * @clk:            clock for DISP_RDMA block
++ * @regs:           MMIO registers base
++ * @cmdq_reg:       CMDQ Client register
++ * @data:           platform data
++ * @vblank_cb:      vblank callback function
++ * @vblank_cb_data: pointer to data that will be passed to vblank_cb()
++ * @fifo_size:      size of DISP_RDMA block's FIFO
+  */
+ struct mtk_disp_rdma {
+ 	struct clk			*clk;
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.40.0
+
