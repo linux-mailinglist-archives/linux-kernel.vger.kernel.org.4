@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE636C33CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4986C33D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjCUOOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S231261AbjCUOOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCUOOS (ORCPT
+        with ESMTP id S230437AbjCUOOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 10:14:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EE9B760;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B6FCC25;
         Tue, 21 Mar 2023 07:14:17 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 14:14:14 -0000
+Date:   Tue, 21 Mar 2023 14:14:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679408055;
+        s=2020; t=1679408056;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YNmBGrkXr5zAQUPF5oLNknj1qwJZo9lMq/43zPofrpg=;
-        b=34JhKb7LbJwy0JIHwAQaqfhERVXrby7lFgb7wET1z/wTN4Q2EXPu+BPeIR7bENbMSfy3bz
-        QU5mDUll7AqWivp/6waO7bqLgn/CmVe0mUyqsBXmrBxkBiPAq0zgWszY897hScaT2bon0t
-        4V512HtMfHeZSnaPVtG15gMfSjU2uVUIIngr6vuOgPqw4U9TL430metPOSQv+a3tG4MfxI
-        dAxZx+aPEkEW6uDvMhFb9P3AGxbYcFjjXdFncbqr2zkxN7vqa4Y1xkX635fT0HYb6EDGrg
-        MQ9u1QUsH/CH5xCwA3Kzs456K+8RgXbQxXFw5nsKqxqt7EqMitIls02SWl9PlA==
+        bh=JCBGRWtQKxfchyDAQdVLTwugq1Q6+YeRk5nNyr2Nfg4=;
+        b=OWp+G8ZHaKkNl9tb4Mtdwup/lRmr7Rs8MGlRj5YF36ZgBLHTeBcjSWs7YJhcaqxneyU3lB
+        HF54XTP6LV1/vpeOXYOBRZXjsKajn9uqMtV+KntlGU/iouDHC5o3DfbnlhpUFsoyHWsqKD
+        OJIeWtHR2nXsyltBzTFmnkfPawSnLpWKG8pZXhlQDAEhyRWGZi9ZG6gjpb6zyL0tJ9mAwN
+        HJUHdyKQgcbZNHiIXMnONtpu+9kqSHxgGqe/4nUBrMATl1vfc6OID+NIS+yseNt0jYi8k4
+        UyGWx3O+24TF2BIGe5xuGslYVC4lF2dg1S7aBzsILz1nyglFwE/64iGCQEccOg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679408055;
+        s=2020e; t=1679408056;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YNmBGrkXr5zAQUPF5oLNknj1qwJZo9lMq/43zPofrpg=;
-        b=CJ/2eW8gJ71i+w3f3NOl+pU8FK7geSUTY/c09zbgsfdb2Y1E8VUw7IL0605Tfb4kMWoQ8K
-        fZIZlkyWkUU/G/BA==
-From:   "tip-bot2 for David Woodhouse" <tip-bot2@linutronix.de>
+        bh=JCBGRWtQKxfchyDAQdVLTwugq1Q6+YeRk5nNyr2Nfg4=;
+        b=f9tOXY6Mg0bz8YeObZsDt0k3iLoDPOc9A+EKWhKzlDmIwhjiIfM09QG+P6sABpXEaeA92U
+        miP3yY7FpB40xNAg==
+From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/apic] x86/smpboot: Reference count on
- smpboot_setup_warm_reset_vector()
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
+Subject: [tip: x86/apic] x86/smpboot: Remove early_gdt_descr on 64-bit
+Cc:     Brian Gerst <brgerst@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230316222109.1940300-5-usama.arif@bytedance.com>
-References: <20230316222109.1940300-5-usama.arif@bytedance.com>
+In-Reply-To: <20230316222109.1940300-8-usama.arif@bytedance.com>
+References: <20230316222109.1940300-8-usama.arif@bytedance.com>
 MIME-Version: 1.0
-Message-ID: <167940805503.5837.227518196726835073.tip-bot2@tip-bot2>
+Message-ID: <167940805578.5837.1678729048718748115.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -72,82 +69,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/apic branch of tip:
 
-Commit-ID:     805ae9dc3b1c4040a842eb1714e7744af27fd30d
-Gitweb:        https://git.kernel.org/tip/805ae9dc3b1c4040a842eb1714e7744af27fd30d
-Author:        David Woodhouse <dwmw@amazon.co.uk>
-AuthorDate:    Thu, 16 Mar 2023 22:21:01 
+Commit-ID:     c253b64020c7a7c7a1f6adf8922456614be0f665
+Gitweb:        https://git.kernel.org/tip/c253b64020c7a7c7a1f6adf8922456614be0f665
+Author:        Brian Gerst <brgerst@gmail.com>
+AuthorDate:    Thu, 16 Mar 2023 22:21:04 
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 21 Mar 2023 13:35:53 +01:00
 
-x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+x86/smpboot: Remove early_gdt_descr on 64-bit
 
-When bringing up a secondary CPU from do_boot_cpu(), the warm reset flag
-is set in CMOS and the starting IP for the trampoline written inside the
-BDA at 0x467. Once the CPU is running, the CMOS flag is unset and the
-value in the BDA cleared.
+Build the GDT descriptor on the stack instead.
 
-To allow for parallel bringup of CPUs, add a reference count to track the
-number of CPUs currently bring brought up, and clear the state only when
-the count reaches zero.
-
-Since the RTC spinlock is required to write to the CMOS, it can be used
-for mutual exclusion on the refcount too.
-
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Kim Phillips <kim.phillips@amd.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Tested-by: Usama Arif <usama.arif@bytedance.com>
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Link: https://lore.kernel.org/r/20230316222109.1940300-5-usama.arif@bytedance.com
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+Link: https://lore.kernel.org/r/20230316222109.1940300-8-usama.arif@bytedance.com
 
 ---
- arch/x86/kernel/smpboot.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ arch/x86/kernel/acpi/sleep.c |  2 --
+ arch/x86/kernel/head_64.S    | 11 ++++++-----
+ arch/x86/kernel/smpboot.c    |  2 +-
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
+diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+index 1b4c43d..de89bb4 100644
+--- a/arch/x86/kernel/acpi/sleep.c
++++ b/arch/x86/kernel/acpi/sleep.c
+@@ -127,8 +127,6 @@ int x86_acpi_suspend_lowlevel(void)
+ 	 * value is in the actual %rsp register.
+ 	 */
+ 	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+-	early_gdt_descr.address =
+-			(unsigned long)get_cpu_gdt_rw(smp_processor_id());
+ 	initial_gs = per_cpu_offset(smp_processor_id());
+ 	smpboot_control = smp_processor_id();
+ #endif
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index cc1b145..a5b46c2 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -265,7 +265,12 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * addresses where we're currently running on. We have to do that here
+ 	 * because in 32bit we couldn't load a 64bit linear address.
+ 	 */
+-	lgdt	early_gdt_descr(%rip)
++	subq	$16, %rsp
++	movw	$(GDT_SIZE-1), (%rsp)
++	leaq	gdt_page(%rdx), %rax
++	movq	%rax, 2(%rsp)
++	lgdt	(%rsp)
++	addq	$16, %rsp
+ 
+ 	/* set up data segments */
+ 	xorl %eax,%eax
+@@ -667,10 +672,6 @@ SYM_DATA_END(level1_fixmap_pgt)
+ 	.data
+ 	.align 16
+ 
+-SYM_DATA(early_gdt_descr,		.word GDT_ENTRIES*8-1)
+-SYM_DATA_LOCAL(early_gdt_descr_base,	.quad INIT_PER_CPU_VAR(gdt_page))
+-
+-	.align 16
+ SYM_DATA(smpboot_control,		.long 0)
+ 
+ 	.align 16
 diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index b7d478d..851477f 100644
+index a1531cc..94e6c54 100644
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -121,17 +121,20 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
+@@ -1086,10 +1086,10 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+ 		start_ip = real_mode_header->trampoline_start64;
+ #endif
+ 	idle->thread.sp = (unsigned long)task_pt_regs(idle);
+-	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
+ 	initial_code = (unsigned long)start_secondary;
  
-+
-+static unsigned int smpboot_warm_reset_vector_count;
-+
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
- {
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&rtc_lock, flags);
--	CMOS_WRITE(0xa, 0xf);
-+	if (!smpboot_warm_reset_vector_count++) {
-+		CMOS_WRITE(0xa, 0xf);
-+		*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_HIGH)) = start_eip >> 4;
-+		*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) = start_eip & 0xf;
-+	}
- 	spin_unlock_irqrestore(&rtc_lock, flags);
--	*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_HIGH)) =
--							start_eip >> 4;
--	*((volatile unsigned short *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) =
--							start_eip & 0xf;
- }
- 
- static inline void smpboot_restore_warm_reset_vector(void)
-@@ -143,10 +146,12 @@ static inline void smpboot_restore_warm_reset_vector(void)
- 	 * to default values.
- 	 */
- 	spin_lock_irqsave(&rtc_lock, flags);
--	CMOS_WRITE(0, 0xf);
-+	if (!--smpboot_warm_reset_vector_count) {
-+		CMOS_WRITE(0, 0xf);
-+		*((volatile u32 *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) = 0;
-+	}
- 	spin_unlock_irqrestore(&rtc_lock, flags);
- 
--	*((volatile u32 *)phys_to_virt(TRAMPOLINE_PHYS_LOW)) = 0;
- }
- 
- /*
+ 	if (IS_ENABLED(CONFIG_X86_32)) {
++		early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
+ 		initial_stack  = idle->thread.sp;
+ 	} else {
+ 		smpboot_control = cpu;
