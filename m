@@ -2,81 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931F66C2C95
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1956D6C2C98
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjCUIfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S229611AbjCUIhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjCUIfQ (ORCPT
+        with ESMTP id S229942AbjCUIg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:35:16 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF4222F0;
-        Tue, 21 Mar 2023 01:34:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1679387632; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=RZ33c6MMbBaIUiN6tW6Y444tiInEw5dnZH4aJV04Ggrj2u77jkKN7Pptmq3Cj7mjRsimoPNbY52IDoe68FM3Saz0QyZ+8bMeZQjd/NWHjP6v72mGi17IXVPqEduQ6cDh4tic5wutYf7FTBaDR1SG6zo+jx3Vr8NNQE0ZpDHfmSA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1679387632; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=8hpQK9ToNpRcIR0nUQvwZUjbZt8M7a1xsGtg97t/jT8=; 
-        b=feFPt9K259BOOQvAzSGLpAj7UrqyPI6kaaLGi0SQbdOllKThreMgImG7kATvATJGwsflLdL/pu018hivdCiApDvJPZm+iwEaAS8a5w4MteDnt999Gvq8g1mI++qUM7hepkNbViR5BpU9e2JXq7QjjfgplDw7ZxfhlvKh8hErGvk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679387632;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=8hpQK9ToNpRcIR0nUQvwZUjbZt8M7a1xsGtg97t/jT8=;
-        b=N+x6iwsLl0kkIZvL5WzjHEHkXFoBBvW3/lNB4gleJO2NHWXD4gOH1PyVt7RWQQih
-        dSVEFvydqUMmFHUQPi6N9PgT/HVXTDqJtX8643HofqSdID9gsCxXSswfQc0VUINguHx
-        VfiT1ErqjShopml8rg+dbxTTNoI3vAZrdP1MZ5QM=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1679387630600838.4456904705892; Tue, 21 Mar 2023 01:33:50 -0700 (PDT)
-Message-ID: <d640a929-b6a0-1552-e66a-3a7bbabbc69f@arinc9.com>
-Date:   Tue, 21 Mar 2023 11:33:46 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
+        Tue, 21 Mar 2023 04:36:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B97199D0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679387790; x=1710923790;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=QszN8GXk3epkx+638Fsa5zVCFLTyQ2riiTuM20lv6TI=;
+  b=WIyHzm7wwV81MM2W5XDjLY/ixwD8zv5v4vAtm2sXq+5yEwiG3zvy7mHU
+   WnejN6CjToIyOnxtoJK7SBJBWqsfgowpxTtQ/Ws1uk9Qav2V11t6/S9lk
+   H9ssp3ojf3yWYVO1R+z0Li6lEBuS5ZbhCu8AS5aT1/Vq5nCbezQ41Nb11
+   tqqbSHM7avvW5+tDwS0/bqTaAd45d68mMcERads2IMMB0c7SHAH4ChiNA
+   h3QLdLFqQ7nyjJ1FL4z21gjQCq4PFGHs8HiTqhEhuyQCyzjavOvizQjKE
+   XRH/shcyGZXVHb2KO6Ae5IBad6Lclr+gfxC7Pu8o2SLL7Dlh0xWVaaAea
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="403755417"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="403755417"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 01:34:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="770538286"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="770538286"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2023 01:34:02 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 01:34:02 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 21 Mar 2023 01:34:02 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 21 Mar 2023 01:34:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PNZfyGadzj9FhZni0AtFEeQiajEVAMgNhcBAevBm9I1QdsOBbs+wYDuQF2ZUgpHJB7LpMgQe+mZIi4R8g8J4wa5NHI3QO6n/bUZth+ugT550H+msHte2RteoOhrAjws8ylVeuXDTXu0K2UgXxH/I0dCJXPjNl0gHqP0iZZvatd25eFfqR6drDxNaZxBhb6tCBSrVqcgokXWDfKN6xhM+SWGu/Jb8nknYIT85m0s+GNFETblK27cr5V34l9YTxS8A1LBV46kNvzEaokFlkHaKaJ+eKcetXyuTA7N5cXb8reYMyIIE5nZ8wDVr48TXr5854e3fdwUfrPOmqAftOTbBUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QszN8GXk3epkx+638Fsa5zVCFLTyQ2riiTuM20lv6TI=;
+ b=aswpTbax2Xnko1MGgpkO50mbGyJXQzC5G9dF3aNKxCJMQvYc2KBFrX0ULbXKFFTMLf5dVWLkIrqXrivhsI7BTJarunJfb5eLFE1wenUm8hE8yp9V5HDl4AaXjvYFl400h7alDVSDvFh0dBkJtx/qAsn7LxH85qrEh2HeA0Utx8+FFu+7o4JtxUrJ/cugrdMhKnvPHBlRHpdbnSAK5gD9oSjG8uYUUmDxNCiFNTX0fzEGbYXVlqtbpTXNLXnF3nJ1h7TBzTQfIT+ckvQIzxOmR0Aawl/b2RlSIlU4oJcLHpAuCXkD99AYPdber1fURZOc6/Gjm51mByKfipd9m7YRfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by IA1PR11MB7318.namprd11.prod.outlook.com (2603:10b6:208:426::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 08:34:00 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 08:34:00 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Nicolin Chen <nicolinc@nvidia.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
+ arm_smmu_cache_invalidate_user
+Thread-Topic: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
+ arm_smmu_cache_invalidate_user
+Thread-Index: AQHZUnWe1bQRwtfhAUSI/T7BqHBa167yh7YAgAALsACAANbagIAAyRsAgAqMnjCABPKxgIAANdgAgAAeawCAAPG3IA==
+Date:   Tue, 21 Mar 2023 08:34:00 +0000
+Message-ID: <BN9PR11MB5276E6E3FCA90582AA61BDDE8C819@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
+ <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com> <ZAn7uC9UweiNdGkJ@nvidia.com>
+ <ZAqv87fjbdynVaHA@Asurada-Nvidia> <ZAtYphmOuEqQ1BiC@nvidia.com>
+ <BN9PR11MB52768F4D3E21C5231C1A04D38CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZBhYq8o4gqFZVb6k@nvidia.com> <ZBiF1hZVrp/aJRM6@Asurada-Nvidia>
+ <ZBifWkY2Lt/U1Z7R@nvidia.com>
+In-Reply-To: <ZBifWkY2Lt/U1Z7R@nvidia.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
- <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
- <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
- <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
- <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
- <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
- <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
- <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
- <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
- <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
- <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
- <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
- <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
- <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
- <82f517b5-6697-3379-8d71-163b0d17735d@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <82f517b5-6697-3379-8d71-163b0d17735d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|IA1PR11MB7318:EE_
+x-ms-office365-filtering-correlation-id: 383ceaa4-5346-4b6e-c19e-08db29e70546
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZPNrypwU6dvTX9bROWYFPR3M+ED9sv81oF8c4cNlQOuJP0LewizLHO7v5hkYkgaTujpnNL/EEP1f0vDr25hEIwSPLFR0611T7c17bfRl2e17zdC2XibdZ1d0CujRyPR3M2h6BMtvHSiwdzvFTfs6CxndJGh8IYEPVvW5fQFIbRu29uj3HxmrLQKz9XVCUPnX4y6gtvydg4bUdw6CTWd6pF52my6JHSUdQurr83wKL1M8xoWLy7RCd7Dh6EyzfoJx7lifO1oRDvEzYV94Mhpv5pHjPaArTL/A/yPy7EWZ19Y4jGC6HSQCaxh5YPVnGooMg7Xl5NiviMn6MYzkN5biYOaVHewFdmG4Y48TWR7woC8S4ngxMKrTJODvNRUPiObR+5p870sojLQzbVb31Gsh5IBR0X4IgUbQSTOyhtiDQPoWu8qxVRPC0gZUpW8t533RBSc43CmQ2s7ZYaJUXlwwnMSjE1/4qnENvsOlmbS/vBorz4nzNqqDz67H3hgaGRG5ioEQHXt5eEfcqaPQragpd2ULWrgpC9s7A9sxqfhXHHyKv5jen18DIcRsp5L8zH6wf7I4+Kw4VjsFZu3m3hzu12YALblBpjEQe8BfvXHM9r/k6mrMqv5asD3LjZHZt0xDFhVBG0eDVS5NxQpbiHCGFl5PaBcDp6yyQ6PauwqLhJm2u8dcNkbnXqqOzpNlOvy6cG9ep2pz72PKgF4GU8O8sA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(39860400002)(376002)(396003)(451199018)(82960400001)(2906002)(55016003)(52536014)(9686003)(8936002)(5660300002)(7416002)(6506007)(41300700001)(26005)(186003)(86362001)(7696005)(316002)(33656002)(54906003)(66556008)(478600001)(66446008)(110136005)(66476007)(38070700005)(76116006)(66899018)(64756008)(71200400001)(122000001)(66946007)(38100700002)(4326008)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?U+bR+4Z8jCyEahTHG9WrG5aE9MZzh+T/zEVK1c60lil1NMG9Tf9ySp4VohoN?=
+ =?us-ascii?Q?+IapmzGGbKdj9FJ6Hq/Q+J68NJObhCNIxOze0b8gb7+3wR7q0IpbKRlels06?=
+ =?us-ascii?Q?JMlbgXJFV/sfg/XlNmXO6SyLMhdmBV8Pdn5zRy8yJX3f/wP3+kHhpjs2jvbP?=
+ =?us-ascii?Q?oyc8NzwZAmAyEo1YSm4/6r9X2+fdYXuzka+3Y4BgNcc/uvvkMB8D3PbN02q3?=
+ =?us-ascii?Q?ZTwD/XpMSSwiwNgidueNLfdGqXpaA3vSmFgKELUPrgll10YnbUqaeq8KFPZo?=
+ =?us-ascii?Q?k2HuPm2ntA5/Zux8+kVj6Q5cf3G2oaSfndSkDdiq+x8fXSkI3+GKUJi2j48j?=
+ =?us-ascii?Q?0VlB04Zbr2ITIt7TLKNN8HTxaun/s+V21fGPnBhgPnc5butCT0xWOBTeR9/G?=
+ =?us-ascii?Q?cH85dVH5W+xDwVbkDX+IKm+Wsk2/sYsdFmNZnD4hX7C1GZzn0438CeRnPP+P?=
+ =?us-ascii?Q?xin9U+yVCTKjzTJqbmNe8Eb0S9jAlJkG/BoC18bkjpLZzXwHBO2/X0m14GRY?=
+ =?us-ascii?Q?7LN/6pqo6saM58JGXmMH0jo45K41y6E6CvfFMgRgMyFQ4KWDn8mZmflRFI0r?=
+ =?us-ascii?Q?aSata/L5Uku6kVpnJ0wvqaG0fU/Tv/s52h5lgYdF4CQyC6ylv37PpNEB/8ny?=
+ =?us-ascii?Q?y4fRRrV67qVJUn7IASqwuVN4Vc1lUU4VFM+W5eWUEhyC1MRuO8khwOejlAiY?=
+ =?us-ascii?Q?4p3A5LV3r3X/KFTTQ1jl0BA3pXFNbrd/dG2HszCSxcckL7mMX9D00EH4ASJn?=
+ =?us-ascii?Q?R+E6NJARggAGa+zPYaTaF2RwuLNR77/6uIDjNw6NRkKx5ocyOAJ0xo5+aYUj?=
+ =?us-ascii?Q?tb3GgFci/cVHPPyNmNSQVIGgUYpJnQ2VYGROlq1GusvxQk749ocgUMGf1LyY?=
+ =?us-ascii?Q?MDPkxI+kTFhIvK0xqSJgnsh62B2UPXAqJDSErQlikZwqtTCrtY7c7N9MX23Q?=
+ =?us-ascii?Q?W4bn9f8HDdUY6bI/0rZPogZDfrdsHPhXq7339zMKFwOcKKOOc867G/UxSsv9?=
+ =?us-ascii?Q?Joe1Nle6TX4kGwqFFNwtoabPwIloVzjP2Hz1GzEfwzp4Mza8xaWniEbCcyZ7?=
+ =?us-ascii?Q?PKftNGsbYddLE32OZcPtHA1YidOWXlUdYeQblZEo9spwy1ScrTKWhpTfgOow?=
+ =?us-ascii?Q?d1vJIsZLj6Bcwgf7SJ+jaMheRyHiOgySHF/t6qdsYuwLc8GR2mpvluE224aM?=
+ =?us-ascii?Q?WssuaogUfjL9tBRyqRLuVpChjmQ28gKHS7qdRjARR0BBEaym7J5CR0sIk8Cg?=
+ =?us-ascii?Q?t6EjBDyIt4QdV9h7jOr02YkBBuBGuny+ZZfFtEpqw+anLY3sPg0gBZw8tVXy?=
+ =?us-ascii?Q?ETQ20icEBivgZgH/1XdZ3a26Njq2+upj9JWF7+NmwCvBFYaUrOdvYlmS+Dwq?=
+ =?us-ascii?Q?OkwZtLwUNz2D3rQlS3ORQyF2liHJskhQwKZaQASi2iRy2iIyOkuEGt87Vsta?=
+ =?us-ascii?Q?/bByozclDe6sZHTnoAlo/F6xRDlJKt2n7DUeUSQb88/HBJ46e9OMiQVReUgC?=
+ =?us-ascii?Q?RdKMcqihwW+pH7xxy5nBu89+XFRi9ritRI5QHXjnwJ8CQKkWc0Vch143Bdeh?=
+ =?us-ascii?Q?jVrkK9UcWPY7Wfri5zssljgC0UTQrOddzjWGoFsQ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 383ceaa4-5346-4b6e-c19e-08db29e70546
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 08:34:00.2327
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: usfMItCRS+M7NItF/J3GQl3UbMdTWryY3/pTGo7E7oi+SAQq5kYvc8ZZPLQC3TUz3XCPvQN0apWP1249IXbPEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7318
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +166,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.2023 11:27, Krzysztof Kozlowski wrote:
-> On 21/03/2023 09:24, Arınç ÜNAL wrote:
->>>>
->>>> If we take the calling new things mediatek route, we will never get to
->>>> the bottom of fixing the naming inconsistency.
->>>
->>> All new things, so new SoCs, should be called mediatek, because there is
->>> no ralink and mediatek is already used for them. So why some new
->>> Mediatek SoCs are "mediatek" but some other also new SoCs are "ralink"?
->>>
->>> You can do nothing (and no actual need) about existing inconsistency...
->>
->> I couldn't change ralink -> mediatek because company acquisitions don't
->> grant the change. I don't see any reason to prevent changing mediatek ->
->> ralink without breaking the ABI on the existing schemas.
-> 
-> You cannot change mediatek->ralink without breaking the ABI for the same
-> reasons.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Tuesday, March 21, 2023 2:01 AM
+>=20
+> On Mon, Mar 20, 2023 at 09:12:06AM -0700, Nicolin Chen wrote:
+> > On Mon, Mar 20, 2023 at 09:59:23AM -0300, Jason Gunthorpe wrote:
+> > > On Fri, Mar 17, 2023 at 09:41:34AM +0000, Tian, Kevin wrote:
+> > > > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > > > Sent: Saturday, March 11, 2023 12:20 AM
+> > > > >
+> > > > > What I'm broadly thinking is if we have to make the infrastructur=
+e for
+> > > > > VCMDQ HW accelerated invalidation then it is not a big step to al=
+so
+> > > > > have the kernel SW path use the same infrastructure just with a C=
+PU
+> > > > > wake up instead of a MMIO poke.
+> > > > >
+> > > > > Ie we have a SW version of VCMDQ to speed up SMMUv3 cases
+> without HW
+> > > > > support.
+> > > > >
+> > > >
+> > > > I thought about this in VT-d context. Looks there are some difficul=
+ties.
+> > > >
+> > > > The most prominent one is that head/tail of the VT-d invalidation
+> queue
+> > > > are in MMIO registers. Handling it in kernel iommu driver suggests
+> > > > reading virtual tail register and updating virtual head register. K=
+ind of
+> > > > moving some vIOMMU awareness into the kernel which, iirc, is not
+> > > > a welcomed model.
+> > >
+> > > qemu would trap the MMIO and generate an IOCTL with the written head
+> > > pointer. It isn't as efficient as having the kernel do the trap, but
+> > > does give batching.
+> >
+> > Rephrasing that to put into a design: the IOCTL would pass a
+> > user pointer to the queue, the size of the queue, then a head
+> > pointer and a tail pointer? Then the kernel reads out all the
+> > commands between the head and the tail and handles all those
+> > invalidation commands only?
+>=20
+> Yes, that is one possible design
+>=20
 
-Then this is where I ask for an exception.
+If we cannot have the short path in the kernel then I'm not sure the
+value of using native format and queue in the uAPI. Batching can
+be enabled over any format.
 
-The current solution only complicates things more.
-
-https://github.com/paraka/linux/pull/1/files#diff-0ae6c456898d08536ce987c32f23f2eb6f4a0f7c38bff9a61bdf3d0daa3f6549R21
-
-Arınç
+Btw probably a dumb question. The current invalidation IOCTL is
+per hwpt. If picking a native format does it suggest making the IOCTL
+per iommufd given native format is per IOMMU and could carry
+scope bigger than a hwpt.
