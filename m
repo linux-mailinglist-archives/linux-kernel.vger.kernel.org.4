@@ -2,89 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6546C3412
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0120B6C3415
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjCUOY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
+        id S231233AbjCUOYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjCUOYN (ORCPT
+        with ESMTP id S229744AbjCUOYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:24:13 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83646EB51
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:23:44 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so60315699edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:23:44 -0700 (PDT)
+        Tue, 21 Mar 2023 10:24:21 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC3D1ACF7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:23:48 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id x17so19355035lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679408622;
+        d=linaro.org; s=google; t=1679408626;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aSrbFs6j16nXcODbtUYdbNFgM/4nG6CNnV9copRJGIs=;
-        b=wsOn7tmFbIUoJgUu4FDSfbTjKFlrg7wfxqHj4Az8AKc8WqV6tg02e3b80gNOaDB8UN
-         q/RemCTkkY01Hk5GftXug6aYErP1CAC1zWFvJQ0Y0OUYJxHpqGfOrCWy+ohEgHdcVonA
-         67CK6lmZA+ulEBczWxAuudg/8uPRIgLe2csrNUWlzt0yNp6zefz9gG1GgVWxkqVfTs4O
-         eB1Mrfk5ox0ncouGoWpSuRjKLAkzgqje8TJeyud27+V47LcwJhhaVcFzOjoqq676Mt1O
-         A4hetJOnrGdUI6jj/Hrg55aODKtTwVMdXc/TW0EQFzkwbXP6KxzHnd7GKIpjKnbgJGcy
-         nKYg==
+        bh=zva7pNLmsdp/RMQSPrwmqUrYNtRIqOP5a4zLr3PoT04=;
+        b=I0wVZ8I8q4aZnt+31KVvLFmPYpjg2ee/26mtd0DkXxOGrrfccusVRPAzDpeHZjN6u4
+         uvfsu0NbMG4n214kfBQrFoGBdyBbdRFZyHK35ZU/wbwyJoW9W+OJg6yWlhR49yJDmQyc
+         NBxaDrSMxd0Mw05IXc7GJn55XRymbO6gRhbAE6anO0gWFvMwkO8bC8EvbZAiIGVrhVF5
+         CHO7EeBP2dv+rXea4P+GO1AUuOIrnu4EbqCq1TyHU0E28QCs+yZs0Dp3uCz3AiiiqtQQ
+         iT06SqHBnX868/4lG8az3erWW71w4pSw9T31ZjA4Ntbcf79a4B7CHqv4AVC3bKlrx7ew
+         sMxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679408622;
+        d=1e100.net; s=20210112; t=1679408626;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aSrbFs6j16nXcODbtUYdbNFgM/4nG6CNnV9copRJGIs=;
-        b=WyrSqf5rRGePKPfqzm0ri9a0D7ofbCAED+wtCqtrAoDMefBzKeBvTRtNJrgirXyy1R
-         6mQucHeLLX+xXyANJgjBhGzZUSdJJJwgHndQiQ9rXLay7SlMDy9ZWcelIfAhuOzV8zwQ
-         oqzEHIWAmLqKPbqndRNE2IwyWSpq8lPkJKT9rswWYyI46UJliCpcfR+JGmSVKrzjstnB
-         J0CFSjD27FpWCm61kmRMczZFcTTgV56cKAVf8LRON1uCaiy8SlObYuCr8qW0g1VYB5g3
-         uhvZtW4hJVjtJrIUfXFRVdQK8oOUuzJClYP6DGS5qrRro+WDb2cIUGqgi/+EpD6ZHved
-         Ai8w==
-X-Gm-Message-State: AO0yUKVMDj01jthj1MhSImZzVuMM7knXvllWA/25g1T/YHXHs8ToXj8W
-        B/XkaR3nbtqhLJVJgNFvy261lw==
-X-Google-Smtp-Source: AK7set9QjvwM71knZD2S139jfi9+OOCzWxSEiGkK3gDFPluwLYH0gmnRGszUxAXz9zMw+cjlGPTKDg==
-X-Received: by 2002:a17:907:2104:b0:930:4eba:1640 with SMTP id qn4-20020a170907210400b009304eba1640mr3253057ejb.38.1679408622125;
-        Tue, 21 Mar 2023 07:23:42 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id ha8-20020a170906a88800b0093a6c591743sm479648ejb.69.2023.03.21.07.23.40
+        bh=zva7pNLmsdp/RMQSPrwmqUrYNtRIqOP5a4zLr3PoT04=;
+        b=fGBMmJVsgS0vFHbBqMU50M/yR2snQaA7Sl83jnkHPOfgp6e1+H+/raymgf277HbnRF
+         WhTtmotHY6JG5qZKLRTSIq0TJvd4j1E8wxHX6b+DQt+zzCTt6ZoRzCYSizarb/ByfrPF
+         v40k+D+avi3RzbhvKVIQShvwqyN78qtP+kgpqQUuXaH0+oTPHwRLftPgFRWAMTpki9Hu
+         Tb+UQavth9C0n7qwMkCVoMtmXQ9elYf60CqQpd5IVIO0I/piBOdemN8VVKazIyx5ZzQ6
+         l9A9pGohOq+tGU/AJKtLPVXe23s/k+PrODb8nGoivvgHRAZcZGHlgCFlrEZH1GDsJ5Ey
+         PY4g==
+X-Gm-Message-State: AO0yUKV7ezsF71XiIsHHXqL3etesiUlulaM4A22XA06wUDzmHwScxiaz
+        E/p4bJao0j3y0REbiY7TBp8bOA==
+X-Google-Smtp-Source: AK7set/tPyfbHh5kcNc0oI0w5nvcEIVgbbUVAyR/q4ce2hrnXbszCDa6McPsZi+MLC238+c8hgAbtA==
+X-Received: by 2002:a19:7513:0:b0:4e9:609f:256d with SMTP id y19-20020a197513000000b004e9609f256dmr951609lfe.13.1679408626374;
+        Tue, 21 Mar 2023 07:23:46 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id u8-20020a056512094800b004e7fa99f2b5sm2170794lft.186.2023.03.21.07.23.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 07:23:41 -0700 (PDT)
-Message-ID: <e3ff8157-a3bc-1a48-e287-2d6dd71489ff@linaro.org>
-Date:   Tue, 21 Mar 2023 14:23:40 +0000
+        Tue, 21 Mar 2023 07:23:46 -0700 (PDT)
+Message-ID: <101834f0-e00c-5469-c8a5-59a00a5160a5@linaro.org>
+Date:   Tue, 21 Mar 2023 15:23:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v11 10/26] gunyah: vm_mgr: Introduce basic VM Manager
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
+ specifying channel num
 Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-11-quic_eberman@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230304010632.2127470-11-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-2-815606092fff@linaro.org>
+ <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
+ <38fe0736-b566-9e1b-d7f3-71e3fcd01d90@linaro.org>
+ <f8baed88-6a3b-17c5-4134-ce3917ee8632@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <f8baed88-6a3b-17c5-4134-ce3917ee8632@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -97,320 +85,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 04/03/2023 01:06, Elliot Berman wrote:
-> Gunyah VM manager is a kernel moduel which exposes an interface to
-> Gunyah userspace to load, run, and interact with other Gunyah virtual
-> machines. The interface is a character device at /dev/gunyah.
+On 21.03.2023 15:21, Georgi Djakov wrote:
+> On 21.03.23 16:09, Konrad Dybcio wrote:
+>>
+>> On 21.03.2023 15:06, Georgi Djakov wrote:
+>>> Hi Konrad,
+>>>
+>>> Thanks for the patch!
+>>>
+>>> On 8.03.23 23:40, Konrad Dybcio wrote:
+>>>> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
+>>>> one channel. This should be taken into account in bandwidth calcualtion,
+>>>> as we're supposed to feed msmbus with the per-channel bandwidth. Add
+>>>> support for specifying that and use it during bandwidth aggregation.
+>>>>
+>>>
+>>> This looks good, but do you have any follow-up patch to use this and set
+>>> the channels in some driver?
+>> Yes, I have a couple of OOT drivers that are gonna make use of it.
+>> TBF it should have been sent separately from the QoS mess, but I
+>> don't think it's much of an issue to take it as-is.
+>>
+>> The aforementioned OOT drivers for MSM8998 and SM6375 will be
+>> submitted after we reach a consensus on how we want to ensure
+>> that each node is guaranteed to have its clocks enabled before
+>> access, among some other minor things.
 > 
-> Add a basic VM manager driver. Upcoming patches will add more ioctls
-> into this driver.
+> Yes, these QoS clocks are confusing. Maybe you can even submit them
+> without configuring any QoS stuff in first place? Does enabling QoS
+> actually show any benefits on these devices?
+Haven't tested that thoroughly to be honest. But I'll try to get
+some numbers.
+
+Konrad
 > 
-> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
-
-
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
-
->   .../userspace-api/ioctl/ioctl-number.rst      |   1 +
->   drivers/virt/gunyah/Makefile                  |   2 +-
->   drivers/virt/gunyah/rsc_mgr.c                 |  38 +++++-
->   drivers/virt/gunyah/vm_mgr.c                  | 116 ++++++++++++++++++
->   drivers/virt/gunyah/vm_mgr.h                  |  23 ++++
->   include/uapi/linux/gunyah.h                   |  23 ++++
->   6 files changed, 201 insertions(+), 2 deletions(-)
->   create mode 100644 drivers/virt/gunyah/vm_mgr.c
->   create mode 100644 drivers/virt/gunyah/vm_mgr.h
->   create mode 100644 include/uapi/linux/gunyah.h
+> Thanks,
+> Georgi
 > 
-> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> index 0a1882e296ae..2513324ae7be 100644
-> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> @@ -137,6 +137,7 @@ Code  Seq#    Include File                                           Comments
->   'F'   DD     video/sstfb.h                                           conflict!
->   'G'   00-3F  drivers/misc/sgi-gru/grulib.h                           conflict!
->   'G'   00-0F  xen/gntalloc.h, xen/gntdev.h                            conflict!
-> +'G'   00-0f  linux/gunyah.h                                          conflict!
->   'H'   00-7F  linux/hiddev.h                                          conflict!
->   'H'   00-0F  linux/hidraw.h                                          conflict!
->   'H'   01     linux/mei.h                                             conflict!
-> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-> index de29769f2f3f..03951cf82023 100644
-> --- a/drivers/virt/gunyah/Makefile
-> +++ b/drivers/virt/gunyah/Makefile
-> @@ -2,5 +2,5 @@
->   
->   obj-$(CONFIG_GUNYAH) += gunyah.o
->   
-> -gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o
-> +gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
->   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
-> diff --git a/drivers/virt/gunyah/rsc_mgr.c b/drivers/virt/gunyah/rsc_mgr.c
-> index 67813c9a52db..d7ce692d0067 100644
-> --- a/drivers/virt/gunyah/rsc_mgr.c
-> +++ b/drivers/virt/gunyah/rsc_mgr.c
-> @@ -15,8 +15,10 @@
->   #include <linux/completion.h>
->   #include <linux/gunyah_rsc_mgr.h>
->   #include <linux/platform_device.h>
-> +#include <linux/miscdevice.h>
->   
->   #include "rsc_mgr.h"
-> +#include "vm_mgr.h"
->   
->   #define RM_RPC_API_VERSION_MASK		GENMASK(3, 0)
->   #define RM_RPC_HEADER_WORDS_MASK	GENMASK(7, 4)
-> @@ -129,6 +131,7 @@ struct gh_rm_connection {
->    * @cache: cache for allocating Tx messages
->    * @send_lock: synchronization to allow only one request to be sent at a time
->    * @nh: notifier chain for clients interested in RM notification messages
-> + * @miscdev: /dev/gunyah
->    */
->   struct gh_rm {
->   	struct device *dev;
-> @@ -145,6 +148,8 @@ struct gh_rm {
->   	struct kmem_cache *cache;
->   	struct mutex send_lock;
->   	struct blocking_notifier_head nh;
-> +
-> +	struct miscdevice miscdev;
->   };
->   
->   /**
-> @@ -593,6 +598,21 @@ void gh_rm_put(struct gh_rm *rm)
->   }
->   EXPORT_SYMBOL_GPL(gh_rm_put);
->   
-> +static long gh_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-> +{
-> +	struct miscdevice *miscdev = filp->private_data;
-> +	struct gh_rm *rm = container_of(miscdev, struct gh_rm, miscdev);
-> +
-> +	return gh_dev_vm_mgr_ioctl(rm, cmd, arg);
-> +}
-> +
-> +static const struct file_operations gh_dev_fops = {
-> +	.owner		= THIS_MODULE,
-> +	.unlocked_ioctl	= gh_dev_ioctl,
-> +	.compat_ioctl	= compat_ptr_ioctl,
-> +	.llseek		= noop_llseek,
-> +};
-> +
->   static int gh_msgq_platform_probe_direction(struct platform_device *pdev, bool tx,
->   					    struct gh_resource *ghrsc)
->   {
-> @@ -651,7 +671,22 @@ static int gh_rm_drv_probe(struct platform_device *pdev)
->   	rm->msgq_client.rx_callback = gh_rm_msgq_rx_data;
->   	rm->msgq_client.tx_done = gh_rm_msgq_tx_done;
->   
-> -	return gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, &rm->tx_ghrsc, &rm->rx_ghrsc);
-> +	ret = gh_msgq_init(&pdev->dev, &rm->msgq, &rm->msgq_client, &rm->tx_ghrsc, &rm->rx_ghrsc);
-> +	if (ret)
-> +		goto err_cache;
-> +
-> +	rm->miscdev.name = "gunyah";
-> +	rm->miscdev.minor = MISC_DYNAMIC_MINOR;
-> +	rm->miscdev.fops = &gh_dev_fops;
-> +
-> +	ret = misc_register(&rm->miscdev);
-> +	if (ret)
-> +		goto err_msgq;
-> +
-> +	return 0;
-> +err_msgq:
-> +	mbox_free_channel(gh_msgq_chan(&rm->msgq));
-> +	gh_msgq_remove(&rm->msgq);
->   err_cache:
->   	kmem_cache_destroy(rm->cache);
->   	return ret;
-> @@ -661,6 +696,7 @@ static int gh_rm_drv_remove(struct platform_device *pdev)
->   {
->   	struct gh_rm *rm = platform_get_drvdata(pdev);
->   
-> +	misc_deregister(&rm->miscdev);
->   	mbox_free_channel(gh_msgq_chan(&rm->msgq));
->   	gh_msgq_remove(&rm->msgq);
->   	kmem_cache_destroy(rm->cache);
-> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
-> new file mode 100644
-> index 000000000000..dbacf36af72d
-> --- /dev/null
-> +++ b/drivers/virt/gunyah/vm_mgr.c
-> @@ -0,0 +1,116 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#define pr_fmt(fmt) "gh_vm_mgr: " fmt
-> +
-> +#include <linux/anon_inodes.h>
-> +#include <linux/file.h>
-> +#include <linux/gunyah_rsc_mgr.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/module.h>
-> +
-> +#include <uapi/linux/gunyah.h>
-> +
-> +#include "vm_mgr.h"
-> +
-> +static void gh_vm_free(struct work_struct *work)
-> +{
-> +	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
-> +	int ret;
-> +
-> +	ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
-> +	if (ret)
-> +		pr_warn("Failed to deallocate vmid: %d\n", ret);
-> +
-> +	put_gh_rm(ghvm->rm);
-> +	kfree(ghvm);
-> +}
-> +
-> +static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
-> +{
-> +	struct gh_vm *ghvm;
-> +	int vmid;
-> +
-> +	vmid = gh_rm_alloc_vmid(rm, 0);
-> +	if (vmid < 0)
-> +		return ERR_PTR(vmid);
-> +
-> +	ghvm = kzalloc(sizeof(*ghvm), GFP_KERNEL);
-> +	if (!ghvm) {
-> +		gh_rm_dealloc_vmid(rm, vmid);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	ghvm->parent = gh_rm_get(rm);
-> +	ghvm->vmid = vmid;
-> +	ghvm->rm = rm;
-> +
-> +	INIT_WORK(&ghvm->free_work, gh_vm_free);
-> +
-> +	return ghvm;
-> +}
-> +
-> +static int gh_vm_release(struct inode *inode, struct file *filp)
-> +{
-> +	struct gh_vm *ghvm = filp->private_data;
-> +
-> +	/* VM will be reset and make RM calls which can interruptible sleep.
-> +	 * Defer to a work so this thread can receive signal.
-> +	 */
-> +	schedule_work(&ghvm->free_work);
-> +	return 0;
-> +}
-> +
-> +static const struct file_operations gh_vm_fops = {
-> +	.release = gh_vm_release,
-> +	.llseek = noop_llseek,
-> +};
-> +
-> +static long gh_dev_ioctl_create_vm(struct gh_rm *rm, unsigned long arg)
-> +{
-> +	struct gh_vm *ghvm;
-> +	struct file *file;
-> +	int fd, err;
-> +
-> +	/* arg reserved for future use. */
-> +	if (arg)
-> +		return -EINVAL;
-> +
-> +	ghvm = gh_vm_alloc(rm);
-> +	if (IS_ERR(ghvm))
-> +		return PTR_ERR(ghvm);
-> +
-> +	fd = get_unused_fd_flags(O_CLOEXEC);
-> +	if (fd < 0) {
-> +		err = fd;
-> +		goto err_destroy_vm;
-> +	}
-> +
-> +	file = anon_inode_getfile("gunyah-vm", &gh_vm_fops, ghvm, O_RDWR);
-> +	if (IS_ERR(file)) {
-> +		err = PTR_ERR(file);
-> +		goto err_put_fd;
-> +	}
-> +
-> +	fd_install(fd, file);
-> +
-> +	return fd;
-> +
-> +err_put_fd:
-> +	put_unused_fd(fd);
-> +err_destroy_vm:
-> +	gh_vm_free(&ghvm->free_work);
-> +	return err;
-> +}
-> +
-> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned long arg)
-> +{
-> +	switch (cmd) {
-> +	case GH_CREATE_VM:
-> +		return gh_dev_ioctl_create_vm(rm, arg);
-> +	default:
-> +		return -ENOIOCTLCMD;
-> +	}
-> +}
-> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
-> new file mode 100644
-> index 000000000000..4b22fbcac91c
-> --- /dev/null
-> +++ b/drivers/virt/gunyah/vm_mgr.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef _GH_PRIV_VM_MGR_H
-> +#define _GH_PRIV_VM_MGR_H
-> +
-> +#include <linux/gunyah_rsc_mgr.h>
-> +
-> +#include <uapi/linux/gunyah.h>
-> +
-> +long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned long arg);
-> +
-> +struct gh_vm {
-> +	u16 vmid;
-> +	struct gh_rm *rm;
-> +	struct device *parent;
-> +
-> +	struct work_struct free_work;
-> +};
-> +
-> +#endif
-> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
-> new file mode 100644
-> index 000000000000..10ba32d2b0a6
-> --- /dev/null
-> +++ b/include/uapi/linux/gunyah.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef _UAPI_LINUX_GUNYAH
-> +#define _UAPI_LINUX_GUNYAH
-> +
-> +/*
-> + * Userspace interface for /dev/gunyah - gunyah based virtual machine
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/ioctl.h>
-> +
-> +#define GH_IOCTL_TYPE			'G'
-> +
-> +/*
-> + * ioctls for /dev/gunyah fds:
-> + */
-> +#define GH_CREATE_VM			_IO(GH_IOCTL_TYPE, 0x0) /* Returns a Gunyah VM fd */
-> +
-> +#endif
+>> Konrad
+>>>
+>>> BR,
+>>> Georgi
+>>>
+>>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>    drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
+>>>>    drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>>>>    2 files changed, 8 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>>>> index 35fd75ae70e3..27c4c6497994 100644
+>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>>>> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>>>>    {
+>>>>        struct icc_node *node;
+>>>>        struct qcom_icc_node *qn;
+>>>> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>>>>        int i;
+>>>>          /* Initialise aggregate values */
+>>>> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
+>>>>        list_for_each_entry(node, &provider->nodes, node_list) {
+>>>>            qn = node->data;
+>>>>            for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+>>>> -            agg_avg[i] += qn->sum_avg[i];
+>>>> +            if (qn->channels)
+>>>> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
+>>>> +            else
+>>>> +                sum_avg[i] = qn->sum_avg[i];
+>>>> +            agg_avg[i] += sum_avg[i];
+>>>>                agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
+>>>>            }
+>>>>        }
+>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+>>>> index 8ba1918d7997..8aed5400afda 100644
+>>>> --- a/drivers/interconnect/qcom/icc-rpm.h
+>>>> +++ b/drivers/interconnect/qcom/icc-rpm.h
+>>>> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
+>>>>     * @id: a unique node identifier
+>>>>     * @links: an array of nodes where we can go next while traversing
+>>>>     * @num_links: the total number of @links
+>>>> + * @channels: number of channels at this node (e.g. DDR channels)
+>>>>     * @buswidth: width of the interconnect between a node and the bus (bytes)
+>>>>     * @sum_avg: current sum aggregate value of all avg bw requests
+>>>>     * @max_peak: current max aggregate value of all peak bw requests
+>>>> @@ -78,6 +79,7 @@ struct qcom_icc_node {
+>>>>        u16 id;
+>>>>        const u16 *links;
+>>>>        u16 num_links;
+>>>> +    u16 channels;
+>>>>        u16 buswidth;
+>>>>        u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+>>>>        u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+>>>>
+>>>
+> 
