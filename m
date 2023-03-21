@@ -2,149 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF1E6C3519
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D09F46C351D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCUPIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
+        id S231605AbjCUPIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCUPH5 (ORCPT
+        with ESMTP id S231544AbjCUPII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:07:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D55509A3;
-        Tue, 21 Mar 2023 08:07:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CB0E22205A;
-        Tue, 21 Mar 2023 15:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679411258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qjl8kH/Vpnej56cQT8qCtFqqHMGm0sWE/AsgusME/uQ=;
-        b=g1rdgNqoBgU3cwnVT7+hVR+odjZ7C52BpKvZF97Qf8wh0PAs/ANQATzTkvbvGV6PwqqOBL
-        zPd9TXhm5lc7xw8OAcx/6DoC3kK0+jdwm6/LeRkDiRvWtNGrkZtNCARbeCexd/NgXyey42
-        3Qv8zZTP6L3b1HxeYj098ub+/WkjY2c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679411258;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qjl8kH/Vpnej56cQT8qCtFqqHMGm0sWE/AsgusME/uQ=;
-        b=dFU5avTINlLBgm//sJpLqHPsiKpYosg07rOX+nuSSSpzuQidDzKa4lcd24yq1u4Zu8OSip
-        rFx9mY/NXUg4kqAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90D6313440;
-        Tue, 21 Mar 2023 15:07:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kT+nIjrIGWT/TAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 15:07:38 +0000
-Message-ID: <bd800046-4883-71d7-535f-7546d693faa1@suse.cz>
-Date:   Tue, 21 Mar 2023 16:07:38 +0100
+        Tue, 21 Mar 2023 11:08:08 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0667450721
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:07:45 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r29so14021235wra.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679411264;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFyWXWqsoSrr2n/nr5WFH4+XCUi3HeyHPmJXflcFG4M=;
+        b=BkQC5wUD4CWB2PJ4wIBzixl/nv2bZ/wbBAXgWZZBoB7CPKElqOeL7pFUsAo8WyLasZ
+         Jk8ZoxGEZke4a2oxpZG9QCWIwNaYzub2IogYm1zDpaGaAF7AxcOvlzdgqWkxcI30/EV0
+         CItrJgAVwwUf9XiGhNvVA9DBIvM47GPVrzm6Z/04/pDDR634UO4mgcxXh9Yq9KsMJc8G
+         0GjVOjqZAoZUTr4aeCb0Yh30eN9ajC6lmP6ioYSj9Sr8AtxTKDo7pR2NHAdPC2SC844a
+         z32CGoa1C7I2uMynCUxep9zr5N6h3lu1RPDx14JyxzjPfB17oOuhFnVItnGm4nKEJxXk
+         y/ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679411264;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFyWXWqsoSrr2n/nr5WFH4+XCUi3HeyHPmJXflcFG4M=;
+        b=TGaDfaoiw5igjkgvgCwY2dkOLiqbDDstJAld0ri0O5nCSMlE16a67ZCaxmk1xBAQF6
+         jfUGi6Ry3nk1/K137Zqzo7ee4kEURU197nRh/ZmvsGmL1r1dX1DZ/ri75g4kgJiSLyup
+         CXCApXi96AutEW4UlJTwByBIflr0jds1RtQ2DnMnTXAM4jrG7YuvffZE9lg16fIBt9ng
+         n1DZRzFeVMcpxrpcyjqLYySY5xjSoYqs6uBkTYbDOUweGZckUPXZ07RngPdFeO3Zx3Q+
+         CDD/beWxcs+sFYgxmGk4hrTbhRPWLxAOYro8VJ1HDfWmJasvkv4i9UMLRDLAdvHkGJgU
+         rzyw==
+X-Gm-Message-State: AO0yUKWPCOdKC00yQWDn2UeQhYT0ZJcjNMV4JfAQwsPR/i4ojRHLVuN3
+        Y39svpjPerLVni7StDJrpGDaGg==
+X-Google-Smtp-Source: AK7set84LPqCUYf6yhhlDvPsISDuuO8P7FciRBhYMTb88p9jq1jWKFXiaxN9uhODbTmEO9zz5pAljw==
+X-Received: by 2002:a5d:528f:0:b0:2d2:ac99:a72 with SMTP id c15-20020a5d528f000000b002d2ac990a72mr2379240wrv.46.1679411264305;
+        Tue, 21 Mar 2023 08:07:44 -0700 (PDT)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id g9-20020a5d4889000000b002c559843748sm11573794wrq.10.2023.03.21.08.07.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 08:07:43 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Rob Herring <robh@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: input: Drop unneeded quotes
+In-Reply-To: <20230320234718.2930154-1-robh@kernel.org>
+References: <20230320234718.2930154-1-robh@kernel.org>
+Date:   Tue, 21 Mar 2023 16:07:42 +0100
+Message-ID: <87lejqkurl.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] mm/slab: Fix undefined init_cache_node_node() for NUMA
- and !SMP
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <67261c513706241d479b8b4cf46eb4e6fb0417ba.1679387262.git.geert+renesas@glider.be>
- <fac6b2c757166df891d60bd00524af7e7d30fe78.camel@physik.fu-berlin.de>
- <CAMuHMdUJ+o4qf056XgLHtkoPnqL+Nk4jZhQ7zntKS0_1dzYAEg@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAMuHMdUJ+o4qf056XgLHtkoPnqL+Nk4jZhQ7zntKS0_1dzYAEg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 09:50, Geert Uytterhoeven wrote:
-> Hi Adrian,
-> 
-> On Tue, Mar 21, 2023 at 9:47 AM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
->> On Tue, 2023-03-21 at 09:30 +0100, Geert Uytterhoeven wrote:
->> > sh/migor_defconfig:
->> >
->> >     mm/slab.c: In function ‘slab_memory_callback’:
->> >     mm/slab.c:1127:23: error: implicit declaration of function ‘init_cache_node_node’; did you mean ‘drain_cache_node_node’? [-Werror=implicit-function-declaration]
->> >      1127 |                 ret = init_cache_node_node(nid);
->> >         |                       ^~~~~~~~~~~~~~~~~~~~
->> >         |                       drain_cache_node_node
->> >
->> > The #ifdef condition protecting the definition of init_cache_node_node()
->> > no longer matches the conditions protecting the (multiple) users.
->> >
->> > Fix this by syncing the conditions.
->> >
->> > Fixes: 76af6a054da40553 ("mm/migrate: add CPU hotplug to demotion #ifdef")
->> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
->> > Link: https://lore.kernel.org/r/b5bdea22-ed2f-3187-6efe-0c72330270a4@infradead.org
->> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->> > ---
->> >  mm/slab.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/mm/slab.c b/mm/slab.c
->> > index ba454246ee13dd4d..de1523a78f2e7367 100644
->> > --- a/mm/slab.c
->> > +++ b/mm/slab.c
->> > @@ -839,7 +839,7 @@ static int init_cache_node(struct kmem_cache *cachep, int node, gfp_t gfp)
->> >       return 0;
->> >  }
->> >
->> > -#if (defined(CONFIG_NUMA) && defined(CONFIG_MEMORY_HOTPLUG)) || defined(CONFIG_SMP)
->> > +#if defined(CONFIG_NUMA) || defined(CONFIG_SMP)
->> >  /*
->> >   * Allocates and initializes node for a node on each slab cache, used for
->> >   * either memory or cpu hotplug.  If memory is being hot-added, the kmem_cache_node
->>
->> FWIW, the other #ifdef starting at drain_cache_node_node() closes with "#endif /* CONFIG_NUMA */",
->> while this #ifdef just ends with "#endif". Just in case you want to make this consistent.
-> 
-> I guess that's fine, as init_cache_node_node() is a small function.
-> #endif comments are typically used when the start and end markers
-> do not fit on your (80x25 ;-) screen.
+On lun., mars 20, 2023 at 18:47, Rob Herring <robh@kernel.org> wrote:
 
-Agreed with this reasoning.
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
->> Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> 
-> Thanks!
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com> # for mediatek,mt6779-keypad.yaml
 
-Applied to slab/for-6.3-rc4/fixes, thanks!
-
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-
+> ---
+>  Documentation/devicetree/bindings/input/adc-joystick.yaml     | 4 ++--
+>  .../devicetree/bindings/input/google,cros-ec-keyb.yaml        | 2 +-
+>  Documentation/devicetree/bindings/input/imx-keypad.yaml       | 2 +-
+>  Documentation/devicetree/bindings/input/matrix-keymap.yaml    | 2 +-
+>  .../devicetree/bindings/input/mediatek,mt6779-keypad.yaml     | 2 +-
+>  .../devicetree/bindings/input/microchip,cap11xx.yaml          | 4 ++--
+>  Documentation/devicetree/bindings/input/pwm-vibrator.yaml     | 4 ++--
+>  Documentation/devicetree/bindings/input/regulator-haptic.yaml | 4 ++--
+>  .../bindings/input/touchscreen/elan,elants_i2c.yaml           | 4 ++--
+>  9 files changed, 14 insertions(+), 14 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/input/adc-joystick.yaml b/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> index da0f8dfca8bf..6c244d66f8ce 100644
+> --- a/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> +++ b/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> @@ -2,8 +2,8 @@
+>  # Copyright 2019-2020 Artur Rojek
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/input/adc-joystick.yaml#"
+> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +$id: http://devicetree.org/schemas/input/adc-joystick.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: ADC attached joystick
+>  
+> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> index e05690b3e963..3486c81699a8 100644
+> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> @@ -57,7 +57,7 @@ if:
+>        contains:
+>          const: google,cros-ec-keyb
+>  then:
+> -  $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  $ref: /schemas/input/matrix-keymap.yaml#
+>    required:
+>      - keypad,num-rows
+>      - keypad,num-columns
+> diff --git a/Documentation/devicetree/bindings/input/imx-keypad.yaml b/Documentation/devicetree/bindings/input/imx-keypad.yaml
+> index 7514df62b592..b110eb1f3358 100644
+> --- a/Documentation/devicetree/bindings/input/imx-keypad.yaml
+> +++ b/Documentation/devicetree/bindings/input/imx-keypad.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Liu Ying <gnuiyl@gmail.com>
+>  
+>  allOf:
+> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  - $ref: /schemas/input/matrix-keymap.yaml#
+>  
+>  description: |
+>    The KPP is designed to interface with a keypad matrix with 2-point contact
+> diff --git a/Documentation/devicetree/bindings/input/matrix-keymap.yaml b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> index 4d6dbe91646d..a715c2a773fe 100644
+> --- a/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> +++ b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> @@ -21,7 +21,7 @@ description: |
+>  
+>  properties:
+>    linux,keymap:
+> -    $ref: '/schemas/types.yaml#/definitions/uint32-array'
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>      description: |
+>        An array of packed 1-cell entries containing the equivalent of row,
+>        column and linux key-code. The 32-bit big endian cell is packed as:
+> diff --git a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
+> index d768c30f48fb..47aac8794b68 100644
+> --- a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
+> +++ b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
+> @@ -10,7 +10,7 @@ maintainers:
+>    - Mattijs Korpershoek <mkorpershoek@baylibre.com>
+>  
+>  allOf:
+> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  - $ref: /schemas/input/matrix-keymap.yaml#
+>  
+>  description: |
+>    Mediatek's Keypad controller is used to interface a SoC with a matrix-type
+> diff --git a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+> index 5fa625b5c5fb..5b5d4f7d3482 100644
+> --- a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+> +++ b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+> @@ -1,8 +1,8 @@
+>  # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/input/microchip,cap11xx.yaml#"
+> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +$id: http://devicetree.org/schemas/input/microchip,cap11xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: Microchip CAP11xx based capacitive touch sensors
+>  
+> diff --git a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
+> index a70a636ee112..d32716c604fe 100644
+> --- a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
+> +++ b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
+> @@ -1,8 +1,8 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/input/pwm-vibrator.yaml#"
+> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +$id: http://devicetree.org/schemas/input/pwm-vibrator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: PWM vibrator
+>  
+> diff --git a/Documentation/devicetree/bindings/input/regulator-haptic.yaml b/Documentation/devicetree/bindings/input/regulator-haptic.yaml
+> index 627891e1ef55..cf63f834dd7d 100644
+> --- a/Documentation/devicetree/bindings/input/regulator-haptic.yaml
+> +++ b/Documentation/devicetree/bindings/input/regulator-haptic.yaml
+> @@ -1,8 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/input/regulator-haptic.yaml#"
+> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +$id: http://devicetree.org/schemas/input/regulator-haptic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: Regulator Haptic
+>  
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml b/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
+> index f9053e5e9b24..3255c2c8951a 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
+> @@ -1,8 +1,8 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/input/touchscreen/elan,elants_i2c.yaml#"
+> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +$id: http://devicetree.org/schemas/input/touchscreen/elan,elants_i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: Elantech I2C Touchscreen
+>  
+> -- 
+> 2.39.2
