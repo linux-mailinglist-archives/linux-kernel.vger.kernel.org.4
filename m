@@ -2,326 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06EB6C3192
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5546C3179
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjCUMWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S231158AbjCUMVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbjCUMWM (ORCPT
+        with ESMTP id S230266AbjCUMVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:22:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860B23B86C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679401285;
+        Tue, 21 Mar 2023 08:21:42 -0400
+Received: from out-16.mta1.migadu.com (out-16.mta1.migadu.com [95.215.58.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4314E3CE37
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:21:39 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 20:21:33 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1679401296;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GMDhm7oWbKMcs8fLd7CUA3XQ+ASj5voQX4bYJAXGGj4=;
-        b=aigzOu1X3VmbRSE7LzNuD5ZkdMpXbumd2UrYodj6qh662pP50Xwsm5ZmCSrsg7pIgajnqL
-        Zk33gKF9z1MToT9NAjQvWilAPrcnS3WGZIS16A3m/+zg6RcGdwWffxFfVa+gD4d7nogsY7
-        HTF4cBLgPH5Pcm5hAhT8buPh5asHXcU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-MGchvxixMBKGyDa68iU1Mg-1; Tue, 21 Mar 2023 08:21:24 -0400
-X-MC-Unique: MGchvxixMBKGyDa68iU1Mg-1
-Received: by mail-wm1-f71.google.com with SMTP id bi27-20020a05600c3d9b00b003e9d0925341so6984245wmb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:21:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679401283;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GMDhm7oWbKMcs8fLd7CUA3XQ+ASj5voQX4bYJAXGGj4=;
-        b=oUquZ8T59mYeI+i9eXL3sBvCH+17fo0ND6XLj6oeZ0Qc43yC8FMbS6bpivI55i5F/G
-         bzkiMeRvLWt9pq9QoHmVOL0qpWo/oMeFc27y6zr91R+qVf0a4nYCu+Iu5o/o+78K+wnn
-         sHvbs7MjuxYU1fbbaJ6Q39RntyvSXYKSXV76QPguCPP0fmJMfMGdbFGTzOqo1Pf7rItf
-         VNxaXH3QFJdTqmpY79MeHjzGM9ddWy1hJVfT4WwDctQnYFzW4xuZu1Tr+w31CA8d0o5L
-         cB7Nw8t0F4ACKdp0cDLOyy2fxUiHVysVmcFIeiRsBUZPn3pBLM2PG7k94WMqbkFEnNTE
-         iVzA==
-X-Gm-Message-State: AO0yUKWdihKE0ckeZ5Vz7jKsxDODmtFAMytW4G9PEGqSqzT1RdvL89i2
-        X1WyX5sblUVAt0j1jDOrsfqe2vodypeLDQ/eACcTjNo6WTajnSYx6EMmSfv18lS9ml8mIeriVdg
-        8q+695PmSkzJt/wcPmQZS1Tnt
-X-Received: by 2002:adf:fd07:0:b0:2ce:bd2e:1fea with SMTP id e7-20020adffd07000000b002cebd2e1feamr1926125wrr.26.1679401283340;
-        Tue, 21 Mar 2023 05:21:23 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/7q1jIBWVbFK8ZIqwoSFyF0nd8cPKwX9Gh1yHNDKwTY18wE+ZeGFVBR3jXTezG6HQ3+81gZA==
-X-Received: by 2002:adf:fd07:0:b0:2ce:bd2e:1fea with SMTP id e7-20020adffd07000000b002cebd2e1feamr1926103wrr.26.1679401282983;
-        Tue, 21 Mar 2023 05:21:22 -0700 (PDT)
-Received: from redhat.com ([2.52.1.105])
-        by smtp.gmail.com with ESMTPSA id c8-20020adfe708000000b002cde626cd96sm11136752wrm.65.2023.03.21.05.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 05:21:22 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 08:21:19 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Viktor Prutyanov <viktor@daynix.com>
-Cc:     jasowang@redhat.com, cohuck@redhat.com, pasic@linux.ibm.com,
-        farman@linux.ibm.com, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com
-Subject: Re: [PATCH v2] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-Message-ID: <20230321082101-mutt-send-email-mst@kernel.org>
-References: <20230320232115.1940587-1-viktor@daynix.com>
- <20230321050747-mutt-send-email-mst@kernel.org>
- <CAPv0NP4bGi8o6fmZ93X==FEfBB6+NVDzyuoZNeX5TT3s8Trymg@mail.gmail.com>
+        bh=xi9MruAkMuQYGbZmcpZDA5aQgOaeaz4Z4ph3C28IFIY=;
+        b=xGBOXlZncLvbDTu1dw7ccsIR6XIkqj1wQ2+JUrQDQkc9MjNzo/b5Jg13eFi3GmE1DCfqjZ
+        py7XhQj4MYdgevkSEMtQOvX1bgqe6rFMZ9vh1CJd0tGexmmcwQyrkJ5Ic0pA/7bsXFp+vU
+        pzPvYFch+6sBAGtWEiEf9Pd8t1SvGxo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v7 0/5] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <ZBmhTch4d2CG4TtH@chq-MS-7D45>
+References: <20230315012840.6986-1-cai.huoqing@linux.dev>
+ <20230320121401.zkcjbqmghzacpffh@mobilestation>
+ <ZBkXEzoZZlIy18xB@chq-MS-7D45>
+ <20230321083407.5gc432ttjhwbi2um@mobilestation>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPv0NP4bGi8o6fmZ93X==FEfBB6+NVDzyuoZNeX5TT3s8Trymg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230321083407.5gc432ttjhwbi2um@mobilestation>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 02:49:13PM +0300, Viktor Prutyanov wrote:
-> On Tue, Mar 21, 2023 at 12:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Tue, Mar 21, 2023 at 02:21:15AM +0300, Viktor Prutyanov wrote:
-> > > According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
-> > > indicates that the driver passes extra data along with the queue
-> > > notifications.
-> > >
-> > > In a split queue case, the extra data is 16-bit available index. In a
-> > > packed queue case, the extra data is 1-bit wrap counter and 15-bit
-> > > available index.
-> > >
-> > > Add support for this feature for MMIO and PCI transports. Channel I/O
-> > > transport will not accept this feature.
-> > >
-> > > Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
-> > > ---
-> > >
-> > >  v2: reject the feature in virtio_ccw, replace __le32 with u32
-> > >
-> > >  drivers/s390/virtio/virtio_ccw.c   |  4 +---
-> > >  drivers/virtio/virtio_mmio.c       | 15 ++++++++++++++-
-> > >  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
-> > >  drivers/virtio/virtio_pci_common.h |  4 ++++
-> > >  drivers/virtio/virtio_pci_legacy.c |  2 +-
-> > >  drivers/virtio/virtio_pci_modern.c |  2 +-
-> > >  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
-> > >  include/linux/virtio_ring.h        |  2 ++
-> > >  include/uapi/linux/virtio_config.h |  6 ++++++
-> > >  9 files changed, 56 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> > > index a10dbe632ef9..d72a59415527 100644
-> > > --- a/drivers/s390/virtio/virtio_ccw.c
-> > > +++ b/drivers/s390/virtio/virtio_ccw.c
-> > > @@ -789,9 +789,7 @@ static u64 virtio_ccw_get_features(struct virtio_device *vdev)
-> > >
-> > >  static void ccw_transport_features(struct virtio_device *vdev)
-> > >  {
-> > > -     /*
-> > > -      * Currently nothing to do here.
-> > > -      */
-> > > +     __virtio_clear_bit(vdev, VIRTIO_F_NOTIFICATION_DATA);
-> > >  }
-> > >
-> > >  static int virtio_ccw_finalize_features(struct virtio_device *vdev)
-> > > diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-> > > index 3ff746e3f24a..0e13da17fe0a 100644
-> > > --- a/drivers/virtio/virtio_mmio.c
-> > > +++ b/drivers/virtio/virtio_mmio.c
-> > > @@ -285,6 +285,19 @@ static bool vm_notify(struct virtqueue *vq)
-> > >       return true;
-> > >  }
-> > >
-> > > +static bool vm_notify_with_data(struct virtqueue *vq)
-> > > +{
-> > > +     struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
-> > > +     u32 data = vring_fill_notification_data(vq);
-> > > +
-> > > +     writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
-> > > +
-> > > +     return true;
-> > > +}
-> > > +
-> > > +#define VM_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-> > > +     ? vm_notify_with_data : vm_notify)
-> > > +
-> > >  /* Notify all virtqueues on an interrupt. */
-> > >  static irqreturn_t vm_interrupt(int irq, void *opaque)
-> > >  {
-> > > @@ -397,7 +410,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
-> > >
-> > >       /* Create the vring */
-> > >       vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
-> > > -                              true, true, ctx, vm_notify, callback, name);
-> > > +                     true, true, ctx, VM_NOTIFY(vdev), callback, name);
-> >
-> > I don't see why is this macro useful.
-> >
-> >
-> >
-> > >       if (!vq) {
-> > >               err = -ENOMEM;
-> > >               goto error_new_virtqueue;
-> > > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-> > > index a6c86f916dbd..535263abc2bd 100644
-> > > --- a/drivers/virtio/virtio_pci_common.c
-> > > +++ b/drivers/virtio/virtio_pci_common.c
-> > > @@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
-> > >       /* we write the queue's selector into the notification register to
-> > >        * signal the other end */
-> > >       iowrite16(vq->index, (void __iomem *)vq->priv);
-> > > +
-> > > +     return true;
-> > > +}
-> > > +
-> > > +bool vp_notify_with_data(struct virtqueue *vq)
-> > > +{
-> > > +     u32 data = vring_fill_notification_data(vq);
-> > > +
-> > > +     iowrite32(data, (void __iomem *)vq->priv);
-> > > +
-> > >       return true;
-> > >  }
-> > >
-> > > diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
-> > > index 23112d84218f..9a7212dcbb32 100644
-> > > --- a/drivers/virtio/virtio_pci_common.h
-> > > +++ b/drivers/virtio/virtio_pci_common.h
-> > > @@ -105,6 +105,7 @@ static struct virtio_pci_device *to_vp_device(struct virtio_device *vdev)
-> > >  void vp_synchronize_vectors(struct virtio_device *vdev);
-> > >  /* the notify function used when creating a virt queue */
-> > >  bool vp_notify(struct virtqueue *vq);
-> > > +bool vp_notify_with_data(struct virtqueue *vq);
-> > >  /* the config->del_vqs() implementation */
-> > >  void vp_del_vqs(struct virtio_device *vdev);
-> > >  /* the config->find_vqs() implementation */
-> > > @@ -114,6 +115,9 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
-> > >               struct irq_affinity *desc);
-> > >  const char *vp_bus_name(struct virtio_device *vdev);
-> > >
-> > > +#define VP_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-> > > +     ? vp_notify : vp_notify_with_data)
-> > > +
-> > >  /* Setup the affinity for a virtqueue:
-> > >   * - force the affinity for per vq vector
-> > >   * - OR over all affinities for shared MSI
-> > > diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> > > index 2257f1b3d8ae..b98e994cae48 100644
-> > > --- a/drivers/virtio/virtio_pci_legacy.c
-> > > +++ b/drivers/virtio/virtio_pci_legacy.c
-> > > @@ -131,7 +131,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
-> > >       vq = vring_create_virtqueue(index, num,
-> > >                                   VIRTIO_PCI_VRING_ALIGN, &vp_dev->vdev,
-> > >                                   true, false, ctx,
-> > > -                                 vp_notify, callback, name);
-> > > +                                 VP_NOTIFY(&vp_dev->vdev), callback, name);
-> > >       if (!vq)
-> > >               return ERR_PTR(-ENOMEM);
-> > >
-> > > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> > > index 9e496e288cfa..7fcd8af5af7e 100644
-> > > --- a/drivers/virtio/virtio_pci_modern.c
-> > > +++ b/drivers/virtio/virtio_pci_modern.c
-> > > @@ -321,7 +321,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
-> > >       vq = vring_create_virtqueue(index, num,
-> > >                                   SMP_CACHE_BYTES, &vp_dev->vdev,
-> > >                                   true, true, ctx,
-> > > -                                 vp_notify, callback, name);
-> > > +                                 VP_NOTIFY(&vp_dev->vdev), callback, name);
-> > >       if (!vq)
-> > >               return ERR_PTR(-ENOMEM);
-> > >
-> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > index 723c4e29e1d3..5e9e1800bb6e 100644
-> > > --- a/drivers/virtio/virtio_ring.c
-> > > +++ b/drivers/virtio/virtio_ring.c
-> > > @@ -2699,6 +2699,21 @@ void vring_del_virtqueue(struct virtqueue *_vq)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(vring_del_virtqueue);
-> > >
-> > > +u32 vring_fill_notification_data(struct virtqueue *_vq)
-> > > +{
-> > > +     struct vring_virtqueue *vq = to_vvq(_vq);
-> > > +     u16 next;
-> > > +
-> > > +     if (vq->packed_ring)
-> > > +             next = (vq->packed.next_avail_idx & ~(1 << 15)) |
-> > > +                     ((u16)vq->packed.avail_wrap_counter << 15);
-> >
-> > I don't think the cast is needed. Neither is () around << the second <<
-> > here (first is needed because gcc chooses to complain: apparently it
-> > considers bitwise and a math operation for some obscure reason).
-> >
-> > > +     else
-> > > +             next = virtio16_to_cpu(_vq->vdev, vq->split.vring.avail->idx);
-> > > +
-> > > +     return ((u32)next << 16) | _vq->index;
-> >
-> > I don't think the cast is needed. Neither is () around << needed.
-> >
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(vring_fill_notification_data);
-> > > +
-> >
-> > I'd inline this - it's on data path ...
+On 21 3月 23 11:34:07, Serge Semin wrote:
+> On Tue, Mar 21, 2023 at 10:31:47AM +0800, Cai Huoqing wrote:
+> > On 20 3月 23 15:14:01, Serge Semin wrote:
+> > > Hi Cai
+> > > 
+> > > On Wed, Mar 15, 2023 at 09:28:31AM +0800, Cai Huoqing wrote:
+> > > > Add support for HDMA NATIVE, as long the IP design has set
+> > > > the compatible register map parameter-HDMA_NATIVE,
+> > > > which allows compatibility for native HDMA register configuration.
+> > > > 
+> > > > The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> > > > And the native HDMA registers are different from eDMA,
+> > > > so this patch add support for HDMA NATIVE mode.
+> > > > 
+> > > > HDMA write and read channels operate independently to maximize
+> > > > the performance of the HDMA read and write data transfer over
+> > > > the link When you configure the HDMA with multiple read channels,
+> > > > then it uses a round robin (RR) arbitration scheme to select
+> > > > the next read channel to be serviced.The same applies when
+> > > > youhave multiple write channels.
+> > > > 
+> > > > The native HDMA driver also supports a maximum of 16 independent
+> > > > channels (8 write + 8 read), which can run simultaneously.
+> > > > Both SAR (Source Address Register) and DAR (Destination Address Register)
+> > > > are aligned to byte.
+> > > 
+> > > It seems like we are getting towards the series finalization. I'll
+> > > test it out on my HW after v8 is submitted. Meanwhile could you please
+> > > clarify whether you have a real device with DW HDMA engine on board?
+> > 
 > 
-> As far as I see, to be inlined in virtio_mmio.c, virtio_pci_common.c
-> and virtio_ccw.c, the function should be defined in some header, but
-> definitions such as vring_virtqueue, vring_virtqueue_split,
-> vring_virtqueue_packed will not be available, because they are in
-> virtio_ring.c. Looks like, they must be moved to a separate header
-> in this case, isn't it?
+> > Our hardware is an AI Accelerartor(PCIE Card).
+> > 
+> > The device pci.ids is 1d22:3864
+> > in https://github.com/pciutils/pciids/blob/master/pci.ids
+> > line 24737,
+> > 
+> > "1d22  Baidu Technology
+> >         3684  Kunlun AI Accelerator
+> >         3685  Kunlun2 AI Accelerator [VF]"
+> > 
+> > And our device driver is not ready to upstream(will cost serveral
+> > 
+> > months to port DRM etc.),
+> 
+> Ok. Thanks for clarification. Could you please add me to the Cc-list of
+> the AI-accelerator patch when it's ready to be submitted for review. I am
+> not that familiar with the DRM-part, but would like to have a look at
+> the DMA-related code.
+Sure, I'll Cc you if I send the patches.
 
-Oh you are right. OK, sorry.
+By the way, Why use native hdma:
 
-> >
-> > >  /* Manipulates transport-specific feature bits. */
-> > >  void vring_transport_features(struct virtio_device *vdev)
-> > >  {
-> >
-> > > @@ -2718,6 +2733,8 @@ void vring_transport_features(struct virtio_device *vdev)
-> > >                       break;
-> > >               case VIRTIO_F_ORDER_PLATFORM:
-> > >                       break;
-> > > +             case VIRTIO_F_NOTIFICATION_DATA:
-> > > +                     break;
-> > >               default:
-> > >                       /* We don't understand this bit. */
-> > >                       __virtio_clear_bit(vdev, i);
-> > > diff --git a/include/linux/virtio_ring.h b/include/linux/virtio_ring.h
-> > > index 8b8af1a38991..1f65d2f77012 100644
-> > > --- a/include/linux/virtio_ring.h
-> > > +++ b/include/linux/virtio_ring.h
-> > > @@ -101,4 +101,6 @@ void vring_del_virtqueue(struct virtqueue *vq);
-> > >  void vring_transport_features(struct virtio_device *vdev);
-> > >
-> > >  irqreturn_t vring_interrupt(int irq, void *_vq);
-> > > +
-> > > +u32 vring_fill_notification_data(struct virtqueue *_vq);
-> > >  #endif /* _LINUX_VIRTIO_RING_H */
-> > > diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-> > > index 3c05162bc988..2c712c654165 100644
-> > > --- a/include/uapi/linux/virtio_config.h
-> > > +++ b/include/uapi/linux/virtio_config.h
-> > > @@ -99,6 +99,12 @@
-> > >   */
-> > >  #define VIRTIO_F_SR_IOV                      37
-> > >
-> > > +/*
-> > > + * This feature indicates that the driver passes extra data (besides
-> > > + * identifying the virtqueue) in its device notifications.
-> > > + */
-> > > +#define VIRTIO_F_NOTIFICATION_DATA   38
-> > > +
-> > >  /*
-> > >   * This feature indicates that the driver can reset a queue individually.
-> > >   */
-> > > --
-> > > 2.35.1
-> >
+Our device v1 also use dw-edma. But we find that navtive HDMA work better
 
+in SRIOV on, channel CSR can be map to every VF instead of some global
+
+regiter must in PF. So v2 use native hdma.
+
+Thanks,
+-Cai
+
+> 
+> -Serge(y)
+> 
+> > 
+> > but I have taken this DW eDMA core into our driver test.
+> > 
+> > Thanks
+> > Cai-
+> > 
+> > > You keep submitting the DW eDMA driver core update, but there is no
+> > > glue-driver or low-level device driver patch for a real device which
+> > > would set the EDMA_MF_HDMA_NATIVE mapping.
+> > > 
+> > > -Serge(y)
+> > > 
+> > > > 
+> > > > Cai Huoqing (2):
+> > > >   dmaengine: dw-edma: Add support for native HDMA
+> > > >   dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
+> > > > 
+> > > > Cai huoqing (3):
+> > > >   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+> > > >     dw_edma_plat_ops
+> > > >   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+> > > >     abstract controller operation
+> > > >   dmaengine: dw-edma: Add HDMA DebugFS support
+> > > > 
+> > > > v6->v7:
+> > > >   [1/5]
+> > > >   1.Update the commit log.
+> > > >   [2/5]
+> > > >   2.Revert dw_edma_core_handle_int back to dw-edma-core.h.
+> > > >   3.Fix code style.
+> > > >   [3/5]
+> > > >   4.Move the change of register file from patch[4/5] to patch[3/5].
+> > > >   5.Fix code style.
+> > > > 
+> > > > v6 link:
+> > > >   https://lore.kernel.org/lkml/20230310032342.17395-1-cai.huoqing@linux.dev/
+> > > > 
+> > > >  drivers/dma/dw-edma/Makefile                 |   8 +-
+> > > >  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
+> > > >  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
+> > > >  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+> > > >  drivers/dma/dw-edma/dw-edma-v0-core.c        |  91 ++++--
+> > > >  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+> > > >  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 277 +++++++++++++++++++
+> > > >  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+> > > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 176 ++++++++++++
+> > > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+> > > >  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 130 +++++++++
+> > > >  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+> > > >  include/linux/dma/edma.h                     |   7 +-
+> > > >  13 files changed, 785 insertions(+), 107 deletions(-)
+> > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+> > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+> > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+> > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> > > > 
+> > > > -- 
+> > > > 2.34.1
+> > > > 
