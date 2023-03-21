@@ -2,117 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7286C3CB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C2D6C3CB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjCUV3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S230030AbjCUVaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjCUV3x (ORCPT
+        with ESMTP id S229671AbjCUVaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:29:53 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5618F58C1D;
-        Tue, 21 Mar 2023 14:29:29 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17ab3a48158so17654123fac.1;
-        Tue, 21 Mar 2023 14:29:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679434156;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mbvd4MiQ0n3ACh48MQO9r1tkLfqb32ZNN6Ei0TVQKuw=;
-        b=L9r1i3nP+1kvNq2srHTRGtcfhkgYmPk6bDiVskmyjCnkl+y8d3SmW5f588dLYBFnPM
-         Si2iQZ/1OisIStL5hMrkEEBXaYw3LopvVTVKgQpix10hzjCYCJ1KM1C1Nvpw++e92xek
-         XHd0ILZK++31lqP50PMcvGL0xbw7096j073F4sAmChCLOPiRnxQZFWBws/9/gVl+tPcx
-         Fr1OYMsKq28pXWxYsO+RtOe/TRyX6hey43ytY0JsLKME5HExK/If9SiyyDjDxhsthTjy
-         Nj3diSQ3s4rTyFSQ7MPajAq6Zsi+SKEw9RVloIZbqGUQHdm7y069qfbJIsI84aTC9GOC
-         L0pQ==
-X-Gm-Message-State: AO0yUKUmceRvLuTRmSKYQiwxhgNOyTSCvo2M+6hNApPVYV8/YWTZVpsb
-        mwBPGmfKhampM1yOvOes/w==
-X-Google-Smtp-Source: AK7set/cV9nJfnT/jPDxwqQ4IPuH0ACvO2AqQ3rqNFYXe8V5KcrSmIpHMlh6/MlcBjbGmGOoWQpXKg==
-X-Received: by 2002:a05:6870:3313:b0:177:956c:36d5 with SMTP id x19-20020a056870331300b00177956c36d5mr281386oae.29.1679434154637;
-        Tue, 21 Mar 2023 14:29:14 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ta10-20020a056871868a00b0017197629658sm4595013oab.56.2023.03.21.14.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 14:29:14 -0700 (PDT)
-Received: (nullmailer pid 1645135 invoked by uid 1000);
-        Tue, 21 Mar 2023 21:29:13 -0000
-Date:   Tue, 21 Mar 2023 16:29:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v5 14/15] dt-bindings: net: phy: Document
- support for LEDs node
-Message-ID: <20230321212913.GA1643897-robh@kernel.org>
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-15-ansuelsmth@gmail.com>
+        Tue, 21 Mar 2023 17:30:08 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186C8F979
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6cymCq67neIvjclKAQVSM89ndPJUvh28PAk/YB/rfjw=;
+  b=NFw1sv41L1xnnreazv7MPu80BpOVRHu9WK2Gyo2APJjw7PcQfshkXoAa
+   iOzUsep2ULzZ+Y4qOox61+0luC8Wf3mSKgcYSnaAhd0OlbWjIxZGwAWKz
+   m4myrltdbGVbC1vegXHFEMLZQtEMvnIGosBaIJqvqm9r+4ZW/zndeSOe3
+   o=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,279,1673910000"; 
+   d="scan'208";a="50856107"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 22:29:25 +0100
+Date:   Tue, 21 Mar 2023 22:29:25 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Alex Elder <elder@ieee.org>
+cc:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
+In-Reply-To: <5efa6e6d-8573-31de-639a-d15b2e9deca0@ieee.org>
+Message-ID: <alpine.DEB.2.22.394.2303212218500.2919@hadrien>
+References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com> <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org> <alpine.DEB.2.22.394.2303212140480.2919@hadrien> <5efa6e6d-8573-31de-639a-d15b2e9deca0@ieee.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319191814.22067-15-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 08:18:13PM +0100, Christian Marangi wrote:
-> Document support for LEDs node in phy and add an example for it.
-> PHY LED will have to match led pattern and should be treated as a
-> generic led.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> ---
->  .../devicetree/bindings/net/ethernet-phy.yaml | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-> index 1327b81f15a2..84e15cee27c7 100644
-> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-> @@ -197,6 +197,22 @@ properties:
->        PHY's that have configurable TX internal delays. If this property is
->        present then the PHY applies the TX delay.
->  
-> +  leds:
-> +    type: object
-> +
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
-> +    patternProperties:
-> +      '^led(@[a-f0-9]+)?$':
-> +        $ref: /schemas/leds/common.yaml#
 
-Same questions/issues in this one.
+
+On Tue, 21 Mar 2023, Alex Elder wrote:
+
+> On 3/21/23 3:43 PM, Julia Lawall wrote:
+> >
+> >
+> > On Tue, 21 Mar 2023, Alex Elder wrote:
+> >
+> > > On 3/21/23 1:34 PM, Menna Mahmoud wrote:
+> > > > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> > > > static inline function.
+> > > >
+> > > > It is not great to have macros that use the `container_of` macro,
+> > > > because from looking at the definition one cannot tell what type
+> > > > it applies to.
+> > > >
+> > > > One can get the same benefit from an efficiency point of view
+> > > > by making an inline function.
+> > > >
+> > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> > > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> > >
+> > > I'm sorry if this conflicts with what others have said.
+> > >
+> > > But the use of a macro (with a container_of() right-hand
+> > > side) to get at the structure containing a field pointer
+> > > is a widely-used idiom throughout the kernel.
+> > >
+> > > What you propose achieves the same result but I would
+> > > lean toward keeping it as a macro, mainly because it
+> > > is so common.
+> >
+> > Common is not necessarily good.  Macros are less safe and less
+> > informative.
+>
+> I do agree that the inline function is better, and
+> is functionally equivalent (while being explicit
+> with types and avoiding any macro expansion funny
+> business).
+>
+> Do you think we should make changes like this throughout
+> the kernel (along the lines of the flexible array fixes,
+> to make things safer)?  I don't think it's a terrible idea,
+> but it's likely a big undertaking and I predict push-back.
+
+I agree that it's not a terrible idea and that it's a big undertaking.
+The code would be a little safer if people had the habit of making
+functions, as it avoids the risk of parameterizing over the field name in
+the third argument.  But the impact is probably lesser than for the
+flexible array fixes.  But if we have the chance to clean up the staging
+code, at least, then why not.
+
+There do seem to be more than 100 definitions like:
+
+#define to_dove_clk(hw) container_of(hw, struct dove_clk, hw)
+
+where we have to hope that at all of the usage sites the argument is
+called hw.  Probably anything else would cause a compiler error, but still
+it looks strange.
+
+julia
+
+>
+> Bottom line on this is that I don't think the proposed
+> change is wrong, but there is value in consistently
+> adhering to conventions.
+>
+> Others can comment; I have no real objection.
+>
+> 					-Alex
+>
+> >
+> > julia
+> >
+> >
+> > >
+> > > 					-Alex
+> > > > ---
+> > > > changes in v2:
+> > > > 	-send patch as a single patch.
+> > > > 	-edit the name of struct object.
+> > > > 	-edit commit message.
+> > > > ---
+> > > >    drivers/staging/greybus/gbphy.h | 10 ++++++++--
+> > > >    1 file changed, 8 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/staging/greybus/gbphy.h
+> > > > b/drivers/staging/greybus/gbphy.h
+> > > > index d4a225b76338..e7ba232bada1 100644
+> > > > --- a/drivers/staging/greybus/gbphy.h
+> > > > +++ b/drivers/staging/greybus/gbphy.h
+> > > > @@ -15,7 +15,10 @@ struct gbphy_device {
+> > > >    	struct list_head list;
+> > > >    	struct device dev;
+> > > >    };
+> > > > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> > > > +static inline struct gbphy_device *to_gbphy_dev(const struct device
+> > > > *_dev)
+> > > > +{
+> > > > +	return container_of(_dev, struct gbphy_device, dev);
+> > > > +}
+> > > >      static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+> > > >    {
+> > > > @@ -43,7 +46,10 @@ struct gbphy_driver {
+> > > >      	struct device_driver driver;
+> > > >    };
+> > > > -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
+> > > > +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver
+> > > > *drv)
+> > > > +{
+> > > > +	return container_of(drv, struct gbphy_driver, driver);
+> > > > +}
+> > > >      int gb_gbphy_register_driver(struct gbphy_driver *driver,
+> > > >    			     struct module *owner, const char
+> > > > *mod_name);
+> > >
+> > >
+>
+>
