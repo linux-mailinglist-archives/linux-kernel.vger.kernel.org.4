@@ -2,155 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA44D6C367B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFD76C367F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjCUQCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S231562AbjCUQDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjCUQCs (ORCPT
+        with ESMTP id S231561AbjCUQDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:02:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED0816893;
-        Tue, 21 Mar 2023 09:02:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C59F1B817AC;
-        Tue, 21 Mar 2023 16:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C845C4339E;
-        Tue, 21 Mar 2023 16:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679414564;
-        bh=StOHEPmor4jYKvr+q4St39xCQUBPMkifFyG37jrsrNQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eGlPJEUGU8PKFGYQnnIQI/qsm78RQx68SkCCpD1yu44YkWdpakfLzyFV7I7oVuTti
-         /m6UNU4xqtyZbr1qLENAv9Y6lz1Ht/t2VJkhQOYefW/ahTv5uwveDLzyPl9nTITD5q
-         A/dlBXMGC3e9ckW3PP7NJq3t+PXI7YeBEQcYa02huNYj1Docp5NVAII4JsilVQiG19
-         StQLVn0Xm5io2fbrGiSdzf5vGjN0Djt4+nOU6SiOk/Eo6rKiTj6PNIeXiKEFOTmDNC
-         VJv7U4Ya3QJql6UWlPpkcexvKv4gTpVHfl3cc37eyKj6Tj/UsuaAcl8LDafpqBWwf4
-         4m18toKCYJI3w==
-Received: by mail-yb1-f169.google.com with SMTP id y5so17751019ybu.3;
-        Tue, 21 Mar 2023 09:02:44 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cbGBmCbk8rlYhFnhMl1x/8SgWRHOaUoyKdRhLfH4/CIvnIik4h
-        BnXEziKmcMm4Q7ZK86x9ZkCfiIJKpI/fmhxnlg==
-X-Google-Smtp-Source: AKy350Znf5nfgXC5pAz/FzEgm8ixvOwGbBCNSV3kCkz2S7tE88NH6KVsczZv5n55zuXpUgoXBHA6SOIgtC3TZvoykbw=
-X-Received: by 2002:a05:6902:1083:b0:98e:6280:74ca with SMTP id
- v3-20020a056902108300b0098e628074camr1884852ybu.1.1679414563294; Tue, 21 Mar
- 2023 09:02:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
- <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com> <20230321143356.w5era7et6lzxpte3@bogus>
-In-Reply-To: <20230321143356.w5era7et6lzxpte3@bogus>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 21 Mar 2023 11:02:31 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJJZC8AqjpUuK_Z0Nauc1Z-MAKH7ZbXCJrSguUvw70+7Q@mail.gmail.com>
-Message-ID: <CAL_JsqJJZC8AqjpUuK_Z0Nauc1Z-MAKH7ZbXCJrSguUvw70+7Q@mail.gmail.com>
-Subject: Re: [PATCH 0/7] coresight: etm4x: Migrate AMBA devices to platform driver
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, scclevenger@os.amperecomputing.com,
-        Frank Rowand <frowand.list@gmail.com>,
+        Tue, 21 Mar 2023 12:03:03 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC64EE3A9;
+        Tue, 21 Mar 2023 09:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=UhI5aI9t9AlQX1lyEkSQgbbBqJx4akdZKnAhh0dLnAE=; b=Gf8Qvy0U+a8VjilUEoLdKSmrpY
+        4U2VlqXFZQloRFCLUYziSbHNMTAsMSYcgZ3H9q6pPL8jEfXyRZ1IhuBPI0MjS93KxKG7CZZMEEIc1
+        gvAI4xSTOunBPvpQ2TwITEt6p8IkeX3iIX1ihOXWZwx4xhn99+z40C53V4+WXxXg6BtA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1peeRe-007yxn-HD; Tue, 21 Mar 2023 17:02:42 +0100
+Date:   Tue, 21 Mar 2023 17:02:42 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v5 04/15] leds: Provide stubs for when CLASS_LED
+ is disabled
+Message-ID: <c07d07b3-42bc-4433-8f8d-3bee75218df7@lunn.ch>
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-5-ansuelsmth@gmail.com>
+ <aa2d0a8b-b98b-4821-9413-158be578e8e0@lunn.ch>
+ <64189d72.190a0220.8d965.4a1c@mx.google.com>
+ <5ee3c2cf-8100-4f35-a2df-b379846a8736@lunn.ch>
+ <6419c60e.df0a0220.1949a.c432@mx.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6419c60e.df0a0220.1949a.c432@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 9:34=E2=80=AFAM Sudeep Holla <sudeep.holla@arm.com>=
- wrote:
->
-> On Mon, Mar 20, 2023 at 09:17:16AM -0500, Rob Herring wrote:
-> >
-> > This sounds like an issue for any amba driver. If this is an issue,
-> > solve it for everyone, not just work around it in one driver.
-> >
->
-> Well it is an issue in general for power management. ACPI has specific
-> methods that can be executed for entering specific states.
->
-> The way AMBA was glue into ACPI bus scan IMO was a hack and PM wasn't
-> considered at the time. It was just hack to get AMBA drivers to work
-> with ACPI without any consideration about runtime PM or any methods that
-> comes as part of ACPI device. There is even some dummy clock handler to
-> deal with AMBA requesting APB clocks. AMBA device is added as companion
-> to the ACPI device created as part of the normal bus scan in ACPI which
-> adds its own PM callbacks and rely on clocks and power domains independen=
-t
-> of the ACPI standard methods(_ON/_OFF).
+> BTW yes I repro the problem.
+> 
+> Checked the makefile and led-core.c is compiled with NEW_LEDS and
+> led-class is compiled with LEDS_CLASS.
+> 
+> led_init_default_state_get is in led-core.c and this is the problem with
+> using LEDS_CLASS instead of NEW_LEDS...
+> 
+> But actually why we are putting led_init_default_state_get behind a
+> config? IMHO we should compile it anyway.
 
-I thought only DT had hacks... ;)
+It is pointless if you don't have any LED support. To make it always
+compiled, you would probably need to move it into leds.h. And then you
+bloat every user with some code which is not hot path.
 
-> The default enumeration adds platform devices which adds no extra PM
-> callbacks and allows normal acpi_device probe flow.
->
-> > When someone puts another primecell device into an ACPI system, are we
-> > going to go do the same one-off change in that driver too? (We kind of
-> > already did with SBSA UART...)
-> >
->
-> I would prefer to move all the existing users of ACPI + AMBA to move away
-> from it and just use platform device. This list is not big today, bunch
-> of coresight, PL061/GPIO and PL330/DMA. And all these are assumed to be
-> working or actually working if there is no need for any power management.
-> E.g. on juno coresight needs PM to turn on before probing and AMBA fails
-> as dummy clocks are added but no power domains attached as ACPI doesn't
-> need deal with power domains in the OSPM if it is all well abstracted in
-> methods like _ON/_OFF. They are dealt with explicit power domain in the
-> DT which needs to be turned on and AMBA relies on that.
->
-> One possible further hacky solution is to add dummy genpd to satisfy AMBA
-> but not sure if we can guarantee ordering between ACPI device calling ON
-> and its companion AMBA device probing so that the power domain is ON befo=
-re
-> AMBA uses the dummy clock and power domains in its pm callback hooks.
-
-What if we made AMBA skip its usual matching by ID and only use
-DT/ACPI style matching? We have specific compatibles, but they have
-never been used by the kernel. The only reason the bus code needs to
-do PM is reading the IDs which could be pushed into the drivers that
-need to match on specific IDs (I suspect we have some where the
-compatible is not specific enough (old ST stuff)).
-
-Looks like we only have 2 platforms left not using DT:
-arch/arm/mach-ep93xx/core.c:    amba_device_register(&uart1_device,
-&iomem_resource);
-arch/arm/mach-ep93xx/core.c:    amba_device_register(&uart2_device,
-&iomem_resource);
-arch/arm/mach-ep93xx/core.c:    amba_device_register(&uart3_device,
-&iomem_resource);
-arch/arm/mach-s3c/pl080.c:
-amba_device_register(&s3c64xx_dma0_device, &iomem_resource);
-arch/arm/mach-s3c/pl080.c:
-amba_device_register(&s3c64xx_dma1_device, &iomem_resource);
-
-Get rid of these cases and we don't have to worry about non-DT or ACPI matc=
-hing.
-
-> Even the UART would fail if it needed any PM methods, we just don't happe=
-n
-> to need that for SBSA and may be we could have made it work as amba devic=
-e
-> (can't recollect the exact reason for not doing so now).
-
-SBSA doesn't require ID registers. SBSA UART is a "great" example of
-none of the existing 2 standards work, so let's create a 3rd.
-
-Rob
+      Andrew
