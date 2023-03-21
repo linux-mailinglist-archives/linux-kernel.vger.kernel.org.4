@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57D76C2EB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DC66C2EB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjCUKZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S229527AbjCUKZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjCUKYv (ORCPT
+        with ESMTP id S230214AbjCUKYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:24:51 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D970B451;
-        Tue, 21 Mar 2023 03:24:48 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id g18so14973229ljl.3;
-        Tue, 21 Mar 2023 03:24:48 -0700 (PDT)
+        Tue, 21 Mar 2023 06:24:52 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B941554F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:24:49 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x3so57545407edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:24:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679394287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eMnGO+cdUo4n0JCQA6B9J3faYFMMwzSPnGc3N31RXns=;
-        b=OL97cOCuA1WOehpm1zJAySiABvjHD8vQTwJI2isdWzRb7Q4Ysgyx/nzCpMSqEj6Grw
-         9R60XvRrJIzfWG8xnyW6C4Mh1japTaTlgH12slRH2gsbn7Dk8tAz3yKn0XpldrxMC/jd
-         ONmU04Y1pbnOAy9SYneQmtRfKUJb9OPd79uWkRw3mIyWJQemn6aL8GPkDyM+1GbgfnzG
-         QUdbzi377DtIo3106z7EBOYjKRGlrxy2UMsCeFzrcF7cCDS3KPK3TdjBtIBF1MZu0sBY
-         yaA9eqQW9yPEGRINYuBR7Df6FnAoZkZCoUKPIn7c7Dr87DfLQkD69zr0FzywITqabCmu
-         Zmtw==
+        d=linaro.org; s=google; t=1679394287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IojLlT21b+GTCHUtZS1AK6pqmw384n2x7uObuVhtqoc=;
+        b=UKXfMgENBu09lAoUSD7nvesPp0S9T1AzoiAdAZHyKn0WHgV3DqQ4FU8TJ10FzPwKXm
+         8D4JVetj2hzKVtpPDJK7+hkKLlUWAFNFXGfGSMAStSZABMIEUNHo/+TUqItMgDPM5uFl
+         hYLBeuTdHDlesRIrQL3alAhd6tijHEAxfDlvR+Pxe1QeJWkO9ExTUFCwXmfiL3vctEp/
+         qvj0W60irEm66vsi+17rc6DbP0XkD0f9x1pM3YLvPCoSx8SwELSOhJIqjHJG1UR/UOJ+
+         rTqNl5BG/aMw8NiBkYU0dVnQ1GZQ3wxpB0xNyg9a8nvj0cHsuMUf0Wz4uKsmXHxisRBg
+         S3ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679394287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eMnGO+cdUo4n0JCQA6B9J3faYFMMwzSPnGc3N31RXns=;
-        b=66cAEu8BoH5mbJU6fj13FPdWLAUkuHE+0HUeQVHdAqaJujcMY1tYh75wJXX1U3EKl8
-         D30PnbsSeoEISWSiNlM7lP95DolLIG5IfqDVutwWYqcCEVysg16eJdN2uAK6ZXMBPTm4
-         0e2sZP2pmaabokMKeZ3vrvc9OVh3cmxR8UPlHOx61DyJT2pVVj2NqQ4F4c7OUOR4xuoS
-         DbiuSNBwIoauVJWK+KbTQBsP+6JTFOblrUDMv17wM5sr9956AvlEifFpntMS8wm2GWiY
-         hL6J2oODFlyDQ4zelikIt40ze+4hbk6y++IBlgx9tzEDeYqpyVKN31mWVoC6OlT9IuAN
-         pElg==
-X-Gm-Message-State: AO0yUKWFXDhjenkjgqNDcoGT7v/IOwSTk0fBe3cIweVpXCUpcgWVSU03
-        ncBjMqI2YzlE208qZye/QyI=
-X-Google-Smtp-Source: AK7set8+X6YPBnP4OYEIhq0HB7BSUjF2dweQmUvOy7pWHXIqJeBGU2x5Fw6aWB3zC+XgtcLzx9bg9g==
-X-Received: by 2002:a2e:8342:0:b0:299:5d3a:4f29 with SMTP id l2-20020a2e8342000000b002995d3a4f29mr645207ljh.31.1679394286927;
-        Tue, 21 Mar 2023 03:24:46 -0700 (PDT)
-Received: from pc636 (host-90-233-209-15.mobileonline.telia.com. [90.233.209.15])
-        by smtp.gmail.com with ESMTPSA id l18-20020a2e99d2000000b00297dad1a2b0sm2101031ljj.103.2023.03.21.03.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 03:24:46 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 21 Mar 2023 11:24:44 +0100
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBmF7OMw2TAOYsfW@pc636>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBkDuLKLhsOHNUeG@destitution>
- <ZBk/Wxj4rXPra/ge@pc636>
- <8cd31bcd-dad4-44e3-920f-299a656aea98@lucifer.local>
- <ZBmBZqhOHdGt4t9n@destitution>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IojLlT21b+GTCHUtZS1AK6pqmw384n2x7uObuVhtqoc=;
+        b=7SGQQzgEBbuWB+aQ5a3Sseti/t4jc5Gyf3lp9pWv1gS/RmMJM30ewH6LgoAHe+KelR
+         SsZMarG/iYKTeeamRZ2BOiHY28vOE/aTmD6xiPN5ig+zMYn+mTE+++uHLVEyWm6QMYDT
+         IdMfKason+8nZ7kPGexR+MQCASBEdm4qzQaOroRVvUzTWkDl0++6U5HvoKPdMMOzbFp2
+         tl44WI9ANixTUWoewbZArqudpIjhJuqi1QCPD7SoaM4KDE9CVuEOsnFJmwuBgDM7zzIm
+         3wZu8iIVfWytJexOpzNjMwT0mZ5Po+65IVICNsuyGxArEwBSBcKbtrSX4i0weC/3MzJW
+         S6oQ==
+X-Gm-Message-State: AO0yUKVC6IuymmIHFjsOdYT6bxrjy9eboSX9FpCZVpzstxEYzfYl1gL2
+        ZCUwOTHyoKxgZica2bIDKf7Ac+mqedzqcMuc1x0=
+X-Google-Smtp-Source: AK7set+Re3gHO4/eHWbeE7YoEV3C+eK0AvkdSnJPHMcJRgk8nhROk37jPOCG3x6x2FoLieODZrSWQw==
+X-Received: by 2002:a17:906:30d2:b0:8ab:4c4:d0f6 with SMTP id b18-20020a17090630d200b008ab04c4d0f6mr2023868ejb.56.1679394287704;
+        Tue, 21 Mar 2023 03:24:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id ia9-20020a170907a06900b00932b3e2c015sm4696908ejc.51.2023.03.21.03.24.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 03:24:47 -0700 (PDT)
+Message-ID: <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
+Date:   Tue, 21 Mar 2023 11:24:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBmBZqhOHdGt4t9n@destitution>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+ <20230321100456.0_DhhkZJ@linutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230321100456.0_DhhkZJ@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,131 +84,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:05:26PM +1100, Dave Chinner wrote:
-> On Tue, Mar 21, 2023 at 07:45:56AM +0000, Lorenzo Stoakes wrote:
-> > On Tue, Mar 21, 2023 at 06:23:39AM +0100, Uladzislau Rezki wrote:
-> > > On Tue, Mar 21, 2023 at 12:09:12PM +1100, Dave Chinner wrote:
-> > > > On Sun, Mar 19, 2023 at 07:09:31AM +0000, Lorenzo Stoakes wrote:
-> > > > > vmalloc() is, by design, not permitted to be used in atomic context and
-> > > > > already contains components which may sleep, so avoiding spin locks is not
-> > > > > a problem from the perspective of atomic context.
-> > > > >
-> > > > > The global vmap_area_lock is held when the red/black tree rooted in
-> > > > > vmap_are_root is accessed and thus is rather long-held and under
-> > > > > potentially high contention. It is likely to be under contention for reads
-> > > > > rather than write, so replace it with a rwsem.
-> > > > >
-> > > > > Each individual vmap_block->lock is likely to be held for less time but
-> > > > > under low contention, so a mutex is not an outrageous choice here.
-> > > > >
-> > > > > A subset of test_vmalloc.sh performance results:-
-> > > > >
-> > > > > fix_size_alloc_test             0.40%
-> > > > > full_fit_alloc_test		2.08%
-> > > > > long_busy_list_alloc_test	0.34%
-> > > > > random_size_alloc_test		-0.25%
-> > > > > random_size_align_alloc_test	0.06%
-> > > > > ...
-> > > > > all tests cycles                0.2%
-> > > > >
-> > > > > This represents a tiny reduction in performance that sits barely above
-> > > > > noise.
-> > > >
-> > > > I'm travelling right now, but give me a few days and I'll test this
-> > > > against the XFS workloads that hammer the global vmalloc spin lock
-> > > > really, really badly. XFS can use vm_map_ram and vmalloc really
-> > > > heavily for metadata buffers and hit the global spin lock from every
-> > > > CPU in the system at the same time (i.e. highly concurrent
-> > > > workloads). vmalloc is also heavily used in the hottest path
-> > > > throught the journal where we process and calculate delta changes to
-> > > > several million items every second, again spread across every CPU in
-> > > > the system at the same time.
-> > > >
-> > > > We really need the global spinlock to go away completely, but in the
-> > > > mean time a shared read lock should help a little bit....
-> > > >
-> > 
-> > Hugely appreciated Dave, however I must disappoint on the rwsem as I have now
-> > reworked my patch set to use the original locks in order to satisfy Willy's
-> > desire to make vmalloc atomic in future, and Uladzislau's desire to not have a
-> > ~6% performance hit -
-> > https://lore.kernel.org/all/cover.1679354384.git.lstoakes@gmail.com/
+On 21/03/2023 11:04, Sebastian Andrzej Siewior wrote:
+> On 2023-03-15 17:49:10 [+0100], Krzysztof Kozlowski wrote:
+>> Qualcomm cpufreq driver configures interrupts with affinity to each
+>> cluster, e.g.  dcvsh-irq-0, dcvsh-irq-4 and dcvsh-irq-7 on SM8250.
+>> Triggered interrupt will schedule delayed work, but, since workqueue
+>> prefers local CPUs, it might get executed on a CPU dedicated to realtime
+>> tasks causing unexpected latencies in realtime workload.
+>>
+>> Use unbound workqueue for such case.  This might come with performance
+>> or energy penalty, e.g. because of cache miss or when other CPU is
+>> sleeping.
 > 
-> Yeah, I'd already read that.
-> 
-> What I want to do, though, is to determine whether the problem
-> shared access contention or exclusive access contention. If it's
-> exclusive access contention, then an rwsem will do nothing to
-> alleviate the problem, and that's kinda critical to know before any
-> fix for the contention problems are worked out...
-> 
-> > > I am working on it. I submitted a proposal how to eliminate it:
-> > >
-> > >
-> > > <snip>
-> > > Hello, LSF.
-> > >
-> > > Title: Introduce a per-cpu-vmap-cache to eliminate a vmap lock contention
-> > >
-> > > Description:
-> > >  Currently the vmap code is not scaled to number of CPU cores in a system
-> > >  because a global vmap space is protected by a single spinlock. Such approach
-> > >  has a clear bottleneck if many CPUs simultaneously access to one resource.
-> > >
-> > >  In this talk i would like to describe a drawback, show some data related
-> > >  to contentions and places where those occur in a code. Apart of that i
-> > >  would like to share ideas how to eliminate it providing a few approaches
-> > >  and compare them.
-> 
-> If you want data about contention problems with vmalloc
-> 
-> > > Requirements:
-> > >  * It should be a per-cpu approach;
-> 
-> Hmmmm. My 2c worth on this: That is not a requirement.
-> 
-> That's a -solution-.
-> 
-> The requirement is that independent concurrent vmalloc/vfree
-> operations do not severely contend with each other.
-> 
-> Yes, the solution will probably involve sharding the resource space
-> across mulitple independent structures (as we do in filesystems with
-> block groups, allocations groups, etc) but that does not necessarily
-> need the structures to be per-cpu.
-> 
-> e.g per-node vmalloc arenas might be sufficient and allow more
-> expensive but more efficient indexing structures to be used because
-> we don't have to care about the explosion of memory that
-> fine-grained per-cpu indexing generally entails.  This may also fit
-> in to the existing per-node structure of the memory reclaim
-> infrastructure to manage things like compaction, balancing, etc of
-> vmalloc space assigned to the given node.
-> 
-> Hence I think saying "per-cpu is a requirement" kinda prevents
-> exploration of other novel solutions that may have advantages other
-> than "just solves the concurrency problem"...
-> 
-> > >  * Search of freed ptrs should not interfere with other freeing(as much as we can);
-> > >  *   - offload allocated areas(buzy ones) per-cpu;
-> > >  * Cache ready sized objects or merge them into one big per-cpu-space(split on demand);
-> > >  * Lazily-freed areas either drained per-cpu individually or by one CPU for all;
-> > >  * Prefetch a fixed size in front and allocate per-cpu
-> 
-> I'd call these desired traits and/or potential optimisations, not
-> hard requirements.
-> 
-> > > Goals:
-> > >  * Implement a per-cpu way of allocation to eliminate a contention.
-> 
-> The goal should be to "allow contention-free vmalloc operations", not
-> that we implement a specific solution.
-> 
-I think we are on the same page. I do not see that we go apart in anything.
-Probably i was a bit more specific in requirements but this is how i see
-personally on it based on different kind of experiments with it.
+> I miss the point where it explains that only PREEMPT_RT is affected by
+> this.
 
-Thank you for your 2c!
+I assume "realtime tasks" implies this, but I can make it clearer.
 
---
-Uladzislau Rezki
+> 
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
+>>  1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> index 2f581d2d617d..c5ff8d25fabb 100644
+>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> @@ -390,7 +390,16 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
+>>  
+>>  	/* Disable interrupt and enable polling */
+>>  	disable_irq_nosync(c_data->throttle_irq);
+>> -	schedule_delayed_work(&c_data->throttle_work, 0);
+>> +
+>> +	/*
+>> +	 * Workqueue prefers local CPUs and since interrupts have set affinity,
+>> +	 * the work might execute on a CPU dedicated to realtime tasks.
+>> +	 */
+>> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>> +		queue_delayed_work_on(WORK_CPU_UNBOUND, system_unbound_wq,
+>> +				      &c_data->throttle_work, 0);
+>> +	else
+>> +		schedule_delayed_work(&c_data->throttle_work, 0);
+> 
+> You isolated CPUs and use this on PREEMPT_RT. And this special use-case
+> is your reasoning to make this change and let it depend on PREEMPT_RT?
+> 
+> If you do PREEMPT_RT and you care about latency I would argue that you
+> either disable cpufreq and set it to PERFORMANCE so that the highest
+> available frequency is set once and not changed afterwards.
+
+The cpufreq is set to performance. It will be changed anyway because
+underlying FW notifies through such interrupts about thermal mitigation
+happening.
+
+The only other solution is to disable the cpufreq device, e.g. by not
+compiling it.
+
+Best regards,
+Krzysztof
+
