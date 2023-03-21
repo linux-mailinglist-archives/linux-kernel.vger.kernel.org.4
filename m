@@ -2,90 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0C26C2AF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3889D6C2AFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjCUHAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
+        id S230285AbjCUHBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjCUHAf (ORCPT
+        with ESMTP id S229971AbjCUHA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:00:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB962196C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BFCB619B5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F3FC433EF;
-        Tue, 21 Mar 2023 07:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679382016;
-        bh=OM2A4KB+UNyw53E93L75Z9ferf0e2d7Kz/bpVwCRhUU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=03TSjr68IjtGdZIJEpx7J3RmYn+ZtBBng5lZ5bQEtmHGtfA4Wi8OnKYsFo7y6mtqf
-         GhueYe0dlpUkA/V+HYtLMTVF4wYheVK+DclSjJQGx6Gmtv4G6eHV94WKcEtAPfGGFJ
-         /JVJg23FQ2t5zyNaq4/uLGbq6jueVDY912KaSEDo=
-Date:   Tue, 21 Mar 2023 08:00:13 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org, sshedi@vmware.com
-Subject: Re: [PATCH v5 0/7] refactor file signing program
-Message-ID: <ZBlV/ZEWmLlT9Wuz@kroah.com>
-References: <20230320184345.80166-1-sshedi@vmware.com>
+        Tue, 21 Mar 2023 03:00:56 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0AE20058;
+        Tue, 21 Mar 2023 00:00:50 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso8002527oti.8;
+        Tue, 21 Mar 2023 00:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679382050;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KbrkTS/iLndjrdpPHgh8KLjdf4t93SADOoKQyTzdYQU=;
+        b=qqokbMwbpqGKvc0/tIeC8smk2R161+graQop2B9RDdp1Rp4f2j9ZD5EDsAdjv7Mxs6
+         V6bsrC58etpR+/N1Xu8MI3i3j4FYCDnsxgj6BGoYQsI0Ki6EkR6KhZx50P+lwgFB2L2l
+         YnIdWGPhvnw1YBQJsUNYzLGMMMpiB738hoRvTQEmP80Nkka0PGQCT7sR2ZkeIZYk2deQ
+         TWfMZQXNh2KJArJmmcFiI2MtO050vro48998fHm+4qujFqZyzmTSFOqHsWURZQPH9T0q
+         6DVGl0pbL7tMBv8BElxwZP+qkf735bQ9Bar5PsdxadjNjuDxvPXp0SG51sPleWv4DcjE
+         1jMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679382050;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KbrkTS/iLndjrdpPHgh8KLjdf4t93SADOoKQyTzdYQU=;
+        b=SUhTeB3u+fagr9GTJSqSamckpIRKpsW0/ifgNA+tN743NlivpEDpXr4xwWqpc9E48f
+         J+LymunkGRcmp/45ZrQJM/wwdp8L0Dxm61P6kKZlvKPKYTRJ3xNaxJs69VEfT+dx+3B6
+         YX4DTb9xbb/Z83MKZsUeOupEt6gxUXzx8c2ceh+Anqm91CYh927bBhuZhcuXCdN3FGD4
+         OEvHtQfHVKDu2ZnPvLb60HLVmNUmZV1gDgwFZVf/TyQcgXgbd2Sp4BwKPnnySvIHgZ6L
+         LVGk08HfXvzSb4EUbbk9S/F78UmZhetmQJHfS1BED8oD+O3w6xr42YHzpMkq2aQ/WJ7h
+         YSTA==
+X-Gm-Message-State: AO0yUKXeIIcwiZ6f8UnWnM672Y89uMOtk+w8cPm6MKqjLvvM1WlsXhqL
+        zFQkzUATr4AUZ8sR1C6YI9enp0df31QCMjfRaQ8=
+X-Google-Smtp-Source: AK7set9As8qzNFZRMiI8hYNSzsoJkhpajOQqfBgO3uiI8I+ZIbrUkFthAFTHBSFbp0FMGSO2dXcerwsgheva/lK7ZTY=
+X-Received: by 2002:a05:6830:2083:b0:69f:882:cdb2 with SMTP id
+ y3-20020a056830208300b0069f0882cdb2mr480283otq.3.1679382049674; Tue, 21 Mar
+ 2023 00:00:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320184345.80166-1-sshedi@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+ <20230321050034.1431379-2-sergio.paracuellos@gmail.com> <5f295438-8334-d374-2ae6-2a385ffb317d@linaro.org>
+In-Reply-To: <5f295438-8334-d374-2ae6-2a385ffb317d@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Mar 2023 08:00:37 +0100
+Message-ID: <CAMhs-H_dSgcPNQVusHWVvztYHptOxSJ_o7G0eU9=M1C7RXdsVw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: clock: add mtmips SoCs system controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org, arinc.unal@arinc9.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:13:38AM +0530, Shreenidhi Shedi wrote:
-> From: Shreenidhi Shedi <yesshedi@gmail.com>
-> 
-> This patch series refactors the sign-file program, like:
-> 
-> - Improve argument parsing logic.
-> - Add few more easy to remember arguments.
-> - Add support to sign bunch of modules at once.
-> - Improve the help message with examples.
-> - Few trivial checkpatch reported issue fixes.
-> 
-> Version 5 changes:
-> - Addressed review comments from David Howells.
-> - Framgmented the patches into further small units.
-> Link:
-> v4: https://lore.kernel.org/all/20230221170804.3267242-1-yesshedi@gmail.com/
-> 
-> Version 1 - Version 4 changes:
-> Did some back and forth changes. Getting familiar with patch submission
-> process, nothing significant happened.
-> 
-> Links:
-> v1: https://lore.kernel.org/all/dc852d8e-816a-0fb2-f50e-ff6c2aa11dd8@gmail.com/
-> v2: https://lore.kernel.org/all/20230213185019.56902-1-yesshedi@gmail.com/
-> v3: https://lore.kernel.org/all/20230213190034.57097-1-yesshedi@gmail.com/
-> 
-> Shreenidhi Shedi (7):
->   sign-file: refactor argument parsing logic - 1
->   sign-file: refactor argument parsing logic - 2
->   sign-file: refactor argument parsing logic - 3
+On Tue, Mar 21, 2023 at 7:45=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/03/2023 06:00, Sergio Paracuellos wrote:
+> > Adds device tree binding documentation for system controller node prese=
+nt
+> > in Mediatek MIPS and Ralink SOCs. This node is a clock and reset provid=
+er
+> > for the rest of the world. This covers RT2880, RT3050, RT3052, RT3350,
+> > RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 65 +++++++++++++++++++
+> >  1 file changed, 65 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt=
+mips-sysc.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sy=
+sc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+> > new file mode 100644
+> > index 000000000000..f07e1652723b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+> > @@ -0,0 +1,65 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/mediatek,mtmips-sysc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MTMIPS SoCs System Controller
+> > +
+> > +maintainers:
+> > +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > +
+> > +description: |
+> > +  MediaTek MIPS and Ralink SoCs provides a system controller to allow
+> > +  to access to system control registers. These registers include clock
+> > +  and reset related ones so this node is both clock and reset provider
+> > +  for the rest of the world.
+> > +
+> > +  These SoCs have an XTAL from where the cpu clock is
+> > +  provided as well as derived clocks for the bus and the peripherals.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - ralink,mt7620-sysc
+>
+> Since you decided to send it before we finish discussion:
+> NAK - this is already used as mediatek
 
-"1 2 3" are not good ways to write changelog summaries, sorry.  Please
-explain things better, or split them up into more logical and smaller
-pieces.
+Sorry, there was too much stuff commented so I preferred to clean up
+all of them while maintaining the compatibles with the ralink prefix
+instead since that was where the current discussion was at that point.
 
-thanks,
+>
+> > +          - ralink,mt7620a-sysc
 
-greg k-h
+As I have said, this one exists:
+
+arch/mips/ralink/mt7620.c:      rt_sysc_membase =3D
+plat_of_remap_node("ralink,mt7620a-sysc");
+
+
+> > +          - ralink,mt7628-sysc
+>
+> Same here.
+>
+> > +          - ralink,mt7688-sysc
+>
+> I expect you to check the others.
+
+I can change others to mediatek but that would be a bit weird, don't you th=
+ink?
+
+>
+>
+>
+> Best regards,
+> Krzysztof
+>
+
+Thanks,
+    Sergio Paracuellos
