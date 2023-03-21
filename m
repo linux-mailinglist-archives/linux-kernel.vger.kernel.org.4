@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47A66C325B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02046C325E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjCUNLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S230253AbjCUNMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCUNLR (ORCPT
+        with ESMTP id S229726AbjCUNMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:11:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522CE7D9A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679404232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LHioC2Bz+LhXLt/kWCD/RKd45AYTVWaKEiEQ85K6IJk=;
-        b=OonW6Cc9063rdbAGGl5ZKuI+iUd9fVbKhwTNVP1RMncMX79xsU+GSjntgtm4XqnUTq5qlW
-        Li9XdJiwF/Y9rm914qxe+JwRdln42nKt57F2E72UpYo+EhXo3wpKD+pT83FQKeUwFtaTly
-        kucZQyJuyNT5UCHzOgH1OHmXS/bMTqo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-gQg3QGrOOUS7pjercg99cw-1; Tue, 21 Mar 2023 09:10:26 -0400
-X-MC-Unique: gQg3QGrOOUS7pjercg99cw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC75A96DC85;
-        Tue, 21 Mar 2023 13:10:25 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.206])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 56696140E95F;
-        Tue, 21 Mar 2023 13:10:25 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Viktor Prutyanov <viktor@daynix.com>
-Cc:     Jason Wang <jasowang@redhat.com>, pasic@linux.ibm.com,
-        farman@linux.ibm.com, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com
-Subject: Re: [PATCH v2] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-In-Reply-To: <20230321050719-mutt-send-email-mst@kernel.org>
-Organization: Red Hat GmbH
-References: <20230320232115.1940587-1-viktor@daynix.com>
- <CACGkMEu5qa2KUHti3w59DcXNxBdh8_ogZ9oW9bo1_PHwbNiCBg@mail.gmail.com>
- <CAPv0NP5wTMG=3kT_FX4xi9kGbX0Dah4qTQfFQPutWYsWvK1i-g@mail.gmail.com>
- <20230321050719-mutt-send-email-mst@kernel.org>
-User-Agent: Notmuch/0.37 (https://notmuchmail.org)
-Date:   Tue, 21 Mar 2023 14:10:23 +0100
-Message-ID: <87jzzamerk.fsf@redhat.com>
+        Tue, 21 Mar 2023 09:12:42 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE51749F4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:12:41 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so20163217pjt.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679404361;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fAjXByyNeVsllWRRDtI/FHQctq+3KZulJN/OLUyCO0Y=;
+        b=FVqUv2LQHwvg/vVQtrGj4ZriCG8kiq0Mq2nJuDX8CzetcsSLFWAq8LjPk8hJkqsJkF
+         E2X6Sv4Ncdspvnro9L1YmdOlWqyHhjJTbIy94zFkISeWejHNO8ySKiGB5jIOtUbOEn4d
+         VRIW6wS746nkKBXuzmgv82W4PN288lvt4C6SGvecN4ZR+WQm7JtQXqbbg9feBHlPL9yB
+         CJWUHmlHG6AwwM3ejx6pK8F8UmINAvZw8UyaXPQQ3jA7W0XCVYrHvSNAR0nJA0PXRK2I
+         q0lhYtMm3lu64R8y5ZOHgampujPUwuMvWoUTWadi/WVqBBFcPwOJyaBZ8z0Ze6y1kk5Q
+         wjvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679404361;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fAjXByyNeVsllWRRDtI/FHQctq+3KZulJN/OLUyCO0Y=;
+        b=jrM81m+XELfgMBvYnyFVnp5f7rWQ0JDAwj3aorl66V9pigPnJmAgXhIYel3mXLka7V
+         O9nn4LDWhq1DUxhXR/vvP4VP4xVIQ2c0ODNhwDJAOQQeM9SwQlw8GUmrEBJziPaOVeq/
+         l0JOUTQ4aytqximmFPwPIKwEFw9p/NVrbXXjoZSrfw8lagViXT9Uuue+6yJxM2iqMnZT
+         EmpvxBZ7u3E0eN3xV/QqT6pgDk8SzguUlIpukeIr+S8L8E8zL9dVX/ADsxNcrV2A3A6Y
+         DBjxui+3tf6vwk3tyMIIb4l8/dM62Xy8ftqBN6JqlarZa1kTEMUaragBb96Qr8c66Vst
+         fGqg==
+X-Gm-Message-State: AO0yUKUUMoHox+4svttURiCsRcr3ab2j9gy4YDEFT5EBd98iU8jiGJ6k
+        yZth0dkqCFycxgGn12zkuaOIy8bE2KQ=
+X-Google-Smtp-Source: AK7set+Fux4yS6sb9QMc/wWCWwfKerztUvonr+R6TXeModNpu54XsFqCCe8a6xFun9iV4ReqvZDBSA==
+X-Received: by 2002:a05:6a20:a8a5:b0:d8:afd4:4ac7 with SMTP id ca37-20020a056a20a8a500b000d8afd44ac7mr2315740pzb.4.1679404361134;
+        Tue, 21 Mar 2023 06:12:41 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-50.three.co.id. [116.206.28.50])
+        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b005d4360ed2bbsm8222947pfm.197.2023.03.21.06.12.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 06:12:40 -0700 (PDT)
+Message-ID: <a05cfc82-a9e9-ea96-aaca-612ff9c14219@gmail.com>
+Date:   Tue, 21 Mar 2023 20:12:36 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] scripts/package: add back 'version' for builddeb
+To:     David Wang <00107082@163.com>, linux-kernel@vger.kernel.org
+Cc:     masahiroy@kernel.org
+References: <20230320110819.23668-1-00107082@163.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230320110819.23668-1-00107082@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21 2023, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+On 3/20/23 18:08, David Wang wrote:
+> Fixes: 36862e14e316 (kbuild: deb-pkg: use dh_listpackages to know
+> enabled packages)
+> The 'version' variable is still needed for building
+> debian 'linux-headers' packages, add it back.
+> 
+> Signed-off-by: David Wang <00107082@163.com>
+> ---
+>  scripts/package/builddeb | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+> index c5ae57167d7c..5102d0903f9c 100755
+> --- a/scripts/package/builddeb
+> +++ b/scripts/package/builddeb
+> @@ -215,6 +215,7 @@ install_libc_headers () {
+>  
+>  rm -f debian/files
+>  
+> +version=$KERNELRELEASE
+>  packages_enabled=$(dh_listpackages)
+>  
+>  for package in ${packages_enabled}
 
-> On Tue, Mar 21, 2023 at 12:00:42PM +0300, Viktor Prutyanov wrote:
->> On Tue, Mar 21, 2023 at 5:29=E2=80=AFAM Jason Wang <jasowang@redhat.com>=
- wrote:
->> >
->> > On Tue, Mar 21, 2023 at 7:21=E2=80=AFAM Viktor Prutyanov <viktor@dayni=
-x.com> wrote:
->> > >
->> > > According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
->> > > indicates that the driver passes extra data along with the queue
->> > > notifications.
->> > >
->> > > In a split queue case, the extra data is 16-bit available index. In a
->> > > packed queue case, the extra data is 1-bit wrap counter and 15-bit
->> > > available index.
->> > >
->> > > Add support for this feature for MMIO and PCI transports. Channel I/O
->> > > transport will not accept this feature.
->> > >
->> > > Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
->> > > ---
->> > >
->> > >  v2: reject the feature in virtio_ccw, replace __le32 with u32
->> > >
->> > >  drivers/s390/virtio/virtio_ccw.c   |  4 +---
->> > >  drivers/virtio/virtio_mmio.c       | 15 ++++++++++++++-
->> > >  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
->> > >  drivers/virtio/virtio_pci_common.h |  4 ++++
->> > >  drivers/virtio/virtio_pci_legacy.c |  2 +-
->> > >  drivers/virtio/virtio_pci_modern.c |  2 +-
->> > >  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
->> > >  include/linux/virtio_ring.h        |  2 ++
->> > >  include/uapi/linux/virtio_config.h |  6 ++++++
->> > >  9 files changed, 56 insertions(+), 6 deletions(-)
->> > >
->> > > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/=
-virtio_ccw.c
->> > > index a10dbe632ef9..d72a59415527 100644
->> > > --- a/drivers/s390/virtio/virtio_ccw.c
->> > > +++ b/drivers/s390/virtio/virtio_ccw.c
->> > > @@ -789,9 +789,7 @@ static u64 virtio_ccw_get_features(struct virtio=
-_device *vdev)
->> > >
->> > >  static void ccw_transport_features(struct virtio_device *vdev)
->> > >  {
->> > > -       /*
->> > > -        * Currently nothing to do here.
->> > > -        */
->> > > +       __virtio_clear_bit(vdev, VIRTIO_F_NOTIFICATION_DATA);
->> >
->> > Is there any restriction that prevents us from implementing
->> > VIRTIO_F_NOTIFICATION_DATA? (Spec seems doesn't limit us from this)
->>=20
->> Most likely, nothing.
->
-> So pls code it up. It's the same format.
+Hi,
 
-FWIW, the notification data needs to go via the third parameter of
-kvm_hypercall3() in virtio_ccw_kvm_notify().
+Again, your patch looks like corrupted (tabs converted to spaces).
+Please resubmit; this time; generate the patch via git-format-patch(1)
+and then send the resulting patch with git-send-email(1).
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
