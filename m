@@ -2,139 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D596C2C47
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CE86C2C53
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCUI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        id S229819AbjCUI2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjCUIZ6 (ORCPT
+        with ESMTP id S231168AbjCUI2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:25:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBA02CC5B;
-        Tue, 21 Mar 2023 01:25:55 -0700 (PDT)
+        Tue, 21 Mar 2023 04:28:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056F64491;
+        Tue, 21 Mar 2023 01:28:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7144AB81252;
-        Tue, 21 Mar 2023 08:25:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB65FC433D2;
-        Tue, 21 Mar 2023 08:25:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DEA619BF;
+        Tue, 21 Mar 2023 08:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EFEC4339B;
+        Tue, 21 Mar 2023 08:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679387153;
-        bh=8GPiMzbN7BmXPyIzz0Qw60XVpxo4kSSqd4BTGmy3AlA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OZRB44LFEQYJBDh3/ETp0fAJtAFrIfUIZw8BfDyFQb45eTLV1shnqldjlcpL7R4PV
-         kQv1VW7/0ZDSudqTWBvFo9UpFVin9rUMixEC5b50BKHffW4eOHc9j20wTowSTVpsz9
-         NHCiVoU94+dYFTZvEJWCYtydZ92oOcva2ArbYTJVi9x5e1BjjZcc4wDPudZ9d+7Hrc
-         pglakWLnRAIlljeSqYERD/BuZ18rBrmxK0aYMU/mnBh+3i5vTm5BInFfWiVrqSan5f
-         /ICplHQsfLqF+2gu3HY1UA82jVADZd+twDQNKOI349ENKDMfJSH5NLb2ttbXV5mJw0
-         YqzR2W7as7Wwg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1peXKu-00008b-6A; Tue, 21 Mar 2023 09:27:16 +0100
-Date:   Tue, 21 Mar 2023 09:27:16 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: wireless: add ath11k pcie bindings
-Message-ID: <ZBlqZLHwqLLZhtTi@hovoldconsulting.com>
-References: <20230320104658.22186-1-johan+linaro@kernel.org>
- <20230320104658.22186-2-johan+linaro@kernel.org>
- <a8356f76-189d-928b-1a1c-f4171de1e2d0@linaro.org>
+        s=k20201202; t=1679387293;
+        bh=CoOWB5m6DsId/z5WaBKhpXg+WFwSZORzhnSfYgGrajA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UsFCZnK+ldzABZuMk/PN22yEaiZnVYBIpPksijS5ZNIwZTCSgANuleuujci9lwHVZ
+         M9Z0s8E0BmhEriEKc3YRxpebCE6GKKYoF6qr6pqQsCmhP18H52RR+/ot8tyuPRqJHu
+         ns3IW9fRX79g7/efzc5I4gm2+5VZwRM5snanwdJfhrBELF7LWxPCPmf6CzHQ74gvX9
+         nDfp2qZipUmdlhXmUfaH8RRzwAGoTndQ095sWbScw3iGZ9b5fXaLlAERd9KCorQtA+
+         8mmViO4IslkvVQk7HR6njLKik+EpXHOeY33A3a1L5ugBk3jNuCPM5zaj+YX/OmK2O4
+         7HOOxwTWsfd7Q==
+Received: by mail-ot1-f50.google.com with SMTP id v17-20020a9d6051000000b0069a413e9cf6so8104360otj.3;
+        Tue, 21 Mar 2023 01:28:13 -0700 (PDT)
+X-Gm-Message-State: AO0yUKVzFOfsU+hYegOU9U3MNy/czqQNB2K9AUxXHCwhlIz47+cRdvea
+        WkcKjKgK4X3C/Kgikyq3WVgFYZakTupb838+8OE=
+X-Google-Smtp-Source: AK7set+xIFO1Ffs+pzsdRPHCvC6QdwrEOO/QPrSR2a/x52pa4JNUXT0IFNcgFvNQr9vzH8MBNGJJET7uyOeQUO+RE5Q=
+X-Received: by 2002:a05:6830:3299:b0:688:d1a8:389e with SMTP id
+ m25-20020a056830329900b00688d1a8389emr500571ott.1.1679387293218; Tue, 21 Mar
+ 2023 01:28:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8356f76-189d-928b-1a1c-f4171de1e2d0@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+ <20230224150811.80316-10-nick.alcock@oracle.com> <86y1onw02k.wl-maz@kernel.org>
+ <Y/jyJFXqlj9DlX9z@bombadil.infradead.org> <86wn47vue1.wl-maz@kernel.org> <Y/kXDqW+7d71C4wz@bombadil.infradead.org>
+In-Reply-To: <Y/kXDqW+7d71C4wz@bombadil.infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 21 Mar 2023 17:27:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAScmTeSXBXiFCOS+KU_LSgZjRD4GKRAcxVXHPtTxF7ewg@mail.gmail.com>
+Message-ID: <CAK7LNAScmTeSXBXiFCOS+KU_LSgZjRD4GKRAcxVXHPtTxF7ewg@mail.gmail.com>
+Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:14:15AM +0100, Krzysztof Kozlowski wrote:
-> On 20/03/2023 11:46, Johan Hovold wrote:
-> > Add devicetree bindings for Qualcomm ath11k PCIe devices such as WCN6856
-> > for which the calibration data variant may need to be described.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  .../bindings/net/wireless/pci17cb,1103.yaml   | 56 +++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml b/Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml
-> > new file mode 100644
-> > index 000000000000..df67013822c6
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml
-> 
-> PCI devices are kind of exception in the naming, so this should be
-> qcom,ath11k-pci.yaml or qcom,wcn6856.yaml (or something similar)
+On Sat, Feb 25, 2023 at 4:59=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> On Fri, Feb 24, 2023 at 05:35:34PM +0000, Marc Zyngier wrote:
+> > On Fri, 24 Feb 2023 17:21:40 +0000,
+> > Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >
+> > > On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
+> > > > On Fri, 24 Feb 2023 15:07:53 +0000,
+> > > > Nick Alcock <nick.alcock@oracle.com> wrote:
+> > > > >
+> > > > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > > > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declaratio=
+ns
+> > > > > are used to identify modules. As a consequence, uses of the macro
+> > > > > in non-modules will cause modprobe to misidentify their containin=
+g
+> > > > > object file as a module when it is not (false positives), and mod=
+probe
+> > > > > might succeed rather than failing with a suitable error message.
+> > > > >
+> > > > > So remove it in the files in this commit, none of which can be bu=
+ilt as
+> > > > > modules.
+> > > > >
+> > > > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > > > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > > > Cc: linux-modules@vger.kernel.org
+> > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > > > > ---
+> > > > >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
+> > > > >  1 file changed, 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchi=
+p/irq-renesas-rzg2l.c
+> > > > > index 25fd8ee66565..4bbfa2b0a4df 100644
+> > > > > --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> > > > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> > > > > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irq=
+c_init)
+> > > > >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+> > > > >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesa=
+s.com>");
+> > > > >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> > > > > -MODULE_LICENSE("GPL");
+> > > >
+> > > > I'm probably missing some context here, but I find it odd to drop
+> > > > something that is a important piece of information because of what
+> > > > looks like a tooling regression.
+> > > >
+> > > > It also means that once a random driver gets enabled as a module, i=
+t
+> > > > won't load because it is now missing a MODULE_LICENSE() annotation.
+> > > >
+> > > > It feels like MODULE_LICENSE should instead degrade to an empty
+> > > > statement when MODULE isn't defined. Why isn't this approach the
+> > > > correct one?
+> > > >
+> > > > I expect the cover letter would have some pretty good information o=
+n
+> > > > this, but lore.kernel.org doesn't seem to have it at the time I wri=
+te
+> > > > this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> n=
+ot
+> > > > found").
+> > >
+> > > The right thing is to not even have this and have the module license
+> > > inferred from the SPDX tag. But for now we want to remove the tag fro=
+m
+> > > things we know for sure are not modules.
+> >
+> > I understand that you want to remove it. I don't get why this is the
+> > right solution. Can you please assume that, in this particular
+> > instance, I am a complete idiot and spell it out for me?
+> >
+> > Why isn't that a problem for modules that are compiled-in?
+>
+> Modules that are compiled in should succeed with a modprobe call as its
+> already loaded. The construct we're looking for is a way to detect
+> things which are built-in but *could* be modules. The annotation today
+> is done at build time for something built-in using a file path using
+> modinfo.
 
-Heh, I suggested something similar in my reply to Kalle. Let's go with
-'qcom,ath11k-pci.yaml' then as he first suggested (and keeping the
-current schema file unchanged?).
 
-> > @@ -0,0 +1,56 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (c) 2023 Linaro Limited
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/wireless/pci17cb,1103.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm Technologies ath11k wireless devices (PCIe)
-> > +
-> > +maintainers:
-> > +  - Kalle Valo <kvalo@kernel.org>
-> > +
-> > +description: |
-> > +  Qualcomm Technologies IEEE 802.11ax PCIe devices.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - pci17cb,1103  # WCN6856
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  qcom,ath11k-calibration-variant:
-> 
-> qcom,calibration-variant
 
-This one is already in use as you noticed.
 
-> > +    $ref: /schemas/types.yaml#/definitions/string
-> > +    description: calibration data variant
-> 
-> Your description copies the name of property. Instead say something more...
+Why is it important to make "modprobe irq-renesas-rza1" fail?
 
-Yeah, I was actively avoiding trying to say too much (e.g. mentioning
-the name of the current firmware file). See the definition in
-qcom,ath11k.yaml.
+With CONFIG_RENESAS_RZA1_IRQC=3Dy, "modprobe irq-renesas-rza1"
+exits with 0.
+I do not think it is a big deal since irq-renesas-rza1
+is available as built-in.
 
-I can try to find some middle ground unless you prefer copying the
-current definition.
 
-Johan
+
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
