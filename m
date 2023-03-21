@@ -2,207 +2,529 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DC06C2BEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C372B6C2BE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjCUIG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjCUIGX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230042AbjCUIGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 21 Mar 2023 04:06:23 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80FAD0F;
-        Tue, 21 Mar 2023 01:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679385981; x=1710921981;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=SG74NabLj7F9ngQcEECxrGcQOCmoBvn0ICklqB2yFLc=;
-  b=TSTG+XW0m40wM1OqBpvzEbhQG7ho9sispMkXo8hhAb6X+OrTPOQMweZN
-   yRmTKvMdLOMoQnZbfspq7OtAiv6kWW7JsbKlnjRiGj/4ygYnZnM1MNWba
-   Lu/GXd3zksPNXX8x/IH92/Lra5/ChohYmInVLVKD6bF1G83qQASokcc2i
-   85luw12Pj+cAecZUNZokSzmfJ6WGzz5lGXqKu9HfRcBidEzTXHTN/uiiE
-   PEZyhsUE6TMMigkttXy64vamWsecliN/QjKiV5v+JVtg/CKHait4PC9Fj
-   mcGTdwdYKV95OLhjON46T8UuiRr2n3A2Ti+el+DKzfNVSH30BMICEuaJ7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340421919"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="340421919"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 01:06:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="713891331"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="713891331"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2023 01:06:03 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 01:05:58 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 21 Mar 2023 01:05:58 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.44) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 21 Mar 2023 01:05:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZpnbRYxmRwOGF4oKEzkX8yezN+RUnOLROaGpYB4u203bs9tuL+Pk66oPuAiBMs5x+snbxmlldFnEB9bwrrYQkKt0Z0MGTtKM0wBuAjSMSbkHPi9hnICXmz82c6Fo4M0KfjA/fE2iVijciPTsdbCX8r6TKhMmxHBVOh9W7eFtQwCq0TuG8Z/XnLog44rIYITSO5CsUS+Yerh+ReQiud0qgd8+aCkiExXcH0sMFQZFQ9EUTInAVWKJv3jbg3Gi+4H9MV302erC7PN/Ix+1sjmSZ5qJrPqbP+77cuv1//cXizFNzHUtFj4KHk5HDSSsq2z03tqwfiXEb3lMrXkT7MyDJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SG74NabLj7F9ngQcEECxrGcQOCmoBvn0ICklqB2yFLc=;
- b=aBu70e7P4f6qYf4YE8JuBYFNReRTGwcPliTc4ekDZQI1fBK3LrZ8PVb6b6nF0m+FHP86mAjsZ2qYeXpbkU6F4y+qE6oWSotrDzzecsNRDsbnXB27deVUTNMMzdIaE8D7Wtaqcn75B2oVizX9iFmfFwijesI4XqOzgoVj80EEKXBtc1akDH6Tt6QihTCTGT6ZfIHn68gic7NqYwidk2l8xn2qqlu1T7SqQM4jTsAfU0eL/Bw3aWuPcvmLwPtHouw16pd8f7aDCfC2D5/ayw+MaaNkCEkMiATtiQr0CApXIlKgPpgUKBqATmqRPza3EJn21b81/HSZmwS/K6uyswqVjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SA1PR11MB6944.namprd11.prod.outlook.com (2603:10b6:806:2bb::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 08:05:53 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::f403:a0a2:e468:c1e9]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::f403:a0a2:e468:c1e9%4]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
- 08:05:52 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Dong, Eddie" <eddie.dong@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v10 10/16] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Thread-Topic: [PATCH v10 10/16] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Thread-Index: AQHZUDU/dDGyCqnt3kWU+OxOVAYGTK8E8ZWAgAAF5YA=
-Date:   Tue, 21 Mar 2023 08:05:52 +0000
-Message-ID: <ce375c4a84bb0aafae73df8ddbcd1dc7024cee79.camel@intel.com>
-References: <cover.1678111292.git.kai.huang@intel.com>
-         <5192c24339960c11dcedd42fecb5d49128bbe072.1678111292.git.kai.huang@intel.com>
-         <BL0PR11MB30427B24E47E9612FD2DD27A8A819@BL0PR11MB3042.namprd11.prod.outlook.com>
-In-Reply-To: <BL0PR11MB30427B24E47E9612FD2DD27A8A819@BL0PR11MB3042.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SA1PR11MB6944:EE_
-x-ms-office365-filtering-correlation-id: c814d630-79bc-4ded-78a4-08db29e3173b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wfFEc7UzgCbboJLHvaSWCw3Am2hzT6kN4I/YtXM8G/9T3vGLnlbMxzjLu+J1HKm8aLJTe6X48Dcs0Cwph2z31Zc3e0h4ZIjobJrEbtuz+twp5h088MQjL0hvSS+mtB42Ork9ztXJz86C/XUn/JymF8rspowz1ZC5FtEWkfPgUWkiSJoCs2i6r5jYGL9KtAY7WZO1/xEPBqjZMSntsvJ0PVIxl2gy7PerzHOR+6o5g3zY0e6/Z+unfj1lUfANdS5Lq3wUBGHUquEz7onoh480YSX+OE0SfC6qUKm7iKWQ4xCYouJYOV6ABlBTxvP9wzFxSiYhhnrI9EDAJepVldlCQFwmrE1zJiWRWYolm3N3kINH6KFaiwCgXF1tab+DFdKj/gkHbG4VLiTSntDVRJIeHy6GgNdvV5oZGhgBtrBPwS6+EWFKcUny4HXU2AOphnKxc3wBle7AuvfmmYN43VSa98HCi392G+InJ9dsEXSQ4RQo3v+kYKLHhX/YevityDo2db+kEKgFwX9MYoBDF9dzeJxqgp7JrfFzbUTO3R1/rFuJtdEygZu3T18/51U1gdandkPp1nfLxPx13IQEyQsGm2jVfiycDzWJa8jBFowUGaY7wQMVTnUnSp++p1aSRP6T6znqQUgN68JBLoOjhn2oXFGIOSTu6r4i1oKJIngmHv8shwHe+hIZ+cCCAk99BcDmZ2w8WQ5k/gr6P0lr3eK4uauW/qxLk5o5puVrzV7bTzF4CLoKUYh6k975u8nlfvnsBtDCdTgxFfk/ovk18ss3fg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199018)(41300700001)(478600001)(26005)(6506007)(6512007)(316002)(54906003)(110136005)(38070700005)(186003)(71200400001)(86362001)(6486002)(66446008)(66946007)(76116006)(64756008)(66556008)(66476007)(4326008)(36756003)(8676002)(91956017)(2616005)(38100700002)(2906002)(4744005)(122000001)(82960400001)(8936002)(5660300002)(7416002)(17423001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cmg4ak5jZkFkR29MeTVPNk9oMGkxSFUwVFIzZjNrTFZJV2wxOWhjQkRzQ2Ez?=
- =?utf-8?B?RzJ2TkYvdlJLMktqN2tOaDVCQXJDQnFnL0dudG1JQ2lJRzlPUUhocE9CM29x?=
- =?utf-8?B?aHpPaVVJQUVENUwyV0w2ZjJXd1hvM1BtWHRURzZSSFdqdGo2L0NNcGhYRHVS?=
- =?utf-8?B?b2F5eVJHQnlKN0lPeFVCUUIvM2g5TjVuWnBqY3hWaVg1VVQ4cGxwUDR2Rkg0?=
- =?utf-8?B?a3h0Rmg4ajBqZURVeUx5M2lVTUVBYzZldmFPTlFEbk5XV2NLT2NFc3o1MDJ4?=
- =?utf-8?B?ZW12WU9zWit5UUtiQm01L3EybE5Qa3BzcHVBZS9SdDhNOXZQTjdwNGNZcGd5?=
- =?utf-8?B?ODZxcFhIcFpYWGc0TUs3TGZadG9Ucjg0dUxkNmtlYnVXUkV0S0lzWVJjTlVJ?=
- =?utf-8?B?NC9ZcThraEhVVFJ6Q3J2VndGU0QrdVpLVG5tdDRZQjU1Vms1aHZ2OG9JWU93?=
- =?utf-8?B?ZkFlazhjUGRLQThQeXc2SmQ2RkMzU3NYL09IVzFySmoycFdSRk1ObVk3bnpS?=
- =?utf-8?B?aytycERMWDBoTHV5YnBRMStHZGs0UkxlSk9OY2hHMzZIQWtlVlFNWWg2OHlt?=
- =?utf-8?B?eENubHVOT3pkby8xc0ZYQW9YUW5EamU0bTdBUFdDVkxBMFU1UnVEYWdlZVo5?=
- =?utf-8?B?a3o2bldkRStKUXdBT3hZTS9IdHdPTXI0RXM3U3FmTHBqSStYTWpMZkxhY0JE?=
- =?utf-8?B?ZDh6TzdFQXc5OEhCdE1VaVJ6MXhmT2JIcEhoUG4vMWg2aExWT285Y1JzeXNE?=
- =?utf-8?B?bVZ5RHU1VURVeURuVmVaMWpTQUxpcmVQY1REeWFvZnRnbUVURktBbGFFcHdr?=
- =?utf-8?B?L28yd0pLZCtJSzhWMXFuejR6eW5iYlIvNmVIcEp4TnNBOEtaWm56NnZmRkRi?=
- =?utf-8?B?VHBSRWpQT1VsM29PUnoxNGNlZm93NXhzaTcrU3NRc2hSTHZkcjNoNlUveWRP?=
- =?utf-8?B?ZFJTMkZyNmJocXhaMlZSWHJOMytHWEFtSGJQcUlJSk5JNWZ5Z3h5V1hJU1Fp?=
- =?utf-8?B?UmloSTFUank4eEl1OE50blNDelBkTzVTemRvbEYvYkI5NnRTK3BTUXovSlEr?=
- =?utf-8?B?aGdyT1oydm1aTnRNRnBPUkMrMWplRVdzWVdoRHFKZm5wSGFGUVFhTDYxcldG?=
- =?utf-8?B?ZmhDanhtZmoxNkRsYjNMc3F2VGZyWDU1R1dnQjZwRjAyUndVWm9jdUlVdkhX?=
- =?utf-8?B?NGRXcHN2bHNXdkQ5TTNBNHQrTGxrUTA3eDVWMlRHMWY4b1UyNjMvVkFhMlFv?=
- =?utf-8?B?YmxMVEFOL0JsRmFSWlJ4Si9HejFTS0YyWDVjV2tNSHE2TGlleHQwR1FvbXFX?=
- =?utf-8?B?UXlEVEJWUHpMVjVTek05WGdjbEQvZFh2MzlnR0VSSGxrVjFhelZVNy80RHRp?=
- =?utf-8?B?clZQc1k2OGVkWEFrTVVNTitUeEJ6VWpkNWJPOUhHL0VTRHVPZWphMGhEYXRW?=
- =?utf-8?B?ZjQ2a1hId1NldTBweHBsaGRmczczRFBZZnlzSGtxQVdzaEgwVEdXR0E3bGxC?=
- =?utf-8?B?S1hNL0RyVDZaTVNxdVdpcGpXQkljVGJjVER5Ri94QVo4Z3NjQ0JYR1NsUGI1?=
- =?utf-8?B?aW9KaVp5aDBGbjQvZzJrRndaZWtvZ1IwQWwvSW9IeUhtVktKa0p2TlNmTFFU?=
- =?utf-8?B?QkFNZ0ozZ0NlektRZHBVNzBRN1dyM3pSQm9lRkxhQ3hlbFViczVOa2Z6NEV0?=
- =?utf-8?B?UlhvZFBXamlnbE1FSTRYL05QZ2k0WTFZaUhUR0dMazMwMlJlcGJ1VWxrWGNy?=
- =?utf-8?B?Tys3cWp1YUZzWHNUK3NTdHV0Q0dKNStyV3Yxa3AvNHNoSjhrSGpxYnNUbUNi?=
- =?utf-8?B?S3lneTNaNFp5Rmtsb2x5eUFZV0I1aStnbHphSGRrRUhWTE5qOUFxU3J1cFVK?=
- =?utf-8?B?Y01jVyt0Vy9FVkVKZmhpZUkrL0tlRzV2SW1sQ1JhWWtwY0tSanl1ZFh5WkNB?=
- =?utf-8?B?Rm1zZ2RmeTFyZFBKLzFIamx1VDV4WGNMT3hyVVpxSzhaY0xUaXR1d09Sb3lS?=
- =?utf-8?B?cHA5dVkxOVp5ZVFuampNU3d4MHVyM1JMZnoxUzNWeUszU21EYzRxR2UvQjZX?=
- =?utf-8?B?Z1o1c1Iwb3l3RWpudms3UUFGL2g0eTNaUUtxMEdXUXdpWmFndUwzSzVCT0Qw?=
- =?utf-8?B?NDlFQ1Y2QVpKbDNZUWp3d2lRd1N6TktYZXpXNGk3VHFUMzhJQVFySnJ0V2Rt?=
- =?utf-8?B?OHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3791798DA88AF44EAE0AF113F90FEF3C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229473AbjCUIGU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 21 Mar 2023 04:06:20 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C65E19B;
+        Tue, 21 Mar 2023 01:06:17 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pgkh443jvz4f3nqN;
+        Tue, 21 Mar 2023 16:06:12 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+        by APP4 (Coremail) with SMTP id gCh0CgBnF6t1ZRlkXbEhFw--.4787S2;
+        Tue, 21 Mar 2023 16:06:14 +0800 (CST)
+Message-ID: <8aff940e-6618-f9b2-49e9-8d862705b098@huaweicloud.com>
+Date:   Tue, 21 Mar 2023 16:06:13 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c814d630-79bc-4ded-78a4-08db29e3173b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 08:05:52.6989
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CJrDxT8ZQ2T5V724Dauv+xNVculzt/2cLBa1ZpIklWFGI+RPNZvGhnRmOUZ7UYEPDZ4rFAsdz+da57TRK/RMUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6944
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix a umin > umax reg bound error
+Content-Language: en-US
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
+ <20230314203424.4015351-2-xukuohai@huaweicloud.com>
+ <1331dd9c-4fb0-5347-6519-2b8d2dfea93d@iogearbox.net>
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <1331dd9c-4fb0-5347-6519-2b8d2dfea93d@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnF6t1ZRlkXbEhFw--.4787S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3Zr1xXw4DJw4UtryftFyxZrb_yoW8XF47to
+        WY9r45ArW5tw1xGr4UKw1kJr1akr1rGrnrtF1YganxGFyUAF1jy3yUA3y3G3y3AF1rGryU
+        Cr1DJrWFyFykGw4Dn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYg7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20xva
+        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
+        x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWx
+        JVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTAzLTIxIGF0IDA3OjQ0ICswMDAwLCBEb25nLCBFZGRpZSB3cm90ZToNCj4g
-PiANCj4gPiArLyoNCj4gPiArICogQ2FsY3VsYXRlIFBBTVQgc2l6ZSBnaXZlbiBhIFRETVIgYW5k
-IGEgcGFnZSBzaXplLiAgVGhlIHJldHVybmVkDQo+ID4gKyAqIFBBTVQgc2l6ZSBpcyBhbHdheXMg
-YWxpZ25lZCB1cCB0byA0SyBwYWdlIGJvdW5kYXJ5Lg0KPiA+ICsgKi8NCj4gPiArc3RhdGljIHVu
-c2lnbmVkIGxvbmcgdGRtcl9nZXRfcGFtdF9zeihzdHJ1Y3QgdGRtcl9pbmZvICp0ZG1yLCBpbnQg
-cGdzeiwNCj4gPiArCQkJCSAgICAgIHUxNiBwYW10X2VudHJ5X3NpemUpDQo+ID4gK3sNCj4gPiAr
-CXVuc2lnbmVkIGxvbmcgcGFtdF9zeiwgbnJfcGFtdF9lbnRyaWVzOw0KPiA+ICsNCj4gPiArCXN3
-aXRjaCAocGdzeikgew0KPiA+ICsJY2FzZSBURFhfUFNfNEs6DQo+ID4gKwkJbnJfcGFtdF9lbnRy
-aWVzID0gdGRtci0+c2l6ZSA+PiBQQUdFX1NISUZUOw0KPiA+ICsJCWJyZWFrOw0KPiA+ICsJY2Fz
-ZSBURFhfUFNfMk06DQo+ID4gKwkJbnJfcGFtdF9lbnRyaWVzID0gdGRtci0+c2l6ZSA+PiBQTURf
-U0hJRlQ7DQo+ID4gKwkJYnJlYWs7DQo+ID4gKwljYXNlIFREWF9QU18xRzoNCj4gPiArCQlucl9w
-YW10X2VudHJpZXMgPSB0ZG1yLT5zaXplID4+IFBVRF9TSElGVDsNCj4gPiArCQlicmVhazsNCj4g
-PiArCWRlZmF1bHQ6DQo+ID4gKwkJV0FSTl9PTl9PTkNFKDEpOw0KPiA+ICsJCXJldHVybiAwOw0K
-PiA+ICsJfQ0KPiA+ICsNCj4gPiArCXBhbXRfc3ogPSBucl9wYW10X2VudHJpZXMgKiBwYW10X2Vu
-dHJ5X3NpemU7DQo+ID4gKwkvKiBURFggcmVxdWlyZXMgUEFNVCBzaXplIG11c3QgYmUgNEsgYWxp
-Z25lZCAqLw0KPiA+ICsJcGFtdF9zeiA9IEFMSUdOKHBhbXRfc3osIFBBR0VfU0laRSk7DQo+IA0K
-PiBTaG91bGQgd2UgQUxJR05fVVAgZm9yIHNhZmUgPw0KDQpIaSBFZGRpZSwNCg0KQUxJR04oKSBh
-bHJlYWR5IGRvZXMgYWxpZ24gdXAuDQoNCj4gDQo+ID4gKw0KPiA+ICsJcmV0dXJuIHBhbXRfc3o7
-DQo+ID4gK30NCj4gPiArDQoNCg==
+On 3/18/2023 6:24 AM, Daniel Borkmann wrote:
+
+> On 3/14/23 9:34 PM, Xu Kuohai wrote:
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> After commit 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking"),
+>> the following bpf prog is rejected:
+>>
+>> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
+>> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
+>> 2: (bf) r1 = r2
+>> 3: (07) r1 += 1
+>> 4: (2d) if r1 > r3 goto pc+8
+>> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
+>> 6: (18) r0 = 0x7fffffffffffff10
+>> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
+>> 9: (18) r0 = 0x8000000000000000
+>> 11: (07) r0 += 1
+>> 12: (ad) if r0 < r1 goto pc-2
+>> 13: (b7) r0 = 0
+>> 14: (95) exit
+>>
+>> And the verifier log says:
+>>
+>> [...]
+>>
+>> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
+>> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 13: safe
+>>
+>> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
+>> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 13: safe
+>>
+>> [...]
+>>
+>> What can be seen here is that r1->umin grows blindly and becomes bigger
+>> than r1->umax. The reason is because the loop does not terminate, when
+>> r0 increases to r1->umax_value, the following code in reg_set_min_max()
+>> sets r1->umin_value to r1->umax_value + 1 blindly:
+>>
+>> case BPF_JGT:
+>> {
+>>          if (is_jmp32) {
+>>                  [...]
+>>          } else {
+>>                  u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
+>>                  u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
+>>
+>>                  false_reg->umax_value = min(false_reg->umax_value, false_umax);
+>>                  true_reg->umin_value = max(true_reg->umin_value, true_umin);
+>>          }
+>>          break;
+>> }
+>>
+>> Why the loop does not terminate is because tnum_is_const(src_reg->var_off)
+>> always returns false, causing is_branch_taken() to be skipped:
+>>
+>> if (src_reg->type == SCALAR_VALUE &&
+>>        !is_jmp32 && tnum_is_const(src_reg->var_off)) {
+>>     pred = is_branch_taken(dst_reg,   // could not reach here
+>>                    src_reg->var_off.value,
+>>                    opcode,
+>>                    is_jmp32);
+>> }
+>>
+>> Why tnum_is_const(src_reg->var_off) always returns false is because
+>> r1->umin_value starts increasing from 0x7fffffffffffff10, always bigger
+>> than U32_MAX, causing the __reg_combine_64_into_32() to mark the lower
+>> 32 bits unbounded, i.e. not a constant.
+>>
+>> To fix it:
+>> 1. avoid increasing reg lower bound to a value bigger than the upper bound,
+>>     or decreasing reg upper bound to a value smaller than the lower bound.
+>> 2. set 32-bit min/max values to the lower 32 bits of the 64-bit min/max values
+>>     when the 64-bit min/max values are equal.
+> 
+> Should both these be separate patches, meaning are both of them strictly
+> required as one logical entity or not? From your description it's not really
+> clear wrt reg_{inc,dec}_{u32,u64}_{min,max} and if this is mainly defensive
+> or required.
+>
+
+It's defensive, not required. It was added to address "umin > umax" concerns
+received in v1. Maybe I misunderstood something.
+
+> Also, while you describe to some degree how we get here, there is no analysis
+> on why your proposed changes are safe. If you want to make the verifier less
+> conservative to start accepting such progs, can you then elaborate on the latter?
+>
+
+I have some discussion below and hope it makes some sense.
+
+>> Fixes: 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>   kernel/bpf/verifier.c | 143 +++++++++++++++++++++++++++---------------
+>>   1 file changed, 93 insertions(+), 50 deletions(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 2bbd89279070..b775b50353d6 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -2223,14 +2223,21 @@ static bool __reg64_bound_u32(u64 a)
+>>   static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
+>>   {
+>> +    s64 smin = reg->smin_value;
+>> +    s64 smax = reg->smax_value;
+>> +    u64 umin = reg->umin_value;
+>> +    u64 umax = reg->umax_value;
+>> +
+>>       __mark_reg32_unbounded(reg);
+>> -    if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_value)) {
+>> -        reg->s32_min_value = (s32)reg->smin_value;
+>> -        reg->s32_max_value = (s32)reg->smax_value;
+>> +    if ((__reg64_bound_s32(smin) && __reg64_bound_s32(smax)) ||
+>> +        smin == smax) {
+> 
+> Did you look into debugging reg_bounds_sync()? Assumption for constant
+> register is register_is_const() and it's explicitly looking at var_off.
+>
+
+I checked this function and saw that the low 32 bits and high 32 bits of
+var_off are updated separately, and the new low/high 32 bits are the
+intersection of the old low/high 32 bits and the new [u32_min, u32_max]
+or [umin, umax] range. So as the range [u32_min, u32_max] or [umin, umax]
+converges, the low/high 32 bits converge as well.
+
+This converge process is reasonable. The lower 32 bits of var_off do not
+converge to constant is because the range [u32_min, u32_max] does not
+converge to constant.
+
+IIUC, what _reg_combine_64_into_32 does before calling reg_bounds_sync is
+find the value range of y when the 64-bit variable x changes from smin to
+smax for function y = (s32)x, and the value range of y when x changes from
+umin to umax for function y = (u32)x.
+
+So when the value range of x is a constant, the value range of y is naturally
+also a constant, that is, it's reasonable to infer u32_min == u32_max from
+the 64-bit umin == umax.
+
+In fact, the range of y could be found from function graph directly.
+
+1. function graph for y = (u32)x:
+
+                     ^ y = (u32)x
+                     |
+            U32_MAX  +                  _                   _
+                     |                _/ |                _| |
+                     |              _|   |              _|   |
+                     |            _|     |            _|     |
+                     |          _|       |          _|       |
+                     |        _|         |        _|         |
+                     |      _|           |      _|           |
+                     |    _|             |    _|             |
+                     |  _|               |  _|               |
+                     | |                 | |                 |
+                   0 +-------------------+-------------------+----> x/u64
+
+                     |<---U32_MAX + 1--->|<---U32_MAX + 1--->|
+
+1A) if umin == umax, then u32_min = (u32)umin, u32_max = (u32)umax:
+
+                     ^ y = (u32)x
+                     |
+            U32_MAX  +                  _                   _
+                     |                _/ |                _| |
+                     |              _|   |              _|   |
+                     |            _|     |            _|     |
+  u32_min == u32_max | _ _ _ _  _|       |          _|       |
+                     |        _|         |        _|         |
+                     |      _| |         |      _|           |
+                     |    _|   |         |    _|             |
+                     |  _|     |         |  _|               |
+                     | |       |         | |                 |
+                   0 +---------+---------+-------------------+----> x/u64
+                         umin == umax
+
+                     |<---U32_MAX + 1--->|<---U32_MAX + 1--->|
+
+
+1B) if umax - umin <= U32_MAX and (u32)umin < (u32)umax, then
+     u32_min = (u32)umin, u32_max = (u32)umax:
+
+                     ^ y = (u32)x
+                     |
+            U32_MAX  +                  _                   _
+u32_max = (u32)umax | _ _ _ _ _ _ _  _/ |                _| |
+                     |              _|   |              _|   |
+                     |            _| |   |            _|     |
+u32_min = (u32)umin | _ _ _ _  _|   |   |          _|       |
+                     |        _|     |   |        _|         |
+                     |      _| |     |   |      _|           |
+                     |    _|   |     |   |    _|             |
+                     |  _|     |     |   |  _|               |
+                     | |       |     |   | |                 |
+                   0 +---------+-----+---+-------------------+----> x/u64
+                             umin   umax
+
+                     |<---U32_MAX + 1--->|<---U32_MAX + 1--->|
+
+
+1C) if umax - umin <= U32_MAX and (u32)umin > (u32)umax, then
+     u32_min = U32_MIN, u32_max = U32_MAX:
+
+                     ^ y = (u32)x
+                     |
+   u32_max = 32_MAX  +                  _                   _
+                     |                _/ |                _| |
+                     |              _|   |              _|   |
+                     |            _|     |            _|     |
+           (u32)umin | _ _ _ _  _|       |          _|       |
+                     |        _|         |        _|         |
+                     |      _| |         |      _|           |
+           (u32)umax | _  _| _ |_ _ _ _ _|_ _ _|             |
+                     |  _|     |         |  _| |             |
+                     | |       |         | |   |             |
+u32_min = U32_MIN 0 +---------+---------+-----+-------------+----> x/u64
+                             umin             umax
+
+                     |<---U32_MAX + 1--->|<---U32_MAX + 1--->|
+
+1D) if umax - umin > U32_MAX, then u32_min = U32_MIN, u32_max = U32_MAX:
+
+                     ^ y = (u32)x
+                     |
+   u32_max = 32_MAX  +                  _                   _
+                     |                _/ |                _| |
+           (u32)umax | _ _ _ _ _ _  _|_ _|_ _ _ _ _ _ _ _|   |
+                     |            _|     |            _|     |
+           (u32)umin | _ _ _ _  _|       |          _| |     |
+                     |        _|         |        _|   |     |
+                     |      _| |         |      _|     |     |
+                     |    _|   |         |    _|       |     |
+                     |  _|     |         |  _|         |     |
+                     | |       |         | |           |     |
+u32_min = U32_MIN 0 +---------+---------+-------------+-----+----> x/u64
+                             umin                     umax
+
+                     |<---U32_MAX + 1--->|<---U32_MAX + 1--->|
+
+
+2. function graph for y = (s32)x:
+
+                   ^ y = (s32)x
+                   |
+           S32_MAX | _ _ _ _ _                    _
+                   |       _| |                 _| |
+                   |     _|   |               _|   |
+                   |   _|     |             _|     |
+                   | _|       |           _|       |
+       --+---------0----------+---------+----------+---> x/s64
+         |        _|          |        _|
+         |      _| |          |      _|
+         |    _|   |          |    _|
+         |  _|     |          |  _|
+         |_| _ _ _ | S32_MIN  |_|
+                   |
+                   |
+         |<--- U32_MAX + 1--->|<--- U32_MAX + 1--->|
+
+2A) if smin == smax, then s32_min = (s32)smin, s32_max = (s32)smax:
+
+
+                   ^ y = (s32)x
+                   |
+           S32_MAX | _ _ _ _ _                    _
+                   |       _| |                 _| |
+                   |     _|   |               _|   |
+s32_min == s32_max|__ _|     |             _|     |
+                   | _| |     |           _|       |
+       --+---------0----+-----+---------+----------+---> x/s64
+         |        _|   smin   |        _|
+         |      _| |   smax   |      _|
+         |    _|   |          |    _|
+         |  _|     |          |  _|
+         |_| _ _ _ | S32_MIN  |_|
+                   |
+                   |
+         |<--- U32_MAX + 1--->|<--- U32_MAX + 1--->|
+
+
+
+2B) if smax - smin <= U32_MAX and (s32)smin < (s32)smax, then
+     s32_min = (u32)smin, s32_max = (s32)smax:
+
+
+                   ^ y = (s32)x
+                   |
+           S32_MAX | _ _ _ _ _                    _
+           s32_max | _ _ _ _| |                 _| |
+                   |     _|   |               _|   |
+                   |   _| |   |             _|     |
+                   | _|   |   |           _|       |
+       --+---+-----0------+---+---------+----------+---> x/s64
+         |  smin  _|     smax |        _|
+         |   |  _| |          |      _|
+         |   |_|_ _| s32_min  |    _|
+         |  _|     |          |  _|
+         |_| _ _ _ | S32_MIN  |_|
+                   |
+                   |
+         |<--- U32_MAX + 1--->|<--- U32_MAX + 1--->|
+
+2C) if smax - smin <= U32_MAX and (s32)smin > (s32)smax, then
+     s32_min = S32_MIN, s32_max = S32_MAX:
+
+                   ^ y = (s32)x
+                   |
+s32_max = S32_MAX | _ _ _ _ _                    _
+                   |       _| |                 _| |
+         (s32)smin |_ _  _|   |               _|   |
+                   |   _|     |             _|     |
+                   | _| |     |   smax    _|       |
+       --+---------0----+-----+-----+---+----------+---> x/s64
+                   |   smin   |     |  _|
+         (s32)smax | _ _ _ _ _|_ _ _|_|
+                   |          |    _|
+                   |          |  _|
+s32_min = S32_MIN | _ _ _ _ _|_|
+                   |
+                   |
+         |<--- U32_MAX + 1--->|<--- U32_MAX + 1--->|
+
+
+
+
+2D) if smax - smin > U32_MAX, then s32_min = S32_MIN, s32_max = S32_MAX:
+
+                   ^ y = (s32)x
+                   |
+s32_max = S32_MAX | _ _ _ _ _                    _
+         (s32)smax | _ _ _ _|_|_ _ _ _ _ _ _ _  _| |
+                   |     _|   |               _|   |
+         (s32)smin | _ _|     |             _| |   |
+                   | _|       |           _|   |   |
+       --+---------0--+-------+---------+------+---+---> x/s64
+                   | smin     |        _|     smax
+                   |          |      _|
+                   |          |    _|
+                   |          |  _|
+s32_min = S32_MIN | _ _ _ _ _|_|
+                   |
+                   |
+         |<--- U32_MAX + 1--->|<--- U32_MAX + 1--->|
+
+>> +        reg->s32_min_value = (s32)smin;
+>> +        reg->s32_max_value = (s32)smax;
+>>       }
+>> -    if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value)) {
+>> -        reg->u32_min_value = (u32)reg->umin_value;
+>> -        reg->u32_max_value = (u32)reg->umax_value;
+>> +    if ((__reg64_bound_u32(umin) && __reg64_bound_u32(umax)) ||
+>> +        umin == umax) {
+>> +        reg->u32_min_value = (u32)umin;
+>> +        reg->u32_max_value = (u32)umax;
+>>       }
+>>       reg_bounds_sync(reg);
+>>   }
+>> @@ -12828,6 +12835,62 @@ static int is_pkt_ptr_branch_taken(struct bpf_reg_state *dst_reg,
+>>       return -1;
+>>   }
+>> +static void reg_inc_u32_min(struct bpf_reg_state *reg, u32 val)
+>> +{
+>> +    reg->u32_min_value = max(reg->u32_min_value, val);
+>> +    if (reg->u32_min_value > reg->u32_max_value)
+>> +        reg->u32_min_value = reg->u32_max_value;
+>> +}
+>> +
+>> +static void reg_dec_u32_max(struct bpf_reg_state *reg, u32 val)
+>> +{
+>> +    reg->u32_max_value = min(reg->u32_max_value, val);
+>> +    if (reg->u32_max_value < reg->u32_min_value)
+>> +        reg->u32_max_value = reg->u32_min_value;
+>> +}
+>> +
+>> +static void reg_inc_s32_min(struct bpf_reg_state *reg, s32 val)
+>> +{
+>> +    reg->s32_min_value = max(reg->s32_min_value, val);
+>> +    if (reg->s32_min_value > reg->s32_max_value)
+>> +        reg->s32_min_value = reg->s32_max_value;
+>> +}
+>> +
+>> +static void reg_dec_s32_max(struct bpf_reg_state *reg, s32 val)
+>> +{
+>> +    reg->s32_max_value = min(reg->s32_max_value, val);
+>> +    if (reg->s32_max_value < reg->s32_min_value)
+>> +        reg->s32_max_value = reg->s32_min_value;
+>> +}
+>> +
+>> +static void reg_inc_u64_min(struct bpf_reg_state *reg, u64 val)
+>> +{
+>> +    reg->umin_value = max(reg->umin_value, val);
+>> +    if (reg->umin_value > reg->umax_value)
+>> +        reg->umin_value = reg->umax_value;
+>> +}
+>> +
+>> +static void reg_dec_u64_max(struct bpf_reg_state *reg, u64 val)
+>> +{
+>> +    reg->umax_value = min(reg->umax_value, val);
+>> +    if (reg->umax_value < reg->umin_value)
+>> +        reg->umax_value = reg->umin_value;
+>> +}
+>> +
+>> +static void reg_inc_s64_min(struct bpf_reg_state *reg, s64 val)
+>> +{
+>> +    reg->smin_value = max(reg->smin_value, val);
+>> +    if (reg->smin_value > reg->smax_value)
+>> +        reg->smin_value = reg->smax_value;
+>> +}
+>> +
+>> +static void reg_dec_s64_max(struct bpf_reg_state *reg, s64 val)
+>> +{
+>> +    reg->smax_value = min(reg->smax_value, val);
+>> +    if (reg->smax_value < reg->smin_value)
+>> +        reg->smax_value = reg->smin_value;
+>> +}
+> 
+> All this feels more like a workaround and papering over the issue.
+>
+
+Agree, making umin > umax disappear from error log does not fix the
+issue, and may make debugging more difficult.
+
+>>   /* Adjusts the register min/max values in the case that the dst_reg is the
+>>    * variable register that we are working on, and src_reg is a constant or we're
+>>    * simply doing a BPF_K check.
+>> @@ -12898,76 +12961,56 @@ static void reg_set_min_max(struct bpf_reg_state *true_reg,
+>>       case BPF_JGE:
+>>       case BPF_JGT:
+>>       {
+>> -        if (is_jmp32) {
+>> -            u32 false_umax = opcode == BPF_JGT ? val32  : val32 - 1;
+>> -            u32 true_umin = opcode == BPF_JGT ? val32 + 1 : val32;
+>> +        bool neq = (opcode == BPF_JGT);
+>> -            false_reg->u32_max_value = min(false_reg->u32_max_value,
+>> -                               false_umax);
+>> -            true_reg->u32_min_value = max(true_reg->u32_min_value,
+>> -                              true_umin);
+>> +        if (is_jmp32) {
+>> +            reg_dec_u32_max(false_reg, neq ? val32 : val32 - 1);
+>> +            reg_inc_u32_min(true_reg, neq ? val32 + 1 : val32);
+>>           } else {
+>> -            u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
+>> -            u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
+>> -
+>> -            false_reg->umax_value = min(false_reg->umax_value, false_umax);
+>> -            true_reg->umin_value = max(true_reg->umin_value, true_umin);
+>> +            reg_dec_u64_max(false_reg, neq ? val : val - 1);
+>> +            reg_inc_u64_min(true_reg, neq ? val + 1 : val);
+> .
+
