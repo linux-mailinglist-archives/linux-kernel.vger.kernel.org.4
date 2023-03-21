@@ -2,157 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8026C6C2CEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D336C2CFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjCUItB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        id S231177AbjCUItj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 04:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCUIsE (ORCPT
+        with ESMTP id S230526AbjCUIsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:48:04 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39524617A;
-        Tue, 21 Mar 2023 01:47:23 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id j7so16134477ybg.4;
-        Tue, 21 Mar 2023 01:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679388441;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBcmCiZrY50ZVCjcfSorkVtQXTza6Z7SWwBdqZaP/I4=;
-        b=jbbXeahRIqpklGCp3MMQY1+jUyR8wUFH0caEcc0b0DmB1P+wNncEkjPsSf353eg/7G
-         d3dZkKvPH2/Z1nh/s0WulwtfPsUM60B+NLbpP8AmLFXU3s/3k9LTCXJUFMsGXGtabdCS
-         bslaPjaxVJY3cm4x3Pfuap23HzOqlRVMHERY0KYJzPp2lZ6gDyKF9gxPciuwMjHI7lCH
-         p+7OiRuEPi1jmpc3yek4j7JMfLrwMisttLNRNFkjTG+2qZu2AY1j8Rt+dDy8PeFOkDcg
-         UFjILYnGHhb2KEUUsgvHDNQuCHQ9F5Uhf5I9laD2Vftwj5VkfY3B1GvSGBqSnkk1T4Cz
-         RFWw==
+        Tue, 21 Mar 2023 04:48:22 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABFC457DD;
+        Tue, 21 Mar 2023 01:47:44 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id t9so16966345qtx.8;
+        Tue, 21 Mar 2023 01:47:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679388441;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BBcmCiZrY50ZVCjcfSorkVtQXTza6Z7SWwBdqZaP/I4=;
-        b=Kut79ysIsxL+rjG8QCOOtCnG/BqQIjLPiOl2AXyRvDU0ZGkxahC/vTAO7ApGgrLt8w
-         6e70Xwi5XtyaNWBWfQstbEoqcPsfGOaCwu+fwNBbyFpEXwo89gKqO+Z2ZaecvFX1pNqo
-         U6VxAMD8WuDDEiNq4jHtNEZTxNsOZgyqtk136LnnNMMnBKURb5TWHQjbqn6FSbn8WJhF
-         r02E1KaZha8hIW+aZTSWkJldVfOaR7miq0/6RQLMBL9qWhTEIEqtGLubDVrXegeN3ZkT
-         8zSMGzyFJ0/pfoL54ugk9Xa4xiFNBbA8vEaY3K+sYFqGKnFTI5Y6pppjt+LYqyQgRBg4
-         dkqg==
-X-Gm-Message-State: AAQBX9eKjrn4DGCFruL6zr+J+8PvY4pUofHNx9AIlBhjGhmuDCd6UYgP
-        QmD+whghO+4D9iFO9BMTi+T1Slo37TEmRFfbQVw=
-X-Google-Smtp-Source: AKy350ah4ZHOodkxV7oojAcvrqsXLiq4Vm5Q1MNdWojdKwbYAju+Jmek2XYJr95HmruI+ZHpqKTBHqmWyXC1J7AvSh4=
-X-Received: by 2002:a05:6902:1104:b0:9fc:e3d7:d60f with SMTP id
- o4-20020a056902110400b009fce3d7d60fmr728215ybu.5.1679388441642; Tue, 21 Mar
- 2023 01:47:21 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679388463;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KruUtqbakgoiLoS6bu/IIVfyo+6WwhLB7vUVbzmCkl8=;
+        b=s1M++kDgP/dMLy3cGlNiMxfFTCKDpnZ/k2ZzjzDF+G4Van1CKOFKP8JuPLvR6xxBJ2
+         xY5DvldpIhAzq5F6QbSR3tAPkmRWuyOZl0VleAubJ7Bd0dotWnI8rYcuHoN5SOsQSPc1
+         ULlFx87cKWBnrBxD1eQWo/KhX+Xa7TbmnDtp+j6d8Fbu823Ve5rNV2iJZVygQi4kEp5b
+         7LViXxZXDvZlvmqStNVpcuSoTPxblioV9uj/Lkoe3Rivk5Ams6C9i4O4dpMtfOwN62tA
+         FBKeorSI5d8GFBPKDuiU+frLtgnk7QO0P/ag+DQeYRNB0tX34GER8/VsKYQs4vramq/a
+         sMtA==
+X-Gm-Message-State: AO0yUKXFGMYLwdIFAk3wcmLWRzhxeDsU7lGyamfCwG6GCftYRg9EGcdM
+        WBArp3FiW5TA8qxVXx2XP4Zt0ec7jtrBNw==
+X-Google-Smtp-Source: AK7set93NwBYEmkeNxNDS3LPVln0Z26q4oQFrFnOpJjF9vix0OnY8TnZ2QNbxGSRUORGduxzLJIpbg==
+X-Received: by 2002:ac8:5941:0:b0:3df:6b5:d12c with SMTP id 1-20020ac85941000000b003df06b5d12cmr3364132qtz.32.1679388463081;
+        Tue, 21 Mar 2023 01:47:43 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id j9-20020ac874c9000000b003dffd3d3df5sm4228421qtr.2.2023.03.21.01.47.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 01:47:42 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-536af432ee5so269277967b3.0;
+        Tue, 21 Mar 2023 01:47:42 -0700 (PDT)
+X-Received: by 2002:a81:b64e:0:b0:52f:184a:da09 with SMTP id
+ h14-20020a81b64e000000b0052f184ada09mr1387959ywk.2.1679388462447; Tue, 21 Mar
+ 2023 01:47:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230319195656.326701-1-kal.conley@dectris.com>
- <20230319195656.326701-4-kal.conley@dectris.com> <CAJ8uoz3F-gWzB9vYm-8MtonAv3aBcerJDxPpEDCNfmNkwJFY=A@mail.gmail.com>
-In-Reply-To: <CAJ8uoz3F-gWzB9vYm-8MtonAv3aBcerJDxPpEDCNfmNkwJFY=A@mail.gmail.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 21 Mar 2023 09:47:10 +0100
-Message-ID: <CAJ8uoz2LU14oCAGSmUMfxMytF0KsiBGK55n+A7qPBuxpXBz6gA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] selftests: xsk: Add tests for 8K and 9K
- frame sizes
-To:     Kal Conley <kal.conley@dectris.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230320231310.28841-1-rdunlap@infradead.org> <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
+ <ad2234ad155d51c142e59adcf2981bce23d69aa4.camel@physik.fu-berlin.de>
+ <CAMuHMdW-oxpoHubUJUpsjG9aXtQ3MMwAopN-hS+Mf0gN1udhig@mail.gmail.com> <fa8b4f3ca8f3d9dc0487399962bcc6ef75ebd6b0.camel@physik.fu-berlin.de>
+In-Reply-To: <fa8b4f3ca8f3d9dc0487399962bcc6ef75ebd6b0.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Mar 2023 09:47:31 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV-hAcf+uaWvLdXef6jOUHWV04u0FS2dGHxtJArG6c_Wg@mail.gmail.com>
+Message-ID: <CAMuHMdV-hAcf+uaWvLdXef6jOUHWV04u0FS2dGHxtJArG6c_Wg@mail.gmail.com>
+Subject: Re: [PATCH 6/7 v5] sh: fix Kconfig entry for NUMA => SMP
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 at 09:45, Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
->
-> On Sun, 19 Mar 2023 at 21:07, Kal Conley <kal.conley@dectris.com> wrote:
-> >
-> > Add tests:
-> > - RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-> > - RUN_TO_COMPLETION_9K_FRAME_SIZE: frame_size=9000 (unaligned)
-> >
-> > Signed-off-by: Kal Conley <kal.conley@dectris.com>
-> > ---
-> >  tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
-> >  tools/testing/selftests/bpf/xskxceiver.h |  2 ++
-> >  2 files changed, 26 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> > index 7a47ef28fbce..f10ff8c5e9c5 100644
-> > --- a/tools/testing/selftests/bpf/xskxceiver.c
-> > +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> > @@ -1789,6 +1789,30 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
-> >                 pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-> >                 testapp_validate_traffic(test);
-> >                 break;
-> > +       case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-> > +               if (!hugepages_present(test->ifobj_tx)) {
-> > +                       ksft_test_result_skip("No 2M huge pages present.\n");
-> > +                       return;
-> > +               }
-> > +               test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-> > +               test->ifobj_tx->umem->frame_size = 8192;
-> > +               test->ifobj_rx->umem->frame_size = 8192;
-> > +               pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-> > +               testapp_validate_traffic(test);
-> > +               break;
-> > +       case TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME:
->
-> TEST_TYPE_UNALIGNED_9K_FRAME
->
-> > +               if (!hugepages_present(test->ifobj_tx)) {
-> > +                       ksft_test_result_skip("No 2M huge pages present.\n");
-> > +                       return;
-> > +               }
-> > +               test_spec_set_name(test, "RUN_TO_COMPLETION_9K_FRAME_SIZE");
->
-> UNALIGNED_MODE_9K
+Hi Adrian,
 
-_9K_FRAME_SIZE it should have been. Hit send too early.
-
-> > +               test->ifobj_tx->umem->frame_size = 9000;
-> > +               test->ifobj_rx->umem->frame_size = 9000;
-> > +               test->ifobj_tx->umem->unaligned_mode = true;
-> > +               test->ifobj_rx->umem->unaligned_mode = true;
-> > +               pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-> > +               testapp_validate_traffic(test);
-> > +               break;
-> >         case TEST_TYPE_RX_POLL:
-> >                 test->ifobj_rx->use_poll = true;
-> >                 test_spec_set_name(test, "POLL_RX");
-> > diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-> > index 3e8ec7d8ec32..ff723b6d7852 100644
-> > --- a/tools/testing/selftests/bpf/xskxceiver.h
-> > +++ b/tools/testing/selftests/bpf/xskxceiver.h
-> > @@ -70,6 +70,8 @@ enum test_mode {
-> >  enum test_type {
-> >         TEST_TYPE_RUN_TO_COMPLETION,
-> >         TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-> > +       TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
-> > +       TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME,
-> >         TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
-> >         TEST_TYPE_RX_POLL,
-> >         TEST_TYPE_TX_POLL,
-> > --
-> > 2.39.2
+On Tue, Mar 21, 2023 at 9:45 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Tue, 2023-03-21 at 09:42 +0100, Geert Uytterhoeven wrote:
+> > On Tue, Mar 21, 2023 at 9:10 AM John Paul Adrian Glaubitz
+> > <glaubitz@physik.fu-berlin.de> wrote:
+> > > On Tue, 2023-03-21 at 08:55 +0100, Geert Uytterhoeven wrote:
+> > > > On Tue, Mar 21, 2023 at 12:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> > > > > Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+> > > > > SYS_SUPPORTS_SMP and SMP.
+> > > >
+> > > > Perhaps because these SoCs do not support SMP?
+> > >
+> > > Well, there is actually a dual-core 7786 board available, see:
+> > >
+> > > > https://www.apnet.co.jp/product/superh/ap-sh4ad-0a.html
+> > >
+> > > Quoting:
+> > >
+> > > »The SH7786 is equipped with a dual-core SH-4A and has interfaces such as
+> > >  DDR3 SDRAM, PCI Express, USB, and display unit.«
 > >
+> > SH7786 is dual-core...
+> >
+> > > FWIW, I just realized we need this for config CPU_SUBTYPE_SH7786 as well.
+> >
+> > ... and CPU_SUBTYPE_SH7786 selects CPU_SHX3, which selects
+> > SYS_SUPPORTS_SMP and SYS_SUPPORTS_NUMA in turn.
+> > So everything is fine for SH7786.
+>
+> Yeah, this explains it then. Your new patch is definitely the better approach
+> and I would prefer it over Randy's suggested change. Let's see what the mm
+> maintainers have to say.
+
+I'm sure the missed condition was just an oversight, so I expect no
+objections.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
