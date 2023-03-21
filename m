@@ -2,282 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0431D6C3877
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6B66C3881
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCURml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S229924AbjCURn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCURmj (ORCPT
+        with ESMTP id S229685AbjCURn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:42:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBD14688;
-        Tue, 21 Mar 2023 10:42:36 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LGENCd031704;
-        Tue, 21 Mar 2023 17:42:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ugIzKoPJwH55c5cFx4I8HYix/yq/Nifp1l2svD2Iw4E=;
- b=ee+cPWIQorwZwp+SldMk1vOHMJ+zu4A0HBF2UxsCoZHBDPoWPfsyZdAnLOgKUPh9tGSs
- kISWF5qbT31pGPeOcF88BA6K8wypiej6q8kuTCHSVDLmXorrHn+PUo62rg8NZIRVjMOE
- VzdnTkKSZZUQafr6WTxAUGSQ87eUgRNPP69hH/Y2GiF/Mh4Vaz3zl9wfgeeESHzfD08i
- Qm74AtZIpxDK9aLqtQyC3s1k09LQylE/tUrT70h0AouOFkbnMtdiVvKfeA7N0hyIvS/3
- fFI70NcWCx5NA4/7+/xRraBHsg+c3MQwEKILwXPrfzq7fjLfDRkz+Nl8oTNT2YUsyZHp 6g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pes8p4162-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 17:42:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32LHgUf9015646
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 17:42:30 GMT
-Received: from [10.71.109.55] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Mar
- 2023 10:42:30 -0700
-Message-ID: <fead4b41-a2b7-d6ea-e473-db75b5171d7b@quicinc.com>
-Date:   Tue, 21 Mar 2023 10:42:09 -0700
+        Tue, 21 Mar 2023 13:43:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2A746168;
+        Tue, 21 Mar 2023 10:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679420585; x=1710956585;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+pjwBEmDe+T56Sgwt4qimQ2CIBOYEqSjWw1uHZNKv6U=;
+  b=bs8VSpiykmh9MtC3xKMoByUznm9gjz2V9OM82KqWl89rBCm2wN7Zhe+Q
+   y12WyD1BfKhvbs4hGfqKIASKDVvjpNL6M5v+xIx2i6GtwnLVQ1m/zjZ7t
+   A0DJg1DxRXMs7z2jf9KhvjiVJEIe0UXNreScy2R4hr4YcDkuhJ5ip8KFv
+   93F8tUp85CH/8PrfeYrX24ds5wEfsK+YhQ3QSHHtU66zlzLMsqifHFCf8
+   kQHFVV+eYgaO8aUS4kUznloV/wyLPfhyRbBgpag7AbpsNoNF5r1Splvat
+   IOuPKqjVGeAH+jktubjnuydBvyDTTpedHklTvxNkcDKYBexhCl7Qt+xaY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340553609"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="340553609"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 10:42:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="805503023"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="805503023"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2023 10:42:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peg0Q-000CDT-1d;
+        Tue, 21 Mar 2023 17:42:42 +0000
+Date:   Wed, 22 Mar 2023 01:42:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, jernel@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 1/8] media: videobuf2: Access vb2_queue bufs array
+ through helper functions
+Message-ID: <202303220154.ioaH1XLM-lkp@intel.com>
+References: <20230321102855.346732-2-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 4/7] soc: qcom: mdt_loader: Enhance split binary
- detection
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>
-CC:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20230306231202.12223-1-quic_molvera@quicinc.com>
- <20230306231202.12223-5-quic_molvera@quicinc.com>
- <20230316021229.jpvaelcqb7vb7dwy@ripper>
-Content-Language: en-US
-From:   Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
-In-Reply-To: <20230316021229.jpvaelcqb7vb7dwy@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aCp565oekrEII4wgBjFuFtecFQ3pnsWB
-X-Proofpoint-ORIG-GUID: aCp565oekrEII4wgBjFuFtecFQ3pnsWB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 impostorscore=0 malwarescore=0 phishscore=0 clxscore=1011
- adultscore=0 bulkscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303210139
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321102855.346732-2-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Benjamin,
 
-Thanks Bjorn for the review comments.
-On 3/15/2023 7:12 PM, Bjorn Andersson wrote:
-> On Mon, Mar 06, 2023 at 03:11:59PM -0800, Melody Olvera wrote:
->> From: Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
->>
->> When booting with split binaries, it may be that the offset of the first
->> program header lies inside the mdt's filesize, in this case the loader
->> would incorrectly assume that the bins were not split. The loading would
->> then continue on and fail for split bins.
-> 
-> Can you please be more explicit about the scenario you're having
-> problems with?
-> 
-In this scenario below, the first pheader end address is < mdt file size 
-but the next pheader lies outside the mdt file size. The 
-_qcom_mdt_load() would continue on to load the firmware as a single 
-image which leads to load error. By checking if all the pheaders lie 
-inside the file size, we will be able to fix this issue.
+I love your patch! Yet something to improve:
 
-fw = cdsp_dtb.mdt phdr->p_filesz = 148 phdr->p_offset 0 fw->size 4044
-fw = cdsp_dtb.mdt phdr->p_filesz = 512 phdr->p_offset 148 fw->size 4044
-fw = cdsp_dtb.mdt phdr->p_filesz = 3896 phdr->p_offset 4096 fw->size 4044
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v6.3-rc3 next-20230321]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Is the problem that the first segment is represented in both the .mdt
-> and .b01, but different? Or is it that you find the hash in both .mdt
-> abd .b01, but only one of them is valid?
-> 
->> This change updates the logic used
->> by the mdt loader to understand whether the firmware images are split or not
->> by checking if each programs header's segment lies within the file or not.
->>
->> Signed-off-by: Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>   drivers/soc/qcom/mdt_loader.c | 64 +++++++++++++++++++----------------
->>   1 file changed, 35 insertions(+), 29 deletions(-)
->>
->> diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
->> index 33dd8c315eb7..3aadce299c02 100644
->> --- a/drivers/soc/qcom/mdt_loader.c
->> +++ b/drivers/soc/qcom/mdt_loader.c
->> @@ -31,6 +31,26 @@ static bool mdt_phdr_valid(const struct elf32_phdr *phdr)
->>   	return true;
->>   }
->>   
->> +static bool qcom_mdt_bins_are_split(const struct firmware *fw)
->> +{
->> +	const struct elf32_phdr *phdrs;
->> +	const struct elf32_hdr *ehdr;
->> +	uint64_t seg_start, seg_end;
->> +	int i;
->> +
->> +	ehdr = (struct elf32_hdr *)fw->data;
->> +	phdrs = (struct elf32_phdr *)(ehdr + 1);
->> +
->> +	for (i = 0; i < ehdr->e_phnum; i++) {
->> +		seg_start = phdrs[i].p_offset;
->> +		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
->> +		if (seg_start > fw->size || seg_end > fw->size)
->> +			return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>   static ssize_t mdt_load_split_segment(void *ptr, const struct elf32_phdr *phdrs,
->>   				      unsigned int segment, const char *fw_name,
->>   				      struct device *dev)
->> @@ -167,23 +187,13 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
->>   	/* Copy ELF header */
->>   	memcpy(data, fw->data, ehdr_size);
->>   
-> 
-> The existing code handles 3 cases:
-> 
->> -	if (ehdr_size + hash_size == fw->size) {
-> 
-> 1) File is split, but hash resides with the ELF header in the .mdt
->
->> -		/* Firmware is split and hash is packed following the ELF header */
->> -		hash_offset = phdrs[0].p_filesz;
->> -		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
->> -	} else if (phdrs[hash_segment].p_offset + hash_size <= fw->size) {
-> 
-> 2) The hash segment exists in a segment of its own, but in the loaded
->     image.
-> 
->> -		/* Hash is in its own segment, but within the loaded file */
->> +
->> +	if (qcom_mdt_bins_are_split(fw)) {
->> +		ret = mdt_load_split_segment(data + ehdr_size, phdrs, hash_segment, fw_name, dev);
->> +	} else {
->>   		hash_offset = phdrs[hash_segment].p_offset;
->>   		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
->> -	} else {
-> 
-> 3) The image is split, and the hash segment resides in it's own file.
-> 
-> 
-> Afaict the updated logic maintains #2 and #3, but drops #1. Please
-> review the git history to see if you can determine which target this
-> case exists with - and ask for someone to specifically verify your
-> change there.
-> 
-> Perhaps all your change is doing is removing case #1, in which case this
-> should be clear in the commit message; and we need to validate that your
-> new assumptions holds.
->
->> -		/* Hash is in its own segment, beyond the loaded file */
->> -		ret = mdt_load_split_segment(data + ehdr_size, phdrs, hash_segment, fw_name, dev);
-> 
-> For some reason you reversed the condition and got this out of the else
-> (seems like an unnecessary change)...but in the process you lost the
-> error handling below.
-> 
-Yes, Updating the patch to remove this unnecessary change in the 
-qcom_mdt_read_metadat().
->> -		if (ret) {
->> -			kfree(data);
->> -			return ERR_PTR(ret);
->> -		}
->>   	}
->> -
->>   	*data_len = ehdr_size + hash_size;
->>   
->>   	return data;
->> @@ -270,6 +280,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   	phys_addr_t min_addr = PHYS_ADDR_MAX;
->>   	ssize_t offset;
->>   	bool relocate = false;
->> +	bool is_split;
->>   	void *ptr;
->>   	int ret = 0;
->>   	int i;
->> @@ -277,6 +288,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   	if (!fw || !mem_region || !mem_phys || !mem_size)
->>   		return -EINVAL;
->>   
->> +	is_split = qcom_mdt_bins_are_split(fw);
->>   	ehdr = (struct elf32_hdr *)fw->data;
->>   	phdrs = (struct elf32_phdr *)(ehdr + 1);
->>   
->> @@ -330,22 +342,16 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   
->>   		ptr = mem_region + offset;
->>   
->> -		if (phdr->p_filesz && phdr->p_offset < fw->size &&
->> -		    phdr->p_offset + phdr->p_filesz <= fw->size) {
->> -			/* Firmware is large enough to be non-split */
->> -			if (phdr->p_offset + phdr->p_filesz > fw->size) {
->> -				dev_err(dev, "file %s segment %d would be truncated\n",
->> -					fw_name, i);
->> -				ret = -EINVAL;
->> -				break;
->> +		if (phdr->p_filesz) {
-> 
-> If you just change the condition (phr->p_filesz && !issplit), then your
-> patch becomes easier to read.
-> 
-Done.
-V3: only make change in the __qcom_mdt_load() and not in the 
-qcom_mdt_read_metadata().
-> Regards,
-> Bjorn
-> 
->> +			if (!is_split) {
->> +				/* Firmware is large enough to be non-split */
->> +				memcpy(ptr, fw->data + phdr->p_offset, phdr->p_filesz);
->> +			} else {
->> +				/* Firmware not large enough, load split-out segments */
->> +				ret = mdt_load_split_segment(ptr, phdrs, i, fw_name, dev);
->> +				if (ret)
->> +					break;
->>   			}
->> -
->> -			memcpy(ptr, fw->data + phdr->p_offset, phdr->p_filesz);
->> -		} else if (phdr->p_filesz) {
->> -			/* Firmware not large enough, load split-out segments */
->> -			ret = mdt_load_split_segment(ptr, phdrs, i, fw_name, dev);
->> -			if (ret)
->> -				break;
->>   		}
->>   
->>   		if (phdr->p_memsz > phdr->p_filesz)
->> -- 
->> 2.25.1
->>
-Thanks,
-Gokul
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230321102855.346732-2-benjamin.gaignard%40collabora.com
+patch subject: [PATCH v2 1/8] media: videobuf2: Access vb2_queue bufs array through helper functions
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230322/202303220154.ioaH1XLM-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/625d46c1c1fe8e3229a780134d21bcd4a017cfdd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
+        git checkout 625d46c1c1fe8e3229a780134d21bcd4a017cfdd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/staging/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303220154.ioaH1XLM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/staging/media/atomisp/pci/atomisp_ioctl.c: In function 'atomisp_dqbuf_wrapper':
+>> drivers/staging/media/atomisp/pci/atomisp_ioctl.c:1098:33: error: incompatible type for argument 1 of 'vb2_get_buffer'
+    1098 |         vb = vb2_get_buffer(pipe->vb_queue, buf->index);
+         |                             ~~~~^~~~~~~~~~
+         |                                 |
+         |                                 struct vb2_queue
+   In file included from include/media/videobuf2-v4l2.h:16,
+                    from drivers/staging/media/atomisp//pci/ia_css_frame_public.h:23,
+                    from drivers/staging/media/atomisp/pci/sh_css_legacy.h:22,
+                    from drivers/staging/media/atomisp/pci/atomisp_internal.h:34,
+                    from drivers/staging/media/atomisp/pci/atomisp_cmd.h:30,
+                    from drivers/staging/media/atomisp/pci/atomisp_ioctl.c:27:
+   include/media/videobuf2-core.h:1239:67: note: expected 'struct vb2_queue *' but argument is of type 'struct vb2_queue'
+    1239 | static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+         |                                                 ~~~~~~~~~~~~~~~~~~^
+
+
+vim +/vb2_get_buffer +1098 drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+
+  1083	
+  1084	static int atomisp_dqbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer *buf)
+  1085	{
+  1086		struct video_device *vdev = video_devdata(file);
+  1087		struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
+  1088		struct atomisp_sub_device *asd = pipe->asd;
+  1089		struct atomisp_device *isp = video_get_drvdata(vdev);
+  1090		struct ia_css_frame *frame;
+  1091		struct vb2_buffer *vb;
+  1092		int ret;
+  1093	
+  1094		ret = vb2_ioctl_dqbuf(file, fh, buf);
+  1095		if (ret)
+  1096			return ret;
+  1097	
+> 1098		vb = vb2_get_buffer(pipe->vb_queue, buf->index);
+  1099		frame = vb_to_frame(vb);
+  1100	
+  1101		buf->reserved = asd->frame_status[buf->index];
+  1102	
+  1103		/*
+  1104		 * Hack:
+  1105		 * Currently frame_status in the enum type which takes no more lower
+  1106		 * 8 bit.
+  1107		 * use bit[31:16] for exp_id as it is only in the range of 1~255
+  1108		 */
+  1109		buf->reserved &= 0x0000ffff;
+  1110		if (!(buf->flags & V4L2_BUF_FLAG_ERROR))
+  1111			buf->reserved |= frame->exp_id;
+  1112		buf->reserved2 = pipe->frame_config_id[buf->index];
+  1113	
+  1114		dev_dbg(isp->dev,
+  1115			"dqbuf buffer %d (%s) for asd%d with exp_id %d, isp_config_id %d\n",
+  1116			buf->index, vdev->name, asd->index, buf->reserved >> 16,
+  1117			buf->reserved2);
+  1118		return 0;
+  1119	}
+  1120	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
