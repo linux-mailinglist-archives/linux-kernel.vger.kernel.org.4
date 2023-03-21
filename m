@@ -2,165 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAA76C2E2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEB46C2E34
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCUJr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S230056AbjCUJtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCUJrX (ORCPT
+        with ESMTP id S229525AbjCUJtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:47:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD85141B64;
-        Tue, 21 Mar 2023 02:47:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C714AD7;
-        Tue, 21 Mar 2023 02:48:05 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.54.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18FAA3F766;
-        Tue, 21 Mar 2023 02:47:19 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 09:47:17 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Florent Revest <revest@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        rostedt@goodmis.org, mhiramat@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, jolsa@kernel.org
-Subject: Re: [PATCH 1/7] ftrace: Let unregister_ftrace_direct_multi() call
- ftrace_free_filter()
-Message-ID: <ZBl9JahKr+50sBW0@FVFF77S0Q05N>
-References: <20230316173811.1223508-1-revest@chromium.org>
- <20230316173811.1223508-2-revest@chromium.org>
+        Tue, 21 Mar 2023 05:49:10 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CBF954;
+        Tue, 21 Mar 2023 02:49:06 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L9msi0037365;
+        Tue, 21 Mar 2023 04:48:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679392134;
+        bh=JJIYrcey46uy+S3AUzULE5SHPkG70JA9TDTd6IjyWNw=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=onWV1zrmtM6rWiMG74/F8iknw9yrrTiJrZuCkPgvScMJGGBwoDtqlboYdYckJYDCH
+         ZLQfpG3KsiG/jL8XCg40VZNZKi/ZZI+NOnXOgh29x79loOGHyMB9Wp3YY2bh4TWyfE
+         ymu85u/8ZCpSxc3Ax3I6zery9CbMJ423TA5EBQ74=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L9msAO096312
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Mar 2023 04:48:54 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Mar 2023 04:48:53 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Mar 2023 04:48:53 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L9mmPr021899;
+        Tue, 21 Mar 2023 04:48:49 -0500
+Message-ID: <e4cdd295-d292-255a-fbd0-b1728aaca155@ti.com>
+Date:   Tue, 21 Mar 2023 15:18:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316173811.1223508-2-revest@chromium.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/5] soc: ti: pruss: Add
+ pruss_{request,release}_mem_region() API
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, Andrew Davis <afd@ti.com>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-3-danishanwar@ti.com>
+ <3f26b194-287c-074d-8e78-572875f9a734@kernel.org>
+ <52aeb13f-1fe4-825f-9d28-ba64860ae76d@ti.com>
+ <13048b01-641a-1d92-178c-02b87c5fa1b9@ti.com>
+ <5b936f1b-3c5b-30ab-7074-e202fd6555b6@ti.com>
+ <67dd1d04-147d-0e40-c06b-6e1e0dd05f13@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <67dd1d04-147d-0e40-c06b-6e1e0dd05f13@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 06:38:05PM +0100, Florent Revest wrote:
-> A common pattern when using the ftrace_direct_multi API is to unregister
-> the ops and also immediately free its filter. We've noticed it's very
-> easy for users to miss calling ftrace_free_filter().
-> 
-> This adds a "free_filters" argument to unregister_ftrace_direct_multi()
-> to both remind the user they should free filters and also to make their
-> life easier.
-> 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Florent Revest <revest@chromium.org>
-> ---
->  include/linux/ftrace.h                      | 6 ++++--
->  kernel/bpf/trampoline.c                     | 2 +-
->  kernel/trace/ftrace.c                       | 6 +++++-
->  samples/ftrace/ftrace-direct-multi-modify.c | 3 +--
->  samples/ftrace/ftrace-direct-multi.c        | 3 +--
->  5 files changed, 12 insertions(+), 8 deletions(-)
+Hi Roger,
 
-This looks good to me; I see that the BPF code frees the filter in
-bpf_trampoline_put(), so it not doing so via unregister_ftrace_direct_multi()
-looks fine. FWIW:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
+On 21/03/23 14:54, Roger Quadros wrote:
+> Hi,
 > 
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 366c730beaa3..5b68ee874bc1 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -407,7 +407,8 @@ int ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
->  				unsigned long new_addr);
->  unsigned long ftrace_find_rec_direct(unsigned long ip);
->  int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
-> -int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
-> +int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr,
-> +				   bool free_filters);
->  int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
->  int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr);
->  
-> @@ -446,7 +447,8 @@ static inline int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned
->  {
->  	return -ENODEV;
->  }
-> -static inline int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> +static inline int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr,
-> +						 bool free_filters)
->  {
->  	return -ENODEV;
->  }
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index d0ed7d6f5eec..88bc23f1e10a 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -198,7 +198,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
->  	int ret;
->  
->  	if (tr->func.ftrace_managed)
-> -		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr);
-> +		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr, false);
->  	else
->  		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
->  
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 29baa97d0d53..fa379cf91fdb 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -5804,7 +5804,8 @@ EXPORT_SYMBOL_GPL(register_ftrace_direct_multi);
->   *  0 on success
->   *  -EINVAL - The @ops object was not properly registered.
->   */
-> -int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> +int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr,
-> +				   bool free_filters)
->  {
->  	struct ftrace_hash *hash = ops->func_hash->filter_hash;
->  	int err;
-> @@ -5822,6 +5823,9 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  	/* cleanup for possible another register call */
->  	ops->func = NULL;
->  	ops->trampoline = 0;
-> +
-> +	if (free_filters)
-> +		ftrace_free_filter(ops);
->  	return err;
->  }
->  EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
-> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-> index b58c594efb51..196b43971cb5 100644
-> --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> @@ -151,8 +151,7 @@ static int __init ftrace_direct_multi_init(void)
->  static void __exit ftrace_direct_multi_exit(void)
->  {
->  	kthread_stop(simple_tsk);
-> -	unregister_ftrace_direct_multi(&direct, my_tramp);
-> -	ftrace_free_filter(&direct);
-> +	unregister_ftrace_direct_multi(&direct, my_tramp, true);
->  }
->  
->  module_init(ftrace_direct_multi_init);
-> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-> index c27cf130c319..ea0e88ee5e43 100644
-> --- a/samples/ftrace/ftrace-direct-multi.c
-> +++ b/samples/ftrace/ftrace-direct-multi.c
-> @@ -78,8 +78,7 @@ static int __init ftrace_direct_multi_init(void)
->  
->  static void __exit ftrace_direct_multi_exit(void)
->  {
-> -	unregister_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
-> -	ftrace_free_filter(&direct);
-> +	unregister_ftrace_direct_multi(&direct, (unsigned long) my_tramp, true);
->  }
->  
->  module_init(ftrace_direct_multi_init);
-> -- 
-> 2.40.0.rc2.332.ga46443480c-goog
+> On 21/03/2023 07:23, Md Danish Anwar wrote:
+>> Hi Andrew, Roger,
+>>
+>> On 20/03/23 21:48, Andrew Davis wrote:
+>>> On 3/20/23 12:11 AM, Md Danish Anwar wrote:
+>>>> Hi Roger,
+>>>>
+>>>> On 17/03/23 14:26, Roger Quadros wrote:
+>>>>> Hi Andrew & Danish,
+>>>>>
+>>>>>
+>>>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
+>>>>>> From: "Andrew F. Davis" <afd@ti.com>
+>>>>>>
+>>>>>> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
+>>>>>> to the PRUSS platform driver to allow client drivers to acquire and release
+>>>>>> the common memory resources present within a PRU-ICSS subsystem. This
+>>>>>> allows the client drivers to directly manipulate the respective memories,
+>>>>>> as per their design contract with the associated firmware.
+>>>>>>
+>>>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
+>>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>>>> Signed-off-by: Andrew F. Davis <afd@ti.com>
+>>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>>>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>>>>>> ---
+>>>>>>   drivers/soc/ti/pruss.c           | 77 ++++++++++++++++++++++++++++++++
+>>>>>>   include/linux/pruss_driver.h     | 27 +++--------
+>>>>>>   include/linux/remoteproc/pruss.h | 39 ++++++++++++++++
+>>>>>
+>>>>>
+>>>>> We have these 2 header files and I think anything that deals with
+>>>>> 'struct pruss' should go in include/linux/pruss_driver.h
+>>>>>
+>>>>> Anything that deals with pru_rproc (i.e. struct rproc) should go in
+>>>>> include/linux/remoteproc/pruss.h
+>>>>>
+>>>>> Do you agree?
+>>>>>
+>>>>
+>>>> I agree with you Roger but Andrew is the right person to comment here as he is
+>>>> the author of this and several other patches.
+>>>>
+>>>> Hi Andrew, Can you please comment on this?
+>>>>
+>>>
+>>> Original idea was a consumer driver (like "ICSSG Ethernet Driver" in your other
+>>> series) could just
+>>>
+>>> #include <linux/remoteproc/pruss.h>
+>>>
+>>> and get everything they need, and nothing they do not.
+>>>
+>>
+>> If we plan on continuing the original idea, then I think keeping the header
+>> files as it is will be the best. Because if we move anything that deals with
+>> 'struct pruss' to include/linux/pruss_driver.h and anything that deals with
+>> pru_rproc (i.e. struct rproc) to include/linux/remoteproc/pruss.h, then the
+>> consumer drivers will need to do,
+>>
+>> #include <linux/remoteproc/pruss.h>
+>> #include <linux/pruss_driver.h>
+>>
+>> Roger, should I keep the header files arrangement as it is?
+>>
 > 
+> OK but can we please rename one of them to something else so they don't
+> sound very similar. Maybe you could use Andrew's suggestion below.
+> 
+
+Yes sure, I'll rename the header files to reduce confusion. The pruss_driver.h
+is located in include/linux, implying it's not internal to PRUSS. So I will
+keep this header file name as it is.
+
+There are total 3 pruss related header files.
+
+1. include/linux/pruss_driver.h (Public header file, not internal to PRUSS,
+will keep it as it is. This exists to allow communication between the pruss
+core and the pru rproc driver which live in different subsystems.)
+2. include/linux/remoteproc/pruss.h (Public header file, not internal to PRUSS,
+will keep it as it is. Only this header file needs to be included by client
+drivers.)
+3. drivers/soc/ti/pruss.h (Internal to PRUSS, I will rename this to
+pruss_internal.h, this file has private definitions and APIs to modify PRUSS
+CFG space. This file is private to pruss.c)
+
+Please let me know if the above looks OK.
+
+>>> pruss_driver.h (which could be renamed pruss_internal.h) exists to allow
+>>> comunication between the pruss core and the pru rproc driver which live
+>>> in different subsystems.
+>>>
+>>> Andrew
+>>>
+>>>>>>   3 files changed, 121 insertions(+), 22 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>>>>> index a169aa1ed044..c8053c0d735f 100644
+>>>>>> --- a/drivers/soc/ti/pruss.c
+>>>>>> +++ b/drivers/soc/ti/pruss.c
+>>>>>> @@ -88,6 +88,82 @@ void pruss_put(struct pruss *pruss)
+>>>>>>   }
+>>>>>>   EXPORT_SYMBOL_GPL(pruss_put);
+>>>>>>   +/**
+>>>>>> + * pruss_request_mem_region() - request a memory resource
+>>>>>> + * @pruss: the pruss instance
+>>>>>> + * @mem_id: the memory resource id
+>>>>>> + * @region: pointer to memory region structure to be filled in
+>>>>>> + *
+>>>>>> + * This function allows a client driver to request a memory resource,
+>>>>>> + * and if successful, will let the client driver own the particular
+>>>>>> + * memory region until released using the pruss_release_mem_region()
+>>>>>> + * API.
+>>>>>> + *
+>>>>>> + * Return: 0 if requested memory region is available (in such case pointer to
+>>>>>> + * memory region is returned via @region), an error otherwise
+>>>>>> + */
+>>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>>>>>> +                 struct pruss_mem_region *region)
+>>>>>> +{
+>>>>>> +    if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
+>>>>>> +        return -EINVAL;
+>>>>>> +
+>>>>>> +    mutex_lock(&pruss->lock);
+>>>>>> +
+>>>>>> +    if (pruss->mem_in_use[mem_id]) {
+>>>>>> +        mutex_unlock(&pruss->lock);
+>>>>>> +        return -EBUSY;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    *region = pruss->mem_regions[mem_id];
+>>>>>> +    pruss->mem_in_use[mem_id] = region;
+>>>>>> +
+>>>>>> +    mutex_unlock(&pruss->lock);
+>>>>>> +
+>>>>>> +    return 0;
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * pruss_release_mem_region() - release a memory resource
+>>>>>> + * @pruss: the pruss instance
+>>>>>> + * @region: the memory region to release
+>>>>>> + *
+>>>>>> + * This function is the complimentary function to
+>>>>>> + * pruss_request_mem_region(), and allows the client drivers to
+>>>>>> + * release back a memory resource.
+>>>>>> + *
+>>>>>> + * Return: 0 on success, an error code otherwise
+>>>>>> + */
+>>>>>> +int pruss_release_mem_region(struct pruss *pruss,
+>>>>>> +                 struct pruss_mem_region *region)
+>>>>>> +{
+>>>>>> +    int id;
+>>>>>> +
+>>>>>> +    if (!pruss || !region)
+>>>>>> +        return -EINVAL;
+>>>>>> +
+>>>>>> +    mutex_lock(&pruss->lock);
+>>>>>> +
+>>>>>> +    /* find out the memory region being released */
+>>>>>> +    for (id = 0; id < PRUSS_MEM_MAX; id++) {
+>>>>>> +        if (pruss->mem_in_use[id] == region)
+>>>>>> +            break;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    if (id == PRUSS_MEM_MAX) {
+>>>>>> +        mutex_unlock(&pruss->lock);
+>>>>>> +        return -EINVAL;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    pruss->mem_in_use[id] = NULL;
+>>>>>> +
+>>>>>> +    mutex_unlock(&pruss->lock);
+>>>>>> +
+>>>>>> +    return 0;
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
+>>>>>> +
+>>>>>>   static void pruss_of_free_clk_provider(void *data)
+>>>>>>   {
+>>>>>>       struct device_node *clk_mux_np = data;
+>>>>>> @@ -290,6 +366,7 @@ static int pruss_probe(struct platform_device *pdev)
+>>>>>>           return -ENOMEM;
+>>>>>>         pruss->dev = dev;
+>>>>>> +    mutex_init(&pruss->lock);
+>>>>>>         child = of_get_child_by_name(np, "memories");
+>>>>>>       if (!child) {
+>>>>>> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
+>>>>>> index 86242fb5a64a..22b4b37d2536 100644
+>>>>>> --- a/include/linux/pruss_driver.h
+>>>>>> +++ b/include/linux/pruss_driver.h
+>>>>>> @@ -9,37 +9,18 @@
+>>>>>>   #ifndef _PRUSS_DRIVER_H_
+>>>>>>   #define _PRUSS_DRIVER_H_
+>>>>>>   +#include <linux/mutex.h>
+>>>>>>   #include <linux/remoteproc/pruss.h>
+>>>>>>   #include <linux/types.h>
+>>>>>>   -/*
+>>>>>> - * enum pruss_mem - PRUSS memory range identifiers
+>>>>>> - */
+>>>>>> -enum pruss_mem {
+>>>>>> -    PRUSS_MEM_DRAM0 = 0,
+>>>>>> -    PRUSS_MEM_DRAM1,
+>>>>>> -    PRUSS_MEM_SHRD_RAM2,
+>>>>>> -    PRUSS_MEM_MAX,
+>>>>>> -};
+>>>>>> -
+>>>>>> -/**
+>>>>>> - * struct pruss_mem_region - PRUSS memory region structure
+>>>>>> - * @va: kernel virtual address of the PRUSS memory region
+>>>>>> - * @pa: physical (bus) address of the PRUSS memory region
+>>>>>> - * @size: size of the PRUSS memory region
+>>>>>> - */
+>>>>>> -struct pruss_mem_region {
+>>>>>> -    void __iomem *va;
+>>>>>> -    phys_addr_t pa;
+>>>>>> -    size_t size;
+>>>>>> -};
+>>>>>> -
+>>>>>>   /**
+>>>>>>    * struct pruss - PRUSS parent structure
+>>>>>>    * @dev: pruss device pointer
+>>>>>>    * @cfg_base: base iomap for CFG region
+>>>>>>    * @cfg_regmap: regmap for config region
+>>>>>>    * @mem_regions: data for each of the PRUSS memory regions
+>>>>>> + * @mem_in_use: to indicate if memory resource is in use
+>>>>>> + * @lock: mutex to serialize access to resources
+>>>>>>    * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
+>>>>>>    * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
+>>>>>>    */
+>>>>>> @@ -48,6 +29,8 @@ struct pruss {
+>>>>>>       void __iomem *cfg_base;
+>>>>>>       struct regmap *cfg_regmap;
+>>>>>>       struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
+>>>>>> +    struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
+>>>>>> +    struct mutex lock; /* PRU resource lock */
+>>>>>>       struct clk *core_clk_mux;
+>>>>>>       struct clk *iep_clk_mux;
+>>>>>>   };
+>>>>>> diff --git a/include/linux/remoteproc/pruss.h
+>>>>>> b/include/linux/remoteproc/pruss.h
+>>>>>> index 93a98cac7829..33f930e0a0ce 100644
+>>>>>> --- a/include/linux/remoteproc/pruss.h
+>>>>>> +++ b/include/linux/remoteproc/pruss.h
+>>>>>> @@ -44,6 +44,28 @@ enum pru_ctable_idx {
+>>>>>>       PRU_C31,
+>>>>>>   };
+>>>>>>   +/*
+>>>>>> + * enum pruss_mem - PRUSS memory range identifiers
+>>>>>> + */
+>>>>>> +enum pruss_mem {
+>>>>>> +    PRUSS_MEM_DRAM0 = 0,
+>>>>>> +    PRUSS_MEM_DRAM1,
+>>>>>> +    PRUSS_MEM_SHRD_RAM2,
+>>>>>> +    PRUSS_MEM_MAX,
+>>>>>> +};
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * struct pruss_mem_region - PRUSS memory region structure
+>>>>>> + * @va: kernel virtual address of the PRUSS memory region
+>>>>>> + * @pa: physical (bus) address of the PRUSS memory region
+>>>>>> + * @size: size of the PRUSS memory region
+>>>>>> + */
+>>>>>> +struct pruss_mem_region {
+>>>>>> +    void __iomem *va;
+>>>>>> +    phys_addr_t pa;
+>>>>>> +    size_t size;
+>>>>>> +};
+>>>>>> +
+>>>>>>   struct device_node;
+>>>>>>   struct rproc;
+>>>>>>   struct pruss;
+>>>>>> @@ -52,6 +74,10 @@ struct pruss;
+>>>>>>     struct pruss *pruss_get(struct rproc *rproc);
+>>>>>>   void pruss_put(struct pruss *pruss);
+>>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>>>>>> +                 struct pruss_mem_region *region);
+>>>>>> +int pruss_release_mem_region(struct pruss *pruss,
+>>>>>> +                 struct pruss_mem_region *region);
+>>>>>>     #else
+>>>>>>   @@ -62,6 +88,19 @@ static inline struct pruss *pruss_get(struct rproc
+>>>>>> *rproc)
+>>>>>>     static inline void pruss_put(struct pruss *pruss) { }
+>>>>>>   +static inline int pruss_request_mem_region(struct pruss *pruss,
+>>>>>> +                       enum pruss_mem mem_id,
+>>>>>> +                       struct pruss_mem_region *region)
+>>>>>> +{
+>>>>>> +    return -EOPNOTSUPP;
+>>>>>> +}
+>>>>>> +
+>>>>>> +static inline int pruss_release_mem_region(struct pruss *pruss,
+>>>>>> +                       struct pruss_mem_region *region)
+>>>>>> +{
+>>>>>> +    return -EOPNOTSUPP;
+>>>>>> +}
+>>>>>> +
+>>>>>>   #endif /* CONFIG_TI_PRUSS */
+>>>>>>     #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>>>>
+>>>>> cheers,
+>>>>> -roger
+>>>>
+>>
+> 
+> cheers,
+> -roger
+
+-- 
+Thanks and Regards,
+Danish.
