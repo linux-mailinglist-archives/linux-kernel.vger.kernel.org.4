@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AF46C36D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74096C36D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCUQUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S229810AbjCUQVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjCUQUv (ORCPT
+        with ESMTP id S229651AbjCUQVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:20:51 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F94FF31
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:20:49 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so11406340wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:20:49 -0700 (PDT)
+        Tue, 21 Mar 2023 12:21:41 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D328AFF02
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:21:39 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ek18so61913262edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:21:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679415647;
+        d=gmail.com; s=20210112; t=1679415698;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C4Ra5hFGiWG+UPE75bfuD9gJYCH0sgVcLFGMPcfDw4w=;
-        b=FIL2tOs191tYaYzAYYtD+0FgbSA5mgP28x899XLc3H5s/TPBp1nQ0LmUIa3K6nngEI
-         d7LD4nuYWRTy85MMVUKhmOlrFmNAEloTj7LllIB/+URzSjNX+lIgtYZgT9DX0r8U0At6
-         r2lbXhdusH1gYGfGnQjvtG+tWr9uAbmJFx6vpWEjyissH0/Znq/2Zb+pjQ4BZ4VveI6K
-         WIUam2cGjF567ix7O8qOWSWX8zHG2TKGmz5b4GYRbr+/NAKylAeiQnIw+DubdVo657tP
-         OoGpgL5eamOBq9OQZb7qrNlgMpYybtsNkbCIppYaG0bbtpLwHznskfFYC8LLgnKKmAfi
-         D/gg==
+        bh=lN54tDUmXf9hwv+PXMNCl+jsvxs7b+LzMxVySPVN8ik=;
+        b=TP7xcMAp4UQxJz2ItJv3FiZYU+VFst7DjGgMIXfyglYpdwVEdVDe03mdwalZVRAzcJ
+         XKpUZ1MP82LkAsPWPjKY29lBDwMQSzhIjnF7LV7TzlLXf4Ad9f/qOf/NEs1Tf7vUDBhl
+         VNVz4ccP4nCVi+i7jH9H8m+/VTzwGF01Za/sFk7gVV8EMFc2gIi89YkGHXRdfpPxOtM5
+         sL9KLhhIJ8nZTPR4bys4F5iwSbmUAbEyqoI8lCbsbznO4xrtzLvd+gDp0XRI6IStzUxe
+         yuCU1diSGOVnsU75ns8aRPohEq6t/mJQVoXmNKjDk03CYHEo6V+CHF14f9Qhu2tLrcZO
+         hnLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679415647;
+        d=1e100.net; s=20210112; t=1679415698;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C4Ra5hFGiWG+UPE75bfuD9gJYCH0sgVcLFGMPcfDw4w=;
-        b=7aUaiCWvSRkftAuMiJQDeJJKPPmK6PfPvnRyOSfjU1zl5CwPmyOC3F1TKyJ1p9e63P
-         tioCQDOZUOn8YFBSHpB0C0QMqmMHyPXCLu/i/JfsVcHsQnfQsWQbTI8tBY1ERh2mk1Rk
-         KNDFbur0qbMKFd282445pBocQaugvjcWIPHI/X4eZ+Tt5bQylURjJi0to1EWwvET2SIR
-         RaIJTjeqyTexzLfn2Vuqd4dZzxttx/fPsPwJ3w2UT95reDp6CswFnwq7qucwenbNV4iI
-         GsVuxnqgfgWjX7/GtOujEf1jG/XgqBMZHDVx6wRw80B/tUfHYh1Dir/0ElKGAY9qZonm
-         zk+w==
-X-Gm-Message-State: AO0yUKUIXS0wKOFgetSeHwpsfZEFL8E+kqEgOvAxPtXpJfov7/piupMC
-        9G2WmWIxuZT8Km2C6H4tpYBybQ==
-X-Google-Smtp-Source: AK7set/FK6LztPlEM4J5hp4VTx7XkyNFR8jgKiyMKjuVsloE2RaoRmLVD15X8lU1Nj6IAcUrKt9Jag==
-X-Received: by 2002:a05:600c:2114:b0:3ee:97c:58f4 with SMTP id u20-20020a05600c211400b003ee097c58f4mr2949669wml.12.1679415647425;
-        Tue, 21 Mar 2023 09:20:47 -0700 (PDT)
-Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
-        by smtp.gmail.com with ESMTPSA id p9-20020a1c5449000000b003dc1d668866sm19972280wmi.10.2023.03.21.09.20.46
+        bh=lN54tDUmXf9hwv+PXMNCl+jsvxs7b+LzMxVySPVN8ik=;
+        b=OhUFM7UCRQFmj11j4kw023f4h7CpsRtEBmUVINiKnyBuoblIXoZiV3AUfxTSQ+wOUy
+         YAPBwyHcmX/VujDUTjw9TRkk2Q5wuhz959wyp/9hVsgTtnwweqK5z2F4QNmH6QPY41Ut
+         Tgt/gwAqWjhHVBmE/F9fX5xWRWIKzvEeIlHUbS7I1qoFjUBbD578hsFr8fd5A5ueNsDZ
+         dBAKLNqxWNi1Ve6IhoLe4F7NaVBa3aZOhZtN4pkkve3RVG0i3noJcRBMuoubuHP+gWC4
+         k4e9FX0lwVRnX+PdW5TxG1vCJYaHlyrDHLvwomUtnND9kNHn87eI3pYnm/ldfXvOI1EB
+         trQw==
+X-Gm-Message-State: AO0yUKUNH1rwetn1lt2jSpIsKJ+uQy9agdJNI+as1/DNETyzs1R1bCU5
+        DrelQQZ8Ok+liE6rb9aAM2swNzD/KMNUUonr
+X-Google-Smtp-Source: AK7set9n+TEYOTN5JF+wpsOMVpXYpeA2AgUrMGIGu3uxrhtF1oKub2rMRl/BdhdUV2wyGEenG8Sf2A==
+X-Received: by 2002:a17:906:d14d:b0:931:de86:1879 with SMTP id br13-20020a170906d14d00b00931de861879mr3945437ejb.9.1679415698145;
+        Tue, 21 Mar 2023 09:21:38 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id v19-20020a1709067d9300b008cff300cf47sm5977472ejo.72.2023.03.21.09.21.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 09:20:46 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 16:20:42 +0000
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 1/2] ring-buffer: Introducing ring-buffer mapping
- functions
-Message-ID: <ZBnZWhcelEpKXHo8@google.com>
-References: <20230317143310.1604700-1-vdonnefort@google.com>
- <20230317143310.1604700-2-vdonnefort@google.com>
- <20230320214516.01c18367@gandalf.local.home>
- <ZBnKe55cvTZybZLF@google.com>
- <20230321114047.3432afbe@gandalf.local.home>
+        Tue, 21 Mar 2023 09:21:37 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 21:21:35 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: greybus: merge split lines
+Message-ID: <ZBnZj3JbTOsplHvw@khadija-virtual-machine>
+References: <ZBgYsqkpdYpGQniB@khadija-virtual-machine>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321114047.3432afbe@gandalf.local.home>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <ZBgYsqkpdYpGQniB@khadija-virtual-machine>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,74 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:40:47AM -0400, Steven Rostedt wrote:
-> On Tue, 21 Mar 2023 15:17:15 +0000
-> Vincent Donnefort <vdonnefort@google.com> wrote:
+On Mon, Mar 20, 2023 at 01:26:33PM +0500, Khadija Kamran wrote:
+> If condition and spin_unlock_...() call is split into two lines, merge
+> them to form a single line.
 > 
-> > On Mon, Mar 20, 2023 at 09:45:16PM -0400, Steven Rostedt wrote:
-> > > On Fri, 17 Mar 2023 14:33:09 +0000
-> > > Vincent Donnefort <vdonnefort@google.com> wrote:
-> > >   
-> > > > Also, the meta-page being... a single page, this limits at the moment the
-> > > > number of pages in the ring-buffer that can be mapped: ~3MB on a 4K pages
-> > > > system.  
-> > > 
-> > > I hate this limitation, so I fixed it ;-)  
-> > 
-> > Thanks a lot for having a look. Do you mind if I fold this in my patch for a V2?
+> Suggested-by: Deepak R Varma drv@mailo.com
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> ---
 > 
-> Hold off, I found some bugs that I'm fixing ;-)
+> Changes in v3:
+>  - Removing tab to fix line length results in a new checkpatch warning,
+>    so let the fix length be as it is.
+> Changes in v2:
+>  - Rephrased he subject and description
+>  - Merged if_condition() and spin_unlock...() into one line
+>  - Link to patch:
+>  https://lore.kernel.org/outreachy/ZAusnKYVTGvO5zoi@khadija-virtual-machine/
 > 
-> > 
-> > > 
-> > > I added a meta_page_size field to the meta page, and user space can do:
-> > > 
-> > > 	meta = mmap(NULL, page_size, PROT_READ, MAP_SHARED, fd, 0);
-> > > 	if (meta == MAP_FAILED)
-> > > 		pdie("mmap");
-> > > 
-> > > 	map = meta;
-> > > 	meta_len = map->meta_page_size;
-> > > 
-> > > 	if (meta_len > page_size) {
-> > > 		munmap(meta, page_size);
-> > > 		meta = mmap(NULL, meta_len, PROT_READ, MAP_SHARED, fd, 0);
-> > > 		if (meta == MAP_FAILED)
-> > > 			pdie("mmap");
-> > > 		map = meta;
-> > > 	}
-> > > 
-> > > This appears to work (but I'm still testing it).
-> > > 
-> > > -- Steve
-> > > 
-> > > diff --git a/include/uapi/linux/trace_mmap.h b/include/uapi/linux/trace_mmap.h
-> > > index 24bcec754a35..12f3f7ee33d9 100644
-> > > --- a/include/uapi/linux/trace_mmap.h
-> > > +++ b/include/uapi/linux/trace_mmap.h
-> > > @@ -18,6 +18,7 @@ struct ring_buffer_meta_page {
-> > >  	__u32	reader_page;
-> > >  	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
-> > >  	__u32	data_page_head;	/* index of data_pages[] */
-> > > +	__u32	meta_page_size;	/* size of the meta page */  
-> > 
-> > Do we want a specific field here? That could be deduced from nr_data_pages()
-> > quite easily?
+> Link to first patch:
+> https://lore.kernel.org/outreachy/ZAtkW6g6DwPg%2FpDp@khadija-virtual-machine/
 > 
-> I rather not have too much implementation detail knowledge in user space.
-> It only removes a single entry, and it makes user space easier. In fact,
+>  drivers/staging/greybus/arche-platform.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/arche-platform.c b/drivers/staging/greybus/arche-platform.c
+> index fcbd5f71eff2..6890710afdfc 100644
+> --- a/drivers/staging/greybus/arche-platform.c
+> +++ b/drivers/staging/greybus/arche-platform.c
+> @@ -176,12 +176,10 @@ static irqreturn_t arche_platform_wd_irq(int irq, void *devid)
+>  				 * Check we are not in middle of irq thread
+>  				 * already
+>  				 */
+> -				if (arche_pdata->wake_detect_state !=
+> -						WD_STATE_COLDBOOT_START) {
+> +				if (arche_pdata->wake_detect_state != WD_STATE_COLDBOOT_START) {
+>  					arche_platform_set_wake_detect_state(arche_pdata,
+>  									     WD_STATE_COLDBOOT_TRIG);
+> -					spin_unlock_irqrestore(&arche_pdata->wake_lock,
+> -							       flags);
+> +					spin_unlock_irqrestore(&arche_pdata->wake_lock, flags);
+>  					return IRQ_WAKE_THREAD;
+>  				}
+>  			}
+> --
+> 2.34.1
+>
 
-Ack.
+Hey Outreachy Mentors,
 
-> I'm thinking we should not include "__u32 data_pages[]" but instead add a:
-> "__u32 data_start" where user space does:
-> 
-> 	__u32 *data_pages = (_u32 *)meta_page + meta_page->data_start;
-> 
-> That way we could extend the data provided by the meta_page in the future.
+Kindly take a look at this patch and let me know if it is okay to work
+on this file or should I look for other cleanup patches.
 
-That'd be nice. Couldn't we keep both to simplify the code for the kernel side?
+Thank you for your time.
+Regards,
+Khadija
 
-> 
-> -- Steve
-> 
