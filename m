@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7F96C2A09
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF936C2A10
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCUFuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S229958AbjCUFwi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 01:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUFuF (ORCPT
+        with ESMTP id S229583AbjCUFwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:50:05 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7718A5C;
-        Mon, 20 Mar 2023 22:50:02 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso7948362oti.8;
-        Mon, 20 Mar 2023 22:50:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679377801;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PQRYTyJUcXjGIlb32K69CN7N/CfuacDHmOLvuVVkIeU=;
-        b=F5so8U9eSPDfKwLwdhjWe1tE8PfeVDHKjkiyKaVpWQqKRuyuavEeTzXd4hk6L3z6zp
-         VHPO8QjxcIT4MYzTcNnHQK4kCkDGjZgPowyHLuCLV9GljdqpK9u99uNfqkBMK5RA93gv
-         FGjbjWg9KVC+SGloN3ekhh+2k6L7EF7wthr0pjQIqJLNck01caZneaWdLgqxokr/RLrO
-         1sgViMnoTTZxc9T5zi936whRCWGOMENT2d8QDQSNUknsMhStPJdQFhKuw7YCDQdWuHuY
-         XA7Htk2YAl4jH1GHMq/ggeJA09GTqzjWLySHNgMO09vanozHHeos4pEKMn6CfOVlZGDt
-         TxtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679377801;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PQRYTyJUcXjGIlb32K69CN7N/CfuacDHmOLvuVVkIeU=;
-        b=F+s8zjzIrEGYsx6hUIpY4AypQRSgaI1J7euQkQ42p6TNiWR74+Ud4W3WVMAditLJQr
-         CaowjZJsj4VOVBiY73DILXuj3n8dIFKKlDOzRQycXhzqak3mJzisw0X7W0rwfuLLvRVa
-         z9eC4RuXcuND7FSIotBqml8LvChmRxDlfbzak3IIEgZykkxXvnR98fmKAE/gY0B6iJWI
-         3K6BFRwIxhGk/uEJd1rgoZrcWFqAWmntoK5dVXJ3X9PqM0Xo6MUHeEVOY7DngFtGfSQB
-         ukGxegKWRtQPXMBRWWZRJ6bN8VxyHS5OmJ16tKzw9wIOZilgG8lIG8cJCCN7Gokc3AHu
-         v7Sg==
-X-Gm-Message-State: AO0yUKWmHcErfDaWY4rFJTxA2dExzj9FWKjUTnOPCZDHm/k8X/cLEk4a
-        PK3HM0Z9jYhzC7DHIEy1kM5zp9CPH1PMihlxGU0=
-X-Google-Smtp-Source: AK7set9hGdm8jb3Zms52xIkHW02ezlDplA4s1W/5C+8w1fxRVUiCGMOX1ghjWbWe1rulG24xEDF5Rs78eQG2Vsd6oW8=
-X-Received: by 2002:a05:6830:13d3:b0:69e:24a7:e042 with SMTP id
- e19-20020a05683013d300b0069e24a7e042mr409968otq.3.1679377801763; Mon, 20 Mar
- 2023 22:50:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230320233955.2921179-1-robh@kernel.org>
-In-Reply-To: <20230320233955.2921179-1-robh@kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 21 Mar 2023 06:49:49 +0100
-Message-ID: <CAMhs-H829e-QSwMXAVN6b4pYTB+_d-PLJxbEqdhd9oOrYnY-aQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: phy: Drop unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Tue, 21 Mar 2023 01:52:36 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00022DE1;
+        Mon, 20 Mar 2023 22:52:33 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 611BB24E0B4;
+        Tue, 21 Mar 2023 13:52:30 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 13:52:30 +0800
+Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
+ by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 21 Mar 2023 13:52:29 +0800
+From:   William Qiu <william.qiu@starfivetech.com>
+To:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        William Qiu <william.qiu@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>
+Subject: [RESEND v3 0/2] StarFive's Pulse Width Modulation driver support
+Date:   Tue, 21 Mar 2023 13:52:26 +0800
+Message-ID: <20230321055228.105945-1-william.qiu@starfivetech.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:40=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
-e:
->
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi,
 
->  .../devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml    | 4 ++--
+This patchset adds initial rudimentary support for the StarFive
+Pulse Width Modulation controller driver. And this driver will
+be used in StarFive's VisionFive 2 board.The first patch add
+Documentations for the device and Patch 2 adds device probe for
+the module.
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Changes v2->v3:
+- Fixed some formatting issues.
+
+Changes v1->v2:
+- Renamed the dt-binding 'pwm-starfive.yaml' to 'starfive,jh7110-pwm.yaml'.
+- Dropped the compatible's Items.
+- Dropped the unuse defines.
+- Modified the code to follow the Linux coding style.
+- Changed return value to dev_err_probe.
+- Dropped the unnecessary local variable.
+
+The patch series is based on v6.2.
+
+William Qiu (2):
+  dt-bindings: PWM: Add StarFive PWM module
+  pwm: starfive: Add PWM driver support
+
+ .../bindings/pwm/starfive,jh7110-pwm.yaml     |  53 ++++
+ MAINTAINERS                                   |   7 +
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-starfive-ptc.c                | 245 ++++++++++++++++++
+ 5 files changed, 316 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/starfive,jh7110-pwm.yaml
+ create mode 100644 drivers/pwm/pwm-starfive-ptc.c
+
+--
+2.34.1
+
