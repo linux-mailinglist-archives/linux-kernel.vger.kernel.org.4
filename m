@@ -2,152 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7FE6C2910
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAF36C2912
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjCUEQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 00:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S229550AbjCUESw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 00:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjCUEPv (ORCPT
+        with ESMTP id S229484AbjCUESt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 00:15:51 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4089949F9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:15:21 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id cu12so3003078pfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679372121;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sJ2j5JN955TIVQ6alJF8oihXVZDZ3XjiZxc6zY7G6i8=;
-        b=C5TlzmipNRBOvhfXbntHYNIh7BINmX3doog1Kh/Nt8x0Dzeroj4cWnGwbYiAMag6vT
-         3teLzldwQ8d/0arRPh90I2m5w6NtiS67ZdZIZN5aMqhTDdxkDyjocN2l16hdJm4wSe3n
-         MrFhtH8LsCkPPEKjeGmnI1zfKMKbGKpFjK30ZiatpDrn3hksUlVeVZF3Cy1/qAyGispK
-         mP5Q2gR0ASOAoYtjBWgrQqMGH3FWgB3FQX5KxdwBb8xUfKlfPvYp/g7Am48E1ZUeqp1F
-         3WdRQNm/htm105jJwB2cMyXbUpoJoiPIGFDqE8Pyp+JCRFrQT4PsKHuf+BcJqVgjqVma
-         fLJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679372121;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sJ2j5JN955TIVQ6alJF8oihXVZDZ3XjiZxc6zY7G6i8=;
-        b=gBUhA/gmVShX2qAdN2nWFrGjckj11XzwSkYqRvU0vALqsL9+3C2IZQ4rYD+2vdH1iX
-         s6DPI+oqKQkJFowe370CpCvpEc6PLtJDuPDyw3in/vIl8VuxB7n8WIOI6VBWorHFuIJa
-         lXEupbhdTvftvlyS/fWCGQ7q3PdyL7qUsB+eOO0vZFraTRzL/ItLiwlETwJ/Gvv1sap4
-         gnnyASGdU2JCx8gwsuhgW4FLYUGZUSz+6bhu1+p2plm4Drl8Vid+F3UwAiJFmCi97Qfv
-         kfXDTXTgyXULOyQMjSo7uU+uiOLcNXbkXFvIviBLKpLtwrnO/6TwjgLjpuVRESG20p7+
-         /uQg==
-X-Gm-Message-State: AO0yUKXoYBls85eIhHw9ISswQMRqwlCZef9SQT3i8uVTvmlL2hqZP19s
-        /5mTnEcmcgF/ls+s0W8fBbMVye61jIE=
-X-Google-Smtp-Source: AK7set8dpMbVHUo4z+qEAApeMhTR1ArVggBkpk5n/HqWDsBBjRCHMET+H6oD4qp9S/na9AarcUi1ZA==
-X-Received: by 2002:aa7:9dc1:0:b0:5a8:4861:af7d with SMTP id g1-20020aa79dc1000000b005a84861af7dmr1259596pfq.20.1679372120677;
-        Mon, 20 Mar 2023 21:15:20 -0700 (PDT)
-Received: from localhost (121-44-69-75.tpgi.com.au. [121.44.69.75])
-        by smtp.gmail.com with ESMTPSA id j26-20020aa78d1a000000b005dfc8a35793sm7113513pfe.38.2023.03.20.21.15.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 21:15:20 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 21 Mar 2023 14:15:14 +1000
-Message-Id: <CRBRQAXJRZZW.28LH58EV3T8AL@bobo>
-Cc:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] arch/powerpc/kvm: kvmppc_hv_entry: remove r4
- argument
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Kautuk Consul" <kconsul@linux.vnet.ibm.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Fabiano Rosas" <farosas@linux.ibm.com>,
-        "Sathvika Vasireddy" <sv@linux.ibm.com>,
-        "Alexey Kardashevskiy" <aik@ozlabs.ru>
-X-Mailer: aerc 0.13.0
-References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
- <20230316051025.1424093-3-kconsul@linux.vnet.ibm.com>
-In-Reply-To: <20230316051025.1424093-3-kconsul@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 00:18:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947B73C38
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:18:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E623B80D5C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C9CBC433EF;
+        Tue, 21 Mar 2023 04:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679372324;
+        bh=pbEGl7dD5fxCPHdZv4f//Rwhjn5M+g6SoFos47Cd0PM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YDlsKc03X/Okd7034UDCAimU41OiaqHgzXFtbEC2J7teIkl2SL9sTEiUbyMRABHUH
+         rG94XYV33FmS4/9WD1/HQ7V63mTi4W1J07MOiPkba05gq2kfFFgCHD9xg9vxCdCfUz
+         HvOuBjKASFNOjA1n6WhFsB1ReiuyI29/cytPOqGjKb8KqOFliGjoJq/Twg7jyBzdh/
+         cBHgTnLQkOSEZrWfM3pIB6cI/K9yvYdsgh9upXdzR7mGbfiA+7dSUaphwRE3lejO4r
+         SlSWYCf3oQ5szAYxLXNXFWW4SeKsL0oMRQgrN78vQz237pOgoAH0Z69pg4uVRL76oL
+         nARJ7JSN1awHw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 4565A1540395; Mon, 20 Mar 2023 21:18:44 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 21:18:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Liu, Yujie" <yujie.liu@intel.com>
+Cc:     lkp <lkp@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>
+Subject: Re: [paulmck-rcu:dev.2023.03.17a 33/38] kernel/rcu/tasks.h:140:20:
+ warning: 'tasks_rcu_exit_srcu' defined but not used
+Message-ID: <5b73fe0e-bacc-4aee-a632-3160e38e42db@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202303191536.XzMSyzTl-lkp@intel.com>
+ <be0bf772-bac1-4a18-a46a-922a93093314@paulmck-laptop>
+ <9c716b77dd0743089a40f933ccdcbd57222e21f4.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9c716b77dd0743089a40f933ccdcbd57222e21f4.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
-> kvmppc_hv_entry is called from only 2 locations within
-> book3s_hv_rmhandlers.S. Both of those locations set r4
-> as HSTATE_KVM_VCPU(r13) before calling kvmppc_hv_entry.
-> So, shift the r4 load instruction to kvmppc_hv_entry and
-> thus modify the calling convention of this function.
+On Tue, Mar 21, 2023 at 02:49:08AM +0000, Liu, Yujie wrote:
+> Hi Paul,
+> 
+> On Sun, 2023-03-19 at 17:33 -0700, Paul E. McKenney wrote:
+> > On Sun, Mar 19, 2023 at 03:05:43PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.17a
+> > > head:   19d218a4b125a4dce12eb88097a9c55f7126ce8c
+> > > commit: 61eea4556e8cf92d4c9b483110a679d2652aa451 [33/38] srcu: Move work-scheduling fields from srcu_struct to srcu_usage
+> > > config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230319/202303191536.XzMSyzTl-lkp@intel.com/config)
+> > > compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> > > reproduce (this is a W=1 build):
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=61eea4556e8cf92d4c9b483110a679d2652aa451
+> > >         git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+> > >         git fetch --no-tags paulmck-rcu dev.2023.03.17a
+> > >         git checkout 61eea4556e8cf92d4c9b483110a679d2652aa451
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         make W=1 O=build_dir ARCH=x86_64 olddefconfig
+> > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Link: https://lore.kernel.org/oe-kbuild-all/202303191536.XzMSyzTl-lkp@intel.com/
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > >    In file included from include/linux/srcu.h:49,
+> > >                     from include/linux/notifier.h:16,
+> > >                     from arch/x86/include/asm/uprobes.h:13,
+> > >                     from include/linux/uprobes.h:49,
+> > >                     from include/linux/mm_types.h:16,
+> > >                     from include/linux/sched/signal.h:13,
+> > >                     from kernel/rcu/update.c:26:
+> > > > > kernel/rcu/tasks.h:140:20: warning: 'tasks_rcu_exit_srcu' defined but not used [-Wunused-variable]
+> > >      140 | DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+> > >          |                    ^~~~~~~~~~~~~~~~~~~
+> > >    include/linux/srcutree.h:184:38: note: in definition of macro '__DEFINE_SRCU'
+> > >      184 |         is_static struct srcu_struct name =                                                     \
+> > >          |                                      ^~~~
+> > >    kernel/rcu/tasks.h:140:1: note: in expansion of macro 'DEFINE_STATIC_SRCU'
+> > >      140 | DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+> > >          | ^~~~~~~~~~~~~~~~~~
+> > 
+> > Good catch, thank you!
+> > 
+> > Does the patch shown below fix this?
+> 
+> We've tested the patch and the build warning is fixed by it. Thanks.
 
-Is r4 there only used for CONFIG_KVM_BOOK3S_HV_P8_TIMING? Could put it
-under there. Although you then lose the barrier if it's disabled, that
-is okay if you're sure that's the only memory operation being ordered.
+Thank you!  May I apply your Tested-by?
 
-I'm not sure how much new work we want to put into changing this asm
-code, since it's POWER7/8 only. I would love to move this (and the
-other) KVM implementations to C like we did with P9. It's a pretty big
-job though.
+							Thanx, Paul
 
-Thanks,
-Nick
-
->
-> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
-> ---
->  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/b=
-ook3s_hv_rmhandlers.S
-> index b81ba4ee0521..b61f0b2c677b 100644
-> --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> @@ -85,7 +85,7 @@ _GLOBAL_TOC(kvmppc_hv_entry_trampoline)
->  	RFI_TO_KERNEL
-> =20
->  kvmppc_call_hv_entry:
-> -	ld	r4, HSTATE_KVM_VCPU(r13)
-> +	/* Enter guest. */
->  	bl	kvmppc_hv_entry
-> =20
->  	/* Back from guest - restore host state and return to caller */
-> @@ -352,9 +352,7 @@ kvm_secondary_got_guest:
->  	mtspr	SPRN_LDBAR, r0
->  	isync
->  63:
-> -	/* Order load of vcpu after load of vcore */
-> -	lwsync
-> -	ld	r4, HSTATE_KVM_VCPU(r13)
-> +	/* Enter guest. */
->  	bl	kvmppc_hv_entry
-> =20
->  	/* Back from the guest, go back to nap */
-> @@ -506,7 +504,6 @@ SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
-> =20
->  	/* Required state:
->  	 *
-> -	 * R4 =3D vcpu pointer (or NULL)
->  	 * MSR =3D ~IR|DR
->  	 * R13 =3D PACA
->  	 * R1 =3D host R1
-> @@ -524,6 +521,10 @@ SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
->  	li	r6, KVM_GUEST_MODE_HOST_HV
->  	stb	r6, HSTATE_IN_GUEST(r13)
-> =20
-> +	/* Order load of vcpu after load of vcore */
-> +	lwsync
-> +	ld	r4, HSTATE_KVM_VCPU(r13)
-> +
->  #ifdef CONFIG_KVM_BOOK3S_HV_P8_TIMING
->  	/* Store initial timestamp */
->  	cmpdi	r4, 0
-> --=20
-> 2.39.2
-
+> --
+> Best Regards,
+> Yujie
+> 
+> >                                                         Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > commit a9b8406e51603238941dbc6fa1437f8915254ebb
+> > Author: Paul E. McKenney <paulmck@kernel.org>
+> > Date:   Sun Mar 19 17:29:20 2023 -0700
+> > 
+> >     rcu-tasks: Fix warning for unused tasks_rcu_exit_srcu
+> >     
+> >     The tasks_rcu_exit_srcu variable is used only by kernels built
+> >     with CONFIG_TASKS_RCU=y, but is defined for all kernesl with
+> >     CONFIG_TASKS_RCU_GENERIC=y.  Therefore, in kernels built with
+> >     CONFIG_TASKS_RCU_GENERIC=y but CONFIG_TASKS_RCU=n, this gives
+> >     a "defined but not used" warning.
+> >     
+> >     This commit therefore moves this variable under CONFIG_TASKS_RCU
+> >     
+> >     Link: https://lore.kernel.org/oe-kbuild-all/202303191536.XzMSyzTl-lkp@intel.com/
+> >     Reported-by: kernel test robot <lkp@intel.com>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> > index baf7ec178155..85a874d4166b 100644
+> > --- a/kernel/rcu/tasks.h
+> > +++ b/kernel/rcu/tasks.h
+> > @@ -136,10 +136,10 @@ static struct rcu_tasks rt_name =                                                 \
+> >         .kname = #rt_name,                                                              \
+> >  }
+> >  
+> > +#ifdef CONFIG_TASKS_RCU
+> >  /* Track exiting tasks in order to allow them to be waited for. */
+> >  DEFINE_STATIC_SRCU(tasks_rcu_exit_srcu);
+> >  
+> > -#ifdef CONFIG_TASKS_RCU
+> >  /* Report delay in synchronize_srcu() completion in rcu_tasks_postscan(). */
+> >  static void tasks_rcu_exit_srcu_stall(struct timer_list *unused);
+> >  static DEFINE_TIMER(tasks_rcu_exit_srcu_stall_timer, tasks_rcu_exit_srcu_stall);
+> > 
+> 
