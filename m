@@ -2,151 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825496C38C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC096C38CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCUR6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S230036AbjCUR7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjCUR6Z (ORCPT
+        with ESMTP id S229993AbjCUR7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:58:25 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7493D1C5AF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:58:07 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x3so62969217edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679421485;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=beQg10Ver7dN23IwCsKB//20vr3DygviG7yoTEe+FxY=;
-        b=QYAinkUisZBUcqo8VDaVOtNZcE9iFdEWTyzmy+5Vslhmfcvc2PXM46b3gIzf8PAWNg
-         wk0cuUkFBYCNPNdWsdLs75cyRkOfwGriVmanTFGFlETNqFqo+vVRhE22syEXMoAc9YT+
-         l3W4AOQF/7195XmOmm9TRVJ+f2Iu1nTZ/mW+CJZRAfSzResa+vuByUXUjgjkMWReRX2N
-         /28pe7mcY0it3eefC1NF6gAxt+MYwlGEE+fSDAhzvXVeyFDiq2H3jJst7I1sJOOOSlWl
-         H587CiPo+Mczy397Hvvc6VZ3O8LQZHVzD6AmcNx5XrHWiMLMVuVgF1gRtnWi3rhlBEcB
-         go3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679421485;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=beQg10Ver7dN23IwCsKB//20vr3DygviG7yoTEe+FxY=;
-        b=4ZAq+Bk3m+rfrKk/Z1V2xFvzt6bGAHQhB0SoA9VWUUwgpFM5/hmlj3icLGQof0WFW8
-         rnDMsvNHYj50fbcupAIJ2HOy8jpbRWkuXTa+rIhnGhDKZ7B6zQhASONIoqsVfMwPFk/f
-         88Jclz0mcJ/q/jNauaWGKeH+PT/wCQWHynr7n0Gm/wBgqdfs66o6tuDyK4UH7m0ul09t
-         gTmZmszKVdIwbScGXdPwUtwUhjqWJR7FkqIb2nujOKDfISpEbqDbcz31lAdTSt4ILDXK
-         RGtjFRuZPhNEpmcD7WKpTzcGTs2xb0h1zZGjqCdrmUtJ1ZQePblZPWu5d24uZvAxuvoC
-         QZbg==
-X-Gm-Message-State: AO0yUKXhvhAz2TzYLw9pYXBi+hBK+/pDunwF9Yr3SttXsNItn1utOF0m
-        euBNuH7GG8xLMq86ubIjupgBbg==
-X-Google-Smtp-Source: AK7set8gOMiqKZ8ghAMrSL9tsj+E0T5/dhTV2S9V9Tjnei/fZr6elg7a8benpEtAOLJHv9tHtR9fcA==
-X-Received: by 2002:a17:906:2855:b0:92a:7178:ab56 with SMTP id s21-20020a170906285500b0092a7178ab56mr3498973ejc.39.1679421485742;
-        Tue, 21 Mar 2023 10:58:05 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id p9-20020a1709060e8900b0093313f4fc3csm4887360ejf.70.2023.03.21.10.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 10:58:04 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     andersson@kernel.org, agross@kernel.org
-Cc:     konrad.dybcio@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        stable@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
-Subject: [PATCH] clk: qcom: gfm-mux: use runtime pm while accessing registers
-Date:   Tue, 21 Mar 2023 17:57:58 +0000
-Message-Id: <20230321175758.26738-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Tue, 21 Mar 2023 13:59:36 -0400
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D7B1BAC1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:59:34 -0700 (PDT)
+Received: from localhost.localdomain ([109.190.253.13])
+        by smtp.orange.fr with ESMTPA
+        id egGTpZTNYNBsfegGWp5b3D; Tue, 21 Mar 2023 18:59:32 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 21 Mar 2023 18:59:32 +0100
+X-ME-IP: 109.190.253.13
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, aurabindo.pillai@amd.com, roman.li@amd.com,
+        hersenxs.wu@amd.com, stylon.wang@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] drm/amd/display: Slightly optimize dm_dmub_outbox1_low_irq()
+Date:   Tue, 21 Mar 2023 18:58:50 +0100
+Message-Id: <b7cff2c1976308c64951d466fd627989ef6e46fb.1679421347.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gfm mux driver does support runtime pm but we never use it while
-accessing registers. Looks like this driver was getting lucky and
-totally depending on other drivers to leave the clk on.
+A kzalloc()+memcpy() can be optimized in a single kmemdup().
+This saves a few cycles because some memory doesn't need to be zeroed.
 
-Fix this by doing runtime pm while accessing registers.
-
-Fixes: a2d8f507803e ("clk: qcom: Add support to LPASS AUDIO_CC Glitch Free Mux clocks")
-Cc: stable@vger.kernel.org
-Reported-by: Amit Pundir <amit.pundir@linaro.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/clk/qcom/lpass-gfm-sm8250.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/qcom/lpass-gfm-sm8250.c b/drivers/clk/qcom/lpass-gfm-sm8250.c
-index 96f476f24eb2..bcf0ea534f7f 100644
---- a/drivers/clk/qcom/lpass-gfm-sm8250.c
-+++ b/drivers/clk/qcom/lpass-gfm-sm8250.c
-@@ -38,14 +38,37 @@ struct clk_gfm {
- static u8 clk_gfm_get_parent(struct clk_hw *hw)
- {
- 	struct clk_gfm *clk = to_clk_gfm(hw);
-+	int ret;
-+	u8 parent;
-+
-+	ret = pm_runtime_resume_and_get(clk->priv->dev);
-+	if (ret < 0 && ret != -EACCES) {
-+		dev_err_ratelimited(clk->priv->dev,
-+				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
-+				    __func__, ret);
-+		return ret;
-+	}
-+
-+	parent = readl(clk->gfm_mux) & clk->mux_mask;
-+
-+	pm_runtime_mark_last_busy(clk->priv->dev);
- 
--	return readl(clk->gfm_mux) & clk->mux_mask;
-+	return parent;
- }
- 
- static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
- {
- 	struct clk_gfm *clk = to_clk_gfm(hw);
- 	unsigned int val;
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(clk->priv->dev);
-+	if (ret < 0 && ret != -EACCES) {
-+		dev_err_ratelimited(clk->priv->dev,
-+				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
-+				    __func__, ret);
-+		return ret;
-+	}
- 
- 	val = readl(clk->gfm_mux);
- 
-@@ -57,6 +80,8 @@ static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
- 
- 	writel(val, clk->gfm_mux);
- 
-+	pm_runtime_mark_last_busy(clk->priv->dev);
-+
- 	return 0;
- }
- 
-@@ -251,6 +276,8 @@ static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
- 	if (IS_ERR(cc->base))
- 		return PTR_ERR(cc->base);
- 
-+	cc->dev = dev;
-+
- 	err = devm_pm_runtime_enable(dev);
- 	if (err)
- 		return err;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 5bac5781a06b..57a5fbdab890 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -820,15 +820,14 @@ static void dm_dmub_outbox1_low_irq(void *interrupt_params)
+ 					DRM_ERROR("Failed to allocate dmub_hpd_wrk");
+ 					return;
+ 				}
+-				dmub_hpd_wrk->dmub_notify = kzalloc(sizeof(struct dmub_notification), GFP_ATOMIC);
++				dmub_hpd_wrk->dmub_notify = kmemdup(&notify, sizeof(struct dmub_notification),
++								    GFP_ATOMIC);
+ 				if (!dmub_hpd_wrk->dmub_notify) {
+ 					kfree(dmub_hpd_wrk);
+ 					DRM_ERROR("Failed to allocate dmub_hpd_wrk->dmub_notify");
+ 					return;
+ 				}
+ 				INIT_WORK(&dmub_hpd_wrk->handle_hpd_work, dm_handle_hpd_work);
+-				if (dmub_hpd_wrk->dmub_notify)
+-					memcpy(dmub_hpd_wrk->dmub_notify, &notify, sizeof(struct dmub_notification));
+ 				dmub_hpd_wrk->adev = adev;
+ 				if (notify.type == DMUB_NOTIFICATION_HPD) {
+ 					plink = adev->dm.dc->links[notify.link_index];
 -- 
-2.21.0
+2.32.0
 
