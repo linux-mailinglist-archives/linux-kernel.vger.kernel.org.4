@@ -2,113 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DDA6C334A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8756C334D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbjCUNuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S231135AbjCUNul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjCUNuM (ORCPT
+        with ESMTP id S229819AbjCUNuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:50:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B603FBA6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679406542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yI/bZ8IYt/rjw4KBzfWVe1iqPY2paEeLBiaCSNShT/4=;
-        b=GeEbR5gLXb4yOHZTxbd0YluyGgNfLydhQJrdAFP7llrF6fgO84bokq7XFEXrh3O7Vns8ib
-        azesjeaD7ewyuFF1Qm8f5zG9TYrWDWfLiP0V4QREfCQrJvnSDKwao7hIyq6HfhZEme8rBT
-        p/CxobqJJso4bzXjyq0n/yM7rM56DWk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-272-7HBnSOwnM3WIAJ9VnSmlng-1; Tue, 21 Mar 2023 09:49:01 -0400
-X-MC-Unique: 7HBnSOwnM3WIAJ9VnSmlng-1
-Received: by mail-wr1-f71.google.com with SMTP id i11-20020a5d522b000000b002ceac3d4413so1794251wra.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:49:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679406540;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yI/bZ8IYt/rjw4KBzfWVe1iqPY2paEeLBiaCSNShT/4=;
-        b=l9XYwiTB2wSrFUdGtJT5bkS8kMmHQg9wvxII+6j+LOB7xZCwlgnuWT/yA/boKr200c
-         T7w38w7xwPoSm86YokJMpCf1tCXWpoWry5l2pNpsytwrJR94X0/ZpRyxRcCr+ZGRg6Q3
-         RdYbb6yyu7ElXbXLHuQKUvgxO2U0KAHhkUXDLBa6+dSHagOIrz48CZfsh+hw+gbu5KTm
-         YJDZGm8lpdH1q2svCFxh1qkl2zqntbSXTfJjE9OCMxZJ+P2a+VISdpyoLK5UUBztO1rd
-         CQWOFSvC1QiIJ3dCo4906TyG1Um/Ecpk1cMWbl8GVUHs7fxM3cGafGTtwVKfepEIcpPD
-         I4rQ==
-X-Gm-Message-State: AO0yUKW/YPofka6SDQ0sugaQUKvU51wj0xfv27/S/NKdGV/OnxO5WVdl
-        VnTLIlPKumXjvqpJ53TxX/I8mfRUbK46vZgREtFc9QiYle1H8MhypOzPLdze1oISiJ0OVutuy1g
-        mDUb0gsl4NdPMs3A1GJe/+e/d
-X-Received: by 2002:adf:f58d:0:b0:2ce:9e0a:10ae with SMTP id f13-20020adff58d000000b002ce9e0a10aemr2179546wro.53.1679406539838;
-        Tue, 21 Mar 2023 06:48:59 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9EKsVvw5U/yPPbi9tGukgfJCx6ovbrD4timB/FgzFRRnJM6NTECZsQavMRWFZ67rCTApC7lA==
-X-Received: by 2002:adf:f58d:0:b0:2ce:9e0a:10ae with SMTP id f13-20020adff58d000000b002ce9e0a10aemr2179532wro.53.1679406539539;
-        Tue, 21 Mar 2023 06:48:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
-        by smtp.gmail.com with ESMTPSA id c10-20020adffb0a000000b002c70c99db74sm11353849wrr.86.2023.03.21.06.48.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 06:48:59 -0700 (PDT)
-Message-ID: <d9ca4727-76c0-8b1f-ca57-effca446fbb6@redhat.com>
-Date:   Tue, 21 Mar 2023 14:48:57 +0100
+        Tue, 21 Mar 2023 09:50:39 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2081.outbound.protection.outlook.com [40.107.244.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD68A37577;
+        Tue, 21 Mar 2023 06:50:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VtCi26BuqyPJrE1CXCK+csn9x2kqW1v80ItdMtuV0AHEzUsEqreIFwTAR3VDRDp5BXLpULoqngYUOZ8pygFU35Uk8eQxHFC9j4jVEO3TnPaSu4wQaVNB1+Ay1nwGPcH+iax0dZd6GlN7Dp0c0+OSmMl6xGy65prwmHxfriM9FMDA7GXUH7nAG3E1eCaIJbAW7uZrfD56N72iH/gf1qlP6GJe/L5gu6O62ZsLh+9aI6AH9y2LOTznfZZhzH9Mr2H+qYUOvBlOy/noJifksE1vi0rbowFCRgtlPtBLhB4gqR/qkdLbCkob898Lq0b3DPQ+7A7GYZc/GCt57LS2kSRuLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F2snrFClXrxEYMywJIQ4YJxrvd/RLdw+MmG5M5Iz+1M=;
+ b=dWDzMj51xzOFGW2w1h6im1R0KgdSTAL7vlMqDhXz6TcN+AWR8O3hou86K1H2oEUbD1vO81C7rKhdATxcHQYJ3xzUGnni4c/lhePNSUbSrqLR9gtXAlbWdiqDV2JrmCoN88J+qYqR2+v1FHAqsyv9RTfT48rJJjJvOgADOUn7BRDc0+siqZD6eZ5okkk/jYooKHya26MBGAUq1rOySgel0efAEMMhEIxmxr4ZLUXz15iKH+RT6ZvhVLhF8bDtNx7yBr2YQbyRwmmBYpT7aQHBQjKgdLA3RZBEXJNk8fe7KAixBqqs10Ok+nZ0r5QJFSNuvd2Ypn7OuY3mkXjSzBLl9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F2snrFClXrxEYMywJIQ4YJxrvd/RLdw+MmG5M5Iz+1M=;
+ b=nzPcB5dlTwdKXkxkJXoJIstsJuWkexZOGksvEaXojiU5l2C/wzwD+MqDgYtxWVM3NKsIIpz2H8ZOH5BveJuv/H479UPs8yjJ+i/SMuGikGD21Gbl1tk30Imp/f9JYKOtVP3DO0pA8I7AeyoE8znfLGah7b2DVjyGn7S3wyiNFzvPQUgN0vwbLhRlrIZau+KxT/jG6qyk/IZ/xXLQJA0IGqN8Cu8vzWFhI21CbKdxgtKIVBOi3Ilaf9TPy+ccd70waGUjWLESfQsevwiwGtJ/b5DLLpDhvdOhlNhw3M5Hra2HEvGB/2hl/GNRuQHs7jNeiaY2hJfTY5qZkRVFb3s1yA==
+Received: from DM6PR07CA0082.namprd07.prod.outlook.com (2603:10b6:5:337::15)
+ by SA1PR12MB7271.namprd12.prod.outlook.com (2603:10b6:806:2b8::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 13:50:30 +0000
+Received: from DS1PEPF0000E639.namprd02.prod.outlook.com
+ (2603:10b6:5:337:cafe::86) by DM6PR07CA0082.outlook.office365.com
+ (2603:10b6:5:337::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Tue, 21 Mar 2023 13:50:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E639.mail.protection.outlook.com (10.167.17.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.30 via Frontend Transport; Tue, 21 Mar 2023 13:50:30 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 21 Mar 2023
+ 06:50:20 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 21 Mar
+ 2023 06:50:19 -0700
+Received: from c-237-173-140-141.mtl.labs.mlnx (10.127.8.12) by
+ mail.nvidia.com (10.129.68.9) with Microsoft SMTP Server id 15.2.986.5 via
+ Frontend Transport; Tue, 21 Mar 2023 06:50:15 -0700
+From:   Paul Blakey <paulb@nvidia.com>
+To:     Paul Blakey <paulb@nvidia.com>, <netdev@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        "Jozsef Kadlecsik" <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Oz Shlomo <ozsh@nvidia.com>, Roi Dayan <roid@nvidia.com>,
+        Vlad Buslov <vladbu@nvidia.com>
+Subject: [PATCH net-next 1/1] netfilter: ctnetlink: Support offloaded conntrack entry deletion
+Date:   Tue, 21 Mar 2023 15:50:04 +0200
+Message-ID: <1679406604-133128-1-git-send-email-paulb@nvidia.com>
+X-Mailer: git-send-email 1.8.4.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv2] mm/page_alloc: Make deferred page init free pages in
- MAX_ORDER blocks
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E639:EE_|SA1PR12MB7271:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d33b647-e18e-4246-c037-08db2a133c0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2zUNAqkhFiEIWxtRZYcT3RZTa+2DnxSMWoZuvORQbFqxNLp5IQJi4J0n0kteFQ0kwdBe1pknBtzDI46TtWKgtj89LTZdlAMoNbmmXVAkUMpYXkmWl2bPtBSPfpdJw1ObGIw9FGTPBqAu3CXDzL7MxyFgQarVlCUKMGkwrwokrXL2Kvu7Y98n3orFIxaCtZo/N/aVnROW3uRMkjYQ7lcXEngiyYqfV/hI10R1w6ZkjM6UcS2Iq9DaT1Drms4GmM1QsXLz5T/cjnWwHI7UkLVsidaDmpdClw2/O+v2bytMIZz3Hwuznkok5LXqwvIeoYZjLiSZCaBwiaDODgwBh173f+Q688n/Zxv2zJmMqLDFjQwPApVrTnXghLcWkhg9YvuqpJ0kQFXYfoXolm4ysC+ycvIXfN+OqZjNNand6oAFxwM0FB5G9xzAIF4C5cGOiV8cspUz1KQdz6FW4sJhLlY3g3Qslp9BD30ssg4ERLb2TwQ+WX11vwMuxFdDs05zokyc5rE9+1xMQk8y3PkJ4Tj1kkwahIz8YkBraQVYAN6ub6SrbbyaDEb7CO43Y56M+Y+8MzTiX0cJJEYHX2KSTl0IqAzZuvDthknPRph4gVaoAIkirx4tPHvxKIOG+fPRCmMhNXX3GPJ+FWTGtfudPkcewwnE43bgk2K30cEK95b+UMbs/pysNXHbRLZcX1QIN0y9ckCaajVBYi5/3jMSazto4oSh4bgzowUkGD/EOtR0K1VoIkzizjWF/KmX/YhyxKUhaE5EtJzIfdCHDpF3D1q6Pg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(39860400002)(136003)(346002)(451199018)(40470700004)(36840700001)(46966006)(86362001)(82310400005)(40460700003)(36756003)(40480700001)(70206006)(83380400001)(316002)(4326008)(478600001)(70586007)(8676002)(186003)(54906003)(26005)(336012)(110136005)(2616005)(107886003)(6666004)(426003)(47076005)(921005)(356005)(8936002)(5660300002)(7416002)(36860700001)(41300700001)(2906002)(82740400003)(7636003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 13:50:30.1864
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d33b647-e18e-4246-c037-08db2a133c0c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E639.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7271
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.23 01:24, Kirill A. Shutemov wrote:
-> Normal page init path frees pages during the boot in MAX_ORDER chunks,
-> but deferred page init path does it in pageblock blocks.
-> 
-> Change deferred page init path to work in MAX_ORDER blocks.
-> 
-> For cases when MAX_ORDER is larger than pageblock, set migrate type to
-> MIGRATE_MOVABLE for all pageblocks covered by the page.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
-> 
-> Note: the patch depends on the new definiton of MAX_ORDER.
-> 
-> v2:
-> 
->   - Fix commit message;
-> 
+Currently, offloaded conntrack entries (flows) can only be deleted
+after they are removed from offload, which is either by timeout,
+tcp state change or tc ct rule deletion. This can cause issues for
+users wishing to manually delete or flush existing entries.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Support deletion of offloaded conntrack entries.
 
+Example usage:
+ # Delete all offloaded (and non offloaded) conntrack entries
+ # whose source address is 1.2.3.4
+ $ conntrack -D -s 1.2.3.4
+ # Delete all entries
+ $ conntrack -F
+
+Signed-off-by: Paul Blakey <paulb@nvidia.com>
+---
+ net/netfilter/nf_conntrack_netlink.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
+index bfc3aaa2c872..fbc47e4b7bc3 100644
+--- a/net/netfilter/nf_conntrack_netlink.c
++++ b/net/netfilter/nf_conntrack_netlink.c
+@@ -1554,9 +1554,6 @@ static const struct nla_policy ct_nla_policy[CTA_MAX+1] = {
+ 
+ static int ctnetlink_flush_iterate(struct nf_conn *ct, void *data)
+ {
+-	if (test_bit(IPS_OFFLOAD_BIT, &ct->status))
+-		return 0;
+-
+ 	return ctnetlink_filter_match(ct, data);
+ }
+ 
+@@ -1626,11 +1623,6 @@ static int ctnetlink_del_conntrack(struct sk_buff *skb,
+ 
+ 	ct = nf_ct_tuplehash_to_ctrack(h);
+ 
+-	if (test_bit(IPS_OFFLOAD_BIT, &ct->status)) {
+-		nf_ct_put(ct);
+-		return -EBUSY;
+-	}
+-
+ 	if (cda[CTA_ID]) {
+ 		__be32 id = nla_get_be32(cda[CTA_ID]);
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.26.3
 
