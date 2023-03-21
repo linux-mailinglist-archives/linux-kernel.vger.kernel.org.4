@@ -2,192 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24136C37AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DFB6C37B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCURFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S230022AbjCURFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjCURF0 (ORCPT
+        with ESMTP id S230337AbjCURFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:05:26 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85E9521D7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:04:47 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id d65-20020a6bb444000000b0075842b0c980so1462034iof.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:04:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679418287;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+zTrQymw8nWm1LaYS6yQZNEVKZFLl6piGpgaLk7/4RE=;
-        b=DE/b6szEhbefCpB7hYhulGcssd4OF7eEli2gKbE7E794Lk3e+CXEkuQTgbutnjLMV8
-         9z2bO2+25kR5B/LnawzvR1ChYJuFvv/6Wy7zlmNPcAJPO+AHYn/p5NOWmfUvrzIsAYeC
-         fLILAhHroDVYRFfqlVQmwMxEnDpSjW9fpo3eWJVvfjVltYrsg13ekCLzllWfuC+F6Zn1
-         ACHeCkxrTeduEJT5wP1q0eEgZd3mqa6uqvN7dxbMWkfyScgRFLggjSqtN+mwAOZG50ng
-         lpf7ZDlB/hOsviD3FUnR838pKj63H6glL3a/mnJWCwYRP5hPD8MAjaJBBFtpbz/CqiAG
-         9pew==
-X-Gm-Message-State: AO0yUKXB+tULFmgAB2SbocBb5pkjQmEjzFgeAHwEVASWgTewFsVdxbDi
-        XEOQ9cx0ZBzTeVqPKg1Im7MxGOgiIHMeE+9gwwRntxFN/Mrk
-X-Google-Smtp-Source: AK7set9ZLrfktTpmIZ42olW6S9WFaixJFSMx4jgpyGAZsTz4YqTTPuheLv3NxoBXl0MTeXnwBNJY/zeGRCozfMx2sV1x9SBu/ngM
+        Tue, 21 Mar 2023 13:05:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D5E17CE9;
+        Tue, 21 Mar 2023 10:05:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D59D261D3D;
+        Tue, 21 Mar 2023 17:05:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB75C433EF;
+        Tue, 21 Mar 2023 17:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679418327;
+        bh=jlgHU9SCJxg4qa7O1zwTnf+v78Uv+aUw7L56oscbVn4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SR//Z3es/uwPV/FylYLKutrPpcqB+cPpuUl7i4+EYeHAiWOyzte/q5CE0uFzEMCc6
+         Tl8W6Mm6EGyewcT/4H3YaBKW3fFGERVvWHB9EjlgGFrXEhOkY1Ro91rC3TcA/kP8hf
+         5el/RQT0rmijOmgowXMYvlaZCDhd/nTZ+RD4hDdGwEIC1ILNlv2BYzQP/InXBBv4tW
+         3lQUHYg74e+GwNYXAq18WY0Vq7lEpNJYq9u4M3TFXj5+giR1Zwd9gOM3Qc91FqHq9V
+         5kz/HmxIbxrWgOhuL4XVyusBy/sWOl+5Ki2yioS0PR23DdRYCYzaKKpv3L2MQtNooJ
+         chpznnjMxOTJw==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 00/14] mm: move core MM initialization to mm/mm_init.c
+Date:   Tue, 21 Mar 2023 19:04:59 +0200
+Message-Id: <20230321170513.2401534-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:f13:b0:313:c399:73c8 with SMTP id
- x19-20020a056e020f1300b00313c39973c8mr1279881ilj.4.1679418287044; Tue, 21 Mar
- 2023 10:04:47 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 10:04:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006dc0c105f76c0a72@google.com>
-Subject: [syzbot] [dri?] BUG: sleeping function called from invalid context in _vm_unmap_aliases
-From:   syzbot <syzbot+a9a2bb6afe9eb31efc56@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, christian.koenig@amd.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-syzbot found the following issue on:
+Also in git:
+https://git.kernel.org/rppt/h/mm-init/v2
 
-HEAD commit:    f3594f0204b7 Add linux-next specific files for 20230321
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=161552eec80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f22105589e896af1
-dashboard link: https://syzkaller.appspot.com/bug?extid=a9a2bb6afe9eb31efc56
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+v2:
+* move init_cma_reserved_pageblock() from cma.c to mm_init.c
+* rename init_mem_debugging_and_hardening() to
+  mem_debugging_and_hardening_init()
+* inline pgtable_init() into mem_core_init()
+* add Acked and Reviewed tags (thanks David, hopefully I've picked them
+  right)
 
-Unfortunately, I don't have any reproducer for this issue yet.
+v1: https://lore.kernel.org/all/20230319220008.2138576-1-rppt@kernel.org
+This set moves most of the core MM initialization to mm/mm_init.c.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0b755145006a/disk-f3594f02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fca26e328a81/vmlinux-f3594f02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/39744d7d289f/bzImage-f3594f02.xz
+This largely includes free_area_init() and its helpers, functions used at
+boot time, mm_init() from init/main.c and some of the functions it calls.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a9a2bb6afe9eb31efc56@syzkaller.appspotmail.com
+Aside from gaining some more space before mm/page_alloc.c hits 10k lines,
+this makes mm/page_alloc.c to be mostly about buddy allocator and moves the
+init code out of the way, which IMO improves maintainability.
 
-BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 10028, name: syz-executor.4
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-3 locks held by syz-executor.4/10028:
- #0: ffff88807597afd8 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_killable include/linux/mmap_lock.h:110 [inline]
- #0: ffff88807597afd8 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0x158/0x3b0 mm/util.c:541
- #1: ffff888081123270 (&shmem->pages_lock){+.+.}-{3:3}, at: drm_gem_shmem_get_pages+0x53/0x180 drivers/gpu/drm/drm_gem_shmem_helper.c:216
- #2: ffffffff8c796500 (rcu_read_lock){....}-{1:2}, at: _vm_unmap_aliases.part.0+0x138/0x560 mm/vmalloc.c:2182
-CPU: 1 PID: 10028 Comm: syz-executor.4 Not tainted 6.3.0-rc3-next-20230321-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10059
- __mutex_lock_common kernel/locking/mutex.c:580 [inline]
- __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
- _vm_unmap_aliases.part.0+0x1ca/0x560 mm/vmalloc.c:2187
- _vm_unmap_aliases mm/vmalloc.c:2181 [inline]
- vm_unmap_aliases+0x49/0x50 mm/vmalloc.c:2230
- change_page_attr_set_clr+0x226/0x470 arch/x86/mm/pat/set_memory.c:1837
- cpa_set_pages_array arch/x86/mm/pat/set_memory.c:1892 [inline]
- _set_pages_array+0x1c6/0x220 arch/x86/mm/pat/set_memory.c:2230
- drm_gem_shmem_get_pages_locked+0x155/0x240 drivers/gpu/drm/drm_gem_shmem_helper.c:191
- drm_gem_shmem_get_pages+0x71/0x180 drivers/gpu/drm/drm_gem_shmem_helper.c:219
- drm_gem_shmem_mmap drivers/gpu/drm/drm_gem_shmem_helper.c:636 [inline]
- drm_gem_shmem_mmap+0x153/0x540 drivers/gpu/drm/drm_gem_shmem_helper.c:620
- drm_gem_mmap_obj+0x1b6/0x6c0 drivers/gpu/drm/drm_gem.c:1046
- drm_gem_mmap+0x41d/0x780 drivers/gpu/drm/drm_gem.c:1124
- call_mmap include/linux/fs.h:1859 [inline]
- mmap_region+0x694/0x28d0 mm/mmap.c:2652
- do_mmap+0x831/0xf60 mm/mmap.c:1438
- vm_mmap_pgoff+0x1a2/0x3b0 mm/util.c:543
- ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1484
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f905968c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f905a3fa168 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
-RAX: ffffffffffffffda RBX: 00007f90597abf80 RCX: 00007f905968c0f9
-RDX: 0000000000000000 RSI: 0000000000003028 RDI: 0000000020ffc000
-RBP: 00007f90596e7b39 R08: 0000000000000004 R09: 0000000100000000
-R10: 0000000000000012 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcde03503f R14: 00007f905a3fa300 R15: 0000000000022000
- </TASK>
+Besides, this allows to move a couple of declarations out of include/linux
+and make them private to mm/.
 
-=============================
-[ BUG: Invalid wait context ]
-6.3.0-rc3-next-20230321-syzkaller #0 Tainted: G        W         
------------------------------
-syz-executor.4/10028 is trying to lock:
-ffff888027c7a068 (&vb->lock){+.+.}-{3:3}, at: _vm_unmap_aliases.part.0+0x1ca/0x560 mm/vmalloc.c:2187
-other info that might help us debug this:
-context-{4:4}
-3 locks held by syz-executor.4/10028:
- #0: ffff88807597afd8 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_killable include/linux/mmap_lock.h:110 [inline]
- #0: ffff88807597afd8 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0x158/0x3b0 mm/util.c:541
- #1: ffff888081123270 (&shmem->pages_lock){+.+.}-{3:3}, at: drm_gem_shmem_get_pages+0x53/0x180 drivers/gpu/drm/drm_gem_shmem_helper.c:216
- #2: ffffffff8c796500 (rcu_read_lock){....}-{1:2}, at: _vm_unmap_aliases.part.0+0x138/0x560 mm/vmalloc.c:2182
-stack backtrace:
-CPU: 1 PID: 10028 Comm: syz-executor.4 Tainted: G        W          6.3.0-rc3-next-20230321-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4724 [inline]
- check_wait_context kernel/locking/lockdep.c:4785 [inline]
- __lock_acquire+0x159e/0x5df0 kernel/locking/lockdep.c:5024
- lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
- __mutex_lock_common kernel/locking/mutex.c:603 [inline]
- __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
- _vm_unmap_aliases.part.0+0x1ca/0x560 mm/vmalloc.c:2187
- _vm_unmap_aliases mm/vmalloc.c:2181 [inline]
- vm_unmap_aliases+0x49/0x50 mm/vmalloc.c:2230
- change_page_attr_set_clr+0x226/0x470 arch/x86/mm/pat/set_memory.c:1837
- cpa_set_pages_array arch/x86/mm/pat/set_memory.c:1892 [inline]
- _set_pages_array+0x1c6/0x220 arch/x86/mm/pat/set_memory.c:2230
- drm_gem_shmem_get_pages_locked+0x155/0x240 drivers/gpu/drm/drm_gem_shmem_helper.c:191
- drm_gem_shmem_get_pages+0x71/0x180 drivers/gpu/drm/drm_gem_shmem_helper.c:219
- drm_gem_shmem_mmap drivers/gpu/drm/drm_gem_shmem_helper.c:636 [inline]
- drm_gem_shmem_mmap+0x153/0x540 drivers/gpu/drm/drm_gem_shmem_helper.c:620
- drm_gem_mmap_obj+0x1b6/0x6c0 drivers/gpu/drm/drm_gem.c:1046
- drm_gem_mmap+0x41d/0x780 drivers/gpu/drm/drm_gem.c:1124
- call_mmap include/linux/fs.h:1859 [inline]
- mmap_region+0x694/0x28d0 mm/mmap.c:2652
- do_mmap+0x831/0xf60 mm/mmap.c:1438
- vm_mmap_pgoff+0x1a2/0x3b0 mm/util.c:543
- ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1484
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f905968c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f905a3fa168 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
-RAX: ffffffffffffffda RBX: 00007f90597abf80 RCX: 00007f905968c0f9
-RDX: 0000000000000000 RSI: 0000000000003028 RDI: 0000000020ffc000
-RBP: 00007f90596e7b39 R08: 0000000000000004 R09: 0000000100000000
-R10: 0000000000000012 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcde03503f R14: 00007f905a3fa300 R15: 0000000000022000
- </TASK>
+And as an added bonus there a slight decrease in vmlinux size.
+For tinyconfig and defconfig on x86 I've got
+
+tinyconfig:
+   text	   data	    bss	    dec	    hex	filename
+ 853206	 289376	1200128	2342710	 23bf36	a/vmlinux
+ 853198	 289344	1200128	2342670	 23bf0e	b/vmlinux
+
+defconfig:
+    text   	   data	    bss	    dec	    	    hex	filename
+26152959	9730634	2170884	38054477	244aa4d	a/vmlinux
+26152945	9730602	2170884	38054431	244aa1f	b/vmlinux
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Mike Rapoport (IBM) (14):
+  mips: fix comment about pgtable_init()
+  mm/page_alloc: add helper for checking if check_pages_enabled
+  mm: move most of core MM initialization to mm/mm_init.c
+  mm: handle hashdist initialization in mm/mm_init.c
+  mm/page_alloc: rename page_alloc_init() to page_alloc_init_cpuhp()
+  init: fold build_all_zonelists() and page_alloc_init_cpuhp() to mm_init()
+  init,mm: move mm_init() to mm/mm_init.c and rename it to mm_core_init()
+  mm: call {ptlock,pgtable}_cache_init() directly from mm_core_init()
+  mm: move init_mem_debugging_and_hardening() to mm/mm_init.c
+  init,mm: fold late call to page_ext_init() to page_alloc_init_late()
+  mm: move mem_init_print_info() to mm_init.c
+  mm: move kmem_cache_init() declaration to mm/slab.h
+  mm: move vmalloc_init() declaration to mm/internal.h
+  MAINTAINERS: extend memblock entry to include MM initialization
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ MAINTAINERS                    |    3 +-
+ arch/mips/include/asm/fixmap.h |    2 +-
+ include/linux/gfp.h            |    7 +-
+ include/linux/mm.h             |    9 +-
+ include/linux/page_ext.h       |    2 -
+ include/linux/slab.h           |    1 -
+ include/linux/vmalloc.h        |    4 -
+ init/main.c                    |   74 +-
+ mm/cma.c                       |    1 +
+ mm/internal.h                  |   52 +-
+ mm/mm_init.c                   | 2547 +++++++++++++++++++++++++++
+ mm/page_alloc.c                | 2981 +++-----------------------------
+ mm/slab.h                      |    1 +
+ 13 files changed, 2856 insertions(+), 2828 deletions(-)
+
+
+base-commit: 4018ab1f7cec061b8425737328edefebdc0ab832
+-- 
+2.35.1
+
