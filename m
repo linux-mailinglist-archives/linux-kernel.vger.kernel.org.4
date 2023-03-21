@@ -2,173 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8C46C34BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783856C34C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjCUOth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S231485AbjCUOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjCUOte (ORCPT
+        with ESMTP id S230365AbjCUOwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:49:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F702D6A;
-        Tue, 21 Mar 2023 07:49:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19AC661C39;
-        Tue, 21 Mar 2023 14:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E75C4339B;
-        Tue, 21 Mar 2023 14:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679410169;
-        bh=MaDVQeIKwlP/YtUYVe7obO4q1kPKMuSHIYn5knKyEFE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KNUT7gDJVr0Hw6RD4nKnujdsbgxU0iDdBm9bb4egfDoD91vdJTkHBZeIJQi601gne
-         eNbDoWgawEpLwEMjfCnS6XfQTBVoLvvbgKWDtUy/fjiLKMhJ61LUO4aUJ8kUFW+nd5
-         yWYF3EyPFDZ+TO/ZX4BMmOrtPFoa/dZlWjrUlKyhlgGuZCMKlR/1lWhQrT+SquSup+
-         OS8tAWDtsMSLCG8JXMet1Te4yvq7PRxOX2UL9kDB0cAFZujCz5sOq1GX5yBTM4x/A5
-         A6+Cn7JHfOKWoA8AKrTNSyGMtgLb8253Y7IYmVZRn+7UQYfKSZ6HsJzSW1DVWclVcP
-         EljO7FmnhZ/2g==
-Message-ID: <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
-Date:   Tue, 21 Mar 2023 16:49:24 +0200
+        Tue, 21 Mar 2023 10:52:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9379C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=70/OM02lQCra3OnSiPxk9Khoao4iKy6odWQlLyOQNu4=; b=ZpcL6QEIcMhbm4WXXOwK+09043
+        /v0WK/Bc4OVkq767sNF5M+jK/nT8vJVVZ1KXgQJywvRkOtHfMxZHbT+Ilm4+8wF64xTQqWZEhnrIq
+        i6rkrHnHHZgRwR0VorFZjI614OOtDl/TS+ljL58uEc9Wbl+6owK9ytEgjAVcRKfmdBrRO7oC4JwtF
+        KXy1I6W8jeplmj/XnTDulCnT1JZQu0NMdOaH9v/NqXjyKk/bQGohnHYuXJz3t42gYGiD4uf4ZJt1T
+        rYj6cAJxS5GuzyX3JGM2ruYmOBrjZUuuFtxtoXx3/YbLF9iGtdv5SZNIVHYzlO+K0xa2/Bac+VvkZ
+        BhtH+9jg==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pedL9-00CoOf-2L;
+        Tue, 21 Mar 2023 14:51:55 +0000
+Message-ID: <6515b323-59ed-5524-846e-90782654259f@infradead.org>
+Date:   Tue, 21 Mar 2023 07:51:55 -0700
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
- specifying channel num
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 06/37] drm/vkms/vkms_composer: Fix a few different
+ kerneldoc formatting
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-2-815606092fff@linaro.org>
- <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
- <38fe0736-b566-9e1b-d7f3-71e3fcd01d90@linaro.org>
- <f8baed88-6a3b-17c5-4134-ce3917ee8632@kernel.org>
- <101834f0-e00c-5469-c8a5-59a00a5160a5@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <101834f0-e00c-5469-c8a5-59a00a5160a5@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Melissa Wen <mwen@igalia.com>
+Cc:     Lee Jones <lee@kernel.org>, dri-devel@lists.freedesktop.org,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel@vger.kernel.org, Melissa Wen <melissa.srw@gmail.com>
+References: <20230317081718.2650744-1-lee@kernel.org>
+ <20230317081718.2650744-7-lee@kernel.org>
+ <20230320234639.va6an7gton3u6eke@mail.igalia.com>
+ <23fe0765-fb3b-9bf4-ecb4-507e6f3edefe@infradead.org>
+ <20230321094940.ndf5nhvfr2y67d3x@mail.igalia.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230321094940.ndf5nhvfr2y67d3x@mail.igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.23 16:23, Konrad Dybcio wrote:
+
+
+On 3/21/23 02:49, Melissa Wen wrote:
+> O 03/20, Randy Dunlap wrote:
+>>
+>>
+>> On 3/20/23 16:46, Melissa Wen wrote:
+>>> On 03/17, Lee Jones wrote:
+>>>> Fixes the following W=1 kernel build warning(s):
+>>>>
+>>>>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Function parameter or member 'frame_info' not described in 'pre_mul_alpha_blend'
+>>>>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Excess function parameter 'src_frame_info' description in 'pre_mul_alpha_blend'
+>>>>  drivers/gpu/drm/vkms/vkms_composer.c:72: warning: Cannot understand  * @wb_frame_info: The writeback frame buffer metadata
+>>>>
+>>>> Cc: Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
+>>>> Cc: Melissa Wen <melissa.srw@gmail.com>
+>>>> Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+>>>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>>>> Cc: David Airlie <airlied@gmail.com>
+>>>> Cc: dri-devel@lists.freedesktop.org
+>>>> Signed-off-by: Lee Jones <lee@kernel.org>
+>>>> ---
+>>>>  drivers/gpu/drm/vkms/vkms_composer.c | 6 ++++--
+>>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/vkms_composer.c
+>>>> index 8e53fa80742b2..41668eedf4272 100644
+>>>> --- a/drivers/gpu/drm/vkms/vkms_composer.c
+>>>> +++ b/drivers/gpu/drm/vkms/vkms_composer.c
+>>>> @@ -22,7 +22,7 @@ static u16 pre_mul_blend_channel(u16 src, u16 dst, u16 alpha)
+>>>>  
+>>>>  /**
+>>>>   * pre_mul_alpha_blend - alpha blending equation
+>>>> - * @src_frame_info: source framebuffer's metadata
+>>>> + * @frame_info: source framebuffer's metadata
+>>>>   * @stage_buffer: The line with the pixels from src_plane
+>>>>   * @output_buffer: A line buffer that receives all the blends output
+>>>>   *
+>>>> @@ -69,11 +69,13 @@ static void fill_background(const struct pixel_argb_u16 *background_color,
+>>>>  }
+>>>>  
+>>>>  /**
+>>>> - * @wb_frame_info: The writeback frame buffer metadata
+>>>> + * blend
+>>> As we are already here:
+>>> * blend - blend pixels from a given row and calculate crc
+>>
+>>  * blend: blend pixels from a given row and calculate CRC
+>>
+>> preferably.
 > 
+> Hmm.. I didn't get the colon suggestion. This first line is a brief
+> description of the function blend(), so I understand that a more
+> accurate doc standard is:
 > 
-> On 21.03.2023 15:21, Georgi Djakov wrote:
->> On 21.03.23 16:09, Konrad Dybcio wrote:
+> blend() - Blend pixels from a given row and calculate crc
+> 
+
+You are correct. My bad. Sorry for the noise.
+
+> 
+>>
+>>> Reviewed-by: Melissa Wen <mwen@igalia.com>
 >>>
->>> On 21.03.2023 15:06, Georgi Djakov wrote:
->>>> Hi Konrad,
->>>>
->>>> Thanks for the patch!
->>>>
->>>> On 8.03.23 23:40, Konrad Dybcio wrote:
->>>>> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
->>>>> one channel. This should be taken into account in bandwidth calcualtion,
->>>>> as we're supposed to feed msmbus with the per-channel bandwidth. Add
->>>>> support for specifying that and use it during bandwidth aggregation.
->>>>>
->>>>
->>>> This looks good, but do you have any follow-up patch to use this and set
->>>> the channels in some driver?
->>> Yes, I have a couple of OOT drivers that are gonna make use of it.
->>> TBF it should have been sent separately from the QoS mess, but I
->>> don't think it's much of an issue to take it as-is.
->>>
->>> The aforementioned OOT drivers for MSM8998 and SM6375 will be
->>> submitted after we reach a consensus on how we want to ensure
->>> that each node is guaranteed to have its clocks enabled before
->>> access, among some other minor things.
->>
->> Yes, these QoS clocks are confusing. Maybe you can even submit them
->> without configuring any QoS stuff in first place? Does enabling QoS
->> actually show any benefits on these devices?
-> Haven't tested that thoroughly to be honest. But I'll try to get
-> some numbers.
-
-I expect this to have impact only on some latency sensitive stuff like
-modem or when there is heavy traffic flows. Maybe we can start without
-QoS first and then add it on top as a next step?
-
-BR,
-Georgi
-
-> 
-> Konrad
->>
->> Thanks,
->> Georgi
->>
->>> Konrad
->>>>
->>>> BR,
->>>> Georgi
->>>>
->>>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>> ---
->>>>>     drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
->>>>>     drivers/interconnect/qcom/icc-rpm.h | 2 ++
->>>>>     2 files changed, 8 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>> index 35fd75ae70e3..27c4c6497994 100644
->>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>>>>     {
->>>>>         struct icc_node *node;
->>>>>         struct qcom_icc_node *qn;
->>>>> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>>>>         int i;
->>>>>           /* Initialise aggregate values */
->>>>> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>>>>         list_for_each_entry(node, &provider->nodes, node_list) {
->>>>>             qn = node->data;
->>>>>             for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->>>>> -            agg_avg[i] += qn->sum_avg[i];
->>>>> +            if (qn->channels)
->>>>> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
->>>>> +            else
->>>>> +                sum_avg[i] = qn->sum_avg[i];
->>>>> +            agg_avg[i] += sum_avg[i];
->>>>>                 agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
->>>>>             }
->>>>>         }
->>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->>>>> index 8ba1918d7997..8aed5400afda 100644
->>>>> --- a/drivers/interconnect/qcom/icc-rpm.h
->>>>> +++ b/drivers/interconnect/qcom/icc-rpm.h
->>>>> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
->>>>>      * @id: a unique node identifier
->>>>>      * @links: an array of nodes where we can go next while traversing
->>>>>      * @num_links: the total number of @links
->>>>> + * @channels: number of channels at this node (e.g. DDR channels)
->>>>>      * @buswidth: width of the interconnect between a node and the bus (bytes)
->>>>>      * @sum_avg: current sum aggregate value of all avg bw requests
->>>>>      * @max_peak: current max aggregate value of all peak bw requests
->>>>> @@ -78,6 +79,7 @@ struct qcom_icc_node {
->>>>>         u16 id;
->>>>>         const u16 *links;
->>>>>         u16 num_links;
->>>>> +    u16 channels;
->>>>>         u16 buswidth;
->>>>>         u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>>>>         u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->>>>>
+>>>> + * @wb: The writeback frame buffer metadata
+>>>>   * @crtc_state: The crtc state
+>>>>   * @crc32: The crc output of the final frame
+>>>>   * @output_buffer: A buffer of a row that will receive the result of the blend(s)
+>>>>   * @stage_buffer: The line with the pixels from plane being blend to the output
+>>>> + * @row_size: Size of memory taken up by row data (line_width * pixel_size)
+>>>>   *
+>>>>   * This function blends the pixels (Using the `pre_mul_alpha_blend`)
+>>>>   * from all planes, calculates the crc32 of the output from the former step,
+>>>> -- 
+>>>> 2.40.0.rc1.284.g88254d51c5-goog
 >>>>
 >>
+>> -- 
+>> ~Randy
 
+-- 
+~Randy
