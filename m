@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBFF6C3940
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365946C393F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjCUSfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S229995AbjCUSfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjCUSf1 (ORCPT
+        with ESMTP id S229992AbjCUSfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:35:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A545CA16
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679423684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sPS9ll6drXSpZudk7wgwyOxcgefAuYnobo/FFgs8jpQ=;
-        b=jKOuX4H7KKrZHvL4QoJfSrsCEU4cE+O4j0K6ZpbFLZatVoKKp9wfJKdXPcDix//iYzqaW0
-        BFBf1gzJVbkTMryBZ6DSDHo/RgHpWdelvh90WCiDH6ConTcvu8WCTy6zpejaZHcUtzMEyD
-        p48Qxa0irnrCDG6vpE4suM/Y+j6ZoTA=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-482-UjBmMrz9OpicOonRmkk_4w-1; Tue, 21 Mar 2023 14:34:43 -0400
-X-MC-Unique: UjBmMrz9OpicOonRmkk_4w-1
-Received: by mail-qt1-f200.google.com with SMTP id i24-20020ac84f58000000b003bfe3358691so9298354qtw.21
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:34:43 -0700 (PDT)
+        Tue, 21 Mar 2023 14:35:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4383E1C2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:35:03 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eh3so63389196edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679423701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z0AYUnT0/KW1zTFkWuQVJ616wax7LB1pNkItFnW63oA=;
+        b=Y5PVDuLgSexCXggBndd5IVvHrqQ8Ii0KndS1uA5hsJVRdGEFLk09/RXu7Y8rwPZ1UX
+         +FhFNqSr6iXQ1SiE7ha2gn81WcqYJMC4jLGHusTE00npGJpnvGPgEEsQHh21KSS0bEE9
+         sj6Y7r0V122u0fJOUEXAlRYXUb7v3Tq7GcsYWJ5Kfx4gkpSZIELP+kqg9Tu9Oiy0cJtc
+         On0UdAWYvCsuRwX6FNwj+3TVPZGtfD1Awj/POZsPHyoGEz+H4jw8guwbf59loBv4ZKlT
+         xYhD63sCyESWu6lYA1h8tyb9d8tvn6IKqrolfDqoeH88D/wjMYjAWiP/7YJqKhOhVeMe
+         KPmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679423683;
+        d=1e100.net; s=20210112; t=1679423701;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sPS9ll6drXSpZudk7wgwyOxcgefAuYnobo/FFgs8jpQ=;
-        b=j4MvMRG92A3fsYkgY8QV+ZZZxdZuoC4ygvygL/q/LJYVUme1Ts0JkZGiJA4agsbRrM
-         Mcv96YiZDD2waXQ0yBACnhXRFf6exAYP0HXuK71eUQNpMnxu4fqIqDfCE8uU+MK6pJtX
-         aSl0yFRxByrA7riT7qOEXeNwUURZeXtSkrKnzQ/+Owu7q5W35vXoLYVYhX/1qn9rp4s9
-         UawBr2JRYa3dCDmipMwrtWAdX/Djwl6L17zgkkjo7B58ym/GKEyHW+aIK8EdWkBRnW6I
-         aa5fr8YL3Wzb3yr9lsE4rA3JE3lsx7lWRG/t5Pmgju+TNVEH6SeqWDybhjJm0+DfR3+3
-         TxpA==
-X-Gm-Message-State: AO0yUKV6Usw24EoygIqvXHAWeyCQahvnpLMgfKeA6dKYSCyxDBR0GzbY
-        w/XRAyIOFuFAe9SW3dU6dMVBcpJmI6ShsLP0nBPK6wm3XeVrTev7edvHsDYaRxBzbRgA6GzvERX
-        j1oi/KE0yawGCeCnUEwtxC2KV
-X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c212 with SMTP id x12-20020a05622a000c00b003b9bc8cc212mr1130919qtw.29.1679423683057;
-        Tue, 21 Mar 2023 11:34:43 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8Nu0137AV03cS5KH42Ha1QHglBsq3KR/srTrXB0d2sDKNVBqq1BOANC35xWCA7cmroLW7GGw==
-X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c212 with SMTP id x12-20020a05622a000c00b003b9bc8cc212mr1130898qtw.29.1679423682803;
-        Tue, 21 Mar 2023 11:34:42 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i16-20020ac871d0000000b003d9a69b4876sm8778906qtp.11.2023.03.21.11.34.41
+        bh=Z0AYUnT0/KW1zTFkWuQVJ616wax7LB1pNkItFnW63oA=;
+        b=BZTae5snODsz3TWG0RssEeD1d5q+6ekFzl2XhWtRSmN4e7NkusO9TsAUnPlvCH9LSl
+         QMrqNEohYCeo0R+EPdNEc3va6h5Q28lUyjjBny/8sWbx4ZE75oGGCa34RR6Q5wIjrx4F
+         7mhkhFY8TrVmmDmulHk1kXlfJOAFcwA6nEQz/87S+yIcpIczVAyuYkjaGyEKuZz4mTV/
+         7ejBEotIWbLLEgADndVeQqlYJpXsnZpo8UWd0CDphUgXQ8GyM7wyw/Mf0P/630IMuo3P
+         /adQ8s8gTYV+gs6Zm3/IFS7R8RUhEyNxjT+IU/pgMzQjM0xKOmGsdT5FpUa6rN+HOwQy
+         ap1g==
+X-Gm-Message-State: AO0yUKVHV6pv/EL2UBxwSwSSFwuiyL+nXKjBGDdGk4vk4KoHceyyRzSx
+        8bAm36B6UN+vhMsazLRCwt6k7RImWac=
+X-Google-Smtp-Source: AK7set9x7EzaUpWev+yfVdYQZs4/VetrJQSk64rd89ldBRD4zNng7APaNzY9p+fBZRaaVopAjd3KAA==
+X-Received: by 2002:a17:906:344d:b0:932:83fa:d2fe with SMTP id d13-20020a170906344d00b0093283fad2femr3913646ejb.12.1679423701474;
+        Tue, 21 Mar 2023 11:35:01 -0700 (PDT)
+Received: from alaa-emad.. ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id bm7-20020a170906c04700b0093332993b1bsm4670919ejb.137.2023.03.21.11.34.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:34:42 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] watchdog: s3c2410: remove unused freq_to_wdt and s3c2410wdt_is_running functions
-Date:   Tue, 21 Mar 2023 14:34:39 -0400
-Message-Id: <20230321183439.1826823-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 21 Mar 2023 11:35:00 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        eng.mennamahmoud.mm@gmail.com, Julia Lawall <julia.lawall@inria.fr>
+Subject: [PATCH v2] staging: greybus: use inline function for macros
+Date:   Tue, 21 Mar 2023 20:34:56 +0200
+Message-Id: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,50 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/watchdog/s3c2410_wdt.c:311:35: error: unused function
-  'freq_to_wdt' [-Werror,-Wunused-function]
-static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
-                                  ^
-drivers/watchdog/s3c2410_wdt.c:446:19: error: unused function
-  's3c2410wdt_is_running' [-Werror,-Wunused-function]
-static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
-                  ^
-These functions are not used, so remove them.
+Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+static inline function.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+It is not great to have macros that use the `container_of` macro,
+because from looking at the definition one cannot tell what type
+it applies to.
+
+One can get the same benefit from an efficiency point of view
+by making an inline function.
+
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
 ---
- drivers/watchdog/s3c2410_wdt.c | 10 ----------
- 1 file changed, 10 deletions(-)
+changes in v2:
+	-send patch as a single patch.
+	-edit the name of struct object.
+	-edit commit message.
+---
+ drivers/staging/greybus/gbphy.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index 200ba236a72e..6394dda7a5dc 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -308,11 +308,6 @@ static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
- 				       / S3C2410_WTCON_MAXDIV);
- }
+diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+index d4a225b76338..e7ba232bada1 100644
+--- a/drivers/staging/greybus/gbphy.h
++++ b/drivers/staging/greybus/gbphy.h
+@@ -15,7 +15,10 @@ struct gbphy_device {
+ 	struct list_head list;
+ 	struct device dev;
+ };
+-#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
++static inline struct gbphy_device *to_gbphy_dev(const struct device *_dev)
++{
++	return container_of(_dev, struct gbphy_device, dev);
++}
  
--static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
--{
--	return container_of(nb, struct s3c2410_wdt, freq_transition);
--}
--
- static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
+ static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
  {
- 	const u32 mask_val = BIT(wdt->drv_data->mask_bit);
-@@ -443,11 +438,6 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
- 	return 0;
- }
+@@ -43,7 +46,10 @@ struct gbphy_driver {
  
--static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
--{
--	return readl(wdt->reg_base + S3C2410_WTCON) & S3C2410_WTCON_ENABLE;
--}
--
- static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
- 				    unsigned int timeout)
- {
+ 	struct device_driver driver;
+ };
+-#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
++static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *drv)
++{
++	return container_of(drv, struct gbphy_driver, driver);
++}
+ 
+ int gb_gbphy_register_driver(struct gbphy_driver *driver,
+ 			     struct module *owner, const char *mod_name);
 -- 
-2.27.0
+2.34.1
 
