@@ -2,156 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385016C3EB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0FF6C3EB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCUXj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 19:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S230013AbjCUXkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 19:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjCUXjy (ORCPT
+        with ESMTP id S229487AbjCUXki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 19:39:54 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E65C15577;
-        Tue, 21 Mar 2023 16:39:53 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id az3-20020a05600c600300b003ed2920d585so12010583wmb.2;
-        Tue, 21 Mar 2023 16:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679441991;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jwfMZ6FsDD8+QlFgG9YSGQ+zSUs+XYTprVxYaYY4xCs=;
-        b=bkBHelgXJwSgw9NZ5DcQ/rAeODyT2QbCZQWqLR3yhQe7qk2WtbX3WlX//JoMlB0gX0
-         lfalGUbwfgFGT4ELFVIjA759O+kKuqGQtJS87Vk0JPkszPWrW7TnHebl6ei2+oorMVhd
-         Lc98meTC4oaHoutzsVkMwR95MIwhSE9MwDhFyknkqQPJcwG7O5IR8GeQyHr9MTD/9SGU
-         pxFGpcTlofPElg4Phc7kkGzdUqKwVaBFHVxGp3tGJeLa84o6nDOEeypP1oikHYn+q7wR
-         Jrtu2GEePEQfegjd54V3W5o2sm98uxNpYUTvOBLoOV3Ny09R0J74nwQSogF+VMIzc3FY
-         26XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679441991;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jwfMZ6FsDD8+QlFgG9YSGQ+zSUs+XYTprVxYaYY4xCs=;
-        b=xdDlQYoYZbOFfBaeXuHW4Q0P7xijQqOvRMo5wz+k2uewxT6rAUnWVSqDJjjhFIZEQv
-         Ug3VLLvPYGFFQPZFcyvCmg9By9CGFMDlknDjbG8t5vqQcTft5VbzPaf5CF9W9tygQwH5
-         SNpZHKl/gowqMKYyX4hUB6+nxqgMKqIEUMDOVDFuzxGzgcj8tzJ3kwy65th4BuuEBTcS
-         Bcv351atxgu+vbsg+7SGMjGEeT78bGlL7dxO6rIyASz0RBruguR7b1iZxMTPDBXEfVbs
-         pdzmwdMn2R3VgWax83dZJfUAUD3JQmoHcna9HFmv5VEMxWN+4e4pTOLv+yU+6/EeHOlN
-         NIQQ==
-X-Gm-Message-State: AO0yUKVDH14GiAixz7VZU5qKeYcvef3a9rfx0Qp/3aYWgJ/0C5JN4GoO
-        KSJJi0MLA37z5VBHoawey74=
-X-Google-Smtp-Source: AK7set/s45oboY6J1DqDB/0FL+87KkEyElGWJ9yuDvg1P5AEXq8dYBcKJ3L/B1aVpUVe1ob2ikoHEg==
-X-Received: by 2002:a7b:c7c4:0:b0:3ea:ed4d:38f6 with SMTP id z4-20020a7bc7c4000000b003eaed4d38f6mr3681988wmk.4.1679441991057;
-        Tue, 21 Mar 2023 16:39:51 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.gmail.com with ESMTPSA id l15-20020a7bc44f000000b003edef091b17sm7840916wmi.37.2023.03.21.16.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 16:39:50 -0700 (PDT)
-Message-ID: <641a4046.7b0a0220.44d4e.95d4@mx.google.com>
-X-Google-Original-Message-ID: <ZBpARKRa7Hcg0crS@Ansuel-xps.>
-Date:   Wed, 22 Mar 2023 00:39:48 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
- Document support for LEDs node
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-11-ansuelsmth@gmail.com>
- <20230321211953.GA1544549-robh@kernel.org>
- <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
- <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
+        Tue, 21 Mar 2023 19:40:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAAD15577;
+        Tue, 21 Mar 2023 16:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679442037; x=1710978037;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=pGF/Owt8sHEYuKKC2m0YqEqvQ9bwrNgtMef7To+3Wc0=;
+  b=QKLcpWs4uBugkJmMw9jV3u6qqnSH0hU00RcLnU2Y4GTrYWW9rWqW/dL+
+   49sV9s8+PZcmmdn3w0wjeAkBA51WDqt+bWDGNdKfxw2HdkaAznlC+Hfi8
+   aYr/ZelDuLXG3NrLjqLyayDkGnKLR7QB4BBZk3OlS2Gp84UbC6rsa/RbZ
+   veWRlpK0uHag30vBKQXt9Sfe7rIiSVqjQXd2iOvheB3ZqvYlcGKKJgQMl
+   wC+4AJIuO9FEzmJFDUBTXzQiyo5vhWghdKF/O5chJgBbTui1UsaY5PA+C
+   QCDQVn+FExdDRrcLLeZDB9vbZQOWZ7GZ/kBsKSUfSUjXGZhPHt+GrgqzK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="341439110"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="341439110"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 16:40:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="927622669"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="927622669"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Mar 2023 16:40:35 -0700
+Received: from ejgrimme-mobl1.amr.corp.intel.com (unknown [10.251.1.45])
+        by linux.intel.com (Postfix) with ESMTP id 98D25580AA4;
+        Tue, 21 Mar 2023 16:40:35 -0700 (PDT)
+Message-ID: <4210e5ceccb8206da32e855915bcd4a9c6235fe2.camel@linux.intel.com>
+Subject: Re: [PATCH V10 4/4] PCI: vmd: Add quirk to configure PCIe ASPM and
+ LTR
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Date:   Tue, 21 Mar 2023 16:40:35 -0700
+In-Reply-To: <ZBmlPIU4FIBU7HU1@intel.com>
+References: <20230120031522.2304439-1-david.e.box@linux.intel.com>
+         <20230120031522.2304439-5-david.e.box@linux.intel.com>
+         <ZBjko/ifunIwsK2v@intel.com>
+         <8675a80b311443d3c3ed99e09832bd07355bfcc2.camel@linux.intel.com>
+         <ZBmlPIU4FIBU7HU1@intel.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:23:59AM +0100, Andrew Lunn wrote:
-> > > Are specific ethernet controllers allowed to add their own properties in 
-> > > led nodes? If so, this doesn't work. As-is, this allows any other 
-> > > properties. You need 'unevaluatedProperties: false' here to prevent 
-> > > that. But then no one can add properties. If you want to support that, 
-> > > then you need this to be a separate schema that devices can optionally 
-> > > include if they don't extend the properties, and then devices that 
-> > > extend the binding would essentially have the above with:
-> > > 
-> > > $ref: /schemas/leds/common.yaml#
-> > > unevaluatedProperties: false
-> > > properties:
-> > >   a-custom-device-prop: ...
-> > > 
-> > > 
-> > > If you wanted to define both common ethernet LED properties and 
-> > > device specific properties, then you'd need to replace leds/common.yaml 
-> > > above  with the ethernet one.
-> > > 
-> > > This is all the same reasons the DSA/switch stuff and graph bindings are 
-> > > structured the way they are.
-> > > 
-> > 
-> > Hi Rob, thanks for the review/questions.
-> > 
-> > The idea of all of this is to keep leds node as standard as possible.
-> > It was asked to add unevaluatedProperties: False but I didn't understood
-> > it was needed also for the led nodes.
-> > 
-> > leds/common.yaml have additionalProperties set to true but I guess that
-> > is not OK for the final schema and we need something more specific.
-> > 
-> > Looking at the common.yaml schema reg binding is missing so an
-> > additional schema is needed.
-> > 
-> > Reg is needed for ethernet LEDs and PHY but I think we should also permit
-> > to skip that if the device actually have just one LED. (if this wouldn't
-> > complicate the implementation. Maybe some hints from Andrew about this
-> > decision?)
-> 
-> I would make reg mandatory.
->
+On Tue, 2023-03-21 at 14:38 +0200, Ville Syrj=C3=A4l=C3=A4 wrote:
+> On Mon, Mar 20, 2023 at 07:24:16PM -0700, David E. Box wrote:
+> > Hi,
+> >=20
+> > On Tue, 2023-03-21 at 00:56 +0200, Ville Syrj=C3=A4l=C3=A4 wrote:
+> > > On Thu, Jan 19, 2023 at 07:15:22PM -0800, David E. Box wrote:
+> > > > +/*
+> > > > + * Enable ASPM and LTR settings on devices that aren't configured =
+by
+> > > > BIOS.
+> > > > + */
+> > > > +static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdat=
+a)
+> > > > +{
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long features =
+=3D *(unsigned long *)userdata;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 ltr =3D VMD_BIOS_PM_=
+QUIRK_LTR;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 ltr_reg;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int pos;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!(features & VMD_FEA=
+T_BIOS_PM_QUIRK))
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci_enable_link_state(pd=
+ev, PCIE_LINK_STATE_ALL);
+> >=20
+> > We call pci_enable_link_state from a callback that's run during
+> > pci_walk_bus()
+> > which I see already acquires the semaphore. We've had this patch for we=
+ll
+> > over a
+> > year and I haven't seen this issue before. Is there a particular config
+> > needed
+> > to reproduce it?
+>=20
+> Not sure what would affect it, beyond the normal PROVE_LOCKING=3Dy.
 
-Ok will add a new schema and change the regex.
+Thanks. Did not have this set. I reproduced the issue and have sent a fix.
 
-> We should not encourage additional properties, but i also think we
-> cannot block it.
-> 
-> The problem we have is that there is absolutely no standardisation
-> here. Vendors are free to do whatever they want, and they do. So i
-> would not be too surprised if some vendor properties are needed
-> eventually.
->
+David
 
-Think that will come later with defining a more specific schema. But I
-honestly think most of the special implementation will be handled to the
-driver internally and not with special binding in DT.
+>=20
+> This is the .config our CI uses:
+> https://gitlab.freedesktop.org/gfx-ci/i915-infra/-/blob/master/kconfig/de=
+bug
+>=20
+> >=20
+> > As far as a solution I think we can copy what __pci_disable_link_state(=
+)
+> > does
+> > and add a bool argument so that we only do down/up on the semaphore whe=
+n set
+> > to
+> > true. Since we know we will in be the lock during the bus walk we can s=
+et it
+> > to
+> > false.
+> >=20
+> > David
+> >=20
+> > >=20
+> > > Hi,
+> > >=20
+> > > This is tripping lockdep on one our CI ADL machines.
+> > >=20
+> > > https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_12814/bat-adlp-6/boot=
+0.txt
+> > >=20
+> > > <4>[=C2=A0=C2=A0 13.815380] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> > > <4>[=C2=A0=C2=A0 13.815382] WARNING: possible recursive locking detec=
+ted
+> > > <4>[=C2=A0=C2=A0 13.815384] 6.3.0-rc1-CI_DRM_12814-g4753bbc2a817+ #1 =
+Not tainted
+> > > <4>[=C2=A0=C2=A0 13.815386] -----------------------------------------=
+---
+> > > <4>[=C2=A0=C2=A0 13.815387] swapper/0/1 is trying to acquire lock:
+> > > <4>[=C2=A0=C2=A0 13.815389] ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3=
+}, at:
+> > > pci_enable_link_state+0x69/0x1d0
+> > > <4>[=C2=A0=C2=A0 13.815396]=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 but task is already holding lock:
+> > > <4>[=C2=A0=C2=A0 13.815398] ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3=
+}, at:
+> > > pci_walk_bus+0x24/0x90
+> > > <4>[=C2=A0=C2=A0 13.815403]=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 other info that might help us debug this:
+> > > <4>[=C2=A0=C2=A0 13.815404]=C2=A0 Possible unsafe locking scenario:
+> > >=20
+> > > <4>[=C2=A0=C2=A0 13.815406]=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ CPU0
+> > > <4>[=C2=A0=C2=A0 13.815407]=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ ----
+> > > <4>[=C2=A0=C2=A0 13.815408]=C2=A0=C2=A0 lock(pci_bus_sem);
+> > > <4>[=C2=A0=C2=A0 13.815410]=C2=A0=C2=A0 lock(pci_bus_sem);
+> > > <4>[=C2=A0=C2=A0 13.815411]=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *** DEADLOCK ***
+> > >=20
+> > > <4>[=C2=A0=C2=A0 13.815413]=C2=A0 May be due to missing lock nesting =
+notation
+> > >=20
+> > > <4>[=C2=A0=C2=A0 13.815414] 2 locks held by swapper/0/1:
+> > > <4>[=C2=A0=C2=A0 13.815416]=C2=A0 #0: ffff8881029511b8 (&dev->mutex){=
+....}-{3:3}, at:
+> > > __driver_attach+0xab/0x180
+> > > <4>[=C2=A0=C2=A0 13.815422]=C2=A0 #1: ffffffff827ab0b0 (pci_bus_sem){=
+++++}-{3:3}, at:
+> > > pci_walk_bus+0x24/0x90
+> > > <4>[=C2=A0=C2=A0 13.815426]=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 stack backtrace:
+> > > <4>[=C2=A0=C2=A0 13.815428] CPU: 0 PID: 1 Comm: swapper/0 Not tainted=
+ 6.3.0-rc1-
+> > > CI_DRM_12814-g4753bbc2a817+ #1
+> > > <4>[=C2=A0=C2=A0 13.815431] Hardware name: Intel Corporation Alder La=
+ke Client
+> > > Platform/AlderLake-P DDR4 RVP, BIOS ADLPFWI1.R00.3135.A00.2203251419
+> > > 03/25/2022
+> > > <4>[=C2=A0=C2=A0 13.815434] Call Trace:
+> > > <4>[=C2=A0=C2=A0 13.815436]=C2=A0 <TASK>
+> > > <4>[=C2=A0=C2=A0 13.815437]=C2=A0 dump_stack_lvl+0x64/0xb0
+> > > <4>[=C2=A0=C2=A0 13.815443]=C2=A0 __lock_acquire+0x9b5/0x2550
+> > > <4>[=C2=A0=C2=A0 13.815461]=C2=A0 lock_acquire+0xd7/0x330
+> > > <4>[=C2=A0=C2=A0 13.815463]=C2=A0 ? pci_enable_link_state+0x69/0x1d0
+> > > <4>[=C2=A0=C2=A0 13.815466]=C2=A0 down_read+0x3d/0x180
+> > > <4>[=C2=A0=C2=A0 13.815480]=C2=A0 ? pci_enable_link_state+0x69/0x1d0
+> > > <4>[=C2=A0=C2=A0 13.815482]=C2=A0 pci_enable_link_state+0x69/0x1d0
+> > > <4>[=C2=A0=C2=A0 13.815485]=C2=A0 ? __pfx_vmd_pm_enable_quirk+0x10/0x=
+10
+> > > <4>[=C2=A0=C2=A0 13.815488]=C2=A0 vmd_pm_enable_quirk+0x49/0xb0
+> > > <4>[=C2=A0=C2=A0 13.815490]=C2=A0 pci_walk_bus+0x6d/0x90
+> > > <4>[=C2=A0=C2=A0 13.815492]=C2=A0 vmd_probe+0x75f/0x9d0
+> > > <4>[=C2=A0=C2=A0 13.815495]=C2=A0 pci_device_probe+0x95/0x120
+> > > <4>[=C2=A0=C2=A0 13.815498]=C2=A0 really_probe+0x164/0x3c0
+> > > <4>[=C2=A0=C2=A0 13.815500]=C2=A0 ? __pfx___driver_attach+0x10/0x10
+> > > <4>[=C2=A0=C2=A0 13.815503]=C2=A0 __driver_probe_device+0x73/0x170
+> > > <4>[=C2=A0=C2=A0 13.815506]=C2=A0 driver_probe_device+0x19/0xa0
+> > > <4>[=C2=A0=C2=A0 13.815508]=C2=A0 __driver_attach+0xb6/0x180
+> > > <4>[=C2=A0=C2=A0 13.815511]=C2=A0 ? __pfx___driver_attach+0x10/0x10
+> > > <4>[=C2=A0=C2=A0 13.815513]=C2=A0 bus_for_each_dev+0x77/0xd0
+> > > <4>[=C2=A0=C2=A0 13.815516]=C2=A0 bus_add_driver+0x114/0x210
+> > > <4>[=C2=A0=C2=A0 13.815518]=C2=A0 driver_register+0x5b/0x110
+> > > <4>[=C2=A0=C2=A0 13.815520]=C2=A0 ? __pfx_vmd_drv_init+0x10/0x10
+> > > <4>[=C2=A0=C2=A0 13.815523]=C2=A0 do_one_initcall+0x57/0x330
+> > > <4>[=C2=A0=C2=A0 13.815527]=C2=A0 kernel_init_freeable+0x181/0x3a0
+> > > <4>[=C2=A0=C2=A0 13.815529]=C2=A0 ? __pfx_kernel_init+0x10/0x10
+> > > <4>[=C2=A0=C2=A0 13.815532]=C2=A0 kernel_init+0x15/0x120
+> > > <4>[=C2=A0=C2=A0 13.815534]=C2=A0 ret_from_fork+0x29/0x50
+> > > <4>[=C2=A0=C2=A0 13.815537]=C2=A0 </TASK>
+> > >=20
+>=20
 
--- 
-	Ansuel
