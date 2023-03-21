@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7066C347D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAB66C348B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjCUOkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
+        id S231229AbjCUOm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCUOkD (ORCPT
+        with ESMTP id S230122AbjCUOm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:40:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF86298ED
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679409552;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=te2wjPxLotIIBWis0C4qhukl42NU3760NpTaXDtKkAA=;
-        b=EbVzPZrKdkvnCdwIpfWLMotNblRPD0f+5pk2lPjGnYXFmo28DdBkRZ0ThavnCju19SjOnN
-        /N/MfLMQZMDPzjxdCXwREojR7cRqL09CUJvbAdPv/MN/DEgu1RQLEyWbV52yBWohoOOBz2
-        ZYq8jFMoEpEGEUvmsO4fvAbt3SP8sTA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-310-MOaFrRVgOha05xutUUB10w-1; Tue, 21 Mar 2023 10:39:08 -0400
-X-MC-Unique: MOaFrRVgOha05xutUUB10w-1
-Received: by mail-wm1-f69.google.com with SMTP id j16-20020a05600c1c1000b003edfa11fa91so2498980wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:39:08 -0700 (PDT)
+        Tue, 21 Mar 2023 10:42:27 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D644D610;
+        Tue, 21 Mar 2023 07:42:26 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id bf15so6995692iob.7;
+        Tue, 21 Mar 2023 07:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679409746;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/mPHZAJ/4f0K+ZrgW1eaRgvJAnV5woW5J9CiZAelkEY=;
+        b=P14fjCC8K0ZFXG1N71qzuKysqhqk2D1T4ohhzGYNupPn5JlcVbouPXVpZVHGW9LmoK
+         QY51Dyk7sDTbnnULZT4+m4OeZJkjVHy4nBpZb0sESfSNN+s77TP2bJrfM6011w+7KHzh
+         EJBBWpIm6iMx5LsBMRhVxh33ermcGREAJuLTxPm4aOxxXzAABqJFOD0A518OXgaGZdpG
+         +3DCBtb7CCWvH2gkamobNaYXqJzm+8S1Grm4PyxjUyZApyAd0IqxJ8rIZbFERkpOWwnY
+         9IRk25V2+uyhB3AFmObiZcKF5ozcuXJnbFsyBbQMvP2laBeaq4UC0mT8DXXV0h3WlyG0
+         pbLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679409547;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=te2wjPxLotIIBWis0C4qhukl42NU3760NpTaXDtKkAA=;
-        b=exwfvmdZKeJnp50rrTP3yHUI9xlil4rCbZsR3KRm2mxbC1X+3S8SRLmAkxNtMW7vfk
-         /iSxCdIbcwcrgTP0lkmT6+ULKP5DIOeKMys3AvBfZxnYoV5g/P/tMPSrpDasIObowtZ0
-         9VDtdpHW46W8vgQ6wZpNoN6csqACQsdKG8IiQFEnL9K4Bi0uAccHu67QUJvN4J3SXZpt
-         BS8wmq+z+xHv/Cf8oG2iAiEfDZdx/Oz/XxyqM8ByH9VfrwwcOeQSGX6eWA4P+EFQ9/ax
-         hPyK+6WP+2jxlyUsP5SqfmTqvABmjzjN/4JXpmgJlfvgkBaUlIbOg1XvuV6RUM/NklUm
-         yvSQ==
-X-Gm-Message-State: AO0yUKWsGIq9BviytkEyX311iTfORP+4nTSxDgH6/Rqvxi61IF/uHZXo
-        ClN5doOlPtFSn+ypwMjWw2CDcjlBkmVRNDLRXURoEVT/0XjLKWOvjYvbcGvNeaR1vp1//hO67M+
-        D0psMMJNr1WdcKyWiexQSRNAB
-X-Received: by 2002:a05:600c:4744:b0:3ed:ebcb:e2c6 with SMTP id w4-20020a05600c474400b003edebcbe2c6mr2966522wmo.3.1679409547707;
-        Tue, 21 Mar 2023 07:39:07 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8Jpe5k8eJaSDWziJnwP3NQWvprpto6X93PPJIuPivb6Bx6XPYOeMSt783Ld3ERpqKIUsu/Vg==
-X-Received: by 2002:a05:600c:4744:b0:3ed:ebcb:e2c6 with SMTP id w4-20020a05600c474400b003edebcbe2c6mr2966505wmo.3.1679409547445;
-        Tue, 21 Mar 2023 07:39:07 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-244-19.dyn.eolo.it. [146.241.244.19])
-        by smtp.gmail.com with ESMTPSA id k15-20020a05600c1c8f00b003ed793d9de0sm2618439wms.1.2023.03.21.07.39.06
+        d=1e100.net; s=20210112; t=1679409746;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/mPHZAJ/4f0K+ZrgW1eaRgvJAnV5woW5J9CiZAelkEY=;
+        b=OEpC1wsYHuHFUgJddgjfF6My4p1A478YhlZ+aZ1pHEWr9dhz6HC7Q+AcT61f2lg8Gi
+         q0fnJZEYUmP56y4qnxaRnPBTSEVl3mMGhsHdmtJjvNioc/1N/VEbG1tbnK2xHM81i8Af
+         sDI4NQuwm3vxyG/GCfTnb7bibHc7Y+d+6I8UsYMKnTBpX2dBd5gySahyRkNEIefWZfA3
+         nbXEFg2g5uVO2E/MvyOUUsG+MnuRNila6nyJDGehIQC0AIJvCgpEF/IXig9nV3J7ZYlq
+         WUU+FW/79J4bD8cJOX0v1eq4mEDofwfNtAIOAfha6aIJvVXDyGbz2iljMQDY1yZ0MEcn
+         ZQ1Q==
+X-Gm-Message-State: AO0yUKVPLt+87v5Qo2EBdQO6FrZmxi1UqVadz7ltowqRzK8JBJYgtsLI
+        Vf7vocbSEPFX0kF/Ar9m1WQ=
+X-Google-Smtp-Source: AK7set8NNKp5yKnKnglKuRwfSaTDCAz9jQ2kweLIW2szz/T8DYHrBJehsD3eLsAHBfa+gLUD5CqpWQ==
+X-Received: by 2002:a5d:8550:0:b0:74c:da4b:c4e4 with SMTP id b16-20020a5d8550000000b0074cda4bc4e4mr1807054ios.3.1679409746016;
+        Tue, 21 Mar 2023 07:42:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p15-20020a056638216f00b00403089c2a1dsm4246541jak.108.2023.03.21.07.42.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 07:39:07 -0700 (PDT)
-Message-ID: <7589589f340f1ecb49bc8ed852e1e2dddb384700.camel@redhat.com>
-Subject: Re: [PATCH net v2 2/2] smsc911x: avoid PHY being resumed when
- interface is not up
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        netdev@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 21 Mar 2023 15:39:05 +0100
-In-Reply-To: <20230320092041.1656-3-wsa+renesas@sang-engineering.com>
-References: <20230320092041.1656-1-wsa+renesas@sang-engineering.com>
-         <20230320092041.1656-3-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 21 Mar 2023 07:42:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 21 Mar 2023 07:42:24 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Paul Fertser <fercerpav@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] hwmon: (peci/cputemp) Fix miscalculated DTS for SKX
+Message-ID: <d30ea7f5-7b47-474f-8208-a87d0b2e1394@roeck-us.net>
+References: <20230321090410.866766-1-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321090410.866766-1-iwona.winiarska@intel.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,43 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-20 at 10:20 +0100, Wolfram Sang wrote:
-> SMSC911x doesn't need mdiobus suspend/resume, that's why it sets
-> 'mac_managed_pm'. However, setting it needs to be moved from init to
-> probe, so mdiobus PM functions will really never be called (e.g. when
-> the interface is not up yet during suspend/resume). The errno is changed
-> because ENODEV has a special meaning when returned in probe().
->=20
-> Fixes: 3ce9f2bef755 ("net: smsc911x: Stop and start PHY during suspend an=
-d resume")
-> Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Tue, Mar 21, 2023 at 10:04:10AM +0100, Iwona Winiarska wrote:
+> For Skylake, DTS temperature of the CPU is reported in S10.6 format
+> instead of S8.8.
+> 
+> Reported-by: Paul Fertser <fercerpav@gmail.com>
+> Link: https://lore.kernel.org/lkml/ZBhHS7v+98NK56is@home.paul.comp/
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+
+Applied.
+
+Thanks,
+Guenter
+
 > ---
-> Changes since v1:
-> * no change
->=20
-> In smsc911x_mii_probe(), I remove the sanity check for 'phydev' because
-> it was already done in smsc911x_mii_init(). Let me know if this is
-> acceptable or if a more defensive approach is favoured.
-
-Since this is a fix, I would keep the old check, too.
-
-> @@ -1108,6 +1102,15 @@ static int smsc911x_mii_init(struct platform_devic=
-e *pdev,
->  		goto err_out_free_bus_2;
->  	}
-> =20
-> +	phydev =3D phy_find_first(pdata->mii_bus);
-> +	if (!phydev) {
-> +		netdev_err(dev, "no PHY found\n");
-> +		err =3D -ENOENT;
-> +		goto err_out_free_bus_2;
-
-Why don't you call mdiobus_unregister() in this error path?
-
-mdiobus_register() completed successfully a few lines above.
-
-Cheers,
-
-Paolo
-
+>  drivers/hwmon/peci/cputemp.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+> index 30850a479f61..87d56f0fc888 100644
+> --- a/drivers/hwmon/peci/cputemp.c
+> +++ b/drivers/hwmon/peci/cputemp.c
+> @@ -537,6 +537,12 @@ static const struct cpu_info cpu_hsx = {
+>  	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
+>  };
+>  
+> +static const struct cpu_info cpu_skx = {
+> +	.reg		= &resolved_cores_reg_hsx,
+> +	.min_peci_revision = 0x33,
+> +	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
+> +};
+> +
+>  static const struct cpu_info cpu_icx = {
+>  	.reg		= &resolved_cores_reg_icx,
+>  	.min_peci_revision = 0x40,
+> @@ -558,7 +564,7 @@ static const struct auxiliary_device_id peci_cputemp_ids[] = {
+>  	},
+>  	{
+>  		.name = "peci_cpu.cputemp.skx",
+> -		.driver_data = (kernel_ulong_t)&cpu_hsx,
+> +		.driver_data = (kernel_ulong_t)&cpu_skx,
+>  	},
+>  	{
+>  		.name = "peci_cpu.cputemp.icx",
