@@ -2,111 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE806C37DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB786C37DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjCURKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        id S230447AbjCURKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjCURKt (ORCPT
+        with ESMTP id S230333AbjCURKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:10:49 -0400
+        Tue, 21 Mar 2023 13:10:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6785372F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027B753727;
         Tue, 21 Mar 2023 10:10:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A0DBB818D3;
-        Tue, 21 Mar 2023 17:09:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21E23C433EF;
-        Tue, 21 Mar 2023 17:09:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679418590;
-        bh=kdWqS/e+sKonowSJQi5knjG8RtTeulUae8t8lT/tj94=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZgP/zney0RxkfxiYC0h0uNFKINgVFhMRkTFoDjmxpyVIimrPvegj7UxYkRjG86RG+
-         4Ucse6+U0toZ5epVETfe6mlwEKHyODjgRn4liysLMficvDLpDgLKk8tCVPGQyAdDoZ
-         2rSFOupBs0aOwgaD4YASFB01x1OOq/07EQ4C1x70DfUhlljbEvwY0Iyq9Ydeu+rr/f
-         DbHXuTXspAQXbNC7puuXYHlLpml2S+TGs3YxeKPyzaNsyECIkhqKNboa1u/IxoCpGH
-         Ag+47bafIxmFwW21pA+alZjwI8ddcy/NfkKhpUel7FxEEL6h8mE4vmmsI9JCDm9+3x
-         XH1d2qvmIN0dg==
-Date:   Tue, 21 Mar 2023 17:09:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     syzbot <syzbot+9f06ddd18bf059dff2ad@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, ckeepax@opensource.cirrus.com,
-        jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, shaggy@kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Subject: Re: [syzbot] [jfs?] KASAN: invalid-free in sys_mount
-Message-ID: <2d0114ce-a811-47e9-9a76-8c7a80f1faed@sirena.org.uk>
-References: <000000000000698e5d05f76c0adf@google.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD9B7B818F2;
+        Tue, 21 Mar 2023 17:09:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19616C433D2;
+        Tue, 21 Mar 2023 17:09:50 +0000 (UTC)
+Date:   Tue, 21 Mar 2023 17:09:48 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
+        aou@eecs.berkeley.edu, bp@alien8.de, dave.hansen@linux.intel.com,
+        davem@davemloft.net, gor@linux.ibm.com, hca@linux.ibm.com,
+        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
+        mingo@redhat.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        robin.murphy@arm.com, tglx@linutronix.de,
+        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
+        will@kernel.org
+Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+Message-ID: <ZBnk3O0QLs6+8KNN@arm.com>
+References: <20230321122514.1743889-1-mark.rutland@arm.com>
+ <20230321122514.1743889-2-mark.rutland@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UhOUWIYICTHnIC7N"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000698e5d05f76c0adf@google.com>
-X-Cookie: Will it improve my CASH FLOW?
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230321122514.1743889-2-mark.rutland@arm.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 21, 2023 at 12:25:11PM +0000, Mark Rutland wrote:
+> +static void assert_size_valid(struct kunit *test,
+> +			      const struct usercopy_params *params,
+> +			      unsigned long ret)
+> +{
+> +	const unsigned long size = params->size;
+> +	const unsigned long offset = params->offset;
 
---UhOUWIYICTHnIC7N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think you should drop the 'unsigned' for 'offset', it better matches
+the usercopy_params structure and the 'offset < 0' test.
 
-On Tue, Mar 21, 2023 at 10:04:46AM -0700, syzbot wrote:
+> +
+> +	if (ret > size) {
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"return value is impossibly large (offset=%ld, size=%lu, ret=%lu)",
+> +			offset, size, ret);
+> +	}
+> +
+> +	/*
+> +	 * When the user buffer starts within a faulting page, no bytes can be
+> +	 * copied, so ret must equal size.
+> +	 */
+> +	if (offset < 0 || offset >= PAGE_SIZE) {
+> +		if (ret == size)
+> +			return;
+> +
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"impossible copy did not fail (offset=%ld, size=%lu, ret=%lu)",
+> +			offset, size, ret);
+> +	}
+> +
+> +	/*
+> +	 * When the user buffer fits entirely within a non-faulting page, all
+> +	 * bytes must be copied, so ret must equal 0.
+> +	 */
+> +	if (offset + size <= PAGE_SIZE) {
+> +		if (ret == 0)
+> +			return;
+> +
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"completely possible copy failed (offset=%ld, size=%lu, ret=%lu)",
+> +			offset, size, ret);
+> +	}
+> +
+> +	/*
+> +	 * The buffer starts in a non-faulting page, but continues into a
+> +	 * faulting page. At least one byte must be copied, and at most all the
+> +	 * non-faulting bytes may be copied.
+> +	 */
+> +	if (ret == size) {
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"too few bytes consumed (offset=%ld, size=%lu, ret=%lu)",
+> +			offset, size, ret);
+> +	}
+> +
+> +	if (ret < (offset + size) - PAGE_SIZE) {
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			   "too many bytes consumed (offset=%ld, size=%lu, ret=%lu)",
+> +			   offset, size, ret);
+> +	}
+> +}
 
-> The issue was bisected to:
->=20
-> commit a0b6e4048228829485a43247c12c7774531728c4
-> Author: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Date:   Thu Jun 23 12:52:28 2022 +0000
->=20
->     ASoC: cx20442: Remove now redundant non_legacy_dai_naming flag
+Nitpick: slightly less indentation probably if we write the above as:
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12756e1cc8=
-0000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D11756e1cc8=
-0000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16756e1cc80000
+	KUNIT_ASSERT_TRUE_MSG(test,
+		ret < (offset + size) - PAGE_SIZE,
+		"too many bytes consumed (offset=%ld, size=%lu, ret=%lu)",
+		offset, size, ret);
 
-This does not seem especially credible for the backtrace provided:
+Not sure this works for the early return cases above.
 
->  slab_free mm/slub.c:3787 [inline]
->  __kmem_cache_free+0xaf/0x2d0 mm/slub.c:3800
->  __do_sys_mount fs/namespace.c:3596 [inline]
->  __se_sys_mount fs/namespace.c:3571 [inline]
->  __x64_sys_mount+0x212/0x300 fs/namespace.c:3571
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> +static void assert_src_valid(struct kunit *test,
+> +			     const struct usercopy_params *params,
+> +			     const char *src, long src_offset,
+> +			     unsigned long ret)
+> +{
+> +	const unsigned long size = params->size;
+> +	const unsigned long offset = params->offset;
 
-which is nowhere near ASoC, let alone that specific driver.
+The unsigned offset here doesn't matter much but I'd drop it as well.
 
---UhOUWIYICTHnIC7N
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	/*
+> +	 * A usercopy MUST NOT modify the source buffer.
+> +	 */
+> +	for (int i = 0; i < PAGE_SIZE; i++) {
+> +		char val = src[i];
+> +
+> +		if (val == buf_pattern(i))
+> +			continue;
+> +
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"source bytes modified (src[%d]=0x%x, offset=%ld, size=%lu, ret=%lu)",
+> +			i, offset, size, ret);
+> +	}
+> +}
+> +
+> +static void assert_dst_valid(struct kunit *test,
+> +			     const struct usercopy_params *params,
+> +			     const char *dst, long dst_offset,
+> +			     unsigned long ret)
+> +{
+> +	const unsigned long size = params->size;
+> +	const unsigned long offset = params->offset;
+> +
+> +	/*
+> +	 * A usercopy MUST NOT modify any bytes before the destination buffer.
+> +	 */
+> +	for (int i = 0; i < dst_offset; i++) {
+> +		char val = dst[i];
+> +
+> +		if (val == 0)
+> +			continue;
+> +
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"pre-destination bytes modified (dst_page[%d]=0x%x, offset=%ld, size=%lu, ret=%lu)",
+> +			i, val, offset, size, ret);
+> +	}
+> +
+> +	/*
+> +	 * A usercopy MUST NOT modify any bytes after the end of the destination
+> +	 * buffer.
+> +	 */
 
------BEGIN PGP SIGNATURE-----
+Without looking at the arm64 fixes in this series, I think such test can
+fail for us currently given the right offset.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQZ5NcACgkQJNaLcl1U
-h9BJBgf/WJnuTPyzPxNZcVE/Y2Nn4WhuqOMTenRwekqMToG4fEK99ITA1NYnWBRy
-ixCUajNCuBvf2X6YmjYiNsf79Nio8JVdamUSEpDV5mHq0zpN4B6txrZCSm1FFXL9
-nrHe02bAEoaYdrLAS8/mYGQRckp8A7cJYEZnzeC1wo43Mk3qbFrnuezKi52VRUNv
-2wGPCVCXAlp7yEDfTObNGAAOg6m6009JBioTcQq9IeCog99a7oFYud7kQhvFebA8
-K7PDgAbUAY+WD9bE0ba/Xg3P6xjpq7KpEW+SIck1UpsrKpLJlK54kP9eXgMzwhRx
-fPddOZeXHclJfKKPwlcYKI6yoZeDsw==
-=uJQW
------END PGP SIGNATURE-----
+> +	for (int i = dst_offset + size - ret; i < PAGE_SIZE; i++) {
+> +		char val = dst[i];
+> +
+> +		if (val == 0)
+> +			continue;
+> +
+> +		KUNIT_ASSERT_FAILURE(test,
+> +			"post-destination bytes modified (dst_page[%d]=0x%x, offset=%ld, size=%lu, ret=%lu)",
+> +			i, val, offset, size, ret);
+> +	}
+> +}
 
---UhOUWIYICTHnIC7N--
+[...]
+
+> +/*
+> + * Generate the size and offset combinations to test.
+> + *
+> + * Usercopies may have different paths for small/medium/large copies, but
+> + * typically max out at 64 byte chunks. We test sizes 0 to 128 bytes to check
+> + * all combinations of leading/trailing chunks and bulk copies.
+> + *
+> + * For each size, we test every offset relative to a leading and trailing page
+> + * boundary (i.e. [size, 0] and [PAGE_SIZE - size, PAGE_SIZE]) to check every
+> + * possible faulting boundary.
+> + */
+> +#define for_each_size_offset(size, offset)				\
+> +	for (unsigned long size = 0; size <= 128; size++)		\
+> +		for (long offset = -size;				\
+> +		     offset <= (long)PAGE_SIZE;				\
+> +		     offset = (offset ? offset + 1: (PAGE_SIZE - size)))
+> +
+> +static void test_copy_to_user(struct kunit *test)
+> +{
+> +	const struct usercopy_env *env = test->priv;
+> +
+> +	for_each_size_offset(size, offset) {
+> +		const struct usercopy_params params = {
+> +			.size = size,
+> +			.offset = offset,
+> +		};
+> +		unsigned long ret;
+> +
+> +		buf_init_zero(env->ubuf);
+> +		buf_init_pattern(env->kbuf);
+> +
+> +		ret = do_copy_to_user(env, &params);
+> +
+> +		assert_size_valid(test, &params, ret);
+> +		assert_src_valid(test, &params, env->kbuf, 0, ret);
+> +		assert_dst_valid(test, &params, env->ubuf, params.offset, ret);
+> +		assert_copy_valid(test, &params,
+> +				  env->ubuf, params.offset,
+> +				  env->kbuf, 0,
+> +				  ret);
+> +	}
+> +}
+
+IIUC, in such tests you only vary the destination offset. Our copy
+routines in general try to align the source and leave the destination
+unaligned for performance. It would be interesting to add some variation
+on the source offset as well to spot potential issues with that part of
+the memcpy routines.
+
+-- 
+Catalin
