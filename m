@@ -2,81 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7056C3E6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145296C3E73
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjCUXX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 19:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S230161AbjCUXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 19:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjCUXX4 (ORCPT
+        with ESMTP id S229524AbjCUXYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 19:23:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DD8574ED;
-        Tue, 21 Mar 2023 16:23:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC11C61ECD;
-        Tue, 21 Mar 2023 23:23:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25840C433EF;
-        Tue, 21 Mar 2023 23:23:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679441034;
-        bh=+EfnOxT75Ld+29rEVmKi6TN3JgIS8p2r7e10xPEAPGo=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=Vzd5oM68Pw5X+tVrVXkMn/ejgMsiJ0J5brorQOCg3FqUYlN4j4PrLRDWspJ39cEna
-         sQ6p/chTwubRym64K3xbcpvM9QxuVmvSPVxhoyXDEH2FnK8X8KuVw4YzAFGJpNoROo
-         /6min28s0g6QwMl3/z6/velSIRSwPgljM8P7SbjnPF4z0mAEMklOBqq121zTRh8CIJ
-         vNXlRj1ufVLX2olhzT8aSmnMWOMKcewQ5TFyZVX6hmMXS3FpT70QU5PJ11i9enYOhg
-         WrJbAay6sZ7xZRzcYIFlbolZV5bwJ5jnctE9g24Urlak/2X9yurE8eXNCIZ6Hafi6O
-         7C+vNBFAbUEJA==
-Message-ID: <896d16997cf3d308eff0cb8ce8596fc3.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Mar 2023 19:24:20 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFE7574FB;
+        Tue, 21 Mar 2023 16:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=wiy20BSnFfJfVc25CurvTMCkxrUDUZJYaysnyodWx80=; b=a0P9GyyNur3yQ2++XNo9KrUso8
+        /Q94iFHzANTQeoD9k8DY5tFXeexrUEqn3e6W754stwCFtQBWxKTVsYRylZspTW0umlCpp8ORrTwmP
+        5jDUUln0zCwk91dkPN4b7wqrrYNp0TFYmrkUkubfZSIrqd2+zO7J7cGwvmNPZW6X3uaw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pelKh-0080wA-Oe; Wed, 22 Mar 2023 00:23:59 +0100
+Date:   Wed, 22 Mar 2023 00:23:59 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
+ Document support for LEDs node
+Message-ID: <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-11-ansuelsmth@gmail.com>
+ <20230321211953.GA1544549-robh@kernel.org>
+ <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <302bb0c4-a31e-7025-26d6-21c8d473f370@gmail.com>
-References: <20210315122605.28437-1-noltari@gmail.com> <20230321201022.1052743-1-noltari@gmail.com> <20230321201022.1052743-5-noltari@gmail.com> <3a1d7b271a42324c056d983e1943b386.sboyd@kernel.org> <0071fdc1-fa53-e096-19c7-ecd1a9d56e86@gmail.com> <d06781c905adb23089a85a8d54b94461.sboyd@kernel.org> <302bb0c4-a31e-7025-26d6-21c8d473f370@gmail.com>
-Subject: Re: [PATCH v3 4/4] clk: bcm: Add BCM63268 timer clock and reset driver
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, jonas.gorski@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, robh+dt@kernel.org,
-        william.zhang@broadcom.com,
-        =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez?= Rojas <noltari@gmail.com>
-Date:   Tue, 21 Mar 2023 16:23:51 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Florian Fainelli (2023-03-21 16:09:54)
-> On 3/21/23 16:06, Stephen Boyd wrote:
-> > Quoting Florian Fainelli (2023-03-21 16:00:29)
-> >>
-> >> These SoCs are big-endian, require native endian register access and
-> >> have no posted writes within their bus logic (UBUS) and require no
-> >> barriers, hence the use of __raw_readl() and __raw_writel() is adequat=
-e.
-> >>
-> >=20
-> > Use ioread32be() then?
->=20
-> BCM63xx drivers tend to use __raw_{read,write}l for consistency and to=20
-> make it clear that no barriers, no endian swapping is necessary, I would =
+> > Are specific ethernet controllers allowed to add their own properties in 
+> > led nodes? If so, this doesn't work. As-is, this allows any other 
+> > properties. You need 'unevaluatedProperties: false' here to prevent 
+> > that. But then no one can add properties. If you want to support that, 
+> > then you need this to be a separate schema that devices can optionally 
+> > include if they don't extend the properties, and then devices that 
+> > extend the binding would essentially have the above with:
+> > 
+> > $ref: /schemas/leds/common.yaml#
+> > unevaluatedProperties: false
+> > properties:
+> >   a-custom-device-prop: ...
+> > 
+> > 
+> > If you wanted to define both common ethernet LED properties and 
+> > device specific properties, then you'd need to replace leds/common.yaml 
+> > above  with the ethernet one.
+> > 
+> > This is all the same reasons the DSA/switch stuff and graph bindings are 
+> > structured the way they are.
+> > 
+> 
+> Hi Rob, thanks for the review/questions.
+> 
+> The idea of all of this is to keep leds node as standard as possible.
+> It was asked to add unevaluatedProperties: False but I didn't understood
+> it was needed also for the led nodes.
+> 
+> leds/common.yaml have additionalProperties set to true but I guess that
+> is not OK for the final schema and we need something more specific.
+> 
+> Looking at the common.yaml schema reg binding is missing so an
+> additional schema is needed.
+> 
+> Reg is needed for ethernet LEDs and PHY but I think we should also permit
+> to skip that if the device actually have just one LED. (if this wouldn't
+> complicate the implementation. Maybe some hints from Andrew about this
+> decision?)
 
-> prefer to remain consistent with that convention.
+I would make reg mandatory.
 
-Ok.
+We should not encourage additional properties, but i also think we
+cannot block it.
 
-Is the clk device big-endian? Or the CPU is big-endian? SoC being
-big-endian sounds like the devices in the SoC are big-endian. I hope we
-never plop this device down with a CPU that's litle-endian.
+The problem we have is that there is absolutely no standardisation
+here. Vendors are free to do whatever they want, and they do. So i
+would not be too surprised if some vendor properties are needed
+eventually.
+
+	Andrew
