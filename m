@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42B66C3736
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F1E6C373A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjCUQnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S230110AbjCUQnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjCUQnh (ORCPT
+        with ESMTP id S230103AbjCUQns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:43:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EFA52F55
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:43:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pef4e-0003Cx-Tg; Tue, 21 Mar 2023 17:43:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pef4e-005jSE-25; Tue, 21 Mar 2023 17:43:00 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pef4d-006oRj-BW; Tue, 21 Mar 2023 17:42:59 +0100
-Date:   Tue, 21 Mar 2023 17:42:59 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
-        thierry.reding@gmail.com, greybus-dev@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, Julia Lawall <julia.lawall@inria.fr>
-Subject: Re: [PATCH 2/3] staging: greybus: use inline function for macros
-Message-ID: <20230321164259.nt6varbc6v6bavrz@pengutronix.de>
-References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com>
- <1274302b52ae905dab6f75377d625598facbbdf1.1679352669.git.eng.mennamahmoud.mm@gmail.com>
- <20230321154728.3r7ut3rl2pccmo2e@pengutronix.de>
- <7c883bac-382c-b429-ab21-4675dce02474@gmail.com>
+        Tue, 21 Mar 2023 12:43:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8501F515C9;
+        Tue, 21 Mar 2023 09:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Z+zwblPNJ3OUYOnKk/QBbkl8n+ZHXybiPX0PiQx3oXU=; b=YHEt7/8HVk+HXyQdyu4UIyshX9
+        24kbrya3mv8KOjHy2Mvq9WjJcPISA8U2TMNhAe71LJOCWB2xxAXOlT8a7A0sB0w1B06p8iCOAv+rL
+        0d8pFv2ojSaI9VUu343HerXQVkP2UWXXTYjzWFROZzX2elqgRzqjHVtLuN4zllt6HH2UQrFGl+iY0
+        7kGmtienyRFdp+fwP4KMvaE5qlhe7hqKwQj0G5fgN5END84mQjluWFCBg6A+13Yk6XimfuLf/Cq0D
+        GTDq/tUG4bI9++AFKsUWh2fAla691b9RQlx0W0uP24zEaKTuqhChjmaJQSEr9/MnrQixHA4mk1fFc
+        Iv/73d0Q==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pef4j-00D6ty-1A;
+        Tue, 21 Mar 2023 16:43:05 +0000
+Message-ID: <227fdc99-b54a-eeb0-c4e6-21ed92731240@infradead.org>
+Date:   Tue, 21 Mar 2023 09:43:04 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ycczzpqu7aadwq6j"
-Content-Disposition: inline
-In-Reply-To: <7c883bac-382c-b429-ab21-4675dce02474@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm/slab: Fix undefined init_cache_node_node() for NUMA
+ and !SMP
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-mm@kvack.org, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <67261c513706241d479b8b4cf46eb4e6fb0417ba.1679387262.git.geert+renesas@glider.be>
+ <ZBneELQuakjva1xa@casper.infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZBneELQuakjva1xa@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,85 +69,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ycczzpqu7aadwq6j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 21, 2023 at 06:25:29PM +0200, Menna Mahmoud wrote:
->=20
-> On =D9=A2=D9=A1=E2=80=8F/=D9=A3=E2=80=8F/=D9=A2=D9=A0=D9=A2=D9=A3 =D9=A1=
-=D9=A7:=D9=A4=D9=A7, Uwe Kleine-K=C3=B6nig wrote:
-> > Hello,
-> >=20
-> > just some nitpicks:
-> >=20
-> > On Tue, Mar 21, 2023 at 01:04:33AM +0200, Menna Mahmoud wrote:
-> > > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-> > > static inline function.
-> > >=20
-> > > it is not great to have macro that use `container_of` macro,
-> > s/it/It/; s/macro/macros/; s/use/use the/;
-> Okay, I will fix it.
-> >=20
-> > > because from looking at the definition one cannot tell what type
-> > > it applies to.
-> > > [...]
-> > > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> > > +static inline struct gbphy_device *to_gbphy_dev(const struct device =
-*d)
-> > drivers/staging/greybus/gbphy.c always passes a variable named
-> > "dev" to this macro. So I'd call the parameter "dev", too, instead of
-> > "d". This is also a more typical name for variables of that type.
-> >=20
-> > > +{
-> > > +	return container_of(d, struct gbphy_device, dev);
-> > > +}
-> > > [...]
-> > >   };
-> > > -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driv=
-er)
-> > > +static inline struct gbphy_driver *to_gbphy_driver(struct device_dri=
-ver *d)
-> > > +{
-> > > +	return container_of(d, struct gbphy_driver, driver);
-> > > +}
-> > With a similar reasoning (and also to not have "d"s that are either
-> > device or device_driver) I'd recommend "drv" here.
->=20
->=20
-> please check this with Julia, because she said they should different.
+On 3/21/23 09:40, Matthew Wilcox wrote:
+> On Tue, Mar 21, 2023 at 09:30:59AM +0100, Geert Uytterhoeven wrote:
+>> -#if (defined(CONFIG_NUMA) && defined(CONFIG_MEMORY_HOTPLUG)) || defined(CONFIG_SMP)
+>> +#if defined(CONFIG_NUMA) || defined(CONFIG_SMP)
+> 
+> I'm amused by the thought of CONFIG_NUMA without CONFIG_SMP.
+> Is it possible to have one node with memory and a single CPU, then
+> another node with memory and no CPU?
 
-At least use "_dev" instead of "d" which seems to be a common idiom,
-too:
+More likely 1 with CPU+memory, 1 with memory only.
 
-	$ git grep -P 'container_of\(_(?<ident>[A-Za-z_0-9-]*)\s*,[^,]*,\s*\g{iden=
-t}\s*\)' | wc -l
-	570
+I've been told that that are also I/O-only nodes.
 
-("drv" should be fine, because the third argument is "driver" there.)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ycczzpqu7aadwq6j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQZ3pIACgkQj4D7WH0S
-/k5pUQf/XJUDV6EvqcrGxi++Gu/Dk83CxxiHdJnuv3linIJyLi93tZYagEMj773b
-zxh1hIg8sW9OY0D/5HIkMjjhziTA432DNiFWW85/B+eOduuRE2fQHZ8kHOMiXH+R
-P2k2cPlJLW9pV3n6odYFqmn0BGoQvgOAgDUfftIgZ6Wfc6bEX7cl7rOAXaPxrz+s
-b0hgLYCkQJ5x19/n6JmO6eQq3IvCZyye8y2NgU28gHQ7tCDy3M4cy4o6rM+45GOP
-QnptwPU1+WnnmOfztzLTGFZwVnQs/t0rKMn7yC6cu0WdbPtILq8ug+ZE5Rx4cRv5
-VmFAwNr1gpOVs8Yix3vuHqXFhvTk6Q==
-=iXWj
------END PGP SIGNATURE-----
-
---ycczzpqu7aadwq6j--
+-- 
+~Randy
