@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48926C3EC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326466C3ECC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjCUXrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 19:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S229671AbjCUXxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 19:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjCUXrh (ORCPT
+        with ESMTP id S229629AbjCUXxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 19:47:37 -0400
+        Tue, 21 Mar 2023 19:53:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052F95709C;
-        Tue, 21 Mar 2023 16:47:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A33900B;
+        Tue, 21 Mar 2023 16:53:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8644261EE3;
-        Tue, 21 Mar 2023 23:47:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20C5C433D2;
-        Tue, 21 Mar 2023 23:47:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94EF861EE5;
+        Tue, 21 Mar 2023 23:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E6DC433D2;
+        Tue, 21 Mar 2023 23:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679442455;
-        bh=Dueco9S6WPNbyt2iYcz2EyLFSTR3HIetRYyWH4Q6aIk=;
+        s=k20201202; t=1679442788;
+        bh=u3FIUoADjtoydcrO6I/aan1rZmbX5WL1LF1a+25+YAU=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=bUndYTbajsb4+QiWJFSlXKBL7wuuniI9RgFonPYQouhZ5TX3cQ/PlZSxmsmMZ3R1Z
-         p/qGUS/GypjcFcqCVgBX8NIP6tV/sV0S0qqWQ/XUhZuFHPveTdBaBoDVm3wuS77Vpk
-         RhsigtddEjFWcKVRJXUHAMuBR9YuXG5ZncXrYT6q3J29iL+0X2XfGR6eI6qK4JEgep
-         8itRF+E+9+qSyPFtJpG15SQbNK94lOJje6+AKhNSeGE9MbjZ5857/hBA8ueowDgE38
-         1fqmhrkNOVi9UEwTq/EdOLkt/GygdptzcNxJ5KGGXWXcnrNBP84hi7TTq8+VbVUNWT
-         jjMHqOhrIWEiA==
-Message-ID: <cf42169cfd04c5cee84fb14e1824666f.sboyd@kernel.org>
+        b=h1Hu+DeUR3VZRZVBG2jNUJRWJu0N59GwVNc5RxyKN/BoFepQ+v7/623jG/Ui20DH+
+         5VWLZYUaixBqgHl3Rv33CPCTIjYqfRyOKfujqfjP9ssGc8NImR+LbZ6FBNB28+2jGg
+         pcgkiozLHv47BpRX6trD7iM64iSY6v+Zmk9WQRN/YtHKHsfkrMM2TF07MvVmtzpUQH
+         XqssElxcEcxJV+dOkTiV29n9HwVZZCI/eckjHmpOxIPBCT84d9Hh1edGnJIGVECX1m
+         ngKMkmzTKdWqANJ/xjBNfFV3yB3zdhd46RTvxpO6PSnYu0z9cHXm9wYMVQKjNl5VQF
+         rb4islGZnEV8w==
+Message-ID: <be4595e1b4aecd2f8f7c07f6f5503ef7.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221209152913.1335068-1-marpagan@redhat.com>
-References: <20221209152913.1335068-1-marpagan@redhat.com>
-Subject: Re: [PATCH 0/6] clk: socfpga: use of_clk_add_hw_provider and improve error handling
+In-Reply-To: <20221209152913.1335068-2-marpagan@redhat.com>
+References: <20221209152913.1335068-1-marpagan@redhat.com> <20221209152913.1335068-2-marpagan@redhat.com>
+Subject: Re: [PATCH 1/6] clk: socfpga: use of_clk_add_hw_provider and improve error handling
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Marco Pagani <marpagan@redhat.com>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
 To:     Dinh Nguyen <dinguyen@kernel.org>,
         Marco Pagani <marpagan@redhat.com>,
         Michael Turquette <mturquette@baylibre.com>
-Date:   Tue, 21 Mar 2023 16:47:33 -0700
+Date:   Tue, 21 Mar 2023 16:53:05 -0700
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
@@ -56,15 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Marco Pagani (2022-12-09 07:29:07)
-> This patch set improves error handling and replaces the deprecated
-> of_clk_add_provider() function with of_clk_add_hw_provider() in the
-> Intel SoC-FPGA family clock drivers.
+Quoting Marco Pagani (2022-12-09 07:29:08)
+> The function of_clk_add_provider() has been deprecated, so use its
+> suggested replacement of_clk_add_hw_provider() instead.
 >=20
-> The patch set is based on top of the patch: "Fix memory leak in
-> socfpga_gate_init()" to avoid a conflict.
+> Since of_clk_add_hw_provider() can fail, like of_clk_add_provider(),
+> check its return value and do the error handling.
 >=20
-> https://lore.kernel.org/all/20221123031622.63171-1-xiujianfeng@huawei.com/
+> The indentation of the init function parameters has been aligned
+> to match open parenthesis, as suggested by checkpatch, and the __init
+> macro moved before the function name, as specified in init.h.
+>=20
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
 
-I was waiting for Dinh to review this. I guess that won't happen so I'll
-just go apply this.
+Applied to clk-next
