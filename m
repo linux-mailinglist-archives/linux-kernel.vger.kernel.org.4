@@ -2,125 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2D16C2E47
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0CE6C2E4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjCUJyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S229872AbjCUJzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjCUJyl (ORCPT
+        with ESMTP id S229904AbjCUJzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:54:41 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669C23347A;
-        Tue, 21 Mar 2023 02:54:38 -0700 (PDT)
-Received: from [172.16.12.33] (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 17150680B61;
-        Tue, 21 Mar 2023 17:54:31 +0800 (CST)
-Message-ID: <6d7a4677-de1a-8851-026a-b180fca34632@rock-chips.com>
-Date:   Tue, 21 Mar 2023 17:54:30 +0800
+        Tue, 21 Mar 2023 05:55:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800C642BD1;
+        Tue, 21 Mar 2023 02:54:57 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35C4F66030DA;
+        Tue, 21 Mar 2023 09:54:54 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679392495;
+        bh=1JltmLgRNV4IHmYEsNUnZUzP3ExsG4axYz1jkhP27SY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Owh7RWhB7Db/pjY5RqGj1SkTPYKhoygsU7DooP1X/gCOchYEMhLFV/Uf88sVaShzh
+         leEbyY5ujLEw9bBnOrQ2DGZvSI9bnX0JDvQFCb3AfqKBO7xzJZUSU1anJsD3YRTHdI
+         in2uy0sTPQEjMPv9OyT030GpbpkQESfRo4zjqOuTDzYIQrQ0USzlrY3XQeFisjCKq7
+         AYWUu68nxWsP44n2mIPqXfmMaHBCDtlJW2UmDNITmMRth6N9D+K7g0VM2v7sBniZJP
+         TCuWeTQinerSBuHT2+PKepMLfAYmmo9N7W9nm/pCV1SSJq56wqhp6ZR7GkuuPM/5VN
+         tlJiaAiAXHSgQ==
+Message-ID: <cac08caf-a5ef-08d7-ac90-cd852cd63e3c@collabora.com>
+Date:   Tue, 21 Mar 2023 10:54:51 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: add get max power support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
+ mt8195
 Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20230320100711.3708-1-frank.wang@rock-chips.com>
- <20230320100711.3708-4-frank.wang@rock-chips.com>
- <20230320203139.quld3gmoo6esu56i@mercury.elektranox.org>
- <19b39d82-8510-2717-cf3b-71cb955373d0@rock-chips.com>
- <20230321050048.3p7xtyikf2lkqwrg@mercury.elektranox.org>
-From:   Frank Wang <frank.wang@rock-chips.com>
-In-Reply-To: <20230321050048.3p7xtyikf2lkqwrg@mercury.elektranox.org>
+To:     =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+References: <20221227081011.6426-1-nancy.lin@mediatek.com>
+ <20221227081011.6426-2-nancy.lin@mediatek.com>
+ <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
+ <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
+ <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
+ <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
+ <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
+ <0ebf187d-972e-4228-d8a0-8c0ce02f642d@linaro.org>
+ <72cf6344a1c5942bff0872d05dce82b787b49b76.camel@mediatek.com>
+ <4027714e-b4e8-953b-68e2-f74f7a7f0e8e@linaro.org>
+ <fdd0a157-eedb-bf21-c632-79b02a4cd6b0@collabora.com>
+ <5695b8e5ab8339764c646ee581529cb6cee04346.camel@mediatek.com>
+ <34c758c0-cbbb-da11-6263-e7b084040ed6@collabora.com>
+ <74dca3fa90d5cd78286281e2ced45842bee21f91.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <74dca3fa90d5cd78286281e2ced45842bee21f91.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRoeSVYZTx8fTUsfQkhKQ0tVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLSEpMVUpLS1VLWQ
-        Y+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NUk6Txw6Qj0PORYyDEI#Dj4P
-        TDUaFFZVSlVKTUxCSEJJT0xJS0lDVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFPTENINwY+
-X-HM-Tid: 0a87039779f72eb5kusn17150680b61
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
-
-On 2023/3/21 13:00, Sebastian Reichel wrote:
-> Hi,
->
-> On Tue, Mar 21, 2023 at 09:32:53AM +0800, Frank Wang wrote:
->> On 2023/3/21 4:31, Sebastian Reichel wrote:
->>> On Mon, Mar 20, 2023 at 06:07:11PM +0800, Frank Wang wrote:
->>>> Traverse fixed pdos to calculate the maximum power that the charger
->>>> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
->>>> property.
+Il 21/03/23 06:33, Nancy Lin (林欣螢) ha scritto:
+> Dear Angelo,
+> 
+> Sorry for late reply.
+> 
+> On Fri, 2023-03-17 at 10:58 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 17/03/23 10:52, Nancy Lin (林欣螢) ha scritto:
+>>> On Fri, 2023-03-17 at 10:37 +0100, AngeloGioacchino Del Regno
+>>> wrote:
+>>>> Il 17/03/23 10:03, Krzysztof Kozlowski ha scritto:
+>>>>> On 17/03/2023 08:55, Nancy Lin (林欣螢) wrote:
+>>>>>> On Thu, 2023-03-16 at 12:36 +0100, Krzysztof Kozlowski wrote:
+>>>>>>> On 16/03/2023 10:53, AngeloGioacchino Del Regno wrote:
+>>>>>>>
+>>>>>>>> Hello Krzysztof, Nancy,
+>>>>>>>>
+>>>>>>>> Since this series has reached v29, can we please reach an
+>>>>>>>> agreement
+>>>>>>>> on the bindings
+>>>>>>>> to use here, so that we can get this finally upstreamed?
+>>>>>>>>
+>>>>>>>> I will put some examples to try to get this issue
+>>>>>>>> resolved.
+>>>>>>>>
+>>>>>>>> ### Example 1: Constrain the number of GCE entries to
+>>>>>>>> *seven*
+>>>>>>>> array
+>>>>>>>> elements (7x4!)
+>>>>>>>>
+>>>>>>>>       mediatek,gce-client-reg:
+>>>>>>>>         $ref: /schemas/types.yaml#/definitions/phandle-
+>>>>>>>> array
+>>>>>>>>         maxItems: 1
+>>>>>>>>         description: The register of display function
+>>>>>>>> block to
+>>>>>>>> be set
+>>>>>>>> by gce.
+>>>>>>>>           There are 4 arguments in this property, gce
+>>>>>>>> node,
+>>>>>>>> subsys id,
+>>>>>>>> offset and
+>>>>>>>>           register size. The subsys id is defined in the
+>>>>>>>> gce
+>>>>>>>> header of
+>>>>>>>> each chips
+>>>>>>>>           include/dt-bindings/gce/<chip>-gce.h, mapping to
+>>>>>>>> the
+>>>>>>>> register of display
+>>>>>>>>           function block.
+>>>>>>>>         items:
+>>>>>>>>           minItems: 28
+>>>>>>>>           maxItems: 28
+>>>>>>>>           items:                     <----- this block
+>>>>>>>> doesn't
+>>>>>>>> seem to
+>>>>>>>> get checked :\
+>>>>>>>>             - description: phandle of GCE
+>>>>>>>>             - description: GCE subsys id
+>>>>>>>>             - description: register offset
+>>>>>>>>             - description: register size
+>>>>>>>
+>>>>>>> This is what we would like to have but it requires
+>>>>>>> exception in
+>>>>>>> dtschema. Thus:
+>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> ### Example 2: Don't care about constraining the number
+>>>>>>>> of
+>>>>>>>> arguments
+>>>>>>>>
+>>>>>>>>       mediatek,gce-client-reg:
+>>>>>>>>         $ref: /schemas/types.yaml#/definitions/phandle-
+>>>>>>>> array
+>>>>>>>>         maxItems: 1
+>>>>>>>>         description: The register of display function
+>>>>>>>> block to
+>>>>>>>> be set
+>>>>>>>> by gce.
+>>>>>>>>           There are 4 arguments in this property, gce
+>>>>>>>> node,
+>>>>>>>> subsys id,
+>>>>>>>> offset and
+>>>>>>>>           register size. The subsys id is defined in the
+>>>>>>>> gce
+>>>>>>>> header of
+>>>>>>>> each chips
+>>>>>>>>           include/dt-bindings/gce/<chip>-gce.h, mapping to
+>>>>>>>> the
+>>>>>>>> register of display
+>>>>>>>>           function block.
+>>>>>>>
+>>>>>>> use this.
+>>>>>>>
+>>>>>>> Best regards,
+>>>>>>> Krzysztof
+>>>>>>
+>>>>>>
+>>>>>> Hi Krzysztof, Angelo,
+>>>>>>
+>>>>>> Thanks for the comment.
+>>>>>> The Example 2 can pass dt_binding_check.
+>>>>>>
+>>>>>> But the example in the binding has 7 items [1] and dts [2].
+>>>>>> Does
+>>>>>> the
+>>>>>> "maxItems: 1" affect any other schema or dts check?
+>>>>>
+>>>>> Ah, then it should be maxItems: 7, not 1.
+>>>>>
 >>>>
->>>> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
->>>> ---
->>>>    drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
->>>>    1 file changed, 24 insertions(+)
+>>>> Keep in mind for your v30:
 >>>>
->>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->>>> index 13830b5e2d09f..d6ad3cdf9e4af 100644
->>>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>>> @@ -6320,6 +6320,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
->>>>    	return 0;
->>>>    }
->>>> +static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
->>>> +					  union power_supply_propval *val)
->>>> +{
->>>> +	unsigned int src_mv, src_ma, max_src_mw = 0;
->>>> +	unsigned int i, tmp;
->>>> +
->>>> +	for (i = 0; i < port->nr_source_caps; i++) {
->>>> +		u32 pdo = port->source_caps[i];
->>>> +
->>>> +		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
->>>> +			src_mv = pdo_fixed_voltage(pdo);
->>>> +			src_ma = pdo_max_current(pdo);
->>>> +			tmp = src_mv * src_ma / 1000;
->>>> +			max_src_mw = tmp > max_src_mw ? tmp : max_src_mw;
->>>> +		}
->>>> +	}
->>>> +
->>>> +	val->intval = max_src_mw;
->>> The power-supply subsystem expects Microwatts and not Milliwatts.
->> Yes, but I see the 'power_supply_propval' member 'intval' is an integer
->> type, I worry about it may be overflowed that uses Microwatts.
-> Data being encoded in Microwatts is part of the ABI. The data
-> you are supplying will be interpreted in µW. If you submit your
-> data in mW it is basically always wrong even without an overflow.
->
-> Now regarding the overflow: A signed int can store 2^31 bit, so
-> 2,147,483,648 µW = 2147 W. Looking at your code you effectively
-> calculate Microwatts in an unsigned int and then divide by 1000.
-> Since the intermediate value (before dividing by 1000) needs to be
-> stored you gain only one bit. That raises the question: Why do you
-> expect data to be between 2147 W and 4294 W when the latest released
-> USB PD spec allows 5A@48V = 240W?
->
-> -- Sebastian
+>>>> maxItems: 7 will pass - but only if minItems is *not* 7 :-)
+>>>>
+>>>> -> (so, do not declare minItems, as default is 1) <-
+>>>>
+>>>> Regards,
+>>>> Angelo
+>>>>
+>>>
+>>> Hi Angelo,
+>>>
+>>> I still have one message [1] when runing dt_binding_check for
+>>> "example
+>>> 2 + maxItems: 7" [2].
+>>>
+>>> [1]
+>>> /proj/mtk19347/cros/src/third_party/kernel/v5.10/Documentation/devi
+>>> cetr
+>>> ee/bindings/display/mediatek/mediatek,ethdr.example.dtb:
+>>> hdr-engine@1c114000: mediatek,gce-client-reg: [[4294967295, 7,
+>>> 16384,
+>>> 4096, 4294967295, 7, 20480, 4096, 4294967295, 7, 28672, 4096,
+>>> 4294967295, 7, 36864, 4096, 4294967295, 7, 40960, 4096, 4294967295,
+>>> 7,
+>>> 45056, 4096, 4294967295, 7, 49152, 4096]] is too short
+>>>
+>>>
+>>> [2]
+>>>      mediatek,gce-client-reg:
+>>>        $ref: /schemas/types.yaml#/definitions/phandle-array
+>>>        maxItems: 7
+>>>        description: The register of display function block to be set
+>>> by
+>>> gce.
+>>>          There are 4 arguments in this property, gce node, subsys
+>>> id,
+>>> offset and
+>>>          register size. The subsys id is defined in the gce header
+>>> of
+>>> each chips
+>>>          include/dt-bindings/gce/<chip>-gce.h, mapping to the
+>>> register of
+>>> display
+>>>          function block.
+>>>
+>>
+>> Maybe I'm wrong about the "do not declare minItems"... try with
+>>
+>> minItems: 1
+>> maxItems: 7
+>>
+>>
+>> ...does it work now?
+>>
+> 
+> Yes, It works well with "example2 + minItems:1 + maxItems: 7" [1]
+> 
+> [1]
+>    mediatek,gce-client-reg:
+>      $ref: /schemas/types.yaml#/definitions/phandle-array
+>      minItems: 1
+>      maxItems: 7
+>      description: The register of display function block to be set by
+> gce.
+>        There are 4 arguments in this property, gce node, subsys id,
+> offset and
+>        register size. The subsys id is defined in the gce header of each
+> chips
+>        include/dt-bindings/gce/<chip>-gce.h, mapping to the register of
+> display
+>        function block.
+> 
 
-Okay, got it, I shall delete conversion codes ( divide by 1000 ) in the 
-next version.
+Please send a v30 with that solution ASAP then, so that we may perhaps *finally*
+get it in for v6.4.
 
-
-BR.
-Frank
+Regards,
+Angelo
