@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EA56C39BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF546C39B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCUTCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S229923AbjCUTCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjCUTC1 (ORCPT
+        with ESMTP id S229976AbjCUTCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:02:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54B75650C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679425298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jDgIhgp53F4LHTSbzXO+YUJfE0aKRCAlyTc2/nXzqFQ=;
-        b=E698QrxuB8XhYn7YBnkL8kpOWofZ4GFcuKSHiLMFu5oZ6070FJYmfZgNy1cnUBLF2j8213
-        h+beXYSQCQdqpsosoeWyAGXkC4b3pospsLC5fB54BE9BAl/kwny0ITTog/F+FKeKiogdjY
-        6DxAg/YDe07iKrT+6rsX5OvMNVZ36EE=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-219-9Dr7K1M8OdOgkvGohOI46w-1; Tue, 21 Mar 2023 15:01:36 -0400
-X-MC-Unique: 9Dr7K1M8OdOgkvGohOI46w-1
-Received: by mail-qk1-f200.google.com with SMTP id b34-20020a05620a272200b007460c05a463so7548673qkp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:01:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679425296;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jDgIhgp53F4LHTSbzXO+YUJfE0aKRCAlyTc2/nXzqFQ=;
-        b=GPwcdgO7FDrOolnf/nGlmhRcZLZAo+fAcM0gtpgDAcru5GXmJ3kZM99Z/Co8k01QTM
-         hXcrx/6fpMyKix31uxSUQEO+yxdGizm0Y3qeT1KtRqFOZKUIcWbvz4tkO7Vp3DwWuep6
-         qQzvZvtPOT0omRfoxOjU33Bi7WkFSMOuP9ajmcKZWPTyTQtTRatEUXgeXD8/s3DlOig3
-         XwhYOyb52aYQM2A7SVWaAYuZ0IdJQSOwpIlFJiLgjwnLBV95PkP0DOQKP46ASxpkujMc
-         HWiJdC8FhHlqmrHJ2W/PLgTbEkzdnLn+jeaJXSnVmcutK99HriIcPh5aXPAtPg+DygIu
-         CaiQ==
-X-Gm-Message-State: AO0yUKW3eUAUfxN69bz1nbK6BCCcsFDmb2VkNzn4gsx+2teGI/cpT4mp
-        D2hx4ppkmRZhqJGHmLkH+b8dom+gfdaq7oeXe9OXKhFSFw/qfushOErAGk2NI4y6CFKtJlvLL6K
-        6G5J79hsN8xssiCiWK+nFuiE3
-X-Received: by 2002:a05:6214:d07:b0:5cc:e059:efa3 with SMTP id 7-20020a0562140d0700b005cce059efa3mr1487154qvh.23.1679425296008;
-        Tue, 21 Mar 2023 12:01:36 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9UtNWa/XtHHXbYeSxWPiA8fhZvXtBktHVWK/DoCGMPKvnMpcnYyKocZiXKb0EXFRGGYKumwA==
-X-Received: by 2002:a05:6214:d07:b0:5cc:e059:efa3 with SMTP id 7-20020a0562140d0700b005cce059efa3mr1487112qvh.23.1679425295618;
-        Tue, 21 Mar 2023 12:01:35 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id v127-20020a379385000000b0074230493ccfsm9847029qkd.73.2023.03.21.12.01.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 12:01:34 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] staging: rts5208: remove unused xd_check_err_code function
-Date:   Tue, 21 Mar 2023 15:01:27 -0400
-Message-Id: <20230321190127.1827703-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 21 Mar 2023 15:02:01 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA5C56538;
+        Tue, 21 Mar 2023 12:01:49 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B2EE55C0105;
+        Tue, 21 Mar 2023 15:01:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 21 Mar 2023 15:01:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679425305; x=
+        1679511705; bh=XDrvGUk9PJdg/6+5k40AIJKhr8ZrxDCGiHZcWcPJnLY=; b=E
+        fgI+vkMEB/ivbm0D4fudXuJf7CN0WGeZlbpfPICNNQQv6ugakPD8AAbfHZS3z36z
+        +YhRjYwCfaZaiTKLkjaqEK4sukYKnhNqcjalyWPkpcDTH3pvwrBrcRF3CoQvIrA+
+        uXmTkPVF4g2S0U6uZ+7S81rY3B89/utMjIYc+qQOoYLtbPpYPwE8ZyVh5jj7wPjk
+        t/28pgazhF8O/0ZUj4L+ZdgPUM9r9Tu5uOSYiXtkblvdFQmzRNaZ+SYP88Q4zbDW
+        dMt5ozbZDZdTeiZ9Yd0rVV/WwxBssRMvZrlmoPJqAnaiEB5UsTtpAZnYEsQvo3Mk
+        dRvdX3MkA9SjrocwYNYjQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679425305; x=
+        1679511705; bh=XDrvGUk9PJdg/6+5k40AIJKhr8ZrxDCGiHZcWcPJnLY=; b=k
+        PhGCpTXf0GQHmqRGaVccYzLnqWhqTPQ5Qe9eK5U+k4qPJnDq/S/SHl9siupuyyCL
+        ydGkIGQA8r1nFhAemWGLjNlT5+YeqqrsevjM4RDGhJUANilzsqCRDFh86hSO8iHH
+        ipW25a1cG9aNXHeJoCBtmm763owsxMDUHatW8/hpJmAwc0gl0+rbrwe0KNhBMoxB
+        4IGlRrGANV21qjm1a4kKA3X2qthvUrUOtxJKK0N7wkDBq2dPzLvU4VYinqrf+oy8
+        2GybUcMOedyzMRUl3nWVkaoDiR1Y+kNizrMn29hQ0kSY9iK42HKsHkXrYsvLeMPR
+        BW+Mh8Gg12wOkHfDsxTMw==
+X-ME-Sender: <xms:GP8ZZLkutVFfr52RRMAxlvcxdwE2VUxUt-DjOVsOFfRFyw5nKFzhLA>
+    <xme:GP8ZZO02oVp0iUkTk-M4mxxvRjXmGBEBEeQEYWZXumd3wvh0vFHsnXxSJxOCIK5gm
+    _Cdtc0iFgRPA9J7TJ0>
+X-ME-Received: <xmr:GP8ZZBqp2Y0Ww8JsoHKGDiXWyOQ00qsTyOSrk2SmhGWXc-_Tn456YF9rRtshuLazVFBAM5btrNagTRoIcxNTrYkCjjVksGNsOxH4x_DAXMmA02lkOB65kHfkQ7j13i6BoDTd0ZkamA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddguddukecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
+    fhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcurfgvrghr
+    shhonhcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggrqeenucggtf
+    frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
+    teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
+X-ME-Proxy: <xmx:Gf8ZZDnIdagMQdq3gtGD179ESghqSCMzbOdZ3tAJpJ2vxMittC0FLg>
+    <xmx:Gf8ZZJ062cqjGlqfs-D-_BJFn6magWMT8077ESIM8VbqjHQGjDivQA>
+    <xmx:Gf8ZZCufyTjKRUKhg0gXF0iJbiiLwd-_TDYL9y6i0x7p7ZjKvxiUAA>
+    <xmx:Gf8ZZCyfuCcD5oqwn3tbvHMrzVJTYY0dP1xcyhUs5-LBtDAxiVFzCA>
+Feedback-ID: ibe194615:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Mar 2023 15:01:44 -0400 (EDT)
+From:   Mark Pearson <mpearson-lenovo@squebb.ca>
+To:     mpearson-lenovo@squebb.ca
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: acpi: Remove notifier before destroying handler
+Date:   Tue, 21 Mar 2023 15:01:36 -0400
+Message-Id: <20230321190136.449485-1-mpearson-lenovo@squebb.ca>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <mpearson-lenovo@squebb.ca>
+References: <mpearson-lenovo@squebb.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/staging/rts5208/xd.c:34:19: error: unused function
-  'xd_check_err_code' [-Werror,-Wunused-function]
-static inline int xd_check_err_code(struct rtsx_chip *chip, u8 err_code)
-                  ^
-This function is not used, so remove it.
+Was debugging another issue (since fixed) and noticed that the acpi
+notify_handler should be removed before the ucsi object is destroyed.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+This isn't fixing any issues that I'm aware of - but I assume could
+potentially lead to a race condition if you were really unlucky?
+
+Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 ---
- drivers/staging/rts5208/xd.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/rts5208/xd.c b/drivers/staging/rts5208/xd.c
-index 42cab93982c0..c0af378ada71 100644
---- a/drivers/staging/rts5208/xd.c
-+++ b/drivers/staging/rts5208/xd.c
-@@ -31,13 +31,6 @@ static inline void xd_set_err_code(struct rtsx_chip *chip, u8 err_code)
- 	xd_card->err_code = err_code;
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index ce0c8ef80c04..be3bf4f996d3 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -176,12 +176,12 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
+ {
+ 	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
+ 
+-	ucsi_unregister(ua->ucsi);
+-	ucsi_destroy(ua->ucsi);
+-
+ 	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
+ 				   ucsi_acpi_notify);
+ 
++	ucsi_unregister(ua->ucsi);
++	ucsi_destroy(ua->ucsi);
++
+ 	return 0;
  }
  
--static inline int xd_check_err_code(struct rtsx_chip *chip, u8 err_code)
--{
--	struct xd_info *xd_card = &chip->xd_card;
--
--	return (xd_card->err_code == err_code);
--}
--
- static int xd_set_init_para(struct rtsx_chip *chip)
- {
- 	struct xd_info *xd_card = &chip->xd_card;
 -- 
-2.27.0
+2.39.2
 
