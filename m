@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE2C6C308F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9B06C309F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCULlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S230137AbjCULov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCULlt (ORCPT
+        with ESMTP id S229636AbjCULot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:41:49 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9663F1DBA0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:41:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso15615249pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679398904;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YW3xbqi/VHK+051ISNRxO6nRHOEPScJeQcBOYGq32Q=;
-        b=jUjW2SGpLivPtEct6UbAlu9/ZDohcZG1nkwjXR08/71xM9Etn5dQPoGn5nOxu6jxsl
-         P93ver8+THwj6F/ARvXRw1u9ZnB+LVd8+sg6YcBF/WTFjb2Ey3W96Z8LBdBFoU2wclPl
-         bG5RnQmB8XBpyuj8mFX2kUImyhjRDWC/cY2tRF7OFdA6UC0Lq4bHvsSQm9O/N1O3MXro
-         xrXdh6rnwhTLGuoH/jgcnBOyYBjdZsLco5vobrz+MOP9WCKEU0zs/cnM7bsHlf07tkSm
-         yBH1S34yaCMj7Bip5siOLVSjFeOqMgWy4x2zq09tyLoRUgkz/rpwz6MOnRbh1t3nxkma
-         BgPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679398904;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YW3xbqi/VHK+051ISNRxO6nRHOEPScJeQcBOYGq32Q=;
-        b=eol/K20ClJ4uaNP9mOp9fbpFEH8ncf7hRr0dVRqp5YYxItNIc8vYvXRrLWlg+OCQfm
-         1HEHHOpYpJwRYSsNr1KvNN5dX72iyhnyxyoJ+FoncvRFw2W/w3vlmVTl5ATsC4Xer0Hx
-         c3JyR8hFfHE3AR5JPsrdQyq8bwEKEgVZJkL9Danf0mwY12Y14uaE2yc0EN248R2W+lju
-         HzXLd4yf1qrQfMBkRTwOimWlZ9oGU/lsFjhdBDgU2hewVtBEn2C6OptU+HGMNTACLm69
-         HpFFwCfa8es0vrMvByVcHyGTPP5Uc+EKLW7ldWLUQY89smOz9abhk73sYHTrJ5yQIv5R
-         4lQg==
-X-Gm-Message-State: AO0yUKX2ALrSJqKz5mmbQdR8nJLVqed8xKU9GMDKk5CKeiMa6YavTY70
-        tPElCTRC0dj9Yo+aP4jCFRpnG39CMQ==
-X-Google-Smtp-Source: AK7set+IZEO0Vs4I9RYeGuYvEfVzcSycM/hbhsX43x0q0HILzHmRJmljgXF5AtVWRdNP0hhngZ9yBg==
-X-Received: by 2002:a05:6a20:c29c:b0:da:368e:7c73 with SMTP id bs28-20020a056a20c29c00b000da368e7c73mr1752668pzb.37.1679398904390;
-        Tue, 21 Mar 2023 04:41:44 -0700 (PDT)
-Received: from mehmed-HP-Pavilion-Laptop-15-eh2xxx ([2401:4900:1c19:e99d:c9dc:9d9e:85b3:1d9e])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa780d1000000b0062814f38d33sm1092365pfn.170.2023.03.21.04.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 04:41:44 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 17:11:41 +0530
-From:   Inshal Khan <kziaul123@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] Staging: rtl8712: osdep_intf: Improve RND4 macro for
- better debugging and safety
-Message-ID: <ZBmX9cjTRNhwt2zA@mehmed-HP-Pavilion-Laptop-15-eh2xxx>
+        Tue, 21 Mar 2023 07:44:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F8938EBD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679399043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ip0ypPWj0y6T3kRIH9Tya2rrM/dKmttRsWWLGVarwIU=;
+        b=iy1Xb/O/sVarMBkBjoFyV0kAAdBnuwFT2crJHolRBnHdEsoQdHupQectcvakcHFCmVfBsw
+        tMnEX3DsQMzubIXf8DHYDwwMI1HLlXgEXF0sVaiOqstOcqVlqnfJrR/t3FRoyGbBD9wCU0
+        Jeujk6GhNpqMnIyVaWcGIS+WSZKC2Vs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-106-zDzNZeAJNaCSu7nOK5F_fQ-1; Tue, 21 Mar 2023 07:43:59 -0400
+X-MC-Unique: zDzNZeAJNaCSu7nOK5F_fQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 156C529AB3EA;
+        Tue, 21 Mar 2023 11:43:59 +0000 (UTC)
+Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ACA531121314;
+        Tue, 21 Mar 2023 11:43:51 +0000 (UTC)
+Date:   Tue, 21 Mar 2023 19:43:46 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com,
+        ming.lei@redhat.com
+Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively open
+ device again
+Message-ID: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,43 +63,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit modifies the RND4_UPPER macro in the osdep_intf module of
-the rtl8712 driver to improve its safety and debugging capabilities.
-The macro has been changed to use a temporary variable for the input
-argument 'x', instead of directly using it in the macro expression.
-This change helps to avoid potential issues with operator precedence
-and unexpected side effects that could occur if 'x' was reused within
-the macro.
+On Fri, Feb 17, 2023 at 10:21:58AM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Changes from RFC:
+>  - remove the patch to factor out GD_NEED_PART_SCAN
+> 
+> Yu Kuai (2):
+>   block: Revert "block: Do not reread partition table on exclusively
+>     open device"
+>   block: fix scan partition for exclusively open device again
 
-Additionally, the new definition of the macro uses the 'typeof' operator
-to determine the type of the input argument, which ensures that the macro
-can handle any data type safely. The new definition also uses a block
-expression to contain the macro code, allowing for better debugging
-capabilities and cleaner code.
+Hi Yu kuai,
 
-This change improves the safety and maintainability of the RND4 macro
-and makes it more suitable for use in the Linux kernel.
+Looks the original issue starts to re-appear now with the two patches:
 
-Signed-off-by: Inshal Khan <kziaul123@gmail.com>
----
- drivers/staging/rtl8712/osdep_intf.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://lore.kernel.org/linux-block/20221130135344.2ul4cyfstfs3znxg@quack3/
 
-diff --git a/drivers/staging/rtl8712/osdep_intf.h b/drivers/staging/rtl8712/osdep_intf.h
-index 95a21f380cd7..0e097b4a8670 100644
---- a/drivers/staging/rtl8712/osdep_intf.h
-+++ b/drivers/staging/rtl8712/osdep_intf.h
-@@ -18,8 +18,8 @@
- #include "drv_types.h"
- 
- #define RND4(x)	({ \
--		typeof(x) _x = (x); \
--		(((_x) + 3) & ~3); \
-+			typeof(x) _x = (x); \
-+			(((_x) + 3) & ~3); \
- 		})
- 
- struct intf_priv {
--- 
-2.34.1
+And underlying disk partition and raid partition can be observed at the
+same time.
+
+Can you take a look?
+
+Follows the script, which isn't 100% triggered, but still easy.
+
+#create level 1 with 2 devices, meta 1.0
+mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
+
+#create partition 0, start from 0 sector, size 100MiB
+sgdisk -n 0:0:+100MiB /dev/md0
+
+#observe partitions
+cat /proc/partitions
+
+#stop the array
+mdadm -S /dev/md0
+
+#re-assemble 
+mdadm -A /dev/md0 /dev/sda /dev/sdb
+cat /proc/partitions
+
+
+Thanks,
+Ming
 
