@@ -2,154 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3BE6C3829
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0036C3830
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjCUR0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S229841AbjCURbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjCUR0I (ORCPT
+        with ESMTP id S229713AbjCURbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:26:08 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DA3199E1;
-        Tue, 21 Mar 2023 10:26:04 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eg48so62565391edb.13;
-        Tue, 21 Mar 2023 10:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679419563;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/SnwtyCeqfxN+W4U7ez13LVb+d2R2LMwy11y/Jz9LSw=;
-        b=litogbTU0fH+k6JlYoZGvbaT5Hq90vpRJXH6co7YHtPjy6GL7l1hcYkbR9W6LJTley
-         /QC3Cm+TaFE531qQTrcwnikTApOJrtVklzYCfYrs6NvTwNKLZqHqKQ8MXRuUbwEL8oM+
-         8fLVJduQ+OTnwBuxEpJ60Vn1XPeV7d5dmW4gWh0YHE5/3VW1ZXHIFh0UniHcoPHGaxHy
-         MR0Nh66FbEL9n1SdmB5B5O1Eka3N858+qEGBwzRV2HWXYAfTTt6uWGtXjJnHwiZsMeBq
-         VCZLadbrdEJyvuiqTQYKOsHIox9IOjOlMK5BOp1cZPxO40YRAa4JKUZOpJTbau7FKB3z
-         tGbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679419563;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/SnwtyCeqfxN+W4U7ez13LVb+d2R2LMwy11y/Jz9LSw=;
-        b=hncPpfcdRq3FcsemahwYt8pRTkv1Ok8r/TT7xE0bUUwsGdrNPEndFRL/3Ud3uRUOW9
-         5kDGB6THa3y/7PT5/qvEtvJedr31s84CVueCfC1OvTTwrRdycvDeEtwGofg6JHk1U9gP
-         G7jAPPD4XLYxzflcQ135uwXbSJP05WdjfnSL+xzqnzKGcQHuMlxCRL/jnvygN976ktvv
-         w4r13GoQnYcjSgZhAGjt4zPTOajgG7OoGGtx6/l3MFFgyWvqtQH5ccSpSaMQOOSzL2zg
-         S7RFDIqqdIbMFQY0Zr0sW+a8E2N6dgP7ANJKhs8rrht6S6KYGswQHuo/nj8TZy0FjV7w
-         u3yw==
-X-Gm-Message-State: AO0yUKXg9GATv8cBVwnPF1pQGo0g9C451Db5kB7CgZwUkBA9n4FuI+3j
-        i4MOGatSgBSIlhP4EP2tOmk=
-X-Google-Smtp-Source: AK7set+CABg3f1+mYA3u1QDkoUb8lm/4Sppl7dLBmBjX4+Czz1G/Js2gGQwEPDHRJLet/KbaByWEBQ==
-X-Received: by 2002:a17:906:646:b0:8a5:8620:575 with SMTP id t6-20020a170906064600b008a586200575mr3677381ejb.3.1679419563139;
-        Tue, 21 Mar 2023 10:26:03 -0700 (PDT)
-Received: from [192.168.1.16] ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id u7-20020a170906b10700b0092f38a6d082sm6043318ejy.209.2023.03.21.10.26.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:26:02 -0700 (PDT)
-Message-ID: <d98bd7af-d9f9-bb78-9aad-80c06a7a12a7@gmail.com>
-Date:   Tue, 21 Mar 2023 19:26:00 +0200
+        Tue, 21 Mar 2023 13:31:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DC5113FA;
+        Tue, 21 Mar 2023 10:31:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33A8661D54;
+        Tue, 21 Mar 2023 17:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC44C433D2;
+        Tue, 21 Mar 2023 17:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679419874;
+        bh=be0SOJijbIAFiA4S90OBb78y61Nkl7wEB41PUf9Nang=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=go3Zx3kIkA/vKDOMA+8kgvYmqQCbJGGPq0BhEPX/RbYLsGLKJNxsbUsi00qnUeyWo
+         6nQyG9WEIf1kZVLGFXF7ul0wDUrJUdrtHdkFa3mNSvdQhY64CsJOuLKCCgSbI/cVQr
+         oCuOn8DswhW46Z4VKLPfzccKfRyAYiupv4pFnYb0VBHpZUP1UjymBGS1ev5xVukR74
+         gtm5B0WNo/zqJIm2tjMtaEShhZ+JM1uPJJjt/3AEoXRHenps3YqSE4OVClrEuIvHtl
+         ZxZ6wWXh/OhFbaRDtVwDy7ls1fPtBSjddunXoSX+iyBZcgUTiAJ/xKZFGTBhF8rGkx
+         vH9fEGefFLdrA==
+Message-ID: <d3b057408117a71bcd153f4a91bcdfe1.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/3] edits in greybus driver
-Content-Language: en-US
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org
-References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com>
- <ee77a227-13bd-70ad-1d8e-f9719970e0f8@inria.fr>
- <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com>
- <8020f263-158d-db6e-f34-425b72983bb@inria.fr>
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-In-Reply-To: <8020f263-158d-db6e-f34-425b72983bb@inria.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230320204042.980708-4-mmyangfl@gmail.com>
+References: <20230320204042.980708-1-mmyangfl@gmail.com> <20230320204042.980708-4-mmyangfl@gmail.com>
+Subject: Re: [PATCH v5 3/5] clk: hisilicon: Add complex clock for Hi3798
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     David Yang <mmyangfl@gmail.com>
+Date:   Tue, 21 Mar 2023 10:31:12 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting David Yang (2023-03-20 13:40:36)
+> @@ -59,6 +61,131 @@ static const struct hisi_fixed_rate_clock hi3798_fixe=
+d_rate_clks[] =3D {
+>         { HI3798_FIXED_250M, "250m", NULL, 0, 250000000, },
+>  };
+> =20
+> +struct hi3798_complex_clock {
+> +       unsigned int    id;
+> +       const char      *name;
+> +       const char      *parent_name;
+> +       unsigned long   flags;
+> +       unsigned long   offset;
+> +       u32             mask;
+> +       u32             value;
+> +       const char      *alias;
+> +};
+> +
+> +struct hi3798_clk_complex {
+> +       struct clk_hw   hw;
+> +       void __iomem    *reg;
+> +       u32             mask;
+> +       u32             value;
+> +};
+> +
+> +#define to_complex_clk(_hw) container_of(_hw, struct hi3798_clk_complex,=
+ hw)
 
-On ٢١‏/٣‏/٢٠٢٣ ١٨:٣٩, Julia Lawall wrote:
->
-> On Tue, 21 Mar 2023, Menna Mahmoud wrote:
->
->> On ٢١/٣/٢٠٢٣ ١٣:٤٦, Julia Lawall wrote:
->>> On Tue, 21 Mar 2023, Menna Mahmoud wrote:
->>>
->>>> This patchset includes change happened in greybus driver in three
->>>> different files two of them patch one and three related to
->>>> checkpatch issue and in second patch convert two
->>>> `container_of` macros into inline functions.
->>>>
->>>> Menna Mahmoud (3):
->>>>     staging: greybus: remove unnecessary blank line
->>>>     staging: greybus: use inline function for macros
->>>>     staging: greybus: remove unnecessary blank line
->>> Different patches should have different subject lines.
->> But I have already the same edit in both file, so should I re-write the
->> subject for one of them?
->>>     You need to either
->>> be more specific about the file affected or merge the two patches with the
->>> same subject into one.
->> each patch related to different file. So, Can I to merge two commits for
->> different files but have the same edit in one patch?
-> They are both for greybus, which is what you advertise in the subject
-> line.  And the sense of the changes is the same, and the changes are quite
-> simple.  So I think you could just put them in one patch.  If you find
-> other occurrences of the problem in greybus you could make one patch that
-> fixes all of them.
->
->> but in this case no need to create patchset for all changes in `greybus`
->> driver, right?
-> A patchset is needed if the changes affect the same file, because there
-> might be complications if the patches are applied in the wrong order.
->
->> If okay with that, should I versioning the patches to resend them again, or
->> should add "RESEND" subject prefix?
-> RESEND would be if you send exactly the same thing, because some time has
-> passed and you are worried that the patch has been lost.  Now that you
-> have put these in a series, it is perhaps best to leave them in a series
-> and increase the version number, to avoid confusion on the part of people
-> reading the patches.
->
-> julia
+Missing header include for container_of()
 
+> +
+> +static int hi3798_clk_complex_prepare(struct clk_hw *hw)
+> +{
+> +       struct hi3798_clk_complex *clk =3D to_complex_clk(hw);
+> +       u32 val;
+> +
+> +       val =3D readl_relaxed(clk->reg);
+> +       val &=3D ~(clk->mask);
+> +       val |=3D clk->value;
+> +       writel_relaxed(val, clk->reg);
+> +
+> +       return 0;
+> +}
+> +
+> +static void hi3798_clk_complex_unprepare(struct clk_hw *hw)
+> +{
+> +       struct hi3798_clk_complex *clk =3D to_complex_clk(hw);
+> +       u32 val;
+> +
+> +       val =3D readl_relaxed(clk->reg);
+> +       val &=3D ~(clk->mask);
+> +       writel_relaxed(val, clk->reg);
+> +}
+> +
+> +static int hi3798_clk_complex_is_prepared(struct clk_hw *hw)
+> +{
+> +       struct hi3798_clk_complex *clk =3D to_complex_clk(hw);
+> +       u32 val;
+> +
+> +       val =3D readl_relaxed(clk->reg);
+> +       return (val & clk->mask) =3D=3D clk->value;
+> +}
+> +
+> +static const struct clk_ops hi3798_clk_complex_ops =3D {
+> +       .prepare =3D hi3798_clk_complex_prepare,
+> +       .unprepare =3D hi3798_clk_complex_unprepare,
+> +       .is_prepared =3D hi3798_clk_complex_is_prepared,
+> +};
+> +
+> +static int hi3798_clk_register_complex(const struct hi3798_complex_clock=
+ *clks, int nums,
+> +                                      struct hisi_clock_data *data)
+> +{
+> +       void __iomem *base =3D data->base;
+> +       int i;
+> +       int ret;
+> +
+> +       for (i =3D 0; i < nums; i++) {
+> +               struct hi3798_clk_complex *p_clk;
+> +               struct clk *clk;
+> +               struct clk_init_data init;
+> +
+> +               p_clk =3D kzalloc(sizeof(*p_clk), GFP_KERNEL);
 
-understood, thanks Julia.
+Use devm?
 
+> +               if (!p_clk) {
+> +                       ret =3D -ENOMEM;
+> +                       goto err_kzalloc;
+> +               }
+> +
+> +               init.name =3D clks[i].name;
+> +               init.ops =3D &hi3798_clk_complex_ops;
+> +
+> +               init.flags =3D 0;
+> +               init.parent_names =3D
+> +                       (clks[i].parent_name ? &clks[i].parent_name : NUL=
+L);
+> +               init.num_parents =3D (clks[i].parent_name ? 1 : 0);
+> +
+> +               p_clk->reg =3D base + clks[i].offset;
+> +               p_clk->mask =3D clks[i].mask;
+> +               p_clk->value =3D clks[i].value;
+> +               p_clk->hw.init =3D &init;
+> +
+> +               clk =3D clk_register(NULL, &p_clk->hw);
 
-Menna
+Use devm? Also, please use devm_clk_hw_register()
 
->
->> please tell me the best way to resend these patches, appreciate your help.
->>
->>
->> Menna
->>
->>
->>> julia
->>>
->>>>    drivers/staging/greybus/gbphy.h                  | 10 ++++++++--
->>>>    drivers/staging/greybus/greybus_authentication.h |  1 -
->>>>    drivers/staging/greybus/pwm.c                    |  1 -
->>>>    3 files changed, 8 insertions(+), 4 deletions(-)
->>>>
->>>> --
->>>> 2.34.1
->>>>
->>>>
->>>>
-> >
+> +               if (IS_ERR(clk)) {
+> +                       kfree(p_clk);
+> +err_kzalloc:
+> +                       pr_err("%s: failed to register clock %s\n",
+> +                              __func__, clks[i].name);
+> +                       goto err;
+> +               }
+> +
+> +               if (clks[i].alias)
+> +                       clk_register_clkdev(clk, clks[i].alias, NULL);
+
+Do you use this clkdev lookup? You have an OF clk provider. Hopefully
+this can be removed.
+
+> +
+> +               data->clk_data.clks[clks[i].id] =3D clk;
+> +       }
+> +
+> +       return 0;
+> +
+> +err:
+> +       while (i--)
+> +               clk_unregister(data->clk_data.clks[clks[i].id]);
+> +
+> +       return ret;
+> +}
+> +
