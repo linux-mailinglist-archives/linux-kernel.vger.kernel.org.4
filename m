@@ -2,197 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C136C38BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAFC6C38C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjCUR5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S230287AbjCUR53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjCUR4v (ORCPT
+        with ESMTP id S230398AbjCUR4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:56:51 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CDC51C91
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:29 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so17206271pjp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679421388;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r94G8t+laaLRHOqp7P6NpxqXY5ipeIxkdHAuq3GhtkU=;
-        b=FqHGROlFeKRmjeq5RlLPU34wtJAd1p5fe0lZ//1ZGPnYLu2AjOOVTuxxzO98KffaFL
-         lk+3qizt2R4AK6AR6mCf3Kn/u8mTYHjdJYmuIiFl3OlpZ1eNMwl9/hq83DKtd7rCDtxS
-         RCXDW9R/ajRyFK/UhSmcqgM06xDl2DWQOHuKrPvRkquC7InbHhLKbUbmWDQiDdnEkYsv
-         Er9NCeoQT9xP5AdZ6KE+Zhzqz9nj2Xd8jYXKR8gshFvML5TmwC39qYkAjB9NCSqc9mdC
-         BBGhuZFPkvImL4kvzyhdNndy4oTWPoSWy42+7Vv3uMrgu4w/HOIBQcmaKUsPf0fy9+7P
-         Objg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679421388;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r94G8t+laaLRHOqp7P6NpxqXY5ipeIxkdHAuq3GhtkU=;
-        b=JQ+ueUpm0vO5tL4OZRol0NxsfVvfVpDY28RnZ6AHNqdwM2khO7VrMoG2uuK2JGFg+V
-         eSGHtBAp6QCPoAGbrMUqQiBjA2eLJGxPFDrA1NDaRa05KwB4jQ6FTo9ONXJoVNrBtQ1W
-         dhgtChwkotOPPZP88ky2qbS7KLkKXmE/Mhu09rOF7ysVaZmRWB2FijlBmk4n+HcqNu5L
-         KaevPGrqLqh47oFErycvaxpuT+ah1tOJ74SoL4i9dVQe4SGkY70Q3lhxj4vst8tW84Mh
-         DAGtlVoJjMGxhC29fGC2siYHjLUjH05RjiD+g58AQ/gINFRdj1zT2+e7eyiwSydy7Ei0
-         /tPg==
-X-Gm-Message-State: AO0yUKVxUIkPTFsu1TkInWmqkt4AgBZyU9a39AUuxH5PQgX9cA0Xv68A
-        QLHWE/61218RpISEW9KrcTDOkk8QZdQHBruFQV1Efw==
-X-Google-Smtp-Source: AK7set99Lezq0qYv6gzZV3r6/9X/dce2iZeZI5kDliHXHztkipzJifJgdyGO+cknsvtp3ylxbHTLLHsBNuUA0FbXeWs=
-X-Received: by 2002:a17:90a:d205:b0:23c:fae6:c1e1 with SMTP id
- o5-20020a17090ad20500b0023cfae6c1e1mr252377pju.6.1679421388545; Tue, 21 Mar
- 2023 10:56:28 -0700 (PDT)
+        Tue, 21 Mar 2023 13:56:52 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254E955505
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=X/XHGzweNcGnZj7J+RpSBa5nq+wT
+        r0BLkAkcv70wsdM=; b=D+nVXfa0FkyurAG1/7M4V0Z5UKvwx0AkpfK84DU1Cz1j
+        fRaH19mATwg5Ru7VOD01wnpi7ixQ4UzWzH4sGAQtN5NLTaDU9i3DBiNd25x/c7OY
+        OXYQoEyAS0v3UmDsdvhS+ZChMb0cdBJJRjT3M9JBqXWRir7R9vLc1HhXUOfvv3s=
+Received: (qmail 1364990 invoked from network); 21 Mar 2023 18:56:28 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Mar 2023 18:56:28 +0100
+X-UD-Smtp-Session: l3s3148p1@bhIcw2z34N4ujnv6
+Date:   Tue, 21 Mar 2023 18:56:25 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] smsc911x: avoid PHY being resumed when
+ interface is not up
+Message-ID: <ZBnvya7Q/brY+MEt@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20230320092041.1656-1-wsa+renesas@sang-engineering.com>
+ <20230320092041.1656-3-wsa+renesas@sang-engineering.com>
+ <7589589f340f1ecb49bc8ed852e1e2dddb384700.camel@redhat.com>
 MIME-Version: 1.0
-References: <20230310160610.742382-1-james.clark@arm.com> <20230310160610.742382-6-james.clark@arm.com>
- <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
-In-Reply-To: <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 21 Mar 2023 17:56:16 +0000
-Message-ID: <CAJ9a7Vg1EebruGT0irGE6sgk-Rs39-ptX_N3U=NkG3OsQeuBFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] coresight: Dynamically add connections
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dSX357otSPN9QRZc"
+Content-Disposition: inline
+In-Reply-To: <7589589f340f1ecb49bc8ed852e1e2dddb384700.camel@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James
 
-On Thu, 16 Mar 2023 at 17:12, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> On 10/03/2023 16:06, James Clark wrote:
-> > Add a function for adding connections dynamically. This also removes
-> > the 1:1 mapping between port number and the index into the connections
-> > array. The only place this mapping was used was in the warning for
-> > duplicate output ports, which has been replaced by a search. Other
-> > uses of the port number already use the port member variable.
-> >
-> > Being able to dynamically add connections will allow other devices like
-> > CTI to re-use the connection mechanism despite not having explicit
-> > connections described in the DT.
-> >
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> > ---
-> >   .../hwtracing/coresight/coresight-platform.c  | 77 ++++++++++++++-----
-> >   include/linux/coresight.h                     |  7 +-
-> >   2 files changed, 64 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-> > index c77238cdf448..16553f7dde12 100644
-> > --- a/drivers/hwtracing/coresight/coresight-platform.c
-> > +++ b/drivers/hwtracing/coresight/coresight-platform.c
-> > @@ -27,8 +27,9 @@ static int coresight_alloc_conns(struct device *dev,
-> >                                struct coresight_platform_data *pdata)
-> >   {
-> >       if (pdata->nr_outconns) {
-> > -             pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
-> > -                                         sizeof(*pdata->out_conns), GFP_KERNEL);
-> > +             pdata->out_conns = devm_krealloc_array(
-> > +                     dev, pdata->out_conns, pdata->nr_outconns,
->
-> super minor nit:
->                 pdata->out_conns = devm_krealloc_array(dev,
->
->
-> > +                     sizeof(*pdata->out_conns), GFP_KERNEL | __GFP_ZERO);
-> >               if (!pdata->out_conns)
-> >                       return -ENOMEM;
-> >       }
-> > @@ -36,6 +37,48 @@ static int coresight_alloc_conns(struct device *dev,
-> >       return 0;
-> >   }
-> >
-> > +/*
-> > + * Add a connection in the first free slot, or realloc
-> > + * if there is no space. @conn's contents is copied into the new slot.
-> > + *
-> > + * If the output port is already assigned on this device, return -EINVAL
-> > + */
-> > +int coresight_add_conn(struct device *dev,
-> > +                    struct coresight_platform_data *pdata,
-> > +                    const struct coresight_connection *conn)
-> > +{
-> > +     int ret;
-> > +     struct coresight_connection *free_conn = NULL;
-> > +     struct coresight_connection *i;
-> > +
-> > +     /*
-> > +      * Search for a free slot, and while looking for one, warn
-> > +      * on any existing duplicate output port.
-> > +      */
-> > +     for (i = pdata->out_conns; i < pdata->out_conns + pdata->nr_outconns;
-> > +          ++i) {
->
-> minor nit: I see why you have gone against using "i" as index into
-> the array. But I think having that as the index is still better
-> readable.
->
->         for (i = 0; i < pdata->nr_outconns; i++) {
->                 struct coresight_connection *c = &pdata->out_conns[i];
->
-> > +             if (i->remote_fwnode && conn->port != -1 &&
-> > +                 i->port == conn->port) {
-> > +                     dev_warn(dev, "Duplicate output port %d\n", i->port);
-> > +                     return -EINVAL;
-> > +             }
+--dSX357otSPN9QRZc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This code assumes that slots are filled sequentially and that it is
-not possible to release slots out of order - i.e. if we find a free
-slot, there is not a match in a later slot.
-I can't think how this could happen but a comment to confirm this
-might be needed here.
+Hi Paolo,
 
-When we had 1:1 port / array index then this check was guaranteed
+> > In smsc911x_mii_probe(), I remove the sanity check for 'phydev' because
+> > it was already done in smsc911x_mii_init(). Let me know if this is
+> > acceptable or if a more defensive approach is favoured.
+>=20
+> Since this is a fix, I would keep the old check, too.
 
-Mike
+Yes, makes sense.
+
+> > +	phydev =3D phy_find_first(pdata->mii_bus);
+> > +	if (!phydev) {
+> > +		netdev_err(dev, "no PHY found\n");
+> > +		err =3D -ENOENT;
+> > +		goto err_out_free_bus_2;
+>=20
+> Why don't you call mdiobus_unregister() in this error path?
+
+Oversight. I will fix it.
+
+Thank you for the review!
 
 
+--dSX357otSPN9QRZc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > +             if (!i->remote_fwnode && !free_conn)
-> > +                     free_conn = i;
-> > +     }
-> > +
-> > +     if (!free_conn) {
->
-> and:
->         /* No free slots */
->         if (i == pdata->nr_outconns) {
->
-> > +             pdata->nr_outconns++;
-> > +             ret = coresight_alloc_conns(dev, pdata);
-> > +             if (ret)
-> > +                     return ret;
-> > +             free_conn = &pdata->out_conns[pdata->nr_outconns - 1];
-> > +     }
-> > +
->
-> and:
->         pdata->out_conns[i] = *conn;
->
->
-> Otherwise looks good to me.
->
-> Suzuki
->
->
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQZ78UACgkQFA3kzBSg
+KbalWQ//QzAaCeqp5I/wIJj9fW3lDht8cVRIiUEco0sruEdxcE0uAKwVZ3FTtG69
+lobHyWzyxzJA/EtbYFPB3CWoFTRs9yVb7Dl36fBtmXz6UrUZTiiZxD661Kj6I47t
+CEcmNoMhVr+XBdNxE34vjKKe6lzFWzjOxJJEUmJ5heUbQPqpeHGH4ZDeBXb8s/8n
+fGOKOgREQ3kyk9bVYFpwPO84tWVsY+07SbQ77/zgCqaGtkh/O8doQ2Rz+LQgZub1
+Re8c/1ldwloHhQXj9p1RL/uIQCb3cR0zQD4TBDYy8M95Ip1y2PJg6islO2WGvNQJ
+z1bp57CvFiNCxdT7ZfF6uc2ysr06leJGPhBlAiXxUNCiYhJ0pWvyDi+aoohtcMsP
+rVYBikF4cASU8xxGLF6W3MUHy8W+zVubz+1Kz539L22Erb5Ca4rWpAN2n3WKYoZW
+uFyG0gD/JD88UO31aeNwgXXrpIxyEZO0UAoWMBKyopWOP+exxQ5O/Q0mM/pYqlAa
+aBf1t8ziO+3MJOoSgwOwU5UxAHUaRzc75GU4B//fg2SQipDzW4gwQU53bq2pnGQY
+M2fXFbX1RdVkGcoSJud3Jf21El4lCUfakbnvclMKWyDzpC3Z/MDjJyJm5prFCTAw
+04QYsJxmHhfbHH2Wn1nXOm+XZIW02S/K+P+o9vfD+etY+oix9KY=
+=ptv0
+-----END PGP SIGNATURE-----
 
---
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+--dSX357otSPN9QRZc--
