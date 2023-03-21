@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095456C355E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FA16C3562
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjCUPRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
+        id S231648AbjCUPRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjCUPRR (ORCPT
+        with ESMTP id S231220AbjCUPRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 11:17:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F60A26CF3;
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F433BDBB;
         Tue, 21 Mar 2023 08:17:15 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LEh78R024839;
-        Tue, 21 Mar 2023 15:16:56 GMT
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LEh3JZ016684;
+        Tue, 21 Mar 2023 15:16:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=CHCxWc3rbFcp6UZWpf/pCxYlaalqi6G6tNsTY1PMYM4=;
- b=iIaJFDFlcNCRPRB3mGP+5Q6NWvTt/7b4dV4LX4IfMH+yjWT8ykhluGWXXzCzuLiyKTjX
- HyBLuPib/tI5rNk2oqvgVzp7oM5K00TWeF5N+lTMqlAf2uMRoUfMPsWNEZ1sYZi+Y2/n
- W1A6YYn485TsjxPSe67iZp8qmOrNQ5RAXhRF0MOAa3K4JjZJfeo/VpzH2kMcJW3h1Q4C
- rDSGehGyagX+4f6JQ8XIYCt10qWUn/adOsPisTLIcoBj4brIKmi3yfWra/jNiQ8vsNgI
- UhUxCFkbWDe8TSMDD6lyzJ7bZo2BbBlFWodwvCexsHE1p1oTwg2GtunBYlGL3p2V+LPN rA== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf7qnv3pk-1
+ bh=vbLhpg+PI2Rym4W/kWQG3RHITMxtpIWM1agvPvo6g0A=;
+ b=B6d5SdVzpiGIxzuKxR/wWjNXk8Uor5NdEtqSOyox6/6H1I3DZS75T4WfjEvAC/t/K+5w
+ OElCcjleJsDhZmBi8pPjXcD7KmkdY4ZOsEWN8cxcU26BDOcRy5/bRgzTTivxvfqkU+Bk
+ UhTGok+I50jhyNsRwvXn4onEOlZPRZFPZHhC2eNT5ASuj1kkUS+F6Fl7ZUTYX63TEqpG
+ T+1XwukgqnuEgIcU+KUkU156BwbQXNNg7+ERHDpxfN+Ail0+V4cTiswdzQqserB3/eRZ
+ 46DG9sZv1v/1UU6JoG5s4X8iLxI6O2e5lFRJF8oQAW9t5VTggzpxaIB/NAyoR5Ze/c9e EQ== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf92421s3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 15:16:56 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LEE4lx030320;
-        Tue, 21 Mar 2023 15:16:55 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3pd4x6u7gu-1
+        Tue, 21 Mar 2023 15:16:58 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LF2HbD032441;
+        Tue, 21 Mar 2023 15:16:57 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3pd4x736jn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 15:16:55 +0000
+        Tue, 21 Mar 2023 15:16:57 +0000
 Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LFGrFJ61800786
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LFGuhc6160974
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Mar 2023 15:16:54 GMT
+        Tue, 21 Mar 2023 15:16:56 GMT
 Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CDFF55805B;
-        Tue, 21 Mar 2023 15:16:53 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3E52658066;
+        Tue, 21 Mar 2023 15:16:56 +0000 (GMT)
 Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 521F958063;
-        Tue, 21 Mar 2023 15:16:52 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id ABF5D58065;
+        Tue, 21 Mar 2023 15:16:54 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.111.39])
         by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Mar 2023 15:16:52 +0000 (GMT)
+        Tue, 21 Mar 2023 15:16:54 +0000 (GMT)
 From:   Eddie James <eajames@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
         andrew@aj.id.au, joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
         Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2 2/4] doc: Add Atmel AT30TSE serial eeprom
-Date:   Tue, 21 Mar 2023 10:16:40 -0500
-Message-Id: <20230321151642.461618-3-eajames@linux.ibm.com>
+Subject: [PATCH v2 3/4] eeprom: ee1004: Add devicetree binding
+Date:   Tue, 21 Mar 2023 10:16:41 -0500
+Message-Id: <20230321151642.461618-4-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230321151642.461618-1-eajames@linux.ibm.com>
 References: <20230321151642.461618-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BDGxzua8XQlU3P1guiQT_48bq79xeThX
-X-Proofpoint-ORIG-GUID: BDGxzua8XQlU3P1guiQT_48bq79xeThX
+X-Proofpoint-GUID: 79e012hUrlu-aSBvM21uiScPTC0ymbzc
+X-Proofpoint-ORIG-GUID: 79e012hUrlu-aSBvM21uiScPTC0ymbzc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- suspectscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 phishscore=0 impostorscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303150002 definitions=main-2303210118
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -85,27 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AT30TSE is compatible with the JEDEC EE1004 standard. Document it
-as a trivial I2C device.
+Add an OF match table for devicetree instantiation of EE1004
+devices.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/misc/eeprom/ee1004.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 6f482a254a1d..43e26c73a95f 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -47,6 +47,8 @@ properties:
-           - ams,iaq-core
-             # i2c serial eeprom (24cxx)
-           - at,24c08
-+            # i2c serial eeprom (EE1004 standard)
-+          - atmel,at30tse
-             # i2c trusted platform module (TPM)
-           - atmel,at97sc3204t
-             # ATSHA204 - i2c h/w symmetric crypto module
+diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
+index 950813821087..72068bb72621 100644
+--- a/drivers/misc/eeprom/ee1004.c
++++ b/drivers/misc/eeprom/ee1004.c
+@@ -59,6 +59,12 @@ static const struct i2c_device_id ee1004_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, ee1004_ids);
+ 
++static const struct of_device_id ee1004_of_match[] = {
++	{ .compatible = "atmel,at30tse" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, ee1004_of_match);
++
+ /*-------------------------------------------------------------------------*/
+ 
+ static int ee1004_get_current_page(struct ee1004_bus *bus)
+@@ -270,6 +276,7 @@ static struct i2c_driver ee1004_driver = {
+ 	.driver = {
+ 		.name = "ee1004",
+ 		.dev_groups = ee1004_groups,
++		.of_match_table = ee1004_of_match,
+ 	},
+ 	.probe_new = ee1004_probe,
+ 	.remove = ee1004_remove,
 -- 
 2.31.1
 
