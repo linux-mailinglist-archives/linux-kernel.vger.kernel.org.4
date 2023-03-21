@@ -2,204 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDE96C3900
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE856C3903
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCUSQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S230371AbjCUSQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjCUSQK (ORCPT
+        with ESMTP id S230353AbjCUSQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:16:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8ADA8A7E;
-        Tue, 21 Mar 2023 11:16:06 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 460FAFB;
-        Tue, 21 Mar 2023 19:16:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679422564;
-        bh=YYbBI+yZSSJbYGhSeo7clHqjJfv86VCoUJSEWpYXO+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=et96KRBewPZzizQfexOFCLJXkqb5wSeGgSv6hB9T2tVkzio8N0HVTy7cx7cQxPgeJ
-         xkoMRqVvU70aL6Gb9D3BeLPHdljMgL/LuwnNWcLW5bf0+XFhvoWCKgy4EI5/1+occk
-         4d/lA/Yw7mIY0BWH9k+99HYvgqDCoH4KUE2+nYE4=
-Date:   Tue, 21 Mar 2023 20:16:10 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
-        jernel@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
- allocated
-Message-ID: <20230321181610.GE20234@pendragon.ideasonboard.com>
-References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
- <20230321102855.346732-3-benjamin.gaignard@collabora.com>
+        Tue, 21 Mar 2023 14:16:40 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A061F18B3F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:16:31 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id s8so19985475lfr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679422590;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDFZrNSGbx6kXfBTWbHiu3B1ojrpm5J95xJKok9hpdg=;
+        b=oeAEXQx8p16Bf8q8S+69VRYyQAd/gXz+2xFAAtBBZ7kEI62axDYCyPj5jjIbQwZ0ju
+         4Q8w9jQcT93gT2IWzlOfedSNMs7fRVWNLlqa4tPEuF2Q+NHurcTWAqeKBMgM26Z2wrFV
+         VMIwhiDD9cFKyXYm8BCe4WrDoV+4CABlqGkGLQK2c2AXLBaBvoaRFSp7mFwYmk+VyTbY
+         G+qZqXYR0wmPeTxVFoNDSkGHjcTUeQx/feuLv3dFJKVGkf83w8wJtuaJgeTZGalmOQvn
+         KcpUhfRG2nN4KWODqklQrig7f459GE7AW44PUZBXxFRCZ/6ei1hjiGhLlufUunCx2vNn
+         jq+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679422590;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KDFZrNSGbx6kXfBTWbHiu3B1ojrpm5J95xJKok9hpdg=;
+        b=PZsLI4+5l4CpA4QE4ASeCSW94nkNLv8vhmOHVnO5YZHeN7jIBZ2eb43YmwFzxudKyX
+         HtkABkCox9qV3S5h7nzxudo/3fzoIFnuNuwSwYzh3FVomLTf8CBI8FHYnTDwv5THDKoZ
+         ogDJQsquHlD5HHTQeQ6zntDdi9jL1CTn11O/WtwKpqiqz+bTmJmDHLAetZWtLl/mmL0n
+         fUk7m8UDCIf+jrCpIMYL6z1pp44cPBksc0os/ELFmJsWQPKAhmVfifjFGwMp4ssivRiR
+         5hqPxwFUVlY3SeIy93vccy1g00hKD3UogdPt2oOO3NtuknyC0q4GbQOBMozQYNzgKRlL
+         M3yg==
+X-Gm-Message-State: AO0yUKXfTh2NJUc95U7gyQoBh6Qa7BqGfRpQwC3+mOzaSgLhkcNPuOpU
+        Q37iRhLGSnFLpXYH5vOLrrQ=
+X-Google-Smtp-Source: AK7set81Z5rRpqlVAcKNnMlWpVH8OObsxQcRAXiPFZ/IH38XbWI3XLTu5QiQD/i8BHk4h5bTsJp6BA==
+X-Received: by 2002:ac2:510c:0:b0:4cc:73ff:579a with SMTP id q12-20020ac2510c000000b004cc73ff579amr1063295lfb.38.1679422589928;
+        Tue, 21 Mar 2023 11:16:29 -0700 (PDT)
+Received: from pc636 (host-90-233-209-15.mobileonline.telia.com. [90.233.209.15])
+        by smtp.gmail.com with ESMTPSA id l9-20020ac24309000000b004dbebb3a6fasm2259384lfh.175.2023.03.21.11.16.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:16:29 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 21 Mar 2023 19:16:27 +0100
+To:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] MAINTAINERS: add myself as vmalloc reviewer
+Message-ID: <ZBn0exbF9PRlv67E@pc636>
+References: <55f663af6100c84a71a0065ac0ed22463aa340de.1679421959.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321102855.346732-3-benjamin.gaignard@collabora.com>
+In-Reply-To: <55f663af6100c84a71a0065ac0ed22463aa340de.1679421959.git.lstoakes@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
-
-Thank you for the patch.
-
-On Tue, Mar 21, 2023 at 11:28:49AM +0100, Benjamin Gaignard wrote:
-> Instead of a static array change bufs to a dynamically allocated array.
-> This will allow to store more video buffer if needed.
-> Protect the array with a spinlock.
-
-I think I asked in the review of v1 why we couldn't use the kernel
-IDA/IDR APIs to allocate buffer IDs and register buffers, but I don't
-think I've received a reply. Wouldn't it be better than rolling out our
-own mechanism ?
-
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  .../media/common/videobuf2/videobuf2-core.c   |  8 +++
->  include/media/videobuf2-core.h                | 49 ++++++++++++++++---
->  2 files changed, 49 insertions(+), 8 deletions(-)
+> I have recently been involved in both reviewing and submitting patches to
+> the vmalloc code in mm and would be willing and happy to help out with
+> review going forward if it would be helpful!
 > 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-> index 79e90e338846..ae9d72f4d181 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> @@ -2452,6 +2452,13 @@ int vb2_core_queue_init(struct vb2_queue *q)
->  	mutex_init(&q->mmap_lock);
->  	init_waitqueue_head(&q->done_wq);
->  
-> +	q->max_num_bufs = 32;
-> +	q->bufs = kmalloc_array(q->max_num_bufs, sizeof(*q->bufs), GFP_KERNEL | __GFP_ZERO);
-> +	if (!q->bufs)
-> +		return -ENOMEM;
-> +
-> +	spin_lock_init(&q->bufs_lock);
-> +
->  	q->memory = VB2_MEMORY_UNKNOWN;
->  
->  	if (q->buf_struct_size == 0)
-> @@ -2479,6 +2486,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
->  	mutex_lock(&q->mmap_lock);
->  	__vb2_queue_free(q, q->num_buffers);
->  	mutex_unlock(&q->mmap_lock);
-> +	kfree(q->bufs);
->  }
->  EXPORT_SYMBOL_GPL(vb2_core_queue_release);
->  
-> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-> index 5b1e3d801546..397dbf6e61e1 100644
-> --- a/include/media/videobuf2-core.h
-> +++ b/include/media/videobuf2-core.h
-> @@ -558,6 +558,8 @@ struct vb2_buf_ops {
->   * @dma_dir:	DMA mapping direction.
->   * @bufs:	videobuf2 buffer structures
->   * @num_buffers: number of allocated/used buffers
-> + * @bufs_lock: lock to protect bufs access
-> + * @max_num_bufs: max number of buffers storable in bufs
->   * @queued_list: list of buffers currently queued from userspace
->   * @queued_count: number of buffers queued and ready for streaming.
->   * @owned_by_drv_count: number of buffers owned by the driver
-> @@ -619,8 +621,10 @@ struct vb2_queue {
->  	struct mutex			mmap_lock;
->  	unsigned int			memory;
->  	enum dma_data_direction		dma_dir;
-> -	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
-> +	struct vb2_buffer		**bufs;
->  	unsigned int			num_buffers;
-> +	spinlock_t			bufs_lock;
-> +	size_t				max_num_bufs;
->  
->  	struct list_head		queued_list;
->  	unsigned int			queued_count;
-> @@ -1239,9 +1243,16 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
->  static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
->  						unsigned int index)
->  {
-> -	if (index < q->num_buffers)
-> -		return q->bufs[index];
-> -	return NULL;
-> +	struct vb2_buffer *vb = NULL;
-> +
-> +	spin_lock(&q->bufs_lock);
-> +
-> +	if (index < q->max_num_bufs)
-> +		vb = q->bufs[index];
-> +
-> +	spin_unlock(&q->bufs_lock);
-> +
-> +	return vb;
->  }
->  
->  /**
-> @@ -1251,12 +1262,30 @@ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
->   */
->  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
->  {
-> -	if (vb->index < VB2_MAX_FRAME) {
-> +	bool ret = false;
-> +
-> +	spin_lock(&q->bufs_lock);
-> +
-> +	if (vb->index >= q->max_num_bufs) {
-> +		struct vb2_buffer **tmp;
-> +
-> +		tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
-> +		if (!tmp)
-> +			goto realloc_failed;
-> +
-> +		q->max_num_bufs *= 2;
-> +		q->bufs = tmp;
-> +	}
-> +
-> +	if (vb->index < q->max_num_bufs) {
->  		q->bufs[vb->index] = vb;
-> -		return true;
-> +		ret = true;
->  	}
->  
-> -	return false;
-> +realloc_failed:
-> +	spin_unlock(&q->bufs_lock);
-> +
-> +	return ret;
->  }
->  
->  /**
-> @@ -1266,8 +1295,12 @@ static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *
->   */
->  static inline void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
->  {
-> -	if (vb->index < VB2_MAX_FRAME)
-> +	spin_lock(&q->bufs_lock);
-> +
-> +	if (vb->index < q->max_num_bufs)
->  		q->bufs[vb->index] = NULL;
-> +
-> +	spin_unlock(&q->bufs_lock);
->  }
->  
->  /*
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b79463ea1049..69d19130af2f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13419,6 +13419,7 @@ VMALLOC
+>  M:	Andrew Morton <akpm@linux-foundation.org>
+>  R:	Uladzislau Rezki <urezki@gmail.com>
+>  R:	Christoph Hellwig <hch@infradead.org>
+> +R:	Lorenzo Stoakes <lstoakes@gmail.com>
+>  L:	linux-mm@kvack.org
+>  S:	Maintained
+>  W:	http://www.linux-mm.org
+> --
+> 2.39.2
+Makes sense to me!
 
--- 
-Regards,
+Acked-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-Laurent Pinchart
+--
+Uladzislau Rezki
