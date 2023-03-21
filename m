@@ -2,175 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8428F6C3795
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1C16C378E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjCURCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S229984AbjCURBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCURCh (ORCPT
+        with ESMTP id S229510AbjCURBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:02:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989E12822B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679418106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lcFH3Gw2MS2hxoUbFfkXJb2/O9gx/UdG3VWmXz/ijFE=;
-        b=TBwUhcJu0rrBTa+OLtpnMSDXATL1J4DkryY+7orMN0oM8kPTnYhH5OmlnlyslS/S3FFsg4
-        uFOtnJYdmodk1YNSpQ1qTsA1lUDtru573htb5ZhcewCcinAekrDDP3SRx9vB3+bAgK6ASI
-        +GSN1D/7+WTeXZt743seufEW5J5F7Jw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-527--W2BBs1aPmO-xHkcmQRwNA-1; Tue, 21 Mar 2023 13:01:43 -0400
-X-MC-Unique: -W2BBs1aPmO-xHkcmQRwNA-1
-Received: by mail-wm1-f70.google.com with SMTP id iv10-20020a05600c548a00b003ee112e6df1so2340043wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:01:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679418102;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lcFH3Gw2MS2hxoUbFfkXJb2/O9gx/UdG3VWmXz/ijFE=;
-        b=YMyG7q25RlJzoPZ1WRTOITS8Kfi/Bh9zjXXzcA4alO9KY5pWalrJN/6xd5mjALis8U
-         uhc7PTnkAeaaR0f3Pv09UYCHto0VS8osKw8Dppz+4fmeGebJ64bnGw9Pk/Qz6Hu+zWA+
-         +MVlInA/PjyrVmkP3nm5q52yL533S0llL1fVPDWSdeZU5ezWDds/k/egKZp/bqZitcXJ
-         1fb45NNk0CKBI1NsM/LLRrlf4jxin3ghg68EMio5+uIgBTL6qjrvHoL3Ws02/tIWeOv6
-         7fH+Q4c2N3GgS4j9UHng717CK12Y+nO10C2lU6ipFfMBXXyCt2cT//QFFJGj4T+R+Tc3
-         pStg==
-X-Gm-Message-State: AO0yUKVzTfqxAhAuwfdyGvuB6wJPUvrLDQ7UXzzhqr7HK+J2nOIf+9Ah
-        olV4qa5Z791lmJMyV2zpzBAestngdATdXk66hGhZafHVugXLTJlFW2d0LA67PG8eDPmRu7Aa+HD
-        5p2lSjT6y/os64f8SxMqc6t1R
-X-Received: by 2002:a05:6000:10d0:b0:2ce:a7f6:2fe5 with SMTP id b16-20020a05600010d000b002cea7f62fe5mr3069228wrx.60.1679418102729;
-        Tue, 21 Mar 2023 10:01:42 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8H4j1IS2DP9wgMOOzB3lkgc0urxBfNv94zaRLD/dw6IB/eqVFyZlA2Ttlu6q9hf9hZ1CwfOA==
-X-Received: by 2002:a05:6000:10d0:b0:2ce:a7f6:2fe5 with SMTP id b16-20020a05600010d000b002cea7f62fe5mr3069210wrx.60.1679418102393;
-        Tue, 21 Mar 2023 10:01:42 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
-        by smtp.gmail.com with ESMTPSA id a7-20020adff7c7000000b002c70ce264bfsm11856785wrq.76.2023.03.21.10.01.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:01:41 -0700 (PDT)
-Message-ID: <d8318657-f119-b0f3-cfb8-ed314a8144e6@redhat.com>
-Date:   Tue, 21 Mar 2023 18:01:40 +0100
+        Tue, 21 Mar 2023 13:01:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C19E28846;
+        Tue, 21 Mar 2023 10:01:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D895B61D1A;
+        Tue, 21 Mar 2023 17:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE2EC4339B;
+        Tue, 21 Mar 2023 17:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679418107;
+        bh=wijKgZAZ2VxVg3wUlQIz/KBZ2VVi/2DuE5W458CNj8A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yGJ/UGFAYSIcXhAnT6Z0C0YknK2+H4WD6fsHv3q8VzgO7xbBiUF7Ws5qbngCCfPEg
+         T4ZHHM2Hy18vtHmd36Erqn6lu0j+hPsZMyeK9YmR3Wp988n9/63MhTNwCLB6Q9uLwG
+         CWN8E8y8//3ONxeEYLtAh6CWvzlDTB0Ycix1QaGU=
+Date:   Tue, 21 Mar 2023 18:01:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        vireshk@kernel.org, thierry.reding@gmail.com,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 2/3] staging: greybus: use inline function for macros
+Message-ID: <ZBni+Ho63jwZth9F@kroah.com>
+References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com>
+ <1274302b52ae905dab6f75377d625598facbbdf1.1679352669.git.eng.mennamahmoud.mm@gmail.com>
+ <20230321154728.3r7ut3rl2pccmo2e@pengutronix.de>
+ <82a4e5f1-a1f2-c70-3645-9464ccb17bab@inria.fr>
+ <20230321162629.rjmivzhbdy4pcgii@pengutronix.de>
+ <9a775966-29d4-12b3-e67d-4327194f972@inria.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Adam Manzanares <a.manzanares@samsung.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-References: <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
- <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
- <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
- <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
- <eaa75ce0-7064-7919-0e72-6bb4ccc5d0d6@redhat.com>
- <ZBng0qnm/ADtSTBQ@bombadil.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZBng0qnm/ADtSTBQ@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9a775966-29d4-12b3-e67d-4327194f972@inria.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.23 17:52, Luis Chamberlain wrote:
-> On Tue, Mar 21, 2023 at 04:11:27PM +0100, David Hildenbrand wrote:
->> On 20.03.23 22:23, Luis Chamberlain wrote:
->>> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
->>>> On 20.03.23 22:09, Luis Chamberlain wrote:
->>>>> On Mon, Mar 20, 2023 at 08:40:07PM +0100, David Hildenbrand wrote:
->>>>>> On 20.03.23 10:38, David Hildenbrand wrote:
->>>>>>> On 18.03.23 01:11, Luis Chamberlain wrote:
->>>>>>>> On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
->>>>>>>>> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
->>>>>>>>>> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
->>>>>>>>>>> I expect to have a machine (with a crazy number of CPUs/devices) available
->>>>>>>>>>> in a couple of days (1-2), so no need to rush.
->>>>>>>>>>>
->>>>>>>>>>> The original machine I was able to reproduce with is blocked for a little
->>>>>>>>>>> bit longer; so I hope the alternative I looked up will similarly trigger the
->>>>>>>>>>> issue easily.
->>>>>>>>>>
->>>>>>>>>> OK give this a spin:
->>>>>>>>>>
->>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
->>>>>>>>
->>>>>>>> Today I am up to here:
->>>>>>>>
->>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
->>>>>>>>
->>>>>>>> The last patch really would have no justification yet at all unless it
->>>>>>>> does help your case.
->>>>>>>
->>>>>>> Still waiting on the system (the replacement system I was able to grab
->>>>>>> broke ...).
->>>>>>>
->>>>>>> I'll let you know once I succeeded in reproducing + testing your fixes.
->>>>>>
->>>>>> Okay, I have a system where I can reproduce.
->>>>>>
->>>>>> Should I give
->>>>>>
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts
->>>>>>
->>>>>> from yesterday a churn?
->>>>>
->>>>> Yes please give that a run.
->>>>
->>>> Reproduced with v6.3.0-rc1 (on 1st try)
->>>
->>> By reproduced, you mean it fails to boot?
->>
->> It boots but we get vmap allocation warnings, because the ~440 CPUs manage
->> to completely exhaust the module vmap area due to KASAN.
+On Tue, Mar 21, 2023 at 05:35:54PM +0100, Julia Lawall wrote:
 > 
-> Thanks, can you post a trace?
-
-See
-
-https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
-
-where I also describe the issue in more detail.
-
 > 
->>>> Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
->>>
->>> Oh wow, so to clarify, it boots OK?
->>
->> It boots and I don't get the vmap allocation warnings.
+> On Tue, 21 Mar 2023, Uwe Kleine-König wrote:
 > 
-> Wonderful!
+> > On Tue, Mar 21, 2023 at 04:59:49PM +0100, Julia Lawall wrote:
+> > >
+> > >
+> > > On Tue, 21 Mar 2023, Uwe Kleine-König wrote:
+> > >
+> > > > Hello,
+> > > >
+> > > > just some nitpicks:
+> > > >
+> > > > On Tue, Mar 21, 2023 at 01:04:33AM +0200, Menna Mahmoud wrote:
+> > > > > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> > > > > static inline function.
+> > > > >
+> > > > > it is not great to have macro that use `container_of` macro,
+> > > >
+> > > > s/it/It/; s/macro/macros/; s/use/use the/;
+> > > >
+> > > > > because from looking at the definition one cannot tell what type
+> > > > > it applies to.
+> > > > > [...]
+> > > > > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> > > > > +static inline struct gbphy_device *to_gbphy_dev(const struct device *d)
+> > > >
+> > > > drivers/staging/greybus/gbphy.c always passes a variable named
+> > > > "dev" to this macro. So I'd call the parameter "dev", too, instead of
+> > > > "d". This is also a more typical name for variables of that type.
+> > >
+> > > I argued against that.  Because then there are two uses of dev
+> > > in the argument of container_of, and they refer to completely different
+> > > things.  It's true that by the way container_of works, it's fine, but it
+> > > may be misleading.
+> >
+> > Hmm, that seems to be subjective, but I have less problems with that
+> > than with using "d" for a struct device (or a struct device_driver).
+> > I'd even go so far as to consider it nice if they are identical.
+> >
+> > Maybe that's because having the first and third argument identical is
+> > quite common:
+> >
+> > 	$ git grep -P 'container_of\((?<ident>[A-Za-z_0-9-]*)\s*,[^,]*,\s*\g{ident}\s*\)' | wc -l
+> > 	5940
+> >
+> > which is >44% of all the usages
+> >
+> > 	$ git grep -P 'container_of\((?<ident>[A-Za-z_0-9-]*)\s*,[^,]*,\s*(?&ident)\s*\)' | wc -l
+> > 	13362
+> 
+> OK, if people like that, then why not.  But it's dangerous if the call to
+> container_of is in a macro, rather than in a function.
 
-I'm still compiling/testing the debug kernels 
-(20230319-module-alloc-opts-adjust +  single revert of the rcu patch). I 
-should have some systemd-analyze results for !debug kernels later.
+It's not "dangerous" at all, as the macro will enforce type-safety, you
+can't get it wrong when using it.
 
--- 
-Thanks,
+Ideally this is best as a macro as it's just doing pointer math, worst
+case, the compiler turns a function like this into a real function and
+you have a call/subtract/return for every time you make this call.
 
-David / dhildenb
+So this conversion to functions feels odd to me, as you potentially are
+making all of this worse overall.
 
+Wait until people realize that when we eventually turn these into
+container_of_const() you HAVE to go back to using it as a macro instead
+of in a function call wrapper like this...
+
+thanks,
+
+greg k-h
