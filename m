@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7A66C37A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D4D6C379D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjCURES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
+        id S230326AbjCURED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCUREC (ORCPT
+        with ESMTP id S229828AbjCUREA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:04:02 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B0C23113
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:57 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id d3-20020a056e02050300b00317999dcfb1so8178507ils.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:57 -0700 (PDT)
+        Tue, 21 Mar 2023 13:04:00 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091251E1FD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:55 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id f15-20020a05660215cf00b00752dd002fd1so7990647iow.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679418235;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iQJQrb9mny4qoyxwqwRsccNTiZVnDvEPXFwh94AIcx4=;
-        b=ndG0xhUw06527VyJnqYOQP5mK7/zHYqiUECuGxr1HH1/z4C6GKBKURw4F5oKW23Ddo
-         1r7ORm/PgCT3KYe2MOw48cOX2bJyZFAiBw1VxAXrmlfbmIwwEkPuAvWI/vfIbeHSCzbc
-         5OPJkHcWKXrO5Se4jhF1KYAFrV4RaIytxDsPeYycVpVLxyahVe2k8BwCxQCjcFPBWH4I
-         xAidiP4xzHJdVM6lJF4u3YWGI7dOwC+AGqBsz31IpNGWemjE3zPjSqDOckLX7zcd9siW
-         lQhpJ6Px33luwkBvTLqhYVwgAYyCy1MddNVM10OefwKLD7KYS0gzavgZAIf8uGXk4oL6
-         jH5Q==
-X-Gm-Message-State: AO0yUKX50tJig/d5Rw+HxyzIr09bvS2TtmIhBB+JMMcf66BFxpJy3KbB
-        HsMI7OYWsDMftQsv5bO1F0zUBZpVxfkciTCY7yhCBeIoypIf
-X-Google-Smtp-Source: AK7set+fiYdL/20PbMmGdByHO7Cgctxr2BNWMLEy39OP9mKD0YmSO0FLCepsjH3LZ27U6vkan+fXqNh6Qfv4AI9Do0zrUEpqe020
+        bh=2QB/JLyschWN1RNDfVkDwwNUTUpPwkV1rFd89UbZI9k=;
+        b=yKPTijaGPwcnB6cthNTT0JaOVzyeJIBzARj4xTwj5gB9JrCOXCXctkmeI8UmM4B/h+
+         lM2S5lE1LxwMZb7JhUY8QciTvJ2My8bKRimIrMxCOJZxJ3m6kVW97P3VEKJn32e6XqGs
+         1nGc6/H5t2RK4uppBQKv+8xKL8f3FO4Iolp0oGjeRb2XtZBCS6BqfFCk4MOXlhQ3LAdy
+         3Nhofu7Z1x702XnVCpiqkWrwtcyfubW50jEaHxjSWy/g6bmItpVzdt2UiE3RNaz5HwWZ
+         tLREkx4Qi8nQkcS5l08RuU80QIg/2pdLPZWvnwJZr9SR4fzM/r+C1pvhNqn7jHkFCuiI
+         SPVw==
+X-Gm-Message-State: AO0yUKVyQaHEIFIdHUeuFQNlrrWX4pYDTHq85zYJ14BV//92bx5OULEv
+        SzXQiwWZD4+p7l9uZjvA+EMR4ET42eIjthvzVoJAmbUHE4XF
+X-Google-Smtp-Source: AK7set8ERmiGsq22zEnIE8/ZlKHEtIrVFT7xEnDOhRZRRE4uIH9terhS/8dY+3IyTKw/a2RfW3g+4Mqxc7X2R5cH8rJmm3A4M9jy
 MIME-Version: 1.0
-X-Received: by 2002:a6b:5d0b:0:b0:74e:7a27:d183 with SMTP id
- r11-20020a6b5d0b000000b0074e7a27d183mr1242791iob.2.1679418235745; Tue, 21 Mar
+X-Received: by 2002:a05:6e02:c74:b0:317:9096:e80f with SMTP id
+ f20-20020a056e020c7400b003179096e80fmr1314698ilj.4.1679418235206; Tue, 21 Mar
  2023 10:03:55 -0700 (PDT)
 Date:   Tue, 21 Mar 2023 10:03:55 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005f023705f76c075c@google.com>
-Subject: [syzbot] [fbdev?] KASAN: use-after-free Write in fbcon_get_font
-From:   syzbot <syzbot+5a04eb16db96950bb112@syzkaller.appspotmail.com>
-To:     daniel@ffwll.ch, deller@gmx.de, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+Message-ID: <00000000000056cdc905f76c0733@google.com>
+Subject: [syzbot] [xfs?] BUG: sleeping function called from invalid context in vm_map_ram
+From:   syzbot <syzbot+6d9043ea38ed2b9ef000@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, djwong@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, lstoakes@gmail.com,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,74 +60,193 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    fe15c26ee26e Linux 6.3-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=11bc9c16c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=5a04eb16db96950bb112
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=135becbac80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1182c9d2c80000
+HEAD commit:    73f2c2a7e1d2 Add linux-next specific files for 20230320
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11ad6e1cc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f22105589e896af1
+dashboard link: https://syzkaller.appspot.com/bug?extid=6d9043ea38ed2b9ef000
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d199bac80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=159c7281c80000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
+disk image: https://storage.googleapis.com/syzbot-assets/2e4e105e18cf/disk-73f2c2a7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/08d761112297/vmlinux-73f2c2a7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/4b39e3e871ce/bzImage-73f2c2a7.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/662e0db5efdd/mount_0.gz
+
+The issue was bisected to:
+
+commit 8f4977bdd77ee3dce8af81488231e7535695f889
+Author: Lorenzo Stoakes <lstoakes@gmail.com>
+Date:   Sun Mar 19 07:09:31 2023 +0000
+
+    mm: vmalloc: use rwsem, mutex for vmap_area_lock and vmap_block->lock
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16c9956ec80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15c9956ec80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11c9956ec80000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5a04eb16db96950bb112@syzkaller.appspotmail.com
+Reported-by: syzbot+6d9043ea38ed2b9ef000@syzkaller.appspotmail.com
+Fixes: 8f4977bdd77e ("mm: vmalloc: use rwsem, mutex for vmap_area_lock and vmap_block->lock")
 
-==================================================================
-BUG: KASAN: use-after-free in fbcon_get_font+0x240/0x8cc drivers/video/fbdev/core/fbcon.c:2290
-Write of size 22062 at addr ffff0000e1bfabd6 by task syz-executor329/5944
-
-CPU: 0 PID: 5944 Comm: syz-executor329 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
+BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 41, name: kworker/u4:2
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+3 locks held by kworker/u4:2/41:
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:643 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:670 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: process_one_work+0x883/0x15e0 kernel/workqueue.c:2376
+ #1: ffffc90000b27db0 ((work_completion)(&pwork->work)){+.+.}-{0:0}, at: process_one_work+0x8b7/0x15e0 kernel/workqueue.c:2380
+ #2: ffffffff8c796440 (rcu_read_lock){....}-{1:2}, at: vb_alloc mm/vmalloc.c:2090 [inline]
+ #2: ffffffff8c796440 (rcu_read_lock){....}-{1:2}, at: vm_map_ram+0x7a/0xcf0 mm/vmalloc.c:2290
+CPU: 0 PID: 41 Comm: kworker/u4:2 Not tainted 6.3.0-rc3-next-20230320-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call trace:
- dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+Workqueue: xfs_iwalk-5100 xfs_pwork_work
+Call Trace:
+ <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0x174/0x514 mm/kasan/report.c:430
- kasan_report+0xd4/0x130 mm/kasan/report.c:536
- kasan_check_range+0x264/0x2a4 mm/kasan/generic.c:187
- __asan_memset+0x40/0x70 mm/kasan/shadow.c:84
- fbcon_get_font+0x240/0x8cc drivers/video/fbdev/core/fbcon.c:2290
- con_font_get drivers/tty/vt/vt.c:4559 [inline]
- con_font_op+0x468/0xfa0 drivers/tty/vt/vt.c:4674
- vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
- vt_ioctl+0x1a90/0x252c drivers/tty/vt/vt_ioctl.c:752
- tty_ioctl+0x8a4/0xd8c drivers/tty/tty_io.c:2777
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ __might_resched+0x358/0x580 kernel/sched/core.c:10059
+ __mutex_lock_common kernel/locking/mutex.c:580 [inline]
+ __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
+ vb_alloc mm/vmalloc.c:2105 [inline]
+ vm_map_ram+0x13d/0xcf0 mm/vmalloc.c:2290
+ _xfs_buf_map_pages+0x158/0x3a0 fs/xfs/xfs_buf.c:441
+ xfs_buf_get_map+0x1cb8/0x2fd0 fs/xfs/xfs_buf.c:719
+ xfs_buf_read_map+0xce/0xb10 fs/xfs/xfs_buf.c:811
+ xfs_buf_readahead_map+0x8c/0xc0 fs/xfs/xfs_buf.c:889
+ xfs_buf_readahead fs/xfs/xfs_buf.h:262 [inline]
+ xfs_btree_reada_bufs+0x170/0x1e0 fs/xfs/libxfs/xfs_btree.c:926
+ xfs_iwalk_ichunk_ra+0x2a1/0x3e0 fs/xfs/xfs_iwalk.c:114
+ xfs_iwalk_ag+0x607/0x930 fs/xfs/xfs_iwalk.c:455
+ xfs_iwalk_ag_work+0x14a/0x1c0 fs/xfs/xfs_iwalk.c:624
+ xfs_pwork_work+0x7f/0x160 fs/xfs/xfs_pwork.c:47
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x33e/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-The buggy address belongs to the physical page:
-page:00000000c3c989b0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x121800
-head:00000000c3c989b0 order:10 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0x5ffc00000010000(head|node=0|zone=2|lastcpupid=0x7ff)
-raw: 05ffc00000010000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff0000e1bfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff0000e1bfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff0000e1c00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                   ^
- ffff0000e1c00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff0000e1c00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
+=============================
+[ BUG: Invalid wait context ]
+6.3.0-rc3-next-20230320-syzkaller #0 Tainted: G        W         
+-----------------------------
+kworker/u4:2/41 is trying to lock:
+ffff88801d967468 (&vb->lock){+.+.}-{3:3}, at: vb_alloc mm/vmalloc.c:2105 [inline]
+ffff88801d967468 (&vb->lock){+.+.}-{3:3}, at: vm_map_ram+0x13d/0xcf0 mm/vmalloc.c:2290
+other info that might help us debug this:
+context-{4:4}
+3 locks held by kworker/u4:2/41:
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:643 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:670 [inline]
+ #0: ffff8880234fc938 ((wq_completion)xfs_iwalk-5100){+.+.}-{0:0}, at: process_one_work+0x883/0x15e0 kernel/workqueue.c:2376
+ #1: ffffc90000b27db0 ((work_completion)(&pwork->work)){+.+.}-{0:0}, at: process_one_work+0x8b7/0x15e0 kernel/workqueue.c:2380
+ #2: ffffffff8c796440 (rcu_read_lock){....}-{1:2}, at: vb_alloc mm/vmalloc.c:2090 [inline]
+ #2: ffffffff8c796440 (rcu_read_lock){....}-{1:2}, at: vm_map_ram+0x7a/0xcf0 mm/vmalloc.c:2290
+stack backtrace:
+CPU: 0 PID: 41 Comm: kworker/u4:2 Tainted: G        W          6.3.0-rc3-next-20230320-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Workqueue: xfs_iwalk-5100 xfs_pwork_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_lock_invalid_wait_context kernel/locking/lockdep.c:4724 [inline]
+ check_wait_context kernel/locking/lockdep.c:4785 [inline]
+ __lock_acquire+0x159e/0x5df0 kernel/locking/lockdep.c:5024
+ lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5691
+ __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+ __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+ vb_alloc mm/vmalloc.c:2105 [inline]
+ vm_map_ram+0x13d/0xcf0 mm/vmalloc.c:2290
+ _xfs_buf_map_pages+0x158/0x3a0 fs/xfs/xfs_buf.c:441
+ xfs_buf_get_map+0x1cb8/0x2fd0 fs/xfs/xfs_buf.c:719
+ xfs_buf_read_map+0xce/0xb10 fs/xfs/xfs_buf.c:811
+ xfs_buf_readahead_map+0x8c/0xc0 fs/xfs/xfs_buf.c:889
+ xfs_buf_readahead fs/xfs/xfs_buf.h:262 [inline]
+ xfs_btree_reada_bufs+0x170/0x1e0 fs/xfs/libxfs/xfs_btree.c:926
+ xfs_iwalk_ichunk_ra+0x2a1/0x3e0 fs/xfs/xfs_iwalk.c:114
+ xfs_iwalk_ag+0x607/0x930 fs/xfs/xfs_iwalk.c:455
+ xfs_iwalk_ag_work+0x14a/0x1c0 fs/xfs/xfs_iwalk.c:624
+ xfs_pwork_work+0x7f/0x160 fs/xfs/xfs_pwork.c:47
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x33e/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 41, name: kworker/u4:2
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+INFO: lockdep is turned off.
+CPU: 1 PID: 41 Comm: kworker/u4:2 Tainted: G        W          6.3.0-rc3-next-20230320-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Workqueue: xfs_iwalk-5163 xfs_pwork_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ __might_resched+0x358/0x580 kernel/sched/core.c:10059
+ __mutex_lock_common kernel/locking/mutex.c:580 [inline]
+ __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
+ vb_alloc mm/vmalloc.c:2105 [inline]
+ vm_map_ram+0x13d/0xcf0 mm/vmalloc.c:2290
+ _xfs_buf_map_pages+0x158/0x3a0 fs/xfs/xfs_buf.c:441
+ xfs_buf_get_map+0x1cb8/0x2fd0 fs/xfs/xfs_buf.c:719
+ xfs_buf_read_map+0xce/0xb10 fs/xfs/xfs_buf.c:811
+ xfs_buf_readahead_map+0x8c/0xc0 fs/xfs/xfs_buf.c:889
+ xfs_buf_readahead fs/xfs/xfs_buf.h:262 [inline]
+ xfs_btree_reada_bufs+0x170/0x1e0 fs/xfs/libxfs/xfs_btree.c:926
+ xfs_iwalk_ichunk_ra+0x2a1/0x3e0 fs/xfs/xfs_iwalk.c:114
+ xfs_iwalk_ag+0x607/0x930 fs/xfs/xfs_iwalk.c:455
+ xfs_iwalk_ag_work+0x14a/0x1c0 fs/xfs/xfs_iwalk.c:624
+ xfs_pwork_work+0x7f/0x160 fs/xfs/xfs_pwork.c:47
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x33e/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 41, name: kworker/u4:2
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+INFO: lockdep is turned off.
+CPU: 1 PID: 41 Comm: kworker/u4:2 Tainted: G        W          6.3.0-rc3-next-20230320-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Workqueue: xfs_iwalk-5298 xfs_pwork_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ __might_resched+0x358/0x580 kernel/sched/core.c:10059
+ __mutex_lock_common kernel/locking/mutex.c:580 [inline]
+ __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
+ vb_alloc mm/vmalloc.c:2105 [inline]
+ vm_map_ram+0x13d/0xcf0 mm/vmalloc.c:2290
+ _xfs_buf_map_pages+0x158/0x3a0 fs/xfs/xfs_buf.c:441
+ xfs_buf_get_map+0x1cb8/0x2fd0 fs/xfs/xfs_buf.c:719
+ xfs_buf_read_map+0xce/0xb10 fs/xfs/xfs_buf.c:811
+ xfs_buf_readahead_map+0x8c/0xc0 fs/xfs/xfs_buf.c:889
+ xfs_buf_readahead fs/xfs/xfs_buf.h:262 [inline]
+ xfs_btree_reada_bufs+0x170/0x1e0 fs/xfs/libxfs/xfs_btree.c:926
+ xfs_iwalk_ichunk_ra+0x2a1/0x3e0 fs/xfs/xfs_iwalk.c:114
+ xfs_iwalk_ag+0x607/0x930 fs/xfs/xfs_iwalk.c:455
+ xfs_iwalk_ag_work+0x14a/0x1c0 fs/xfs/xfs_iwalk.c:624
+ xfs_pwork_work+0x7f/0x160 fs/xfs/xfs_pwork.c:47
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x33e/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
 ---
@@ -136,5 +256,6 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 syzbot can test patches for this issue, for details see:
 https://goo.gl/tpsmEJ#testing-patches
