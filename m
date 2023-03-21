@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF30F6C3D25
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630226C3D30
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjCUV5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S230175AbjCUV57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjCUV4s (ORCPT
+        with ESMTP id S230150AbjCUV5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:56:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C651A5291F;
-        Tue, 21 Mar 2023 14:56:43 -0700 (PDT)
+        Tue, 21 Mar 2023 17:57:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEECF591F0;
+        Tue, 21 Mar 2023 14:56:47 -0700 (PDT)
 Received: from localhost (unknown [188.24.179.102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 59F2166030E0;
-        Tue, 21 Mar 2023 21:56:42 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5EEE266030E8;
+        Tue, 21 Mar 2023 21:56:45 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679435802;
-        bh=N/ZvfamKX7ttvXbRjuUCngvIStvDvApje9cACLj84nc=;
+        s=mail; t=1679435805;
+        bh=6Pn4h5hBqV5Mx/XTEaAivfDdSRY70HW5NEjSKaEvQGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DqaZ5y5wGDXGe9EAD5npPYnOvO8wTs3kNVCLiDkTuyJH7ci44MX8ygIEFgwNjQNyv
-         sqBKfbH5NULmGNhEnqAny3aDt1UklimcwMHGKe3QsS4C18Php76Uwvcy5C5acRqSgU
-         9ymwDXiVb3HW6dfk2SD+FWFK00TmK8vZVuyHZfdSzqLZwJb3Rp66yXy5Wd+mniHzQm
-         HbaocTMIi2y2VmHj5H97kNMjZNVLXihy5ZuEYBfvyQ+vcefBsOSeIeE9tCqVfiLsna
-         mtjcISN1N3a5tKbCODUy2AMlT5JCuwLsdKudj5rXfD1XCRuVVo74Qv8JEVlTjMCfyB
-         s20AE7DVsgyug==
+        b=HNds7UKN7y1p2cduDi0Vgr7IKmadoc+8Hc0tJb0c79MWm7R0s4opLuHs9TwoxtAmP
+         HqXP7iL7BftmWxaT6TpsF9TD5ivwgydc8VfBkvEE1L/e81wA8KFCM/6F7Rw7h2Ogyd
+         PmWhAgcID/M0MILvYzd0j9JZQ81qMxKzQqVUlaxm0QwLuEn/gTH1CrN99M8cui7guQ
+         NP1Go7ZFsn8utZZDAY8qxLf+BnWkcod2hBexQwdQaRuZamQZYlCjFIKiGROw4Szqli
+         hZO3afvFXq2q2vaQZqbd0Ywwg+hTRgQyi4jwsaonJ9e5KPwiRgwXVJASU3LxR9LThy
+         977C6DdG5csAg==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
         linux-riscv@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v2 04/10] ARM: dts: sun8i: v3s: Switch dma-names order for snps,dw-apb-uart nodes
-Date:   Tue, 21 Mar 2023 23:56:18 +0200
-Message-Id: <20230321215624.78383-5-cristian.ciocaltea@collabora.com>
+Subject: [PATCH v2 05/10] ARM: dts: sunxi: h3/h5: Switch dma-names order for snps,dw-apb-uart nodes
+Date:   Tue, 21 Mar 2023 23:56:19 +0200
+Message-Id: <20230321215624.78383-6-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
 References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
@@ -83,40 +83,49 @@ Do the same for the snps,dw-apb-uart nodes in the DTS file.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- arch/arm/boot/dts/sun8i-v3s.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index db194c606fdc..b001251644f7 100644
---- a/arch/arm/boot/dts/sun8i-v3s.dtsi
-+++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
-@@ -479,7 +479,7 @@ uart0: serial@1c28000 {
- 			reg-io-width = <4>;
+diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+index 686193bd6bd9..ade1cd50e445 100644
+--- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
++++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+@@ -710,7 +710,7 @@ uart0: serial@1c28000 {
  			clocks = <&ccu CLK_BUS_UART0>;
+ 			resets = <&ccu RST_BUS_UART0>;
  			dmas = <&dma 6>, <&dma 6>;
 -			dma-names = "rx", "tx";
 +			dma-names = "tx", "rx";
- 			resets = <&ccu RST_BUS_UART0>;
  			status = "disabled";
  		};
-@@ -492,7 +492,7 @@ uart1: serial@1c28400 {
- 			reg-io-width = <4>;
+ 
+@@ -723,7 +723,7 @@ uart1: serial@1c28400 {
  			clocks = <&ccu CLK_BUS_UART1>;
+ 			resets = <&ccu RST_BUS_UART1>;
  			dmas = <&dma 7>, <&dma 7>;
 -			dma-names = "rx", "tx";
 +			dma-names = "tx", "rx";
- 			resets = <&ccu RST_BUS_UART1>;
  			status = "disabled";
  		};
-@@ -505,7 +505,7 @@ uart2: serial@1c28800 {
- 			reg-io-width = <4>;
+ 
+@@ -736,7 +736,7 @@ uart2: serial@1c28800 {
  			clocks = <&ccu CLK_BUS_UART2>;
+ 			resets = <&ccu RST_BUS_UART2>;
  			dmas = <&dma 8>, <&dma 8>;
 -			dma-names = "rx", "tx";
 +			dma-names = "tx", "rx";
- 			resets = <&ccu RST_BUS_UART2>;
- 			pinctrl-0 = <&uart2_pins>;
- 			pinctrl-names = "default";
+ 			status = "disabled";
+ 		};
+ 
+@@ -749,7 +749,7 @@ uart3: serial@1c28c00 {
+ 			clocks = <&ccu CLK_BUS_UART3>;
+ 			resets = <&ccu RST_BUS_UART3>;
+ 			dmas = <&dma 9>, <&dma 9>;
+-			dma-names = "rx", "tx";
++			dma-names = "tx", "rx";
+ 			status = "disabled";
+ 		};
+ 
 -- 
 2.40.0
 
