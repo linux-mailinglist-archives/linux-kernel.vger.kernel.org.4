@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103146C32B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9E66C32B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjCUNW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S231296AbjCUNW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjCUNW1 (ORCPT
+        with ESMTP id S230488AbjCUNWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:22:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F071524BFA
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:22:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 952AAB8169B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:22:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9C3C433EF;
-        Tue, 21 Mar 2023 13:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679404931;
-        bh=6nQmTXWR0S5yZAO/vh9jjHZ8e6HnzfqVY7IbBOcHD98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IogLwT033y5KY0sEFYrePVyrpD/N7OIvRDlrC1p1hfhU5OympYUhOIxEjPufXraKm
-         4uaW4oOp+iHIM/DapN1B5HEmFbzIFjmFMdD29Q0B0gX1BaaVqtvAG8dE7qARlNLMo9
-         XNG4c84zR+JBic2jq8DtdWDyTVuoetX0c35821RLP4UhBE8sF7vmmREfkdk6Y4qbIZ
-         QEB/VY96BlWHnz4SbUdk97TZ6IoV0GSw44yxItISmOGId/Hitq9Eym29EnJFoS5O8S
-         Kb5j44ouix6KCCasa5HvkvSvY9opaFER5fcr1qC9KFnqbnuA5YlcGLSSVU9tKuYJFK
-         +SyIPYTHna8tw==
-Date:   Tue, 21 Mar 2023 13:22:05 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Shenghao Ding <13916275206@139.com>
-Cc:     lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
-        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com
-Subject: Re: [PATCH v5] ASoC: tas2781: Add tas2781 driver
-Message-ID: <e9134abb-5caa-45aa-b623-e1ceb40223d1@sirena.org.uk>
-References: <20230321113130.25853-1-13916275206@139.com>
+        Tue, 21 Mar 2023 09:22:23 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2322684F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:22:07 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id cu12so3726015pfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679404926;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=21T2ruoV7Hb2byNjXRrKdStLSJ9N1tOpZrLYkVqWI4g=;
+        b=Huli5rHB8xjZ/PvuKC/Kxl1vGQ/ACUbRM7LSmVzGard3IMne+90B36HyDOmD5XhUbL
+         Yoq8kVKaLoMctiQ7nT9eMSYPwO2aBScOz+EaFN+7MLWSqEnK5CHVx6bdNsNAf+SnrdqC
+         S3ONVUFNj0FVNVrwmNGOhLz7OrEsZEnCCXvWW5Yn9AL9Z0LK4BQ7g7ewB/PmHTCKMms4
+         fvyQRW2t4RkomJkBdS0fVk8AQHO93G0NdNnu1NegIZXYIg+2FQgDL41LEWPtAGSh/yVo
+         ORJV1rsg4OdyUuDssywd/TFMn5fDyIaUEmaaUK4EW8t3O62HQrB7kozz3WJtXCulPGvo
+         tnpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679404926;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=21T2ruoV7Hb2byNjXRrKdStLSJ9N1tOpZrLYkVqWI4g=;
+        b=4z6FKCQHE5pJumT0JLm1WBUAyCt7fQrk2gX5TG5QT/o+2Z+0nU1eV8ftxAe93Kl8sZ
+         fi3h0i8PHztSXcGTv0VuBmewcAXyEdljfzYJ9vjszgYruNk2byDh2Qvck32nVOd+7uW/
+         57DirVsKFtNyEa6vkq/3nqzPQFaHwV2mwSVHXLTyr9d24wXPVWviY5KQ1UIiv1f0Gn6d
+         RTcuW43njPZL7L/o7YZhx7uHvOHgIJd+TD4cqoBwiYqjRXhpFLy2sjfMm9RsEAz8JqEz
+         +TS6QW7rOHbp93eqGtpZxWmk20+2ORaQ/qjiWKkN75+V8+h3BC3q2YYqlj4NzY9EtJlM
+         1LaA==
+X-Gm-Message-State: AO0yUKWgzotV5t68+uzfurFnr9CxTe4E76bj95XRL44FBCBr7cJUv0F8
+        jTrqelhs0h15T0jFf7Ayn49ZfqdM3CtmZsJ8L5UcKG7pT4SvVQ==
+X-Google-Smtp-Source: AK7set8BLwETHu9BGegnVixuBn2qniIOtF2F5lXu9Sfb/88AoPZz1I3Rpd8VIle1R2CcZE+10lyJBo7v1pyp+RIK5OA=
+X-Received: by 2002:a05:6a00:3214:b0:625:563e:7d17 with SMTP id
+ bm20-20020a056a00321400b00625563e7d17mr957231pfb.0.1679404926558; Tue, 21 Mar
+ 2023 06:22:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0KwVVK9qwawOe9aF"
-Content-Disposition: inline
-In-Reply-To: <20230321113130.25853-1-13916275206@139.com>
-X-Cookie: Will it improve my CASH FLOW?
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: abcdefjhigklnmopqstuvwxyz@gmail.com
+Received: by 2002:a05:6a10:d5a1:b0:46f:e435:8630 with HTTP; Tue, 21 Mar 2023
+ 06:22:06 -0700 (PDT)
+From:   Mrs Suzara Maling Wan <mrssuzaramailingwan12@gmail.com>
+Date:   Tue, 21 Mar 2023 13:22:06 +0000
+X-Google-Sender-Auth: hCqEeUqPtuW_QUJdy8gxpZnyzL8
+Message-ID: <CAOcMXG+ZhPJFvzW17hcQ3+ge=wYDNN0s-R-Pw8Ztuf0A6umQeQ@mail.gmail.com>
+Subject: Mrs Suzara Maling Wan
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I am Mrs Suzara Maling Wan, I have a desire to build an orphanage home
+in your country and also support the poor and less privilege in your
+society, I want you to handle this project on my behalf, I have $4.5
+Million Dollars with Ecobank to execute this project .
 
---0KwVVK9qwawOe9aF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you are in a good position to handle this project, reply for
+further details of the project
 
-On Tue, Mar 21, 2023 at 07:31:30PM +0800, Shenghao Ding wrote:
-> Create tas2781 driver.
->=20
-> Signed-off-by: Shenghao Ding <13916275206@139.com>
-
-Not looked at the code properly yet but as previously noted you are
-adding a new DT binding so you need to send a patch documenting that
-binding along with the driver.
-
---0KwVVK9qwawOe9aF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQZr3wACgkQJNaLcl1U
-h9A6Cgf/dONTG2ih8NwPlAV46YcR7SHyEM6ke3V0bNPQrib8DgEyj9w86A4dskHF
-2EpQaQOVpGTgjS6pYH2srs2i30iV7yYLb+a1rSCt/QzBzJL0bolEskKXCHCqk/+L
-+yMBi/zXMpIZtXaBZ9LWFt+7s07/CaaBtrxam4yMs8gM/YACW6RRZXIjCXX90Rc5
-zkXIkHHxN01RZlcXf8sWqpeB8hn71MdWr0bKzlBCk8/xs7ygKffLmB9PyYASoepZ
-S1E6uxk83SBXDaf5xFEwxD3cHucGrretW8yvy06vdYfrvTEKsac6afts/TWDtHmJ
-VFRyjEqZHbMQZgBaQaaLm3nIdsGVKw==
-=30hx
------END PGP SIGNATURE-----
-
---0KwVVK9qwawOe9aF--
+Regards
+Mrs Suzara Maling Wan
