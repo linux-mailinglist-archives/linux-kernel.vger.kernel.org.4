@@ -2,199 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE4B6C294D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BBF6C294E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjCUEvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 00:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S229819AbjCUEvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 00:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjCUEvM (ORCPT
+        with ESMTP id S229813AbjCUEvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 00:51:12 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1097305C1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:51:09 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id k15so7126971pgt.10
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:51:09 -0700 (PDT)
+        Tue, 21 Mar 2023 00:51:19 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB0532512;
+        Mon, 20 Mar 2023 21:51:18 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id le6so14830829plb.12;
+        Mon, 20 Mar 2023 21:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1679374269;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EreI0axmIoAWb7kJD6KZO5O0Tim6KFcWmhMtZZ2OgkU=;
-        b=TtL7ps5iIOs9ApmEnamPyY+r1qzzdqEZOMZ00g+CayBW0Drt+Cs+5EenYK4qxYIZ1C
-         eflNXKsYOMl8rZ/paBw2Og900ky7OgBj5M7TOltpaI+YB3WkX1q8hk7oHJKc4TZsE3iy
-         JHZYUGy7TFe8nO6Y3GGsyoH1U3fMujZOqYPhw=
+        d=gmail.com; s=20210112; t=1679374278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AII7onvNh0XTKeparTJKT1aBkAQlRV5EfnYZkxUIGPI=;
+        b=QoRHphEL8ZIwfgoYH/NGmU3kYdjTIO5xFzzu/YNEtRfE7M0mSwhy9UIZQeqz02M8oy
+         1ViZyf3tOspGHBNELlcIKN1PlTE9Rg4wI34/EXumUC21vCkqG2QGg4TQcpL7HwtmURHY
+         l87jTlVz8brLLQOTd9cFDFvBp2b/LXfWqYR0R8SQINTPDeSBeesT5FsuEKn/yBp0x/A0
+         s3npnN+dwyygxwibr7e2t1mklBx+969P8HyqlBq0Xmw4J8ikfePObWN+XuRoxCWqvtwC
+         ApMLmyGXMExQmLslXPeHllKV9VFthJAla3VS1l+DkQTSDekj/Q1wbsriNn7IZtDrt/1Y
+         8r4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679374269;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EreI0axmIoAWb7kJD6KZO5O0Tim6KFcWmhMtZZ2OgkU=;
-        b=JJeUb0hrH0k9l/sglvgk3kSwFlNhPFQOViRT2g0DfHCK/mYSluspoXXtGWBWWbBTYf
-         rF3r/l9surHKds8T8g3aERjMs70cFaynXqvBmj5uEoRh+LyWwa/xULiB1GsPLIN6edBq
-         WGBRTXSOQyAwc7VMDLGxSspYC2vJMZjrSe8+fa/4Ka7OETaxWZa065lK5mrubHp7ijYW
-         tvv936xc4sQ3KCrWNZKTPMPUt2K6Tjt2sQEaINhZFPiDF6WwYrZOUxY8VUUH5IG0UIF/
-         PnrKv9F3lcyKM3NYi86UBVUSxjA2+WFB9eftoI4jFv4K2A6zauAG/2vxTwq3JH9CJbqo
-         VFew==
-X-Gm-Message-State: AO0yUKUv/oLWDkJnbSI/PnvOX3N8P8Al1dTppziyVhq2F86icUppHMTa
-        hh25l5rL8KXJyFVW8nBjwLnRAnpWWxmpwG+XnBlUiA==
-X-Google-Smtp-Source: AK7set82aHsZYqNETwBCxN6JaH/U7uzqwf+VwKlinynHbi1gWLfXQnBpCPLfMgVclh59ARAnoXU49Eq7Iyode0dklRI=
-X-Received: by 2002:a05:6a00:80db:b0:625:dc5b:9d1d with SMTP id
- ei27-20020a056a0080db00b00625dc5b9d1dmr557648pfb.0.1679374269255; Mon, 20 Mar
- 2023 21:51:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679374278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AII7onvNh0XTKeparTJKT1aBkAQlRV5EfnYZkxUIGPI=;
+        b=lIISk5kROpjfJuDzSMbLftnGywfSDkfEfHjpp5qtI/BwUOSGA30ID68olm/LG5xGg6
+         6Omi7NlvQ2Rda9r62pZqfKbdqVpePBQ+Vkc+1NhRV/ujTP2k0wVqEDRafzNZah8XIEHN
+         gTzxByJVp9bxM4OtKdralLYlJACEuu5JzQyisux3aNWI1e3w5cZaZ074a/U8XFzkkQdN
+         2QhLjMDT8xZitInoM1X8syjx5Q9aXEcYR/JoZSMh0ufpBrLlyQ3UL0pLoB5GdvC0E1YE
+         cEmBFOiwgtxfrDQNrjgNuEmSR7uSkP7xjm2CCulg7NvN8azT6uknb9vOBh2csXfoaXYY
+         alpA==
+X-Gm-Message-State: AO0yUKUVoBfa3fBJUi1nAamXF0reW2hIG5gsGvGGNhgcdUYEWhUwcHmk
+        hrMGn3MQXdtQWYvvHn6gyBU=
+X-Google-Smtp-Source: AK7set9SuLai7Lg6fyJzhgDANa+f/KtBjfTcPdjnsx6UKECjqZ/rLR/F3yTENeBP5hru1Twt+1R9ew==
+X-Received: by 2002:a17:903:124c:b0:1a0:65ae:df32 with SMTP id u12-20020a170903124c00b001a065aedf32mr1120468plh.37.1679374277737;
+        Mon, 20 Mar 2023 21:51:17 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-8.three.co.id. [180.214.233.8])
+        by smtp.gmail.com with ESMTPSA id y10-20020a1709029b8a00b0019a7bb18f98sm7601920plp.48.2023.03.20.21.51.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 21:51:17 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id A8485106617; Tue, 21 Mar 2023 11:51:14 +0700 (WIB)
+Date:   Tue, 21 Mar 2023 11:51:14 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/211] 6.2.8-rc1 review
+Message-ID: <ZBk3wibPN5dSe7cG@debian.me>
+References: <20230320145513.305686421@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230320232317.1729464-1-trix@redhat.com>
-In-Reply-To: <20230320232317.1729464-1-trix@redhat.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 21 Mar 2023 10:20:58 +0530
-Message-ID: <CALs4sv3CoBEfvV7_508jm-ea3kuhvv6qK6ogT6XdTk9L-ZEJOQ@mail.gmail.com>
-Subject: Re: [PATCH] net: atheros: atl1c: remove unused atl1c_irq_reset function
-To:     Tom Rix <trix@redhat.com>
-Cc:     chris.snook@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com, yuanjilin@cdjrlc.com,
-        liew.s.piaw@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c8ca9a05f761ca4b"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oCLL87y0E6lcm2MM"
+Content-Disposition: inline
+In-Reply-To: <20230320145513.305686421@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c8ca9a05f761ca4b
-Content-Type: text/plain; charset="UTF-8"
+
+--oCLL87y0E6lcm2MM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 21, 2023 at 4:54=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/net/ethernet/atheros/atl1c/atl1c_main.c:214:20: error:
->   unused function 'atl1c_irq_reset' [-Werror,-Wunused-function]
-> static inline void atl1c_irq_reset(struct atl1c_adapter *adapter)
->                    ^
-> This function is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/net/ethernet/atheros/atl1c/atl1c_main.c | 10 ----------
->  1 file changed, 10 deletions(-)
+On Mon, Mar 20, 2023 at 03:52:15PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.8 release.
+> There are 211 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-Looks good to me.
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
->
-> diff --git a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c b/drivers/ne=
-t/ethernet/atheros/atl1c/atl1c_main.c
-> index 40c781695d58..4a288799633f 100644
-> --- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-> +++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-> @@ -207,16 +207,6 @@ static inline void atl1c_irq_disable(struct atl1c_ad=
-apter *adapter)
->         synchronize_irq(adapter->pdev->irq);
->  }
->
-> -/**
-> - * atl1c_irq_reset - reset interrupt confiure on the NIC
-> - * @adapter: board private structure
-> - */
-> -static inline void atl1c_irq_reset(struct atl1c_adapter *adapter)
-> -{
-> -       atomic_set(&adapter->irq_sem, 1);
-> -       atl1c_irq_enable(adapter);
-> -}
-> -
->  /*
->   * atl1c_wait_until_idle - wait up to AT_HW_MAX_IDLE_DELAY reads
->   * of the idle status register until the device is actually idle
-> --
-> 2.27.0
->
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
---000000000000c8ca9a05f761ca4b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+--=20
+An old man doll... just what I always wanted! - Clara
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDwHxU/f+7wtXpHwK8c4enekf0yV4BDG
-fskOh3IJR94mMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDMy
-MTA0NTEwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQBqgwwBcoYwifktzl6KUWgAzvsI18ZHccH+aKTETXkC2T/Ri6Az
-7w/M99zjMfXW4dN1rFKtB/6i4HzX65qsDZ1sbOktm0lN+yn86k7AoTd1Lz7iWa2LaR/+n6KVr3wd
-/n54tkrmkUSWh1Fu8WT+5NRF6BgqUmoHB/PKI0nFPsR2kbx7r6l/YqfPwgLo3KWZpzWDTfNR41j+
-R+sD4jcVVJ/yyNMhxeTP0Gs40cvVjvjzKEN731iSePlzwAmWVOf24ADETeeCokro7rc67uWkxHMU
-U76/W7ho9NHaQaBr2r6k08yDLD8IK37XbOcX5sCuihm5g26w+tPE+0kOOa+Pt+Z0
---000000000000c8ca9a05f761ca4b--
+--oCLL87y0E6lcm2MM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBk3wgAKCRD2uYlJVVFO
+o2lVAQCxBh7e94urOdOwu6CU4EuNbxNQKnVgCpIIOKMb1Q4YMwD9FVoWukVZYmCv
+PNQl+oC3J7Xqqe5ZhcWOQa2eFZk6QQs=
+=wkZA
+-----END PGP SIGNATURE-----
+
+--oCLL87y0E6lcm2MM--
