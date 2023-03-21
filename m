@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6146C3016
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6102B6C301B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjCULR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S230417AbjCULSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjCULRZ (ORCPT
+        with ESMTP id S229923AbjCULSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:17:25 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0084EDE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:17:20 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id j11so18586678lfg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679397438;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NtKEJBNyunYjPawzF3HMbeki6+rSmdWQGFTeKC93lS8=;
-        b=xP7wVRu4n2NvCx9w5tgDPIrBrnDazF2rn1Ugs5zcZrJrmnsJDdrMMbTNPhVetL+qYt
-         VnXYrx/tiqxOrPDiXirqr9fFdv4Z3uYyekA5rBvoqzitMRmO4hULouTlzjUabHJYwH4h
-         05/kTRXg8apF86NYLPjVOxxS+mrOW61WidTtm9dGtJt8llPweUPdw4h9iCxFC7OOh1gq
-         f5S7HVqNGewrBO3/ocncSILrZDipu3g8Yv/XB6L9g8NEpRPWCuvOUCrN1omtuXyMrOgC
-         DTAShJuPqtuZ+TR+/MK7bc7UrldvM8h4BQsXMtGuvAtPQCZV159V5J05KzHOF4F4JJZD
-         4vgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679397438;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NtKEJBNyunYjPawzF3HMbeki6+rSmdWQGFTeKC93lS8=;
-        b=COQZ/Ckg0tM2v4+yiC84w1s16/s/OUZtBGmiLq07SN842HBoasNhR+ZM6Cjm3HUib3
-         sRilSZoy3Q8bRCxlq2BJTaaSugth2tsZsRPfoPmN9D1N4HcMw5NGd0t8DoMulRwDEWCJ
-         hQ7ULdGHCBnJkwLIbKnIqhTGfgld+PMJqL4an1PKkGfrFPW9yhdPFffr9v9IBY1XJ1Zh
-         o6NsNorcems2XCKEGZOtnOTrmyzJ8//ngcjhaiSAkjUUPdC3fBd+ANcB2DrmP1b/YN2t
-         1b1GQjz+g8X4QNrMaY2oJfPCcKWqYdKhfVzQZ5QrhUUM1e14SfaAq7SIH5z5TJ1dufV4
-         nRow==
-X-Gm-Message-State: AO0yUKUBLH/IxltU8tWiPs+Tdbplif48HF+EXwG5ytu6w5phfBBU8G/t
-        utq2oQ39c+fVfcjeuMfbS1v1QA==
-X-Google-Smtp-Source: AK7set/Cu17olUriB8ZQQHQ5Aoy/b9zxovXnsVmvUhfJhKT+otuqfADxe0j3tJFlQHz6V7oAyzVd3Q==
-X-Received: by 2002:a05:6512:3a8b:b0:4db:3846:f908 with SMTP id q11-20020a0565123a8b00b004db3846f908mr963454lfu.10.1679397438291;
-        Tue, 21 Mar 2023 04:17:18 -0700 (PDT)
-Received: from [127.0.0.1] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id m2-20020a2e9342000000b00295965f7495sm2174305ljh.0.2023.03.21.04.17.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 Mar 2023 04:17:17 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 14:17:13 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/8=5D_dt-bindings=3A_phy=3A_q?= =?US-ASCII?Q?com=2Cqusb2=3A_Document_IPQ9574_compatible?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ef5af2e581203e2101773863aa7e1667b4d1b705.1679388632.git.quic_varada@quicinc.com>
-References: <cover.1677749625.git.quic_varada@quicinc.com> <cover.1679388632.git.quic_varada@quicinc.com> <ef5af2e581203e2101773863aa7e1667b4d1b705.1679388632.git.quic_varada@quicinc.com>
-Message-ID: <69120CDC-19C5-4087-BF71-0ECAB87D018B@linaro.org>
+        Tue, 21 Mar 2023 07:18:16 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 838BA12849;
+        Tue, 21 Mar 2023 04:18:12 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Dxldhykhlk4GEPAA--.27963S3;
+        Tue, 21 Mar 2023 19:18:10 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxur1xkhlkv4YIAA--.314S3;
+        Tue, 21 Mar 2023 19:18:09 +0800 (CST)
+Subject: Re: [PATCH v14 2/2] clk: clk-loongson2: add clock controller driver
+ support
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230318075340.22770-1-zhuyinbo@loongson.cn>
+ <20230318075340.22770-2-zhuyinbo@loongson.cn>
+ <1bac2baccd4de561944c4a3f8454f7d3.sboyd@kernel.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <92b39474-f79b-74b2-0844-46c7b849d666@loongson.cn>
+Date:   Tue, 21 Mar 2023 19:18:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1bac2baccd4de561944c4a3f8454f7d3.sboyd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Cxur1xkhlkv4YIAA--.314S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3AF15uF4DCryfWryUXw17GFg_yoW7KFWkpF
+        Z7AayjkFW7Jr4UWw40qryDJFn5Zw4fK3W7CFW3Ja4DAr9Fvr18u39rGFWfCFn3ZrWkCay2
+        vFWq9w4fCFsIgaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bTAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwI
+        xGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAF
+        wI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
+        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
+        WIevJa73UjIFyTuYvjxU7J3vUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,46 +73,215 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+在 2023/3/21 上午4:17, Stephen Boyd 写道:
+> Quoting Yinbo Zhu (2023-03-18 00:53:40)
+>> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+>> index 1eef05bb1f99..c0f32d9c1cc4 100644
+>> --- a/drivers/clk/Kconfig
+>> +++ b/drivers/clk/Kconfig
+>> @@ -325,6 +325,15 @@ config COMMON_CLK_LOCHNAGAR
+>>            This driver supports the clocking features of the Cirrus Logic
+>>            Lochnagar audio development board.
+>>   
+>> +config COMMON_CLK_LOONGSON2
+>> +       bool "Clock driver for Loongson-2 SoC"
+>> +       depends on COMMON_CLK && OF
+> It doesn't depend on OF to build, right? If so, remove it. Also, this is
+> within the 'if COMMON_CLK' section of this file, so the 'depends on
+> COMMON_CLK' is redundant and should be removed.
 
-On 21 March 2023 11:54:19 GMT+03:00, Varadarajan Narayanan <quic_varada@qu=
-icinc=2Ecom> wrote:
->Document the compatible string used for the qusb2 phy in IPQ9574=2E
+I find some function ask OF was enabled otherwise return NULL, but if OF 
+not enable that shouldn't be caused compile error,
+
+I will remove the depends on COMMON_CLK  && OF and add depend on 
+LOONGARCH || COMPILE_TEST
+
 >
->Acked-by: Krzysztof Kozlowski <krzysztof=2Ekozlowski@linaro=2Eorg>
->Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc=2Ecom>
+>> +       help
+>> +          This driver provides support for clock controller on Loongson-2 SoC.
+>> +          The clock controller can generates and supplies clock to various
+>> +          peripherals within the SoC.
+>> +          Say Y here to support Loongson-2 SoC clock driver.
+>> +
+>>   config COMMON_CLK_NXP
+>>          def_bool COMMON_CLK && (ARCH_LPC18XX || ARCH_LPC32XX)
+>>          select REGMAP_MMIO if ARCH_LPC32XX
+>> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
+>> new file mode 100644
+>> index 000000000000..c423932b626d
+>> --- /dev/null
+>> +++ b/drivers/clk/clk-loongson2.c
+>> @@ -0,0 +1,356 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+>> + */
+>> +
+>> +#include <linux/err.h>
+>> +#include <linux/init.h>
+>> +#include <linux/of.h>
+> Don't think this include will be needed.
+okay, I will remove it.
 >
->---
-> Changes in v2:
->	- Moved ipq6018 to the proper place and placed ipq9574
->	  next to it as suggested by Dmitry
->---
-> Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
+>> +#include <linux/of_address.h>
+> Don't include this.
+okay, I got it.
 >
->diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml =
-b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml
->index 7f403e7=2E=2Eeaecf9b 100644
->--- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml
->+++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy=2Eyaml
->@@ -19,12 +19,13 @@ properties:
->       - items:
->           - enum:
->               - qcom,ipq8074-qusb2-phy
->+              - qcom,ipq6018-qusb2-phy
->+              - qcom,ipq9574-qusb2-phy
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/clk.h>
+> Drop this include. This isn't a clk consumer.
+okay I got it.
+>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/io-64-nonatomic-lo-hi.h>
+>> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
+>> +
+>> +#define LOONGSON2_PLL_MULT_SHIFT               32
+>> +#define LOONGSON2_PLL_MULT_WIDTH               10
+>> +#define LOONGSON2_PLL_DIV_SHIFT                        26
+>> +#define LOONGSON2_PLL_DIV_WIDTH                        6
+>> +#define LOONGSON2_APB_FREQSCALE_SHIFT          20
+>> +#define LOONGSON2_APB_FREQSCALE_WIDTH          3
+>> +#define LOONGSON2_USB_FREQSCALE_SHIFT          16
+>> +#define LOONGSON2_USB_FREQSCALE_WIDTH          3
+>> +#define LOONGSON2_SATA_FREQSCALE_SHIFT         12
+>> +#define LOONGSON2_SATA_FREQSCALE_WIDTH         3
+>> +#define LOONGSON2_BOOT_FREQSCALE_SHIFT         8
+>> +#define LOONGSON2_BOOT_FREQSCALE_WIDTH         3
+>> +
+>> +static void __iomem *loongson2_pll_base;
+>> +
+>> +static const struct clk_parent_data pdata[] = {
+>> +       { .fw_name = "ref_100m", .name = "ref_clk", },
+> Are you mainintain backwards compatibility? If not, which I believe is
+> the case, drop .name assignment.
+okay, I will remove .name
+>> +};
+>> +
+>> +static struct clk_hw *loongson2_clk_register(struct device_node *np,
+> Take a struct device instead.
+okay, I will do it.
+>
+>> +                                         const char *name,
+>> +                                         const char *parent_name,
+>> +                                         const struct clk_ops *ops,
+>> +                                         unsigned long flags)
+>> +{
+>> +       int ret;
+>> +       struct clk_hw *hw;
+>> +       struct clk_init_data init;
+>> +
+>> +       /* allocate the divider */
+>> +       hw = kzalloc(sizeof(*hw), GFP_KERNEL);
+>> +       if (!hw)
+>> +               return ERR_PTR(-ENOMEM);
+>> +
+>> +       init.name = name;
+>> +       init.ops = ops;
+>> +       init.flags = flags;
+>> +       init.num_parents = 1;
+>> +
+>> +       if (!parent_name)
+>> +               init.parent_data = pdata;
+>> +       else
+>> +               init.parent_names = &parent_name;
+>> +
+>> +       hw->init = &init;
+>> +
+>> +       /* register the clock */
+>> +       ret = of_clk_hw_register(np, hw);
+> Use devm_clk_hw_register()
+okay, I got it.
+>
+>> +       if (ret) {
+>> +               kfree(hw);
+>> +               hw = ERR_PTR(ret);
+>> +       }
+>> +
+>> +       return hw;
+>> +}
+>> +
+>> +static unsigned long loongson2_calc_pll_rate(int offset, unsigned long rate)
+>> +{
+>> +       u64 val;
+>> +       u32 mult = 1, div = 1;
+> Why are these initialized?
+I will remove the initialized operaion.
+>
+>> +
+>> +       val = readq(loongson2_pll_base + offset);
+>> +
+>> +       mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
+>> +                       clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
+>> +       div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
+>> +                       clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
+> They're overwritten here.
+okay, I got it.
+>
+>> +
+>> +       return div_u64((u64)rate * mult, div);
+>> +}
+>> +
+>> +static unsigned long loongson2_node_recalc_rate(struct clk_hw *hw,
+>> +                                         unsigned long parent_rate)
+>> +{
+>> +       return loongson2_calc_pll_rate(0x0, parent_rate);
+>> +}
+> [...]
+>> +
+>> +static inline void loongson2_check_clk_hws(struct clk_hw *clks[], unsigned int count)
+>> +{
+>> +       unsigned int i;
+>> +
+>> +       for (i = 0; i < count; i++)
+>> +               if (IS_ERR(clks[i]))
+>> +                       pr_err("Loongson2 clk %u: register failed with %ld\n",
+>> +                               i, PTR_ERR(clks[i]));
+>> +}
+>> +
+>> +static void loongson2_clocks_init(struct device_node *np)
+> Inline this function at the caller.
+okay, I got it.
+>
+>> +{
+>> +       struct clk_hw **hws;
+>> +       struct clk_hw_onecell_data *clk_hw_data;
+>> +       spinlock_t loongson2_clk_lock;
+>> +
+>> +       loongson2_pll_base = of_iomap(np, 0);
+> Use platform device APIs.
+I will use devm_platform_ioremap_resource.
+>
+>> +
+>> +       if (!loongson2_pll_base) {
+>> +               pr_err("clk: unable to map loongson2 clk registers\n");
+> Drop error messages when mapping.
+okay, I got it.
+>
+>> +               return;
+>> +       }
+>> +
+>> +       clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_CLK_END),
+> Use devm_kzalloc()
+okay, I got it.
+>
+>> +                                       GFP_KERNEL);
+>> +       if (WARN_ON(!clk_hw_data))
+>> +               goto err;
+>> +
+> [...]
+>> +
+>> +static int loongson2_clk_probe(struct platform_device *pdev)
+>> +{
+>> +       struct device *dev = &pdev->dev;
+>> +       struct device_node *np = dev->of_node;
+>> +
+>> +       loongson2_clocks_init(np);
+>> +
+>> +       return 0;
+>> +}
+>> +
 
-This still isn't sorted
-
->               - qcom,msm8953-qusb2-phy
->               - qcom,msm8996-qusb2-phy
->               - qcom,msm8998-qusb2-phy
->               - qcom,qcm2290-qusb2-phy
->               - qcom,sdm660-qusb2-phy
->-              - qcom,ipq6018-qusb2-phy
->               - qcom,sm4250-qusb2-phy
->               - qcom,sm6115-qusb2-phy
->       - items:
-
---=20
-With best wishes
-Dmitry
