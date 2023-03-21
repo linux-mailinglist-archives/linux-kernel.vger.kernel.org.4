@@ -2,181 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254DF6C2FBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DB56C2FBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjCULEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S230409AbjCULFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjCULED (ORCPT
+        with ESMTP id S229964AbjCULF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:04:03 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC03B85A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:04:00 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id n125so16517768ybg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:04:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679396640;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+xGaWFqZk+SjQHPaJZ22gZZSAzmIpjEZSvJQ2u7q7hU=;
-        b=Esmc5EfF3KMPYOrGWpN+3uKTDp47YY+1KX3RRmSmmAovWOaUuDAcTvSeqZ6aa+IeMW
-         b5K+4JqGLGmVm5oMAQYJJg/E1sIoySEQPczVHNLimG5jbDccF4Ze3VEmdZGSRm0pjbxC
-         juX5JCX5YE15q/YHSfsS3zL50OgeDBCM1XJcuTGodXYp4+yNnj8E/KEFB9on1tt6qBPB
-         AWqNTxMSp01qiJN2EVLNHrPgIRXVdTmIpXbvPhj5fnEXB1BBy5myUKH28C3wt5ukiPHd
-         gUfe7CDu3AeWULSqAJme5NPzMFiaUhl3/pEW8wSZk0e1isHnzA2sO/xbCvhrmXon9NFG
-         ayDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679396640;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+xGaWFqZk+SjQHPaJZ22gZZSAzmIpjEZSvJQ2u7q7hU=;
-        b=CL0BjXFf4G6iibd7MwIgP/V04k8qDVPUVsUQ6U9os+/Ae4Wlybaba3t2DkVKJHON2m
-         QsuuxYCvkc6LGk3RdtAg/0uFGGm98o3Zr1B60PMmCNK177nuBards2vIkgjRVAwPKBcM
-         FAqxfnl5HlWw2jeloij8FKnhMC4cM7YNpycibOqtnvnY4+0PKRQxfztKwPf1znZcJC5U
-         HavQ2tXF3VbismoBElamyn8xH1tSJNsQpGkJIrPaWuth2pz7uRRItVh298knq6oL8L0u
-         eLTANAc83MhW5hR92GftAKOt4F1p/24Uw/HSCNqD4etk9KkaYngeGBZJ7yY33TOw/dsK
-         GQKQ==
-X-Gm-Message-State: AAQBX9dW25xZeahB291MZlUh+N25t9nBh16mLLAz8C17PRsmqPVnizIQ
-        eO/xLs/FWk3GCQt+zCoscw4Plq5fCupUD5Qbq24OgQ==
-X-Google-Smtp-Source: AKy350anWjiUgJzmZq/Q0GSExiC0OXO7/b8ibvhwpC6ppwIWDbuvnqDTTEE2zKvhqXnHLmmpwFf5pd2YH8Ge21uSmHU=
-X-Received: by 2002:a05:6902:1107:b0:b3c:cbdb:ed5e with SMTP id
- o7-20020a056902110700b00b3ccbdbed5emr1201464ybu.3.1679396639937; Tue, 21 Mar
- 2023 04:03:59 -0700 (PDT)
+        Tue, 21 Mar 2023 07:05:29 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DB02B63E;
+        Tue, 21 Mar 2023 04:05:23 -0700 (PDT)
+X-UUID: 44070bc4c7d811eda9a90f0bb45854f4-20230321
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=mdqNGlxEp7pDLOgt43rQf5lzDoIlr9ne3YAiYLzanzo=;
+        b=JBcVHiunIjNJiZmDiy5N0KI1NMn9DgtjIHjrHf1GKMBUTJEGBBqVlAnkDW5ZecOZjIjqP8yT84tFjWlNnCw4QtPfcHWbAstswbIWZQhBPDXJhxJ6OJ/8WtBoq20m1AxKiaizu69lp/IEJthRszhA9jKBp7yqkhoZJkJolUKittk=;
+X-CID-CACHE: Type:Local,Time:202303211905+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:30b75a4c-bac2-46b8-9add-6a517f47c7c9,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:-35
+X-CID-META: VersionHash:120426c,CLOUDID:5c5de8b3-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+        L:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 44070bc4c7d811eda9a90f0bb45854f4-20230321
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <tze-nan.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1161388397; Tue, 21 Mar 2023 19:05:18 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 21 Mar 2023 19:05:16 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 21 Mar 2023 19:05:16 +0800
+From:   Tze-nan Wu <Tze-nan.Wu@mediatek.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Tom Zanussi" <zanussi@kernel.org>
+CC:     <bobule.chang@mediatek.com>, <Tze-nan.Wu@mediatek.com>,
+        <cheng-jui.wang@mediatek.com>, <wsd_upstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] tracing/synthetic: Fix races on freeing last_cmd
+Date:   Tue, 21 Mar 2023 19:04:43 +0800
+Message-ID: <20230321110444.1587-1-Tze-nan.Wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20230316164514.1615169-1-ulf.hansson@linaro.org> <8d6d12b5-39d4-ac07-f725-18ae9df9765b@intel.com>
-In-Reply-To: <8d6d12b5-39d4-ac07-f725-18ae9df9765b@intel.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 21 Mar 2023 12:03:23 +0100
-Message-ID: <CAPDyKFrvWA-SxM6d=eVHFyPTYygsXmWQGVmnHJxsRFwGOhVjYw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: Allow to avoid REQ_FUA if the eMMC supports an
- internal cache
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     linux-mmc@vger.kernel.org,
-        Wenchao Chen <wenchao.chen666@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Christian Lohle <cloehle@hyperstone.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bean Huo <beanhuo@micron.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 at 11:36, Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 16/03/23 18:45, Ulf Hansson wrote:
-> > REQ_FUA translates into so called "reliable writes" (atomic writes) for
-> > eMMC cards, which is generally supported as it was introduced as a
-> > mandatory feature already in the v4.3 (2007) of the eMMC spec. To fully
-> > support the reliable writes (thus REQ_FUA), the mmc host driver needs to
-> > support the CMD23 (MMC_CAP_CMD23) too, which is rather common nowadays.
-> >
-> > File systems typically uses REQ_FUA for writing their meta-data and other
-> > important information. Ideally it should provide an increased protection
-> > against data-corruption, during sudden power-failures. This said, file
-> > systems have other ways to handle sudden power-failures too, like using
-> > checksums to detect partly-written data, for example.
-> >
-> > It has been reported that the reliable writes are costly for some eMMCs,
-> > leading to performance degradations. Exactly why, is in the implementation
-> > details of the internals of the eMMC.
-> >
-> > Moreover, in the v4.5 (2011) of the eMMC spec, the cache-control was
-> > introduced as an optional feature. It allows the host to trigger a flush of
-> > the eMMC's internal write-cache. In the past, before the cache-control
-> > feature was added, the reliable write acted as trigger for the eMMC, to
-> > also flush its internal write-cache, even if that too remains as an
-> > implementation detail of the eMMC.
-> >
-> > In a way to try to improve the situation with costly reliable writes and
-> > REQ_FUA, let's add a new card quirk MMC_QUIRK_AVOID_REL_WRITE, which may be
-> > set to avoid announcing the support for it. However, as mentioned above,
-> > due to the specific relationship with the cache-control feature, we must
-> > keep REQ_FUA unless that is supported too.
-> >
-> > Reported-by: Wenchao Chen <wenchao.chen666@gmail.com>
-> > Acked-by: Bean Huo <beanhuo@micron.com>
-> > Acked-by: Avri Altman <avri.altman@wdc.com>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->
-> Minor cosmetic suggestion below, but nevertheless:
->
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+From: "Tze-nan Wu" <Tze-nan.Wu@mediatek.com>
 
-Thanks!
+Currently, the "last_cmd" variable can be accessed by multiple processes
+asynchronously when multiple users manipulate synthetic_events node
+at the same time, it could lead to use-after-free or double-free.
 
->
-> > ---
-> >
-> > Updated since the RFC:
-> >       Added a card quirk to maintain the current behaviour. The quirk isn't
-> >       set for any cards yet, which is needed (a patch on top) to move forward
-> >       with this.
-> >
-> > ---
-> >  drivers/mmc/core/block.c | 16 ++++++++++++----
-> >  drivers/mmc/core/card.h  |  5 +++++
-> >  include/linux/mmc/card.h |  1 +
-> >  3 files changed, 18 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> > index 672ab90c4b2d..35292e36a1fb 100644
-> > --- a/drivers/mmc/core/block.c
-> > +++ b/drivers/mmc/core/block.c
-> > @@ -2409,8 +2409,7 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
-> >       struct mmc_blk_data *md;
-> >       int devidx, ret;
-> >       char cap_str[10];
-> > -     bool cache_enabled = false;
-> > -     bool fua_enabled = false;
-> > +     bool cache_enabled, avoid_fua, fua_enabled = false;
-> >
-> >       devidx = ida_simple_get(&mmc_blk_ida, 0, max_devices, GFP_KERNEL);
-> >       if (devidx < 0) {
-> > @@ -2494,11 +2493,20 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
-> >           ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
-> >            card->ext_csd.rel_sectors)) {
-> >               md->flags |= MMC_BLK_REL_WR;
-> > +     }
-> > +
-> > +     /*
-> > +      * REQ_FUA is supported through eMMC reliable writes, which has been
-> > +      * reported to be a bit costly for some eMMCs. In these cases, let's
-> > +      * rely on the flush requests (REQ_OP_FLUSH) instead, if we can use the
-> > +      * cache-control feature too.
-> > +      */
-> > +     cache_enabled = mmc_cache_enabled(card->host);
-> > +     avoid_fua = cache_enabled && mmc_card_avoid_rel_write(card);
-> > +     if (md->flags & MMC_BLK_REL_WR && !avoid_fua) {
-> >               fua_enabled = true;
-> >               cache_enabled = true;
-> >       }
->
-> looks like this could be just:
->
->         fua_enabled = (md->flags & MMC_BLK_REL_WR) && !avoid_fua;
->
-> with fua_enabled no longer needing initialization
+This patch add "lastcmd_mutex" to prevent "last_cmd" from being accessed
+asynchronously.
 
-Unless I misunderstand your point, that would work for fua_enabled,
-but would not be sufficient for cache_enabled.
+================================================================
 
-cache_enabled should be set if fua_enabled is set - and no matter
-whether mmc_cache_enabled() returns true or not.
+It's easy to reproduce in the KASAN environment by running the two
+scripts below in different shells.
 
-Did that make sense?
+script 1:
+        while :
+        do
+                echo -n -e '\x88' > /sys/kernel/tracing/synthetic_events
+        done
 
-[...]
+script 2:
+        while :
+        do
+                echo -n -e '\xb0' > /sys/kernel/tracing/synthetic_events
+        done
 
-Kind regards
-Uffe
+================================================================
+double-free scenario:
+
+    process A                       process B
+-------------------               ---------------
+1.kstrdup last_cmd
+                                  2.free last_cmd
+3.free last_cmd(double-free)
+
+================================================================
+use-after-free scenario:
+
+    process A                       process B
+-------------------               ---------------
+1.kstrdup last_cmd
+                                  2.free last_cmd
+3.tracing_log_err(use-after-free)
+
+================================================================
+
+Appendix 1. KASAN report double-free:
+
+BUG: KASAN: double-free in kfree+0xdc/0x1d4
+Free of addr ***** by task sh/4879
+Call trace:
+        ...
+        kfree+0xdc/0x1d4
+        create_or_delete_synth_event+0x60/0x1e8
+        trace_parse_run_command+0x2bc/0x4b8
+        synth_events_write+0x20/0x30
+        vfs_write+0x200/0x830
+        ...
+
+Allocated by task 4879:
+        ...
+        kstrdup+0x5c/0x98
+        create_or_delete_synth_event+0x6c/0x1e8
+        trace_parse_run_command+0x2bc/0x4b8
+        synth_events_write+0x20/0x30
+        vfs_write+0x200/0x830
+        ...
+
+Freed by task 5464:
+        ...
+        kfree+0xdc/0x1d4
+        create_or_delete_synth_event+0x60/0x1e8
+        trace_parse_run_command+0x2bc/0x4b8
+        synth_events_write+0x20/0x30
+        vfs_write+0x200/0x830
+        ...
+
+================================================================
+Appendix 2. KASAN report use-after-free:
+
+BUG: KASAN: use-after-free in strlen+0x5c/0x7c
+Read of size 1 at addr ***** by task sh/5483
+sh: CPU: 7 PID: 5483 Comm: sh
+        ...
+        __asan_report_load1_noabort+0x34/0x44
+        strlen+0x5c/0x7c
+        tracing_log_err+0x60/0x444
+        create_or_delete_synth_event+0xc4/0x204
+        trace_parse_run_command+0x2bc/0x4b8
+        synth_events_write+0x20/0x30
+        vfs_write+0x200/0x830
+        ...
+
+Allocated by task 5483:
+        ...
+        kstrdup+0x5c/0x98
+        create_or_delete_synth_event+0x80/0x204
+        trace_parse_run_command+0x2bc/0x4b8
+        synth_events_write+0x20/0x30
+        vfs_write+0x200/0x830
+        ...
+
+Freed by task 5480:
+        ...
+        kfree+0xdc/0x1d4
+        create_or_delete_synth_event+0x74/0x204
+        trace_parse_run_command+0x2bc/0x4b8
+        synth_events_write+0x20/0x30
+        vfs_write+0x200/0x830
+        ...
+
+Fixes: 27c888da9867 ("tracing: Remove size restriction on synthetic event cmd error logging")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
+---
+ kernel/trace/trace_events_synth.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index 46d0abb32d0f..f0ff730125bf 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -44,14 +44,21 @@ enum { ERRORS };
+ 
+ static const char *err_text[] = { ERRORS };
+ 
++DEFINE_MUTEX(lastcmd_mutex);
+ static char *last_cmd;
+ 
+ static int errpos(const char *str)
+ {
++	int ret = 0;
++
++	mutex_lock(&lastcmd_mutex);
+ 	if (!str || !last_cmd)
+-		return 0;
++		goto out;
+ 
+-	return err_pos(last_cmd, str);
++	ret = err_pos(last_cmd, str);
++ out:
++	mutex_unlock(&lastcmd_mutex);
++	return ret;
+ }
+ 
+ static void last_cmd_set(const char *str)
+@@ -59,18 +66,22 @@ static void last_cmd_set(const char *str)
+ 	if (!str)
+ 		return;
+ 
++	mutex_lock(&lastcmd_mutex);
+ 	kfree(last_cmd);
+-
+ 	last_cmd = kstrdup(str, GFP_KERNEL);
++	mutex_unlock(&lastcmd_mutex);
+ }
+ 
+ static void synth_err(u8 err_type, u16 err_pos)
+ {
++	mutex_lock(&lastcmd_mutex);
+ 	if (!last_cmd)
+-		return;
++		goto out;
+ 
+ 	tracing_log_err(NULL, "synthetic_events", last_cmd, err_text,
+ 			err_type, err_pos);
++ out:
++	mutex_unlock(&lastcmd_mutex);
+ }
+ 
+ static int create_synth_event(const char *raw_command);
+-- 
+2.18.0
+
