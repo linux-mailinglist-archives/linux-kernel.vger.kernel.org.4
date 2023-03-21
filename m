@@ -2,224 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA3E6C3150
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E11E6C3152
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbjCUMOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S230169AbjCUMPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjCUMOA (ORCPT
+        with ESMTP id S229782AbjCUMPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:14:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822FF5592;
-        Tue, 21 Mar 2023 05:13:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2F46F1FFA8;
-        Tue, 21 Mar 2023 12:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679400838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6lqhh3x0dmFCypkdpURPj2W+m106HV2LQcy5G8mRAK0=;
-        b=PZ8Idz6ywkPiqiQGG+J23CZQtRAvF8uy3vAshw3loEv3tjn75V1J89faFH+9KxtyV9wFA/
-        UaeW1poI9Wv9VOFYg6ZezMcUQcAJTgGkFOX77zwUBmmuSWW6K/ePRcY8z4jcV/htfD4AfW
-        V2jAhDbPDuK8VkxDfmam+9in5j176Bg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679400838;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6lqhh3x0dmFCypkdpURPj2W+m106HV2LQcy5G8mRAK0=;
-        b=Kt2x2mwa1a9RzgKQFjlgWk5S2czUJZhD6SUyfc9WXJc5FTIiEIHLjO8i8EgN/WfN7FrOI+
-        Bbvg1G3XNuQvAfCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B58813440;
-        Tue, 21 Mar 2023 12:13:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AtIKI4WfGWR3MQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Tue, 21 Mar 2023 12:13:57 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 8fadaac7;
-        Tue, 21 Mar 2023 12:13:56 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] ceph: fscrypt: fix atomic open bug for encrypted
- directories
-References: <20230316181413.26916-1-lhenriques@suse.de>
-        <568da52f-18a6-5f96-cd51-5b07dedefb2d@redhat.com>
-        <CAOi1vP9QsbSUq9JNRcpQpV3XWM2Eurhk+6AkDDNmks5PLTx3YQ@mail.gmail.com>
-        <0b51da52-bb38-2094-b9b2-bc3858066be5@redhat.com>
-        <20230320221609.GA21979@sol.localdomain>
-Date:   Tue, 21 Mar 2023 12:13:56 +0000
-In-Reply-To: <20230320221609.GA21979@sol.localdomain> (Eric Biggers's message
-        of "Mon, 20 Mar 2023 15:16:09 -0700")
-Message-ID: <87v8iugv3v.fsf@suse.de>
+        Tue, 21 Mar 2023 08:15:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E8C303EE
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679400855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MeqgjoxuzuKVfvN4kKyBkqoYwC4zvCCK7OH75FGIWlU=;
+        b=grsgzSa4xvUInq6AHnKmUHoqxgRxC+jTQZ1kiuEswpmksVRlkjDyafCTPPfrDgzb7GOvI9
+        OGq9ds1PhvS0/a9dqrvP6NcTeGsG/SYVPwc+ucjL6GwsUK1tqQUNVH0xNEAk2XDHaE+qBB
+        gnkI1yd0In4gu0vtQMl80aj0yJA2MxM=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-283-uGWQS0m1PfeBdfZpOsrzEQ-1; Tue, 21 Mar 2023 08:14:14 -0400
+X-MC-Unique: uGWQS0m1PfeBdfZpOsrzEQ-1
+Received: by mail-qt1-f199.google.com with SMTP id h6-20020a05622a170600b003e22c6de617so3087221qtk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:14:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679400854;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MeqgjoxuzuKVfvN4kKyBkqoYwC4zvCCK7OH75FGIWlU=;
+        b=OZHM9564cHmxcoWWlv3rddzAAWD0mox+zZfjl9qdgoh3wZAfjZMektUavLXaPWqXGw
+         v5+VvxJbkT+5JHa1F206921cEam1r/LQRgTnFYeIehxm7v0g30/sRMaDByJoBKj62TbD
+         c+SwkxQPXA+4LE+6WXsuJISg2ebtjmETi5ScTYjmuXKwcgPBeTh+LUEk3rGbAhc4CkUA
+         KxrHwPn9hZ5+hr1Ee5ZAUxNHJXbWTmVHTyDHGn7n7x3KNETNWO+kh7sJHFYbV1s6qv+z
+         pTtTRy7IjsWlYMHRbskc81HJUMsyxuwCJfe3W50Eiam5HQZicz4Z/O8/2Mv/8Dt0sWhU
+         Kj1Q==
+X-Gm-Message-State: AO0yUKW0E+orduSmUVvUQw/1vANZjNf5f5J+BL9fElL+3fQ7sVE+n7XH
+        3BbIw95fEL5ObqVfp6xTRLiJdLzk42LY50WOnGWkqHySbJy/oYvqVm2PF8NTw2pQOtMjcdM61QA
+        Vwo8AAVbQ3lkAWyS7VK96GVN2ZrGJ7ZUz
+X-Received: by 2002:a05:6214:194f:b0:571:428:73dc with SMTP id q15-20020a056214194f00b00571042873dcmr3855047qvk.34.1679400853996;
+        Tue, 21 Mar 2023 05:14:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/d3J0U6kitajYIEj3ZmtdOs+/3zJa8HNAgthEmb+l3c5O1ncy7hAlyyZwyTIOqyZbkV1OzhA==
+X-Received: by 2002:a05:6214:194f:b0:571:428:73dc with SMTP id q15-20020a056214194f00b00571042873dcmr3855016qvk.34.1679400853756;
+        Tue, 21 Mar 2023 05:14:13 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id bk12-20020a05620a1a0c00b0074357a6529asm9225502qkb.105.2023.03.21.05.14.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 05:14:13 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     abbotti@mev.co.uk, hsweeten@visionengravers.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] comedi: remove unused dma_chain_flag_bits function
+Date:   Tue, 21 Mar 2023 08:14:10 -0400
+Message-Id: <20230321121410.1782901-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Biggers <ebiggers@kernel.org> writes:
+clang with W=1 reports
+drivers/comedi/drivers/cb_pcidas64.c:377:28: error: unused function
+  'dma_chain_flag_bits' [-Werror,-Wunused-function]
+static inline unsigned int dma_chain_flag_bits(u16 prepost_bits)
+                           ^
+This function is not used, so remove it.
 
-> On Mon, Mar 20, 2023 at 08:47:18PM +0800, Xiubo Li wrote:
->>=20
->> On 20/03/2023 19:20, Ilya Dryomov wrote:
->> > On Mon, Mar 20, 2023 at 2:07=E2=80=AFAM Xiubo Li <xiubli@redhat.com> w=
-rote:
->> > >=20
->> > > On 17/03/2023 02:14, Lu=C3=ADs Henriques wrote:
->> > > > Hi!
->> > > >=20
->> > > > I started seeing fstest generic/123 failing in ceph fscrypt, when =
-running it
->> > > > with 'test_dummy_encryption'.  This test is quite simple:
->> > > >=20
->> > > > 1. Creates a directory with write permissions for root only
->> > > > 2. Writes into a file in that directory
->> > > > 3. Uses 'su' to try to modify that file as a different user, and
->> > > >      gets -EPERM
->> > > >=20
->> > > > All the test steps succeed, but the test fails to cleanup: 'rm -rf=
- <dir>'
->> > > > will fail with -ENOTEMPTY.  'strace' shows that calling unlinkat()=
- to remove
->> > > > the file got a -ENOENT and then -ENOTEMPTY for the directory.
->> > > >=20
->> > > > This is because 'su' does a drop_caches ('su (874): drop_caches: 2=
-' in
->> > > > dmesg), and ceph's atomic open will do:
->> > > >=20
->> > > >        if (IS_ENCRYPTED(dir)) {
->> > > >                set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
->> > > >                if (!fscrypt_has_encryption_key(dir)) {
->> > > >                        spin_lock(&dentry->d_lock);
->> > > >                        dentry->d_flags |=3D DCACHE_NOKEY_NAME;
->> > > >                        spin_unlock(&dentry->d_lock);
->> > > >                }
->> > > >        }
->> > > >=20
->> > > > Although 'dir' has the encryption key available, fscrypt_has_encry=
-ption_key()
->> > > > will return 'false' because fscrypt info isn't yet set after the c=
-ache
->> > > > cleanup.
->> > > >=20
->> > > > The first patch will add a new helper for the atomic_open that wil=
-l force
->> > > > the fscrypt info to be loaded into an inode that has been evicted =
-recently
->> > > > but for which the key is still available.
->> > > >=20
->> > > > The second patch switches ceph atomic_open to use the new fscrypt =
-helper.
->> > > >=20
->> > > > Cheers,
->> > > > --
->> > > > Lu=C3=ADs
->> > > >=20
->> > > > Changes since v2:
->> > > > - Make helper more generic and to be used both in lookup and atomi=
-c open
->> > > >     operations
->> > > > - Modify ceph_lookup (patch 0002) and ceph_atomic_open (patch 0003=
-) to use
->> > > >     the new helper
->> > > >=20
->> > > > Changes since v1:
->> > > > - Dropped IS_ENCRYPTED() from helper function because kerneldoc sa=
-ys
->> > > >     already that it applies to encrypted directories and, most imp=
-ortantly,
->> > > >     because it would introduce a different behaviour for
->> > > >     CONFIG_FS_ENCRYPTION and !CONFIG_FS_ENCRYPTION.
->> > > > - Rephrased helper kerneldoc
->> > > >=20
->> > > > Changes since initial RFC (after Eric's review):
->> > > > - Added kerneldoc comments to the new fscrypt helper
->> > > > - Dropped '__' from helper name (now fscrypt_prepare_atomic_open())
->> > > > - Added IS_ENCRYPTED() check in helper
->> > > > - DCACHE_NOKEY_NAME is not set if fscrypt_get_encryption_info() re=
-turns an
->> > > >     error
->> > > > - Fixed helper for !CONFIG_FS_ENCRYPTION (now defined 'static inli=
-ne')
->> > > This series looks good to me.
->> > >=20
->> > > And I have run the test locally and worked well.
->> > >=20
->> > >=20
->> > > > Lu=C3=ADs Henriques (3):
->> > > >     fscrypt: new helper function - fscrypt_prepare_lookup_partial()
->> > > Eric,
->> > >=20
->> > > If possible I we can pick this together to ceph repo and need your a=
-ck
->> > > about this. Or you can pick it to the crypto repo then please feel f=
-ree
->> > > to add:
->> > >=20
->> > > Tested-by: Xiubo Li <xiubli@redhat.com> and Reviewed-by: Xiubo Li
->> > > <xiubli@redhat.com>
->> > I would prefer the fscrypt helper to go through the fscrypt tree.
->>=20
->> Sure. This also LGTM.
->>=20
->> Thanks
->>=20
->
-> I've applied it to
-> https://git.kernel.org/pub/scm/fs/fscrypt/linux.git/log/?h=3Dfor-next
->
-> But I ended up reworking the comment a bit and moving the function to be =
-just
-> below __fscrypt_prepare_lookup().  So I sent out v4 that matches what I a=
-pplied.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/comedi/drivers/cb_pcidas64.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Awesome, thanks a lot, Eric.
+diff --git a/drivers/comedi/drivers/cb_pcidas64.c b/drivers/comedi/drivers/cb_pcidas64.c
+index ca6038a25f26..59390b23fa81 100644
+--- a/drivers/comedi/drivers/cb_pcidas64.c
++++ b/drivers/comedi/drivers/cb_pcidas64.c
+@@ -374,11 +374,6 @@ static inline u16 pipe_full_bits(u16 hw_status_bits)
+ 	return (hw_status_bits >> 10) & 0x3;
+ };
+ 
+-static inline unsigned int dma_chain_flag_bits(u16 prepost_bits)
+-{
+-	return (prepost_bits >> 6) & 0x3;
+-}
+-
+ static inline unsigned int adc_upper_read_ptr_code(u16 prepost_bits)
+ {
+ 	return (prepost_bits >> 12) & 0x3;
+-- 
+2.27.0
 
-> BTW, I'm wondering if anyone has had any thoughts about the race conditio=
-n I
-> described at https://lore.kernel.org/r/ZBC1P4Gn6eAKD61+@sol.localdomain/.=
-  In
-> particular, I'm wondering whether this helper function will need to be ch=
-anged
-> or not.  Maybe not, because ceph could look at DCACHE_NOKEY_NAME to deter=
-mine
-> whether the name should be treated as a no-key name or not, instead of ch=
-ecking
-> fscrypt_has_encryption_key() again (as I think it is doing currently)?
-
-I started looking into that but, to be honest, I haven't yet reached any
-conclusion.  It looks like the ceph code that handles filenames *may* have
-this race too (I'm looking at ceph_fill_trace()) but I'm still not 100%
-sure.  In any case, I think that an eventual fix for this race (if it does
-indeed exist!) will likely be restricted to the ceph code and won't touch
-the generic fscrypt code.  But I'm still looking...
-
-Cheers,
---=20
-Lu=C3=ADs
