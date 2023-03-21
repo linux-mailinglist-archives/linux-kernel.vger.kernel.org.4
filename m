@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3656C3B08
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A606C3B0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCUTxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S229734AbjCUTyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCUTxq (ORCPT
+        with ESMTP id S229930AbjCUTyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:53:46 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734754D2B5;
-        Tue, 21 Mar 2023 12:53:20 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id w133so12051526oib.1;
-        Tue, 21 Mar 2023 12:53:20 -0700 (PDT)
+        Tue, 21 Mar 2023 15:54:39 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3E21B303;
+        Tue, 21 Mar 2023 12:54:34 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id bm2so3129309oib.4;
+        Tue, 21 Mar 2023 12:54:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679428365;
+        d=1e100.net; s=20210112; t=1679428474;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FvDUHb9mHZ3H5XBG9Qrw/6yfPAcHbkJRtRTB2OtceZM=;
-        b=tK9Z0gugaA9MPcQccz8kmhVo0GzaA977v6nf+JcBNXcU/WWKkq89a4A/qBBn1rRqJk
-         bToMdnLMeGXSth/3os0HAOgs4WokXWN+ptkRDZ+ZEyNsPKTL2r8+FeiYFCOp+78TYTYU
-         I7js7IetaA6BcFeVduSv+usDpoftqNyeBFKP1kXYDOCd2fxeCxQfPJBVo4z3RBk5xh7U
-         +NRh0F5NAag4lPIjOFjIsiDXAOjVYay+m4clX2aerErC6DGjdk2YOOH4YBH8P2/UIEgI
-         vBbornGooVChOOd/0paj3+GAPf5uB8L5Pr5R4QUcLkXLu2kQwra3wlX5U9z2PFv6/7pr
-         a//w==
-X-Gm-Message-State: AO0yUKX8TmvlS8Jwp4gjXAH19VP5c+Q78/71D3grL0AEhDAwVRJwFasN
-        1NWhAfhSgT46306y4HouaA==
-X-Google-Smtp-Source: AK7set+PfrlzdyluKEri9dVWtlLQhA8KJm7p7kcuU0BFcw4do2Hy3yuEnq27AVzW/6YAJxI0m7sxSA==
-X-Received: by 2002:a05:6808:9a6:b0:387:e06:6602 with SMTP id e6-20020a05680809a600b003870e066602mr132316oig.49.1679428365120;
-        Tue, 21 Mar 2023 12:52:45 -0700 (PDT)
+        bh=dzGK/1K3jXeb2RXo8eG0lU4LCzC1yzSP/KWzYe+eVbw=;
+        b=ampEM2Qqk1H70egvD3eBZLcrBlFXjpLe550jasdSe+QWVnFdeNtCiqLBJIz/zx7BWx
+         2CzQS3JqL1YWryGObLYzuKlpjMTvMyw88VdiYMVCZqpVoYda+321SxO80HceSZdh4QV3
+         uHWft12Q8bOwSjCvh+J6lGejWe9UAvLrZEedQqqTNGsp3frw2cqsWnTcu+I0R2rFWOXp
+         aA1JpRY/aVcfNn3rfx1zUy+LMr4CcDPg1oRNnCpuMclNODMQEx01fwWd0zBmkIuSUJPl
+         CusJXiR7ViMEJ+x9bD8h5mPb0fC47zidv03z7gm+qmmYnBg+lo6OcjA5AIAgzajyizTy
+         D7yw==
+X-Gm-Message-State: AO0yUKUxvrS9TUkL82xo77MoIULLRvfYRic8hMRD7HPqDKYIeXgom8Cb
+        QYLE5TXJTJHdYG/E28n+4w==
+X-Google-Smtp-Source: AK7set+KMmtZUupNTDW8y48dmb0Nsic39+Iea4GTnkiEhCiarvZbLd4wCMKv+ZkisvmMY1Q1UFvy2Q==
+X-Received: by 2002:a05:6808:19a:b0:383:fb18:aa7d with SMTP id w26-20020a056808019a00b00383fb18aa7dmr156495oic.35.1679428470893;
+        Tue, 21 Mar 2023 12:54:30 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q132-20020acac08a000000b0037fa035f4f3sm5160147oif.53.2023.03.21.12.52.44
+        by smtp.gmail.com with ESMTPSA id q132-20020acac08a000000b0037fa035f4f3sm5161798oif.53.2023.03.21.12.54.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 12:52:44 -0700 (PDT)
-Received: (nullmailer pid 1341754 invoked by uid 1000);
-        Tue, 21 Mar 2023 19:52:44 -0000
-Date:   Tue, 21 Mar 2023 14:52:44 -0500
+        Tue, 21 Mar 2023 12:54:30 -0700 (PDT)
+Received: (nullmailer pid 1344021 invoked by uid 1000);
+        Tue, 21 Mar 2023 19:54:29 -0000
+Date:   Tue, 21 Mar 2023 14:54:29 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: mfd: qcom,spmi-pmic: add nvram function
-Message-ID: <167942836356.1341699.17699410680064353553.robh@kernel.org>
-References: <20230320135710.1989-1-johan+linaro@kernel.org>
- <20230320135710.1989-4-johan+linaro@kernel.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [RESEND PATCH v9 1/2] dt-bindings: PCI: qcom: Add SM8550
+ compatible
+Message-ID: <20230321195429.GA1341884-robh@kernel.org>
+References: <20230320144658.1794991-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320135710.1989-4-johan+linaro@kernel.org>
+In-Reply-To: <20230320144658.1794991-1-abel.vesa@linaro.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -69,16 +75,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 20 Mar 2023 14:57:10 +0100, Johan Hovold wrote:
-> Add an 'nvram' pattern property and a reference to the corresponding
-> SDAM DT schema.
+On Mon, Mar 20, 2023 at 04:46:57PM +0200, Abel Vesa wrote:
+> Add the SM8550 platform to the binding.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
+> This patch is a resend of the following:
+> https://lore.kernel.org/all/20230208180020.2761766-10-abel.vesa@linaro.org/
+> 
+> No changes since then.
+> 
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index fb32c43dd12d..be7b4b805291 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -38,6 +38,7 @@ properties:
+>            - qcom,pcie-sm8350
+>            - qcom,pcie-sm8450-pcie0
+>            - qcom,pcie-sm8450-pcie1
+> +          - qcom,pcie-sm8550
+>        - items:
+>            - const: qcom,pcie-msm8998
+>            - const: qcom,pcie-msm8996
+> @@ -58,6 +59,12 @@ properties:
+>      minItems: 1
+>      maxItems: 8
+>  
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  iommu-map:
+> +    maxItems: 2
 
-Acked-by: Rob Herring <robh@kernel.org>
+I think this will conflict with a series from Mani. 'iommus' use is also 
+wrong here.
 
+> +
+>    # Common definitions for clocks, clock-names and reset.
+>    # Platform constraints are described later.
+>    clocks:
+> @@ -205,6 +212,7 @@ allOf:
+>                - qcom,pcie-sm8350
+>                - qcom,pcie-sm8450-pcie0
+>                - qcom,pcie-sm8450-pcie1
+> +              - qcom,pcie-sm8550
+>      then:
+>        properties:
+>          reg:
+> @@ -639,6 +647,37 @@ allOf:
+>            items:
+>              - const: pci # PCIe core reset
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,pcie-sm8550
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 7
+> +          maxItems: 8
+> +        clock-names:
+> +          minItems: 7
+> +          items:
+> +            - const: aux # Auxiliary clock
+> +            - const: cfg # Configuration clock
+> +            - const: bus_master # Master AXI clock
+> +            - const: bus_slave # Slave AXI clock
+> +            - const: slave_q2a # Slave Q2A clock
+> +            - const: ddrss_sf_tbu # PCIe SF TBU clock
+> +            - const: noc_aggr # Aggre NoC PCIe AXI clock
+> +            - const: cnoc_sf_axi # Config NoC PCIe1 AXI clock
+> +        resets:
+> +          minItems: 1
+> +          maxItems: 2
+> +        reset-names:
+> +          minItems: 1
+> +          items:
+> +            - const: pci # PCIe core reset
+> +            - const: link_down # PCIe link down reset
+> +
+>    - if:
+>        properties:
+>          compatible:
+> @@ -724,6 +763,7 @@ allOf:
+>                - qcom,pcie-sm8350
+>                - qcom,pcie-sm8450-pcie0
+>                - qcom,pcie-sm8450-pcie1
+> +              - qcom,pcie-sm8550
+>      then:
+>        oneOf:
+>          - properties:
+> -- 
+> 2.34.1
+> 
