@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7B46C31B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D019D6C31BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjCUMaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S230176AbjCUMa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUMaU (ORCPT
+        with ESMTP id S229524AbjCUMax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:30:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8508E1715;
-        Tue, 21 Mar 2023 05:30:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BCD161B74;
-        Tue, 21 Mar 2023 12:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70B28C4339B;
-        Tue, 21 Mar 2023 12:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679401818;
-        bh=2fyTuaCHjdl/UpR50suXht+irQY2VJBJxNpLECv+KFE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cLKPTAK57jDdVKjnX9PtETAr7N7zs1gUmraocFGmvMgry8jPaNXLSAKLpmQlm+83E
-         7p8T5dB/dA91tQD1YmDoDt4hM+AGc2avfVQgcb/OGjSn6z0wX3SmjNJicrHfquY11n
-         PfOhX3uJYye0z7Boew8UBtPdGVT+OPfSOIgcDpOxciQBPgDDxJpJqX3j4snOnU7mzt
-         Pg4F3HtQZ3Y5nktm+Q+f5hmjBOJqsoFKNQaXT9bbYy2qLK0f1SQNizDOBp6EEmoonr
-         24AgCeb3uw/QWWA6RxIMmmve5uHYDjMrKauDfaBMSpKLWe8GaeIc1DgxdJIh2oKolf
-         TyXO8y6MArsmQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57164E52513;
-        Tue, 21 Mar 2023 12:30:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Mar 2023 08:30:53 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8BE211FF;
+        Tue, 21 Mar 2023 05:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1679401840;
+        bh=RIk1bW9UJ1N6hwpsv3iiYyeLz4E5i4Xo2Z7MHEEpqjw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=UrurL81bAtGJJ3vZF1m5JCqI4EOjAq6EMSwanOFS3UJhoPWGXuutALltE8o6kYvFf
+         KwIZslmJw9bw6RTmF+BlYodHgJPXwEd/QnWwXEeW33vnD7oE3xdEri+bAtmbZLWbcq
+         wvc+BcyytHLH0o7Y5nGdQySA2P/RCTJsMd3qMBLc=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id F2CD46633A;
+        Tue, 21 Mar 2023 08:30:37 -0400 (EDT)
+Message-ID: <75f843b2780fc3c3dcc1d0d8f78f2b955956316b.camel@xry111.site>
+Subject: Re: [PATCH v4 05/29] LoongArch: KVM: Add vcpu related header files
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+Date:   Tue, 21 Mar 2023 20:30:36 +0800
+In-Reply-To: <20230321035651.598505-6-zhaotianrui@loongson.cn>
+References: <20230321035651.598505-1-zhaotianrui@loongson.cn>
+         <20230321035651.598505-6-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: dsa: b53: add support for BCM63xx RGMIIs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167940181835.17617.10779789931458547899.git-patchwork-notify@kernel.org>
-Date:   Tue, 21 Mar 2023 12:30:18 +0000
-References: <20230319220805.124024-1-noltari@gmail.com>
-In-Reply-To: <20230319220805.124024-1-noltari@gmail.com>
-To:     =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez_Rojas_=3Cnoltari=40gmail=2Ecom=3E?=@ci.codeaurora.org
-Cc:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 2023-03-21 at 11:56 +0800, Tianrui Zhao wrote:
+> +/* Tracepoints for VM exits */
+> +#define kvm_trace_symbol_exit_types=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0\
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0({ KVM_TRACE_EXIT_IDLE,=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"IDLE" },=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0\
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ KVM_TRACE_EXIT_CACHE,=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"CACHE" },=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0\
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ KVM_TRACE_EXIT_SIGNAL,=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"Signal" })
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Looks like there shouldn't be "(" and ")".
 
-On Sun, 19 Mar 2023 23:08:05 +0100 you wrote:
-> BCM63xx RGMII ports require additional configuration in order to work.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> ---
->  v2: add changes suggested by Andrew:
->   - Use a switch statement.
->   - Use dev_dbg() instead of dev_info().
-> 
-> [...]
+> +#define kvm_trace_symbol_aux_op				\
+> +	({ KVM_TRACE_AUX_RESTORE,	"restore" },	\
+> +	{ KVM_TRACE_AUX_SAVE,		"save" },	\
+> +	{ KVM_TRACE_AUX_ENABLE,		"enable" },	\
+> +	{ KVM_TRACE_AUX_DISABLE,	"disable" },	\
+> +	{ KVM_TRACE_AUX_DISCARD,	"discard" })
 
-Here is the summary with links:
-  - [v2] net: dsa: b53: add support for BCM63xx RGMIIs
-    https://git.kernel.org/netdev/net-next/c/ce3bf94871f7
+Likewise.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+See the test robot report, and https://godbolt.org/z/bE8q97z1o.
 
+The lesson: if a text book claims "you should always wrap the content of
+a macro in ( ... )", we should burn it in the fire! :)
 
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
