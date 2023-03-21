@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C806C29F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669386C29F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCUFiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S229825AbjCUFlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjCUFii (ORCPT
+        with ESMTP id S229634AbjCUFlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:38:38 -0400
+        Tue, 21 Mar 2023 01:41:10 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18822134;
-        Mon, 20 Mar 2023 22:38:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7717CED;
+        Mon, 20 Mar 2023 22:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:Cc:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=+NQR2cPC+9ftHy9bkc6ojFpRutVyCr2wlZ//xE3JKzU=; b=UKGzuF1+vvffxv8tV1c7SOUMNf
-        N6gOBaXUq1Z2WBP6vYfwQm1sD+G9eXycB7QfSXba+4a5C/bDlK2bkVo0Ab4iohEGRbrSqPYKF812K
-        MjQDv+BjpwO9UY4upzyh4tjIBtEbERfxbkYgung/jovgyz5RAAJpMzTzdDI+34lS43r94T5xHZHeK
-        xm3UhfHFtSaXyeP0C7TP+yngL6HKFHKRjUhgRMA6tbhrYhW9B4QYy1XQFvRa8J9k1QocnOVB/NLjT
-        kUGAkcHhlHckdcckTA5Z78MynD3gb8FYWcJT2DCpXhPR4Whx1gqGJkqC5nMB3JVzkNsSDefta1ZMK
-        TrCi2dcw==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1peUhc-00BHNo-39;
-        Tue, 21 Mar 2023 05:38:33 +0000
-Message-ID: <c85681c6-6fcf-33ed-210f-661e539f78d8@infradead.org>
-Date:   Mon, 20 Mar 2023 22:38:31 -0700
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=V+8E3N2hWBMY6JuQmKvAuziEhrAWOBaYxYWA1/lHFMo=; b=PZrBUD6jn6h0x9MriVZBLTBQP0
+        C4ALnRjap0IJJR7wQjpZDkxe0U9MfJPJhWsZ119kwFBbS1dtNyXCs3LU0wwV9t3oM9gZelGBLSwkD
+        PwIOb3YDFAqKstEJrwe8Cbby0u7ClWLuq3C7L8KQffHETP+vIKV4p+VIBrk7rgFu1H3W31RDlOuZ1
+        n9XHLZtnkio5y9RsiASEehuG2QSKkJ3ejIE8S3xZOiDaoeJVNUQypYA8i5iVKWZw1tMwzyuT+4pwo
+        ZTSTkZsl9FLkXyldkhUZzDeGX6VdZgJTTdcE3QPVo9KPYK8EC5VPyvazJl+M6GUOdn5oGRPoeGhuF
+        BUHcTxTw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1peUjw-00BHkn-2s;
+        Tue, 21 Mar 2023 05:40:56 +0000
+Date:   Mon, 20 Mar 2023 22:40:56 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the sysctl tree with Linus' tree
+Message-ID: <ZBlDaMh023N20uuo@bombadil.infradead.org>
+References: <20230321132052.7d12fd7d@canb.auug.org.au>
+ <20230321132227.5f63cd43@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Build regressions/improvements in v6.3-rc3 (drm/msm/)
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
- <20230320082146.4117022-1-geert@linux-m68k.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-In-Reply-To: <20230320082146.4117022-1-geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230321132227.5f63cd43@canb.auug.org.au>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Tue, Mar 21, 2023 at 01:22:27PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> On Tue, 21 Mar 2023 13:20:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > Today's linux-next merge of the sysctl tree got a conflict in:
+> >=20
+> >   mm/memory-failure.c
+> >=20
+> > between commit:
+> >=20
+> >   44b8f8bf2438 ("mm: memory-failure: add memory failure stats to sysfs")
+> >=20
+> > from Linus' tree and commit:
+> >=20
+> >   cfe7e6ea5ee2 ("mm: memory-failure: Move memory failure sysctls to its=
+ own file")
+> >=20
+> > from the sysctl tree.
+> >=20
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+>=20
+> Sorry, I forgot the resolution - see below.
 
-On 3/20/23 01:21, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v6.3-rc3[1] compared to v6.2[2].
-> 
-> Summarized:
->   - build errors: +9/-14
->   - build warnings: +4/-1447
-> 
-> JFYI, when comparing v6.3-rc3[1] to v6.3-rc2[3], the summaries are:
->   - build errors: +0/-1
->   - build warnings: +0/-0
-> 
-> Happy fixing! ;-)
-> 
-> Thanks to the linux-next team for providing the build service.
-> 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e8d018dd0257f744ca50a729e3d042cf2ec9da65/ (all 152 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9c3395d5e3dcc6daee66c6908354d47bf98cb0c/ (all 152 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/eeac8ede17557680855031c6f305ece2378af326/ (all 152 configs)
-> 
-> 
-> *** ERRORS ***
-> 
-> 9 error regressions:
+Oh sorry, its on Linus' tree, so I can just rebase too. Did that and
+addressed the conflict as you did, thanks!
 
->   + /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant:  => 300:2, 299:2, 296:2
-
-
-Are these due to the sign bit being set after a shift?
-It looks that way since it is only reported for such values.
-
-From the reports on the build server, it only happens when building with gcc5.
-I don't have the ability to build with gcc5 or I would test it.
-
-@Rob and other drm/msm people, what do you think about this?
-(or is this already fixed somewhere but not yet in linux-next?)
-
-Thanks.
-
------
-diff -- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -19,9 +19,9 @@
-  */
- #define MAX_BLOCKS    12
- 
--#define DPU_HW_VER(MAJOR, MINOR, STEP) (((MAJOR & 0xF) << 28)    |\
--		((MINOR & 0xFFF) << 16)  |\
--		(STEP & 0xFFFF))
-+#define DPU_HW_VER(MAJOR, MINOR, STEP) ((((__u32)MAJOR & 0xF) << 28)    |\
-+		(((__u32)MINOR & 0xFFF) << 16)  |\
-+		((__u32)STEP & 0xFFFF))
- 
- #define DPU_HW_MAJOR(rev)		((rev) >> 28)
- #define DPU_HW_MINOR(rev)		(((rev) >> 16) & 0xFFF)
+  Luis
