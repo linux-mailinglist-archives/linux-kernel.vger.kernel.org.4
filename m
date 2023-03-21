@@ -2,197 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5116C2D55
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5098C6C2D25
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjCUI6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        id S230461AbjCUI41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjCUI5p (ORCPT
+        with ESMTP id S229611AbjCUIzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:57:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ADC27483;
-        Tue, 21 Mar 2023 01:56:30 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32KLiO0B021401;
-        Tue, 21 Mar 2023 08:55:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=x7IKGkzszojJ6gIKRTwbKxVczNQu0DRZzpkWLJ0CXHs=;
- b=V65O8TAHLawrem3hPIQL178lsRxtiFsNsw7S8JlsjyRQTWYuWTAyWXP/CnrjqJJyKHRN
- G+LXbc2GKrIbyVIN+NPMt3wMwfCQCAg3yoIgCOniOVD3TFxELK99AgOJ7HJHnXuWRMRm
- OMeasnpins5M9tK8UQ58XaWLLu/CZcLuh9F35bj72vUNMTFaBOQItzrBIsVFjeUjiTEO
- cZYsSUqPHhbQJVvcDHF6C3ymYDZZxZqxvZ9VkHKkj5/7TJ3SL/WNEQlMl69o4cx++q1W
- gwty1WJZrq2sglX46gujxrsAvnrbfaPFjiv4f6eV1DvOrlJaTIux/8Rbv89jNyb3euZl TA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3peryx2ehg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 08:55:51 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32L8tpiV031772
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 08:55:51 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 21 Mar 2023 01:55:45 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v2 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-Date:   Tue, 21 Mar 2023 14:24:25 +0530
-Message-ID: <644b4b0f17f72e109445a7b31f3e0d2e75dcc361.1679388632.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1679388632.git.quic_varada@quicinc.com>
-References: <cover.1677749625.git.quic_varada@quicinc.com> <cover.1679388632.git.quic_varada@quicinc.com>
+        Tue, 21 Mar 2023 04:55:52 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFFE268B;
+        Tue, 21 Mar 2023 01:54:54 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bi9so18135265lfb.12;
+        Tue, 21 Mar 2023 01:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679388869;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ihWLb6YDeUm4LyXoGDvnXvPNh5dZmfkRW4mzY5FPdhM=;
+        b=PUeizF7dzLAZJmmyz4Qbzek28PUiJv9e9blTv2pw/0T3CuhF3KprL7LCtEIm9Jbwme
+         eIkhw77b4qrg8nCvBEJebTu6itTSeuurkArgaVZ1YEkPcyI41jLz43/Vh7vBqquQ8i8U
+         kOx+jzUiRR6h37OW8uI+XYmgIwVnsmTugrhGPhmTmoPmHgPBJyXhBKWg8ayzUhlumy4k
+         bFRdCdg4RWqrwp8zDPG3ryeKWj1ZQnN87by6Y6axKqfevqW3Szk7O42xikCQtp3BpKYk
+         s5e1ElpL/7HIKEX69eQWOzjC5ha2nWhlxFcURYkt8JMO8SSVt3/trvKLrIpSd/krX5YS
+         xniQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679388869;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ihWLb6YDeUm4LyXoGDvnXvPNh5dZmfkRW4mzY5FPdhM=;
+        b=LVAZqXwUv4JeJyz3uKZcGvJQF7++9wyyP6ENQm2XmzNKtgoCSeQ0UyIr3pcsvBjV5C
+         xoTCRLg87dhQec1ZRtSvN/xqQF5uls0KqZ33pdpJMTP3TWljNd+riDPUFKKKWPPnIiW0
+         OysPMXB5wuv6nvJ1PFuifFMDcLGtELQjgdYLsDN3weJFk/b6gz6qygEakFnNH1nWp6h2
+         DwUDjg2GGFJGFu3p8/G8EX0T9TE2CI9W16V0XD/ixpcBeMHOjP/d209CkNagmTEzNJgv
+         NbqbKIGrAkF+XWIRSCCIA6/tUN9bUQrxW1zWWB+1cPEa+Jmg4ra6vblcUJoMDjeHEYBn
+         2yXQ==
+X-Gm-Message-State: AO0yUKXUYQfcziE/Wzyvf4ByOjliI/buxpDWryetFuSfBTYLZn/rVWBQ
+        QZrlalQruehajIvkf4ulSWI=
+X-Google-Smtp-Source: AK7set+HyqoO+eZz5C//84EZqAvcFQ7KS7XwqX9sdZR0jNq+5OaFBZIEVgNAuP9hR3nhr0Nv+lsEZA==
+X-Received: by 2002:ac2:5a1a:0:b0:4d5:a689:7580 with SMTP id q26-20020ac25a1a000000b004d5a6897580mr582688lfn.47.1679388869163;
+        Tue, 21 Mar 2023 01:54:29 -0700 (PDT)
+Received: from pc636 (host-90-233-209-15.mobileonline.telia.com. [90.233.209.15])
+        by smtp.gmail.com with ESMTPSA id h11-20020ac250cb000000b004db3d57c3a8sm2079989lfm.96.2023.03.21.01.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 01:54:28 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 21 Mar 2023 09:54:26 +0100
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Dave Chinner <david@fromorbit.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <ZBlwwkGrnyF25/Pv@pc636>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+ <ZBkDuLKLhsOHNUeG@destitution>
+ <ZBk/Wxj4rXPra/ge@pc636>
+ <8cd31bcd-dad4-44e3-920f-299a656aea98@lucifer.local>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: N5mU4IRqAv-OHElJty-46tJWbBSj0coe
-X-Proofpoint-ORIG-GUID: N5mU4IRqAv-OHElJty-46tJWbBSj0coe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_06,2023-03-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 spamscore=0 adultscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210068
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8cd31bcd-dad4-44e3-920f-299a656aea98@lucifer.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add USB phy and controller related nodes
+On Tue, Mar 21, 2023 at 07:45:56AM +0000, Lorenzo Stoakes wrote:
+> On Tue, Mar 21, 2023 at 06:23:39AM +0100, Uladzislau Rezki wrote:
+> > On Tue, Mar 21, 2023 at 12:09:12PM +1100, Dave Chinner wrote:
+> > > On Sun, Mar 19, 2023 at 07:09:31AM +0000, Lorenzo Stoakes wrote:
+> > > > vmalloc() is, by design, not permitted to be used in atomic context and
+> > > > already contains components which may sleep, so avoiding spin locks is not
+> > > > a problem from the perspective of atomic context.
+> > > >
+> > > > The global vmap_area_lock is held when the red/black tree rooted in
+> > > > vmap_are_root is accessed and thus is rather long-held and under
+> > > > potentially high contention. It is likely to be under contention for reads
+> > > > rather than write, so replace it with a rwsem.
+> > > >
+> > > > Each individual vmap_block->lock is likely to be held for less time but
+> > > > under low contention, so a mutex is not an outrageous choice here.
+> > > >
+> > > > A subset of test_vmalloc.sh performance results:-
+> > > >
+> > > > fix_size_alloc_test             0.40%
+> > > > full_fit_alloc_test		2.08%
+> > > > long_busy_list_alloc_test	0.34%
+> > > > random_size_alloc_test		-0.25%
+> > > > random_size_align_alloc_test	0.06%
+> > > > ...
+> > > > all tests cycles                0.2%
+> > > >
+> > > > This represents a tiny reduction in performance that sits barely above
+> > > > noise.
+> > >
+> > > I'm travelling right now, but give me a few days and I'll test this
+> > > against the XFS workloads that hammer the global vmalloc spin lock
+> > > really, really badly. XFS can use vm_map_ram and vmalloc really
+> > > heavily for metadata buffers and hit the global spin lock from every
+> > > CPU in the system at the same time (i.e. highly concurrent
+> > > workloads). vmalloc is also heavily used in the hottest path
+> > > throught the journal where we process and calculate delta changes to
+> > > several million items every second, again spread across every CPU in
+> > > the system at the same time.
+> > >
+> > > We really need the global spinlock to go away completely, but in the
+> > > mean time a shared read lock should help a little bit....
+> > >
+> 
+> Hugely appreciated Dave, however I must disappoint on the rwsem as I have now
+> reworked my patch set to use the original locks in order to satisfy Willy's
+> desire to make vmalloc atomic in future, and Uladzislau's desire to not have a
+> ~6% performance hit -
+> https://lore.kernel.org/all/cover.1679354384.git.lstoakes@gmail.com/
+> 
+> > I am working on it. I submitted a proposal how to eliminate it:
+> >
+> >
+> > <snip>
+> > Hello, LSF.
+> >
+> > Title: Introduce a per-cpu-vmap-cache to eliminate a vmap lock contention
+> >
+> > Description:
+> >  Currently the vmap code is not scaled to number of CPU cores in a system
+> >  because a global vmap space is protected by a single spinlock. Such approach
+> >  has a clear bottleneck if many CPUs simultaneously access to one resource.
+> >
+> >  In this talk i would like to describe a drawback, show some data related
+> >  to contentions and places where those occur in a code. Apart of that i
+> >  would like to share ideas how to eliminate it providing a few approaches
+> >  and compare them.
+> >
+> > Requirements:
+> >  * It should be a per-cpu approach;
+> >  * Search of freed ptrs should not interfere with other freeing(as much as we can);
+> >  *   - offload allocated areas(buzy ones) per-cpu;
+> >  * Cache ready sized objects or merge them into one big per-cpu-space(split on demand);
+> >  * Lazily-freed areas either drained per-cpu individually or by one CPU for all;
+> >  * Prefetch a fixed size in front and allocate per-cpu
+> >
+> > Goals:
+> >  * Implement a per-cpu way of allocation to eliminate a contention.
+> >
+> > Thanks!
+> > <snip>
+> >
+> > --
+> > Uladzislau Rezki
+> >
+> 
+> That's really awesome! I will come to that talk at LSF/MM :) being able to
+> sustain the lock in atomic context seems to be an aspect that is important going
+> forward also.
+>
+Uhh... So i need to prepare then :)))
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-
----
- Changes in v2:
-	- Fixed issues flagged by Krzysztof
-	- Fix issues reported by make dtbs_check
-	- Remove NOC related clocks (to be added with proper
-	  interconnect support)
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 86 +++++++++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 2bb4053..513da74 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -829,6 +829,92 @@
- 			msi-parent = <&v2m0>;
- 			status = "disabled";
- 		};
-+
-+		qusb_phy_0: phy@7b000 {
-+			compatible = "qcom,ipq9574-qusb2-phy";
-+			reg = <0x07b000 0x180>;
-+			#phy-cells = <0>;
-+
-+			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-+				<&xo_board_clk>;
-+			clock-names = "cfg_ahb", "ref";
-+
-+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-+			status = "disabled";
-+		};
-+
-+		ssphy_0: phy@7d000 {
-+			compatible = "qcom,ipq9574-qmp-usb3-phy";
-+			reg = <0x7d000 0x1c4>;
-+			#clock-cells = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
-+
-+			clocks = <&gcc GCC_USB0_AUX_CLK>,
-+				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-+			clock-names = "aux", "cfg_ahb";
-+
-+			resets =  <&gcc GCC_USB0_PHY_BCR>,
-+				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
-+			reset-names = "phy","common";
-+			status = "disabled";
-+
-+			usb0_ssphy: phy@7d200 {
-+				reg = <0x0007d200 0x130>,	/* tx */
-+				      <0x0007d400 0x200>,	/* rx */
-+				      <0x0007d800 0x1f8>,	/* pcs  */
-+				      <0x0007d600 0x044>;	/* pcs misc */
-+				#phy-cells = <0>;
-+				clocks = <&gcc GCC_USB0_PIPE_CLK>;
-+				clock-names = "pipe0";
-+				clock-output-names = "usb0_pipe_clk";
-+			};
-+		};
-+
-+		usb3: usb3@8a00000 {
-+			compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-+			reg = <0x8af8800 0x400>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
-+
-+			clocks = <&gcc GCC_SNOC_USB_CLK>,
-+				 <&gcc GCC_ANOC_USB_AXI_CLK>,
-+				 <&gcc GCC_USB0_MASTER_CLK>,
-+				 <&gcc GCC_USB0_SLEEP_CLK>,
-+				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-+
-+			clock-names = "sys_noc_axi",
-+				      "anoc_axi",
-+				      "master",
-+				      "sleep",
-+				      "mock_utmi";
-+
-+			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-+					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-+			assigned-clock-rates = <200000000>,
-+					       <24000000>;
-+
-+			resets = <&gcc GCC_USB_BCR>;
-+			status = "disabled";
-+
-+			dwc_0: usb@8a00000 {
-+				compatible = "snps,dwc3";
-+				reg = <0x8a00000 0xcd00>;
-+				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-+				clock-names = "ref";
-+				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-+				phys = <&qusb_phy_0>, <&usb0_ssphy>;
-+				phy-names = "usb2-phy", "usb3-phy";
-+				tx-fifo-resize;
-+				snps,is-utmi-l1-suspend;
-+				snps,hird-threshold = /bits/ 8 <0x0>;
-+				snps,dis_u2_susphy_quirk;
-+				snps,dis_u3_susphy_quirk;
-+				dr_mode = "host";
-+			};
-+		};
- 	};
- 
- 	rpm-glink {
--- 
-2.7.4
-
+--
+Uladzislau Rezki
