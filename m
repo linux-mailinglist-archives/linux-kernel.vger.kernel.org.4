@@ -2,180 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036B36C284D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04ED6C284E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCUCly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 22:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S229627AbjCUCnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCUClw (ORCPT
+        with ESMTP id S229848AbjCUCnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:41:52 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DE5265AA
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:41:51 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so3724786pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1679366511;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HEkJyYt73vejLSpG2+x8Ouk/b+GBlTD7f0hr6+7FBys=;
-        b=EPNaKpwDedmJIHjvq//QFdMZJ1bwSI6kGwROkrd4BE2qCSHOgENUIKyNMNO3GMZm90
-         peuHU4GCfLn4X/rjSkIWVJcazbUFJevTL66PwPCgHGZsU1zigewsuD5oruZvte+U141p
-         Hugu8vxs1/RvD3ssusgS67w5W8cUzUmTh+FZXgAzZdJGFNrqSefGc/yaMmtv0+o9Tw7S
-         TVms7IxFiSARjYd2eUlbSYruuKA+xreCtibVaikE+pn2HyW4nMQ16WTQGKZgcZiXdqem
-         Bddx7U3M0hPB1Xc4DJbO3WRbsa2uWdNsqbmMnkDKyOtNsMlMfhdZ+I/mhcU1ayZvD2Ye
-         AEqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679366511;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HEkJyYt73vejLSpG2+x8Ouk/b+GBlTD7f0hr6+7FBys=;
-        b=HYpzKeTyXymBrOAKHtRytKAZbFJx8eTJ62YTSRrypY25A+/hPep0i4VFinzRYvIe76
-         1UtN55Ofsg3WXtlmc0nCBJaRdivzQNAXgKnhq8hUQ4XcJ4UI1mubkiClFo4GqM/LWFJ8
-         q+wYmy+XLRUg0r4KxtKAWa2NXjrmaFzmSp55W8M0i962PSOvuh437fLfa3bL7R/huxtB
-         JI5ZvUIjr6l7Vg2f65hlnX5eoy/Krg/werELViD0utnM+dCjE/fF0USZOIe66JKsAg1c
-         N7YSSGvYKTlWmw1gkBxQfVju8qUJucecvieyZISUCQQfR2j0V6NftJQXVsaa7XTe0Olq
-         r4VA==
-X-Gm-Message-State: AO0yUKWisPSR7xb+q7mAfdDj9wq/fOFWdh+YouDkY7mTg/QEXLMQIzKf
-        67elRfp9NtXDrLqhpHfOkPek+A==
-X-Google-Smtp-Source: AK7set+7Allahs6jz++T+GpHLmunKF6U2IvwRRyY0XJ3UBLtK8KojpT1JqDPIX/pfX8LcN/dzZJ0Rg==
-X-Received: by 2002:a17:902:e195:b0:1a0:485c:a6c with SMTP id y21-20020a170902e19500b001a0485c0a6cmr602540pla.8.1679366510603;
-        Mon, 20 Mar 2023 19:41:50 -0700 (PDT)
-Received: from [10.54.24.141] ([143.92.118.3])
-        by smtp.gmail.com with ESMTPSA id u8-20020a170902bf4800b0018b025d9a40sm7341062pls.256.2023.03.20.19.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 19:41:49 -0700 (PDT)
-Message-ID: <d1d0429a-0cf6-51f5-81ce-6eb0ad340540@shopee.com>
-Date:   Tue, 21 Mar 2023 10:41:44 +0800
+        Mon, 20 Mar 2023 22:43:11 -0400
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7029E197
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:43:07 -0700 (PDT)
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+        by Atcsqr.andestech.com with ESMTP id 32L2gFuL055035;
+        Tue, 21 Mar 2023 10:42:15 +0800 (+08)
+        (envelope-from dylan@andestech.com)
+Received: from APC323 (10.0.12.101) by ATCPCS16.andestech.com (10.0.1.222)
+ with Microsoft SMTP Server id 14.3.498.0; Tue, 21 Mar 2023 10:42:14 +0800
+Date:   Tue, 21 Mar 2023 10:42:37 +0800
+From:   Dylan Jhong <dylan@andestech.com>
+To:     Zong Li <zongbox@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <guoren@kernel.org>, <sergey.matyukevich@syntacore.com>,
+        <aou@eecs.berkeley.edu>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <x5710999x@gmail.com>,
+        <tim609@andestech.com>, <peterlin@andestech.com>,
+        <ycliang@andestech.com>, <alistair.francis@wdc.com>
+Subject: Re: [PATCH v2] riscv: mm: Fix incorrect ASID argument when flushing
+ TLB
+Message-ID: <ZBkZnRG4FYqjGiLz@APC323>
+References: <20230313034906.2401730-1-dylan@andestech.com>
+ <CA+ZOyahmpKXq2K-VqKkfN8t5aLDwU-OvL46oj9nNpdm6ZU3qNQ@mail.gmail.com>
+ <ZBAh4EY2RNLryzEW@APC323>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [RFC] memcg, oom: clean up mem_cgroup_oom_synchronize
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     hannes@cmpxchg.org, shakeelb@google.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230315070302.268316-1-haifeng.xu@shopee.com>
- <ZBRTV12GNtiSlOr3@dhcp22.suse.cz>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <ZBRTV12GNtiSlOr3@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZBAh4EY2RNLryzEW@APC323>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Originating-IP: [10.0.12.101]
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: Atcsqr.andestech.com 32L2gFuL055035
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 14, 2023 at 03:27:30PM +0800, Dylan Jhong wrote:
+> On Tue, Mar 14, 2023 at 10:22:43AM +0800, Zong Li wrote:
+> > Dylan Jhong <dylan@andestech.com> 於 2023年3月13日 週一 下午12:29寫道：
+> > >
+> > > Currently, we pass the CONTEXTID instead of the ASID to the TLB flush
+> > > function. We should only take the ASID field to prevent from touching
+> > > the reserved bit field.
+> > >
+> > > Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
+> > > Signed-off-by: Dylan Jhong <dylan@andestech.com>
+> > > ---
+> > 
+> > Hi Dylan,
+> > Thanks for your patch, if I remember correctly, there was a patch from
+> > Alistair Francis did the similar fix. Perhaps we should track that
+> > patch to see why it doesn't be merged. Thanks.
+> > 
+> > http://lists.infradead.org/pipermail/linux-riscv/2022-March/013558.html
+> >
+> Hi Zong,
+> Thanks for the reminder, I didn't notice that Alistair had sent the same patch before.
+> 
+> Hi Palmer, Alistair
+> http://lists.infradead.org/pipermail/linux-riscv/2022-March/013597.html
+> This patch does not seem to be cherry-picked back to the released linux kernel,
+> and I have not seen the v4 patch. May I ask how is the follow-up progress of this patch?
+> 
+> Best,
+> Dylan
+>
 
+Hi Palmer,
 
-On 2023/3/17 19:47, Michal Hocko wrote:
-> On Wed 15-03-23 07:03:02, Haifeng Xu wrote:
->> Since commit 29ef680ae7c2 ("memcg, oom: move out_of_memory back to
->> the charge path"), only oom_kill_disable is set, oom killer will
->> be delayed to page fault path. In the charge patch, even if the
->> oom_lock in memcg can't be acquired, the oom handing can also be
->> invoked. In order to keep the behavior consistent with it, remove
->> the lock check, just leave oom_kill_disable check behind in the
->> page fault path.
-> 
-> I do not understand the actual problem you are trying to deal with here.
-> 
->> Furthermore, the lock contender won't be scheduled out, this doesn't
->> fit the sixth description in commit fb2a6fc56be66 ("mm: memcg:
->> rework and document OOM waiting and wakeup"). So remove the explicit
->> wakeup for the lock holder.
->>
->> Fixes: fb2a6fc56be6 ("mm: memcg: rework and document OOM waiting and wakeup")
-> 
-> The subject mentions a clean up but the fixes tag would indicate an
-> acutal fix.
-> 
->> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
->> ---
->>  mm/memcontrol.c | 11 ++---------
->>  1 file changed, 2 insertions(+), 9 deletions(-)
->>
->> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->> index 5abffe6f8389..360fa7cf7879 100644
->> --- a/mm/memcontrol.c
->> +++ b/mm/memcontrol.c
->> @@ -1999,7 +1999,7 @@ bool mem_cgroup_oom_synchronize(bool handle)
->>  	if (locked)
->>  		mem_cgroup_oom_notify(memcg);
->>  
->> -	if (locked && !memcg->oom_kill_disable) {
->> +	if (!memcg->oom_kill_disable) {
->>  		mem_cgroup_unmark_under_oom(memcg);
->>  		finish_wait(&memcg_oom_waitq, &owait.wait);
->>  		mem_cgroup_out_of_memory(memcg, current->memcg_oom_gfp_mask,
-> 
-> Now looking at the actual code I suspect you in fact want to simplify
-> the logic here as mem_cgroup_oom_synchronize is only ever triggered whe
-> oom_kill_disable == true because current->memcg_in_oom is never non NULL
-> otherwise. So the check is indeed unnecessary. Your patch, however
-> doesn't really simplify the code much. 
-> 
-> Did you want this instead?
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 12559c08d976..a77dc88cfa12 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -1999,16 +1999,9 @@ bool mem_cgroup_oom_synchronize(bool handle)
->  	if (locked)
->  		mem_cgroup_oom_notify(memcg);
->  
-> -	if (locked && !READ_ONCE(memcg->oom_kill_disable)) {
-> -		mem_cgroup_unmark_under_oom(memcg);
-> -		finish_wait(&memcg_oom_waitq, &owait.wait);
-> -		mem_cgroup_out_of_memory(memcg, current->memcg_oom_gfp_mask,
-> -					 current->memcg_oom_order);
-> -	} else {
-> -		schedule();
-> -		mem_cgroup_unmark_under_oom(memcg);
-> -		finish_wait(&memcg_oom_waitq, &owait.wait);
-> -	}
-> +	schedule();
-> +	mem_cgroup_unmark_under_oom(memcg);
-> +	finish_wait(&memcg_oom_waitq, &owait.wait);
->  
->  	if (locked) {
->  		mem_cgroup_oom_unlock(memcg);
-> 
+Ping. Any update on this?
 
-Yes, the chance that someone else disable the oom_kill_disable again in the page fault path
-is quite low.
+Best,
+Dylan
 
->> @@ -2010,15 +2010,8 @@ bool mem_cgroup_oom_synchronize(bool handle)
->>  		finish_wait(&memcg_oom_waitq, &owait.wait);
->>  	}
->>  
->> -	if (locked) {
->> +	if (locked)
->>  		mem_cgroup_oom_unlock(memcg);
->> -		/*
->> -		 * There is no guarantee that an OOM-lock contender
->> -		 * sees the wakeups triggered by the OOM kill
->> -		 * uncharges.  Wake any sleepers explicitly.
->> -		 */
->> -		memcg_oom_recover(memcg);
->> -	}
-> 
-> Hmm, so this seems unneded as well for the oom_kill_disable case as
-> well. Rather than referring to fb2a6fc56be66 it would be better to
-> why the explicit recovery is not really needed anymore.
-> 
->>  cleanup:
->>  	current->memcg_in_oom = NULL;
->>  	css_put(&memcg->css);
-> 
-
-Thank you for your suggestion. I'll post an official patch later.
+> > > Changes from v2:
+> > > - Remove unsued EXPORT_SYMBOL()
+> > > ---
+> > >  arch/riscv/include/asm/tlbflush.h | 2 ++
+> > >  arch/riscv/mm/context.c           | 2 +-
+> > >  arch/riscv/mm/tlbflush.c          | 2 +-
+> > >  3 files changed, 4 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
+> > > index 907b9efd39a8..597d6d8aec28 100644
+> > > --- a/arch/riscv/include/asm/tlbflush.h
+> > > +++ b/arch/riscv/include/asm/tlbflush.h
+> > > @@ -12,6 +12,8 @@
+> > >  #include <asm/errata_list.h>
+> > >
+> > >  #ifdef CONFIG_MMU
+> > > +extern unsigned long asid_mask;
+> > > +
+> > >  static inline void local_flush_tlb_all(void)
+> > >  {
+> > >         __asm__ __volatile__ ("sfence.vma" : : : "memory");
+> > > diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+> > > index 80ce9caba8d2..6d1aeb063e81 100644
+> > > --- a/arch/riscv/mm/context.c
+> > > +++ b/arch/riscv/mm/context.c
+> > > @@ -22,7 +22,7 @@ DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
+> > >
+> > >  static unsigned long asid_bits;
+> > >  static unsigned long num_asids;
+> > > -static unsigned long asid_mask;
+> > > +unsigned long asid_mask;
+> > >
+> > >  static atomic_long_t current_version;
+> > >
+> > > diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> > > index ce7dfc81bb3f..ba4c27187c95 100644
+> > > --- a/arch/riscv/mm/tlbflush.c
+> > > +++ b/arch/riscv/mm/tlbflush.c
+> > > @@ -27,7 +27,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+> > >         /* check if the tlbflush needs to be sent to other CPUs */
+> > >         broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
+> > >         if (static_branch_unlikely(&use_asid_allocator)) {
+> > > -               unsigned long asid = atomic_long_read(&mm->context.id);
+> > > +               unsigned long asid = atomic_long_read(&mm->context.id) & asid_mask;
+> > >
+> > >                 /*
+> > >                  * TLB will be immediately flushed on harts concurrently
+> > > --
+> > > 2.34.1
+> > >
