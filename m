@@ -2,162 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F1B6C3102
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A116C3104
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjCUL4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S230418AbjCUL4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjCUL4C (ORCPT
+        with ESMTP id S229552AbjCUL4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:56:02 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED0025E11;
-        Tue, 21 Mar 2023 04:55:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kSHNijqJKJN+mi3Rj0MAyQ1kJwaIb2qVgBZQeIPdRxjuf3FipH34CXtNOyG2kVJNjF8qb5uYoMHGTfxtQx1BepFr5RwTwciKO+qo1bzOq1CxCGMxSaEEfixe3cu+43lUPLVwJPimdnc4hxzMbnXM/c8opQXQXGQwyJ+XY/SeoN4ngrPc7EnlJMNzhhllhpe7JK8Y4gMHgFPydGi7fToC6SBxdoFJLb2YgYsDiN+nI5ddW9aLzCQz1sEteN6gz1XQbphgiwoFYMe0HpAa9/e+ziJXQGEZ1lkKWGBMXfyjhsaZqdviq+OVGvDWsfmOK2sGaEaVcVp0dzpaiudU+2cNTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TLgpHdc+j55L9bKlGEf/kBp613TOzIDl7Yt0KAuzt0Y=;
- b=HYoaxSRBc6Z5H97FY2oldPfXcJQ6mKzpmpkQCWQGkQnyD7ANb/WGdxCZGmNPRNnUuMArezUGTGPnOAHgXuKnn2aU2zL1Iks/dEUr+JPCZPmdKtqEVUx3VBAOKPdDqrLDIPqAXvlWVlYQwykCqA+BA/SVLUePk7Ua+OlcIKCOPq1jva/2fcQseCChPKWbYvGwWcFzGbfsTZe1yE9bSd9NR6LWUQSxP8rpg4y+7CNOTYH5kVkMdzQL0MDmAZsqdSmLbUPH/gPOdCKezV0n4j1IGnQF1TUlPJbD+dhLBhD7PhhyhvF0XK+bzOF7KJnbP05abZOB+8GGFSo7lLaBCdJuUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TLgpHdc+j55L9bKlGEf/kBp613TOzIDl7Yt0KAuzt0Y=;
- b=Cr0blvPoSwZCR2Mo/t5hOIk8Rd6JfDtid3inCZruLDn7pGpyNBytEeAGae7u4NTOg+Hw4eGUABFny24avXwmhpIupMmOvrAfiNgPtl8beqJ+y3ETYFMvf/pNPvuPIrLBJPX5rcsK9yu077ioXZbrcZfjaTm+ccNFICHGENeQw58pIvFitJfq/R65znYso8lLJy1ZPG9K/ZrMWixhPfMsJhRBEF3nD0bFCBP+KNHK0xu3PwKfWaVh+tw7UJC8AhuE5t+wylbeDXMJ4phXOXjiVI24ut6r4/fkPidExuDu3IzeIY/r619Pdr9coqEeJGnmKTsu9Axh68ThSHZfl3DvtA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DS7PR12MB8273.namprd12.prod.outlook.com (2603:10b6:8:da::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.37; Tue, 21 Mar 2023 11:55:35 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::5464:997b:389:4b07]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::5464:997b:389:4b07%9]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
- 11:55:35 +0000
-Message-ID: <668ef919-9a8f-a3b5-03a4-60295d7edce0@nvidia.com>
-Date:   Tue, 21 Mar 2023 11:55:22 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.10 00/99] 5.10.176-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20230320145443.333824603@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20230320145443.333824603@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0604.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:314::13) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Tue, 21 Mar 2023 07:56:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCC44AFFA;
+        Tue, 21 Mar 2023 04:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679399754; x=1710935754;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BTWIrZbaCdKLLOKW7OpNpd63UiURx6az9bhFqRHf6VQ=;
+  b=NXNeGtcFiCvIExfVz5OjzGglRdUPJDl6jB30NVPP5OnyqsqfWXB8HC4A
+   s4pJjPb6x/pSt/epw1qCamjwBpOzNgtQ1IOxNnvSJwase2eRFVBQsUMet
+   PAtwevRmvdECqQ1hDkNHBBlAFIpAa6cLQ4b2a6UDm04PCDhrzoGT4aJdh
+   CZ94nonN2BVTT/N+GdSBDy6g0IdMyjWub5vEBT99W06KcX42fPCCPl628
+   CAFDp7uHrVwlmdZYfdDB6g6XwUp+HUs3VCiBggpHCUaJ6SlqoSmskdC0F
+   Qb6ekq3Y0ifT7G+3vjdQNhWzX5NdC1Ym3oVCERDVzoMCgeKwHGCTe+4gN
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,278,1673938800"; 
+   d="scan'208";a="202669415"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2023 04:55:52 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 04:55:45 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Tue, 21 Mar 2023 04:55:43 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_EXTTS for lan8841
+Date:   Tue, 21 Mar 2023 12:55:41 +0100
+Message-ID: <20230321115541.4187912-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DS7PR12MB8273:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb742cae-39f5-43e4-6f62-08db2a032ded
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yZ7D37peqvysH6/SS2Urfse83Ca6IjdW6ImFwZx1j4+WJp0dMVaSS9NpESbAxqdmJvJR4Uj8I5Qci7PyU5FteYqJ8/FTbq3RFCdn8RsiHKamW1NalAJf8T67ZRnVfdplA2i1kqnvccB7e22jABWIhXC5Zxs16B0HTqOEqMSc05q7WJlKZtX5vVfw702Yx5KZjIDKphGkwm3DdEWxqxOt6PODG84uCd1WXk3tJBjA2OXbpW0PUTUwmZLTXLnJMAZ2swoOlKpjee+tZV4WPVxIGxqO9nTbK0pL3htmVIgRQATfOf3yweI2LF/xJ/8f54S9oga8SX7EYBkvcd0yQFloVbTZnJnxlbh85mq+JyDTIwZfCLuDw8bPbeN2AYeKPx2yN+qNIEuWnPaSaBUazg27ibvKzIN0RBTmXJ26Chty1Y790O0rfXnWCEczSjDh1FnXXkLI4PvKcvoEh7mqxl17HMBe9uO/UhBbS9bF2lv9fLJ2Gsb4gMMHJrjAhg3zrcP/nAy2f8CNx1HrXorvsHPycOcsgHEyGuiLzyJ9SNRFLIEdoXjNMUacsgd1raeHs+6O3IqfhrkFwgu782YMRpIFzxNv1EYwjp0+woB2qUuXku9/8WMkxIocVWexbMCzAKzbsCWw1RbxUROHYvBNr4D+1EVZyVvlSL2506UzFpksicgTxM73W/J2Hce0sqqkd3lnuixRZH/o3FcPgIq1V8ts+PerDQ/mxn3QsdnCTkiaDQf/u8/aSlXxkOr6nx2JzoGq4k+sU0ncED1mty9F1xPtTw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199018)(31686004)(2616005)(966005)(316002)(6512007)(6666004)(55236004)(53546011)(6486002)(478600001)(26005)(6506007)(186003)(7416002)(31696002)(38100700002)(86362001)(4744005)(66946007)(5660300002)(41300700001)(4326008)(2906002)(8936002)(36756003)(66476007)(66556008)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MHNSd2lJcHQ0QzZmTDdlTDRaZHBPdzE3ZTRtTTBhR01CUzV2NGx3UXMvWWlv?=
- =?utf-8?B?d1B0SGN4OGpRVU5HWHkzTE40MWY0UGgwd1dNbU9aY3BSSUtXRnN1c2tGRERW?=
- =?utf-8?B?QklnVk96RHI4anJxMDlBMmUvaFFza3dyRXZNMmdxM21xWmM4aGpKNFNRdzMz?=
- =?utf-8?B?Q0tYOERreTdzajVXU0NKaitzUkNkUG1nV0g3Ync2M25IT2QvYmJQTUxqbjhl?=
- =?utf-8?B?YU1NR3llRjU0YlpnTzJ5N0d3d1lXM1FhUi8vTzZya0huRThGOE5yMjlhY3Ru?=
- =?utf-8?B?elpLVTVjRW1IeHRKOHJpb1hZaUR3VjlyME9PU2xXSVRlQjlKS1Vlam1yY1h5?=
- =?utf-8?B?cFp3NTRXYkZQVFkxd0ZVdVk1akNtWEw1OGtFbFlYNUwvcmRLV0g5RWoxQUMv?=
- =?utf-8?B?UE5xZmRLd0IwcUxHSWF4YXRHUEhEQkI0RlVSNWFlZXcrSzlvTzBJTjB4LzJv?=
- =?utf-8?B?WDZrSFljeDdGSjB0Z3J3VzBBVUIyUFJma2p3czBSYUY4UEtJbkNDRkg3MXVE?=
- =?utf-8?B?M2NZc3ZoQ1VyQS9QcVdieXNJM1dBNENBMVNoeGhVMis5TnAwTzRJaGYrS2Z4?=
- =?utf-8?B?VndQQkRqa0RWR25zSzBpZnI0WFJTaVZDalJ1TEIwMFV4Q0dTOHJjclNId3VP?=
- =?utf-8?B?M0JkN2JhRmZ5MGlFazB6U2U3SjRLNXZEQ2hucGg2V0g3VjRWcU5xbUNwcnky?=
- =?utf-8?B?cmNncHJidHF5WCt6SjdPa0hXT1lZb2tOb3pGZm1ueTlTWjMyQzBPYUVWcHNW?=
- =?utf-8?B?Z0lJZVlFTkZiaW9IQVNqa3RSdEc0bGJqd1kxQU84MWFVZTJmQ0E1VTBPN21E?=
- =?utf-8?B?OVJVM3U0cUNQMXZ0VmRyaktBSFFDbDlRN1VtNHFJeWltSWI2eCtSYVZ3ZkVD?=
- =?utf-8?B?YUJjMldQYTE2UDl0cUl3Qlk3MWNDVjNsUzRVQW1OZzNnV2xZbjJLSm5wcjF4?=
- =?utf-8?B?UWxWaTltSFJYTzFUVTc5N0RmYjZIWlFtbkZlMFUvVjVoalNDaG1Jbzl3QzMz?=
- =?utf-8?B?NkplRkNwK1ZIOGlBa3BKRXBvck9vQTJUVU9YZWw2bUJFck5XWjVUdHZoZk11?=
- =?utf-8?B?VVcwUThzd1pWQjhQZFZmYzYyNENlZEdjVUdDRlNTVE1SNVVWcDh2RTB1Wisz?=
- =?utf-8?B?bkVscTByUEpLbEJvTUNCL3p2Z3FCOXNlTDJJYkxwbUR2MlR0SjBvVlg0VnNI?=
- =?utf-8?B?MXBvanVNU2piTDVvSGVJOURQTXJrRjUvNjc2UU0zU3FkeTZOdWhNaUI5OUpy?=
- =?utf-8?B?U3JuOWVMeldjNkxjV0lYYVYwS0tabmFaS25pT0JDcmlWNUxPQ2JBUlZPY2Ro?=
- =?utf-8?B?Ni9XVUwvT3U1Q1VESEIzdFJpWklWRlBaWUdnTWpXc3VjcWpzaFFLZWNFL1NG?=
- =?utf-8?B?STlUL1pITGhmSTVHd1doRCtGUU51UUdNVktDMEdIbVZFb3pSOXlMTHU1RjEr?=
- =?utf-8?B?OHFnejhVZ2lVUEsySC9PTFcvTmpCL0EzMnhVbGsrditJSVdyQm5aSHRwVkZZ?=
- =?utf-8?B?VFFwcGRpbktESTRGR3YzWUk1NDFDSjhTQzUwMlpTVFZWaGxUeVEyZlUrUEwv?=
- =?utf-8?B?ek45MFlwWWMrQjdJWThJaUFqcDR6U2xLdzVYZG9valRVWDlLT0xZNkV4bW1k?=
- =?utf-8?B?V2pLRXhGZkJrbnBjdVZCRTBtRUdMcHluOGFDckh2ZjJLNk4wRlZPbnRWNjJ3?=
- =?utf-8?B?SU5rcFk0diszSlhyQmJXOTk2Y2pEc1AxNWF3ZDhwZTRQbXRjbWczY3gyanBY?=
- =?utf-8?B?K2haZXIxU1hQeEZpZnBaalJ4T3J3SWp0YXNaOVBxOUlZM2dLdm1JbzdyWjBw?=
- =?utf-8?B?QnJ0SmNTcGRxekhZOWgxQ0hES2s0VnpwMEJFOVVuNHdORWRTZzFZOGVXaVFL?=
- =?utf-8?B?QTY3Q004OGhsdmZYZ096TFhrdVFjMjltd0lDUFpDTWMza005WGt3Nk9FNjYx?=
- =?utf-8?B?MW5tNmRyVlNHYXE3eFcybkpHUlExakp5dVRpMXZrSGxncmt4L0tNaVA4YjZr?=
- =?utf-8?B?cTY5STdlVm1nS1pKZTB1Q2JMTnZzTzB6cGxjVWduMXFBRlFXK05FSFRoeDcz?=
- =?utf-8?B?TENUbjExN0pvSUNEVW9qcVg2QXRKdWVzR0I4OElqQnEyaFlQTDF4NGIzVk9v?=
- =?utf-8?B?TmFhU1RQZFc2RkpyRWxkK0xlbThna0l6aTlvMkpOYjgyWThta0FKbG44eXZJ?=
- =?utf-8?B?dlE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb742cae-39f5-43e4-6f62-08db2a032ded
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 11:55:34.9216
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dD6P5r3iuus+l8seIKX7Rh2uV2ymy0doUQXtkpmSMoGKBJj0wfbzbFVmltcyIWJdc1XEz242npnMeaJYMFfHfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8273
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Extend the PTP programmable gpios to implement also PTP_PF_EXTTS
+function. The pins can be configured to capture both of rising
+and falling edge. Once the event is seen, then an interrupt is
+generated and the LTC is saved in the registers.
 
-On 20/03/2023 14:53, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.176 release.
-> There are 99 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 22 Mar 2023 14:54:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.176-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+This was tested using:
+ts2phc -m -l 7 -s generic -f ts2phc.cfg
 
-All tests passing for Tegra.
+Where the configuration was the following:
+[global]
+ts2phc.pin_index  6
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+[eth2]
 
-Due to infrastructure issues, no test report available, but all tests 
-are passing.
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/phy/micrel.c | 163 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 163 insertions(+)
 
-Jon
-
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index e26c6723caa4d..c7ac55aad8f21 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -3437,6 +3437,7 @@ static void lan8841_ptp_process_rx_ts(struct kszphy_ptp_priv *ptp_priv)
+ #define LAN8841_PTP_INT_STS_PTP_TX_TS_INT	BIT(12)
+ #define LAN8841_PTP_INT_STS_PTP_RX_TS_OVRFL_INT	BIT(9)
+ #define LAN8841_PTP_INT_STS_PTP_RX_TS_INT	BIT(8)
++#define LAN8841_PTP_INT_STS_PTP_GPIO_CAP_INT	BIT(2)
+ 
+ static void lan8841_ptp_flush_fifo(struct kszphy_ptp_priv *ptp_priv, bool egress)
+ {
+@@ -3451,6 +3452,68 @@ static void lan8841_ptp_flush_fifo(struct kszphy_ptp_priv *ptp_priv, bool egress
+ 	phy_read_mmd(phydev, 2, LAN8841_PTP_INT_STS);
+ }
+ 
++#define LAN8841_PTP_GPIO_CAP_STS			506
++#define LAN8841_PTP_GPIO_SEL				327
++#define LAN8841_PTP_GPIO_SEL_GPIO_SEL(gpio)		((gpio) << 8)
++#define LAN8841_PTP_GPIO_RE_LTC_SEC_HI_CAP		498
++#define LAN8841_PTP_GPIO_RE_LTC_SEC_LO_CAP		499
++#define LAN8841_PTP_GPIO_RE_LTC_NS_HI_CAP		500
++#define LAN8841_PTP_GPIO_RE_LTC_NS_LO_CAP		501
++#define LAN8841_PTP_GPIO_FE_LTC_SEC_HI_CAP		502
++#define LAN8841_PTP_GPIO_FE_LTC_SEC_LO_CAP		503
++#define LAN8841_PTP_GPIO_FE_LTC_NS_HI_CAP		504
++#define LAN8841_PTP_GPIO_FE_LTC_NS_LO_CAP		505
++
++static void lan8841_gpio_process_cap(struct kszphy_ptp_priv *ptp_priv)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	struct ptp_clock_event ptp_event = {0};
++	s32 sec, nsec;
++	int pin, ret;
++	u16 tmp;
++
++	pin = ptp_find_pin_unlocked(ptp_priv->ptp_clock, PTP_PF_EXTTS, 0);
++	if (pin == -1)
++		return;
++
++	tmp = phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_CAP_STS);
++	if (tmp < 0)
++		return;
++
++	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_GPIO_SEL,
++			    LAN8841_PTP_GPIO_SEL_GPIO_SEL(pin));
++	if (ret)
++		return;
++
++	mutex_lock(&ptp_priv->ptp_lock);
++	if (tmp & BIT(pin)) {
++		sec = phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_RE_LTC_SEC_HI_CAP);
++		sec <<= 16;
++		sec |= phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_RE_LTC_SEC_LO_CAP);
++
++		nsec = phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_RE_LTC_NS_HI_CAP) & 0x3fff;
++		nsec <<= 16;
++		nsec |= phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_RE_LTC_NS_LO_CAP);
++	} else {
++		sec = phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_FE_LTC_SEC_HI_CAP);
++		sec <<= 16;
++		sec |= phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_FE_LTC_SEC_LO_CAP);
++
++		nsec = phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_FE_LTC_NS_HI_CAP) & 0x3fff;
++		nsec <<= 16;
++		nsec |= phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_FE_LTC_NS_LO_CAP);
++	}
++	mutex_unlock(&ptp_priv->ptp_lock);
++	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_GPIO_SEL, 0);
++	if (ret)
++		return;
++
++	ptp_event.index = 0;
++	ptp_event.timestamp = ktime_set(sec, nsec);
++	ptp_event.type = PTP_CLOCK_EXTTS;
++	ptp_clock_event(ptp_priv->ptp_clock, &ptp_event);
++}
++
+ static void lan8841_handle_ptp_interrupt(struct phy_device *phydev)
+ {
+ 	struct kszphy_priv *priv = phydev->priv;
+@@ -3459,12 +3522,16 @@ static void lan8841_handle_ptp_interrupt(struct phy_device *phydev)
+ 
+ 	do {
+ 		status = phy_read_mmd(phydev, 2, LAN8841_PTP_INT_STS);
++
+ 		if (status & LAN8841_PTP_INT_STS_PTP_TX_TS_INT)
+ 			lan8841_ptp_process_tx_ts(ptp_priv);
+ 
+ 		if (status & LAN8841_PTP_INT_STS_PTP_RX_TS_INT)
+ 			lan8841_ptp_process_rx_ts(ptp_priv);
+ 
++		if (status & LAN8841_PTP_INT_STS_PTP_GPIO_CAP_INT)
++			lan8841_gpio_process_cap(ptp_priv);
++
+ 		if (status & LAN8841_PTP_INT_STS_PTP_TX_TS_OVRFL_INT) {
+ 			lan8841_ptp_flush_fifo(ptp_priv, true);
+ 			skb_queue_purge(&ptp_priv->tx_queue);
+@@ -3924,6 +3991,7 @@ static int lan8841_ptp_verify(struct ptp_clock_info *ptp, unsigned int pin,
+ 	switch (func) {
+ 	case PTP_PF_NONE:
+ 	case PTP_PF_PEROUT:
++	case PTP_PF_EXTTS:
+ 		break;
+ 	default:
+ 		return -1;
+@@ -4191,10 +4259,104 @@ static int lan8841_ptp_perout(struct ptp_clock_info *ptp,
+ 	return ret;
+ }
+ 
++#define LAN8841_PTP_GPIO_CAP_EN			496
++#define LAN8841_PTP_GPIO_CAP_EN_GPIO_RE_CAPTURE_ENABLE(gpio)	(BIT(gpio))
++#define LAN8841_PTP_GPIO_CAP_EN_GPIO_FE_CAPTURE_ENABLE(gpio)	(BIT(gpio) << 8)
++#define LAN8841_PTP_INT_EN_PTP_GPIO_CAP_EN	BIT(2)
++
++static int lan8841_ptp_extts_on(struct kszphy_ptp_priv *ptp_priv, int pin,
++				u32 flags)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	u16 tmp = 0;
++	int ret;
++
++	/* Set GPIO to be intput */
++	ret = phy_set_bits_mmd(phydev, 2, LAN8841_GPIO_EN, BIT(pin));
++	if (ret)
++		return ret;
++
++	ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_BUF, BIT(pin));
++	if (ret)
++		return ret;
++
++	/* Enable capture on the edges of the pin */
++	if (flags & PTP_RISING_EDGE)
++		tmp |= LAN8841_PTP_GPIO_CAP_EN_GPIO_RE_CAPTURE_ENABLE(pin);
++	if (flags & PTP_FALLING_EDGE)
++		tmp |= LAN8841_PTP_GPIO_CAP_EN_GPIO_FE_CAPTURE_ENABLE(pin);
++	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_GPIO_CAP_EN, tmp);
++	if (ret)
++		return ret;
++
++	/* Enable interrupt */
++	return phy_modify_mmd(phydev, 2, LAN8841_PTP_INT_EN,
++			      LAN8841_PTP_INT_EN_PTP_GPIO_CAP_EN,
++			      LAN8841_PTP_INT_EN_PTP_GPIO_CAP_EN);
++}
++
++static int lan8841_ptp_extts_off(struct kszphy_ptp_priv *ptp_priv, int pin)
++{
++	struct phy_device *phydev = ptp_priv->phydev;
++	int ret;
++
++	/* Set GPIO to be output */
++	ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_EN, BIT(pin));
++	if (ret)
++		return ret;
++
++	ret = phy_clear_bits_mmd(phydev, 2, LAN8841_GPIO_BUF, BIT(pin));
++	if (ret)
++		return ret;
++
++	/* Disable capture on both of the edges */
++	ret = phy_modify_mmd(phydev, 2, LAN8841_PTP_GPIO_CAP_EN,
++			     LAN8841_PTP_GPIO_CAP_EN_GPIO_RE_CAPTURE_ENABLE(pin) |
++			     LAN8841_PTP_GPIO_CAP_EN_GPIO_FE_CAPTURE_ENABLE(pin),
++			     0);
++	if (ret)
++		return ret;
++
++	/* Disable interrupt */
++	return phy_modify_mmd(phydev, 2, LAN8841_PTP_INT_EN,
++			      LAN8841_PTP_INT_EN_PTP_GPIO_CAP_EN,
++			      0);
++}
++
++static int lan8841_ptp_extts(struct ptp_clock_info *ptp,
++			     struct ptp_clock_request *rq, int on)
++{
++	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
++							ptp_clock_info);
++	int pin;
++	int ret;
++
++	/* Reject requests with unsupported flags */
++	if (rq->extts.flags & ~(PTP_ENABLE_FEATURE |
++				PTP_EXTTS_EDGES |
++				PTP_STRICT_FLAGS))
++		return -EOPNOTSUPP;
++
++	pin = ptp_find_pin(ptp_priv->ptp_clock, PTP_PF_EXTTS, rq->extts.index);
++	if (pin == -1 || pin >= LAN8841_PTP_GPIO_NUM)
++		return -EINVAL;
++
++	mutex_lock(&ptp_priv->ptp_lock);
++	if (on)
++		ret = lan8841_ptp_extts_on(ptp_priv, pin, rq->extts.flags);
++	else
++		ret = lan8841_ptp_extts_off(ptp_priv, pin);
++	mutex_unlock(&ptp_priv->ptp_lock);
++
++	return ret;
++}
++
+ static int lan8841_ptp_enable(struct ptp_clock_info *ptp,
+ 			      struct ptp_clock_request *rq, int on)
+ {
+ 	switch (rq->type) {
++	case PTP_CLK_REQ_EXTTS:
++		return lan8841_ptp_extts(ptp, rq, on);
+ 	case PTP_CLK_REQ_PEROUT:
+ 		return lan8841_ptp_perout(ptp, rq, on);
+ 	default:
+@@ -4215,6 +4377,7 @@ static struct ptp_clock_info lan8841_ptp_clock_info = {
+ 	.verify         = lan8841_ptp_verify,
+ 	.enable         = lan8841_ptp_enable,
+ 	.n_per_out      = LAN8841_PTP_GPIO_NUM,
++	.n_ext_ts       = LAN8841_PTP_GPIO_NUM,
+ 	.n_pins         = LAN8841_PTP_GPIO_NUM,
+ };
+ 
 -- 
-nvpublic
+2.38.0
+
