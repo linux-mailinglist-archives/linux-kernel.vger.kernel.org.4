@@ -2,181 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2F26C3DAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A406C3DB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCUWU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S229705AbjCUWXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjCUWUx (ORCPT
+        with ESMTP id S229513AbjCUWXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:20:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B920D1E5F7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679437204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3d30Yo9IkuDAuQ71lplDlZlFi1tH3/S4QrO8CaL0yaU=;
-        b=ZtiEf4t8MUqzHpuzHeZ+bOwGam9Wxo2Js5CYJlO4XyhWpY0qiPe7lgHO0lt9GcWIJ3QUaE
-        v/+SWBAP/WjwYQ2iv/5RVPe5mJGab/pFW7pPd3BNgm5eep8dcJUAWqGPsZGTMALQsIE2iQ
-        rHdZrZwbM4gaVysIKCDnPhcyCg3x1vs=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-403-PWxLgyBePLCKKyAKfOdqKw-1; Tue, 21 Mar 2023 18:20:03 -0400
-X-MC-Unique: PWxLgyBePLCKKyAKfOdqKw-1
-Received: by mail-ot1-f70.google.com with SMTP id c2-20020a056830000200b0069f1299335fso4298285otp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:20:03 -0700 (PDT)
+        Tue, 21 Mar 2023 18:23:14 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D856A22C91;
+        Tue, 21 Mar 2023 15:23:12 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso10356386wmo.0;
+        Tue, 21 Mar 2023 15:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679437391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zrv9jJ3AdCNTWt85MeiC3aT4ke6dH7Ht0E0gm4oJlV8=;
+        b=fACC/2kzAWcwEXo+61byf3CLolgXqWlPzekcsqtxdx1WdoaLxSxkws7NoY3ejtBfOf
+         g4+A50IH3vMQZNMz79QokqNj7SL65WJP3cMSCt0rdaC+YOcGnSqRimwm9bDDsLxtBk8q
+         XaupQdIxHW/Zum+qry/aDNgz8lqZHNbKalIWd9WVy9qHRpz6J59avNIG029Z4B8SrG3A
+         ypzVOllfc8Z81Rc00zVhvSFxQLZQZOYBWha8HnYzkUy5qqI7pCu0OmutuYBSgmglzHAv
+         2cQhBTw1zcV/gjCcIblBexjgVkLy+I22K20/mI3z2PqKUj/ehmOuUDgWpX2O6wFvWvyz
+         qE7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679437203;
+        d=1e100.net; s=20210112; t=1679437391;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3d30Yo9IkuDAuQ71lplDlZlFi1tH3/S4QrO8CaL0yaU=;
-        b=I5RJlCKxvn1OtPUCr0ZebmwmQ/YfDK99TujASOIhliTdSIYqOxnwo1MsbzTAbo3mfx
-         d+8x1iOoL/jvqMzDhQy9h9zz20FyEbvZPPT3wfaYu1ZXp6eBqwqw1cZ0lMwY7BzQGh5e
-         MmXoTY5CDFW1OcRVX1dxFXiwGOkYKnYsB3JcoplAJZBbs6rxL/601BGOVqHm5lD+7Z2m
-         egW9uuJwxgIo5/B10M4C/G9YDk1f9wz/IrwRq7blFE92xvvg2S0buokR3bDjmzy066ea
-         3INGDaGXW0ZLNVVRtutT7LeSlUY1Mq1xII8Ctcf47gYLCKFiYvq+E1wb+m45RbhENKre
-         82xA==
-X-Gm-Message-State: AO0yUKXxpFtTkjQqqtjszYUIc64fywnRwtfSYtR+IEV9ZOM1GbSvIik7
-        G1ILyROJI1EPf9ExF+7qwVGFY2TfHD7KNeDdGcond82OOj+CSCGlRVwM63kmUPxvLQmpB11tO/C
-        6HLR8YLvwwUsdI+o+rJ0kyrCv
-X-Received: by 2002:a05:6870:461c:b0:17a:cabc:c92c with SMTP id z28-20020a056870461c00b0017acabcc92cmr389500oao.4.1679437202780;
-        Tue, 21 Mar 2023 15:20:02 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+U0ekkEh5oox/1FTDAwz5G/lXb0i1Zm4idONxXrNRjXje54uB3CMGHl647zfImhCphOO1Nqw==
-X-Received: by 2002:a05:6870:461c:b0:17a:cabc:c92c with SMTP id z28-20020a056870461c00b0017acabcc92cmr389491oao.4.1679437202547;
-        Tue, 21 Mar 2023 15:20:02 -0700 (PDT)
-Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id x5-20020a9d6285000000b0069d4e5284fdsm5566268otk.7.2023.03.21.15.20.00
+        bh=Zrv9jJ3AdCNTWt85MeiC3aT4ke6dH7Ht0E0gm4oJlV8=;
+        b=eJBjZRxzJr0YtIT9ESl2atHaEhco5adGTGJTllpn449Is8jncIPoK3dPCwttAt7CyB
+         bm/mOu7Puan6rQythGhTZ7Bc7UyYRpkuhnbrICOTHPzrs8h7oWSZx55AARxiQlH2VxAA
+         /JVFx7AAU34+16GQFBMQPk/OyjO42FqFLzb3Byhtd/LLnbqEKDAmttvodC8MGIzpodrS
+         rLaqbWtKpzliY5WChWh4iuTOBob64I8xiQm17iuhgPyTcfAn54vVVw4XrvGufcm8TvYz
+         Z/cnEX01YTd5D97PDlniE9vj4jlPNDZV95dqhdbodNhQW7ZaGFm+iDJ+m1wqbqjkHBUM
+         67NQ==
+X-Gm-Message-State: AO0yUKXlRH0etFKc0GA7D2DzoTLbhMDKvyYjwtHVNo57gVEEyeCXh9yX
+        tlILVEVBjZYYKnCiI5TH/vv8cNf6JyI=
+X-Google-Smtp-Source: AK7set+sOwGkE9gD00SBPRoBBMoB3Sd/0ySHtdInDmTC+zCnUdcvq7WmAJ8v5qBRgJIXhPUVqKlNKw==
+X-Received: by 2002:a05:600c:2251:b0:3ea:f75d:4626 with SMTP id a17-20020a05600c225100b003eaf75d4626mr3467150wmm.38.1679437390810;
+        Tue, 21 Mar 2023 15:23:10 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b003e7f1086660sm21168331wmb.15.2023.03.21.15.23.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 15:20:02 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 17:19:58 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, bhupesh.sharma@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-Subject: Re: [PATCH net-next v2 09/12] net: stmmac: Add EMAC3 variant of
- dwmac4
-Message-ID: <20230321221958.e3s7mbpxp5hpm7su@halaney-x13s>
-References: <20230320221617.236323-1-ahalaney@redhat.com>
- <20230320221617.236323-10-ahalaney@redhat.com>
- <20230320204153.21736840@kernel.org>
+        Tue, 21 Mar 2023 15:23:10 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 22:23:08 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     mm-commits@vger.kernel.org, akpm@linux-foundation.org
+Subject: Re: + mm-vmalloc-convert-vread-to-vread_iter-fix.patch added to
+ mm-unstable branch
+Message-ID: <ec52646c-b5a2-4a67-9a6b-333c81aa29df@lucifer.local>
+References: <20230321213633.7DE54C433D2@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320204153.21736840@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230321213633.7DE54C433D2@smtp.kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 08:41:53PM -0700, Jakub Kicinski wrote:
-> On Mon, 20 Mar 2023 17:16:14 -0500 Andrew Halaney wrote:
-> > The next approach that was checked was to have a function pointer
-> > embedded inside a structure that does the appropriate conversion based
-> > on the variant that's in use. However, some of the function definitions
-> > are like the following:
-> > 
-> >     void emac3_set_rx_ring_len(void __iomem *ioaddr, u32 len, u32 chan)
-> 
-> I checked a couple of callbacks and they seem to all be called with
-> priv->iomem as an arg, so there is no strong reason to pass iomem
-> instead of priv / hw. Or at least not to pass both..
-> 
-> I think that's a better approach than adding the wrappers :(
-> 
-> Are you familiar with coccinelle / spatch? It's often better than 
-> just regexps for refactoring, maybe it can help?
-> 
+On Tue, Mar 21, 2023 at 02:36:32PM -0700, Andrew Morton wrote:
+>
+> The patch titled
+>      Subject: mm-vmalloc-convert-vread-to-vread_iter-fix
+> has been added to the -mm mm-unstable branch.  Its filename is
+>      mm-vmalloc-convert-vread-to-vread_iter-fix.patch
+>
+> This patch will shortly appear at
+>      https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-vmalloc-convert-vread-to-vread_iter-fix.patch
+>
+> This patch will later appear in the mm-unstable branch at
+>     git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>
+> Before you just go and hit "reply", please:
+>    a) Consider who else should be cc'ed
+>    b) Prefer to cc a suitable mailing list as well
+>    c) Ideally: find the original patch on the mailing list and do a
+>       reply-to-all to that, adding suitable additional cc's
+>
+> *** Remember to use Documentation/process/submit-checklist.rst when testing your code ***
+>
+> The -mm tree is included into linux-next via the mm-everything
+> branch at git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> and is updated there every 2-3 working days
+>
+> ------------------------------------------------------
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: mm-vmalloc-convert-vread-to-vread_iter-fix
+> Date: Tue Mar 21 02:34:51 PM PDT 2023
+>
+> fix nommu build
+>
+> Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>
+>
+> --- a/mm/nommu.c~mm-vmalloc-convert-vread-to-vread_iter-fix
+> +++ a/mm/nommu.c
+> @@ -199,7 +199,7 @@ unsigned long vmalloc_to_pfn(const void
+>  }
+>  EXPORT_SYMBOL(vmalloc_to_pfn);
+>
+> -long vread_iter(struct iov_iter *iter, char *addr, size_t count)
+> +long vread_iter(struct iov_iter *iter, const char *addr, size_t count)
 
-No worries, I'll try and refactor as you mentioned. Looking at it some
-this afternoon makes me think I'll try something like this:
+Apologies, missed that. Will make sure it's included in any future respin.
 
-    diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
-    index 16a7421715cb..75c55f696c7a 100644
-    --- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
-    +++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
-    @@ -12,7 +12,7 @@
-     ({ \
-            int __result = -EINVAL; \
-            if ((__priv)->hw->__module && (__priv)->hw->__module->__cname) { \
-    -               (__priv)->hw->__module->__cname((__arg0), ##__args); \
-    +               (__priv)->hw->__module->__cname((__priv), (__arg0), ##__args); \
-                    __result = 0; \
-            } \
-            __result; \
-    @@ -21,7 +21,7 @@
-     ({ \
-            int __result = -EINVAL; \
-            if ((__priv)->hw->__module && (__priv)->hw->__module->__cname) \
-    -               __result = (__priv)->hw->__module->__cname((__arg0), ##__args); \
-    +               __result = (__priv)->hw->__module->__cname((__priv), (__arg0), ##__args); \
-            __result; \
-     })
-     
-    @@ -34,68 +34,68 @@ struct dma_edesc;
-     /* Descriptors helpers */
-     struct stmmac_desc_ops {
-            /* DMA RX descriptor ring initialization */
-    -       void (*init_rx_desc)(struct dma_desc *p, int disable_rx_ic, int mode,
-    -                       int end, int bfsize);
-    +       void (*init_rx_desc)(struct stmmac_priv *priv, struct dma_desc *p,
-    +                            int disable_rx_ic, int mode, int end, int bfsize);
-            /* DMA TX descriptor ring initialization */
-    (...)
-
-and then, I'll add something like:
-
-    diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-    index a152678b82b7..f5f406a09ae3 100644
-    --- a/include/linux/stmmac.h
-    +++ b/include/linux/stmmac.h
-    @@ -273,5 +273,7 @@ struct plat_stmmacenet_data {
-            bool use_phy_wol;
-            bool sph_disable;
-            bool serdes_up_after_phy_linkup;
-    +       u32 mtl_base;
-    +       u32 mtl_offset;
-     };
-     #endif
-
-and rewrite:
-
-    #define MTL_CHANX_BASE_ADDR(x)		(MTL_CHAN_BASE_ADDR + \
-                                            (x * MTL_CHAN_BASE_OFFSET))
-
-to use mtl_base/offset if they exist, and so on for the DMA versions,
-etc...
-
-I'm sure I'll probably run into some issue and change course slightly,
-but thought I'd post a hint of the path to make sure I'm not way off the
-mark.
-
-Thanks for your feedback,
-Andrew
-
+>  {
+>  	/* Don't allow overflow */
+>  	if ((unsigned long) addr + count < count)
+> _
+>
+> Patches currently in -mm which might be from akpm@linux-foundation.org are
+>
+> mm-page_alloc-reduce-page-alloc-free-sanity-checks-checkpatch-fixes.patch
+> mm-page_alloc-reduce-page-alloc-free-sanity-checks-fix.patch
+> mm-userfaultfd-support-wp-on-multiple-vmas-fix.patch
+> mm-add-new-api-to-enable-ksm-per-process-fix.patch
+> mm-treewide-redefine-max_order-sanely-fix-2.patch
+> mm-treewide-redefine-max_order-sanely-fix-3-fix.patch
+> memcg-do-not-drain-charge-pcp-caches-on-remote-isolated-cpus-fix.patch
+> vmstat-add-pcp-remote-node-draining-via-cpu_vm_stats_fold-fix.patch
+> mm-vmalloc-convert-vread-to-vread_iter-fix.patch
+> scripts-link-vmlinuxsh-fix-error-message-presentation.patch
+> notifiers-add-tracepoints-to-the-notifiers-infrastructure-checkpatch-fixes.patch
+>
