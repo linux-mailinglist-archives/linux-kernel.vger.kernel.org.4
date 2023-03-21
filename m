@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5732C6C2E29
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6C16C2E2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjCUJpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229980AbjCUJpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCUJov (ORCPT
+        with ESMTP id S229619AbjCUJph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:44:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19FC39296;
-        Tue, 21 Mar 2023 02:44:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB01961AAD;
-        Tue, 21 Mar 2023 09:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E331EC433D2;
-        Tue, 21 Mar 2023 09:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679391881;
-        bh=4y+jXrbZ1bwtYeyd/jWXn/dcnAO7cq768MGFDANWHkc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L6HCpffsLA9OJA1sfIuIL7YvwpZ91R8vkJr4iPuvRfYbUFjlCO+r3fp4TQ1qHtnu6
-         9eE2cOWxhtweB7phbEkyScFa69OavRx3HHRhP3vbYPYbmxPBxkOZQR67snvduKArMX
-         p30idcwiMDOfSPE2+DDYCaJEi5vYpQxH4WxGWUZIKLOnedd6e0X2LpIxr06vJIPq7D
-         EEpo7f1J3MAbxUzBAZVgwBvO8D3Y93r14BpX1sRmGhCBfhb8XIiRE5BD0Sz7ZgQOmI
-         bxJIoi4yIzDBFdRq6WoUHy35RWE+yg2cTEghwngWIYHCm505V/3bSLLX6CURfSNkLC
-         tdqqTpE2jnJcQ==
-Message-ID: <0f0382f0-26d0-c217-93d2-c436c5209a2b@kernel.org>
-Date:   Tue, 21 Mar 2023 11:44:36 +0200
+        Tue, 21 Mar 2023 05:45:37 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01D02F06C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:45:35 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id x3so57134301edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679391934;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pvHJKDHY8iATaKDHrW52pjTQ08nKOuxTNUz703I9tcI=;
+        b=QF1em8XfANrrX2hd0qUpb9+biEigvVdSjSiMZ1s4tBHGBwvYHECk1p3p97LYvFK2F9
+         CIYIW2mA1NCiIkNkIGqezcyFktlqynC7ybw2T2fUtrcjOioHVNLr5sPyuzD46G+tyY10
+         +5hBFbZgzQUblxiRP+PBZihqp4v0GOImKvBPxsRf2iPJuJOPM31IR/GyQGJKY6L2agk1
+         bmb6AGFXQAuNhAlxTKoWRvtV8Xd7TcodxOBjpQwVKlHVFl4G63GuyIf5SoE3SMHD5IoF
+         JMMvK343iL12tIkMm1KrOXRVFaAdr429SylUvi+J2dCRPxqV5LEw97Jf+18toonQUxDu
+         weng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679391934;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pvHJKDHY8iATaKDHrW52pjTQ08nKOuxTNUz703I9tcI=;
+        b=SAlpIkzSn4K68bqpyJCEzPVgEXOfkLktxr3GmUDUXKyFfqbbK6jgqkNSyEgO7BM6yt
+         1KX9ON3xV3J8op+3BPVYtiqInlpC7lvp8Q2phux3IrZ/ypoik9D9EGPXq8vcru80v5gy
+         2WF147lAjS+iEABJFtyN96MGm58xEySjRcp9V0Q00upv4hrhn15tW8viRWvwzqtiegbN
+         aviIZoSXWiip9/aQSyDSi4Lw08Bss2cpwVrPySVGhQoLiVg6afIH+Nw+Fgc1QKUxofmc
+         xP6L+eEgzZ+fAoe+SuHcqVbt26oXmWLe5v7FUg4WslXst+EDjgLZEjdq1Z8D7VHiNTgQ
+         gTlQ==
+X-Gm-Message-State: AO0yUKVnhzWP60HyjVz2g+ee8pfcZ4Bk9J3AoPeqazgj2HVDagT45zUT
+        +qX0kCsEPCxZklmN1UBmmon7Kw==
+X-Google-Smtp-Source: AK7set+UvWU6OCYe+wROsnxPFIUDBtUafE9x7WbzBRosjBUR7fMgUbvdG6+1FyRd/dRlmhtgpyT0+Q==
+X-Received: by 2002:aa7:d38e:0:b0:4a3:43c1:8430 with SMTP id x14-20020aa7d38e000000b004a343c18430mr15479165edq.4.1679391934324;
+        Tue, 21 Mar 2023 02:45:34 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id b44-20020a509f2f000000b004c09527d62dsm6002460edf.30.2023.03.21.02.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 02:45:33 -0700 (PDT)
+Message-ID: <5687e3a0-ed1b-be16-f8f6-5c77a8787c50@linaro.org>
+Date:   Tue, 21 Mar 2023 09:45:32 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 1/2] dt-bindings: usb: snps,dwc3: Add
- 'snps,gadget-keep-connect-sys-sleep'
+Subject: Re: [PATCH 2/2] misc: fastrpc: reject new invocations during device
+ removal
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thinh.Nguyen@synopsys.com, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, vigneshr@ti.com, srk@ti.com,
-        r-gunasekaran@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230320093447.32105-1-rogerq@kernel.org>
- <20230320093447.32105-2-rogerq@kernel.org>
- <20230320132252.GA1440894-robh@kernel.org>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230320132252.GA1440894-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Richard Acayan <mailingradian@gmail.com>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Escande <thierry.escande@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230130222716.7016-1-mailingradian@gmail.com>
+ <20230130222716.7016-3-mailingradian@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230130222716.7016-3-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,82 +82,156 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 20/03/2023 15:22, Rob Herring wrote:
-> On Mon, Mar 20, 2023 at 11:34:46AM +0200, Roger Quadros wrote:
->> The current USB gadget driver behaviour is to stop the controller
->> and disconnect from the bus during System sleep.
+On 30/01/2023 22:27, Richard Acayan wrote:
+> The channel's rpmsg object allows new invocations to be made. After old
+> invocations are already interrupted, the driver shouldn't try to invoke
+> anymore. Invalidating the rpmsg at the end of the driver removal
+> function makes it easy to cause a race condition in userspace. Even
+> closing a file descriptor before the driver finishes its cleanup can
+> cause an invocation via fastrpc_release_current_dsp_process() and
+> subsequent timeout.
 > 
-> What's USB gadget? ;)
-
-:)
-
+> Invalidate the channel before the invocations are interrupted to make
+> sure that no invocations can be created to hang after the device closes.
 > 
->> The 'snps,gadget-keep-connect-sys-sleep' property can be used to
->> change this behaviour and keep the controller active and connected
->> to the bus during System sleep. This is useful for applications
->> that want to enter a low power state when USB is suspended but
->> remain connected so they can resume activity on USB resume.
->>
->> This feature introduces a new constraint if Gadget driver is connected
->> to USB host: i.e.  the gadget must be in USB suspend state to allow
->> a System sleep as we cannot process any USB transactions
->> when in System sleep.
->>
->> The system hardware is responsible to detect the end of USB suspend
->> and wake up the system so we can begin processing the USB transactions
->> as soon as possible.
+
+------------->cut<-------------
+> Demonstration of the bug as performed on a Google Pixel 3a with
+> devicetree patches:
 > 
-> Sounds like something the user/OS would want to choose rather than fixed 
-> by your board's firmware.
-
-Yes.
-
+> 	#include <fcntl.h>
+> 	#include <misc/fastrpc.h>
+> 	#include <stdint.h>
+> 	#include <stdio.h>
+> 	#include <string.h>
+> 	#include <sys/ioctl.h>
+> 	#include <unistd.h>
 > 
-> Is this somehow DWC3 specific? If not, why a DWC3 specific property?
-
-This is not DWC3 specific. 
-
-Should we make this a UDC class device's sysfs attribute instead?
-Only concern is that in dual-role case, if a role switch from
-device mode to host mode and back to device mode happens, we loose
-the UDC device's attributes as we re-init the UDC device.
-
-Or should we make it a udc_core module parameter? This should be
-persistent between role switches.
-
+> 	static int remotectl_open(int fd,
+> 				  const char *name,
+> 				  uint32_t *handle)
+> 	{
+> 		struct fastrpc_invoke invoke;
+> 		struct fastrpc_invoke_args args[4];
+> 		struct {
+> 			uint32_t namelen;
+> 			uint32_t errlen;
+> 		} in;
+> 		struct {
+> 			uint32_t handle;
+> 			uint32_t err;
+> 		} out;
+> 		char errstr[256];
+> 		int ret;
 > 
->>
->> Cc: devicetree@vger.kernel.org
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index be36956af53b..1ce8008e7fef 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -262,6 +262,11 @@ properties:
->>        asserts utmi_sleep_n.
->>      type: boolean
->>  
->> +  snps,gadget-keep-connect-sys-sleep:
->> +    description:
->> +      If True then gadget driver will not disconnect during system sleep.
->> +      System sleep will not be allowed if gadget is not already in USB suspend.
+> 		// Remoteproc expects to receive a null terminator
+> 		in.namelen = strlen(name) + 1;
+> 		in.errlen = 256;
 > 
-> 'gadget' is a Linuxism.
-
-Got it. Will avoid using it ;)
-
+> 		args[0].ptr = (__u64) &in;
+> 		args[0].length = sizeof(in);
+> 		args[0].fd = -1;
 > 
->> +
->>    snps,hird-threshold:
->>      description: HIRD threshold
->>      $ref: /schemas/types.yaml#/definitions/uint8
->> -- 
->> 2.34.1
->>
+> 		args[1].ptr = (__u64) name;
+> 		args[1].length = in.namelen;
+> 		args[1].fd = -1;
+> 
+> 		args[2].ptr = (__u64) &out;
+> 		args[2].length = sizeof(out);
+> 		args[2].fd = -1;
+> 
+> 		args[3].ptr = (__u64) errstr;
+> 		args[3].length = 256;
+> 		args[3].fd = -1;
+> 
+> 		invoke.handle = 0;
+> 		invoke.sc = 0x00020200;
+> 		invoke.args = (__u64) args;
+> 
+> 		ret = ioctl(fd, FASTRPC_IOCTL_INVOKE, (__u64) &invoke);
+> 
+> 		if (!ret)
+> 			*handle = out.handle;
+> 
+> 		return ret;
+> 	}
+> 
+> 	int main()
+> 	{
+> 		struct fastrpc_init_create_static create;
+> 		uint32_t handle;
+> 		int fd, ret;
+> 
+> 		fd = open("/dev/fastrpc-adsp", O_RDWR);
+> 		if (fd == -1) {
+> 			perror("Could not open /dev/fastrpc-adsp");
+> 			return 1;
+> 		}
+> 
+> 		ret = ioctl(fd, FASTRPC_IOCTL_INIT_ATTACH_SNS, NULL);
+> 		if (ret) {
+> 			perror("Could not attach to sensorspd");
+> 			goto close_dev;
+> 		}
+> 
+> 		/*
+> 		 * Under normal circumstances, the remote processor
+> 		 * would request a file from a different client, and
+> 		 * quickly find out that there is no such file. When
+> 		 * this other client is not running, this procedure call
+> 		 * conveniently waits for the ADSP to crash.
+> 		 */
+> 		ret = remotectl_open(fd, "a", &handle);
+> 		if (ret == -1)
+> 			perror("Could not open CHRE interface");
+> 
+> 	close_dev:
+> 		// This takes 10 seconds
+> 		printf("Closing file descriptor\n");
+> 		close(fd);
+> 		printf("Closed file descriptor\n");
+> 
+> 		return 0;
+> 	}
+> 
+------------->cut<-------------
 
-cheers,
--roger
+move this after --- in commit log so that this is not part of commit log.
+
+> Fixes: c68cfb718c8f ("misc: fastrpc: Add support for context Invoke method")
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>   drivers/misc/fastrpc.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index 2334a4fd5869..c8a36b9cf4fe 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -2351,7 +2351,9 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
+>   	struct fastrpc_user *user;
+>   	unsigned long flags;
+>   
+> +	// No invocations past this point
+use /* */ style commenting, as its preferred one.
+
+Once these are fixed
+
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+>   	spin_lock_irqsave(&cctx->lock, flags);
+> +	cctx->rpdev = NULL;
+>   	list_for_each_entry(user, &cctx->users, user)
+>   		fastrpc_notify_users(user);
+>   	spin_unlock_irqrestore(&cctx->lock, flags);
+> @@ -2370,7 +2372,6 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
+>   
+>   	of_platform_depopulate(&rpdev->dev);
+>   
+> -	cctx->rpdev = NULL;
+>   	fastrpc_channel_ctx_put(cctx);
+>   }
+>   
