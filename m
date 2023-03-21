@@ -2,125 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6866C36AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C7D6C36C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjCUQON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        id S229810AbjCUQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCUQOL (ORCPT
+        with ESMTP id S229506AbjCUQRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:14:11 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC35BB9C;
-        Tue, 21 Mar 2023 09:14:07 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LGDkJZ020197;
-        Tue, 21 Mar 2023 16:13:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=STLxretgSrKorO1inoaxrMl0MOAruib27t8XQDWlDD4=;
- b=Z2IqUBmDfKxFh4ISuw13EY5Ax8yKtY1doEku0tmBmIAddgbUVJV4FcjXhTGXNIjMvxiA
- g3CeDUmt+b3qrk9mtlUAbZghTfmNmFsh6dCx+Mqpv7GW+kY2EavSBmmgsCN/JgemYywH
- PxIDK2Pcu681smO5QhAqSlTu/Rf3fNn30uPe34IeDDDhqEKomhExaWBtuVSVaXKTuYxs
- wEyVr2PlZit1FN19x/g1PehPY2Tac9ivpj4amO5RBafsgHvThlJPyLFIMgGlYO73N6u9
- +eFfN9tZ0HgbMNqj+HyO1SR32dUdX2e9662jaHX8WWrZ+i1jAWuAxwpD12etrxeQkx6g dQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfc2pru93-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 16:13:46 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32LGDde4011062
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 16:13:39 GMT
-Received: from [10.216.40.180] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Mar
- 2023 09:13:35 -0700
-Message-ID: <f48da7ea-0c09-a2fc-0ecc-55c946189fb5@quicinc.com>
-Date:   Tue, 21 Mar 2023 21:43:31 +0530
+        Tue, 21 Mar 2023 12:17:17 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD251E5E8;
+        Tue, 21 Mar 2023 09:17:15 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32LGGrk6066591;
+        Tue, 21 Mar 2023 11:16:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679415413;
+        bh=+rl/WasPCbJZG+4H6jTQdufMAqEE/slW6v5BBuCLdXs=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=VcmZqk52HQAn3ExxCJE8NrkOkBaXJqDF39vT00/KF25X62WIxrRNgiEqwEpWw2LAg
+         alf4CHJ5w7JfaYOq5jVDZ7DycX4chnmcDphqvf82xArUNhOG3YANCJ/R5XHtFv16BA
+         6PbBVmaFoSDlEfMgoHBljQsbx8ZhVQmL3Mkaqsvg=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32LGGrQU006040
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Mar 2023 11:16:53 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Mar 2023 11:16:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Mar 2023 11:16:52 -0500
+Received: from [10.249.131.130] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32LGGlZK119822;
+        Tue, 21 Mar 2023 11:16:48 -0500
+Message-ID: <843d7a47-5887-99ca-e6ed-ced38c278b02@ti.com>
+Date:   Tue, 21 Mar 2023 21:46:47 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 6/6] pstore/ram: Register context with minidump
+ Thunderbird/102.9.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
+ for SGMII mode
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
- <1676978713-7394-7-git-send-email-quic_mojha@quicinc.com>
- <63f7c1de.170a0220.f48b.e137@mx.google.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <63f7c1de.170a0220.f48b.e137@mx.google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+References: <20230321111958.2800005-1-s-vadapalli@ti.com>
+ <20230321111958.2800005-3-s-vadapalli@ti.com>
+ <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
+ <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
+ <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: abYGF1QvqcAsn1Ielr8hihDfoxktCQwA
-X-Proofpoint-GUID: abYGF1QvqcAsn1Ielr8hihDfoxktCQwA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- bulkscore=0 spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- clxscore=1015 mlxlogscore=999 adultscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210127
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Russell,
 
+On 21-03-2023 21:08, Russell King (Oracle) wrote:
+> On Tue, Mar 21, 2023 at 07:04:50PM +0530, Siddharth Vadapalli wrote:
+>> Hello Russell,
+>>
+>> On 21-03-2023 16:59, Russell King (Oracle) wrote:
+>>> On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
+>>>> Add support for configuring the CPSW Ethernet Switch in SGMII mode.
+>>>>
+>>>> Depending on the SoC, allow selecting SGMII mode as a supported interface,
+>>>> based on the compatible used.
+>>>>
+>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>> ---
+>>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
+>>>>  1 file changed, 10 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> index cba8db14e160..d2ca1f2035f4 100644
+>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>>> @@ -76,6 +76,7 @@
+>>>>  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
+>>>>  
+>>>>  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
+>>>> +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
+>>>>  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
+>>>
+>>> Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG come
+>>> after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting that
+>>> from its register offset definition?
+>>
+>> Thank you for reviewing the patch. The registers are as follows:
+>> CONTROL_REG offset 0x10
+>> STATUS_REG offset  0x14
+>> MR_ADV_REG offset  0x18
+>>
+>> Since the STATUS_REG is not used in the driver, its offset is omitted.
+>> The next register is the MR_ADV_REG, which I placed after the
+>> CONTROL_REG. I grouped the register offsets together, to represent the
+>> order in which the registers are placed. Due to this, the
+>> MR_ADV_ABILITY_REG offset is placed after the CONTROL_REG offset define.
+>>
+>> Please let me know if I should move it after the CONTROL_MR_AN_ENABLE
+>> define instead.
+> 
+> Well, it's up to you - whether you wish to group the register offsets
+> separately from the bit definitions for those registers, or whether
+> you wish to describe the register offset and its associated bit
+> definitions in one group before moving on to the next register.
+> 
+>>> If the advertisement register is at 0x18, and the lower 16 bits is the
+>>> advertisement, are the link partner advertisement found in the upper
+>>> 16 bits?
+>>
+>> The MR_LP_ADV_ABILITY_REG is at offset 0x020, which is the the register
+>> corresponding to the Link Partner advertised value. Also, the
+>> AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE Bit is in the CONTROL_REG. The CPSW
+>> Hardware specification describes the process of configuring the CPSW MAC
+>> for SGMII mode as follows:
+>> 1. Write 0x1 (ADVERTISE_SGMII) to the MR_ADV_ABILITY_REG register.
+>> 2. Enable auto-negotiation in the CONTROL_REG by setting the
+>> AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE bit.
+> 
+> Good to hear that there is a link partner register.
+> 
+>>>>  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
+>>>> @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+>>>>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>>>>  	struct am65_cpsw_common *common = port->common;
+>>>>  
+>>>> -	if (common->pdata.extra_modes & BIT(state->interface))
+>>>> +	if (common->pdata.extra_modes & BIT(state->interface)) {
+>>>> +		if (state->interface == PHY_INTERFACE_MODE_SGMII)
+>>>> +			writel(ADVERTISE_SGMII,
+>>>> +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+>>>> +
+>>>
+>>> I think we can do better with this, by implementing proper PCS support.
+>>>
+>>> It seems manufacturers tend to use bought-in IP for this, so have a
+>>> look at drivers/net/pcs/ to see whether any of those (or the one in
+>>> the Mediatek patch set on netdev that has recently been applied) will
+>>> idrive your hardware.
+>>>
+>>> However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+>>> I suspect you won't find a compatible implementation.
+>>
+>> I have tested with an SGMII Ethernet PHY in the standard SGMII MAC2PHY
+>> configuration. I am not sure if PCS support will be required or not. I
+>> hope that the information shared above by me regarding the CPSW
+>> Hardware's specification for configuring it in SGMII mode will help
+>> determine what the right approach might be. Please let me know whether
+>> the current implementation is acceptable or PCS support is necessary.
+> 
+> Nevertheless, this SGMII block is a PCS, and if you're going to want to
+> support inband mode (e.g. to read the SGMII word from the PHY), or if
+> someone ever wants to use 1000base-X, you're going to need to implement
+> this properly as a PCS.
+> 
+> That said, it can be converted later, so isn't a blocking sisue.
 
-On 2/24/2023 1:13 AM, Kees Cook wrote:
-> On Tue, Feb 21, 2023 at 04:55:13PM +0530, Mukesh Ojha wrote:
->> There are system which does not uses pstore directly but
->> may have the interest in the context saved by pstore.
->> Register pstore regions with minidump so that it get
->> dumped on minidump collection.
-> 
-> Okay, so, this is a really interesting case -- it's a RAM backend that
-> is already found on a system by pstore via device tree, but there is
-> _another_ RAM overlay (minidump) that would like to know more about how
-> the pstore ram backend carves up the memory regions so it can examine
-> them itself too. (i.e. it's another "interface" like the pstorefs.)
-> 
-> So we need to provide the mapping back to the overlay. It feels to me
-> like the logic for this needs to live in the minidump driver itself
-> (rather than in the pstore RAM backend). Specifically, it wants to know
-> about all the operational frontends (dmesg, console, ftrace, pmsg) with
-> their virt & phys addresses and size.
-> 
-> The frontends are defined via enum pstore_type_id, and the other values
-> are "normal" types, so it should be possible to move this logic into
-> minidump instead, leaving a simpler callback. Perhaps something like:
-> 
-> void pstore_region_defined(enum pstore_type_id, void *virt,
-> 			   phys_addr_t phys, size_t size);
-> 
-> How the pstore ram backend should know to call this, though, I'm
-> struggling to find a sensible way. How can it determine if the device
-> tree region is actually contained by a minidump overlay?
+Thank you for clarifying. I will work on converting it to PCS in a
+future series.
 
-
-Do you think, if qcom_minidump_ready() can be used which checks minidump 
-readiness ?
-
--Mukesh
-> 
+Regards,
+Siddharth.
