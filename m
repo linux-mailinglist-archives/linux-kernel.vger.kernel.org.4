@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A406C3DB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C626C3DB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjCUWXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S229757AbjCUWXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCUWXO (ORCPT
+        with ESMTP id S229511AbjCUWXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:23:14 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D856A22C91;
-        Tue, 21 Mar 2023 15:23:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso10356386wmo.0;
-        Tue, 21 Mar 2023 15:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679437391;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zrv9jJ3AdCNTWt85MeiC3aT4ke6dH7Ht0E0gm4oJlV8=;
-        b=fACC/2kzAWcwEXo+61byf3CLolgXqWlPzekcsqtxdx1WdoaLxSxkws7NoY3ejtBfOf
-         g4+A50IH3vMQZNMz79QokqNj7SL65WJP3cMSCt0rdaC+YOcGnSqRimwm9bDDsLxtBk8q
-         XaupQdIxHW/Zum+qry/aDNgz8lqZHNbKalIWd9WVy9qHRpz6J59avNIG029Z4B8SrG3A
-         ypzVOllfc8Z81Rc00zVhvSFxQLZQZOYBWha8HnYzkUy5qqI7pCu0OmutuYBSgmglzHAv
-         2cQhBTw1zcV/gjCcIblBexjgVkLy+I22K20/mI3z2PqKUj/ehmOuUDgWpX2O6wFvWvyz
-         qE7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679437391;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zrv9jJ3AdCNTWt85MeiC3aT4ke6dH7Ht0E0gm4oJlV8=;
-        b=eJBjZRxzJr0YtIT9ESl2atHaEhco5adGTGJTllpn449Is8jncIPoK3dPCwttAt7CyB
-         bm/mOu7Puan6rQythGhTZ7Bc7UyYRpkuhnbrICOTHPzrs8h7oWSZx55AARxiQlH2VxAA
-         /JVFx7AAU34+16GQFBMQPk/OyjO42FqFLzb3Byhtd/LLnbqEKDAmttvodC8MGIzpodrS
-         rLaqbWtKpzliY5WChWh4iuTOBob64I8xiQm17iuhgPyTcfAn54vVVw4XrvGufcm8TvYz
-         Z/cnEX01YTd5D97PDlniE9vj4jlPNDZV95dqhdbodNhQW7ZaGFm+iDJ+m1wqbqjkHBUM
-         67NQ==
-X-Gm-Message-State: AO0yUKXlRH0etFKc0GA7D2DzoTLbhMDKvyYjwtHVNo57gVEEyeCXh9yX
-        tlILVEVBjZYYKnCiI5TH/vv8cNf6JyI=
-X-Google-Smtp-Source: AK7set+sOwGkE9gD00SBPRoBBMoB3Sd/0ySHtdInDmTC+zCnUdcvq7WmAJ8v5qBRgJIXhPUVqKlNKw==
-X-Received: by 2002:a05:600c:2251:b0:3ea:f75d:4626 with SMTP id a17-20020a05600c225100b003eaf75d4626mr3467150wmm.38.1679437390810;
-        Tue, 21 Mar 2023 15:23:10 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b003e7f1086660sm21168331wmb.15.2023.03.21.15.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 15:23:10 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 22:23:08 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mm-commits@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: + mm-vmalloc-convert-vread-to-vread_iter-fix.patch added to
- mm-unstable branch
-Message-ID: <ec52646c-b5a2-4a67-9a6b-333c81aa29df@lucifer.local>
-References: <20230321213633.7DE54C433D2@smtp.kernel.org>
+        Tue, 21 Mar 2023 18:23:48 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB67750983
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:23:47 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 5871C10047C20
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 22:23:47 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id ekOQpXbyuZEg8ekORphCCB; Tue, 21 Mar 2023 22:23:47 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=R+zGpfdX c=1 sm=1 tr=0 ts=641a2e73
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=k__wU0fu6RkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=XkbnGRzfJVSPjv2eceoA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=68pw622V/PIlbs0plkJKcGyovmQ00j3rT7uooePWEwM=; b=dRAY0bMALaR9nbAn2dHaV3Ncr5
+        65Hd7kXknOFEICvEk0oaS7ratrtlFy3DYfvD6kV4qnbi0IlU0d0Wmxtm9MKNIoQTmvVJKiHNEBCsT
+        +PutGq0EXd7qj+zdeAraP4Y7lgHz0Hu03WrGktY//wmDbae+C3UelMnpiEtaJ4V8+PltPFTEULWvC
+        xvkOlzZeDeK5yr15ItfVk7chD9nzVMVQTDlRxkrKwV0gc7B6QJxh7f1qMFofXYD18XVBp9Dr0mDYH
+        kCwJyWwBkHYQmZP0oUF1KZ07+qTuZQeN3xOUCAzA9RPrQDFax/nfuG9RPbpEixPoqAj/8cD5G18/m
+        zYmIkXaA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32770 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pekOO-0008JR-M7;
+        Tue, 21 Mar 2023 16:23:44 -0600
+Subject: Re: [PATCH 6.2 000/214] 6.2.8-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230321180749.921141176@linuxfoundation.org>
+In-Reply-To: <20230321180749.921141176@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <797691b5-d42e-ff9a-dc8a-ed708f814dae@w6rz.net>
+Date:   Tue, 21 Mar 2023 15:23:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321213633.7DE54C433D2@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pekOO-0008JR-M7
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:32770
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 02:36:32PM -0700, Andrew Morton wrote:
+On 3/21/23 11:08 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.8 release.
+> There are 214 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> The patch titled
->      Subject: mm-vmalloc-convert-vread-to-vread_iter-fix
-> has been added to the -mm mm-unstable branch.  Its filename is
->      mm-vmalloc-convert-vread-to-vread_iter-fix.patch
+> Responses should be made by Thu, 23 Mar 2023 18:07:09 +0000.
+> Anything received after that time might be too late.
 >
-> This patch will shortly appear at
->      https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-vmalloc-convert-vread-to-vread_iter-fix.patch
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.8-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
 >
-> This patch will later appear in the mm-unstable branch at
->     git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> thanks,
 >
-> Before you just go and hit "reply", please:
->    a) Consider who else should be cc'ed
->    b) Prefer to cc a suitable mailing list as well
->    c) Ideally: find the original patch on the mailing list and do a
->       reply-to-all to that, adding suitable additional cc's
->
-> *** Remember to use Documentation/process/submit-checklist.rst when testing your code ***
->
-> The -mm tree is included into linux-next via the mm-everything
-> branch at git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> and is updated there every 2-3 working days
->
-> ------------------------------------------------------
-> From: Andrew Morton <akpm@linux-foundation.org>
-> Subject: mm-vmalloc-convert-vread-to-vread_iter-fix
-> Date: Tue Mar 21 02:34:51 PM PDT 2023
->
-> fix nommu build
->
-> Cc: Lorenzo Stoakes <lstoakes@gmail.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
->
->
-> --- a/mm/nommu.c~mm-vmalloc-convert-vread-to-vread_iter-fix
-> +++ a/mm/nommu.c
-> @@ -199,7 +199,7 @@ unsigned long vmalloc_to_pfn(const void
->  }
->  EXPORT_SYMBOL(vmalloc_to_pfn);
->
-> -long vread_iter(struct iov_iter *iter, char *addr, size_t count)
-> +long vread_iter(struct iov_iter *iter, const char *addr, size_t count)
+> greg k-h
 
-Apologies, missed that. Will make sure it's included in any future respin.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
->  {
->  	/* Don't allow overflow */
->  	if ((unsigned long) addr + count < count)
-> _
->
-> Patches currently in -mm which might be from akpm@linux-foundation.org are
->
-> mm-page_alloc-reduce-page-alloc-free-sanity-checks-checkpatch-fixes.patch
-> mm-page_alloc-reduce-page-alloc-free-sanity-checks-fix.patch
-> mm-userfaultfd-support-wp-on-multiple-vmas-fix.patch
-> mm-add-new-api-to-enable-ksm-per-process-fix.patch
-> mm-treewide-redefine-max_order-sanely-fix-2.patch
-> mm-treewide-redefine-max_order-sanely-fix-3-fix.patch
-> memcg-do-not-drain-charge-pcp-caches-on-remote-isolated-cpus-fix.patch
-> vmstat-add-pcp-remote-node-draining-via-cpu_vm_stats_fold-fix.patch
-> mm-vmalloc-convert-vread-to-vread_iter-fix.patch
-> scripts-link-vmlinuxsh-fix-error-message-presentation.patch
-> notifiers-add-tracepoints-to-the-notifiers-infrastructure-checkpatch-fixes.patch
->
+Tested-by: Ron Economos <re@w6rz.net>
+
