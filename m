@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D019D6C31BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A817C6C31C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCUMa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
+        id S229961AbjCUMfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUMax (ORCPT
+        with ESMTP id S229473AbjCUMfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:30:53 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8BE211FF;
-        Tue, 21 Mar 2023 05:30:42 -0700 (PDT)
+        Tue, 21 Mar 2023 08:35:39 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D0F3A4D3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:35:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1679401840;
-        bh=RIk1bW9UJ1N6hwpsv3iiYyeLz4E5i4Xo2Z7MHEEpqjw=;
+        s=default; t=1679402137;
+        bh=WqHd6UmiflAZuHzVPLhpeirTpk1BHvePg3JeMyhBQbE=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=UrurL81bAtGJJ3vZF1m5JCqI4EOjAq6EMSwanOFS3UJhoPWGXuutALltE8o6kYvFf
-         KwIZslmJw9bw6RTmF+BlYodHgJPXwEd/QnWwXEeW33vnD7oE3xdEri+bAtmbZLWbcq
-         wvc+BcyytHLH0o7Y5nGdQySA2P/RCTJsMd3qMBLc=
+        b=bjCHwENxoDjb6bK4lLpiebeF4axazjLESvQBHn8qmKv1JeVbC91tDW/15BCkrCjI8
+         StazifwyGhK3Un1Bpi3TlA2A+8DsIgbuXUx1zbE00u30XESxFaOsqicrNufmwkGRmt
+         bmULJfddPXeEiq/qN2+xZoHBWbynPVnfGHchj5kM=
 Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
         (Client did not present a certificate)
         (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id F2CD46633A;
-        Tue, 21 Mar 2023 08:30:37 -0400 (EDT)
-Message-ID: <75f843b2780fc3c3dcc1d0d8f78f2b955956316b.camel@xry111.site>
-Subject: Re: [PATCH v4 05/29] LoongArch: KVM: Add vcpu related header files
+        by xry111.site (Postfix) with ESMTPSA id B90D765938;
+        Tue, 21 Mar 2023 08:35:35 -0400 (EDT)
+Message-ID: <253a5dfcb7e41e44d15232e1891e7ea9d39dc953.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Check unwind_error() in arch_stack_walk()
 From:   Xi Ruoyao <xry111@xry111.site>
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
-Date:   Tue, 21 Mar 2023 20:30:36 +0800
-In-Reply-To: <20230321035651.598505-6-zhaotianrui@loongson.cn>
-References: <20230321035651.598505-1-zhaotianrui@loongson.cn>
-         <20230321035651.598505-6-zhaotianrui@loongson.cn>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Guenter Roeck <linux@roeck-us.net>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Date:   Tue, 21 Mar 2023 20:35:34 +0800
+In-Reply-To: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,36 +53,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-21 at 11:56 +0800, Tianrui Zhao wrote:
-> +/* Tracepoints for VM exits */
-> +#define kvm_trace_symbol_exit_types=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0\
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0({ KVM_TRACE_EXIT_IDLE,=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"IDLE" },=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0\
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ KVM_TRACE_EXIT_CACHE,=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"CACHE" },=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0\
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ KVM_TRACE_EXIT_SIGNAL,=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"Signal" })
+T24gVHVlLCAyMDIzLTAzLTIxIGF0IDE0OjI5ICswODAwLCBUaWV6aHUgWWFuZyB3cm90ZToKPiBX
+ZSBjYW4gc2VlIHRoZSBmb2xsb3dpbmcgbWVzc2FnZXMgd2l0aCBDT05GSUdfUFJPVkVfTE9DS0lO
+Rz15IG9uCj4gTG9vbmdBcmNoOgo+IAo+IMKgIEJVRzogTUFYX1NUQUNLX1RSQUNFX0VOVFJJRVMg
+dG9vIGxvdyEKPiDCoCB0dXJuaW5nIG9mZiB0aGUgbG9ja2luZyBjb3JyZWN0bmVzcyB2YWxpZGF0
+b3IuCj4gCj4gVGhpcyBpcyBiZWNhdXNlIHN0YWNrX3RyYWNlX3NhdmUoKSByZXR1cm5zIGEgYmln
+IHZhbHVlIGFmdGVyIGNhbGwKPiBhcmNoX3N0YWNrX3dhbGsoKSwgaGVyZSBpcyB0aGUgY2FsbCB0
+cmFjZToKPiAKPiDCoCBzYXZlX3RyYWNlKCkKPiDCoMKgwqAgc3RhY2tfdHJhY2Vfc2F2ZSgpCj4g
+wqDCoMKgwqDCoCBhcmNoX3N0YWNrX3dhbGsoKQo+IMKgwqDCoMKgwqDCoMKgIHN0YWNrX3RyYWNl
+X2NvbnN1bWVfZW50cnkoKQo+IAo+IGFyY2hfc3RhY2tfd2FsaygpIHNob3VsZCByZXR1cm4gaW1t
+ZWRpYXRlbHkgaWYgdW53aW5kX25leHRfZnJhbWUoKQo+IGZhaWxlZCwgbm8gbmVlZCB0byBkbyB0
+aGUgdXNlbGVzcyBsb29wcyB0byBpbmNyZWFzZSB0aGUgdmFsdWUgb2YKPiBjLT5sZW4gaW4gc3Rh
+Y2tfdHJhY2VfY29uc3VtZV9lbnRyeSgpLCB0aGVuIHdlIGNhbiBmaXggdGhlIGFib3ZlCj4gcHJv
+YmxlbS4KPiAKPiBSZXBvcnRlZC1ieTogR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0
+Pgo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC84YTQ0YWQ3MS02OGQyLTQ5MjYt
+ODkyZi03MmJmYzdhNjdlMmFAcm9lY2stdXMubmV0Lwo+IFNpZ25lZC1vZmYtYnk6IFRpZXpodSBZ
+YW5nIDx5YW5ndGllemh1QGxvb25nc29uLmNuPgoKVGhlIGZpeCBtYWtlcyBzZW5zZSwgYnV0IEkn
+bSBhc2tpbmcgdGhlIHNhbWUgcXVlc3Rpb24gYWdhaW4gKHNvcnJ5IGlmCml0J3Mgbm9pc3kpOiBz
+aG91bGQgd2UgQ2Mgc3RhYmxlQHZnZXIua2VybmVsLm9yZyBhbmQvb3IgbWFrZSBhIFBSIGZvcgo2
+LjM/CgpUbyBtZSBhIGJ1ZyBmaXhlcyBzaG91bGQgYmUgYmFja3BvcnRlZCBpbnRvIGFsbCBzdGFi
+bGUgYnJhbmNoZXMgYWZmZWN0ZWQKYnkgdGhlIGJ1ZywgdW5sZXNzIHRoZXJlIGlzIHNvbWUgc2Vy
+aW91cyBkaWZmaWN1bHR5LiAgQXMgNi4zIHJlbGVhc2UKd2lsbCB3b3JrIG9uIGxhdW5jaGVkIDNB
+NTAwMCBib2FyZHMgb3V0LW9mLWJveCwgcGVvcGxlIG1heSB3YW50IHRvIHN0b3AKc3RheWluZyBv
+biB0aGUgbGVhZGluZyBlZGdlIGFuZCB1c2UgYSBMVFMvc3RhYmxlIHJlbGVhc2Ugc2VyaWVzLiBX
+ZQpjYW4ndCBqdXN0IHNheSAob3IgYmVoYXZlIGxpa2UpICJ3ZSBkb24ndCBiYWNrcG9ydCwgcGxl
+YXNlIHVzZSBsYXRlc3QKbWFpbmxpbmUiIElNTyA6KS4KCj4gLS0tCj4gwqBhcmNoL2xvb25nYXJj
+aC9rZXJuZWwvc3RhY2t0cmFjZS5jwqDCoMKgwqDCoCB8IDMgKystCj4gwqBhcmNoL2xvb25nYXJj
+aC9rZXJuZWwvdW53aW5kLmPCoMKgwqDCoMKgwqDCoMKgwqAgfCAxICsKPiDCoGFyY2gvbG9vbmdh
+cmNoL2tlcm5lbC91bndpbmRfcHJvbG9ndWUuYyB8IDQgKysrLQo+IMKgMyBmaWxlcyBjaGFuZ2Vk
+LCA2IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2FyY2gv
+bG9vbmdhcmNoL2tlcm5lbC9zdGFja3RyYWNlLmMgYi9hcmNoL2xvb25nYXJjaC9rZXJuZWwvc3Rh
+Y2t0cmFjZS5jCj4gaW5kZXggM2E2OTBmOS4uN2MxNWJhNSAxMDA2NDQKPiAtLS0gYS9hcmNoL2xv
+b25nYXJjaC9rZXJuZWwvc3RhY2t0cmFjZS5jCj4gKysrIGIvYXJjaC9sb29uZ2FyY2gva2VybmVs
+L3N0YWNrdHJhY2UuYwo+IEBAIC0zMCw3ICszMCw4IEBAIHZvaWQgYXJjaF9zdGFja193YWxrKHN0
+YWNrX3RyYWNlX2NvbnN1bWVfZm4gY29uc3VtZV9lbnRyeSwgdm9pZCAqY29va2llLAo+IMKgCj4g
+wqDCoMKgwqDCoMKgwqDCoHJlZ3MtPnJlZ3NbMV0gPSAwOwo+IMKgwqDCoMKgwqDCoMKgwqBmb3Ig
+KHVud2luZF9zdGFydCgmc3RhdGUsIHRhc2ssIHJlZ3MpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgIXVud2luZF9kb25lKCZzdGF0ZSk7IHVud2luZF9uZXh0X2ZyYW1lKCZzdGF0ZSkpIHsK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAhdW53aW5kX2RvbmUoJnN0YXRlKSAmJiAhdW53aW5k
+X2Vycm9yKCZzdGF0ZSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdW53aW5kX25leHRfZnJh
+bWUoJnN0YXRlKSkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYWRkciA9IHVu
+d2luZF9nZXRfcmV0dXJuX2FkZHJlc3MoJnN0YXRlKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGlmICghYWRkciB8fCAhY29uc3VtZV9lbnRyeShjb29raWUsIGFkZHIpKQo+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+IGRp
+ZmYgLS1naXQgYS9hcmNoL2xvb25nYXJjaC9rZXJuZWwvdW53aW5kLmMgYi9hcmNoL2xvb25nYXJj
+aC9rZXJuZWwvdW53aW5kLmMKPiBpbmRleCBhNDYzZDY5Li5iYTMyNGJhIDEwMDY0NAo+IC0tLSBh
+L2FyY2gvbG9vbmdhcmNoL2tlcm5lbC91bndpbmQuYwo+ICsrKyBiL2FyY2gvbG9vbmdhcmNoL2tl
+cm5lbC91bndpbmQuYwo+IEBAIC0yOCw1ICsyOCw2IEBAIGJvb2wgZGVmYXVsdF9uZXh0X2ZyYW1l
+KHN0cnVjdCB1bndpbmRfc3RhdGUgKnN0YXRlKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoH0gd2hp
+bGUgKCFnZXRfc3RhY2tfaW5mbyhzdGF0ZS0+c3AsIHN0YXRlLT50YXNrLCBpbmZvKSk7Cj4gwqAK
+PiArwqDCoMKgwqDCoMKgwqBzdGF0ZS0+ZXJyb3IgPSB0cnVlOwo+IMKgwqDCoMKgwqDCoMKgwqBy
+ZXR1cm4gZmFsc2U7Cj4gwqB9Cj4gZGlmZiAtLWdpdCBhL2FyY2gvbG9vbmdhcmNoL2tlcm5lbC91
+bndpbmRfcHJvbG9ndWUuYyBiL2FyY2gvbG9vbmdhcmNoL2tlcm5lbC91bndpbmRfcHJvbG9ndWUu
+Ywo+IGluZGV4IDkwOTVmZGUuLjU1YWZjMjcgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9sb29uZ2FyY2gv
+a2VybmVsL3Vud2luZF9wcm9sb2d1ZS5jCj4gKysrIGIvYXJjaC9sb29uZ2FyY2gva2VybmVsL3Vu
+d2luZF9wcm9sb2d1ZS5jCj4gQEAgLTIxMSw3ICsyMTEsNyBAQCBzdGF0aWMgYm9vbCBuZXh0X2Zy
+YW1lKHN0cnVjdCB1bndpbmRfc3RhdGUgKnN0YXRlKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBjID0gcmVncy0+Y3NyX2VyYTsKPiDCoAo+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICh1c2VyX21vZGUo
+cmVncykgfHwgIV9fa2VybmVsX3RleHRfYWRkcmVzcyhwYykpCj4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGZhbHNl
+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGdvdG8gb3V0Owo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgc3RhdGUtPmZpcnN0ID0gdHJ1ZTsKPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0ZS0+cGMgPSBwYzsKPiBAQCAtMjI2
+LDYgKzIyNiw4IEBAIHN0YXRpYyBib29sIG5leHRfZnJhbWUoc3RydWN0IHVud2luZF9zdGF0ZSAq
+c3RhdGUpCj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgfSB3aGlsZSAoIWdldF9zdGFja19pbmZvKHN0
+YXRlLT5zcCwgc3RhdGUtPnRhc2ssIGluZm8pKTsKPiDCoAo+ICtvdXQ6Cj4gK8KgwqDCoMKgwqDC
+oMKgc3RhdGUtPmVycm9yID0gdHJ1ZTsKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGZhbHNlOwo+
+IMKgfQo+IMKgCgotLSAKWGkgUnVveWFvIDx4cnkxMTFAeHJ5MTExLnNpdGU+ClNjaG9vbCBvZiBB
+ZXJvc3BhY2UgU2NpZW5jZSBhbmQgVGVjaG5vbG9neSwgWGlkaWFuIFVuaXZlcnNpdHkK
 
-Looks like there shouldn't be "(" and ")".
-
-> +#define kvm_trace_symbol_aux_op				\
-> +	({ KVM_TRACE_AUX_RESTORE,	"restore" },	\
-> +	{ KVM_TRACE_AUX_SAVE,		"save" },	\
-> +	{ KVM_TRACE_AUX_ENABLE,		"enable" },	\
-> +	{ KVM_TRACE_AUX_DISABLE,	"disable" },	\
-> +	{ KVM_TRACE_AUX_DISCARD,	"discard" })
-
-Likewise.
-
-See the test robot report, and https://godbolt.org/z/bE8q97z1o.
-
-The lesson: if a text book claims "you should always wrap the content of
-a macro in ( ... )", we should burn it in the fire! :)
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
