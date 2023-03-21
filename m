@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7031E6C3B01
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107516C3AFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCUTvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S229768AbjCUTuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjCUTvQ (ORCPT
+        with ESMTP id S229459AbjCUTur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:51:16 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7047858492;
-        Tue, 21 Mar 2023 12:50:35 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 19:50:05 +0000
+        Tue, 21 Mar 2023 15:50:47 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDA04BE8E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:50:24 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 19:50:10 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1679428225; x=1679687425;
-        bh=+p+odlGt4Lpa7j8EN6KwSae2Ae/jbNLZRSBVIgNchK8=;
+        s=protonmail3; t=1679428219; x=1679687419;
+        bh=FNlCN3cHsJdz3JxxhBIbrUQMYy+/cKZuDeBnqnufKaQ=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=ZWimU1u/tRce1Mxz5ecaVPMKqjL4yJUpOxb+ZGSdYyUVD6VkjzFJQjhS+kawVYSzv
-         nw/t3h0YWanoOp6hEZtOc3V//NDlXM1wzgW7elSg4u5fPmUHykFyYvr3Byg/nRRvcw
-         wNXK4RhrTKqBsj6MdgJyNjSiDZ0U92FOKPKmlCC/ks8rwhYJajqoFk4qV+cEUZ05AP
-         B8rTj9FUHq/OXcnoQX8okfDxICJYkJWfB4Wp0v5A9F6Oun6HBMkGxWHfcrPD0kqSIm
-         nQGqAti6lV6lsT++J9p5+yGi6Gs/ltT4YJMaYNFdyIyFeS8b+/6WDgWo4KU39uB7vg
-         a8pZlbHLUerdg==
+        b=Og5rTLKVLPegceIya3psm7F/BerxmDfAFFqiPBwcw8oflNcadzZX9R6uU+QWVPW8O
+         Y9m/o1sNRQzKtYQ6BXCErgut/8YWPXIndUd81bUaiMiklBCVvQ2PvNaOBjAlKDrAFQ
+         RCu1WHJOJPIObRLRMaXKupJNP7Ia66UcCPfunnI3m4HAn5nR3oemQbU+oFkqewylpG
+         Znv3UBP+tMUEanZndB8AqeG3RzPo2Am0W1cNvcKQTAAk2L/8v0vqid3Um/wWSfMI1z
+         3JoGgXoh/xEGgijXgNapaKTnIsq+P4ePMmTSN80lBVUADn/RYJ2V2k0Pb+5CtK1nlr
+         Y2VRfX8RZylag==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -36,8 +36,8 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
 From:   Benno Lossin <y86-dev@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
-Subject: [PATCH v2 4/5] rust: init: add common init-helper functions for `Opaque`
-Message-ID: <20230321194934.908891-5-y86-dev@protonmail.com>
+Subject: [PATCH v2 5/5] rust: sync: reduce stack usage of `UniqueArc::try_new_uninit`
+Message-ID: <20230321194934.908891-6-y86-dev@protonmail.com>
 In-Reply-To: <20230321194934.908891-1-y86-dev@protonmail.com>
 References: <20230321194934.908891-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -54,85 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add helper functions to more easily initialize `Opaque<T>` via FFI.
-These functions take a function pointer to the FFI-initialization
-function and take between 0-4 other arguments. It then returns an
-initializer that uses the FFI function along with the given arguments to
-initialize an `Opaque<T>`.
+`UniqueArc::try_new_uninit` calls `Arc::try_new(MaybeUninit::uninit())`.
+This results in the uninitialized memory being placed on the stack,
+which may be arbitrarily large due to the generic `T` and thus could
+cause a stack overflow for large types.
+
+Change the implementation to use the pin-init API which enables in-place
+initialization. In particular it avoids having to first construct and
+then move the uninitialized memory from the stack into the final location.
 
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 ---
- rust/kernel/init.rs        |  1 +
- rust/kernel/init/common.rs | 42 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
- create mode 100644 rust/kernel/init/common.rs
+ rust/kernel/lib.rs      |  1 -
+ rust/kernel/sync/arc.rs | 12 +++++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index 895845db6f2b..5b8adb8727b2 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -207,6 +207,7 @@ use core::{
-     ptr,
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 3e2777d26ff5..d9df77132fa2 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -27,7 +27,6 @@
+ #[cfg(not(CONFIG_RUST))]
+ compile_error!("Missing kernel configuration for conditional compilation")=
+;
+
+-#[allow(unused_extern_crates)]
+ // Allow proc-macros to refer to `::kernel` inside the `kernel` crate (thi=
+s crate).
+ extern crate self as kernel;
+
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index 5b4f64dd3ac8..0518ff99b6c5 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -18,6 +18,7 @@
+ use crate::{
+     bindings,
+     error::{Error, Result},
++    init,
+     init::{InPlaceInit, Init, PinInit},
+     types::{ForeignOwnable, Opaque},
  };
+@@ -29,6 +30,7 @@ use core::{
+     pin::Pin,
+     ptr::NonNull,
+ };
++use macros::pin_data;
 
-+pub mod common;
- #[doc(hidden)]
- pub mod macros;
+ /// A reference-counted pointer to an instance of `T`.
+ ///
+@@ -121,6 +123,7 @@ pub struct Arc<T: ?Sized> {
+     _p: PhantomData<ArcInner<T>>,
+ }
 
-diff --git a/rust/kernel/init/common.rs b/rust/kernel/init/common.rs
-new file mode 100644
-index 000000000000..f8c6e9dff786
---- /dev/null
-+++ b/rust/kernel/init/common.rs
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: Apache-2.0 OR MIT
-+
-+//! Module containing common kernel initializer functions.
-+
-+use crate::{
-+    init::{self, PinInit},
-+    types::Opaque,
-+};
-+
-+macro_rules! create_func {
-+    ($name:ident $(, $arg_name:ident: $arg_typ:ident)*) =3D> {
-+        /// Create an initializer using the given initializer function fro=
-m C.
-+        ///
-+        /// # Safety
-+        ///
-+        /// The given function **must** under all circumstances initialize=
- the memory location to a
-+        /// valid `T`. If it fails to do so it results in UB.
-+        ///
-+        /// If any parameters are given, those need to be valid for the fu=
-nction. Valid means that
-+        /// calling the function with those parameters complies with the a=
-bove requirement **and**
-+        /// every other requirement on the function itself.
-+        pub unsafe fn $name<T $(, $arg_typ)*>(
-+            init_func: unsafe extern "C" fn(*mut T $(, $arg_name: $arg_typ=
-)*),
-+            $($arg_name: $arg_typ,)*
-+        ) -> impl PinInit<Opaque<T>> {
-+            // SAFETY: The safety contract of this function ensures that `=
-init_func` fully
-+            // initializes `slot`.
-+            unsafe {
-+                init::pin_init_from_closure(move |slot| {
-+                    init_func(Opaque::raw_get(slot) $(, $arg_name)*);
-+                    Ok(())
-+                })
-+            }
-+        }
-+    }
-+}
-+
-+create_func!(ffi_init);
-+create_func!(ffi_init1, arg1: A1);
-+create_func!(ffi_init2, arg1: A1, arg2: A2);
-+create_func!(ffi_init3, arg1: A1, arg2: A2, arg3: A3);
-+create_func!(ffi_init4, arg1: A1, arg2: A2, arg3: A3, arg4: A4);
++#[pin_data]
+ #[repr(C)]
+ struct ArcInner<T: ?Sized> {
+     refcount: Opaque<bindings::refcount_t>,
+@@ -501,9 +504,16 @@ impl<T> UniqueArc<T> {
+
+     /// Tries to allocate a new [`UniqueArc`] instance whose contents are =
+not initialised yet.
+     pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>> {
++        // INVARIANT: The refcount is initialised to a non-zero value.
++        let inner =3D Box::init(init!(ArcInner::<MaybeUninit<T>> {
++            // SAFETY: There are no safety requirements for this FFI call.
++            refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
++            data <- init::uninit(),
++        }))?;
+         Ok(UniqueArc::<MaybeUninit<T>> {
+             // INVARIANT: The newly-created object has a ref-count of 1.
+-            inner: Arc::try_new(MaybeUninit::uninit())?,
++            // SAFETY: The pointer from the `Box` is valid.
++            inner: unsafe { Arc::from_inner(Box::leak(inner).into()) },
+         })
+     }
+ }
 --
 2.39.2
 
