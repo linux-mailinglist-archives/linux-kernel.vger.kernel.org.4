@@ -2,130 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAAC6C2A70
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F796C2A74
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjCUGda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S230250AbjCUGdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCUGd2 (ORCPT
+        with ESMTP id S230252AbjCUGdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:33:28 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A6F3B22B
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:33:01 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id o12so55597058edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:33:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679380380;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+HtQTr70p9g0PFqB21eWyfcsMG//fwSOn6c9K2QaLZg=;
-        b=U0naptLlEpIIIPIujtsOPbCXgtUTGWKYTvhXhVRe0+VrDYAC1jzdgU8unYp+1fWM+a
-         K4s9mQWcd9Fn1xPdQhA70P6yAMxmkXr0MKWS/Aeq6WaKV4Xd0zWw+6FaZMyDHg2IjdgI
-         xvin3/erA8RN5zf2AGuo20nWq7ptInWL+iZC1Q5WBsSFzunxx8rhuySAhR5YoXqBZ0+q
-         xiWd4wr9EGF7jEJRyzJp5ziCZNdy94gtKLqGjvzamsH4wIJFQlZ3DxYWuKrmYz8cGCjp
-         Kht/hVbxz/6z0EpfI+bDtXVah7uiYbSF7kNK8IFD6EtVE2vZU05bF6x9RkVkLZISNlFr
-         Xy2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679380380;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HtQTr70p9g0PFqB21eWyfcsMG//fwSOn6c9K2QaLZg=;
-        b=Q8geUUe5xjfPOjXBVFRWBb2nML3x+kX27EH4aXivCbsUAn3nZgGV0OAMzWzJj8XhJR
-         SKcs0ZDN+OsRHDUTfe3KOhweMHuzmaKIOhvTbp6ky2AhvewmEcbgA8ZAe6LOuJr4il6I
-         3p5tR59WpTY8cCa8o5/MJNr4d9V8w6lGLppyc1L0zBYWs+mr8LhBAJ6z07NQuv0KE5we
-         jY0KGiF9kvAxIfBAAijEJXsgmuePNgSm1pvEMKa88njluZA7gXoKovSbtci+dgSjRWPq
-         glg7k+LB9zcJ/qsKnc6ePMg247lQ1gctzjTpd4vkkxFcYz1FO9PPBj0or4Rp0jxl4fB0
-         wKww==
-X-Gm-Message-State: AO0yUKUs65LzxD+Yzq/Rm884+UcO3H8n9/NMEeaZmpRYsq9H99tnDAkX
-        eJh13NBKYzRJXj7VXThU191TVw==
-X-Google-Smtp-Source: AK7set+X26OM3FXuIWXm2jm5XGPMTjCpHNvsswvRWpweqJQXypouCjDAycl742Es0v6RCKzFZmHJAw==
-X-Received: by 2002:a17:906:86cd:b0:878:545b:e540 with SMTP id j13-20020a17090686cd00b00878545be540mr1633577ejy.51.1679380379982;
-        Mon, 20 Mar 2023 23:32:59 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id a11-20020a17090680cb00b00930d22474dbsm5358277ejx.97.2023.03.20.23.32.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 23:32:59 -0700 (PDT)
-Message-ID: <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
-Date:   Tue, 21 Mar 2023 07:32:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
+        Tue, 21 Mar 2023 02:33:46 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::623])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52823F959
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:33:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VV7x2i8w/0yDdArpo4J8f0IprD/15O2PnE9IAPLYOTWCxGuG5AR73XVxiOFBfG2dRv/fS5oV407LP/feAfN0+TbRhDwe0uW+az/T5pzTrAPoks7nChsmzl9PYtH6DMa4LZ8Hgj1jxCpcmjm9Rbp6KG6w+u8EYKN8K45QsuUHVCxjxt15UbOqoxgwU7BGagi0f/QqwJQnYZ8DooJp2p1Gr9FjSaXHtcsWgudStQlTt5aRBMaG5/VrlJTOf2852IndhM6SM0aJ79E9JJTB4gG9vjtL+5sFKw0ijrE8l5NbFveyDO+3t+KTZnjq4aXYvZNVmQHiYcz5rRZKyeck/3LqvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wZ1A09g7HdbbsFh5LEJf9EbbblXOfY/lrOBfGzWy98s=;
+ b=MDGYGY7Sy6Mu+GTr4B8fY5ccdxQD2o4R5Y3bmQ156bLv19wz4OktGG51XQbMMj35p776h+XVb9obH9tmDaF3ZP4ztu9nY/WABnfNMJiG2zv0dXZI/fvoFcA8ctWv5lNpmy9ZRqBzX8CB4+iIxKNDrY+4dJ7sQY+19KtxyAW1KpiV35DfUsqaeRDYjRCTSIzm9WFn1cwEGVBQiJbCfxdcGw1cis87bp2M2kvhcbMtxonfYDgm3DpbxoEoeuA3ZrdiXHYlv631jC/AvWNFJIsF649kKkF7ugnDi4JgcZ1i8uk5B5fPSn0HNupmuhJpDs7Ebd30iGVKlESKGdkf2KIeVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wZ1A09g7HdbbsFh5LEJf9EbbblXOfY/lrOBfGzWy98s=;
+ b=eEW8QlipeprG8ezzOKSPvgYLuies29DxENeFS4L4K7B2xURzyjWYSbFHOe3aWIJX6E/F1tz1riFFGJXGqd//dxuMelgaN5tO6++pfsoNe7yFkF62n7JPf8gzLHNwT0d5GCKUePSAnhU0F3q2eSZ3iV9vnTvdYNGOf0uY/Ddk85Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by BL1PR12MB5334.namprd12.prod.outlook.com (2603:10b6:208:31d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 06:33:25 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::d8e6:76b5:2c23:1247]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::d8e6:76b5:2c23:1247%6]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 06:33:24 +0000
+Message-ID: <2154046a-2081-606d-a1ea-33fd2d48cce7@amd.com>
+Date:   Tue, 21 Mar 2023 12:03:14 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] perf/x86/ibs: Set data_src.mem_lvl_num as well
 Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
- <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
- <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
- <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
- <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
- <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
- <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230311000642.1270971-1-namhyung@kernel.org>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <20230311000642.1270971-1-namhyung@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0158.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::13) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|BL1PR12MB5334:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3b9ab60-8a2a-409f-0a2d-08db29d62c16
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WtTVl3g6C7VXDQ8Z5gaRQ54+BgBvndKwqBHp1ZL7J4QLVe6pV+LQemA8q7gsS8AaKXs4UE929OiaIjfDNw6YmvyShm/EBCQK6yyjJ1T/jun3GtRYkgG2WTE7FPN16nX8taPOQZFeOJRv90CoKiUpV92VQOtWbTxvtwH/flQarByTqkK6CB0eznRsKyq/SObzbCrBfQFe6QCYzOyEt9dUL+vbO3leUBXe347TMLu33Rv+GD94JmYn5zfIJyBxylK9Y6gQLSRgHNaAs8quODfcjxXzrbcJPQNzgetPK5TMbrkdHZvd+ezCRqhtbH/Fex+e/E0EJLJcJGgfrFQP2CHuBW8wneDA4gQVn0Kv489m311VsXfySvHW1cM8kJzonW7cQ+1wdSjhNeb1gpfKzLL4CindgQi3bZ/QKVvD2yfDwx+VuyO6FhWuCxCrCsD//Ae2rEgcS+AzM3lZP3LQG3BuxYSFYQ96Ee5ZmC2Hx1PxKdEVJwT8UmCfG0NV1T0XbNawBje4nSyONuE4nN2DIw8vNJGPR4V3tIz40tUBcEUw4SeoLh+RXhMgLE4OAYtVO56ZkPmiRm9tepdJ1snl8rJu3YLoVQSnvc0pYLgrozzTI5apa8BYGAZgtRs8vvFh/sHZuq5BKMWWtCuQMKrdbMJw5cCwMhjHro4g4PyjwxyGOdP3DV8T/+Co/AqGgQ4cUDh8yPEf6lOa2paS7G52VzLDZlre7sIeEi7l2xfuHkslMDw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(136003)(396003)(376002)(366004)(451199018)(38100700002)(86362001)(36756003)(31696002)(6506007)(4326008)(6916009)(5660300002)(2906002)(66476007)(66556008)(8936002)(44832011)(66946007)(41300700001)(26005)(2616005)(186003)(6486002)(316002)(54906003)(6512007)(6666004)(478600001)(83380400001)(31686004)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?elFlZEZka2hXUmZjUmpNZFQyT1dteGFwSzN6NHNwcE15L2dLczQ2ejMwUkVK?=
+ =?utf-8?B?UWFKTXVaeFBBTjVLUUwxamx1KzFMamJwdkRnNkJrNk8vNTdPaUxPYm0zS2VU?=
+ =?utf-8?B?dWUxaXhHTDhkR0k3UDFwUk9NZDVRZEFmUDVsTkU0QS9tN3ZVWnAzYTU5aGxS?=
+ =?utf-8?B?YXJDVGF0TnZIZzMycHBJNmpQUkdTRVB4NGVpMHV1WS9jMngvMDRsRzVjSXJY?=
+ =?utf-8?B?MTRrVWVSVmdEKzc2WVJkaUgzaGhFdHQrL29ScGtScU1seXgxWnZDdUhHWHN6?=
+ =?utf-8?B?ajB1MWpDN2lzRWJoZFhuZFpiaS9NYklRTE0yanlDNkYrSGxLLzRuUnpMd0FR?=
+ =?utf-8?B?MDBSQmErMlE0bDBYVVArQ0NjTGtLMmJkOHNscUw5aUVPeE1odHhCQXcyQWhF?=
+ =?utf-8?B?c25xdisrenNqcFBodXpZUklwMnVnMEpDdVBoUFV1cHo2MG94amtrd3REcVBj?=
+ =?utf-8?B?M0xSbjZvRzZFWVp3V2oweDFETmxSSmdnRHJTaXk3UVlWRGluUTZEMURRZGdV?=
+ =?utf-8?B?K2F0TnJQQjRpN2s3MnVHSzlqODk1b1N1cnZMRjJxWE9lVVNRRENFVitaVUtL?=
+ =?utf-8?B?ek9WRnVwNDNia1RSMEtyNnl2bFp2TmMxTkJWVlBvcUdVN1hjNlk0MWJ1ejBL?=
+ =?utf-8?B?Smw2VlA1RktVYkVaNjc1a3ZFYXhLT2N4R1A1bDVFbXEraURXWCsya1hWNU1h?=
+ =?utf-8?B?RWlwQTA5cXNqMlQrbitpNzlvcHJaK09HN1hFVlo5Um9WK0haSGNwN1FQZG1y?=
+ =?utf-8?B?SWRpVXRqdStETmFtU0V2aHp2SkZzbytDdU81TVFmcVJmSlVnWFNvZUNGY0lG?=
+ =?utf-8?B?Y2U2MmhDelJ4cUhqOTBjMzBURmxnVGVIUGszUExCbllJc1BkRFh2OFRpRkd2?=
+ =?utf-8?B?ZlVhM0d3dyszMEhDMlB1djBORThpWHVLbXFYZzlQWFh4SWtVV2MzWEhNQ0tQ?=
+ =?utf-8?B?V29HSDRqcjBLVzUwdzRrTDhYRlhFU2lZMHJlSVJLQjBPVDdvaGluTy8rYkRr?=
+ =?utf-8?B?T2ZCVEpHQThtaHd0Qmw1ZVlxSmhOK0VlS1lscTZEY3ZNa09GK25DTm9OUVVL?=
+ =?utf-8?B?aTNxbUVFekVLNjNQdFhDNWJxYlp2SWZWNXdHbDZUcm1MMURubjR6WDB4dTQw?=
+ =?utf-8?B?RlN3WC9WcWJHMEdhb0E0WFVWN2hMRWRzK1RMalNCSCtDNmEvSFFkTHRNVDNT?=
+ =?utf-8?B?dEcxeTkrNnhZbWxpdHVHelZqVkJXU2pjak5weENoOGs4Wm43bEhhTUZqZ0N0?=
+ =?utf-8?B?a2NaRW1EM1cxejIzNU93aGpmbEZtMDZ3Zm8wdTczd1ZFeDExR0NmN2NMNEZr?=
+ =?utf-8?B?N3lQcjRHQVl1UUYrR0VWSjhoVzlSdTZmNjNhMm16bWFJRnZBanVlVmN1MjVj?=
+ =?utf-8?B?OTRWWVBCT2djUTBZTm1tK2lFTGVCbWg5dnhKY2ZSbVBhMGNWUlVJMG1tb0VF?=
+ =?utf-8?B?aWZsWVcrRmt5SWthWVVnSEZzUUh2d2xIcE0yZ0c2ZmxwMWFWTnFSeFdJM1JJ?=
+ =?utf-8?B?UHU5Tzdmb1ZiWktTTlN4TjVMNGpURE9IL21SUktCdlVUeEcyT2hQMjZZQ1N2?=
+ =?utf-8?B?SzRYMmg3WXJ2dzluU2pIeWNwNUdNWXlVOWRGMm4xY1JtYTlkYTB4bjRQMUd1?=
+ =?utf-8?B?M3J4TXRjYzBZQ2lodFJ2YkUzTURGVExWSHEwaXZ4SFZmMXh3Y29pQ1YrbmRS?=
+ =?utf-8?B?ZUc1VnVxSFpCWnpwVVVBQWo3eUFFVUtEMmJzMzdMQ3B5MmtxZjd6cWVlT0lh?=
+ =?utf-8?B?MTVtckN0RWpIdXBqeURxSFNnVUlrcnM4bUlaZ29vOWRlYW1xUTZTWnl2N29P?=
+ =?utf-8?B?MGVITnhvZXlxQTNlTWlHODZUbGV0N0xUQ0lFaExyY3YyL2NJMUFQeld5UGRx?=
+ =?utf-8?B?cjFNSWpYQXhFNnZCazRjWjBGUEhKU3N0TTNUc1JKZWplcmRhaHpjOUVaSUps?=
+ =?utf-8?B?YWZ1Y2ZkRGh5dTE2aDVuNlBidDNrVEppZ0tuQmFKSUZkamx2cmZXWnkzUktK?=
+ =?utf-8?B?SDFka1MzSHlxeFVlcHd4TjMvYnFuZjcxUU9nOEtyc2NGT1l4MVRKOHZ2TlVi?=
+ =?utf-8?B?NHhrRG81ZzdQbWd1ZFl2YjluR21XWmpudVFXYldUZC9LY3ZMbWxQUFYyQXRK?=
+ =?utf-8?Q?clfcVaE4mk0Bu+r55j/P3Tzn9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3b9ab60-8a2a-409f-0a2d-08db29d62c16
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 06:33:24.3688
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x57sx27R8tidJPNVZVgmC6ioNwEw6+MCngwV7U6A6xIXBcp+LHC/YESF4fXsbSgvM0UE4egE+gY+5ER+y9Xm6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5334
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 05:34, Sergio Paracuellos wrote:
-> On Mon, Mar 20, 2023 at 7:15 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 20/03/2023 19:09, Arınç ÜNAL wrote:
->>>>> Would mediatek,mtmips-clock.yaml make sense?
->>>>
->>>> More, except:
->>>> 1. This is not clock, but sysc.
->>>
->>> Sergio, beware.
->>
->> I meant, that's what I understood from what Sergio said. :)
-> 
-> Yes, you understood properly. I will use 'sysc' instead.
-> 
->>
->>>
->>>> 2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which are ARM?
->>>
->>> All of the SoCs, RTXXXX, MT7620, MT7621, MT7628, MT7688 are MIPS. So I
->>> decided to call this platform MTMIPS as I've seen MediaTek use this on
->>> other projects like U-Boot. This is what I did on my pinctrl patch
->>> series as well.
->>
->> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs which are
->> ARM, so mediatek,mtmips-sysc would work.
-> 
-> I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles will
-> start with ralink. There are already some existent compatibles for
-> mt762x already having ralink as prefix, so to be coherent ralink
-> should be maintained as prefix.
+Hi Namhyung,
 
-The compatibles I mentioned start already with mediatek, so why do you
-want to introduce incorrect vendor name for these?
+> @@ -748,12 +750,14 @@ static void perf_ibs_get_mem_lvl(union ibs_op_data2 *op_data2,
+>  	if (ibs_caps & IBS_CAPS_ZEN4) {
+>  		if (ibs_data_src == IBS_DATA_SRC_EXT_LOC_CACHE) {
+>  			data_src->mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_HIT;
+> +			data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
+>  			return;
+>  		}
+>  	} else {
+>  		if (ibs_data_src == IBS_DATA_SRC_LOC_CACHE) {
+>  			data_src->mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_REM_CCE1 |
+>  					    PERF_MEM_LVL_HIT;
+> +			data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
 
-Best regards,
-Krzysztof
+mem_lvl_num does not have option to set multiple sources. Setting just
+PERF_MEM_LVLNUM_L3 is bit misleading here. Documentation (PPR 55898 Rev
+0.70 - Oct 14, 2022) says:
 
+ "data returned from shared L3, other L2 on same CCX or other core's
+  cache trough same node."
+
+As per my knowledge, "shared L3" and "other L2 on same CCX" has similar
+latency. But request need to go through DF for "other core's cache trough
+same node" which incurs higher latency. Thus, setting both is important.
+This was one of the reason to not use mem_lvl_num in IBS code.
+
+2nd reason was, perf c2c (c2c_decode_stats()) does not use mem_lvl_num.
+
+3rd reason was, perf mem sorting logic (sort__lvl_cmp()) does not consider
+mem_lvl_num.
+
+4th one was, if I set both mem_lvl and mem_lvl_num, like what other archs
+do, `perf mem report` prints both, which is kind of ugly:
+
+          464029  N/A
+          340728  L1 or L1 hit
+            8312  LFB/MAB or LFB/MAB hit
+            7901  L2 or L2 hit
+             123  L3 or Remote Cache (1 hop) or L3 hit
+
+Without mem_lvl_num it's much cleaner:
+
+          330057  N/A
+          229646  L1 hit
+            5842  L2 hit
+            5726  LFB/MAB hit
+              78  L3 or Remote Cache (1 hop) hit
+
+I think we should clean this before applying this patch? Other option is
+to add bpf filter support for mem_lvl. What do you think?
+
+Thanks,
+Ravi
