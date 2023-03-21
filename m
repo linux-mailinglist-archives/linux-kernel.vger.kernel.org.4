@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7576C3855
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6627D6C3848
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCURfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S230216AbjCURe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjCURex (ORCPT
+        with ESMTP id S229677AbjCUReX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:34:53 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A45559D8;
-        Tue, 21 Mar 2023 10:34:26 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id m2so14547588wrh.6;
-        Tue, 21 Mar 2023 10:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679420063;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cUvnluVaZPzfEQB9fMRuYo+4/361t/7po7nyUBBJfxc=;
-        b=F0pa8JmQZ1FeXVtdpCygur8UmLrgKwxCcjaMn312u5zNvsXsEPeCAIDqP2tvNNTwv/
-         UYjaNaoZ77HSvv/gSqeG808AXGyNs1PvLuHZYuUTJRNuLaMixKtkNFi4ypheCdk0WCiE
-         IWz0DIm6ojmdwMqafDUKQ6Qwkv5R0vo8Wh5vpjimEmCelOyMvfuLZNqubsiGqpnCguBp
-         uWlmKh95/VubCGgiGG2xK1IXQayL14ENuWseDds7nVpVK50NycrFgJbL17Bd6qJKYkbo
-         m70IC+9jM0hjwKXpyi6ipCBNcW+1E6JIwILVC04Xi+BTpOGhbUAQ59Yn2hyq7tQM7dzs
-         4PLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420063;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cUvnluVaZPzfEQB9fMRuYo+4/361t/7po7nyUBBJfxc=;
-        b=SCX78yTuGjdnE5nuL0p7+kxGnOzsCExsigLdaV+x/JswmwxSpZvxn223i1yM95klj9
-         Rk0RnXqATLF1wZA7L1YmbeZ66zxUwW/osnCjJHPeEF8AGgjK/qawtLl/HJQHN67NaRNQ
-         bDsRn2nWQ2GRTRFpvD+iGRy4uyQCDu9HFxLbn43fBsBmRnXWGPQP5cEb90tL83/Onp4D
-         Lx/XcyZOh9QRfJNhj+G1BAeRCLRA/sdA0W3Ecu5SCFs+LtS6uvLVGWDKEDfnZhYY8Xqf
-         Mx9evWzdW2OorEN2FI6+xTglvnEBcVhHIJ7XEGAhCG6ocgMZeck++774S8RWumWl8xpy
-         /K9Q==
-X-Gm-Message-State: AO0yUKUORAlGfbkNwnYmQnTWcGPqW6sp4g9WfgQmRZGCV+9tCB0OebSP
-        ICq6v4YPmUPNRl/WNnVCbps=
-X-Google-Smtp-Source: AK7set8pFDl8fHRwGPhAguqxIfqnQ4PY+b57IHEsybIaQ/HPNwdJ1cs1+IPBGHe3TL14dTS4aVNpHA==
-X-Received: by 2002:a5d:6991:0:b0:2ce:aab5:f96b with SMTP id g17-20020a5d6991000000b002ceaab5f96bmr2965175wru.67.1679420062764;
-        Tue, 21 Mar 2023 10:34:22 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056000054d00b002da1261aa44sm184775wrf.48.2023.03.21.10.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 10:34:21 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v2 2/4] net: dsa: b53: mmap: add more 63xx SoCs
+        Tue, 21 Mar 2023 13:34:23 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC9B53DBD;
+        Tue, 21 Mar 2023 10:33:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1679420038; i=rwarsow@gmx.de;
+        bh=acxJ695h55d1k6cxhevVrjQxqBJFddoHyzszuIX/Hho=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=jo3gX3NYIdBQr1cBpZ5DMWknifrZ1IQGf3KgLPgbDU61EtrDNHw6pSB0MnZVC5mzX
+         xml/AnmEEDZMlrJagJX3zbIqqzxI1XzZdzM+nf39qkAVBoYG2s+q55ESM8E09RQW7I
+         5bUdHKP5bGaRVL97zZqy5H9VYpu/dW4/YftJGeX8PbwqqkWqAt8db+1zopctxS9MwK
+         DHaYqXHg6rV3c2GACvZ+5PdHzKeC+aL3z9MSH98REpza4FF/PTnG2TcSy8yQ3l584+
+         Ga4zLMV7QeuMrxwk+zzM52cOLVGueUzLwMdl4IP+2Ji2U0YaAuNEoEZ8wBjSqA6eA+
+         rAembqO+ajPQw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([94.134.26.109]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwwdf-1qOwnu3y8J-00yNMY; Tue, 21
+ Mar 2023 18:33:58 +0100
+Message-ID: <a764c98c-9223-0bed-8565-8e68406dcb2e@gmx.de>
 Date:   Tue, 21 Mar 2023 18:33:57 +0100
-Message-Id: <20230321173359.251778-3-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230321173359.251778-1-noltari@gmail.com>
-References: <20230320155024.164523-1-noltari@gmail.com>
- <20230321173359.251778-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.2 000/213] 6.2.8-rc2 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:q0rIaCbi2WarhFaU71FerP4UXA5ro+pa87R46Kmeps5XuAgJA88
+ vx2bGoh7dfaGMyMXBy2qbDYB96V3sijuAn7uvzoYHKu40xDOhjbEpkYgPLN/su5banMANDT
+ PzHtyc8lKvY0ps9wTFTs2/GHjKWhIcnfDfKwAILbIZJp1hxdDQqA3d/zNp23pkhZMlvNY50
+ AY6xK7+alUGG/McVZBwaA==
+UI-OutboundReport: notjunk:1;M01:P0:+x5zNEdwUeo=;/0np1HFA4agLzgJVwRuzTk8FMWB
+ wiDRuXE8HxP+Wj9XUoXLW9WFXPyswt9RGGJoNjcVgwgK2Ct1b7MeZ/9jUP14Uls8VEsEayoJS
+ DMhdovHCDn3vcnrf7yW6YGXfH4dJLXNLTZukex24fzi1YgafMFXu/5FNyGKHvFxqGLTYF7TpH
+ Vp+4kPn0G2ueiFSW5UORbnnj0beHdh27LW9mB18odtSe6e0PKQv7da8xMPYcVGzlA0XGVmNew
+ MhXR5GpnTDTPYdOS+91Iuq++h40UIxBFel2fzg+CYiMym6pbRyX8O7FL8xmiCFBpnV4B0DZIf
+ 83iuopUHCFyjP+OA0he/f9b6IxUMOizsTWvot+OUh9yspUy/tWTI7n/9cSojeL5CA/eFZNXx3
+ h2nMeS9qv68dno0JgIsE6RQJSMdYkXe+PDDZ64KU3mrZd1bjjEe3Jpwgo2QnZWmgnkBB+wSaH
+ 6aHrAwvpDHXOIlPnQG03dYH3gpnps2n0EDiYN/IJHn2NpVNR/FKJ9lBwKD/op5NiS7makL74N
+ 3W2FvVfvLT7UOxVRhZ5IzeMoFuAFdTd+0N0II7BuyOjAADwpKKLugfzxv040NxycpCKWv2E9Z
+ L2q4zeggHau0kpXilyRcmdntqgaQaeDsq4JPaYoPQlWItld6g/Exh8DtHlufLrjMd57BWdneQ
+ XSkg/KpJ1u6SnDQfYouhYUiPQuVoxBdYVtV3vtkmj6/Zk7s2fwDtWS6C2dsnIot4Ljjgec1Ag
+ PN87XQIt4IIAql983PkOdfhmkhq3f/cABoj04gsqd+5Bm3z2OQa4hYsiWOsYACHF1UnhqGLxD
+ JE6CQiVj/0DjZprRajO44T0AsjRUX4BIc4oMD3YHqRNa1HPrTboGde0k4ooDXrKGWB+VyU5Wk
+ vzYRTIhHwaPTQK8bODuwhtUCsAgpTHlz+fCHDbXs7RC8dUd/HIEUazyOjatR5E1PBiTVwRoN7
+ TU9/Iw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,32 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BCM6318, BCM6362 and BCM63268 are SoCs with a B53 MMAP switch.
+Hi Greg
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
----
- v2: no changes.
+6.2.8-rc2
 
- drivers/net/dsa/b53/b53_mmap.c | 3 +++
- 1 file changed, 3 insertions(+)
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 38 Beta)
 
-diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
-index e968322dfbf0..f63aebd445e8 100644
---- a/drivers/net/dsa/b53/b53_mmap.c
-+++ b/drivers/net/dsa/b53/b53_mmap.c
-@@ -331,8 +331,11 @@ static void b53_mmap_shutdown(struct platform_device *pdev)
- 
- static const struct of_device_id b53_mmap_of_table[] = {
- 	{ .compatible = "brcm,bcm3384-switch" },
-+	{ .compatible = "brcm,bcm6318-switch" },
- 	{ .compatible = "brcm,bcm6328-switch" },
-+	{ .compatible = "brcm,bcm6362-switch" },
- 	{ .compatible = "brcm,bcm6368-switch" },
-+	{ .compatible = "brcm,bcm63268-switch" },
- 	{ .compatible = "brcm,bcm63xx-switch" },
- 	{ /* sentinel */ },
- };
--- 
-2.30.2
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
