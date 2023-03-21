@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E616C2D61
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588126C2D17
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjCUJA5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 05:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S229892AbjCUIzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjCUJA3 (ORCPT
+        with ESMTP id S230136AbjCUIyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:00:29 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AC73D93A;
-        Tue, 21 Mar 2023 01:59:02 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id hf2so12843910qtb.3;
-        Tue, 21 Mar 2023 01:59:02 -0700 (PDT)
+        Tue, 21 Mar 2023 04:54:47 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECE336462;
+        Tue, 21 Mar 2023 01:53:42 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id m20-20020a9d6094000000b0069caf591747so8131808otj.2;
+        Tue, 21 Mar 2023 01:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679388692;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6g8ZCOL0qBfroGI6HKL/AHMClePzWoKtlB2eOg/vjPU=;
+        b=SK3ZTDtVa1I2xB60js5elRDZCZErqnbS9tkXiU4atY22XLjFVkPDCiaIQ4qS9fb/SE
+         mtq355JcyNHSq9VAyCvUA8x/vwJBMMqdh6P6UGNR2+UyGaXMX9NtYI5H/NJjuWz8R1c7
+         +SB1lYKyPAmZCUkcz7lb9XOLn2YJPdDkGfN3eLjUWxGK3qnPn/Ppnl/qI22fNkbx3fDM
+         BYazCH/4xNL2JS/KqHdjSbkxHCZNrTOLtVU4sGeZ7c8xZLgVwoe5/2g24Yb9K6xXoqmB
+         Kw++jUsEX/Ew8sUbwIB6zNxdT7+XujkqtKye8dmKASmW4vuLJfnmXj4eU6qOlSf++eUq
+         O6lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679389076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f3c3sA3MMjESnwXk4E5cN5peA4kX2fpUwWLFzglk4UI=;
-        b=cpJiLiPw5JocweMPfva/j120ZbrVVN2nJuLKZgcr/jeOtDUPlVCRaM8aHMSCgcp1Zn
-         dE9FsQUyESUNwrKZzym5Q+Ea28oDRlx5IcMe+yuy+TEBl98ycr2sCpESKOwUafwSmpIk
-         hfTWABgkBfqRCntfUrtwI20tLu803+DS0ED558WmILzR/9zvlsNI3tggR3RCmOKI8FBV
-         0mkxKY07siolQKMQWVdak55uqx2yArlucKTQkpmmjP5LGFAtEavk4FQbNiMPR8uhIv53
-         xKZlL69KImdhoLEl6BvzBjMKW84ZYLIdGzJ3HOb9lWtS1kcWr1s/BCX75PYZL/f2RyT8
-         0GjA==
-X-Gm-Message-State: AO0yUKVamHXqq+WnPtTFMBV8a5qu6OD9Wa9aiybd3fTOf+CEi5oW0u92
-        SKwyrWVCw3IRq0ql18oaHtDDTR0svXMtEA==
-X-Google-Smtp-Source: AK7set9F+vbsTwkJXm/k6x9dVA1C6jI3Dj4nT0B74nSOLkwqzM2zco9Ni3Q+C0yQzMcPxXSsAQVwhg==
-X-Received: by 2002:ac8:5a8d:0:b0:3bf:e43f:6992 with SMTP id c13-20020ac85a8d000000b003bfe43f6992mr2803210qtc.57.1679389076030;
-        Tue, 21 Mar 2023 01:57:56 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id s14-20020a37450e000000b007417e60f621sm8943319qka.126.2023.03.21.01.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 01:57:55 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5447d217bc6so268593257b3.7;
-        Tue, 21 Mar 2023 01:57:55 -0700 (PDT)
-X-Received: by 2002:a81:ac0d:0:b0:545:45f4:2e50 with SMTP id
- k13-20020a81ac0d000000b0054545f42e50mr602754ywh.4.1679388614423; Tue, 21 Mar
- 2023 01:50:14 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679388692;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6g8ZCOL0qBfroGI6HKL/AHMClePzWoKtlB2eOg/vjPU=;
+        b=eZNgh7qVPHBm/zqemAJrC9FbQNC73T/xJpas4PJJUMuqXWCYWMrGjBpmhPsTLNn4Ms
+         73DHt5z0ZCrrwEJyb298tQ2mZmt2ofW+1SgrVjMaN7MWViClF2kNY821MVzYVd88goic
+         Ss6XA8Jf2sIpAZrojVGCRC+4iTspsXscIztQywyoKeaW02uWt4oFa/huiWdkZxmuheBs
+         VtK9EJlNajgKn8wv8/8IeCaUFmaUpfEkTA0LIPu1JFoQn3YJgra+qJttxPWHT/x6Wx0r
+         lymNoA9+jQAigwA+8UC+e08gyCPVRBHOuyp/GuHUlR+sN4UMBpCd4lj47dY5HAD7gNm8
+         Trsg==
+X-Gm-Message-State: AO0yUKU6Nb8lqtHrF+S49qrr0RshBw37nwqMZQZb6H4qEGlN+KTtPtVw
+        0HC2AL/BWNDB+iHH16cBKnicmpGtL7SarW5Brc4=
+X-Google-Smtp-Source: AK7set/RyVoEm6XZHT+AY5WK5cUy/4W39dJmufwy7VTHqkL30rYPhO5GpZX0GnBy2VFri+fYxEHvdokgkTWbioUoKmY=
+X-Received: by 2002:a9d:6510:0:b0:699:7883:940d with SMTP id
+ i16-20020a9d6510000000b006997883940dmr543887otl.7.1679388692321; Tue, 21 Mar
+ 2023 01:51:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <67261c513706241d479b8b4cf46eb4e6fb0417ba.1679387262.git.geert+renesas@glider.be>
- <fac6b2c757166df891d60bd00524af7e7d30fe78.camel@physik.fu-berlin.de>
-In-Reply-To: <fac6b2c757166df891d60bd00524af7e7d30fe78.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Mar 2023 09:50:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUJ+o4qf056XgLHtkoPnqL+Nk4jZhQ7zntKS0_1dzYAEg@mail.gmail.com>
-Message-ID: <CAMuHMdUJ+o4qf056XgLHtkoPnqL+Nk4jZhQ7zntKS0_1dzYAEg@mail.gmail.com>
-Subject: Re: [PATCH] mm/slab: Fix undefined init_cache_node_node() for NUMA
- and !SMP
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
+References: <20230210114957.2667963-1-danishanwar@ti.com>
+In-Reply-To: <20230210114957.2667963-1-danishanwar@ti.com>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Tue, 21 Mar 2023 09:51:21 +0100
+Message-ID: <CAH9NwWdiWtGsbyQRWCPros7iuSZTm_9fzJFPtuyiMoDg3TubuA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] Introduce ICSSG based ethernet Driver
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, andrew@lunn.ch, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+Hi
 
-On Tue, Mar 21, 2023 at 9:47 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Tue, 2023-03-21 at 09:30 +0100, Geert Uytterhoeven wrote:
-> > sh/migor_defconfig:
-> >
-> >     mm/slab.c: In function ‘slab_memory_callback’:
-> >     mm/slab.c:1127:23: error: implicit declaration of function ‘init_cache_node_node’; did you mean ‘drain_cache_node_node’? [-Werror=implicit-function-declaration]
-> >      1127 |                 ret = init_cache_node_node(nid);
-> >         |                       ^~~~~~~~~~~~~~~~~~~~
-> >         |                       drain_cache_node_node
-> >
-> > The #ifdef condition protecting the definition of init_cache_node_node()
-> > no longer matches the conditions protecting the (multiple) users.
-> >
-> > Fix this by syncing the conditions.
-> >
-> > Fixes: 76af6a054da40553 ("mm/migrate: add CPU hotplug to demotion #ifdef")
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > Link: https://lore.kernel.org/r/b5bdea22-ed2f-3187-6efe-0c72330270a4@infradead.org
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> >  mm/slab.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/mm/slab.c b/mm/slab.c
-> > index ba454246ee13dd4d..de1523a78f2e7367 100644
-> > --- a/mm/slab.c
-> > +++ b/mm/slab.c
-> > @@ -839,7 +839,7 @@ static int init_cache_node(struct kmem_cache *cachep, int node, gfp_t gfp)
-> >       return 0;
-> >  }
-> >
-> > -#if (defined(CONFIG_NUMA) && defined(CONFIG_MEMORY_HOTPLUG)) || defined(CONFIG_SMP)
-> > +#if defined(CONFIG_NUMA) || defined(CONFIG_SMP)
-> >  /*
-> >   * Allocates and initializes node for a node on each slab cache, used for
-> >   * either memory or cpu hotplug.  If memory is being hot-added, the kmem_cache_node
+Am Fr., 10. Feb. 2023 um 13:02 Uhr schrieb MD Danish Anwar <danishanwar@ti.com>:
 >
-> FWIW, the other #ifdef starting at drain_cache_node_node() closes with "#endif /* CONFIG_NUMA */",
-> while this #ifdef just ends with "#endif". Just in case you want to make this consistent.
+> The Programmable Real-time Unit and Industrial Communication Subsystem
+> Gigabit (PRU_ICSSG) is a low-latency microcontroller subsystem in the TI
+> SoCs. This subsystem is provided for the use cases like the implementation
+> of custom peripheral interfaces, offloading of tasks from the other
+> processor cores of the SoC, etc.
+>
+> The subsystem includes many accelerators for data processing like
+> multiplier and multiplier-accumulator. It also has peripherals like
+> UART, MII/RGMII, MDIO, etc. Every ICSSG core includes two 32-bit
+> load/store RISC CPU cores called PRUs.
+>
+> The above features allow it to be used for implementing custom firmware
+> based peripherals like ethernet.
+>
+> This series adds the YAML documentation and the driver with basic EMAC
+> support for TI AM654 Silicon Rev 2 SoC with the PRU_ICSSG Sub-system.
+> running dual-EMAC firmware.
+> This currently supports basic EMAC with 1Gbps and 100Mbps link. 10M and
+> half-duplex modes are not yet supported because they require the support
+> of an IEP, which will be added later.
+> Advanced features like switch-dev and timestamping will be added later.
 
-I guess that's fine, as init_cache_node_node() is a small function.
-#endif comments are typically used when the start and end markers
-do not fit on your (80x25 ;-) screen.
-
-> Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
+What are TI plans to support TI AM642 Silicon Rev 2?
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+greets
+--
+Christian Gmeiner, MSc
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+https://christian-gmeiner.info/privacypolicy
