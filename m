@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2DA6C2DA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797866C2DA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCUJJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S229913AbjCUJKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjCUJJq (ORCPT
+        with ESMTP id S229754AbjCUJKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:09:46 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2087.outbound.protection.outlook.com [40.107.21.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F60513D74;
-        Tue, 21 Mar 2023 02:09:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BYcdsa/jnAAT3yMFgDQIlQ/Nj0vAcLbi7ZxSCWclzj2SKhWs4FGLXSBv06jHrYJVGLszoTD5ohg+boOM1HYAbFzPxN4MQREi5ATL3HP2prtDWFXb1r/bqvihUgyDKjw546NCASJnnE/F2f2KDUOlxEmdXO0vdb9HNrDFnq+35fHqkeKrDhm8RLwXHSgBh5keaVN9OXTcPNYrY1PwToCEIxwlWoIFxYz/gUYs8gnf15NITx6FTaUBOUBdwmGOms24D7tu7FsHsgk/hB56KAFsD4qJxbWn43umpsGx8pXSI0zbwt/xI7NxuMbCuDo1aaLMhchW0OeT92JZiw8kKVBNgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aIM+RBIvcLhA7EBqG5yipVY+9LHzv8xl8etYkcVlvmg=;
- b=Y4Ap9maaFs3KatVvOh9FVWIQwC5d9yfVxjrM5RS7g4Aoqooa/EzpufyCWoer5YNCOFAU3eCQ6h0rXtZuB3O+V9dXy/sckSkcQhPBWovnMxG3kB+y2GJjxH0uccmRTs0T3Hll309ure1iakp8a0or3WKTTKwgtXzYOo8232VshjJ/q/q8sk7Ot37CSa9Wr4gtw6MuM6hYjcAJbUAL+5sqd70q0AdCcUy+NO3Ig4Hock01EqAqb/4mfUARBe3MQ0XAY2T/eNU86D97RyEk6/JT5gDJ8QyHN+u/utIu9AoWSy7S8zonOevRFrKrQRLtEMQs5myqO3n3VW67DkPnuqgsrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aIM+RBIvcLhA7EBqG5yipVY+9LHzv8xl8etYkcVlvmg=;
- b=JSxTx0k70eAtlmoyB153Gvt2UzSAhnodN/51svhN1Og6D9wrwKO7xPuQydqG6vOyj1wIByS6JkZLTQUiHmE+qahsMugFm/IDnybqv3/QnXgB0o23W1FAP/oPzGOERgX9Ugrz2eqPlUMmFV/VzpfCzuYmp+0EJtQfOG4XR8NlZo25C/nV/BCQ8z5tyJk54N91YooFygp/Xubq0E1ZW16H+Soh8EofWCxy0hCdI32bNeiEiVb/4EmKkL+JVNvxAmYiB+0JrjPN9k7+wsiWXcktIHLTztt5mbJRCWPMA80xIAvEbwQz7jBrDrWDtwG/asQaniKBxGN+FXxF1FBQZRUW5A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by AS8PR04MB7638.eurprd04.prod.outlook.com (2603:10a6:20b:291::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 09:09:26 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7])
- by VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7%4]) with
- mapi id 15.20.6178.037; Tue, 21 Mar 2023 09:09:25 +0000
-Message-ID: <a1cca367-52b6-a6b1-fb01-890cad39fd29@suse.com>
-Date:   Tue, 21 Mar 2023 10:09:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/1] Guard pci_create_sysfs_dev_files with atomic value
-To:     Oliver Neukum <oneukum@suse.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Korneliusz Osmenda <korneliuszo@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230316091540.494366-1-alexander.stein@ew.tq-group.com>
- <4888964.44csPzL39Z@steina-w> <90e97b96-2918-294a-0e71-33a42f28d8a8@suse.com>
- <3607385.usQuhbGJ8B@steina-w> <ced8713f-69de-e48a-37eb-4f844e651b6b@suse.com>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <ced8713f-69de-e48a-37eb-4f844e651b6b@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0070.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:49::20) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Tue, 21 Mar 2023 05:10:40 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFB33A85;
+        Tue, 21 Mar 2023 02:10:34 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id y5so16210373ybu.3;
+        Tue, 21 Mar 2023 02:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679389833;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1naR9VgFK/CRVn0pFs+TG3gFfORX42gFmCzJOm4FT5s=;
+        b=V2Hsq91CBcj4Sq2XpdLP0d+BTsMhf+dNqrqpprgcBXsX0it8vNwpXGu7UNT6VsEuTI
+         sP67h+uE9ZU+u0xoG3jSFqKnVitOvgV2hdp3SW2n1dAGMgnojlwsYnwoSy+gUPuXe+Dk
+         csvSg+SUgnQk0Ke74bSJQem1BJ5rfHnElRTHxfn4CtNMw8yJgRHqsClNRPsc5+Rq+Ctz
+         FVd7uQceqsWlMWkbHoyOLIKBZGgZojBfZD8lyqAjRD60pf5BHQkev6uSA8SHXbIBOGs6
+         68ee7fGEZRGpKtgthPFXNuzjv4RooTIpObj3ubzuLDdCH5NduRkinqDvkOJovssx3pqU
+         +6Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679389833;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1naR9VgFK/CRVn0pFs+TG3gFfORX42gFmCzJOm4FT5s=;
+        b=xtg8f2V672rWYcNq3Qp03rErUx3/cYS0FGV6j9gZc2nHe/q1PiVUt9x+34SdoebtVr
+         4t6UgNcrgIKj38p8DoYLe6+qub79pBz1uQ8nK9sU5SJTapYN1GDvVHetPpzflCz8kqSI
+         5vn7jBjLmy4v36d3StIWegdYW03BCOzC3OTtjgtdIHTC0NQ31C7PoinE120aZmjVFPKt
+         oyijK89kjIngr0EWuynCe5f79enaltnOaGGHg5K2HzKc2MUKQd2w9hfmesamne+8eRum
+         ey0b5X22NNaWeT/q/MyRzdRrIdQ7yYvLCaz5nrXHGkK3SxW5rRru89uhheDQ7aEAxaO8
+         j3lQ==
+X-Gm-Message-State: AAQBX9c4O/QwZAY0qUhE9Y3y7aCrnCiAfMHoSyH0avs9BQD2Cfn0o6cl
+        hkXmFughugu6ZrwKOmA/5pM8PK5R7j3QR7ga+Ew=
+X-Google-Smtp-Source: AKy350bOGXAX9HSyWlXVprdERaGHVsqXcSIgyEknmRaBkIwQ672kz9f6VJHLNkM+gCa0jBu6dbTnqzx8D9FgrAh9cZU=
+X-Received: by 2002:a25:8c89:0:b0:b6c:2d28:b3e7 with SMTP id
+ m9-20020a258c89000000b00b6c2d28b3e7mr886226ybl.9.1679389833380; Tue, 21 Mar
+ 2023 02:10:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS8PR04MB7638:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5a1db02d-d5bd-43fc-b15f-08db29ebf7ba
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +GtiLNvIGmW0TV+j+zMxA72AH2JpCz3VKZ8qMCIgQjTFk3rIt+gbgh15Z0G3Vwd/8q+3JGdJWNnnFLGQbNOGdApSLYZXQihMfzrv1TvuSE+vTW7OFDoFCdsi6ogD3fW7Py3T34bZRpP8Gg5cbO5X7CV2zrPt1wjlsYkIN4Orvx7tXvSWKeXLrQs7X7p0sB56QhNxrVWBz+l6ZSwbENWOC0s+hvLaYkBxQD70OdE/LT0qnSI7RR3a5DrzrYIOk7iKTJsJGfoDw+d68BNjtr/VUaJ0964av16+5pxg2aq8EzYOyqNzED+UQYRT66Q44lsUngmXSNXn8vbyQ030WqSlMfh7U/V88OBrrvNwZzMjJ5Rrc8mtV/f0OfqkC9fAR6VURWtBKpbbuTyrk0PmrROMjMqijgQGYHgr2cGfu7KMnBwlVifNX3OP1eVpjKKIRzKCQ1oj1fX/S4RtcjD1McxROjVLaSwDDCl6NQzcw9U1FI1q9oWHhswOMQuDoU1p2ettiDNJsR7GiMwjFNrhALP1njdxahsxk2hZCZSW7SB7+UKW/ogEIvP/UMYP7qBZBo8svNU2EpbrJhSPIt6V/Fy09lTkYUMhUsI5+WXzNnpKt6pxnUZMlMLHry0QCsU8QGWdwZ2S2LFbXzyIlLnR8NHaE9Wb0JiUiXTs2vK4oI/GsCqFEb+uFRDS+5U6WTZMflMyrIT2IIFWPAo1KIR0BO+/GdMQCArxkwm45U/utqxPH6U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(366004)(396003)(376002)(346002)(451199018)(2616005)(6486002)(4326008)(83380400001)(478600001)(6666004)(316002)(110136005)(66476007)(6512007)(66946007)(66556008)(8676002)(6506007)(186003)(31686004)(4744005)(8936002)(41300700001)(5660300002)(38100700002)(2906002)(36756003)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MERTb29XMDBVQlhGMlE3c1BjSFY5SVJLT0JRM1ZrMVFwcVRneCtKRG1PZE1I?=
- =?utf-8?B?M0NDaDk0VE9ad2p6YlVuelc0ZE1aY09iUHZtcDVsbVRWdE5tRHBUa1ZpeTFz?=
- =?utf-8?B?TjlBZjhSUUZQMWkxLzZIZjNPa1JyWlVXZ1JPalN6Mlk5c29IZXczQ1F1OG5y?=
- =?utf-8?B?SG5DNDBrVmZpeU8yWlQ1ZUJYTjYzcGtJNHE0Q3Q1ZHkxa3BmNHM4cUZtbkoz?=
- =?utf-8?B?VFI0Z2c4MVRsMWg0cjN5ZVdZNlM0ZkFzVkt2d2pqZTNPRGV5VEFSZlhFUVZW?=
- =?utf-8?B?ekJZa1NVQWhEbnlqMVR1RDM4SGt4aDkxcjk2MWpiUmlrYmpJNUd6ZkdxOWFy?=
- =?utf-8?B?STlrTDVxbWt5SnNyMmZBWWJ1d2FydkVKLzVDa3ZKLzNzUW14SWFjd1hTZXB0?=
- =?utf-8?B?cjBpZ3ZxU3pSeDlPM3NuZDdlZGpWUHd1SjJkWCtzUUlOSUNybmJxUngwWjFs?=
- =?utf-8?B?Z1U1ZWJmNDA4TitDbkVJcWY5OWd0cnFKbHR3QU56eVlwU3RwRmpES3RCMFpa?=
- =?utf-8?B?dlN1U1VUSFhHVlR6ajR3Yk94dk9OWEtpeVc1WDM2K3Z4ZzFhSmZhRGt6a2Na?=
- =?utf-8?B?QUtUQzhGdncxYmpzWFZoTm9rRWNobDY5Mi80bjVxQjY5cFV6Tmh2bGM5bTha?=
- =?utf-8?B?MjB5amx5L1JQaXRlMEc1Ymo1RDk5bVd4MzFVeTRhUmNiOTVSemN4Wkk2RWZQ?=
- =?utf-8?B?QWswcWs0ZUczY1gxUzR1aGVFYmw5WllMeTdlZHo5QjBURkprUVBrOWppcG1k?=
- =?utf-8?B?SENCdEc5SXZqekM3Wjg5RDRnZ2xYM3pZRFBtL3pITFgrVUt2L2xGUzFtOVZa?=
- =?utf-8?B?ME1QNU5vSUdQZ01wUFZxdUg4K2FFUHhWeTRpN0VPc05SK2NTcHloM2dZNFAx?=
- =?utf-8?B?NDZrTVdrQkNNc3BpNi9jOVNqWjdXSGw1aDNvRE9hWTVTK3ZLdGZPZTR5UXpV?=
- =?utf-8?B?Q1gvSjdrSlYrWGg0Q0FKZTRPVlloNjVZNzRSM0l4T3lmRTN4U0p2eHZLdGJy?=
- =?utf-8?B?eUNjKzZXWDlkcFBMa3dzMUpzYzBianNHcDd1N2pmdXFzSTJtSWdlbVFTMDgw?=
- =?utf-8?B?YzFtTis5MFN5L3BxV0VRSUVwUWxnSGpXZUZyT25TUDUzcUZ5OEUrall5WUEv?=
- =?utf-8?B?UWJEcTRRQk1YVGZ0bFhnWEJOWW8rdUlraDBSRGhDNFJSSzVWams1dWlmckF6?=
- =?utf-8?B?d1VHK25hY3FvY3ZhQ01sdk5mNXpMNzNSRUNRUHUxdFBWRUJRUHhiSkxwdk10?=
- =?utf-8?B?eXREZEhpZFZBSEl4ZC9saWZnYXNUZ2VscVdNQU1vamZnWklzM2Z3OUNtUHFp?=
- =?utf-8?B?RVJseW9JTkFLakI4NnV6Y0RxbkdiTzAvYXoyL2JzZDhzQmY4YTJiSFE2Q1Mz?=
- =?utf-8?B?QnVRRlB0NXBiaUZSMVg2aWFIYTFjZVRXWGp4enRDSWVCMGRIQ1o2dGhnZ3Mv?=
- =?utf-8?B?VDl3TkdJdW9SbkNUaTRvcGQ1SGpiOG4rcnZvSGdsYktKOFEwNW4wVmhxVzVq?=
- =?utf-8?B?YlVlOEEzMThKSEhYdkVaNGNIVDdIL3FUOTduekxZeWVUS0p1V201eTZDZ0RJ?=
- =?utf-8?B?VUNyMFM0L2JnejlLQXM0R29ncmJNVWt6cEdFSFBjbzNrdzk2RmhISlJUMlNL?=
- =?utf-8?B?L1ZLci93ekRPQ3VSekI4TGVxYXRhUWd6MGIvenUzNndhQWtrNnI3RUZhMVdN?=
- =?utf-8?B?NjVaQUhnVmxFSEFtS1lpUGt6Rm01dmJkdDRIKzQvMmxrT3Q4S1VVZ29LMTZS?=
- =?utf-8?B?RlplZ3YxdjhENmw2Y1hPMllCRDN3VUdCMTVTdVM4bVJmdURWcGxCMEFDckhG?=
- =?utf-8?B?NFNscEtsSnpsSFl6RDRiRkRoZzVkeS9Va3IvT25zQThKako1c0JONzFyU09U?=
- =?utf-8?B?TWpGeitYMWZFSXVlVUdFOXNXYjhpR2VCUmZ0T1hSbWRYenBFRmpsRkRLSlJq?=
- =?utf-8?B?ZFVXb0xseTBTVjRBZ0grWGpRWExtL01SdDVwTTBDMm0yVkJEejRycVBHblhP?=
- =?utf-8?B?VVp2QWJZVHJBbEZadXg0NVBGZCtoQzBvS0orN3lEVFp4ZUQ5dlNkRFp6TXQy?=
- =?utf-8?B?ZFppTUtBQy9HK3JCZklYNmFOYmdSNU5qdHEzWVpjL2xwN2lha1dya1VGZGcv?=
- =?utf-8?B?ajJZMmZDTGFJOVBhWVlQRVZWMHRVcCt4OFBOaXVPNGFyZHBFMU14SXVxRzVq?=
- =?utf-8?Q?ZR6O/6KYe98qefElNcftMkbiMoRR7PnIgrmBhscl0xLF?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a1db02d-d5bd-43fc-b15f-08db29ebf7ba
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 09:09:25.6923
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7qAB6U7UgYBnAN06Og1hX+b2o9/tZdwVlDexfGRlWm3jsrxXpc+RQXqVCWy9D25HGjhm13ID4asG8eCydbK3uw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7638
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:199d:b0:490:be1c:c35a with HTTP; Tue, 21 Mar 2023
+ 02:10:33 -0700 (PDT)
+In-Reply-To: <6f7e9b8c-6256-e7dd-b130-8e1429610faa@gmail.com>
+References: <20230320155024.164523-1-noltari@gmail.com> <20230320155024.164523-5-noltari@gmail.com>
+ <6f7e9b8c-6256-e7dd-b130-8e1429610faa@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Tue, 21 Mar 2023 10:10:33 +0100
+Message-ID: <CAKR-sGcB-GgeRe=7_WYffQmppmzZTweRrxL848MG=_LMUuMedw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] net: dsa: b53: add BCM63268 RGMII configuration
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 16. März 2023, 15:01:25 CET schrieb Oliver Neukum:
-> I'm not sure if I can follow you here. Can you elaborate?
+(Excuse me for my previous email in HTML, but I forgot Android Gmail
+app uses HTML)
 
-There are far better reasons to leave the setup of a PCI bus as the firmware
-has done it than to leave a USB as is.
+2023-03-20 21:00 GMT+01:00, Florian Fainelli <f.fainelli@gmail.com>:
+> On 3/20/23 08:50, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+>> BCM63268 requires special RGMII configuration to work.
+>>
+>> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+>> ---
+>>   drivers/net/dsa/b53/b53_common.c | 6 +++++-
+>>   drivers/net/dsa/b53/b53_regs.h   | 1 +
+>>   2 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/dsa/b53/b53_common.c
+>> b/drivers/net/dsa/b53/b53_common.c
+>> index 6e212f6f1cb9..d0a22c8a55c9 100644
+>> --- a/drivers/net/dsa/b53/b53_common.c
+>> +++ b/drivers/net/dsa/b53/b53_common.c
+>> @@ -1240,8 +1240,12 @@ static void b53_adjust_63xx_rgmii(struct dsa_swit=
+ch
+>> *ds, int port,
+>>   		break;
+>>   	}
+>>
+>> -	if (port !=3D dev->imp_port)
+>> +	if (port !=3D dev->imp_port) {
+>> +		if (is63268(dev))
+>> +			rgmii_ctrl |=3D RGMII_CTRL_MII_OVERRIDE;
+>
+> AFAICT the override bit is defined and valid for both 63268 and 6318,
 
+Should we add a specific ID for the 6318?
+I don't know if it's different enough from the 63268 to need a special
+treatment such as is6318()...
 
-> How is it necessary? How do these PCI devices get attaches to the pci_bus_type 
-> bus without calling pci_bus_add_device?
+> essentially whenever more than one RGMII control register for port 4,
+> but also for other ports, it seems like the bit becomes valid. The
+> comment I have says that the override bit ensures that what is populated
+> in bits 5:4 which is the actual RGMII interface mode is applied. That
+> mode can be one of:
+>
+> 0b00: RGMII mode
+> 0b01: MII mode
+> 0b10: RVMII mode
+> 0b11: GMII mode
 
-AFAICT they don't. But somebody has to call it.
+This is interesting since we never set those bits in the bcm63xx
+enetsw controller...
+Should we add configuration for those bits in future patches?
+Which SoCs hace those bits? Only 6318 and 63268 or every 63xx has them?
 
+>
+> even though this is not documented as such, I suspect that the override
+> bit does not only set the mode, but also ensures that the delays are
+> also applied.
+>
+> Once you update patch 3, this LGTM and you may add:
+>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>
+> For your v2. Thanks!
+> --
+> Florian
+>
+>
 
-> Okay, so which dependency is provided by pci_sysfs_init, which are required by 
-> drivers then?
-
-It isn't. It is missing from the code. But it exists in reality. That is the point.
-You have a race condition between two probes. We cannot have that.
-Hence IMHO the dependency would be best expressed by waiting for pci_sysfs_init()
-to finish in the init sequence before you add any PCI bridges or devices to the system.
-
-	Regards
-		Oliver
+--
+=C3=81lvaro
