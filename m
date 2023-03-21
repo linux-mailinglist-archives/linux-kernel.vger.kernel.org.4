@@ -2,105 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C6F6C2B4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3E06C2B5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCUHU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S229749AbjCUH3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCUHU5 (ORCPT
+        with ESMTP id S229541AbjCUH3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:20:57 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6311C595
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:20:52 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t5so19130252edd.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679383251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n1ju9SHjn0EjnX+WJqAHc/qHXQe1M1fQAhQ9irmoRLI=;
-        b=G6ekUazE6TcVZTpMdj9FhFeFggQPVT2VFUWaVtSaXIXTASqF++fMNxdF9KK8E6jaSL
-         ZxuQCYzENQ9eYwWdylaKVB8cU5qUsu4R5sIwD0IIrNZX+Oo0AX814EHrHOZ4nB7WYMax
-         YUWo1MqBTLRXOMVVr9tYCNrgu923Xrw6URPxwNxkAEkDp7epE2F8hgxV4cZiji7lOREJ
-         niygwQoFXhUPEUDsSetV6Edn47C9sgSWqXDTI3Dz/fCXVRaHBilN6IPoShYT9gKzSq2h
-         v+dykiWM/hzx+RdJMIfdogOBRMX12snNrk7GfqZ43S8HyiNmdwkPfVFwvscVb/2iLiXG
-         aCuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679383251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n1ju9SHjn0EjnX+WJqAHc/qHXQe1M1fQAhQ9irmoRLI=;
-        b=TD4KvbctHO+7+9TcRXCu2xdEMgGcOmbmX4G7JJtgxBqGuo4/B5WaFOXY+SWwQSrLZF
-         vnWRRfighQ8hYrhFlS/8rhaTFEZpTBfl1EpUTGCiCLwbEq1Lwx2JhkZArxx3IbP2PCo8
-         C/p22oT91SI6KG1X5e1yTekByxXeI+FaxtS8FKCgSLTiVwQjIqP42l5WIDTrf1fd5xxB
-         ipLFirT+L2HoQsC5Ygh8QCX3iBjthiPyDAlMhcbThT9TtUhLhnr70DNNA1Aqm2Dddj3Z
-         Sk+XmSdkzitwbOSZq/tP6yOyrg17YPVE8yXHXclSdWIzY+G8thT0xabYeKW4vyEjcghc
-         3kjg==
-X-Gm-Message-State: AO0yUKWCgQTCSyhicocLnD4J3fsUwSH0uZV1e1FAuFm1uZQFHImLas89
-        /VTUdFxZYATfOIngdApa0cA9FQ==
-X-Google-Smtp-Source: AK7set9ajV2h8MoJNZmNzFZ4RL5J57SDG8cMw8WnAC78cNBMYl3mTmrve+NyaqmHOj1gJroxcZnYrQ==
-X-Received: by 2002:a17:906:607:b0:932:be78:a728 with SMTP id s7-20020a170906060700b00932be78a728mr1688168ejb.68.1679383251026;
-        Tue, 21 Mar 2023 00:20:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id qn17-20020a170907211100b0093048a8bd31sm5385926ejb.68.2023.03.21.00.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 00:20:50 -0700 (PDT)
-Message-ID: <cc45efa0-e2c6-525a-e3f3-7f87e8762e2e@linaro.org>
-Date:   Tue, 21 Mar 2023 08:20:49 +0100
+        Tue, 21 Mar 2023 03:29:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D11534027;
+        Tue, 21 Mar 2023 00:29:29 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PgjrW5G0xzrVDj;
+        Tue, 21 Mar 2023 15:28:27 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 15:29:27 +0800
+From:   Xingui Yang <yangxingui@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <john.g.garry@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
+        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
+Subject: [PATCH] scsi: libsas: Add end eh callback
+Date:   Tue, 21 Mar 2023 07:22:59 +0000
+Message-ID: <20230321072259.35366-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: usb: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org
-References: <20230320233904.2920197-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230320233904.2920197-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.50.163.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 00:39, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+If an error occurs while the disk is processing an NCQ command and the host
+received the abnormal SDB FIS, let libata EH to analyze the NCQ error, and
+it is not necessary to reset the target to recover.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Then the hisi_sas has some special process to set dev_status to normal when
+end the eh for NCQ error without reset the target, so add a callback and
+fill it in for the hisi_sas driver.
 
-Best regards,
-Krzysztof
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+---
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 12 +++++++++---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  7 +++++--
+ drivers/scsi/libsas/sas_ata.c          |  4 ++++
+ include/scsi/libsas.h                  |  2 ++
+ 4 files changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 325d6d6a21c3..61686ead0027 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -1777,9 +1777,6 @@ static int hisi_sas_I_T_nexus_reset(struct domain_device *device)
+ 	struct device *dev = hisi_hba->dev;
+ 	int rc;
+ 
+-	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
+-		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+-
+ 	rc = hisi_sas_internal_task_abort_dev(sas_dev, false);
+ 	if (rc < 0) {
+ 		dev_err(dev, "I_T nexus reset: internal abort (%d)\n", rc);
+@@ -1967,6 +1964,14 @@ static bool hisi_sas_internal_abort_timeout(struct sas_task *task,
+ 	return false;
+ }
+ 
++static void hisi_sas_end_eh(struct domain_device *dev)
++{
++	struct hisi_sas_device *sas_dev = dev->lldd_dev;
++
++	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
++		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
++}
++
+ static void hisi_sas_port_formed(struct asd_sas_phy *sas_phy)
+ {
+ 	hisi_sas_port_notify_formed(sas_phy);
+@@ -2083,6 +2088,7 @@ static struct sas_domain_function_template hisi_sas_transport_ops = {
+ 	.lldd_write_gpio	= hisi_sas_write_gpio,
+ 	.lldd_tmf_aborted	= hisi_sas_tmf_aborted,
+ 	.lldd_abort_timeout	= hisi_sas_internal_abort_timeout,
++	.lldd_end_eh		= hisi_sas_end_eh,
+ };
+ 
+ void hisi_sas_init_mem(struct hisi_hba *hisi_hba)
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 66fcb340b98e..abad57de4aee 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -2433,15 +2433,18 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
+ 			struct hisi_sas_device *sas_dev =
+ 				&hisi_hba->devices[device_id];
+ 			struct domain_device *device = sas_dev->sas_device;
++			bool force_reset = true;
+ 
+ 			dev_err(dev, "erroneous completion disk err dev id=%d sas_addr=0x%llx CQ hdr: 0x%x 0x%x 0x%x 0x%x\n",
+ 				device_id, itct->sas_addr, dw0, dw1,
+ 				complete_hdr->act, dw3);
+ 
+-			if (is_ncq_err_v3_hw(complete_hdr))
++			if (is_ncq_err_v3_hw(complete_hdr)) {
+ 				sas_dev->dev_status = HISI_SAS_DEV_NCQ_ERR;
++				force_reset = false;
++			}
+ 
+-			sas_ata_device_link_abort(device, true);
++			sas_ata_device_link_abort(device, force_reset);
+ 		} else if (likely(iptt < HISI_SAS_COMMAND_ENTRIES_V3_HW)) {
+ 			slot = &hisi_hba->slot_info[iptt];
+ 			slot->cmplt_queue_slot = rd_point;
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index 77714a495cbb..2d48643a08cf 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -539,6 +539,10 @@ void sas_ata_end_eh(struct ata_port *ap)
+ 	spin_lock_irqsave(&ha->lock, flags);
+ 	if (test_and_clear_bit(SAS_DEV_EH_PENDING, &dev->state))
+ 		ha->eh_active--;
++
++	if (i->dft->lldd_end_eh)
++		i->dft->lldd_end_eh(device);
++
+ 	spin_unlock_irqrestore(&ha->lock, flags);
+ }
+ 
+diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+index 159823e0afbf..659395ef616e 100644
+--- a/include/scsi/libsas.h
++++ b/include/scsi/libsas.h
+@@ -683,6 +683,8 @@ struct sas_domain_function_template {
+ 	int (*lldd_lu_reset)(struct domain_device *, u8 *lun);
+ 	int (*lldd_query_task)(struct sas_task *);
+ 
++	void (*lldd_end_eh)(struct domain_device *dev);
++
+ 	/* Special TMF callbacks */
+ 	void (*lldd_tmf_exec_complete)(struct domain_device *dev);
+ 	void (*lldd_tmf_aborted)(struct sas_task *task);
+-- 
+2.17.1
 
