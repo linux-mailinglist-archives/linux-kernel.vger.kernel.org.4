@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4B46C3B1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8454C6C3B1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCUT6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S229923AbjCUT73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCUT6K (ORCPT
+        with ESMTP id S229484AbjCUT71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:58:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F81302B9;
-        Tue, 21 Mar 2023 12:57:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED058617EC;
-        Tue, 21 Mar 2023 19:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277C9C433D2;
-        Tue, 21 Mar 2023 19:57:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679428667;
-        bh=GKA4u3MPOorQTBHU2zQGSJnmsX+P8WaqFLKkzLHEvJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6lg/B/buJIb/LZoslCty46VUSmVDDjrCtozuQJtxilxcKJW1FN7HRJpPDnWFj5yI
-         01gu4iqeKf0OiAbVO4b97AkVsovIiQvCBUhA2LAcMoNgdQ0KX0cJRLuu9R648kL+SV
-         CYFx5jyb+Loasx8FS63wDUEWB8ZmI1TnP3XAvlvxTUd5O1vE285bIdDOS0E2jXNhXe
-         9FCP12eCMaMlHJNZcVMWQ+DdLYPFgTMkiEmnh+LDd35E4OVLoxg7+aOiJPBWiwyzGg
-         PVjfWnje6LJxZWNaLV9Y6yjE7ElgMnYqBhOgyQuDVQjgtZBeuGE2+4MoEulGMeaLVO
-         c1PdDFK3fgddw==
-Date:   Tue, 21 Mar 2023 20:57:42 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     syzbot <syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com>,
-        jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [syzbot] [kernel?] general protection fault in vhost_task_start
-Message-ID: <20230321195742.6b46syklc34es4cx@wittgenstein>
-References: <0000000000005a60a305f76c07dc@google.com>
- <2d976892-9914-5de0-62e0-c75f1c148259@oracle.com>
+        Tue, 21 Mar 2023 15:59:27 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAA08A46;
+        Tue, 21 Mar 2023 12:59:26 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id m20-20020a9d6094000000b0069caf591747so9208465otj.2;
+        Tue, 21 Mar 2023 12:59:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679428765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ROP4DRR/+tYjzmqeO5vCsVTkmmIBiGALSgi3SPQadn4=;
+        b=8ANzfsYIQO9Igtwf43WaeERobPPQ5+55j2XroazxWsQB8LPmCkHK5D5sZw5Uahh7cn
+         2v9vsouag/vlTo1BFRYt1kdGOL+4qcgdPxwOTWitqjDH9WglkDrPp+cDGOSErEKERlHq
+         M2tJS74U18E4O3AP4UcESqHCMoOSp+yh7zfhn94WeeS4Hjnr/bUMbAFBYDiFSXubw+hG
+         mHfQNC85aJFJIdauCB+ZarN0chBVWTAUc+qj5jJipryF8906PEkZPvlX+QWe2jU5n7fX
+         Qz6iB8l9OM2KhUmMu4PTM6c1Rj40QXSdhv5UJZon2g0ksDlKosHY6S11O4T/KF372W7R
+         JLKQ==
+X-Gm-Message-State: AO0yUKUZVd8Dyu8g3yy6RuSmH1iY1wIiC2KlHah0GmLYoDOdO6b3G49B
+        xd/iLf91eJZnEqCn+DqogQ==
+X-Google-Smtp-Source: AK7set+H+vIh3Lr0z8ak+Tuxg2q8VFXzxPrPC9CkKAfZfFwsF3osaXyOzEeU8ueS/6FbBgFaRAghwg==
+X-Received: by 2002:a9d:7d16:0:b0:69c:639b:330e with SMTP id v22-20020a9d7d16000000b0069c639b330emr252747otn.3.1679428765524;
+        Tue, 21 Mar 2023 12:59:25 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t2-20020a9d7482000000b00690f6d9a737sm5488723otk.8.2023.03.21.12.59.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 12:59:25 -0700 (PDT)
+Received: (nullmailer pid 1351594 invoked by uid 1000);
+        Tue, 21 Mar 2023 19:59:24 -0000
+Date:   Tue, 21 Mar 2023 14:59:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     linux-usb@vger.kernel.org, xu.yang_2@nxp.com, linux-imx@nxp.com,
+        gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de, devicetree@vger.kernel.org,
+        shawnguo@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        s.hauer@pengutronix.de, jun.li@nxp.com, festevam@gmail.com,
+        robh+dt@kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V6 01/10] dt-bindings: usb: usbmisc-imx: convert to DT
+ schema
+Message-ID: <167942876351.1351542.3404764451729965603.robh@kernel.org>
+References: <20230321085213.1624216-1-peng.fan@oss.nxp.com>
+ <20230321085213.1624216-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d976892-9914-5de0-62e0-c75f1c148259@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230321085213.1624216-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:46:04PM -0500, Mike Christie wrote:
-> On 3/21/23 12:03 PM, syzbot wrote:
-> > RIP: 0010:vhost_task_start+0x22/0x40 kernel/vhost_task.c:115
-> > Code: 00 00 00 00 00 0f 1f 00 f3 0f 1e fa 53 48 89 fb e8 c3 67 2c 00 48 8d 7b 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 0a 48 8b 7b 70 5b e9 fe bd 02 00 e8 79 ec 7e 00 eb
-> > RSP: 0018:ffffc90003a9fc38 EFLAGS: 00010207
-> > RAX: dffffc0000000000 RBX: fffffffffffffff4 RCX: 0000000000000000
-> > RDX: 000000000000000c RSI: ffffffff81564c8d RDI: 0000000000000064
-> > RBP: ffff88802b21dd40 R08: 0000000000000100 R09: ffffffff8c917cf3
-> > R10: 00000000fffffff4 R11: 0000000000000000 R12: fffffffffffffff4
-> > R13: ffff888075d000b0 R14: ffff888075d00000 R15: ffff888075d00008
-> > FS:  0000555556247300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007ffe3d8e5ff8 CR3: 00000000215d4000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  vhost_worker_create drivers/vhost/vhost.c:580 [inline]
+
+On Tue, 21 Mar 2023 16:52:04 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> The return value from vhost_task_create is incorrect if the kzalloc fails.
+> Convert usbmisc-imx to DT schema format, add missing compatibles
 > 
-> Christian, here is a fix for what's in your tree. Do you want me to submit
-> a follow up patch like this or a replacement patch for:
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 68 +++++++++++++++++++
+>  .../devicetree/bindings/usb/usbmisc-imx.txt   | 19 ------
+>  2 files changed, 68 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
 > 
-> commit 77feab3c4156 ("vhost_task: Allow vhost layer to use copy_process")
 
-Since this has been in linux-next my tendency is to just put this fix on
-top. So please slap a Fixes: tag on it and a Link to the syzbot report.
-I also tend to annotate such fixes with "# mainline only":
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Fixes: 77feab3c4156 ("vhost_task: Allow vhost layer to use copy_process") # mainline only
-
-to prevent AUTOSEL from picking this up.
-
-Thanks for taking care of this so quickly!
-Christian
