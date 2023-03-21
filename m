@@ -2,177 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8007E6C3599
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F7B6C359B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjCUPZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
+        id S231526AbjCUP0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjCUPZq (ORCPT
+        with ESMTP id S231443AbjCUP0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:25:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A464FCC0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679412341; x=1710948341;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=wUl8q50fX83Pxt0FLNlLN7yvA7n1d6/42RULa+53jro=;
-  b=VZ/IsVjkmCSrZmFSiBgEBeRYEpDPoLlSMO0Dn2ua38j2ziMIQzkzV8uH
-   ojSdjXuiC3WI4HQD66xKtjFPofahwYICQ6vigbOdbKK1b70T5+SJPRCW2
-   P36LCEA00H9NclygYO0GJSh156eYsNPAXUWeHvihdfjmGoVh6vt1Dem/u
-   Q5eVlQhuGByat6XXhjiQrUuJJLjCSt9klLtXafEnbzTZ5WdLYatlSCD13
-   2XyJgGFSHwKtTlf0U0lKTHwrSUXSRHkX53lZBmw14xaeU/zlBrywMrt1l
-   9vz1iz1OE7FzWYas8dk7NYGcQnFvbthAsHGbhbE+YkX3Z6wy9wSd0P9hK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="322813316"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="322813316"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:25:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="683905778"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="683905778"
-Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:25:36 -0700
-Date:   Tue, 21 Mar 2023 17:25:33 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     James Morse <james.morse@arm.com>
-cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
-Subject: Re: [PATCH v3 17/19] x86/resctrl: Allow overflow/limbo handlers to
- be scheduled on any-but cpu
-In-Reply-To: <118d53a6-e292-50a0-dc8f-32c573379ed7@linux.intel.com>
-Message-ID: <54165c70-795b-6e6e-aad-4089ddd6dbe5@linux.intel.com>
-References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-18-james.morse@arm.com> <118d53a6-e292-50a0-dc8f-32c573379ed7@linux.intel.com>
+        Tue, 21 Mar 2023 11:26:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F24FABF;
+        Tue, 21 Mar 2023 08:26:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 86541201AA;
+        Tue, 21 Mar 2023 15:26:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679412365; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KhZIrgDPD74P810Uzhm3yzk3QcaPBkmpJ69S46jGLm8=;
+        b=IxufG8ke4f+UKmgoQV9q/5pnK2H7HS/lPMe58VwakCtSSyilAWnUwr9t/Heb37v6HiCLpn
+        BlBwZD3X4kTs66OS+8xPceUvnB8vVapT+XsbC0P54WrH6agpRSpeABAal3nsKcvDzb3feL
+        AdtAeRcqL7372FLZcJ633Tbl2WCYZ1o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679412365;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KhZIrgDPD74P810Uzhm3yzk3QcaPBkmpJ69S46jGLm8=;
+        b=iifihTlZKLBLfKievhIRtBdtYqOQPT0FlnQAt759dk7MD8H8kl3ugUZvGKgobBxFqe0pRl
+        KGmK57gNjjk1uZDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4922913A9D;
+        Tue, 21 Mar 2023 15:26:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lAQpEI3MGWQfWAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 15:26:05 +0000
+Message-ID: <9952bbf8-cf59-7bea-ce50-0200d4f4165e@suse.cz>
+Date:   Tue, 21 Mar 2023 16:26:04 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1557823100-1679412340=:1997"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V4 1/2] mm: compaction: move compaction sysctl to its own
+ file
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, mcgrof@kernel.org
+Cc:     keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, chi.minghao@zte.com.cn,
+        linmiaohe@huawei.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+References: <202303211511314414538@zte.com.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202303211511314414538@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1557823100-1679412340=:1997
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 21 Mar 2023, Ilpo Järvinen wrote:
-
-> On Mon, 20 Mar 2023, James Morse wrote:
+On 3/21/23 08:11, ye.xingchen@zte.com.cn wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> > When a CPU is taken offline resctrl may need to move the overflow or
-> > limbo handlers to run on a different CPU.
-> > 
-> > Once the offline callbacks have been split, cqm_setup_limbo_handler()
-> > will be called while the CPU that is going offline is still present
-> > in the cpu_mask.
-> > 
-> > Pass the CPU to exclude to cqm_setup_limbo_handler() and
-> > mbm_setup_overflow_handler(). These functions can use a variant of
-> > cpumask_any_but() when selecting the CPU. -1 is used to indicate no CPUs
-> > need excluding.
-> > 
-> > Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > ---
-> > Changes since v2:
-> >  * Rephrased a comment to avoid a two letter bad-word. (we)
-> >  * Avoid assigning mbm_work_cpu if the domain is going to be free()d
-> >  * Added cpumask_any_housekeeping_but(), I dislike the name
-> > ---
-> >  arch/x86/kernel/cpu/resctrl/core.c     |  8 +++--
-> >  arch/x86/kernel/cpu/resctrl/internal.h | 37 ++++++++++++++++++++--
-> >  arch/x86/kernel/cpu/resctrl/monitor.c  | 43 +++++++++++++++++++++-----
-> >  arch/x86/kernel/cpu/resctrl/rdtgroup.c |  6 ++--
-> >  include/linux/resctrl.h                |  3 ++
-> >  5 files changed, 83 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> > index 8e25ea49372e..aafe4b74587c 100644
-> > --- a/arch/x86/kernel/cpu/resctrl/core.c
-> > +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> > @@ -582,12 +582,16 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
-> >  	if (r == &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl) {
-> >  		if (is_mbm_enabled() && cpu == d->mbm_work_cpu) {
-> >  			cancel_delayed_work(&d->mbm_over);
-> > -			mbm_setup_overflow_handler(d, 0);
-> > +			/*
-> > +			 * exclude_cpu=-1 as this CPU has already been removed
-> > +			 * by cpumask_clear_cpu()d
-> > +			 */
-> > +			mbm_setup_overflow_handler(d, 0, RESCTRL_PICK_ANY_CPU);
-> >  		}
-> >  		if (is_llc_occupancy_enabled() && cpu == d->cqm_work_cpu &&
-> >  		    has_busy_rmid(r, d)) {
-> >  			cancel_delayed_work(&d->cqm_limbo);
-> > -			cqm_setup_limbo_handler(d, 0);
-> > +			cqm_setup_limbo_handler(d, 0, RESCTRL_PICK_ANY_CPU);
-> >  		}
-> >  	}
-> >  }
-> > diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> > index 3eb5b307b809..47838ba6876e 100644
-> > --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> > +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> > @@ -78,6 +78,37 @@ static inline unsigned int cpumask_any_housekeeping(const struct cpumask *mask)
-> >  	return cpu;
-> >  }
-> >  
-> > +/**
-> > + * cpumask_any_housekeeping_but() - Chose any cpu in @mask, preferring those
-> > + *			            that aren't marked nohz_full, excluding
-> > + *				    the provided CPU
-> > + * @mask:	The mask to pick a CPU from.
-> > + * @exclude_cpu:The CPU to avoid picking.
-> > + *
-> > + * Returns a CPU from @mask, but not @but. If there are houskeeping CPUs that
-> > + * don't use nohz_full, these are preferred.
-> > + * Returns >= nr_cpu_ids if no CPUs are available.
-> > + */
-> > +static inline unsigned int
-> > +cpumask_any_housekeeping_but(const struct cpumask *mask, int exclude_cpu)
-> > +{
-> > +	int cpu, hk_cpu;
-> > +
-> > +	cpu = cpumask_any_but(mask, exclude_cpu);
-> > +	if (tick_nohz_full_cpu(cpu)) {
-> > +		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
-> > +		if  (hk_cpu == exclude_cpu) {
-> > +			hk_cpu = cpumask_nth_andnot(1, mask,
-> > +						    tick_nohz_full_mask);
+> This moves all compaction sysctls to its own file.
 > 
-> I'm left to wonder if it's okay to alter tick_nohz_full_mask in resctrl 
-> code??
+> Link: https://lore.kernel.org/all/ZAJwoXJCzfk1WIBx@bombadil.infradead.org/
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  include/linux/compaction.h |  7 ----
+>  kernel/sysctl.c            | 58 -------------------------------
+>  mm/compaction.c            | 70 ++++++++++++++++++++++++++++++++++----
+>  3 files changed, 64 insertions(+), 71 deletions(-)
+> 
+> diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+> index 52a9ff65faee..a6e512cfb670 100644
+> --- a/include/linux/compaction.h
+> +++ b/include/linux/compaction.h
+> @@ -81,13 +81,6 @@ static inline unsigned long compact_gap(unsigned int order)
+>  }
+> 
+>  #ifdef CONFIG_COMPACTION
+> -extern unsigned int sysctl_compaction_proactiveness;
+> -extern int sysctl_compaction_handler(struct ctl_table *table, int write,
+> -			void *buffer, size_t *length, loff_t *ppos);
+> -extern int compaction_proactiveness_sysctl_handler(struct ctl_table *table,
+> -		int write, void *buffer, size_t *length, loff_t *ppos);
+> -extern int sysctl_extfrag_threshold;
+> -extern int sysctl_compact_unevictable_allowed;
+> 
+>  extern unsigned int extfrag_for_order(struct zone *zone, unsigned int order);
+>  extern int fragmentation_index(struct zone *zone, unsigned int order);
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index ce0297acf97c..49a405447c77 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
 
-I suppose it should do instead:
-		hk_cpu = cpumask_nth_and(0, mask, tick_nohz_full_mask);
-		if (hk_cpu == exclude_cpu)
-			hk_cpu = cpumask_next_and(hk_cpu, mask, tick_nohz_full_mask);
+You should be able to remove the #include <linux/compaction.h> in this file now?
 
--- 
- i.
+> @@ -746,27 +746,6 @@ int proc_dointvec(struct ctl_table *table, int write, void *buffer,
+>  	return do_proc_dointvec(table, write, buffer, lenp, ppos, NULL, NULL);
+>  }
+> 
+> -#ifdef CONFIG_COMPACTION
+> -static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
+> -		int write, void *buffer, size_t *lenp, loff_t *ppos)
+> -{
+> -	int ret, old;
+> -
+> -	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
+> -		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+> -
+> -	old = *(int *)table->data;
+> -	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+> -	if (ret)
+> -		return ret;
+> -	if (old != *(int *)table->data)
+> -		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
+> -			     table->procname, current->comm,
+> -			     task_pid_nr(current));
+> -	return ret;
+> -}
+> -#endif
+> -
+>  /**
+>   * proc_douintvec - read a vector of unsigned integers
+>   * @table: the sysctl table
+> @@ -2157,43 +2136,6 @@ static struct ctl_table vm_table[] = {
+>  		.extra1		= SYSCTL_ONE,
+>  		.extra2		= SYSCTL_FOUR,
+>  	},
+> -#ifdef CONFIG_COMPACTION
+> -	{
+> -		.procname	= "compact_memory",
+> -		.data		= NULL,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0200,
+> -		.proc_handler	= sysctl_compaction_handler,
+> -	},
+> -	{
+> -		.procname	= "compaction_proactiveness",
+> -		.data		= &sysctl_compaction_proactiveness,
+> -		.maxlen		= sizeof(sysctl_compaction_proactiveness),
+> -		.mode		= 0644,
+> -		.proc_handler	= compaction_proactiveness_sysctl_handler,
+> -		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= SYSCTL_ONE_HUNDRED,
+> -	},
+> -	{
+> -		.procname	= "extfrag_threshold",
+> -		.data		= &sysctl_extfrag_threshold,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		.proc_handler	= proc_dointvec_minmax,
+> -		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= SYSCTL_ONE_THOUSAND,
+> -	},
+> -	{
+> -		.procname	= "compact_unevictable_allowed",
+> -		.data		= &sysctl_compact_unevictable_allowed,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
+> -		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= SYSCTL_ONE,
+> -	},
+> -
+> -#endif /* CONFIG_COMPACTION */
+>  	{
+>  		.procname	= "min_free_kbytes",
+>  		.data		= &min_free_kbytes,
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index e689d66cedf4..f56b3dc4563b 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -1728,7 +1728,7 @@ typedef enum {
+>   * Allow userspace to control policy on scanning the unevictable LRU for
+>   * compactable pages.
+>   */
+> -int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
+> +static int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
 
---8323329-1557823100-1679412340=:1997--
+I would move all the sysctl_ variables scattered later in the file to a
+single place here.
+
+>  static inline void
+>  update_fast_start_pfn(struct compact_control *cc, unsigned long pfn)
+> @@ -2052,7 +2052,7 @@ static unsigned int fragmentation_score_node(pg_data_t *pgdat)
+> 
+>  	return score;
+>  }
+> -
+> +unsigned int sysctl_compaction_proactiveness;
+
+e.g. this
+
+>  static unsigned int fragmentation_score_wmark(pg_data_t *pgdat, bool low)
+>  {
+>  	unsigned int wmark_low;
+> @@ -2228,7 +2228,7 @@ static enum compact_result __compaction_suitable(struct zone *zone, int order,
+> 
+>  	return COMPACT_CONTINUE;
+>  }
+> -
+> +static int sysctl_extfrag_threshold = 500;
+
+and this.
+
+>  /*
+>   * compaction_suitable: Is this suitable to run compaction on this zone now?
+>   * Returns
+> @@ -2584,7 +2584,6 @@ static enum compact_result compact_zone_order(struct zone *zone, int order,
+>  	return ret;
+>  }
+> 
+> -int sysctl_extfrag_threshold = 500;
+> 
+
+Remove newline so that's a single one.
+
+>  /**
+>   * try_to_compact_pages - Direct compact to satisfy a high-order allocation
+> @@ -2749,7 +2748,7 @@ static void compact_nodes(void)
+>   */
+>  unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
+
+Also move this one, and can be also static now?
+
+> -int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+> +static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+>  		void *buffer, size_t *length, loff_t *ppos)
+>  {
+>  	int rc, nid;
+> @@ -2779,7 +2778,7 @@ int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+>   * This is the entry point for compacting all nodes via
+>   * /proc/sys/vm/compact_memory
+>   */
+> -int sysctl_compaction_handler(struct ctl_table *table, int write,
+> +static int sysctl_compaction_handler(struct ctl_table *table, int write,
+>  			void *buffer, size_t *length, loff_t *ppos)
+>  {
+>  	if (write)
+> @@ -3074,7 +3073,63 @@ static int kcompactd_cpu_online(unsigned int cpu)
+>  	}
+>  	return 0;
+>  }
+
+Please add newline here
+
+> +static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
+> +		int write, void *buffer, size_t *lenp, loff_t *ppos)
+> +{
+> +	int ret, old;
+> 
+> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
+> +		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+> +
+> +	old = *(int *)table->data;
+> +	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+> +	if (ret)
+> +		return ret;
+> +	if (old != *(int *)table->data)
+> +		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
+> +			     table->procname, current->comm,
+> +			     task_pid_nr(current));
+> +	return ret;
+> +}
+
+Newline.
+
+> +#ifdef CONFIG_SYSCTL
+> +static struct ctl_table vm_compaction[] = {
+> +	{
+> +		.procname	= "compact_memory",
+> +		.data		= NULL,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0200,
+> +		.proc_handler	= sysctl_compaction_handler,
+> +	},
+> +	{
+> +		.procname	= "compaction_proactiveness",
+> +		.data		= &sysctl_compaction_proactiveness,
+> +		.maxlen		= sizeof(sysctl_compaction_proactiveness),
+> +		.mode		= 0644,
+> +		.proc_handler	= compaction_proactiveness_sysctl_handler,
+> +		.extra1		= SYSCTL_ZERO,
+> +		.extra2		= SYSCTL_ONE_HUNDRED,
+> +	},
+> +	{
+> +		.procname	= "extfrag_threshold",
+> +		.data		= &sysctl_extfrag_threshold,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec_minmax,
+> +		.extra1		= SYSCTL_ZERO,
+> +		.extra2		= SYSCTL_ONE_THOUSAND,
+> +	},
+> +	{
+> +		.procname	= "compact_unevictable_allowed",
+> +		.data		= &sysctl_compact_unevictable_allowed,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
+> +		.extra1		= SYSCTL_ZERO,
+> +		.extra2		= SYSCTL_ONE,
+> +	},
+> +	{ }
+> +};
+> +#endif
+
+Newline.
+
+>  static int __init kcompactd_init(void)
+>  {
+>  	int nid;
+> @@ -3090,6 +3145,9 @@ static int __init kcompactd_init(void)
+> 
+>  	for_each_node_state(nid, N_MEMORY)
+>  		kcompactd_run(nid);
+> +#ifdef CONFIG_SYSCTL
+> +	register_sysctl_init("vm", vm_compaction);
+> +#endif
+>  	return 0;
+>  }
+>  subsys_initcall(kcompactd_init)
+
+Thanks!
+
