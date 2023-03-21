@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47CA6C31DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED326C31DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjCUMjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        id S231169AbjCUMjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjCUMjG (ORCPT
+        with ESMTP id S231161AbjCUMjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:39:06 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC1F7ABE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:38:57 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id d13so15452967pjh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679402337;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=psQ3fndUzPOiGZuluVjcHdDi70vc5YYFSkEQm/+7Ln8=;
-        b=hdAg+kbUcsvf35SFZgqeAGJMawvQhmOUfrDyR9ABe9kykcf+VIR7cOeYnjotRn5GCU
-         SN3P+J0/zkbbbrU6/PdrZZDVbFmNF8URpez3d5j18iFxVuGLUTDKErbnxiMn5/uUYu2d
-         W2Qjo11+YNkyxMN4Z8IMgSt7Fjr1jFRHF96uJICH1mQQwuoYfqvWMItvu74dQruHtQo0
-         u0y/iRFf3bC3Ir34xlg7I4bkG6Q5emFpwfoX9M213wEhR8VUdXFtusENkvLJKGMGA2uU
-         r0L5IqrQOWS4+9OycTV05CAW02JmzqBW88fi2SC2w0/S3nVVdDhJC1HduABnLvgGNFOQ
-         lkAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679402337;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=psQ3fndUzPOiGZuluVjcHdDi70vc5YYFSkEQm/+7Ln8=;
-        b=0KImXxvZC5fPC1A0x5Ooa/brMMYvQth808Jkp5M6lKMfputqJyf/sCONYe9nvLiU5f
-         GaITkmIThyBycplYOakSJbR/iMeA3dBMJlYJd9llxRL9XThokYLKqYxiyt7mIpf0Yymh
-         nsiUgWtNDTwUNuZQdGf64DAyqItTRMI3+kHUj9ntPnFAek/+35uPQgozNX/ODFKRO3tz
-         TMJkecEKST0eoe3ikaJqFqvcLN7kPMr934GSvY//Ke3d1JbBUx7gIgpb9GpVJK4ySu6w
-         RFui4AoxD9VWfr5Rp35627PI9nXSQYB3Kadz1v7v6dP4ndw/i/V2B+gBr2nlVfDKDLU/
-         yc8A==
-X-Gm-Message-State: AO0yUKVvtaWzijRel9vO4NcDMoQKioIjHGcEX6mrF6LDOs6WRpUltOcj
-        P5AKDjqHDzd9HgO09ysiDy6uvzsQ2zDr0KrPXrS5Ig==
-X-Google-Smtp-Source: AK7set8Y6ZbQ8GATAMTM9rGHzakUBlONUXTzVdrc4Qcz+6gcS5yhwvuBoj2pwKFBIlMSPKONpFYT3ABZL6MIqjb/dXo=
-X-Received: by 2002:a17:90a:ca8d:b0:23d:4e0e:cf2c with SMTP id
- y13-20020a17090aca8d00b0023d4e0ecf2cmr620323pjt.3.1679402336886; Tue, 21 Mar
- 2023 05:38:56 -0700 (PDT)
+        Tue, 21 Mar 2023 08:39:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BCC6EB6;
+        Tue, 21 Mar 2023 05:39:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2428B81673;
+        Tue, 21 Mar 2023 12:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 713ECC433EF;
+        Tue, 21 Mar 2023 12:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679402337;
+        bh=fxPcB6Lzqq1Y8arAf6NWGF782DnpVxwW96wS65uUn3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R6LXbzPqlNuIO/oYPIzCbooFZT8R0Nh+MO5asOv2+KFUbu5hQQNmH/KsHN9uMx3av
+         c1mXFTh0FULRl+/HgmX25sQF3pNbeIuEooZ4jPY1mYVZCg2K5sUCSTzUg0b9RzFx8R
+         ovicJWaRaMhf4uG8BDSQPvzBeKvF1cTWN+inciYeUc+QUxpK0VpqZN6py8e6EEdKqT
+         vI3EmqSGGpeO5l1vWW/dBtJk+qzo9XKH+JJsZcXIvUJxonMtVB6r1mCrPUbeCmryWv
+         7B+ZHxbUkRPwuE+iZ1c3D4azzOrYDrD3I5jEthnR3/S8ULA8xY4QC6Dj9/WxI+FP+D
+         HOMpX/gMrhfzA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0DCCA4052D; Tue, 21 Mar 2023 09:38:55 -0300 (-03)
+Date:   Tue, 21 Mar 2023 09:38:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Bernhard M. Wiedemann" <bwiedemann@suse.de>
+Cc:     linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf jevents: Sort list of input files
+Message-ID: <ZBmlXzCty7wc9M4o@kernel.org>
+References: <ZBjdIbF7BDphCH+k@kernel.org>
+ <20230321063032.19804-1-bwiedemann@suse.de>
 MIME-Version: 1.0
-References: <20230317160810.107988-1-vincent.guittot@linaro.org> <20230321122846.GK2234901@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230321122846.GK2234901@hirez.programming.kicks-ass.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 21 Mar 2023 13:38:45 +0100
-Message-ID: <CAKfTPtD28wd17cdUqrpVp71Vkw0kReyLSK86N4ZUmV5A2h+fSw@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321063032.19804-1-bwiedemann@suse.de>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,25 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 at 13:28, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Mar 17, 2023 at 05:08:10PM +0100, Vincent Guittot wrote:
-> > Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
-> > fixes an overflowing bug, but ignore a case that se->exec_start is reset
-> > after a migration.
-> >
-> > For fixing this case, we delay the reset of se->exec_start after
-> > placing the entity which se->exec_start to detect long sleeping task.
-> >
-> > In order to take into account a possible divergence between the clock_task
-> > of 2 rqs, we increase the threshold to around 104 days.
-> >
-> >
-> > Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
-> > Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
->
-> Just noticed, that SoB chain isn't valid, should Zhang be something
-> like: Originally-by or Suggested-by or whatever?
+Em Tue, Mar 21, 2023 at 07:30:32AM +0100, Bernhard M. Wiedemann escreveu:
+> Without this, pmu-events.c would be generated with variations in ordering
+> depending on non-deterministic filesystem readdir order.
+> 
+> I tested that pmu-events.c still has the same number of lines
+> and that perf list output works.
+> 
+> This patch was done while working on reproducible builds for openSUSE,
+> but also solves issues in Debian [1] and other distributions.
+> 
+> [1] https://tests.reproducible-builds.org/debian/rb-pkg/unstable/i386/linux.html
 
-Originally-by would be the right tag
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Signed-off-by: Bernhard M. Wiedemann <bwiedemann@suse.de>
+> CC: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/pmu-events/jevents.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> index 2bcd07ce609f..736ee0a75cf8 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -889,7 +889,7 @@ def main() -> None:
+>    def ftw(path: str, parents: Sequence[str],
+>            action: Callable[[Sequence[str], os.DirEntry], None]) -> None:
+>      """Replicate the directory/file walking behavior of C's file tree walk."""
+> -    for item in os.scandir(path):
+> +    for item in sorted(os.scandir(path), key=lambda e: e.name):
+>        if _args.model != 'all' and item.is_dir():
+>          # Check if the model matches one in _args.model.
+>          if len(parents) == _args.model.split(',')[0].count('/'):
+> -- 
+> 2.35.3
+> 
+
+-- 
+
+- Arnaldo
