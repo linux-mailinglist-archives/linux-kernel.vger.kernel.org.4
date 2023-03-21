@@ -2,195 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A356C31C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEB96C31CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCUMgK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 08:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S230158AbjCUMhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCUMgI (ORCPT
+        with ESMTP id S229473AbjCUMhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:36:08 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A2241B61;
-        Tue, 21 Mar 2023 05:36:03 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E093424E30A;
-        Tue, 21 Mar 2023 20:36:00 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
- 2023 20:36:00 +0800
-Received: from [192.168.125.108] (183.27.97.64) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
- 2023 20:35:59 +0800
-Message-ID: <2311a888-8861-ade6-d46f-caff4fc3ec73@starfivetech.com>
-Date:   Tue, 21 Mar 2023 20:35:59 +0800
+        Tue, 21 Mar 2023 08:37:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46FB4346F;
+        Tue, 21 Mar 2023 05:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EKPzzBQ3FvBycDuqBFuN9h8/3as7Wm8d7ysB+f2krm4=; b=nvjbX0z/nmnuQ6KwN3CNm8WoLu
+        oyEVoMHPWDfIbLBsKuQBad4rZOOiRoj5uThoiY3ks5tCiIvftymvBulFkhxEeNft/MYn6IUmgQzTX
+        xlWmqmGKYRdKZlKb/eP5Qupv1MBzXbv2T3mStJjk2S8lbDPiTtF5XVVPyLSxVGxUBHBsc+AeiNFyh
+        pkrDNXbSNnzs4NeGGEdoBYxtdFWKiW9vRbGijsMbUyoNFz+Mw0BaTLocTU7JlVRj+1NbTg/zTSIRm
+        Ts2x53hXcC+N11eHg7QYP8n945U6vZPrlZgqMjPrGyIJQj6eLTRMTWadfHu3OlFLvzqu45sIMa1Y9
+        qKQ4zYKw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pebF1-00CLpY-1d;
+        Tue, 21 Mar 2023 12:37:27 +0000
+Date:   Tue, 21 Mar 2023 05:37:27 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-mmc@vger.kernel.org,
+        Wenchao Chen <wenchao.chen666@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Christian Lohle <cloehle@hyperstone.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <beanhuo@micron.com>
+Subject: Re: [PATCH] mmc: core: Allow to avoid REQ_FUA if the eMMC supports
+ an internal cache
+Message-ID: <ZBmlB2K3KMt7Apv5@infradead.org>
+References: <20230316164514.1615169-1-ulf.hansson@linaro.org>
+ <ZBNIg8+rOdFKcsS8@infradead.org>
+ <522a5d01-e939-278a-3354-1bbfb1bd6557@intel.com>
+ <ZBf8dZm1FZIusMls@infradead.org>
+ <CAPDyKFogTyf30X+3JGeqf+yER_OLQ8JwXy6oEF3Rn78KzLSDxw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
- configuration.
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        "Roger Quadros" <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20230315104411.73614-1-minda.chen@starfivetech.com>
- <20230315104411.73614-6-minda.chen@starfivetech.com>
- <20230320153419.GB1713196-robh@kernel.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <20230320153419.GB1713196-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.97.64]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFogTyf30X+3JGeqf+yER_OLQ8JwXy6oEF3Rn78KzLSDxw@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/20 23:34, Rob Herring wrote:
-> On Wed, Mar 15, 2023 at 06:44:11PM +0800, Minda Chen wrote:
->> USB Glue layer and Cadence USB subnode configuration,
->> also includes USB and PCIe phy dts configuration.
->> 
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
->>  2 files changed, 61 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> index a132debb9b53..c64476aebc1a 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> @@ -236,3 +236,10 @@
->>  	pinctrl-0 = <&uart0_pins>;
->>  	status = "okay";
->>  };
->> +
->> +&usb0 {
->> +	status = "okay";
->> +	usbdrd_cdns3: usb@0 {
->> +		dr_mode = "peripheral";
->> +	};
->> +};
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index f70a4ed47eb4..17722fd1be62 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -362,6 +362,60 @@
->>  			status = "disabled";
->>  		};
->>  
->> +		usb0: usb@10100000 {
->> +			compatible = "starfive,jh7110-usb";
->> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
->> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
->> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
->> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
->> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
->> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
->> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
->> +			starfive,sys-syscon = <&sys_syscon 0x18>;
->> +			status = "disabled";
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +			ranges = <0x0 0x0 0x10100000 0x100000>;
->> +
->> +			usbdrd_cdns3: usb@0 {
->> +				compatible = "cdns,usb3";
+On Mon, Mar 20, 2023 at 04:24:36PM +0100, Ulf Hansson wrote:
+> > Neither to ATA or SCSI, but applications and file systems always very
+> > much expected it, so withou it storage devices would be considered
+> > fault.  Only NVMe actually finally made it part of the standard.
 > 
-> This pattern of USB wrapper and then a "generic" IP node is discouraged 
-> if it is just clocks, resets, power-domains, etc. IOW, unless there's an 
-> actual wrapper h/w block with its own registers, then don't do this 
-> split. Merge it all into a single node.
-> 
-I am afraid it is difficult to merge in one single node. 
+> Even if the standard doesn't say, it's perfectly possible that the
+> storage device implements it.
 
-1.If cadence3 usb device is still the sub device. All the dts setting are in
-StarFive node. This can not work.
-StarFive driver code Using platform_device_add generate cadenc3 usb platform device. 
-Even IO memory space setting can be passed to cadence3 USB, PHY setting can not be passed.
-For the PHY driver using dts now. But in this case, Cadence3 USB no dts configure.
+That's exactly what I'm saying above.
 
-2. Just one USB Cadence platform device.
-Maybe this can work. But Cadence USB driver code cdns3-plat.c required to changed.
+> > But these are completely separate issue.  Torn writes are completely
+> > unrelated to cache flushes.  You can indeed work around torn writes
+> > by checksums, but not the lack of cache flushes or vice versa.
+> 
+> It's not a separate issue for eMMC. Please read the complete commit
+> message for further clarifications in this regard.
 
-Hi Peter Pawel and Roger
-   There is a "platform_suspend" function pointer in "struct cdns3_platform_data"，
-   Add "platform_init" and "platform_exit" for our JH7110 platform. Maybe it can work.
-   Is it OK?   
->> +				reg = <0x0 0x10000>,
->> +				      <0x10000 0x10000>,
->> +				      <0x20000 0x10000>;
->> +				reg-names = "otg", "xhci", "dev";
->> +				interrupts = <100>, <108>, <110>;
->> +				interrupt-names = "host", "peripheral", "otg";
->> +				phys = <&usbphy0>;
->> +				phy-names = "cdns3,usb2-phy";
+The commit message claims that checksums replace cache flushes.  Which
+is dangerously wrong.  So please don't refer me to it again - this
+dangerously incorrect commit message is wht alerted me to reply to the
+patch.
+
+> > > However, the issue has been raised that reliable write is not
+> > > needed to provide sufficient assurance of data integrity, and that
+> > > in fact, cache flush can be used instead and perform better.
+> >
+> > It does not.
 > 
-> No need for *-names when there is only 1 entry. Names are local to the 
-> device and only to distinguish entries, so 'usb2' would be sufficient 
-> here.
-> 
-The PHY name 'cdns3,usb2-phy'  is defined in cadence3 usb driver code.
-Cadence USB3 driver code using this name to get PHY instance.
-And all the PHY ops used in Cadence3 USB sub device. 
->> +				maximum-speed = "super-speed";
->> +			};
->> +		};
->> +
->> +		usbphy0: phy@10200000 {
->> +			compatible = "starfive,jh7110-usb-phy";
->> +			reg = <0x0 0x10200000 0x0 0x10000>;
->> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
->> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
->> +			clock-names = "125m", "app_125";
->> +			#phy-cells = <0>;
->> +		};
->> +
->> +		pciephy0: phy@10210000 {
->> +			compatible = "starfive,jh7110-pcie-phy";
->> +			reg = <0x0 0x10210000 0x0 0x10000>;
->> +			#phy-cells = <0>;
->> +		};
->> +
->> +		pciephy1: phy@10220000 {
->> +			compatible = "starfive,jh7110-pcie-phy";
->> +			reg = <0x0 0x10220000 0x0 0x10000>;
->> +			#phy-cells = <0>;
->> +		};
->> +
->>  		stgcrg: clock-controller@10230000 {
->>  			compatible = "starfive,jh7110-stgcrg";
->>  			reg = <0x0 0x10230000 0x0 0x10000>;
->> -- 
->> 2.17.1
->> 
+> Can you please elaborate on this?
+
+Flushing caches does not replace the invariant of not tearing subsector
+writes.  And if you need to use reliable writes for (some) devices to
+not tear sectors, no amount of cache flushing is going to paper over
+the problem.
