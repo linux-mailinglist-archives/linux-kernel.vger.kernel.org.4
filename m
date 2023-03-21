@@ -2,155 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054FB6C2F62
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E91386C2F67
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjCUKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S230387AbjCUKsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbjCUKrH (ORCPT
+        with ESMTP id S230386AbjCUKsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:47:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25C2E558D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:47:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB99FAD7;
-        Tue, 21 Mar 2023 03:47:49 -0700 (PDT)
-Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CE0373F71E;
-        Tue, 21 Mar 2023 03:47:04 -0700 (PDT)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     coresight@lists.linaro.org
-Cc:     anshuman.khandual@arm.com, mike.leach@linaro.org,
-        james.clark@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, suzuki.poulose@arm.com,
-        Steve Clevenger <scclevenger@os.amperecomputing.com>
-Subject: [PATCH v2] coresight: etm4x: Do not access TRCIDR1 for identification
-Date:   Tue, 21 Mar 2023 10:45:30 +0000
-Message-Id: <20230321104530.1547136-1-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 21 Mar 2023 06:48:18 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600554214
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:48:10 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d17so4720011wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679395689;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9fr4s/NbgFwlXaB/kT+wdNGLIVroo3XSqt3IGTfKlrw=;
+        b=XpxtA4gxBxKDJ+qVj87Lm+nPdo9mRsPb9+gYYIOIqGAHVmtPw9Xws+tHNBVkr1HrMe
+         KNw1h8gFTV68arDcGIVtYPpY9Z8mio8vMDw+jTo6BWD3wyTCCPWjF+EHtmKdMG/+c41f
+         kz2Thg/wBZGzM3WGDsRfNjQdKFKwBawispP30fYPXblSeCtauxrT0p3XZqawGxwx2YHa
+         2m9uWuLQ1+E0u0vnC0tG4bRnwKj6dfb7Qy7W8K+I0f2oy/QprtKkMEbWji4nzWsqPSF6
+         6ibDObDfCxIdrlKzN/vM2WiNFTYdPp+GOLbZG9Ktk7WNe+nM8Cq8B2np38QurauyySPd
+         GqVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679395689;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fr4s/NbgFwlXaB/kT+wdNGLIVroo3XSqt3IGTfKlrw=;
+        b=3h35Ldu5Z9Ml8o4L/w/XaCyVKz9OFD5evAfxdANkM0p2SxjMGFy2m6YOw6lAuH7KmU
+         Sw0igE6BzQaymdP1wnwvZ0PhMtva3E+x435rqamlgx+zn2KteuRYdyFbEtsol0ZLqvTj
+         SFpj3jlS36/swjkf4ujUQ3cnsV1+1u6PJ3N5AdxWfwnEKlHJmSZsjXInR9ki/SvqyVOS
+         Kv5Vtj/1CTZQabMFPG91ZCUXU4EUeNT5ZTLQ1h5WT2oWUyOzWaVcSrARUT46Z8rei5BF
+         WkvTce5ikavssKsxPNpz3PB8OXBSmX2rPhEUBF5z3RQW4AQiyQx1LChzcXDWpFW0SDfr
+         e9uA==
+X-Gm-Message-State: AO0yUKXZzC9+slpbByjVD9tvn0J+EGHBhW9dboLVSyC57JufWUH1JGcw
+        dCY9OClcaiKuhGUVJgmnIhrcmw==
+X-Google-Smtp-Source: AK7set+Dx2bqwbuauE+ZNG0b4IJ0siP/A/tIE+bC6HdEArLrXCBXSI/i2Tk8rfNS7MbnYwY37Ql4ug==
+X-Received: by 2002:adf:edc9:0:b0:2d1:5698:3f6e with SMTP id v9-20020adfedc9000000b002d156983f6emr1913160wro.58.1679395688892;
+        Tue, 21 Mar 2023 03:48:08 -0700 (PDT)
+Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id a4-20020adffb84000000b002d322b9a7f5sm11010756wrr.88.2023.03.21.03.48.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 03:48:08 -0700 (PDT)
+Message-ID: <5845f51e-5d87-c98e-77a1-0f9b6365e6c1@baylibre.com>
+Date:   Tue, 21 Mar 2023 11:48:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230315110736.35506-1-jpanis@baylibre.com>
+ <20230315110736.35506-2-jpanis@baylibre.com>
+ <20230320155354.GB1733616-robh@kernel.org>
+ <04914464-2bc2-9d86-e9e2-8a716b929f28@baylibre.com>
+ <2dcfd9dc-6c43-20b7-e27b-8ec2883be237@linaro.org>
+ <887d5e71-334c-b206-08e6-2cc822df9eda@baylibre.com>
+ <2aeb47d6-0577-f8e4-6070-331af15b1f83@linaro.org>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <2aeb47d6-0577-f8e4-6070-331af15b1f83@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CoreSight ETM4x architecture clearly provides ways to identify a device
-via registers in the "Management" class, TRCDEVARCH and TRCDEVTYPE. These
-registers can be accessed without the Trace domain being powered on.
-We additionally added TRCIDR1 as fallback in order to cover for any
-ETMs that may not have implemented TRCDEVARCH. So far, nobody has
-reported hitting a WARNING we placed to catch such systems.
 
-Also, more importantly it is problematic to access TRCIDR1, which is a
-"Trace" register via MMIO access, without clearing the OSLK. But we cannot
-mess with the OSLK until we know for sure that this is an ETMv4 device.
-Thus, this kind of creates a chicken and egg problem unnecessarily for
-systems "which are compliant" to the ETMv4 architecture.
 
-Let us remove the TRCIDR1 fall back check and rely only on TRCDEVARCH.
+On 3/21/23 11:32, Krzysztof Kozlowski wrote:
+> On 21/03/2023 10:03, Julien Panis wrote:
+>>
+>> On 3/21/23 08:36, Krzysztof Kozlowski wrote:
+>>> On 20/03/2023 17:35, Julien Panis wrote:
+>>>> On 3/20/23 16:53, Rob Herring wrote:
+>>>>> On Wed, Mar 15, 2023 at 12:07:33PM +0100, Julien Panis wrote:
+>>>>>> TPS6594 is a Power Management IC which provides regulators and others
+>>>>>> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+>>>>>> PFSM (Pre-configurable Finite State Machine) managing the state of the
+>>>>>> device.
+>>>>>> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+>>>>> As mentioned, the binding needs to be complete. It's missing GPIO at
+>>>>> least. RTC and watchdog may or may not need binding changes.
+>>>> Thank you for your feedback.
+>>>>
+>>>> About GPIO, do you speak about 'gpio-controller'
+>>>> and/or '#gpio-cells' properties ?
+>>> Yes.
+>>>
+>>>> For RTC (and for watchdog, once the driver will be
+>>>> implemented), our driver do not require any node
+>>>> to work. What could make an explicit instantiation
+>>>> necessary in DT ?
+>>> Properties from RTC schema, e.g. start-year, wakeup etc.
+>> TPS6594 RTC driver is being reviewed (this is another patch
+>> series, not merged yet). These properties are not used by our
+>> driver, that's why we did not have to add some RTC node in
+>> the DT (until now, using such properties in our driver was not
+>> requested by RTC sub-system maintainers).
+> Bindings should be complete, regardless whether you now need this in
+> driver or not. Does your comment mean that you will never need these,
+> because hardware does not support them, and never going to add?
+> Otherwise I don't get why you refer to driver when we talk about bindings...
 
-Reported-by: Steve Clevenger <scclevenger@os.amperecomputing.com>
-Link: https://lore.kernel.org/all/143540e5623d4c7393d24833f2b80600d8d745d2.1677881753.git.scclevenger@os.amperecomputing.com/
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: James Clark <james.clark@arm.com>
-Fixes: 8b94db1edaee ("coresight: etm4x: Use TRCDEVARCH for component discovery")
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
----
+OK, I understand now (I misinterpreted "RTC and watchdog may or may not
+need binding changes").
 
-Changes since v2:
- - Remove unused etm_tridr_to_arch() helper
- - Add comment to explain why TRCIDR1 cannot be used.
-
----
- .../coresight/coresight-etm4x-core.c          | 22 ++++++++-----------
- drivers/hwtracing/coresight/coresight-etm4x.h | 20 +++++------------
- 2 files changed, 15 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index 104333c2c8a3..4c15fae534f3 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -1070,25 +1070,21 @@ static bool etm4_init_iomem_access(struct etmv4_drvdata *drvdata,
- 				   struct csdev_access *csa)
- {
- 	u32 devarch = readl_relaxed(drvdata->base + TRCDEVARCH);
--	u32 idr1 = readl_relaxed(drvdata->base + TRCIDR1);
- 
- 	/*
- 	 * All ETMs must implement TRCDEVARCH to indicate that
--	 * the component is an ETMv4. To support any broken
--	 * implementations we fall back to TRCIDR1 check, which
--	 * is not really reliable.
-+	 * the component is an ETMv4. Even though TRCIDR1 also
-+	 * contains the information, it is part of the "Trace"
-+	 * register and must be accessed with the OSLK cleared,
-+	 * with MMIO. But we cannot touch the OSLK until we are
-+	 * sure this is an ETM. So rely only on the TRCDEVARCH.
- 	 */
--	if ((devarch & ETM_DEVARCH_ID_MASK) == ETM_DEVARCH_ETMv4x_ARCH) {
--		drvdata->arch = etm_devarch_to_arch(devarch);
--	} else {
--		pr_warn("CPU%d: ETM4x incompatible TRCDEVARCH: %x, falling back to TRCIDR1\n",
--			smp_processor_id(), devarch);
--
--		if (ETM_TRCIDR1_ARCH_MAJOR(idr1) != ETM_TRCIDR1_ARCH_ETMv4)
--			return false;
--		drvdata->arch = etm_trcidr_to_arch(idr1);
-+	if ((devarch & ETM_DEVARCH_ID_MASK) != ETM_DEVARCH_ETMv4x_ARCH) {
-+		pr_warn_once("TRCDEVARCH doesn't match ETMv4 architecture\n");
-+		return false;
- 	}
- 
-+	drvdata->arch = etm_devarch_to_arch(devarch);
- 	*csa = CSDEV_ACCESS_IOMEM(drvdata->base);
- 	return true;
- }
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 434f4e95ee17..27c8a9901868 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x.h
-+++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-@@ -753,14 +753,12 @@
-  * TRCDEVARCH	- CoreSight architected register
-  *                - Bits[15:12] - Major version
-  *                - Bits[19:16] - Minor version
-- * TRCIDR1	- ETM architected register
-- *                - Bits[11:8] - Major version
-- *                - Bits[7:4]  - Minor version
-- * We must rely on TRCDEVARCH for the version information,
-- * however we don't want to break the support for potential
-- * old implementations which might not implement it. Thus
-- * we fall back to TRCIDR1 if TRCDEVARCH is not implemented
-- * for memory mapped components.
-+ *
-+ * We must rely only on TRCDEVARCH for the version information. Even though,
-+ * TRCIDR1 also provides the architecture version, it is a "Trace" register
-+ * and as such must be accessed only with Trace power domain ON. This may
-+ * not be available at probe time.
-+ *
-  * Now to make certain decisions easier based on the version
-  * we use an internal representation of the version in the
-  * driver, as follows :
-@@ -786,12 +784,6 @@ static inline u8 etm_devarch_to_arch(u32 devarch)
- 				ETM_DEVARCH_REVISION(devarch));
- }
- 
--static inline u8 etm_trcidr_to_arch(u32 trcidr1)
--{
--	return ETM_ARCH_VERSION(ETM_TRCIDR1_ARCH_MAJOR(trcidr1),
--				ETM_TRCIDR1_ARCH_MINOR(trcidr1));
--}
--
- enum etm_impdef_type {
- 	ETM4_IMPDEF_HISI_CORE_COMMIT,
- 	ETM4_IMPDEF_FEATURE_MAX,
--- 
-2.34.1
+> Best regards,
+> Krzysztof
+>
 
