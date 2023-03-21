@@ -2,91 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669386C29F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860F96C29F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCUFlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        id S229813AbjCUFoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCUFlK (ORCPT
+        with ESMTP id S229494AbjCUFoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:41:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7717CED;
-        Mon, 20 Mar 2023 22:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=V+8E3N2hWBMY6JuQmKvAuziEhrAWOBaYxYWA1/lHFMo=; b=PZrBUD6jn6h0x9MriVZBLTBQP0
-        C4ALnRjap0IJJR7wQjpZDkxe0U9MfJPJhWsZ119kwFBbS1dtNyXCs3LU0wwV9t3oM9gZelGBLSwkD
-        PwIOb3YDFAqKstEJrwe8Cbby0u7ClWLuq3C7L8KQffHETP+vIKV4p+VIBrk7rgFu1H3W31RDlOuZ1
-        n9XHLZtnkio5y9RsiASEehuG2QSKkJ3ejIE8S3xZOiDaoeJVNUQypYA8i5iVKWZw1tMwzyuT+4pwo
-        ZTSTkZsl9FLkXyldkhUZzDeGX6VdZgJTTdcE3QPVo9KPYK8EC5VPyvazJl+M6GUOdn5oGRPoeGhuF
-        BUHcTxTw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peUjw-00BHkn-2s;
-        Tue, 21 Mar 2023 05:40:56 +0000
-Date:   Mon, 20 Mar 2023 22:40:56 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the sysctl tree with Linus' tree
-Message-ID: <ZBlDaMh023N20uuo@bombadil.infradead.org>
-References: <20230321132052.7d12fd7d@canb.auug.org.au>
- <20230321132227.5f63cd43@canb.auug.org.au>
+        Tue, 21 Mar 2023 01:44:17 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9EB1589F;
+        Mon, 20 Mar 2023 22:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679377456; x=1710913456;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aYKfSTlUBleYkVyElMNA3zlWKwAfGp8fUVwgAyZJIkA=;
+  b=YBkpovjt8h4SpfYp15oKHgfnfzUM0A8n8IG+2gXa1XtQKRKaBLt7tSnQ
+   1RMWMKgJcZfOzKgCrCCFq8Xai+diIriYTuuTiMxh98g2OCjwJi+v29tDl
+   +or5MT7Qddxp7Pr+XWbpdU52JtYm+50GKC/C8+VfKxhXQ+S7CyVgF1lG/
+   BgfGdntJK+W2KuFwaGkIOmIy/DxkqLJabwPvb5JZVT/6K4Yop+XvXUWB6
+   juYXVyTNq/nhpM+K+fLgBqd7HHeXXYCid5NekQLiPvZbJUUTRGXKPi4w7
+   NZKauTCApeRZz/Jl1GFgllcQf7rGe+aOsqG5sehS9HjjoC9zRn24uLHO2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340397929"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="340397929"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:44:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="791933553"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="791933553"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Mar 2023 22:44:11 -0700
+Message-ID: <9c5d1951-5475-863b-b258-1a4cbc242f0b@linux.intel.com>
+Date:   Tue, 21 Mar 2023 13:43:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230321132227.5f63cd43@canb.auug.org.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        dmaengine@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] iommu/vt-d: Allow SVA with device-specific IOPF
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <20230309025639.26109-1-baolu.lu@linux.intel.com>
+ <20230309025639.26109-3-baolu.lu@linux.intel.com>
+ <20230320090006.180efbed@jacob-builder>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230320090006.180efbed@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 01:22:27PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> On Tue, 21 Mar 2023 13:20:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+On 3/21/23 12:00 AM, Jacob Pan wrote:
+> Hi BaoLu,
+
+Hi Jacob,
+
+> 
+> On Thu,  9 Mar 2023 10:56:36 +0800, Lu Baolu<baolu.lu@linux.intel.com>
 > wrote:
-> >
-> > Today's linux-next merge of the sysctl tree got a conflict in:
-> >=20
-> >   mm/memory-failure.c
-> >=20
-> > between commit:
-> >=20
-> >   44b8f8bf2438 ("mm: memory-failure: add memory failure stats to sysfs")
-> >=20
-> > from Linus' tree and commit:
-> >=20
-> >   cfe7e6ea5ee2 ("mm: memory-failure: Move memory failure sysctls to its=
- own file")
-> >=20
-> > from the sysctl tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
->=20
-> Sorry, I forgot the resolution - see below.
+> 
+>> Currently enabling SVA requires IOPF support from the IOMMU and device
+>> PCI PRI. However, some devices can handle IOPF by itself without ever
+>> sending PCI page requests nor advertising PRI capability.
+>>
+>> Allow SVA support with IOPF handled either by IOMMU (PCI PRI) or device
+>> driver (device-specific IOPF). As long as IOPF could be handled, SVA
+>> should continue to work.
+>>
+>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/intel/iommu.c | 13 ++++++++++++-
+>>   1 file changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index 7c2f4bd33582..d2fcab9d8f61 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -4650,7 +4650,18 @@ static int intel_iommu_enable_sva(struct device
+>> *dev) if (!(iommu->flags & VTD_FLAG_SVM_CAPABLE))
+>>   		return -ENODEV;
+>>   
+>> -	if (!info->pasid_enabled || !info->pri_enabled ||
+>> !info->ats_enabled)
+>> +	if (!info->pasid_enabled)
+>> +		return -EINVAL;
+>> +
+>> +	/*
+>> +	 * Devices having device-specific I/O fault handling should not
+>> +	 * support PCI/PRI.
+>> +	 */
+>> +	if (!info->pri_supported)
+>> +		return 0;
+> If you put this check at the very beginning, everything else should it be
+> the same, right?
 
-Oh sorry, its on Linus' tree, so I can just rebase too. Did that and
-addressed the conflict as you did, thanks!
+Even for device specific IOPF, PASID/ATS are still required on the IOMMU
+side.
 
-  Luis
+> 
+> Still feel a little weird that, SVA is tied to PRI for PCI PRI but not for
+> device specific IOPF.
+
+PCI PRI and device specific IOPF *should* be equivalent. But the IOMMU
+side has no means to check the capability of device-specific IOPF.
+Therefore, IOMMU can only default that if the device driver enables SVA
+on a non-PRI device, it will handle IOPF in its own way.
+
+Best regards,
+baolu
