@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8D46C3C08
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C71B6C3C18
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCUUka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S229788AbjCUUnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCUUk2 (ORCPT
+        with ESMTP id S229700AbjCUUnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:40:28 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3015238670
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:40:24 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so16686594ybl.19
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:40:24 -0700 (PDT)
+        Tue, 21 Mar 2023 16:43:49 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B9B4FF29
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:43:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679431223;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0VX2E2VBZDgPxkrBwL/o7IsICeL0Ay1k7ukDuibN754=;
-        b=cO/TfLh+R21jum42uldyQsoc0byLEIbZo2aTYdGQ0UwhRAZwKM8devfr5JPlGBvMiL
-         vHuBsxVUfdDfowGDb1TXE8z4n2phAj4My2jjmSZEGWgSUwgFYlyPYL/X30fRuT7S+tmQ
-         WxhCjiPT5ppqUyMZYC2Km4iub2gHIpIkztrcA9+nKKX8980IRyiSPkmPdTsMFbmYCf6i
-         GIfSD2ZToNIYl90qyf19vqQi7i9ZshDi2pVpVpkrQ7i0f0fOJmxEvIS/YtO0fDOR+nhU
-         VvbXv55uHDeKrJuMzNPNuaA7lpU/T1Bb3+G1uwcbGpBQSNxJEHdTwb4EZT8Zu4Xh0J/J
-         gu9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679431223;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0VX2E2VBZDgPxkrBwL/o7IsICeL0Ay1k7ukDuibN754=;
-        b=x3wMB0YIUCJLI+mrMhAsaf6YscScgZUk+wUYj8gUVkY0F0M3e3KFxvlLX5D9ZHioiJ
-         AP/TR3HVwa6I6v45P0pvCeDyaxo+IBd39kdo3FFAzspMOpcQBYw7lxuRa8x/o/IxJKjN
-         6zwGrD4FI5AnLLND8J4w8U4i8oOSkngySug3qoQkeoCMv+pIF+ClYpzUplYwP6GIIk3q
-         DHTrzeEYRv7nR6WfxQAGcoTjayHuZFHg5yUSC1UOieIzE/sxVTnrKLHTfktg3okVdsRA
-         RhCSGRdKf7g4QLosjXNMgXr1Ts67PQyER7o+3uPrpyS5q8NKzh+7Ee+eI36E3TD0l9w9
-         jhXg==
-X-Gm-Message-State: AAQBX9fWXk3kJMnOpT74y8gU2TirKoIc+q9FIr7KogZWLErk5k+2I+Oq
-        7RqrREm7QBOmxXcCXVVseSdPLNYFMXE=
-X-Google-Smtp-Source: AKy350YxucAejzFE+MvN2YR+VKNN6JvkSM+4jcZN3l6smrHeyez9vPSHpHLwK7WhRO/FCwCRBLNPKCbOWVg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ad11:0:b0:544:51f7:83c5 with SMTP id
- l17-20020a81ad11000000b0054451f783c5mr1993947ywh.1.1679431223453; Tue, 21 Mar
- 2023 13:40:23 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 13:40:21 -0700
-In-Reply-To: <ZBoMIJipRtmvsNXg@google.com>
-Mime-Version: 1.0
-References: <20230211014626.3659152-1-vipinsh@google.com> <ZBTwX5790zwl5721@google.com>
- <ZBj9L2VUjEbWbgcS@google.com> <CAHVum0feM8hnD-+dXF4jiug8tmpm9GBAh619Xf279LNSm=Jozw@mail.gmail.com>
- <ZBoMIJipRtmvsNXg@google.com>
-Message-ID: <ZBoWNdwGho5bZ+Kz@google.com>
-Subject: Re: [Patch v3 0/7] Optimize clear dirty log
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=I2S5b3dzYyNzYT0wd2040dnIXDiUQEurUwJKuN7lh+o=;
+  b=HGFN43BDtdxu3FlTEYY7cGieyOWY1T5WeNb6JH716TubMaF026M+QVGD
+   BD2mKMKVXSVDp68iYzTKT/kA8HRoH2MryxqCK5TbLUGt5uzwulk+xrGdM
+   t7CEFhfjoCYsTI5Zfjx7sZgp6kpJuHdWXMG3JNygkEwo+PXbL7KIOYVmi
+   0=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,279,1673910000"; 
+   d="scan'208";a="50853598"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 21:43:43 +0100
+Date:   Tue, 21 Mar 2023 21:43:42 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Alex Elder <elder@ieee.org>
+cc:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
+In-Reply-To: <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
+Message-ID: <alpine.DEB.2.22.394.2303212140480.2919@hadrien>
+References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com> <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,81 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023, Sean Christopherson wrote:
-> On Tue, Mar 21, 2023, Vipin Sharma wrote:
-> > On Mon, Mar 20, 2023 at 5:41=E2=80=AFPM Sean Christopherson <seanjc@goo=
-gle.com> wrote:
-> > >
-> > > On Fri, Mar 17, 2023, Sean Christopherson wrote:
-> > > > Did a cursory glance, looks good.  I'll do a more thorough pass nex=
-t week and get
-> > > > it queued up if all goes well.  No need for a v4 at this point, I'l=
-l fixup David's
-> > > > various nits when applying.
-> > >
-> > > Ooof, that ended up being painful.  In hindsight, I should have asked=
- for a v4,
-> > > but damage done, and it's my fault for throwing you a big blob of cod=
-e in the
-> > > first place.
-> > >
-> > > I ended up splitting the "interesting" patches into three each:
-> > >
-> > >   1. Switch to the atomic-AND
-> > >   2. Drop the access-tracking / dirty-logging (as appropriate)
-> > >   3. Drop the call to __handle_changed_spte()
-> > >
-> > > because logically they are three different things (although obviously=
- related).
-> > >
-> > > I have pushed the result to kvm-x86/mmu, but haven't merged to kvm-x8=
-6/next or
-> > > sent thanks because it's not yet tested.  I'll do testing tomorrow, b=
-ut if you
-> > > can take a look in the meantime to make sure I didn't do something co=
-mpletely
-> > > boneheaded, it'd be much appreciated.
-> >=20
-> >=20
-> > Thanks for refactoring the patches. I reviewed the commits, no obvious
-> > red flags from my side. Few small nits I found:
-> >=20
-> > commit e534a94eac07 ("KVM: x86/mmu: Use kvm_ad_enabled() to determine
-> > if TDP MMU SPTEs need wrprot")
-> >  - kvm_ad_enabled() should be outside the loop.
->=20
-> Hmm, I deliberately left it inside the loop, but I agree that it would be=
- better
-> to hoist it out in that commit.
->=20
-> > commit 69032b5d71ef (" KVM: x86/mmu: Atomically clear SPTE dirty state
-> > in the clear-dirty-log flow")
-> >  - MMU_WARN_ON(kvm_ad_enabled() &&
-> > spte_ad_need_write_protect(iter.old_spte) should be after
-> > if(iter.level > PG_LEVEL_4k...)
->=20
-> Ah, hrm.  This was also deliberate, but looking at the diff I agree that =
-relative
-> to the diff, it's an unnecessary/unrelated change.  I think what I'll do =
-is
-> land the assertion above the "if (iter.level > PG_LEVEL_4K ||" in the abo=
-ve
-> commit that switches to kvm_ad_enabled().  That way there shouldn't be an=
-y change
-> for the assertion in this commit.
 
-Aha!  Even better, split this into yet one more patch to dedup the guts bef=
-ore
-switching to the atomic-AND, and give clear_dirty_gfn_range() the same trea=
-tment.
-That further isolates the changes, provides solid justification for hoistin=
-g the
-kvm_ad_enabled() check out of the loop (it's basically guaranteed to be a s=
-ingle
-memory read that hits the L1), and keeps clear_dirty_gfn_range() and
-clear_dirty_pt_masked() as similar as is reasonably possible.
 
-Speaking of which, I'll send a patch to remove the redundant is_shadow_pres=
-ent_pte()
-check in clear_dirty_gfn_range(), that's already handled by tdp_root_for_ea=
-ch_leaf_pte().
+On Tue, 21 Mar 2023, Alex Elder wrote:
+
+> On 3/21/23 1:34 PM, Menna Mahmoud wrote:
+> > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> > static inline function.
+> >
+> > It is not great to have macros that use the `container_of` macro,
+> > because from looking at the definition one cannot tell what type
+> > it applies to.
+> >
+> > One can get the same benefit from an efficiency point of view
+> > by making an inline function.
+> >
+> > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+>
+> I'm sorry if this conflicts with what others have said.
+>
+> But the use of a macro (with a container_of() right-hand
+> side) to get at the structure containing a field pointer
+> is a widely-used idiom throughout the kernel.
+>
+> What you propose achieves the same result but I would
+> lean toward keeping it as a macro, mainly because it
+> is so common.
+
+Common is not necessarily good.  Macros are less safe and less
+informative.
+
+julia
+
+
+>
+> 					-Alex
+> > ---
+> > changes in v2:
+> > 	-send patch as a single patch.
+> > 	-edit the name of struct object.
+> > 	-edit commit message.
+> > ---
+> >   drivers/staging/greybus/gbphy.h | 10 ++++++++--
+> >   1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/staging/greybus/gbphy.h
+> > b/drivers/staging/greybus/gbphy.h
+> > index d4a225b76338..e7ba232bada1 100644
+> > --- a/drivers/staging/greybus/gbphy.h
+> > +++ b/drivers/staging/greybus/gbphy.h
+> > @@ -15,7 +15,10 @@ struct gbphy_device {
+> >   	struct list_head list;
+> >   	struct device dev;
+> >   };
+> > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> > +static inline struct gbphy_device *to_gbphy_dev(const struct device *_dev)
+> > +{
+> > +	return container_of(_dev, struct gbphy_device, dev);
+> > +}
+> >     static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+> >   {
+> > @@ -43,7 +46,10 @@ struct gbphy_driver {
+> >     	struct device_driver driver;
+> >   };
+> > -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
+> > +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver
+> > *drv)
+> > +{
+> > +	return container_of(drv, struct gbphy_driver, driver);
+> > +}
+> >     int gb_gbphy_register_driver(struct gbphy_driver *driver,
+> >   			     struct module *owner, const char *mod_name);
+>
+>
