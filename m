@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628196C3C20
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4382D6C3C22
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCUUqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S229922AbjCUUqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCUUqN (ORCPT
+        with ESMTP id S229717AbjCUUq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:46:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562E853716;
-        Tue, 21 Mar 2023 13:46:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ph3Xs0x6Nz4whh;
-        Wed, 22 Mar 2023 07:46:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679431565;
-        bh=jbbSyfF15CCmAYfwEpFN4mZSyPCgTiOHDupvsOOTxiY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LBGnwYv2P96KdvCQpl2ovk//PvWdAhawq4ZpFn9U7vrhsmISHFk5Ac78XMgT8ehK5
-         WIXs48/KBmvwqwswpxYdl5UAn5hoJsbX3IFmmTZmYbFKY3TdnvnADP+cFwPwcSYHen
-         540kWMn0ELobrQ4i/iGxjjwU6jAxYt3nVeB0Oq2BHxM37OLy0PwgakOnoTyuQhmkHY
-         Wc1V9ZRt+dLivMRp36Q4g3M64ziuW2fWqdwROC/Viq4pX9BNlK5Wbg8ffo31WCnlkf
-         mGZ0KA4UifhCdru6W5mk4S+rlRV7SwY30VUEqXloPAh/3P0X43AuPacWobP2waqIGH
-         2pPMyOJK1YAUw==
-Date:   Wed, 22 Mar 2023 07:45:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Frank Crawford <frank@crawford.emu.id.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the hwmon-fixes tree
-Message-ID: <20230322074551.09dac2b6@canb.auug.org.au>
+        Tue, 21 Mar 2023 16:46:27 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C59653716
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:46:22 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id l27so6715546wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679431580;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JJZvn4i52w6uqtdykKTHiGurQP95OxTlrYhIRyImreM=;
+        b=VhCMBbTc1OwR3ws5VjY1dvQYOrgszHYil4QhEBOmCLwzpY+7XdOZal9kptjh+z9glZ
+         MiPXAojzxD95F8ZCsKXzE3PS7Vz0TXzVBjbZ+N3LLtrd/yA90/61Sh4YVLFxRKIaSktC
+         PGXuRw4GjxulKbm+uw44ROlfhv22Ode6s+ii5EXNXG4pdZ9OWMyIwIdzb+MEkuNpJSEl
+         H7KdnfPSiDsY29b2dwIz7fdOHMu5yZClfoVbQCHZ29fCDZ/RfimUnvrlabYOK7kvNivC
+         aa65t++CkEfaQ6KiFXlAs++svwoE5EeNIdsjPTNs3aTOnRM4e4FtbZveBZTJ6RwLGM7w
+         lODg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679431580;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JJZvn4i52w6uqtdykKTHiGurQP95OxTlrYhIRyImreM=;
+        b=xfwnM2aKTwazaD+lCYFwpYbUR0hNubWjBSkZiqpAfID3WWVNa+2Z4/xCxhIEUc7e3L
+         e108c7BKCr15ReJHpmbYdoRzFAg+bKLL+prJ6F/AxQuFmRbYKaiXvj5HxTyiGr1MMTSK
+         KzarEDeyTrbnGni+pGlWuuEvw+nBAZQhhX0vNlWFXp1F3xOvpZxfahiaGYEvw7IlcaCe
+         /F0tZkCh2EezX4XhsPrAFcsnyAXV1qgnaWTXwWMISgIgYByCLcyd7XHVaZsXRrnAdYDw
+         6ECA23wBWTIG9TyHfRHRMUfwHWzPs7QVhvXV2hiGHBKerWcXa5y8tfLiYy+Nu8KxaLJ5
+         DufA==
+X-Gm-Message-State: AO0yUKVv3F6ne0wyko1XH2NIsYNdo8aJIXUcfM+6uq9XQ03BOi5L5u/S
+        /OwuWXzJ2K3NeSKAS9rIccxm57vt4xk=
+X-Google-Smtp-Source: AK7set8T1Bjs3C6ZFaqvWMtG5bf79ANPDPm22WVuGlwYFMNYV09cRjIKur+a7WziZ+AGag5aEINiaA==
+X-Received: by 2002:adf:e484:0:b0:2d8:a7df:bce9 with SMTP id i4-20020adfe484000000b002d8a7dfbce9mr3226350wrm.23.1679431579946;
+        Tue, 21 Mar 2023 13:46:19 -0700 (PDT)
+Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.googlemail.com with ESMTPSA id a4-20020adffb84000000b002d322b9a7f5sm12142491wrr.88.2023.03.21.13.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 13:46:19 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v2 0/4] further cleanup of vma_merge()
+Date:   Tue, 21 Mar 2023 20:45:54 +0000
+Message-Id: <cover.1679431180.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7m/q9WKE1L5PIu_qunH.++S";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/7m/q9WKE1L5PIu_qunH.++S
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Following on from Vlastimil Babka's patch series "cleanup vma_merge() and
+improve mergeability tests" which was in turn based on Liam's prior
+cleanups, this patch series introduces changes discussed in review of
+Vlastimil's series and goes further in attempting to make the logic as
+clear as possible.
 
-Hi all,
+Nearly all of this should have absolutely no functional impact, however it
+does add a singular VM_WARN_ON() case.
 
-In commit
+With many thanks to Vernon for helping kick start the discussion around
+simplification - abstract use of vma did indeed turn out not to be
+necessary - and to Liam for his excellent suggestions which greatly
+simplified things.
 
-  38c25fa52920 ("hwmon (it87): Fix voltage scaling for chips with 10.9mV  A=
-DCs")
+v2:
+- Put the patch series on a serious diet, cut comments down to avoid
+  bloat.
+- Added clever use of find_vma_intersection() and vma_lookup() as suggested
+  by Liam which improved clarity + brevity significantly.
+- Eliminated the use of a temporary vma local as suggested by Vernon, it
+  does seem this was ultimately adding confusion and Liam's suggestions
+  eliminated the need for this.
+- Moved around initial variables to be more sensible and to initialise each
+  variable in one place where possible.
 
-Fixes tag
+v1:
+https://lore.kernel.org/all/cover.1679137163.git.lstoakes@gmail.com
 
-  Fixes: ead8080351c ("hwmon: (it87) Add support for IT8732F")
+Lorenzo Stoakes (4):
+  mm/mmap/vma_merge: further improve prev/next VMA naming
+  mm/mmap/vma_merge: set next to NULL if not applicable
+  mm/mmap/vma_merge: extend invariants, avoid invalid res, vma
+  mm/mmap/vma_merge: init cleanup, be explicit about the non-mergeable
+    case
 
-has these problem(s):
+ mm/mmap.c | 155 ++++++++++++++++++++++++++++--------------------------
+ 1 file changed, 80 insertions(+), 75 deletions(-)
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/7m/q9WKE1L5PIu_qunH.++S
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQaF38ACgkQAVBC80lX
-0GwhQwf/W9hbkDgGkUYuhPkIy3DsOOyR/03ksx0a+GhlSnYqPv22y2GeVe3CyXdb
-H22IgQPfClgxEiq98agUsohacjDbcA25DrJp3mPCIZdLylAWWKvZ+XFPFmE7OTkh
-/dlXDfg2gDba3lsRMzjiNVfRKTbI9lVi61zzUhiAikjeT4uNpkx8oZxQosYNtW1X
-YEaK0sy3pcNJiUXafdHuq6Gwf5k5LvjSdSOyCN89HrqbH+bh6+PoAk7FUulK68my
-IFP4H0DMHAECkAROn0uOxvezBatcTTE6hQMfsqYs+7Q5UlsHZwbBpovmjJiLU63z
-qjSdmYiMaCU+CijH5EMzSAMU+b1hLw==
-=YwKD
------END PGP SIGNATURE-----
-
---Sig_/7m/q9WKE1L5PIu_qunH.++S--
+--
+2.39.2
