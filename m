@@ -2,94 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BCE6C3580
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5CB6C3581
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjCUPUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S231273AbjCUPVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbjCUPU3 (ORCPT
+        with ESMTP id S231371AbjCUPVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:20:29 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E5523C7F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:20:26 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id b20so28174394edd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679412025;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Da2jxuDTdjMSjUZ5oJaHx1frHV9AyEaeWV3IO9K8Rs=;
-        b=RIZhyIZ9n0aS3DStByjSKQu/175aENkML4VQIuqDuR3TrTGuDi59cBsHTE2ZhqcIwd
-         rTx4kVX5fZoY9GU7W/OPKD4Rps8U1hUsSqnzkkytb/5KH95gWW8BVcSC1Y4Kv3oCY7bM
-         H4QUrxopAbXaCgr5BGAc+kmUs3WyY+ufwfnGEzXYIt22mDWF0WnoIaWKsm+GjRT9uwIO
-         KKwlC0CEdTABkp5bZcBCE1AxjjQXhIWG3gW8DNVYBgLBL4u1XzgFA4T5uCijk9yP7oWs
-         skNsxpAnAmm4Vj0yN8ZHUUcZv8mLj6rvLxWbnj7u2KrLMtdJSitv58VRNhVpfUdRatzm
-         dgbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679412025;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Da2jxuDTdjMSjUZ5oJaHx1frHV9AyEaeWV3IO9K8Rs=;
-        b=wbx4U3EfQYWDrBHPvdRUZLd5dMj9Q4jrFh9E9c+Nd8YnIsEA8wV4K3zlFe+59k8uwP
-         kZxu1ihlM2tCz7JgoevhVaB7zNoSrGXcN6mTSlVT0zzWvqXcPURL24ib1ir3V0rdHAED
-         +z1DXSao5GBvU5qvCyuo6CvHQhZhrcrErUmiTvlIUgoLdirCmhGW9IBLN5+RCNi9fdvM
-         W+bI5MXIgBtMGyLr3+bdMslIUnE1NmCbDK+64lREBh57zPbknD0ND/uFOu67YtlvQGLu
-         eCoViVroUW0aiaRa3gY59qr/rJGxPcbT1lDDzm34J90p2qulL3nrp+VIVHmvuiWIWK1r
-         ikFw==
-X-Gm-Message-State: AO0yUKUKPk8Rbvfq5dWD7WxeQdwdMFrCzk3BaE6nh4Mb5vw+YcxhYxC7
-        PH8v+Y7p8sNY3O/BBTIeqQpBxg==
-X-Google-Smtp-Source: AK7set93GdFlp6UxzAJRhP+TpVPdJfQCztzCBUEZMkFY2nmybXMPfjIo0Fvf6G9cxJLVi/gEQ8Umdg==
-X-Received: by 2002:aa7:d84d:0:b0:4ef:9bf0:7177 with SMTP id f13-20020aa7d84d000000b004ef9bf07177mr3338986eds.9.1679412025077;
-        Tue, 21 Mar 2023 08:20:25 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id y2-20020a50ce02000000b004c0057b478bsm6493930edi.34.2023.03.21.08.20.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 08:20:24 -0700 (PDT)
-Message-ID: <bad282d5-9e40-a99d-0abb-d04163dcf080@linaro.org>
-Date:   Tue, 21 Mar 2023 16:20:23 +0100
+        Tue, 21 Mar 2023 11:21:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA493498A9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:20:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8D61E2209C;
+        Tue, 21 Mar 2023 15:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679412036; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jiD1Ov4GAppGMXcnNtOcT+oui4+HFoeyxzBo5N1dnEk=;
+        b=rUrKm6HOPAfLMBy29V2ObSPOPTRScasDh89tMwV6VCNAiRCyc9En/j+NBORMzJb9LFGmV3
+        soBIKdu343YoGlmIP0Vbv9qUGlX0aqG4okz5UZwtjbqBrJnosDimCm6bKC+Br6wX3bER/c
+        bX63WhRojgOtmJg9BEwU6u+3RZfv92o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679412036;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jiD1Ov4GAppGMXcnNtOcT+oui4+HFoeyxzBo5N1dnEk=;
+        b=aPknuomhPEUETIn+g0w3jZXbm5N7tgq6JGcKWk9q7EdR9/+tRR2kDTB2iPXjaWMjAIofeg
+        wGZcnSC/p94ZPbDw==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 669C72C141;
+        Tue, 21 Mar 2023 15:20:35 +0000 (UTC)
+Date:   Tue, 21 Mar 2023 15:20:31 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 01/11] mm/vmstat: remove remote node draining
+Message-ID: <20230321152031.2bzcury6k6aj7p6k@suse.de>
+References: <20230209150150.380060673@redhat.com>
+ <20230209153204.656996515@redhat.com>
+ <6b6cd2fe-2309-b471-8950-3c4334462e69@redhat.com>
+ <Y/5XoAnv43zYzxLR@tpad>
+ <3329f63e-5671-1500-0730-cd46ba461d04@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/4] eeprom: ee1004: Add devicetree binding
-Content-Language: en-US
-To:     Eddie James <eajames@linux.ibm.com>, linux-kernel@vger.kernel.org
-Cc:     linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
-        andrew@aj.id.au, joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
-References: <20230321151642.461618-1-eajames@linux.ibm.com>
- <20230321151642.461618-4-eajames@linux.ibm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230321151642.461618-4-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <3329f63e-5671-1500-0730-cd46ba461d04@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 16:16, Eddie James wrote:
-> Add an OF match table for devicetree instantiation of EE1004
-> devices.
-
-Subject: There is no device tree binding here. You add OF matching (or
-support) to the driver.
-
+On Thu, Mar 02, 2023 at 11:10:03AM +0100, David Hildenbrand wrote:
+> [...]
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/misc/eeprom/ee1004.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> > 
+> > > (2) drain_zone_pages() documents that we're draining the PCP
+> > >      (bulk-freeing them) of the current CPU on remote nodes. That bulk-
+> > >      freeing will properly adjust free memory counters. What exactly is
+> > >      the impact when no longer doing that? Won't the "snapshot" of some
+> > >      counters eventually be wrong? Do we care?
+> > 
+> > Don't see why the snapshot of counters will be wrong.
+> > 
+> > Instead of freeing pages on pcp list of remote nodes after they are
+> > considered idle ("3 seconds idle till flush"), what will happen is that
+> > drain_all_pages() will free those pcps, for example after an allocation
+> > fails on direct reclaim:
+> > 
+> >          page = get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
+> > 
+> >          /*
+> >           * If an allocation failed after direct reclaim, it could be because
+> >           * pages are pinned on the per-cpu lists or in high alloc reserves.
+> >           * Shrink them and try again
+> >           */
+> >          if (!page && !drained) {
+> >                  unreserve_highatomic_pageblock(ac, false);
+> >                  drain_all_pages(NULL);
+> >                  drained = true;
+> >                  goto retry;
+> >          }
+> > 
+> > In both cases the pages are freed (and counters maintained) here:
+> > 
+> > static inline void __free_one_page(struct page *page,
+> >                  unsigned long pfn,
+> >                  struct zone *zone, unsigned int order,
+> >                  int migratetype, fpi_t fpi_flags)
+> > {
+> >          struct capture_control *capc = task_capc(zone);
+> >          unsigned long buddy_pfn = 0;
+> >          unsigned long combined_pfn;
+> >          struct page *buddy;
+> >          bool to_tail;
+> > 
+> >          VM_BUG_ON(!zone_is_initialized(zone));
+> >          VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
+> > 
+> >          VM_BUG_ON(migratetype == -1);
+> >          if (likely(!is_migrate_isolate(migratetype)))
+> >                  __mod_zone_freepage_state(zone, 1 << order, migratetype);
+> > 
+> >          VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+> >          VM_BUG_ON_PAGE(bad_range(zone, page), page);
+> > 
+> >          while (order < MAX_ORDER - 1) {
+> >                  if (compaction_capture(capc, page, order, migratetype)) {
+> >                          __mod_zone_freepage_state(zone, -(1 << order),
+> >                                                                  migratetype);
+> >                          return;
+> >                  }
+> > 
+> > > Describing the difference between instructed refresh of vmstat and "remotely
+> > > drain per-cpu lists" in order to move free memory from the pcp to the buddy
+> > > would be great.
+> > 
+> > The difference is that now remote PCPs will be drained on demand, either via
+> > kcompactd or direct reclaim (through drain_all_pages), when memory is
+> > low.
+> > 
+> > For example, with the following test:
+> > 
+> > dd if=/dev/zero of=file bs=1M count=32000 on a tmpfs filesystem:
+> > 
+> >        kcompactd0-116     [005] ...1 228232.042873: drain_all_pages <-kcompactd_do_work
+> >        kcompactd0-116     [005] ...1 228232.042873: __drain_all_pages <-kcompactd_do_work
+> >                dd-479485  [003] ...1 228232.455130: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> >                dd-479485  [011] ...1 228232.721994: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> >       gnome-shell-3750    [015] ...1 228232.723729: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> > 
+> > The commit message was indeed incorrect. Updated one:
+> > 
+> > "mm/vmstat: remove remote node draining
+> > 
+> > Draining of pages from the local pcp for a remote zone should not be
+> > necessary, since once the system is low on memory (or compaction on a
+> > zone is in effect), drain_all_pages should be called freeing any unused
+> > pcps."
+> > 
+> > Thanks!
+> 
+> Thanks for the explanation, that makes sense to me. Feel free to add my
+> 
+> Acked-by: David Hildenbrand <david@redhat.com>
+> 
+> ... hoping that some others (Mel, Vlastimil?) can have another look.
+> 
 
-Best regards,
-Krzysztof
+I was on extended leave and am still in the process of triaging a few
+thousand mails so I'm working off memory here instead of the code. This
+is a straight-forward enough question to answer quickly in case I forget
+later.
 
+Short answer: I'm not a fan of the patch in concept and I do not think it
+should be merged.
+
+I agree that drain_all_pages() would free the PCP pages on demand in
+direct reclaim context but it happens after reclaim has already
+happened. Hence, the reclaim may be necessary and may cause overreclaim
+in some situations due to remote CPUs pinning memory in PCP lists.
+
+Similarly, kswapd may trigger early because PCP pages do not contribute
+to NR_FREE_PAGES so watermark checks can fail even though pages are
+free, just inaccessible.
+
+Finally, remote pages expire because ideally CPUs allocate local memory
+assuming memory policies are not forcing use of remote nodes. The expiry
+means that remote pages get freed back to the buddy lists after a short
+period. By removing the expiry, it's possible that a local allocation will
+fail and spill over to a remote node prematurely because free pages were
+pinned on the PCP lists.
+
+As this patch has the possibility of reclaiming early in both direct and
+kswapd context and increases the risk of remote node fallback, I think it
+needs much stronger justification and a warning about the side-effects. For
+this version unless I'm very wrong -- NAK :(
+
+-- 
+Mel Gorman
+SUSE Labs
