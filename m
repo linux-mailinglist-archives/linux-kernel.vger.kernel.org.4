@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1B76C3454
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6E66C3451
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjCUOeQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 10:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
+        id S231264AbjCUOeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjCUOeM (ORCPT
+        with ESMTP id S230399AbjCUOeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:34:12 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A026234C37;
-        Tue, 21 Mar 2023 07:34:10 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id c19so18032763qtn.13;
-        Tue, 21 Mar 2023 07:34:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679409249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=82nUopC4peey5GRVSgLUYvMNsOkr6qqSP8KaXHFDorM=;
-        b=povKLd2VWRVnfXIwc/JvHyhRXfzbpRCOXWz67h8TEE5Uo0h4oNBXibBzJ6PeVozRr+
-         fHcX8sms7zpFFHqgmpDKefq2LWbHhz1CyIdEDROvMdN0qNdLPSWkGNn3XsGpPc5Oi7wr
-         f/O5Ygrlvm6qveC1eM2cGjYPk0A51N6OeH18ni8VAg3fOyN+0y7Ftdiu/qlc5Z8rtbsk
-         LahV5+8Buc5MSXRWfvyZ/BTi8I7JgsVuMH6cw+pt4OZVaA6UzIKkn/r1kLpJ6iO2a/lW
-         BxTKL2AaIlxC3Yt5WmrvXjB2hrkAKdoe85JW0lG8PRmLtjZNmPOmiS6kbFU+/FZFy3Sj
-         YuWw==
-X-Gm-Message-State: AO0yUKX3h9t3ijewGqWdPFiNuwD9ziWZnv3aChd1yKL4JzXXWoYfeI+5
-        EL5hEGpD4DhypPIhtfo/aqKxV0VB9xV2ow==
-X-Google-Smtp-Source: AK7set/hopW2XtMSTKOZpioG6ZIh22UttanvDRwjaBRMfHIzwA+U9NwjPFxbIoC6/7OHeNe0wZQmdw==
-X-Received: by 2002:ac8:5c93:0:b0:3bf:c5ce:127a with SMTP id r19-20020ac85c93000000b003bfc5ce127amr236294qta.4.1679409248911;
-        Tue, 21 Mar 2023 07:34:08 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id b14-20020a05620a270e00b0073b7f2a0bcbsm9589445qkp.36.2023.03.21.07.34.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 07:34:08 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id e194so17365122ybf.1;
-        Tue, 21 Mar 2023 07:34:08 -0700 (PDT)
-X-Received: by 2002:a05:6902:1023:b0:b6b:841a:aae4 with SMTP id
- x3-20020a056902102300b00b6b841aaae4mr1264687ybt.12.1679409248087; Tue, 21 Mar
- 2023 07:34:08 -0700 (PDT)
+        Tue, 21 Mar 2023 10:34:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77FA02CFF7;
+        Tue, 21 Mar 2023 07:34:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2734F2F4;
+        Tue, 21 Mar 2023 07:34:45 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 018383F6C4;
+        Tue, 21 Mar 2023 07:33:58 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 14:33:56 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, scclevenger@os.amperecomputing.com,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] coresight: etm4x: Migrate AMBA devices to platform
+ driver
+Message-ID: <20230321143356.w5era7et6lzxpte3@bogus>
+References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
+ <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Mar 2023 15:33:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWts4ixT87hK=GcOODQVkfgCqjp+dML0cAxPnXkfnsCpg@mail.gmail.com>
-Message-ID: <CAMuHMdWts4ixT87hK=GcOODQVkfgCqjp+dML0cAxPnXkfnsCpg@mail.gmail.com>
-Subject: Re: [PATCH net-next] sh_eth: remove open coded netif_running()
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 7:58 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> It had a purpose back in the days, but today we have a handy helper.
+On Mon, Mar 20, 2023 at 09:17:16AM -0500, Rob Herring wrote:
 >
-> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> This sounds like an issue for any amba driver. If this is an issue,
+> solve it for everyone, not just work around it in one driver.
+>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Well it is an issue in general for power management. ACPI has specific
+methods that can be executed for entering specific states.
 
-No regressions seen on R-Car M2-W, RZ/A1H, and RZ/A2M.
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+The way AMBA was glue into ACPI bus scan IMO was a hack and PM wasn't
+considered at the time. It was just hack to get AMBA drivers to work
+with ACPI without any consideration about runtime PM or any methods that
+comes as part of ACPI device. There is even some dummy clock handler to
+deal with AMBA requesting APB clocks. AMBA device is added as companion
+to the ACPI device created as part of the normal bus scan in ACPI which
+adds its own PM callbacks and rely on clocks and power domains independent
+of the ACPI standard methods(_ON/_OFF).
 
-Gr{oetje,eeting}s,
+The default enumeration adds platform devices which adds no extra PM
+callbacks and allows normal acpi_device probe flow.
 
-                        Geert
+> When someone puts another primecell device into an ACPI system, are we
+> going to go do the same one-off change in that driver too? (We kind of
+> already did with SBSA UART...)
+>
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I would prefer to move all the existing users of ACPI + AMBA to move away
+from it and just use platform device. This list is not big today, bunch
+of coresight, PL061/GPIO and PL330/DMA. And all these are assumed to be
+working or actually working if there is no need for any power management.
+E.g. on juno coresight needs PM to turn on before probing and AMBA fails
+as dummy clocks are added but no power domains attached as ACPI doesn't
+need deal with power domains in the OSPM if it is all well abstracted in
+methods like _ON/_OFF. They are dealt with explicit power domain in the
+DT which needs to be turned on and AMBA relies on that.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+One possible further hacky solution is to add dummy genpd to satisfy AMBA
+but not sure if we can guarantee ordering between ACPI device calling ON
+and its companion AMBA device probing so that the power domain is ON before
+AMBA uses the dummy clock and power domains in its pm callback hooks.
+
+Even the UART would fail if it needed any PM methods, we just don't happen
+to need that for SBSA and may be we could have made it work as amba device
+(can't recollect the exact reason for not doing so now).
+
+--
+Regards,
+Sudeep
