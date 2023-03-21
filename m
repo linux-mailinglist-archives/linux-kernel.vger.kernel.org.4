@@ -2,245 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DB56C2FBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7CA6C2FBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCULFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S230419AbjCULFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjCULF3 (ORCPT
+        with ESMTP id S229843AbjCULFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:05:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DB02B63E;
-        Tue, 21 Mar 2023 04:05:23 -0700 (PDT)
-X-UUID: 44070bc4c7d811eda9a90f0bb45854f4-20230321
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=mdqNGlxEp7pDLOgt43rQf5lzDoIlr9ne3YAiYLzanzo=;
-        b=JBcVHiunIjNJiZmDiy5N0KI1NMn9DgtjIHjrHf1GKMBUTJEGBBqVlAnkDW5ZecOZjIjqP8yT84tFjWlNnCw4QtPfcHWbAstswbIWZQhBPDXJhxJ6OJ/8WtBoq20m1AxKiaizu69lp/IEJthRszhA9jKBp7yqkhoZJkJolUKittk=;
-X-CID-CACHE: Type:Local,Time:202303211905+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:30b75a4c-bac2-46b8-9add-6a517f47c7c9,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:-35
-X-CID-META: VersionHash:120426c,CLOUDID:5c5de8b3-beed-4dfc-bd9c-e1b22fa6ccc4,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-        L:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 44070bc4c7d811eda9a90f0bb45854f4-20230321
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <tze-nan.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1161388397; Tue, 21 Mar 2023 19:05:18 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 21 Mar 2023 19:05:16 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 21 Mar 2023 19:05:16 +0800
-From:   Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Tom Zanussi" <zanussi@kernel.org>
-CC:     <bobule.chang@mediatek.com>, <Tze-nan.Wu@mediatek.com>,
-        <cheng-jui.wang@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH] tracing/synthetic: Fix races on freeing last_cmd
-Date:   Tue, 21 Mar 2023 19:04:43 +0800
-Message-ID: <20230321110444.1587-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 21 Mar 2023 07:05:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340253D08B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679396737; x=1710932737;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Q+1aUFQOavPDBvO2fR0wBfOAzweGMgiEQPvCZ7oNbVM=;
+  b=Zek3sU6sVeLz/6wiN7chsdoxTyF2783qc1+Yj9B2vKKaHlpwfCmr6scl
+   uECDiGdPiJeNGipBrhxxfi5gcYcvy0a94FqYe3BNSFIAs81ISWvzyCD2L
+   qtSzf6I3uTqhiYaMtnks/xUZIdr96SOBx0SAzxKsbTsMIjZsd7T2kSlci
+   gvjA87ehy4meo74CZKTG0eqF5YvLMIVaJquon1W+yt9hKyV0LQyx0QGbz
+   dgE4PtRsGGWTazI2BJAyvBmYsg0LXuDZLqVHOVrQbnYuMhPUz3gXHtPKc
+   Y/PN7DIRC6i60+n/uwHp4UeVfbVM77P9ILKuO+vTXawhipiG5+o3eanPq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="425182935"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="425182935"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 04:05:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="745803277"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="745803277"
+Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 04:05:15 -0700
+Date:   Tue, 21 Mar 2023 13:05:13 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     James Morse <james.morse@arm.com>
+cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+Subject: Re: [PATCH v3 03/19] x86/resctrl: Create helper for RMID allocation
+ and mondata dir creation
+In-Reply-To: <20230320172620.18254-4-james.morse@arm.com>
+Message-ID: <87dc96e1-e86-84f9-90dc-6e8f691dcd8@linux.intel.com>
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-4-james.morse@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1050287707-1679396720=:1997"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Tze-nan Wu" <Tze-nan.Wu@mediatek.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Currently, the "last_cmd" variable can be accessed by multiple processes
-asynchronously when multiple users manipulate synthetic_events node
-at the same time, it could lead to use-after-free or double-free.
+--8323329-1050287707-1679396720=:1997
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-This patch add "lastcmd_mutex" to prevent "last_cmd" from being accessed
-asynchronously.
+On Mon, 20 Mar 2023, James Morse wrote:
 
-================================================================
+> RMID are allocated for each monitor or control group directory, because
+> each of these needs its own RMID. For control groups,
+> rdtgroup_mkdir_ctrl_mon() later goes on to allocate the CLOSID.
+> 
+> MPAM's equivalent of RMID are not an independent number, so can't be
+> allocated until the CLOSID is known. An RMID allocation for one CLOSID
+> may fail, whereas another may succeed depending on how many monitor
+> groups a control group has.
+> 
+> The RMID allocation needs to move to be after the CLOSID has been
+> allocated.
+> 
+> To make a subsequent change that does this easier to read, move the RMID
+> allocation and mondata dir creation to a helper.
+> 
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c | 42 +++++++++++++++++---------
+>  1 file changed, 27 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> index 6ecaf34a4e32..b785beb0db26 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -3135,6 +3135,30 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
+>  	return 0;
+>  }
+>  
+> +static int mkdir_rdt_prepare_rmid_alloc(struct rdtgroup *rdtgrp)
+> +{
+> +	int ret;
+> +
+> +	if (!rdt_mon_capable)
+> +		return 0;
+> +
+> +	ret = alloc_rmid();
+> +	if (ret < 0) {
+> +		rdt_last_cmd_puts("Out of RMIDs\n");
+> +		return ret;
+> +	}
+> +	rdtgrp->mon.rmid = ret;
+> +
+> +	ret = mkdir_mondata_all(rdtgrp->kn, rdtgrp, &rdtgrp->mon.mon_data_kn);
+> +	if (ret) {
+> +		rdt_last_cmd_puts("kernfs subdir error\n");
+> +		free_rmid(rdtgrp->closid, rdtgrp->mon.rmid);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
+>  			     const char *name, umode_t mode,
+>  			     enum rdt_group_type rtype, struct rdtgroup **r)
+> @@ -3200,20 +3224,10 @@ static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
+>  		goto out_destroy;
+>  	}
+>  
+> -	if (rdt_mon_capable) {
+> -		ret = alloc_rmid();
+> -		if (ret < 0) {
+> -			rdt_last_cmd_puts("Out of RMIDs\n");
+> -			goto out_destroy;
+> -		}
+> -		rdtgrp->mon.rmid = ret;
+> +	ret = mkdir_rdt_prepare_rmid_alloc(rdtgrp);
+> +	if (ret)
+> +		goto out_destroy;
+>  
+> -		ret = mkdir_mondata_all(kn, rdtgrp, &rdtgrp->mon.mon_data_kn);
+> -		if (ret) {
+> -			rdt_last_cmd_puts("kernfs subdir error\n");
+> -			goto out_idfree;
+> -		}
+> -	}
+>  	kernfs_activate(kn);
+>  
+>  	/*
+> @@ -3221,8 +3235,6 @@ static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
+>  	 */
+>  	return 0;
+>  
+> -out_idfree:
+> -	free_rmid(rdtgrp->closid, rdtgrp->mon.rmid);
+>  out_destroy:
+>  	kernfs_put(rdtgrp->kn);
+>  	kernfs_remove(rdtgrp->kn);
+> 
 
-It's easy to reproduce in the KASAN environment by running the two
-scripts below in different shells.
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-script 1:
-        while :
-        do
-                echo -n -e '\x88' > /sys/kernel/tracing/synthetic_events
-        done
 
-script 2:
-        while :
-        do
-                echo -n -e '\xb0' > /sys/kernel/tracing/synthetic_events
-        done
-
-================================================================
-double-free scenario:
-
-    process A                       process B
--------------------               ---------------
-1.kstrdup last_cmd
-                                  2.free last_cmd
-3.free last_cmd(double-free)
-
-================================================================
-use-after-free scenario:
-
-    process A                       process B
--------------------               ---------------
-1.kstrdup last_cmd
-                                  2.free last_cmd
-3.tracing_log_err(use-after-free)
-
-================================================================
-
-Appendix 1. KASAN report double-free:
-
-BUG: KASAN: double-free in kfree+0xdc/0x1d4
-Free of addr ***** by task sh/4879
-Call trace:
-        ...
-        kfree+0xdc/0x1d4
-        create_or_delete_synth_event+0x60/0x1e8
-        trace_parse_run_command+0x2bc/0x4b8
-        synth_events_write+0x20/0x30
-        vfs_write+0x200/0x830
-        ...
-
-Allocated by task 4879:
-        ...
-        kstrdup+0x5c/0x98
-        create_or_delete_synth_event+0x6c/0x1e8
-        trace_parse_run_command+0x2bc/0x4b8
-        synth_events_write+0x20/0x30
-        vfs_write+0x200/0x830
-        ...
-
-Freed by task 5464:
-        ...
-        kfree+0xdc/0x1d4
-        create_or_delete_synth_event+0x60/0x1e8
-        trace_parse_run_command+0x2bc/0x4b8
-        synth_events_write+0x20/0x30
-        vfs_write+0x200/0x830
-        ...
-
-================================================================
-Appendix 2. KASAN report use-after-free:
-
-BUG: KASAN: use-after-free in strlen+0x5c/0x7c
-Read of size 1 at addr ***** by task sh/5483
-sh: CPU: 7 PID: 5483 Comm: sh
-        ...
-        __asan_report_load1_noabort+0x34/0x44
-        strlen+0x5c/0x7c
-        tracing_log_err+0x60/0x444
-        create_or_delete_synth_event+0xc4/0x204
-        trace_parse_run_command+0x2bc/0x4b8
-        synth_events_write+0x20/0x30
-        vfs_write+0x200/0x830
-        ...
-
-Allocated by task 5483:
-        ...
-        kstrdup+0x5c/0x98
-        create_or_delete_synth_event+0x80/0x204
-        trace_parse_run_command+0x2bc/0x4b8
-        synth_events_write+0x20/0x30
-        vfs_write+0x200/0x830
-        ...
-
-Freed by task 5480:
-        ...
-        kfree+0xdc/0x1d4
-        create_or_delete_synth_event+0x74/0x204
-        trace_parse_run_command+0x2bc/0x4b8
-        synth_events_write+0x20/0x30
-        vfs_write+0x200/0x830
-        ...
-
-Fixes: 27c888da9867 ("tracing: Remove size restriction on synthetic event cmd error logging")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
----
- kernel/trace/trace_events_synth.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 46d0abb32d0f..f0ff730125bf 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -44,14 +44,21 @@ enum { ERRORS };
- 
- static const char *err_text[] = { ERRORS };
- 
-+DEFINE_MUTEX(lastcmd_mutex);
- static char *last_cmd;
- 
- static int errpos(const char *str)
- {
-+	int ret = 0;
-+
-+	mutex_lock(&lastcmd_mutex);
- 	if (!str || !last_cmd)
--		return 0;
-+		goto out;
- 
--	return err_pos(last_cmd, str);
-+	ret = err_pos(last_cmd, str);
-+ out:
-+	mutex_unlock(&lastcmd_mutex);
-+	return ret;
- }
- 
- static void last_cmd_set(const char *str)
-@@ -59,18 +66,22 @@ static void last_cmd_set(const char *str)
- 	if (!str)
- 		return;
- 
-+	mutex_lock(&lastcmd_mutex);
- 	kfree(last_cmd);
--
- 	last_cmd = kstrdup(str, GFP_KERNEL);
-+	mutex_unlock(&lastcmd_mutex);
- }
- 
- static void synth_err(u8 err_type, u16 err_pos)
- {
-+	mutex_lock(&lastcmd_mutex);
- 	if (!last_cmd)
--		return;
-+		goto out;
- 
- 	tracing_log_err(NULL, "synthetic_events", last_cmd, err_text,
- 			err_type, err_pos);
-+ out:
-+	mutex_unlock(&lastcmd_mutex);
- }
- 
- static int create_synth_event(const char *raw_command);
 -- 
-2.18.0
+ i.
 
+--8323329-1050287707-1679396720=:1997--
