@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716E46C38F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CD06C38F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjCUSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S230365AbjCUSNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCUSMa (ORCPT
+        with ESMTP id S229945AbjCUSNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:12:30 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14CA50723
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:12:29 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5416b0ab0ecso294996487b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679422349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FPozxaeZQPWyCpd0xbPfiSsnDcAAT2J9cKx1SPDRr9I=;
-        b=X9t0a1zypAz79SHi2UyDEpKSW9JBfcjPYiD8oK9gusW1icc07Zj6V1WcyR2NhnNLkv
-         +JnuaBSRbyDF0IaAkIMmzv4QMqQNh7s4bPg3190aJ6qFAyyK+iPm1ZSbtnji6gDniPQj
-         b5ZNiGkaUzdqa6HCFLXlwAtMPAjGGIqu2ZkSFzaVJ+X4rJ5/k7CXqlnSuqpB9oubYnpU
-         bCVb8Bhaf3upIUC1abbSypW8s800ThDEvG2l4VimVMpOt4oKD/dN/JgN3GefubgQ+qLf
-         kcFHWO+0TQcvYe208YDghTK72N7o2mP1vI2fw2EKKlXWD4piIAfFSV40i6CjxAf/Lg03
-         FKVw==
+        Tue, 21 Mar 2023 14:13:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875564DE1F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679422385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7PqcmUw+IZmRGt9WUw0A+lCjcIOG3yrVoicilFi5R4o=;
+        b=Y45a5O8g1+HMWmmcW08oa8ZLJw6ndwm6If+RKdYm5BO2H9dcis9+ohFDBU4cVlwxwI+Co+
+        SW/Vkfy6jRIRyrr2VG7ehsLDZXIkXkXpfw94NnU2ApcV+e4QzBQWGUCg59WrwNpfhxExK7
+        4GNL5fBjKZXbsWInuRnO1FgBmu9nHwE=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-166-dOHoWW3BPYyG5Tom1apBQw-1; Tue, 21 Mar 2023 14:13:04 -0400
+X-MC-Unique: dOHoWW3BPYyG5Tom1apBQw-1
+Received: by mail-qk1-f198.google.com with SMTP id x80-20020a376353000000b0074681bc7f42so3415763qkb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679422349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FPozxaeZQPWyCpd0xbPfiSsnDcAAT2J9cKx1SPDRr9I=;
-        b=bRU3hOeKQzWCGZIhBxwVQtqCLAiwW/pKjLqF/gblFoxjRtuxXFFY+MeElVsPYbqvIs
-         Ntpb+QLmzCqty3+tL4Qlc6YO4Y8O+MJ6fxngjJYVRpZvG/tEz802Sw/PAsHANeTXlSFs
-         7JXVR72rVXpLVIj+4jfno/nJOd+6ScCjMkhrXkHMsjPumlIF/Yyw+FCLJ43VmYiSpNVo
-         uodYwKwzIN7+J70YIaNQc37XBUdwz4kMmd8iP6mGq9rLHvenhGXrAyYJ8pisT+Q/WXSv
-         2lCC/dD08YqNQMHbsSL6my1Py0ClwZcBPfYKFppfR3dkULDqPekNETN0K5LRZCclnb+h
-         xuJA==
-X-Gm-Message-State: AAQBX9cby6M3vjJx8oABMHkPmswU/aMIM7h8AtOCbNuxfl/01WJh3zgg
-        aUxa2SPNXEX2tPi7/yZn5GGMosNrpn+B37za0rO7Yw==
-X-Google-Smtp-Source: AKy350a9AALo/UNCOhNQxiW/XrM+h7wC/4w+mnV5lmSryhb+xXp5pX4vZye1EgLkE5MKieToXDSBjJxyQKhUmAC3PKk=
-X-Received: by 2002:a81:a846:0:b0:541:69bc:8626 with SMTP id
- f67-20020a81a846000000b0054169bc8626mr1695407ywh.10.1679422348661; Tue, 21
- Mar 2023 11:12:28 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679422383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7PqcmUw+IZmRGt9WUw0A+lCjcIOG3yrVoicilFi5R4o=;
+        b=LhWeqYBWUpo3Qm8D14nJnN3eVOhlUKlAm5uS13y0GPOS9+pEadRJlqpQU+w5+Ilx6Z
+         Ih8rGhCjt3geZw/iC1YuRwsoz/X1RLo/swLcAIuHEF9jsBjOmXXKwioa0WI6Atq65quq
+         VeiKlAXfNY50NCTji+Nvm6ugSwrFTx0OBb9kK9VzKIrIuNIBfUukHbVPPWxNBooXUuHH
+         wKlbtjzO4Qfqo/0m84K6rdXNwtGzZ9TzvtkOHPpD2YGZmP5V4zc1Tw33u3dFXI4Z3sim
+         QEAE3pQW7I2Qo1jmUb8JhLuyMtPalMI19/7+m/5kryo3/eamho6d10jEYBpUE5P9sdGm
+         nXMg==
+X-Gm-Message-State: AO0yUKXDuLdBB9YnXGjkaeQKsx5xxoOxU4fN2MGL5MRocLW9UggAmNlE
+        AxBpyrSGnq3/gUlcX0JKTaraVkJH22SxV/RsPVsbNRPTt9UcvF6QrwD0ddD/nWVVcAXzbtmF+cd
+        QRowUHxZv03MNSvwB3GOLjsyq
+X-Received: by 2002:ac8:7c55:0:b0:3e3:8119:7c68 with SMTP id o21-20020ac87c55000000b003e381197c68mr1356027qtv.52.1679422383558;
+        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+5mKIAyTWquc0+eLxRrstoll07nUcDhsg7ybPYJhnq2pOAz549MYFTu+kSCHFP7AxBTc+21g==
+X-Received: by 2002:ac8:7c55:0:b0:3e3:8119:7c68 with SMTP id o21-20020ac87c55000000b003e381197c68mr1355993qtv.52.1679422383304;
+        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id i1-20020a05620a0a0100b0074631fb7ccesm9599518qka.67.2023.03.21.11.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] USB: serial: quatech2: remove unused qt2_setdevice function
+Date:   Tue, 21 Mar 2023 14:12:55 -0400
+Message-Id: <20230321181255.1825963-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230211014626.3659152-1-vipinsh@google.com> <ZBTwX5790zwl5721@google.com>
- <ZBj9L2VUjEbWbgcS@google.com>
-In-Reply-To: <ZBj9L2VUjEbWbgcS@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 21 Mar 2023 11:11:52 -0700
-Message-ID: <CAHVum0feM8hnD-+dXF4jiug8tmpm9GBAh619Xf279LNSm=Jozw@mail.gmail.com>
-Subject: Re: [Patch v3 0/7] Optimize clear dirty log
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,55 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 5:41=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Fri, Mar 17, 2023, Sean Christopherson wrote:
-> > Did a cursory glance, looks good.  I'll do a more thorough pass next we=
-ek and get
-> > it queued up if all goes well.  No need for a v4 at this point, I'll fi=
-xup David's
-> > various nits when applying.
->
-> Ooof, that ended up being painful.  In hindsight, I should have asked for=
- a v4,
-> but damage done, and it's my fault for throwing you a big blob of code in=
- the
-> first place.
->
-> I ended up splitting the "interesting" patches into three each:
->
->   1. Switch to the atomic-AND
->   2. Drop the access-tracking / dirty-logging (as appropriate)
->   3. Drop the call to __handle_changed_spte()
->
-> because logically they are three different things (although obviously rel=
-ated).
->
-> I have pushed the result to kvm-x86/mmu, but haven't merged to kvm-x86/ne=
-xt or
-> sent thanks because it's not yet tested.  I'll do testing tomorrow, but i=
-f you
-> can take a look in the meantime to make sure I didn't do something comple=
-tely
-> boneheaded, it'd be much appreciated.
+clang with W=1 reports
+drivers/usb/serial/quatech2.c:179:19: error: unused function
+  'qt2_setdevice' [-Werror,-Wunused-function]
+static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
+                  ^
+This function is not used, so remove it.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/serial/quatech2.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Thanks for refactoring the patches. I reviewed the commits, no obvious
-red flags from my side. Few small nits I found:
+diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
+index 6fca40ace83a..fee581409bf6 100644
+--- a/drivers/usb/serial/quatech2.c
++++ b/drivers/usb/serial/quatech2.c
+@@ -176,14 +176,6 @@ static inline int qt2_control_msg(struct usb_device *dev,
+ 			       NULL, 0, QT2_USB_TIMEOUT);
+ }
+ 
+-static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
+-{
+-	u16 x = ((u16) (data[1] << 8) | (u16) (data[0]));
+-
+-	return qt2_control_msg(dev, QT_SET_GET_DEVICE, x, 0);
+-}
+-
+-
+ static inline int qt2_getregister(struct usb_device *dev,
+ 				  u8 uart,
+ 				  u8 reg,
+-- 
+2.27.0
 
-commit e534a94eac07 ("KVM: x86/mmu: Use kvm_ad_enabled() to determine
-if TDP MMU SPTEs need wrprot")
- - kvm_ad_enabled() should be outside the loop.
-
-commit 69032b5d71ef (" KVM: x86/mmu: Atomically clear SPTE dirty state
-in the clear-dirty-log flow")
- - MMU_WARN_ON(kvm_ad_enabled() &&
-spte_ad_need_write_protect(iter.old_spte) should be after
-if(iter.level > PG_LEVEL_4k...)
-
-commit 93c375bb6aea ("KVM: x86/mmu: Bypass __handle_changed_spte()
-when clearing TDP MMU dirty bits")
- - Needs new performance numbers. Adding MMU_WARN_ON() might change
-numbers. I will run a perf test on your mmu branch and see if
-something changes a lot.
