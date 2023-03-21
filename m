@@ -2,167 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710716C2A56
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10176C2A57
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjCUGTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S230196AbjCUGUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjCUGTj (ORCPT
+        with ESMTP id S230151AbjCUGU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:19:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873629E0B;
-        Mon, 20 Mar 2023 23:19:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED10AB812A1;
-        Tue, 21 Mar 2023 06:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40726C433EF;
-        Tue, 21 Mar 2023 06:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679379572;
-        bh=o6gdPjxvDO2lUysJD4btv0gnfbX3M+bVFjVrGrkuHPU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n1595sKLeoRMkXVLlNvYTFYhoktp7jhdB08keut33OLupIBX6dVmh75rtGh/97GDl
-         lmwvoWYQRzTL2ONelkDEfYT/kmOx2j5Q6G67hoxLLKFBzDT/cxgv84J73WbXa6TPMO
-         t1Ak4r+F/E3UFVA0QIgwiVj2LhlmXyI/B87BCiOQ=
-Date:   Tue, 21 Mar 2023 07:19:29 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, JC Kuo <jckuo@nvidia.com>,
-        Wayne Chang <waynec@nvidia.com>
-Subject: Re: [PATCH v2] usb: xhci: tegra: fix sleep in atomic call
-Message-ID: <ZBlMcZA71BKs1oYo@kroah.com>
-References: <20230321023636.771729-1-haotienh@nvidia.com>
+        Tue, 21 Mar 2023 02:20:29 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2031.outbound.protection.outlook.com [40.92.98.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401F39CF1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:20:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HhpszWttysbMCSZP+SoIPBzMWwuerZBLZomB7P+qZoJh904gU/8U/RB41XIumTy+gRb6LOAgYXhkoImYkQtRjEmSiiil+EzBehLORSxA5V1hQ3XpE+dCB7C/KFzrMEDPWfFmv7uOJSS63kaH2Oo8Pae5uFv8E9oDTg3LzQVTC4fkDBUGaweIOAOZxcTzra1eRRwyrVYaopb7CXeHHHQEwk3ksK9Sj6KrlHgCfCcRPo2mn2v6pMTM03Aj/2Wtvbmkml4mXbBvErbB3CsnQ+QzHjhNqEEmV66Te6RKh3CSgfR7Vd5TKjUJmPskjbaS57LHRbRUE/ybRijgS+VuQ15JfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ySe1l8LXiaTaDIJtc/Qn0KhLh3ppIoXqK1CcER35mGM=;
+ b=VUJ5fug4jhiei26A5RHgVVVE82MLi7cWwab4T7x9eEoCTRtAV30LIcjmekplMLp0UoTW8O5kX1bepJ5u8kg+q6dDB9zUm3LYt1HDkmFLIiErv0vqLHv1PcQfE78I17J2BKRnBHYl1VDqLRTEPxmRkb7RP5sizv7w2f78aSTYwcwf22Wb5z7vGfDdznIuw6fbNxmr4sijpa95CvhZTageiiEQO3C/CsF4Y5kxRrOYAlLaaD79crq+mXD/Xc+WO6K2ipex2njhn8ZCLQzX4p4mqxoRiTSh2l+FJWy590jTx+vbq0wSAPK1vosgh4oWxHC21fijTV/baM0GIZFziiQK2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ySe1l8LXiaTaDIJtc/Qn0KhLh3ppIoXqK1CcER35mGM=;
+ b=GFc6qJOhTzqgqbX4Glav07WhzS1/8OsJeR4iHBUfsfEn9T/WDSpcP9KLebR7E02ZNBv5PGZRB9rbACKw/5cgE71VmtRCAsYOvXJMym9XIF6zFr0yQMlIxU2XnZFpSF8nPXKgBiuifkv9MXxdwhh14d6nA2kIdMGJLcoMcWqZIbaQ37DLfNBOGl6R7IJLePU64KIot4CYgXftkvhW/pYOZbdWTJ9p/ag730MN5ziZ2Op0mBH/Uha9n+OZAFMfNBGQbeF4IDC0wGuany/AlNiHWIwkk9us5txGRtOwnq49aUcqiWTzAd4zOaB1C2tXmc525Qz6m4t/6KvQoLUVtFfBNQ==
+Received: from TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:158::13)
+ by TY1P286MB3348.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2ee::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 06:20:07 +0000
+Received: from TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::3682:6425:a009:405f]) by TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::3682:6425:a009:405f%8]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 06:20:07 +0000
+From:   Peng Liu <pngliu@hotmail.com>
+Cc:     jan.kiszka@siemens.com, kbingham@kernel.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        liupeng17@lenovo.com
+Subject: [PATCH 3/3] scripts/gdb: fix lx-timerlist for HRTIMER_MAX_CLOCK_BASES printing
+Date:   Tue, 21 Mar 2023 14:20:04 +0800
+Message-ID: <TYCP286MB214640FF0E7F04AC3926A39EC6819@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [98Tcgg0RWXbZgzGa2mx1HhoZhcSqTbgZ]
+X-ClientProxiedBy: TYCP286CA0174.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:3c6::15) To TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:158::13)
+X-Microsoft-Original-Message-ID: <20230321062004.4574-1-pngliu@hotmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321023636.771729-1-haotienh@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2146:EE_|TY1P286MB3348:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae62aeb0-d682-40c2-a08d-08db29d4512d
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IaOd8WLCbeO8DQ0gHQDmQQsBZyFuKgLdozeJZtNrGOi3Ws+PL+HglDbhjrK8AHS3nBgEFuZcoJdlDZ8UoOvko6jvcV2wC1ARSu0LBYstPKNFmu65cJFj+pMvpFvfgBomo/E0/8eMvjVbUTGTPHaKDLR876Wt7KQzF+Ub3R1r1EyniFVDd7BwcNF9HsA5+3iFwltBSjUmunVMFzXQmJep2fs0odBCEq2R61wIsRi9rbScyAqeSnBGrCofkNBE3acoaezuroKRv31KAgZgraRyczBwYJi7A8i5xOOKAhBzl9P/o6xJ4+XAHmZpFMricm18JnaHGlElq5pZVaOTzB9FZ9BWvU05ZCdTFAz4ZgiV63O5MaWe3QDdVoIhSifu0IRePxDzfC8OptrXBxRJRDnvKZn2GG2Ir+y9RHZso8gQanzDBAcbcuKBKk6/RwuDmQN+M5NEUzKZXVjqA5UvvX/BKP3i2zcZfBL5JtizUxtKKqpXNo575i8Zin6YUFIXO7WfW+qv6ivYGzaKRSRYZ3/gPu8fGABwLPHkUQqq1j6p6Ec+qndeL4OZm2q4b3W2BpZvxqWI/7GV5ttOVexoytBJ7Ggp+Uot4TY9jMtpqKALtus=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?50qWtAWUU8OE4ktXPQu4atOW0Aaktj7bqH9Tmu6XVCgFeTlnQf/wTgVH0BWP?=
+ =?us-ascii?Q?XQRVgkqPmaWKZxyr0SAZb0itHtgVQnMVggI6eT7guJ+P4ovj8VWEH8Qux9aO?=
+ =?us-ascii?Q?gLUuH0Dtw1Hh4gM0XoSCTAWc5VMWuDmvyagDWINf0ZaDqxXhtxnMCyvIc0wM?=
+ =?us-ascii?Q?KfEYvdkfxvwkLvHiIWIst9TaDf0bByVQ2PUsfVYZsHTD61H2DvZNNunzRwgF?=
+ =?us-ascii?Q?CoXa2PQL81atXPuc1c4irGVHDavY3/uiQFUlgkYb6jdpZdaJYVMFfCAcc5j6?=
+ =?us-ascii?Q?y6F9/z4fTbJehxreXdTThGBnrHtMkcwHLcEfeB2VSspZ2zk7T1NO8/SmYdhy?=
+ =?us-ascii?Q?q3T0iClNsWvmq27pwRT7P/l+Dq1r2CfMWgcsGXNT1/Vr8JmICLv1WjovMiIm?=
+ =?us-ascii?Q?9pbc+BLeo1k2QDUWjFH+mcdgutk+No/rkncyopoG2nr2bLiKZOP/X4YXjMNv?=
+ =?us-ascii?Q?ALDEuNJxzP0Z7DxeJmFC/tul7H7qFN/6ONOzKw5SXnoGWUzklFCOZMxExPG5?=
+ =?us-ascii?Q?1+8mwrUMudxRGpz8lg5Mq802rT16NRvhZGxOkKuQ5KqM/xE5rJ3aeegbPWWs?=
+ =?us-ascii?Q?/kUGUJU3dN72MhU45Pj2qs79Zhu1ZH6P1uhsk/I9QThlxel48QicXpLaytVE?=
+ =?us-ascii?Q?bL+M/Mz4IxZVJpKnLk6gsFmb6+o+qEp84kVIXa8tV+6+W8KMUyl/92hzL0tC?=
+ =?us-ascii?Q?j2XKbn49CeseQDJGtTgDlCGhEnSTYXnrO0JiOnSTGnphD0WTZ6fQJ593hObA?=
+ =?us-ascii?Q?W7YaVr3MfONkTUVwCbHCPBtmujCwu/AAoA6qoZM1e6fO383fpIMQG7Wi+cmb?=
+ =?us-ascii?Q?jUzBkmJr2ssODjiUm6EbxJZR+fAxbUdPBvZvMxWpUqwKcVRmme38JLNtWf9j?=
+ =?us-ascii?Q?29Osw/ZLiwvHOKVkU99m1H7QC6qSH1Rg2kGra+R1Hl2LDFIw+mOCeN9MbaM0?=
+ =?us-ascii?Q?dJwmuF+fmBkoZVaw09YyOFNI/cy52IhZC41zpZaCMYJots8A3RwuWLIm0Sp7?=
+ =?us-ascii?Q?8RO68T7ZEA3ETtKa7GAshE5NWKBVsi/GSPfwg0gI7DKo/BHRLvFDnPINPWLK?=
+ =?us-ascii?Q?/JR6XP2/RWXQmNnzF0UwtjUpJ6tvdBnFvqDsWyyY714D2vUfbX1P/6N41GND?=
+ =?us-ascii?Q?Vktt/9ubNHgLsr83Ra384qCmUtc/75PXwPGDyEvyeda75a5ei+t8iUk3pbSg?=
+ =?us-ascii?Q?Svioa75GNV7e8ND/QsLofF2r7kHwFHqhS2LQcviCjUCbq8OLeMpJCi1O+9th?=
+ =?us-ascii?Q?Wxw3csTE4ZaPBGEP/RGg?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae62aeb0-d682-40c2-a08d-08db29d4512d
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 06:20:07.7307
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1P286MB3348
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:36:36AM +0800, Haotien Hsu wrote:
-> From: Wayne Chang <waynec@nvidia.com>
-> 
-> When we set the OTG port to Host mode, we observed the following splat:
-> [  167.057718] BUG: sleeping function called from invalid context at
-> include/linux/sched/mm.h:229
-> [  167.057872] Workqueue: events tegra_xusb_usb_phy_work
-> [  167.057954] Call trace:
-> [  167.057962]  dump_backtrace+0x0/0x210
-> [  167.057996]  show_stack+0x30/0x50
-> [  167.058020]  dump_stack_lvl+0x64/0x84
-> [  167.058065]  dump_stack+0x14/0x34
-> [  167.058100]  __might_resched+0x144/0x180
-> [  167.058140]  __might_sleep+0x64/0xd0
-> [  167.058171]  slab_pre_alloc_hook.constprop.0+0xa8/0x110
-> [  167.058202]  __kmalloc_track_caller+0x74/0x2b0
-> [  167.058233]  kvasprintf+0xa4/0x190
-> [  167.058261]  kasprintf+0x58/0x90
-> [  167.058285]  tegra_xusb_find_port_node.isra.0+0x58/0xd0
-> [  167.058334]  tegra_xusb_find_port+0x38/0xa0
-> [  167.058380]  tegra_xusb_padctl_get_usb3_companion+0x38/0xd0
-> [  167.058430]  tegra_xhci_id_notify+0x8c/0x1e0
-> [  167.058473]  notifier_call_chain+0x88/0x100
-> [  167.058506]  atomic_notifier_call_chain+0x44/0x70
-> [  167.058537]  tegra_xusb_usb_phy_work+0x60/0xd0
-> [  167.058581]  process_one_work+0x1dc/0x4c0
-> [  167.058618]  worker_thread+0x54/0x410
-> [  167.058650]  kthread+0x188/0x1b0
-> [  167.058672]  ret_from_fork+0x10/0x20
-> 
-> The function tegra_xusb_padctl_get_usb3_companion eventually calls
-> tegra_xusb_find_port and this in turn calls kasprintf which might sleep
-> and so cannot be called from an atomic context.
-> 
-> Fix this by moving the call to tegra_xusb_padctl_get_usb3_companion to
-> the tegra_xhci_id_work function where it is really needed.
-> 
-> Fixes: f836e7843036 ("usb: xhci-tegra: Add OTG support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-> ---
->  drivers/usb/host/xhci-tegra.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index 1ff22f675930..8dbce2cdb7e4 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -2,7 +2,7 @@
->  /*
->   * NVIDIA Tegra xHCI host controller driver
->   *
-> - * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
-> + * Copyright (c) 2014-2020,2023, NVIDIA CORPORATION. All rights reserved.
->   * Copyright (C) 2014 Google, Inc.
->   */
->  
-> @@ -1360,6 +1360,10 @@ static void tegra_xhci_id_work(struct work_struct *work)
->  
->  	mutex_unlock(&tegra->lock);
->  
-> +	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(
-> +							tegra->padctl,
-> +							tegra->otg_usb2_port);
-> +
->  	if (tegra->host_mode) {
->  		/* switch to host mode */
->  		if (tegra->otg_usb3_port >= 0) {
-> @@ -1474,9 +1478,6 @@ static int tegra_xhci_id_notify(struct notifier_block *nb,
->  	}
->  
->  	tegra->otg_usb2_port = tegra_xusb_get_usb2_port(tegra, usbphy);
-> -	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(
-> -							tegra->padctl,
-> -							tegra->otg_usb2_port);
->  
->  	tegra->host_mode = (usbphy->last_event == USB_EVENT_ID) ? true : false;
->  
-> -- 
-> 2.25.1
-> 
+From: Peng Liu <liupeng17@lenovo.com>
 
-Hi,
+HRTIMER_MAX_CLOCK_BASES is of enum type hrtimer_base_type. To print
+it as an integer, HRTIMER_MAX_CLOCK_BASES should be converted first.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Signed-off-by: Peng Liu <liupeng17@lenovo.com>
+Reviewed-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ scripts/gdb/linux/timerlist.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
+index 8281da068c5b..249f0e804b24 100644
+--- a/scripts/gdb/linux/timerlist.py
++++ b/scripts/gdb/linux/timerlist.py
+@@ -188,7 +188,8 @@ class LxTimerList(gdb.Command):
+         max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
+ 
+         text = "Timer List Version: gdb scripts\n"
+-        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
++        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(
++            max_clock_bases.type.fields()[max_clock_bases].enumval)
+         text += "now at {} nsecs\n".format(ktime_get())
+ 
+         for cpu in cpus.each_online_cpu():
+-- 
+2.34.1
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
