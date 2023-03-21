@@ -2,139 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9B76C34DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B846C34EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjCUO5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S231528AbjCUO77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCUO5n (ORCPT
+        with ESMTP id S230090AbjCUO75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:57:43 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FFD3B86F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:57:42 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4532B582090;
-        Tue, 21 Mar 2023 10:57:42 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 21 Mar 2023 10:57:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679410662; x=1679417862; bh=WZ
-        Ckbh/tYGNxV+F2X4fGjvMhyY0o6gXTLsZ+ZHhktts=; b=hR5369FKPFCxMf7rzi
-        I7rmDxOiakJl1l3s/R6QoM2Y6rTdUVhmy//Vq8htzIrcwZTbL5O71qycjQei52hZ
-        DOEk8D4aPdB5vM9LZQOC+9oFc+JYHUSMqmlz0FGJRRweEEHadXUGLtmoFqWY0Koc
-        0THQUFeZYca2cfPO9ZX0MJO5MpvGRugjR+KjQ4WGAi6bXpT7JqEhBnNDv7DeKMFU
-        00PqvG3cGb8FOa1K3BnOiD8nJQE1berJFG1oKjc2BqiGlfBENbOYS5ERrCQ75L7q
-        Hbfnb4Gadt/DRrRW89Ye+VgouZHOAX+tIRrw7LlUf1WYsGqNR3KdE3mRmdBjNwrJ
-        S4vg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679410662; x=1679417862; bh=WZCkbh/tYGNxV
-        +F2X4fGjvMhyY0o6gXTLsZ+ZHhktts=; b=rILf9kiCjLqy98oLvC0dfF06Zbobw
-        6thcabURJMPNPlSsFDpp875rnPpOrHFwTf3ENZAtaLG0W7KqtKkU/8Q6Wc9qBpFl
-        kqX+TfJSvkvZhbgj/b+YAVSwY11m2OeIgSyxLQOtQ5HzFf65Wxl9uUqoWrk1jrBZ
-        +SjOo9grCHExaXf12fHr3uwY6W2S0tYgNf9lfc5wHW4ftEoAgdIkrpZI3y8M5Jc0
-        8UQppsx/PkozffbSivg6/XXn9tppCSLTcBOA4xGP5S3a+dL67rZLlO6lhRFmC9H9
-        aRhlLqo5RocfPRkUYAdETTeoLwBXV3VLmdDWkeAzDCn4tzek69PkN3KpQ==
-X-ME-Sender: <xms:5cUZZNLW08BDnJwpBb1MgYgeXHruxfOpicBGqRPeMWows9sQlFadrw>
-    <xme:5cUZZJI_wdrvSWMGqMGm5JGBjFnn8iFc34hhF_cGDOX84_Xc7vUTU_a6L3U0Ax8X5
-    -eplCNlfUOY3jkPW7g>
-X-ME-Received: <xmr:5cUZZFuVXfFZF1jZbJQHQOHWW1kWCT8vBucXc4JkNSOSNxn_Mf6G5q08rXZsvuI_QU4DQm9MUkqgxoFD5BUw6Pc1v8r6CK8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:5cUZZObFz7fuN8U4Ep1CWo3Siw1FmKVYs3S2ZZqT2dgF5fRpr9kt1w>
-    <xmx:5cUZZEarjw9CzY3z28k1tIOyHhTGdIw-qEn9LbK0sOmJYkqBA6guTw>
-    <xmx:5cUZZCBte83TG_6wNpIc_LDmR2HGh8ShOeb-WUlBKMcVVW4f6_XEmw>
-    <xmx:5sUZZBLC5tcBipVIa9w1JHnzqumCxaFU9nCX-V1WMFyDUHB8plrjWw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Mar 2023 10:57:40 -0400 (EDT)
-Date:   Tue, 21 Mar 2023 15:57:39 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     jagan@amarulasolutions.com, michael@amarulasolutions.com,
-        Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "open list:DRM DRIVERS FOR ALLWINNER A10" 
-        <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Allwinner sunXi SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] drm/sun4i: tcon: Fix setting PLL rate when using DSI
-Message-ID: <20230321145739.jlpbzplsc27dlh7v@houat>
-References: <20230319160704.9858-1-frank@oltmanns.dev>
- <20230319160704.9858-2-frank@oltmanns.dev>
+        Tue, 21 Mar 2023 10:59:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF274231
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679410754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qOIIbtRi2YdRi9h/kU7CZ7/kNGD+yuNaR6Y05A5vIGE=;
+        b=eu73R3HHgmP5ttAPehBuv5JzIqxDRNru1ixNzHxD5klwYxc9/mdldAXZAovazXVFeIWfp1
+        /gqkqqD023ah5+/E3KwSpZWOWSfrwqjVIKuVw9lL8k7D2DyvY5We26QkUDIfDYOAoohXxe
+        xahCkNvyTwEYeUFAIqpKAI4E9s63F4Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-HVDIsSLjNDez1JOvl18iAg-1; Tue, 21 Mar 2023 10:59:10 -0400
+X-MC-Unique: HVDIsSLjNDez1JOvl18iAg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 63A5E2806042;
+        Tue, 21 Mar 2023 14:59:09 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.206])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 15ACC40C6E67;
+        Tue, 21 Mar 2023 14:59:08 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Viktor Prutyanov <viktor@daynix.com>, mst@redhat.com,
+        jasowang@redhat.com
+Cc:     pasic@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
+Subject: Re: [PATCH v3] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+In-Reply-To: <20230321134410.2097163-1-viktor@daynix.com>
+Organization: Red Hat GmbH
+References: <20230321134410.2097163-1-viktor@daynix.com>
+User-Agent: Notmuch/0.37 (https://notmuchmail.org)
+Date:   Tue, 21 Mar 2023 15:59:07 +0100
+Message-ID: <87h6uem9qc.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p6lqqqs2douyc2p3"
-Content-Disposition: inline
-In-Reply-To: <20230319160704.9858-2-frank@oltmanns.dev>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 21 2023, Viktor Prutyanov <viktor@daynix.com> wrote:
 
---p6lqqqs2douyc2p3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
+> indicates that the driver passes extra data along with the queue
+> notifications.
+>
+> In a split queue case, the extra data is 16-bit available index. In a
+> packed queue case, the extra data is 1-bit wrap counter and 15-bit
+> available index.
+>
+> Add support for this feature for MMIO, PCI and channel I/O transports.
+>
+> Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
+> ---
+>  v3: support feature in virtio_ccw, remove VM_NOTIFY, use avail_idx_shadow,
+>     remove byte swap, rename to vring_notification_data
+>  v2: reject the feature in virtio_ccw, replace __le32 with u32
+>
+>  drivers/s390/virtio/virtio_ccw.c   |  4 +++-
+>  drivers/virtio/virtio_mmio.c       | 14 +++++++++++++-
+>  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
+>  drivers/virtio/virtio_pci_common.h |  4 ++++
+>  drivers/virtio/virtio_pci_legacy.c |  2 +-
+>  drivers/virtio/virtio_pci_modern.c |  2 +-
+>  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
+>  include/linux/virtio_ring.h        |  2 ++
+>  include/uapi/linux/virtio_config.h |  6 ++++++
+>  9 files changed, 57 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> index 954fc31b4bc7..c33172c5b8d5 100644
+> --- a/drivers/s390/virtio/virtio_ccw.c
+> +++ b/drivers/s390/virtio/virtio_ccw.c
+> @@ -396,13 +396,15 @@ static bool virtio_ccw_kvm_notify(struct virtqueue *vq)
+>  	struct virtio_ccw_vq_info *info = vq->priv;
+>  	struct virtio_ccw_device *vcdev;
+>  	struct subchannel_id schid;
+> +	u32 data = __virtio_test_bit(vq->vdev, VIRTIO_F_NOTIFICATION_DATA) ?
+> +			vring_notification_data(vq) : vq->index;
+>  
+>  	vcdev = to_vc_device(info->vq->vdev);
+>  	ccw_device_get_schid(vcdev->cdev, &schid);
+>  	BUILD_BUG_ON(sizeof(struct subchannel_id) != sizeof(unsigned int));
+>  	info->cookie = kvm_hypercall3(KVM_S390_VIRTIO_CCW_NOTIFY,
+>  				      *((unsigned int *)&schid),
+> -				      vq->index, info->cookie);
+> +				      data, info->cookie);
+>  	if (info->cookie < 0)
+>  		return false;
+>  	return true;
+> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> index 3ff746e3f24a..7c16e622c33d 100644
+> --- a/drivers/virtio/virtio_mmio.c
+> +++ b/drivers/virtio/virtio_mmio.c
+> @@ -285,6 +285,16 @@ static bool vm_notify(struct virtqueue *vq)
+>  	return true;
+>  }
+>  
+> +static bool vm_notify_with_data(struct virtqueue *vq)
+> +{
+> +	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
+> +	u32 data = vring_notification_data(vq);
+> +
+> +	writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
 
-Hi,
+Can't you simply use the same method as for ccw, i.e. use one callback
+function that simply writes one value or the other?
 
-On Sun, Mar 19, 2023 at 05:07:04PM +0100, Frank Oltmanns wrote:
-> Set the required PLL rate by adjusting the dotclock rate when calling
-> clk_set_rate() when using DSI.
->=20
-> According to the Allwinners A64's BSP code, a TCON divider of 4 has to
-> be used and the PLL rate needs to be set to the following frequency when
-> using DSI:
->     PLL rate =3D DCLK * bpp / lanes
->=20
-> After this change the common mode set function would only contain
-> setting the resolution. Therefore, dissolve the function and transfer
-> the functionality to the individual mode set functions.
->=20
-> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+> +
+> +	return true;
+> +}
+> +
+>  /* Notify all virtqueues on an interrupt. */
+>  static irqreturn_t vm_interrupt(int irq, void *opaque)
+>  {
+> @@ -368,6 +378,8 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
+>  	unsigned long flags;
+>  	unsigned int num;
+>  	int err;
+> +	bool (*notify)(struct virtqueue *vq) = __virtio_test_bit(vdev,
+> +		VIRTIO_F_NOTIFICATION_DATA) ? vm_notify_with_data : vm_notify;
+>  
+>  	if (!name)
+>  		return NULL;
+> @@ -397,7 +409,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
+>  
+>  	/* Create the vring */
+>  	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
+> -				 true, true, ctx, vm_notify, callback, name);
+> +				 true, true, ctx, notify, callback, name);
+>  	if (!vq) {
+>  		err = -ENOMEM;
+>  		goto error_new_virtqueue;
+> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+> index a6c86f916dbd..e915c22f2384 100644
+> --- a/drivers/virtio/virtio_pci_common.c
+> +++ b/drivers/virtio/virtio_pci_common.c
+> @@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
+>  	/* we write the queue's selector into the notification register to
+>  	 * signal the other end */
+>  	iowrite16(vq->index, (void __iomem *)vq->priv);
+> +
+> +	return true;
+> +}
+> +
+> +bool vp_notify_with_data(struct virtqueue *vq)
+> +{
+> +	u32 data = vring_notification_data(vq);
+> +
+> +	iowrite32(data, (void __iomem *)vq->priv);
 
-This is similar to:
-https://lore.kernel.org/all/20230320161636.24411-1-romanberanek@icloud.com/
+Same for pci.
 
-What's the story there?
+> +
+>  	return true;
+>  }
+>  
 
-Maxime
-
---p6lqqqs2douyc2p3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBnF4wAKCRDj7w1vZxhR
-xTlHAP9hZXRLcHFHF6akyZpKqfeIfat5Kq/GQ60EkQZNui464AEAs9lW2mPHhILc
-QNQTIPwgSzuSlRTyCidCZj5arUxu3wY=
-=7tRe
------END PGP SIGNATURE-----
-
---p6lqqqs2douyc2p3--
