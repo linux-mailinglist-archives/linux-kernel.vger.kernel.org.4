@@ -2,157 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61766C2F9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E826C2F9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjCUKzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S230233AbjCUKzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjCUKzC (ORCPT
+        with ESMTP id S229710AbjCUKzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:55:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96EF17169;
+        Tue, 21 Mar 2023 06:55:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95571556B;
         Tue, 21 Mar 2023 03:54:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80060B8133A;
-        Tue, 21 Mar 2023 10:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E76E3C433EF;
-        Tue, 21 Mar 2023 10:54:54 +0000 (UTC)
-Message-ID: <2b93f81f-a0d6-2a09-31af-393e94faa83c@xs4all.nl>
-Date:   Tue, 21 Mar 2023 11:54:52 +0100
+Date:   Tue, 21 Mar 2023 10:54:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679396098;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GjIQ6cqwjUWanLpYa24zwS4pnPehno8Ojf1BeB1SOW0=;
+        b=YKEdosmZRNeYmaqYK0fzS2Wnq9eMh4EYMBCyCUbS3Gzzwrskhw8j48gojQBF8B5MIiBPxm
+        07IaiqKYIbR3ka8f80Ey2kVJCFz91ydi2NZoM9yHCtSLUDcFn1Agx2B4ymal7OQGniR3jC
+        E25pepyQApZdEnrF/9WjKB7cGJE/jqO1PFsUs3RM3b6aW48ieXLW2WhBLtclS/y+Km9fC0
+        /zS2Kb7+npOdtvM8OGSL6aLzAJe6ddXjC1GooDukdfEi0X3mJd7a0Wcq/YEdhcZQO8c+TE
+        ZoLG6VVhLjJTJOF0AZpFSrPV5+/Z7AKxJ/ARGsTvCkkWMN7yzvfrz29awI096w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679396098;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GjIQ6cqwjUWanLpYa24zwS4pnPehno8Ojf1BeB1SOW0=;
+        b=Gxt1B/nmM07316Skxb64BB9AWd4fN2+3AfUu5Wi6gLc9aZxMdFJJLOHdY3WZRgdSbCn8uZ
+        aSjhXzKVU/GEKzDQ==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/urgent] entry: Fix noinstr warning in __enter_from_user_mode()
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <d8955fa6d68dc955dda19baf13ae014ae27926f5.1677369694.git.jpoimboe@kernel.org>
+References: <d8955fa6d68dc955dda19baf13ae014ae27926f5.1677369694.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 05/10] media: Add BGR48_12 video format
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        mirela.rabulea@oss.nxp.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1678788305.git.ming.qian@nxp.com>
- <fbd891d2910a1a681cc66d196bcf36416a3bfe90.1678788305.git.ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <fbd891d2910a1a681cc66d196bcf36416a3bfe90.1678788305.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <167939609749.5837.2095598522697085146.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 11:08, Ming Qian wrote:
-> BGR48_12 is a reversed RGB format with 12 bits per component like BGR24,
-> expanded to 16bits.
-> Data in the 12 high bits, zeros in the 4 low bits,
-> arranged in little endian order.
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  .../userspace-api/media/v4l/pixfmt-rgb.rst    | 33 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  3 ++
->  4 files changed, 38 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> index d330aeb4d3eb..fc98a10991f1 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> @@ -956,6 +956,39 @@ number of bits for each component.
->  
->      \endgroup
->  
-> +12 Bits Per Component
-> +==============================
-> +
-> +These formats store an RGB triplet in six or eighth bytes, with 12 bits per component.
+The following commit has been merged into the core/urgent branch of tip:
 
-eighth -> eight
+Commit-ID:     f87d28673b71b35b248231a2086f9404afbb7f28
+Gitweb:        https://git.kernel.org/tip/f87d28673b71b35b248231a2086f9404afbb7f28
+Author:        Josh Poimboeuf <jpoimboe@kernel.org>
+AuthorDate:    Sat, 25 Feb 2023 16:01:36 -08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 21 Mar 2023 11:53:16 +01:00
 
-> +expand the bits per component to 16 bits, data in the high bits, zeros in the low bits,
+entry: Fix noinstr warning in __enter_from_user_mode()
 
-expand -> Expand
+__enter_from_user_mode() is triggering noinstr warnings with
+CONFIG_DEBUG_PREEMPT due to its call of preempt_count_add() via
+ct_state().
 
-> +arranged in little endian order.
-> +
-> +.. raw:: latex
-> +
-> +    \small
-> +
-> +.. flat-table:: RGB Formats With 12 Bits Per Component
-> +    :header-rows:  1
-> +
-> +    * - Identifier
-> +      - Code
-> +      - Byte 1-0
-> +      - Byte 3-2
-> +      - Byte 5-4
-> +      - Byte 7-6
-> +    * .. _V4L2-PIX-FMT-BGR48-12:
-> +
-> +      - ``V4L2_PIX_FMT_BGR48_12``
-> +      - 'B312'
-> +
-> +      - B\ :sub:`15-4`
-> +      - G\ :sub:`15-4`
-> +      - R\ :sub:`15-4`
-> +      -
-> +
-> +.. raw:: latex
-> +
-> +    \normalsize
->  
->  Deprecated RGB Formats
->  ======================
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index da313a0637de..16d3c91c7da2 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -252,6 +252,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_RGB565,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_RGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_BGR666,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_BGR48_12, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  
->  		/* YUV packed formats */
->  		{ .format = V4L2_PIX_FMT_YUYV,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 6543cda5815f..6d9599391d7b 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1302,6 +1302,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_RGBX1010102:	descr = "32-bit RGBX 10-10-10-2"; break;
->  	case V4L2_PIX_FMT_RGBA1010102:	descr = "32-bit RGBA 10-10-10-2"; break;
->  	case V4L2_PIX_FMT_ARGB2101010:	descr = "32-bit ARGB 2-10-10-10"; break;
-> +	case V4L2_PIX_FMT_BGR48_12:	descr = "12-bit Depth BGR"; break;
->  	case V4L2_PIX_FMT_GREY:		descr = "8-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y4:		descr = "4-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y6:		descr = "6-bit Greyscale"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 8a6430bc4a00..3c5acd72606c 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -580,6 +580,9 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_RGBA1010102 v4l2_fourcc('R', 'A', '3', '0') /* 32  RGBA-10-10-10-2 */
->  #define V4L2_PIX_FMT_ARGB2101010 v4l2_fourcc('A', 'R', '3', '0') /* 32  ARGB-2-10-10-10 */
->  
-> +/* RGB formats (6 or 8 bytes per pixel) */
-> +#define V4L2_PIX_FMT_BGR48_12    v4l2_fourcc('B', '3', '1', '2') /* 48  BGR 12-bit per component */
-> +
->  /* Grey formats */
->  #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Greyscale     */
->  #define V4L2_PIX_FMT_Y4      v4l2_fourcc('Y', '0', '4', ' ') /*  4  Greyscale     */
+The preemption disable isn't needed as interrupts are already disabled.
+And the context_tracking_enabled() check in ct_state() also isn't needed
+as that's already being done by the CT_WARN_ON().
 
-Regards,
+Just use __ct_state() instead.
 
-	Hans
+Fixes the following warnings:
+
+  vmlinux.o: warning: objtool: enter_from_user_mode+0xba: call to preempt_count_add() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0xf9: call to preempt_count_add() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0xc7: call to preempt_count_add() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0xba: call to preempt_count_add() leaves .noinstr.text section
+
+Fixes: 171476775d32 ("context_tracking: Convert state to atomic_t")
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/d8955fa6d68dc955dda19baf13ae014ae27926f5.1677369694.git.jpoimboe@kernel.org
+
+---
+ include/linux/context_tracking.h       | 1 +
+ include/linux/context_tracking_state.h | 2 ++
+ kernel/entry/common.c                  | 2 +-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
+index d4afa85..3a7909e 100644
+--- a/include/linux/context_tracking.h
++++ b/include/linux/context_tracking.h
+@@ -96,6 +96,7 @@ static inline void user_exit_irqoff(void) { }
+ static inline int exception_enter(void) { return 0; }
+ static inline void exception_exit(enum ctx_state prev_ctx) { }
+ static inline int ct_state(void) { return -1; }
++static inline int __ct_state(void) { return -1; }
+ static __always_inline bool context_tracking_guest_enter(void) { return false; }
+ static inline void context_tracking_guest_exit(void) { }
+ #define CT_WARN_ON(cond) do { } while (0)
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 4a4d56f..fdd537e 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -46,7 +46,9 @@ struct context_tracking {
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+ DECLARE_PER_CPU(struct context_tracking, context_tracking);
++#endif
+ 
++#ifdef CONFIG_CONTEXT_TRACKING_USER
+ static __always_inline int __ct_state(void)
+ {
+ 	return arch_atomic_read(this_cpu_ptr(&context_tracking.state)) & CT_STATE_MASK;
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 846add8..1314894 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -21,7 +21,7 @@ static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
+ 	arch_enter_from_user_mode(regs);
+ 	lockdep_hardirqs_off(CALLER_ADDR0);
+ 
+-	CT_WARN_ON(ct_state() != CONTEXT_USER);
++	CT_WARN_ON(__ct_state() != CONTEXT_USER);
+ 	user_exit_irqoff();
+ 
+ 	instrumentation_begin();
