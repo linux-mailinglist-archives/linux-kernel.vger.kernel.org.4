@@ -2,51 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923386C2CE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8026C6C2CEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjCUIs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S230215AbjCUItB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjCUIr5 (ORCPT
+        with ESMTP id S230156AbjCUIsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:47:57 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD5348E0D;
-        Tue, 21 Mar 2023 01:47:13 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 1CF7358063F;
-        Tue, 21 Mar 2023 16:47:07 +0800 (CST)
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com
-Cc:     linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH v6 2/2] tracing: Add documentation for funcgraph-retval and graph_retval_hex
-Date:   Tue, 21 Mar 2023 01:46:50 -0700
-Message-Id: <20230321084650.769212-3-pengdonglin@sangfor.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230321084650.769212-1-pengdonglin@sangfor.com.cn>
-References: <20230321084650.769212-1-pengdonglin@sangfor.com.cn>
+        Tue, 21 Mar 2023 04:48:04 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39524617A;
+        Tue, 21 Mar 2023 01:47:23 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id j7so16134477ybg.4;
+        Tue, 21 Mar 2023 01:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679388441;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BBcmCiZrY50ZVCjcfSorkVtQXTza6Z7SWwBdqZaP/I4=;
+        b=jbbXeahRIqpklGCp3MMQY1+jUyR8wUFH0caEcc0b0DmB1P+wNncEkjPsSf353eg/7G
+         d3dZkKvPH2/Z1nh/s0WulwtfPsUM60B+NLbpP8AmLFXU3s/3k9LTCXJUFMsGXGtabdCS
+         bslaPjaxVJY3cm4x3Pfuap23HzOqlRVMHERY0KYJzPp2lZ6gDyKF9gxPciuwMjHI7lCH
+         p+7OiRuEPi1jmpc3yek4j7JMfLrwMisttLNRNFkjTG+2qZu2AY1j8Rt+dDy8PeFOkDcg
+         UFjILYnGHhb2KEUUsgvHDNQuCHQ9F5Uhf5I9laD2Vftwj5VkfY3B1GvSGBqSnkk1T4Cz
+         RFWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679388441;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BBcmCiZrY50ZVCjcfSorkVtQXTza6Z7SWwBdqZaP/I4=;
+        b=Kut79ysIsxL+rjG8QCOOtCnG/BqQIjLPiOl2AXyRvDU0ZGkxahC/vTAO7ApGgrLt8w
+         6e70Xwi5XtyaNWBWfQstbEoqcPsfGOaCwu+fwNBbyFpEXwo89gKqO+Z2ZaecvFX1pNqo
+         U6VxAMD8WuDDEiNq4jHtNEZTxNsOZgyqtk136LnnNMMnBKURb5TWHQjbqn6FSbn8WJhF
+         r02E1KaZha8hIW+aZTSWkJldVfOaR7miq0/6RQLMBL9qWhTEIEqtGLubDVrXegeN3ZkT
+         8zSMGzyFJ0/pfoL54ugk9Xa4xiFNBbA8vEaY3K+sYFqGKnFTI5Y6pppjt+LYqyQgRBg4
+         dkqg==
+X-Gm-Message-State: AAQBX9eKjrn4DGCFruL6zr+J+8PvY4pUofHNx9AIlBhjGhmuDCd6UYgP
+        QmD+whghO+4D9iFO9BMTi+T1Slo37TEmRFfbQVw=
+X-Google-Smtp-Source: AKy350ah4ZHOodkxV7oojAcvrqsXLiq4Vm5Q1MNdWojdKwbYAju+Jmek2XYJr95HmruI+ZHpqKTBHqmWyXC1J7AvSh4=
+X-Received: by 2002:a05:6902:1104:b0:9fc:e3d7:d60f with SMTP id
+ o4-20020a056902110400b009fce3d7d60fmr728215ybu.5.1679388441642; Tue, 21 Mar
+ 2023 01:47:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGkkdVh0YGR1KHU1MQkNKHlUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpISkJIT1VKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NS46Azo6PT0UVhdNDyEZMBFP
-        SDgaCi1VSlVKTUxCSENDT0lDT09OVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFNQ05ONwY+
-X-HM-Tid: 0a870359c6b12eb7kusn1cf7358063f
-X-HM-MType: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230319195656.326701-1-kal.conley@dectris.com>
+ <20230319195656.326701-4-kal.conley@dectris.com> <CAJ8uoz3F-gWzB9vYm-8MtonAv3aBcerJDxPpEDCNfmNkwJFY=A@mail.gmail.com>
+In-Reply-To: <CAJ8uoz3F-gWzB9vYm-8MtonAv3aBcerJDxPpEDCNfmNkwJFY=A@mail.gmail.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 21 Mar 2023 09:47:10 +0100
+Message-ID: <CAJ8uoz2LU14oCAGSmUMfxMytF0KsiBGK55n+A7qPBuxpXBz6gA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] selftests: xsk: Add tests for 8K and 9K
+ frame sizes
+To:     Kal Conley <kal.conley@dectris.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,115 +83,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the two newly introduced options for the
-function_graph tracer. The new option funcgraph-retval is used to
-control whether or not to display the return value. The new option
-graph_retval_hex is used to control the display format of the return
-value.
+On Tue, 21 Mar 2023 at 09:45, Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+>
+> On Sun, 19 Mar 2023 at 21:07, Kal Conley <kal.conley@dectris.com> wrote:
+> >
+> > Add tests:
+> > - RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
+> > - RUN_TO_COMPLETION_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+> >
+> > Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> > ---
+> >  tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
+> >  tools/testing/selftests/bpf/xskxceiver.h |  2 ++
+> >  2 files changed, 26 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> > index 7a47ef28fbce..f10ff8c5e9c5 100644
+> > --- a/tools/testing/selftests/bpf/xskxceiver.c
+> > +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> > @@ -1789,6 +1789,30 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+> >                 pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
+> >                 testapp_validate_traffic(test);
+> >                 break;
+> > +       case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
+> > +               if (!hugepages_present(test->ifobj_tx)) {
+> > +                       ksft_test_result_skip("No 2M huge pages present.\n");
+> > +                       return;
+> > +               }
+> > +               test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
+> > +               test->ifobj_tx->umem->frame_size = 8192;
+> > +               test->ifobj_rx->umem->frame_size = 8192;
+> > +               pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
+> > +               testapp_validate_traffic(test);
+> > +               break;
+> > +       case TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME:
+>
+> TEST_TYPE_UNALIGNED_9K_FRAME
+>
+> > +               if (!hugepages_present(test->ifobj_tx)) {
+> > +                       ksft_test_result_skip("No 2M huge pages present.\n");
+> > +                       return;
+> > +               }
+> > +               test_spec_set_name(test, "RUN_TO_COMPLETION_9K_FRAME_SIZE");
+>
+> UNALIGNED_MODE_9K
 
-Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
----
-v6:
- - Modify the limitations for funcgraph-retval
- - Optimize the English expression
+_9K_FRAME_SIZE it should have been. Hit send too early.
 
-v5:
- - Describe the limitations of funcgraph-retval
----
- Documentation/trace/ftrace.rst | 73 ++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
-
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index b927fb2b94dc..1807f7752037 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -1328,6 +1328,19 @@ Options for function_graph tracer:
- 	only a closing curly bracket "}" is displayed for
- 	the return of a function.
- 
-+  funcgraph-retval
-+	When set, the return value of each traced function
-+	will be printed after an equal sign "=". By default
-+	this is off.
-+
-+  graph_retval_hex
-+	When set, the return value will always be printed
-+	in hexadecimal format. If the option is not set and
-+	the return value is an error code, it will be printed
-+	in signed decimal format; otherwise it will also be
-+	printed in hexadecimal format. By default, this option
-+	is off.
-+
-   sleep-time
- 	When running function graph tracer, to include
- 	the time a task schedules out in its function.
-@@ -2673,6 +2686,66 @@ It is default disabled.
-     0)   1.757 us    |        } /* kmem_cache_free() */
-     0)   2.861 us    |      } /* putname() */
- 
-+The return value of each traced function can be displayed after
-+an equal sign "=". When encountering system call failures, it
-+can be verfy helpful to quickly locate the function that first
-+returns an error code.
-+
-+	- hide: echo nofuncgraph-retval > trace_options
-+	- show: echo funcgraph-retval > trace_options
-+
-+  Example with funcgraph-retval::
-+
-+    1)               |    cgroup_migrate() {
-+    1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-+    1)               |      cgroup_migrate_execute() {
-+    1)               |        cpu_cgroup_can_attach() {
-+    1)               |          cgroup_taskset_first() {
-+    1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-+    1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-+    1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
-+    1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
-+    1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
-+    1)   7.143 us    |    } /* cgroup_migrate = -22 */
-+
-+The above example shows that the function cpu_cgroup_can_attach
-+returned the error code -22 firstly, then we can read the code
-+of this function to get the root cause.
-+
-+When the option graph_retval_hex is not set, the return value can
-+be displayed in a smart way. Specifically, if it is an error code,
-+it will be printed in signed decimal format, otherwise it will
-+printed in hexadecimal format.
-+
-+	- smart: echo nograph_retval_hex > trace_options
-+	- hexadecimal always: echo graph_retval_hex > trace_options
-+
-+  Example with graph_retval_hex::
-+
-+    1)               |      cgroup_migrate() {
-+    1)   0.651 us    |        cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-+    1)               |        cgroup_migrate_execute() {
-+    1)               |          cpu_cgroup_can_attach() {
-+    1)               |            cgroup_taskset_first() {
-+    1)   0.732 us    |              cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-+    1)   1.232 us    |            } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-+    1)   0.380 us    |            sched_rt_can_attach(); /* = 0x0 */
-+    1)   2.335 us    |          } /* cpu_cgroup_can_attach = 0xffffffea */
-+    1)   4.369 us    |        } /* cgroup_migrate_execute = 0xffffffea */
-+    1)   7.143 us    |      } /* cgroup_migrate = 0xffffffea */
-+
-+There are some limitations when using the funcgraph-retval currently:
-+
-+- Even if the function return type is void, a return value will still
-+  be printed, and you can just ignore it.
-+
-+- Even if return values are stored in two registers, only the value of
-+  the first return register will be recorded and printed. For example,
-+  in x86 architecture, both eax and edx are used to store a 64-bit
-+  return value. Eax stores the low 32 bits, and edx stores the high
-+  32 bits. However, only the value stored in eax will be recorded and
-+  printed.
-+
- You can put some comments on specific functions by using
- trace_printk() For example, if you want to put a comment inside
- the __might_sleep() function, you just have to include
--- 
-2.25.1
-
+> > +               test->ifobj_tx->umem->frame_size = 9000;
+> > +               test->ifobj_rx->umem->frame_size = 9000;
+> > +               test->ifobj_tx->umem->unaligned_mode = true;
+> > +               test->ifobj_rx->umem->unaligned_mode = true;
+> > +               pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
+> > +               testapp_validate_traffic(test);
+> > +               break;
+> >         case TEST_TYPE_RX_POLL:
+> >                 test->ifobj_rx->use_poll = true;
+> >                 test_spec_set_name(test, "POLL_RX");
+> > diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
+> > index 3e8ec7d8ec32..ff723b6d7852 100644
+> > --- a/tools/testing/selftests/bpf/xskxceiver.h
+> > +++ b/tools/testing/selftests/bpf/xskxceiver.h
+> > @@ -70,6 +70,8 @@ enum test_mode {
+> >  enum test_type {
+> >         TEST_TYPE_RUN_TO_COMPLETION,
+> >         TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
+> > +       TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
+> > +       TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME,
+> >         TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
+> >         TEST_TYPE_RX_POLL,
+> >         TEST_TYPE_TX_POLL,
+> > --
+> > 2.39.2
+> >
