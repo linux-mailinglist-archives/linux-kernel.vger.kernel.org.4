@@ -2,137 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD7E6C3715
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F386C3718
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjCUQjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S229990AbjCUQkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjCUQju (ORCPT
+        with ESMTP id S230014AbjCUQkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:39:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B03268C;
-        Tue, 21 Mar 2023 09:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ycwlWjK1cUtfsnTr97lPHy9bLPf8Ff9LLKdvYqykvYY=; b=wrVZ974+jz3x9up+alNPyiIjnC
-        /mJl9S5EGt1onTqEAMLEkfVTGcUReagyOF7Fxa00dRA6VNKXaWUmuNFVLLjlH065mfkxeCGbhxj6f
-        qbph7Q2EEYFIq/Z5PDa/qz1MPY5Vy1hBhg59E9PVg0hSNTDpNM+LXXcphUmutABTWlnDKvYPF5YHG
-        N/RjybPLqB4DSBLv6OjmreTOlrDpSbfVi9dyoG/+41VeslScSk6LlRcsnm2lRO1ICz62FmgIDPYmP
-        XAH3GT6hG0FrQD+dv8yjs8lp25EombKb7KRoqdfZtOryWHvRQO2GZaeNShKRUJJYMG0pGk+Zl7pjh
-        FEO+ZmTA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pef1R-00D6NS-0E;
-        Tue, 21 Mar 2023 16:39:41 +0000
-Date:   Tue, 21 Mar 2023 09:39:41 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] fs/drop_caches: move drop_caches sysctls into its own
- file
-Message-ID: <ZBndzRjJ8oNX7g6N@bombadil.infradead.org>
-References: <20230321130908.6972-1-frank.li@vivo.com>
- <20230321142836.l6pymt4ygg2qhfvn@wittgenstein>
+        Tue, 21 Mar 2023 12:40:02 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486F24EED;
+        Tue, 21 Mar 2023 09:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=PzFbeSMMbS4CC7XY2NIBhcKqrJEORtC8j3V9n4WJKHA=;
+  b=mK6kLhXLytGD1zE70XoQ6WcMB+mJyZieWcb6GqWmQMfOVpN0GBdaE4fg
+   1oU3+eZXBLvCLchaYuZFATS8et4Q+7qxQ7ZV1p29S1a4Art/+eDSPeeo+
+   8HfOFnSJUZZMC/ekg0lpUiwC/tW/C9oBktNSKwlOlb1b1qOWJEJWKMl27
+   c=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,279,1673910000"; 
+   d="scan'208";a="98353568"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 17:39:55 +0100
+Date:   Tue, 21 Mar 2023 17:39:55 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 0/3] edits in greybus driver
+In-Reply-To: <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com>
+Message-ID: <8020f263-158d-db6e-f34-425b72983bb@inria.fr>
+References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com> <ee77a227-13bd-70ad-1d8e-f9719970e0f8@inria.fr> <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321142836.l6pymt4ygg2qhfvn@wittgenstein>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1428913748-1679416795=:10740"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 03:28:36PM +0100, Christian Brauner wrote:
-> On Tue, Mar 21, 2023 at 09:09:07PM +0800, Yangtao Li wrote:
-> > This moves the fs/drop_caches.c respective sysctls to its own file.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > ---
-> >  fs/drop_caches.c   | 25 ++++++++++++++++++++++---
-> >  include/linux/mm.h |  6 ------
-> >  kernel/sysctl.c    |  9 ---------
-> >  3 files changed, 22 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/fs/drop_caches.c b/fs/drop_caches.c
-> > index e619c31b6bd9..3032b83ce6f2 100644
-> > --- a/fs/drop_caches.c
-> > +++ b/fs/drop_caches.c
-> > @@ -12,8 +12,7 @@
-> >  #include <linux/gfp.h>
-> >  #include "internal.h"
-> >  
-> > -/* A global variable is a bit ugly, but it keeps the code simple */
-> > -int sysctl_drop_caches;
-> > +static int sysctl_drop_caches;
-> >  
-> >  static void drop_pagecache_sb(struct super_block *sb, void *unused)
-> >  {
-> > @@ -47,7 +46,7 @@ static void drop_pagecache_sb(struct super_block *sb, void *unused)
-> >  	iput(toput_inode);
-> >  }
-> >  
-> > -int drop_caches_sysctl_handler(struct ctl_table *table, int write,
-> > +static int drop_caches_sysctl_handler(struct ctl_table *table, int write,
-> >  		void *buffer, size_t *length, loff_t *ppos)
-> >  {
-> >  	int ret;
-> > @@ -75,3 +74,23 @@ int drop_caches_sysctl_handler(struct ctl_table *table, int write,
-> >  	}
-> >  	return 0;
-> >  }
-> > +
-> > +static struct ctl_table drop_caches_table[] = {
-> > +	{
-> > +		.procname	= "drop_caches",
-> > +		.data		= &sysctl_drop_caches,
-> > +		.maxlen		= sizeof(int),
-> > +		.mode		= 0200,
-> > +		.proc_handler	= drop_caches_sysctl_handler,
-> > +		.extra1		= SYSCTL_ONE,
-> > +		.extra2		= SYSCTL_FOUR,
-> > +	},
-> > +	{}
-> > +};
-> > +
-> > +static int __init drop_cache_init(void)
-> > +{
-> > +	register_sysctl_init("vm", drop_caches_table);
-> 
-> Does this belong under mm/ or fs/?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-To not break old userspace it must be kept under "vm" because the
-patch author is moving it from the kernel/sysctl.c table which used
-the "vm" table.
+--8323329-1428913748-1679416795=:10740
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Moving it to "fs" would be a highly functional change which should
-require review from maintainers it would not break existing userspace
-expecations.
 
-> And is it intended to be moved into a completely separate file?
 
-What do you mean by this?
+On Tue, 21 Mar 2023, Menna Mahmoud wrote:
 
-> Feels abit wasteful for 20 lines of code...
+>
+> On ٢١/٣/٢٠٢٣ ١٣:٤٦, Julia Lawall wrote:
+> >
+> > On Tue, 21 Mar 2023, Menna Mahmoud wrote:
+> >
+> > > This patchset includes change happened in greybus driver in three
+> > > different files two of them patch one and three related to
+> > > checkpatch issue and in second patch convert two
+> > > `container_of` macros into inline functions.
+> > >
+> > > Menna Mahmoud (3):
+> > >    staging: greybus: remove unnecessary blank line
+> > >    staging: greybus: use inline function for macros
+> > >    staging: greybus: remove unnecessary blank line
+> > Different patches should have different subject lines.
+> But I have already the same edit in both file, so should I re-write the
+> subject for one of them?
+> >    You need to either
+> > be more specific about the file affected or merge the two patches with the
+> > same subject into one.
+>
+> each patch related to different file. So, Can I to merge two commits for
+> different files but have the same edit in one patch?
 
-Not sure what you mean by this either. The commit log sucks, please
-review got log kernel/sysclt.c for much better commit logs for the
-rationale of moving sysctls out out kernel/sysctl.c to their own
-respective places.
+They are both for greybus, which is what you advertise in the subject
+line.  And the sense of the changes is the same, and the changes are quite
+simple.  So I think you could just put them in one patch.  If you find
+other occurrences of the problem in greybus you could make one patch that
+fixes all of them.
 
-  Luis
+> but in this case no need to create patchset for all changes in `greybus`
+> driver, right?
+
+A patchset is needed if the changes affect the same file, because there
+might be complications if the patches are applied in the wrong order.
+
+>
+> If okay with that, should I versioning the patches to resend them again, or
+> should add "RESEND" subject prefix?
+
+RESEND would be if you send exactly the same thing, because some time has
+passed and you are worried that the patch has been lost.  Now that you
+have put these in a series, it is perhaps best to leave them in a series
+and increase the version number, to avoid confusion on the part of people
+reading the patches.
+
+julia
+
+> please tell me the best way to resend these patches, appreciate your help.
+>
+>
+> Menna
+>
+>
+> >
+> > julia
+> >
+> > >   drivers/staging/greybus/gbphy.h                  | 10 ++++++++--
+> > >   drivers/staging/greybus/greybus_authentication.h |  1 -
+> > >   drivers/staging/greybus/pwm.c                    |  1 -
+> > >   3 files changed, 8 insertions(+), 4 deletions(-)
+> > >
+> > > --
+> > > 2.34.1
+> > >
+> > >
+> > >
+>
+--8323329-1428913748-1679416795=:10740--
