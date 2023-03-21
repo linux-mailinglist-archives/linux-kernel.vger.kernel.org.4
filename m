@@ -2,115 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E55C6C2631
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06846C2635
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCUAFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S229846AbjCUAJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 20:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCUAFP (ORCPT
+        with ESMTP id S229666AbjCUAJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:05:15 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBC13D6C;
-        Mon, 20 Mar 2023 17:05:12 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id n13so1279044qkh.5;
-        Mon, 20 Mar 2023 17:05:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679357110;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6zwGxwuyXT/NVvMzhj8NdGRibrMvY35o27jTmcImb/o=;
-        b=M87mIS3xjD3LbG+ibAMNXTKr5138vmVRHU7bLjNFFqg2esxmLtsuup0C/VhccJYamh
-         4koBFZK6aSnb8OgxOoV1mbp03nkUotXwNzHYvS/dB5mQrLARdltZTYlvkZ4xgdVEFk+y
-         fEE/ah0ADDD2pkKj9QBlA8FdVi2C9Er1pT3cY5/NrQyZNZ4EorHEJbgn6ZO/LFyeYEqz
-         s09eSL8NyzIugTn3N6XSe/7kpesvNm/JVeMPNhg8ycevYSQhJSFZc2xr9YoQcura1prr
-         TXlHWXEG2UxUSqngylm15VXJ8o1ryq7WzcpY1Dkf3mWGLmCA9hVUCpqj4TX8ECJpJlnt
-         AVRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679357110;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6zwGxwuyXT/NVvMzhj8NdGRibrMvY35o27jTmcImb/o=;
-        b=JFEBStYct8VoIGYMikjlVQmigHjrMVUZkl0hsE2tFXrBCyX+B9TVPZFc6Ln2BhC9Sm
-         UJmeCwf2xKppsbQFlHOSD3j68VOqCryIBQ4SQIkt3j/tjErMu0gues9Y1aSLeeJRU9FZ
-         gGKy1if469TMM9xQC6MGp4B3WFYk1zB/JRadDw1SMxRj9nUrFcLPNW5Tx4ziLCxVhd5P
-         DzNZJ/VOfAH4CAUca4o4C6NmvpS0PoQicyb/jSR6AMXGLuVWq5s0j1QgPrgiuHZNcYG3
-         Ultc5FpblnJk2amQexZywFJtQjKeuiaQbvYQsSmIkfpSbggqR2lias3HhPMehTA0Giew
-         V/3A==
-X-Gm-Message-State: AO0yUKXHgCZycvDuJByY90RmwhA6GksQmXuA1hQV361UXgAsLjKG0N9u
-        E+GDCP0WdxjEfsKnX6MsdoHL9NFg85RO/8MCNC5WpodW/aARE5cn3x1eeg==
-X-Google-Smtp-Source: AK7set8Ktr3fw2E+9mOT7egDTk+dzT1LGMr4CC3xgUMx14JeapNTniRyBCsmYLDYA4HpVC3dRZHypWJfW1pCY5XKRCk=
-X-Received: by 2002:a37:e110:0:b0:744:ae74:6fd2 with SMTP id
- c16-20020a37e110000000b00744ae746fd2mr163138qkm.10.1679357110557; Mon, 20 Mar
- 2023 17:05:10 -0700 (PDT)
+        Mon, 20 Mar 2023 20:09:15 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0117EB56
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=buOs6OTUuEh7yaWqQoZ4zABNIq5hoZjF+8q53WL+W5E=; b=FdeHr1QXM0GCrTnqSVS4Rny0dO
+        OkQgHiLV/nkkb95GONnrCn8ixzwAR2rpeN/wWbAu8FqFR+WHGACkf1XVmVt1G1WDVryZV0msmgz0b
+        o+J24oMCaWQXxkZpCPaf1vUGTSH7o4IXvM5/tiJX2lE9BhxWthQmnrwFDdsRS41jWA03GXfH/ui4t
+        QOYtZ3Pvq4A30dSzJg9SZnQML2t2fKRgAF6T7duBipKdkBCI6D4QLLsmdif3/FiR2Y8i+kLx8k73P
+        Yk924E3+cSvgB7MqtFwF4nJqlIzSSRvBzlHFaeMHIEDW4izcZC10KRVOtEo2yn7SA+Ob0j0Wq96um
+        IHzT3Chg==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pePYq-00ArLi-2m;
+        Tue, 21 Mar 2023 00:09:08 +0000
+Message-ID: <23fe0765-fb3b-9bf4-ecb4-507e6f3edefe@infradead.org>
+Date:   Mon, 20 Mar 2023 17:09:07 -0700
 MIME-Version: 1.0
-References: <CABXGCsMOZ7LQgem+vpjytU5MybGrOmRH_hnkckQCx8_wCknecA@mail.gmail.com>
- <121d75eb-da8e-e120-3754-391a0c064001@candelatech.com>
-In-Reply-To: <121d75eb-da8e-e120-3754-391a0c064001@candelatech.com>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Tue, 21 Mar 2023 05:04:59 +0500
-Message-ID: <CABXGCsMP6XUt4QKPc2P4fHo8DD_tam62NBHGrSWc0BHvch3hXw@mail.gmail.com>
-Subject: Re: BUG: KASAN: vmalloc-out-of-bounds in mt7921_check_offload_capability+0x3fa/0x430
- [mt7921_common]
-To:     Ben Greear <greearb@candelatech.com>
-Cc:     Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
-        sean.wang@mediatek.com, deren.wu@mediatek.com,
-        Felix Fietkau <nbd@nbd.name>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 06/37] drm/vkms/vkms_composer: Fix a few different
+ kerneldoc formatting
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>, Lee Jones <lee@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel@vger.kernel.org, Melissa Wen <melissa.srw@gmail.com>
+References: <20230317081718.2650744-1-lee@kernel.org>
+ <20230317081718.2650744-7-lee@kernel.org>
+ <20230320234639.va6an7gton3u6eke@mail.igalia.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230320234639.va6an7gton3u6eke@mail.igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 7:00=E2=80=AFPM Ben Greear <greearb@candelatech.com=
-> wrote:
->
-> On 3/20/23 03:32, Mikhail Gavrilov wrote:
-> > Hi,
-> > After enabling KASAN sanitizer the message "BUG: KASAN:
-> > vmalloc-out-of-bounds in mt7921_check_offload_capability+0x3fa/0x430
-> > [mt7921_common]" chase me at every boot.
->
-> This is use-after-free bug, and I already posted a patch to fix it.
-> "wireless: mt76: mt7921: Fix use-after-free in fw features query."
-
-Hi,
-This is the last version?
-https://patchwork.kernel.org/project/linux-wireless/patch/20230308175832.23=
-94061-1-greearb@candelatech.com/
-
-Unfortunately it is not applicable to 6.3-rc3.
-
-=E2=9D=AF git apply v2-wireless-mt76-mt7921-Fix-use-after-free-in-fw-featur=
-es-query..patch
--v
-Checking patch drivers/net/wireless/mediatek/mt76/mt7921/init.c...
-Hunk #1 succeeded at 171 (offset 6 lines).
-Hunk #2 succeeded at 203 (offset 6 lines).
-error: while searching for:
-
-release_firmware(fw);
-
-return features ? features->data : 0;
-}
-EXPORT_SYMBOL_GPL(mt7921_check_offload_capability);
 
 
-error: patch failed: drivers/net/wireless/mediatek/mt76/mt7921/init.c:211
-error: drivers/net/wireless/mediatek/mt76/mt7921/init.c: patch does not app=
-ly
+On 3/20/23 16:46, Melissa Wen wrote:
+> On 03/17, Lee Jones wrote:
+>> Fixes the following W=1 kernel build warning(s):
+>>
+>>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Function parameter or member 'frame_info' not described in 'pre_mul_alpha_blend'
+>>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Excess function parameter 'src_frame_info' description in 'pre_mul_alpha_blend'
+>>  drivers/gpu/drm/vkms/vkms_composer.c:72: warning: Cannot understand  * @wb_frame_info: The writeback frame buffer metadata
+>>
+>> Cc: Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
+>> Cc: Melissa Wen <melissa.srw@gmail.com>
+>> Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>> Cc: David Airlie <airlied@gmail.com>
+>> Cc: dri-devel@lists.freedesktop.org
+>> Signed-off-by: Lee Jones <lee@kernel.org>
+>> ---
+>>  drivers/gpu/drm/vkms/vkms_composer.c | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/vkms_composer.c
+>> index 8e53fa80742b2..41668eedf4272 100644
+>> --- a/drivers/gpu/drm/vkms/vkms_composer.c
+>> +++ b/drivers/gpu/drm/vkms/vkms_composer.c
+>> @@ -22,7 +22,7 @@ static u16 pre_mul_blend_channel(u16 src, u16 dst, u16 alpha)
+>>  
+>>  /**
+>>   * pre_mul_alpha_blend - alpha blending equation
+>> - * @src_frame_info: source framebuffer's metadata
+>> + * @frame_info: source framebuffer's metadata
+>>   * @stage_buffer: The line with the pixels from src_plane
+>>   * @output_buffer: A line buffer that receives all the blends output
+>>   *
+>> @@ -69,11 +69,13 @@ static void fill_background(const struct pixel_argb_u16 *background_color,
+>>  }
+>>  
+>>  /**
+>> - * @wb_frame_info: The writeback frame buffer metadata
+>> + * blend
+> As we are already here:
+> * blend - blend pixels from a given row and calculate crc
 
---=20
-Best Regards,
-Mike Gavrilov.
+ * blend: blend pixels from a given row and calculate CRC
+
+preferably.
+
+> Reviewed-by: Melissa Wen <mwen@igalia.com>
+> 
+>> + * @wb: The writeback frame buffer metadata
+>>   * @crtc_state: The crtc state
+>>   * @crc32: The crc output of the final frame
+>>   * @output_buffer: A buffer of a row that will receive the result of the blend(s)
+>>   * @stage_buffer: The line with the pixels from plane being blend to the output
+>> + * @row_size: Size of memory taken up by row data (line_width * pixel_size)
+>>   *
+>>   * This function blends the pixels (Using the `pre_mul_alpha_blend`)
+>>   * from all planes, calculates the crc32 of the output from the former step,
+>> -- 
+>> 2.40.0.rc1.284.g88254d51c5-goog
+>>
+
+-- 
+~Randy
