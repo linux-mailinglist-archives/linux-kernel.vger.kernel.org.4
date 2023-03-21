@@ -2,148 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50656C2C31
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9A36C2C2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjCUIV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S230343AbjCUIUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjCUIVj (ORCPT
+        with ESMTP id S229640AbjCUIUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:21:39 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06ED2E838
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:21:26 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id x3so56356446edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679386885;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4gU5Ul5Pqtj2Zu4ilRhyv356GMLxKXORyaaNIGSfEx4=;
-        b=KCVpYwy5GslZcg2w/pnsd8XD8fl9oI4gTI7eu3h/7VXuqpW8TQdXNDAK+sPofcAMdl
-         ycbY9Xr/ULZro8rx4v9I3OHqiWPEUuAMOvfc2ZyO39n8Zrbsiky3tXod+YDFqwsXWgC3
-         S34BMx+RCcIQ9vdtol3bHFe6wb5qZ+7vjw052gIrZbJob9mArZMAiHiPax3LRCNw/xgS
-         jZjPnQylzihCDnVoOw4tPskB7fZD8ZKLiWh6LEyly9tD9N3Qf1s8y+TqjFVXBP2AGm9q
-         mL31sS6a0lGd7StHZXAe3czDWmrdc3pwltw6CGcsCP8GUZPrcJffasoCBbGwipL5+2/s
-         U3rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679386885;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4gU5Ul5Pqtj2Zu4ilRhyv356GMLxKXORyaaNIGSfEx4=;
-        b=CDszVKgcc/+LM2M+bh5A3Qf31+NvjNvWB0Z97J0niclkz2RLTBigd52zP1kZMJZtbU
-         t3NfI1WPlt4lTZx4o9cR8vJjsdZV228hVnSh+U4rQB+AVTtXyIohNlT9X4x1e0DVO/Yk
-         HXIl1RpCG46l0R8GOC3C4X2BthCZDeV1UYLW3SnxXIY5yKl1Mw/22jSFz0JtbnU4YFge
-         RnfeqSXOc6ld4v5YILg5CJLeFsv/tu6I3O90e+C8Q2XvH8EQwYygPd9pXJzWFG1qXcat
-         32e44wrNqOBMZu/vMxRkXKam9noM+0Z8ZkavHvc3nqMl1j3ui6ZJaQCy7Cm0QFvLNi4e
-         BouQ==
-X-Gm-Message-State: AO0yUKVPNBibMvjwF9Y0t6feydS9M/OQvdTef0YamIXUQrFgAipnT8qO
-        5deuddK+6hRbPyVQwMtJdpKAVA==
-X-Google-Smtp-Source: AK7set+6Sf7lskRnCtVXZF0F+OgifgUKEDMmWXjnbQFKwSnk5FABspDdYivaIjgEpa8Ajasi1pfhJA==
-X-Received: by 2002:a05:6402:55a:b0:4fa:ada1:796d with SMTP id i26-20020a056402055a00b004faada1796dmr2339969edx.10.1679386885235;
-        Tue, 21 Mar 2023 01:21:25 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id s29-20020a50d49d000000b004fc2a75c6b3sm5865294edi.23.2023.03.21.01.21.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 01:21:24 -0700 (PDT)
-Message-ID: <8b7816b0-1daa-1c49-6f9d-40769d228a39@linaro.org>
-Date:   Tue, 21 Mar 2023 09:21:22 +0100
+        Tue, 21 Mar 2023 04:20:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE681C58E;
+        Tue, 21 Mar 2023 01:20:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FE0BB80A25;
+        Tue, 21 Mar 2023 08:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E53C433EF;
+        Tue, 21 Mar 2023 08:20:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679386842;
+        bh=r/XTwJ0ZGyepgVGIYhRMA7vXO27GpJFl+4EAu53pwyQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I5AS0EjZPdovcIfa3Rxq3mpy1YE1tj4r7DxmltKUbA9HAIs/+Z3rldPFX190yJmF0
+         sQOuPslQRdYDEVdHQO75fgvUapJNFIno4orOhWPya+T2rV2URacZhPj7Ib5K3+/AQV
+         eeP68B66netd1yDsQpOLHJ51Z5lL6MIIe0CsV+2oO+KDJvJaLxCb7kFE6ccUF2XoCm
+         5DiKhfZXfXjpDckX6zxSpHh9VXoylVZ8H2EkCu2PRRvP6yLsiciU7S0MvKNFq+2585
+         tw4b7xjjkS2E+QM6dLgAiFdp99T5V0NSNsfHa0bALQkWc5iAc+wBwNVa8lQijepYHC
+         Zeu7EAiuL+f2w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1peXFs-00006M-Bo; Tue, 21 Mar 2023 09:22:05 +0100
+Date:   Tue, 21 Mar 2023 09:22:04 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org
+Subject: Re: [PATCH 1/3] dt-bindings: wireless: add ath11k pcie bindings
+Message-ID: <ZBlpLJfqB1Q7JfQ+@hovoldconsulting.com>
+References: <20230320104658.22186-1-johan+linaro@kernel.org>
+ <20230320104658.22186-2-johan+linaro@kernel.org>
+ <87ttyfhatn.fsf@kernel.org>
+ <ZBhUo1C08U5mp9zP@hovoldconsulting.com>
+ <87a607fepa.fsf@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 20/28] media: platform: jpeg: always reference OF data
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org,
-        oushixiong <oushixiong@kylinos.cn>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
- <86431868-488b-4a72-944b-231b6d0382b0@app.fastmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <86431868-488b-4a72-944b-231b6d0382b0@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a607fepa.fsf@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 09:11, Arnd Bergmann wrote:
-> On Sun, Mar 12, 2023, at 14:13, Krzysztof Kozlowski wrote:
->> The driver can match only via the DT table so the table should be always
->> used and the of_match_ptr does not have any sense (this also allows ACPI
->> matching via PRP0001, even though it might not be relevant here).  This
->> also fixes !CONFIG_OF error:
->>
->>   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1890:38: error: 
->> ‘mtk8195_jpegdec_drvdata’ defined but not used 
->> [-Werror=unused-const-variable=]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, Mar 20, 2023 at 08:41:21PM +0200, Kalle Valo wrote:
+> + ath11k list
 > 
-> I see now that we both submitted the same patch, but now Hans
-
-We as you and me? I cannot find your patch on lore:
-https://lore.kernel.org/all/?q=f%3Aarnd%40arndb.de
-
-> merged a worse fix [1] without a changelog text.
+> Johan Hovold <johan@kernel.org> writes:
 > 
->     Arnd
+> > On Mon, Mar 20, 2023 at 02:22:12PM +0200, Kalle Valo wrote:
+> >> Johan Hovold <johan+linaro@kernel.org> writes:
+> >> 
+> >> > Add devicetree bindings for Qualcomm ath11k PCIe devices such as WCN6856
+> >> > for which the calibration data variant may need to be described.
+> >> >
+> >> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >> > ---
+> >> >  .../bindings/net/wireless/pci17cb,1103.yaml   | 56 +++++++++++++++++++
+> >> >  1 file changed, 56 insertions(+)
+> >> >  create mode 100644
+> >> > Documentation/devicetree/bindings/net/wireless/pci17cb,1103.yaml
+> >> 
+> >> I'm confused (as usual), how does this differ from
+> >> bindings/net/wireless/qcom,ath11k.yaml? Why we need two .yaml files?
+> >
+> > Almost none of bindings/net/wireless/qcom,ath11k.yaml applies to WCN6856
+> > when using PCIe (e.g. as most properties are then discoverable).
+> >
+> > We could try to encode everything in one file, but that would likely
+> > just result in a big mess of a schema with conditionals all over.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=4ae47770d57bff01
+> Ah, so the current qcom,ath11k.yaml would be only for ath11k AHB devices
+> and this new file is only for ath11k PCI devices?
 
-Uh, I can rebase my patchset.
+Right, there would two separate schema files for the two device classes.
 
-Best regards,
-Krzysztof
+> But why still the odd
+> name pci17cb,1103.yaml? It's not really descriptive and I'm for sure
+> will not remember that pci17cb,1103.yaml is for ath11k :)
 
+Yeah, it's not the best name from that perspective, but it follows the
+current convention of naming the schema files after the first compatible
+added.
+
+That said, we don't have many schemas for PCI devices so perhaps we can
+establish a new convention for those. Perhaps by replacing the numerical
+ids with what we'd use if these were platform devices (e.g.
+'qcom,wcn6855.yaml').
+
+As long as the DT maintainers are OK with it, I'd also be happy with
+something like you suggest below:
+
+	qcom,ath11k-ahb.yaml
+	qcom,ath11k-pci.yaml
+
+(or simply not renaming the current file 'qcom,ath11k.yaml') but I have
+gotten push back on that in the past.
+
+> Also it doesn't look good that we have qcom,ath11k-calibration-variant
+> documented twice now. I'm no DT expert but isn't there any other way? Is
+> it possible to include other files? For example, if we would have three
+> files:
+> 
+> qcom,ath11k.yaml
+> qcom,ath11k-ahb.yaml
+> qcom,ath11k-pci.yaml
+> 
+> Then have the common properties like ath11k-calibration-variant in the
+> first file and ahb/pci files would include that.
+
+That should be possible, but it's not necessarily better as you'd then
+have to look up two files to see the bindings for either device class
+(and as far as I can tell there would not be much sharing beyond this
+single property).
+
+Note that the property could just have well have been named
+'qcom,calibration-variant' and then it would be shared also with the
+ath10k set of devices which currently holds another definition of what
+is essentially the same property ('qcom,ath10k-calibration-variant').
+
+Johan
