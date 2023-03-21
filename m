@@ -2,112 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19F06C336B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88586C3353
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjCUNxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S231221AbjCUNwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjCUNxn (ORCPT
+        with ESMTP id S229783AbjCUNwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:53:43 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223064FAB6;
-        Tue, 21 Mar 2023 06:53:23 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LDafnB014293;
-        Tue, 21 Mar 2023 13:53:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=GlbQ6R7BvqzcBCmdNU07/9LL8nz61k8DP3MPvKU1WtM=;
- b=JsYzteUgebJm6FcRLGKpNiuat2rOarSZA9IMwOypnuHBlvO59tcvFIuF1RnZeG8OUk9t
- xoN0ZcZjq/dRtygSmknuH918JpLoJ/rjTtc7D8SuPwbs3F1m8m6ZM0HpYHFEt/QK1d5C
- PwG3Da2DL4CPeD30X2TYRMrS5h8KXoC9ASyEBklEIX5NMyFM402eSrxkpXStB3rn/6YJ
- zqU1BUx8M6jHX66/g1wR5vtIqSAytyTjPOPp7iVLE/4XQYJWUCBcRFSfY1znqNpd1qU/
- lMSpBEX+F6rBiQ9ImS43YEyETle/wfnGJ7RtZgFCYBh2lnTMv8pUeLSIoQK4jfDNpZx0 bA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfdm4g1qs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 13:53:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32LDrA8E002493
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 13:53:10 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 21 Mar 2023 06:53:06 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V1 4/4] MAINTAINERS: Add the entry for boot_stats driver support
-Date:   Tue, 21 Mar 2023 19:21:51 +0530
-Message-ID: <40cc0359245bd1e29c6c95a12ffb96fd32d63142.1679403696.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1679403696.git.quic_schowdhu@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
+        Tue, 21 Mar 2023 09:52:05 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86191969C;
+        Tue, 21 Mar 2023 06:52:03 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pecPB-0001NE-HP; Tue, 21 Mar 2023 14:52:01 +0100
+Message-ID: <a79ea7f5-6a41-a6c9-cfec-ba01aa2a3cfa@leemhuis.info>
+Date:   Tue, 21 Mar 2023 14:52:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uKz3rmpAgc_s3uWjgh1ylVZNptF6Wy0p
-X-Proofpoint-GUID: uKz3rmpAgc_s3uWjgh1ylVZNptF6Wy0p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_10,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 clxscore=1015
- spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
- mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210108
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217218 - Trying to boot Linux version 6-2.2 kernel
+ with Marvell SATA controller 88SE9235
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679406723;c22d97dc;
+X-HE-SMSGID: 1pecPB-0001NE-HP
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entries for all the files added as a part of driver support for
-boot stats.
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developers don't keep an eye on it, I decided to forward it by
+mail (note, the reporter *is not* CCed to this mail, see[1]).
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f2c3d47..6a55577 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17071,6 +17071,13 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ipa/
- 
-+QCOM BOOT_STATS DRIVER
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
-+F:	drivers/soc/qcom/boot_stats.c
-+
- QEMU MACHINE EMULATOR AND VIRTUALIZER SUPPORT
- M:	Gabriel Somlo <somlo@cmu.edu>
- M:	"Michael S. Tsirkin" <mst@redhat.com>
--- 
-2.7.4
+Christoph, apparently it's caused by a commit of yours.
 
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217218 :
+
+>  jason_a69 2023-03-20 11:05:54 UTC
+> 
+> The machine will not boot as the controller appears to be lock up, reset
+> itself and then only 2 of the 4 disks are detected which are connected
+> to the controller.
+> 
+> The man errors I am getting are
+> 
+> dmar_fault 8 callbacks suppressed
+> DMAR : DRHD: handling fault status req 2
+> DMAR : [DMA Write NO_PASID] Request device [07.00.1] fault addr
+> 0xfffe0000 [fault reason 0x82] Present bit in contect entry is clear
+> 
+> Kernel version 5.15.91 works fine, I also tried 6-0.0 which also failed
+> 
+> Looking in the change log for 6.0
+> https://cdn.kernel.org/pub/linux/kernel/v6.x/ChangeLog-6.0
+> 
+> There are quite a few iommu changes. As a result I changed
+> /etc/default/grub from
+> 
+> GRUB_CMDLINE_LINUX="iommu=soft intel_iommu=on"
+> 
+> to
+> 
+> GRUB_CMDLINE_LINUX="iommu=soft intel_iommu=on iommu.forcedac=1"
+> 
+> which did not help.
+> 
+> If I do lspci on a kernel that boots I get 
+> 
+> 00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v2/3rd Gen Core processor DRAM Controller (rev 09)
+> 00:02.0 VGA compatible controller: Intel Corporation Xeon E3-1200 v2/3rd Gen Core processor Graphics Controller (rev 09)
+> 00:16.0 Communication controller: Intel Corporation 6 Series/C200 Series Chipset Family MEI Controller #1 (rev 04)
+> 00:1a.0 USB controller: Intel Corporation 6 Series/C200 Series Chipset Family USB Enhanced Host Controller #2 (rev 05)
+> 00:1b.0 Audio device: Intel Corporation 6 Series/C200 Series Chipset Family High Definition Audio Controller (rev 05)
+> 00:1c.0 PCI bridge: Intel Corporation 6 Series/C200 Series Chipset Family PCI Express Root Port 1 (rev b5)
+> 00:1c.2 PCI bridge: Intel Corporation 6 Series/C200 Series Chipset Family PCI Express Root Port 3 (rev b5)
+> 00:1c.3 PCI bridge: Intel Corporation 6 Series/C200 Series Chipset Family PCI Express Root Port 4 (rev b5)
+> 00:1c.4 PCI bridge: Intel Corporation 6 Series/C200 Series Chipset Family PCI Express Root Port 5 (rev b5)
+> 00:1d.0 USB controller: Intel Corporation 6 Series/C200 Series Chipset Family USB Enhanced Host Controller #1 (rev 05)
+> 00:1f.0 ISA bridge: Intel Corporation H61 Express Chipset LPC Controller (rev 05)
+> 00:1f.2 SATA controller: Intel Corporation 6 Series/C200 Series Chipset Family 6 port Desktop SATA AHCI Controller (rev 05)
+> 00:1f.3 SMBus: Intel Corporation 6 Series/C200 Series Chipset Family SMBus Controller (rev 05)
+> 02:00.0 USB controller: Etron Technology, Inc. EJ188/EJ198 USB 3.0 Host Controller
+> 03:00.0 PCI bridge: PLX Technology, Inc. PEX 8603 3-lane, 3-Port PCI Express Gen 2 (5.0 GT/s) Switch (rev ab)
+> 04:01.0 PCI bridge: PLX Technology, Inc. PEX 8603 3-lane, 3-Port PCI Express Gen 2 (5.0 GT/s) Switch (rev ab)
+> 04:02.0 PCI bridge: PLX Technology, Inc. PEX 8603 3-lane, 3-Port PCI Express Gen 2 (5.0 GT/s) Switch (rev ab)
+> 05:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network Connection (rev 03)
+> 06:00.0 Ethernet controller: Intel Corporation I210 Gigabit Network Connection (rev 03)
+> 07:00.0 SATA controller: Marvell Technology Group Ltd. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller (rev 10)
+> 
+> I have had a look at the kernel parameters which are here
+> 
+> https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html?highlight=iommu
+> 
+> I have tried a few different parameters, the only thing that did work was
+> intel_iommu=off
+> 
+> Using that option would mess up my VMs so I would rather not do that.
+> 
+> I am sure I am just missing a kernel parameter.
+>
+> [...]
+>
+> git bisect bad 78013eaadf696d2105982abb4018fbae394ca08f
+> # first bad commit: [78013eaadf696d2105982abb4018fbae394ca08f] x86: remove the IOMMU table infrastructure
+
+See the ticket for more details.
+
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: 78013eaadf696d21
+https://bugzilla.kernel.org/show_bug.cgi?id=217218
+#regzbot title: dma/x86: machine with Marvell SATA controller 88SE9235
+stopped booting
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
