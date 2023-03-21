@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EED76C3492
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE566C3497
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjCUOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S231428AbjCUOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjCUOnI (ORCPT
+        with ESMTP id S231196AbjCUOn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:43:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF7B29E32
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:43:06 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id y20so19449971lfj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:43:06 -0700 (PDT)
+        Tue, 21 Mar 2023 10:43:26 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E312A10CA;
+        Tue, 21 Mar 2023 07:43:23 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id ek18so60643103edb.6;
+        Tue, 21 Mar 2023 07:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679409784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O7BDMNV63w/nRH0IlJ+LWLAMT7WkMKpel3X2vIkr+GE=;
-        b=x7FEFvjPBZ4mJtbAdKPWIObXN71LRfNoK2qzcgzNz8wr3GEdJQF0hvNinmdtsGMeTy
-         AJ2l/FxZXwoA75jz7CZv4DyIXaUSfwlX6R8QrEQyl859yjCsVFC/MTQ1gNMIyhylqk2P
-         gojEU9aNix33lW8WNIWSaj8T4o0jUqwgLFCKr65pAAh06s/jLzReEBklymAMKUK4S7jO
-         MooR6JWs2obroNOdZNAQIliRfhfr+hqPZw/nQ4kSVgfWDqpgLg5KYKGJjXQQCVqy/wxJ
-         TxOeU4QMPqRBGq4Wvy7mCCyWK/X2cxqsChD64C4QxzzzlwOgv3V23EPw5QJxQYo/aO/p
-         /yrA==
+        d=gmail.com; s=20210112; t=1679409802;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O7ubpTBwCGfHItDX77/xDDLQ0Emp6svnzclBDAs6qyE=;
+        b=T1s8Ngl+RkVIvxNZpvZnMH7cqodpqineB22YWtIv/fCGFj7joV/a1TjSRUm2pJJHHt
+         MUKxqDn5xKWt1O5LBWVnUBgDu7rGLfa03O5Y9FcuEHowG/SlkK7LqP23ZwmrwM0e7Teq
+         QIWIwFG8FsQIjgobJ5zpK1KmBtp960ybNTL2lY/5bEB4xvS7cnm3kjiyyk9z2xzet73f
+         gBH4RPumKKnXgn8OfdTuNLjHTY1ctiMA2fIGN5fpsiI7phP1firJvEgcgRL6RMRFv9B6
+         rxvXVlonIb+2hM/XbpELgBCHVQG3Fb65I6yc1FlE/etUE3C5BrDKrCvP1Dd5HFv5cDVd
+         3S5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679409784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7BDMNV63w/nRH0IlJ+LWLAMT7WkMKpel3X2vIkr+GE=;
-        b=U/7EVl8fP2VE+So/dgnoQcIh5hU8Ihd/1Zz2bMCBF4eWwek6ZGv1txlARRZhUBVdM9
-         agYNy9Uia253ESOW8bxotkB1Oq7EcpwWYseMWQie/u2JuoAt3+PxDdIk/ixfIoKVH/I5
-         g+fq9IgLDq6rZyz+UUMyUX/kdMFK98NksdioxhD0hiWLAW74fmNbHAKGDDkex4ai6TC9
-         lJ5UA+quvLyvI9WIyk/XeiZ6H41PXkJ6KSk8RPzVXSuft1GcOUe+P93AIGajvbAlaMo4
-         5t9YWbE7GMG1+jNYHZZKRawA+eBHA57Uho3+bDNIz488HX8ieF4HtCIGRT81itvIO64K
-         y19Q==
-X-Gm-Message-State: AO0yUKXY1JYQURI7aaAK0CxiWf9zKD4GRbRySKqWzphgPSX2TcpXr2os
-        Nf++5yoD+xoSUgivU06xcyeT0w==
-X-Google-Smtp-Source: AK7set8NjKRaOPlkE21loVh+PZamQ3MqDcldA1NP940LXjsMxXnonUwSonjFS5j4YSrJ8Img293jdA==
-X-Received: by 2002:a19:ad4b:0:b0:4ea:e779:fc3 with SMTP id s11-20020a19ad4b000000b004eae7790fc3mr777391lfd.25.1679409784538;
-        Tue, 21 Mar 2023 07:43:04 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id m1-20020a056512014100b004d8729d4150sm2187363lfo.145.2023.03.21.07.43.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 07:43:04 -0700 (PDT)
-Message-ID: <34bac508-21b1-a441-0987-6b5b5be0bb08@linaro.org>
-Date:   Tue, 21 Mar 2023 16:43:03 +0200
+        d=1e100.net; s=20210112; t=1679409802;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O7ubpTBwCGfHItDX77/xDDLQ0Emp6svnzclBDAs6qyE=;
+        b=r3q6DEz2yV4hDn8IYZKPxexbnrH/9JtKp0BLERREVGhrjc3icgIU/1/JQXcKkwmqvd
+         yJG5L5xDQ/oCCQBMHCQg4Zv5fBrncgztfXS0Se5wkvvLdQ3NRUGw8vrM8Ubqm4IA+eg1
+         aprKVEFSrqZueWnnrWZwJepo+WVgfg7EJphSGksJ5kz9B0SddH91aD4ctut+Dr1IYOkK
+         YPLNqun9TchVtSfFH+IAC/idGqrK0Gya/r5K55z3U4aqEm7niU7LNGquQ3h+LzMgoTmu
+         CRoFl4CNWnH7YaTPQ4jVkhQENVp7rquab4h95n6L6KBMu8+LwAFZFZh+boO4kVI8fLq9
+         P/pg==
+X-Gm-Message-State: AO0yUKVDcwfyVLBQ4ocxPaK78o7bFUjtKZdfG5wST1ES/yoFdKJP+48E
+        qUTywqM1D2uEnpeALTxga58=
+X-Google-Smtp-Source: AK7set96Is0TLe0fndXxjNYCDYYIIwKDzHB+KNPQfBa3bfvxoMA0iLVPglnQVrqgXhUacHz1wyNEXg==
+X-Received: by 2002:a05:6402:1116:b0:4ac:b528:5727 with SMTP id u22-20020a056402111600b004acb5285727mr3772779edv.1.1679409802207;
+        Tue, 21 Mar 2023 07:43:22 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation ([5.170.200.163])
+        by smtp.gmail.com with ESMTPSA id q28-20020a50aa9c000000b004fb556e905fsm6386755edc.49.2023.03.21.07.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 07:43:21 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 15:43:18 +0100
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Paul Elder <paul.elder@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/14] media: rkisp1: Add support for i.MX8MP
+Message-ID: <ZBnChlWq5RTI8U8h@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 10/10] drm/msm: move include directive
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230306100722.28485-1-johan+linaro@kernel.org>
- <20230306100722.28485-11-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230306100722.28485-11-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118093931.1284465-1-paul.elder@ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,19 +78,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 12:07, Johan Hovold wrote:
-> Move the include of of_address.h to the top of the file where it
-> belongs.
+Hello Paul,
+
+On Fri, Nov 18, 2022 at 06:39:17PM +0900, Paul Elder wrote:
+> This series depends on v3 of "dt-bindings: media: Add macros for video
+> interface bus types" [1].
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> This series extends the rkisp1 driver to support the ISP found in the
+> NXP i.MX8MP SoC.
+> 
+> The ISP IP cores in the Rockchip RK3399 (known as the "Rockchip ISP1")
+> and in the NXP i.MX8MP have the same origin, and have slightly diverged
+> over time as they are now independently developed (afaik) by Rockchip
+> and VeriSilicon. The latter is marketed under the name "ISP8000Nano",
+> and is close enough to the RK3399 ISP that it can easily be supported by
+> the same driver.
+> 
+> The last two patches add support for UYVY output format, which can be
+> implemented on the ISP version in the i.MX8MP but not in the one in the
+> RK3399.
+> 
+> This version of the series specifically has been tested on a Polyhex
+> Debix model A with an imx219 (Raspberry Pi cam v2).
+> 
+> [1] https://lore.kernel.org/linux-media/20220615221410.27459-2-laurent.pinchart@ideasonboard.com/
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I tested your series on imx274 on imx8mp-evk csi0.
+All looks good on my side.
+Thanks for your work!
 
-> ---
->   drivers/gpu/drm/msm/msm_drv.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
 
--- 
-With best wishes
-Dmitry
+Regards,
+Tommaso
 
+> 
+> Laurent Pinchart (3):
+>   dt-bindings: media: rkisp1: Add i.MX8MP ISP example
+>   media: rkisp1: Add and use rkisp1_has_feature() macro
+>   media: rkisp1: Configure gasket on i.MX8MP
+> 
+> Paul Elder (11):
+>   dt-bindings: media: rkisp1: Add i.MX8MP ISP to compatible
+>   media: rkisp1: Add match data for i.MX8MP ISP
+>   media: rkisp1: Add and set registers for crop for i.MX8MP
+>   media: rkisp1: Add and set registers for output size config on i.MX8MP
+>   media: rkisp1: Add i.MX8MP-specific registers for MI and resizer
+>   media: rkisp1: Shift DMA buffer addresses on i.MX8MP
+>   media: rkisp1: Add register definitions for the test pattern generator
+>   media: rkisp1: Fix RSZ_CTRL bits for i.MX8MP
+>   media: rkisp1: Support devices without self path
+>   media: rkisp1: Add YC swap capability
+>   media: rkisp1: Add UYVY as an output format
+> 
+>  .../bindings/media/rockchip-isp1.yaml         |  79 ++++++++++-
+>  .../platform/rockchip/rkisp1/rkisp1-capture.c | 102 +++++++++++---
+>  .../platform/rockchip/rkisp1/rkisp1-common.h  |  32 +++++
+>  .../platform/rockchip/rkisp1/rkisp1-debug.c   |  14 +-
+>  .../platform/rockchip/rkisp1/rkisp1-dev.c     |  67 +++++++--
+>  .../platform/rockchip/rkisp1/rkisp1-isp.c     | 128 +++++++++++++++++-
+>  .../platform/rockchip/rkisp1/rkisp1-regs.h    |  90 ++++++++++++
+>  .../platform/rockchip/rkisp1/rkisp1-resizer.c |  35 ++++-
+>  include/uapi/linux/rkisp1-config.h            |   2 +
+>  9 files changed, 509 insertions(+), 40 deletions(-)
+> 
+> -- 
+> 2.35.1
+>
