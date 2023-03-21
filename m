@@ -2,141 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA386C2BAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EEC6C2BB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjCUHs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
+        id S230417AbjCUHtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCUHss (ORCPT
+        with ESMTP id S230403AbjCUHte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:48:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE3A30F8;
-        Tue, 21 Mar 2023 00:48:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE27761A00;
-        Tue, 21 Mar 2023 07:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3439C433D2;
-        Tue, 21 Mar 2023 07:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679384914;
-        bh=XI7OIN6kKxnXA+zf5fix2H550tfCc8AHh9zzh6nh5DY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lu4S0tkpUSiXdf5n67wBH8b+rGSfsNIgBs1SzowX8XbCCXlQodk92D/TyxUCkLWpz
-         kkoIy5CvnwuE2jEHc+Kjr+HbeEJYGBh/LWUk1hyVqhffdmgmDM9Tm+ht+4rSYnFxL9
-         mGzqCIFZEYF85Snkyu69ISjyTo3IEFe8eT52mv6g=
-Date:   Tue, 21 Mar 2023 08:48:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc1 review
-Message-ID: <ZBlhT9ktUq9KCJku@kroah.com>
-References: <20230320145507.420176832@linuxfoundation.org>
- <CA+G9fYtCtfSqrje=1wkw1ODpnJorDMFkB1bSVexpyc4gi3X0ZQ@mail.gmail.com>
+        Tue, 21 Mar 2023 03:49:34 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC602BB8D;
+        Tue, 21 Mar 2023 00:49:16 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PgkJ42PJ8z9vTJ;
+        Tue, 21 Mar 2023 15:48:52 +0800 (CST)
+Received: from [10.67.101.126] (10.67.101.126) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 15:49:12 +0800
+Message-ID: <147630ca-38d6-ae0e-241e-a679e4c97a95@huawei.com>
+Date:   Tue, 21 Mar 2023 15:49:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYtCtfSqrje=1wkw1ODpnJorDMFkB1bSVexpyc4gi3X0ZQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] scsi: libsas: Add end eh callback
+Content-Language: en-CA
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <john.g.garry@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20230321072259.35366-1-yangxingui@huawei.com>
+From:   yangxingui <yangxingui@huawei.com>
+In-Reply-To: <20230321072259.35366-1-yangxingui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.126]
+X-ClientProxiedBy: dggpemm500020.china.huawei.com (7.185.36.49) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:12:40AM +0530, Naresh Kamboju wrote:
-> On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.1.21 release.
-> > There are 198 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 22 Mar 2023 14:54:29 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.21-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> 
-> Results from Linaro’s test farm.
-> Regressions on PowerPC build failures.
-> 
-> > Christophe Leroy <christophe.leroy@csgroup.eu>
-> >     powerpc/64: Set default CPU in Kconfig
-> >
-> 
-> We see PowerPC build failures with Clang 16 and nightly on the
-> following configurations:
-> * cell_defconfig
-> * ppc64e_defconfig
-> * tqm8xx_defconfig
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Error messages respectively:
-> -----8<-----
-> error: unknown target CPU 'cell'
-> note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
-> 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
-> 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
-> pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
-> power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
-> powerpc64, ppc64, powerpc64le, ppc64le, future
-> ----->8-----
-> 
-> -----8<-----
-> error: unknown target CPU 'e500mc64'
-> note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
-> 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
-> 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
-> pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
-> power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
-> powerpc64, ppc64, powerpc64le, ppc64le, future
-> ----->8-----
-> 
-> -----8<-----
-> error: unknown target CPU '860'
-> note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
-> 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
-> 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
-> pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
-> power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
-> powerpc64, ppc64, powerpc64le, ppc64le, future
-> ----->8-----
-> 
-> The bisection pointed to this commit,
->   45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
-> 
-> 
-> Follow up fix patch is here as per Christophe Leroy comments,
->  powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
-> 
+Sorry, please ignore this patch and I have resend a new one.
 
-Should now be fixed, I'll push out a -rc2.
-
-greg k-h
+On 2023/3/21 15:22, Xingui Yang wrote:
+> If an error occurs while the disk is processing an NCQ command and the host
+> received the abnormal SDB FIS, let libata EH to analyze the NCQ error, and
+> it is not necessary to reset the target to recover.
+> 
+> Then the hisi_sas has some special process to set dev_status to normal when
+> end the eh for NCQ error without reset the target, so add a callback and
+> fill it in for the hisi_sas driver.
+> 
+> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+> ---
+>   drivers/scsi/hisi_sas/hisi_sas_main.c  | 12 +++++++++---
+>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  7 +++++--
+>   drivers/scsi/libsas/sas_ata.c          |  4 ++++
+>   include/scsi/libsas.h                  |  2 ++
+>   4 files changed, 20 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> index 325d6d6a21c3..61686ead0027 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> @@ -1777,9 +1777,6 @@ static int hisi_sas_I_T_nexus_reset(struct domain_device *device)
+>   	struct device *dev = hisi_hba->dev;
+>   	int rc;
+>   
+> -	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
+> -		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+> -
+>   	rc = hisi_sas_internal_task_abort_dev(sas_dev, false);
+>   	if (rc < 0) {
+>   		dev_err(dev, "I_T nexus reset: internal abort (%d)\n", rc);
+> @@ -1967,6 +1964,14 @@ static bool hisi_sas_internal_abort_timeout(struct sas_task *task,
+>   	return false;
+>   }
+>   
+> +static void hisi_sas_end_eh(struct domain_device *dev)
+> +{
+> +	struct hisi_sas_device *sas_dev = dev->lldd_dev;
+> +
+> +	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
+> +		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+> +}
+> +
+>   static void hisi_sas_port_formed(struct asd_sas_phy *sas_phy)
+>   {
+>   	hisi_sas_port_notify_formed(sas_phy);
+> @@ -2083,6 +2088,7 @@ static struct sas_domain_function_template hisi_sas_transport_ops = {
+>   	.lldd_write_gpio	= hisi_sas_write_gpio,
+>   	.lldd_tmf_aborted	= hisi_sas_tmf_aborted,
+>   	.lldd_abort_timeout	= hisi_sas_internal_abort_timeout,
+> +	.lldd_end_eh		= hisi_sas_end_eh,
+>   };
+>   
+>   void hisi_sas_init_mem(struct hisi_hba *hisi_hba)
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> index 66fcb340b98e..abad57de4aee 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> @@ -2433,15 +2433,18 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
+>   			struct hisi_sas_device *sas_dev =
+>   				&hisi_hba->devices[device_id];
+>   			struct domain_device *device = sas_dev->sas_device;
+> +			bool force_reset = true;
+>   
+>   			dev_err(dev, "erroneous completion disk err dev id=%d sas_addr=0x%llx CQ hdr: 0x%x 0x%x 0x%x 0x%x\n",
+>   				device_id, itct->sas_addr, dw0, dw1,
+>   				complete_hdr->act, dw3);
+>   
+> -			if (is_ncq_err_v3_hw(complete_hdr))
+> +			if (is_ncq_err_v3_hw(complete_hdr)) {
+>   				sas_dev->dev_status = HISI_SAS_DEV_NCQ_ERR;
+> +				force_reset = false;
+> +			}
+>   
+> -			sas_ata_device_link_abort(device, true);
+> +			sas_ata_device_link_abort(device, force_reset);
+>   		} else if (likely(iptt < HISI_SAS_COMMAND_ENTRIES_V3_HW)) {
+>   			slot = &hisi_hba->slot_info[iptt];
+>   			slot->cmplt_queue_slot = rd_point;
+> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+> index 77714a495cbb..2d48643a08cf 100644
+> --- a/drivers/scsi/libsas/sas_ata.c
+> +++ b/drivers/scsi/libsas/sas_ata.c
+> @@ -539,6 +539,10 @@ void sas_ata_end_eh(struct ata_port *ap)
+>   	spin_lock_irqsave(&ha->lock, flags);
+>   	if (test_and_clear_bit(SAS_DEV_EH_PENDING, &dev->state))
+>   		ha->eh_active--;
+> +
+> +	if (i->dft->lldd_end_eh)
+> +		i->dft->lldd_end_eh(device);
+> +
+>   	spin_unlock_irqrestore(&ha->lock, flags);
+>   }
+>   
+> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+> index 159823e0afbf..659395ef616e 100644
+> --- a/include/scsi/libsas.h
+> +++ b/include/scsi/libsas.h
+> @@ -683,6 +683,8 @@ struct sas_domain_function_template {
+>   	int (*lldd_lu_reset)(struct domain_device *, u8 *lun);
+>   	int (*lldd_query_task)(struct sas_task *);
+>   
+> +	void (*lldd_end_eh)(struct domain_device *dev);
+> +
+>   	/* Special TMF callbacks */
+>   	void (*lldd_tmf_exec_complete)(struct domain_device *dev);
+>   	void (*lldd_tmf_aborted)(struct sas_task *task);
+> 
