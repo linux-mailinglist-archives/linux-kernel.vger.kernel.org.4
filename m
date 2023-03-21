@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2256C3932
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AD56C3935
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCUSaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S229964AbjCUSam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjCUSaO (ORCPT
+        with ESMTP id S229872AbjCUSaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:30:14 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157224391C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:30:13 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id w133so11845202oib.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:30:13 -0700 (PDT)
+        Tue, 21 Mar 2023 14:30:39 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08348559DD;
+        Tue, 21 Mar 2023 11:30:31 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id o2so9557880plg.4;
+        Tue, 21 Mar 2023 11:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679423412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uR2L5ssyoNX1DS+2yU8J8y2e0fQMhmy1KklHHGVtM9M=;
-        b=K/XNWG9WcsCbmZOpWg1P5w1gPHOqenS564JrNPjrLscyh889UAuoYHbY1sP2/9PWSD
-         j4yaur5EY5ET3sargDhiDzN43OXEUZAretK+X8xWcn2RRrrDg+4O4OnG64h0LCFHMIVy
-         LeV4mAW2YXTaoyCneeS7SDQZlSkx0MPHg0Ws2cT9C8Uyl3oC6CXYqG3CFHwi8yNl1/uz
-         0Ik7zGJ8YA5GH4SE6/hGslnhtc3jrvS3yu14GmuNtjGSmBKnkCwvnFIlYOpefzUyn+UX
-         4DHn4X6SryoD8+Ql2SeoctJolx7AzTFaiGsikxs139GFHhtoKTZFCkjOFUjoEXdAAdis
-         kYNQ==
+        d=gmail.com; s=20210112; t=1679423430;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rkjWHBgUku8MSuRSZQ+S7pLaMQUx4hKAx9achzwRQ08=;
+        b=AXOihnAH0B0O4pktC/PqBcmYDX5szxYRzghNl161/BIG9cu3cfq5pL2vR7gYwCvycK
+         ya2Eb42AtqfvNT0Rnqki7KI140cDOtuSv7aK4Er2DgH9uyp5ncyd9fo1gxhN84PcK+Mb
+         oZtEQwq2KbwtX2HA2yO2+hGyg8GB6yXvmudYWWXWhkG7um0VZ2mTTg2HcypGjKYhNrK9
+         m2o/GfMiifYLQBXNqyf/GtONlkj/lesMLTgTBgnRTKQlTbk0UO2v4anALIhzz/0cA1mE
+         PbBUHhvY5b0SFIgZcyYKVdWXFD1BUTTB8Spcr7dWKpSsMre5BcKUiJF16o2AskD0sG09
+         hMwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679423412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uR2L5ssyoNX1DS+2yU8J8y2e0fQMhmy1KklHHGVtM9M=;
-        b=p7xrto8bMM1p7F54WMbkEQ96/z5nxdBT0/yuIQQbEsR3F7cGYb23tqfWFfEkcAH4V9
-         nV4F2zUTqQ1rghm+1JZB8hlWe6VNsTkSm9OFeJC+Np8H4sT36tBWJS5aHUneB0gWuxUC
-         2RwILwH6XEbodKoGM4TJVhVjk2Zo+YBdTPR6//fZ5CUoA+JANO8BDsD9JbBA23zUBbZ0
-         WVBwbNRkTpJB8le+rkBYGqFxW9OEsZ3rcDSVxZ+vEVHFcw4rHtr9B82YpXtp183Yv9DY
-         76S+OMs2Xm7UPXzJJV+Oz1DNBZDLjX8Gubxk2ZVZvKo+rnYgQ7Rj74LwWSA+XOlkCJ/o
-         B8ZA==
-X-Gm-Message-State: AO0yUKUaLlBOF8ArA7naMdFFk5l7VwApKPseHqGJ/fxtCN8YVade03+h
-        quDKzNv3rGSQ3VzR3hEvEmxgn7H/j8Gz862Qp/J8gg==
-X-Google-Smtp-Source: AK7set/MD1mENLDDCQxgddxuXO7UKTS/6BUQ6ohGmiWWxM9gCmTwfU0AU5sWF8J7iw6SAvGy56nVqJizhbTthK5jpQ8=
-X-Received: by 2002:a54:400a:0:b0:384:27f0:bd0a with SMTP id
- x10-20020a54400a000000b0038427f0bd0amr33142oie.9.1679423412200; Tue, 21 Mar
- 2023 11:30:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679423430;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rkjWHBgUku8MSuRSZQ+S7pLaMQUx4hKAx9achzwRQ08=;
+        b=E72prPqE3OXJ67rkeweLLpTFmYG7BrHURDN7u4leFoB99eDdkkDreQEc4cTqYmDSmQ
+         KtAEgjzwkQE7mTLlv4Cs+XpxZuQzsdrEKUWow83NGAbTDPmlht1ITLLOdVugkZBsjlwE
+         TLd8+E0TFqAYkCqAfeCkl7D7zFFOgNrKodtBqbxdk1tPye96dncNkKhrVOIWqZYCG0T4
+         QouBz417Bxiq27SBgjQt/UgDySBhEdWvGYAsW5Gnq20Ms31r6QAnXtAE7aKiBSruGgg9
+         8VRprTElX3c2l5FsDr/xQhPIvzLWsm6ifobPsVaaVDSI6+uB1Ad3WbomFGf3LgFC6emn
+         ge5A==
+X-Gm-Message-State: AO0yUKVg2NclbO7zRo6z09d7cbGYib3wAYE/VckSDeI7Wn4dt5DVd0ol
+        OOLoJsm7/d2XYG7Y0adIMo11wduq9IQ=
+X-Google-Smtp-Source: AK7set/8TvvOjgCXUYMDgSNVuWVwb7G7MjD3roFihJpRn+nnL3hwsQcop75N18OV7FrB+B+FLXpUkg==
+X-Received: by 2002:a05:6a20:3391:b0:d8:f312:b3b with SMTP id f17-20020a056a20339100b000d8f3120b3bmr2824221pzd.3.1679423430170;
+        Tue, 21 Mar 2023 11:30:30 -0700 (PDT)
+Received: from trent-reznor ([2601:641:4000:81:109e:9b0c:f18f:7fa1])
+        by smtp.gmail.com with ESMTPSA id d2-20020a639742000000b00502e7115cbdsm5817599pgo.51.2023.03.21.11.30.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:30:29 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 11:30:26 -0700
+From:   Daniel Watson <ozzloy@gmail.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: av7110: put spaces around operators
+Message-ID: <ZBn3wmTkcZ0WC6iW@trent-reznor>
+References: <ZBlShLl4PYlNIpGN@trent-reznor>
+ <487b75ea-aecd-5fdc-c2a2-5f5080f8647e@xs4all.nl>
 MIME-Version: 1.0
-References: <20230201132905.549148-1-eesposit@redhat.com> <CALMp9eTt3xzAEoQ038bJQ9LN0ZOXrSWsN7xnNUD+0SS=WwF7Pg@mail.gmail.com>
- <CABgObfYKrn86hteXV0Cc_CDuMC170nuynCM9zW_QvtvKsOh8nw@mail.gmail.com>
-In-Reply-To: <CABgObfYKrn86hteXV0Cc_CDuMC170nuynCM9zW_QvtvKsOh8nw@mail.gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 21 Mar 2023 11:30:01 -0700
-Message-ID: <CALMp9eQ+U3SLt=KOti=xF2cXCV0oJSpMOGXfj9uhe7m=_57R+Q@mail.gmail.com>
-Subject: Re: [PATCH 0/3] KVM: support the cpu feature FLUSH_L1D
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Ben Serebrin <serebrin@google.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <487b75ea-aecd-5fdc-c2a2-5f5080f8647e@xs4all.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 2:43=E2=80=AFAM Paolo Bonzini <pbonzini@redhat.com>=
- wrote:
->
-> On Mon, Mar 20, 2023 at 5:52=E2=80=AFPM Jim Mattson <jmattson@google.com>=
- wrote:
-> > > Patch 1 and 2 are just taken and refactored from Jim Mattison's serie=
- that it
-> > > seems was lost a while ago:
-> > > https://patchwork.kernel.org/project/kvm/patch/20180814173049.21756-1=
--jmattson@google.com/
-> > >
-> > > I thought it was worth re-posting them.
-> >
-> > What has changed since the patches were originally posted, and Konrad
-> > dissed them?
->
-> What has changed is that the reporting of mmio_stale_data now
-> piggybacks on flush_l1d as well.
->
->         if ((ia32_cap & ARCH_CAP_FB_CLEAR) ||
->             (boot_cpu_has(X86_FEATURE_MD_CLEAR) &&
->              boot_cpu_has(X86_FEATURE_FLUSH_L1D) &&
->              !(ia32_cap & ARCH_CAP_MDS_NO)))
->                 mmio_mitigation =3D MMIO_MITIGATION_VERW;
->         else
->                 mmio_mitigation =3D MMIO_MITIGATION_UCODE_NEEDED;
->
-> Maybe Intel only defines CPUID bits after a firstborn has been
-> sacriificed to the microcode gods?
->
-> Paolo
->
+On Tue, Mar 21, 2023 at 04:08:30PM +0100, Hans Verkuil wrote:
+> Hi Daniel,
+> 
+Hi!
 
-Ha!
+> I'm not sure what the point it of these two fixes since this driver is
+> full of such things.
+these fixes were the only ones where checkpatch said "spaces required
+around that ..." for this file.
 
-As I wrote way back when, "It is more forward-thinking to provide this
-capability than it is not to."
+> In any case, I'm rejecting this. Just leave this driver alone, it's not
+> worth the effort.
+ok.
 
-I feel vindicated. :)
+> If you are doing this as part of some mentorship program, then skip the
+i'm doing this on my own.  i read that newbies should do about 10 minor
+patches to get familiar with the process before doing something more
+substantial.
+
+> drivers/staging/media directory, it's not suitable for that.
+ok, i'll try other drivers in staging.  i'll also see about getting a
+mentor.
+
+thanks again!
