@@ -2,131 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8546C321D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068406C2FE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjCUM6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S229734AbjCULMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjCUM6t (ORCPT
+        with ESMTP id S229497AbjCULMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:58:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC1446B9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679403480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IA0s4cewAQV8rPDVtTlrJMqtApl2LJJvORTtv+RulJQ=;
-        b=J7BkxqCgjuN2CxK0FkkmAO/Sz9OoP70MJkbH2T2uelYkvEcD6vAojtMdIElYqBI8IIfJS3
-        N/LGFIebTZHFwASD2iQfgOTD40C1ZE+ioSQNeY8v3p10kQjioan+JHpW3HcNDU279QxMhz
-        Dsu8yOwm74eEMgwYxfQ3tLpEiq9bNeg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-217-o9LOOsT4MpqKUpRkQeraZA-1; Tue, 21 Mar 2023 08:57:55 -0400
-X-MC-Unique: o9LOOsT4MpqKUpRkQeraZA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 21 Mar 2023 07:12:18 -0400
+Received: from harvie.cz (harvie.cz [77.87.242.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E62603E1C9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:12:16 -0700 (PDT)
+Received: from anemophobia.amit.cz (unknown [31.30.84.130])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82EC01C01B3A;
-        Tue, 21 Mar 2023 12:57:54 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4DC0A492C13;
-        Tue, 21 Mar 2023 12:57:54 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 0075D400DEA0A; Mon, 20 Mar 2023 16:07:29 -0300 (-03)
-Date:   Mon, 20 Mar 2023 16:07:29 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZBiu8csaxB/zrOAS@tpad>
-References: <20230320180332.102837832@redhat.com>
- <ZBilM1JR2HKElIR1@dhcp22.suse.cz>
+        by harvie.cz (Postfix) with ESMTPSA id D37151801B5;
+        Tue, 21 Mar 2023 11:35:04 +0100 (CET)
+From:   Tomas Mudrunka <tomas.mudrunka@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, rppt@kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, tomas.mudrunka@gmail.com
+Subject: [PATCH v2] Add results of early memtest to /proc/meminfo
+Date:   Tue, 21 Mar 2023 11:34:30 +0100
+Message-Id: <20230321103430.7130-1-tomas.mudrunka@gmail.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
+References: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBilM1JR2HKElIR1@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_PASS,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 07:25:55PM +0100, Michal Hocko wrote:
-> On Mon 20-03-23 15:03:32, Marcelo Tosatti wrote:
-> > This patch series addresses the following two problems:
-> > 
-> > 1. A customer provided evidence indicating that a process
-> >    was stalled in direct reclaim:
-> > 
-> This is addressed by the trivial patch 1.
-> 
-> [...]
-> >  2. With a task that busy loops on a given CPU,
-> >     the kworker interruption to execute vmstat_update
-> >     is undesired and may exceed latency thresholds
-> >     for certain applications.
-> 
-> Yes it can but why does that matter?
+Currently the memtest results were only presented in dmesg.
+This adds /proc/meminfo entry which can be easily used by scripts.
 
-It matters for the application that is executing and expects
-not to be interrupted.
+Signed-off-by: Tomas Mudrunka <tomas.mudrunka@gmail.com>
+---
+ Documentation/filesystems/proc.rst |  8 ++++++++
+ fs/proc/meminfo.c                  | 13 +++++++++++++
+ include/linux/memblock.h           |  2 ++
+ mm/memtest.c                       |  6 ++++++
+ 4 files changed, 29 insertions(+)
 
-> > By having vmstat_shepherd flush the per-CPU counters to the
-> > global counters from remote CPUs.
-> > 
-> > This is done using cmpxchg to manipulate the counters,
-> > both CPU locally (via the account functions),
-> > and remotely (via cpu_vm_stats_fold).
-> > 
-> > Thanks to Aaron Tomlin for diagnosing issue 1 and writing
-> > the initial patch series.
-> > 
-> > 
-> > Performance details for the kworker interruption:
-> > 
-> > oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
-> > oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
-> > oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
-> > kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
-> >  
-> > The example above shows an additional 7us for the
-> > 
-> >         oslat -> kworker -> oslat
-> > 
-> > switches. In the case of a virtualized CPU, and the vmstat_update
-> > interruption in the host (of a qemu-kvm vcpu), the latency penalty
-> > observed in the guest is higher than 50us, violating the acceptable
-> > latency threshold for certain applications.
-> 
-> I do not think we have ever promissed any specific latency guarantees
-> for vmstat. These are statistics have been mostly used for debugging
-> purposes AFAIK. I am not aware of any specific user space use case that
-> would be latency sensitive. Your changelog doesn't go into details there
-> either.
-
-There is a class of workloads for which response time can be
-of interest. MAC scheduler is an example:
-
-https://par.nsf.gov/servlets/purl/10090368
-
-Thanks!
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 9d5fd9424..8740362f3 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -996,6 +996,7 @@ Example output. You may not have all of these fields.
+     VmallocUsed:       40444 kB
+     VmallocChunk:          0 kB
+     Percpu:            29312 kB
++    EarlyMemtestBad:       0 kB
+     HardwareCorrupted:     0 kB
+     AnonHugePages:   4149248 kB
+     ShmemHugePages:        0 kB
+@@ -1146,6 +1147,13 @@ VmallocChunk
+ Percpu
+               Memory allocated to the percpu allocator used to back percpu
+               allocations. This stat excludes the cost of metadata.
++EarlyMemtestBad
++              The amount of RAM/memory in kB, that was identified as corrupted
++              by early memtest. If memtest was not run, this field will not
++              be displayed at all. Size is never rounded down to 0 kB.
++              That means if 0 kB is reported, you can safely assume
++              there was at least one pass of memtest and none of the passes
++              found a single faulty byte of RAM.
+ HardwareCorrupted
+               The amount of RAM/memory in KB, the kernel identifies as
+               corrupted.
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 440960110..b43d0bd42 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -6,6 +6,7 @@
+ #include <linux/hugetlb.h>
+ #include <linux/mman.h>
+ #include <linux/mmzone.h>
++#include <linux/memblock.h>
+ #include <linux/proc_fs.h>
+ #include <linux/percpu.h>
+ #include <linux/seq_file.h>
+@@ -131,6 +132,18 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 	show_val_kb(m, "VmallocChunk:   ", 0ul);
+ 	show_val_kb(m, "Percpu:         ", pcpu_nr_pages());
+ 
++#ifdef CONFIG_MEMTEST
++	if (early_memtest_done) {
++		unsigned long early_memtest_bad_size_kb;
++
++		early_memtest_bad_size_kb = early_memtest_bad_size>>10;
++		if (early_memtest_bad_size && !early_memtest_bad_size_kb)
++			early_memtest_bad_size_kb = 1;
++		/* When 0 is reported, it means there actually was a successful test */
++		seq_printf(m, "EarlyMemtestBad:   %5lu kB\n", early_memtest_bad_size_kb);
++	}
++#endif
++
+ #ifdef CONFIG_MEMORY_FAILURE
+ 	seq_printf(m, "HardwareCorrupted: %5lu kB\n",
+ 		   atomic_long_read(&num_poisoned_pages) << (PAGE_SHIFT - 10));
+diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+index 50ad19662..f82ee3fac 100644
+--- a/include/linux/memblock.h
++++ b/include/linux/memblock.h
+@@ -597,6 +597,8 @@ extern int hashdist;		/* Distribute hashes across NUMA nodes? */
+ #endif
+ 
+ #ifdef CONFIG_MEMTEST
++extern phys_addr_t early_memtest_bad_size;	/* Size of faulty ram found by memtest */
++extern bool early_memtest_done;			/* Was early memtest done? */
+ extern void early_memtest(phys_addr_t start, phys_addr_t end);
+ #else
+ static inline void early_memtest(phys_addr_t start, phys_addr_t end)
+diff --git a/mm/memtest.c b/mm/memtest.c
+index f53ace709..57149dfee 100644
+--- a/mm/memtest.c
++++ b/mm/memtest.c
+@@ -4,6 +4,9 @@
+ #include <linux/init.h>
+ #include <linux/memblock.h>
+ 
++bool early_memtest_done;
++phys_addr_t early_memtest_bad_size;
++
+ static u64 patterns[] __initdata = {
+ 	/* The first entry has to be 0 to leave memtest with zeroed memory */
+ 	0,
+@@ -30,6 +33,7 @@ static void __init reserve_bad_mem(u64 pattern, phys_addr_t start_bad, phys_addr
+ 	pr_info("  %016llx bad mem addr %pa - %pa reserved\n",
+ 		cpu_to_be64(pattern), &start_bad, &end_bad);
+ 	memblock_reserve(start_bad, end_bad - start_bad);
++	early_memtest_bad_size += (end_bad - start_bad);
+ }
+ 
+ static void __init memtest(u64 pattern, phys_addr_t start_phys, phys_addr_t size)
+@@ -61,6 +65,8 @@ static void __init memtest(u64 pattern, phys_addr_t start_phys, phys_addr_t size
+ 	}
+ 	if (start_bad)
+ 		reserve_bad_mem(pattern, start_bad, last_bad + incr);
++
++	early_memtest_done = true;
+ }
+ 
+ static void __init do_one_pass(u64 pattern, phys_addr_t start, phys_addr_t end)
+-- 
+2.40.0
 
