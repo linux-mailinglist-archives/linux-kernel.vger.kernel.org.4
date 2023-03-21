@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AE96C2931
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAB26C2934
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCUEef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 00:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S229739AbjCUEha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 00:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCUEec (ORCPT
+        with ESMTP id S229511AbjCUEh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 00:34:32 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D5D166D5;
-        Mon, 20 Mar 2023 21:34:30 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17786581fe1so15132067fac.10;
-        Mon, 20 Mar 2023 21:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679373270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qUs2zAXPOtYAth4VTg4HJovCnt+hv90v8Ki9Yz6QDEM=;
-        b=D1zurgf5l5miMav/cDjr6nTTo186jRP0iGjwFIiktstGupS8nmgn4htAeBYBSgHljI
-         rSisNmlYoRYhCQo/bAHHcTVjJyEBK0qgCP9zQTbAjoTbIP1TVranXL1P9rphcMzdRXcO
-         50BmV7lnSO6Z/EK1fralFJ0nEveVYhS8gPm0vLD+UYcy5NQH13yd2o0SKrXNALuhpuTx
-         3p4zC6CwcoeQOiK7MGiStbyTBn4F1hT4OFBLEjdUiY/UKho8Tml+AZ5HavEL1gRraNJE
-         /ohriEDTsVSWMTDyJZTEUZVpA6yxoGUa6Y2+HkTQ10YLnEnE8W2Hf7owxjfAhDl2KO3Q
-         yZgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679373270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qUs2zAXPOtYAth4VTg4HJovCnt+hv90v8Ki9Yz6QDEM=;
-        b=wb7YwP+3YWqx0jBmPskK+QE9i9nOMArm1YOXxakWdSi2LHRGxNcGF+0ZEOtlw57yOE
-         4i7nRJgiVf565fNmozGX6lsjSn68EG5PlOtfdp3C35bMzhIEVMBfzI/YPqW+q0WvYISi
-         hKPd+Kv9Ba2zrCeHmNYB4skHPOwikk/k+a2oYvOOblq6DUK1OULSMZWbyr0UHjshveqo
-         ofV7imYDqZ1XpQfg96QQnfhpsfOpnpP/jqzP4rryi8BYYxMG+WjVFleq1moQRfDRI36t
-         nVo4sVPq+JGiSDl8n/TXgoR4CbKXQdxqSFvoubrrx3eJqj3q4B0PYB60SUHyyGnB8cpY
-         obpQ==
-X-Gm-Message-State: AO0yUKXT2SnAqiHaVES8AFPejl3xoUFzRtWc19HbyzSuIomBU8LGCnOp
-        ekCrzF/89yehFKAWyIk41ITQpRa+Pl8qaSp0pwc=
-X-Google-Smtp-Source: AK7set/osPTPV+KDWROSFxeQ82lsZ+D0kNpgb59DbwDtGICu0p3iR8Hxq9STdb/+qZ+B8ermE+gUjBLk3Sz0i1AEZPI=
-X-Received: by 2002:a05:6871:e02:b0:17b:e128:b4c2 with SMTP id
- vj2-20020a0568710e0200b0017be128b4c2mr229523oab.0.1679373269867; Mon, 20 Mar
- 2023 21:34:29 -0700 (PDT)
+        Tue, 21 Mar 2023 00:37:28 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9282A9B5;
+        Mon, 20 Mar 2023 21:37:27 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L4bIWd018873;
+        Mon, 20 Mar 2023 23:37:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679373438;
+        bh=SPVumwcpt0D9GYRf8gsF0VJBx5ewNMg3aoYWWLCt/f0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Aq74u0UPsKaBtXki9zr+munGRs/GGyrSLfziO2LNh6yxxOteHYaDZz5uW76y+k0lJ
+         phD9OjsCZwgoY4hAnl8qgqUm6qaUe2sZ3Kv2sbFFxwO3DMy9a7g6ABuRB7a8u8QY0t
+         EJ8pbxuq1iCWbKLkt0LbouTI3FiEwUAu+2wsoV+M=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L4bIeC023858
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Mar 2023 23:37:18 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 20
+ Mar 2023 23:37:17 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 20 Mar 2023 23:37:18 -0500
+Received: from [10.249.132.105] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L4bDhB032111;
+        Mon, 20 Mar 2023 23:37:14 -0500
+Message-ID: <4a1f33bb-882a-ed49-9e0e-b463203e0ea9@ti.com>
+Date:   Tue, 21 Mar 2023 10:07:13 +0530
 MIME-Version: 1.0
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com> <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
- <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
- <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org> <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org> <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
-In-Reply-To: <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 21 Mar 2023 05:34:18 +0100
-Message-ID: <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V3 1/2] arm64: dts: ti: k3-am62-wakeup: Introduce RTC node
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Julien Panis <jpanis@baylibre.com>, <bb@ti.com>
+References: <20230320165123.80561-1-nm@ti.com>
+ <20230320165123.80561-2-nm@ti.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230320165123.80561-2-nm@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,43 +72,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 7:15=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/03/2023 19:09, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> >>> Would mediatek,mtmips-clock.yaml make sense?
-> >>
-> >> More, except:
-> >> 1. This is not clock, but sysc.
-> >
-> > Sergio, beware.
->
-> I meant, that's what I understood from what Sergio said. :)
+Hi,
 
-Yes, you understood properly. I will use 'sysc' instead.
-
+On 20/03/23 22:21, Nishanth Menon wrote:
+> Introduce digital RTC node in wakeup domain. Even though this has
+> no specific battery backup supply, this on-chip RTC is used in
+> cost-optimized board designs as a wakeup source.
 >
-> >
-> >> 2. mips sounds redundant. Do you have rt2xxx and mt7xxx chips which ar=
-e ARM?
-> >
-> > All of the SoCs, RTXXXX, MT7620, MT7621, MT7628, MT7688 are MIPS. So I
-> > decided to call this platform MTMIPS as I've seen MediaTek use this on
-> > other projects like U-Boot. This is what I did on my pinctrl patch
-> > series as well.
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> Reviewed-by: Bryan Brattlof <bb@ti.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+> Changes since v2:
+> - Just reviewed-by pickups
 >
-> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs which are
-> ARM, so mediatek,mtmips-sysc would work.
-
-I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles will
-start with ralink. There are already some existent compatibles for
-mt762x already having ralink as prefix, so to be coherent ralink
-should be maintained as prefix.
-
+> V2: https://lore.kernel.org/all/20230315170706.1598977-2-nm@ti.com/
+> V1: https://lore.kernel.org/all/20230311105850.21811-2-nm@ti.com/
 >
-> Best regards,
-> Krzysztof
+>  arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+> index 38dced6b4fef..fec81546fbbd 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
+> @@ -40,4 +40,14 @@ wkup_i2c0: i2c@2b200000 {
+>  		clock-names = "fck";
+>  		status = "disabled";
+>  	};
+> +
+> +	wkup_rtc0: rtc@2b1f0000 {
+> +		compatible = "ti,am62-rtc";
+> +		reg = <0x00 0x2b1f0000 0x00 0x100>;
+> +		interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&k3_clks 117 6> , <&k3_clks 117 0>;
+> +		clock-names = "vbus", "osc32k";
+> +		power-domains = <&k3_pds 117 TI_SCI_PD_EXCLUSIVE>;
+> +		wakeup-source;
+> +	};
+>  };
 
-Thanks,
-   Sergio Paracuellos
+I was just wondering why some of the rtctests show failures on this platform:
+
+https://gist.github.com/DhruvaG2000/5c6d8bb99b087308b916985d70f0c440
+
+pass:5 fail:2
+
+the test is compiled from tools/testing/selftests/rtc/rtctest.c for arm64 target
+
+Is this expected?
+
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
+
