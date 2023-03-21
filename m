@@ -2,137 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D9C6C3C89
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF2D6C3C88
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCUVTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S229841AbjCUVTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjCUVTU (ORCPT
+        with ESMTP id S229512AbjCUVTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:19:20 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6F0136D3;
-        Tue, 21 Mar 2023 14:19:19 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LJEQfR001100;
-        Tue, 21 Mar 2023 21:19:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=bbozAYZVvpIJ1rSltt7P6n1hBU/8cwQRgE061FnjM7I=;
- b=DsXBP3/qmMEf3FMQeTlM0NX1KGMFhTygFGvqej6rq6u5Y6pj/Ev5GOKVVnHKENug67AM
- 5ne6Nj3xpX49KYw/GbH1vj8xjy+4x/b8LCvl2JE/w+VhTgHQn9vqmUIk/tvM3WunFT9C
- hCjcszzHdkpfuDsmZ3YV/whSl4SuxVBjXLIXPPz3ARYHMLNGWHdL8Pr9YU88LGScxndx
- NEX8EujJ0uNv0VnlYOsEZTlH/dM0zcomKvO3XfBsMC5PW7Svav/6olxaJhkKdfxRpozy
- lxUnahFoDtI9aLd0fkmCoLh1W1EOJZ8KesUB34MlwghQXZurw5CU0BsVWnBUcr7UeDXV TQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfjjdtgd4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 21:19:15 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32LLBCel005465;
-        Tue, 21 Mar 2023 21:19:14 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfjjdtgck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 21:19:14 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32L50Jdi018062;
-        Tue, 21 Mar 2023 21:19:12 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3pd4jfc9x2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 21:19:12 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LLJ9g842205758
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Mar 2023 21:19:09 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F289D20043;
-        Tue, 21 Mar 2023 21:19:08 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 51ADE20040;
-        Tue, 21 Mar 2023 21:19:08 +0000 (GMT)
-Received: from localhost (unknown [9.171.1.78])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 21 Mar 2023 21:19:08 +0000 (GMT)
-Date:   Tue, 21 Mar 2023 22:19:06 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Joe Lawrence <joe.lawrence@redhat.com>, stable@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH] s390: reintroduce expoline dependence to scripts
-Message-ID: <your-ad-here.call-01679433546-ext-8459@work.hours>
-References: <705ce64c-5f73-2ec8-e4bc-dd48c85f0498@kernel.org>
- <20230316112809.7903-1-jirislaby@kernel.org>
+        Tue, 21 Mar 2023 17:19:19 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D4E12F14
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:19:18 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so17768648pjp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679433558;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VK8OACTsZrCxigEsUC8+yzbwaxLgbM99buzLp5o3QHA=;
+        b=KDAujDFlQT0N2rQpFVbd4roL3RWQBYm/O2siIyVzrY7lG/AfI5USHePmZqNACELWyZ
+         CAnixP+UM1iiselTENdcf+UGEHR7RjU7v2nh4l8MS9I5rs410vful8xNw1q8a1l48TII
+         1Tzk3uBMAd+TwF1zrApmuNi1Ts9xdXFmqeedXAvilKHysph5glkWHJYEVWDmicnq32te
+         xjLHW8hqAnrfzXLSsjx7gr9JFW3Is657wdZmV/bWIato4yLeyjXJgVuehH/QRLFzcBli
+         TGsAS28JrwpiCe5hck5JukYyZaEK9UOMdkcpfk+cvG5LjIf7XljQvIN3HFH7P5f5dwb8
+         XYCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679433558;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VK8OACTsZrCxigEsUC8+yzbwaxLgbM99buzLp5o3QHA=;
+        b=dduRUWUMitWDMeMYOVhg0NxGwN1ggd+x10MDWNRxLtd+F56j3sZOdQmgAVd3UDCRPH
+         D7RqqtFvnYMbPiaOtehdAmwtTwaUdBTjIBsC1YDQnsgOowzH3157nxbQv7bTYGFTkadZ
+         4rvgR8kiIUBm41VaoHzARnWYYXj3JwbpINYxrjX6fd/GVVYrWftpj0rn7aCKYoSh9BVJ
+         TmFZBQYFZkkleGqZm6y1EEEnu42ZOlRn3VB3SNGQHMQaQZDcL+nrGxTmi8w4tKLFgK/8
+         jQMRMB73ssiWoH1KfpO1A+AgLmySwbxqD5NK1Uv2KZzVoYCk4SSUb5l4UFrFqInifJ6A
+         B/OA==
+X-Gm-Message-State: AO0yUKV5pzd9VJkPX5lm9vEUZ1XXJDbL6R5qJWGDEZzV1mRbsh3NnwNI
+        HPs8F2z3hdBPhWosREiv+JkrXA==
+X-Google-Smtp-Source: AK7set+8I755xqwBJMnakxMfyAKZdvfsiqbry9lE2fZAK+7+ZS6/xxDfvgMLgjrrGxPIbY9MdNYOwg==
+X-Received: by 2002:a17:90a:49cf:b0:230:b0e3:9cad with SMTP id l15-20020a17090a49cf00b00230b0e39cadmr889584pjm.23.1679433558289;
+        Tue, 21 Mar 2023 14:19:18 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:8a45:c131:e8ed:3f53])
+        by smtp.gmail.com with ESMTPSA id s19-20020a170902989300b00186cf82717fsm9173146plp.165.2023.03.21.14.19.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 14:19:17 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 15:19:15 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        patrice.chotard@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, arnaud.pouliquen@st.com,
+        hongxing.zhu@nxp.com, peng.fan@nxp.com, shengjiu.wang@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] retmoteproc: imx_dsp_rproc: Call of_node_put() on
+ iteration error
+Message-ID: <20230321211915.GA2782856@p14s>
+References: <20230320221826.2728078-1-mathieu.poirier@linaro.org>
+ <20230320221826.2728078-6-mathieu.poirier@linaro.org>
+ <CAOMZO5Dh0mQEhjT2Wx_T9Kf9aTkNpJ7PbMfocQ24sh+yGtw+ww@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230316112809.7903-1-jirislaby@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GlJMtsEVQZZ0gT78_adUV8bdi7lGyiQO
-X-Proofpoint-ORIG-GUID: 0ug9ZL6ZKPv_3YE6ECwxu-eCpoqk4EUS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=998 spamscore=0 malwarescore=0 lowpriorityscore=0
- suspectscore=0 mlxscore=0 impostorscore=0 clxscore=1015 adultscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210166
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOMZO5Dh0mQEhjT2Wx_T9Kf9aTkNpJ7PbMfocQ24sh+yGtw+ww@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 12:28:09PM +0100, Jiri Slaby (SUSE) wrote:
-> Expolines depend on scripts/basic/fixdep. And build of expolines can now
-> race with the fixdep build:
+On Mon, Mar 20, 2023 at 08:02:04PM -0300, Fabio Estevam wrote:
+> On Mon, Mar 20, 2023 at 7:18 PM Mathieu Poirier
+> <mathieu.poirier@linaro.org> wrote:
+> >
+> > Function of_phandle_iterator_next() calls of_node_put() on the last
+> > device_node it iterated over, but when the loop exits prematurely it has
+> > to be called explicitly.
 > 
->  make[1]: *** Deleting file 'arch/s390/lib/expoline/expoline.o'
->  /bin/sh: line 1: scripts/basic/fixdep: Permission denied
->  make[1]: *** [../scripts/Makefile.build:385: arch/s390/lib/expoline/expoline.o] Error 126
->  make: *** [../arch/s390/Makefile:166: expoline_prepare] Error 2
-> 
-> The dependence was removed in the below Fixes: commit. So reintroduce
-> the dependence on scripts.
-> 
-> Fixes: a0b0987a7811 ("s390/nospec: remove unneeded header includes")
-> Cc: Joe Lawrence <joe.lawrence@redhat.com>
-> Cc: stable@vger.kernel.org
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> ---
->  arch/s390/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-> index b3235ab0ace8..ed646c583e4f 100644
-> --- a/arch/s390/Makefile
-> +++ b/arch/s390/Makefile
-> @@ -162,7 +162,7 @@ vdso_prepare: prepare0
->  
->  ifdef CONFIG_EXPOLINE_EXTERN
->  modules_prepare: expoline_prepare
-> -expoline_prepare:
-> +expoline_prepare: scripts
->  	$(Q)$(MAKE) $(build)=arch/s390/lib/expoline arch/s390/lib/expoline/expoline.o
->  endif
->  endif
-> -- 
+> Typo on the Subject: s/retmoteproc/remoteproc
 
-Applied, thank you.
+Thanks for pointing that out, I'll fix it.
+
