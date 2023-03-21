@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC5F6C3400
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5BC6C3402
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjCUOW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S230047AbjCUOX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjCUOWy (ORCPT
+        with ESMTP id S229513AbjCUOXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:22:54 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4D050704
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:22:42 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s19so3325574pgi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679408562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zK2oKikLMhsjpoZfnl9kq7jtqVSuiVQmn3GCed10h+c=;
-        b=SaLlnOexv4eAThvkdekCVUZbUl7mmWclkJm5i4VPUOcuiV8sDgFFFZAJ7Dcv83liaf
-         sVfmP2IHzpOGa4Vmfkn2+0MNveaCHR6b4nXs6285V23Vi2oBFlqady5SGwFm0psjaGOE
-         2Qe7JYp8I3C6M+/KXndjqTPMC4dQGk3ZHo4/U3U0OFjvn+Upz3euXrzpvr2wxcpgPfVh
-         i7vrPvqV2jCoD9/xHRv8TKQM0l8Gnv8Yr3yOpXkOMt3uOTQlJJKycsobnPHN9VxiR48f
-         q3zutwuvvLV+SD2vi55V8EG0bWZ6Jc8tIPk40jHvJpg4zbCrDXOX34UVLT6g4YuC0tx1
-         5BMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679408562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zK2oKikLMhsjpoZfnl9kq7jtqVSuiVQmn3GCed10h+c=;
-        b=THGA4zKDSQJnXQez9SYBTjxFUBx++o1lEyL6LfcfJ/H6KHVRVS3KNCFoSBNGHn1j5P
-         LqLLH7kPeJwR3H157D4sIjnnGjshFmya0BKnNQOLm+0DGuvDxOal1da9Ye7mlorrMW1P
-         1CTJx2HfiRt3C9yL6xEYqU7ZTHNfyBpvVtXc8MzuWv5KJHG90oXghW3XLh5ZqpwoiGcW
-         5F7mAerPfEqenOlFpNnFezOYOMOEPOp3Gu1ZsM/0z9D1dwaPm+H6/WJpdkrx+yvI8NJ+
-         TICqwqQ0hxczcWdGaWFJyh1izPfWmWtCeghjTO6EUTQrwIHv4TN3CZrRD8TyW0FCTdiY
-         5FkA==
-X-Gm-Message-State: AO0yUKUmasetDKIWN93hYzEpzwBNZsYAIFt9YSkw5slMVBIXtxb8LWXZ
-        Puv/fGU6kdxv3sNkpBlywHhlpWNuKcGV1nZLLarv2A==
-X-Google-Smtp-Source: AK7set/1T5zRnc6NbUwdtyPcUSXfTLHVV+/+mx2Jhf5DoqgGoV0ZRF21wj6FDDc6X5zCtifrNJHVuw==
-X-Received: by 2002:a62:524f:0:b0:625:e728:4c5f with SMTP id g76-20020a62524f000000b00625e7284c5fmr2230069pfb.22.1679408561777;
-        Tue, 21 Mar 2023 07:22:41 -0700 (PDT)
-Received: from leoy-yangtze.lan (211-75-219-203.hinet-ip.hinet.net. [211.75.219.203])
-        by smtp.gmail.com with ESMTPSA id k23-20020aa790d7000000b0059442ec49a2sm8515706pfk.146.2023.03.21.07.22.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 07:22:41 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 22:22:35 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] perf kvm: Support refcnt in structure kvm_info
-Message-ID: <20230321142235.GD221467@leoy-yangtze.lan>
-References: <20230320061619.29520-1-leo.yan@linaro.org>
- <20230320061619.29520-2-leo.yan@linaro.org>
- <ZBmqiKC1FSGI0/iE@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Tue, 21 Mar 2023 10:23:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F106E5072A;
+        Tue, 21 Mar 2023 07:22:57 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LELMFx034262;
+        Tue, 21 Mar 2023 14:22:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to : sender :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=E4/hcGhIwKILSk4TaiplmGQpCnV33KGRDstB6/1AMjU=;
+ b=p74ZCJr2prkDbPojlaRwFdJHepSgbmVBVRVLmCxTK2imUkE1+X/JP0syFsBAottl7WZJ
+ FK7OgFpusjJ83TIjI8d0j0BqgP2FWKxVKSUpUneZid5mjJi4cJzA84Q4h6BCKMtadOo8
+ Xm1wep1dioyHdMfelCmB1AcDURPh/YDY0FHCfVP32pUuvcwYNHdzfckIlesBZ0aBjCW6
+ d57J4QE5s3csMQgIM/diWrkOxqRWBm+lo7yQiBp5S522xkmicdl/SgKYhxn5LxGsC867
+ ZExo0Du3oD6tJOqouFGFpsdYBPvn3CQSzNTr0xZgMDIAqpgBp3GdmLA4LyUhmmQnjAkW NA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfbpmckx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 14:22:44 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32L8prDf022328;
+        Tue, 21 Mar 2023 14:22:42 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6crvk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 14:22:41 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LEMcY644237400
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 14:22:38 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 437412004D;
+        Tue, 21 Mar 2023 14:22:38 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D30C2004B;
+        Tue, 21 Mar 2023 14:22:38 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.179.3.208])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 Mar 2023 14:22:38 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.96)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1pecsn-002N2T-1t;
+        Tue, 21 Mar 2023 15:22:37 +0100
+Date:   Tue, 21 Mar 2023 14:22:37 +0000
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH] scsi: fix hung_task when change host from recovery to
+ running via sysfs
+Message-ID: <20230321142237.GC311313@t480-pf1aa2c2.fritz.box>
+References: <20230321084204.1860900-1-yebin@huaweicloud.com>
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZBmqiKC1FSGI0/iE@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230321084204.1860900-1-yebin@huaweicloud.com>
+Sender: Benjamin Block <bblock@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: KsxfCXHDwgXQoQjYry9vKwkkxdYXqVKP
+X-Proofpoint-GUID: KsxfCXHDwgXQoQjYry9vKwkkxdYXqVKP
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_10,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1011 spamscore=0 bulkscore=0 suspectscore=0
+ mlxscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:00:56AM -0300, Arnaldo Carvalho de Melo wrote:
+On Tue, Mar 21, 2023 at 04:42:04PM +0800, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+>
+> When do follow test:
+> Step1: echo  "recovery" > /sys/class/scsi_host/host0/state
 
-[...]
+Hmm, that make me wonder, what potential use-case this is for? Just
+testing?
 
-> > +static inline void __kvm_info__zput(struct kvm_info **ki)
-> > +{
-> > +	kvm_info__put(*ki);
-> > +	*ki = NULL;
-> > +}
-> > +
-> > +#define kvm_info__zput(ki) __kvm_info__zput(&ki)
-> > +
-> > +static inline struct kvm_info *kvm_info__new(void)
-> > +{
-> > +	struct kvm_info *ki;
-> > +
-> > +	ki = zalloc(sizeof(*ki));
-> > +	if (ki)
-> > +		refcount_set(&ki->refcnt, 1);
-> > +
-> > +	return ki;
-> > +}
-> > +
-> >  #endif /* HAVE_KVM_STAT_SUPPORT */
-> >  
-> >  extern int kvm_add_default_arch_event(int *argc, const char **argv);
-> 
-> I had to add this:
-> 
-> Provide a nop version of kvm_info__zput() to be used when
-> HAVE_KVM_STAT_SUPPORT isn't defined as it is used unconditionally in
-> hists__findnew_entry() and hist_entry__delete().
+For SDEVs we explicitly filter what states can be set from user-space.
+Only `SDEV_RUNNING` and `SDEV_OFFLINE` can be set in
+`store_state_field()`.
+    There is probably quite a few other bad things you can do with this
+interface by using any of the other states used for device destruction
+or EH, and then trigger I/O or said destruction/EH otherwise.
+    Not sure handling this one special case of `SHOST_RECOVERY` is quite
+enough.
 
-Thanks a lot, Arnaldo.
 
-Just want to check, before I sent out this series I have run building
-test with the command `make -C tools/perf build-test` and I didn't see
-the building failure.  Do I need to run other testing?
+> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+> index ee28f73af4d4..ae6b1476b869 100644
+> --- a/drivers/scsi/scsi_sysfs.c
+> +++ b/drivers/scsi/scsi_sysfs.c
+> @@ -216,6 +216,9 @@ store_shost_state(struct device *dev, struct device_attribute *attr,
+>
+>       if (scsi_host_set_state(shost, state))
+>               return -EINVAL;
+> +     else
+> +             wake_up(&shost->host_wait);
+> +
+>       return count;
+>  }
+>
+> --
+> 2.31.1
+>
 
-Thanks,
-Leo
+-- 
+Best Regards, Benjamin Block        /        Linux on IBM Z Kernel Development
+IBM Deutschland Research & Development GmbH    /   https://www.ibm.com/privacy
+Vors. Aufs.-R.: Gregor Pillen         /         Geschäftsführung: David Faller
+Sitz der Ges.: Böblingen     /    Registergericht: AmtsG Stuttgart, HRB 243294
