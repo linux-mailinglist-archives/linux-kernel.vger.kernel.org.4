@@ -2,213 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AE46C322C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F2A6C3230
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCUNBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S230355AbjCUNCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjCUNBD (ORCPT
+        with ESMTP id S229743AbjCUNCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:01:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AF54AD33;
-        Tue, 21 Mar 2023 06:01:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34BFBB81689;
-        Tue, 21 Mar 2023 13:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7992C433AA;
-        Tue, 21 Mar 2023 13:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679403658;
-        bh=rw0p931Rpe2Ny/jb9uFi/QH0tIAjRolc9p08WyG9TIc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V7+ts8Nr78LLj2M4xcfKeFepUeYmMZaMwBoN00rSJX887yHsfz0jcWBv/3eLwMy6L
-         1PkFE2BtNsDcGxnnWoQn1M5feyrrHoxUXW+cWDkkhSrKCE8exNC9YRj/F3Wx7Qlv7Y
-         jiQ8EwSfSEQ5cuwh9l8UL0Ww5KafAib6Q+qQMylWLNbJAunikHYUU9tJ5zy3hmIpki
-         j1ML8Vc+gB8uzHZdRzyTqdt3gXD5FnFcGWr3ytwhgzVsic4Jcj6GdvlXmGn6XFHfoA
-         Chm7pwlc8nQpnm71tTuQR4tRlzQzVyUe15VsrdigcNhc2ndSeSXgLjJ185fqwffq3f
-         aqgFGctDTrF6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0D69F4052D; Tue, 21 Mar 2023 10:00:56 -0300 (-03)
-Date:   Tue, 21 Mar 2023 10:00:56 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] perf kvm: Support refcnt in structure kvm_info
-Message-ID: <ZBmqiKC1FSGI0/iE@kernel.org>
-References: <20230320061619.29520-1-leo.yan@linaro.org>
- <20230320061619.29520-2-leo.yan@linaro.org>
+        Tue, 21 Mar 2023 09:02:30 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734EF4D2A4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:02:26 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e194so16976714ybf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679403745;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8FYwsUtner+evX2XiCWd4n7PrQv50qsY8npv17QFr4g=;
+        b=W51SldL/uD13+yW022ZaqKJ1pKEFZULJyjsmEIX4YpQIdUW2k51ASpchwCvKCkm5aC
+         jPAjKmqx4et3SN1vsAIQYI2CG7z0YTcHj2zdvX/ruEdBsiTFu9gwepPSZjBdoDP44NTi
+         i6YuEDHUlSB2i7VXN3sRT22XDwfeje8FQrosWVcxx75z9yFerRkVq4rM/CHAsn4Bb94h
+         QKANvK0FXSUYqHKKsTMKbh7hTKIXxM05HAIZMd1v8xVe4nQsnzncV+BaOtZqq0gfbW/5
+         DMDDTHkedbmx8+G7w6WpVSsKdAL679wRwbo6DcU3TcUboO+mBiP5GO0fAwdX7en5krZG
+         L0yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679403745;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8FYwsUtner+evX2XiCWd4n7PrQv50qsY8npv17QFr4g=;
+        b=r6k3w5VfRK7Pgdalkd91xk39ZAwI4XHqnQD1mH3Nw4s9BElCn2im+JE+LqSt+yVu59
+         iOYfuIIyyITBPWP0CZ14OMXZhn6puaVCUYmxeZXcWeVJAVPtF8A3FyXwdJVtzbVr5nsJ
+         A38wZdCNX8apY3tcAYRbwI8AprB8joarQmkdarMueKieAXwCsVkTg50vKC/REpzr7L6g
+         IVyJS/FDJMIT2nxi6Y7uA5EXoJ2xrTHUHKFcvbfDG7B7yruOhdF6ox+Z0hUYWiMkfT7+
+         vjNQ4bAWga9rw3JIBnBhf6ErY09w9q0x/UByj3BZME1z3BI0b1ZfWaIkCxEaUmFY7dG0
+         KTmQ==
+X-Gm-Message-State: AAQBX9fhU4ZJWczL+FUiIiO7j5zj//j0ERq+zbVlSUQq4pPqkF9diGpi
+        GDh1wXUZ0/7mcbYQXdDc4ctllwRIhW7gvq5nPZTx0Q==
+X-Google-Smtp-Source: AKy350Yb8ERbX90GNutqmuZajtYmqYfg+Uxlub/J3I55ai9NYPtlLsOZt512ThjUW55MCrSJPrDulbkMoXDga2eVzZc=
+X-Received: by 2002:a05:6902:722:b0:b68:7a4a:5258 with SMTP id
+ l2-20020a056902072200b00b687a4a5258mr1492467ybt.3.1679403745629; Tue, 21 Mar
+ 2023 06:02:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320061619.29520-2-leo.yan@linaro.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230320134217.1685781-1-abel.vesa@linaro.org> <20230320134217.1685781-2-abel.vesa@linaro.org>
+In-Reply-To: <20230320134217.1685781-2-abel.vesa@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 21 Mar 2023 14:01:49 +0100
+Message-ID: <CAPDyKFqZ8sYVpo-HxnsRRKoWD+g0psVrpufEw1NtBdFe+LTTwA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/5] PM: domains: Allow power off queuing from providers
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 20, 2023 at 02:16:18PM +0800, Leo Yan escreveu:
-> hists__add_entry_ops() doesn't allocate a new histograms entry if it has
-> an existed entry for a KVM event, in this case, find_create_kvm_event()
-> allocates structure kvm_info but it's not used by any histograms and
-> never freed.
-> 
-> To fix the memory leak, this patch firstly introduces refcnt and a set
-> of functions for refcnt operations in the structure kvm_info.  When the
-> data structure is not used anymore, it invokes kvm_info__zput() to
-> decrease reference count and release the structure.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+On Mon, 20 Mar 2023 at 14:42, Abel Vesa <abel.vesa@linaro.org> wrote:
+>
+> In some cases, the providers might choose to refuse powering off some
+> domains until all of the consumer have had a chance to probe, that is,
+
+/s/consumer/consumers
+
+> until sync state callback has been called. Such providers might choose
+> to disable such domains on their on, from the sync state callback. So,
+
+/s/their on/their own
+
+> in order to do that, they need a way to queue up a power off request.
+> Since the generic genpd already has such API, make that available to
+> those providers.
+>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  tools/perf/builtin-kvm.c   |  3 +--
->  tools/perf/util/hist.c     |  5 +++++
->  tools/perf/util/kvm-stat.h | 37 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 43 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-> index 4c205df5106f..1e1cb5a9d0a2 100644
-> --- a/tools/perf/builtin-kvm.c
-> +++ b/tools/perf/builtin-kvm.c
-> @@ -768,7 +768,6 @@ static void kvm_he_free(void *he)
+>  drivers/base/power/domain.c | 3 ++-
+>  include/linux/pm_domain.h   | 6 ++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 32084e38b73d..97d4e2f2da91 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -649,10 +649,11 @@ static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
+>   * Queue up the execution of genpd_power_off() unless it's already been done
+>   * before.
+>   */
+> -static void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+
+Please add a function description - and make sure to state that its
+external use is explicitly intended for being called from genpd
+providers ->sync_state callbacks.
+
+> +void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+
+As this becomes an exported function, we should also conform to
+genpd's function naming rules, which is to use the "pm_genpd_*"
+prefix.
+
+While renaming it, perhaps it's sufficient with
+"pm_genpd_queue_power_off" or maybe even better "pm_genpd_sync_state",
+what do you think?
+
 >  {
->  	struct kvm_event *kvm_ev;
->  
-> -	free(((struct hist_entry *)he)->kvm_info);
->  	kvm_ev = container_of(he, struct kvm_event, he);
->  	free(kvm_ev);
+>         queue_work(pm_wq, &genpd->power_off_work);
 >  }
-> @@ -788,7 +787,7 @@ static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
->  
->  	BUG_ON(key->key == INVALID_KEY);
->  
-> -	ki = zalloc(sizeof(*ki));
-> +	ki = kvm_info__new();
->  	if (!ki) {
->  		pr_err("Failed to allocate kvm info\n");
->  		return NULL;
-> diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-> index 3670136a0074..b296f572f881 100644
-> --- a/tools/perf/util/hist.c
-> +++ b/tools/perf/util/hist.c
-> @@ -628,6 +628,8 @@ static struct hist_entry *hists__findnew_entry(struct hists *hists,
->  
->  			block_info__zput(entry->block_info);
->  
-> +			kvm_info__zput(entry->kvm_info);
-> +
->  			/* If the map of an existing hist_entry has
->  			 * become out-of-date due to an exec() or
->  			 * similar, update it.  Otherwise we will
-> @@ -1323,6 +1325,9 @@ void hist_entry__delete(struct hist_entry *he)
->  	if (he->block_info)
->  		block_info__zput(he->block_info);
->  
-> +	if (he->kvm_info)
-> +		kvm_info__zput(he->kvm_info);
-> +
->  	zfree(&he->res_samples);
->  	zfree(&he->stat_acc);
->  	free_srcline(he->srcline);
-> diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
-> index bc6c8e38ef50..9bf34c0e0056 100644
-> --- a/tools/perf/util/kvm-stat.h
-> +++ b/tools/perf/util/kvm-stat.h
-> @@ -10,6 +10,9 @@
->  #include "symbol.h"
->  #include "record.h"
->  
-> +#include <stdlib.h>
-> +#include <linux/zalloc.h>
-> +
->  #define KVM_EVENT_NAME_LEN	40
->  
->  struct evsel;
-> @@ -25,6 +28,7 @@ struct event_key {
->  
->  struct kvm_info {
->  	char name[KVM_EVENT_NAME_LEN];
-> +	refcount_t refcnt;
->  };
->  
->  struct kvm_event_stats {
-> @@ -145,6 +149,39 @@ extern const char *vcpu_id_str;
->  extern const char *kvm_exit_reason;
->  extern const char *kvm_entry_trace;
->  extern const char *kvm_exit_trace;
-> +
-> +static inline struct kvm_info *kvm_info__get(struct kvm_info *ki)
+> +EXPORT_SYMBOL_GPL(genpd_queue_power_off_work);
+>
+>  /**
+>   * genpd_power_off - Remove power from a given PM domain.
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index f776fb93eaa0..f9729640f87e 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -231,6 +231,7 @@ int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
+>  int pm_genpd_init(struct generic_pm_domain *genpd,
+>                   struct dev_power_governor *gov, bool is_off);
+>  int pm_genpd_remove(struct generic_pm_domain *genpd);
+> +void genpd_queue_power_off_work(struct generic_pm_domain *genpd);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>  int dev_pm_genpd_remove_notifier(struct device *dev);
+> @@ -278,6 +279,11 @@ static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
+>         return -EOPNOTSUPP;
+>  }
+>
+> +void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
 > +{
-> +	if (ki)
-> +		refcount_inc(&ki->refcnt);
-> +	return ki;
+> +       return -EOPNOTSUPP;
 > +}
 > +
-> +static inline void kvm_info__put(struct kvm_info *ki)
-> +{
-> +	if (ki && refcount_dec_and_test(&ki->refcnt))
-> +		free(ki);
-> +}
-> +
-> +static inline void __kvm_info__zput(struct kvm_info **ki)
-> +{
-> +	kvm_info__put(*ki);
-> +	*ki = NULL;
-> +}
-> +
-> +#define kvm_info__zput(ki) __kvm_info__zput(&ki)
-> +
-> +static inline struct kvm_info *kvm_info__new(void)
-> +{
-> +	struct kvm_info *ki;
-> +
-> +	ki = zalloc(sizeof(*ki));
-> +	if (ki)
-> +		refcount_set(&ki->refcnt, 1);
-> +
-> +	return ki;
-> +}
-> +
->  #endif /* HAVE_KVM_STAT_SUPPORT */
->  
->  extern int kvm_add_default_arch_event(int *argc, const char **argv);
+>  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+>                                                      unsigned int state)
+>  {
+> --
+> 2.34.1
+>
 
-I had to add this:
+Other than the minor things above, the approach looks reasonable to me!
 
-Provide a nop version of kvm_info__zput() to be used when
-HAVE_KVM_STAT_SUPPORT isn't defined as it is used unconditionally in
-hists__findnew_entry() and hist_entry__delete().
-
-- Arnaldo
-
-diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
-index 9bf34c0e0056e390..90b854390c89708d 100644
---- a/tools/perf/util/kvm-stat.h
-+++ b/tools/perf/util/kvm-stat.h
-@@ -182,6 +182,9 @@ static inline struct kvm_info *kvm_info__new(void)
- 	return ki;
- }
- 
-+#else /* HAVE_KVM_STAT_SUPPORT */
-+// We use this unconditionally in hists__findnew_entry() and hist_entry__delete()
-+#define kvm_info__zput(ki)
- #endif /* HAVE_KVM_STAT_SUPPORT */
- 
- extern int kvm_add_default_arch_event(int *argc, const char **argv);
+Kind regards
+Uffe
