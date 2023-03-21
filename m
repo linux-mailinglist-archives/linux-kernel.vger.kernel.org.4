@@ -2,188 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088BA6C3342
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DDA6C334A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCUNsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S230488AbjCUNuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjCUNsm (ORCPT
+        with ESMTP id S230478AbjCUNuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:48:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66D93D927;
-        Tue, 21 Mar 2023 06:48:24 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PgtDD73D6zKs3R;
-        Tue, 21 Mar 2023 21:46:04 +0800 (CST)
-Received: from [10.67.101.126] (10.67.101.126) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 21:48:21 +0800
-Message-ID: <b1524366-0e32-adb2-e7ef-fd0de5ef473c@huawei.com>
-Date:   Tue, 21 Mar 2023 21:48:21 +0800
+        Tue, 21 Mar 2023 09:50:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B603FBA6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679406542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yI/bZ8IYt/rjw4KBzfWVe1iqPY2paEeLBiaCSNShT/4=;
+        b=GeEbR5gLXb4yOHZTxbd0YluyGgNfLydhQJrdAFP7llrF6fgO84bokq7XFEXrh3O7Vns8ib
+        azesjeaD7ewyuFF1Qm8f5zG9TYrWDWfLiP0V4QREfCQrJvnSDKwao7hIyq6HfhZEme8rBT
+        p/CxobqJJso4bzXjyq0n/yM7rM56DWk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-272-7HBnSOwnM3WIAJ9VnSmlng-1; Tue, 21 Mar 2023 09:49:01 -0400
+X-MC-Unique: 7HBnSOwnM3WIAJ9VnSmlng-1
+Received: by mail-wr1-f71.google.com with SMTP id i11-20020a5d522b000000b002ceac3d4413so1794251wra.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:49:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679406540;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yI/bZ8IYt/rjw4KBzfWVe1iqPY2paEeLBiaCSNShT/4=;
+        b=l9XYwiTB2wSrFUdGtJT5bkS8kMmHQg9wvxII+6j+LOB7xZCwlgnuWT/yA/boKr200c
+         T7w38w7xwPoSm86YokJMpCf1tCXWpoWry5l2pNpsytwrJR94X0/ZpRyxRcCr+ZGRg6Q3
+         RdYbb6yyu7ElXbXLHuQKUvgxO2U0KAHhkUXDLBa6+dSHagOIrz48CZfsh+hw+gbu5KTm
+         YJDZGm8lpdH1q2svCFxh1qkl2zqntbSXTfJjE9OCMxZJ+P2a+VISdpyoLK5UUBztO1rd
+         CQWOFSvC1QiIJ3dCo4906TyG1Um/Ecpk1cMWbl8GVUHs7fxM3cGafGTtwVKfepEIcpPD
+         I4rQ==
+X-Gm-Message-State: AO0yUKW/YPofka6SDQ0sugaQUKvU51wj0xfv27/S/NKdGV/OnxO5WVdl
+        VnTLIlPKumXjvqpJ53TxX/I8mfRUbK46vZgREtFc9QiYle1H8MhypOzPLdze1oISiJ0OVutuy1g
+        mDUb0gsl4NdPMs3A1GJe/+e/d
+X-Received: by 2002:adf:f58d:0:b0:2ce:9e0a:10ae with SMTP id f13-20020adff58d000000b002ce9e0a10aemr2179546wro.53.1679406539838;
+        Tue, 21 Mar 2023 06:48:59 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9EKsVvw5U/yPPbi9tGukgfJCx6ovbrD4timB/FgzFRRnJM6NTECZsQavMRWFZ67rCTApC7lA==
+X-Received: by 2002:adf:f58d:0:b0:2ce:9e0a:10ae with SMTP id f13-20020adff58d000000b002ce9e0a10aemr2179532wro.53.1679406539539;
+        Tue, 21 Mar 2023 06:48:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
+        by smtp.gmail.com with ESMTPSA id c10-20020adffb0a000000b002c70c99db74sm11353849wrr.86.2023.03.21.06.48.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 06:48:59 -0700 (PDT)
+Message-ID: <d9ca4727-76c0-8b1f-ca57-effca446fbb6@redhat.com>
+Date:   Tue, 21 Mar 2023 14:48:57 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH RESEND] scsi: libsas: Add end eh callback
-Content-Language: en-CA
-To:     John Garry <john.g.garry@oracle.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
-        <kangfenglong@huawei.com>, <chenxiang66@hisilicon.com>
-References: <20230321073959.736-1-yangxingui@huawei.com>
- <4d9606b2-374c-8a76-05c4-7bd861b3b8bc@oracle.com>
-From:   yangxingui <yangxingui@huawei.com>
-In-Reply-To: <4d9606b2-374c-8a76-05c4-7bd861b3b8bc@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.126]
-X-ClientProxiedBy: dggpemm500012.china.huawei.com (7.185.36.89) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCHv2] mm/page_alloc: Make deferred page init free pages in
+ MAX_ORDER blocks
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+On 21.03.23 01:24, Kirill A. Shutemov wrote:
+> Normal page init path frees pages during the boot in MAX_ORDER chunks,
+> but deferred page init path does it in pageblock blocks.
+> 
+> Change deferred page init path to work in MAX_ORDER blocks.
+> 
+> For cases when MAX_ORDER is larger than pageblock, set migrate type to
+> MIGRATE_MOVABLE for all pageblocks covered by the page.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
+> 
+> Note: the patch depends on the new definiton of MAX_ORDER.
+> 
+> v2:
+> 
+>   - Fix commit message;
+> 
 
-On 2023/3/21 17:31, John Garry wrote:
-> On 21/03/2023 07:39, Xingui Yang wrote:
->> If an error occurs while the disk is processing an NCQ command and the 
->> host
->> received the abnormal SDB FIS, let libata EH to analyze the NCQ error, 
->> and
->> it is not necessary to reset the target to recover.
->>
->> Then the hisi_sas has some special process to set dev_status to normal 
->> when
->> end the eh for NCQ error without reset the target, so add a callback and
->> fill it in for the hisi_sas driver.
-> 
-> What is so special about this driver such that it is the only one to get 
-> this treatment? We generally don't just add callbacks for specific 
-> driver usage, i.e. you need to make it generic.
-Yes, I agree very much. it may be a common requirement for the lldd 
-performs a specific state restoration after eh complete. such as, we set 
-the device state to normal instead of doing it in the target reset 
-function.
-> 
-> I would need to refresh my memory on the ATA EH handling to review this 
-> further, which I will do when I get a chance.
-Thanks
-Xingui
-> 
->>
->> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
->> ---
->>   drivers/scsi/hisi_sas/hisi_sas_main.c  | 12 +++++++++---
->>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  7 +++++--
->>   drivers/scsi/libsas/sas_ata.c          |  5 +++++
->>   include/scsi/libsas.h                  |  2 ++
->>   4 files changed, 21 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c 
->> b/drivers/scsi/hisi_sas/hisi_sas_main.c
->> index 325d6d6a21c3..61686ead0027 100644
->> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
->> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
->> @@ -1777,9 +1777,6 @@ static int hisi_sas_I_T_nexus_reset(struct 
->> domain_device *device)
->>       struct device *dev = hisi_hba->dev;
->>       int rc;
->> -    if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
->> -        sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
->> -
->>       rc = hisi_sas_internal_task_abort_dev(sas_dev, false);
->>       if (rc < 0) {
->>           dev_err(dev, "I_T nexus reset: internal abort (%d)\n", rc);
->> @@ -1967,6 +1964,14 @@ static bool 
->> hisi_sas_internal_abort_timeout(struct sas_task *task,
->>       return false;
->>   }
->> +static void hisi_sas_end_eh(struct domain_device *dev)
->> +{
->> +    struct hisi_sas_device *sas_dev = dev->lldd_dev;
->> +
->> +    if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
->> +        sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
->> +}
->> +
->>   static void hisi_sas_port_formed(struct asd_sas_phy *sas_phy)
->>   {
->>       hisi_sas_port_notify_formed(sas_phy);
->> @@ -2083,6 +2088,7 @@ static struct sas_domain_function_template 
->> hisi_sas_transport_ops = {
->>       .lldd_write_gpio    = hisi_sas_write_gpio,
->>       .lldd_tmf_aborted    = hisi_sas_tmf_aborted,
->>       .lldd_abort_timeout    = hisi_sas_internal_abort_timeout,
->> +    .lldd_end_eh        = hisi_sas_end_eh,
->>   };
->>   void hisi_sas_init_mem(struct hisi_hba *hisi_hba)
->> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c 
->> b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
->> index 66fcb340b98e..abad57de4aee 100644
->> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
->> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
->> @@ -2433,15 +2433,18 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
->>               struct hisi_sas_device *sas_dev =
->>                   &hisi_hba->devices[device_id];
->>               struct domain_device *device = sas_dev->sas_device;
->> +            bool force_reset = true;
->>               dev_err(dev, "erroneous completion disk err dev id=%d 
->> sas_addr=0x%llx CQ hdr: 0x%x 0x%x 0x%x 0x%x\n",
->>                   device_id, itct->sas_addr, dw0, dw1,
->>                   complete_hdr->act, dw3);
->> -            if (is_ncq_err_v3_hw(complete_hdr))
->> +            if (is_ncq_err_v3_hw(complete_hdr)) {
->>                   sas_dev->dev_status = HISI_SAS_DEV_NCQ_ERR;
->> +                force_reset = false;
->> +            }
->> -            sas_ata_device_link_abort(device, true);
->> +            sas_ata_device_link_abort(device, force_reset);
->>           } else if (likely(iptt < HISI_SAS_COMMAND_ENTRIES_V3_HW)) {
->>               slot = &hisi_hba->slot_info[iptt];
->>               slot->cmplt_queue_slot = rd_point;
->> diff --git a/drivers/scsi/libsas/sas_ata.c 
->> b/drivers/scsi/libsas/sas_ata.c
->> index 77714a495cbb..25a064087311 100644
->> --- a/drivers/scsi/libsas/sas_ata.c
->> +++ b/drivers/scsi/libsas/sas_ata.c
->> @@ -534,11 +534,16 @@ void sas_ata_end_eh(struct ata_port *ap)
->>   {
->>       struct domain_device *dev = ap->private_data;
->>       struct sas_ha_struct *ha = dev->port->ha;
->> +    struct sas_internal *i = dev_to_sas_internal(dev);
->>       unsigned long flags;
->>       spin_lock_irqsave(&ha->lock, flags);
->>       if (test_and_clear_bit(SAS_DEV_EH_PENDING, &dev->state))
->>           ha->eh_active--;
->> +
->> +    if (i->dft->lldd_end_eh)
->> +        i->dft->lldd_end_eh(dev);
->> +
->>       spin_unlock_irqrestore(&ha->lock, flags);
->>   }
->> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
->> index 159823e0afbf..659395ef616e 100644
->> --- a/include/scsi/libsas.h
->> +++ b/include/scsi/libsas.h
->> @@ -683,6 +683,8 @@ struct sas_domain_function_template {
->>       int (*lldd_lu_reset)(struct domain_device *, u8 *lun);
->>       int (*lldd_query_task)(struct sas_task *);
->> +    void (*lldd_end_eh)(struct domain_device *dev);
->> +
->>       /* Special TMF callbacks */
->>       void (*lldd_tmf_exec_complete)(struct domain_device *dev);
->>       void (*lldd_tmf_aborted)(struct sas_task *task);
-> 
-> 
-> .
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
