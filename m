@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5C76C3AD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37D76C3AE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjCUTk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S229788AbjCUTl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjCUTkE (ORCPT
+        with ESMTP id S229871AbjCUTlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:40:04 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1402A9B1;
-        Tue, 21 Mar 2023 12:39:39 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id g18so16710870ljl.3;
-        Tue, 21 Mar 2023 12:39:39 -0700 (PDT)
+        Tue, 21 Mar 2023 15:41:51 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888D3567BD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:40:43 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id t15so14874563wrz.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:40:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679427576;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=38UUmK+a8srL5/S/qgYnYErIVIOrqwMhPrwp/fVYqb8=;
-        b=XsxUZeJ4RA77K5K/7CsRanhirut2lOLu9ZY8k7l1ilF7QrblYBDpPfEwcwamXXofl5
-         wJfpAbu3r6jzhw/nEJAdM91C3Um5s8LSVimMj043gDLdIZ8/C8C2q7qaF45Qux0cCkXy
-         ZE5smFlSe4kLahs7jX/RHDs75Dv/3IZ9hb2Bfvljd7IUC+dtNbzqB+XGli2QGFrypWE9
-         Mpj9Boya3yg9OPk4Po+3x8jIOoR/R7C4VhMHa3kMpQLUcPBlXOvL4P3IKnKALUM2kcwU
-         /uqGBTPHte8bZBuwHhYzM0fVOOamJhEII078uBiz32hPErrhcFtZGJP3qCoO6+tGuRGy
-         vv6Q==
+        d=bytedance.com; s=google; t=1679427634;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2zchVYrraM7s3AAvPCnvhbdIUl39F6C9hdQmcDKPK/Q=;
+        b=eHO+13aro+Q5+CFqTFTEYO/acPnKq92VXA1rMDfgODABgcYcvJlqbN+8jzb4pIojMl
+         h0PU/VR7YAe2ZQwP4QN/qgyAU7J+Xi2uc7QBgohOBHLHBldz3azXk/VpFYhLw123Q5bn
+         GnXsxlWdyhWU3B17VU/HWn0JCgMsKwZrQZdGyhlAXhv7Kh/nNP3uypKJiqMScZcA9CsO
+         9a3ui4pzLyihrUNZJtnk/Zqe/AG1q7ltAySlxJ9pj2EbnPvBMVc1/xZcJoLQS+JZgszj
+         WDKNrA0fcXnf9/h1ptbinmMggQwBmEd1BoQ4y+n1ybW+34gRPi+TpAVIB/zy2yLZNpvm
+         0MoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679427576;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=38UUmK+a8srL5/S/qgYnYErIVIOrqwMhPrwp/fVYqb8=;
-        b=fTqi05Ux6Ugcz+2KBNpFdIGlTn++7QqLt4dP2YR0VdHebWMhiBvoTTWBv4J7KG09ZS
-         +F2M7S2V3U2bf1tLUz7NHNyeqNrAyES32JSC38T0jyeURu+y4EubARZitpEw7OXeSJom
-         Uj3/CH4rtLntmcNvjoXEZTAV6YkRtSZHeqqAY8jXFiJAom+DnY1ivP4vuL2Ud8Gyaa7D
-         yWXrLWDHIdvmgaPtK17w2x+A8qyMGLV51UrA3U+sJiF2/whcJkdz03SXnbSd1CkcXcGn
-         HqU6DTMfdXFsFuX2lXlYzO20nEQSdxblLNfQp90beJKNvJf32l8EovG3A+SsWEArVKYF
-         KXlQ==
-X-Gm-Message-State: AO0yUKVxMCgkesuKy+mdZ55uYCX5u0yaSaM8582MZczne2OYMHT+vVuz
-        y8TTLJbfVzT7mRB1aEs96Ul7xY/Z/Go=
-X-Google-Smtp-Source: AK7set+mcDSP8AtMr8B1IAnEW8DFStaFZL+KpXtgV9GZ41alnbG3OMscIEVIiMJLLb7wFCfMP/lmIA==
-X-Received: by 2002:a05:651c:2d1:b0:298:9e31:f27a with SMTP id f17-20020a05651c02d100b002989e31f27amr1278224ljo.10.1679427576423;
-        Tue, 21 Mar 2023 12:39:36 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id v2-20020a2e9902000000b002986ff63c64sm2369857lji.47.2023.03.21.12.39.35
+        d=1e100.net; s=20210112; t=1679427634;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2zchVYrraM7s3AAvPCnvhbdIUl39F6C9hdQmcDKPK/Q=;
+        b=Gh9CabnKrnJ8aclfkY+Y8sVLRiYmMxOXOUNj8v/l46cf2Psdzxdwk1yWuhcb8EFCTc
+         JaO8Ojwk6EsxcfKa86GsRGq6Ij1cQC2M8JY1M3mvNmY9oU5NJhEbHvgdSkn1b3IBMBAv
+         7+2kJvQ2H+Z7YkbaGgSrwVWQrhjZU002LFzYqdmpSDkm0VBkiFU2j2A+kuCIbEhqieuP
+         PiD0fW8utf4/tSoIfYxEatw7G6onTa2s496YhXoUv0PMrpEKuc5PfeWe2g6ZXCgv4YSp
+         DVWcNjhZomjzDIAyN8plVtGKWL4cOuXJMlOOlOjlb7FaG7/4Shtoe+sM1ImOi0I1l7qT
+         OdqA==
+X-Gm-Message-State: AO0yUKXu1idiGNTq9iVaP1sJ1P4AmROaNlqxJCvdhQB0ud1jZuPOqlUw
+        xjTG45d3GPePrNRVNUL2ytmO7Q==
+X-Google-Smtp-Source: AK7set9JWBndoA6/LsUZnhg+S7mZ3EFpbG43ajzw6YNe+1yek1XVoxjdYeT6sHzfIxDgUfn9TjclWA==
+X-Received: by 2002:adf:fe51:0:b0:2cf:e689:e60e with SMTP id m17-20020adffe51000000b002cfe689e60emr3233898wrs.59.1679427634215;
+        Tue, 21 Mar 2023 12:40:34 -0700 (PDT)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:7a8a:d679:ba4e:61cf])
+        by smtp.gmail.com with ESMTPSA id a3-20020adffb83000000b002c561805a4csm12005026wrr.45.2023.03.21.12.40.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 12:39:35 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 22:39:33 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v7 0/5] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <20230321193933.iccqqlg5mgegcsed@mobilestation>
-References: <20230315012840.6986-1-cai.huoqing@linux.dev>
- <20230320121401.zkcjbqmghzacpffh@mobilestation>
- <ZBkXEzoZZlIy18xB@chq-MS-7D45>
- <20230321083407.5gc432ttjhwbi2um@mobilestation>
- <ZBmhTch4d2CG4TtH@chq-MS-7D45>
+        Tue, 21 Mar 2023 12:40:33 -0700 (PDT)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v16 0/8] Parallel CPU bringup for x86_64
+Date:   Tue, 21 Mar 2023 19:40:00 +0000
+Message-Id: <20230321194008.785922-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBmhTch4d2CG4TtH@chq-MS-7D45>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,138 +78,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 08:21:33PM +0800, Cai Huoqing wrote:
-> On 21 3月 23 11:34:07, Serge Semin wrote:
-> > On Tue, Mar 21, 2023 at 10:31:47AM +0800, Cai Huoqing wrote:
-> > > On 20 3月 23 15:14:01, Serge Semin wrote:
-> > > > Hi Cai
-> > > > 
-> > > > On Wed, Mar 15, 2023 at 09:28:31AM +0800, Cai Huoqing wrote:
-> > > > > Add support for HDMA NATIVE, as long the IP design has set
-> > > > > the compatible register map parameter-HDMA_NATIVE,
-> > > > > which allows compatibility for native HDMA register configuration.
-> > > > > 
-> > > > > The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> > > > > And the native HDMA registers are different from eDMA,
-> > > > > so this patch add support for HDMA NATIVE mode.
-> > > > > 
-> > > > > HDMA write and read channels operate independently to maximize
-> > > > > the performance of the HDMA read and write data transfer over
-> > > > > the link When you configure the HDMA with multiple read channels,
-> > > > > then it uses a round robin (RR) arbitration scheme to select
-> > > > > the next read channel to be serviced.The same applies when
-> > > > > youhave multiple write channels.
-> > > > > 
-> > > > > The native HDMA driver also supports a maximum of 16 independent
-> > > > > channels (8 write + 8 read), which can run simultaneously.
-> > > > > Both SAR (Source Address Register) and DAR (Destination Address Register)
-> > > > > are aligned to byte.
-> > > > 
-> > > > It seems like we are getting towards the series finalization. I'll
-> > > > test it out on my HW after v8 is submitted. Meanwhile could you please
-> > > > clarify whether you have a real device with DW HDMA engine on board?
-> > > 
-> > 
-> > > Our hardware is an AI Accelerartor(PCIE Card).
-> > > 
-> > > The device pci.ids is 1d22:3864
-> > > in https://github.com/pciutils/pciids/blob/master/pci.ids
-> > > line 24737,
-> > > 
-> > > "1d22  Baidu Technology
-> > >         3684  Kunlun AI Accelerator
-> > >         3685  Kunlun2 AI Accelerator [VF]"
-> > > 
-> > > And our device driver is not ready to upstream(will cost serveral
-> > > 
-> > > months to port DRM etc.),
-> > 
-> > Ok. Thanks for clarification. Could you please add me to the Cc-list of
-> > the AI-accelerator patch when it's ready to be submitted for review. I am
-> > not that familiar with the DRM-part, but would like to have a look at
-> > the DMA-related code.
+This version includes the following changes over v15:
+- Roll back to CPUHP_OFFLINE on failure in parallel bringup case.
+- Release trampoline_lock earlier, just before setup_gdt.
+- Rebase to x86/apic, Linux 6.3-rc3 with no change in boot time
+  improvement over v15.
+  (This already has some of the commits from v15 merged).
 
-> Sure, I'll Cc you if I send the patches.
+Thanks,
+Usama
 
-Great! Thanks in advance.
+Changes across versions:
+v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+    in preparation for more parallelisation.
+v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+    avoid scribbling on initial_gs in common_cpu_up(), and to allow all
+    24 bits of the physical X2APIC ID to be used. That patch still needs
+    a Signed-off-by from its original author, who once claimed not to
+    remember writing it at all. But now we've fixed it, hopefully he'll
+    admit it now :)
+v5: rebase to v6.1 and remeasure performance, disable parallel bringup
+    for AMD CPUs.
+v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
+    reused timer calibration for secondary CPUs.
+v7: [David Woodhouse] iterate over all possible CPUs to find any existing
+    cluster mask in alloc_clustermask. (patch 1/9)
+    Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
+    0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+    Included sanity checks for APIC id from 0x0B. (patch 6/9)
+    Removed patch for reusing timer calibration for secondary CPUs.
+    commit message and code improvements.
+v8: Fix CPU0 hotplug by setting up the initial_gs, initial_stack and
+    early_gdt_descr.
+    Drop trampoline lock and bail if APIC ID not found in find_cpunr.
+    Code comments improved and debug prints added.
+v9: Drop patch to avoid repeated saves of MTRR at boot time.
+    rebased and retested at v6.2-rc8.
+    added kernel doc for no_parallel_bringup and made do_parallel_bringup
+    __ro_after_init.
+v10: Fixed suspend/resume not working with parallel smpboot.
+     rebased and retested to 6.2.
+     fixed checkpatch errors.
+v11: Added patches from Brian Gerst to remove the global variables initial_gs,
+     initial_stack, and early_gdt_descr from the 64-bit boot code
+     (https://lore.kernel.org/all/20230222221301.245890-1-brgerst@gmail.com/).
+v12: Fixed compilation errors, acquire tr_lock for every stack setup in
+     trampoline_64.S.
+     Rearranged commits for a cleaner git history.
+v13: Fix build error with CONFIG_FORCE_NR_CPUS.
+     Commit message improved, typos fixed and extra comments added.
+v14: Enable parallel bringup for SEV-ES guests.
+v15: use vendor parallel_smp when platform has CC_ATTR_GUEST_STATE_ENCRYPT.
+     Call smpboot_restore_warm_reset_vector incase any of the steps in
+     native_cpu_up fail.
+     Reset stale stack and kasan unpoison in bringup_cpu
+     Release trampoline_lock a bit earlier.
+v16: Roll back to CPUHP_OFFLINE on failure in parallel bringup case.
+     Release trampoline_lock earlier, just before setup_gdt.
+     Rebase to x86/apic (Linux 6.3-rc3).
 
-> 
-> By the way, Why use native hdma:
-> 
-> Our device v1 also use dw-edma. But we find that navtive HDMA work better
-> 
-> in SRIOV on, channel CSR can be map to every VF instead of some global
-> 
-> regiter must in PF. So v2 use native hdma.
+ 
+David Woodhouse (8):
+  cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+  cpu/hotplug: Reset task stack state in _cpu_up()
+  cpu/hotplug: Add dynamic parallel bringup states before
+    CPUHP_BRINGUP_CPU
+  x86/smpboot: Split up native_cpu_up into separate phases and document
+    them
+  x86/smpboot: Support parallel startup of secondary CPUs
+  x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+  x86/smpboot: Serialize topology updates for secondary bringup
+  x86/smpboot: Allow parallel bringup for SEV-ES
 
-Good to know. Thanks.
+ .../admin-guide/kernel-parameters.txt         |   3 +
+ arch/x86/coco/core.c                          |   5 +
+ arch/x86/include/asm/coco.h                   |   1 +
+ arch/x86/include/asm/cpu.h                    |   1 +
+ arch/x86/include/asm/realmode.h               |   3 +
+ arch/x86/include/asm/sev-common.h             |   3 +
+ arch/x86/include/asm/smp.h                    |  13 +-
+ arch/x86/include/asm/topology.h               |   2 -
+ arch/x86/kernel/acpi/sleep.c                  |   9 +-
+ arch/x86/kernel/apic/apic.c                   |   2 +-
+ arch/x86/kernel/cpu/common.c                  |   6 +-
+ arch/x86/kernel/cpu/topology.c                |   3 +-
+ arch/x86/kernel/head_64.S                     |  97 +++++
+ arch/x86/kernel/smpboot.c                     | 344 +++++++++++++-----
+ arch/x86/realmode/init.c                      |   3 +
+ arch/x86/realmode/rm/trampoline_64.S          |  27 +-
+ arch/x86/xen/smp_pv.c                         |   4 +-
+ include/linux/cpuhotplug.h                    |   2 +
+ include/linux/smpboot.h                       |   7 +
+ kernel/cpu.c                                  |  61 +++-
+ kernel/smpboot.h                              |   2 -
+ 21 files changed, 481 insertions(+), 117 deletions(-)
 
--Serge(y)
+-- 
+2.25.1
 
-> 
-> Thanks,
-> -Cai
-> 
-> > 
-> > -Serge(y)
-> > 
-> > > 
-> > > but I have taken this DW eDMA core into our driver test.
-> > > 
-> > > Thanks
-> > > Cai-
-> > > 
-> > > > You keep submitting the DW eDMA driver core update, but there is no
-> > > > glue-driver or low-level device driver patch for a real device which
-> > > > would set the EDMA_MF_HDMA_NATIVE mapping.
-> > > > 
-> > > > -Serge(y)
-> > > > 
-> > > > > 
-> > > > > Cai Huoqing (2):
-> > > > >   dmaengine: dw-edma: Add support for native HDMA
-> > > > >   dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
-> > > > > 
-> > > > > Cai huoqing (3):
-> > > > >   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
-> > > > >     dw_edma_plat_ops
-> > > > >   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
-> > > > >     abstract controller operation
-> > > > >   dmaengine: dw-edma: Add HDMA DebugFS support
-> > > > > 
-> > > > > v6->v7:
-> > > > >   [1/5]
-> > > > >   1.Update the commit log.
-> > > > >   [2/5]
-> > > > >   2.Revert dw_edma_core_handle_int back to dw-edma-core.h.
-> > > > >   3.Fix code style.
-> > > > >   [3/5]
-> > > > >   4.Move the change of register file from patch[4/5] to patch[3/5].
-> > > > >   5.Fix code style.
-> > > > > 
-> > > > > v6 link:
-> > > > >   https://lore.kernel.org/lkml/20230310032342.17395-1-cai.huoqing@linux.dev/
-> > > > > 
-> > > > >  drivers/dma/dw-edma/Makefile                 |   8 +-
-> > > > >  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
-> > > > >  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
-> > > > >  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
-> > > > >  drivers/dma/dw-edma/dw-edma-v0-core.c        |  91 ++++--
-> > > > >  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
-> > > > >  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 277 +++++++++++++++++++
-> > > > >  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
-> > > > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 176 ++++++++++++
-> > > > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
-> > > > >  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 130 +++++++++
-> > > > >  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
-> > > > >  include/linux/dma/edma.h                     |   7 +-
-> > > > >  13 files changed, 785 insertions(+), 107 deletions(-)
-> > > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
-> > > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
-> > > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-> > > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-> > > > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> > > > > 
-> > > > > -- 
-> > > > > 2.34.1
-> > > > > 
