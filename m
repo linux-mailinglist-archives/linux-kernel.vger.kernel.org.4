@@ -2,95 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5A86C3BA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C2E6C3BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCUUVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S230113AbjCUUVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCUUVJ (ORCPT
+        with ESMTP id S229651AbjCUUVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:21:09 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80E424BC9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:19:56 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id w9so64555738edc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:19:56 -0700 (PDT)
+        Tue, 21 Mar 2023 16:21:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCF43593;
+        Tue, 21 Mar 2023 13:20:38 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LGnWiH024686;
+        Tue, 21 Mar 2023 20:20:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-id :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=xX/XFEUvIt+HZH3nOoO6waag4fYzuF2IAJvsMzzjZWI=;
+ b=Z1HnNhGjKQN93FNNiITeTT5C1PS7pTWMK9iONT9y/UWG0S3IzdaXSS7FpNNL0REyTCVW
+ DJqnNmBstspzsdMmLvhiTpcyCOqJJPtIgbgXQj4xrv7+wqYowE8m2TsdN+rHeMTdNAHl
+ 8N91+FhMFq75n77GQc7fmVRgY2kQzsTgq5H31QL105sIosrhpQsB049jyUbLAGZOF8kP
+ RF7Yinvq6O8QlSbxoQHkO8xOlSizJpNdT+SMypqshaY6pWiHjPiygUlk7nk5totHlADQ
+ MpsdxzGXMAb4knHxC1vD4tA8Ao2gCG6MOljZxO7fEYxs4bF+bivhYDvlp1qnomZe7TQW yg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pd5uuf8sa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 20:20:14 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32LK9E94034020;
+        Tue, 21 Mar 2023 20:20:13 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pfkc60fb4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 20:20:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=neZaA28e+Y1fSFH4DIVCRJC3IkTnje3Gkl/XSsDaqyqJk5n0uv7Ws2SZ1fcrk6umJLKguMfjFABOAOIPi5D35IbppR5XIeSnz76JASAYOA/JMnldpkMDZppf3M32a7sgOnxUD1pR/5Y2tz/UzNXcvrlGytAME1y4Sise/ZtjTtxDQCWKqdp6DPI/dXucNppV1jgEgXp9qnpWsMWzlFMTnjN/pYaGFesrFZyN2BN2o3c29n/8Jqpo3FcubOSNxbC7GkjYX/itWhSpi28aozhKXfnGqySytyVxopY+ndwKpGXm/7y8P724aekr6Ip6YvXDIyB9hisvfLRJ7N61dM2ppA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xX/XFEUvIt+HZH3nOoO6waag4fYzuF2IAJvsMzzjZWI=;
+ b=ZxC2gOrMrSLbZjw3wrRybzEhn4fljrezK6k9eHNkPpGEFu/YGYZuLByIf789+0lfFco8/DCI38U+rgaPTeRXuTi4UQn1W1MqY9tUwd+owM+snnBr4zPef4Qk44X8tXkcwYLomKyeM8RK1BKX81pLo9PkhhSXxb07uHDpM3UnIHipl5FhJStDK/wcIeo1caMaLejkIB/itA2DRihWg17afAh7HcxHiXuJhnfkZvthcXu0U049wWMG00Li/AysCCuLLLw6kovcMIfksXzIIZbNmFsleIQk/PbssvqJxGyJDqKmRHIjugPfjSIdp/dzKlDV0XsN7mKOItls7OldQkriZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679429992;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zilK0d0Uf3iuezoEwzx+OD3k9KAQ8GpwZUTkAXC8lkI=;
-        b=wtBFPpjIV7KiImWUl3z6Q64vdi8IywvzOJPBt1juWZyXgq9JY5obeloe6CMlt3c8l2
-         n4OhQYP1hm4QknTg/dqNXV6G8smfonfZsYEP/EWnLLMP9TQPyE42cTukUZsAVj2uWLfE
-         p5nOus3r9n6uY1kH2T0EFUPWiXMzPQV5MicLhUI3PLnV0aKYebzaXU3t3tmlHorYeMKY
-         BZC7d94PaBML8zRpZ+1+C30SpztE+cm3EygWFUgF0ihhe3OBP2g/5zEoyWRJBTnOLhxg
-         jq6A+33Mx28bPUnH4eECNaF5zKUIXmj4wZw59AbTs7ZKayTRLjm1dJaDhPPHDCyMGZqL
-         lTQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679429992;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zilK0d0Uf3iuezoEwzx+OD3k9KAQ8GpwZUTkAXC8lkI=;
-        b=Gug/MlttbKF0sgYDKNm9EMnzbV9lDpSP90OP4slcEht5Pd1JF99k6Hayux2SabxnGv
-         vRg7duAJruqP6BmxdRQlGZbvhq4F+bTg4/pr/no/cGsrcsPVBCUnWFH6UeRY4gVt/62K
-         kPuj/0vSCINpdVUPvqKoCcHFykrRsjTa6SQZ3lghiKk2QnDHEdLsAPi47dlUlOh3zySG
-         cbz8SoqMkR5jgU01AYmg0CSGxVR9a36gkXqOgM577IBikPDTYx1FErpYZlphpcwSLpbd
-         8iL6U14gRMrLw+LLDDdVEJI8dZX7jMl/RZyp+z4XAcRxZTIx1uMOZ2pTo7wiHs6iC6EZ
-         7FFw==
-X-Gm-Message-State: AO0yUKVZtOWs1gN0xxkGIQBgepx4bxwpoRx9WKYCrUhdFwNrzAnkDN0h
-        NTRErwm3zwDleM7gY2e0SBv5IQ==
-X-Google-Smtp-Source: AK7set/P2f6JVMVgK8V1xGvovTLyqEKgqENGNj+wWyaiirzrrCld75wthFFfg2Vyka2tWaiswC5O5w==
-X-Received: by 2002:a17:906:7b96:b0:925:5549:f81c with SMTP id s22-20020a1709067b9600b009255549f81cmr4394298ejo.6.1679429991780;
-        Tue, 21 Mar 2023 13:19:51 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id fi9-20020a170906da0900b00931faf03db0sm5915177ejb.27.2023.03.21.13.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 13:19:51 -0700 (PDT)
-Message-ID: <3fe1023a-99b7-e905-20c1-12a51b57f701@linaro.org>
-Date:   Tue, 21 Mar 2023 20:19:48 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v11 16/26] firmware: qcom_scm: Register Gunyah platform
- ops
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xX/XFEUvIt+HZH3nOoO6waag4fYzuF2IAJvsMzzjZWI=;
+ b=Ma+N2WgNXy3qUCPBoy7MXNgmGyEdRUj2rIuZ4V+OnmUbsGOb0p9uefyPYwtkoVwSiyHP8FWLtyrWfRnugiX9zJiT+XjJawcTiQQx1onMcthfy6WFpzcn9GIgpbVsv6jupam39d8pkHzywR3BOTT/NW4RBrxjCVyEz+mc99zKnfw=
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
+ by MN2PR10MB4160.namprd10.prod.outlook.com (2603:10b6:208:1df::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 20:20:11 +0000
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::5c2f:5e81:b6c4:a127]) by BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::5c2f:5e81:b6c4:a127%8]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 20:20:10 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+Subject: [GIT PULL] nfsd fixes for 6.3-rc3
+Thread-Topic: [GIT PULL] nfsd fixes for 6.3-rc3
+Thread-Index: AQHZXDKJUkc5buE1fUeDj3ONlvU3Lw==
+Date:   Tue, 21 Mar 2023 20:20:10 +0000
+Message-ID: <2AD73E1B-E81B-4553-9975-11FA02841471@oracle.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-17-quic_eberman@quicinc.com>
- <6c2e3fac-1bd8-be10-6e10-e200ee9b55f2@linaro.org>
- <bc68f88e-81fd-e24c-30b6-73bff4652bae@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <bc68f88e-81fd-e24c-30b6-73bff4652bae@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.2)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|MN2PR10MB4160:EE_
+x-ms-office365-filtering-correlation-id: af51ced7-291f-4dc3-7bbc-08db2a49abf1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dzt/f2dpnHBhV6xMoVI2LlcaWk+RTdiXE+UhJZchZBh+tJvO6fhBFxYX4r0+BCod8cwhk/hW2o8pfghMGMClr1xR5J2xQlI4W+jrKiJbr12TWTzKugmHjp9r85kiFosI9U55cuMkaL63zWuIP9B5jhM5cK9ASnoVdSdae7R9CSFBHfqBxYnV9NhvRdktDyu3J5iOm3bWZTjfo5U5O/FATiZVyQELcrjQMxUPtoDGq0l+sMQhHILnGSbY25q60JPh+ZzmXy0PfEJq/W0fwrsUm7sq/DmdBzCgt8KbwV2F+oJla79EnNvjuzP4f9oojY6eHXr/mDW8lq6La2TXRRlyJKvv5y6JbDq6W6ho7dR7RS/ekPUoM5Br9OUIBUKbWesBGBHXtwRLJHPfol8o5ujIVW6SgmDa5MjP3w2L3SElcyL9BtyAlQjmzq/HcB3fdHeA84gV8cmL19iPYN+yR0CmetAgSbgZ33gJx9TyoktNmtmSiu6IpuWCe81wkOL1Cjgwe3hsz1d1qbh+HdELVv63p3iOfRTxHhjDK4fRLqJnQDt5ClSv2KlmCzzs3nt9zxt2avubTgjIq/ERzRgPSV8f61BZdv69qKYENUWAYeQuLESA1RH5I2cU0VtgHwOi0bHxt6U6kjVidwPSbJHlqxyZrpLFK2bpPQbg6czz3bMHEz/H7etCD2l/otpeZHCP3xxorB4TmTye9QIc9OMWDLE/eT9Wmi4VKzssDW+yLvcI3Pg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(136003)(376002)(396003)(39860400002)(451199018)(8936002)(5660300002)(4744005)(41300700001)(33656002)(36756003)(38070700005)(86362001)(38100700002)(2906002)(122000001)(4326008)(966005)(6486002)(83380400001)(478600001)(54906003)(2616005)(186003)(71200400001)(26005)(6512007)(6506007)(8676002)(66446008)(6916009)(316002)(91956017)(66556008)(76116006)(66946007)(64756008)(66476007)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DPiOnj/XuVJS0rO9dSf4fuWpbGbMrmdMk+cB3QQOyvjHN1Qcm0vHw65NOe00?=
+ =?us-ascii?Q?gZI7R6Cd+bRNLIwKA8RrMQQ2sK/tzo1dq+axmCLPSxlEpXdSmZ1IJJz5Mws6?=
+ =?us-ascii?Q?3h117Zqp1EGiww6gXEkjhABd6oocrKyNuIiKrXSANz2hBD2i1ZLPja5qAubT?=
+ =?us-ascii?Q?IzGHR1j81fwFrUJzJNdEahl6IEem1Jc8n+gVzH5NvPSGF2+vblD1G3Qfq0SQ?=
+ =?us-ascii?Q?avO5n5Us3I3jIBfIG/CrKwnmH4DPBhCsvVhPYPi3b9hHVvk0ntx5/S0bDswi?=
+ =?us-ascii?Q?BVhshRS2ky4j44UpigYRNfkxnBdXzQpdZuoNPDsAj0+gYumIpK2Fehsmy4Qa?=
+ =?us-ascii?Q?BZxST+4lb43/r1UoiJ0nS6r7K6hz8i/Qm2/jO5V6BZv4LGtszcf3u9EdnxPi?=
+ =?us-ascii?Q?KQ92HAXPubQPO6M/ZTOleRV16PxhfZ1O2c2skQ5afKwkjiuga2mpT5Dw4q9X?=
+ =?us-ascii?Q?7gCsnWNrM7nXMB5hQ5KvZuhvT7qljPToqdlltTZVXpEEzhsQ/WASd2/s5LQt?=
+ =?us-ascii?Q?5knji8bSnNam3032gUnddprm1nAYQYmoQ/+yOuHAYeNkLwPAQokmUOOBQTG5?=
+ =?us-ascii?Q?IN5tfuZbwRrfrA+YBYN61vebEGmzTQmvtmNePA6rcsM3CQSdfSmmRit1I/cZ?=
+ =?us-ascii?Q?tFXCIeiJU13dJOkHxKB9+qwfk6HVufbNTNanXyU7hbK0Mx61ILsia0RvuTRB?=
+ =?us-ascii?Q?rXPkQjP7fUOj2P5hklYqqdF6pFxigJMs+vePgZ/OE7VF+83xJMt6MEpYGKxu?=
+ =?us-ascii?Q?csQUjSgaVKuZCyPrNtfx3zfyUCVXISGaKj0N54SA5Bu9MCDMcXMiZE8iqFK/?=
+ =?us-ascii?Q?AD6se1dTo3hW3d55pvZia09lEWL7Br2XAbeP4Zcj3AngujxQsBDOMR++vZwT?=
+ =?us-ascii?Q?jfFX7ojvAoiC3YrycvgaeMxvnrtxsZ5vA7vMn2OngAd4r1uxBbJuEn5/b6RZ?=
+ =?us-ascii?Q?EnC42kt/LrY+YGDRj+oedFO7NGrlOfEtkTsp1SowprwYtPizPrwVpmoIlPUb?=
+ =?us-ascii?Q?TbRF8KCG+/GB744gOyU2EZE81s6Rgw1lLoK6bh0QD4Nc5pypa0DJ+Gq9iEpQ?=
+ =?us-ascii?Q?xp7r9v7Qas+k0d4SgRA8tLBT9Xzvg+RiZfvxc4IvV9LdlV6x+LvtFeQjlnSh?=
+ =?us-ascii?Q?ErdDSvAMYI6f423raWZBfMkxBN/PEngDxKESvZD0Dk0LikVSnS7cjTbf4YgY?=
+ =?us-ascii?Q?2IMEqCQHtPRTT1Tr2KByrhPR0H/lZybw+75FTec9iXd9jyn6A9YCwc1GQGQa?=
+ =?us-ascii?Q?UIeZAlXkOhUvGtt0Zf/+RyH2fJywcaoGHOJipJs49fCTi8ax5eziLR+AgtTp?=
+ =?us-ascii?Q?oGGXNF+yl8CP+llZvbO+4jFV0QAE09c9Dj+lDZRGqs6FfUCYbDVfr4t+fCk6?=
+ =?us-ascii?Q?7+8kisZ3R1DmnpA3vSCMXwzGglbzP8TCe8z2WdbEm7Ng5Zdr38/m+E7o/PU4?=
+ =?us-ascii?Q?o2k2YE6WF2FSiwtJ6QNqyM4TeMKR+PXK/byEkFXhhDtK+hrDt6J4pQOr8of2?=
+ =?us-ascii?Q?oiXp7rX1HyYRQ6y/6u/DaeqOtKj/+tmvlwugtGP27QNparGYZ4Uz3ryRA4Xz?=
+ =?us-ascii?Q?LQOd4twvD1vztSbXi1gngdASB5HrKZxCaIGg8i6zheJaKBlEY3xzQ1Zv/CTG?=
+ =?us-ascii?Q?lA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <5CAFE5C96ADF8841849E33FFEDA55A35@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: sSKT8k4Pi8yPtxk2Rzai67B7xhZBXlMZoZWHF+gmGDO5ZZ0SjINZRpC6urM9e2kzxw++rLPvk/QaJvtEuKVyhaL08+I2OYuw2XCk/UbhOKyBooxyRO08BJi+sMpoB36qCY4U4wO8KyALIqalZ5wVXQbOKkj9cD8XMlASYQtmeOPlY8FJVfhwtwtewM+OxfiDAVQJpl5jp1lnOHu+jpeQoCkDi/q0q4ch3BneeyFsAel3lf4hjvRsasl72zA1gUoPbZuJ4vSt97xg25T/16mXN+wAiPetGzvBc0hluXoVMDIQc9tf+HuP52Od4qVPGgYDC0dS3GWcW5KDbC4MW6BtCe82hU9//cVEP3avGyQ06IKpQOkWkvfXnjVJA3f2x82LHYb2gZA3pTwBRl5kSRf19Rh/OxErNReTgPGKpOB3RTSF0p8bjC3T/eoNlzG9BIsAPERP6MVinbCGeR+XfPMj7B717a2qNe/PIa/Q+ZwIh9Nx5BLNI6BqYmfAEafj1/UuaqdCxuz6ejPa4Oeh0DAk/uIaQDRzHyX0gaTsy3xnFZYePsUQEhpqoZIkNr71b/J3NaR6OxSIPbJes8bgnrMjTFgsi5QHHMS/Np6xVLziqp8+r/D8Uz13noLmjf/u8WUXt2x6MQc6GyQ2KnVb9FNtC8wq9A6ufgqoDnAXAXsSrxmWLOEe1S9AP2P8GAYhfnBA/gSZ9Gk6nUy48jM4VIY3ZB82YqKeeWQ9l53l5FPQI22MfnRX711xrpeVXRnPxeFOXR1eheujpevkqS6241YAlNW/eYe+MBqZy6sGkvSmBCoXxQFuk+4Vd8iWM5fOsoQAgdxq4gHMqt8/Jw7SyQKvuIfMvrl+aFLF3LjQRjji1m4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af51ced7-291f-4dc3-7bbc-08db2a49abf1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 20:20:10.8453
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: s1OT8YpGwsl08ZOhSvbjV0jWsBPmlK7ccFFiEY15jBsosyTYnHnjKI4hEJFSLEfwRZ1fJix7zb/Rfst1dlPTTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4160
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303210162
+X-Proofpoint-GUID: CI8gv5kh9jHHjtrwjWM2JnRvhTTM-0JV
+X-Proofpoint-ORIG-GUID: CI8gv5kh9jHHjtrwjWM2JnRvhTTM-0JV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,394 +150,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus -
+
+The following changes since commit 9ca6705d9d609441d34f8b853e1e4a6369b3b171=
+:
+
+  SUNRPC: Fix a server shutdown leak (2023-03-08 08:46:41 -0500)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6=
+.3-3
+
+for you to fetch changes up to 27c934dd8832dd40fd34776f916dc201e18b319b:
+
+  nfsd: don't replace page in rq_pages if it's a continuation of last page =
+(2023-03-17 18:18:15 -0400)
+
+----------------------------------------------------------------
+nfsd-6.3 fixes:
+- Fix a crash during NFS READs from certain client implementations
+- Address a minor kbuild regression in v6.3
+
+----------------------------------------------------------------
+Chuck Lever (1):
+      NFS & NFSD: Update GSS dependencies
+
+Jeff Layton (1):
+      nfsd: don't replace page in rq_pages if it's a continuation of last p=
+age
+
+ fs/nfs/Kconfig  | 2 +-
+ fs/nfsd/Kconfig | 2 +-
+ fs/nfsd/vfs.c   | 9 ++++++++-
+ 3 files changed, 10 insertions(+), 3 deletions(-)
+
+--
+Chuck Lever
 
 
-On 21/03/2023 18:40, Elliot Berman wrote:
-> 
-> 
-> On 3/21/2023 7:24 AM, Srinivas Kandagatla wrote:
->> Hi Elliot,
->>
->> On 04/03/2023 01:06, Elliot Berman wrote:
->>> Qualcomm platforms have a firmware entity which performs access control
->>> to physical pages. Dynamically started Gunyah virtual machines use the
->>> QCOM_SCM_RM_MANAGED_VMID for access. Linux thus needs to assign access
->>> to the memory used by guest VMs. Gunyah doesn't do this operation for us
->>> since it is the current VM (typically VMID_HLOS) delegating the access
->>> and not Gunyah itself. Use the Gunyah platform ops to achieve this so
->>> that only Qualcomm platforms attempt to make the needed SCM calls.
->>>
->>> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->>> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->>> ---
->>>   drivers/firmware/Kconfig       |   2 +
->>>   drivers/firmware/qcom_scm.c    | 100 +++++++++++++++++++++++++++++++++
->>>   include/linux/gunyah_rsc_mgr.h |   2 +-
->>>   3 files changed, 103 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
->>> index b59e3041fd62..b888068ff6f2 100644
->>> --- a/drivers/firmware/Kconfig
->>> +++ b/drivers/firmware/Kconfig
->>> @@ -214,6 +214,8 @@ config MTK_ADSP_IPC
->>>   config QCOM_SCM
->>>       tristate
->>> +    select VIRT_DRIVERS
->>> +    select GUNYAH_PLATFORM_HOOKS
->>>
->>
->> I still have concerns with this selects in Kconfig on older Qualcomm 
->> platforms that use SCM and do not have GUNYAH.
->>
->> In our last discussing you mentioned the requirement for
->> "CONFIG_GUNYAH=y and CONFIG_QCOM_SCM=m"
->>
->> I think that should be doable and remove selecting if you can make a 
->> separate GUNYAH_QCOM_PLATFORM_HOOKS driver
->>
->> Does this work?
-> 
-> This works for Android and all the Qualcomm vendor (downstream) 
-> platforms where we can explicitly load modules. I don't think this 
-> module would be implicitly loaded by any kernel mechanism.
-
-We could also load this module based on UUID match at the gunyah core 
-level too, if that helps.
-
-
---srini
-
-> 
->>  >----------------------->cut<-------------------------------
->>  From 1fb7995aecf17caefd09ffb516579bc4ac9ac301 Mon Sep 17 00:00:00 2001
->> From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> Date: Tue, 21 Mar 2023 13:34:02 +0000
->> Subject: [PATCH] virt: gunyah: add qcom platform hooks
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> ---
->>   drivers/firmware/Kconfig                      |  2 --
->>   drivers/firmware/qcom_scm.c                   | 14 +++-----
->>   drivers/virt/gunyah/Kconfig                   |  5 +++
->>   drivers/virt/gunyah/Makefile                  |  1 +
->>   .../virt/gunyah/gunyah_qcom_platform_hooks.c  | 35 +++++++++++++++++++
->>   include/linux/firmware/qcom/qcom_scm.h        |  3 ++
->>   6 files changed, 48 insertions(+), 12 deletions(-)
->>   create mode 100644 drivers/virt/gunyah/gunyah_qcom_platform_hooks.c
->>
->> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
->> index b888068ff6f2..b59e3041fd62 100644
->> --- a/drivers/firmware/Kconfig
->> +++ b/drivers/firmware/Kconfig
->> @@ -214,8 +214,6 @@ config MTK_ADSP_IPC
->>
->>   config QCOM_SCM
->>       tristate
->> -    select VIRT_DRIVERS
->> -    select GUNYAH_PLATFORM_HOOKS
->>
->>   config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
->>       bool "Qualcomm download mode enabled by default"
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index 5273cf64ee2a..194ea2bc9a1d 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -1301,7 +1301,7 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 
->> payload_reg, u32 payload_val,
->>   }
->>   EXPORT_SYMBOL(qcom_scm_lmh_dcvsh);
->>
->> -static int qcom_scm_gh_rm_pre_mem_share(struct gh_rm *rm, struct 
->> gh_rm_mem_parcel *mem_parcel)
->> +int qcom_scm_gh_rm_pre_mem_share(struct gh_rm_mem_parcel *mem_parcel)
->>   {
->>       struct qcom_scm_vmperm *new_perms;
->>       u64 src, src_cpy;
->> @@ -1359,8 +1359,9 @@ static int qcom_scm_gh_rm_pre_mem_share(struct 
->> gh_rm *rm, struct gh_rm_mem_parce
->>       kfree(new_perms);
->>       return ret;
->>   }
->> +EXPORT_SYMBOL_GPL(qcom_scm_gh_rm_pre_mem_share);
->>
->> -static int qcom_scm_gh_rm_post_mem_reclaim(struct gh_rm *rm, struct 
->> gh_rm_mem_parcel *mem_parcel)
->> +int qcom_scm_gh_rm_post_mem_reclaim(struct gh_rm_mem_parcel *mem_parcel)
->>   {
->>       struct qcom_scm_vmperm new_perms;
->>       u64 src = 0, src_cpy;
->> @@ -1388,11 +1389,7 @@ static int 
->> qcom_scm_gh_rm_post_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_pa
->>
->>       return ret;
->>   }
->> -
->> -static struct gh_rm_platform_ops qcom_scm_gh_rm_platform_ops = {
->> -    .pre_mem_share = qcom_scm_gh_rm_pre_mem_share,
->> -    .post_mem_reclaim = qcom_scm_gh_rm_post_mem_reclaim,
->> -};
->> +EXPORT_SYMBOL_GPL(qcom_scm_gh_rm_post_mem_reclaim);
->>
->>   static int qcom_scm_find_dload_address(struct device *dev, u64 *addr)
->>   {
->> @@ -1597,9 +1594,6 @@ static int qcom_scm_probe(struct platform_device 
->> *pdev)
->>       if (download_mode)
->>           qcom_scm_set_download_mode(true);
->>
->> -    if (devm_gh_rm_register_platform_ops(&pdev->dev, 
->> &qcom_scm_gh_rm_platform_ops))
->> -        dev_warn(__scm->dev, "Gunyah RM platform ops were already 
->> registered\n");
->> -
->>       return 0;
->>   }
->>
->> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
->> index bd8e31184962..a9c48d6518f7 100644
->> --- a/drivers/virt/gunyah/Kconfig
->> +++ b/drivers/virt/gunyah/Kconfig
->> @@ -16,6 +16,11 @@ config GUNYAH
->>   config GUNYAH_PLATFORM_HOOKS
->>       tristate
->>
->> +config GUNYAH_QCOM_PLATFORM_HOOKS
->> +    tristate "Gunyah Platform hooks for Qualcomm"
->> +        depends on ARCH_QCOM && QCOM_SCM
->> +    depends on GUNYAH
->> +
->>   config GUNYAH_VCPU
->>       tristate "Runnable Gunyah vCPUs"
->>       depends on GUNYAH
->> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
->> index 7347b1470491..c33f701bb5c8 100644
->> --- a/drivers/virt/gunyah/Makefile
->> +++ b/drivers/virt/gunyah/Makefile
->> @@ -2,6 +2,7 @@
->>
->>   obj-$(CONFIG_GUNYAH) += gunyah.o
->>   obj-$(CONFIG_GUNYAH_PLATFORM_HOOKS) += gunyah_platform_hooks.o
->> +obj-$(CONFIG_GUNYAH_QCOM_PLATFORM_HOOKS) += gunyah_qcom_platform_hooks.o
->>
->>   gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
->>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
->> diff --git a/drivers/virt/gunyah/gunyah_qcom_platform_hooks.c 
->> b/drivers/virt/gunyah/gunyah_qcom_platform_hooks.c
->> new file mode 100644
->> index 000000000000..3332f84134d3
->> --- /dev/null
->> +++ b/drivers/virt/gunyah/gunyah_qcom_platform_hooks.c
->> @@ -0,0 +1,35 @@
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/firmware/qcom/qcom_scm.h>
->> +#include <linux/gunyah_rsc_mgr.h>
->> +
->> +static int qcom_gh_rm_pre_mem_share(struct gh_rm *rm, struct 
->> gh_rm_mem_parcel *mem_parcel)
->> +{
->> +    return qcom_scm_gh_rm_pre_mem_share(mem_parcel);
->> +}
->> +
->> +static int qcom_gh_rm_post_mem_reclaim(struct gh_rm *rm, struct 
->> gh_rm_mem_parcel *mem_parcel)
->> +{
->> +    return qcom_scm_gh_rm_post_mem_reclaim(mem_parcel);
->> +}
->> +
->> +static struct gh_rm_platform_ops qcom_gh_platform_hooks_ops = {
->> +    .pre_mem_share = qcom_gh_rm_pre_mem_share,
->> +    .post_mem_reclaim = qcom_gh_rm_post_mem_reclaim,
->> +};
->> +
->> +static int __init qcom_gh_platform_hooks_register(void)
->> +{
->> +    return gh_rm_register_platform_ops(&qcom_gh_platform_hooks_ops);
->> +}
->> +
->> +static void __exit qcom_gh_platform_hooks_unregister(void)
->> +{
->> +    gh_rm_unregister_platform_ops(&qcom_gh_platform_hooks_ops);
->> +}
->> +
->> +module_init(qcom_gh_platform_hooks_register);
->> +module_exit(qcom_gh_platform_hooks_unregister);
->> +
->> +MODULE_DESCRIPTION("Qualcomm Technologies, Inc. Gunyah Platform Hooks 
->> driver");
->> +MODULE_LICENSE("GPL v2");
->> diff --git a/include/linux/firmware/qcom/qcom_scm.h 
->> b/include/linux/firmware/qcom/qcom_scm.h
->> index 1e449a5d7f5c..9b0d33db803d 100644
->> --- a/include/linux/firmware/qcom/qcom_scm.h
->> +++ b/include/linux/firmware/qcom/qcom_scm.h
->> @@ -121,5 +121,8 @@ extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 
->> payload_reg, u32 payload_val,
->>                     u64 limit_node, u32 node_id, u64 version);
->>   extern int qcom_scm_lmh_profile_change(u32 profile_id);
->>   extern bool qcom_scm_lmh_dcvsh_available(void);
->> +struct gh_rm_mem_parcel;
->> +extern int qcom_scm_gh_rm_post_mem_reclaim(struct gh_rm_mem_parcel 
->> *mem_parcel);
->> +extern int qcom_scm_gh_rm_pre_mem_share(struct gh_rm_mem_parcel 
->> *mem_parcel);
->>
->>   #endif
->> --------------------------->cut<-----------------------
->>
->>>   config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
->>>       bool "Qualcomm download mode enabled by default"
->>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->>> index b95616b35bff..89a261a9e021 100644
->>> --- a/drivers/firmware/qcom_scm.c
->>> +++ b/drivers/firmware/qcom_scm.c
->>> @@ -20,6 +20,7 @@
->>>   #include <linux/clk.h>
->>>   #include <linux/reset-controller.h>
->>>   #include <linux/arm-smccc.h>
->>> +#include <linux/gunyah_rsc_mgr.h>
->>>   #include "qcom_scm.h"
->>> @@ -30,6 +31,9 @@ module_param(download_mode, bool, 0);
->>>   #define SCM_HAS_IFACE_CLK    BIT(1)
->>>   #define SCM_HAS_BUS_CLK        BIT(2)
->>> +#define QCOM_SCM_RM_MANAGED_VMID    0x3A
->>> +#define QCOM_SCM_MAX_MANAGED_VMID    0x3F
->>> +
->>>   struct qcom_scm {
->>>       struct device *dev;
->>>       struct clk *core_clk;
->>> @@ -1299,6 +1303,99 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 
->>> payload_reg, u32 payload_val,
->>>   }
->>>   EXPORT_SYMBOL(qcom_scm_lmh_dcvsh);
->>> +static int qcom_scm_gh_rm_pre_mem_share(struct gh_rm *rm, struct 
->>> gh_rm_mem_parcel *mem_parcel)
->>> +{
->>> +    struct qcom_scm_vmperm *new_perms;
->>> +    u64 src, src_cpy;
->>> +    int ret = 0, i, n;
->>> +    u16 vmid;
->>> +
->>> +    new_perms = kcalloc(mem_parcel->n_acl_entries, 
->>> sizeof(*new_perms), GFP_KERNEL);
->>> +    if (!new_perms)
->>> +        return -ENOMEM;
->>> +
->>> +    for (n = 0; n < mem_parcel->n_acl_entries; n++) {
->>> +        vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
->>> +        if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
->>> +            new_perms[n].vmid = vmid;
->>> +        else
->>> +            new_perms[n].vmid = QCOM_SCM_RM_MANAGED_VMID;
->>> +        if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_X)
->>> +            new_perms[n].perm |= QCOM_SCM_PERM_EXEC;
->>> +        if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_W)
->>> +            new_perms[n].perm |= QCOM_SCM_PERM_WRITE;
->>> +        if (mem_parcel->acl_entries[n].perms & GH_RM_ACL_R)
->>> +            new_perms[n].perm |= QCOM_SCM_PERM_READ;
->>> +    }
->>> +
->>> +    src = (1ull << QCOM_SCM_VMID_HLOS);
->>> +
->>> +    for (i = 0; i < mem_parcel->n_mem_entries; i++) {
->>> +        src_cpy = src;
->>> +        ret = 
->>> qcom_scm_assign_mem(le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
->>> +                        le64_to_cpu(mem_parcel->mem_entries[i].size),
->>> +                        &src_cpy, new_perms, 
->>> mem_parcel->n_acl_entries);
->>> +        if (ret) {
->>> +            src = 0;
->>> +            for (n = 0; n < mem_parcel->n_acl_entries; n++) {
->>> +                vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
->>> +                if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
->>> +                    src |= (1ull << vmid);
->>> +                else
->>> +                    src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
->>> +            }
->>> +
->>> +            new_perms[0].vmid = QCOM_SCM_VMID_HLOS;
->>> +
->>> +            for (i--; i >= 0; i--) {
->>> +                src_cpy = src;
->>> +                WARN_ON_ONCE(qcom_scm_assign_mem(
->>> + le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
->>> +                        le64_to_cpu(mem_parcel->mem_entries[i].size),
->>> +                        &src_cpy, new_perms, 1));
->>> +            }
->>> +            break;
->>> +        }
->>> +    }
->>> +
->>> +    kfree(new_perms);
->>> +    return ret;
->>> +}
->>> +
->>> +static int qcom_scm_gh_rm_post_mem_reclaim(struct gh_rm *rm, struct 
->>> gh_rm_mem_parcel *mem_parcel)
->>> +{
->>> +    struct qcom_scm_vmperm new_perms;
->>> +    u64 src = 0, src_cpy;
->>> +    int ret = 0, i, n;
->>> +    u16 vmid;
->>> +
->>> +    new_perms.vmid = QCOM_SCM_VMID_HLOS;
->>> +    new_perms.perm = QCOM_SCM_PERM_EXEC | QCOM_SCM_PERM_WRITE | 
->>> QCOM_SCM_PERM_READ;
->>> +
->>> +    for (n = 0; n < mem_parcel->n_acl_entries; n++) {
->>> +        vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
->>> +        if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
->>> +            src |= (1ull << vmid);
->>> +        else
->>> +            src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
->>> +    }
->>> +
->>> +    for (i = 0; i < mem_parcel->n_mem_entries; i++) {
->>> +        src_cpy = src;
->>> +        ret = 
->>> qcom_scm_assign_mem(le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
->>> +                        le64_to_cpu(mem_parcel->mem_entries[i].size),
->>> +                        &src_cpy, &new_perms, 1);
->>> +        WARN_ON_ONCE(ret);
->>> +    }
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static struct gh_rm_platform_ops qcom_scm_gh_rm_platform_ops = {
->>> +    .pre_mem_share = qcom_scm_gh_rm_pre_mem_share,
->>> +    .post_mem_reclaim = qcom_scm_gh_rm_post_mem_reclaim,
->>> +};
->>> +
->>>   static int qcom_scm_find_dload_address(struct device *dev, u64 *addr)
->>>   {
->>>       struct device_node *tcsr;
->>> @@ -1502,6 +1599,9 @@ static int qcom_scm_probe(struct 
->>> platform_device *pdev)
->>>       if (download_mode)
->>>           qcom_scm_set_download_mode(true);
->>> +    if (devm_gh_rm_register_platform_ops(&pdev->dev, 
->>> &qcom_scm_gh_rm_platform_ops))
->>> +        dev_warn(__scm->dev, "Gunyah RM platform ops were already 
->>> registered\n");
->>> +
->>>       return 0;
->>>   }
->>> diff --git a/include/linux/gunyah_rsc_mgr.h 
->>> b/include/linux/gunyah_rsc_mgr.h
->>> index 515087931a2b..acf8c1545a6c 100644
->>> --- a/include/linux/gunyah_rsc_mgr.h
->>> +++ b/include/linux/gunyah_rsc_mgr.h
->>> @@ -145,7 +145,7 @@ int gh_rm_get_hyp_resources(struct gh_rm *rm, u16 
->>> vmid,
->>>                   struct gh_rm_hyp_resources **resources);
->>>   int gh_rm_get_vmid(struct gh_rm *rm, u16 *vmid);
->>> -struct gunyah_rm_platform_ops {
->>> +struct gh_rm_platform_ops {
->>>       int (*pre_mem_share)(struct gh_rm *rm, struct gh_rm_mem_parcel 
->>> *mem_parcel);
->>>       int (*post_mem_reclaim)(struct gh_rm *rm, struct 
->>> gh_rm_mem_parcel *mem_parcel);
->>>   };
