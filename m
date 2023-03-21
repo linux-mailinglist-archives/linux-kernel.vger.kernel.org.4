@@ -2,114 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AFE6C27B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EFF6C27B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjCUCAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 22:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S229823AbjCUCDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCUCAg (ORCPT
+        with ESMTP id S229643AbjCUCDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:00:36 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC98919C42;
-        Mon, 20 Mar 2023 19:00:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VeL2IlV_1679364028;
-Received: from 30.240.114.229(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VeL2IlV_1679364028)
-          by smtp.aliyun-inc.com;
-          Tue, 21 Mar 2023 10:00:29 +0800
-Message-ID: <93bbc216-9ae5-c22f-b6a8-f6591aa92c2a@linux.alibaba.com>
-Date:   Tue, 21 Mar 2023 10:00:26 +0800
+        Mon, 20 Mar 2023 22:03:38 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFC6F96D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:03:37 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32L23D4S017789
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 22:03:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1679364195; bh=1++IKRnqZ+BH2bM0eGHWtNbecEk8GgRIA8+jEij3mzM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=jYHIUJj5Nxaj3F8dekW6ywk+SvD8er7agnGjI9VKHDxL0C3uFSGGUuEOlVGIfTOvE
+         WY6BohWTcaw2OgL9PVRHJm+DbVfhrvf/Te1PQ6W04mgvgUu/1MYxGSEBA54rkG2YgY
+         4OREog7fyMLtMLzv7GELovYZm1rZp/9pn4oEOatZWRvbaAJq600GLiT96DE4Wne0CB
+         g+pMdMJw/RdypxImFlqNmYIp8BoR8hFSuy9psdAcKD56FdL+Q8abj9/98tFQncZRKk
+         Mv/CRcEtDoR3/+TJbUrkots9gtDyunBWcuZF43Jd25Y0ML2fmp2rIftMQmscymcFwC
+         v6KihMmhYzxNQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 6D1AE15C4279; Mon, 20 Mar 2023 22:03:13 -0400 (EDT)
+Date:   Mon, 20 Mar 2023 22:03:13 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [GIT PULL] fscrypt fix for v6.3-rc4
+Message-ID: <20230321020313.GA108653@mit.edu>
+References: <20230320205617.GA1434@sol.localdomain>
+ <CAHk-=whefxRGyNGzCzG6BVeM=5vnvgb-XhSeFJVxJyAxAF8XRA@mail.gmail.com>
+ <20230320225934.GB21979@sol.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] ACPI: APEI: EINJ: warn on invalid argument when
- explicitly indicated by platform
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "jaylu102@amd.com" <jaylu102@amd.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
-References: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
- <SJ1PR11MB60836145DD10108B1FE13A4FFCBD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <91796ce2-2f63-4b07-3e44-dc2a2a98615e@linux.alibaba.com>
- <SJ1PR11MB60831F4A66DB77095B4314FDFC809@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <SJ1PR11MB60831F4A66DB77095B4314FDFC809@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320225934.GB21979@sol.localdomain>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/21 AM12:32, Luck, Tony wrote:
->>> I don't see how reporting -EBUSY for the "Unknown Failure" case is
->>> actually better.
->>
->> Tony, did you misunderstand this patch?
->>
->> The original code report -EBUSY for both "Unknown Failure" and
->> "Invalid Access" cases.
+On Mon, Mar 20, 2023 at 03:59:34PM -0700, Eric Biggers wrote:
 > 
-> I mixed up what was already in the kernel with what the patch was changing.
-> 
->> This patch intends to report -EINVAL for "Invalid Access" case
->> and keeps reporting -EBUSY for "Unknown Failure" case unchanged.
->> Although -EBUSY for "Unknown Failure" case is not a good choice.
->> Will -EIO for "Unknown failure" case be better?
-> 
-> Is this for some real use case?
-> 
-> Do you have a BIOS EINJ implementation that is returning these different codes?
+> Yes, I agree that most of the WARN_ONs should be WARN_ON_ONCEs.  I think I've
+> been assuming that WARN_ON is significantly more lightweight than WARN_ON_ONCE.
+> But that doesn't seem to be the case, especially since commit 19d436268dde
+> ("debug: Add _ONCE() logic to report_bug()").
 
-Yes, our BIOS tester complains that EINJ always reports EBUSY, and he has no idea
-about it. It can not help him determine whether it is a BIOS bug or an injection
-operation error.
+Another option is WARN_RATELIMITED.
 
-> What will the user do differently if they see these different error strings?
-> 
->   # echo 1 > error_inject
->   ... different error messages here ...
+As an unrelated side-note, one of the things I've been working on in
+some of the ext4 code paths when I've been moving BUG_ON's to
+WARN_RATELIMITED is to think about what might be needed to debug a
+problem, and sometimes it can be helpful to use a printf string to
+provide more context than just a WARN_ON.
 
-For example, with original code:
+Cheers,
 
-	# select a invalid core or device to inject
-	# echo 1 > error_inject
-	echo: write error: Device or resource busy
-
-When tester sees that, he will submit a bug to BIOS developer.
-
-Actually, firmware will do some platform dependent sanity checks and returns
-different error codes. In this case, user injects to a invalid device, platform
-returns "Invalid Access". And user is expected to see:
-
-	# select a invalid core or device to inject
-	# echo 1 > error_inject
-	echo: write error: Invalid argument
-
-Then user is expected to check his injection argument first.
-
-
-> 
-> -Tony
-> 
-
-Best Regards,
-Shuai
+						- Ted
