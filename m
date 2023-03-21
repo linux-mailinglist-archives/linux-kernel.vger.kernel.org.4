@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FA36C2EB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD12B6C2EB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjCUKZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:25:02 -0400
+        id S230160AbjCUKZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:25:06 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjCUKYn (ORCPT
+        with ESMTP id S230115AbjCUKYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:24:43 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D975918B08;
-        Tue, 21 Mar 2023 03:24:28 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id q14so587954ljm.11;
-        Tue, 21 Mar 2023 03:24:28 -0700 (PDT)
+        Tue, 21 Mar 2023 06:24:44 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F541A663;
+        Tue, 21 Mar 2023 03:24:30 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t11so18465585lfr.1;
+        Tue, 21 Mar 2023 03:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679394267;
+        d=gmail.com; s=20210112; t=1679394268;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TlFYzvPaNc4+r1fF+4ETWq25exQj+hE48K2I2gE4XAQ=;
-        b=in1ot4HNg4D0Zl6IetwLv2Twu6rMFjNgcqqzIJVhQeHgi3KQh4qiutrKGa3/8fu5Xw
-         2yA9KTbmoyQCiCQskH7su5+akiRxGhHFAW1XZouCNVFYADNlSj+yO3/s0eAXCDOFdibO
-         0Q5h9iaYUzVeV2kuoYKeBd61UnK0E2B289+4B/FBj6r2Cvgf4Ug/RqnteZYQw7hYE7cT
-         2i1D3o8wEXPHJxnrV+Svn5RkhfdFtfXARqjkMR2r2ErAZf11MhfPtVhDW5mJ7Zs4OfV9
-         sXqoKnxQWGgElib3o8ODymdeWX/byG/4maxcsNs/84tTdmrIptW68ZgUOhno50vNGf6z
-         4/MQ==
+        bh=aWn/7mbklD+A+VP8Q0o9PMepwQzDExkOlaUCk9c90go=;
+        b=iquuKDMl6Sqaw/4fFi35QnrEmF2ISe0CqEPGKCaT2wkhZo/3Yz10fW2lj6LbTbJymI
+         bdxwZ4WL3jPu8LAnQQa08mrHlhJ7VTpicEm/DuObAWhtOFTiU07Upmk5Sdw6Wk1r9+7m
+         5YLoSxx4zCZ3IqIu4es5M2p05CPoScm4iH2Pz7QEFiyrzCVctSVdsT/viItWjJrhv7fi
+         zYV0KK1ACS9w+6/SoEVz8zouJZPqndunovcm82iQVZ6Kgu3xbuSjUarTTbuPekjzCR7Z
+         jKpTmL5DWjmERKHOSYfcZzSDX0f7X69xk2x3PUPpwODw9qC2cB3ab/Y1UDpnA3rw99Ft
+         e77Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679394267;
+        d=1e100.net; s=20210112; t=1679394268;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TlFYzvPaNc4+r1fF+4ETWq25exQj+hE48K2I2gE4XAQ=;
-        b=RTECmv7gZpYQY8cd3saDew3gA1g+k6nCzg/XwqJ2oc4cWsFL0M6UH7gSdMWdAEHOkC
-         LoU07O5ZWISsdGQG2TWVdvWqLDU3U2X6qpMFOkIARYtLhWFhWJ9qixPhv0rbo3ww8wlw
-         lioCSw9xR2C6a/Oc/Ck/zfkQO9U8S0EAY4LgDPTZu1tXm2AgUJIG0pZmpSl/Zcmos05k
-         r9l07s8XZyk94NmITY1OWPLrIcb3L1QEKHoSTIlRzz1der7D+H+Tawx9DVIuUBoe1JO5
-         4UjUEgYxb+Wyyumb/YdBSLC70bES+mhhiwZCAJPh7Nt+XadAXKjF21WpOaxOaXUTQI3Q
-         MVyA==
-X-Gm-Message-State: AO0yUKUIQH3so2bviKHT1XqHxuuD4mWKWBa5FSyQL/d/4oBdSZY875k6
-        9S663/J19uMDKEvaYk8IoXU=
-X-Google-Smtp-Source: AK7set/eb9PAW6irBrQgsowgIBPUjzkAVtAeMdbC7yJTTnrV8dqxeJpxqpQ/oPGH3nHviN2oo95egg==
-X-Received: by 2002:a2e:9d0c:0:b0:299:57eb:ef3a with SMTP id t12-20020a2e9d0c000000b0029957ebef3amr693229lji.2.1679394267021;
-        Tue, 21 Mar 2023 03:24:27 -0700 (PDT)
+        bh=aWn/7mbklD+A+VP8Q0o9PMepwQzDExkOlaUCk9c90go=;
+        b=4pB18e+OUD232VBcLkxhZiu2dDASgvDC4lOyfx9k3ck/kWGNM7ZGjFqsJv7hkiQVDW
+         YsV/a7yS04NKr0m5J9ChaY/iDw7lS6EbD4fNgwITGi6wozuISEzY2Xc6RfGNmW9WDQlB
+         je2Fv0FzHLLxLrRyKG2Uw7yIQvEKnqZvSwf/NGJ9pVyC5Nv589pkX/81zLm5NgpT7QOQ
+         OdVgddg5cEhsdu1mMt/p9SuKOQJElWFhgcA+16BvHYc1AZWFST0iVWU1E48BCZkeGP+6
+         bK5WsNy/IKwn8eB+umZAaQrE1ZXirujs4lQQaB+4WPs+vuFP3Z65ylCUCIDjpxzHXTyy
+         Jf5Q==
+X-Gm-Message-State: AO0yUKWfyJ14lC//UsA9LgG5hGOlw6BS92za7kjT4fC3hOSXdEh66OdK
+        nsTJD4uAHOAFjt8oZE+cvmo=
+X-Google-Smtp-Source: AK7set93b9KqwqqM62J0DlhGRHnZZnYDPOjuVLEwX5LJ42AC3bEXCYrx2vBUX/maekAuvfP/Gvo5PQ==
+X-Received: by 2002:ac2:4ac8:0:b0:4e0:2455:3ade with SMTP id m8-20020ac24ac8000000b004e024553ademr603297lfp.60.1679394268654;
+        Tue, 21 Mar 2023 03:24:28 -0700 (PDT)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id n12-20020a2e904c000000b00299f0194108sm2163069ljg.31.2023.03.21.03.24.25
+        by smtp.gmail.com with ESMTPSA id n12-20020a2e904c000000b00299f0194108sm2163069ljg.31.2023.03.21.03.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 03:24:26 -0700 (PDT)
+        Tue, 21 Mar 2023 03:24:28 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,9 +59,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V5 2/3] dt-bindings: nvmem: convert base example to use NVMEM fixed cells layout
-Date:   Tue, 21 Mar 2023 11:24:17 +0100
-Message-Id: <20230321102418.4190-3-zajec5@gmail.com>
+Subject: [PATCH V5 3/3] nvmem: core: add support for fixed cells *layout*
+Date:   Tue, 21 Mar 2023 11:24:18 +0100
+Message-Id: <20230321102418.4190-4-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230321102418.4190-1-zajec5@gmail.com>
 References: <20230321102418.4190-1-zajec5@gmail.com>
@@ -80,68 +80,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-With support for the "fixed-layout" binding it's possible and preferred
-now to define fixed NVMEM cells in the layout node. Do that for the
-example binding.
+This adds support for the "fixed-layout" NVMEM layout binding. It allows
+defining NVMEM cells in a layout DT node named "nvmem-layout".
+
+While NVMEM subsystem supports layout drivers it has been discussed that
+"fixed-layout" may actually be supperted internally. It's because:
+1. It's a very basic layout
+2. It allows sharing code with legacy syntax parsing
+3. It's safer for soc_device_match() due to -EPROBE_DEFER
+4. This will make the syntax transition easier
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- .../devicetree/bindings/nvmem/nvmem.yaml      | 42 +++++++++++--------
- 1 file changed, 24 insertions(+), 18 deletions(-)
+ drivers/nvmem/core.c | 32 +++++++++++++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-index b79f1bb795fb..980244100690 100644
---- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-@@ -68,24 +68,30 @@ examples:
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 212c5ba5789f..591b640f53dd 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -694,7 +694,7 @@ static int nvmem_validate_keepouts(struct nvmem_device *nvmem)
+ 	return 0;
+ }
  
-           /* ... */
+-static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
++static int nvmem_add_cells_from_dt(struct nvmem_device *nvmem, struct device_node *np)
+ {
+ 	struct nvmem_layout *layout = nvmem->layout;
+ 	struct device *dev = &nvmem->dev;
+@@ -702,7 +702,7 @@ static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
+ 	const __be32 *addr;
+ 	int len, ret;
  
--          /* Data cells */
--          tsens_calibration: calib@404 {
--              reg = <0x404 0x10>;
--          };
--
--          tsens_calibration_bckp: calib_bckp@504 {
--              reg = <0x504 0x11>;
--              bits = <6 128>;
--          };
--
--          pvs_version: pvs-version@6 {
--              reg = <0x6 0x2>;
--              bits = <7 2>;
--          };
--
--          speed_bin: speed-bin@c{
--              reg = <0xc 0x1>;
--              bits = <2 3>;
-+          nvmem-layout {
-+              compatible = "fixed-layout";
-+              #address-cells = <1>;
-+              #size-cells = <1>;
-+
-+              /* Data cells */
-+              tsens_calibration: calib@404 {
-+                  reg = <0x404 0x10>;
-+              };
-+
-+              tsens_calibration_bckp: calib_bckp@504 {
-+                  reg = <0x504 0x11>;
-+                  bits = <6 128>;
-+              };
-+
-+              pvs_version: pvs-version@6 {
-+                  reg = <0x6 0x2>;
-+                  bits = <7 2>;
-+              };
-+
-+              speed_bin: speed-bin@c{
-+                  reg = <0xc 0x1>;
-+                  bits = <2 3>;
-+              };
-           };
-       };
+-	for_each_child_of_node(dev->of_node, child) {
++	for_each_child_of_node(np, child) {
+ 		struct nvmem_cell_info info = {0};
  
+ 		addr = of_get_property(child, "reg", &len);
+@@ -740,6 +740,28 @@ static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
+ 	return 0;
+ }
+ 
++static int nvmem_add_cells_from_legacy_of(struct nvmem_device *nvmem)
++{
++	return nvmem_add_cells_from_dt(nvmem, nvmem->dev.of_node);
++}
++
++static int nvmem_add_cells_fixed(struct nvmem_device *nvmem)
++{
++	struct device_node *layout_np;
++	int err = 0;
++
++	layout_np = of_nvmem_layout_get_container(nvmem);
++	if (!layout_np)
++		return 0;
++
++	if (of_device_is_compatible(layout_np, "fixed-layout"))
++		err = nvmem_add_cells_from_dt(nvmem, layout_np);
++
++	of_node_put(layout_np);
++
++	return err;
++}
++
+ int __nvmem_layout_register(struct nvmem_layout *layout, struct module *owner)
+ {
+ 	layout->owner = owner;
+@@ -970,7 +992,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	if (rval)
+ 		goto err_remove_cells;
+ 
+-	rval = nvmem_add_cells_from_of(nvmem);
++	rval = nvmem_add_cells_from_legacy_of(nvmem);
+ 	if (rval)
+ 		goto err_remove_cells;
+ 
+@@ -980,6 +1002,10 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	if (rval)
+ 		goto err_remove_cells;
+ 
++	rval = nvmem_add_cells_fixed(nvmem);
++	if (rval)
++		goto err_remove_cells;
++
+ 	rval = nvmem_add_cells_from_layout(nvmem);
+ 	if (rval)
+ 		goto err_remove_cells;
 -- 
 2.34.1
 
