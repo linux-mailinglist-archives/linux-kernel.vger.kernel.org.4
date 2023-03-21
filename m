@@ -2,151 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0906C2A27
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D652A6C2A2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCUGEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S229967AbjCUGFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjCUGEg (ORCPT
+        with ESMTP id S229683AbjCUGF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:04:36 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8E727D6D;
-        Mon, 20 Mar 2023 23:04:35 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id m15so4330584qkn.9;
-        Mon, 20 Mar 2023 23:04:35 -0700 (PDT)
+        Tue, 21 Mar 2023 02:05:28 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CE929E0D;
+        Mon, 20 Mar 2023 23:05:27 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id a16so10263120pjs.4;
+        Mon, 20 Mar 2023 23:05:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679378675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e8okZ+MxCAMhs0+VJVHp9ZPpwKBGBvJ/Czo08rRq3vk=;
-        b=cNh1GYqwjZGb02XyXqjdt36rEMx40jrvUPWa8EDbApuA0HdCsLKKxWLkP3qDX01Sbp
-         4IJcwzStT5S6svSD23FRU4Ad0rioAwiz+2EaCeTyf9qYH8Y/ADwCvqbY82UeBuquvh5Z
-         mmLgKSNyh5Kiy7nzXT7mvkBvbZQU168WoPUwVb8TO0bsgRaYSwn9EyAaW+HN8PvMcpEX
-         /QprCgcrLw3Wa+6Ge3jQNanyaXGk+/sqnk8l8g20NQJT3FdZ8vJ330467217p3SCM6Su
-         d5FBEcNAs+pmxdnNQBtgixdUmWXTCl1ZkJoxJAemLsLjxLLVoNHOzcmuG9X3DysYg23R
-         H3Pw==
+        d=gmail.com; s=20210112; t=1679378727;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y+SP907X/SeUBhM/PRlD7SkiAzVdHeJVpNjB8FbspAg=;
+        b=IWxX3ncjwV8aVOOeyMwIHGxyzIurlBvEVpEHWSM02rtq0lQRKKn6Fd0ceiP5HP5QCA
+         6Iri1BCPFS/QW60zHMp0smnIhWfzS7+bHfhpox3t/xQ/Ry+TUDdXsXQJm7+Gm99wsnlR
+         8HxBaXwRi13UHPqf9E7LGmbTbWUCRPhblJv35s8FU5cpbihDifZ+Ymp6S50yCTfU5BZM
+         SvIIkz7y+rDP17894DoDKBX3sFK4C8QVU+tLPJedkVVW13+wCwAw3+16cqW3+9UgOQJd
+         6jfnb2hXYTZTyuVAGDM/MSimYpDNanwaDgOkLEBXrz9GYDk/mtC0jeGqosLeSFjmD/MR
+         4jDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679378675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e8okZ+MxCAMhs0+VJVHp9ZPpwKBGBvJ/Czo08rRq3vk=;
-        b=xB1FW6fpSycZakAHMDsMAuAk0q1TTgirqXmOtQE+por94ohRf98wS2YdHv0hx4H22T
-         51835K/9ndkm6EjMkNi4+iGMrbNNQEzwcKPuNcl5P6egQTOZMvmP5YqH+lKo4UzKzxEn
-         FBMOpC2/IT1VMxpe/A9WIQAE4wE7VcUpvLeRK6RYNIzfTTbiFVafwIxDQrpeW6d6GEg/
-         RonEEGVU16M1llaQ/uYOcwkXh4ZPRB06IU1xHoVJ3hht4vdild3e3M6VReWuHyPe7zU+
-         L7Bdc42Q/gcQdB+Cfmn3i7dISMeyr6MZ7XAECqSXOZHgWFWgqkBXFqHlXNITwucqj2xB
-         6Law==
-X-Gm-Message-State: AO0yUKWK6RCX2ns73fi2d9QrY4HYem97pxdi1GxvZumRRZAumP9Y4vRK
-        m6YfS5muzXEUnDLhML0MuXSPHZD/nV/abtRKYWQ=
-X-Google-Smtp-Source: AK7set/oZRC1c37jEs+UBIZKlHM+uinEOTBoILRWM+qefzYpXQu8ihDwKO1oN6OkqNRx4Ow9gsk/Eui9sC1u9NbnM1g=
-X-Received: by 2002:a05:620a:e07:b0:746:7857:d28b with SMTP id
- y7-20020a05620a0e0700b007467857d28bmr295379qkm.14.1679378674833; Mon, 20 Mar
- 2023 23:04:34 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679378727;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y+SP907X/SeUBhM/PRlD7SkiAzVdHeJVpNjB8FbspAg=;
+        b=r1YfVHU84ak4moC0h6meDHCzQbk8Inb4KeFZpvk7FixHM2AsVKXEYIQJ3zYlwdqZ1V
+         tQ0IHITS1mtesCyQ+LQKBmzhmTB0gq6wyGHQO3YIKO3Q6KSlhxQC7XYyrZWb2PpZezTq
+         P30Ju3vdao+jOp36yh2Zc3p/HrUiDBp4/yv5E4rEKmyknp1TmMqNqMBuFaOp1vSIwR7H
+         c+BjrfGDOSlH1Ce7aFwy5Oz+y9Fp01hA2o9QU+AV4hjJXdszrJXRhn1krATz1o4mqPd7
+         51CLA/iZHZy6yIqrwDOOwYnti8LIxTOxdQR3R/MICxwxNVCCsthE10fQqXe3zh/TIWWh
+         BtvA==
+X-Gm-Message-State: AO0yUKXbJjYp/aDkOaFsx+8mKjVjM3+aE3VbMRhTb8opv3BqmpYeNW2n
+        49Wqb9nuER4eGunTs/RUW5k=
+X-Google-Smtp-Source: AK7set9ukTQm402ocqVk6fh4G3GBri9ryQ7FuCaGIfmYvRLaDVN3QObvZpwlqD55VtxXguDqxQSq2w==
+X-Received: by 2002:a17:902:db12:b0:1a1:d949:a52d with SMTP id m18-20020a170902db1200b001a1d949a52dmr1370406plx.65.1679378726453;
+        Mon, 20 Mar 2023 23:05:26 -0700 (PDT)
+Received: from localhost ([2600:380:4a39:cac0:d7fa:8e4d:47d8:f561])
+        by smtp.gmail.com with ESMTPSA id 13-20020a63134d000000b004fb171df68fsm7157609pgt.7.2023.03.20.23.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 23:05:26 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 20 Mar 2023 20:05:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, fsverity@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [GIT PULL] fsverity fixes for v6.3-rc4
+Message-ID: <ZBlJJBR7dH4/kIWD@slm.duckdns.org>
+References: <20230320210724.GB1434@sol.localdomain>
+ <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230320212029.3154407-1-david.e.box@linux.intel.com>
-In-Reply-To: <20230320212029.3154407-1-david.e.box@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 21 Mar 2023 08:03:58 +0200
-Message-ID: <CAHp75VfQVGOj6FsvgddmxBMvkKi=Az29pzovdpzwZvVmj9pCqg@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86/intel/pmc: Alder Lake PCH slp_s0_residency fix
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     irenic.rajneesh@gmail.com, rajvi.jingar@linux.intel.com,
-        hdegoede@redhat.com, markgross@kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 11:20=E2=80=AFPM David E. Box
-<david.e.box@linux.intel.com> wrote:
+Hello,
+
+(cc'ing Lai.)
+
+On Mon, Mar 20, 2023 at 03:31:13PM -0700, Linus Torvalds wrote:
+> On Mon, Mar 20, 2023 at 2:07 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > Nathan Huckleberry (1):
+> >       fsverity: Remove WQ_UNBOUND from fsverity read workqueue
+> 
+> There's a *lot* of other WQ_UNBOUND users. If it performs that badly,
+> maybe there is something wrong with the workqueue code.
 >
-> From: Rajvi Jingar <rajvi.jingar@linux.intel.com>
->
-> For platforms with Alder Lake PCH (Alder Lake S and Raptor Lake S) the
-> slp_s0_residency attribute has been reporting the wrong value. Unlike oth=
-er
-> platforms, ADL PCH does not have a counter for the time that the SLP_S0
-> signal was asserted. Instead, firmware uses the aggregate of the Low Powe=
-r
-> Mode (LPM) substate counters as the S0ix value.  Since the LPM counters r=
-un
-> at a different frequency, this lead to misreporting of the S0ix time.
->
-> Add a check for Alder Lake PCH and adjust the frequency accordingly when
-> display slp_s0_residency.
+> Should people be warned to not use WQ_UNBOUND - or is there something
+> very special about fsverity?
+> 
+> Added Tejun to the cc. With one of the main documented reasons for
+> WQ_UNBOUND being performance (both implicit "try to start execution of
+> work items as soon as possible") and explicit ("CPU intensive
+> workloads which can be better managed by the system scheduler"), maybe
+> it's time to reconsider?
+> 
+> WQ_UNBOUND adds a fair amount of complexity and special cases to the
+> workqueues, and this is now the second "let's remove it because it's
+> hurting things in a big way".
 
-OK!
-But one nit-pick below.
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Do you remember what the other case was? Was it also on heterogenous arm
+setup?
 
-> Fixes: bbab31101f44 ("platform/x86/intel: pmc/core: Add Alderlake support=
- to pmc core driver")
-> Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/pmc/core.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86=
-/intel/pmc/core.c
-> index e489d2175e42..61ca7c37fb02 100644
-> --- a/drivers/platform/x86/intel/pmc/core.c
-> +++ b/drivers/platform/x86/intel/pmc/core.c
-> @@ -66,7 +66,18 @@ static inline void pmc_core_reg_write(struct pmc_dev *=
-pmcdev, int reg_offset,
->
->  static inline u64 pmc_core_adjust_slp_s0_step(struct pmc_dev *pmcdev, u3=
-2 value)
->  {
-> -       return (u64)value * pmcdev->map->slp_s0_res_counter_step;
-> +       /*
-> +        * ADL PCH does not have the SLP_S0 counter and LPM Residency cou=
-nters are
-> +        * used as a workaround which uses 30.5 usec tick. All other clie=
-nt
+There aren't many differences between unbound workqueues and percpu ones
+that aren't concurrency managed. If there are significant performance
+differences, it's unlikely to be directly from whatever workqueue is doing.
 
-microsecond or us or  =C2=B5s (I prefer the latter).
+One obvious thing that comes to mind is that WQ_UNBOUND may be pushing tasks
+across expensive cache boundaries (e.g. across cores that are living on
+separate L3 complexes). This isn't a totally new problem and workqueue has
+some topology awareness, by default, WQ_UNBOUND pools are segregated across
+NUMA boundaries. This used to be fine but I think it's likely outmoded now.
+given that non-trivial cache hierarchies on top of UMA or inside a node are
+a thing these days.
 
-> +        * programs have the legacy SLP_S0 residency counter that is usin=
-g the 122
-> +        * usec tick.
+Looking at f959325e6ac3 ("fsverity: Remove WQ_UNBOUND from fsverity read
+workqueue"), I feel a bit uneasy. This would be fine on a setup which does
+moderate amount of IOs on CPUs with quick enough accelration mechanisms, but
+that's not the whole world. Use cases that generate extreme amount of IOs do
+depend on the ability to fan out IO related work items across multiple CPUs
+especially if the IOs coincide with network activities. So, my intuition is
+that the commit is fixing a subset of use cases while likely regressing
+others.
 
-microsecond or us or =C2=B5s (I prefer the latter).
+If the cache theory is correct, the right thing to do would be making
+workqueue init code a bit smarter so that it segements unbound pools on LLC
+boundaries rather than NUMA, which would make more sense on recent AMD chips
+too. Nathan, can you run `hwloc-ls` on the affected setup (or `lstopo
+out.pdf`) and attach the output?
 
-> +        */
-> +       const int lpm_adj_x2 =3D pmcdev->map->lpm_res_counter_step_x2;
-> +
-> +       if (pmcdev->map =3D=3D &adl_reg_map)
-> +               return (u64)value * GET_X2_COUNTER((u64)lpm_adj_x2);
+As for the overhead of supporting WQ_UNBOUND, it does add non-trivial amount
+of complexity but of the boring kind. It's all managerial stuff which isn't
+too difficult to understand and relatively easy to understand and fix when
+something goes wrong, so it isn't expensive in terms of supportability and
+it does address classes of significant use cases, so I think we should just
+fix it.
 
-> +       else
+Thanks.
 
-Redundant 'else'.
-
-> +               return (u64)value * pmcdev->map->slp_s0_res_counter_step;
->  }
->
->  static int set_etr3(struct pmc_dev *pmcdev)
->
-> base-commit: 02c464b73645404654359ad21f368a13735e2850
-> --
-> 2.34.1
->
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+tejun
