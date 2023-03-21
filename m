@@ -2,139 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1596C2819
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EBC6C27E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCUC0z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 22:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        id S229715AbjCUCLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCUC0w (ORCPT
+        with ESMTP id S229550AbjCUCLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:26:52 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D6C28D31;
-        Mon, 20 Mar 2023 19:26:50 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9A8D624E211;
-        Tue, 21 Mar 2023 10:26:49 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
- 2023 10:26:49 +0800
-Received: from ubuntu.localdomain (183.27.97.64) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
- 2023 10:26:48 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 0/2] hwmon: Add StarFive JH71X0 temperature sensor
+        Mon, 20 Mar 2023 22:11:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E923608D
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679364708; x=1710900708;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gC9u9R+eER52MkKmLB/PDhyl14IPCemBeV7g5a5ZfwY=;
+  b=QfydbEeaNTJf09fbnIi5s0OK15v5n2lAY9yRNgCTVK+tqJl+DsXNIjed
+   E1QX9dOLlO3+tCA26ocAfF5qrFno294VBx0Vr8puHZKhzAzXfJduXG37x
+   wgRavE28q5ShrxeqleLrkKx8JZLo79FtSIq6I0QOhxuHM6Wkh1QT776gQ
+   CDac+Y+gOSrjNe/fovq50QyqLjKa5uZS19x2a4TaMMIQGGl4MUEQnVtFm
+   noQnY1PeTVvhwVsmNJISoNyoSRxSEOiBgETKjXYjDaUDwOvfLV+noj4J+
+   YZiW5GlSMjcHM4CFKbeffV5alKOC8D+6DuWtmxQ2h3j8KA6qmGrtSHsBc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319224682"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="319224682"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 19:11:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674648777"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="674648777"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 19:11:43 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH] soundwire: intel: don't save hw_params for use in prepare
 Date:   Tue, 21 Mar 2023 10:26:42 +0800
-Message-ID: <20230321022644.107027-1-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
+Message-Id: <20230321022642.1426611-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.64]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a driver for the temperature sensor on the JH7100 and JH7110,
-RISC-V SoCs by StarFive Technology Co. Ltd.. The JH7100 is used on the
-BeagleV Starlight board and StarFive VisionFive board. The JH7110 is
-used on the StarFive VisionFive 2 board.
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-v6:
-* Replace SOC_STARFIVE with ARCH_STARFIVE.
+The existing code copies the hw_params pointer and reuses it later in
+.prepare, specifically to re-initialize the ALH DMA channel
+information that's lost in suspend-resume cycles.
 
-v5:
-* Drop the "interrupts" property in dt-bindings.
-* Reword the commit message of patch 2.
-* Use continuous mode instead of single mode and drop the interrupt
-  related code used in the single mode.
-* Add the missing "default:" statements in the driver.
-* Change the device name to "sfctemp" which avoids a warning when startup.
+This is not needed, we can directly access the information from the
+substream/rtd - as done for the HDAudio DAIs in
+sound/soc/sof/intel/hda-dai.c
 
-v4:
-* Change the node name from "tmon" to "temperature-sensor" in dt-binding
-  example, which is more generic.
-* Add support for StarFive JH7110 SoC besides JH7100.
-* Add clock and reset support in the dt-bindings and driver.
-* Add the missing headers in patch 2.
-* Use devm_platform_ioremap_resource() to remap instead of
-  platform_get_resource() and devm_ioremap_resource().
-* Use dev_err_probe() instead of dev_err().
-* Add Signed-off-by tag for Hal Feng. Add Co-developed-by tag for
-  Samin Guo in patch 2.
+In addition, using the saved pointer causes the suspend-resume test
+cases to fail on specific platforms, depending on which version of GCC
+is used. Péter Ujfalusi and I have spent long hours to root-cause this
+problem that was reported by the Intel CI first with 6.2-rc1 and again
+v6.3-rc1. In the latter case we were lucky that the problem was 100%
+reproducible on local test devices, and found out that adding a
+dev_dbg() or adding a call to usleep_range() just before accessing the
+saved pointer "fixed" the issue. With errors appearing just by
+changing the compiler version or minor changes in the code generated,
+clearly we have a memory management Heisenbug.
 
-v3:
-* Handle timeouts from wait_for_completion_interruptible_timeout
-  properly.
+The root-cause seems to be that the hw_params pointer is not
+persistent. The soc-pcm code allocates the hw_params structure on the
+stack, and passes it to the BE dailink hw_params and DAIs
+hw_params. Saving such a pointer and reusing it later during the
+.prepare stage cannot possibly work reliably, it's broken-by-design
+since v5.10. It's astonishing that the problem was not seen earlier.
 
-v2:
-* Fix checkpatch.pl --strict warnings
-  - Add myself to MAINTAINERS
-  - Fix multiline comments
-  - Use proper case and whitespace for #defines
-  - Add comment to sfctemp::lock mutex.
-* Remaining comments by Guenter Roeck
-  - Add Documentation/hwmon/sfctemp.rst
-  - Use devm_add_action() and devm_hwmon_device_register_with_info()
-    instead of a driver .remove function.
-  - Don't do test conversion at probe time.
-  - #include <linux/io.h>
-  - Remove unused #defines
-  - Use int return variable in sfctemp_convert().
-* Add Samin's Signed-off-by to patch 2/2
+This simple fix will have to be back-ported to -stable, due to changes
+to avoid the use of the get/set_dmadata routines this patch will only
+apply on kernels older than v6.1.
 
+Fixes: a5a0239c27fe ("soundwire: intel: reinitialize IP+DSP in .prepare(), but only when resuming")
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
-History:
-v5: https://lore.kernel.org/all/20230227134125.120638-1-hal.feng@starfivetech.com/
-v4: https://lore.kernel.org/all/20230207072314.62040-1-hal.feng@starfivetech.com/
-v3: https://lore.kernel.org/all/20210726171802.1052716-1-kernel@esmil.dk/
-v2: https://lore.kernel.org/all/20210624162108.832518-1-esmil@mailme.dk/
-v1: https://lore.kernel.org/all/20210616181545.496149-1-kernel@esmil.dk/
+ drivers/soundwire/cadence_master.h |  2 --
+ drivers/soundwire/intel.c          | 11 +++++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-Emil Renner Berthing (2):
-  dt-bindings: hwmon: Add starfive,jh71x0-temp
-  hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
-
- .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  70 ++++
- Documentation/hwmon/index.rst                 |   1 +
- Documentation/hwmon/sfctemp.rst               |  33 ++
- MAINTAINERS                                   |   8 +
- drivers/hwmon/Kconfig                         |  10 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/sfctemp.c                       | 331 ++++++++++++++++++
- 7 files changed, 454 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
- create mode 100644 Documentation/hwmon/sfctemp.rst
- create mode 100644 drivers/hwmon/sfctemp.c
-
-
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
+diff --git a/drivers/soundwire/cadence_master.h b/drivers/soundwire/cadence_master.h
+index b653734085d9..27c56274217f 100644
+--- a/drivers/soundwire/cadence_master.h
++++ b/drivers/soundwire/cadence_master.h
+@@ -84,7 +84,6 @@ struct sdw_cdns_stream_config {
+  * @bus: Bus handle
+  * @stream_type: Stream type
+  * @link_id: Master link id
+- * @hw_params: hw_params to be applied in .prepare step
+  * @suspended: status set when suspended, to be used in .prepare
+  * @paused: status set in .trigger, to be used in suspend
+  * @direction: stream direction
+@@ -96,7 +95,6 @@ struct sdw_cdns_dai_runtime {
+ 	struct sdw_bus *bus;
+ 	enum sdw_stream_type stream_type;
+ 	int link_id;
+-	struct snd_pcm_hw_params *hw_params;
+ 	bool suspended;
+ 	bool paused;
+ 	int direction;
+diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+index 046c67a2a39b..238acf5c97a9 100644
+--- a/drivers/soundwire/intel.c
++++ b/drivers/soundwire/intel.c
+@@ -725,7 +725,6 @@ static int intel_hw_params(struct snd_pcm_substream *substream,
+ 	dai_runtime->paused = false;
+ 	dai_runtime->suspended = false;
+ 	dai_runtime->pdi = pdi;
+-	dai_runtime->hw_params = params;
+ 
+ 	/* Inform DSP about PDI stream number */
+ 	ret = intel_params_stream(sdw, substream->stream, dai, params,
+@@ -778,6 +777,11 @@ static int intel_prepare(struct snd_pcm_substream *substream,
+ 	}
+ 
+ 	if (dai_runtime->suspended) {
++		struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++		struct snd_pcm_hw_params *hw_params;
++
++		hw_params = &rtd->dpcm[substream->stream].hw_params;
++
+ 		dai_runtime->suspended = false;
+ 
+ 		/*
+@@ -789,7 +793,7 @@ static int intel_prepare(struct snd_pcm_substream *substream,
+ 		 */
+ 
+ 		/* configure stream */
+-		ch = params_channels(dai_runtime->hw_params);
++		ch = params_channels(hw_params);
+ 		if (substream->stream == SNDRV_PCM_STREAM_CAPTURE)
+ 			dir = SDW_DATA_DIR_RX;
+ 		else
+@@ -801,7 +805,7 @@ static int intel_prepare(struct snd_pcm_substream *substream,
+ 
+ 		/* Inform DSP about PDI stream number */
+ 		ret = intel_params_stream(sdw, substream->stream, dai,
+-					  dai_runtime->hw_params,
++					  hw_params,
+ 					  sdw->instance,
+ 					  dai_runtime->pdi->intel_alh_id);
+ 	}
+@@ -840,7 +844,6 @@ intel_hw_free(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
+ 		return ret;
+ 	}
+ 
+-	dai_runtime->hw_params = NULL;
+ 	dai_runtime->pdi = NULL;
+ 
+ 	return 0;
 -- 
-2.38.1
+2.25.1
 
