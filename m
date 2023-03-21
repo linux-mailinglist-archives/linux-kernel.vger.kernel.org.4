@@ -2,120 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324116C36AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6866C36AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCUQNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S230090AbjCUQON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCUQNQ (ORCPT
+        with ESMTP id S229487AbjCUQOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:13:16 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCABE18E;
-        Tue, 21 Mar 2023 09:13:10 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id t17-20020a05600c451100b003edc906aeeaso926336wmo.1;
-        Tue, 21 Mar 2023 09:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679415188;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pk7IjbqaJIEEKsGiYXSoq0xQcxrVnoZL7rQBDJ5gFyo=;
-        b=JJlheVt73rKm0X/Gw5EvGnFVdk8pxIjDe6hawHWy6HG0j14Ml9yuCNNiCiGS1ElkJ4
-         FDwK7ikjHVH6cQbl9wbP0xFexbFxsKBHs4SD8312/HTB3efNEDVXoujQRUHFQbbQZNVr
-         MyLoeXM5qvmqSdc0OV9luJJVf+TYLpfTBehyE96zatjk+fTa5/fG08zOWBqdzbeCV9HL
-         almVUq1eF/p3WcHexcp36GQIGPzSz0to6oS51bS0uh995l9xehQQ3S0pdFNg81EmDprn
-         OUicM5QjBLbRyR2KJ63JojA0PyGYFrWwHr7LbTDeEVU3icNgYAQwJeu2JMEfYTxYGB5e
-         doTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679415188;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pk7IjbqaJIEEKsGiYXSoq0xQcxrVnoZL7rQBDJ5gFyo=;
-        b=EyZBGXMtolXNFU6jZVGmIM2AUw6Y0FfdJrsocj8pxhSfB/lRaPGeu3REJacZEwAi46
-         x5KoIZeTKdpSwifxKgO2YHqkqi7xs6LK6ZUPrS/EGE+3+nc9o+vI/SkL43ZWcPqZTCYO
-         6kFQcj4GDSEhwa7Sayc8hyjw6d/U5E0QrJ6Ho8lKJudwIPylPrmcLTvV9Cl7st5eS8Qo
-         XodDU5UMH+8Pyv+2hB8PnShs1YmeQCgfO5l+PXiysEwD1w/C9xI+jHBn88BHjIU5ghV7
-         6Iv8Dv4jxLH2HeuVk9Ki2qhUeliDMrA1/SjncX1PqN2mV1DgiB2GMDMs2Qy42kSLp0Ip
-         KJQg==
-X-Gm-Message-State: AO0yUKXbE15F5Ri2KMKaPLiBaeimqzEwXHml+BwuTaKKHGHcNXZYivK6
-        ytFMnNOn2ItSUKHR1t4f+eqvJkprcD0=
-X-Google-Smtp-Source: AK7set/UHc3VryuQe4vmOCNthOI8y5hUPmcaxq9SL3XP9hauniO7Ssi4Bsnu4r6WzLO5iry5I/3gqg==
-X-Received: by 2002:a05:600c:2148:b0:3ed:af6b:7fb3 with SMTP id v8-20020a05600c214800b003edaf6b7fb3mr2942703wml.2.1679415188348;
-        Tue, 21 Mar 2023 09:13:08 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.gmail.com with ESMTPSA id f26-20020a7bc8da000000b003ed2d7f9135sm13812938wml.45.2023.03.21.09.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 09:13:07 -0700 (PDT)
-Message-ID: <6419d793.7b0a0220.f0640.a82c@mx.google.com>
-X-Google-Original-Message-ID: <ZBnXkkZ8sOBY36YG@Ansuel-xps.>
-Date:   Tue, 21 Mar 2023 17:13:06 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v5 04/15] leds: Provide stubs for when CLASS_LED
- is disabled
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-5-ansuelsmth@gmail.com>
- <aa2d0a8b-b98b-4821-9413-158be578e8e0@lunn.ch>
- <64189d72.190a0220.8d965.4a1c@mx.google.com>
- <5ee3c2cf-8100-4f35-a2df-b379846a8736@lunn.ch>
- <6419c60e.df0a0220.1949a.c432@mx.google.com>
- <c07d07b3-42bc-4433-8f8d-3bee75218df7@lunn.ch>
+        Tue, 21 Mar 2023 12:14:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC35BB9C;
+        Tue, 21 Mar 2023 09:14:07 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LGDkJZ020197;
+        Tue, 21 Mar 2023 16:13:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=STLxretgSrKorO1inoaxrMl0MOAruib27t8XQDWlDD4=;
+ b=Z2IqUBmDfKxFh4ISuw13EY5Ax8yKtY1doEku0tmBmIAddgbUVJV4FcjXhTGXNIjMvxiA
+ g3CeDUmt+b3qrk9mtlUAbZghTfmNmFsh6dCx+Mqpv7GW+kY2EavSBmmgsCN/JgemYywH
+ PxIDK2Pcu681smO5QhAqSlTu/Rf3fNn30uPe34IeDDDhqEKomhExaWBtuVSVaXKTuYxs
+ wEyVr2PlZit1FN19x/g1PehPY2Tac9ivpj4amO5RBafsgHvThlJPyLFIMgGlYO73N6u9
+ +eFfN9tZ0HgbMNqj+HyO1SR32dUdX2e9662jaHX8WWrZ+i1jAWuAxwpD12etrxeQkx6g dQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfc2pru93-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 16:13:46 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32LGDde4011062
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 16:13:39 GMT
+Received: from [10.216.40.180] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 21 Mar
+ 2023 09:13:35 -0700
+Message-ID: <f48da7ea-0c09-a2fc-0ecc-55c946189fb5@quicinc.com>
+Date:   Tue, 21 Mar 2023 21:43:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c07d07b3-42bc-4433-8f8d-3bee75218df7@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 6/6] pstore/ram: Register context with minidump
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
+ <1676978713-7394-7-git-send-email-quic_mojha@quicinc.com>
+ <63f7c1de.170a0220.f48b.e137@mx.google.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <63f7c1de.170a0220.f48b.e137@mx.google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: abYGF1QvqcAsn1Ielr8hihDfoxktCQwA
+X-Proofpoint-GUID: abYGF1QvqcAsn1Ielr8hihDfoxktCQwA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0
+ clxscore=1015 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210127
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 05:02:42PM +0100, Andrew Lunn wrote:
-> > BTW yes I repro the problem.
-> > 
-> > Checked the makefile and led-core.c is compiled with NEW_LEDS and
-> > led-class is compiled with LEDS_CLASS.
-> > 
-> > led_init_default_state_get is in led-core.c and this is the problem with
-> > using LEDS_CLASS instead of NEW_LEDS...
-> > 
-> > But actually why we are putting led_init_default_state_get behind a
-> > config? IMHO we should compile it anyway.
-> 
-> It is pointless if you don't have any LED support. To make it always
-> compiled, you would probably need to move it into leds.h. And then you
-> bloat every user with some code which is not hot path.
-> 
 
-Ok think just to be safe we should wait one more day for the 0 day bot
-and then finally send v6? 
 
--- 
-	Ansuel
+On 2/24/2023 1:13 AM, Kees Cook wrote:
+> On Tue, Feb 21, 2023 at 04:55:13PM +0530, Mukesh Ojha wrote:
+>> There are system which does not uses pstore directly but
+>> may have the interest in the context saved by pstore.
+>> Register pstore regions with minidump so that it get
+>> dumped on minidump collection.
+> 
+> Okay, so, this is a really interesting case -- it's a RAM backend that
+> is already found on a system by pstore via device tree, but there is
+> _another_ RAM overlay (minidump) that would like to know more about how
+> the pstore ram backend carves up the memory regions so it can examine
+> them itself too. (i.e. it's another "interface" like the pstorefs.)
+> 
+> So we need to provide the mapping back to the overlay. It feels to me
+> like the logic for this needs to live in the minidump driver itself
+> (rather than in the pstore RAM backend). Specifically, it wants to know
+> about all the operational frontends (dmesg, console, ftrace, pmsg) with
+> their virt & phys addresses and size.
+> 
+> The frontends are defined via enum pstore_type_id, and the other values
+> are "normal" types, so it should be possible to move this logic into
+> minidump instead, leaving a simpler callback. Perhaps something like:
+> 
+> void pstore_region_defined(enum pstore_type_id, void *virt,
+> 			   phys_addr_t phys, size_t size);
+> 
+> How the pstore ram backend should know to call this, though, I'm
+> struggling to find a sensible way. How can it determine if the device
+> tree region is actually contained by a minidump overlay?
+
+
+Do you think, if qcom_minidump_ready() can be used which checks minidump 
+readiness ?
+
+-Mukesh
+> 
