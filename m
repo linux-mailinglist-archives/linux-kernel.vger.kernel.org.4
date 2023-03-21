@@ -2,153 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98926C2CCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841B26C2CC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCUInv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S230343AbjCUInf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 04:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjCUInr (ORCPT
+        with ESMTP id S230224AbjCUInd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:43:47 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDC43BDB6;
-        Tue, 21 Mar 2023 01:42:50 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id w22-20020a9d77d6000000b0069d2032f98aso8019823otl.12;
-        Tue, 21 Mar 2023 01:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679388168;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIM5TNKlfNxivE5VG0d4KRJ8inW6s1usyOfvs+X4zYg=;
-        b=UhCCNdHH1PEqmWjTTy62itx+pYyk+/UB50fuRUrwGS18KDu7/6NLkEvyeQVPPYUyXH
-         jiKtPIEnlVzlP8N+2SDTpV3smxvUHvHRVdNFO96gpLex5OFNHxMhMYiD/MnvR9ObG71W
-         E2VnFpiV/LQRYTRmlDN4odK9/ri6t7cawHZ2U8WUJkQoUowSXmC34OHl/ykT0WHz4lfw
-         /5Wk8VIOyRVKYuJmvDS3NsDPJshuEfz25XG8GGIJoY864mdEMuDUJKa+7zi+ebJTKe4b
-         3U/rDVApv41fOZY/fefr4b//3EIVyeUrj1X3OFggglukSgKJ2qqSV9zfkB1uGXD1g1K2
-         TH4w==
+        Tue, 21 Mar 2023 04:43:33 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1086C4391C;
+        Tue, 21 Mar 2023 01:42:59 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id t9so16957711qtx.8;
+        Tue, 21 Mar 2023 01:42:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679388168;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PIM5TNKlfNxivE5VG0d4KRJ8inW6s1usyOfvs+X4zYg=;
-        b=RBSi1D5awBv5pXjXu+Gk+99ngoXm455fkXF+hqKXomy0PJ8PnTIZ/y+veoiGucY+d2
-         ARhW8pMj8rNgkom2YPRdF5/RWAzemqmIRg739N7jcHExOhojZzftm5uDbHijsvlx++PZ
-         1aCDtXZ4dfPg/Pfvvku59En9jomQsKSYm0Kx8wowSrEJpN0RzK/1TDC3/CESJPCOwG2G
-         zwVWEUXv19j1ZWPCsnZMt5M7x4lbj936yrsUUwnDqGacxpDvqGI94fTgy8kqe0eAogCd
-         +poxDMI0HjD4F8GvOATK8Zh5UjIWhc29uT0IjvinxG9IL9mfr46XKiYMjBS6TyvguSS7
-         8wPA==
-X-Gm-Message-State: AO0yUKVZ5RbPOgtGNFQiauJNubBwksrnwp8wDhJXN3OPlYpFgxhOsjCw
-        d+P2lTkWKMmheDuwmgKjjnjrdTgGQ07qd4/sMMg=
-X-Google-Smtp-Source: AK7set9W9RD3dzU3hSbXXc5N+zgXzCtyG7/Ufz/f6/mVVEf13arFZi8yOyyf00JXd77jpHGi67JvMPmyTlGNxQiLRQs=
-X-Received: by 2002:a9d:7854:0:b0:68b:cd1e:1ef1 with SMTP id
- c20-20020a9d7854000000b0068bcd1e1ef1mr535395otm.7.1679388167819; Tue, 21 Mar
- 2023 01:42:47 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679388169;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iK/sUmy+uYhum5gWxh+OskUEG9MJUSbdKMs8GiRoDEA=;
+        b=2mr/Yl9a7W5ge6l7VYQ+2YTc3f6II/EJPIm02IvHR0zA4I1EBAOpty2cb9vCqjdjIa
+         z9RqgrJuA8cd8ty8hYKkK0lY0OMDyUHGMUMB6qTu19gjSLWomp+9kIXFjGZG6rR5B0zF
+         Iwh8tOEunPZ3/lVe+MV1kjvX7DXaW5Z1y5+71y5Vd0ldSNiyq3ez3axVpp2IuiGRbr8L
+         FdEXOQ8Uy1bjLQ8lR7AiT4mKKlVThh4YBQrWnhKe2vEgrIDBnBU6p9xN5kKQMghf6Oqg
+         d7wPFJZ+CS0BW2QYQS6eUwq2g/E10aFw0trdRgMovq81kBdA6rNLMur6+e+hsFC0bBjg
+         U+eQ==
+X-Gm-Message-State: AO0yUKUioH7FNo7oKnuhK2MxhmqVfnv3Qu/LkY1U/JoIxKtnLqG1fl9k
+        pPmu2S2xY5D5OmN+PGaHa8Cyhs1XrA6fiw==
+X-Google-Smtp-Source: AK7set8zcFcPFYMXR1676wnY/uqv2LKnwfFwC19F1xiLF0fxOYp8iBz2ktCItNtcrB75rMmsnx/SRA==
+X-Received: by 2002:a05:622a:15cb:b0:3e3:7d35:7899 with SMTP id d11-20020a05622a15cb00b003e37d357899mr3078700qty.43.1679388169352;
+        Tue, 21 Mar 2023 01:42:49 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id e14-20020a05620a014e00b0073b45004754sm8974446qkn.34.2023.03.21.01.42.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 01:42:49 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id e71so16181898ybc.0;
+        Tue, 21 Mar 2023 01:42:48 -0700 (PDT)
+X-Received: by 2002:a05:6902:1023:b0:b6b:841a:aae4 with SMTP id
+ x3-20020a056902102300b00b6b841aaae4mr689181ybt.12.1679388168489; Tue, 21 Mar
+ 2023 01:42:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221013062649.303184-1-dominic.rath@ibv-augsburg.de>
- <20221013062649.303184-2-dominic.rath@ibv-augsburg.de> <20221013191249.GA38183-robh@kernel.org>
- <20221014134114.GA307620@JADEVM-DRA> <5d049f9c-f86e-990d-6e81-168606172d63@ti.com>
-In-Reply-To: <5d049f9c-f86e-990d-6e81-168606172d63@ti.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Tue, 21 Mar 2023 09:42:36 +0100
-Message-ID: <CAH9NwWfLLvVG4=cxCriYjMpXHYw5OhX3rzbSXO0o5Ji3isYtXg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: PCI: cdns: Add PHY latency properties
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Dominic Rath <dominic.rath@ibv-augsburg.net>,
-        Rob Herring <robh@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
-        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, Alexander Bahle <bahle@ibv-augsburg.de>,
-        Dominic Rath <rath@ibv-augsburg.de>
+References: <20230320231310.28841-1-rdunlap@infradead.org> <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
+ <ad2234ad155d51c142e59adcf2981bce23d69aa4.camel@physik.fu-berlin.de>
+In-Reply-To: <ad2234ad155d51c142e59adcf2981bce23d69aa4.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Mar 2023 09:42:37 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW-oxpoHubUJUpsjG9aXtQ3MMwAopN-hS+Mf0gN1udhig@mail.gmail.com>
+Message-ID: <CAMuHMdW-oxpoHubUJUpsjG9aXtQ3MMwAopN-hS+Mf0gN1udhig@mail.gmail.com>
+Subject: Re: [PATCH 6/7 v5] sh: fix Kconfig entry for NUMA => SMP
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dominic,
+Hi Adrian,
 
-> >>>
-> >>> Add "cdns,tx-phy-latency-ps" and "cdns,rx-phy-latency-ps" DT bindings for
-> >>> setting the PCIe PHY latencies.
-> >>> The properties expect a list of uint32 PHY latencies in picoseconds for
-> >>> every supported speed starting at PCIe Gen1, e.g.:
-> >>>
-> >>>   max-link-speed = <2>;
-> >>>   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
-> >>>   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
-> >>
-> >> These are a property of the PHY or PCI host? Sounds like PHY to me and
-> >> that should be in the PHY node. No reason the PCI driver can't go read
-> >> PHY node properties.
+On Tue, Mar 21, 2023 at 9:10 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Tue, 2023-03-21 at 08:55 +0100, Geert Uytterhoeven wrote:
+> > On Tue, Mar 21, 2023 at 12:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> > > Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+> > > SYS_SUPPORTS_SMP and SMP.
 > >
-> > I'm actually not sure if this a property of the PHY, the PCIe host, or
-> > of the combination of the two.
-> >
+> > Perhaps because these SoCs do not support SMP?
 >
-> Latency is mostly related to propogation latency through SERDES PCS and
-> PMA layers.
+> Well, there is actually a dual-core 7786 board available, see:
 >
-> > We thought about adding this property to the PHY, too, but we didn't
-> > know how to handle cases where a single PCIe host is linked with
-> > multiple PHYs for multi-lane configurations (see TI's AM65x for
-> > example). Which PHYs latency would you use to configure this PCIe RC?
+> > https://www.apnet.co.jp/product/superh/ap-sh4ad-0a.html
 >
-> On AM65x, all lanes go through SERDES of same design (but just different
-> instances) and thus latencies will remain same across lanes as the PCS
-> and PMA logics are same. So, the delays are not lane specific
+> Quoting:
 >
-> >
-> > Personally I don't have a very strong opinion either way - we just
-> > didn't know any better than to put this into the PCIe host that needs
-> > it. If you think this is better put into the PHY node we can of course
-> > send a new version of this patch.
-> >
->
-> I don't have a preference here...  Delays are dependent on PHYs being
-> used but something that host needs, will leave it to framework
-> maintainers.
->
-> > Is there any binding that specifies "generic" PCIe properties, similar
-> > to ethernet-phy.yaml? We couldn't find any.
-> >
-> > I guess in the AM64x case the "PHY" is serdes0_pcie_link below serdes0:
-> >
-> > &serdes0 {
-> >         serdes0_pcie_link: phy@0 {
-> >       ...
-> >
-> > This seems to be described by bindings/phy/phy-cadence-torrent.yaml.
-> >
-> > Should we add a generic (without cdns) tx/rx-phy-latency-ps property
-> > there?
-> >
-> >> If PTM is a standard PCIe thing, then I don't think these should be
-> >> Cadence specific. IOW, drop 'cdns'.
-> >
-> > Yes, it is a standard PCIe thing, but we haven't seen that many
-> > implementations yet, so we didn't want to pretend to know what this
-> > looks like in the generic case. We can of course drop 'cdns'.
->
-> PTM is definitely standard and vendor specific prefix don't make sense
-> to me.
->
+> »The SH7786 is equipped with a dual-core SH-4A and has interfaces such as
+>  DDR3 SDRAM, PCI Express, USB, and display unit.«
 
-Is there any chance you can send a revisited patch series or is there
-anything missing for
-you to continue?
+SH7786 is dual-core...
+
+> FWIW, I just realized we need this for config CPU_SUBTYPE_SH7786 as well.
+
+... and CPU_SUBTYPE_SH7786 selects CPU_SHX3, which selects
+SYS_SUPPORTS_SMP and SYS_SUPPORTS_NUMA in turn.
+So everything is fine for SH7786.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-greets
---
-Christian Gmeiner, MSc
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-https://christian-gmeiner.info/privacypolicy
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
