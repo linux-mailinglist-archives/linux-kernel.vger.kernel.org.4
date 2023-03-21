@@ -2,220 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE156C3333
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088BA6C3342
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCUNsD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 09:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S231192AbjCUNsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCUNsB (ORCPT
+        with ESMTP id S231280AbjCUNsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:48:01 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D0B43469;
-        Tue, 21 Mar 2023 06:47:59 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id r11so59914962edd.5;
-        Tue, 21 Mar 2023 06:47:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679406478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vvR60g3tFXEBQYgwVwbIXJyQcGxQhx5VhvptYm3eERQ=;
-        b=lB4+cmzGe4Aon1YQpwAZly0x5SkZfgvy92MYuRQPGOHlOM2cFx3UV+hlVJwCC+eSEH
-         GsPkk29IE4lZPBXNbcz2aO5xMelb5G1tUOpX01AiV79BrF0Tsr4rS2PkmEIDeWe2WaP9
-         nTcsx+lKyStaDpFNq/BwS2gw5b0vBFmnp3Sv0ufhJ28670+J63XjcMN8G++wbyt6N86t
-         ivoiabKwxoOm6qt6uLLbhVScoyio/8IkDlf5xMWCwGBlyyONaScMh/4hD86Zol6vz75A
-         EK4BOeUvUKN1/u3cR5oWsUUa8gtwWsQhiavz6Qil/2gOgAxXO24em3fvUti/IOEhBL7M
-         mYHQ==
-X-Gm-Message-State: AO0yUKVTIG1KBTkmgURRK0CemURiy55PC6PinoPZn36ClJVUEbf88lAj
-        qfSup2aFhFBGRjvMinZ+yumyIBg+1aJupPWB+ag=
-X-Google-Smtp-Source: AK7set/h/NZ/VGvn4gefABgUQDp9XIpghr+brUfqQ2nYQUkGxKqbJrSGm8oBcbUzqE6/gClu2VFHaojfHaqc9llz62M=
-X-Received: by 2002:a50:cd1d:0:b0:4fc:8749:cd77 with SMTP id
- z29-20020a50cd1d000000b004fc8749cd77mr1690914edi.3.1679406477635; Tue, 21 Mar
- 2023 06:47:57 -0700 (PDT)
+        Tue, 21 Mar 2023 09:48:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66D93D927;
+        Tue, 21 Mar 2023 06:48:24 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PgtDD73D6zKs3R;
+        Tue, 21 Mar 2023 21:46:04 +0800 (CST)
+Received: from [10.67.101.126] (10.67.101.126) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 21:48:21 +0800
+Message-ID: <b1524366-0e32-adb2-e7ef-fd0de5ef473c@huawei.com>
+Date:   Tue, 21 Mar 2023 21:48:21 +0800
 MIME-Version: 1.0
-References: <20230316164257.42590-1-roger.pau@citrix.com>
-In-Reply-To: <20230316164257.42590-1-roger.pau@citrix.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 21 Mar 2023 14:47:46 +0100
-Message-ID: <CAJZ5v0jskeE8nJt04vyEkDO3rOwOHp36mcKcV=L9LGXD0HL6Mw@mail.gmail.com>
-Subject: Re: [PATCH v4] acpi/processor: fix evaluating _PDC method when
- running as Xen dom0
-To:     Roger Pau Monne <roger.pau@citrix.com>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        josef@oderland.se, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
-        Alex Chiang <achiang@hp.com>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH RESEND] scsi: libsas: Add end eh callback
+Content-Language: en-CA
+To:     John Garry <john.g.garry@oracle.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>, <chenxiang66@hisilicon.com>
+References: <20230321073959.736-1-yangxingui@huawei.com>
+ <4d9606b2-374c-8a76-05c4-7bd861b3b8bc@oracle.com>
+From:   yangxingui <yangxingui@huawei.com>
+In-Reply-To: <4d9606b2-374c-8a76-05c4-7bd861b3b8bc@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.126]
+X-ClientProxiedBy: dggpemm500012.china.huawei.com (7.185.36.89) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 5:43 PM Roger Pau Monne <roger.pau@citrix.com> wrote:
->
-> In ACPI systems, the OS can direct power management, as opposed to the
-> firmware.  This OS-directed Power Management is called OSPM.  Part of
-> telling the firmware that the OS going to direct power management is
-> making ACPI "_PDC" (Processor Driver Capabilities) calls.  These _PDC
-> methods must be evaluated for every processor object.  If these _PDC
-> calls are not completed for every processor it can lead to
-> inconsistency and later failures in things like the CPU frequency
-> driver.
->
-> In a Xen system, the dom0 kernel is responsible for system-wide power
-> management.  The dom0 kernel is in charge of OSPM.  However, the
-> number of CPUs available to dom0 can be different than the number of
-> CPUs physically present on the system.
->
-> This leads to a problem: the dom0 kernel needs to evaluate _PDC for
-> all the processors, but it can't always see them.
->
-> In dom0 kernels, ignore the existing ACPI method for determining if a
-> processor is physically present because it might not be accurate.
-> Instead, ask the hypervisor for this information.
->
-> Fix this by introducing a custom function to use when running as Xen
-> dom0 in order to check whether a processor object matches a CPU that's
-> online.  Such checking is done using the existing information fetched
-> by the Xen pCPU subsystem, extending it to also store the ACPI ID.
->
-> This ensures that _PDC method gets evaluated for all physically online
-> CPUs, regardless of the number of CPUs made available to dom0.
->
-> Fixes: 5d554a7bb064 ('ACPI: processor: add internal processor_physically_present()')
-> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-> ---
-> Changes since v3:
->  - Protect xen_processor_present() definition with CONFIG_ACPI.
->
-> Changes since v2:
->  - Extend and use the existing pcpu functionality.
->
-> Changes since v1:
->  - Reword commit message.
-> ---
->  arch/x86/include/asm/xen/hypervisor.h | 10 ++++++++++
->  drivers/acpi/processor_pdc.c          | 11 +++++++++++
->  drivers/xen/pcpu.c                    | 21 +++++++++++++++++++++
->  3 files changed, 42 insertions(+)
->
-> diff --git a/arch/x86/include/asm/xen/hypervisor.h b/arch/x86/include/asm/xen/hypervisor.h
-> index 5fc35f889cd1..990a1609677e 100644
-> --- a/arch/x86/include/asm/xen/hypervisor.h
-> +++ b/arch/x86/include/asm/xen/hypervisor.h
-> @@ -63,4 +63,14 @@ void __init xen_pvh_init(struct boot_params *boot_params);
->  void __init mem_map_via_hcall(struct boot_params *boot_params_p);
->  #endif
->
-> +#if defined(CONFIG_XEN_DOM0) && defined(CONFIG_ACPI)
-> +bool __init xen_processor_present(uint32_t acpi_id);
-> +#else
-> +static inline bool xen_processor_present(uint32_t acpi_id)
-> +{
-> +       BUG();
-> +       return false;
-> +}
-> +#endif
-> +
->  #endif /* _ASM_X86_XEN_HYPERVISOR_H */
-> diff --git a/drivers/acpi/processor_pdc.c b/drivers/acpi/processor_pdc.c
-> index 8c3f82c9fff3..18fb04523f93 100644
-> --- a/drivers/acpi/processor_pdc.c
-> +++ b/drivers/acpi/processor_pdc.c
-> @@ -14,6 +14,8 @@
->  #include <linux/acpi.h>
->  #include <acpi/processor.h>
->
-> +#include <xen/xen.h>
+Hi John,
 
-This along with the definition above is evidently insufficient for
-xen_processor_present() to always be defined.  See
-https://lore.kernel.org/linux-acpi/64198b60.bO+m9o5w+Hd8hcF3%25lkp@intel.com/T/#u
-for example.
-
-I'm dropping the patch now, please fix and resend.
-
-> +
->  #include "internal.h"
->
->  static bool __init processor_physically_present(acpi_handle handle)
-> @@ -47,6 +49,15 @@ static bool __init processor_physically_present(acpi_handle handle)
->                 return false;
->         }
->
-> +       if (xen_initial_domain())
-> +               /*
-> +                * When running as a Xen dom0 the number of processors Linux
-> +                * sees can be different from the real number of processors on
-> +                * the system, and we still need to execute _PDC for all of
-> +                * them.
-> +                */
-> +               return xen_processor_present(acpi_id);
-> +
->         type = (acpi_type == ACPI_TYPE_DEVICE) ? 1 : 0;
->         cpuid = acpi_get_cpuid(handle, type, acpi_id);
->
-> diff --git a/drivers/xen/pcpu.c b/drivers/xen/pcpu.c
-> index fd3a644b0855..034d05e56507 100644
-> --- a/drivers/xen/pcpu.c
-> +++ b/drivers/xen/pcpu.c
-> @@ -58,6 +58,7 @@ struct pcpu {
->         struct list_head list;
->         struct device dev;
->         uint32_t cpu_id;
-> +       uint32_t acpi_id;
->         uint32_t flags;
->  };
->
-> @@ -249,6 +250,7 @@ static struct pcpu *create_and_register_pcpu(struct xenpf_pcpuinfo *info)
->
->         INIT_LIST_HEAD(&pcpu->list);
->         pcpu->cpu_id = info->xen_cpuid;
-> +       pcpu->acpi_id = info->acpi_id;
->         pcpu->flags = info->flags;
->
->         /* Need hold on xen_pcpu_lock before pcpu list manipulations */
-> @@ -381,3 +383,22 @@ static int __init xen_pcpu_init(void)
->         return ret;
->  }
->  arch_initcall(xen_pcpu_init);
-> +
-> +#ifdef CONFIG_ACPI
-> +bool __init xen_processor_present(uint32_t acpi_id)
-> +{
-> +       struct pcpu *pcpu;
-> +       bool online = false;
-> +
-> +       mutex_lock(&xen_pcpu_lock);
-> +       list_for_each_entry(pcpu, &xen_pcpus, list)
-> +               if (pcpu->acpi_id == acpi_id) {
-> +                       online = pcpu->flags & XEN_PCPU_FLAGS_ONLINE;
-> +                       break;
-> +               }
-> +
-> +       mutex_unlock(&xen_pcpu_lock);
-> +
-> +       return online;
-> +}
-> +#endif
-> --
-> 2.39.0
->
+On 2023/3/21 17:31, John Garry wrote:
+> On 21/03/2023 07:39, Xingui Yang wrote:
+>> If an error occurs while the disk is processing an NCQ command and the 
+>> host
+>> received the abnormal SDB FIS, let libata EH to analyze the NCQ error, 
+>> and
+>> it is not necessary to reset the target to recover.
+>>
+>> Then the hisi_sas has some special process to set dev_status to normal 
+>> when
+>> end the eh for NCQ error without reset the target, so add a callback and
+>> fill it in for the hisi_sas driver.
+> 
+> What is so special about this driver such that it is the only one to get 
+> this treatment? We generally don't just add callbacks for specific 
+> driver usage, i.e. you need to make it generic.
+Yes, I agree very much. it may be a common requirement for the lldd 
+performs a specific state restoration after eh complete. such as, we set 
+the device state to normal instead of doing it in the target reset 
+function.
+> 
+> I would need to refresh my memory on the ATA EH handling to review this 
+> further, which I will do when I get a chance.
+Thanks
+Xingui
+> 
+>>
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+>> ---
+>>   drivers/scsi/hisi_sas/hisi_sas_main.c  | 12 +++++++++---
+>>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  7 +++++--
+>>   drivers/scsi/libsas/sas_ata.c          |  5 +++++
+>>   include/scsi/libsas.h                  |  2 ++
+>>   4 files changed, 21 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c 
+>> b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> index 325d6d6a21c3..61686ead0027 100644
+>> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> @@ -1777,9 +1777,6 @@ static int hisi_sas_I_T_nexus_reset(struct 
+>> domain_device *device)
+>>       struct device *dev = hisi_hba->dev;
+>>       int rc;
+>> -    if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
+>> -        sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+>> -
+>>       rc = hisi_sas_internal_task_abort_dev(sas_dev, false);
+>>       if (rc < 0) {
+>>           dev_err(dev, "I_T nexus reset: internal abort (%d)\n", rc);
+>> @@ -1967,6 +1964,14 @@ static bool 
+>> hisi_sas_internal_abort_timeout(struct sas_task *task,
+>>       return false;
+>>   }
+>> +static void hisi_sas_end_eh(struct domain_device *dev)
+>> +{
+>> +    struct hisi_sas_device *sas_dev = dev->lldd_dev;
+>> +
+>> +    if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
+>> +        sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
+>> +}
+>> +
+>>   static void hisi_sas_port_formed(struct asd_sas_phy *sas_phy)
+>>   {
+>>       hisi_sas_port_notify_formed(sas_phy);
+>> @@ -2083,6 +2088,7 @@ static struct sas_domain_function_template 
+>> hisi_sas_transport_ops = {
+>>       .lldd_write_gpio    = hisi_sas_write_gpio,
+>>       .lldd_tmf_aborted    = hisi_sas_tmf_aborted,
+>>       .lldd_abort_timeout    = hisi_sas_internal_abort_timeout,
+>> +    .lldd_end_eh        = hisi_sas_end_eh,
+>>   };
+>>   void hisi_sas_init_mem(struct hisi_hba *hisi_hba)
+>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c 
+>> b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+>> index 66fcb340b98e..abad57de4aee 100644
+>> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+>> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+>> @@ -2433,15 +2433,18 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
+>>               struct hisi_sas_device *sas_dev =
+>>                   &hisi_hba->devices[device_id];
+>>               struct domain_device *device = sas_dev->sas_device;
+>> +            bool force_reset = true;
+>>               dev_err(dev, "erroneous completion disk err dev id=%d 
+>> sas_addr=0x%llx CQ hdr: 0x%x 0x%x 0x%x 0x%x\n",
+>>                   device_id, itct->sas_addr, dw0, dw1,
+>>                   complete_hdr->act, dw3);
+>> -            if (is_ncq_err_v3_hw(complete_hdr))
+>> +            if (is_ncq_err_v3_hw(complete_hdr)) {
+>>                   sas_dev->dev_status = HISI_SAS_DEV_NCQ_ERR;
+>> +                force_reset = false;
+>> +            }
+>> -            sas_ata_device_link_abort(device, true);
+>> +            sas_ata_device_link_abort(device, force_reset);
+>>           } else if (likely(iptt < HISI_SAS_COMMAND_ENTRIES_V3_HW)) {
+>>               slot = &hisi_hba->slot_info[iptt];
+>>               slot->cmplt_queue_slot = rd_point;
+>> diff --git a/drivers/scsi/libsas/sas_ata.c 
+>> b/drivers/scsi/libsas/sas_ata.c
+>> index 77714a495cbb..25a064087311 100644
+>> --- a/drivers/scsi/libsas/sas_ata.c
+>> +++ b/drivers/scsi/libsas/sas_ata.c
+>> @@ -534,11 +534,16 @@ void sas_ata_end_eh(struct ata_port *ap)
+>>   {
+>>       struct domain_device *dev = ap->private_data;
+>>       struct sas_ha_struct *ha = dev->port->ha;
+>> +    struct sas_internal *i = dev_to_sas_internal(dev);
+>>       unsigned long flags;
+>>       spin_lock_irqsave(&ha->lock, flags);
+>>       if (test_and_clear_bit(SAS_DEV_EH_PENDING, &dev->state))
+>>           ha->eh_active--;
+>> +
+>> +    if (i->dft->lldd_end_eh)
+>> +        i->dft->lldd_end_eh(dev);
+>> +
+>>       spin_unlock_irqrestore(&ha->lock, flags);
+>>   }
+>> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+>> index 159823e0afbf..659395ef616e 100644
+>> --- a/include/scsi/libsas.h
+>> +++ b/include/scsi/libsas.h
+>> @@ -683,6 +683,8 @@ struct sas_domain_function_template {
+>>       int (*lldd_lu_reset)(struct domain_device *, u8 *lun);
+>>       int (*lldd_query_task)(struct sas_task *);
+>> +    void (*lldd_end_eh)(struct domain_device *dev);
+>> +
+>>       /* Special TMF callbacks */
+>>       void (*lldd_tmf_exec_complete)(struct domain_device *dev);
+>>       void (*lldd_tmf_aborted)(struct sas_task *task);
+> 
+> 
+> .
