@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225AD6C370D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B7C6C3709
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjCUQih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S229941AbjCUQiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCUQie (ORCPT
+        with ESMTP id S229619AbjCUQiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:38:34 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6493A86;
-        Tue, 21 Mar 2023 09:38:32 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32LGc0B1129243;
-        Tue, 21 Mar 2023 11:38:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679416680;
-        bh=uyW0ma/g/TPpcz9cP3XZ4eMHjClm1JYyRJYyObimbRg=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=TEpHALzKK4737cd+fev5B5J6JQaHQMk+tWpOOvSdWkkBlEnr4c4PSsLHKXOWJzzck
-         Kd43hsjF7hkzFqtOW3gCaIYBzbtNwn7UBKzTM3pvDHzgCrDHRukL3D4OPupOLTxrPx
-         O0MTJAvXeDv97FVNtLJWKvREJTv/eqNdjkJX5DVc=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32LGbxa1067846
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 11:37:59 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 11:37:59 -0500
-Received: from DFLE114.ent.ti.com ([fe80::bc90:ddd:2b87:4222]) by
- DFLE114.ent.ti.com ([fe80::bc90:ddd:2b87:4222%18]) with mapi id
- 15.01.2507.016; Tue, 21 Mar 2023 11:37:59 -0500
-From:   "Sterzik, Chris" <sterzik@ti.com>
-To:     Rob Herring <robh@kernel.org>, Julien Panis <jpanis@baylibre.com>
-CC:     "lee@kernel.org" <lee@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
-        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "stephen@networkplumber.org" <stephen@networkplumber.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "contact@emersion.fr" <contact@emersion.fr>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Kumar, Udit" <u-kumar1@ti.com>,
-        "eblanc@baylibre.com" <eblanc@baylibre.com>,
-        "jneanne@baylibre.com" <jneanne@baylibre.com>
-Subject: RE: [EXTERNAL] Re: [PATCH v2 1/4] dt-bindings: mfd: Add TI TPS6594
- PMIC
-Thread-Topic: [EXTERNAL] Re: [PATCH v2 1/4] dt-bindings: mfd: Add TI TPS6594
- PMIC
-Thread-Index: AQHZW0Qu2zDSQUXVm0moss4cLgsF5K8FbWcw
-Date:   Tue, 21 Mar 2023 16:37:59 +0000
-Message-ID: <edbd9ccae2fb4d18b50d99123246cb03@ti.com>
-References: <20230315110736.35506-1-jpanis@baylibre.com>
- <20230315110736.35506-2-jpanis@baylibre.com>
- <20230320155354.GB1733616-robh@kernel.org>
-In-Reply-To: <20230320155354.GB1733616-robh@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.249.38.185]
-x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 21 Mar 2023 12:38:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E2BC651
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:38:06 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D18E721E69;
+        Tue, 21 Mar 2023 16:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679416684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=75NZSyygx2lstlqfDbzVwOfIzbH0byOyQMOGCINC048=;
+        b=f8P7m1ge3oRJfoNF9biJ7pOTtTZebdhtmKo+s7/L6kxMO76x2uSuMUC+rCI458nXMwNDBZ
+        6IktAu2Ioz+zxPPPnZKlxBhMcpAOQ/PV5P3T4X/F/6lek9Z49kgH1Ox2n/s0aJiPeeuiyl
+        CofInc3+fMM3Unh50RwQPnQjX9RuGnQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 75FDF2C141;
+        Tue, 21 Mar 2023 16:38:04 +0000 (UTC)
+Date:   Tue, 21 Mar 2023 17:38:01 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 07/18] printk: nobkl: Add buffer management
+Message-ID: <ZBndaSUFd4ipvKwj@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-8-john.ogness@linutronix.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302195618.156940-8-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> +      A multi-PMIC synchronization scheme is implemented in the PMIC de=
-vice
->> +      to synchronize the power state changes with other PMIC devices. T=
-his is
->> +      accomplished through a SPMI bus: the primary PMIC is the controll=
-er
->> +      device on the SPMI bus, and the secondary PMICs are the target de=
-vices
->> +      on the SPMI bus.
->
->Is this a TI specific feature?
->
-This implementation of SPMI bus is a TI specific feature and is only suppor=
-ted between devices which have this specific implementation.
+On Thu 2023-03-02 21:02:07, John Ogness wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> In case of hostile takeovers it must be ensured that the previous
+> owner cannot scribble over the output buffer of the emergency/panic
+> context. This is achieved by:
+> 
+>  - Adding a global output buffer instance for early boot (pre per CPU
+>    data being available).
+> 
+>  - Allocating an output buffer per console for threaded printers once
+>    printer threads become available.
+> 
+>  - Allocating per CPU output buffers per console for printing from
+>    all contexts not covered by the other buffers.
+> 
+>  - Choosing the appropriate buffer is handled in the acquire/release
+>    functions.
+> 
+> The output buffer is wrapped into a separate data structure so other
+> context related fields can be added in later steps.
+> 
+> --- a/kernel/printk/printk_nobkl.c
+> +++ b/kernel/printk/printk_nobkl.c
+> @@ -166,6 +166,47 @@ static inline bool cons_check_panic(void)
+>  	return pcpu != PANIC_CPU_INVALID && pcpu != smp_processor_id();
+>  }
+>  
+> +static struct cons_context_data early_cons_ctxt_data __initdata;
+> +
+> +/**
+> + * cons_context_set_pbufs - Set the output text buffer for the current context
+> + * @ctxt:	Pointer to the acquire context
+> + *
+> + * Buffer selection:
+> + *   1) Early boot uses the global (initdata) buffer
+> + *   2) Printer threads use the dynamically allocated per-console buffers
+> + *   3) All other contexts use the per CPU buffers
+> + *
+> + * This guarantees that there is no concurrency on the output records ever.
+> + * Early boot and per CPU nesting is not a problem. The takeover logic
+> + * tells the interrupted context that the buffer has been overwritten.
+> + *
+> + * There are two critical regions that matter:
+> + *
+> + * 1) Context is filling the buffer with a record. After interruption
+> + *    it continues to sprintf() the record and before it goes to
+> + *    write it out, it checks the state, notices the takeover, discards
+> + *    the content and backs out.
+> + *
+> + * 2) Context is in a unsafe critical region in the driver. After
+> + *    interruption it might read overwritten data from the output
+> + *    buffer. When it leaves the critical region it notices and backs
+> + *    out. Hostile takeovers in driver critical regions are best effort
+> + *    and there is not much that can be done about that.
+> + */
+> +static __ref void cons_context_set_pbufs(struct cons_context *ctxt)
+> +{
+> +	struct console *con = ctxt->console;
+> +
+> +	/* Thread context or early boot? */
+> +	if (ctxt->thread)
+> +		ctxt->pbufs = con->thread_pbufs;
+> +	else if (!con->pcpu_data)
+> +		ctxt->pbufs = &early_cons_ctxt_data.pbufs;
+> +	else
+> +		ctxt->pbufs = &(this_cpu_ptr(con->pcpu_data)->pbufs);
+
+What exactly do we need the per-CPU buffers for, please?
+Is it for an early boot or panic or another scenario?
+
+I would expect that per-console buffer should be enough.
+The per-console atomic lock should define who owns
+the per-console buffer. The buffer must be accessed
+carefully because any context could loose the atomic lock.
+Why is kthread special?
+
+The per-CPU buffer actually looks dangerous. It might
+be used by more NOBKL consoles. How is the access synchronized
+please? By console_list_lock? It is not obvious to me.
+
+
+On the contrary, we might need 4 static buffers for the early
+boot. For example, one atomic console might start printing
+in the normal context. Second atomic console might use
+the same static buffer in IRQ context. But the first console
+will not realize it because it did not loose the per-CPU
+atomic lock when the CPU handled the interrupt..
+Or is this handled another way, please?
+
+Best Regards,
+Petr
