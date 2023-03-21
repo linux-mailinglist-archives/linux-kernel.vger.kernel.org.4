@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADDB6C2CCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59C16C2CCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjCUIoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S229923AbjCUIoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjCUIoZ (ORCPT
+        with ESMTP id S230047AbjCUIo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:44:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B31347413;
-        Tue, 21 Mar 2023 01:43:22 -0700 (PDT)
+        Tue, 21 Mar 2023 04:44:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D85DEC48;
+        Tue, 21 Mar 2023 01:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679388204; x=1710924204;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=btMS0huDMUYhEmGuZe82nAyhxOj5XzUpq5NA/2S108g=;
-  b=S3A4PWZyCEnf03oEsWjmJjWeYV++mV/b0Im/oYpx7YyujKfVUgRcLmq4
-   s+u/bB5/C0/ohoTu2sqmQc1uyxYvVzpLg2773eXF5TjkAoeaDMTEsLl+1
-   GJ3ekWHI9CP6YtOwWpKGnSOLRlQm2NF5nI5zJ+7h5IPwZiQQBwm4U6OXo
-   +ZXMRZK9FhJhlXiEiYuvGSw7YRD8LSrIc9XxiCrnV1Pm3oQOyORYn3Q/b
-   t3xgCgtuUvz6vHCup4OSFL/lpz2swnfwgX97yIVrnOeB3D7+QVqatGlI6
-   UX+Tc1d7MOvS/5P31HPRZUjV+pCdrdwuYX+8XNALYkg23Vt7/3YMaMH/L
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,278,1673938800"; 
-   d="asc'?scan'208";a="143082697"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2023 01:43:11 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 01:43:11 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 21 Mar 2023 01:43:09 -0700
-Date:   Tue, 21 Mar 2023 08:42:39 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc1 review
-Message-ID: <174b5c37-b4cc-4ec4-89f1-8eca4ccd3043@spud>
-References: <20230320145507.420176832@linuxfoundation.org>
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679388208; x=1710924208;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cJdbBf+bpw+4ZJXIgzlJlPNlSnPstSFYZ4kxxJGkF7s=;
+  b=WdEViKIWktEpZURMkBzkhwlGoTKkARKsPiBHpl3wXHNO8GLLYdC+tvdT
+   hqspPNKk6DF3uHe5t5vyRvRD0h0E7acdWU41IGNSWLZaKNeeCpC0en/E1
+   ydmwjNDPRM6b8Rv/k31MtVkr/NiUR1RRpJq4WpYgj6FmBcCYSP0MFVyEU
+   MFdPnkxr6IWxDykJksMDsWch9EsjGwA4OJprpB1Nq1/IIZWVgSKnSx1ec
+   g31bJh+visYL/rCusUoMuIeIhS07Rsb2hKOir7cDAyDsfne3rhLoFVodx
+   DkupUBKmxUWl2FUqPjK6UiQNIx7SkkIPWwFjNH3qTOk1bchRg/qUnHv7d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340428308"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="340428308"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 01:43:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674741495"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="674741495"
+Received: from scoyle-mobl.ger.corp.intel.com (HELO [10.213.210.173]) ([10.213.210.173])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 01:43:09 -0700
+Message-ID: <f72efa19-8f29-afcd-af07-d2ac89c9785d@linux.intel.com>
+Date:   Tue, 21 Mar 2023 08:43:07 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3ranM69fegQ07Uvr"
-Content-Disposition: inline
-In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH][next] drm/i915/uapi: Replace fake flex-array with
+ flexible-array member
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <ZBSu2QsUJy31kjSE@work>
+ <64189999.170a0220.fa1d9.c3f5@mx.google.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <64189999.170a0220.fa1d9.c3f5@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---3ranM69fegQ07Uvr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Mar 20, 2023 at 03:52:18PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.21 release.
-> There are 198 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 20/03/2023 17:36, Kees Cook wrote:
+> On Fri, Mar 17, 2023 at 12:18:01PM -0600, Gustavo A. R. Silva wrote:
+>> Zero-length arrays as fake flexible arrays are deprecated and we are
+>> moving towards adopting C99 flexible-array members instead.
+>>
+>> Address the following warning found with GCC-13 and
+>> -fstrict-flex-arrays=3 enabled:
+>> drivers/gpu/drm/i915/gem/i915_gem_context.c: In function ‘set_proto_ctx_engines.isra’:
+>> drivers/gpu/drm/i915/gem/i915_gem_context.c:769:41: warning: array subscript n is outside array bounds of ‘struct i915_engine_class_instance[0]’ [-Warray-bounds=]
+>>    769 |                 if (copy_from_user(&ci, &user->engines[n], sizeof(ci))) {
+>>        |                                         ^~~~~~~~~~~~~~~~~
+>> ./include/uapi/drm/i915_drm.h:2494:43: note: while referencing ‘engines’
+>>   2494 |         struct i915_engine_class_instance engines[0];
+>>
+>> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+>> routines on memcpy() and help us make progress towards globally
+>> enabling -fstrict-flex-arrays=3 [1].
+>>
+>> Link: https://github.com/KSPP/linux/issues/21
+>> Link: https://github.com/KSPP/linux/issues/271
+>> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Flexible array member is even consistent with the rest of our uapi, 
+pushed to drm-intel-gt-next, thanks!
 
-Thanks,
-Conor.
+Regards,
 
---3ranM69fegQ07Uvr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBlt8AAKCRB4tDGHoIJi
-0osqAQCXp7XGbmO3waPebaOqtK+o/IFEysCgiDT7zf72nI9BGwEA0mQccjPondSp
-o1T13gT3EdwtFKCNYQ0yXOVc4mTLTQA=
-=g0Vt
------END PGP SIGNATURE-----
-
---3ranM69fegQ07Uvr--
+Tvrtko
