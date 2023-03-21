@@ -2,218 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185576C2FA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131D86C2FA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjCUK4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S230384AbjCUK52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCUK42 (ORCPT
+        with ESMTP id S229671AbjCUK51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:56:28 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CC82A9B0;
-        Tue, 21 Mar 2023 03:56:23 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8E771C000A;
-        Tue, 21 Mar 2023 10:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679396181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uU/xF/1XZaDXYdbp4Nthi/pqeMyjnaY9h5BAhcgysyw=;
-        b=RTOccEmAp1Y/S3bE0KFB5fzMQRdCwfDehknR5CtMxifBTR+f7DjvXHLT9B+9ZH9+OFihHE
-        GCkMCJxuSlUU8NkMSlqucCaDtjQlk82C/TvXTiBbprCbQYNm7ZxMVNe2ueEBrACk+z+H26
-        8DFM2NfjIyuNeS/XMeDbbT1ZqUuw6421W38YV+9lYN2n8p+/fnfWZIi6rnYxWy7vmNFfBf
-        0fUjpW+kYgj7xvwEYzx9MilcnQH6roXFKBuF0Ct/Bjm8BtDQk/m3a0QuZDTFaEb91Z8Wsv
-        Oiim80QuGcc05dPGBL2qBWunEDC2TLq7uZ7MqeEF0ZMIzTvl7qHja6c9aFDbmw==
-Date:   Tue, 21 Mar 2023 11:56:15 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     zzam@gentoo.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
-Message-ID: <20230321115615.0145124b@booty>
-In-Reply-To: <a21fcab7-aa80-0228-7bd3-236fb4203d36@ideasonboard.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
-        <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
-        <70323408-b823-1f1a-0202-434e6243b2af@gentoo.org>
-        <20230320092830.0431d042@booty>
-        <a21fcab7-aa80-0228-7bd3-236fb4203d36@ideasonboard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 21 Mar 2023 06:57:27 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD362F78F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679396245; x=1710932245;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=/k4j9lIzqcsHGDq/qy2vT0g85evDUM1Ob6+Zh6UlWjo=;
+  b=NRv2BjitWL5ZaqVYuf9BGZr4Bez7PqMv0owpO+R4vt71B/2oQ3vw4nTP
+   3mqwlsxm3m8mT2UHo+TOWf1gFDPXxM2vSxqujtyfOZnaRI4jrqLPFfWJr
+   TdMr/dv2QB7yR83yVa5zHxnPONzh4vB9/HTLifVlXbxzGjKN/3GFEPXvx
+   AgJPreFUFAOf8dGhzo390Y3YvNCLjGRLBWRV5s5dDevhSInQwVSZeJqml
+   hNy+cdkyMUBpePXqlmkTTUBtLIWOnKvxO2VZqbUrrshYoZqQSCnJQKtOh
+   r73osoZ9ahT9OK07ZNIB6wszpMoFWM1qB8/GyJXxCFK9RYhRV+TfDijNG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="327281843"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="327281843"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 03:57:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="658723121"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="658723121"
+Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 03:57:10 -0700
+Date:   Tue, 21 Mar 2023 12:57:03 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     James Morse <james.morse@arm.com>
+cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+Subject: Re: [PATCH v3 02/19] x86/resctrl: Access per-rmid structures by
+ index
+In-Reply-To: <20230320172620.18254-3-james.morse@arm.com>
+Message-ID: <312d454-494-1ab5-6374-353a7fe24162@linux.intel.com>
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-3-james.morse@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+On Mon, 20 Mar 2023, James Morse wrote:
 
-On Mon, 20 Mar 2023 14:12:32 +0200
-Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
-
-> On 20/03/2023 10:28, Luca Ceresoli wrote:
-> > Hello Matthias,
-> > 
-> > thanks for the in-depth review!
-> > 
-> > On Mon, 20 Mar 2023 07:34:34 +0100
-> > zzam@gentoo.org wrote:
-> >   
-> >> Some inline comments below.
-> >>
-> >> Regards
-> >> Matthias
-> >>
-> >> Am 22.02.23 um 14:29 schrieb Tomi Valkeinen:  
-> >>> From: Luca Ceresoli <luca@lucaceresoli.net>
-> >>>
-> >>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
-> >>> slave "upstream" port and N master "downstream" ports, and forwards
-> >>> transactions from upstream to the appropriate downstream port. But it
-> >>> is different in that the forwarded transaction has a different slave
-> >>> address. The address used on the upstream bus is called the "alias"
-> >>> and is (potentially) different from the physical slave address of the
-> >>> downstream chip.
-> >>>
-> >>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
-> >>> implementing ATR features in a device driver. The helper takes care or
-> >>> adapter creation/destruction and translates addresses at each transaction.
-> >>>
-> >>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> >>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >>> ---
-> >>>    Documentation/i2c/index.rst         |   1 +
-> >>>    Documentation/i2c/muxes/i2c-atr.rst |  97 +++++
-> >>>    MAINTAINERS                         |   8 +
-> >>>    drivers/i2c/Kconfig                 |   9 +
-> >>>    drivers/i2c/Makefile                |   1 +
-> >>>    drivers/i2c/i2c-atr.c               | 548 ++++++++++++++++++++++++++++
-> >>>    include/linux/i2c-atr.h             | 116 ++++++
-> >>>    7 files changed, 780 insertions(+)
-> >>>    create mode 100644 Documentation/i2c/muxes/i2c-atr.rst
-> >>>    create mode 100644 drivers/i2c/i2c-atr.c
-> >>>    create mode 100644 include/linux/i2c-atr.h
-> >>>      
-> >> [...]  
-> >>> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-> >>> new file mode 100644
-> >>> index 000000000000..5ab890b83670
-> >>> --- /dev/null
-> >>> +++ b/drivers/i2c/i2c-atr.c
-> >>> @@ -0,0 +1,548 @@  
-> >> [...]  
-> >>> +
-> >>> +/*
-> >>> + * Replace all message addresses with their aliases, saving the original
-> >>> + * addresses.
-> >>> + *
-> >>> + * This function is internal for use in i2c_atr_master_xfer(). It must be
-> >>> + * followed by i2c_atr_unmap_msgs() to restore the original addresses.
-> >>> + */
-> >>> +static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
-> >>> +			    int num)
-> >>> +{
-> >>> +	struct i2c_atr *atr = chan->atr;
-> >>> +	static struct i2c_atr_cli2alias_pair *c2a;
-> >>> +	int i;
-> >>> +
-> >>> +	/* Ensure we have enough room to save the original addresses */
-> >>> +	if (unlikely(chan->orig_addrs_size < num)) {
-> >>> +		u16 *new_buf;
-> >>> +
-> >>> +		/* We don't care about old data, hence no realloc() */
-> >>> +		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
-> >>> +		if (!new_buf)
-> >>> +			return -ENOMEM;
-> >>> +
-> >>> +		kfree(chan->orig_addrs);
-> >>> +		chan->orig_addrs = new_buf;
-> >>> +		chan->orig_addrs_size = num;
-> >>> +	}
-> >>> +
-> >>> +	for (i = 0; i < num; i++) {
-> >>> +		chan->orig_addrs[i] = msgs[i].addr;
-> >>> +
-> >>> +		c2a = i2c_atr_find_mapping_by_addr(&chan->alias_list,
-> >>> +						   msgs[i].addr);
-> >>> +		if (!c2a) {
-> >>> +			dev_err(atr->dev, "client 0x%02x not mapped!\n",
-> >>> +				msgs[i].addr);
-> >>> +			return -ENXIO;  
-> >> I miss the roll-back of previously modified msgs[].addr values.  
-> > 
-> > Indeed you have a point. There is a subtle error in case all of the
-> > following happen in a single i2c_atr_master_xfer() call:
-> > 
-> >   * there are 2+ messages, having different addresses
-> >   * msg[0] is mapped correctly
-> >   * msg[n] (n > 0) fails mapping
-> > 
-> > It's very unlikely, but in this case we'd get back to the caller with
-> > an error and modified addresses for the first n messages. Which in turn
-> > is unlikely to create any problems, but it could.
-> > 
-> > Tomi, do you agree?
-> > 
-> > This looks like a simple solution:
-> > 
-> >     if (!c2a) {
-> > +    i2c_atr_unmap_msgs(chan, msgs, i);
-> >       ...
-> >     }  
+> Because of the differences between Intel RDT/AMD QoS and Arm's MPAM
+> monitors, RMID values on arm64 are not unique unless the CLOSID is
+> also included. Bitmaps like rmid_busy_llc need to be sized by the
+> number of unique entries for this resource.
 > 
-> Wouldn't that possibly restore the address from orig_addrs[x] also for 
-> messages we haven't handled yet?
-
-No, because there is  'i' as the 3rd argument, not 'num'. But...
-
+> Add helpers to encode/decode the CLOSID and RMID to an index. The
+> domain's rmid_busy__llc and the rmid_ptrs[] array are then sized by
+> index, as are the domain mbm_local and mbm_total arrays.
+> On x86, the index is always just the RMID, so all these structures
+> remain the same size.
 > 
-> I think a simple
+> The index gives resctrl a unique value it can use to store monitor
+> values, and allows MPAM to decode the closid when reading the hardware
+> counters.
 > 
-> while (i--)
-> 	msgs[i].addr = chan->orig_addrs[i];
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+> Changes since v1:
+>  * Added X86_BAD_CLOSID macro to make it clear what this value means
+>  * Added second WARN_ON() for closid checking, and made both _ONCE()
 > 
-> should do here. It is also, perhaps, a bit more clear this way, as you 
-> can see the assignments to msgs[i].addr nearby, and the rollback here 
-> with the above code. Instead of seeing a call to an unmap function, 
-> having to go and see what exactly it will do.
+> Changes since v2:
+>  * Added RESCTRL_RESERVED_CLOSID
+>  * Removed a newline
+>  * Repharsed some comments
+>  * Renamed a variable 'ignore'd
+>  * Moved X86_RESCTRL_BAD_CLOSID to a previous patch
+> ---
 
-...sure, this would work. If I had connected my brain at the
-appropriate time I would have realized it's two lines only. And
-definitely less spaghetti-coded that what I had suggested.
+> diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
+> index cbe986d23df6..3ca40be41a0a 100644
 
-Luca
+> @@ -732,19 +759,20 @@ void mbm_setup_overflow_handler(struct rdt_domain *dom, unsigned long delay_ms)
+>  
+>  static int dom_data_init(struct rdt_resource *r)
+>  {
+> +	u32 nr_idx = resctrl_arch_system_num_rmid_idx();
+
+You've used idx_limit elsewhere so this name should be consistent with the 
+others.
+
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ i.
+
+>  	struct rmid_entry *entry = NULL;
+> -	int i, nr_rmids;
+> +	u32 idx;
+> +	int i;
+>  
+> -	nr_rmids = r->num_rmid;
+> -	rmid_ptrs = kcalloc(nr_rmids, sizeof(struct rmid_entry), GFP_KERNEL);
+> +	rmid_ptrs = kcalloc(nr_idx, sizeof(struct rmid_entry), GFP_KERNEL);
+>  	if (!rmid_ptrs)
+>  		return -ENOMEM;
+>  
+> -	for (i = 0; i < nr_rmids; i++) {
+> +	for (i = 0; i < nr_idx; i++) {
+>  		entry = &rmid_ptrs[i];
+>  		INIT_LIST_HEAD(&entry->list);
+>  
+> -		entry->rmid = i;
+> +		resctrl_arch_rmid_idx_decode(i, &entry->closid, &entry->rmid);
+>  		list_add_tail(&entry->list, &rmid_free_lru);
+>  	}
+>  
+> @@ -753,7 +781,8 @@ static int dom_data_init(struct rdt_resource *r)
+>  	 * default_rdtgroup control group, which will be setup later. See
+>  	 * rdtgroup_setup_root().
+>  	 */
+> -	entry = __rmid_entry(0, 0);
+> +	idx = resctrl_arch_rmid_idx_encode(RESCTRL_RESERVED_CLOSID, 0);
+> +	entry = __rmid_entry(idx);
+>  	list_del(&entry->list);
+>  
+>  	return 0;
+
