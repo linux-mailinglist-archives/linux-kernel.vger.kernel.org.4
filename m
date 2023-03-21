@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7C06C3614
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C036C3610
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjCUPoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S229456AbjCUPn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbjCUPoJ (ORCPT
+        with ESMTP id S231817AbjCUPni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:44:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029AA5595
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679413384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bIv3PP4yBpsiDfFQUDhlNlVTwLloVQU9kKPFwpUK4lo=;
-        b=IQLHMY2fmubLNZJeovua8l85WNKwWjb2REixGSjQDnjZsBPdlNBcKDo/lgMNHmMSlmYPEK
-        0YyhIhpkhxq8N3YKkqgnkrGdCrFWHvzHzorGzTOmo+FXWD32ln0dRtYYozKjwsSixOXNqh
-        19bV9qQgBMAaZIf9B9dqy5DqHpdpnuA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-70-W6NKk70YMMqAK3Tl_a6ZLw-1; Tue, 21 Mar 2023 11:43:03 -0400
-X-MC-Unique: W6NKk70YMMqAK3Tl_a6ZLw-1
-Received: by mail-wm1-f72.google.com with SMTP id o7-20020a05600c4fc700b003edf85f6bb1so3118778wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:43:02 -0700 (PDT)
+        Tue, 21 Mar 2023 11:43:38 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE4A2BEDF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:43:34 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id cu36so5065127vsb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679413413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y00xZTMnW/WazbGdbgQrBycDfNcdSIYV3Mj2B7uLQTc=;
+        b=sPFXiF51FOiH1Az8z8W3OFjCkyrxHA+rMnCni2Cfh0p1HCJTcba1loA9m5PGDrcBXG
+         9m+0Pa72K/zYMdNxB8WA+Ea5uLprRi5MKyVdqgvc9IcEHQVbziqDVOwZSF2SEwWHvJFp
+         wdlm2p8YJ0yvelTRL6Yg5tRI+T08JHaput8IFf1Lo5momgM1EGsA4BansylobRI3ESf+
+         /nOllXRmzQzan52DN49tMCrAZ7utbT7p3Xz3sYSK5e5GOJ4iD+p7oRFZMxF4WGxF/DYD
+         DzfJwrC9q726iq7rpNhtVrAnraybW2odx9sG8zE/vhT/Oi4qHerQ+cP2j28uOWuNSft4
+         AUEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679413380;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679413413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bIv3PP4yBpsiDfFQUDhlNlVTwLloVQU9kKPFwpUK4lo=;
-        b=R3aYI33SRDPrbftqxaOTZ1rNXW0BxU0buKlNOwk7FkLF/BRCOiRy80HiC9sg3H3oab
-         98d17++HZmuPGZ9DwdXnXBBHRhx6beD6B1gEPzFL3v8NtxUOUKtEIeZufO699GQ2t0ZI
-         6WRghuyZcy8wR5cpMSGYrSZeQGgRJiIOgVckrJFW5mMAj+HAhYD/jDM8nBpncvDJiuKt
-         aAy5vuQxpS4gE6QecFvQviqnavF6afSlqCUNindsodnzzkxZqdTkXrB/35DEU9Yi90nS
-         tCXHgHmwda+STZj/TrEup+hG7fvpN7EhD2U/TwXC20xNoSkwN6QyjcE07geJYeHcvXC2
-         Jj5Q==
-X-Gm-Message-State: AO0yUKUVoXLvLJlRSCPt0LuUXa24pNARSIoiF95szDA3ev6J3l1mZRXu
-        zBAtDe+Ji0T0ei5fZ8zF2rXCWMP7k64CSKfaQPQBCh+WsF7k2nnmJcnBo4sWDEGi4sTWKYYRUF7
-        s426fe+tAIWptYs53GHBbmiIR
-X-Received: by 2002:a5d:4d0f:0:b0:2cd:e089:398d with SMTP id z15-20020a5d4d0f000000b002cde089398dmr2806134wrt.5.1679413380266;
-        Tue, 21 Mar 2023 08:43:00 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8cYR72hdvy3mHJEzDhnqtBs/xqBE/H6lo8y8NxTbvPjr87rHIO4A/V1Ti6cu3VeSVcB8D4+A==
-X-Received: by 2002:a5d:4d0f:0:b0:2cd:e089:398d with SMTP id z15-20020a5d4d0f000000b002cde089398dmr2806126wrt.5.1679413379955;
-        Tue, 21 Mar 2023 08:42:59 -0700 (PDT)
-Received: from step1.redhat.com (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm6340125wrn.111.2023.03.21.08.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 08:42:59 -0700 (PDT)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     stefanha@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v3 4/8] vringh: support VA with iotlb
-Date:   Tue, 21 Mar 2023 16:42:24 +0100
-Message-Id: <20230321154228.182769-5-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230321154228.182769-1-sgarzare@redhat.com>
-References: <20230321154228.182769-1-sgarzare@redhat.com>
+        bh=Y00xZTMnW/WazbGdbgQrBycDfNcdSIYV3Mj2B7uLQTc=;
+        b=YtQvA47IfIYsYpnlH66FRbZ6U6gGNRJ0TVRrBHDHmOJbPo5bdecjcY/pUvojlfWg9/
+         eRQCIIfQy7u1/noUOX1EcbMk8y2feqskw1JQau1pWTHTDvFRuea6Wd2MzTceFDeQC4Br
+         nFBFrSiCeVSjtlT9ySMDUaAWrxr04e9rwsXzcSqos+ogVhxx0QV7enzxaLEncWcd0qMD
+         M32mTPC0NnJKHQqVxDgCQ6qpI5i0BaDUiqRw9NhsDy+hJUOxSyopXCAQZccC5Gif5zvs
+         FgpoMouImfX2nixgh7aP84CYAfQ/jXdVzTOW7gdD1PwFZfO38yibERQA+TL8M5qnGm/1
+         W+Uw==
+X-Gm-Message-State: AAQBX9cwFez7bNEjs/fg+OmdYlFTYzjFQqDtqNiQSVrk2hOtPBv3d3En
+        M+wnF0metOLzCr3fug4RNoyUyfq9HK80Bctf0a/VWg==
+X-Google-Smtp-Source: AK7set+uE31fRevBboLUAiIpZN5iCBwZ5X84oVwutDcKQH0rj2bO1OlFmwPCvwxrPKza1UPYQ2We10CceECf7Oyd3pc=
+X-Received: by 2002:a67:d891:0:b0:425:b38b:650 with SMTP id
+ f17-20020a67d891000000b00425b38b0650mr1896281vsj.7.1679413412722; Tue, 21 Mar
+ 2023 08:43:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <CANn89iLy+-rQDSKCg6g=xkNLL5SmgkB7gyMSgxCEPp13-+eLbw@mail.gmail.com>
+ <26269528616bb41dcb2b5a3314f87fb36d45acac.camel@redhat.com>
+In-Reply-To: <26269528616bb41dcb2b5a3314f87fb36d45acac.camel@redhat.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 21 Mar 2023 08:43:20 -0700
+Message-ID: <CANn89i+vKjBZAC-Htt9K6+WxFHaSH190Mm9WMiy2ZUkuQJZ0Gg@mail.gmail.com>
+Subject: Re: syzbot + epoll
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Xiumei Mu <xmu@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,352 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vDPA supports the possibility to use user VA in the iotlb messages.
-So, let's add support for user VA in vringh to use it in the vDPA
-simulators.
+On Tue, Mar 21, 2023 at 8:20=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
+te:
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
+> (adding Hillf, as was looking to this issue, too)
+>
+> The fix LGTM and syzkaller says it addresses the issue:
+>
+> https://groups.google.com/g/syzkaller-bugs/c/oiBUmGsqz_Q/m/1IQ4vbROAgAJ
+>
+> I see Andrew removed the patch from the -mm tree. I guess at this point
+> a new version of "epoll: use refcount to reduce ep_mutex contention",
+> including the above is needed?
+>
+> If the above is correct, would a co-devel tag fit you Eric?
 
-Notes:
-    v3:
-    - refactored avoiding code duplication [Eugenio]
-    v2:
-    - replace kmap_atomic() with kmap_local_page() [see previous patch]
-    - fix cast warnings when build with W=1 C=1
-
- include/linux/vringh.h            |   5 +-
- drivers/vdpa/mlx5/net/mlx5_vnet.c |   2 +-
- drivers/vdpa/vdpa_sim/vdpa_sim.c  |   4 +-
- drivers/vhost/vringh.c            | 153 +++++++++++++++++++++++-------
- 4 files changed, 127 insertions(+), 37 deletions(-)
-
-diff --git a/include/linux/vringh.h b/include/linux/vringh.h
-index 1991a02c6431..d39b9f2dcba0 100644
---- a/include/linux/vringh.h
-+++ b/include/linux/vringh.h
-@@ -32,6 +32,9 @@ struct vringh {
- 	/* Can we get away with weak barriers? */
- 	bool weak_barriers;
- 
-+	/* Use user's VA */
-+	bool use_va;
-+
- 	/* Last available index we saw (ie. where we're up to). */
- 	u16 last_avail_idx;
- 
-@@ -279,7 +282,7 @@ void vringh_set_iotlb(struct vringh *vrh, struct vhost_iotlb *iotlb,
- 		      spinlock_t *iotlb_lock);
- 
- int vringh_init_iotlb(struct vringh *vrh, u64 features,
--		      unsigned int num, bool weak_barriers,
-+		      unsigned int num, bool weak_barriers, bool use_va,
- 		      struct vring_desc *desc,
- 		      struct vring_avail *avail,
- 		      struct vring_used *used);
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 520646ae7fa0..dfd0e000217b 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -2537,7 +2537,7 @@ static int setup_cvq_vring(struct mlx5_vdpa_dev *mvdev)
- 
- 	if (mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ))
- 		err = vringh_init_iotlb(&cvq->vring, mvdev->actual_features,
--					MLX5_CVQ_MAX_ENT, false,
-+					MLX5_CVQ_MAX_ENT, false, false,
- 					(struct vring_desc *)(uintptr_t)cvq->desc_addr,
- 					(struct vring_avail *)(uintptr_t)cvq->driver_addr,
- 					(struct vring_used *)(uintptr_t)cvq->device_addr);
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index eea23c630f7c..47cdf2a1f5b8 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -60,7 +60,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
- 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
- 	uint16_t last_avail_idx = vq->vring.last_avail_idx;
- 
--	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true,
-+	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true, false,
- 			  (struct vring_desc *)(uintptr_t)vq->desc_addr,
- 			  (struct vring_avail *)
- 			  (uintptr_t)vq->driver_addr,
-@@ -92,7 +92,7 @@ static void vdpasim_vq_reset(struct vdpasim *vdpasim,
- 	vq->cb = NULL;
- 	vq->private = NULL;
- 	vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_features,
--			  VDPASIM_QUEUE_MAX, false, NULL, NULL, NULL);
-+			  VDPASIM_QUEUE_MAX, false, false, NULL, NULL, NULL);
- 
- 	vq->vring.notify = NULL;
- }
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 0ba3ef809e48..72c88519329a 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -1094,10 +1094,18 @@ EXPORT_SYMBOL(vringh_need_notify_kern);
- 
- #if IS_REACHABLE(CONFIG_VHOST_IOTLB)
- 
-+struct iotlb_vec {
-+	union {
-+		struct iovec *iovec;
-+		struct bio_vec *bvec;
-+	} iov;
-+	size_t count;
-+	bool is_iovec;
-+};
-+
- static int iotlb_translate(const struct vringh *vrh,
- 			   u64 addr, u64 len, u64 *translated,
--			   struct bio_vec iov[],
--			   int iov_size, u32 perm)
-+			   struct iotlb_vec *ivec, u32 perm)
- {
- 	struct vhost_iotlb_map *map;
- 	struct vhost_iotlb *iotlb = vrh->iotlb;
-@@ -1107,9 +1115,9 @@ static int iotlb_translate(const struct vringh *vrh,
- 	spin_lock(vrh->iotlb_lock);
- 
- 	while (len > s) {
--		u64 size, pa, pfn;
-+		u64 size;
- 
--		if (unlikely(ret >= iov_size)) {
-+		if (unlikely(ret >= ivec->count)) {
- 			ret = -ENOBUFS;
- 			break;
- 		}
-@@ -1124,10 +1132,22 @@ static int iotlb_translate(const struct vringh *vrh,
- 		}
- 
- 		size = map->size - addr + map->start;
--		pa = map->addr + addr - map->start;
--		pfn = pa >> PAGE_SHIFT;
--		bvec_set_page(&iov[ret], pfn_to_page(pfn), min(len - s, size),
--			      pa & (PAGE_SIZE - 1));
-+		if (ivec->is_iovec) {
-+			struct iovec *iovec = ivec->iov.iovec;
-+
-+			iovec[ret].iov_len = min(len - s, size);
-+			iovec[ret].iov_base = (void __user *)(unsigned long)
-+					      (map->addr + addr - map->start);
-+		} else {
-+			u64 pa = map->addr + addr - map->start;
-+			u64 pfn = pa >> PAGE_SHIFT;
-+			struct bio_vec *bvec = ivec->iov.bvec;
-+
-+			bvec_set_page(&bvec[ret], pfn_to_page(pfn),
-+				      min(len - s, size),
-+				      pa & (PAGE_SIZE - 1));
-+		}
-+
- 		s += size;
- 		addr += size;
- 		++ret;
-@@ -1141,26 +1161,42 @@ static int iotlb_translate(const struct vringh *vrh,
- 	return ret;
- }
- 
-+#define IOTLB_IOV_SIZE 16
-+
- static inline int copy_from_iotlb(const struct vringh *vrh, void *dst,
- 				  void *src, size_t len)
- {
-+	struct iotlb_vec ivec;
-+	union {
-+		struct iovec iovec[IOTLB_IOV_SIZE];
-+		struct bio_vec bvec[IOTLB_IOV_SIZE];
-+	} iov;
- 	u64 total_translated = 0;
- 
-+	ivec.iov.iovec = iov.iovec;
-+	ivec.count = IOTLB_IOV_SIZE;
-+	ivec.is_iovec = vrh->use_va;
-+
- 	while (total_translated < len) {
--		struct bio_vec iov[16];
- 		struct iov_iter iter;
- 		u64 translated;
- 		int ret;
- 
- 		ret = iotlb_translate(vrh, (u64)(uintptr_t)src,
- 				      len - total_translated, &translated,
--				      iov, ARRAY_SIZE(iov), VHOST_MAP_RO);
-+				      &ivec, VHOST_MAP_RO);
- 		if (ret == -ENOBUFS)
--			ret = ARRAY_SIZE(iov);
-+			ret = IOTLB_IOV_SIZE;
- 		else if (ret < 0)
- 			return ret;
- 
--		iov_iter_bvec(&iter, ITER_SOURCE, iov, ret, translated);
-+		if (ivec.is_iovec) {
-+			iov_iter_init(&iter, ITER_SOURCE, ivec.iov.iovec, ret,
-+				      translated);
-+		} else {
-+			iov_iter_bvec(&iter, ITER_SOURCE, ivec.iov.bvec, ret,
-+				      translated);
-+		}
- 
- 		ret = copy_from_iter(dst, translated, &iter);
- 		if (ret < 0)
-@@ -1177,23 +1213,37 @@ static inline int copy_from_iotlb(const struct vringh *vrh, void *dst,
- static inline int copy_to_iotlb(const struct vringh *vrh, void *dst,
- 				void *src, size_t len)
- {
-+	struct iotlb_vec ivec;
-+	union {
-+		struct iovec iovec[IOTLB_IOV_SIZE];
-+		struct bio_vec bvec[IOTLB_IOV_SIZE];
-+	} iov;
- 	u64 total_translated = 0;
- 
-+	ivec.iov.iovec = iov.iovec;
-+	ivec.count = IOTLB_IOV_SIZE;
-+	ivec.is_iovec = vrh->use_va;
-+
- 	while (total_translated < len) {
--		struct bio_vec iov[16];
- 		struct iov_iter iter;
- 		u64 translated;
- 		int ret;
- 
- 		ret = iotlb_translate(vrh, (u64)(uintptr_t)dst,
- 				      len - total_translated, &translated,
--				      iov, ARRAY_SIZE(iov), VHOST_MAP_WO);
-+				      &ivec, VHOST_MAP_WO);
- 		if (ret == -ENOBUFS)
--			ret = ARRAY_SIZE(iov);
-+			ret = IOTLB_IOV_SIZE;
- 		else if (ret < 0)
- 			return ret;
- 
--		iov_iter_bvec(&iter, ITER_DEST, iov, ret, translated);
-+		if (ivec.is_iovec) {
-+			iov_iter_init(&iter, ITER_DEST, ivec.iov.iovec, ret,
-+				      translated);
-+		} else {
-+			iov_iter_bvec(&iter, ITER_DEST, ivec.iov.bvec, ret,
-+				      translated);
-+		}
- 
- 		ret = copy_to_iter(src, translated, &iter);
- 		if (ret < 0)
-@@ -1210,20 +1260,37 @@ static inline int copy_to_iotlb(const struct vringh *vrh, void *dst,
- static inline int getu16_iotlb(const struct vringh *vrh,
- 			       u16 *val, const __virtio16 *p)
- {
--	struct bio_vec iov;
--	void *kaddr, *from;
-+	struct iotlb_vec ivec;
-+	union {
-+		struct iovec iovec[1];
-+		struct bio_vec bvec[1];
-+	} iov;
-+	__virtio16 tmp;
- 	int ret;
- 
-+	ivec.iov.iovec = iov.iovec;
-+	ivec.count = 1;
-+	ivec.is_iovec = vrh->use_va;
-+
- 	/* Atomic read is needed for getu16 */
--	ret = iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p), NULL,
--			      &iov, 1, VHOST_MAP_RO);
-+	ret = iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p),
-+			      NULL, &ivec, VHOST_MAP_RO);
- 	if (ret < 0)
- 		return ret;
- 
--	kaddr = kmap_local_page(iov.bv_page);
--	from = kaddr + iov.bv_offset;
--	*val = vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
--	kunmap_local(kaddr);
-+	if (ivec.is_iovec) {
-+		ret = __get_user(tmp, (__virtio16 __user *)ivec.iov.iovec[0].iov_base);
-+		if (ret)
-+			return ret;
-+	} else {
-+		void *kaddr = kmap_local_page(ivec.iov.bvec[0].bv_page);
-+		void *from = kaddr + ivec.iov.bvec[0].bv_offset;
-+
-+		tmp = READ_ONCE(*(__virtio16 *)from);
-+		kunmap_local(kaddr);
-+	}
-+
-+	*val = vringh16_to_cpu(vrh, tmp);
- 
- 	return 0;
- }
-@@ -1231,20 +1298,37 @@ static inline int getu16_iotlb(const struct vringh *vrh,
- static inline int putu16_iotlb(const struct vringh *vrh,
- 			       __virtio16 *p, u16 val)
- {
--	struct bio_vec iov;
--	void *kaddr, *to;
-+	struct iotlb_vec ivec;
-+	union {
-+		struct iovec iovec;
-+		struct bio_vec bvec;
-+	} iov;
-+	__virtio16 tmp;
- 	int ret;
- 
-+	ivec.iov.iovec = &iov.iovec;
-+	ivec.count = 1;
-+	ivec.is_iovec = vrh->use_va;
-+
- 	/* Atomic write is needed for putu16 */
--	ret = iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p), NULL,
--			      &iov, 1, VHOST_MAP_WO);
-+	ret = iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p),
-+			      NULL, &ivec, VHOST_MAP_RO);
- 	if (ret < 0)
- 		return ret;
- 
--	kaddr = kmap_local_page(iov.bv_page);
--	to = kaddr + iov.bv_offset;
--	WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
--	kunmap_local(kaddr);
-+	tmp = cpu_to_vringh16(vrh, val);
-+
-+	if (ivec.is_iovec) {
-+		ret = __put_user(tmp, (__virtio16 __user *)ivec.iov.iovec[0].iov_base);
-+		if (ret)
-+			return ret;
-+	} else {
-+		void *kaddr = kmap_local_page(ivec.iov.bvec[0].bv_page);
-+		void *to = kaddr + ivec.iov.bvec[0].bv_offset;
-+
-+		WRITE_ONCE(*(__virtio16 *)to, tmp);
-+		kunmap_local(kaddr);
-+	}
- 
- 	return 0;
- }
-@@ -1306,6 +1390,7 @@ static inline int putused_iotlb(const struct vringh *vrh,
-  * @features: the feature bits for this ring.
-  * @num: the number of elements.
-  * @weak_barriers: true if we only need memory barriers, not I/O.
-+ * @use_va: true if IOTLB contains user VA
-  * @desc: the userpace descriptor pointer.
-  * @avail: the userpace avail pointer.
-  * @used: the userpace used pointer.
-@@ -1313,11 +1398,13 @@ static inline int putused_iotlb(const struct vringh *vrh,
-  * Returns an error if num is invalid.
-  */
- int vringh_init_iotlb(struct vringh *vrh, u64 features,
--		      unsigned int num, bool weak_barriers,
-+		      unsigned int num, bool weak_barriers, bool use_va,
- 		      struct vring_desc *desc,
- 		      struct vring_avail *avail,
- 		      struct vring_used *used)
- {
-+	vrh->use_va = use_va;
-+
- 	return vringh_init_kern(vrh, features, num, weak_barriers,
- 				desc, avail, used);
- }
--- 
-2.39.2
-
+Squashing patches make sense for sure, thanks.
