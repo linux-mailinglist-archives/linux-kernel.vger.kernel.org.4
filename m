@@ -2,194 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A3C6C2C91
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2958F6C2C97
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCUIfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S229804AbjCUIgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjCUIfE (ORCPT
+        with ESMTP id S230398AbjCUIf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:35:04 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B53424713;
-        Tue, 21 Mar 2023 01:34:16 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 20so7538563lju.0;
-        Tue, 21 Mar 2023 01:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679387650;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qRPbKqc+nqL8bLzA5xwf3sRGQmESBN2lSE8EF0451Uw=;
-        b=h40JVsE2J4fw1cdlKlOfUzq0A4kxvn8n7bWccYXxLgR9EsW7Z7jPYUxAlyo/waxOZy
-         uzJZm8S4DtCFvFPjNT9HgxTGrfxytb+lBOdGBCqT7ZzZmFN/neSMv1pjrAVVUh2Ai2G6
-         i7+Jo9EFjFjIcSsORC50Ja97nmD8CXt38rflKH8qt9bk12RGluP5tugXLYVHx16T/MuG
-         mK9vqMQNESHSX6JRDE7TncS8GK5H7+nF8us+nx3Eik6R5dza0b9TpAP4JBEjq1A79jU3
-         +JtEt4L7dYrjngye4GYoFNV+cRpZDof4CbnSM05G/jG7WnabqqCRLns/TgkHs9BMZPcj
-         4drg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679387650;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qRPbKqc+nqL8bLzA5xwf3sRGQmESBN2lSE8EF0451Uw=;
-        b=A9sOIEyfK0ESjtlUlbcGdc96eQTGy29aEm+9tM/VpZlnvAJZmegBXaHpwJGC00/T0L
-         o/o/3hGuCd+T7yOXqEVP+U2Hh2SxRWho0j6ajctho7gJrQKle1x+EvaBKf+5KnXhmEJw
-         ehXeQt3E0fDkPjv9LsByFzs5oyGNYlQvtAey7ficqIpf1J2uyDBi4OmEIZryliR3x6Nw
-         78gw/z6kpLNGpgNdlYnCbcaFdwXGUA5TzTVQZKy302TrhpvHhYswSO50l4/Wvn0mIBl9
-         eqBxtENr9qRaBfmx6hsUHJH29zEFZqdQ7DoeDRXhaZeNsNxlaaOh95LiaEplKmMnbKK6
-         8kJw==
-X-Gm-Message-State: AO0yUKXJOQGBs4WCRj2SYYEOA56XiWgqKgGGtytv/5dcgk2/FN8MjtGa
-        IcJeCZysMa2CgyBf/r+S9bw/2foApa4=
-X-Google-Smtp-Source: AK7set9rI/WKwGszk2bbDKo5fPMJLhBbrAGA369OYo2U+t15BD9SURgqrtKynquR0qd1r99/aqEs+Q==
-X-Received: by 2002:a2e:9c57:0:b0:292:b368:345d with SMTP id t23-20020a2e9c57000000b00292b368345dmr521194ljj.48.1679387650333;
-        Tue, 21 Mar 2023 01:34:10 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id c14-20020a05651c014e00b0029913364649sm2126420ljd.11.2023.03.21.01.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 01:34:09 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 11:34:07 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v7 0/5] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <20230321083407.5gc432ttjhwbi2um@mobilestation>
-References: <20230315012840.6986-1-cai.huoqing@linux.dev>
- <20230320121401.zkcjbqmghzacpffh@mobilestation>
- <ZBkXEzoZZlIy18xB@chq-MS-7D45>
+        Tue, 21 Mar 2023 04:35:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5212512BE5;
+        Tue, 21 Mar 2023 01:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679387725; x=1710923725;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=DLsTiccPyH7bx55bHU/zTg3xNa8snfWDn/Y76x4NHcQ=;
+  b=ib04BcI1pBqpTjpT42ehmkUCr7AkhB2AzcEQ/pkXq2mNSguBMJa9e1K5
+   Imm9XEY/DbTtnaXb/Hj9TbEPM4QCGRM2VT5YxN05q6naecn7WOkhj3ssi
+   BgD/CHvRZfeBJAH0GjUGFYBuY8Fg+3HXcq7ELW8kE+IOUH5b2z5cQPYlG
+   baDs7mQgA5Jl5m7y6W+bgCcaLSqkmk9MD18DXxYxAMa/gl5Lu+BP0wPHk
+   agOp4UczVErIUNIQym9EfiHHu2Ile/MFZXvylmWpfReUoseUFfvfKvlUK
+   k+YbHegLHMEPqdOANAr00dfl+KmIVjtxw+yFT1/VEayQTo0sCDBo7VLcU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="322723186"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="322723186"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 01:34:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="805249460"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="805249460"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2023 01:34:57 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 01:34:57 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 21 Mar 2023 01:34:57 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.175)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 21 Mar 2023 01:34:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DDhohsXYG7j5x0WtXmsx13MgoyncsbOTckEWVKSifJQgr/Sv+4X8s0roc/0Bgv3EljDA1r5cBxxwCBC4pPfEEiTKEdsHdcTV07e0hwXEroodr25wxymoD3BYBb56qBoPgdQ0ee1tFrb+TVFR05207N6E/fRRNC7UvxwuChjOveDsubdFh2hKLCdOrYt+f+GH0tke6x8lKwmJLIk+Jd601y0+XzZ7R0pdSa/zlf6XWi4eVQBurrHxa3BcZaJLtIho9V4uOQvsHFkAzR1zCLAJz6OY2gb+XrtcFW5r+Ys8o4QXKbC+QEQLVqeq/ezy8mbQsJCWSEk/ZifsUvTnE5OFrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NyJtowKQyybi1L44fxn1rTqOV3L6DQzqD1MZ9bspH5A=;
+ b=QNByR25HHR6Y04/Wmmw7UOTWrLoop72DBm55drYo1MC8k2XT2zHD1tQfbnqgdLKh58AsJSSCvp21wgjzqSjGBKP43NVcLiHDdOJj/MPRUaHhToaEmHpXw4BWLHkLTpqf/K4j7p4JNz8CYJTZWEZ+jZUsIoe4jwfZ8ysU55hK3XWHtmxzEPHhb006j80rj32MjjctPm66wm+DbI3/ZbRAZCA9xwXlR6zLXxTC4VnhLBssficTbYqwyrWmaQ2+aB0DTeovB/J/9VlF7bT6+TFPc6Ye1oul7+2xhD2PPuGsoIw8QxS2HqKHhdg3/MQFkAsDYwV26EitB28vl+6uvr7Bsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB7587.namprd11.prod.outlook.com (2603:10b6:510:26d::17)
+ by PH8PR11MB8259.namprd11.prod.outlook.com (2603:10b6:510:1c2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 08:34:50 +0000
+Received: from PH0PR11MB7587.namprd11.prod.outlook.com
+ ([fe80::a9d7:2083:ea9f:7b0c]) by PH0PR11MB7587.namprd11.prod.outlook.com
+ ([fe80::a9d7:2083:ea9f:7b0c%8]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 08:34:50 +0000
+From:   "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>
+To:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Looi, Hong Aun" <hong.aun.looi@intel.com>,
+        "Voon, Weifeng" <weifeng.voon@intel.com>,
+        "Lai, Peter Jun Ann" <peter.jun.ann.lai@intel.com>
+Subject: RE: [PATCH net v2 1/2] net: stmmac: fix PHY handle parsing
+Thread-Topic: [PATCH net v2 1/2] net: stmmac: fix PHY handle parsing
+Thread-Index: AQHZWQqKiptgMBBkxEe3QmwqS1rIqK7/dC0AgAV1bFA=
+Date:   Tue, 21 Mar 2023 08:34:49 +0000
+Message-ID: <PH0PR11MB7587DC1E7B2947BDB0126F979D819@PH0PR11MB7587.namprd11.prod.outlook.com>
+References: <20230314070208.3703963-1-michael.wei.hong.sit@intel.com>
+ <20230314070208.3703963-2-michael.wei.hong.sit@intel.com>
+ <10aff941-e18a-4d77-974b-1760529988a6@lunn.ch>
+ <ZBTUTD6RL22pdlmq@shell.armlinux.org.uk>
+In-Reply-To: <ZBTUTD6RL22pdlmq@shell.armlinux.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB7587:EE_|PH8PR11MB8259:EE_
+x-ms-office365-filtering-correlation-id: 8fae234b-0786-475b-c061-08db29e7227e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4TDWPLQfnfd1owJ/gErIdSMNsg3Iyz1SR8F+aMNA2hWZQ5ekXJKbrHXeXO1yVRbZUtEEne3gTk8YsxaiT12jScPrhhTZHcQHCEwShD32Jqej8Rp0ywx/PIVssZVmshwYl908OB/c9gr5gsr3AQfbTh+VcaUiqu/tPZGe9u4nE3/zlDGMRjhVULPTDbn1mtXUCjTawsuXWXzKZ/Gcg8gK8p8kYSRPK+PqnFFHXVu9zFlW3fr3zKqT0XGulOn4jMy8pbdqHfgVywCAgKWKY1guSvaMzN8D+BIz1ecDpV9U0LPUiRlnVM00195xU95cOS71NvGIrpCR6dWuINSOtx/eX2EW7loAnzMjiX/beLTFaf7Y3l4cP9w7x2s3655LjIDBffOpQn7sI3JWQ9hCsgd9AaH0xiWS/HI87DmXU0Gw/J2TQmDIC3ZOBrJ3CoqJm6jUxv8QwrwMme2L2JpwZxOPVehy3PFQkp0Celkq9KzFvqP+QQYZdKDJ2ps09El0M46jbVfxl3x4Znyy0GDeHsFOpFxKyoriZN+QbDkd0Ni/Ww+vYBhX9ZjhjfsbCNPhUbKCfSiKqvVUHHJckxDVEG1xo8yj55VGZz4SrzrNHqURmmvJbcsqcKD9BephN8JIXTpbXL9va8t7YvWjVuPMMBJS1t2gweRBsg8i8P/JtN1Zc3uFWcbP3P3AktwGZOBGtaxM
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7587.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199018)(8936002)(41300700001)(2906002)(8676002)(66556008)(66476007)(66446008)(4326008)(76116006)(64756008)(66946007)(7416002)(52536014)(5660300002)(316002)(54906003)(86362001)(110136005)(478600001)(55016003)(71200400001)(7696005)(966005)(6506007)(107886003)(33656002)(186003)(26005)(53546011)(38100700002)(83380400001)(9686003)(82960400001)(38070700005)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?djaemcAHhFirhKj5q5IGB0qhHpwflvQE4TSrqNBRtTnVBiXHaZ4U3uivv6dc?=
+ =?us-ascii?Q?Avv1hetbdfw09I8xzXLzzPffW3avjnd+072ZsrdjUoJQ21HoUKMuLDfiIW2+?=
+ =?us-ascii?Q?D5eDG+avLPzCsXD9glhGmR/DKP57zJ0jj3ZT2fLammGFNV1XUmkCIQ8poe+H?=
+ =?us-ascii?Q?WqFf9khs4DP3PzNxI9qVaHiGOt8TOm+wPSbhbzAxL0U9VaXEGp030g89FS9F?=
+ =?us-ascii?Q?piEwm7KpElbzhFCRbCjzXssuiF7u8BOq9+wVpa/hB/+G1xRIdx5oLxw0Dm75?=
+ =?us-ascii?Q?3PeuAURFBZexuttibdWhMDdzjGstqOj1kDtUMMl7BF0eR2M2x7u+WAoVA2aG?=
+ =?us-ascii?Q?vk5o7jS1I6U1aOjHJojP7UDF2Ro2gTsaRw11QY6zCuGHx9OmjeTmIT1alEL5?=
+ =?us-ascii?Q?u86iLK3Dav+eMtHE+OlOCSZn5OTxRlpFjTUnA/ZiKsanHebacHz527OeP2LM?=
+ =?us-ascii?Q?RWzeC7HGS1E3q1mDVsfhqhUqenhd3iRZWFj6SfMMKz6QDyOiBj6LkEw8Hevs?=
+ =?us-ascii?Q?LIHkJMQLJbWVPn0zz91o5S9ASfEwcD6IbCSYmEFualXigw5AjBzK50rbLOTk?=
+ =?us-ascii?Q?rfrBpuTIF80UDGX6w4kIQUeSkipCKGxzmmedlvHW0f9qSPU2GhdZWjRBSvSw?=
+ =?us-ascii?Q?G94zmrkCN1J+YMrrAn0p+8pUWaB29Xn8+ro78eIRLdu43MgvLyR9MhLMocNa?=
+ =?us-ascii?Q?rxJTlhKvalEAnW+af+hLlvTQ3htLpe/ww+kKcJwsBdh4Zfkqe4iPXnhJeT94?=
+ =?us-ascii?Q?8RL5C/qrCD4I8dJSiT7F7AKy26B/ofIAixAYzYvVJLFLZwhSvi2cp0mjRozv?=
+ =?us-ascii?Q?ALA7c7yNl5HMOjyN6oYryaV/Zw42liFXHsR1C2jojWraejFQwc1zCTTgtjbk?=
+ =?us-ascii?Q?09OQTi2l5tCNaQizQQ8N0KffvAbTdDImqQ/WaZXNHylPABI9M/cPt+MUXijM?=
+ =?us-ascii?Q?pv/Qlb5DEID+OHm3ZR1sScSTwNaobc43i1GLi/uhnwO27Ip19QogW34Nj4Qx?=
+ =?us-ascii?Q?mQs4K6d1qJkqn3FymHYPHkntgvVTq90/8bMAuN26joj56j9uTl7Ka7vW3Znw?=
+ =?us-ascii?Q?Pk/3tkVFENQLMCUh7gjrk/OK18c00AxAnDolBUtLHMNknf5JSiVbjjV/n5Jy?=
+ =?us-ascii?Q?sVjlppcNytR2GrDb7r+kQgIVrKUV0XYKBWEzjQ5Pu27YZ1blLgnK3YexO5Tg?=
+ =?us-ascii?Q?0DXhijGbKwLEyCQg2MmWSouVd/6tmwdX5n/HlhgJtlZkGmWaYZXmRHIAa83c?=
+ =?us-ascii?Q?TUsg1w1XaWfXGLAGP3uOzylYg8S20y1gXQOyXFDb50YlfmrHhTG3LWgdAYo/?=
+ =?us-ascii?Q?cXvqJ3pG30J+2+h2q/PhIVXJgEI6wfBbZ+7jHtwTcWZ8prV2DNsP1dUBDSl9?=
+ =?us-ascii?Q?htTD3WepeGRXzzFq+6eI1GZKdGCLLLY98TAzVWFbwdUxlLo2EebicUupMltK?=
+ =?us-ascii?Q?SkRuErxfrKYfk8BMxKmFtibndNf6hqCTYu787Iupw5T0zcYFnyYa4iN6NZHC?=
+ =?us-ascii?Q?rl3C7o6JApCt9rVTKQPZ1wP834CtT/JSz6FCM2sM7WL9/Ms2S7PmGCv23ooF?=
+ =?us-ascii?Q?isoyX6qHJUeZ2OI8ZCpIgchxPTk8Lkrtl/+ttcpC+Ast2R27YIJx8j7tsSOq?=
+ =?us-ascii?Q?2g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBkXEzoZZlIy18xB@chq-MS-7D45>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7587.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8fae234b-0786-475b-c061-08db29e7227e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 08:34:49.5661
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1ItbaCklIH4rCd4Y7G35Xlhv54educ4AhWfM8Qnsc1GdzRw9XN/eI5cbVbYp63F247tijRyFhGAsztE2m3m/uUEfnMNQo365GPimtt9/tqc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8259
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:31:47AM +0800, Cai Huoqing wrote:
-> On 20 3月 23 15:14:01, Serge Semin wrote:
-> > Hi Cai
-> > 
-> > On Wed, Mar 15, 2023 at 09:28:31AM +0800, Cai Huoqing wrote:
-> > > Add support for HDMA NATIVE, as long the IP design has set
-> > > the compatible register map parameter-HDMA_NATIVE,
-> > > which allows compatibility for native HDMA register configuration.
-> > > 
-> > > The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> > > And the native HDMA registers are different from eDMA,
-> > > so this patch add support for HDMA NATIVE mode.
-> > > 
-> > > HDMA write and read channels operate independently to maximize
-> > > the performance of the HDMA read and write data transfer over
-> > > the link When you configure the HDMA with multiple read channels,
-> > > then it uses a round robin (RR) arbitration scheme to select
-> > > the next read channel to be serviced.The same applies when
-> > > youhave multiple write channels.
-> > > 
-> > > The native HDMA driver also supports a maximum of 16 independent
-> > > channels (8 write + 8 read), which can run simultaneously.
-> > > Both SAR (Source Address Register) and DAR (Destination Address Register)
-> > > are aligned to byte.
-> > 
-> > It seems like we are getting towards the series finalization. I'll
-> > test it out on my HW after v8 is submitted. Meanwhile could you please
-> > clarify whether you have a real device with DW HDMA engine on board?
-> 
 
-> Our hardware is an AI Accelerartor(PCIE Card).
-> 
-> The device pci.ids is 1d22:3864
-> in https://github.com/pciutils/pciids/blob/master/pci.ids
-> line 24737,
-> 
-> "1d22  Baidu Technology
->         3684  Kunlun AI Accelerator
->         3685  Kunlun2 AI Accelerator [VF]"
-> 
-> And our device driver is not ready to upstream(will cost serveral
-> 
-> months to port DRM etc.),
 
-Ok. Thanks for clarification. Could you please add me to the Cc-list of
-the AI-accelerator patch when it's ready to be submitted for review. I am
-not that familiar with the DRM-part, but would like to have a look at
-the DMA-related code.
+> -----Original Message-----
+> From: Russell King <linux@armlinux.org.uk>
+> Sent: Saturday, March 18, 2023 4:58 AM
+> To: Andrew Lunn <andrew@lunn.ch>
+> Cc: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>;
+> Giuseppe Cavallaro <peppe.cavallaro@st.com>; Alexandre
+> Torgue <alexandre.torgue@foss.st.com>; Jose Abreu
+> <joabreu@synopsys.com>; David S . Miller
+> <davem@davemloft.net>; Eric Dumazet
+> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
+> Paolo Abeni <pabeni@redhat.com>; Maxime Coquelin
+> <mcoquelin.stm32@gmail.com>; Ong, Boon Leong
+> <boon.leong.ong@intel.com>; netdev@vger.kernel.org; linux-
+> stm32@st-md-mailman.stormreply.com; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Looi,
+> Hong Aun <hong.aun.looi@intel.com>; Voon, Weifeng
+> <weifeng.voon@intel.com>; Lai, Peter Jun Ann
+> <peter.jun.ann.lai@intel.com>
+> Subject: Re: [PATCH net v2 1/2] net: stmmac: fix PHY handle
+> parsing
+>=20
+> On Fri, Mar 17, 2023 at 08:56:19PM +0100, Andrew Lunn wrote:
+> > On Tue, Mar 14, 2023 at 03:02:07PM +0800, Michael Sit Wei
+> Hong wrote:
+> > > phylink_fwnode_phy_connect returns 0 when set to
+> MLO_AN_INBAND.
+> > > This causes the PHY handle parsing to skip and the PHY will not
+> be
+> > > attached to the MAC.
+> >
+> > Please could you expand the commit message because i'm
+> having trouble
+> > following this.
+> >
+> > phylink_fwnode_phy_connect() says:
+> >
+> > 	/* Fixed links and 802.3z are handled without needing a
+> PHY */
+> > 	if (pl->cfg_link_an_mode =3D=3D MLO_AN_FIXED ||
+> > 	    (pl->cfg_link_an_mode =3D=3D MLO_AN_INBAND &&
+> > 	     phy_interface_mode_is_8023z(pl->link_interface)))
+> > 		return 0;
+> >
+> > So your first statement is not true. It should be
+> MLO_AN_INBAND and
+> > phy_interface_mode_is_8023z.
+> >
+> > > Add additional check for PHY handle parsing when set to
+> MLO_AN_INBAND.
+> >
+> > Looking at the patch, there is no reference to
+> MLO_AN_INBAND, or
+> > managed =3D "in-band-status";
+>=20
+> That's the pesky "xpcs_an_inband" which ends up as phylink's
+> "ovr_an_inband"... I'm sure these are random renames of stuff
+> to make sure that people struggle to follow the code.
+>=20
+It is as mentioned above, the "xpcs_an_inband" will end up as
+"ovr_an_inband" which will then
+set pl->cfg_link_an_mode =3D MLO_AN_INBAND in the
+phylink_parse_mode() in phylink.c
 
--Serge(y)
+The phylink_fwnode_phy_connect() checks if both
+MLO_AN_INBAND && phy_interface_mode_is_8023z() true
+before returning 0.
 
-> 
-> but I have taken this DW eDMA core into our driver test.
-> 
-> Thanks
-> Cai-
-> 
-> > You keep submitting the DW eDMA driver core update, but there is no
-> > glue-driver or low-level device driver patch for a real device which
-> > would set the EDMA_MF_HDMA_NATIVE mapping.
-> > 
-> > -Serge(y)
-> > 
-> > > 
-> > > Cai Huoqing (2):
-> > >   dmaengine: dw-edma: Add support for native HDMA
-> > >   dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
-> > > 
-> > > Cai huoqing (3):
-> > >   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
-> > >     dw_edma_plat_ops
-> > >   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
-> > >     abstract controller operation
-> > >   dmaengine: dw-edma: Add HDMA DebugFS support
-> > > 
-> > > v6->v7:
-> > >   [1/5]
-> > >   1.Update the commit log.
-> > >   [2/5]
-> > >   2.Revert dw_edma_core_handle_int back to dw-edma-core.h.
-> > >   3.Fix code style.
-> > >   [3/5]
-> > >   4.Move the change of register file from patch[4/5] to patch[3/5].
-> > >   5.Fix code style.
-> > > 
-> > > v6 link:
-> > >   https://lore.kernel.org/lkml/20230310032342.17395-1-cai.huoqing@linux.dev/
-> > > 
-> > >  drivers/dma/dw-edma/Makefile                 |   8 +-
-> > >  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
-> > >  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
-> > >  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.c        |  91 ++++--
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
-> > >  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 277 +++++++++++++++++++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 176 ++++++++++++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 130 +++++++++
-> > >  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
-> > >  include/linux/dma/edma.h                     |   7 +-
-> > >  13 files changed, 785 insertions(+), 107 deletions(-)
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> > > 
-> > > -- 
-> > > 2.34.1
-> > > 
+But in our case, we only have MLO_AN_INBAND is true, which
+then goes to the next part of the code.
+
+	phy_fwnode =3D fwnode_get_phy_node(fwnode);
+	if (IS_ERR(phy_fwnode)) {
+		if (pl->cfg_link_an_mode =3D=3D MLO_AN_PHY)
+			return -ENODEV;
+		return 0;
+	}
+
+Where here the IS_ERR(phy_fwnode) returns true, then it
+Checks for MLO_AN_PHY, which in our case is not, so it returns
+a 0.
+
+When returned 0, our driver will then skip the manual phy parsing
+due to if (!fwnode || ret)
+> --
+> RMK's Patch system:
+> https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at
+> last!
