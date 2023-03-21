@@ -2,122 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9436C35D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4536C35DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbjCUPir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S231770AbjCUPjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjCUPip (ORCPT
+        with ESMTP id S230521AbjCUPi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:38:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC5323D8E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679413119; x=1710949119;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Oldf4kjaQJcTQ9uXaaXfmdQbhwPXm+kkDs/uC9KsfFM=;
-  b=aDNmgXkMA9LlgMCvLptys6CZpLGf/KfTg7FXA/RSuHs3W/GI1S/4540M
-   I5BeoUxGz8z96UvXDnf8u6KTNLwKSfzkZIWNgqSDECwFEnjqTulA1s0KR
-   NozEkBbUavpjSgKrOFaDehj1wT+cp1ne+lNAxr+JkW45wKpE02jVSjXAj
-   jbNsMvfDsyC2+OiYEt1ZfDawH9EQuL9r7kRmalD0Si6/dWy07NM6bjI0P
-   +op2ARe/TyMd7H3xv/X1nRdPd5fnSSjLYnuUCCehnyhp4Hoag2dYS9BWs
-   d5tzjzX/yeokSItzSMn95TT/OGsTvoKJM1UDrPA5INL1oW7o1+18Q/Ujz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="319364829"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="319364829"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:38:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="770691221"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="770691221"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2023 08:38:39 -0700
-Received: from [10.209.33.254] (kliang2-mobl1.ccr.corp.intel.com [10.209.33.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 21 Mar 2023 11:38:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D7D2BEE0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id CAE755805CB;
-        Tue, 21 Mar 2023 08:38:37 -0700 (PDT)
-Message-ID: <29588394-0b14-86f3-9933-1a852707c233@linux.intel.com>
-Date:   Tue, 21 Mar 2023 11:38:36 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E6AF61CEB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68318C433EF;
+        Tue, 21 Mar 2023 15:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679413131;
+        bh=Dih/f+sK5t9xwuuNfL9d5fK5xvkAJU6end11mS6FalI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dS1ceQ8jadc30uxHeKXt9YDbaL6DwxqutAV+UXfx7OB8tZ1Rf+rKELJmBVBdkPz2z
+         rPoe4WkwFRArybQBIAqBtNdrAtKRjMrrZzERv53LLptGutUViCE/+pa1WyCB3OPwEX
+         l7y167hL6PyHwYf340dq9zLci8loBKqxo4RFRc78TPNzsykB609fv/asjRIl9mgIJy
+         WupVfj+zhBB+wG6X9Kq6SyvrjkeXZ1eVAfXrb21KXJdyWEqMEZebUD4zuKEmJX9Yre
+         0J1uDEUZj/5Lw4MtmdiT0bnRKq//WA2fi8hFL/uhgotRK4SirVeS1UgqOyUTct1NIL
+         G91BPgS3A11ZQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 01406154033A; Tue, 21 Mar 2023 08:38:50 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 08:38:50 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, jgross@suse.com, mingo@kernel.org,
+        corbet@lwn.net
+Subject: Re: [PATCH RFC smp] Remove diagnostics and adjust config for CSD
+ lock diagnostics
+Message-ID: <1b48795e-8ec7-4628-b926-38f21a024a9d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
+ <20230321102220.GH2234901@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH V2 4/9] perf/x86: Enable post-processing monotonic raw
- conversion
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, jstultz@google.com,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, eranian@google.com, namhyung@kernel.org,
-        ak@linux.intel.com, adrian.hunter@intel.com,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-5-kan.liang@linux.intel.com> <875yc4rp68.ffs@tglx>
- <4372ae84-76e2-8bae-b0ad-87102973df67@linux.intel.com> <873578rmp2.ffs@tglx>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <873578rmp2.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321102220.GH2234901@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-On 2023-02-14 3:55 p.m., Thomas Gleixner wrote:
-> On Tue, Feb 14 2023 at 15:21, Kan Liang wrote:
->> On 2023-02-14 3:02 p.m., Thomas Gleixner wrote:
->>>
->>> What guarantees that the clocksource used by the timekeeping core is
->>> actually TSC? Nothing at all. You cannot make assumptions here.
->>>
->>
->> Yes, you are right.
->> I will add a check to make sure the clocksource is TSC when perf does
->> the conversion.
->>
->> Could you please comment on whether the patch is in the right direction?
->> This V2 patch series expose the kernel internal conversion information
->> into the user space. Is it OK for you?
+On Tue, Mar 21, 2023 at 11:22:20AM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 20, 2023 at 05:54:39PM -0700, Paul E. McKenney wrote:
+> > Hello!
+> > 
+> > This series removes CSD-lock diagnostics that were once very useful
+> > but which have not seen much action since.  It also adjusts Kconfig and
+> > kernel-boot-parameter setup.
+> > 
+> > 1.	locking/csd_lock: Add Kconfig option for csd_debug default.
+> > 
+> > 2.	locking/csd_lock: Remove added data from CSD lock debugging.
+> > 
+> > 3.	locking/csd_lock: Remove per-CPU data indirection from CSD
+> > 	lock debugging.
+> > 
+> > 4.	kernel/smp: Make csdlock_debug= resettable.
+> > 
+> > 						Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> >  Documentation/admin-guide/kernel-parameters.txt   |   17 -
+> >  b/Documentation/admin-guide/kernel-parameters.txt |    6 
+> >  b/kernel/smp.c                                    |    2 
+> >  b/lib/Kconfig.debug                               |    9 
+> >  kernel/smp.c                                      |  260 ++--------------------
+> >  5 files changed, 47 insertions(+), 247 deletions(-)
 > 
-> Making the conversion info an ABI is suboptimal at best. I'm still
-> trying to wrap my brain around all of this. Will reply over there once
-> my confusion subsides.
-> 
+> Yay!! How do you want to route these, should I take them through tip?
 
-John and I have tried a pure user-space solution (avoid exposing
-internal conversion info) to convert a given TSC to a monotonic raw.
-But it doesn't work well.
-https://lore.kernel.org/lkml/CANDhNComKRDdZJ8SJECNdoAzQhmR3vu9yKAtp7NKDmECxff=fg@mail.gmail.com/
+Either way works for me.  If you take them into -tip, I will drop them
+from -rcu.  If you don't take them into -tip, I will send Linus a pull
+request for the upcoming merge window.  And if you take them at just
+the wrong time, we will both send them to Linus.  ;-)
 
-So, for now, there seems only two solutions.
-Solution 1: Do the conversion in the kernel (Similar to V1).
-https://lore.kernel.org/lkml/20230123182728.825519-1-kan.liang@linux.intel.com/
+Your choice!
 
-Solution 2: Expose the internal conversion information to the user space
-via perf mmap and does post-processing conversion. (Implemented in this V2)
+> What about the rest of the thing? Your commits seem to suggest it's
+> still actually used -- why? Are there still more virt bugs?
 
-Personally, I incline the solution 1. Because
-- The current monotonic raw is calculated in the kernel as well.
-  The solution 1 just follow the existing method. It doesn't introduce
-extra overhead.
-- It avoids exposing the internal timekeeping state directly to userspace.
+Thus far, no luck.  I proposed ditching some of the stack traces, but
+that got shot down.
 
+These find the following issues:  (1) CPU looping with interrupts
+disabled.  (2) CPU stuck in a longer-than-average SMI handler or other
+firmware sand trap.  (3) CPU fail stopped.
 
-What do you think? Are there other directions I can explore?
+In theory, we could drop the RCU CPU stall warning to five seconds and
+catch this same stuff.  Unfortunately, in practice, there would need to
+be lots of churn from CPUs looping with preemption disabled.  Which we
+still get from time to time even at 21 seconds.
 
-Thanks,
-Kan
+NMIs can be used to deal with #1, and the hard lockup detector in fact
+sort of does this.  But these are not helpful for #2 and #3.
+
+So nothing yet, but I am still looking for improved diagnostics.
+
+							Thanx, Paul
