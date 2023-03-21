@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F756C3C23
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4AA6C3C25
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjCUUqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        id S229670AbjCUUqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCUUq3 (ORCPT
+        with ESMTP id S229865AbjCUUqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:46:29 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8DF53D9C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:46:24 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id o7so15041704wrg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:46:24 -0700 (PDT)
+        Tue, 21 Mar 2023 16:46:32 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB02F54C8F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:46:25 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id i9so15026101wrp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679431583;
+        d=gmail.com; s=20210112; t=1679431584;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M+P4r5ohjfdtTt/Mfa4qHdLtxtbZQxPh6y+eJBbFwbQ=;
-        b=Z7Gjn1KMJVHvSI9APFNDg5uxS4keAM8LnCBQVHmEJD6yDXb22mgga2nC+Rwzpa3IcL
-         RxnTpVHSK77c6WZjwYzcArWUEA11ZTfmBWGOCiHBjlXCKMRLXbs81gxYbP0IC48tal5g
-         WRJExwimKVuHKEA3MMDUsaZEbLPRcUotIfTZpvdQWzQTIqaBDRVsGhmIY5eQjn/HmVY+
-         XB0ATW0xXz0JuaP839CKl/ExxesBCdeUyAjy45Hh+FiqMp4s1wi7/fmRN5+bjFdvP5ZS
-         rvnko07nNRULJxK6AZtA4g7ZSCwxAA7z/iW+KMHwVR1NYBWCtfQtc4ZIRSNP4n/KeGhS
-         c2IQ==
+        bh=MfsZBuYgS6pqJ3Am6jGw1RAqKs9VHOoqJ2PWKKositw=;
+        b=Xthyp8pNRedrgpz+v7r1SoXbmc6FhAaRO0rPX1lWRJx0A6HaV08XrfWC3LBKRr1v4J
+         VVJn5sFjSfzpbAaBIECALfN2ebHT0JfzrX1GnPa4bT8W0hFFyOdyhRLCYjL9viRXVCzW
+         l8Lz43DLOTRm3mkbFemM/Ofmh4JH89aCXl1jKSNyU4vhKGd9FSFAaRKFmKYTcaaNMWae
+         kU9h111gk9jlfYE1r8tSyq65aKuuJ9TgN6Jm2xuLTJ/VsMbqA9+nRWd5HiO03wrPX5Kz
+         yuAd9nbzdzKyHs0L2r/tAw9etDrdkFR9dao7pQuZoWZ9Ht3Mr6j88Cgqyd0Q6+GrsfnO
+         Uwew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679431583;
+        d=1e100.net; s=20210112; t=1679431584;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M+P4r5ohjfdtTt/Mfa4qHdLtxtbZQxPh6y+eJBbFwbQ=;
-        b=XCqocn1SzgWCULom/C8J6PkWlTi4GzzKWBPOt5IfuBYcVB0fTBjGosiM2fc4lrxGSK
-         HI7fOM+Cx5orhTCUC0/XRZO6iIOLy05bB5dqgxrh/gnW9W4fcBZIc11D3uDr1O4d5IoD
-         RhcdOvaLNAIGdD7w3rDFhOmFlmh1yEEe1Do0nIcft8moqqblt/GE8tkica1oI9r3DsnG
-         uTlQ2Vcf8GAu7GtigfrW2k/vup/BHwd09PC4vAt5jHoaGKy+W2uFXsyr8hfO94N5iTAh
-         fk052SYamCOj30ofZauewmBnxkJxeLJN7hCSTZM+z8u6+7SyVv28HHYDFXOLC4mc00NR
-         +aLA==
-X-Gm-Message-State: AO0yUKXxNLuJIcEgGr/+dUraEKARTib1n8Yrd55Gi4pQvbzqt5LqfOzo
-        wrV5r/84e/oeXOEfQOXR+Go=
-X-Google-Smtp-Source: AK7set9qKf2MHVF0+P2hb8JkRBr8OZ1hgZ3RUsK5mnnQG8b6+tURR09MpVh1Xlja767sSCFdhoOAuA==
-X-Received: by 2002:adf:e242:0:b0:2ce:ad40:7705 with SMTP id bl2-20020adfe242000000b002cead407705mr3296806wrb.25.1679431582801;
-        Tue, 21 Mar 2023 13:46:22 -0700 (PDT)
+        bh=MfsZBuYgS6pqJ3Am6jGw1RAqKs9VHOoqJ2PWKKositw=;
+        b=bfgLgmsdlOe5AMbXO7YmvF+MoV4N5MxOigEh463wxYWD2o7C8ncfyQkIimXT4pfo9q
+         PD0OW90k/xq5+ER9qszsQYYmutpKV/L4tAwHNATX4QJR2iN3PKdf4Mwk2DDDNQRAtDSd
+         WmNx2ELgnKm66y58y1k3c07WUGZ9BgtHMWI0g9m6oKJRMCTIWKIyvBHMbN8HwytbPISG
+         ne+vFE0tlUuI/opmNMnKbloXHUW2+FVJar7PSWyO85SgpjZ5sTEgl696nvhwY4NcNbCe
+         GkOhVx3ite5GoJ3GDQCDLGInVspAF8k2KBz4WVLT8KDf1UlUDJe9CA6HT9IyUfk7UIAQ
+         VJwg==
+X-Gm-Message-State: AO0yUKUzTtupYnbOqS9q+7auLUJnpm9a1kb999LzbDoY6zPzSssAAuaY
+        7x+/azvFl4LyqQtvOM/wkio=
+X-Google-Smtp-Source: AK7set8vgB48KSqkTfNA3yVmqhUDD2V9Hf3XxSaQnFm8ZDXG7nS4tj0A/4peODTUrzQZWqI5gVVA0w==
+X-Received: by 2002:a5d:4535:0:b0:2c7:e5f:e0e0 with SMTP id j21-20020a5d4535000000b002c70e5fe0e0mr3542607wra.65.1679431584097;
+        Tue, 21 Mar 2023 13:46:24 -0700 (PDT)
 Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.googlemail.com with ESMTPSA id a4-20020adffb84000000b002d322b9a7f5sm12142491wrr.88.2023.03.21.13.46.21
+        by smtp.googlemail.com with ESMTPSA id a4-20020adffb84000000b002d322b9a7f5sm12142491wrr.88.2023.03.21.13.46.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 13:46:21 -0700 (PDT)
+        Tue, 21 Mar 2023 13:46:23 -0700 (PDT)
 From:   Lorenzo Stoakes <lstoakes@gmail.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
@@ -59,9 +59,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>,
         Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v2 2/4] mm/mmap/vma_merge: set next to NULL if not applicable
-Date:   Tue, 21 Mar 2023 20:45:56 +0000
-Message-Id: <3506997a8146a287ec13ee7a53cf916707537bf8.1679431180.git.lstoakes@gmail.com>
+Subject: [PATCH v2 3/4] mm/mmap/vma_merge: extend invariants, avoid invalid res, vma
+Date:   Tue, 21 Mar 2023 20:45:57 +0000
+Message-Id: <17b6fc3edc46c4b33aa93b9ef17a63a3a76f4b5f.1679431180.git.lstoakes@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1679431180.git.lstoakes@gmail.com>
 References: <cover.1679431180.git.lstoakes@gmail.com>
@@ -77,65 +77,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are only interested in next if end == next->vm_start (in which case we
-check to see if we can set merge_next), so perform this check alongside
-checking whether curr should be set.
+Previously, vma was an uninitialised variable which was only definitely
+assigned as a result of the logic covering all possible input cases - for
+it to have remained uninitialised, prev would have to be NULL, and next
+would _have_ to be mergeable.
 
-This groups all of the simple range checks together and establishes the
-invariant that, if prev, curr or next are non-NULL then their positions are
-as expected.
+We now reuse vma to assign curr and next, so to be absolutely explicit,
+ensure this variable is _always_ assigned, and while we're at it remove the
+redundant assignment of both res and vma (if prev is NULL then we simply
+assign to NULL).
 
-This has no functional impact.
+In addition, we absolutely do rely on addr == curr->vm_start should curr
+exist, so assert as much.
 
 Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 ---
- mm/mmap.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ mm/mmap.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/mm/mmap.c b/mm/mmap.c
-index c9834364ac98..6361baf75601 100644
+index 6361baf75601..7aec49c3bc74 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -930,15 +930,15 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 	if (vm_flags & VM_SPECIAL)
- 		return NULL;
+@@ -911,7 +911,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ {
+ 	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
+ 	pgoff_t vma_pgoff;
+-	struct vm_area_struct *curr, *next, *res = NULL;
++	struct vm_area_struct *curr, *next, *res;
+ 	struct vm_area_struct *vma, *adjust, *remove, *remove2;
+ 	int err = -1;
+ 	bool merge_prev = false;
+@@ -940,14 +940,18 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ 		/* Is there a VMA next to a hole (case 1 - 3) or prev (4)? */
+ 		next = vma_lookup(mm, end);
  
--	curr = find_vma(mm, prev ? prev->vm_end : 0);
--	if (curr && curr->vm_end == end)		/* cases 6, 7, 8 */
--		next = find_vma(mm, curr->vm_end);
--	else
--		next = curr;
-+	/* Does the input range span an existing VMA? (cases 5 - 8) */
-+	curr = find_vma_intersection(mm, prev ? prev->vm_end : 0, end);
- 
--	/* In cases 1 - 4 there's no CCCC vma */
--	if (curr && end <= curr->vm_start)
--		curr = NULL;
-+	if (curr && end == curr->vm_end)
-+		/* Is there is a VMA immediately adjacent (cases 6 - 8)? */
-+		next = vma_lookup(mm, curr->vm_end);
-+	else if (!curr)
-+		/* Is there a VMA next to a hole (case 1 - 3) or prev (4)? */
-+		next = vma_lookup(mm, end);
- 
- 	/* verify some invariant that must be enforced by the caller */
+-	/* verify some invariant that must be enforced by the caller */
++	/*
++	 * By default, we return prev. Cases 3, 4, 8 will instead return next
++	 * and cases 3, 8 will also update vma to point at next.
++	 */
++	res = vma = prev;
++
++	/* Verify some invariant that must be enforced by the caller. */
  	VM_WARN_ON(prev && addr <= prev->vm_start);
-@@ -959,11 +959,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+-	VM_WARN_ON(curr && end > curr->vm_end);
++	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+ 	VM_WARN_ON(addr >= end);
+ 
+ 	if (prev) {
+-		res = prev;
+-		vma = prev;
+ 		vma_start = prev->vm_start;
+ 		vma_pgoff = prev->vm_pgoff;
+ 		/* Can we merge the predecessor? */
+@@ -958,6 +962,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			vma_prev(vmi);
  		}
  	}
++
  	/* Can we merge the successor? */
--	if (next && end == next->vm_start &&
--			mpol_equal(policy, vma_policy(next)) &&
--			can_vma_merge_before(next, vm_flags,
--					     anon_vma, file, pgoff+pglen,
--					     vm_userfaultfd_ctx, anon_name)) {
-+	if (next && mpol_equal(policy, vma_policy(next)) &&
-+	    can_vma_merge_before(next, vm_flags,
-+				 anon_vma, file, pgoff+pglen,
-+				 vm_userfaultfd_ctx, anon_name)) {
- 		merge_next = true;
- 	}
- 
+ 	if (next && mpol_equal(policy, vma_policy(next)) &&
+ 	    can_vma_merge_before(next, vm_flags,
+@@ -998,6 +1003,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			adj_start = -(prev->vm_end - addr);
+ 			err = dup_anon_vma(next, prev);
+ 		} else {
++			/*
++			 * Note that cases 3 and 8 are the ONLY ones where prev
++			 * is permitted to be (but is not necessarily) NULL.
++			 */
+ 			vma = next;			/* case 3 */
+ 			vma_start = addr;
+ 			vma_end = next->vm_end;
 -- 
 2.39.2
 
