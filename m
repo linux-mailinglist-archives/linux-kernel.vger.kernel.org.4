@@ -2,141 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB536C368C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870CB6C3690
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjCUQEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
+        id S230490AbjCUQFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjCUQEm (ORCPT
+        with ESMTP id S230215AbjCUQFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:04:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C502A151;
-        Tue, 21 Mar 2023 09:04:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9A62722179;
-        Tue, 21 Mar 2023 16:04:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679414676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 21 Mar 2023 12:05:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2626F311FA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679414686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nqV68zFEuPEfvE057sQFY+VG01o4U7Wn4v08os2RZjg=;
-        b=E/OA2UdMgfl8mYCkExoWWAsmR5K7iAcywCkd0mkc3bM+cC1Zm7jk8SljBNAYSCXKQm0luD
-        rP8XBTizJ+Bd3TgkrDMIOL4Zwlh7ojBNLlPVF51RO+i4OmY4bJtNg+2vtTM+LUcDmVWShX
-        ZXlulOVUcvXHutCE17HLUBPQPuMGFno=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3A3962C141;
-        Tue, 21 Mar 2023 16:04:36 +0000 (UTC)
-Date:   Tue, 21 Mar 2023 17:04:33 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: union: was: Re: [PATCH printk v1 05/18] printk: Add non-BKL console
- basic infrastructure
-Message-ID: <ZBnVkarywpyWlDWW@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-6-john.ogness@linutronix.de>
+        bh=lvuo6+gbLS66U9JgpxqS8Rw/48nBbSnJ5zKf6oE7jWc=;
+        b=PzVRwKOt8msBlVhJZdjZODQw/OokHVqNd0jmd2eLpvS57vxNq4WqNqyYSZdspwR50T00Zb
+        KwalmZQqDMyUpbg9/pp0a0cATA5ftDA9XuZe5X/2NuSGcaObDby0i7gLAB1fI/YrBTNOGL
+        0XzU0mlLBXBcQdU4Vw0RF1TVtZnT+xA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-256-jL0honriP1WaeQqYlCx3mw-1; Tue, 21 Mar 2023 12:04:45 -0400
+X-MC-Unique: jL0honriP1WaeQqYlCx3mw-1
+Received: by mail-wm1-f69.google.com with SMTP id j13-20020a05600c190d00b003ed26189f44so10213986wmq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:04:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679414684;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvuo6+gbLS66U9JgpxqS8Rw/48nBbSnJ5zKf6oE7jWc=;
+        b=16ZLizNHdwcBG5dvT0qIAn0JoQHCT0/nz+0XwARN7DlxSFArBfxmj4+npelI8281iU
+         47XWxLGoW5edRGA2rfNtx8GWTLkqt0rJLcCpzPf/TAe7r2TLphvAL8WL6R5uwKLyBxpO
+         ZWICtH7Gh5Rn9NkO46/KNjJ986fSbPBrMa1gQQq3yJ2LNcDS8i+p3GaE/4IJGhDEcRU+
+         WtukE9zQ6qSsdhrEOEaktLIMokPtJjwfyDeHdvoRSBLUbopNDVLeohndYWFa6XIx4uGF
+         VKvujraZa55J4dMRa5bsiQAke6+IjYYnUWaYnxlxaSO6R37G8ow+YENJgwMk/4aaVURG
+         Oe2A==
+X-Gm-Message-State: AO0yUKUHS6CV97lW9gYomOMDr8qxzO3tjjbR/OVMiTVrTDweVLU2G93L
+        lCejtbT8wqb32TSLyqmHezrHIVAz/HjtE8FghlcJfHi0B5lRlWeCLfdP7SlP3N1aCsbJhfF6v4d
+        2GDLK/w1zORjbXxJcm62M7gGl
+X-Received: by 2002:adf:ec44:0:b0:2c6:85ef:4086 with SMTP id w4-20020adfec44000000b002c685ef4086mr2641064wrn.32.1679414684065;
+        Tue, 21 Mar 2023 09:04:44 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/qpBy5hLFiDKHRejykyhei5GGgmayXQki0xtcMTXtMaW6+qKHkyL/mZoulIXdg9Sh2mNKc+w==
+X-Received: by 2002:adf:ec44:0:b0:2c6:85ef:4086 with SMTP id w4-20020adfec44000000b002c685ef4086mr2641036wrn.32.1679414683733;
+        Tue, 21 Mar 2023 09:04:43 -0700 (PDT)
+Received: from redhat.com ([2.52.1.105])
+        by smtp.gmail.com with ESMTPSA id j10-20020a5d464a000000b002cea8f07813sm11737981wrs.81.2023.03.21.09.04.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 09:04:43 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 12:04:39 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Viktor Prutyanov <viktor@daynix.com>, jasowang@redhat.com,
+        pasic@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, yan@daynix.com
+Subject: Re: [PATCH v3] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+Message-ID: <20230321115854-mutt-send-email-mst@kernel.org>
+References: <20230321134410.2097163-1-viktor@daynix.com>
+ <87h6uem9qc.fsf@redhat.com>
+ <CAPv0NP6Ep4-B7cMc285E3d3vYjgwO7O1pq5sG3OYYAoZd3EAYQ@mail.gmail.com>
+ <87bkkmm89a.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230302195618.156940-6-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87bkkmm89a.fsf@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-03-02 21:02:05, John Ogness wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On Tue, Mar 21, 2023 at 04:30:57PM +0100, Cornelia Huck wrote:
+> On Tue, Mar 21 2023, Viktor Prutyanov <viktor@daynix.com> wrote:
 > 
-> The current console/printk subsystem is protected by a Big Kernel Lock,
-> (aka console_lock) which has ill defined semantics and is more or less
-> stateless. This puts severe limitations on the console subsystem and
-> makes forced takeover and output in emergency and panic situations a
-> fragile endavour which is based on try and pray.
+> > On Tue, Mar 21, 2023 at 5:59 PM Cornelia Huck <cohuck@redhat.com> wrote:
+> >>
+> >> On Tue, Mar 21 2023, Viktor Prutyanov <viktor@daynix.com> wrote:
+> >>
+> >> > According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
+> >> > indicates that the driver passes extra data along with the queue
+> >> > notifications.
+> >> >
+> >> > In a split queue case, the extra data is 16-bit available index. In a
+> >> > packed queue case, the extra data is 1-bit wrap counter and 15-bit
+> >> > available index.
+> >> >
+> >> > Add support for this feature for MMIO, PCI and channel I/O transports.
+> >> >
+> >> > Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
+> >> > ---
+> >> >  v3: support feature in virtio_ccw, remove VM_NOTIFY, use avail_idx_shadow,
+> >> >     remove byte swap, rename to vring_notification_data
+> >> >  v2: reject the feature in virtio_ccw, replace __le32 with u32
+> >> >
+> >> >  drivers/s390/virtio/virtio_ccw.c   |  4 +++-
+> >> >  drivers/virtio/virtio_mmio.c       | 14 +++++++++++++-
+> >> >  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
+> >> >  drivers/virtio/virtio_pci_common.h |  4 ++++
+> >> >  drivers/virtio/virtio_pci_legacy.c |  2 +-
+> >> >  drivers/virtio/virtio_pci_modern.c |  2 +-
+> >> >  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
+> >> >  include/linux/virtio_ring.h        |  2 ++
+> >> >  include/uapi/linux/virtio_config.h |  6 ++++++
+> >> >  9 files changed, 57 insertions(+), 4 deletions(-)
+> >> >
+> >> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> >> > index 954fc31b4bc7..c33172c5b8d5 100644
+> >> > --- a/drivers/s390/virtio/virtio_ccw.c
+> >> > +++ b/drivers/s390/virtio/virtio_ccw.c
+> >> > @@ -396,13 +396,15 @@ static bool virtio_ccw_kvm_notify(struct virtqueue *vq)
+> >> >       struct virtio_ccw_vq_info *info = vq->priv;
+> >> >       struct virtio_ccw_device *vcdev;
+> >> >       struct subchannel_id schid;
+> >> > +     u32 data = __virtio_test_bit(vq->vdev, VIRTIO_F_NOTIFICATION_DATA) ?
+> >> > +                     vring_notification_data(vq) : vq->index;
+> >> >
+> >> >       vcdev = to_vc_device(info->vq->vdev);
+> >> >       ccw_device_get_schid(vcdev->cdev, &schid);
+> >> >       BUILD_BUG_ON(sizeof(struct subchannel_id) != sizeof(unsigned int));
+> >> >       info->cookie = kvm_hypercall3(KVM_S390_VIRTIO_CCW_NOTIFY,
+> >> >                                     *((unsigned int *)&schid),
+> >> > -                                   vq->index, info->cookie);
+> >> > +                                   data, info->cookie);
+> >> >       if (info->cookie < 0)
+> >> >               return false;
+> >> >       return true;
+> >> > diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> >> > index 3ff746e3f24a..7c16e622c33d 100644
+> >> > --- a/drivers/virtio/virtio_mmio.c
+> >> > +++ b/drivers/virtio/virtio_mmio.c
+> >> > @@ -285,6 +285,16 @@ static bool vm_notify(struct virtqueue *vq)
+> >> >       return true;
+> >> >  }
+> >> >
+> >> > +static bool vm_notify_with_data(struct virtqueue *vq)
+> >> > +{
+> >> > +     struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
+> >> > +     u32 data = vring_notification_data(vq);
+> >> > +
+> >> > +     writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
+> >>
+> >> Can't you simply use the same method as for ccw, i.e. use one callback
+> >> function that simply writes one value or the other?
+> >
+> > The idea is to eliminate the conditional branch induced by feature bit
+> > testing from the notification function. Probably, this can be done in
+> > the same way in ccw.
 > 
-> The goal of non-BKL consoles is to break out of the console lock jail
-> and to provide a new infrastructure that avoids the pitfalls and
-> allows console drivers to be gradually converted over.
-> 
-> The proposed infrastructure aims for the following properties:
-> 
->   - Per console locking instead of global locking
->   - Per console state which allows to make informed decisions
->   - Stateful handover and takeover
-> 
-> As a first step state is added to struct console. The per console state
-> is an atomic_long_t with a 32bit bit field and on 64bit also a 32bit
-> sequence for tracking the last printed ringbuffer sequence number. On
-> 32bit the sequence is separate from state for obvious reasons which
-> requires handling a few extra race conditions.
->
+> Hm, how noticable is that branch? IOW, is it worth making the code less
+> readable for this?
 
-It is not completely clear that that this struct is stored
-as atomic_long_t atomic_state[2] in struct console.
+I'm not sure but these things add up. I'm with Viktor here let's just
+avoid the branch and not worry about whether it's important or not.
+So let's use the same thing here then? And we can use a subfunction
+to avoid code duplication.
 
-What about adding?
+> (In any case, all transports probably should use the same method.)
 
-		atomic_long_t atomic;
-
-> +		unsigned long	atom;
-> +		struct {
-> +#ifdef CONFIG_64BIT
-> +			u32	seq;
-> +#endif
-> +			union {
-> +				u32	bits;
-> +				struct {
-> +				};
-> +			};
-> +		};
-> +	};
->  };
->  
->  /**
-> @@ -186,6 +214,8 @@ enum cons_flags {
->   * @dropped:		Number of unreported dropped ringbuffer records
->   * @data:		Driver private data
->   * @node:		hlist node for the console list
-> + *
-> + * @atomic_state:	State array for NOBKL consoles; real and handover
->   */
->  struct console {
->  	char			name[16];
-> @@ -205,6 +235,9 @@ struct console {
->  	unsigned long		dropped;
->  	void			*data;
->  	struct hlist_node	node;
-> +
-> +	/* NOBKL console specific members */
-> +	atomic_long_t		__private atomic_state[2];
-
-and using here
-
-	struct cons_state	__private cons_state[2];
-
-Then we could use cons_state[which].atomic to access it as
-the atomic type.
-
-Or was this on purpose? It is true that only the variable
-in struct console has to be accessed the atomic way.
-
-Anyway, we should at least add a comment into struct console
-about that atomic_state[2] is used to store and access
-struct cons_state an atomic way. Also add a compilation
-check that the size is the same.
-
-Best Regards,
-Petr
