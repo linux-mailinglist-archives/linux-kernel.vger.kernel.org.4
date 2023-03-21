@@ -2,133 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10176C2A57
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAD66C2A5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCUGUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S230270AbjCUG0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjCUGU3 (ORCPT
+        with ESMTP id S230220AbjCUG0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:20:29 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2031.outbound.protection.outlook.com [40.92.98.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401F39CF1
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:20:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HhpszWttysbMCSZP+SoIPBzMWwuerZBLZomB7P+qZoJh904gU/8U/RB41XIumTy+gRb6LOAgYXhkoImYkQtRjEmSiiil+EzBehLORSxA5V1hQ3XpE+dCB7C/KFzrMEDPWfFmv7uOJSS63kaH2Oo8Pae5uFv8E9oDTg3LzQVTC4fkDBUGaweIOAOZxcTzra1eRRwyrVYaopb7CXeHHHQEwk3ksK9Sj6KrlHgCfCcRPo2mn2v6pMTM03Aj/2Wtvbmkml4mXbBvErbB3CsnQ+QzHjhNqEEmV66Te6RKh3CSgfR7Vd5TKjUJmPskjbaS57LHRbRUE/ybRijgS+VuQ15JfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ySe1l8LXiaTaDIJtc/Qn0KhLh3ppIoXqK1CcER35mGM=;
- b=VUJ5fug4jhiei26A5RHgVVVE82MLi7cWwab4T7x9eEoCTRtAV30LIcjmekplMLp0UoTW8O5kX1bepJ5u8kg+q6dDB9zUm3LYt1HDkmFLIiErv0vqLHv1PcQfE78I17J2BKRnBHYl1VDqLRTEPxmRkb7RP5sizv7w2f78aSTYwcwf22Wb5z7vGfDdznIuw6fbNxmr4sijpa95CvhZTageiiEQO3C/CsF4Y5kxRrOYAlLaaD79crq+mXD/Xc+WO6K2ipex2njhn8ZCLQzX4p4mqxoRiTSh2l+FJWy590jTx+vbq0wSAPK1vosgh4oWxHC21fijTV/baM0GIZFziiQK2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ySe1l8LXiaTaDIJtc/Qn0KhLh3ppIoXqK1CcER35mGM=;
- b=GFc6qJOhTzqgqbX4Glav07WhzS1/8OsJeR4iHBUfsfEn9T/WDSpcP9KLebR7E02ZNBv5PGZRB9rbACKw/5cgE71VmtRCAsYOvXJMym9XIF6zFr0yQMlIxU2XnZFpSF8nPXKgBiuifkv9MXxdwhh14d6nA2kIdMGJLcoMcWqZIbaQ37DLfNBOGl6R7IJLePU64KIot4CYgXftkvhW/pYOZbdWTJ9p/ag730MN5ziZ2Op0mBH/Uha9n+OZAFMfNBGQbeF4IDC0wGuany/AlNiHWIwkk9us5txGRtOwnq49aUcqiWTzAd4zOaB1C2tXmc525Qz6m4t/6KvQoLUVtFfBNQ==
-Received: from TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:158::13)
- by TY1P286MB3348.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2ee::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 06:20:07 +0000
-Received: from TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
- ([fe80::3682:6425:a009:405f]) by TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
- ([fe80::3682:6425:a009:405f%8]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
- 06:20:07 +0000
-From:   Peng Liu <pngliu@hotmail.com>
-Cc:     jan.kiszka@siemens.com, kbingham@kernel.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        liupeng17@lenovo.com
-Subject: [PATCH 3/3] scripts/gdb: fix lx-timerlist for HRTIMER_MAX_CLOCK_BASES printing
-Date:   Tue, 21 Mar 2023 14:20:04 +0800
-Message-ID: <TYCP286MB214640FF0E7F04AC3926A39EC6819@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.34.1
+        Tue, 21 Mar 2023 02:26:34 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97883608D;
+        Mon, 20 Mar 2023 23:26:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L6Q5sG096475;
+        Tue, 21 Mar 2023 01:26:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679379965;
+        bh=a+MTT5Qkyz1YaOgv8XKSB4NSt7MeDdfso+0H1pTzxGE=;
+        h=From:To:CC:Subject:Date;
+        b=M3bmLqI7iJgnzrYioqv1bVKfJHY/M5e7cIkO1PIvpZFKi7OXSrLeS9/ZzRe3Xu3hm
+         Jmt/9jy3j92ReCcg0LWHukVryQkHrkhcOErld8UQsJJqPlD9CwzzTL4S/yDRRDQJb8
+         ghIz1jCcW7d2oyRCBROFvrgwtOn3YNmVd2TNvkZc=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L6Q5RF104597
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Mar 2023 01:26:05 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Mar 2023 01:26:05 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Mar 2023 01:26:05 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L6Q1tY089872;
+        Tue, 21 Mar 2023 01:26:01 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rogerq@kernel.org>,
+        <jacob.e.keller@intel.com>, <richardcochran@gmail.com>,
+        <leon@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net-next] net: ethernet: ti: am65-cpts: adjust estf following ptp changes
+Date:   Tue, 21 Mar 2023 11:56:00 +0530
+Message-ID: <20230321062600.2539544-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [98Tcgg0RWXbZgzGa2mx1HhoZhcSqTbgZ]
-X-ClientProxiedBy: TYCP286CA0174.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:3c6::15) To TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:158::13)
-X-Microsoft-Original-Message-ID: <20230321062004.4574-1-pngliu@hotmail.com>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2146:EE_|TY1P286MB3348:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae62aeb0-d682-40c2-a08d-08db29d4512d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IaOd8WLCbeO8DQ0gHQDmQQsBZyFuKgLdozeJZtNrGOi3Ws+PL+HglDbhjrK8AHS3nBgEFuZcoJdlDZ8UoOvko6jvcV2wC1ARSu0LBYstPKNFmu65cJFj+pMvpFvfgBomo/E0/8eMvjVbUTGTPHaKDLR876Wt7KQzF+Ub3R1r1EyniFVDd7BwcNF9HsA5+3iFwltBSjUmunVMFzXQmJep2fs0odBCEq2R61wIsRi9rbScyAqeSnBGrCofkNBE3acoaezuroKRv31KAgZgraRyczBwYJi7A8i5xOOKAhBzl9P/o6xJ4+XAHmZpFMricm18JnaHGlElq5pZVaOTzB9FZ9BWvU05ZCdTFAz4ZgiV63O5MaWe3QDdVoIhSifu0IRePxDzfC8OptrXBxRJRDnvKZn2GG2Ir+y9RHZso8gQanzDBAcbcuKBKk6/RwuDmQN+M5NEUzKZXVjqA5UvvX/BKP3i2zcZfBL5JtizUxtKKqpXNo575i8Zin6YUFIXO7WfW+qv6ivYGzaKRSRYZ3/gPu8fGABwLPHkUQqq1j6p6Ec+qndeL4OZm2q4b3W2BpZvxqWI/7GV5ttOVexoytBJ7Ggp+Uot4TY9jMtpqKALtus=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?50qWtAWUU8OE4ktXPQu4atOW0Aaktj7bqH9Tmu6XVCgFeTlnQf/wTgVH0BWP?=
- =?us-ascii?Q?XQRVgkqPmaWKZxyr0SAZb0itHtgVQnMVggI6eT7guJ+P4ovj8VWEH8Qux9aO?=
- =?us-ascii?Q?gLUuH0Dtw1Hh4gM0XoSCTAWc5VMWuDmvyagDWINf0ZaDqxXhtxnMCyvIc0wM?=
- =?us-ascii?Q?KfEYvdkfxvwkLvHiIWIst9TaDf0bByVQ2PUsfVYZsHTD61H2DvZNNunzRwgF?=
- =?us-ascii?Q?CoXa2PQL81atXPuc1c4irGVHDavY3/uiQFUlgkYb6jdpZdaJYVMFfCAcc5j6?=
- =?us-ascii?Q?y6F9/z4fTbJehxreXdTThGBnrHtMkcwHLcEfeB2VSspZ2zk7T1NO8/SmYdhy?=
- =?us-ascii?Q?q3T0iClNsWvmq27pwRT7P/l+Dq1r2CfMWgcsGXNT1/Vr8JmICLv1WjovMiIm?=
- =?us-ascii?Q?9pbc+BLeo1k2QDUWjFH+mcdgutk+No/rkncyopoG2nr2bLiKZOP/X4YXjMNv?=
- =?us-ascii?Q?ALDEuNJxzP0Z7DxeJmFC/tul7H7qFN/6ONOzKw5SXnoGWUzklFCOZMxExPG5?=
- =?us-ascii?Q?1+8mwrUMudxRGpz8lg5Mq802rT16NRvhZGxOkKuQ5KqM/xE5rJ3aeegbPWWs?=
- =?us-ascii?Q?/kUGUJU3dN72MhU45Pj2qs79Zhu1ZH6P1uhsk/I9QThlxel48QicXpLaytVE?=
- =?us-ascii?Q?bL+M/Mz4IxZVJpKnLk6gsFmb6+o+qEp84kVIXa8tV+6+W8KMUyl/92hzL0tC?=
- =?us-ascii?Q?j2XKbn49CeseQDJGtTgDlCGhEnSTYXnrO0JiOnSTGnphD0WTZ6fQJ593hObA?=
- =?us-ascii?Q?W7YaVr3MfONkTUVwCbHCPBtmujCwu/AAoA6qoZM1e6fO383fpIMQG7Wi+cmb?=
- =?us-ascii?Q?jUzBkmJr2ssODjiUm6EbxJZR+fAxbUdPBvZvMxWpUqwKcVRmme38JLNtWf9j?=
- =?us-ascii?Q?29Osw/ZLiwvHOKVkU99m1H7QC6qSH1Rg2kGra+R1Hl2LDFIw+mOCeN9MbaM0?=
- =?us-ascii?Q?dJwmuF+fmBkoZVaw09YyOFNI/cy52IhZC41zpZaCMYJots8A3RwuWLIm0Sp7?=
- =?us-ascii?Q?8RO68T7ZEA3ETtKa7GAshE5NWKBVsi/GSPfwg0gI7DKo/BHRLvFDnPINPWLK?=
- =?us-ascii?Q?/JR6XP2/RWXQmNnzF0UwtjUpJ6tvdBnFvqDsWyyY714D2vUfbX1P/6N41GND?=
- =?us-ascii?Q?Vktt/9ubNHgLsr83Ra384qCmUtc/75PXwPGDyEvyeda75a5ei+t8iUk3pbSg?=
- =?us-ascii?Q?Svioa75GNV7e8ND/QsLofF2r7kHwFHqhS2LQcviCjUCbq8OLeMpJCi1O+9th?=
- =?us-ascii?Q?Wxw3csTE4ZaPBGEP/RGg?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae62aeb0-d682-40c2-a08d-08db29d4512d
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 06:20:07.7307
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1P286MB3348
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Liu <liupeng17@lenovo.com>
+From: Grygorii Strashko <grygorii.strashko@ti.com>
 
-HRTIMER_MAX_CLOCK_BASES is of enum type hrtimer_base_type. To print
-it as an integer, HRTIMER_MAX_CLOCK_BASES should be converted first.
+When the CPTS clock is synced/adjusted by running linuxptp (ptp4l/phc2sys),
+it will cause the TSN EST schedule to drift away over time. This is because
+the schedule is driven by the EstF periodic counter whose pulse length is
+defined in ref_clk cycles and it does not automatically sync to CPTS clock.
+   _______
+ _|
+  ^
+  expected cycle start time boundary
+   _______________
+ _|_|___|_|
+  ^
+  EstF drifted away -> direction
 
-Signed-off-by: Peng Liu <liupeng17@lenovo.com>
-Reviewed-by: Jan Kiszka <jan.kiszka@siemens.com>
+To fix it, the same PPM adjustment has to be applied to EstF as done to the
+PHC CPTS clock, in order to correct the TSN EST cycle length and keep them
+in sync.
+
+Drifted cycle:
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230373377017
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230373877017
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230374377017
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230374877017
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230375377017
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230375877023
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230376377018
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230376877018
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230377377018
+
+Stable cycle:
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863193375473
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863193875473
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863194375473
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863194875473
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863195375473
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863195875473
+AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863196375473
+
+Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
- scripts/gdb/linux/timerlist.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/ti/am65-cpts.c | 34 ++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-index 8281da068c5b..249f0e804b24 100644
---- a/scripts/gdb/linux/timerlist.py
-+++ b/scripts/gdb/linux/timerlist.py
-@@ -188,7 +188,8 @@ class LxTimerList(gdb.Command):
-         max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
+diff --git a/drivers/net/ethernet/ti/am65-cpts.c b/drivers/net/ethernet/ti/am65-cpts.c
+index 16ee9c29cb35..1d9a399c9661 100644
+--- a/drivers/net/ethernet/ti/am65-cpts.c
++++ b/drivers/net/ethernet/ti/am65-cpts.c
+@@ -175,6 +175,7 @@ struct am65_cpts {
+ 	u64 timestamp;
+ 	u32 genf_enable;
+ 	u32 hw_ts_enable;
++	u32 estf_enable;
+ 	struct sk_buff_head txq;
+ 	bool pps_enabled;
+ 	bool pps_present;
+@@ -405,13 +406,13 @@ static irqreturn_t am65_cpts_interrupt(int irq, void *dev_id)
+ static int am65_cpts_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+ {
+ 	struct am65_cpts *cpts = container_of(ptp, struct am65_cpts, ptp_info);
+-	u32 pps_ctrl_val = 0, pps_ppm_hi = 0, pps_ppm_low = 0;
++	u32 estf_ctrl_val = 0, estf_ppm_hi = 0, estf_ppm_low = 0;
+ 	s32 ppb = scaled_ppm_to_ppb(scaled_ppm);
+ 	int pps_index = cpts->pps_genf_idx;
+ 	u64 adj_period, pps_adj_period;
+ 	u32 ctrl_val, ppm_hi, ppm_low;
+ 	unsigned long flags;
+-	int neg_adj = 0;
++	int neg_adj = 0, i;
  
-         text = "Timer List Version: gdb scripts\n"
--        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
-+        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(
-+            max_clock_bases.type.fields()[max_clock_bases].enumval)
-         text += "now at {} nsecs\n".format(ktime_get())
+ 	if (ppb < 0) {
+ 		neg_adj = 1;
+@@ -441,19 +442,19 @@ static int am65_cpts_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+ 	ppm_low = lower_32_bits(adj_period);
  
-         for cpu in cpus.each_online_cpu():
+ 	if (cpts->pps_enabled) {
+-		pps_ctrl_val = am65_cpts_read32(cpts, genf[pps_index].control);
++		estf_ctrl_val = am65_cpts_read32(cpts, genf[pps_index].control);
+ 		if (neg_adj)
+-			pps_ctrl_val &= ~BIT(1);
++			estf_ctrl_val &= ~BIT(1);
+ 		else
+-			pps_ctrl_val |= BIT(1);
++			estf_ctrl_val |= BIT(1);
+ 
+ 		/* GenF PPM will do correction using cpts refclk tick which is
+ 		 * (cpts->ts_add_val + 1) ns, so GenF length PPM adj period
+ 		 * need to be corrected.
+ 		 */
+ 		pps_adj_period = adj_period * (cpts->ts_add_val + 1);
+-		pps_ppm_hi = upper_32_bits(pps_adj_period) & 0x3FF;
+-		pps_ppm_low = lower_32_bits(pps_adj_period);
++		estf_ppm_hi = upper_32_bits(pps_adj_period) & 0x3FF;
++		estf_ppm_low = lower_32_bits(pps_adj_period);
+ 	}
+ 
+ 	spin_lock_irqsave(&cpts->lock, flags);
+@@ -471,11 +472,18 @@ static int am65_cpts_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+ 	am65_cpts_write32(cpts, ppm_low, ts_ppm_low);
+ 
+ 	if (cpts->pps_enabled) {
+-		am65_cpts_write32(cpts, pps_ctrl_val, genf[pps_index].control);
+-		am65_cpts_write32(cpts, pps_ppm_hi, genf[pps_index].ppm_hi);
+-		am65_cpts_write32(cpts, pps_ppm_low, genf[pps_index].ppm_low);
++		am65_cpts_write32(cpts, estf_ctrl_val, genf[pps_index].control);
++		am65_cpts_write32(cpts, estf_ppm_hi, genf[pps_index].ppm_hi);
++		am65_cpts_write32(cpts, estf_ppm_low, genf[pps_index].ppm_low);
+ 	}
+ 
++	for (i = 0; i < AM65_CPTS_ESTF_MAX_NUM; i++) {
++		if (cpts->estf_enable & BIT(i)) {
++			am65_cpts_write32(cpts, estf_ctrl_val, estf[i].control);
++			am65_cpts_write32(cpts, estf_ppm_hi, estf[i].ppm_hi);
++			am65_cpts_write32(cpts, estf_ppm_low, estf[i].ppm_low);
++		}
++	}
+ 	/* All GenF/EstF can be updated here the same way */
+ 	spin_unlock_irqrestore(&cpts->lock, flags);
+ 
+@@ -596,6 +604,11 @@ int am65_cpts_estf_enable(struct am65_cpts *cpts, int idx,
+ 	am65_cpts_write32(cpts, val, estf[idx].comp_lo);
+ 	val = lower_32_bits(cycles);
+ 	am65_cpts_write32(cpts, val, estf[idx].length);
++	am65_cpts_write32(cpts, 0, estf[idx].control);
++	am65_cpts_write32(cpts, 0, estf[idx].ppm_hi);
++	am65_cpts_write32(cpts, 0, estf[idx].ppm_low);
++
++	cpts->estf_enable |= BIT(idx);
+ 
+ 	dev_dbg(cpts->dev, "%s: ESTF:%u enabled\n", __func__, idx);
+ 
+@@ -606,6 +619,7 @@ EXPORT_SYMBOL_GPL(am65_cpts_estf_enable);
+ void am65_cpts_estf_disable(struct am65_cpts *cpts, int idx)
+ {
+ 	am65_cpts_write32(cpts, 0, estf[idx].length);
++	cpts->estf_enable &= ~BIT(idx);
+ 
+ 	dev_dbg(cpts->dev, "%s: ESTF:%u disabled\n", __func__, idx);
+ }
 -- 
-2.34.1
+2.25.1
 
