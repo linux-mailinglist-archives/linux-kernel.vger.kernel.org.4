@@ -2,210 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAD66C2A5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9796C2A60
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjCUG0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
+        id S229687AbjCUG3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjCUG0e (ORCPT
+        with ESMTP id S229646AbjCUG3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:26:34 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97883608D;
-        Mon, 20 Mar 2023 23:26:30 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L6Q5sG096475;
-        Tue, 21 Mar 2023 01:26:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679379965;
-        bh=a+MTT5Qkyz1YaOgv8XKSB4NSt7MeDdfso+0H1pTzxGE=;
-        h=From:To:CC:Subject:Date;
-        b=M3bmLqI7iJgnzrYioqv1bVKfJHY/M5e7cIkO1PIvpZFKi7OXSrLeS9/ZzRe3Xu3hm
-         Jmt/9jy3j92ReCcg0LWHukVryQkHrkhcOErld8UQsJJqPlD9CwzzTL4S/yDRRDQJb8
-         ghIz1jCcW7d2oyRCBROFvrgwtOn3YNmVd2TNvkZc=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L6Q5RF104597
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 01:26:05 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 01:26:05 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 01:26:05 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L6Q1tY089872;
-        Tue, 21 Mar 2023 01:26:01 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <rogerq@kernel.org>,
-        <jacob.e.keller@intel.com>, <richardcochran@gmail.com>,
-        <leon@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net-next] net: ethernet: ti: am65-cpts: adjust estf following ptp changes
-Date:   Tue, 21 Mar 2023 11:56:00 +0530
-Message-ID: <20230321062600.2539544-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 21 Mar 2023 02:29:22 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 979EEFF30
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:29:19 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxUU+9Thlk8UMPAA--.11000S3;
+        Tue, 21 Mar 2023 14:29:18 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeW7Thlk20UIAA--.35478S2;
+        Tue, 21 Mar 2023 14:29:15 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Guenter Roeck <linux@roeck-us.net>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] LoongArch: Check unwind_error() in arch_stack_walk()
+Date:   Tue, 21 Mar 2023 14:29:14 +0800
+Message-Id: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxAeW7Thlk20UIAA--.35478S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAFy7uFy7Xr47Cw1kGFy3Jwb_yoW5Xr1xpr
+        ZrZ3Z3Wr4ruF9Fqa4Dtw18ur98J3s7ur12gas8Aa4rCFnrXry2grnava4DZF4qy34kG340
+        gFnYkr909a1UJa7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b3xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s02
+        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF
+        0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvE
+        c7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+        v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7I
+        U8q2NtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grygorii Strashko <grygorii.strashko@ti.com>
+We can see the following messages with CONFIG_PROVE_LOCKING=y on
+LoongArch:
 
-When the CPTS clock is synced/adjusted by running linuxptp (ptp4l/phc2sys),
-it will cause the TSN EST schedule to drift away over time. This is because
-the schedule is driven by the EstF periodic counter whose pulse length is
-defined in ref_clk cycles and it does not automatically sync to CPTS clock.
-   _______
- _|
-  ^
-  expected cycle start time boundary
-   _______________
- _|_|___|_|
-  ^
-  EstF drifted away -> direction
+  BUG: MAX_STACK_TRACE_ENTRIES too low!
+  turning off the locking correctness validator.
 
-To fix it, the same PPM adjustment has to be applied to EstF as done to the
-PHC CPTS clock, in order to correct the TSN EST cycle length and keep them
-in sync.
+This is because stack_trace_save() returns a big value after call
+arch_stack_walk(), here is the call trace:
 
-Drifted cycle:
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230373377017
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230373877017
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230374377017
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230374877017
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230375377017
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230375877023
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230376377018
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230376877018
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635968230377377018
+  save_trace()
+    stack_trace_save()
+      arch_stack_walk()
+        stack_trace_consume_entry()
 
-Stable cycle:
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863193375473
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863193875473
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863194375473
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863194875473
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863195375473
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863195875473
-AM65_CPTS_EVT: 7 e1:01770001 e2:000000ff t:1635966863196375473
+arch_stack_walk() should return immediately if unwind_next_frame()
+failed, no need to do the useless loops to increase the value of
+c->len in stack_trace_consume_entry(), then we can fix the above
+problem.
 
-Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/all/8a44ad71-68d2-4926-892f-72bfc7a67e2a@roeck-us.net/
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/net/ethernet/ti/am65-cpts.c | 34 ++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+ arch/loongarch/kernel/stacktrace.c      | 3 ++-
+ arch/loongarch/kernel/unwind.c          | 1 +
+ arch/loongarch/kernel/unwind_prologue.c | 4 +++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/ti/am65-cpts.c b/drivers/net/ethernet/ti/am65-cpts.c
-index 16ee9c29cb35..1d9a399c9661 100644
---- a/drivers/net/ethernet/ti/am65-cpts.c
-+++ b/drivers/net/ethernet/ti/am65-cpts.c
-@@ -175,6 +175,7 @@ struct am65_cpts {
- 	u64 timestamp;
- 	u32 genf_enable;
- 	u32 hw_ts_enable;
-+	u32 estf_enable;
- 	struct sk_buff_head txq;
- 	bool pps_enabled;
- 	bool pps_present;
-@@ -405,13 +406,13 @@ static irqreturn_t am65_cpts_interrupt(int irq, void *dev_id)
- static int am65_cpts_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
- {
- 	struct am65_cpts *cpts = container_of(ptp, struct am65_cpts, ptp_info);
--	u32 pps_ctrl_val = 0, pps_ppm_hi = 0, pps_ppm_low = 0;
-+	u32 estf_ctrl_val = 0, estf_ppm_hi = 0, estf_ppm_low = 0;
- 	s32 ppb = scaled_ppm_to_ppb(scaled_ppm);
- 	int pps_index = cpts->pps_genf_idx;
- 	u64 adj_period, pps_adj_period;
- 	u32 ctrl_val, ppm_hi, ppm_low;
- 	unsigned long flags;
--	int neg_adj = 0;
-+	int neg_adj = 0, i;
+diff --git a/arch/loongarch/kernel/stacktrace.c b/arch/loongarch/kernel/stacktrace.c
+index 3a690f9..7c15ba5 100644
+--- a/arch/loongarch/kernel/stacktrace.c
++++ b/arch/loongarch/kernel/stacktrace.c
+@@ -30,7 +30,8 @@ void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
  
- 	if (ppb < 0) {
- 		neg_adj = 1;
-@@ -441,19 +442,19 @@ static int am65_cpts_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
- 	ppm_low = lower_32_bits(adj_period);
+ 	regs->regs[1] = 0;
+ 	for (unwind_start(&state, task, regs);
+-	      !unwind_done(&state); unwind_next_frame(&state)) {
++	     !unwind_done(&state) && !unwind_error(&state);
++	     unwind_next_frame(&state)) {
+ 		addr = unwind_get_return_address(&state);
+ 		if (!addr || !consume_entry(cookie, addr))
+ 			break;
+diff --git a/arch/loongarch/kernel/unwind.c b/arch/loongarch/kernel/unwind.c
+index a463d69..ba324ba 100644
+--- a/arch/loongarch/kernel/unwind.c
++++ b/arch/loongarch/kernel/unwind.c
+@@ -28,5 +28,6 @@ bool default_next_frame(struct unwind_state *state)
  
- 	if (cpts->pps_enabled) {
--		pps_ctrl_val = am65_cpts_read32(cpts, genf[pps_index].control);
-+		estf_ctrl_val = am65_cpts_read32(cpts, genf[pps_index].control);
- 		if (neg_adj)
--			pps_ctrl_val &= ~BIT(1);
-+			estf_ctrl_val &= ~BIT(1);
- 		else
--			pps_ctrl_val |= BIT(1);
-+			estf_ctrl_val |= BIT(1);
+ 	} while (!get_stack_info(state->sp, state->task, info));
  
- 		/* GenF PPM will do correction using cpts refclk tick which is
- 		 * (cpts->ts_add_val + 1) ns, so GenF length PPM adj period
- 		 * need to be corrected.
- 		 */
- 		pps_adj_period = adj_period * (cpts->ts_add_val + 1);
--		pps_ppm_hi = upper_32_bits(pps_adj_period) & 0x3FF;
--		pps_ppm_low = lower_32_bits(pps_adj_period);
-+		estf_ppm_hi = upper_32_bits(pps_adj_period) & 0x3FF;
-+		estf_ppm_low = lower_32_bits(pps_adj_period);
- 	}
- 
- 	spin_lock_irqsave(&cpts->lock, flags);
-@@ -471,11 +472,18 @@ static int am65_cpts_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
- 	am65_cpts_write32(cpts, ppm_low, ts_ppm_low);
- 
- 	if (cpts->pps_enabled) {
--		am65_cpts_write32(cpts, pps_ctrl_val, genf[pps_index].control);
--		am65_cpts_write32(cpts, pps_ppm_hi, genf[pps_index].ppm_hi);
--		am65_cpts_write32(cpts, pps_ppm_low, genf[pps_index].ppm_low);
-+		am65_cpts_write32(cpts, estf_ctrl_val, genf[pps_index].control);
-+		am65_cpts_write32(cpts, estf_ppm_hi, genf[pps_index].ppm_hi);
-+		am65_cpts_write32(cpts, estf_ppm_low, genf[pps_index].ppm_low);
- 	}
- 
-+	for (i = 0; i < AM65_CPTS_ESTF_MAX_NUM; i++) {
-+		if (cpts->estf_enable & BIT(i)) {
-+			am65_cpts_write32(cpts, estf_ctrl_val, estf[i].control);
-+			am65_cpts_write32(cpts, estf_ppm_hi, estf[i].ppm_hi);
-+			am65_cpts_write32(cpts, estf_ppm_low, estf[i].ppm_low);
-+		}
-+	}
- 	/* All GenF/EstF can be updated here the same way */
- 	spin_unlock_irqrestore(&cpts->lock, flags);
- 
-@@ -596,6 +604,11 @@ int am65_cpts_estf_enable(struct am65_cpts *cpts, int idx,
- 	am65_cpts_write32(cpts, val, estf[idx].comp_lo);
- 	val = lower_32_bits(cycles);
- 	am65_cpts_write32(cpts, val, estf[idx].length);
-+	am65_cpts_write32(cpts, 0, estf[idx].control);
-+	am65_cpts_write32(cpts, 0, estf[idx].ppm_hi);
-+	am65_cpts_write32(cpts, 0, estf[idx].ppm_low);
-+
-+	cpts->estf_enable |= BIT(idx);
- 
- 	dev_dbg(cpts->dev, "%s: ESTF:%u enabled\n", __func__, idx);
- 
-@@ -606,6 +619,7 @@ EXPORT_SYMBOL_GPL(am65_cpts_estf_enable);
- void am65_cpts_estf_disable(struct am65_cpts *cpts, int idx)
- {
- 	am65_cpts_write32(cpts, 0, estf[idx].length);
-+	cpts->estf_enable &= ~BIT(idx);
- 
- 	dev_dbg(cpts->dev, "%s: ESTF:%u disabled\n", __func__, idx);
++	state->error = true;
+ 	return false;
  }
+diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
+index 9095fde..55afc27 100644
+--- a/arch/loongarch/kernel/unwind_prologue.c
++++ b/arch/loongarch/kernel/unwind_prologue.c
+@@ -211,7 +211,7 @@ static bool next_frame(struct unwind_state *state)
+ 			pc = regs->csr_era;
+ 
+ 			if (user_mode(regs) || !__kernel_text_address(pc))
+-				return false;
++				goto out;
+ 
+ 			state->first = true;
+ 			state->pc = pc;
+@@ -226,6 +226,8 @@ static bool next_frame(struct unwind_state *state)
+ 
+ 	} while (!get_stack_info(state->sp, state->task, info));
+ 
++out:
++	state->error = true;
+ 	return false;
+ }
+ 
 -- 
-2.25.1
+2.1.0
 
