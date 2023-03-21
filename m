@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAFC6C38C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A8C6C38BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjCUR53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S230233AbjCUR47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjCUR4w (ORCPT
+        with ESMTP id S230337AbjCUR4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:56:52 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254E955505
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=X/XHGzweNcGnZj7J+RpSBa5nq+wT
-        r0BLkAkcv70wsdM=; b=D+nVXfa0FkyurAG1/7M4V0Z5UKvwx0AkpfK84DU1Cz1j
-        fRaH19mATwg5Ru7VOD01wnpi7ixQ4UzWzH4sGAQtN5NLTaDU9i3DBiNd25x/c7OY
-        OXYQoEyAS0v3UmDsdvhS+ZChMb0cdBJJRjT3M9JBqXWRir7R9vLc1HhXUOfvv3s=
-Received: (qmail 1364990 invoked from network); 21 Mar 2023 18:56:28 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Mar 2023 18:56:28 +0100
-X-UD-Smtp-Session: l3s3148p1@bhIcw2z34N4ujnv6
-Date:   Tue, 21 Mar 2023 18:56:25 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 2/2] smsc911x: avoid PHY being resumed when
- interface is not up
-Message-ID: <ZBnvya7Q/brY+MEt@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20230320092041.1656-1-wsa+renesas@sang-engineering.com>
- <20230320092041.1656-3-wsa+renesas@sang-engineering.com>
- <7589589f340f1ecb49bc8ed852e1e2dddb384700.camel@redhat.com>
+        Tue, 21 Mar 2023 13:56:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83C455076;
+        Tue, 21 Mar 2023 10:56:22 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8B9310B;
+        Tue, 21 Mar 2023 18:56:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679421380;
+        bh=qUl73zAreteh4tygAoGY7Wt9PYd+S1ypY5ZT9bhJVDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ukY4KOk9jKXfhWRu9zVGMpIr/bv06kOTxC29OWXxgVm1lx2a3/fmFsR6yTJSDAL1+
+         i/jvAoX1V6kkOPDMliwQFhhQwCHFL0q11rTNW33BXwL9i0mdgI+mT6PSrCLelhqGOK
+         dOYCC2e0R88jo66EuMNyCWo+/ECyv1Sh1m4OQ4vc=
+Date:   Tue, 21 Mar 2023 19:56:26 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v2 6/6] media: starfive: Add Starfive Camera Subsystem
+ driver
+Message-ID: <20230321175626.GD20234@pendragon.ideasonboard.com>
+References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+ <20230310120553.60586-7-jack.zhu@starfivetech.com>
+ <20230312124339.GD2545@pendragon.ideasonboard.com>
+ <650b6882-ea02-e4c8-1f73-9e5bdeab290d@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dSX357otSPN9QRZc"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7589589f340f1ecb49bc8ed852e1e2dddb384700.camel@redhat.com>
+In-Reply-To: <650b6882-ea02-e4c8-1f73-9e5bdeab290d@starfivetech.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,53 +61,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jack,
 
---dSX357otSPN9QRZc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 21, 2023 at 08:56:34PM +0800, Jack Zhu wrote:
+> On 2023/3/12 20:43, Laurent Pinchart wrote:
+> > Hi Jack,
+> > 
+> > Thank you for the patch.
+> > 
+> > I'll do a partial review here as the patch is huge and I'm lacking time
+> > at the moment.
+> 
+> Thank you for the review and your time.
+> 
+> > On Fri, Mar 10, 2023 at 08:05:53PM +0800, Jack Zhu wrote:
+> >> Add the driver for Starfive Camera Subsystem found on
+> >> Starfive JH7110 SoC. It is used for handing image sensor
+> >> data.
+> >> 
+> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> >> ---
+> >>  drivers/media/platform/Kconfig                |    1 +
+> >>  drivers/media/platform/Makefile               |    1 +
+> >>  drivers/media/platform/starfive/Kconfig       |   18 +
+> >>  drivers/media/platform/starfive/Makefile      |   14 +
+> >>  drivers/media/platform/starfive/stf_camss.c   |  728 +++++++++
+> >>  drivers/media/platform/starfive/stf_camss.h   |  104 ++
+> >>  drivers/media/platform/starfive/stf_common.h  |  149 ++
+> >>  drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
+> >>  drivers/media/platform/starfive/stf_isp.h     |  183 +++
+> >>  .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 ++++++++++++++++
+> >>  drivers/media/platform/starfive/stf_video.c   | 1286 ++++++++++++++++
+> >>  drivers/media/platform/starfive/stf_video.h   |   89 ++
+> >>  drivers/media/platform/starfive/stf_vin.c     | 1314 +++++++++++++++++
+> >>  drivers/media/platform/starfive/stf_vin.h     |  194 +++
+> >>  .../media/platform/starfive/stf_vin_hw_ops.c  |  357 +++++
+> >>  include/uapi/linux/stf_isp_ioctl.h            |  127 ++
+> >>  16 files changed, 6930 insertions(+)
+> >>  create mode 100644 drivers/media/platform/starfive/Kconfig
+> >>  create mode 100644 drivers/media/platform/starfive/Makefile
+> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.c
+> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.h
+> >>  create mode 100644 drivers/media/platform/starfive/stf_common.h
+> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.c
+> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.h
+> >>  create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
+> >>  create mode 100644 drivers/media/platform/starfive/stf_video.c
+> >>  create mode 100644 drivers/media/platform/starfive/stf_video.h
+> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.c
+> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.h
+> >>  create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
+> >>  create mode 100644 include/uapi/linux/stf_isp_ioctl.h
 
-Hi Paolo,
+[snip]
 
-> > In smsc911x_mii_probe(), I remove the sanity check for 'phydev' because
-> > it was already done in smsc911x_mii_init(). Let me know if this is
-> > acceptable or if a more defensive approach is favoured.
->=20
-> Since this is a fix, I would keep the old check, too.
+> >> diff --git a/drivers/media/platform/starfive/stf_camss.c b/drivers/media/platform/starfive/stf_camss.c
+> >> new file mode 100644
+> >> index 000000000000..525f2d80c5eb
+> >> --- /dev/null
+> >> +++ b/drivers/media/platform/starfive/stf_camss.c
+> >> @@ -0,0 +1,728 @@
 
-Yes, makes sense.
+[snip]
 
-> > +	phydev =3D phy_find_first(pdata->mii_bus);
-> > +	if (!phydev) {
-> > +		netdev_err(dev, "no PHY found\n");
-> > +		err =3D -ENOENT;
-> > +		goto err_out_free_bus_2;
->=20
-> Why don't you call mdiobus_unregister() in this error path?
+> >> +/*
+> >> + * stfcamss_find_sensor - Find a linked media entity which represents a sensor
+> >> + * @entity: Media entity to start searching from
+> >> + *
+> >> + * Return a pointer to sensor media entity or NULL if not found
+> >> + */
+> >> +struct media_entity *stfcamss_find_sensor(struct media_entity *entity)
+> > 
+> > From a camss point of view, the source is the csi2rx. You shouldn't
+> > need to access the sensor directly, only the csi2rx. If you think you
+> > have a need to access the sensor, please explain why and we can discuss
+> > it.
+> 
+> need to use format and bpp of sensor to configure isp HW.
 
-Oversight. I will fix it.
-
-Thank you for the review!
+You can obtain the same information from the ISP sink pad:
 
 
---dSX357otSPN9QRZc
-Content-Type: application/pgp-signature; name="signature.asc"
++----------+       +------------+       +-----------+
+|          |       |            |       |           | 
+| Sensor [0| ----> |0] csi2rx [1| ----> |0]   ISP   |
+|          |       |            |       |           |
++----------+       +------------+       +-----------+
 
------BEGIN PGP SIGNATURE-----
+(I'm not entirely sure if the csi2rx and ISP pad numbers are correct,
+but that's the idea.)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQZ78UACgkQFA3kzBSg
-KbalWQ//QzAaCeqp5I/wIJj9fW3lDht8cVRIiUEco0sruEdxcE0uAKwVZ3FTtG69
-lobHyWzyxzJA/EtbYFPB3CWoFTRs9yVb7Dl36fBtmXz6UrUZTiiZxD661Kj6I47t
-CEcmNoMhVr+XBdNxE34vjKKe6lzFWzjOxJJEUmJ5heUbQPqpeHGH4ZDeBXb8s/8n
-fGOKOgREQ3kyk9bVYFpwPO84tWVsY+07SbQ77/zgCqaGtkh/O8doQ2Rz+LQgZub1
-Re8c/1ldwloHhQXj9p1RL/uIQCb3cR0zQD4TBDYy8M95Ip1y2PJg6islO2WGvNQJ
-z1bp57CvFiNCxdT7ZfF6uc2ysr06leJGPhBlAiXxUNCiYhJ0pWvyDi+aoohtcMsP
-rVYBikF4cASU8xxGLF6W3MUHy8W+zVubz+1Kz539L22Erb5Ca4rWpAN2n3WKYoZW
-uFyG0gD/JD88UO31aeNwgXXrpIxyEZO0UAoWMBKyopWOP+exxQ5O/Q0mM/pYqlAa
-aBf1t8ziO+3MJOoSgwOwU5UxAHUaRzc75GU4B//fg2SQipDzW4gwQU53bq2pnGQY
-M2fXFbX1RdVkGcoSJud3Jf21El4lCUfakbnvclMKWyDzpC3Z/MDjJyJm5prFCTAw
-04QYsJxmHhfbHH2Wn1nXOm+XZIW02S/K+P+o9vfD+etY+oix9KY=
-=ptv0
------END PGP SIGNATURE-----
+The csi2rx can't modify the format (size and bpp), so the format on the
+sensor's pad 0, csi2rx pad 0, csi2rx pad 1 and ISP pad 0 must be
+identical.
 
---dSX357otSPN9QRZc--
+In isp_sensor_fmt_to_index(), the ISP driver doesn't need to get the
+format from the sensor, it can use the format on ISP pad 0 instead.
+
+In video_enum_framesizes(), the ISP driver shouldn't look at the format
+on the ISP input at all, it must enumerate all sizes that the video node
+supports, regardless of what is connected to its input.
+
+video_enum_frameintervals() should be dropped, the ISP itself has no
+notion of frame interval. Userspace can query and configure the frame
+rate from the sensor subdev directly.
+
+In video_pipeline_s_fmt(), the ISP driver shouldn't look at the format
+on the ISP input at all either. It must accept any format supported by
+the ISP. It's only when starting streaming that the pipeline is
+validated to make sure the formats configured on all subdevs match. I
+recommend reading https://git.ideasonboard.org/doc/mc-v4l2.git for an
+overview of how Media Controller-based drivers should behave. The
+documentation describes how the API is meant to be used from userspace,
+but the operating principles apply to driver development too.
+
+video_subscribe_event() and video_unsubscribe_event() should also be
+dropped, events from the sensor can be accessed by userspace on the
+sensor subdev directly.
+
+vin_set_stream() should call .s_stream() on the csi2rx, not the sensor.
+The csi2rx .s_stream() handler will forward the call to the sensor.
+
+> >> +{
+> >> +	struct media_pad *pad;
+> >> +
+> >> +	while (1) {
+> >> +		if (!entity->pads)
+> >> +			return NULL;
+> >> +
+> >> +		pad = &entity->pads[0];
+> >> +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+> >> +			return NULL;
+> >> +
+> >> +		pad = media_pad_remote_pad_first(pad);
+> >> +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+> >> +			return NULL;
+> >> +
+> >> +		entity = pad->entity;
+> >> +
+> >> +		if (entity->function == MEDIA_ENT_F_CAM_SENSOR)
+> >> +			return entity;
+> >> +	}
+> >> +}
+
+[snip]
+
+> >> diff --git a/include/uapi/linux/stf_isp_ioctl.h b/include/uapi/linux/stf_isp_ioctl.h
+> >> new file mode 100644
+> >> index 000000000000..3f302ef235d2
+> >> --- /dev/null
+> >> +++ b/include/uapi/linux/stf_isp_ioctl.h
+> >> @@ -0,0 +1,127 @@
+
+[snip]
+
+> >> +enum _STF_ISP_IOCTL {
+> > 
+> > Device-specific ioctls are allowed, but they must all be clearly
+> > documented.
+> 
+> OK, I will add annotations for these ioctls.
+> 
+> > 
+> >> +	STF_ISP_IOCTL_LOAD_FW = BASE_VIDIOC_PRIVATE + 1,
+> > 
+> > Why can't you use the Linux kernel firmware API ?
+> 
+> The ioctl is used for loading config file, it is different from
+> the Linux kernel firmware API. I will rename it.
+
+Could you explain what the config file is used for ?
+
+> >> +	STF_ISP_IOCTL_DMABUF_ALLOC,
+> >> +	STF_ISP_IOCTL_DMABUF_FREE,
+> >> +	STF_ISP_IOCTL_GET_HW_VER,
+> > 
+> > Not used, drop them.
+> 
+> OK, will drop them.
+> 
+> > 
+> >> +	STF_ISP_IOCTL_REG,
+> > 
+> > Setting registers from userspace isn't allowed. No exception.
+> 
+> OK, will fix.
+> 
+> > 
+> >> +	STF_ISP_IOCTL_SHADOW_LOCK,
+> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK,
+> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK_N_TRIGGER,
+> >> +	STF_ISP_IOCTL_SET_USER_CONFIG_ISP,
+> > 
+> > I'm not sure what these ioctls do exactly as documentation is missing,
+> > but I don't think they are the right API. Please describe the problem
+> > you're trying to solve, and we'll find a good API.
+> 
+> These were used for debugging, I will drop them. Thanks.
+> 
+> >> +	STF_ISP_IOCTL_MAX
+> >> +};
+
+[snip]
+
+-- 
+Regards,
+
+Laurent Pinchart
