@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42316C3ABC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD0B6C3ABE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjCUTfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S230408AbjCUTfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjCUTez (ORCPT
+        with ESMTP id S230325AbjCUTe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:34:55 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A583A4FF2C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:23 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id bn14so1794409pgb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:23 -0700 (PDT)
+        Tue, 21 Mar 2023 15:34:56 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205B570AE
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:25 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so16986604pjz.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679427232;
+        d=gmail.com; s=20210112; t=1679427233;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4AANWMLFPRmqhsaZtqr8wdmw+KFHZMOER6tyEOUd1jY=;
-        b=BwuMojxwrYqAFQterytV0n+RM88osD26Ot+yVGJW4oVuyU7P5Ia+32TPE3TQ4xe2P4
-         fzICA8yNvs3AAnTn9WehPU+vl9xIM8RMRxSlGzV2O6ivAvuad/cKYlR04nu/+NoUQIzk
-         91zilV8eNPrh6E6LjPEbh6RC2tIXsL8xzsUFx+jHhGNbz6z2et/5kUvhG4fT0Z2sfBSg
-         rpD6gHm7+ZA0c6tSROeMfrRs39OS1ljzdbSwA0q1b5s16xb7lJEUFF1KgG4Tp4D9ush5
-         k6Bf3Rz7JQDZkYmlcizT6A7O+5J8+JqxX69/6hL9wA3IZycxDdELGFP6+vVkachhah5Y
-         oRGg==
+        bh=orHz49MEtEREu43pkNm/tKqUuGAbP6UFRUzWf1lMbKM=;
+        b=Iu7lFuzYgxMBD2is5xuyIPdQFrTrSGgbg+1D0Fc9vavmcTU2AgpwtPsecJb3S9pkHk
+         KKjXKnvgEgALI8WVKQDM+fdpBWZzhrrFhjZWbqcuTDgFuLuGlbZjbEqFg8lJWOszxTaU
+         BfnUVKt6kumqRz8xNLLCYhkDJtpAxBCZ+tqqsUjaEDLAGjYic36hbFBwd7B+Ifu+f66h
+         7G3lplMwVw898GhVpPudgEPdXduilp5Zrh2KcMjezDNwow2DbeyddRVO1MmcFIHRxU41
+         8dU64iy5DzLNoSD7SJlQjy7W76pLJLDPAhSiYsaezal1KY8AFTMP1h7ZKlxPW3fbP/9Q
+         PUvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679427232;
+        d=1e100.net; s=20210112; t=1679427233;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4AANWMLFPRmqhsaZtqr8wdmw+KFHZMOER6tyEOUd1jY=;
-        b=ewf4JVrW9YPsuEh5le2rXVMVyrxmhXuT9mg76NjR845BQM9jYJUKdSkqXUcAYBHgSQ
-         aqUTVMjy6b9vxs8SoaatG7YauKIwFeQFYHNhP5vjbAc2tPP8DcO7r9aFcB04cpdjZXO4
-         R2l867gC8Zeu+0/EFqut1w0EjpZQ87tEGadOJwg1k7pHDYmL7p+NXOSeg8T1NPVkXTm7
-         +Vhh2CjHthi1XqB91y/Keid2Y/QEpM40lvvtP6aw/DiWuAfkDPv1JVk7BLTXa0tb67Sb
-         tPbHX7mehHT7/j4CFoFrMdeSMBNhcoenyEMh9Zp1jICx/XDu2wckiHL6NWFXNpuzUuaH
-         pdWQ==
-X-Gm-Message-State: AO0yUKWOOIUviVwij3B0ri1GK3uHxWdK4srhS/0MalQCuyJf9zL27+tF
-        8gZ59CIkhlBspx2hr/48hek=
-X-Google-Smtp-Source: AK7set9RXxBO1t5rxnn03oPkEDUp9bqa/iXCFRosc2odnBEaopFz8gT18I6/NOs3EfQ6fY6LHWk5mQ==
-X-Received: by 2002:a62:6245:0:b0:627:e342:7f0e with SMTP id w66-20020a626245000000b00627e3427f0emr734685pfb.30.1679427232441;
-        Tue, 21 Mar 2023 12:33:52 -0700 (PDT)
+        bh=orHz49MEtEREu43pkNm/tKqUuGAbP6UFRUzWf1lMbKM=;
+        b=LcoO6hCMUDyv3HWLUAr0z51zVkT7M1S5eSHvpbst0uwTnHJP/mKJ8l8Xpiu8hnyAcq
+         Qxvn3M7nQfq45Buo9XhO/r32Z5Q2QeWkf0MvaRQDaUBzfu+/YbUuvegL9vy4JEOAFCSW
+         5W1GIDlBl1EIBAYpU7yamlvSJ/wMou1YxyfEPKP/w127v5HWONxoldcqgj67ZAEPgtqX
+         oaOoXrpZC+5k3c10baQwJFPOCcP8RrY5jXtEc1I5NSaUq19SEybpTi3Us4g3lS/XC5Ph
+         CuD6BRliEttxcOJTmh/3FA0OlVFK85j7n+K9lR4/8z/Pp6ts0YNf77z4nuk3T2nbl3qN
+         PMnw==
+X-Gm-Message-State: AO0yUKVh9TDBw77kgO5uSE50S0CL9lerqIkWlV5w/l+DSMyTeJlGTQeQ
+        c5NbNHCNOQUklXt+3IoulVc0EZKFKDgVLA==
+X-Google-Smtp-Source: AK7set+EWZ8xOyhR6UvvpHkCf9PTFuddYXAucaUStZQVzs1Zzn8sniZj5wRrZdTOp9J5f9yPbpJJHg==
+X-Received: by 2002:a05:6a20:c87:b0:d6:7d3a:c6e with SMTP id dt7-20020a056a200c8700b000d67d3a0c6emr3265804pzb.44.1679427233676;
+        Tue, 21 Mar 2023 12:33:53 -0700 (PDT)
 Received: from f37.eng.vmware.com ([66.170.99.1])
-        by smtp.googlemail.com with ESMTPSA id k23-20020aa790d7000000b006247123adf1sm8843044pfk.143.2023.03.21.12.33.51
+        by smtp.googlemail.com with ESMTPSA id k23-20020aa790d7000000b006247123adf1sm8843044pfk.143.2023.03.21.12.33.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 12:33:52 -0700 (PDT)
+        Tue, 21 Mar 2023 12:33:53 -0700 (PDT)
 From:   Shreenidhi Shedi <yesshedi@gmail.com>
 X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
 To:     gregkh@linuxfoundation.org, dhowells@redhat.com,
         dwmw2@infradead.org
 Cc:     linux-kernel@vger.kernel.org, sshedi@vmware.com, yesshedi@gmail.com
-Subject: [PATCH v6 6/7] sign-file: use const with a global string constant
-Date:   Wed, 22 Mar 2023 01:03:40 +0530
-Message-Id: <20230321193341.87997-7-sshedi@vmware.com>
+Subject: [PATCH v6 7/7] sign-file: fix do while styling issue
+Date:   Wed, 22 Mar 2023 01:03:41 +0530
+Message-Id: <20230321193341.87997-8-sshedi@vmware.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230321193341.87997-1-sshedi@vmware.com>
 References: <20230321193341.87997-1-sshedi@vmware.com>
@@ -83,18 +83,18 @@ Signed-off-by: Shreenidhi Shedi <yesshedi@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index d3abc5721a7e..e8dfbdd3eea3 100644
+index e8dfbdd3eea3..0c95275c4564 100644
 --- a/scripts/sign-file.c
 +++ b/scripts/sign-file.c
-@@ -71,7 +71,7 @@ struct module_signature {
+@@ -147,7 +147,7 @@ static void drain_openssl_errors(void)
+ 		if (__cond) {				\
+ 			errx(1, fmt, ## __VA_ARGS__);	\
+ 		}					\
+-	} while(0)
++	} while (0)
  
- #define PKEY_ID_PKCS7 2
+ static const char *key_pass;
  
--static char magic_number[] = "~Module signature appended~\n";
-+static const char magic_number[] = "~Module signature appended~\n";
- 
- static __attribute__((noreturn))
- void print_usage(void)
 -- 
 2.39.2
 
