@@ -2,111 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CD06C38F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5186C38FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjCUSNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S230035AbjCUSPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjCUSNq (ORCPT
+        with ESMTP id S229606AbjCUSP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:13:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875564DE1F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679422385;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=7PqcmUw+IZmRGt9WUw0A+lCjcIOG3yrVoicilFi5R4o=;
-        b=Y45a5O8g1+HMWmmcW08oa8ZLJw6ndwm6If+RKdYm5BO2H9dcis9+ohFDBU4cVlwxwI+Co+
-        SW/Vkfy6jRIRyrr2VG7ehsLDZXIkXkXpfw94NnU2ApcV+e4QzBQWGUCg59WrwNpfhxExK7
-        4GNL5fBjKZXbsWInuRnO1FgBmu9nHwE=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-166-dOHoWW3BPYyG5Tom1apBQw-1; Tue, 21 Mar 2023 14:13:04 -0400
-X-MC-Unique: dOHoWW3BPYyG5Tom1apBQw-1
-Received: by mail-qk1-f198.google.com with SMTP id x80-20020a376353000000b0074681bc7f42so3415763qkb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679422383;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7PqcmUw+IZmRGt9WUw0A+lCjcIOG3yrVoicilFi5R4o=;
-        b=LhWeqYBWUpo3Qm8D14nJnN3eVOhlUKlAm5uS13y0GPOS9+pEadRJlqpQU+w5+Ilx6Z
-         Ih8rGhCjt3geZw/iC1YuRwsoz/X1RLo/swLcAIuHEF9jsBjOmXXKwioa0WI6Atq65quq
-         VeiKlAXfNY50NCTji+Nvm6ugSwrFTx0OBb9kK9VzKIrIuNIBfUukHbVPPWxNBooXUuHH
-         wKlbtjzO4Qfqo/0m84K6rdXNwtGzZ9TzvtkOHPpD2YGZmP5V4zc1Tw33u3dFXI4Z3sim
-         QEAE3pQW7I2Qo1jmUb8JhLuyMtPalMI19/7+m/5kryo3/eamho6d10jEYBpUE5P9sdGm
-         nXMg==
-X-Gm-Message-State: AO0yUKXDuLdBB9YnXGjkaeQKsx5xxoOxU4fN2MGL5MRocLW9UggAmNlE
-        AxBpyrSGnq3/gUlcX0JKTaraVkJH22SxV/RsPVsbNRPTt9UcvF6QrwD0ddD/nWVVcAXzbtmF+cd
-        QRowUHxZv03MNSvwB3GOLjsyq
-X-Received: by 2002:ac8:7c55:0:b0:3e3:8119:7c68 with SMTP id o21-20020ac87c55000000b003e381197c68mr1356027qtv.52.1679422383558;
-        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+5mKIAyTWquc0+eLxRrstoll07nUcDhsg7ybPYJhnq2pOAz549MYFTu+kSCHFP7AxBTc+21g==
-X-Received: by 2002:ac8:7c55:0:b0:3e3:8119:7c68 with SMTP id o21-20020ac87c55000000b003e381197c68mr1355993qtv.52.1679422383304;
-        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i1-20020a05620a0a0100b0074631fb7ccesm9599518qka.67.2023.03.21.11.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] USB: serial: quatech2: remove unused qt2_setdevice function
-Date:   Tue, 21 Mar 2023 14:12:55 -0400
-Message-Id: <20230321181255.1825963-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 21 Mar 2023 14:15:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E308A7E;
+        Tue, 21 Mar 2023 11:15:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 931F361D98;
+        Tue, 21 Mar 2023 18:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCBAAC433D2;
+        Tue, 21 Mar 2023 18:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679422522;
+        bh=hIOq5dDkrg3sXzDPPJvDRD1aVZ39RpNjhbDlFV9Te8Y=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=VXR6MyBIQLcC8YRSmkoxYqeuBl0N5nxmb5pljge76AYMMBt06x6XPyEkUfUq8+CgE
+         /UJvLCkPg1ufseDOQ7g3lE3e3koPsvUqBsGzDRfdtt+NbCNebgoNN0vwd1PzHQH9Zg
+         BQrraxC6CKNk1e7Du3u3NXpB76OASsBLcXNWL46DRFeyNGMLfDicYrLoJZ2pYa8Y1d
+         Dc2c3nZvtgVhwcVngiUik37zhPF+BmQR+xLwN9sUCHA+FtI6n/vBkdhzO1Pt6uFssT
+         EcrtKrFlFeRFrijmpiuLlvkMCoL4tBk3K/EFXtEALyRKDXU7bqniMG8dPLroz8GaZn
+         VAuDCcjT/fhgw==
+Message-ID: <12903a61f64206be837c1f0744632f29.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230321173303.GA950598-robh@kernel.org>
+References: <20230315183729.2376178-1-sboyd@kernel.org> <20230315183729.2376178-2-sboyd@kernel.org> <20230321173303.GA950598-robh@kernel.org>
+Subject: Re: [PATCH v2 01/11] of: Load KUnit DTB from of_core_init()
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
+To:     Rob Herring <robh@kernel.org>
+Date:   Tue, 21 Mar 2023 11:15:19 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/usb/serial/quatech2.c:179:19: error: unused function
-  'qt2_setdevice' [-Werror,-Wunused-function]
-static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
-                  ^
-This function is not used, so remove it.
+Quoting Rob Herring (2023-03-21 10:33:03)
+> On Wed, Mar 15, 2023 at 11:37:18AM -0700, Stephen Boyd wrote:
+> > diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
+> > new file mode 100644
+> > index 000000000000..a4d70ac344ad
+> > --- /dev/null
+> > +++ b/drivers/of/of_test.c
+> > @@ -0,0 +1,43 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * KUnit tests for OF APIs
+> > + */
+> > +#include <linux/kconfig.h>
+> > +#include <linux/of.h>
+> > +
+> > +#include <kunit/test.h>
+> > +
+> > +/*
+> > + * Test that the root node / exists.
+> > + */
+> > +static void dtb_root_node_exists(struct kunit *test)
+> > +{
+> > +     KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/"));
+> > +}
+> > +
+> > +/*
+> > + * Test that the /__symbols__ node exists.
+> > + */
+> > +static void dtb_symbols_node_exists(struct kunit *test)
+> > +{
+> > +     KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/__symbo=
+ls__"));
+> > +}
+>=20
+> Many base DTs will not have this. And the kunit tests themselves=20
+> shouldn't need it because they should be independent of the base tree.
+>=20
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/usb/serial/quatech2.c | 8 --------
- 1 file changed, 8 deletions(-)
+When I try to apply an overlay it fails=20
 
-diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
-index 6fca40ace83a..fee581409bf6 100644
---- a/drivers/usb/serial/quatech2.c
-+++ b/drivers/usb/serial/quatech2.c
-@@ -176,14 +176,6 @@ static inline int qt2_control_msg(struct usb_device *dev,
- 			       NULL, 0, QT2_USB_TIMEOUT);
+ OF: overlay: no fragments or symbols in overlay
+ OF: overlay: init_overlay_changeset() failed, ret =3D -22
+     # of_overlay_apply_kunit_apply: ASSERTION FAILED at drivers/of/overlay=
+_test.c:18
+     Expected 0 =3D=3D ({ extern uint8_t __dtbo_kunit_overlay_test_begin[];=
+ extern uint8_t __dtbo_kunit_overlay_test_end[]; __of_overlay_apply_kunit((=
+test), __dtbo_kunit_overlay_test_begin, __dtbo_kunit_overlay_test_end); }),=
+ but
+         ({ extern uint8_t __dtbo_kunit_overlay_test_begin[]; extern uint8_=
+t __dtbo_kunit_overlay_test_end[]; __of_overlay_apply_kunit((test), __dtbo_=
+kunit_overlay_test_begin, __dtbo_kunit_overlay_test_end); }) =3D=3D -12 (0x=
+fffffffffffffff4)
+ [FAILED] of_overlay_apply_kunit_apply
+
+Now I'm trying to hack on the fake root node to see if I can make it work.
+
+---8<---
+diff --git a/drivers/of/base.c b/drivers/of/base.c
+index 090c5d7925e4..12c44c86b8ae 100644
+--- a/drivers/of/base.c
++++ b/drivers/of/base.c
+@@ -166,7 +166,7 @@ void __of_phandle_cache_inv_entry(phandle handle)
+ 		phandle_cache[handle_hash] =3D NULL;
  }
- 
--static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
+=20
+-#ifdef CONFIG_OF_KUNIT
++#if 0
+ static int __init of_kunit_add_data(void)
+ {
+ 	void *kunit_fdt;
+diff --git a/drivers/of/kunit_overlay_test.dtso b/drivers/of/kunit_overlay_=
+test.dtso
+index 6e70e2f8cd90..e3ced1467dd9 100644
+--- a/drivers/of/kunit_overlay_test.dtso
++++ b/drivers/of/kunit_overlay_test.dtso
+@@ -2,7 +2,7 @@
+ /dts-v1/;
+ /plugin/;
+=20
+-&kunit_bus {
++/ {
+ 	test-kunit {
+ 		compatible =3D "test,kunit-empty";
+ 	};
+diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
+index 543fdf0936f6..08b670aee083 100644
+--- a/drivers/of/of_test.c
++++ b/drivers/of/of_test.c
+@@ -15,17 +15,8 @@ static void dtb_root_node_exists(struct kunit *test)
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/"));
+ }
+=20
+-/*
+- * Test that the /__symbols__ node exists.
+- */
+-static void dtb_symbols_node_exists(struct kunit *test)
 -{
--	u16 x = ((u16) (data[1] << 8) | (u16) (data[0]));
--
--	return qt2_control_msg(dev, QT_SET_GET_DEVICE, x, 0);
+-	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/__symbols__"));
 -}
 -
--
- static inline int qt2_getregister(struct usb_device *dev,
- 				  u8 uart,
- 				  u8 reg,
--- 
-2.27.0
-
+ static struct kunit_case dtb_test_cases[] =3D {
+ 	KUNIT_CASE(dtb_root_node_exists),
+-	KUNIT_CASE(dtb_symbols_node_exists),
+ 	{}
+ };
