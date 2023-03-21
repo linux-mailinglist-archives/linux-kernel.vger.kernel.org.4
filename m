@@ -2,198 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844B76C372C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09446C372E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjCUQmB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 12:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        id S230141AbjCUQmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjCUQlu (ORCPT
+        with ESMTP id S229619AbjCUQm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:41:50 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81A152911;
-        Tue, 21 Mar 2023 09:41:33 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pef2q-0002rh-BA; Tue, 21 Mar 2023 17:41:08 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Cc:     slewis@rivosinc.com, Conor Dooley <conor@kernel.org>,
-        vineetg@rivosinc.com, Evan Green <evan@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 3/6] RISC-V: hwprobe: Add support for
- RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-Date:   Tue, 21 Mar 2023 17:41:07 +0100
-Message-ID: <3351107.e9J7NaK4W3@diego>
-In-Reply-To: <20230314183220.513101-4-evan@rivosinc.com>
-References: <20230314183220.513101-1-evan@rivosinc.com>
- <20230314183220.513101-4-evan@rivosinc.com>
+        Tue, 21 Mar 2023 12:42:29 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA193532BC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:42:04 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l1-20020a056e021c0100b003180af2a284so8030380ilh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:42:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679416923;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wHMca3wBCutZtAdQFZ/VNGTHdO3FijtlGJn+CEWok5o=;
+        b=lrBuze84HNTfFm9kc/CQ3BpLk5m5Tf1FuLMPYv0QQv1CbmWTdD7lSb8qkcv9B2Ae4P
+         wK4OBPj96t4p/bn8VHOGaM8bgJGdxs0AXu9RZ1wUpu5LjNSaKpQ5v7EbCQqTbWH5sc5k
+         4zZgUn1z2x+dTdHSNf5bUIleHpUCEc+ZhUPZnHVXTQxRr0Pl3lYqguB10ZOsBr8C1+Ww
+         w6DvgSmFBfeiI0OKI+gqwl7EnHnqQ7DoUqGGsBKJFa+ci0QCKOpVFzg2+awimIJwznEy
+         dqv5MiGQ0sfjL/qg5d0D8xs+qfjSahwof6iRdPj6CrzzA83DvnRBb5T1qWqdbVx/CN8A
+         NgOQ==
+X-Gm-Message-State: AO0yUKVJ9hLi4klQhKkUVC8oRMjOADfICdeeM5Umd7R61on6aXwABG1L
+        raeyfdpvwjp8gMzLzF5fLUH97RpjbVCD1PVMkJpS5Qejlp6U
+X-Google-Smtp-Source: AK7set8cgc2X0LhzNhWl5jeVeMFe7l6Z2LjWJKoFKGMSUYyhMO/Rjc5Qt2rtYenkzDVceKJSUr91K2pBKtJpeZPqTYtlFhjIUUQE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:63c7:0:b0:3e5:a7d9:17f0 with SMTP id
+ j190-20020a0263c7000000b003e5a7d917f0mr1294426jac.4.1679416923506; Tue, 21
+ Mar 2023 09:42:03 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 09:42:03 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000027d44f05f76bb96e@google.com>
+Subject: [syzbot] [ntfs?] possible deadlock in ntfs_sync_mft_mirror
+From:   syzbot <syzbot+c9340661f4a0bb3e7e65@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+Hello,
 
-Am Dienstag, 14. März 2023, 19:32:17 CET schrieb Evan Green:
-> We have an implicit set of base behaviors that userspace depends on,
-> which are mostly defined in various ISA specifications.
-> 
-> Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> 
-> Changes in v4:
->  - More newlines in BASE_BEHAVIOR_IMA documentation (Conor)
-> 
-> Changes in v3:
->  - Refactored base ISA behavior probe to allow kernel probing as well,
->    in prep for vDSO data initialization.
->  - Fixed doc warnings in IMA text list, use :c:macro:.
-> 
->  Documentation/riscv/hwprobe.rst       | 24 ++++++++++++++++++++++++
->  arch/riscv/include/asm/hwprobe.h      |  2 +-
->  arch/riscv/include/uapi/asm/hwprobe.h |  5 +++++
->  arch/riscv/kernel/sys_riscv.c         | 20 ++++++++++++++++++++
->  4 files changed, 50 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
-> index 211828f706e3..945d44683c40 100644
-> --- a/Documentation/riscv/hwprobe.rst
-> +++ b/Documentation/riscv/hwprobe.rst
-> @@ -39,3 +39,27 @@ The following keys are defined:
->  
->  * :c:macro:`RISCV_HWPROBE_KEY_MIMPLID`: Contains the value of ``mimplid``, as
->    defined by the RISC-V privileged architecture specification.
-> +
-> +* :c:macro:`RISCV_HWPROBE_KEY_BASE_BEHAVIOR`: A bitmask containing the base
-> +  user-visible behavior that this kernel supports.  The following base user ABIs
-> +  are defined:
-> +
-> +  * :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`: Support for rv32ima or
-> +    rv64ima, as defined by version 2.2 of the user ISA and version 1.10 of the
-> +    privileged ISA, with the following known exceptions (more exceptions may be
-> +    added, but only if it can be demonstrated that the user ABI is not broken):
-> +
-> +    * The :fence.i: instruction cannot be directly executed by userspace
-> +      programs (it may still be executed in userspace via a
-> +      kernel-controlled mechanism such as the vDSO).
-> +
-> +* :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_0`: A bitmask containing the extensions
-> +  that are compatible with the :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`:
-> +  base system behavior.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_IMA_FD`: The F and D extensions are supported, as
-> +    defined by commit cd20cee ("FMIN/FMAX now implement
-> +    minimumNumber/maximumNumber, not minNum/maxNum") of the RISC-V ISA manual.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as defined
-> +    by version 2.2 of the RISC-V ISA manual.
+syzbot found the following issue on:
 
-just wondering, is there a plan on how further extensions should be added this this?
-[as we have this big plethora of them :-) ]
+HEAD commit:    17214b70a159 Merge tag 'fsverity-for-linus' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13d86d31c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cde06fe2cf5765b7
+dashboard link: https://syzkaller.appspot.com/bug?extid=c9340661f4a0bb3e7e65
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Aka things like Zbb and friends will probably also be relevant to userspace, so just
-fill up RISCV_HWPROBE_KEY_IMA_EXT_0 with more elements and once full switch to
-RISCV_HWPROBE_KEY_IMA_EXT_1 , RISCV_HWPROBE_KEY_IMA_EXT_2, etc?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Or do we have some more elaborate sorting mechanism?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c9340661f4a0bb3e7e65@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc3-syzkaller-00012-g17214b70a159 #0 Not tainted
+------------------------------------------------------
+kworker/u8:1/10 is trying to acquire lock:
+ffff8880722f1840 (&rl->lock){++++}-{3:3}, at: ntfs_sync_mft_mirror+0x18bf/0x1ea0 fs/ntfs/mft.c:536
+
+but task is already holding lock:
+ffff8880723aa290 (&ni->mrec_lock){+.+.}-{3:3}, at: map_mft_record+0x40/0x6c0 fs/ntfs/mft.c:154
+
+which lock already depends on the new lock.
 
 
-Thanks
-Heiko
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&ni->mrec_lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       map_mft_record+0x40/0x6c0 fs/ntfs/mft.c:154
+       ntfs_truncate+0x243/0x2a50 fs/ntfs/inode.c:2383
+       ntfs_truncate_vfs fs/ntfs/inode.c:2862 [inline]
+       ntfs_setattr+0x397/0x560 fs/ntfs/inode.c:2914
+       notify_change+0xb2c/0x1180 fs/attr.c:482
+       do_truncate+0x143/0x200 fs/open.c:66
+       handle_truncate fs/namei.c:3219 [inline]
+       do_open fs/namei.c:3564 [inline]
+       path_openat+0x2083/0x2750 fs/namei.c:3715
+       do_filp_open+0x1ba/0x410 fs/namei.c:3742
+       do_sys_openat2+0x16d/0x4c0 fs/open.c:1348
+       do_sys_open fs/open.c:1364 [inline]
+       __do_sys_creat fs/open.c:1440 [inline]
+       __se_sys_creat fs/open.c:1434 [inline]
+       __x64_sys_creat+0xcd/0x120 fs/open.c:1434
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&rl->lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3098 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+       validate_chain kernel/locking/lockdep.c:3832 [inline]
+       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+       lock_acquire kernel/locking/lockdep.c:5669 [inline]
+       lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
+       ntfs_sync_mft_mirror+0x18bf/0x1ea0 fs/ntfs/mft.c:536
+       write_mft_record_nolock+0x198e/0x1cc0 fs/ntfs/mft.c:787
+       write_mft_record+0x14e/0x3b0 fs/ntfs/mft.h:95
+       __ntfs_write_inode+0x915/0xc40 fs/ntfs/inode.c:3050
+       write_inode fs/fs-writeback.c:1453 [inline]
+       __writeback_single_inode+0x9f8/0xdc0 fs/fs-writeback.c:1665
+       writeback_sb_inodes+0x54d/0xe70 fs/fs-writeback.c:1891
+       wb_writeback+0x294/0xa50 fs/fs-writeback.c:2065
+       wb_do_writeback fs/fs-writeback.c:2208 [inline]
+       wb_workfn+0x2a5/0xfc0 fs/fs-writeback.c:2248
+       process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+       worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+       kthread+0x2e8/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ni->mrec_lock);
+                               lock(&rl->lock);
+                               lock(&ni->mrec_lock);
+  lock(&rl->lock);
+
+ *** DEADLOCK ***
+
+3 locks held by kworker/u8:1/10:
+ #0: ffff888015421938 ((wq_completion)writeback){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888015421938 ((wq_completion)writeback){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888015421938 ((wq_completion)writeback){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888015421938 ((wq_completion)writeback){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:639 [inline]
+ #0: ffff888015421938 ((wq_completion)writeback){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:666 [inline]
+ #0: ffff888015421938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x87a/0x15c0 kernel/workqueue.c:2361
+ #1: ffffc900004cfda8 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x15c0 kernel/workqueue.c:2365
+ #2: ffff8880723aa290 (&ni->mrec_lock){+.+.}-{3:3}, at: map_mft_record+0x40/0x6c0 fs/ntfs/mft.c:154
+
+stack backtrace:
+CPU: 0 PID: 10 Comm: kworker/u8:1 Not tainted 6.3.0-rc3-syzkaller-00012-g17214b70a159 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: writeback wb_workfn (flush-7:2)
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
+ check_prev_add kernel/locking/lockdep.c:3098 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+ validate_chain kernel/locking/lockdep.c:3832 [inline]
+ __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+ lock_acquire kernel/locking/lockdep.c:5669 [inline]
+ lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+ down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
+ ntfs_sync_mft_mirror+0x18bf/0x1ea0 fs/ntfs/mft.c:536
+ write_mft_record_nolock+0x198e/0x1cc0 fs/ntfs/mft.c:787
+ write_mft_record+0x14e/0x3b0 fs/ntfs/mft.h:95
+ __ntfs_write_inode+0x915/0xc40 fs/ntfs/inode.c:3050
+ write_inode fs/fs-writeback.c:1453 [inline]
+ __writeback_single_inode+0x9f8/0xdc0 fs/fs-writeback.c:1665
+ writeback_sb_inodes+0x54d/0xe70 fs/fs-writeback.c:1891
+ wb_writeback+0x294/0xa50 fs/fs-writeback.c:2065
+ wb_do_writeback fs/fs-writeback.c:2208 [inline]
+ wb_workfn+0x2a5/0xfc0 fs/fs-writeback.c:2248
+ process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> diff --git a/arch/riscv/include/asm/hwprobe.h b/arch/riscv/include/asm/hwprobe.h
-> index 08d1c3bdd78a..7e52f1e1fe10 100644
-> --- a/arch/riscv/include/asm/hwprobe.h
-> +++ b/arch/riscv/include/asm/hwprobe.h
-> @@ -8,6 +8,6 @@
->  
->  #include <uapi/asm/hwprobe.h>
->  
-> -#define RISCV_HWPROBE_MAX_KEY 2
-> +#define RISCV_HWPROBE_MAX_KEY 4
->  
->  #endif
-> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-> index 591802047460..fc5665411782 100644
-> --- a/arch/riscv/include/uapi/asm/hwprobe.h
-> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
-> @@ -20,6 +20,11 @@ struct riscv_hwprobe {
->  #define RISCV_HWPROBE_KEY_MVENDORID	0
->  #define RISCV_HWPROBE_KEY_MARCHID	1
->  #define RISCV_HWPROBE_KEY_MIMPID	2
-> +#define RISCV_HWPROBE_KEY_BASE_BEHAVIOR	3
-> +#define		RISCV_HWPROBE_BASE_BEHAVIOR_IMA	(1 << 0)
-> +#define RISCV_HWPROBE_KEY_IMA_EXT_0	4
-> +#define		RISCV_HWPROBE_IMA_FD		(1 << 0)
-> +#define		RISCV_HWPROBE_IMA_C		(1 << 1)
->  /* Increase RISCV_HWPROBE_MAX_KEY when adding items. */
->  
->  #endif
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 981d23457f13..1c118438b1b3 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -9,6 +9,7 @@
->  #include <asm/cacheflush.h>
->  #include <asm/hwprobe.h>
->  #include <asm/sbi.h>
-> +#include <asm/switch_to.h>
->  #include <asm/uaccess.h>
->  #include <asm/unistd.h>
->  #include <asm-generic/mman-common.h>
-> @@ -125,6 +126,25 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
->  	case RISCV_HWPROBE_KEY_MIMPID:
->  		hwprobe_arch_id(pair, cpus);
->  		break;
-> +	/*
-> +	 * The kernel already assumes that the base single-letter ISA
-> +	 * extensions are supported on all harts, and only supports the
-> +	 * IMA base, so just cheat a bit here and tell that to
-> +	 * userspace.
-> +	 */
-> +	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
-> +		pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-> +		break;
-> +
-> +	case RISCV_HWPROBE_KEY_IMA_EXT_0:
-> +		pair->value = 0;
-> +		if (has_fpu())
-> +			pair->value |= RISCV_HWPROBE_IMA_FD;
-> +
-> +		if (elf_hwcap & RISCV_ISA_EXT_c)
-> +			pair->value |= RISCV_HWPROBE_IMA_C;
-> +
-> +		break;
->  
->  	/*
->  	 * For forward compatibility, unknown keys don't fail the whole
-> 
-
-
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
