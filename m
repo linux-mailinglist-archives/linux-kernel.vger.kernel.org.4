@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE306C2CDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02866C2CDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjCUIrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S230238AbjCUIsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCUIqx (ORCPT
+        with ESMTP id S231162AbjCUIrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:46:53 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1946A15C94;
-        Tue, 21 Mar 2023 01:45:58 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id l16so6569883ybe.6;
-        Tue, 21 Mar 2023 01:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679388356;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ou0zA2Nuc2lATXbmKOtaTMcIXxsKlzHd+kdeuMaNI9s=;
-        b=ZuTUSTBThfJDp99rMaTqO2wP4QU3Tgml1Z8DKsW0uS3JA+veVJOyhk8rlcoM0/DYHq
-         t3L5kA3f3sZqlU08udiNkkMhYlLigH08LMpn/KGDBVTY2JQbk0Z1lPkE9HtuiufX7O54
-         42aLkYZPrK0pu8Kfm4Ek7IRLvyUum+AuyrQQpy48lSY8mltg0bSenlH6LfTy9CikwbC8
-         pkcyOHMvBTmquCaizeKqX42LVMuLvv4qpSE0qkbtEvLNnYsW0JwLkr6/ijBkn316+S3O
-         nJyDQm/jZKE1M0Ec9r/mBIj/ln7gAZ3LHciDHx1vJkXtA2YYMv7k8En9SOlG4LfYdgPg
-         XwDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679388356;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ou0zA2Nuc2lATXbmKOtaTMcIXxsKlzHd+kdeuMaNI9s=;
-        b=erioeBTcPnAE3psie6o4kpHCsdquJrT0hx+36wr5mjRFtfrSulpJU3U2jZqGnefen9
-         P+l6fGZr7Gn66psZZyb4igXrgOBnZx1HUqS967oRuGIkrM8FEqBI0cKcYiTg+l710hZo
-         5GZ0J6o7rH1Zw2WfRoBNoCBBna0kHc1IziL163T2qLQvLm5N3tPz84tADSP4/9xQGOn+
-         FF2qgasfVpZk5Qyvf/zLjdUc+NfVuAYKXcYlJQ5y/r0yuWL8YNF28mxdCujPC8fPkFTo
-         1/JIY9t/iqHVDh/mu+p3AjQriN3LbkyoV1UhvBSrdC8vv5Lqb4fRvPLAOAtUnYzVzkde
-         H7qw==
-X-Gm-Message-State: AAQBX9cZl5xdv95+Z4IoD8Ay37vkyykibtHjMq0dQla7HXqbBuUtMiCL
-        aEq4Q67bHoATWhr9iguoYo9Sdpc7hgTmkfxLCzBITOYoma5Idg==
-X-Google-Smtp-Source: AKy350YFHa9pCJfNl6wKOFH8qdb7QbqI+PjWezxi99rhGTo8JSPTYrstYADsZfKTB5Q97p8wo2RgPZUTfIgcbRKN/sQ=
-X-Received: by 2002:a5b:3c8:0:b0:b67:f07:d180 with SMTP id t8-20020a5b03c8000000b00b670f07d180mr898411ybp.5.1679388356617;
- Tue, 21 Mar 2023 01:45:56 -0700 (PDT)
+        Tue, 21 Mar 2023 04:47:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806BF4347E;
+        Tue, 21 Mar 2023 01:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1679388420; x=1710924420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kD4vWiijzXn20xL/y6h7BXFVyHe1w8NgP/ZJbT/mg50=;
+  b=Pr2IyA5gN+7c5uLRZo42KE2Uvf9ycpDUKKs+M2XMFI97TsayvR+vjdHq
+   jQObJG8Om99qpuQokCLuqCXsBH1rYl8wHB/zwGV615HHoTUAOtyA7+dkU
+   7bjnXYb7+m+AGqploLghP8QZnZ8qOGt8AENhbCBb9dgv1LmDflP0oS/B+
+   JCH2xvq8aQ0ejgGgULYwIS/HT1x43/Dp9sdloA8mzBcT4jIIqyWl6wRTZ
+   dB2bPBGtPy/s4vXwJp4EUJyVZT/X+b3sx1HBLcd5xZgDjWt8Eylektvt2
+   7QCQpXpW7I8xkkPlPp6LExyQL5RD3XdXJe0PN+YLALdexwHq4+rqlWvHJ
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,278,1673938800"; 
+   d="asc'?scan'208";a="202646235"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2023 01:46:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 01:46:58 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 21 Mar 2023 01:46:55 -0700
+Date:   Tue, 21 Mar 2023 08:46:25 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>
+Subject: Re: [PATCH 6.2 000/211] 6.2.8-rc1 review
+Message-ID: <965844f0-fc52-487a-b932-494183664c6f@spud>
+References: <20230320145513.305686421@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230319195656.326701-1-kal.conley@dectris.com> <20230319195656.326701-4-kal.conley@dectris.com>
-In-Reply-To: <20230319195656.326701-4-kal.conley@dectris.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 21 Mar 2023 09:45:45 +0100
-Message-ID: <CAJ8uoz3F-gWzB9vYm-8MtonAv3aBcerJDxPpEDCNfmNkwJFY=A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] selftests: xsk: Add tests for 8K and 9K
- frame sizes
-To:     Kal Conley <kal.conley@dectris.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="noutXRxCUlUuIchh"
+Content-Disposition: inline
+In-Reply-To: <20230320145513.305686421@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,72 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 19 Mar 2023 at 21:07, Kal Conley <kal.conley@dectris.com> wrote:
->
-> Add tests:
-> - RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-> - RUN_TO_COMPLETION_9K_FRAME_SIZE: frame_size=9000 (unaligned)
->
-> Signed-off-by: Kal Conley <kal.conley@dectris.com>
-> ---
->  tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
->  tools/testing/selftests/bpf/xskxceiver.h |  2 ++
->  2 files changed, 26 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> index 7a47ef28fbce..f10ff8c5e9c5 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> @@ -1789,6 +1789,30 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
->                 pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
->                 testapp_validate_traffic(test);
->                 break;
-> +       case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-> +               if (!hugepages_present(test->ifobj_tx)) {
-> +                       ksft_test_result_skip("No 2M huge pages present.\n");
-> +                       return;
-> +               }
-> +               test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-> +               test->ifobj_tx->umem->frame_size = 8192;
-> +               test->ifobj_rx->umem->frame_size = 8192;
-> +               pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-> +               testapp_validate_traffic(test);
-> +               break;
-> +       case TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME:
+--noutXRxCUlUuIchh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-TEST_TYPE_UNALIGNED_9K_FRAME
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-> +               if (!hugepages_present(test->ifobj_tx)) {
-> +                       ksft_test_result_skip("No 2M huge pages present.\n");
-> +                       return;
-> +               }
-> +               test_spec_set_name(test, "RUN_TO_COMPLETION_9K_FRAME_SIZE");
+Thanks,
+Conor.
 
-UNALIGNED_MODE_9K
+--noutXRxCUlUuIchh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +               test->ifobj_tx->umem->frame_size = 9000;
-> +               test->ifobj_rx->umem->frame_size = 9000;
-> +               test->ifobj_tx->umem->unaligned_mode = true;
-> +               test->ifobj_rx->umem->unaligned_mode = true;
-> +               pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-> +               testapp_validate_traffic(test);
-> +               break;
->         case TEST_TYPE_RX_POLL:
->                 test->ifobj_rx->use_poll = true;
->                 test_spec_set_name(test, "POLL_RX");
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-> index 3e8ec7d8ec32..ff723b6d7852 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.h
-> +++ b/tools/testing/selftests/bpf/xskxceiver.h
-> @@ -70,6 +70,8 @@ enum test_mode {
->  enum test_type {
->         TEST_TYPE_RUN_TO_COMPLETION,
->         TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-> +       TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
-> +       TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME,
->         TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
->         TEST_TYPE_RX_POLL,
->         TEST_TYPE_TX_POLL,
-> --
-> 2.39.2
->
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBlu4QAKCRB4tDGHoIJi
+0gV6AQCWDrTfmFHW9noFjc+FoeASIiQNVoUQ0lq5VVgjzRNuKAD/egw1QIe1QFQS
+T+rTj2iMU1gkuza8hMWU16CtTlSBXwc=
+=AECz
+-----END PGP SIGNATURE-----
+
+--noutXRxCUlUuIchh--
