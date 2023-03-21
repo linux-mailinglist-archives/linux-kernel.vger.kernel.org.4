@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC036C3D3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62656C3D3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjCUV6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S230095AbjCUV6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCUV55 (ORCPT
+        with ESMTP id S230258AbjCUV6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:57:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CA859433;
-        Tue, 21 Mar 2023 14:57:00 -0700 (PDT)
+        Tue, 21 Mar 2023 17:58:05 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9671F59435;
+        Tue, 21 Mar 2023 14:57:04 -0700 (PDT)
 Received: from localhost (unknown [188.24.179.102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F1E266030EE;
-        Tue, 21 Mar 2023 21:56:59 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B35566030F1;
+        Tue, 21 Mar 2023 21:57:02 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679435819;
-        bh=VEHW/c/2s4Nzddue0SQRQN8yI6FlgApEF6XFoJ9BplU=;
+        s=mail; t=1679435822;
+        bh=GwkI7NvsahRI9WNBHxkf1so8O+1ehcR5/nTJjj5XqyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YHikRZMkteArmXf+6j+Pv+yyRFh6kTGWLU14uJXvbGqwk9ak6k/qAp0oWm2DLoU/U
-         8InnJQRHA5oiDb2hB6mg3LC0xrx8uHHJnSAG7fM9l2yf27di8fe6PCG+uPoBt+VjXt
-         aGwM/tHVP48G9ppE97w2xu9/tJCG5S/0KbLUNMSUS/dc7fhbAXXHnqRqfCE+NeRilc
-         0egSiQtMWrSug3p6oVjYDwaDXA9iTAv3ZCWaNmoiorMceAmj1Kxf/qC7MSOI0WEKxW
-         GMKyda18nDxGNuoLv1NeM4vu9gQfdM/G+KcwSHBQOyEUb9WG7C+t09ZqQMZ8VdN2pF
-         n9ZJ0ThXS6Sdg==
+        b=byK0mMTEq51+ezXCzHTz6KzNJ+w0ZC98Udl6/zMTpEEzpptMWt0laFhQVm9j1S0i3
+         8JR0X4E5elQRvtodxqrAT7dKFxnYdOYtF+t2dv9nbKN4xr/cN5pwY7abSPfc8sNtXo
+         HZih93oHeVNx2y9TGHx3B9vBC+NC+5gqDrhKM6y2zVJg4FmGyoPn7joqmw+/WO28q4
+         CtuTsX9UXuzPF/btdDE0fR7pQQq/vj7dVglw8NsrcI5G8hFwOh0Jis770zceqqOqpP
+         UJgYfRxWfYcZO6psUdBNBir+QOL4SDEwiTeP2lvM3z+GBTkQ2DIP9zz5dpYXeIcc+i
+         QMKLnbo2dhhiA==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
         linux-riscv@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v2 09/10] arm64: dts: rockchip: rk3588: Add I2S nodes
-Date:   Tue, 21 Mar 2023 23:56:23 +0200
-Message-Id: <20230321215624.78383-10-cristian.ciocaltea@collabora.com>
+Subject: [PATCH v2 10/10] arm64: dts: rockchip: rk3588-rock-5b: Add analog audio
+Date:   Tue, 21 Mar 2023 23:56:24 +0200
+Message-Id: <20230321215624.78383-11-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
 References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
@@ -66,96 +66,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In addition to the five I2S/PCM/TDM controllers and the two I2S/PCM
-controllers shared between the RK3588 and RK3588S SoCs, RK3588 provides
-another group of four I2S/PCM/TDM controllers.
-
-Add the DT nodes corresponding to the additional controllers.
+Add the necessary DT nodes for the Rock 5B board to enable the analog
+audio support provided by the Everest Semi ES8316 codec.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3588.dtsi | 68 ++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588.dtsi b/arch/arm64/boot/dts/rockchip/rk3588.dtsi
-index d085e57fbc4c..8be75556af8f 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588.dtsi
-@@ -7,6 +7,74 @@
- #include "rk3588-pinctrl.dtsi"
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+index 95805cb0adfa..945eac304766 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -2,6 +2,7 @@
+ 
+ /dts-v1/;
+ 
++#include <dt-bindings/gpio/gpio.h>
+ #include "rk3588.dtsi"
  
  / {
-+	i2s8_8ch: i2s@fddc8000 {
-+		compatible = "rockchip,rk3588-i2s-tdm";
-+		reg = <0x0 0xfddc8000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru MCLK_I2S8_8CH_TX>, <&cru MCLK_I2S8_8CH_TX>, <&cru HCLK_I2S8_8CH>;
-+		clock-names = "mclk_tx", "mclk_rx", "hclk";
-+		assigned-clocks = <&cru CLK_I2S8_8CH_TX_SRC>;
-+		assigned-clock-parents = <&cru PLL_AUPLL>;
-+		dmas = <&dmac2 22>;
-+		dma-names = "tx";
-+		power-domains = <&power RK3588_PD_VO0>;
-+		resets = <&cru SRST_M_I2S8_8CH_TX>;
-+		reset-names = "tx-m";
-+		#sound-dai-cells = <0>;
-+		status = "disabled";
-+	};
+@@ -25,6 +26,59 @@ vcc5v0_sys: vcc5v0-sys-regulator {
+ 		regulator-min-microvolt = <5000000>;
+ 		regulator-max-microvolt = <5000000>;
+ 	};
 +
-+	i2s6_8ch: i2s@fddf4000 {
-+		compatible = "rockchip,rk3588-i2s-tdm";
-+		reg = <0x0 0xfddf4000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru MCLK_I2S6_8CH_TX>, <&cru MCLK_I2S6_8CH_TX>, <&cru HCLK_I2S6_8CH>;
-+		clock-names = "mclk_tx", "mclk_rx", "hclk";
-+		assigned-clocks = <&cru CLK_I2S6_8CH_TX_SRC>;
-+		assigned-clock-parents = <&cru PLL_AUPLL>;
-+		dmas = <&dmac2 4>;
-+		dma-names = "tx";
-+		power-domains = <&power RK3588_PD_VO1>;
-+		resets = <&cru SRST_M_I2S6_8CH_TX>;
-+		reset-names = "tx-m";
-+		#sound-dai-cells = <0>;
-+		status = "disabled";
-+	};
++	sound {
++		compatible = "audio-graph-card";
++		label = "Analog";
 +
-+	i2s7_8ch: i2s@fddf8000 {
-+		compatible = "rockchip,rk3588-i2s-tdm";
-+		reg = <0x0 0xfddf8000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru MCLK_I2S7_8CH_RX>, <&cru MCLK_I2S7_8CH_RX>, <&cru HCLK_I2S7_8CH>;
-+		clock-names = "mclk_tx", "mclk_rx", "hclk";
-+		assigned-clocks = <&cru CLK_I2S7_8CH_RX_SRC>;
-+		assigned-clock-parents = <&cru PLL_AUPLL>;
-+		dmas = <&dmac2 21>;
-+		dma-names = "rx";
-+		power-domains = <&power RK3588_PD_VO1>;
-+		resets = <&cru SRST_M_I2S7_8CH_RX>;
-+		reset-names = "rx-m";
-+		#sound-dai-cells = <0>;
-+		status = "disabled";
-+	};
++		widgets = "Microphone", "Mic Jack",
++			  "Headphone", "Headphones";
 +
-+	i2s10_8ch: i2s@fde00000 {
-+		compatible = "rockchip,rk3588-i2s-tdm";
-+		reg = <0x0 0xfde00000 0x0 0x1000>;
-+		interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru MCLK_I2S10_8CH_RX>, <&cru MCLK_I2S10_8CH_RX>, <&cru HCLK_I2S10_8CH>;
-+		clock-names = "mclk_tx", "mclk_rx", "hclk";
-+		assigned-clocks = <&cru CLK_I2S10_8CH_RX_SRC>;
-+		assigned-clock-parents = <&cru PLL_AUPLL>;
-+		dmas = <&dmac2 24>;
-+		dma-names = "rx";
-+		power-domains = <&power RK3588_PD_VO1>;
-+		resets = <&cru SRST_M_I2S10_8CH_RX>;
-+		reset-names = "rx-m";
-+		#sound-dai-cells = <0>;
-+		status = "disabled";
-+	};
++		routing = "MIC2", "Mic Jack",
++			  "Headphones", "HPOL",
++			  "Headphones", "HPOR";
 +
- 	gmac0: ethernet@fe1b0000 {
- 		compatible = "rockchip,rk3588-gmac", "snps,dwmac-4.20a";
- 		reg = <0x0 0xfe1b0000 0x0 0x10000>;
++		dais = <&i2s0_8ch_p0>;
++		hp-det-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&hp_detect>;
++	};
++};
++
++&i2c7 {
++	status = "okay";
++
++	es8316: es8316@11 {
++		compatible = "everest,es8316";
++		reg = <0x11>;
++		clocks = <&cru I2S0_8CH_MCLKOUT>;
++		clock-names = "mclk";
++		#sound-dai-cells = <0>;
++
++		port {
++			es8316_p0_0: endpoint {
++				remote-endpoint = <&i2s0_8ch_p0_0>;
++			};
++		};
++	};
++};
++
++&i2s0_8ch {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2s0_lrck
++		     &i2s0_mclk
++		     &i2s0_sclk
++		     &i2s0_sdi0
++		     &i2s0_sdo0>;
++	status = "okay";
++
++	i2s0_8ch_p0: port {
++		i2s0_8ch_p0_0: endpoint {
++			dai-format = "i2s";
++			mclk-fs = <256>;
++			remote-endpoint = <&es8316_p0_0>;
++		};
++	};
+ };
+ 
+ &sdhci {
+@@ -42,3 +96,11 @@ &uart2 {
+ 	pinctrl-0 = <&uart2m0_xfer>;
+ 	status = "okay";
+ };
++
++&pinctrl {
++	sound {
++		hp_detect: hp-detect {
++			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++};
 -- 
 2.40.0
 
