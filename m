@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546936C312B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A24966C3129
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCUMCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
+        id S230408AbjCUMCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjCUMCV (ORCPT
+        with ESMTP id S229822AbjCUMCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:02:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4A61AB
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679400094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZUORpevlKQiU73IYOa4/Bo2bFBpxSB0mQvJe2zWG4uk=;
-        b=Y/IzGBiy15N7O0jpNnT2O945RsbGl/EWX7eEgm8i9ZazEH8avNVBGgLQaCYrW3NEQEo4wN
-        hUpjgFlu7gGLpe8vnBzPuahqM6sloeO8SA728GdKXbP24XOoq8yjj7NHNjXEaSTPuDjcX0
-        UdnjEMoDOKOjLP67bh+9+46vMQeByYY=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-665-52L5XCVqM56TWRX52YzHjw-1; Tue, 21 Mar 2023 08:01:31 -0400
-X-MC-Unique: 52L5XCVqM56TWRX52YzHjw-1
-Received: by mail-ot1-f72.google.com with SMTP id g19-20020a056830161300b0069d6fbb1a72so6736471otr.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:01:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679400091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZUORpevlKQiU73IYOa4/Bo2bFBpxSB0mQvJe2zWG4uk=;
-        b=hKK41xGAkn2yhi3k9G/GNdonF94lrS+2Yvcma3Gc+R66PRM4eZDIUlopXIFG00C5I9
-         tEWsahxetBs1sk1/XP63bbGXttRsmz6llJkbOca5I3+M/YX66Uz5FtvVmMpj/uZFkmGF
-         j/4oOyntYdsWnK8a5MCSNe1kb3SXFdmx9fTPspAxRpdQvLSqLSzgj6Zw3Uxq0x0Bg69Q
-         Hq7hZBYGKZ7y5NYS2RwvS9I01fe9lZgCZqlk1p/SRb+qxvoTYOB9Ge74lO5r4gC7Rvhu
-         /4UagTdAt16mV6AKhkVgZ6X9TooACqsTUKvj+svXY/6RxvAlloQ249J3fimtitaUet2b
-         6PDQ==
-X-Gm-Message-State: AO0yUKWPgGdUCK6PpHPl4UjNP8SynyjKmQcicEOYJ5wYVq14hZw2hqKj
-        MRforthU44dbM58LQCpW3NArh5TPuehNTrkPYDD7hgycWnhw71nQpYShXp1opC8p7QaPxQeqFxy
-        rR1+7AnPnzxX3lrXTYpWgbIzg
-X-Received: by 2002:a05:6870:8289:b0:176:263e:9965 with SMTP id q9-20020a056870828900b00176263e9965mr871698oae.44.1679400091074;
-        Tue, 21 Mar 2023 05:01:31 -0700 (PDT)
-X-Google-Smtp-Source: AK7set899kmqLmAPg7MyUnAjH/WqMmEGz8KcW68wrb4VDOu+woQ52tQV+an0Qn8sOt6JqzR5VPkhdw==
-X-Received: by 2002:a05:6870:8289:b0:176:263e:9965 with SMTP id q9-20020a056870828900b00176263e9965mr871660oae.44.1679400090393;
-        Tue, 21 Mar 2023 05:01:30 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id t72-20020a37464b000000b00725d8d6983asm9163201qka.61.2023.03.21.05.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 05:01:30 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     isdn@linux-pingi.de, nathan@kernel.org, ndesaulniers@google.com,
-        kuba@kernel.org, alexanderduyck@fb.com, yangyingliang@huawei.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] mISDN: remove unused vpm_read_address function
-Date:   Tue, 21 Mar 2023 08:01:27 -0400
-Message-Id: <20230321120127.1782548-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 21 Mar 2023 08:02:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AAB3EB54;
+        Tue, 21 Mar 2023 05:02:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BEF8AD7;
+        Tue, 21 Mar 2023 05:02:47 -0700 (PDT)
+Received: from [10.57.53.10] (unknown [10.57.53.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 993363F71E;
+        Tue, 21 Mar 2023 05:02:00 -0700 (PDT)
+Message-ID: <458b2a97-494b-7772-3499-4fba088b6a67@arm.com>
+Date:   Tue, 21 Mar 2023 12:01:59 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 0/7] coresight: etm4x: Migrate AMBA devices to platform
+ driver
+To:     Rob Herring <robh+dt@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        scclevenger@os.amperecomputing.com,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
+ <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +58,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/isdn/hardware/mISDN/hfcmulti.c:667:1: error: unused function
-  'vpm_read_address' [-Werror,-Wunused-function]
-vpm_read_address(struct hfc_multi *c)
-^
-This function is not used, so remove it.
+On 20/03/2023 14:17, Rob Herring wrote:
+> On Thu, Mar 16, 2023 at 10:05 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>>
+>> CoreSight ETM4x devices could be accessed either via MMIO (handled via
+>> amba_driver) or CPU system instructions (handled via platform driver). But
+>> this has the following issues :
+>>
+>>    - Each new CPU comes up with its own PID and thus we need to keep on
+>>      adding the "known" PIDs to get it working with AMBA driver. While
+>>      the ETM4 architecture (and CoreSight architecture) defines way to
+>>      identify a device as ETM4. Thus older kernels  won't be able to
+>>      "discover" a newer CPU, unless we add the PIDs.
+> 
+> But v8.4 discourages MMIO access, so this problem will go away on its
+> own. Even if not, adding IDs to stable kernels is standard practice
+> whether it is PCI VID/PID, compatible string or AMBA PID.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/isdn/hardware/mISDN/hfcmulti.c | 14 --------------
- 1 file changed, 14 deletions(-)
+Yes, it would eventually go away. As for adding the PIDs, the
+fundamental issue is, unlike other drivers, except for the "PIDs"
+everything else is architected and each CPU has this PID alone
+different and we have plenty of CPUs implementaions out there.
 
-diff --git a/drivers/isdn/hardware/mISDN/hfcmulti.c b/drivers/isdn/hardware/mISDN/hfcmulti.c
-index e840609c50eb..ac665cf64f8c 100644
---- a/drivers/isdn/hardware/mISDN/hfcmulti.c
-+++ b/drivers/isdn/hardware/mISDN/hfcmulti.c
-@@ -663,20 +663,6 @@ vpm_write_address(struct hfc_multi *hc, unsigned short addr)
- 	cpld_write_reg(hc, 1, 0x01 & (addr >> 8));
- }
- 
--static inline unsigned short
--vpm_read_address(struct hfc_multi *c)
--{
--	unsigned short addr;
--	unsigned short highbit;
--
--	addr = cpld_read_reg(c, 0);
--	highbit = cpld_read_reg(c, 1);
--
--	addr = addr | (highbit << 8);
--
--	return addr & 0x1ff;
--}
--
- static inline unsigned char
- vpm_in(struct hfc_multi *c, int which, unsigned short addr)
- {
--- 
-2.27.0
+But all that said, since we added this as an AMBA driver in the first
+place (all for simply getting the apb_clk management), I am happy to
+choose the "Add PIDs to stable kernel approach" for this problem.
+
+> 
+>>    - With ACPI, the ETM4x devices have the same HID to identify the device
+>>      irrespective of the mode of access. This creates a problem where two
+>>      different drivers (both AMBA based driver and platform driver) would
+>>      hook into the "HID" and could conflict. e.g., if AMBA driver gets
+>>      hold of a non-MMIO device, the probe fails. If we have single driver
+>>      hooked into the given "HID", we could handle them seamlessly,
+>>      irrespective of the mode of access.
+> 
+> Why are we changing DT for ACPI? Just always use the platform driver
+> for ACPI and leave DT systems alone.
+
+This was mainly due to (1), given we have a platform driver anyway for
+ACPI. As mentioned above, we could leave the DT alone.
+
+> 
+>>    - CoreSight is heavily dependent on the runtime power management. With
+>>      ACPI, amba_driver doesn't get us anywhere with handling the power
+>>      and thus one need to always turn the power ON to use them. Moving to
+>>      platform driver gives us the power management for free.
+> 
+> This sounds like an issue for any amba driver. If this is an issue,
+> solve it for everyone, not just work around it in one driver.
+
+This alone wouldn't be sufficient. We need a platform driver anyway to
+handle the two different modes in  ACPI for ETMs. But this will be a
+an option for the other CoreSight components which are always MMIO.
+
+Thanks
+Suzuki
+
+
+> 
+> When someone puts another primecell device into an ACPI system, are we
+> going to go do the same one-off change in that driver too? (We kind of
+> already did with SBSA UART...)
+
+
+
+
+
+> 
+> Rob
 
