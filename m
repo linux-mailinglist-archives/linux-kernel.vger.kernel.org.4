@@ -2,75 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A006C2C34
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F96C6C2C7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCUIWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S229959AbjCUIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjCUIWR (ORCPT
+        with ESMTP id S229866AbjCUIc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:22:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9EC311D1;
-        Tue, 21 Mar 2023 01:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0478361A24;
-        Tue, 21 Mar 2023 08:22:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9680C433EF;
-        Tue, 21 Mar 2023 08:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679386931;
-        bh=qmL5btKZB/IZvUgdpQ2K3dkSP/h1TPOeFV45YDB0j48=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iDH45JkBdnLdoWiKQ0q1CDsjmo2Siaxp3tbsD99aFYKfI0fR/+LZfvb+DYcZFHNqG
-         QRGW6YTroRRsfjw5lD6xNtWKcmtXDa/xNiaH4ZVOwEEub17SIIlG9P02WZxbEkIHRY
-         TfoeBeJZHyUHZedvNcORUvWs4lErCj7W9LkkxGPpXCBEh0PtdOMLaR6t8TYAKYleOY
-         6KRFp0Q3vk2S9fjrBTRNIxibz6v7bsq4TZF/HYRULcMyhvAk6v6dEnp/4CtzUVgd4Z
-         9STXDiBFQBYK+W4RACElN+sVwFwEZnesUvKto3u9xFFhvRwaXkOCn89MXxeqFSB4td
-         cCNwYFNMvF27g==
-Date:   Tue, 21 Mar 2023 10:22:06 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] sh_eth: remove open coded netif_running()
-Message-ID: <20230321082206.GS36557@unreal>
-References: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
+        Tue, 21 Mar 2023 04:32:58 -0400
+Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580083C3C;
+        Tue, 21 Mar 2023 01:32:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 570FE2800C1;
+        Tue, 21 Mar 2023 09:23:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
+        t=1679386994; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:content-language:in-reply-to:references;
+        bh=ETMQewYqFOxyEeyfz++LRASMN6UldVLdJx3vLdRJ+U8=;
+        b=mTDUcu6EONftfdBT/BsJcZJqtvG9Hk0H4pY103xW/8Mr82A+Qx85EGQ7yY0DlbFTzgcCDj
+        j/wcpNDwLJWATK8eozJ5mYt5NKPtlTaXEw2xOBWWYeglb6LqyZ5s3qNLNEnUjG1majMlRr
+        Cnl5tN4nJWK9dcY5BLw7UFgqCrpqR014t3U65ZDUf3/8uQAcX4yeoU9fVUVc6MlTn+gelG
+        XOm5xQ8cRcojI3L8pczOamv8AWo+L0SsKPxa/wHJvyQJ0bKsTG2bQ7TmR29UY2nqblZFC3
+        KRfSvqdqkLzvIXWmmeZb5ib31/IcuebKi/kZkw+Nxld2ZqwsUHz5furCUGKlug==
+Message-ID: <e30b31c9-9b18-80a3-8ff0-97b958ab0b8f@cachyos.org>
+Date:   Tue, 21 Mar 2023 09:23:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] module/decompress: Never use kunmap() for local
+ un-mappings
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Chris Down <chris@chrisdown.name>,
+        Nick Terrell <terrelln@fb.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        live-patching@vger.kernel.org, bpf@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ira Weiny <ira.weiny@intel.com>
+References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+Content-Language: pl-PL, en-US
+From:   Piotr Gorski <piotrgorski@cachyos.org>
+In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 07:58:26AM +0100, Wolfram Sang wrote:
-> It had a purpose back in the days, but today we have a handy helper.
-> 
-> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Based on 6.3-rc3 and tested on a Renesas Lager board (R-Car H2).
-> 
->  drivers/net/ethernet/renesas/sh_eth.c | 6 +-----
->  drivers/net/ethernet/renesas/sh_eth.h | 1 -
->  2 files changed, 1 insertion(+), 6 deletions(-)
-> 
+Reviewed-by: Piotr Gorski <piotrgorski@cachyos.org>
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+W dniu 15.03.2023 o 13:52, Fabio M. De Francesco pisze:
+> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
+>
+> kunmap_local() must be called on the kernel virtual address returned by
+> kmap_local_page(), differently from how we use kunmap() which instead
+> expects the mapped page as its argument.
+>
+> In module_zstd_decompress() we currently map with kmap_local_page() and
+> unmap with kunmap(). This breaks the code and so it should be fixed.
+>
+> Cc: Piotr Gorski <piotrgorski@cachyos.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Stephen Boyd <swboyd@chromium.org>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>   kernel/module/decompress.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+> index bb79ac1a6d8f..7ddc87bee274 100644
+> --- a/kernel/module/decompress.c
+> +++ b/kernel/module/decompress.c
+> @@ -267,7 +267,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+>   		zstd_dec.size = PAGE_SIZE;
+>   
+>   		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
+> -		kunmap(page);
+> +		kunmap_local(zstd_dec.dst);
+>   		retval = zstd_get_error_code(ret);
+>   		if (retval)
+>   			break;
