@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1136C31FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4872F6C3200
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjCUMqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S230296AbjCUMqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjCUMp6 (ORCPT
+        with ESMTP id S229891AbjCUMqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:45:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EDC1C330
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:45:18 -0700 (PDT)
+        Tue, 21 Mar 2023 08:46:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51427460BE;
+        Tue, 21 Mar 2023 05:46:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E45CB8166B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976AEC433D2;
-        Tue, 21 Mar 2023 12:44:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2464B81665;
+        Tue, 21 Mar 2023 12:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BF7C433D2;
+        Tue, 21 Mar 2023 12:46:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679402679;
-        bh=B/vtHxAcTCxhhHRIP5YYt3LKQydEzXg1MnDjnoHNkfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VJ7aLyo4hGUHYrR1vArMUTwpO1Cc6v0B9Vg5CHGvjZbjOwaglbWs4YZqlYGlOnpEh
-         C226uGeJ4dgVARE5+5UpTXLMf7LRQdhh9scEsDOkufPArElmirwkGUoHgX/TlapRmx
-         0riftKnWNwYXpYGiiJXhcktDk9enjNuyQcd3KbjSsUseMbmK3jLw5fpF2yAmERNEbB
-         zD5KMKn0NTJZZT3C1rQ0p4EeS4YK+Y1n6v1vwGnBNeblgn83rZNijqPrIAoZvteCmG
-         lx1oNtoRJmCkfYmAyr/aVq1KrXfa7wcZjDszdYNRVsdKPv2s638VlOhBsQYZmAWXD5
-         yRWJ/rOlM++rw==
-Date:   Tue, 21 Mar 2023 13:44:36 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Wei Li <liwei391@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yu Liao <liaoyu15@huawei.com>, Hillf Danton <hdanton@sina.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH 8/8] selftests/proc: Assert clock_gettime(CLOCK_BOOTTIME)
- VS /proc/uptime monotonicity
-Message-ID: <ZBmmtMlKXcf2+hnq@lothringen>
-References: <20230222144649.624380-1-frederic@kernel.org>
- <20230222144649.624380-9-frederic@kernel.org>
- <219c5d09-0099-83e9-b21b-299fa513decd@alu.unizg.hr>
+        s=k20201202; t=1679402784;
+        bh=NK7Qa4/kmnTtDIuShrMbbctCm/ZSCmINfV6f2ojz/kY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=eUphMwq+Y1iiFAmpinx4VQbhWdgjf4hPT4v/XzR2fbGs8jdXQYtftiVcArvK/1F4H
+         s/lAIzEzxGXY4Agf1HzZ8Mh82B0dK5LiPiPisTqjsDGBV7vC99KgTEy4xkyogmQlN3
+         l3TcSKUeoBEvO7164xC+MPFOiho+o6vzFII2oeylo71PWPfpeHCLUWqcqMqBVnxl8C
+         I/gbU7WL9tNQx85G0PuDjNcKRgt5gGOvvBjk9q6ml7VcdfkwC/iWOsDr0JsfvQ/hyi
+         KPfmxCnyVYcXhal5IAgqdaQKYsTO0bgL0STyMVO507EmSLCWwD6daFUj+Kq4hZKtCd
+         YqCyu98JGBDWw==
+From:   Mark Brown <broonie@kernel.org>
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jianhua Lu <lujianhua000@gmail.com>
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+In-Reply-To: <20230318141440.29023-1-lujianhua000@gmail.com>
+References: <20230318141440.29023-1-lujianhua000@gmail.com>
+Subject: Re: [PATCH] ASoC: cs35l41: Add 12288000 clk freq to cs35l41_fs_mon
+ clk config
+Message-Id: <167940278163.26969.15643936747688736434.b4-ty@kernel.org>
+Date:   Tue, 21 Mar 2023 12:46:21 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <219c5d09-0099-83e9-b21b-299fa513decd@alu.unizg.hr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,51 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 04:59:41PM +0100, Mirsad Todorovac wrote:
-> On 2/22/23 15:46, Frederic Weisbecker wrote:
-> From what I see, you round the CLOCK_BOOTIME time to 1/100ths of a second.
+On Sat, 18 Mar 2023 22:14:39 +0800, Jianhua Lu wrote:
+> There are 8 cs35l41 speaker amplifier connected to TDM
+> in my Xiaomi Mi Pad 5 Pro tablet. In this case, it's necessary
+> to set 12288000 (48000 * 32 * 8) clk freq for it.
 > 
-> A simple program that queries clock_getres() on system clocks gives this
-> result:
+> rate=48000, slot_width=32, slots=8.
 > 
-> clock_res [CLOCK_REALTIME] = 0.000000001s
-> clock_res [CLOCK_REALTIME_COARSE] = 0.004000000s
-> clock_res [CLOCK_MONOTONIC] = 0.000000001s
-> clock_res [CLOCK_MONOTONIC_COARSE] = 0.004000000s
-> clock_res [CLOCK_MONOTONIC_RAW] = 0.000000001s
-> clock_res [CLOCK_BOOTTIME] = 0.000000001s
-> clock_res [CLOCK_PROCESS_CPUTIME_ID] = 0.000000001s
-> clock_res [CLOCK_THREAD_CPUTIME_ID] = 0.000000001s
 > 
-> A number of programs may depend i.e. on CLOCK_REALTIME or CLOCK_BOOTIME to give
-> different result each nanosecond.
-> 
-> I came across this when generating nonces for HMACs according to recommendations
-> from RFC 4086 "Randomness Requirements for Security".
-> 
-> If the value of CLOCK_BOOTTIME or CLOCK_REALTIME is incremented not in what
-> clock_getres() gives, but at best in 1/100th of second instead, that would seriously
-> weaken our security (for as you know, in many cryptographic uses nonces need not
-> be random, but MUST NOT ever repeat nor go backwards).
-> 
-> Could we modify the test for this assumption, or is the assumption wrong?
-> 
-> Here the test for CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID
-> increasing monotonically with guaranteed increased value of nanoseconds
-> would also seem good.
-> 
-> Maybe this is already covered in another test case, but it seems that all
-> clocks should be guaranteed to be monotonically increasing, and increased
-> at least by one nanosecond with each syscall, or many algorithms would break.
-> 
-> In other words, CLOCK_BOOTTIME should be tested to increase monotonically in
-> the resolution given by clock_getres (CLOCK_BOOTTIME, &tv_res), not in 1/100ths
-> of second (IMHO).
+> [...]
 
-Maybe but verifying a clock against its own resolution is another testcase. Here the
-point is to verify that CLOCK_BOOTTIME is monotonic against /proc/uptime, and
-since /proc/uptime has an 1/100 second resolution, rounding clock_gettime(CLOCK_BOOTTIME)
-result down to that is the best we can do.
+Applied to
 
-Thanks.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: cs35l41: Add 12288000 clk freq to cs35l41_fs_mon clk config
+      commit: 00a7ef3242f42c38c9ffdf14ab2d729fd9754391
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
