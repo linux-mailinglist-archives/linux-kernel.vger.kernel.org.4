@@ -2,232 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346A86C2C62
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5CC6C2C6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbjCUI3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S230193AbjCUIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjCUI2r (ORCPT
+        with ESMTP id S230273AbjCUIaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:28:47 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359DA3C3C;
-        Tue, 21 Mar 2023 01:28:45 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L8Sa7j069742;
-        Tue, 21 Mar 2023 03:28:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679387316;
-        bh=fPWWg7+iwrb/0eu92g15O3qnylPqBBWBHeXdc+SXMcE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=bqMKMxfUFoGAIGBQ+Z7TzumoCEOXLoyaeY9UlM0uumphhe1/cWRmkuDwPw3aZWRC0
-         DShIj7UedA8KMQ1ZNObcOqytqXh3bxsylO41TxyQBVAg9g7SS2eBPAtRO2XPtET4Ka
-         qJgw9wpjp+33+H17gcITjBFQMcKjXEM/JZczHkm8=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L8SapN045180
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 03:28:36 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 03:28:36 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 03:28:35 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L8SZ9i008172;
-        Tue, 21 Mar 2023 03:28:35 -0500
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-keerthy@ti.com>, <u-kumar1@ti.com>, <j-luthra@ti.com>,
-        <vaishnav.a@ti.com>
-Subject: [PATCH v3 4/4] arm64: dts: ti: k3-j784s4: Add MCSPI nodes
-Date:   Tue, 21 Mar 2023 13:58:27 +0530
-Message-ID: <20230321082827.14274-5-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230321082827.14274-1-vaishnav.a@ti.com>
-References: <20230321082827.14274-1-vaishnav.a@ti.com>
+        Tue, 21 Mar 2023 04:30:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5AA6A73
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679387343;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VdAkEc4+Jc17UFo+IFspyWLrKMsHzFG0fne7hcDGYj8=;
+        b=Ci6ImXke8kXLFchYBEsDDzUT0PzH3Cqy5S3oLhkQZzD0bKXDsvgb2KTcMEpkyUioptUgOU
+        qjDd0kTo+O9nvJXREhH3lGD2DsRtzOgYbWOYzcRYNqf17Wcct7b38GkNWVBhRkpPYTjwSi
+        mVze4YVwl07YB68jxX91Ms7iT10mCcE=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-596-VC_oQWmGPH28BqYAUXaZIg-1; Tue, 21 Mar 2023 04:29:02 -0400
+X-MC-Unique: VC_oQWmGPH28BqYAUXaZIg-1
+Received: by mail-qk1-f200.google.com with SMTP id b34-20020a05620a272200b007460c05a463so6640527qkp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:29:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679387342;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VdAkEc4+Jc17UFo+IFspyWLrKMsHzFG0fne7hcDGYj8=;
+        b=etbdkiA13NSEbb6E0VkDmhvIOAfUIapHCyXXr9hSOSvCL1RFcoejmvfK0qcwFqFcx7
+         ELz+KuwKeHGfNlZlGZP5jwK7zobeQgf1F4QySoTf44zE452L2KuYSNQkuXNtDM+QVvzv
+         FaueY6itqvvkaPZxs8yVj7ZBpNCOuim0s1wnFhyMD3IGnLmqbupm9NhDZjSi4NHPmBzf
+         Z41ZveYPa1dLJuC04x5RIBXrHXjL50io+N3Tv4gCZD0/RDbkj83LHHbs9bxyMzfp3StF
+         RdXI6vyCFeRb5L5w3ZvYzvf1IeAOO1MY1slwwsC+Fyytqxp+XM7/r3M18q3NedTx4nHa
+         wegQ==
+X-Gm-Message-State: AO0yUKU0sMyUDelHOCMg7hdmD8C948TfG4OJQb3A6JCfv37L2utPtndw
+        4SJCPWABxZSPhBHtGjbzSmuhPzIDgKnbIfVs2BN/pSp75wKKCSdqhG/ZVQoFbhW6t2+cu01lnxt
+        D6olBZteKhi5Ki/HOC6cLOYN/
+X-Received: by 2002:a05:622a:1051:b0:3d4:eb79:744f with SMTP id f17-20020a05622a105100b003d4eb79744fmr3461681qte.24.1679387342094;
+        Tue, 21 Mar 2023 01:29:02 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8+9mH/ASsttF6m8QpFD8AJ5PwroH0B+Mwvj5O0naMIvFjj0iJ1GdQ1UqCQuemzR8tKily5qQ==
+X-Received: by 2002:a05:622a:1051:b0:3d4:eb79:744f with SMTP id f17-20020a05622a105100b003d4eb79744fmr3461667qte.24.1679387341779;
+        Tue, 21 Mar 2023 01:29:01 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id i19-20020ac87653000000b003b9a73cd120sm279816qtr.17.2023.03.21.01.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 01:29:01 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 09:28:54 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v2] virtio/vsock: allocate multiple skbuffs on tx
+Message-ID: <20230321082854.jluiqjyc4n5k2vza@sgarzare-redhat>
+References: <ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru>
+ <20230320142959.2wwf474fiyp3ex5z@sgarzare-redhat>
+ <2be688af-89a6-d903-017b-dafee3e48c33@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2be688af-89a6-d903-017b-dafee3e48c33@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J784S4 has 8 MCSPI instances in the main domain and 3 instances
-in the MCU domain. Add the DT nodes for all the 11 instances and
-keep them disabled. MAIN_MCSPI4 is connected as a slave to MCU_MCSPI2
-by default at power-up, MAIN_MCSPI4 and MCU_MCSPI2 are not pinned out
-externally.
+On Mon, Mar 20, 2023 at 09:02:19PM +0300, Arseniy Krasnov wrote:
+>
+>
+>On 20.03.2023 17:29, Stefano Garzarella wrote:
+>> On Sun, Mar 19, 2023 at 09:46:10PM +0300, Arseniy Krasnov wrote:
+>>> This adds small optimization for tx path: instead of allocating single
+>>> skbuff on every call to transport, allocate multiple skbuff's until
+>>> credit space allows, thus trying to send as much as possible data without
+>>> return to af_vsock.c.
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> Link to v1:
+>>> https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
+>>>
+>>> Changelog:
+>>> v1 -> v2:
+>>> - If sent something, return number of bytes sent (even in
+>>>   case of error). Return error only if failed to sent first
+>>>   skbuff.
+>>>
+>>> net/vmw_vsock/virtio_transport_common.c | 53 ++++++++++++++++++-------
+>>> 1 file changed, 39 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>>> index 6564192e7f20..3fdf1433ec28 100644
+>>> --- a/net/vmw_vsock/virtio_transport_common.c
+>>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>>> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>>     const struct virtio_transport *t_ops;
+>>>     struct virtio_vsock_sock *vvs;
+>>>     u32 pkt_len = info->pkt_len;
+>>> -    struct sk_buff *skb;
+>>> +    u32 rest_len;
+>>> +    int ret;
+>>>
+>>>     info->type = virtio_transport_get_type(sk_vsock(vsk));
+>>>
+>>> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>>
+>>>     vvs = vsk->trans;
+>>>
+>>> -    /* we can send less than pkt_len bytes */
+>>> -    if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+>>> -        pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
+>>> -
+>>>     /* virtio_transport_get_credit might return less than pkt_len credit */
+>>>     pkt_len = virtio_transport_get_credit(vvs, pkt_len);
+>>>
+>>> @@ -227,17 +224,45 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>>     if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
+>>>         return pkt_len;
+>>>
+>>> -    skb = virtio_transport_alloc_skb(info, pkt_len,
+>>> -                     src_cid, src_port,
+>>> -                     dst_cid, dst_port);
+>>> -    if (!skb) {
+>>> -        virtio_transport_put_credit(vvs, pkt_len);
+>>> -        return -ENOMEM;
+>>> -    }
+>>> +    ret = 0;
+>>> +    rest_len = pkt_len;
+>>> +
+>>> +    do {
+>>> +        struct sk_buff *skb;
+>>> +        size_t skb_len;
+>>> +
+>>> +        skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
+>>> +
+>>> +        skb = virtio_transport_alloc_skb(info, skb_len,
+>>> +                         src_cid, src_port,
+>>> +                         dst_cid, dst_port);
+>>> +        if (!skb) {
+>>> +            ret = -ENOMEM;
+>>> +            break;
+>>> +        }
+>>> +
+>>> +        virtio_transport_inc_tx_pkt(vvs, skb);
+>>> +
+>>> +        ret = t_ops->send_pkt(skb);
+>>> +
+>>> +        if (ret < 0)
+>>> +            break;
+>>>
+>>> -    virtio_transport_inc_tx_pkt(vvs, skb);
+>>> +        rest_len -= skb_len;
+>>
+>> t_ops->send_pkt() is returning the number of bytes sent. Current
+>> implementations always return `skb_len`, so there should be no problem,
+>> but it would be better to put a comment here, or we should handle the
+>> case where ret != skb_len to avoid future issues.
+>
+>Hello, thanks for review!
+>
+>I see. I think i'll handle such partial sends (ret != skb_len) as error, as
+>it is the only thing to do - we remove 'skb_len' from user's buffer, but
+>'send_pkt()' returns another value, so it will be strange for me to continue
+>this tx loop as everything is ok. Something like this:
+>+
+>+ if (ret < 0)
+>+    break;
+>+
+>+ if (ret != skb_len) {
+>+    ret = -EFAULT;//or may be -EIO
+>+    break;
+>+ }
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
-Reviewed-by: Keerthy <j-keerthy@ti.com>
----
+Good for me.
 
-V2->V3:
- * Add Keerthy's Reviewed-by.
+>
+>>
+>>> +    } while (rest_len);
+>>>
+>>> -    return t_ops->send_pkt(skb);
+>>> +    /* Don't call this function with zero as argument:
+>>> +     * it tries to acquire spinlock and such argument
+>>> +     * makes this call useless.
+>>
+>> Good point, can we do the same also for virtio_transport_get_credit()?
+>> (Maybe in a separate patch)
+>>
+>> I'm thinking if may be better to do it directly inside the functions,
+>> but I don't have a strong opinion on that since we only call them here.
+>>
+>
+>I think in this patch i can call 'virtio_transport_put_credit()' without if, but
+>i'll prepare separate patch which adds zero argument check to this function.
 
-V1->V2: 
-  * Combine main, mcu domain, MCSPI node addition changes
-  to single commit.
+Yep, I agree.
 
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 88 +++++++++++++++++++
- .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 33 +++++++
- 2 files changed, 121 insertions(+)
+>As i see, the only function suitable for such 'if' condition is
+>'virtio_transport_put_credit()'.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-index 80a1b08c51a8..432592ef3bc4 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-@@ -1005,4 +1005,92 @@
- 		bosch,mram-cfg = <0x00 128 64 64 64 64 32 32>;
- 		status = "disabled";
- 	};
-+
-+	main_spi0: spi@2100000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02100000 0x00 0x400>;
-+		interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 376 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 376 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi1: spi@2110000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02110000 0x00 0x400>;
-+		interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 377 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 377 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi2: spi@2120000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02120000 0x00 0x400>;
-+		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 378 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 378 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi3: spi@2130000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02130000 0x00 0x400>;
-+		interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 379 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 379 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi4: spi@2140000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02140000 0x00 0x400>;
-+		interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 380 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 380 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi5: spi@2150000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02150000 0x00 0x400>;
-+		interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 381 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 381 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi6: spi@2160000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02160000 0x00 0x400>;
-+		interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 382 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 382 1>;
-+		status = "disabled";
-+	};
-+
-+	main_spi7: spi@2170000 {
-+		compatible = "ti,am654-mcspi","ti,omap4-mcspi";
-+		reg = <0x00 0x02170000 0x00 0x400>;
-+		interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 383 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 383 1>;
-+		status = "disabled";
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-index 64bd3dee14aa..f04fcb614cbe 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-@@ -204,6 +204,39 @@
- 		status = "disabled";
- 	};
- 
-+	mcu_spi0: spi@40300000 {
-+		compatible = "ti,am654-mcspi", "ti,omap4-mcspi";
-+		reg = <0x00 0x040300000 0x00 0x400>;
-+		interrupts = <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 384 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 384 0>;
-+		status = "disabled";
-+	};
-+
-+	mcu_spi1: spi@40310000 {
-+		compatible = "ti,am654-mcspi", "ti,omap4-mcspi";
-+		reg = <0x00 0x040310000 0x00 0x400>;
-+		interrupts = <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 385 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 385 0>;
-+		status = "disabled";
-+	};
-+
-+	mcu_spi2: spi@40320000 {
-+		compatible = "ti,am654-mcspi", "ti,omap4-mcspi";
-+		reg = <0x00 0x040320000 0x00 0x400>;
-+		interrupts = <GIC_SPI 850 IRQ_TYPE_LEVEL_HIGH>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		power-domains = <&k3_pds 386 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 386 0>;
-+		status = "disabled";
-+	};
-+
- 	mcu_navss: bus@28380000{
- 		compatible = "simple-bus";
- 		#address-cells = <2>;
--- 
-2.17.1
+Why not even for virtio_transport_get_credit() ?
+
+When we send packets without payload (e.g. VIRTIO_VSOCK_OP_REQUEST,
+VIRTIO_VSOCK_OP_SHUTDOWN) we call virtio_transport_get_credit()
+with `credit` parameter equal to 0, then we acquire the spinlock but
+in the end we do nothing.
+
+>Anyway - for future use this check won't be bad.
+
+Yep, these are minor improvements ;-)
+
+Thanks,
+Stefano
 
