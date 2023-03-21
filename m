@@ -2,157 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A856C35B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06056C35B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCUPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S231169AbjCUPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCUPbw (ORCPT
+        with ESMTP id S230241AbjCUPc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:31:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DBB1B32F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679412662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q72wB1AnB+EZXK6jJvM3m9PVX7bBBgcDpGR6RAoFAUA=;
-        b=Y3mxkH/9+YRr4t3t5n5ANXpZMYGPRVf4zBqv+mrM1Or+v2BnopdCIbaEz0IwWcTuO4tddY
-        UcU7etY39NIpUDPLHNUrbjeBSEot0memLnPq6P+Vac+gF1Z4oBwdliNUXmubcICp0fp2aD
-        9c/VbXf8+W7WAEQet3/L/D8x9a9APq0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-NtOcONy6NzGPM3RiV2GI8g-1; Tue, 21 Mar 2023 11:31:01 -0400
-X-MC-Unique: NtOcONy6NzGPM3RiV2GI8g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A34685531E;
-        Tue, 21 Mar 2023 15:31:00 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.206])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 765751410F1C;
-        Tue, 21 Mar 2023 15:30:58 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Viktor Prutyanov <viktor@daynix.com>
-Cc:     mst@redhat.com, jasowang@redhat.com, pasic@linux.ibm.com,
-        farman@linux.ibm.com, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com
-Subject: Re: [PATCH v3] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-In-Reply-To: <CAPv0NP6Ep4-B7cMc285E3d3vYjgwO7O1pq5sG3OYYAoZd3EAYQ@mail.gmail.com>
-Organization: Red Hat GmbH
-References: <20230321134410.2097163-1-viktor@daynix.com>
- <87h6uem9qc.fsf@redhat.com>
- <CAPv0NP6Ep4-B7cMc285E3d3vYjgwO7O1pq5sG3OYYAoZd3EAYQ@mail.gmail.com>
-User-Agent: Notmuch/0.37 (https://notmuchmail.org)
-Date:   Tue, 21 Mar 2023 16:30:57 +0100
-Message-ID: <87bkkmm89a.fsf@redhat.com>
+        Tue, 21 Mar 2023 11:32:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991462711
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679412775; x=1710948775;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=BLmGtZvHGRmtWQIJgM06aKm60El5aTJHv0EDF7NbiFU=;
+  b=PKTh5sQNG95vn3f5igyp1w3VX9+/0bFDkFrMvz+kB7aMLhiQSj82sUMa
+   ZshBjZClQMJXwRhnmXEC6Br5xMTEsXMpkCio1Le/r2mc1qHUL9lOIBxcq
+   0+QvcQbw7FjQW7QFJCqmyyYOIw7xGrcKiZ1Mfd8LD07KZxkB+UYHGl20V
+   H5N6QzHV4kA2x6uxPbNDim72JIwf/jwvloFT0w4dJCh2roZf3wZZNZM1P
+   33XEEHEj5J2OXBUy2nIponcNZ6tk9OwIFNzEAIr/AuZzPVeCxkqDRVyU0
+   Xz9/UyJgWl9WoaMNWrYpY6yUoM/1Gxug0Kn9SUKL27ivJ4fc7IeW9ougN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="319363267"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="319363267"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:32:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="805419596"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="805419596"
+Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:32:46 -0700
+Date:   Tue, 21 Mar 2023 17:32:44 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     James Morse <james.morse@arm.com>
+cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+Subject: Re: [PATCH v3 18/19] x86/resctrl: Add cpu offline callback for
+ resctrl work
+In-Reply-To: <20230320172620.18254-19-james.morse@arm.com>
+Message-ID: <988232ec-988f-5d12-eacb-8095d8c01eb6@linux.intel.com>
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-19-james.morse@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21 2023, Viktor Prutyanov <viktor@daynix.com> wrote:
+On Mon, 20 Mar 2023, James Morse wrote:
 
-> On Tue, Mar 21, 2023 at 5:59=E2=80=AFPM Cornelia Huck <cohuck@redhat.com>=
- wrote:
->>
->> On Tue, Mar 21 2023, Viktor Prutyanov <viktor@daynix.com> wrote:
->>
->> > According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
->> > indicates that the driver passes extra data along with the queue
->> > notifications.
->> >
->> > In a split queue case, the extra data is 16-bit available index. In a
->> > packed queue case, the extra data is 1-bit wrap counter and 15-bit
->> > available index.
->> >
->> > Add support for this feature for MMIO, PCI and channel I/O transports.
->> >
->> > Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
->> > ---
->> >  v3: support feature in virtio_ccw, remove VM_NOTIFY, use avail_idx_sh=
-adow,
->> >     remove byte swap, rename to vring_notification_data
->> >  v2: reject the feature in virtio_ccw, replace __le32 with u32
->> >
->> >  drivers/s390/virtio/virtio_ccw.c   |  4 +++-
->> >  drivers/virtio/virtio_mmio.c       | 14 +++++++++++++-
->> >  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
->> >  drivers/virtio/virtio_pci_common.h |  4 ++++
->> >  drivers/virtio/virtio_pci_legacy.c |  2 +-
->> >  drivers/virtio/virtio_pci_modern.c |  2 +-
->> >  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
->> >  include/linux/virtio_ring.h        |  2 ++
->> >  include/uapi/linux/virtio_config.h |  6 ++++++
->> >  9 files changed, 57 insertions(+), 4 deletions(-)
->> >
->> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/vi=
-rtio_ccw.c
->> > index 954fc31b4bc7..c33172c5b8d5 100644
->> > --- a/drivers/s390/virtio/virtio_ccw.c
->> > +++ b/drivers/s390/virtio/virtio_ccw.c
->> > @@ -396,13 +396,15 @@ static bool virtio_ccw_kvm_notify(struct virtque=
-ue *vq)
->> >       struct virtio_ccw_vq_info *info =3D vq->priv;
->> >       struct virtio_ccw_device *vcdev;
->> >       struct subchannel_id schid;
->> > +     u32 data =3D __virtio_test_bit(vq->vdev, VIRTIO_F_NOTIFICATION_D=
-ATA) ?
->> > +                     vring_notification_data(vq) : vq->index;
->> >
->> >       vcdev =3D to_vc_device(info->vq->vdev);
->> >       ccw_device_get_schid(vcdev->cdev, &schid);
->> >       BUILD_BUG_ON(sizeof(struct subchannel_id) !=3D sizeof(unsigned i=
-nt));
->> >       info->cookie =3D kvm_hypercall3(KVM_S390_VIRTIO_CCW_NOTIFY,
->> >                                     *((unsigned int *)&schid),
->> > -                                   vq->index, info->cookie);
->> > +                                   data, info->cookie);
->> >       if (info->cookie < 0)
->> >               return false;
->> >       return true;
->> > diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio=
-.c
->> > index 3ff746e3f24a..7c16e622c33d 100644
->> > --- a/drivers/virtio/virtio_mmio.c
->> > +++ b/drivers/virtio/virtio_mmio.c
->> > @@ -285,6 +285,16 @@ static bool vm_notify(struct virtqueue *vq)
->> >       return true;
->> >  }
->> >
->> > +static bool vm_notify_with_data(struct virtqueue *vq)
->> > +{
->> > +     struct virtio_mmio_device *vm_dev =3D to_virtio_mmio_device(vq->=
-vdev);
->> > +     u32 data =3D vring_notification_data(vq);
->> > +
->> > +     writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
->>
->> Can't you simply use the same method as for ccw, i.e. use one callback
->> function that simply writes one value or the other?
->
-> The idea is to eliminate the conditional branch induced by feature bit
-> testing from the notification function. Probably, this can be done in
-> the same way in ccw.
+> The resctrl architecture specific code may need to free a domain when
+> a CPU goes offline, it also needs to reset the CPUs PQR_ASSOC register.
+> The resctrl filesystem code needs to move the overflow and limbo work
+> to run on a different CPU, and clear this CPU from the cpu_mask of
+> control and monitor groups.
+> 
+> Currently this is all done in core.c and called from
+> resctrl_offline_cpu(), making the split between architecture and
+> filesystem code unclear.
+> 
+> Move the filesystem work into a filesystem helper called
+> resctrl_offline_cpu(), and rename the one in core.c
+> resctrl_arch_offline_cpu().
+> 
+> The rdtgroup_mutex is unlocked and locked again in the call in
+> preparation for changing the locking rules for the architecture
+> code.
+> 
+> resctrl_offline_cpu() is called before any of the resource/domains
+> are updated, and makes use of the exclude_cpu feature that was
+> previously added.
+> 
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  arch/x86/kernel/cpu/resctrl/core.c     | 41 ++++----------------------
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c | 39 ++++++++++++++++++++++++
+>  include/linux/resctrl.h                |  1 +
+>  3 files changed, 45 insertions(+), 36 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> index aafe4b74587c..4e5fc89dab6d 100644
+> --- a/arch/x86/kernel/cpu/resctrl/core.c
+> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> @@ -578,22 +578,6 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
+>  
+>  		return;
+>  	}
+> -
+> -	if (r == &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl) {
+> -		if (is_mbm_enabled() && cpu == d->mbm_work_cpu) {
+> -			cancel_delayed_work(&d->mbm_over);
+> -			/*
+> -			 * exclude_cpu=-1 as this CPU has already been removed
+> -			 * by cpumask_clear_cpu()d
+> -			 */
 
-Hm, how noticable is that branch? IOW, is it worth making the code less
-readable for this?
+This was added in 17/19 and now removed (not moved) in 18/19. Please avoid 
+such back-and-forth churn.
 
-(In any case, all transports probably should use the same method.)
+-- 
+ i.
+
+
+> -			mbm_setup_overflow_handler(d, 0, RESCTRL_PICK_ANY_CPU);
+> -		}
+> -		if (is_llc_occupancy_enabled() && cpu == d->cqm_work_cpu &&
+> -		    has_busy_rmid(r, d)) {
+> -			cancel_delayed_work(&d->cqm_limbo);
+> -			cqm_setup_limbo_handler(d, 0, RESCTRL_PICK_ANY_CPU);
+> -		}
+> -	}
+>  }
+>  
+>  static void clear_closid_rmid(int cpu)
+> @@ -623,31 +607,15 @@ static int resctrl_arch_online_cpu(unsigned int cpu)
+>  	return err;
+>  }
+>  
+> -static void clear_childcpus(struct rdtgroup *r, unsigned int cpu)
+> +static int resctrl_arch_offline_cpu(unsigned int cpu)
+>  {
+> -	struct rdtgroup *cr;
+> -
+> -	list_for_each_entry(cr, &r->mon.crdtgrp_list, mon.crdtgrp_list) {
+> -		if (cpumask_test_and_clear_cpu(cpu, &cr->cpu_mask)) {
+> -			break;
+> -		}
+> -	}
+> -}
+> -
+> -static int resctrl_offline_cpu(unsigned int cpu)
+> -{
+> -	struct rdtgroup *rdtgrp;
+>  	struct rdt_resource *r;
+>  
+>  	mutex_lock(&rdtgroup_mutex);
+> +	resctrl_offline_cpu(cpu);
+> +
+>  	for_each_capable_rdt_resource(r)
+>  		domain_remove_cpu(cpu, r);
+> -	list_for_each_entry(rdtgrp, &rdt_all_groups, rdtgroup_list) {
+> -		if (cpumask_test_and_clear_cpu(cpu, &rdtgrp->cpu_mask)) {
+> -			clear_childcpus(rdtgrp, cpu);
+> -			break;
+> -		}
+> -	}
+>  	clear_closid_rmid(cpu);
+>  	mutex_unlock(&rdtgroup_mutex);
+>  
+> @@ -970,7 +938,8 @@ static int __init resctrl_late_init(void)
+>  
+>  	state = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+>  				  "x86/resctrl/cat:online:",
+> -				  resctrl_arch_online_cpu, resctrl_offline_cpu);
+> +				  resctrl_arch_online_cpu,
+> +				  resctrl_arch_offline_cpu);
+>  	if (state < 0)
+>  		return state;
+>  
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> index bf206bdb21ee..c27ec56c6c60 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -3710,6 +3710,45 @@ int resctrl_online_cpu(unsigned int cpu)
+>  	return 0;
+>  }
+>  
+> +static void clear_childcpus(struct rdtgroup *r, unsigned int cpu)
+> +{
+> +	struct rdtgroup *cr;
+> +
+> +	list_for_each_entry(cr, &r->mon.crdtgrp_list, mon.crdtgrp_list) {
+> +		if (cpumask_test_and_clear_cpu(cpu, &cr->cpu_mask))
+> +			break;
+> +	}
+> +}
+> +
+> +void resctrl_offline_cpu(unsigned int cpu)
+> +{
+> +	struct rdt_domain *d;
+> +	struct rdtgroup *rdtgrp;
+> +	struct rdt_resource *l3 = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+> +
+> +	lockdep_assert_held(&rdtgroup_mutex);
+> +
+> +	list_for_each_entry(rdtgrp, &rdt_all_groups, rdtgroup_list) {
+> +		if (cpumask_test_and_clear_cpu(cpu, &rdtgrp->cpu_mask)) {
+> +			clear_childcpus(rdtgrp, cpu);
+> +			break;
+> +		}
+> +	}
+> +
+> +	d = get_domain_from_cpu(cpu, l3);
+> +	if (d) {
+> +		if (is_mbm_enabled() && cpu == d->mbm_work_cpu) {
+> +			cancel_delayed_work(&d->mbm_over);
+> +			mbm_setup_overflow_handler(d, 0, cpu);
+> +		}
+> +		if (is_llc_occupancy_enabled() && cpu == d->cqm_work_cpu &&
+> +		    has_busy_rmid(l3, d)) {
+> +			cancel_delayed_work(&d->cqm_limbo);
+> +			cqm_setup_limbo_handler(d, 0, cpu);
+> +		}
+> +	}
+> +}
+> +
+>  /*
+>   * rdtgroup_init - rdtgroup initialization
+>   *
+> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+> index 3ea7d618f33f..f053527aaa5b 100644
+> --- a/include/linux/resctrl.h
+> +++ b/include/linux/resctrl.h
+> @@ -226,6 +226,7 @@ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
+>  int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
+>  void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
+>  int resctrl_online_cpu(unsigned int cpu);
+> +void resctrl_offline_cpu(unsigned int cpu);
+>  
+>  /**
+>   * resctrl_arch_rmid_read() - Read the eventid counter corresponding to rmid
+> 
 
