@@ -2,154 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9706C2D0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DAC6C2D1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjCUIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S231300AbjCUIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjCUIsv (ORCPT
+        with ESMTP id S231226AbjCUIzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:48:51 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2047.outbound.protection.outlook.com [40.107.7.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1AA6EBE;
-        Tue, 21 Mar 2023 01:48:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jbcPWaJMnJxnV4433z08MogWLDQUwC2hHmWw9qdntRAK+yEPzDujh7n5Me+9ObpRm6AH/g2DCfyNr07zcAHVGuYT1yEKgyenpHfM/1J/tmYzvMHQdgIkAJAG/j0ZyODR4/2aq9kJ9QiEhgJ1lRNRuG/EUnsyt4tv09BgtY85juTyYNPlqZH8W9nE9iwsaOd+Pup7egCTBuvKUu3HW8tUEZnGbEKNYfRsB709eMFzi2bpRJpMun9r54ZThjBia85FVR+7r8KsSwbw2W7oZq3FKSh3T/SlSPGdfLD96kCZK7/2hz8iFsGdEdE5Sz8kV3YyC8s1jM8tXyfKnSl6GyQMGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5oIMJoaa1fZ7Qe9o//yuFaWYDpQrA/J7Hg5mCW8lIEE=;
- b=ESYtbPWD6a4uBS7G7fW+y27AhacEJfG/hT3rg+J3s9gOzkQDM7LD+XJKgVr4fpMScFALW0vqkIAieGSR5+Vy4TdhFwU4s/u4T3e2S02BSktjjvrBusSLQx6/AQbYwcp1VMm9KzH2MGonHKZzJ9rEqmfw7idM46KxqKdoM8lrr2BDIyOaW8r0AUeIeekOdXGd+uqj+3zffk20Pey+vDGH8LZI5HAbnBswSegkEEi6e/KPc6kfbGOmyPrQNkpTatwAl2xgrg9WezLNhrNfF29NgdSAoTDg3B8mrS+uhggLsulvFBVRP8tOu+cyvOj/mee44p/LaBQZueRiZ3tRXf1e7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5oIMJoaa1fZ7Qe9o//yuFaWYDpQrA/J7Hg5mCW8lIEE=;
- b=DAAB1lhKUgDr8nPKK5D7ikScRbCjRWDVUDfW9AKBUPzZR+BWfQzWrgE2BU365vKp/oxj7EPNzkmueIOUASCqYwyjrTbsXxM1y8/t0YR8/q6Wp6rDNJGzaLNeM9mpDRjbV7+rKXqyY4LqGBk8m43+1klFjjzp1lxFWkQj2DBgLkI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS1PR04MB9456.eurprd04.prod.outlook.com (2603:10a6:20b:4d7::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 08:48:03 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%7]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
- 08:48:02 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V6 10/10] ARM64: dts: imx7ulp: update usb compatible
-Date:   Tue, 21 Mar 2023 16:52:13 +0800
-Message-Id: <20230321085213.1624216-11-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230321085213.1624216-1-peng.fan@oss.nxp.com>
-References: <20230321085213.1624216-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0040.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::9)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+        Tue, 21 Mar 2023 04:55:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECDE136D9;
+        Tue, 21 Mar 2023 01:54:23 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F74A6602FA0;
+        Tue, 21 Mar 2023 08:53:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679388781;
+        bh=m8krUlfEMzWvYG3Z7812/SraCrcFCYtiocAiyGHHk50=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=odF+CO0D/NjEfMrngDbx4lrjRMM8eYnCD5bRYAqzygx6g1eisJAG8QrJixU868bYP
+         Sg90JXu87V/cgunFX+wAmkj8LeVtXjofOrXwGOuOHWbmm6rANrgxomdVjIf6S+RI/I
+         4DQLVuPQi2yn5Vot4PNkUmi2a6nLhCAegprNr8FHvs9FyXlwFMXL2ruLg+ovwKmr1n
+         C8rjGtKm2MndGIqfbeeggEe+MRMpnY1UdHoQCMyYbLzPtDS2B8vrQBBW/O2JO+vH6a
+         zhsHcymVgn5LzMsBjvqF5eRPg7uaHgg5Sx63Aeidofs49TwH1C47/4RRPzjwRtXpEP
+         jCvOHRXVf77Aw==
+Message-ID: <287bb13f-5a4b-7769-7f3f-a94ee7ca645d@collabora.com>
+Date:   Tue, 21 Mar 2023 09:52:58 +0100
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS1PR04MB9456:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac182e68-e18a-45c1-9638-08db29e8f917
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mepJ/CWRQcn31owTc0vd21bl3LiUgNLfdxWiFjTRleekAvM8ZBFq++VVEoNhLWNJrsHeFrouJbWIxzgXVqVAx1ej0ioP2VrlDLqGpyXu0kYTM00//vR2M33aQkQN9MBSaTr/NC/LwzbDb5Y53/1KCJqI6P4xLtPkfqyjkadE3aZeKNRp7qdXC1ReHAdEcf1rMoc2LtRdyC5G1LCC5GX3kKIdN+DgQ4jKhhQXyngIT58n0ffRVl1VaJF4WtfxE/frqSukHCCsqZ/5puLrj3JX+xhMoxq9fRl0TVLcfo1BobUcEK5oaNL3+DeEyxP/CDf338GKFGpZechJHoaoatoeBZAlvD8K1obcPfSowimi7Z031UQpKnouqjbq0Vi6pUoifyN9y2E5IcEOn+0MjEqShDWHI8xWkzM5t9p3cF6CWg3EIx2a8XVtPJ7ZwGtxKpYpXUNp0xEJ6BXEaw4+in2lvm7FNSY6a/sRYRuLbuHepg2ldTmPqJvgH4RIwiKiycim0Aw/nLMtkTR+ETcThA2gEqp4kc9KcRzF1IhrS9HIozOTbcNZwsyFmZdySYkzDuufJaM6QF8u64rgHAqB0o5GRHowBfppdIG9jFKfcUJ0m0vTaFNhK3BT7IDpvLx7G8Oa9J7zVxSOC0jOQ3DcuB3WTAaz0ASiU4D4F9tzkSFef3F/IbNbJn5DJZcwivwa1I81VbSvBKFehREFOJ7jmOyfcw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(136003)(39860400002)(396003)(376002)(451199018)(2616005)(6666004)(6486002)(186003)(6512007)(6506007)(26005)(1076003)(52116002)(38350700002)(38100700002)(478600001)(2906002)(86362001)(83380400001)(15650500001)(8676002)(316002)(4744005)(8936002)(4326008)(7416002)(5660300002)(41300700001)(66476007)(66946007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zTYwB5DyRSkkhPbEsSvf+5lFh2Pe++oMv4+4kmJU4obxHk5/KRitVfeAm8mj?=
- =?us-ascii?Q?/Bo+WmgXFFVT3WkRv3kjP1Q8DI+6Yjgc/ReT55eL9rvnJXeii39PgYqPm+nJ?=
- =?us-ascii?Q?YGGqzFdvXDs9G0iLx9HrI8BXP9wF9VhYYZ36TG4CIJbQMSdmasXgE7tX4Qkg?=
- =?us-ascii?Q?EGB3klsOEkPCo4NTupI04cHEghTikzrLDcHtDjb+vpT2CZkY7a1uaKQiOpQu?=
- =?us-ascii?Q?Majf530C9U1GioN3bWrdoSKHTWRpap4KaKdZvGPsHC0rV4IAUOlgiSUK9LXX?=
- =?us-ascii?Q?gHGGPgZKelbX9jcaSHhr/Vig+9rAQm1RBwGwuP56O8o5xs2aNqAz7dHsDJDB?=
- =?us-ascii?Q?S7Y/I3w6pbtQwgqrDZ50rkiuuhzBL6Gpexiq8MyQZGDm9RbEvyWNuIzWqYQ+?=
- =?us-ascii?Q?hXGu36JHndRhdSwE5ZcWekjxbugnvvrlsomTexBEc361+QDDLiKQCgFwR47f?=
- =?us-ascii?Q?1QuU0K2c1iPZRBTt42ikC4Ts3MGxx8R8xLkvq0aQsT1Lz0rIPdwVzn7k0L0f?=
- =?us-ascii?Q?iwjo9SxWbZC1NMwCpb+ibR7mjE1pi1eZlxhvd4fdQkGwNMEKxQQh38BtU08T?=
- =?us-ascii?Q?an14jB3LIA00Wc8XRYR/S3BPE40tVifW2CRRPU9a69LdjPbjxtYtv4XVJOQC?=
- =?us-ascii?Q?BVdiEAI6aqYwITfiFWdSl4/x1f1ohlQuZ41xrMyu2VBv8PX8ZBjRFvZc4LGl?=
- =?us-ascii?Q?M0URBC89xeZO1yZz3UMl+IJao4/GEsfq52kjmg6PLgqzKAKlAZvJ2MrvVNzi?=
- =?us-ascii?Q?9TpcX31LNu0j51iaQOM2/WS/+a5bUr4x5vL4OAUXfXcG2mNr+2PAxIVUemz0?=
- =?us-ascii?Q?oaIYIgmzOXin2znUd6socq1lZSxXW5m9PMHBqVKDC04GaDJJz7UnrPF5wOms?=
- =?us-ascii?Q?DbCRfopn4tYovsde/isbrR8ytNzbVSLAfPNJFtKC4Gdfg//HtgIlI/h7M4+s?=
- =?us-ascii?Q?LLGiiGfY+jlPSlosJuF5xtD/oACo22Jd4tzYC+1TUU3qiuqwpJDCo9ZsyVUu?=
- =?us-ascii?Q?iwh/mX0O9NHpWdp5OPGh4y92l4gaWvlN2PEPlpJBBTs3y70SERmDpyhqa7mK?=
- =?us-ascii?Q?+B97ByrPCT7M/zfSCVGUD2NbPoBnjbwcorpbtzQYgHxF0vui/VFycHRTTCx1?=
- =?us-ascii?Q?8/6FjzFJzA/RuvZGXSNdvln23UMTRhG/PZMGJAGG1611Q2K4BrCKN2ZjqUEn?=
- =?us-ascii?Q?AXzHPaHyJKpKxR3F08lhISkkXIMyjit/rjV6CfWH+lDkgUVVeXzguExKP4tG?=
- =?us-ascii?Q?KchTyNKzLOQicYab5dxcVZ4YOr2G5ndiyO92IxgARpv0lB3xypPGAm3kicVI?=
- =?us-ascii?Q?NVNmPiYa+BH5Dmpob+ka7aMvBgtzHa5Ijtek5opdmhQ4mafW1RgdX3OuwAjy?=
- =?us-ascii?Q?7/E+LtgpONy9AD0hsbQttKdrB7WYM7EPAJUYeA0LcGS2/Rvkgim4zJwnhxRB?=
- =?us-ascii?Q?A+dU6IUl5s+SkZpdxEmmbs9VJu7NR2/6ffH6l/H6Pp5X7zKhbTjW+enfWYBD?=
- =?us-ascii?Q?jP8UrqGttrCUScM/NWRyDvQYCUu96sAYRF2kX0wPZ25mijCP1u75/0gVK4XH?=
- =?us-ascii?Q?qRne+L5yeq46vIRtUZiIXAhD7t18p6USi6sTZ1fI?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac182e68-e18a-45c1-9638-08db29e8f917
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 08:47:59.6449
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GP5ik2rtLIb8/TuctNuB8FJHVP+Gtm4HasPQs2xl2MS793+OnNO4jl7nUjGxo3JVVfD+efXJVi372+gqm79T9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9456
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v9 2/7] iommu/mediatek: Fix two IOMMU share pagetable
+ issue
+To:     =?UTF-8?B?WW9uZyBXdSAo5ZC05YuHKQ==?= <Yong.Wu@mediatek.com>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?SmlhbmppYW8gWmVuZyAo5pu+5YGl5aejKQ==?= 
+        <Jianjiao.Zeng@mediatek.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        =?UTF-8?B?Q2hlbmdjaSBYdSAo6K645om/6LWQKQ==?= 
+        <Chengci.Xu@mediatek.com>,
+        =?UTF-8?B?WUYgV2FuZyAo546L5LqR6aOeKQ==?= <YF.Wang@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        =?UTF-8?B?TWluZ3l1YW4gTWEgKOmprOm4o+i/nCk=?= 
+        <Mingyuan.Ma@mediatek.com>, "will@kernel.org" <will@kernel.org>
+References: <20230317085541.20447-1-yong.wu@mediatek.com>
+ <20230317085541.20447-3-yong.wu@mediatek.com>
+ <47cac7a6-c069-64a2-7979-b879b075058f@collabora.com>
+ <e724eb4b63901fd2ba9f7957d1a3cd6fdd234bf4.camel@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <e724eb4b63901fd2ba9f7957d1a3cd6fdd234bf4.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Il 21/03/23 07:50, Yong Wu (吴勇) ha scritto:
+> On Fri, 2023-03-17 at 10:34 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 17/03/23 09:55, Yong Wu ha scritto:
+>>> From: "Chengci.Xu" <chengci.xu@mediatek.com>
+>>>
+>>> Prepare for mt8188 to fix a two IOMMU HWs share pagetable issue.
+>>>
+>>> We have two MM IOMMU HWs in mt8188, one is VPP-IOMMU, another is
+>>> VDO-IOMMU.
+>>> The 2 MM IOMMU HWs share pagetable don't work in this case:
+>>>    a) VPP-IOMMU probe firstly.
+>>>    b) VDO-IOMMU probe.
+>>>    c) The master for VDO-IOMMU probe (means frstdata is vpp-iommu).
+>>>    d) The master in another domain probe. No matter it is vdo or
+>>> vpp.
+>>> Then it still create a new pagetable in step d). The problem is
+>>> "frstdata->bank[0]->m4u_dom" was not initialized. Then when d)
+>>> enter, it
+>>> still create a new one.
+>>>
+>>> In this patch, we create a new variable "share_dom" for this share
+>>> pgtable case, it should be helpful for readable. and put all the
+>>> share
+>>> pgtable logic in the mtk_iommu_domain_finalise.
+>>>
+>>> In mt8195, the master of VPP-IOMMU probes before than VDO-IOMMU
+>>> from its dtsi node sequence, we don't see this issue in it. Prepare
+>>> for
+>>> mt8188.
+>>>
+>>> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>
+>> I'm not sure whether this is *not* a fix... if a specific platform
+>> wasn't
+>> affected, this may still be a logic mistake... to be cautious, I
+>> would
+>> still add a Fixes tag to this one.
+> 
+> I think you are right. If we need add the Fixes tag, it should fix this
+> one: 645b87c190c9 ("iommu/mediatek: Fix 2 HW sharing pgtable issue").
+> 
+> Before I thought the code flow was changed a lot. I added the bank
+> structure and removed the mtk_iommu.h, I'm a bit afraid that this fix
+> patch can not be applied clean, then it will introduce confuse when
+> applying to the previous version for the maintainers.
+> 
+> Meanwhile, After mt8195, mt8186/mt6795/m8365/6795 were merged in
+> upstream. All of them don't have this sharing case, thus I thought this
+> fix it is not so necessary.
+> 
+> What's your opinion? and should I send this one separately if I add the
+> fixes tag?
+> 
 
-Per binding doc, update the compatible
+Well, it would be nicer to send it separately but, realistically, the
+described issue does *not* happen on the previous kernel releases for
+the supported SoCs... so it's not necessary to split this.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm/boot/dts/imx7ulp.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Add the Fixes tag and send this again inside of this series, that's
+going to be fine.
 
-diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
-index 7f7d2d5122fb..f91bf719d4e2 100644
---- a/arch/arm/boot/dts/imx7ulp.dtsi
-+++ b/arch/arm/boot/dts/imx7ulp.dtsi
-@@ -189,7 +189,7 @@ tpm5: tpm@40260000 {
- 		};
- 
- 		usbotg1: usb@40330000 {
--			compatible = "fsl,imx7ulp-usb", "fsl,imx6ul-usb";
-+			compatible = "fsl,imx7ulp-usb", "fsl,imx6ul-usb", "fsl,imx27-usb";
- 			reg = <0x40330000 0x200>;
- 			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&pcc2 IMX7ULP_CLK_USB0>;
-@@ -202,7 +202,8 @@ usbotg1: usb@40330000 {
- 		};
- 
- 		usbmisc1: usbmisc@40330200 {
--			compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc";
-+			compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc",
-+				     "fsl,imx6q-usbmisc";
- 			#index-cells = <1>;
- 			reg = <0x40330200 0x200>;
- 		};
--- 
-2.37.1
+Thanks!
+Angelo
 
