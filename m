@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA8C6C3C43
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFBA6C3C45
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjCUUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S230026AbjCUUyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjCUUxk (ORCPT
+        with ESMTP id S229816AbjCUUyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:53:40 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B3143924
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:53:39 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id y4so64902406edo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:53:39 -0700 (PDT)
+        Tue, 21 Mar 2023 16:54:40 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A51053D9C;
+        Tue, 21 Mar 2023 13:54:39 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id l27so6733513wrb.2;
+        Tue, 21 Mar 2023 13:54:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679432018;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8CVfLEQ96fgtEyGuwyUnqAP2WUVOUslh03bRQ3BEX7A=;
-        b=X+dQPoexHev9KjgL10xzyZa8lLljP521vOdDiIPbrDJXqLx023ULI1d5wvOSvzW5dG
-         lKrVdQPwUWxsmL3H2LpZniE39oi1IxA5k6WUfoS7BcCdQlKkp9W8nDN9FOKJl+58WptF
-         Y7GvoMMAcM2QZ7J8DzphsEZ79mp6dTUYegEJlfqdFTjUw47QC67aYORmGt+Jri/1G9vC
-         ebqPIP0t9MbUw0FFcQLur0WtvcTzj08V9vmmzMMN7AJMV4pbjPaIL9aAdDyazht6zeya
-         FlhN3IwD3vfVFAuiJvZs5ylk5xqrKI7+hOkLWahazNezdPWt+4GA/ZDx/gEAmmHcVfMv
-         zBsQ==
+        d=gmail.com; s=20210112; t=1679432078;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=36n+db1kX7z8fa60FDrINMxCjVwayNeaAfJ4998fhB0=;
+        b=lKekWqTEnnL9WUbfLF6H6trNCIZVnKpoynvj8BOFaOFif9U+k8BNOn32nJAcmuAw0H
+         mpipoVpLX16cSa4bmq8xfUuoVbuv3RzPUTkQPtGrVfif9+nnspnDj8dZoVItgxXN+rLs
+         9W7acderdn4iMA6Dp4izlt8belJXPdrexPiHxUlWVYL+ecJe5625kcdoMeFgNtZlNrXs
+         0yTi0d50npI72KPQAIwKaCBCgC0mwbr16XYFIa6Da2FD66g/gC34amQHguPdkz4zieUu
+         Uvdu4ZNAGAqTC+FJpZoPi7bt/evaoYATfdP/cpobMwwA0vjT35vIWSKi4p641rmvEp+i
+         /G3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679432018;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8CVfLEQ96fgtEyGuwyUnqAP2WUVOUslh03bRQ3BEX7A=;
-        b=j56yuDloVQZQxUEKNBs25WucFcQyfHagLRggdn0UViv1kL7obQIEYsoL4i5M/yTuIk
-         kVsbeWCIn4+MZM8rZfBUIKdVgRheMRaKla6NrLw12D2SmHpMp2Nv+X9NcuiaU2qftSvy
-         qdS8IbrgSz7p/NN26V5odLkj6OdPeIX+06nhGTWpHVKicC6qbFg2hBCuTnlUGxBTUJai
-         JbEhX10WH//4UpVUK93HTyXV+k9k9WGRmMo/fagvx4PSzs6xVXAUNQYnFgaqBI7kiJgy
-         uEyQOizt/BKPBU2fsDMKKYluSZofcRBrtRyxvd+Pff1sDdHhC/ugc+6pKWD3Db5bPV0t
-         +f8Q==
-X-Gm-Message-State: AO0yUKUbkxjvlEUyaz5+618WtuZPq6yRsP1Rk384P+GXAOCQSkALlDm4
-        JR5vHwV+RYpByFJbXGNagaSGbQ==
-X-Google-Smtp-Source: AK7set8buQSL7WJWvLOGJSlf5w169GupneinxCwEc4tmz07+4XkZBxidXr6kRDxDYk6EzYUBpK2bVg==
-X-Received: by 2002:a17:907:6295:b0:932:f88c:c2ff with SMTP id nd21-20020a170907629500b00932f88cc2ffmr16101925ejc.34.1679432017823;
-        Tue, 21 Mar 2023 13:53:37 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id u7-20020a170906b10700b0092f38a6d082sm6218757ejy.209.2023.03.21.13.53.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 13:53:36 -0700 (PDT)
-Message-ID: <17185edd-aa6f-386b-4252-0c6eac1ddcfc@linaro.org>
-Date:   Tue, 21 Mar 2023 20:53:33 +0000
+        d=1e100.net; s=20210112; t=1679432078;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=36n+db1kX7z8fa60FDrINMxCjVwayNeaAfJ4998fhB0=;
+        b=nW19dGFjqWaHZwt/RVOCxQdHoxtoFTzBijQkpPpW9XmAwa+IjRp77IEznPnoCzb0Pg
+         ApayVO0+K4HL8cRj9Jq6nMJ5443Zhdu/55YsHdjIpnei5ggC6WoKQxFW9P/reg2bma1Z
+         +rTTbkSybtV6eDIMdIiAO8Ih8GvB6jcHETOatTBVDoqQvQH0ZvB2VdrCTrh7Lie8SNx0
+         Ub982f+kTRdq9veZrz7XqaLMEjewu1WYKIpvz+FVN7DsJ6euPuP+LI3VA8GfAsZRJL31
+         eVTaqvu8sa6TYFzjc2Hi+SwI5tt63H3vKadnuZWNzjuynDCzEUAfiS4N5CLq4bxPWvmm
+         sRPQ==
+X-Gm-Message-State: AO0yUKUxjOUbnPurvqFed21BwC5XnVVQVvDi4lzp1o1wKskALNxRSMqj
+        c2jdfWHDKSpPi1sbCRhZ9jI=
+X-Google-Smtp-Source: AK7set/Sxj5SUVNX9MbVtbcFGvxNSLhcd0e+8lJ/DDA0/rA2xAijgYqmzqynBDmqpErowI5PCT3qmw==
+X-Received: by 2002:adf:d4c5:0:b0:2cf:f3ea:533e with SMTP id w5-20020adfd4c5000000b002cff3ea533emr3778783wrk.63.1679432077719;
+        Tue, 21 Mar 2023 13:54:37 -0700 (PDT)
+Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.googlemail.com with ESMTPSA id a8-20020a056000100800b002d8566128e5sm3744575wrx.25.2023.03.21.13.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 13:54:36 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v4 0/4] convert read_kcore(), vread() to use iterators
+Date:   Tue, 21 Mar 2023 20:54:29 +0000
+Message-Id: <cover.1679431886.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] misc: fastrpc: Reassign memory ownership only for
- remote heap
-Content-Language: en-US
-To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, bkumar@qti.qualcomm.com,
-        fastrpc.upstream@qti.qualcomm.com, stable <stable@kernel.org>
-References: <1679394100-27119-1-git-send-email-quic_ekangupt@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <1679394100-27119-1-git-send-email-quic_ekangupt@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While reviewing Baoquan's recent changes to permit vread() access to
+vm_map_ram regions of vmalloc allocations, Willy pointed out [1] that it
+would be nice to refactor vread() as a whole, since its only user is
+read_kcore() and the existing form of vread() necessitates the use of a
+bounce buffer.
+
+This patch series does exactly that, as well as adjusting how we read the
+kernel text section to avoid the use of a bounce buffer in this case as
+well.
+
+This has been tested against the test case which motivated Baoquan's
+changes in the first place [2] which continues to function correctly, as do
+the vmalloc self tests.
+
+[1] https://lore.kernel.org/all/Y8WfDSRkc%2FOHP3oD@casper.infradead.org/
+[2] https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
+
+v4:
+- Fixup mistake in email client which orphaned patch emails from the
+  cover letter.
+
+v3:
+- Revert introduction of mutex/rwsem in vmalloc
+- Introduce copy_page_to_iter_atomic() iovec function
+- Update vread_iter() and descendent functions to use only this
+- Fault in user pages before calling vread_iter()
+- Use const char* in vread_iter() and descendent functions
+- Updated commit messages based on feedback
+- Extend vread functions to always check how many bytes we could copy. If
+  at any stage we are unable to copy/zero, abort and return the number of
+  bytes we did copy.
+https://lore.kernel.org/all/cover.1679354384.git.lstoakes@gmail.com/
+
+v2:
+- Fix ordering of vread_iter() parameters
+- Fix nommu vread() -> vread_iter()
+https://lore.kernel.org/all/cover.1679209395.git.lstoakes@gmail.com/
+
+v1:
+https://lore.kernel.org/all/cover.1679183626.git.lstoakes@gmail.com/
 
 
-On 21/03/2023 10:21, Ekansh Gupta wrote:
-> The userspace map request for remote heap allocates CMA memory.
-> The ownership of this memory needs to be reassigned to proper
-> owners to allow access from the protection domain running on
-> DSP. This reassigning of ownership is not correct if done for
-> any other supported flags.
-> 
-> When any other flag is requested from userspace, fastrpc is
-> trying to reassign the ownership of memory and this reassignment
-> is getting skipped for remote heap request which is incorrect.
-> Add proper flag check to reassign the memory only if remote heap
-> is requested.
-> 
-> Fixes: 532ad70c6d44 ("misc: fastrpc: Add mmap request assigning for static PD pool")
-> Cc: stable <stable@kernel.org>
-> Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
-> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+Lorenzo Stoakes (4):
+  fs/proc/kcore: avoid bounce buffer for ktext data
+  fs/proc/kcore: convert read_kcore() to read_kcore_iter()
+  iov_iter: add copy_page_to_iter_atomic()
+  mm: vmalloc: convert vread() to vread_iter()
 
-Thanks for fixing this,  without this fix the code inside if condition 
-was a dead code.
+ fs/proc/kcore.c         |  89 ++++++---------
+ include/linux/uio.h     |   2 +
+ include/linux/vmalloc.h |   3 +-
+ lib/iov_iter.c          |  28 +++++
+ mm/nommu.c              |  10 +-
+ mm/vmalloc.c            | 234 +++++++++++++++++++++++++---------------
+ 6 files changed, 218 insertions(+), 148 deletions(-)
 
-
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
-
---srini
-> ---
->   drivers/misc/fastrpc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index a701132..9b88132 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -1892,7 +1892,7 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
->   	req.vaddrout = rsp_msg.vaddr;
->   
->   	/* Add memory to static PD pool, protection thru hypervisor */
-> -	if (req.flags != ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
-> +	if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
->   		struct qcom_scm_vmperm perm;
->   
->   		perm.vmid = QCOM_SCM_VMID_HLOS;
+--
+2.39.2
