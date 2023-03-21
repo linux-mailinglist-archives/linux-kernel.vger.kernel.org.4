@@ -2,76 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035C26C2958
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C3A6C295A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjCUExo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 00:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S229836AbjCUEy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 00:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCUExl (ORCPT
+        with ESMTP id S229561AbjCUEy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 00:53:41 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E01E3C01;
-        Mon, 20 Mar 2023 21:53:39 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id i10-20020a05600c354a00b003ee0da1132eso2114222wmq.4;
-        Mon, 20 Mar 2023 21:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679374417;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GX92zv5VKe7ckWl7sGbnyvzQGMyhv0ppTgbomfq1PHk=;
-        b=qF3P8D4CRjzvhUxLVQgRiz6W+/M1ImZhcGKi9Pa0nX1Ff6WYPi63iF4XyriDoUaYvb
-         QnB3UVfLFdHHSS6XYstKNll0YwK6hb3vEAh13/HkjvahLtPX+piikYURGlt/NGF6rytO
-         nq7Bbt4QUIr2WNIQC/V5JWShA/iygKlM8vouw3PhLJeDPHu9S3vLcc3iux3BvtyjfrVT
-         6nt0zQBJhnkTcuy9lSpW/1Rv2qCgBBvXsUSsdrMqvy2WTIZQsOxMqnAvhhENYjQqTMcP
-         M25KrjljExnmI1mbMoAG1TkTQwaBwXvm5mevcQ7qY3Q3+EgAnZOyzxDdlQKsvgYOZFcT
-         /PSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679374417;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GX92zv5VKe7ckWl7sGbnyvzQGMyhv0ppTgbomfq1PHk=;
-        b=HthukRLCr5Ygc/wq4VofQEFMS1oS/WdPREcnUsM7A6mE+Wv9ZVJ0n9gp71e+bUQH6+
-         UDYQb4EOieXcJcSJWKBYI0HRLKEsxBqCOErShoszn0dmXbwmrjMli5CTC4hOuGZmJmv5
-         LuImUCvCucy85SUGsbH6L/CC8irhOKUdZxM1hnZhj0PHePzVy/tEcvxReqZM1gApN15g
-         l/OyaQfv7wD+7IcMergBoICCib2D1vc4S/jCVgBYpG/svnkMb/vCO4egv2u/Ku1J5N9B
-         LfjaagmZxd6GotbEE1yUuhk7L64Vm87v+tdWd5jAwhkQB36sxlWo5p4xXmxpG58nP6mH
-         hbdg==
-X-Gm-Message-State: AO0yUKUkFTE9ChcGo0+WwAwUD0OSyMQrk8anYNx56Vo5uYuCYjQGfzIn
-        QezLBDf+E1GPiekyppCeK1w=
-X-Google-Smtp-Source: AK7set87NeoiO5ioLPK68M5XrIbeQVoFDpjKadoZoPnR87tYfA6zznLp86hd1TMPB583S2T+TthuaA==
-X-Received: by 2002:a05:600c:21c7:b0:3dc:4042:5c21 with SMTP id x7-20020a05600c21c700b003dc40425c21mr1263182wmj.6.1679374417390;
-        Mon, 20 Mar 2023 21:53:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003dc522dd25esm12244259wmb.30.2023.03.20.21.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 21:53:36 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 07:53:32 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Rob Clark <robdclark@chromium.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
- dev_pm_qos_mtx
-Message-ID: <155085b0-d2e4-4503-b75b-1a71193c2587@kili.mountain>
+        Tue, 21 Mar 2023 00:54:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4248B2E0CD
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:54:54 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32L115oF018922;
+        Tue, 21 Mar 2023 04:54:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=kw0rWOHnGmJiVqJdNOaBSSZ/jmPGNttYGuo93NE81nM=;
+ b=adClzksAdgTeJXsNqSs0h3qjIVW8qA6Lb7Bc0xg1HfzH0AAtJKdgMAiVQTwFys/qY4ir
+ rJicBsTp8yjmaPwTcdA/Wk5YEKrhU//9WrKmNulbva7pJXW8MV7NBQXE5gTV10uY9Amc
+ dO39koKHkJKux6RIz9/d3iYB/Q6TIln8hMcBcPiRvGvy2dZfjuNBVdwXsGOJqsJN/C09
+ 2RPmHVa9PhMuw92pqmho7dd2GOySoeXIFqx/AZtBNbbJvSV5zTCVip6X2n08YzE79Obf
+ IiRtRQFrzBQJSIB4f7O4JpzptjJIpoymvFzf3LolkTkoRZE+0u8baYj69WWnWTHZfPuQ jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf2j3ug9e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 04:54:42 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32L4ogJq026795;
+        Tue, 21 Mar 2023 04:54:42 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf2j3ug94-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 04:54:42 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32KBe6VX006837;
+        Tue, 21 Mar 2023 04:54:40 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3pd4x63fk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 04:54:40 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32L4sakq23855858
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 04:54:36 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48B9820040;
+        Tue, 21 Mar 2023 04:54:36 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F36EB20043;
+        Tue, 21 Mar 2023 04:54:32 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.43.88.148])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 Mar 2023 04:54:32 +0000 (GMT)
+Date:   Tue, 21 Mar 2023 10:24:28 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arch/powerpc/kvm: kvmppc_hv_entry: remove r4
+ argument
+Message-ID: <ZBk4hCGFqBE+c8+g@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
+ <20230316051025.1424093-3-kconsul@linux.vnet.ibm.com>
+ <CRBRQAXJRZZW.28LH58EV3T8AL@bobo>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+In-Reply-To: <CRBRQAXJRZZW.28LH58EV3T8AL@bobo>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: W2FpsEXo9vZsx17O76EsrsRDH_Pv3e3R
+X-Proofpoint-ORIG-GUID: 2OI-lakoNpPQOvgY6UJGdfZ8_Q_POIqm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_18,2023-03-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,90 +96,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi,
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
-patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
-config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230321/202303211207.mUCSt3CK-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202303211207.mUCSt3CK-lkp@intel.com/
-
-smatch warnings:
-drivers/base/power/qos.c:947 dev_pm_qos_update_user_latency_tolerance() error: uninitialized symbol 'req'.
-drivers/base/power/qos.c:975 dev_pm_qos_update_user_latency_tolerance() warn: possible memory leak of 'req'
-
-vim +/req +947 drivers/base/power/qos.c
-
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
-2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
-00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
-00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
-00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
-00dd582e52a535 Rob Clark         2023-03-20  931  
-2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
-2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
-2d7e4629d7265d Rob Clark         2023-03-20  934  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
-00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
-
-This "req" shadows the ealier req.
-
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
-
-So it leads to an unintialized variable and a leak.
-
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
-2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
-2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
-2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
-2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
-2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
-2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
-2d7e4629d7265d Rob Clark         2023-03-20  964  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11 @975  	return ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+On 2023-03-21 14:15:14, Nicholas Piggin wrote:
+> On Thu Mar 16, 2023 at 3:10 PM AEST, Kautuk Consul wrote:
+> > kvmppc_hv_entry is called from only 2 locations within
+> > book3s_hv_rmhandlers.S. Both of those locations set r4
+> > as HSTATE_KVM_VCPU(r13) before calling kvmppc_hv_entry.
+> > So, shift the r4 load instruction to kvmppc_hv_entry and
+> > thus modify the calling convention of this function.
+> 
+> Is r4 there only used for CONFIG_KVM_BOOK3S_HV_P8_TIMING? Could put it
+> under there. Although you then lose the barrier if it's disabled, that
+> is okay if you're sure that's the only memory operation being ordered.
+r4 is also used by the secondary_too_late label. So I decided against
+moving it inside the CONFIG_KVM_BOOK3S_HV_P8_TIMING #ifdef as then I
+would need to again load from HSTATE_KVM_VCPU(r13) in secondary_too_late.
+> 
+> I'm not sure how much new work we want to put into changing this asm
+> code, since it's POWER7/8 only. I would love to move this (and the
+> other) KVM implementations to C like we did with P9. It's a pretty big
+> job though.
+Yeah. I was just reviewing this code and decided to send this small
+improvement to the mailing list. I will check with my team and ask
+them if we could move this implementation to C.
+> 
+> Thanks,
+> Nick
+> 
+> >
+> > Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> > ---
+> >  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > index b81ba4ee0521..b61f0b2c677b 100644
+> > --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> > @@ -85,7 +85,7 @@ _GLOBAL_TOC(kvmppc_hv_entry_trampoline)
+> >  	RFI_TO_KERNEL
+> >  
+> >  kvmppc_call_hv_entry:
+> > -	ld	r4, HSTATE_KVM_VCPU(r13)
+> > +	/* Enter guest. */
+> >  	bl	kvmppc_hv_entry
+> >  
+> >  	/* Back from guest - restore host state and return to caller */
+> > @@ -352,9 +352,7 @@ kvm_secondary_got_guest:
+> >  	mtspr	SPRN_LDBAR, r0
+> >  	isync
+> >  63:
+> > -	/* Order load of vcpu after load of vcore */
+> > -	lwsync
+> > -	ld	r4, HSTATE_KVM_VCPU(r13)
+> > +	/* Enter guest. */
+> >  	bl	kvmppc_hv_entry
+> >  
+> >  	/* Back from the guest, go back to nap */
+> > @@ -506,7 +504,6 @@ SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
+> >  
+> >  	/* Required state:
+> >  	 *
+> > -	 * R4 = vcpu pointer (or NULL)
+> >  	 * MSR = ~IR|DR
+> >  	 * R13 = PACA
+> >  	 * R1 = host R1
+> > @@ -524,6 +521,10 @@ SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
+> >  	li	r6, KVM_GUEST_MODE_HOST_HV
+> >  	stb	r6, HSTATE_IN_GUEST(r13)
+> >  
+> > +	/* Order load of vcpu after load of vcore */
+> > +	lwsync
+> > +	ld	r4, HSTATE_KVM_VCPU(r13)
+> > +
+> >  #ifdef CONFIG_KVM_BOOK3S_HV_P8_TIMING
+> >  	/* Store initial timestamp */
+> >  	cmpdi	r4, 0
+> > -- 
+> > 2.39.2
+> 
