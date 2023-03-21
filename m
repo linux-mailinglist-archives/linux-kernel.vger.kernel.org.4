@@ -2,163 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E848E6C2BA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E97B6C2B7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjCUHrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S229804AbjCUHkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCUHrU (ORCPT
+        with ESMTP id S229617AbjCUHkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:47:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAED8CC13;
-        Tue, 21 Mar 2023 00:46:45 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pgk9j4S5YznY85;
-        Tue, 21 Mar 2023 15:43:21 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 15:46:27 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>,
-        <chenxiang66@hisilicon.com>
-Subject: [PATCH RESEND] scsi: libsas: Add end eh callback
-Date:   Tue, 21 Mar 2023 07:39:59 +0000
-Message-ID: <20230321073959.736-1-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 21 Mar 2023 03:40:06 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76943392BA;
+        Tue, 21 Mar 2023 00:40:05 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 84F125C0153;
+        Tue, 21 Mar 2023 03:40:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 21 Mar 2023 03:40:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679384402; x=1679470802; bh=ap
+        6PqJ0HtkNsQKkphclV0LiDDXZfW276JdJ32/KWT4I=; b=mmFZYUQ9ipq2r/Bqju
+        DJao1ihDj5PXrWhiAgop1QJnYY9LrUz4+r99cPkacC9c40RYfr+WOqdwxxKP/apc
+        1+XXg9an9RWo7RZ44BwlTTFp95fgOChdeRqfLIwVnZa/i8Xu20aiTUxmiUbYNNai
+        TXCfJNiHjvrMmfhL5brLL6rigGN4RSgia2733F/SkT3iK0ZY4RpQxrhrVpGkwdKR
+        7AmrN6h+q77G/ndtVAZSpJDLQCcjFl2vJv1qlNiY12If8y6sK0EN+65eFqDcq0M/
+        QOVNzAuLqw4b38xsBkNvN2Ns0mTcM/Jg2TyDuBuXr8BxkMUT+kTHEVmsa9hZDkCn
+        VUMA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679384402; x=1679470802; bh=ap6PqJ0HtkNsQ
+        KkphclV0LiDDXZfW276JdJ32/KWT4I=; b=d3my7ZHDoiQ+85yiTSmYTfHtqImFd
+        OEKaOw9ZJUjLo7HS2jhqE/bfYtIzw8W0xy+VAlO+UGq4f4BZ2daw3318pqA2LIB7
+        KTPJaKyP1ws1AGGN7amUJFl9MlME+W0unpEc1fyza2CrMHZ3nVqlnGxBmv36qegY
+        NuBfto/93uocmNx2xl4zRTzJGJ+15GP0VBo8cQkM8Iij/26DHC3VQ/ccrfWLGfJx
+        aUCkyt8ii8g7TZ8ug9CuJaTA+cGNJwwnGj+xd/h9bvsBoEugkM8u6bpc2hYe1VWO
+        t4r/wKX1yTjRfLEFu0QJ/QkB83/QSoeEbaWzBFQZp9NDXkxj7ZeEu8SVQ==
+X-ME-Sender: <xms:Ul8ZZNzCDuiOGCgskBOboyg7NI_xFJsR3-GbaKqs50yihZmC-tG4Xw>
+    <xme:Ul8ZZNS7IMSHX8BZBlzzdDD7W-nK30LPaIoHvQd5k7UGq3rMt8POiJLGCQ7PUekrG
+    SQ8WGRN7k0b7w>
+X-ME-Received: <xmr:Ul8ZZHXJgOGL3NrHDhdfidWU7UiuHkV-ud2Rnc9vv-XfADTuwVtTk4jATxAo0W_1CWCZ8Jdqn2itoAN6X7QFGyT5u-6pbF8CWE9QRQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:Ul8ZZPhQlCsD6feBopuVDIp7iItHl0itzXc8KVNT_70lkQv9UcwGXA>
+    <xmx:Ul8ZZPANyb9DWkf-Hc0dCtqZAw2T_bKoVRABoLQ3hlIxZMnYDs6U7Q>
+    <xmx:Ul8ZZIIrR8WnnkP50C5mONnrmkO0KlfDqVmWrw-bQBoVE5nKBtDsmw>
+    <xmx:Ul8ZZD6cRo1D7QrC8BPcgf7bUijkrlNBvR7l94S2WYwYNGiENckUdg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Mar 2023 03:40:01 -0400 (EDT)
+Date:   Tue, 21 Mar 2023 08:39:59 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: linux-next: manual merge of the driver-core tree with the s390
+ tree
+Message-ID: <ZBlfT3mb5Kmuyh4I@kroah.com>
+References: <20230321123428.5c6956f8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321123428.5c6956f8@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs while the disk is processing an NCQ command and the host
-received the abnormal SDB FIS, let libata EH to analyze the NCQ error, and
-it is not necessary to reset the target to recover.
+On Tue, Mar 21, 2023 at 12:34:28PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the driver-core tree got a conflict in:
+> 
+>   arch/s390/kernel/topology.c
+> 
+> between commit:
+> 
+>   0599331c3da6 ("s390: simplify one-level sysctl registration for topology_ctl_table")
+> 
+> from the s390 tree and commit:
+> 
+>   9493ed19fbc3 ("s390/topology: move to use bus_get_dev_root()")
+> 
+> from the driver-core tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/s390/kernel/topology.c
+> index e5d6a1c25d13,72af753d1bba..000000000000
+> --- a/arch/s390/kernel/topology.c
+> +++ b/arch/s390/kernel/topology.c
+> @@@ -637,14 -637,33 +637,23 @@@ static struct ctl_table topology_ctl_ta
+>   	{ },
+>   };
+>   
+>  -static struct ctl_table topology_dir_table[] = {
+>  -	{
+>  -		.procname	= "s390",
+>  -		.maxlen		= 0,
+>  -		.mode		= 0555,
+>  -		.child		= topology_ctl_table,
+>  -	},
+>  -	{ },
+>  -};
+>  -
+>   static int __init topology_init(void)
+>   {
+> + 	struct device *dev_root;
+> + 	int rc = 0;
+> + 
+>   	timer_setup(&topology_timer, topology_timer_fn, TIMER_DEFERRABLE);
+>   	if (MACHINE_HAS_TOPOLOGY)
+>   		set_topology_timer();
+>   	else
+>   		topology_update_polarization_simple();
+>  -	register_sysctl_table(topology_dir_table);
+>  +	register_sysctl("s390", topology_ctl_table);
+> - 	return device_create_file(cpu_subsys.dev_root, &dev_attr_dispatching);
+> + 
+> + 	dev_root = bus_get_dev_root(&cpu_subsys);
+> + 	if (dev_root) {
+> + 		rc = device_create_file(dev_root, &dev_attr_dispatching);
+> + 		put_device(dev_root);
+> + 	}
+> + 	return rc;
+>   }
+>   device_initcall(topology_init);
 
-Then the hisi_sas has some special process to set dev_status to normal when
-end the eh for NCQ error without reset the target, so add a callback and
-fill it in for the hisi_sas driver.
+Looks correct to me, thanks!
 
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 12 +++++++++---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  7 +++++--
- drivers/scsi/libsas/sas_ata.c          |  5 +++++
- include/scsi/libsas.h                  |  2 ++
- 4 files changed, 21 insertions(+), 5 deletions(-)
+greg k-h
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 325d6d6a21c3..61686ead0027 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1777,9 +1777,6 @@ static int hisi_sas_I_T_nexus_reset(struct domain_device *device)
- 	struct device *dev = hisi_hba->dev;
- 	int rc;
- 
--	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
--		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
--
- 	rc = hisi_sas_internal_task_abort_dev(sas_dev, false);
- 	if (rc < 0) {
- 		dev_err(dev, "I_T nexus reset: internal abort (%d)\n", rc);
-@@ -1967,6 +1964,14 @@ static bool hisi_sas_internal_abort_timeout(struct sas_task *task,
- 	return false;
- }
- 
-+static void hisi_sas_end_eh(struct domain_device *dev)
-+{
-+	struct hisi_sas_device *sas_dev = dev->lldd_dev;
-+
-+	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
-+		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
-+}
-+
- static void hisi_sas_port_formed(struct asd_sas_phy *sas_phy)
- {
- 	hisi_sas_port_notify_formed(sas_phy);
-@@ -2083,6 +2088,7 @@ static struct sas_domain_function_template hisi_sas_transport_ops = {
- 	.lldd_write_gpio	= hisi_sas_write_gpio,
- 	.lldd_tmf_aborted	= hisi_sas_tmf_aborted,
- 	.lldd_abort_timeout	= hisi_sas_internal_abort_timeout,
-+	.lldd_end_eh		= hisi_sas_end_eh,
- };
- 
- void hisi_sas_init_mem(struct hisi_hba *hisi_hba)
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 66fcb340b98e..abad57de4aee 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2433,15 +2433,18 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
- 			struct hisi_sas_device *sas_dev =
- 				&hisi_hba->devices[device_id];
- 			struct domain_device *device = sas_dev->sas_device;
-+			bool force_reset = true;
- 
- 			dev_err(dev, "erroneous completion disk err dev id=%d sas_addr=0x%llx CQ hdr: 0x%x 0x%x 0x%x 0x%x\n",
- 				device_id, itct->sas_addr, dw0, dw1,
- 				complete_hdr->act, dw3);
- 
--			if (is_ncq_err_v3_hw(complete_hdr))
-+			if (is_ncq_err_v3_hw(complete_hdr)) {
- 				sas_dev->dev_status = HISI_SAS_DEV_NCQ_ERR;
-+				force_reset = false;
-+			}
- 
--			sas_ata_device_link_abort(device, true);
-+			sas_ata_device_link_abort(device, force_reset);
- 		} else if (likely(iptt < HISI_SAS_COMMAND_ENTRIES_V3_HW)) {
- 			slot = &hisi_hba->slot_info[iptt];
- 			slot->cmplt_queue_slot = rd_point;
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index 77714a495cbb..25a064087311 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -534,11 +534,16 @@ void sas_ata_end_eh(struct ata_port *ap)
- {
- 	struct domain_device *dev = ap->private_data;
- 	struct sas_ha_struct *ha = dev->port->ha;
-+	struct sas_internal *i = dev_to_sas_internal(dev);
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&ha->lock, flags);
- 	if (test_and_clear_bit(SAS_DEV_EH_PENDING, &dev->state))
- 		ha->eh_active--;
-+
-+	if (i->dft->lldd_end_eh)
-+		i->dft->lldd_end_eh(dev);
-+
- 	spin_unlock_irqrestore(&ha->lock, flags);
- }
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 159823e0afbf..659395ef616e 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -683,6 +683,8 @@ struct sas_domain_function_template {
- 	int (*lldd_lu_reset)(struct domain_device *, u8 *lun);
- 	int (*lldd_query_task)(struct sas_task *);
- 
-+	void (*lldd_end_eh)(struct domain_device *dev);
-+
- 	/* Special TMF callbacks */
- 	void (*lldd_tmf_exec_complete)(struct domain_device *dev);
- 	void (*lldd_tmf_aborted)(struct sas_task *task);
--- 
-2.17.1
+
 
