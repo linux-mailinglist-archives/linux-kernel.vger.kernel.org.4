@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9A56C330C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7366C3314
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjCUNhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
+        id S231143AbjCUNj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCUNhZ (ORCPT
+        with ESMTP id S230496AbjCUNj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:37:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C4F42BC7;
-        Tue, 21 Mar 2023 06:37:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F422B8169B;
-        Tue, 21 Mar 2023 13:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA50C433D2;
-        Tue, 21 Mar 2023 13:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679405840;
-        bh=WcieU/vH4wQINZPtitpWJtdYbGV3aMX2fQpPt6uBVP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1L12ZuFlpbOhqNnlY48o70oH2jSNnqaT1nyzsb77yG/J5FKGr/vaazvq0Ph9ry7R
-         Ez8ri+9WBT9RCD/AdLFDkKppM79beXdyyQghJGrT+HLsTdQIHggf2+trzp0zG/95aO
-         NFL5dFbNSbjdMMGj1/Ty7ubXww6XcIGen73ccmOJe5rqJJciEeIjOkktnRfICkcGGa
-         Z9i3DE0m3WuMlZaM9M7zsJN073vdVAV6pfBrWAVeYV1Gfdqf2Eearf9VuwzdbNUA+M
-         74InmJJ+ollVzSXig8zr1Yo40IUVS7bj4xc9ehg8tpOdmCLGlJqTPgZz3h1XUHtlzm
-         C9ix5ItcDIVBw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pecCK-0006Qr-W6; Tue, 21 Mar 2023 14:38:45 +0100
-Date:   Tue, 21 Mar 2023 14:38:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>, devicetree@vger.kernel.org,
+        Tue, 21 Mar 2023 09:39:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB511A7;
+        Tue, 21 Mar 2023 06:39:26 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 14:39:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679405963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
+        b=nAS1PiYdPQp25hSPtZD9qb4LVvIfl5+Iq5YN9Mxy/T1EHmDnbg8pR/VShA4l3+N1ogc6aW
+        VwtM2UDEZYA6VEkgWdZEDkmtWRDDukXVPXLHXTbLyH6ZbjoAJ9Cfs5RNZleYiuxWbLLgIz
+        1sA8e5lPAUKvng31ckchCFGaRylR3MWgiUqvqFPZFhGgEtSm+7G2BcaFlLjBdm8CtUZKbR
+        3qpTBNFWDOtkTbPA45Uc3zYiQeeDTJQCf42V2Lq7jvmRwTnHCalrc8CIeNA59l2+sM/kZT
+        lmWt30xKc70YatBYQPgSqUoUNbdlTLtiQnQbj5RrCjiGXUR/tmB3GkxlH4nR2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679405963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
+        b=MuC8fJg05kjTXLdb4HxI+i197gCnckEYTxojaKeYuFelpshq39C3x6bX0kq2UQSeu12Sg0
+        dPtD75Vt7oRPDUAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: mfd: qcom,spmi-pmic: add nvram function
-Message-ID: <ZBmzZBYUFXlTX08i@hovoldconsulting.com>
-References: <20230320135710.1989-1-johan+linaro@kernel.org>
- <20230320135710.1989-4-johan+linaro@kernel.org>
- <167940239018.531701.12929244936825953214.robh@kernel.org>
- <CAL_JsqKvAxvYsuUtkPerp0aVuEQ7xUrCH2twAm42DLcpvjEKqA@mail.gmail.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+Message-ID: <20230321133922.ontdC41h@linutronix.de>
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+ <20230321100456.0_DhhkZJ@linutronix.de>
+ <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
+ <20230321105734.Z7F3Uvf1@linutronix.de>
+ <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKvAxvYsuUtkPerp0aVuEQ7xUrCH2twAm42DLcpvjEKqA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 08:20:55AM -0500, Rob Herring wrote:
-> On Tue, Mar 21, 2023 at 8:17 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> >
-> > On Mon, 20 Mar 2023 14:57:10 +0100, Johan Hovold wrote:
-> > > Add an 'nvram' pattern property and a reference to the corresponding
-> > > SDAM DT schema.
-> > >
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> >
-> > Running 'make dtbs_check' with the schema in this patch gives the
-> > following warnings. Consider if they are expected or the schema is
-> > incorrect. These may not be new warnings.
-> >
-> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > This will change in the future.
-> >
-> > Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230320135710.1989-4-johan+linaro@kernel.org
-> >
+On 2023-03-21 12:27:42 [+0100], Krzysztof Kozlowski wrote:
+> > I still fail to understand why this is PREEMPT_RT specific and not a
+> > problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
 > 
-> This is a long list of warnings. Can you all fix some of them before
-> adding on to this binding.
+> Hm, good point, I actually don't know what is the workqueue
+> recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
+> preferred?
 
-Note that this patch is only making the list of warnings shorter so I
-don't think addressing the remaining issues should block this one.
+If you isolate a CPU you want the kernel to stay away from it. The idea
+is that something is done on that CPU and the kernel should leave it
+alone. That is why the HZ tick avoided. That is why timers migrate to
+the "housekeeping" CPU and do not fire on the CPU that it was programmed
+on (unless the timer has to fire on this CPU).
 
-Johan
+> And how such code would look like?
+> if (tick_nohz_tick_stopped())?
+
+Yeah closer :) The CPU-mask for workqueues can still be different on
+non-NOHZ-full CPUs. Still you interrupt the CPU doing in-userland work
+and this is not desired.
+
+You have a threaded-IRQ which does nothing but schedules a worker. Why?
+Why not sleep and remain in that threaded IRQ until the work is done?
+You _can_ sleep in the threaded IRQ if you have to. Force-threaded is
+different but this is one is explicit threaded so you could do it.
+	
+> > However the thermal notifications have nothing to do with cpufreq.
+> 
+> They have. The FW notifies that thermal mitigation is happening and
+> maximum allowed frequency is now XYZ. The cpufreq receives this and sets
+> maximum allowed scaling frequency for governor.
+
+I see. So the driver is doing something in worst case. This interrupt,
+you have per-CPU and you need to do this CPU? I mean could you change
+the affinity of the interrupt to another CPU?
+
+> Best regards,
+> Krzysztof
+
+Sebastian
