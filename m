@@ -2,171 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009136C344E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1B76C3454
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjCUOdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        id S231400AbjCUOeQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 10:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbjCUOdo (ORCPT
+        with ESMTP id S231322AbjCUOeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:33:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC2424733
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:33:30 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1EE7966030D8;
-        Tue, 21 Mar 2023 14:33:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679409207;
-        bh=hfOZhZvwpqq4ufYx8Sox86gnGr5bS6DeOHGjzIeVHPo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QjFR76b5ozWwX+fQ0Mlt67ZpeSPuvj5YdKFce9CbrSGWw2Sy62WzQ+jmobznEWm3o
-         DudEvYaKi02PXXhtXEsll5xLZCNVlCCCCeg2Uzj/AR0Hxlw0i2n6gPH+GmuIyTEoe8
-         6PzCP5dU2w7P1ZceoHlpwalnFBVJkKeZahOJgeVHvMMUf6t/nOX1AQANWaxyBfP+sC
-         iMgvfajHEkUD8m0r8Kg3jHjZLceKfeT9vfOhU6XDwg8Y44hczyK+P/Yt2V2MNRJAc5
-         tcVMb6FYKHsBqKAnKI8xuXquq0l/Ej7/Bz2NJrVySMGjnAAQjqDpMjK+LgrKqkNZLA
-         xWtY4kxZFDc9A==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     srinivas.kandagatla@linaro.org
-Cc:     wenst@chromium.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH] nvmem: mtk-efuse: Support postprocessing for GPU speed binning data
-Date:   Tue, 21 Mar 2023 15:33:19 +0100
-Message-Id: <20230321143319.333803-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 21 Mar 2023 10:34:12 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A026234C37;
+        Tue, 21 Mar 2023 07:34:10 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id c19so18032763qtn.13;
+        Tue, 21 Mar 2023 07:34:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679409249;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=82nUopC4peey5GRVSgLUYvMNsOkr6qqSP8KaXHFDorM=;
+        b=povKLd2VWRVnfXIwc/JvHyhRXfzbpRCOXWz67h8TEE5Uo0h4oNBXibBzJ6PeVozRr+
+         fHcX8sms7zpFFHqgmpDKefq2LWbHhz1CyIdEDROvMdN0qNdLPSWkGNn3XsGpPc5Oi7wr
+         f/O5Ygrlvm6qveC1eM2cGjYPk0A51N6OeH18ni8VAg3fOyN+0y7Ftdiu/qlc5Z8rtbsk
+         LahV5+8Buc5MSXRWfvyZ/BTi8I7JgsVuMH6cw+pt4OZVaA6UzIKkn/r1kLpJ6iO2a/lW
+         BxTKL2AaIlxC3Yt5WmrvXjB2hrkAKdoe85JW0lG8PRmLtjZNmPOmiS6kbFU+/FZFy3Sj
+         YuWw==
+X-Gm-Message-State: AO0yUKX3h9t3ijewGqWdPFiNuwD9ziWZnv3aChd1yKL4JzXXWoYfeI+5
+        EL5hEGpD4DhypPIhtfo/aqKxV0VB9xV2ow==
+X-Google-Smtp-Source: AK7set/hopW2XtMSTKOZpioG6ZIh22UttanvDRwjaBRMfHIzwA+U9NwjPFxbIoC6/7OHeNe0wZQmdw==
+X-Received: by 2002:ac8:5c93:0:b0:3bf:c5ce:127a with SMTP id r19-20020ac85c93000000b003bfc5ce127amr236294qta.4.1679409248911;
+        Tue, 21 Mar 2023 07:34:08 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id b14-20020a05620a270e00b0073b7f2a0bcbsm9589445qkp.36.2023.03.21.07.34.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 07:34:08 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id e194so17365122ybf.1;
+        Tue, 21 Mar 2023 07:34:08 -0700 (PDT)
+X-Received: by 2002:a05:6902:1023:b0:b6b:841a:aae4 with SMTP id
+ x3-20020a056902102300b00b6b841aaae4mr1264687ybt.12.1679409248087; Tue, 21 Mar
+ 2023 07:34:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230321065826.2044-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Mar 2023 15:33:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWts4ixT87hK=GcOODQVkfgCqjp+dML0cAxPnXkfnsCpg@mail.gmail.com>
+Message-ID: <CAMuHMdWts4ixT87hK=GcOODQVkfgCqjp+dML0cAxPnXkfnsCpg@mail.gmail.com>
+Subject: Re: [PATCH net-next] sh_eth: remove open coded netif_running()
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some MediaTek SoCs GPU speed binning data is available for read
-in the SoC's eFuse array but it has a format that is incompatible
-with what the OPP API expects, as we read a number from 0 to 7 but
-opp-supported-hw is expecting a bitmask to enable an OPP entry:
-being what we read limited to 0-7, it's straightforward to simply
-convert the value to BIT(value) as a post-processing action.
+On Tue, Mar 21, 2023 at 7:58 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> It had a purpose back in the days, but today we have a handy helper.
+>
+> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-So, introduce post-processing support and enable it by evaluating
-the newly introduced platform data's `uses_post_processing` member,
-currently enabled only for MT8186.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/nvmem/mtk-efuse.c | 53 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 51 insertions(+), 2 deletions(-)
+No regressions seen on R-Car M2-W, RZ/A1H, and RZ/A2M.
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
-index a08e0aedd21c..b36cd0dcc8c7 100644
---- a/drivers/nvmem/mtk-efuse.c
-+++ b/drivers/nvmem/mtk-efuse.c
-@@ -10,6 +10,11 @@
- #include <linux/io.h>
- #include <linux/nvmem-provider.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
-+
-+struct mtk_efuse_pdata {
-+	bool uses_post_processing;
-+};
- 
- struct mtk_efuse_priv {
- 	void __iomem *base;
-@@ -29,6 +34,37 @@ static int mtk_reg_read(void *context,
- 	return 0;
- }
- 
-+static int mtk_efuse_gpu_speedbin_pp(void *context, const char *id, int index,
-+				     unsigned int offset, void *data, size_t bytes)
-+{
-+	u8 *val = data;
-+
-+	if (val[0] < 8)
-+		val[0] = BIT(val[0]);
-+
-+	return 0;
-+}
-+
-+static void mtk_efuse_fixup_cell_info(struct nvmem_device *nvmem,
-+				      struct nvmem_layout *layout,
-+				      struct nvmem_cell_info *cell)
-+{
-+	size_t sz = strlen(cell->name);
-+
-+	/*
-+	 * On some SoCs, the GPU speedbin is not read as bitmask but as
-+	 * a number with range [0-7] (max 3 bits): post process to use
-+	 * it in OPP tables to describe supported-hw.
-+	 */
-+	if (cell->nbits <= 3 &&
-+	    strncmp(cell->name, "gpu-speedbin", min(sz, strlen("gpu-speedbin"))) == 0)
-+		cell->read_post_process = mtk_efuse_gpu_speedbin_pp;
-+}
-+
-+static struct nvmem_layout mtk_efuse_layout = {
-+	.fixup_cell_info = mtk_efuse_fixup_cell_info,
-+};
-+
- static int mtk_efuse_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -36,6 +72,7 @@ static int mtk_efuse_probe(struct platform_device *pdev)
- 	struct nvmem_device *nvmem;
- 	struct nvmem_config econfig = {};
- 	struct mtk_efuse_priv *priv;
-+	const struct mtk_efuse_pdata *pdata;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -45,20 +82,32 @@ static int mtk_efuse_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
-+	pdata = device_get_match_data(dev);
- 	econfig.stride = 1;
- 	econfig.word_size = 1;
- 	econfig.reg_read = mtk_reg_read;
- 	econfig.size = resource_size(res);
- 	econfig.priv = priv;
- 	econfig.dev = dev;
-+	if (pdata->uses_post_processing)
-+		econfig.layout = &mtk_efuse_layout;
- 	nvmem = devm_nvmem_register(dev, &econfig);
- 
- 	return PTR_ERR_OR_ZERO(nvmem);
- }
- 
-+static const struct mtk_efuse_pdata mtk_mt8186_efuse_pdata = {
-+	.uses_post_processing = true,
-+};
-+
-+static const struct mtk_efuse_pdata mtk_efuse_pdata = {
-+	.uses_post_processing = false,
-+};
-+
- static const struct of_device_id mtk_efuse_of_match[] = {
--	{ .compatible = "mediatek,mt8173-efuse",},
--	{ .compatible = "mediatek,efuse",},
-+	{ .compatible = "mediatek,mt8173-efuse", .data = &mtk_efuse_pdata },
-+	{ .compatible = "mediatek,mt8186-efuse", .data = &mtk_mt8186_efuse_pdata },
-+	{ .compatible = "mediatek,efuse", .data = &mtk_efuse_pdata },
- 	{/* sentinel */},
- };
- MODULE_DEVICE_TABLE(of, mtk_efuse_of_match);
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.40.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
