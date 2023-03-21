@@ -2,87 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9DB6C3AAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A414B6C3AB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCUTeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
+        id S230270AbjCUTew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjCUTeN (ORCPT
+        with ESMTP id S230184AbjCUTep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:34:13 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52113574D7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:33:20 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id t14so16674266ljd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:33:19 -0700 (PDT)
+        Tue, 21 Mar 2023 15:34:45 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7520074
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:07 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id z18so9234039pgj.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679427190;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DOJedXqzU4VqWJK2Ajbw3X3+PFnOG//f2bTihr6Ow9s=;
-        b=GLM3DYS2JL2It4G6BzoIJ2VGfllIZyUTyFizD2iw7R1nQ/2Nxw7s1eUA4S475UZ30E
-         RRYPrXV+WtXKvvHWVQA+mkJeFTUzRQ7PiclfuUNDSZQrSITkCUvu5MS5yIcyeiSw2xpG
-         TJylosF3L45XsVG1r+7VfG+NiDUacqoboZLj91Yr50Fcw5URjdl8g8ThnfqbP7+U7R/v
-         eKUxRfwh1Y3706MWwpv8qmqpPXKUm3Yl2lPgxYBzzgiFBPvu5xtuzrhREfL1hlPzNA8r
-         yJEsi1N22r00cg0uXwTzXYRvGaCrs9z0gGgysEzANaA3egBRhHbyyRjwy0Qcru8YSOLj
-         AqtA==
+        d=gmail.com; s=20210112; t=1679427225;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f6yqwwGHiT07JiUUrp45GDD3AMqzX2ZKYw5EqqKqkzQ=;
+        b=NLQMtZ9qo+uzRT6NHyOsA/WLXnbtKSf7jtqESSwtr5PiwUgfYkzACMopqfFSLBrzCD
+         ARblYSc5IpWaa01h2jHMt8zf9XCA2RPe9plZP4I05fFzO4ixCiEb9jtMJ1H2UKUQOHmf
+         LKaVcA+GjITLTA0bSJ1wXvKkdOL/S1Qig9/dLiXhChu4HzkW5vATOBZloM+oFPmlAQ1f
+         HUZxABrvDKeuPncQcX2K4B6roTA4KXO2byhWupEhMh51NclVwGI7wIHfVAGpWDXgLlxu
+         U6yU5rH5ouidABYX+IW+V4ASmtBMnPgiU5o9Ec+9u/fWGu4vFKPvZxngtSU8UHocssk9
+         NJMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679427190;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DOJedXqzU4VqWJK2Ajbw3X3+PFnOG//f2bTihr6Ow9s=;
-        b=pX9nSAuG5K1rzCzYqnOPqdZMG+5BUsdmjGIZwY71KfkACE8D0okOa9mP+DyAoLiE+K
-         w7onw9WiBH7ueKqwUlvof1aJF1hqdcTxqAXIQd9oQNfo2v4ysX1K2uqC8ZZH4uAU48m/
-         KwgObiPcIzlPOpmBqFapq+xyrD/GFqG+5MuoMdVjtNw6b/Vc3XOOLVUu14rVNV3WyaXB
-         6HbR+5nIRTTnbaJHkPaePZGpykBFUqBugtfo/rWexlDmKnAKRhN8nzIkjd+9tQk2v71p
-         xWhuTmgVPoQZTXQ63rfAjD55b3MoZFzyWDCeRisu9lJgwKNjZX5eXHCmfKjzhPVHNunN
-         /rvw==
-X-Gm-Message-State: AO0yUKXJK0xlf1yyVqn7pgtj2kGs3BA2wJXBhxhh6WX8yw7XAyioc0/W
-        QT5q3kpY3XektMC/hbYmLFCAOQ==
-X-Google-Smtp-Source: AK7set/Ex+jNMGHlNPs7MD/8WHLmtZjVZAaZIPc3DR+BKF/CGbp/oAxGt7AI1rUvwWvA4YPWwZQhAw==
-X-Received: by 2002:a2e:9e53:0:b0:29b:aee8:29b3 with SMTP id g19-20020a2e9e53000000b0029baee829b3mr1074275ljk.38.1679427189980;
-        Tue, 21 Mar 2023 12:33:09 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id y22-20020a2e9d56000000b002991baef49bsm2349020ljj.12.2023.03.21.12.33.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 12:33:09 -0700 (PDT)
-Message-ID: <013babf9-713b-b0ee-c70b-d12ab5e2b3eb@linaro.org>
-Date:   Tue, 21 Mar 2023 20:33:05 +0100
+        d=1e100.net; s=20210112; t=1679427225;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f6yqwwGHiT07JiUUrp45GDD3AMqzX2ZKYw5EqqKqkzQ=;
+        b=Rc3Z1XzUw0wsKfYGVIGg9T2JVU16oS7DHEyfUUItlX/Olbwy4pLIH+smn6xkNPQHrD
+         VIMhyuSnn6h9wmcEXuFnOM80lnIdKUfSjhyzN3x6lk3WJ8voB2FIK0BmAaUj25Tiguy9
+         ezf3sYfA7sZp9FEvj5op1Oo6KlEguKP8SMZ2424BpsQ1vi03QkzliR5M14+LrxCqB46u
+         1y+dk1hG9MpTI0q0McRdo29myQax53PvqZAwkQOi1dgbi5/7OndmaERtdbrn+5dM4UfZ
+         svBRM0Bhi2BZIJdYLMw2MjBcEkv34ZnCSNJ8z4IBdbORMve08wLnpeKOP9opw8OQjkrQ
+         oqyA==
+X-Gm-Message-State: AO0yUKWAYCCuGZw7fTpxFxOWdtMEw26pdgUGWk9vnVz34tAnQNidCQ0O
+        5U/eqApq86zKLpxz4tD/q2Y=
+X-Google-Smtp-Source: AK7set9MPzfiOpDK1A4D+gLyJtB3DWTN5NBrMa46vpR3+HWYeZX+Pvst+sd3DYYSL8GrZd3Os7mkbw==
+X-Received: by 2002:aa7:9dc1:0:b0:627:e69c:847c with SMTP id g1-20020aa79dc1000000b00627e69c847cmr905661pfq.16.1679427225224;
+        Tue, 21 Mar 2023 12:33:45 -0700 (PDT)
+Received: from f37.eng.vmware.com ([66.170.99.1])
+        by smtp.googlemail.com with ESMTPSA id k23-20020aa790d7000000b006247123adf1sm8843044pfk.143.2023.03.21.12.33.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 12:33:44 -0700 (PDT)
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
+To:     gregkh@linuxfoundation.org, dhowells@redhat.com,
+        dwmw2@infradead.org
+Cc:     linux-kernel@vger.kernel.org, sshedi@vmware.com, yesshedi@gmail.com
+Subject: [PATCH v6 0/7] refactor file signing program
+Date:   Wed, 22 Mar 2023 01:03:34 +0530
+Message-Id: <20230321193341.87997-1-sshedi@vmware.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH net-next v2 05/12] clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
-Content-Language: en-US
-To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, bhupesh.sharma@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-References: <20230320221617.236323-1-ahalaney@redhat.com>
- <20230320221617.236323-6-ahalaney@redhat.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230320221617.236323-6-ahalaney@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,75 +70,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Shreenidhi Shedi <yesshedi@gmail.com>
 
+This patch series refactors the sign-file program.
 
-On 20.03.2023 23:16, Andrew Halaney wrote:
-> Add the EMAC GDSCs to allow the EMAC hardware to be enabled.
-> 
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Brief of changes in this patch series:
 
-Konrad
-> 
-> I'm still unsure if Bjorn wants to take this patch or net-dev, and how I am
-> supposed to indicate such other than commenting here (per Stephen's
-> comment on v1): https://lore.kernel.org/netdev/e5cb46e8874b12dbe438be12ee0cf949.sboyd@kernel.org/#t
-> 
-> Changes since v1:
-> 	* Add Stephen's Acked-by
-> 	* Explicitly tested on x13s laptop with no noticeable side effect (Konrad)
-> 
->  drivers/clk/qcom/gcc-sc8280xp.c               | 18 ++++++++++++++++++
->  include/dt-bindings/clock/qcom,gcc-sc8280xp.h |  2 ++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-> index b3198784e1c3..04a99dbaa57e 100644
-> --- a/drivers/clk/qcom/gcc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -6873,6 +6873,22 @@ static struct gdsc usb30_sec_gdsc = {
->  	.pwrsts = PWRSTS_RET_ON,
->  };
->  
-> +static struct gdsc emac_0_gdsc = {
-> +	.gdscr = 0xaa004,
-> +	.pd = {
-> +		.name = "emac_0_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +};
-> +
-> +static struct gdsc emac_1_gdsc = {
-> +	.gdscr = 0xba004,
-> +	.pd = {
-> +		.name = "emac_1_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +};
-> +
->  static struct clk_regmap *gcc_sc8280xp_clocks[] = {
->  	[GCC_AGGRE_NOC_PCIE0_TUNNEL_AXI_CLK] = &gcc_aggre_noc_pcie0_tunnel_axi_clk.clkr,
->  	[GCC_AGGRE_NOC_PCIE1_TUNNEL_AXI_CLK] = &gcc_aggre_noc_pcie1_tunnel_axi_clk.clkr,
-> @@ -7351,6 +7367,8 @@ static struct gdsc *gcc_sc8280xp_gdscs[] = {
->  	[USB30_MP_GDSC] = &usb30_mp_gdsc,
->  	[USB30_PRIM_GDSC] = &usb30_prim_gdsc,
->  	[USB30_SEC_GDSC] = &usb30_sec_gdsc,
-> +	[EMAC_0_GDSC] = &emac_0_gdsc,
-> +	[EMAC_1_GDSC] = &emac_1_gdsc,
->  };
->  
->  static const struct clk_rcg_dfs_data gcc_dfs_clocks[] = {
-> diff --git a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> index cb2fb638825c..721105ea4fad 100644
-> --- a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> +++ b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> @@ -492,5 +492,7 @@
->  #define USB30_MP_GDSC					9
->  #define USB30_PRIM_GDSC					10
->  #define USB30_SEC_GDSC					11
-> +#define EMAC_0_GDSC					12
-> +#define EMAC_1_GDSC					13
->  
->  #endif
+- Improve argument parsing logic.
+- Add few more easy to remember arguments.
+- Add support to sign bunch of modules at once.
+- Improve the help message with examples.
+- Few trivial checkpatch reported issue fixes.
+
+Version 6 changes:
+- Fixed commit messages as suggested by Greg and David.
+
+Version 5 changes:
+- Addressed review comments from David Howells.
+- Fragmented the patches into further small units.
+Link:
+v4: https://lore.kernel.org/all/20230221170804.3267242-1-yesshedi@gmail.com/
+
+Version 1 - Version 4 changes:
+Did some back and forth changes. Getting familiar with patch submission
+process, nothing significant happened.
+
+Links:
+v1: https://lore.kernel.org/all/dc852d8e-816a-0fb2-f50e-ff6c2aa11dd8@gmail.com/
+v2: https://lore.kernel.org/all/20230213185019.56902-1-yesshedi@gmail.com/
+v3: https://lore.kernel.org/all/20230213190034.57097-1-yesshedi@gmail.com/
+
+Shreenidhi Shedi (7):
+  sign-file: use getopt_long_only for parsing input args
+  sign-file: inntroduce few new flags to make argument processing easy.
+  sign-file: move file signing logic to its own function
+  sign-file: add support to sign modules in bulk
+  sign-file: improve help message
+  sign-file: use const with a global string constant
+  sign-file: fix do while styling issue
+
+ scripts/sign-file.c | 292 +++++++++++++++++++++++++++++++-------------
+ 1 file changed, 209 insertions(+), 83 deletions(-)
+
+--
+2.39.2
