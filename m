@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7FE6C36EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AEB6C36F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjCUQ10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S229705AbjCUQ2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjCUQ1Z (ORCPT
+        with ESMTP id S229676AbjCUQ2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:27:25 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965E846099;
-        Tue, 21 Mar 2023 09:27:13 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id c18so18552259qte.5;
-        Tue, 21 Mar 2023 09:27:13 -0700 (PDT)
+        Tue, 21 Mar 2023 12:28:39 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E9435B0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:28:37 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eh3so61937949edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679416032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bWItCEGK6khz5+cq2aChgbY6kgyAqOoNV2Ytyqot+Vs=;
-        b=FNtohfhtxSZvVpqqzY72Cp+HY9Kpexhj6+Gkb/85IHjdXmTSdq83nZyL69pl1feNlZ
-         Ox34bIJ4oDpn3wn7Sp8vov50ID7VufAPS620zGc/iRtluVvPFi2t5T0wbIdQ3OhTtirX
-         Z6+aOv633+HgR/wL2MY4r+xcy7jCXM2sk7Ows0MJeyfQTkqx4b2coq+Fpi7zFHSbxz+f
-         RULW6aL8rKl73KT4gFRNbrbklrAuixMXNkX3qRNNmtKKCwugjxL7TbYai8e8/OBsfBnV
-         dwnYvxu3reKHic0bo4XDgRLxixS3ib1fCFNAUpsD6mrJwdGbddcWflRqIFtKd0rmW7aJ
-         zE+A==
+        d=gmail.com; s=20210112; t=1679416116;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qRUXMjw1yqtizFMO9hhf0y6intRqN77LQ8iMEXFSQeU=;
+        b=IVfOxzk8m1QldR3hACl0mrlKEk/3Mpgb19D3F14wwyGcDk89LmFr8cuGJREN/viaRy
+         Z2z1xAeEALG5HOZkNqX9P/arLTn0gqJ7OIjVOkbU24b2SgFm4aY8VZo3cTXPt+EC4ymP
+         sWKwg6sLlpkuqpqSos4LLaGG6Ua4IV8O/ip+Qisdjw9xzbW7CsOx5on5C8MoGcFmjKnW
+         cDMB8eZxwtUw7dgXVaQEuk4xQiO9A2GOyRWQiaPDKuxkaKBK7mCTWlwj1AoqZYbixqv1
+         qCrwijAhes24rXjbU0Z7eDNYMQCm+dqyTxRrzFdlVj1VHV+jlNQpmGftzv4K38C9n0jb
+         Y/dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679416032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bWItCEGK6khz5+cq2aChgbY6kgyAqOoNV2Ytyqot+Vs=;
-        b=NXCeK8jxWOFzv8CNS/cnjOl03K9SAF5XIYxzLFlH2Rpop4O1MHKh11a4fWSuhEHtWn
-         myqyKk4+7YuBl57T1t2KOXHeCbv+/uACxu5H8AbUvNJZ+HPTFSVuJ5UuvYux8lCSAp1c
-         k04csaDs1xFZErWNPizWsqRJ3omfOSkC2RPcbvtrxDDBem8+EBwS1gg5wcUNZ+UTdWBy
-         CJ8wM6ulDg/7yuidoUqKWozsHiXjXDQ41l490LVb7YCzO6UJxIJMmuQexef4hU9iF9WG
-         57KvCNYNMum8BdKo9Zj5851Hu+GGBbKH4I6QkHzbTfPAYh6LE+9St2hhyJKrbTCgeieJ
-         CDAA==
-X-Gm-Message-State: AO0yUKV11+0V6RYl6FD+QxB1pc4B3BkefyKt+y87gEm0noutcQgyuUXL
-        fj1m22ttZ1lzAg3hfGYZpRvqaSc/aDs=
-X-Google-Smtp-Source: AK7set+AXBqUGKxjyRYI1M909bkOFeWTq7pmlBghLp8uVYfmremXh3d5YGWtNHaHTLUssNIBSVW/Ew==
-X-Received: by 2002:ac8:5f4d:0:b0:3b8:6ae9:b10d with SMTP id y13-20020ac85f4d000000b003b86ae9b10dmr804759qta.2.1679416032509;
-        Tue, 21 Mar 2023 09:27:12 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h2-20020ac85682000000b003e388264753sm357387qta.65.2023.03.21.09.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 09:27:12 -0700 (PDT)
-Message-ID: <044a2033-3398-0836-6b54-798d62fcb84c@gmail.com>
-Date:   Tue, 21 Mar 2023 09:27:07 -0700
+        d=1e100.net; s=20210112; t=1679416116;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qRUXMjw1yqtizFMO9hhf0y6intRqN77LQ8iMEXFSQeU=;
+        b=akeHPgjdoQUTKZhIngO4tvBMU/pq8uI5cr/tANDBZFr2huapEonqoe7GHld/lxR3s8
+         lzQduPee0yOAc6h1LxhP0j6NgF54RURQpI5xMQkGJuS/7PtNZQhbSaij6/FhxOhLYbRF
+         SMPfXrtYfonIdABK5Q0/v6EcVRKnxTF6B5e1/TT71Rf+FcikkWTY7IahpUT9BzW1Mn0g
+         urxuPJrZSrjRM9K3LeGuhjc4i6NajvvKYL5gKuCOhsG1/LCio8N5TipJEH5sXM2+o3N+
+         7jyhFRVxXT9PdWOBg+oNT0mImMFDqeVCKNZAKYy1MDa4rh0eI6/L8HJ6poJw+cV0xLww
+         DGNA==
+X-Gm-Message-State: AO0yUKUs/kXGWAT3TZZOOgsIXFklahBwngZhCuxwCZpYI3Bv+gcd3Ntz
+        cAKj8uAYe1VP4weblNgla0jrsn1giTwJfK2g
+X-Google-Smtp-Source: AK7set9J9hxl4uXIJrgVRbkzC7YMBJZZcmmKgSQPLvjIZ1YSEcv9LYFHdmAhpM3rIq9prmlmfnFaDw==
+X-Received: by 2002:a05:6402:38a:b0:4fc:d277:a6d5 with SMTP id o10-20020a056402038a00b004fcd277a6d5mr3838658edv.19.1679416115750;
+        Tue, 21 Mar 2023 09:28:35 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id x23-20020a50d617000000b004fa268da13esm6623696edi.56.2023.03.21.09.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 09:28:35 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 21:28:32 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev,
+        Forest Bond <forest@alittletooquiet.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: fix line ending with '('
+Message-ID: <ZBnbMEJS6q+NWNiT@khadija-virtual-machine>
+References: <ZBhNOkQbG4ygNF98@khadija-virtual-machine>
+ <ZBnZD5alylOgjhYd@khadija-virtual-machine>
+ <ZBnZ+xM0+59Lmvhi@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] i2c: brcmstb: use devm_platform_ioremap_resource_byname()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, kdasu.kdev@gmail.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202303211944063761253@zte.com.cn>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <202303211944063761253@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBnZ+xM0+59Lmvhi@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,16 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 04:44, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Tue, Mar 21, 2023 at 05:23:23PM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Mar 21, 2023 at 09:19:27PM +0500, Khadija Kamran wrote:
 > 
-> Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
-> call to devm_platform_ioremap_resource_byname(), as this is exactly what
-> this function does.
+> <snip>
 > 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> > Hey Outreachy Mentors,
+> > 
+> > Kindly take a look at this patch and let me know if I should wait for
+> > the response on this patch or submit another patch.
+> 
+> Less than 1 day later?
+> 
+> Please relax and always keep working on new things, don't let my
+> response time be the gateway for you doing work, otherwise you are not
+> going to get very much done at all.
+> 
+> You normally have to wait about 2 weeks to get a patch reviewed,
+> sometimes I go much faster, sometimes slower.  Either way, it's
+> uncertian...
+> 
+> thanks,
+> 
+> greg k-h
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Okay understood.
+
+Really sorry about this message.
+
+Regards,
+Khadija
 
