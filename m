@@ -2,125 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A817C6C31C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A356C31C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCUMfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S230373AbjCUMgK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 08:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCUMfj (ORCPT
+        with ESMTP id S229473AbjCUMgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:35:39 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D0F3A4D3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1679402137;
-        bh=WqHd6UmiflAZuHzVPLhpeirTpk1BHvePg3JeMyhBQbE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bjCHwENxoDjb6bK4lLpiebeF4axazjLESvQBHn8qmKv1JeVbC91tDW/15BCkrCjI8
-         StazifwyGhK3Un1Bpi3TlA2A+8DsIgbuXUx1zbE00u30XESxFaOsqicrNufmwkGRmt
-         bmULJfddPXeEiq/qN2+xZoHBWbynPVnfGHchj5kM=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id B90D765938;
-        Tue, 21 Mar 2023 08:35:35 -0400 (EDT)
-Message-ID: <253a5dfcb7e41e44d15232e1891e7ea9d39dc953.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Check unwind_error() in arch_stack_walk()
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Guenter Roeck <linux@roeck-us.net>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Date:   Tue, 21 Mar 2023 20:35:34 +0800
-In-Reply-To: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4 
+        Tue, 21 Mar 2023 08:36:08 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A2241B61;
+        Tue, 21 Mar 2023 05:36:03 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id E093424E30A;
+        Tue, 21 Mar 2023 20:36:00 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 20:36:00 +0800
+Received: from [192.168.125.108] (183.27.97.64) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 20:35:59 +0800
+Message-ID: <2311a888-8861-ade6-d46f-caff4fc3ec73@starfivetech.com>
+Date:   Tue, 21 Mar 2023 20:35:59 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
+ configuration.
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        "Roger Quadros" <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-6-minda.chen@starfivetech.com>
+ <20230320153419.GB1713196-robh@kernel.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <20230320153419.GB1713196-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTAzLTIxIGF0IDE0OjI5ICswODAwLCBUaWV6aHUgWWFuZyB3cm90ZToKPiBX
-ZSBjYW4gc2VlIHRoZSBmb2xsb3dpbmcgbWVzc2FnZXMgd2l0aCBDT05GSUdfUFJPVkVfTE9DS0lO
-Rz15IG9uCj4gTG9vbmdBcmNoOgo+IAo+IMKgIEJVRzogTUFYX1NUQUNLX1RSQUNFX0VOVFJJRVMg
-dG9vIGxvdyEKPiDCoCB0dXJuaW5nIG9mZiB0aGUgbG9ja2luZyBjb3JyZWN0bmVzcyB2YWxpZGF0
-b3IuCj4gCj4gVGhpcyBpcyBiZWNhdXNlIHN0YWNrX3RyYWNlX3NhdmUoKSByZXR1cm5zIGEgYmln
-IHZhbHVlIGFmdGVyIGNhbGwKPiBhcmNoX3N0YWNrX3dhbGsoKSwgaGVyZSBpcyB0aGUgY2FsbCB0
-cmFjZToKPiAKPiDCoCBzYXZlX3RyYWNlKCkKPiDCoMKgwqAgc3RhY2tfdHJhY2Vfc2F2ZSgpCj4g
-wqDCoMKgwqDCoCBhcmNoX3N0YWNrX3dhbGsoKQo+IMKgwqDCoMKgwqDCoMKgIHN0YWNrX3RyYWNl
-X2NvbnN1bWVfZW50cnkoKQo+IAo+IGFyY2hfc3RhY2tfd2FsaygpIHNob3VsZCByZXR1cm4gaW1t
-ZWRpYXRlbHkgaWYgdW53aW5kX25leHRfZnJhbWUoKQo+IGZhaWxlZCwgbm8gbmVlZCB0byBkbyB0
-aGUgdXNlbGVzcyBsb29wcyB0byBpbmNyZWFzZSB0aGUgdmFsdWUgb2YKPiBjLT5sZW4gaW4gc3Rh
-Y2tfdHJhY2VfY29uc3VtZV9lbnRyeSgpLCB0aGVuIHdlIGNhbiBmaXggdGhlIGFib3ZlCj4gcHJv
-YmxlbS4KPiAKPiBSZXBvcnRlZC1ieTogR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0
-Pgo+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC84YTQ0YWQ3MS02OGQyLTQ5MjYt
-ODkyZi03MmJmYzdhNjdlMmFAcm9lY2stdXMubmV0Lwo+IFNpZ25lZC1vZmYtYnk6IFRpZXpodSBZ
-YW5nIDx5YW5ndGllemh1QGxvb25nc29uLmNuPgoKVGhlIGZpeCBtYWtlcyBzZW5zZSwgYnV0IEkn
-bSBhc2tpbmcgdGhlIHNhbWUgcXVlc3Rpb24gYWdhaW4gKHNvcnJ5IGlmCml0J3Mgbm9pc3kpOiBz
-aG91bGQgd2UgQ2Mgc3RhYmxlQHZnZXIua2VybmVsLm9yZyBhbmQvb3IgbWFrZSBhIFBSIGZvcgo2
-LjM/CgpUbyBtZSBhIGJ1ZyBmaXhlcyBzaG91bGQgYmUgYmFja3BvcnRlZCBpbnRvIGFsbCBzdGFi
-bGUgYnJhbmNoZXMgYWZmZWN0ZWQKYnkgdGhlIGJ1ZywgdW5sZXNzIHRoZXJlIGlzIHNvbWUgc2Vy
-aW91cyBkaWZmaWN1bHR5LiAgQXMgNi4zIHJlbGVhc2UKd2lsbCB3b3JrIG9uIGxhdW5jaGVkIDNB
-NTAwMCBib2FyZHMgb3V0LW9mLWJveCwgcGVvcGxlIG1heSB3YW50IHRvIHN0b3AKc3RheWluZyBv
-biB0aGUgbGVhZGluZyBlZGdlIGFuZCB1c2UgYSBMVFMvc3RhYmxlIHJlbGVhc2Ugc2VyaWVzLiBX
-ZQpjYW4ndCBqdXN0IHNheSAob3IgYmVoYXZlIGxpa2UpICJ3ZSBkb24ndCBiYWNrcG9ydCwgcGxl
-YXNlIHVzZSBsYXRlc3QKbWFpbmxpbmUiIElNTyA6KS4KCj4gLS0tCj4gwqBhcmNoL2xvb25nYXJj
-aC9rZXJuZWwvc3RhY2t0cmFjZS5jwqDCoMKgwqDCoCB8IDMgKystCj4gwqBhcmNoL2xvb25nYXJj
-aC9rZXJuZWwvdW53aW5kLmPCoMKgwqDCoMKgwqDCoMKgwqAgfCAxICsKPiDCoGFyY2gvbG9vbmdh
-cmNoL2tlcm5lbC91bndpbmRfcHJvbG9ndWUuYyB8IDQgKysrLQo+IMKgMyBmaWxlcyBjaGFuZ2Vk
-LCA2IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2FyY2gv
-bG9vbmdhcmNoL2tlcm5lbC9zdGFja3RyYWNlLmMgYi9hcmNoL2xvb25nYXJjaC9rZXJuZWwvc3Rh
-Y2t0cmFjZS5jCj4gaW5kZXggM2E2OTBmOS4uN2MxNWJhNSAxMDA2NDQKPiAtLS0gYS9hcmNoL2xv
-b25nYXJjaC9rZXJuZWwvc3RhY2t0cmFjZS5jCj4gKysrIGIvYXJjaC9sb29uZ2FyY2gva2VybmVs
-L3N0YWNrdHJhY2UuYwo+IEBAIC0zMCw3ICszMCw4IEBAIHZvaWQgYXJjaF9zdGFja193YWxrKHN0
-YWNrX3RyYWNlX2NvbnN1bWVfZm4gY29uc3VtZV9lbnRyeSwgdm9pZCAqY29va2llLAo+IMKgCj4g
-wqDCoMKgwqDCoMKgwqDCoHJlZ3MtPnJlZ3NbMV0gPSAwOwo+IMKgwqDCoMKgwqDCoMKgwqBmb3Ig
-KHVud2luZF9zdGFydCgmc3RhdGUsIHRhc2ssIHJlZ3MpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgIXVud2luZF9kb25lKCZzdGF0ZSk7IHVud2luZF9uZXh0X2ZyYW1lKCZzdGF0ZSkpIHsK
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAhdW53aW5kX2RvbmUoJnN0YXRlKSAmJiAhdW53aW5k
-X2Vycm9yKCZzdGF0ZSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdW53aW5kX25leHRfZnJh
-bWUoJnN0YXRlKSkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYWRkciA9IHVu
-d2luZF9nZXRfcmV0dXJuX2FkZHJlc3MoJnN0YXRlKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGlmICghYWRkciB8fCAhY29uc3VtZV9lbnRyeShjb29raWUsIGFkZHIpKQo+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+IGRp
-ZmYgLS1naXQgYS9hcmNoL2xvb25nYXJjaC9rZXJuZWwvdW53aW5kLmMgYi9hcmNoL2xvb25nYXJj
-aC9rZXJuZWwvdW53aW5kLmMKPiBpbmRleCBhNDYzZDY5Li5iYTMyNGJhIDEwMDY0NAo+IC0tLSBh
-L2FyY2gvbG9vbmdhcmNoL2tlcm5lbC91bndpbmQuYwo+ICsrKyBiL2FyY2gvbG9vbmdhcmNoL2tl
-cm5lbC91bndpbmQuYwo+IEBAIC0yOCw1ICsyOCw2IEBAIGJvb2wgZGVmYXVsdF9uZXh0X2ZyYW1l
-KHN0cnVjdCB1bndpbmRfc3RhdGUgKnN0YXRlKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoH0gd2hp
-bGUgKCFnZXRfc3RhY2tfaW5mbyhzdGF0ZS0+c3AsIHN0YXRlLT50YXNrLCBpbmZvKSk7Cj4gwqAK
-PiArwqDCoMKgwqDCoMKgwqBzdGF0ZS0+ZXJyb3IgPSB0cnVlOwo+IMKgwqDCoMKgwqDCoMKgwqBy
-ZXR1cm4gZmFsc2U7Cj4gwqB9Cj4gZGlmZiAtLWdpdCBhL2FyY2gvbG9vbmdhcmNoL2tlcm5lbC91
-bndpbmRfcHJvbG9ndWUuYyBiL2FyY2gvbG9vbmdhcmNoL2tlcm5lbC91bndpbmRfcHJvbG9ndWUu
-Ywo+IGluZGV4IDkwOTVmZGUuLjU1YWZjMjcgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9sb29uZ2FyY2gv
-a2VybmVsL3Vud2luZF9wcm9sb2d1ZS5jCj4gKysrIGIvYXJjaC9sb29uZ2FyY2gva2VybmVsL3Vu
-d2luZF9wcm9sb2d1ZS5jCj4gQEAgLTIxMSw3ICsyMTEsNyBAQCBzdGF0aWMgYm9vbCBuZXh0X2Zy
-YW1lKHN0cnVjdCB1bndpbmRfc3RhdGUgKnN0YXRlKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBjID0gcmVncy0+Y3NyX2VyYTsKPiDCoAo+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICh1c2VyX21vZGUo
-cmVncykgfHwgIV9fa2VybmVsX3RleHRfYWRkcmVzcyhwYykpCj4gLcKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGZhbHNl
-Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGdvdG8gb3V0Owo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgc3RhdGUtPmZpcnN0ID0gdHJ1ZTsKPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzdGF0ZS0+cGMgPSBwYzsKPiBAQCAtMjI2
-LDYgKzIyNiw4IEBAIHN0YXRpYyBib29sIG5leHRfZnJhbWUoc3RydWN0IHVud2luZF9zdGF0ZSAq
-c3RhdGUpCj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgfSB3aGlsZSAoIWdldF9zdGFja19pbmZvKHN0
-YXRlLT5zcCwgc3RhdGUtPnRhc2ssIGluZm8pKTsKPiDCoAo+ICtvdXQ6Cj4gK8KgwqDCoMKgwqDC
-oMKgc3RhdGUtPmVycm9yID0gdHJ1ZTsKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGZhbHNlOwo+
-IMKgfQo+IMKgCgotLSAKWGkgUnVveWFvIDx4cnkxMTFAeHJ5MTExLnNpdGU+ClNjaG9vbCBvZiBB
-ZXJvc3BhY2UgU2NpZW5jZSBhbmQgVGVjaG5vbG9neSwgWGlkaWFuIFVuaXZlcnNpdHkK
 
+
+On 2023/3/20 23:34, Rob Herring wrote:
+> On Wed, Mar 15, 2023 at 06:44:11PM +0800, Minda Chen wrote:
+>> USB Glue layer and Cadence USB subnode configuration,
+>> also includes USB and PCIe phy dts configuration.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
+>>  2 files changed, 61 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index a132debb9b53..c64476aebc1a 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -236,3 +236,10 @@
+>>  	pinctrl-0 = <&uart0_pins>;
+>>  	status = "okay";
+>>  };
+>> +
+>> +&usb0 {
+>> +	status = "okay";
+>> +	usbdrd_cdns3: usb@0 {
+>> +		dr_mode = "peripheral";
+>> +	};
+>> +};
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index f70a4ed47eb4..17722fd1be62 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -362,6 +362,60 @@
+>>  			status = "disabled";
+>>  		};
+>>  
+>> +		usb0: usb@10100000 {
+>> +			compatible = "starfive,jh7110-usb";
+>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+>> +			starfive,sys-syscon = <&sys_syscon 0x18>;
+>> +			status = "disabled";
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges = <0x0 0x0 0x10100000 0x100000>;
+>> +
+>> +			usbdrd_cdns3: usb@0 {
+>> +				compatible = "cdns,usb3";
+> 
+> This pattern of USB wrapper and then a "generic" IP node is discouraged 
+> if it is just clocks, resets, power-domains, etc. IOW, unless there's an 
+> actual wrapper h/w block with its own registers, then don't do this 
+> split. Merge it all into a single node.
+> 
+I am afraid it is difficult to merge in one single node. 
+
+1.If cadence3 usb device is still the sub device. All the dts setting are in
+StarFive node. This can not work.
+StarFive driver code Using platform_device_add generate cadenc3 usb platform device. 
+Even IO memory space setting can be passed to cadence3 USB, PHY setting can not be passed.
+For the PHY driver using dts now. But in this case, Cadence3 USB no dts configure.
+
+2. Just one USB Cadence platform device.
+Maybe this can work. But Cadence USB driver code cdns3-plat.c required to changed.
+
+Hi Peter Pawel and Roger
+   There is a "platform_suspend" function pointer in "struct cdns3_platform_data"，
+   Add "platform_init" and "platform_exit" for our JH7110 platform. Maybe it can work.
+   Is it OK?   
+>> +				reg = <0x0 0x10000>,
+>> +				      <0x10000 0x10000>,
+>> +				      <0x20000 0x10000>;
+>> +				reg-names = "otg", "xhci", "dev";
+>> +				interrupts = <100>, <108>, <110>;
+>> +				interrupt-names = "host", "peripheral", "otg";
+>> +				phys = <&usbphy0>;
+>> +				phy-names = "cdns3,usb2-phy";
+> 
+> No need for *-names when there is only 1 entry. Names are local to the 
+> device and only to distinguish entries, so 'usb2' would be sufficient 
+> here.
+> 
+The PHY name 'cdns3,usb2-phy'  is defined in cadence3 usb driver code.
+Cadence USB3 driver code using this name to get PHY instance.
+And all the PHY ops used in Cadence3 USB sub device. 
+>> +				maximum-speed = "super-speed";
+>> +			};
+>> +		};
+>> +
+>> +		usbphy0: phy@10200000 {
+>> +			compatible = "starfive,jh7110-usb-phy";
+>> +			reg = <0x0 0x10200000 0x0 0x10000>;
+>> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
+>> +			clock-names = "125m", "app_125";
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		pciephy0: phy@10210000 {
+>> +			compatible = "starfive,jh7110-pcie-phy";
+>> +			reg = <0x0 0x10210000 0x0 0x10000>;
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		pciephy1: phy@10220000 {
+>> +			compatible = "starfive,jh7110-pcie-phy";
+>> +			reg = <0x0 0x10220000 0x0 0x10000>;
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>>  		stgcrg: clock-controller@10230000 {
+>>  			compatible = "starfive,jh7110-stgcrg";
+>>  			reg = <0x0 0x10230000 0x0 0x10000>;
+>> -- 
+>> 2.17.1
+>> 
