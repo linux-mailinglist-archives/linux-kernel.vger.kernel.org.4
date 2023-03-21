@@ -2,149 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D145C6C3866
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C7C6C386D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCURi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S230207AbjCURjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjCURiY (ORCPT
+        with ESMTP id S229527AbjCURjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:38:24 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9200532B6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:38 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id o12so62781688edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679420247;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NSFN+vcAKBFw9CRrOYxwC+q3dw6MZ4zFCC9rNy3oZWA=;
-        b=mB4V1KsAyRBedrHItqtzDgzZDsCtyU5w9IhYM+dAykklkQa0yAz+MMLvf94MYlP2g+
-         h1AtfqvglvgRcnv4NrxkHxQ7rUqoHxCi1bTM4F8yXSdmeLmWUsvajReSsHHoAIYUhhcZ
-         o7DERoqWNC7h2iO5IUORsDN9G8O0tH5g9NxLvMyL9Boej8KVKlP0orYNimYxHBtgLZkh
-         Rm21t5ti8Ii49KzGtrGjclCKLDRz0++odTj0tgOtqwlwq5/dhtXzqM9nJIEuWHQfJVFJ
-         P9MCWKSh0O4LyUBfE66V5awrIBFLQtCq5tJUnkVW8U/TGWvjkXlibG36M+EirAmjJa52
-         KEfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420247;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NSFN+vcAKBFw9CRrOYxwC+q3dw6MZ4zFCC9rNy3oZWA=;
-        b=mm8t51xiPurmnQmnkTBgAztYvYRt8G6+EVdA5qVHfM9t1XQHrJeMxQnV8aKBG6TXDj
-         8V294IXV1ehG3aA39fkOq+13keHsLvRS4SeH2/ZOXOO66fJRNf5lPth1vpXLelHvntPw
-         dEaKoPOXNd7LmiKucH0KHBWqVyqGCHt5c8NUWz/YDDV4GwreQ9CdX2k3Qij4iTraw+Ba
-         1cwk2ueAY1RYZq7sLXJRXBAxjYysXQ45ksKBP7c5UcJYjxQgL9+4WsN8MhxlqDsaDh/t
-         cQ/GRynOSRgxCqcb9IKmlTKdvweYx3NV4qN/SHbISpjXQqvzNWCd919fzOSy2eL+xcqz
-         8yMQ==
-X-Gm-Message-State: AO0yUKUVJbIn+vQ4amew3aH0E86EBxHRfYhiQLar1r/1mTtVW3nCaO+m
-        lz4UOM6UGJtaQqmqek9l9MuB4g==
-X-Google-Smtp-Source: AK7set8Uy9OaFw50NEy/nbItPw+/m/3jWKl13WeHGIOpVaMRPYTcSXDoBlgcKw3lU2R9ULIJw5BTTQ==
-X-Received: by 2002:a17:907:a074:b0:923:c199:dab1 with SMTP id ia20-20020a170907a07400b00923c199dab1mr3530925ejc.55.1679420247526;
-        Tue, 21 Mar 2023 10:37:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id w29-20020a50d79d000000b004bf5981ef3dsm6216731edi.94.2023.03.21.10.37.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:37:27 -0700 (PDT)
-Message-ID: <611ea918-64a6-f306-b5ec-db55e41abda2@linaro.org>
-Date:   Tue, 21 Mar 2023 18:37:25 +0100
+        Tue, 21 Mar 2023 13:39:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1837F55524;
+        Tue, 21 Mar 2023 10:38:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E60C0B818D2;
+        Tue, 21 Mar 2023 17:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E580CC433EF;
+        Tue, 21 Mar 2023 17:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679420291;
+        bh=h6PaXJFdNf2jrbSib5gtfbzWZDlURlMX1ekxTl2pyT8=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=LxHBE/UOj7jZzGE6nQmnjE2zuhJVVKMaWI7bt8qm7ARn7QWGhhbPZIFY5zL1PEVh2
+         NG6LcXCL7oSQjC3azOUVfK+ekBlwqMOGc1dQ/E4tO6yGBmteXm+CVjoZEHOkfMtQKJ
+         7KcDXdmdzvHlRXvDt4VJTPFgRYu5uExNvEth/Gb/h0oueeyoIL8rl3ayf5PRYsX3sR
+         UFiNDID6byANLG9dfjQmFfKkUvw3kCAAox4FuU6tyZsTXGavQEb7tL+N8bnzrooTbF
+         7C6eZLiMjwhmjVjBxSE+rx0gxgK4nsaIgI9opSpCsmejMgozdsejYSbylnVpFk7LPE
+         0LTCzsAEVu6ew==
+Message-ID: <a9819d66-43fc-e964-b523-27161466a70a@kernel.org>
+Date:   Tue, 21 Mar 2023 19:38:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V1 3/4] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
 Content-Language: en-US
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+From:   Georgi Djakov <djakov@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <3f385562845ae26d519940ca8098fde89282991b.1679403696.git.quic_schowdhu@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3f385562845ae26d519940ca8098fde89282991b.1679403696.git.quic_schowdhu@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+ <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
+ <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
+ <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
+ <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
+ <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
+ <0af8ba67-f33c-4861-bea5-e662d19638bf@kernel.org>
+ <5459d8d3-4829-01ab-7000-2c1f58ad69e8@linaro.org>
+ <f32cffc4-c327-5019-3598-21516056b4e1@kernel.org>
+In-Reply-To: <f32cffc4-c327-5019-3598-21516056b4e1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 14:51, Souradeep Chowdhury wrote:
-> All of Qualcomm's proprietary Android boot-loaders capture boot time
-> stats, like the time when the bootloader started execution and at what
-> point the bootloader handed over control to the kernel etc. in the IMEM
-> region. This information is captured in a specific format by this driver
-> by mapping a structure to the IMEM memory region and then accessing the
-> members of the structure to print the information. This information is
-> useful in verifying if the existing boot KPIs have regre
+On 21.03.23 16:38, Georgi Djakov wrote:
+> On 21.03.23 16:11, Konrad Dybcio wrote:
+>>
+>>
+>> On 21.03.2023 14:58, Georgi Djakov wrote:
+>>> Hi,
+>>>
+>>> On 11.03.23 17:26, Dmitry Baryshkov wrote:
+>>>> On 11/03/2023 16:38, Bryan O'Donoghue wrote:
+>>>>> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
+>>>>>>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
+>>>>>>> be added to the UFS device list of clocks.
+>>>>>> While we were doing this for some of the clocks (PCIe and USB, if I'm
+>>>>>> not mistaken), I think that generally this is not fully correct. In my
+>>>>>> opinion it should be in the interconnect driver, who turns
+>>>>>> corresponding clocks on and off. These clocks correspond to the SoC
+>>>>>> topology, rather than the end-device.
+>>>>>>
+>>>>>
+>>>>> True enough, they are interconnect clocks.
+>>>>>
+>>>>> The question is how to only turn them on when the device that depends on them wants them.
+>>>>
+>>>> I think we can turn them on an off from qcom_icc_set(). Each node can list required clocks.
+>>>>
+>>>
+>>> Yes, this is a bit weird, but looks like these are the interface clocks
+>>> required for programming the qos box of the respective peripheral and
+>>> nothing else. Maybe we can even configure QoS just once (eg. on the first
+>>> bandwidth request) and not every time we call qcom_icc_set().
+>> Would that persist a full bus reset - if we e.g. shut down MMNoC
+>> after the display stack is turned off in preparation for a power
+>> collapse, would we have to reprogram it?
+>>
+>> Another thing is, do we know "how persistent" the QoS settings are?
+>> What could reset them? Would a bandwidth request for a node that
+>> belongs to the same path do so?
+> 
+> That's a good question. From what i recall, i expect them to persist until
+> you reset the board. Probably we can verify it with an experiment by reading
+> them back, but let me check if i can find some info.
+> 
 
+This seems to be hardware specific and there is no general answer. It depends
+on where the reset line for the NIU comes from. It could be from the primary
+chip reset in most cases, but it could be also within the power domain of the
+associated core.
 
-> +/**
-> + *  struct boot_stats - timestamp information related to boot stats
-> + *  @bootloader_start:	Time for the starting point of the abl bootloader
-> + *  @bootloader_end:	Time when the kernel starts loading from abl bootloader
-> + */
-> +struct boot_stats {
-> +	u32 bootloader_start;
-> +	u32 bootloader_end;
-> +} __packed;
-> +
-> +static struct boot_stats __iomem *boot_stats;
-> +static void __iomem *mpm_counter_base;
-> +static u32 mpm_counter_freq;
-
-No file-scope variables. Does not scale, not easy for review and
-maintenance. Avoid such code.
-
-> +
-> +static int mpm_parse_dt(void)
-> +{
-> +	struct device_node *np_imem, *np_mpm2;
-> +
-> +	np_imem = of_find_compatible_node(NULL, NULL,
-> +					  "qcom,imem-boot_stats");
-> +	if (!np_imem) {
-> +		pr_err("can't find qcom,imem node\n");
-
-So you are printing errors everywhere, on every soc and with compile
-test on every platform there is in the world... sorry, it does not work
-like that.
-
-> +		return -ENODEV;
-> +	}
-> +	boot_stats = of_iomap(np_imem, 0);
-> +	if (!boot_stats) {
-> +		pr_err("boot_stats: Can't map imem\n");
-> +		goto err1;
-> +	}
-
-
-> +
-> +static void __exit boot_stats_exit(void)
-> +{
-> +}
-> +module_exit(boot_stats_exit)
-
-
-I don't think this is some special code which deserves init calls. Make
-it module_platform_driver().
-
-
-Best regards,
-Krzysztof
+Thanks,
+Georgi
 
