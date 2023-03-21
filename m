@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E2E6C3D9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF9A6C3D96
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCUWSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S229846AbjCUWRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjCUWSk (ORCPT
+        with ESMTP id S229639AbjCUWRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:18:40 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77321E2BE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:18:39 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 04DE516C0008;
-        Wed, 22 Mar 2023 00:18:37 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id E3HaXk0NAyie; Wed, 22 Mar 2023 00:18:33 +0200 (EET)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1679437113; bh=esiCyKOeRzOLdYIVhVrXW6XDb+dUfcaBNizQSQbemhA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Gs+vK6HPaIqLXChtT2Kk/SmmFCHQ5yHmyT9ThRurlMegTjCiW8/aT95i8jdmIioPq
-         iHeLYuz8urbvwB+u0F8MSPQWdbIWthONiiIhavj2vNGRb9aMV+l6IwWfW8Me5Af+9y
-         sD+UY2i9lHYR6sRn0xbBuEuzuh1IvuqQXrmBXK9k=
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 3/4] ASoC: amd: acp: Add machine driver that enables
- sound for systems with a ES8336 codec
-In-Reply-To: <141a3320-ff65-459f-9d00-c8bed691dcfc@sirena.org.uk>
-References: <20230320203519.20137-1-posteuca@mutex.one>
- <20230320203519.20137-4-posteuca@mutex.one>
- <141a3320-ff65-459f-9d00-c8bed691dcfc@sirena.org.uk>
-Date:   Wed, 22 Mar 2023 00:17:24 +0200
-Message-ID: <87lejpwxzf.fsf@mutex.one>
+        Tue, 21 Mar 2023 18:17:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E081717E;
+        Tue, 21 Mar 2023 15:17:34 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.24.179.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A31A866030D8;
+        Tue, 21 Mar 2023 22:17:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679437052;
+        bh=kISYc8jF93sURnyHntnC1OZ2p4p1sWgcPPfEJiI3pho=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DAlF+kqBJ+TEevV3l2dvq4UP4emcgYVVXEzpExVl2nEEZQG5wPo/gPGRhrebUJ4jB
+         6UuwSHDZL7gQadG/0pX/QwT7ZZZFuhysxpycz/tYEs+BX1pZC9hNMfwaFnJ8FI718S
+         HX3dybyqVznpzuASOX/4MQKrkzxdElPKo0R0J7/oCJbOGQbBgfu15V3g2EEsCgKg3O
+         I7C7YYalHMeiFiBzzMhgrgJqZtMzR9T1ai92Kz63OL3ffXAXSla6rJHdZbhEmEzNB6
+         EftcQErQx9ncAjS18lQI5SGVnMHuwCrZxx0b1cCZ3EZvTR5On2hyhy1IxBeDicRKnm
+         r++47+MMC+UQA==
+Message-ID: <7cd34af7-94e7-b5e2-053c-4cc831e4cfc4@collabora.com>
+Date:   Wed, 22 Mar 2023 00:17:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 01/10] dt-bindings: serial: snps-dw-apb-uart: Switch
+ dma-names order
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
+ <20230321215624.78383-2-cristian.ciocaltea@collabora.com>
+ <5287504e-c0f7-4964-8a61-fd49b7ee9547@spud>
+Content-Language: en-US
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <5287504e-c0f7-4964-8a61-fd49b7ee9547@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark Brown <broonie@kernel.org> writes:
+On 3/22/23 00:09, Conor Dooley wrote:
+> On Tue, Mar 21, 2023 at 11:56:15PM +0200, Cristian Ciocaltea wrote:
+>> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
+>> dma-names properties") documented dma-names property to handle Allwinner
+>> D1 dtbs_check warnings, but relies on the rx->tx ordering, which is the
+>> reverse of what a different board expects:
+>>
+>>    rk3326-odroid-go2.dtb: serial@ff030000: dma-names:0: 'rx' was expected
+>>
+>> A quick and incomplete check shows the inconsistency is present in many
+>> other DTS files:
+> 
+>> The initial proposed solution was to allow a flexible dma-names order in
+>> the binding, due to potential ABI breakage concerns after fixing the DTS
+>> files. But luckily the Allwinner boards are not really affected, since
+>> all of them are using a shared DMA channel for rx and tx:
+> 
+>> Switch dma-names order to tx->rx as the first step in fixing the
+>> inconsistency. The remaining DTS fixes will be handled by separate
+>> patches.
+>>
+>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Thanks for doing all of the switch overs too. I should've probably
+> broadened my searching beyond the allwinner platforms when I initially
+> added this, so yeah, thanks.
 
->> +static int acp3x_es83xx_speaker_power_event(struct snd_soc_dapm_widget *w,
->> +					    struct snd_kcontrol *kcontrol, int event)
->> +{
->> +	struct acp3x_es83xx_private *priv = get_mach_priv(w->dapm->card);
->> +
->> +	dev_dbg(priv->codec_dev, "speaker power event: %d\n", event);
->> +	if (SND_SOC_DAPM_EVENT_ON(event))
->> +		acp3x_es83xx_set_gpios_values(priv, 1, 0);
->> +	else
->> +		acp3x_es83xx_set_gpios_values(priv, 0, 1);
->
-> Why are these two GPIOs tied together like this?
->
-
-These GPIOs represent the speaker and the headphone switches. When
-activating the speaker GPIO you have to deactivate the headphone GPIO
-and vice versa. The logic is taken from the discussion on the sofproject
-pull request:
-https://github.com/thesofproject/linux/pull/4112/commits/810d03e0aecdf0caf580a5179ee6873fb33485ab
-and
-https://github.com/thesofproject/linux/pull/4066
-
->> +static int acp3x_es83xx_suspend_pre(struct snd_soc_card *card)
->> +{
->> +	struct acp3x_es83xx_private *priv = get_mach_priv(card);
->> +
->> +	dev_dbg(priv->codec_dev, "card suspend\n");
->> +	snd_soc_component_set_jack(priv->codec, NULL, NULL);
->> +	return 0;
->> +}
->
-> That's weird, why do that?
-
-This is needed because if suspending the laptop with the headphones
-inserted, when resuming, the sound is not working anymore. Sound stops
-working on speakers and headphones. Reinsertion and removals of the
-headphone doesn't solve the problem.
-
-This seems to be caused by the fact
-that the GPIO IRQ stops working in es8316_irq() after resume.
-Now the call to snd_soc_component_set_jack() in suspend disables the
-GPIO IRQ and in resume the GPIO IRQ is reactivated.
-By the way this sequence is also used in bytcht_es8316.c in suspend and
-resume:
-
-static int byt_cht_es8316_suspend(struct snd_soc_card *card)
-{
-	struct snd_soc_component *component;
-
-	for_each_card_components(card, component) {
-		if (!strcmp(component->name, codec_name)) {
-			dev_dbg(component->dev, "disabling jack detect before suspend\n");
-			snd_soc_component_set_jack(component, NULL, NULL);
-			break;
-		}
-	}
-
-	return 0;
-}
-
-static int byt_cht_es8316_resume(struct snd_soc_card *card)
-{
-	struct byt_cht_es8316_private *priv = snd_soc_card_get_drvdata(card);
-	struct snd_soc_component *component;
-
-	for_each_card_components(card, component) {
-		if (!strcmp(component->name, codec_name)) {
-			dev_dbg(component->dev, "re-enabling jack detect after resume\n");
-			snd_soc_component_set_jack(component, &priv->jack, NULL);
-			break;
-		}
-	}
+Thanks for the quick review! And no worries, I'm glad I could help, 
+hopefully I didn't miss anything..
