@@ -2,157 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB166C3EA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385016C3EB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 00:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCUXi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 19:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S230035AbjCUXj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 19:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjCUXiy (ORCPT
+        with ESMTP id S229764AbjCUXjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 19:38:54 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331311589F;
-        Tue, 21 Mar 2023 16:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679441933; x=1710977933;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QyMwH+TpTkKRII7zXw6wfHJaKJbJT+IwvyS0aWpk6So=;
-  b=jKObHg6JGwhin2O+u2uKi1TQMsIIjIVQTARC/5NX9uTxvf8p8jF3+w+m
-   R766w/TWmo8v7CBcz14a4vToGaFcezyJr3BRbprvqvbKaZQ9yxRet2vMN
-   Q6cfUE2pNmxpSIW8y8u0owjXM45lldpQQErRNFcz49XEt1OKfLqEFBt9s
-   n2/iGWfuhmwPSl0GXFLWsU7G60qxpsyouvTLgxDVPGMp7X0QilJMWv/gd
-   UeHCnBWn1NFEtpAGLxNRuBqpd/RNnOVy7DubfJfJT8i5PIlVpiv64sJRN
-   eF9gFWZf04YXUEpd51KC8FrUKimy+XmTEAF6x/tjVuORW8VgWIw6f9Pct
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="322926126"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="322926126"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 16:38:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="770840396"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="770840396"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2023 16:38:52 -0700
-Received: from debox1-desk4.intel.com (unknown [10.251.1.45])
-        by linux.intel.com (Postfix) with ESMTP id A9C495805CB;
-        Tue, 21 Mar 2023 16:38:51 -0700 (PDT)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     david.e.box@linux.intel.com, ville.syrjala@linux.intel.com,
-        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org
-Cc:     me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: [PATCH] PCI/ASPM: pci_enable_link_state: Add argument to acquire bus lock
-Date:   Tue, 21 Mar 2023 16:38:49 -0700
-Message-Id: <20230321233849.3408339-1-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 21 Mar 2023 19:39:54 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E65C15577;
+        Tue, 21 Mar 2023 16:39:53 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id az3-20020a05600c600300b003ed2920d585so12010583wmb.2;
+        Tue, 21 Mar 2023 16:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679441991;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=jwfMZ6FsDD8+QlFgG9YSGQ+zSUs+XYTprVxYaYY4xCs=;
+        b=bkBHelgXJwSgw9NZ5DcQ/rAeODyT2QbCZQWqLR3yhQe7qk2WtbX3WlX//JoMlB0gX0
+         lfalGUbwfgFGT4ELFVIjA759O+kKuqGQtJS87Vk0JPkszPWrW7TnHebl6ei2+oorMVhd
+         Lc98meTC4oaHoutzsVkMwR95MIwhSE9MwDhFyknkqQPJcwG7O5IR8GeQyHr9MTD/9SGU
+         pxFGpcTlofPElg4Phc7kkGzdUqKwVaBFHVxGp3tGJeLa84o6nDOEeypP1oikHYn+q7wR
+         Jrtu2GEePEQfegjd54V3W5o2sm98uxNpYUTvOBLoOV3Ny09R0J74nwQSogF+VMIzc3FY
+         26XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679441991;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jwfMZ6FsDD8+QlFgG9YSGQ+zSUs+XYTprVxYaYY4xCs=;
+        b=xdDlQYoYZbOFfBaeXuHW4Q0P7xijQqOvRMo5wz+k2uewxT6rAUnWVSqDJjjhFIZEQv
+         Ug3VLLvPYGFFQPZFcyvCmg9By9CGFMDlknDjbG8t5vqQcTft5VbzPaf5CF9W9tygQwH5
+         SNpZHKl/gowqMKYyX4hUB6+nxqgMKqIEUMDOVDFuzxGzgcj8tzJ3kwy65th4BuuEBTcS
+         Bcv351atxgu+vbsg+7SGMjGEeT78bGlL7dxO6rIyASz0RBruguR7b1iZxMTPDBXEfVbs
+         pdzmwdMn2R3VgWax83dZJfUAUD3JQmoHcna9HFmv5VEMxWN+4e4pTOLv+yU+6/EeHOlN
+         NIQQ==
+X-Gm-Message-State: AO0yUKVDH14GiAixz7VZU5qKeYcvef3a9rfx0Qp/3aYWgJ/0C5JN4GoO
+        KSJJi0MLA37z5VBHoawey74=
+X-Google-Smtp-Source: AK7set/s45oboY6J1DqDB/0FL+87KkEyElGWJ9yuDvg1P5AEXq8dYBcKJ3L/B1aVpUVe1ob2ikoHEg==
+X-Received: by 2002:a7b:c7c4:0:b0:3ea:ed4d:38f6 with SMTP id z4-20020a7bc7c4000000b003eaed4d38f6mr3681988wmk.4.1679441991057;
+        Tue, 21 Mar 2023 16:39:51 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
+        by smtp.gmail.com with ESMTPSA id l15-20020a7bc44f000000b003edef091b17sm7840916wmi.37.2023.03.21.16.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 16:39:50 -0700 (PDT)
+Message-ID: <641a4046.7b0a0220.44d4e.95d4@mx.google.com>
+X-Google-Original-Message-ID: <ZBpARKRa7Hcg0crS@Ansuel-xps.>
+Date:   Wed, 22 Mar 2023 00:39:48 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
+ Document support for LEDs node
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-11-ansuelsmth@gmail.com>
+ <20230321211953.GA1544549-robh@kernel.org>
+ <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
+ <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The VMD driver calls pci_enabled_link_state as a callback from
-pci_bus_walk. Both will acquire the pci_bus_sem lock leading to a lockdep
-warning. Add an argument to pci_enable_link_state to set whether the lock
-should be acquired. In the VMD driver, set the argument to false since the
-lock will already be obtained by pci_bus_walk.
+On Wed, Mar 22, 2023 at 12:23:59AM +0100, Andrew Lunn wrote:
+> > > Are specific ethernet controllers allowed to add their own properties in 
+> > > led nodes? If so, this doesn't work. As-is, this allows any other 
+> > > properties. You need 'unevaluatedProperties: false' here to prevent 
+> > > that. But then no one can add properties. If you want to support that, 
+> > > then you need this to be a separate schema that devices can optionally 
+> > > include if they don't extend the properties, and then devices that 
+> > > extend the binding would essentially have the above with:
+> > > 
+> > > $ref: /schemas/leds/common.yaml#
+> > > unevaluatedProperties: false
+> > > properties:
+> > >   a-custom-device-prop: ...
+> > > 
+> > > 
+> > > If you wanted to define both common ethernet LED properties and 
+> > > device specific properties, then you'd need to replace leds/common.yaml 
+> > > above  with the ethernet one.
+> > > 
+> > > This is all the same reasons the DSA/switch stuff and graph bindings are 
+> > > structured the way they are.
+> > > 
+> > 
+> > Hi Rob, thanks for the review/questions.
+> > 
+> > The idea of all of this is to keep leds node as standard as possible.
+> > It was asked to add unevaluatedProperties: False but I didn't understood
+> > it was needed also for the led nodes.
+> > 
+> > leds/common.yaml have additionalProperties set to true but I guess that
+> > is not OK for the final schema and we need something more specific.
+> > 
+> > Looking at the common.yaml schema reg binding is missing so an
+> > additional schema is needed.
+> > 
+> > Reg is needed for ethernet LEDs and PHY but I think we should also permit
+> > to skip that if the device actually have just one LED. (if this wouldn't
+> > complicate the implementation. Maybe some hints from Andrew about this
+> > decision?)
+> 
+> I would make reg mandatory.
+>
 
-Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Fixes: de82f60f9c86 ("PCI/ASPM: Add pci_enable_link_state()")
-Link: https://lore.kernel.org/linux-pci/ZBjko%2FifunIwsK2v@intel.com/
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
- drivers/pci/controller/vmd.c | 2 +-
- drivers/pci/pcie/aspm.c      | 9 ++++++---
- include/linux/pci.h          | 5 +++--
- 3 files changed, 10 insertions(+), 6 deletions(-)
+Ok will add a new schema and change the regex.
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 990630ec57c6..45aa35744eae 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -737,7 +737,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
- 	if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
- 		return 0;
- 
--	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
-+	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL, false);
- 
- 	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
- 	if (!pos)
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 66d7514ca111..5b5a600bb864 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -1147,8 +1147,9 @@ EXPORT_SYMBOL(pci_disable_link_state);
-  *
-  * @pdev: PCI device
-  * @state: Mask of ASPM link states to enable
-+ * @sem: Boolean to acquire/release pci_bus_sem
-  */
--int pci_enable_link_state(struct pci_dev *pdev, int state)
-+int pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)
- {
- 	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
- 
-@@ -1165,7 +1166,8 @@ int pci_enable_link_state(struct pci_dev *pdev, int state)
- 		return -EPERM;
- 	}
- 
--	down_read(&pci_bus_sem);
-+	if (sem)
-+		down_read(&pci_bus_sem);
- 	mutex_lock(&aspm_lock);
- 	link->aspm_default = 0;
- 	if (state & PCIE_LINK_STATE_L0S)
-@@ -1186,7 +1188,8 @@ int pci_enable_link_state(struct pci_dev *pdev, int state)
- 	link->clkpm_default = (state & PCIE_LINK_STATE_CLKPM) ? 1 : 0;
- 	pcie_set_clkpm(link, policy_to_clkpm_state(link));
- 	mutex_unlock(&aspm_lock);
--	up_read(&pci_bus_sem);
-+	if (sem)
-+		up_read(&pci_bus_sem);
- 
- 	return 0;
- }
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index fafd8020c6d7..a6f9f24b39fd 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1707,7 +1707,7 @@ extern bool pcie_ports_native;
- #ifdef CONFIG_PCIEASPM
- int pci_disable_link_state(struct pci_dev *pdev, int state);
- int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
--int pci_enable_link_state(struct pci_dev *pdev, int state);
-+int pci_enable_link_state(struct pci_dev *pdev, int state, bool sem);
- void pcie_no_aspm(void);
- bool pcie_aspm_support_enabled(void);
- bool pcie_aspm_enabled(struct pci_dev *pdev);
-@@ -1716,7 +1716,8 @@ static inline int pci_disable_link_state(struct pci_dev *pdev, int state)
- { return 0; }
- static inline int pci_disable_link_state_locked(struct pci_dev *pdev, int state)
- { return 0; }
--static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
-+static inline int
-+pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)
- { return 0; }
- static inline void pcie_no_aspm(void) { }
- static inline bool pcie_aspm_support_enabled(void) { return false; }
+> We should not encourage additional properties, but i also think we
+> cannot block it.
+> 
+> The problem we have is that there is absolutely no standardisation
+> here. Vendors are free to do whatever they want, and they do. So i
+> would not be too surprised if some vendor properties are needed
+> eventually.
+>
+
+Think that will come later with defining a more specific schema. But I
+honestly think most of the special implementation will be handled to the
+driver internally and not with special binding in DT.
+
 -- 
-2.34.1
-
+	Ansuel
