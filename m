@@ -2,179 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CE86C2C53
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584DA6C2C51
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCUI2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S231220AbjCUI2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbjCUI2Q (ORCPT
+        with ESMTP id S231233AbjCUI1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:28:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056F64491;
-        Tue, 21 Mar 2023 01:28:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DEA619BF;
-        Tue, 21 Mar 2023 08:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EFEC4339B;
-        Tue, 21 Mar 2023 08:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679387293;
-        bh=CoOWB5m6DsId/z5WaBKhpXg+WFwSZORzhnSfYgGrajA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UsFCZnK+ldzABZuMk/PN22yEaiZnVYBIpPksijS5ZNIwZTCSgANuleuujci9lwHVZ
-         M9Z0s8E0BmhEriEKc3YRxpebCE6GKKYoF6qr6pqQsCmhP18H52RR+/ot8tyuPRqJHu
-         ns3IW9fRX79g7/efzc5I4gm2+5VZwRM5snanwdJfhrBELF7LWxPCPmf6CzHQ74gvX9
-         nDfp2qZipUmdlhXmUfaH8RRzwAGoTndQ095sWbScw3iGZ9b5fXaLlAERd9KCorQtA+
-         8mmViO4IslkvVQk7HR6njLKik+EpXHOeY33A3a1L5ugBk3jNuCPM5zaj+YX/OmK2O4
-         7HOOxwTWsfd7Q==
-Received: by mail-ot1-f50.google.com with SMTP id v17-20020a9d6051000000b0069a413e9cf6so8104360otj.3;
-        Tue, 21 Mar 2023 01:28:13 -0700 (PDT)
-X-Gm-Message-State: AO0yUKVzFOfsU+hYegOU9U3MNy/czqQNB2K9AUxXHCwhlIz47+cRdvea
-        WkcKjKgK4X3C/Kgikyq3WVgFYZakTupb838+8OE=
-X-Google-Smtp-Source: AK7set+xIFO1Ffs+pzsdRPHCvC6QdwrEOO/QPrSR2a/x52pa4JNUXT0IFNcgFvNQr9vzH8MBNGJJET7uyOeQUO+RE5Q=
-X-Received: by 2002:a05:6830:3299:b0:688:d1a8:389e with SMTP id
- m25-20020a056830329900b00688d1a8389emr500571ott.1.1679387293218; Tue, 21 Mar
- 2023 01:28:13 -0700 (PDT)
+        Tue, 21 Mar 2023 04:27:51 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC6339BB4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:27:46 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id o12so56459747edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679387264;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/TEoac3zeVJgrljfVa3qI82OfUIQHCkP0Xt4a5FiT+o=;
+        b=yoCa7/aGur2BAdLJ0k075LI38fAA5uW/39Bida5ARuhbJngZpq4KmgzY4307Ut8mcl
+         5+KBSkPEzkhMAwVC2vJ0La0j1YcVqBeAsxgBRRLyNbnfUihAUfAwg9KJ2SKX/+mmcyBH
+         hsxEZrPQyY8MUSaIW44hGOF//5Fz62bZsZINgIUp1HMH0rv86LKAwuVYsB7oanw7OZe7
+         EB2/+hQ49iUSD89pX8kSyNdsN/GdaAIRJQ9+i2uojH8Mpy6qRk4E5k8knP27e/ETahjy
+         4EcIE96IsWZWZWSWZnCPCz0rTrt4u0mEZOEu7sqJoAWDrYti8/2rKmXD4z1+SoRCjYzh
+         Mf/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679387264;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/TEoac3zeVJgrljfVa3qI82OfUIQHCkP0Xt4a5FiT+o=;
+        b=5/HkR5cGzcfGMmET/xl/wVikX5VsH4PTNOe8jtw5yRCVht1Zm2B0zSygx78p8BQv0/
+         02NB3suvEM463PZKBT275pLlSRlZO6DnBl/kacOd9Ng6pCF2R83qpZqBPTCHiuxa8yla
+         JOXyO5hA0RXUOzhLFim1QqTmvtQAvyPCedBhNmhk2xybnAucuS0k6H3/4QNR2BxQbc6w
+         EyFESZf5F5uvuMfTqgOTLbRVfRsgk5PvMlGIH6zMZXa1PrcyeM4GaVYxmxyqwIUajdvj
+         mlm19zlMRhTTDxHM0l28dMXX+cseHUupg/hqXJndKr5mKfzvKkDLcjzlikPCkpKrUOBE
+         k15Q==
+X-Gm-Message-State: AO0yUKUaH7UutUtwm7/6pkqv94kk6UOJqNQJkvx0FgEOnNGleQGA/sGM
+        rWHv3f+9JNT6n7KaMPgRVzYFcw==
+X-Google-Smtp-Source: AK7set/otTGERTl499ZirD8V+i4JpJed1Ipr6PSjOnjMebniqJYVuGKY9sgR9QOB04aOlA+Bn+URmg==
+X-Received: by 2002:aa7:c858:0:b0:4fe:9bb7:73a2 with SMTP id g24-20020aa7c858000000b004fe9bb773a2mr2092978edt.38.1679387264161;
+        Tue, 21 Mar 2023 01:27:44 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id x23-20020a50d617000000b004fa268da13esm5985814edi.56.2023.03.21.01.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 01:27:43 -0700 (PDT)
+Message-ID: <82f517b5-6697-3379-8d71-163b0d17735d@linaro.org>
+Date:   Tue, 21 Mar 2023 09:27:42 +0100
 MIME-Version: 1.0
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-10-nick.alcock@oracle.com> <86y1onw02k.wl-maz@kernel.org>
- <Y/jyJFXqlj9DlX9z@bombadil.infradead.org> <86wn47vue1.wl-maz@kernel.org> <Y/kXDqW+7d71C4wz@bombadil.infradead.org>
-In-Reply-To: <Y/kXDqW+7d71C4wz@bombadil.infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 21 Mar 2023 17:27:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAScmTeSXBXiFCOS+KU_LSgZjRD4GKRAcxVXHPtTxF7ewg@mail.gmail.com>
-Message-ID: <CAK7LNAScmTeSXBXiFCOS+KU_LSgZjRD4GKRAcxVXHPtTxF7ewg@mail.gmail.com>
-Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+ <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+ <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
+ <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+ <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
+ <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+ <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
+ <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
+ <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
+ <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
+ <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
+ <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
+ <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
+ <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 4:59=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Fri, Feb 24, 2023 at 05:35:34PM +0000, Marc Zyngier wrote:
-> > On Fri, 24 Feb 2023 17:21:40 +0000,
-> > Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
-> > > > On Fri, 24 Feb 2023 15:07:53 +0000,
-> > > > Nick Alcock <nick.alcock@oracle.com> wrote:
-> > > > >
-> > > > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > > > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declaratio=
-ns
-> > > > > are used to identify modules. As a consequence, uses of the macro
-> > > > > in non-modules will cause modprobe to misidentify their containin=
-g
-> > > > > object file as a module when it is not (false positives), and mod=
-probe
-> > > > > might succeed rather than failing with a suitable error message.
-> > > > >
-> > > > > So remove it in the files in this commit, none of which can be bu=
-ilt as
-> > > > > modules.
-> > > > >
-> > > > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > > > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > Cc: linux-modules@vger.kernel.org
-> > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > > > > ---
-> > > > >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
-> > > > >  1 file changed, 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchi=
-p/irq-renesas-rzg2l.c
-> > > > > index 25fd8ee66565..4bbfa2b0a4df 100644
-> > > > > --- a/drivers/irqchip/irq-renesas-rzg2l.c
-> > > > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> > > > > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irq=
-c_init)
-> > > > >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
-> > > > >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesa=
-s.com>");
-> > > > >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
-> > > > > -MODULE_LICENSE("GPL");
-> > > >
-> > > > I'm probably missing some context here, but I find it odd to drop
-> > > > something that is a important piece of information because of what
-> > > > looks like a tooling regression.
-> > > >
-> > > > It also means that once a random driver gets enabled as a module, i=
-t
-> > > > won't load because it is now missing a MODULE_LICENSE() annotation.
-> > > >
-> > > > It feels like MODULE_LICENSE should instead degrade to an empty
-> > > > statement when MODULE isn't defined. Why isn't this approach the
-> > > > correct one?
-> > > >
-> > > > I expect the cover letter would have some pretty good information o=
-n
-> > > > this, but lore.kernel.org doesn't seem to have it at the time I wri=
-te
-> > > > this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> n=
-ot
-> > > > found").
-> > >
-> > > The right thing is to not even have this and have the module license
-> > > inferred from the SPDX tag. But for now we want to remove the tag fro=
-m
-> > > things we know for sure are not modules.
-> >
-> > I understand that you want to remove it. I don't get why this is the
-> > right solution. Can you please assume that, in this particular
-> > instance, I am a complete idiot and spell it out for me?
-> >
-> > Why isn't that a problem for modules that are compiled-in?
->
-> Modules that are compiled in should succeed with a modprobe call as its
-> already loaded. The construct we're looking for is a way to detect
-> things which are built-in but *could* be modules. The annotation today
-> is done at build time for something built-in using a file path using
-> modinfo.
+On 21/03/2023 09:24, Arınç ÜNAL wrote:
+>>>
+>>> If we take the calling new things mediatek route, we will never get to
+>>> the bottom of fixing the naming inconsistency.
+>>
+>> All new things, so new SoCs, should be called mediatek, because there is
+>> no ralink and mediatek is already used for them. So why some new
+>> Mediatek SoCs are "mediatek" but some other also new SoCs are "ralink"?
+>>
+>> You can do nothing (and no actual need) about existing inconsistency...
+> 
+> I couldn't change ralink -> mediatek because company acquisitions don't 
+> grant the change. I don't see any reason to prevent changing mediatek -> 
+> ralink without breaking the ABI on the existing schemas.
 
+You cannot change mediatek->ralink without breaking the ABI for the same
+reasons.
 
+Best regards,
+Krzysztof
 
-
-Why is it important to make "modprobe irq-renesas-rza1" fail?
-
-With CONFIG_RENESAS_RZA1_IRQC=3Dy, "modprobe irq-renesas-rza1"
-exits with 0.
-I do not think it is a big deal since irq-renesas-rza1
-is available as built-in.
-
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
