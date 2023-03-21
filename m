@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6627D6C3848
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84B16C3858
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjCURe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S231134AbjCURfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjCUReX (ORCPT
+        with ESMTP id S230374AbjCURex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:34:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC9B53DBD;
-        Tue, 21 Mar 2023 10:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1679420038; i=rwarsow@gmx.de;
-        bh=acxJ695h55d1k6cxhevVrjQxqBJFddoHyzszuIX/Hho=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=jo3gX3NYIdBQr1cBpZ5DMWknifrZ1IQGf3KgLPgbDU61EtrDNHw6pSB0MnZVC5mzX
-         xml/AnmEEDZMlrJagJX3zbIqqzxI1XzZdzM+nf39qkAVBoYG2s+q55ESM8E09RQW7I
-         5bUdHKP5bGaRVL97zZqy5H9VYpu/dW4/YftJGeX8PbwqqkWqAt8db+1zopctxS9MwK
-         DHaYqXHg6rV3c2GACvZ+5PdHzKeC+aL3z9MSH98REpza4FF/PTnG2TcSy8yQ3l584+
-         Ga4zLMV7QeuMrxwk+zzM52cOLVGueUzLwMdl4IP+2Ji2U0YaAuNEoEZ8wBjSqA6eA+
-         rAembqO+ajPQw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([94.134.26.109]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwwdf-1qOwnu3y8J-00yNMY; Tue, 21
- Mar 2023 18:33:58 +0100
-Message-ID: <a764c98c-9223-0bed-8565-8e68406dcb2e@gmx.de>
-Date:   Tue, 21 Mar 2023 18:33:57 +0100
+        Tue, 21 Mar 2023 13:34:53 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C906B5550A;
+        Tue, 21 Mar 2023 10:34:26 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id y14so14546846wrq.4;
+        Tue, 21 Mar 2023 10:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679420064;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vnvnwWc5Tmg09HBQo/m9RbRM6yM8KLx8r1VA+Abfg3k=;
+        b=eFv+mwe94Y2YZMiJP5gydXVrGlbIAR5HCrY0rdcoGoMPzQUHLFckZeYCgEKudI55I7
+         gMLZYCtLwvDXvKeHM2AUigsq2YuJSeF5QwICPrhTnMwUGBg4yyyltrc3+J0lSd6/4kQv
+         h0yM1Oo4v0d8CuqjBU6bXienIk34AFVJfsPq+vWQTjAbUL7ht4WHZ2Ez2MFoTvZpkIJA
+         5iWMyVoMbugZl6eqNRjvDHFmtBtrZIv8AFs10r2Ca6+Yxm+aq0v33DRkbSVVqgFPNEzy
+         q5QOXOeLBPL6BvyovOpmVSWGoHf1zFV7lrzcqi+uc+FuYxQ9dyN3ND73DrrhWSkLaSg9
+         r8yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679420064;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vnvnwWc5Tmg09HBQo/m9RbRM6yM8KLx8r1VA+Abfg3k=;
+        b=jIRB8pIlrLA/ovhnEoePs/6SX8fn6l7l4fY2CxX2pLrTbP1JI8AAetPavvrNVQTr2M
+         Vm0iLbKyL/VpTq9+bSN1SMjaoi4lAMj0pgafoHrwABMVZpFauYvtCfSYTstZ2pw4Dr1j
+         wYQGj3BUSpFIYHtSIDMkb5449WA3T3TONhaQLRFAUCBD6gAFyEky5fY+DIHrGaj352B6
+         9ST/tkqHgPpuFlmromr42KQWoTFU+Pj0Uhyp7ru4BsnF7tTshWroZZIHUJmSACudEadr
+         fBPiuurX9jgp9zNqj8Oy0HjiVUnULFCapj8yICGp5s44uDAK/XFqFXpOuJ8ptS6uPazU
+         xUwg==
+X-Gm-Message-State: AO0yUKX2w6QZfaGDHtlZAlY/U8F8VuJa3HwlgXbxgGChgdgvIoFThawv
+        oDyFAhWbVfe4DxwXTwxgJ/I=
+X-Google-Smtp-Source: AK7set+sH60XiJYup7bqrZTzFJVNe1YGcX/UTfjWV9xfGwNyodc34cHvKpqNagw5J+vEpv6CKvNHaA==
+X-Received: by 2002:adf:f344:0:b0:2cd:de25:1c76 with SMTP id e4-20020adff344000000b002cdde251c76mr12989754wrp.17.1679420064464;
+        Tue, 21 Mar 2023 10:34:24 -0700 (PDT)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id b13-20020a056000054d00b002da1261aa44sm184775wrf.48.2023.03.21.10.34.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 10:34:23 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v2 3/4] net: dsa: b53: mmap: allow passing a chip ID
+Date:   Tue, 21 Mar 2023 18:33:58 +0100
+Message-Id: <20230321173359.251778-4-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230321173359.251778-1-noltari@gmail.com>
+References: <20230320155024.164523-1-noltari@gmail.com>
+ <20230321173359.251778-1-noltari@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.2 000/213] 6.2.8-rc2 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:q0rIaCbi2WarhFaU71FerP4UXA5ro+pa87R46Kmeps5XuAgJA88
- vx2bGoh7dfaGMyMXBy2qbDYB96V3sijuAn7uvzoYHKu40xDOhjbEpkYgPLN/su5banMANDT
- PzHtyc8lKvY0ps9wTFTs2/GHjKWhIcnfDfKwAILbIZJp1hxdDQqA3d/zNp23pkhZMlvNY50
- AY6xK7+alUGG/McVZBwaA==
-UI-OutboundReport: notjunk:1;M01:P0:+x5zNEdwUeo=;/0np1HFA4agLzgJVwRuzTk8FMWB
- wiDRuXE8HxP+Wj9XUoXLW9WFXPyswt9RGGJoNjcVgwgK2Ct1b7MeZ/9jUP14Uls8VEsEayoJS
- DMhdovHCDn3vcnrf7yW6YGXfH4dJLXNLTZukex24fzi1YgafMFXu/5FNyGKHvFxqGLTYF7TpH
- Vp+4kPn0G2ueiFSW5UORbnnj0beHdh27LW9mB18odtSe6e0PKQv7da8xMPYcVGzlA0XGVmNew
- MhXR5GpnTDTPYdOS+91Iuq++h40UIxBFel2fzg+CYiMym6pbRyX8O7FL8xmiCFBpnV4B0DZIf
- 83iuopUHCFyjP+OA0he/f9b6IxUMOizsTWvot+OUh9yspUy/tWTI7n/9cSojeL5CA/eFZNXx3
- h2nMeS9qv68dno0JgIsE6RQJSMdYkXe+PDDZ64KU3mrZd1bjjEe3Jpwgo2QnZWmgnkBB+wSaH
- 6aHrAwvpDHXOIlPnQG03dYH3gpnps2n0EDiYN/IJHn2NpVNR/FKJ9lBwKD/op5NiS7makL74N
- 3W2FvVfvLT7UOxVRhZ5IzeMoFuAFdTd+0N0II7BuyOjAADwpKKLugfzxv040NxycpCKWv2E9Z
- L2q4zeggHau0kpXilyRcmdntqgaQaeDsq4JPaYoPQlWItld6g/Exh8DtHlufLrjMd57BWdneQ
- XSkg/KpJ1u6SnDQfYouhYUiPQuVoxBdYVtV3vtkmj6/Zk7s2fwDtWS6C2dsnIot4Ljjgec1Ag
- PN87XQIt4IIAql983PkOdfhmkhq3f/cABoj04gsqd+5Bm3z2OQa4hYsiWOsYACHF1UnhqGLxD
- JE6CQiVj/0DjZprRajO44T0AsjRUX4BIc4oMD3YHqRNa1HPrTboGde0k4ooDXrKGWB+VyU5Wk
- vzYRTIhHwaPTQK8bODuwhtUCsAgpTHlz+fCHDbXs7RC8dUd/HIEUazyOjatR5E1PBiTVwRoN7
- TU9/Iw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +79,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+BCM6318 and BCM63268 SoCs require a special handling for their RGMIIs, so we
+should be able to identify them as a special BCM63xx switch.
 
-6.2.8-rc2
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ v2:
+  - Add missing chip to b53_switch_chips[].
+  - Fix device_get_match_data() casting warning.
+  - Add BCM63268_DEVICE_ID to BCM6318 too.
+  - Add BCM6318 in commit description.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 38 Beta)
+ drivers/net/dsa/b53/b53_common.c | 13 +++++++++++++
+ drivers/net/dsa/b53/b53_mmap.c   | 32 +++++++++++++++++++++++---------
+ drivers/net/dsa/b53/b53_priv.h   |  9 ++++++++-
+ 3 files changed, 44 insertions(+), 10 deletions(-)
 
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
+index 6e212f6f1cb9..97327d7a6760 100644
+--- a/drivers/net/dsa/b53/b53_common.c
++++ b/drivers/net/dsa/b53/b53_common.c
+@@ -2465,6 +2465,19 @@ static const struct b53_chip_data b53_switch_chips[] = {
+ 		.jumbo_pm_reg = B53_JUMBO_PORT_MASK_63XX,
+ 		.jumbo_size_reg = B53_JUMBO_MAX_SIZE_63XX,
+ 	},
++	{
++		.chip_id = BCM63268_DEVICE_ID,
++		.dev_name = "BCM63268",
++		.vlans = 4096,
++		.enabled_ports = 0, /* pdata must provide them */
++		.arl_bins = 4,
++		.arl_buckets = 1024,
++		.imp_port = 8,
++		.vta_regs = B53_VTA_REGS_63XX,
++		.duplex_reg = B53_DUPLEX_STAT_63XX,
++		.jumbo_pm_reg = B53_JUMBO_PORT_MASK_63XX,
++		.jumbo_size_reg = B53_JUMBO_MAX_SIZE_63XX,
++	},
+ 	{
+ 		.chip_id = BCM53010_DEVICE_ID,
+ 		.dev_name = "BCM53010",
+diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
+index f63aebd445e8..a83a0c9d6939 100644
+--- a/drivers/net/dsa/b53/b53_mmap.c
++++ b/drivers/net/dsa/b53/b53_mmap.c
+@@ -248,7 +248,7 @@ static int b53_mmap_probe_of(struct platform_device *pdev,
+ 		return -ENOMEM;
+ 
+ 	pdata->regs = mem;
+-	pdata->chip_id = BCM63XX_DEVICE_ID;
++	pdata->chip_id = (u32)(unsigned long)device_get_match_data(dev);
+ 	pdata->big_endian = of_property_read_bool(np, "big-endian");
+ 
+ 	of_ports = of_get_child_by_name(np, "ports");
+@@ -330,14 +330,28 @@ static void b53_mmap_shutdown(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id b53_mmap_of_table[] = {
+-	{ .compatible = "brcm,bcm3384-switch" },
+-	{ .compatible = "brcm,bcm6318-switch" },
+-	{ .compatible = "brcm,bcm6328-switch" },
+-	{ .compatible = "brcm,bcm6362-switch" },
+-	{ .compatible = "brcm,bcm6368-switch" },
+-	{ .compatible = "brcm,bcm63268-switch" },
+-	{ .compatible = "brcm,bcm63xx-switch" },
+-	{ /* sentinel */ },
++	{
++		.compatible = "brcm,bcm3384-switch",
++		.data = (void *)BCM63XX_DEVICE_ID,
++	}, {
++		.compatible = "brcm,bcm6318-switch",
++		.data = (void *)BCM63268_DEVICE_ID,
++	}, {
++		.compatible = "brcm,bcm6328-switch",
++		.data = (void *)BCM63XX_DEVICE_ID,
++	}, {
++		.compatible = "brcm,bcm6362-switch",
++		.data = (void *)BCM63XX_DEVICE_ID,
++	}, {
++		.compatible = "brcm,bcm6368-switch",
++		.data = (void *)BCM63XX_DEVICE_ID,
++	}, {
++		.compatible = "brcm,bcm63268-switch",
++		.data = (void *)BCM63268_DEVICE_ID,
++	}, {
++		.compatible = "brcm,bcm63xx-switch",
++		.data = (void *)BCM63XX_DEVICE_ID,
++	}, { /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, b53_mmap_of_table);
+ 
+diff --git a/drivers/net/dsa/b53/b53_priv.h b/drivers/net/dsa/b53/b53_priv.h
+index 4cf9f540696e..a689a6950189 100644
+--- a/drivers/net/dsa/b53/b53_priv.h
++++ b/drivers/net/dsa/b53/b53_priv.h
+@@ -70,6 +70,7 @@ enum {
+ 	BCM53125_DEVICE_ID = 0x53125,
+ 	BCM53128_DEVICE_ID = 0x53128,
+ 	BCM63XX_DEVICE_ID = 0x6300,
++	BCM63268_DEVICE_ID = 0x63268,
+ 	BCM53010_DEVICE_ID = 0x53010,
+ 	BCM53011_DEVICE_ID = 0x53011,
+ 	BCM53012_DEVICE_ID = 0x53012,
+@@ -191,7 +192,13 @@ static inline int is531x5(struct b53_device *dev)
+ 
+ static inline int is63xx(struct b53_device *dev)
+ {
+-	return dev->chip_id == BCM63XX_DEVICE_ID;
++	return dev->chip_id == BCM63XX_DEVICE_ID ||
++		dev->chip_id == BCM63268_DEVICE_ID;
++}
++
++static inline int is63268(struct b53_device *dev)
++{
++	return dev->chip_id == BCM63268_DEVICE_ID;
+ }
+ 
+ static inline int is5301x(struct b53_device *dev)
+-- 
+2.30.2
 
