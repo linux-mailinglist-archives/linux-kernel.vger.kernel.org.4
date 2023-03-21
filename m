@@ -2,108 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F716C3221
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AE46C322C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCUM7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S229976AbjCUNBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCUM7i (ORCPT
+        with ESMTP id S230189AbjCUNBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:59:38 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C026646B9;
-        Tue, 21 Mar 2023 05:59:36 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32LCxPu7124173;
-        Tue, 21 Mar 2023 07:59:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679403565;
-        bh=HmNO1EvDbS3Z0FvWRgk/ZP+c0DvWRB/BSf5vOIxflVc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=DT99aL3Am1a/Bx7aO8mdurXCdyUf9Qr4NHPT9Dznz7l8SnK8O2NdFd203GeUWZ4/Z
-         Cv75kFUGHZzVsyv3gtGQl/tikGd6cwhmbn/rctmvgzON2Tukzzut3TDrGTYXIPsNJo
-         mio7bkEVG7AnPIblXvVQ2IShrxbd0Nu5Sg02rCso=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32LCxPg3012435
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 07:59:25 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 07:59:24 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 07:59:24 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32LCxO5P050755;
-        Tue, 21 Mar 2023 07:59:24 -0500
-Date:   Tue, 21 Mar 2023 07:59:24 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Dhruva Gole <d-gole@ti.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Julien Panis <jpanis@baylibre.com>, <bb@ti.com>
-Subject: Re: [PATCH V3 1/2] arm64: dts: ti: k3-am62-wakeup: Introduce RTC node
-Message-ID: <20230321125924.23ythtji67y66hsi@satisfied>
-References: <20230320165123.80561-1-nm@ti.com>
- <20230320165123.80561-2-nm@ti.com>
- <4a1f33bb-882a-ed49-9e0e-b463203e0ea9@ti.com>
+        Tue, 21 Mar 2023 09:01:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AF54AD33;
+        Tue, 21 Mar 2023 06:01:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34BFBB81689;
+        Tue, 21 Mar 2023 13:01:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7992C433AA;
+        Tue, 21 Mar 2023 13:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679403658;
+        bh=rw0p931Rpe2Ny/jb9uFi/QH0tIAjRolc9p08WyG9TIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V7+ts8Nr78LLj2M4xcfKeFepUeYmMZaMwBoN00rSJX887yHsfz0jcWBv/3eLwMy6L
+         1PkFE2BtNsDcGxnnWoQn1M5feyrrHoxUXW+cWDkkhSrKCE8exNC9YRj/F3Wx7Qlv7Y
+         jiQ8EwSfSEQ5cuwh9l8UL0Ww5KafAib6Q+qQMylWLNbJAunikHYUU9tJ5zy3hmIpki
+         j1ML8Vc+gB8uzHZdRzyTqdt3gXD5FnFcGWr3ytwhgzVsic4Jcj6GdvlXmGn6XFHfoA
+         Chm7pwlc8nQpnm71tTuQR4tRlzQzVyUe15VsrdigcNhc2ndSeSXgLjJ185fqwffq3f
+         aqgFGctDTrF6w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0D69F4052D; Tue, 21 Mar 2023 10:00:56 -0300 (-03)
+Date:   Tue, 21 Mar 2023 10:00:56 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] perf kvm: Support refcnt in structure kvm_info
+Message-ID: <ZBmqiKC1FSGI0/iE@kernel.org>
+References: <20230320061619.29520-1-leo.yan@linaro.org>
+ <20230320061619.29520-2-leo.yan@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a1f33bb-882a-ed49-9e0e-b463203e0ea9@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230320061619.29520-2-leo.yan@linaro.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10:07-20230321, Dhruva Gole wrote:
-[...]
-
+Em Mon, Mar 20, 2023 at 02:16:18PM +0800, Leo Yan escreveu:
+> hists__add_entry_ops() doesn't allocate a new histograms entry if it has
+> an existed entry for a KVM event, in this case, find_create_kvm_event()
+> allocates structure kvm_info but it's not used by any histograms and
+> never freed.
 > 
-> I was just wondering why some of the rtctests show failures on this platform:
+> To fix the memory leak, this patch firstly introduces refcnt and a set
+> of functions for refcnt operations in the structure kvm_info.  When the
+> data structure is not used anymore, it invokes kvm_info__zput() to
+> decrease reference count and release the structure.
 > 
-> https://gist.github.com/DhruvaG2000/5c6d8bb99b087308b916985d70f0c440
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  tools/perf/builtin-kvm.c   |  3 +--
+>  tools/perf/util/hist.c     |  5 +++++
+>  tools/perf/util/kvm-stat.h | 37 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 43 insertions(+), 2 deletions(-)
 > 
-> pass:5 fail:2
-> 
-> the test is compiled from tools/testing/selftests/rtc/rtctest.c for arm64 target
-> 
-> Is this expected?
+> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
+> index 4c205df5106f..1e1cb5a9d0a2 100644
+> --- a/tools/perf/builtin-kvm.c
+> +++ b/tools/perf/builtin-kvm.c
+> @@ -768,7 +768,6 @@ static void kvm_he_free(void *he)
+>  {
+>  	struct kvm_event *kvm_ev;
+>  
+> -	free(((struct hist_entry *)he)->kvm_info);
+>  	kvm_ev = container_of(he, struct kvm_event, he);
+>  	free(kvm_ev);
+>  }
+> @@ -788,7 +787,7 @@ static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
+>  
+>  	BUG_ON(key->key == INVALID_KEY);
+>  
+> -	ki = zalloc(sizeof(*ki));
+> +	ki = kvm_info__new();
+>  	if (!ki) {
+>  		pr_err("Failed to allocate kvm info\n");
+>  		return NULL;
+> diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+> index 3670136a0074..b296f572f881 100644
+> --- a/tools/perf/util/hist.c
+> +++ b/tools/perf/util/hist.c
+> @@ -628,6 +628,8 @@ static struct hist_entry *hists__findnew_entry(struct hists *hists,
+>  
+>  			block_info__zput(entry->block_info);
+>  
+> +			kvm_info__zput(entry->kvm_info);
+> +
+>  			/* If the map of an existing hist_entry has
+>  			 * become out-of-date due to an exec() or
+>  			 * similar, update it.  Otherwise we will
+> @@ -1323,6 +1325,9 @@ void hist_entry__delete(struct hist_entry *he)
+>  	if (he->block_info)
+>  		block_info__zput(he->block_info);
+>  
+> +	if (he->kvm_info)
+> +		kvm_info__zput(he->kvm_info);
+> +
+>  	zfree(&he->res_samples);
+>  	zfree(&he->stat_acc);
+>  	free_srcline(he->srcline);
+> diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
+> index bc6c8e38ef50..9bf34c0e0056 100644
+> --- a/tools/perf/util/kvm-stat.h
+> +++ b/tools/perf/util/kvm-stat.h
+> @@ -10,6 +10,9 @@
+>  #include "symbol.h"
+>  #include "record.h"
+>  
+> +#include <stdlib.h>
+> +#include <linux/zalloc.h>
+> +
+>  #define KVM_EVENT_NAME_LEN	40
+>  
+>  struct evsel;
+> @@ -25,6 +28,7 @@ struct event_key {
+>  
+>  struct kvm_info {
+>  	char name[KVM_EVENT_NAME_LEN];
+> +	refcount_t refcnt;
+>  };
+>  
+>  struct kvm_event_stats {
+> @@ -145,6 +149,39 @@ extern const char *vcpu_id_str;
+>  extern const char *kvm_exit_reason;
+>  extern const char *kvm_entry_trace;
+>  extern const char *kvm_exit_trace;
+> +
+> +static inline struct kvm_info *kvm_info__get(struct kvm_info *ki)
+> +{
+> +	if (ki)
+> +		refcount_inc(&ki->refcnt);
+> +	return ki;
+> +}
+> +
+> +static inline void kvm_info__put(struct kvm_info *ki)
+> +{
+> +	if (ki && refcount_dec_and_test(&ki->refcnt))
+> +		free(ki);
+> +}
+> +
+> +static inline void __kvm_info__zput(struct kvm_info **ki)
+> +{
+> +	kvm_info__put(*ki);
+> +	*ki = NULL;
+> +}
+> +
+> +#define kvm_info__zput(ki) __kvm_info__zput(&ki)
+> +
+> +static inline struct kvm_info *kvm_info__new(void)
+> +{
+> +	struct kvm_info *ki;
+> +
+> +	ki = zalloc(sizeof(*ki));
+> +	if (ki)
+> +		refcount_set(&ki->refcnt, 1);
+> +
+> +	return ki;
+> +}
+> +
+>  #endif /* HAVE_KVM_STAT_SUPPORT */
+>  
+>  extern int kvm_add_default_arch_event(int *argc, const char **argv);
 
-I used the standard defconfig and [1] on beagleplay and
-cross verified on 6.3-rc3 as well. It works fine. See logs below.
+I had to add this:
 
-NOTE: BeaglePlay has a external 32k crystal that drives RTC and other
-32k clock sources internal to the SoC. This helps maintain accurate
-time. If your platform does'nt have an external 32k crystal OR AM62
-does'nt enable 32k using MCU_CTRL_LFXOSC_CTRL[2], then default 32k RC
-osc inside the SoC triggers. This internal clock is very variable.
-There are a ton of stuff inside the SoC that depends on 32k, so this
-wont be just a RTC specific behavior.
+Provide a nop version of kvm_info__zput() to be used when
+HAVE_KVM_STAT_SUPPORT isn't defined as it is used unconditionally in
+hists__findnew_entry() and hist_entry__delete().
 
-ti-next: (6.3-rc1)
-ti-next + 6.3-rc3: (dirty is because of a rtctest Makefile mod to build
-static)
-https://gist.github.com/nmenon/e1b300652ac452ad55fa4cf936fc3e63
+- Arnaldo
 
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git/log/
-[2] https://git.beagleboard.org/beagleplay/u-boot/-/blob/lc-ti-u-boot-2021.01/board/ti/am62x/evm.c#L243
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
+index 9bf34c0e0056e390..90b854390c89708d 100644
+--- a/tools/perf/util/kvm-stat.h
++++ b/tools/perf/util/kvm-stat.h
+@@ -182,6 +182,9 @@ static inline struct kvm_info *kvm_info__new(void)
+ 	return ki;
+ }
+ 
++#else /* HAVE_KVM_STAT_SUPPORT */
++// We use this unconditionally in hists__findnew_entry() and hist_entry__delete()
++#define kvm_info__zput(ki)
+ #endif /* HAVE_KVM_STAT_SUPPORT */
+ 
+ extern int kvm_add_default_arch_event(int *argc, const char **argv);
