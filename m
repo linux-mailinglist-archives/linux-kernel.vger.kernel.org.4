@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBE46C3158
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50806C3174
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjCUMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S230135AbjCUMV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjCUMRa (ORCPT
+        with ESMTP id S229449AbjCUMV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:17:30 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8D303CC;
-        Tue, 21 Mar 2023 05:17:29 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id v25so9980122wra.12;
-        Tue, 21 Mar 2023 05:17:29 -0700 (PDT)
+        Tue, 21 Mar 2023 08:21:26 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DAC3B86C;
+        Tue, 21 Mar 2023 05:21:24 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id w20so9471006vsa.8;
+        Tue, 21 Mar 2023 05:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679401047;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KO2LXokOrq3c8XBmHuF7vc+LBuS8LWoa+ic4XBzrjdA=;
-        b=mQCjt1LxxDtHOtUML8080wKChKB70tZkmTVqa15LHUpnyCgSoGsLvEmvJxaJ/slH+P
-         vceJPsJA/Q8He6TCYvmw2rLR/Q/mNMADFxhh4CiiJjQGfLXaPcsWn9BOngWvyDvp/KsZ
-         fOYvXTqvyhnzK5GGIt1liZ+HjYBPZQT7SUgnqDsejfaI6cSJ9UkhIhg+YdzWUi2Ayuo1
-         HP9dyZxV1Yszt0jz77joT02oMv9/4YpsvzJ6k7AvAvrGZhgTXBFlUIhW5Ff8pCksza05
-         QS3CnszwFCclRo1kcwrPG/zFusjbQcFyF7OCjLclAdFcFJ/MC3FGuEsHMq/IPEVWcNL5
-         +lsw==
+        d=gmail.com; s=20210112; t=1679401283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wX/vC5ZRlMTylXo7eynFpDNeVQOHEdv7n3GHC+f0DhU=;
+        b=HIoO4a4bg2p3PcEl23Uw0EH9ABnMLD86udUJVPvQikeoAUUwzaf3Z893G1dndMamS8
+         hg2xvC0xR6dlfb/JFCyICf2ybHZAvIb/p1Osxz1a8FahPXiGe9PdtxH15m64iU01cZRM
+         mSZ4XvVnaljcjDhJZ1U19ldJ3Hd8lW+tBUjPmCANSJUoEmBJbc20AeatzemXIYWEViHC
+         UuQGLtijF3lZIbChozoyzSrfogrOwBhILJ0XRYsqMHdqWsBoXgiI+3nILbi4kbGLSZr2
+         yDUI45EmtZXalB+FNcm32GowXkZ6nUISbHa2wYSYfldvcuCZJY4IFejjSF6atNnxEewy
+         DtEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679401047;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KO2LXokOrq3c8XBmHuF7vc+LBuS8LWoa+ic4XBzrjdA=;
-        b=fij3VpjpYsg4PUp5ewY3vLvdAqgpUceJlVN8CIjnYdJKg9p6fvHqQPmw32VTnLE/yk
-         +X6jTNHYvZSY4yoh+WSM3bFSRAvbP5awHP6/DT08ogtEcf9NLDYm0l3/591XiTi63cSF
-         uPiU9PJy6R1reh2xVZGXmReS1kunau4wBUElc+trd6xY3aJvt34AnyBGUfBHJ0I46S5d
-         Ju7RDbXIre/Xj0TKZ3AlUBYUu/+sD2ZuMxoMuQQ/tIZq9StTojaUeLleLCV9x5NDvanz
-         UbyZqPs9nfO2l1Ywff/3ncyohu5Y5CCDtkEz1gtkHSfxVdy5OmJx1/3VxQHcINve2mFF
-         xHTA==
-X-Gm-Message-State: AO0yUKVLd/yKxo0g6OJpZenMAepeJatPnhx4i+XRIGDt6vo1xwXAMI2n
-        rvus0rNColopeA34NPAJZIqXXX/knWQ=
-X-Google-Smtp-Source: AK7set+Z9VFDtp3Gt9UaNFIMiaOgv3tgsB2Lfkg5s9W8tVch7YSNIWIfpqY4rkyyZ9NQZ8kxaqwgPA==
-X-Received: by 2002:adf:f605:0:b0:2d0:58f9:a6b with SMTP id t5-20020adff605000000b002d058f90a6bmr11792668wrp.13.1679401047576;
-        Tue, 21 Mar 2023 05:17:27 -0700 (PDT)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id a7-20020adff7c7000000b002c70ce264bfsm11285167wrq.76.2023.03.21.05.17.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 05:17:27 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 12:17:25 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Gautam Dawar <gautam.dawar@amd.com>, linux-net-drivers@amd.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-Subject: Re: [PATCH net-next v2 01/14] sfc: add function personality support
- for EF100 devices
-Message-ID: <ZBmgVcwUGql24hDm@gmail.com>
-Mail-Followup-To: Jason Wang <jasowang@redhat.com>,
-        Gautam Dawar <gautam.dawar@amd.com>, linux-net-drivers@amd.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-References: <20230307113621.64153-1-gautam.dawar@amd.com>
- <20230307113621.64153-2-gautam.dawar@amd.com>
- <CACGkMEubKv-CGgTdTbt=Ja=pbazXT3nOGY9f_VtRwrOsmf8-rw@mail.gmail.com>
- <ZA8OBEDECFI4grXG@gmail.com>
- <071329fe-7215-235c-06b7-f17bf69d872b@redhat.com>
- <ZBLcKs+IsgJBjqeT@gmail.com>
- <CACGkMEtOV7pcMZ2=bdUr4BtE4ZTf0wZZSdTB8+OQrwHiZrHrEA@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1679401283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wX/vC5ZRlMTylXo7eynFpDNeVQOHEdv7n3GHC+f0DhU=;
+        b=mSVpJvoXBTR0cxmS+Zpn3XvjiUGgWY/ctVn/AYL82P8g2C1mlajLt/01bd1OrdE+XW
+         BtVHmWAcJLhBRNF4fygE/SoK3t62omBmhLRgTEl55qLQ/VgIaOhLWBEIdA3KNRfyBorc
+         r2l7eIhZO20WhX8kULnyiWyoataDfLBCitPX9z7fKFzUZ/mlN5L9OjSrYiTnxZaGMrL0
+         ZXo+wNu/d8JbvyiegQlJReDlA5sWw1/7a6628WdzOD0l34P+VEFklACyX5diK/rffJla
+         /6X6yl+eQAWVnB/KoK19ts0qghtu8G0yoDFanOtF4IIEgVPolFVYM31U2qPfvmeHa3EG
+         VUQQ==
+X-Gm-Message-State: AO0yUKWn7lNh4N0HdPIZOy/lJAqIEYkN96nDmwbdK0P6X6yFJi0liMrP
+        GG634yXclkSxuxuDtSeo1pmXq1gEncHIfdJlSQeDE2z1nPc=
+X-Google-Smtp-Source: AK7set+6jWavUU7pP601xTA54dL3830yy/EdB0Hlf9ddJExK5Xk4/Azhlr/diamgbhzZ0QGJhxTx0gCgNilARqvl7tw=
+X-Received: by 2002:a67:cc11:0:b0:425:d096:fd42 with SMTP id
+ q17-20020a67cc11000000b00425d096fd42mr1340294vsl.5.1679401283321; Tue, 21 Mar
+ 2023 05:21:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEtOV7pcMZ2=bdUr4BtE4ZTf0wZZSdTB8+OQrwHiZrHrEA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+ <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com> <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+ <CAK7LNATGL4oBPO6s27Zp15-TvD=y4BuqD24YHzLMJxcbk_Ff3w@mail.gmail.com>
+In-Reply-To: <CAK7LNATGL4oBPO6s27Zp15-TvD=y4BuqD24YHzLMJxcbk_Ff3w@mail.gmail.com>
+From:   jim.cromie@gmail.com
+Date:   Tue, 21 Mar 2023 06:20:57 -0600
+Message-ID: <CAJfuBxy2w8g8yML=Lzc0RxiPb_QmD09wdmihHp60GvwO2pDXvA@mail.gmail.com>
+Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in /proc/dynamic_debug/control
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Jason Baron <jbaron@akamai.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_AS_SEEN autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,177 +73,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:52:02AM +0800, Jason Wang wrote:
-> On Thu, Mar 16, 2023 at 5:07 PM Martin Habets <habetsm.xilinx@gmail.com> wrote:
+On Tue, Mar 21, 2023 at 12:45=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+>
+> On Tue, Mar 21, 2023 at 5:00=E2=80=AFAM <jim.cromie@gmail.com> wrote:
 > >
-> > On Wed, Mar 15, 2023 at 01:11:23PM +0800, Jason Wang wrote:
-> > >
-> > > 在 2023/3/13 19:50, Martin Habets 写道:
-> > > > On Fri, Mar 10, 2023 at 01:04:14PM +0800, Jason Wang wrote:
-> > > > > On Tue, Mar 7, 2023 at 7:36 PM Gautam Dawar <gautam.dawar@amd.com> wrote:
-> > > > > > A function personality defines the location and semantics of
-> > > > > > registers in the BAR. EF100 NICs allow different personalities
-> > > > > > of a PCIe function and changing it at run-time. A total of three
-> > > > > > function personalities are defined as of now: EF100, vDPA and
-> > > > > > None with EF100 being the default.
-> > > > > > For now, vDPA net devices can be created on a EF100 virtual
-> > > > > > function and the VF personality will be changed to vDPA in the
-> > > > > > process.
-> > > > > >
-> > > > > > Co-developed-by: Martin Habets <habetsm.xilinx@gmail.com>
-> > > > > > Signed-off-by: Martin Habets <habetsm.xilinx@gmail.com>
-> > > > > > Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
-> > > > > > ---
-> > > > > >   drivers/net/ethernet/sfc/ef100.c     |  6 +-
-> > > > > >   drivers/net/ethernet/sfc/ef100_nic.c | 98 +++++++++++++++++++++++++++-
-> > > > > >   drivers/net/ethernet/sfc/ef100_nic.h | 11 ++++
-> > > > > >   3 files changed, 111 insertions(+), 4 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/net/ethernet/sfc/ef100.c b/drivers/net/ethernet/sfc/ef100.c
-> > > > > > index 71aab3d0480f..c1c69783db7b 100644
-> > > > > > --- a/drivers/net/ethernet/sfc/ef100.c
-> > > > > > +++ b/drivers/net/ethernet/sfc/ef100.c
-> > > > > > @@ -429,8 +429,7 @@ static void ef100_pci_remove(struct pci_dev *pci_dev)
-> > > > > >          if (!efx)
-> > > > > >                  return;
-> > > > > >
-> > > > > > -       probe_data = container_of(efx, struct efx_probe_data, efx);
-> > > > > > -       ef100_remove_netdev(probe_data);
-> > > > > > +       efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_NONE);
-> > > > > >   #ifdef CONFIG_SFC_SRIOV
-> > > > > >          efx_fini_struct_tc(efx);
-> > > > > >   #endif
-> > > > > > @@ -443,6 +442,7 @@ static void ef100_pci_remove(struct pci_dev *pci_dev)
-> > > > > >          pci_disable_pcie_error_reporting(pci_dev);
-> > > > > >
-> > > > > >          pci_set_drvdata(pci_dev, NULL);
-> > > > > > +       probe_data = container_of(efx, struct efx_probe_data, efx);
-> > > > > >          efx_fini_struct(efx);
-> > > > > >          kfree(probe_data);
-> > > > > >   };
-> > > > > > @@ -508,7 +508,7 @@ static int ef100_pci_probe(struct pci_dev *pci_dev,
-> > > > > >                  goto fail;
-> > > > > >
-> > > > > >          efx->state = STATE_PROBED;
-> > > > > > -       rc = ef100_probe_netdev(probe_data);
-> > > > > > +       rc = efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_EF100);
-> > > > > >          if (rc)
-> > > > > >                  goto fail;
-> > > > > >
-> > > > > > diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/sfc/ef100_nic.c
-> > > > > > index 4dc643b0d2db..8cbe5e0f4bdf 100644
-> > > > > > --- a/drivers/net/ethernet/sfc/ef100_nic.c
-> > > > > > +++ b/drivers/net/ethernet/sfc/ef100_nic.c
-> > > > > > @@ -772,6 +772,99 @@ static int efx_ef100_get_base_mport(struct efx_nic *efx)
-> > > > > >          return 0;
-> > > > > >   }
-> > > > > >
-> > > > > > +/* BAR configuration.
-> > > > > > + * To change BAR configuration, tear down the current configuration (which
-> > > > > > + * leaves the hardware in the PROBED state), and then initialise the new
-> > > > > > + * BAR state.
-> > > > > > + */
-> > > > > > +struct ef100_bar_config_ops {
-> > > > > > +       int (*init)(struct efx_probe_data *probe_data);
-> > > > > > +       void (*fini)(struct efx_probe_data *probe_data);
-> > > > > > +};
-> > > > > > +
-> > > > > > +static const struct ef100_bar_config_ops bar_config_ops[] = {
-> > > > > > +       [EF100_BAR_CONFIG_EF100] = {
-> > > > > > +               .init = ef100_probe_netdev,
-> > > > > > +               .fini = ef100_remove_netdev
-> > > > > > +       },
-> > > > > > +#ifdef CONFIG_SFC_VDPA
-> > > > > > +       [EF100_BAR_CONFIG_VDPA] = {
-> > > > > > +               .init = NULL,
-> > > > > > +               .fini = NULL
-> > > > > > +       },
-> > > > > > +#endif
-> > > > > > +       [EF100_BAR_CONFIG_NONE] = {
-> > > > > > +               .init = NULL,
-> > > > > > +               .fini = NULL
-> > > > > > +       },
-> > > > > > +};
-> > > > > This looks more like a mini bus implementation. I wonder if we can
-> > > > > reuse an auxiliary bus here which is more user friendly for management
-> > > > > tools.
-> > > > When we were in the design phase of vDPA for EF100 it was still called
-> > > > virtbus, and the virtbus discussion was in full swing at that time.
-> > > > We could not afford to add risk to the project by depending on it, as
-> > > > it might not have been merged at all.
+> > On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Jason Baron <jbaron@akamai.com=
+> wrote:
 > > >
 > > >
-> > > Right.
 > > >
-> > >
-> > > > If we were doing the same design now I would definitely consider using
-> > > > the auxiliary bus.
+> > > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
+> > > > dynamic-debug METADATA uses KBUILD_MODNAME as:
 > > > >
-> > > > Martin
+> > > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> > > >          static struct _ddebug  __aligned(8)                     \
+> > > >          __section("__dyndbg") name =3D {                          =
+\
+> > > >                  .modname =3D KBUILD_MODNAME,                      =
+\
+> > > >
+> > > > This is going amiss for some builtins, ie those enabled here, by:
+> > > >
+> > > >      echo module main +pmf > /proc/dynamic_debug_control
+> > > >      grep =3Dpmf /proc/dynamic_debug/control
+> > > >
+> > > > init/main.c:1187 [main]initcall_blacklist =3Dpmf "blacklisting init=
+call %s\n"
+> > > > init/main.c:1226 [main]initcall_blacklisted =3Dpmf "initcall %s bla=
+cklisted\n"
+> > > > init/main.c:1432 [main]run_init_process =3Dpmf "  with arguments:\n=
+"
+> > > > init/main.c:1434 [main]run_init_process =3Dpmf "    %s\n"
+> > > > init/main.c:1435 [main]run_init_process =3Dpmf "  with environment:=
+\n"
+> > > > init/main.c:1437 [main]run_init_process =3Dpmf "    %s\n"
 > > >
 > > >
-> > > But it's not late to do the change now. Auxiliary bus has been used by a lot
-> > > of devices (even with vDPA device). The change looks not too complicated.
+> > > Hi Jim,
+> > >
+> > > So if I'm following correctly, this is not a new issue, the 'module'
+> > > name for dynamic debug has always been this way for builtin.
 > >
-> > I'm surprised you think this would not be complicated. From my view it would
-> > require redesign, redevelopment and retest of vdpa which would take months. That is
-> > assuming we can get some of the resources back.
-> 
-> I think I'm fine if we agree to do it sometime in the future.
-
-We have projects on the roadmap that will need to use auxbus for this.
-The timeline for that is not clear to me at the moment.
-
+> > It is not a new issue - both PM and init-main have been in [main] for s=
+ome time.
 > >
-> > > This looks more scalable and convenient for management layer.
+> > I believe that with
+> > cfc1d277891e module: Move all into module/
 > >
-> > There is not much difference for the management layer, it uses the vdpa tool now
-> > and it would do so with the auxiliary bus.
-> 
-> At the vDPA level it doesn't make too much difference.
-> 
-> > The difference is that with the
-> > auxiliary bus users would have to load another module for sfc vDPA support.
-> 
-> The policy is fully under the control of the management instead of the
-> hard-coding policy now, more below.
-> 
-> > Are we maybe on 2 different trains of thought here?
-> 
-> If I read the code correct, when VF is probed:
-> 
-> 1) vDPA mgmtdev is registered
-> 2) netdev is probed, bar config set to netdev
-> 
-> This means when user want to create vDPA device
-> 
-> 1) unregister netdev
-> 2) vDPA is probed, bar config set to vDPA
-> 
-> And when vDPA device is deleted:
-> 
-> 1) unregister vDPA
-> 2) netdev is probed, bat config set to netdev
+> > module's module-name joined them, changing from [module] to [main]
+>
+> Maybe more.
+>
+> We have almost 100 'main.c' files.
+>
+> $ find . -name main.c | wc
+>      97      97    3473
+>
 
-Your analysis is correct. We have a requirement to initially create a
-netdev for new VFs. This was done to maintain backward compatibility with
-earlier Solarflare NICs.
-For new products I can try to change this default behaviour. I definitely
-see a trend towards a core "PCI" layer and different layers on top of that.
-The auxiliary bus will have a significant role to play here.
+yes.  I just picked [main] as the example cuz it was the biggest
+bucket of unrelateds.
 
-> There would be a lot of side effects for the mandated policy of
-> registering/unregistering netdevs like udev events etc when adding and
-> removing vDPA devices.
+there are other oddities:
 
-I agree. During our testing we cam across versions of systemd that will
-cause a spike in the load when creating many netdevs.
+"power" module ( subsystem ?) has 2 names matching/picked-by basename
 
-Martin
+drivers/base/power/main.c:467 [main]dpm_show_time =3D_ "%s%s%s of
+devices %s after %ld.%03ld msecs\n"
+drivers/base/power/domain.c:582 [domain]_genpd_power_on =3D_ "%s:
+Power-%s latency exceeded, new value %lld ns\n"
 
-> 
-> Thanks
-> 
+"power" also has 4 other "mod-names", all matching basename
+
+kernel/power/suspend.c:580 [suspend]enter_state =3D_ "Preparing system
+for sleep (%s)\n"
+kernel/power/hibernate.c:691 [hibernate]load_image_and_restore =3D_
+"Loading hibernation image.\n"
+kernel/power/snapshot.c:1083 [snapshot]mark_nosave_pages =3Dp "Marking
+nosave pages: [mem %#010llx-%#010llx]\n"
+kernel/power/swap.c:1509 [swap]swsusp_read =3Dp "Error %d resuming\n"
+
+others have distinct [modnames], where/how do they get set ?
+
+drivers/base/firmware_loader/main.c:1442
+[firmware_class]device_uncache_fw_images =3D_ "%s\n"
+drivers/media/rc/rc-main.c:230 [rc_core]ir_create_table =3D_ "Allocated
+space for %u keycode entries (%u bytes)\n"
+
+
+
+>
+>
+>
+>
+> > We could do
+> > > something simple and just normalize it when we initially create the
+> > > table, but setting the 'module name' to 'core' or 'builtin' or someth=
+ing
+> > > for all these?
 > >
-> > Martin
+> > core and builtin would both lump all those separate modules together,
+> > making it less meaningful.
 > >
+> > having stable names independent of M vs Y config choices is imperative,=
+ ISTM.
+>
+>
+> I do not understand what you mean.
+>
+
+stable names   =3D=3D=3D    modprobe foo working whether module is builtin =
+or loadable
+
+>
+> KBUILD_MODNAME is not affected by the y/m configuration.
+>
+>
+>
+>
+> If an object is a member of a composite object, which
+> does not necessarily be a real module, KBUILD_MODNAME
+> refers to the name of the composite.
+> Otherwise, the basename of the source file.
+>
+>
+> Examples:
+>
+>
+> obj-y +=3D alias-name.o
+> alias-name-objs :=3D foo.o
+>
+>   -->  KBUILD_MODNAME is "alias-name"
+>
+>
+>
+> obj-y +=3D foo.o
+>
+>   -->  KBUILD_MODNAME is "foo"
+>
+
+taken-from-basename   correctly characterizes that.
+
+
+>
+>
+> This is about how you write Makefile code.
+> CONFIG options are unrelated.
+>
+
+in kernel/power/Makefile, there is:
+
+     obj-$(CONFIG_HIBERNATION) +=3D hibernate.o snapshot.o swap.o
+
+and those 3 objects each get their own [mod-name]
+
+>
+>
+>
+>
+>
+>
+> > Also, I dont think "only builtins are affected" captures the whole prob=
+lem.
+> > I dont recall amdgpu or other modules changing when built with =3Dy
+> >
+> > Theres some subtlety in how KBUILD_MODNAME is set,
+> > and probably many current users who like its current behavior.
+> > A new var ?
+> >
+> > 1st, I think that anything tristate gets a sensible value,
+> > but at least some of the builtin-only "modules" get basenames, by defau=
+lt.
+> >
+> > arch/x86/events/amd/ibs.c:1398 [ibs]force_ibs_eilvt_setup =3D_ "No EILV=
+T
+> > entry available\n"
+> > arch/x86/events/intel/pt.c:797 [pt]pt_topa_dump =3D_ "# table @%p, off
+> > %llx size %zx\n"w=3D%16llx\n"
+> >
+> > kvm gets a solid name, because tristate ?
+> >
+> > arch/x86/kvm/mmu/mmu.c:6661 [kvm]kvm_mmu_invalidate_mmio_sptes =3D_
+> > "kvm: kvm [%i]: zapping shadow pages for mmio generation wraparound\n"
+> > arch/x86/kvm/hyperv.c:1402 [kvm]kvm_hv_set_msr_pw =3D_ "kvm [%i]: vcpu%=
+i
+> > hv crash (0x%llx 0x%llx 0x%llx 0x%llx 0x%llx)\n"
+> >
+> > kvm-intel and kvm-amd get their names elsewhere.
+> >
+> > arch/x86/kvm/vmx/nested.c:207 [kvm_intel]nested_vmx_abort =3D_
+> > "kvm_intel: nested vmx abort, indicator %d\n"
+> > arch/x86/kvm/vmx/nested.c:913 [kvm_intel]nested_vmx_load_msr =3D_
+> > "kvm_intel: %s cannot read MSR entry (%u, 0x%08llx)\n"
+> >
+> > arch/x86/kvm/svm/avic.c:860 [kvm_amd]get_pi_vcpu_info =3D_ "SVM: %s: us=
+e
+> > GA mode for irq %u\n"
+> > arch/x86/kvm/svm/avic.c:889 [kvm_amd]avic_pi_update_irte =3D_ "SVM: %s:
+> > host_irq=3D%#x, guest_irq=3D%#x, set=3D%#x\n"
+> >
+> > iow, I dont know..
+> >
+> > >
+> > > Thanks,
+> > >
+> > > -Jason
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
