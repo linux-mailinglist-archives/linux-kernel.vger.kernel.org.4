@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971B76C30A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DA66C309D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCULo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S230090AbjCULoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjCULoy (ORCPT
+        with ESMTP id S229636AbjCULoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:44:54 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E9B4AD0D;
-        Tue, 21 Mar 2023 04:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=YcT7PB4t/7cxWmWebhwcKuntX/iD6KstxpOgiem5Qec=; b=FvJGN+kmQA7SRR9WYaqpOAtobe
-        mB14sikwTGZkTFG5mDCfgulb/vv9o3OblHJ/thlob5SvlhTY3nVNc5cHGVfNHHckcELI/U97Yrm9z
-        TIKDYWiWZ1Ek+iWsvouWKS6JqIWkaueeyrjmvWXVqX5XuAFMkMJkJhzSJcEpUJ8DJgwzbXJLInJsx
-        aTQltg0hczX4wjjuuyFQE0UBQThYJ1CuKMpUgmCXnc3mBytGvXCMvZ0q+gSPPOn9+wbjOct32ti+q
-        ZFIKNfKCDzTLKk+sxfi5jtHV7r5HTWRI//L7/A7o1uY6+7mYa7hDjtvgtauJ1oMQ28Z948zX+8nno
-        knUDDv/Q==;
-Received: from [193.117.214.244] (helo=[127.0.0.1])
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1peaPI-004FA6-0w;
-        Tue, 21 Mar 2023 11:44:00 +0000
-Date:   Tue, 21 Mar 2023 11:43:58 +0000
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Borislav Petkov <bp@alien8.de>,
-        Usama Arif <usama.arif@bytedance.com>
-CC:     tglx@linutronix.de, kim.phillips@amd.com, brgerst@gmail.com,
-        piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v15_04/12=5D_x86/smpboot=3A_Referenc?= =?US-ASCII?Q?e_count_on_smpboot=5Fsetup=5Fwarm=5Freset=5Fvector=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230321114115.GGZBmX270DI11eXvM+@fat_crate.local>
-References: <20230316222109.1940300-1-usama.arif@bytedance.com> <20230316222109.1940300-5-usama.arif@bytedance.com> <20230321114115.GGZBmX270DI11eXvM+@fat_crate.local>
-Message-ID: <8D6C2EC1-7B53-410B-84C3-A1991A71DEB7@infradead.org>
-MIME-Version: 1.0
+        Tue, 21 Mar 2023 07:44:15 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB2B25956;
+        Tue, 21 Mar 2023 04:44:13 -0700 (PDT)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PgqWc1Y6lz6FK2Q;
+        Tue, 21 Mar 2023 19:44:12 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl2.zte.com.cn with SMTP id 32LBi3le075071;
+        Tue, 21 Mar 2023 19:44:03 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 21 Mar 2023 19:44:06 +0800 (CST)
+Date:   Tue, 21 Mar 2023 19:44:06 +0800 (CST)
+X-Zmail-TransId: 2afa6419988621d-ec893
+X-Mailer: Zmail v1.0
+Message-ID: <202303211944063761253@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <kdasu.kdev@gmail.com>
+Cc:     <bcm-kernel-feedback-list@broadcom.com>, <f.fainelli@gmail.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBpMmM6IGJyY21zdGI6IHVzZSBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2VfYnluYW1lKCk=?=
 Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 32LBi3le075071
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6419988C.000/4PgqWc1Y6lz6FK2Q
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
+Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
+call to devm_platform_ioremap_resource_byname(), as this is exactly what
+this function does.
 
-On 21 March 2023 11:41:15 GMT, Borislav Petkov <bp@alien8=2Ede> wrote:
->On Thu, Mar 16, 2023 at 10:21:01PM +0000, Usama Arif wrote:
->> From: David Woodhouse <dwmw@amazon=2Eco=2Euk>
->>=20
->> When bringing up a secondary CPU from do_boot_cpu(), the warm reset fla=
-g
->> is set in CMOS and the starting IP for the trampoline written inside th=
-e
->> BDA at 0x467=2E Once the CPU is running, the CMOS flag is unset and the
->> value in the BDA cleared=2E
->>=20
->> To allow for parallel bringup of CPUs, add a reference count to track t=
-he
->> number of CPUs currently bring brought up, and clear the state only whe=
-n
->
->s/bring //
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/i2c/busses/i2c-brcmstb.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-"being", I think=2E
+diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
+index 69383be47905..ef942714642a 100644
+--- a/drivers/i2c/busses/i2c-brcmstb.c
++++ b/drivers/i2c/busses/i2c-brcmstb.c
+@@ -575,12 +575,10 @@ static void brcmstb_i2c_set_bsc_reg_defaults(struct brcmstb_i2c_dev *dev)
+ static int bcm2711_release_bsc(struct brcmstb_i2c_dev *dev)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev->device);
+-	struct resource *iomem;
+ 	void __iomem *autoi2c;
+
+ 	/* Map hardware registers */
+-	iomem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "auto-i2c");
+-	autoi2c = devm_ioremap_resource(&pdev->dev, iomem);
++	autoi2c = devm_platform_ioremap_resource_byname(pdev, "auto-i2c");
+ 	if (IS_ERR(autoi2c))
+ 		return PTR_ERR(autoi2c);
+
+-- 
+2.25.1
