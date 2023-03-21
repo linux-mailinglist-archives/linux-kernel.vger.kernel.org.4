@@ -2,197 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40016C3DE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E146C3DEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjCUWyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S229848AbjCUW5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjCUWyw (ORCPT
+        with ESMTP id S229487AbjCUW5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:54:52 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C3458C0D;
-        Tue, 21 Mar 2023 15:54:50 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id v4-20020a05600c470400b003ee4f06428fso833563wmo.4;
-        Tue, 21 Mar 2023 15:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679439289;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3HAdzANA7GRiZJA2epDIo4XVuYsjDwv30y8YzH+0KtI=;
-        b=fbbcthgEVJKZpX19gE41dOEOZKGjPLVKXpR8AbRUpLUoU/Ydsut9Zy+qXTSDba3O7R
-         ogPPDSLCqyZUYOCPKk+OmrlyeNjPcYeRklvTVVvPSX4M4womGAubm5V5mwT7IZoQ2pYm
-         p+BAeasDHYp9yX9PFSrJ4iPGbZQKqGidrJDZxda7g0Kr45XoKI78QWNEhzNuZUmzPrXn
-         py/5T0NSmJHosHOMuugdEJDY5+Q7OoAnUoYeRiTLjqwcyyxHhmDZxe1e4ZTR0BLZy5iI
-         imPJNvtU0FUZ2P0ObJH3NNJOlecs4VQ86l16+H3iPEJUHgrV0EDMCXMnY4UrntCAgPTH
-         sIzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679439289;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3HAdzANA7GRiZJA2epDIo4XVuYsjDwv30y8YzH+0KtI=;
-        b=swU/voEmZwTXqHCREjwXzhSdfJoIa2X2AJ+sxRtHfPYG+QZhYnDF7HQ7IhP9TxssqU
-         IqlM9IuwEJd2Q1ilc5G0bJg8FJ32jIdB9QtPu+6ik4s4zdSeF+RPzvvW4toZ/ZngfQml
-         bPnIscmNVdoOa/3NPlnqTRTkaYI+7I9SGlTMKzI92c4EJA3RPp8gLy//gXkW3xcHokgY
-         IQk8rdQsOl+g7v5NPA2U20E/q8+byjgpuxAMchrYmq3+gUzGaJSE29/BQ23M59YmJ5Ud
-         JV0jD4SzI3qb5cxY//k/FsImLA0qvIXIL8CbmNckCKOKou6ipYdN+cA9B+VRtWiTycGp
-         FrQw==
-X-Gm-Message-State: AO0yUKVPFQAFjsNexcnK6k7FLwk5qnj8/QjDZ9Kkt4qXIitNM3fPv6YC
-        5zJhv2dls01BJwc6w3iqvh+yxEnUP1CVyw==
-X-Google-Smtp-Source: AK7set/E8pBAGWWNISHq/PCSZ5cZ24Z1eoHpQqNIofp1fioL8wjvPDeViM3lQCpr0N0Vic6sWSO9tA==
-X-Received: by 2002:a7b:ce8a:0:b0:3df:de28:f819 with SMTP id q10-20020a7bce8a000000b003dfde28f819mr3832933wmj.15.1679439288934;
-        Tue, 21 Mar 2023 15:54:48 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003dc522dd25esm14755161wmb.30.2023.03.21.15.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 15:54:48 -0700 (PDT)
-Message-ID: <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
-X-Google-Original-Message-ID: <ZBo1tqarEyoA0sV0@Ansuel-xps.>
-Date:   Tue, 21 Mar 2023 23:54:46 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
- Document support for LEDs node
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-11-ansuelsmth@gmail.com>
- <20230321211953.GA1544549-robh@kernel.org>
+        Tue, 21 Mar 2023 18:57:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC46558C0D;
+        Tue, 21 Mar 2023 15:57:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 864A961ECB;
+        Tue, 21 Mar 2023 22:57:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6823C433EF;
+        Tue, 21 Mar 2023 22:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679439456;
+        bh=NKhQb3E1vtSLgRSfK0SvtCpf6hWM8Pf1MdVe9cJDZ6Q=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=i9E0HRSbmCklr2PR7XiTJ2xXliHlxq1XEvl80QmNF3fTq4vuA6NHpopDWzFtDbdAQ
+         C+qFh6sNS7d9pU/1cuV3D0KhF0D6/EClP3AEWp4w1CvzKnNxuY+Z4n5LPObg4utIZx
+         ZLy0/nORBtXNXkRXR+Eo5ITOL8wr8fD5mMvFB+NfxPdcTaYXWsjqWQ9k8TS2GpSAZW
+         UQV7Ok/RNfPpZlai2T/bj4qNw+9GfjlBDWcnU3hIim8D5yyhTz/cZwEHkkIdEg7B7s
+         3d32m4qnBA8iJ0s52IVO4TKZJ6oJ/KBKCRauieDOSfdv3WFR5qh9npTyAV1Yse9UcT
+         xu7jshOYS1meA==
+Message-ID: <3a1d7b271a42324c056d983e1943b386.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321211953.GA1544549-robh@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230321201022.1052743-5-noltari@gmail.com>
+References: <20210315122605.28437-1-noltari@gmail.com> <20230321201022.1052743-1-noltari@gmail.com> <20230321201022.1052743-5-noltari@gmail.com>
+Subject: Re: [PATCH v3 4/4] clk: bcm: Add BCM63268 timer clock and reset driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez?= Rojas <noltari@gmail.com>
+To:     devicetree@vger.kernel.org, f.fainelli@gmail.com,
+        jonas.gorski@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, william.zhang@broadcom.com,
+        =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez?= Rojas <noltari@gmail.com>
+Date:   Tue, 21 Mar 2023 15:57:34 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 04:19:53PM -0500, Rob Herring wrote:
-> On Sun, Mar 19, 2023 at 08:18:09PM +0100, Christian Marangi wrote:
-> > Document support for LEDs node in ethernet-controller.
-> > Ethernet Controller may support different LEDs that can be configured
-> > for different operation like blinking on traffic event or port link.
-> > 
-> > Also add some Documentation to describe the difference of these nodes
-> > compared to PHY LEDs, since ethernet-controller LEDs are controllable
-> > by the ethernet controller regs and the possible intergated PHY doesn't
-> > have control on them.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/net/ethernet-controller.yaml     | 21 +++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> > index 00be387984ac..a93673592314 100644
-> > --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> > +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> > @@ -222,6 +222,27 @@ properties:
-> >          required:
-> >            - speed
-> >  
-> > +  leds:
-> > +    type: object
-> > +    description:
-> > +      Describes the LEDs associated by Ethernet Controller.
-> > +      These LEDs are not integrated in the PHY and PHY doesn't have any
-> > +      control on them. Ethernet Controller regs are used to control
-> > +      these defined LEDs.
-> > +
-> > +    properties:
-> > +      '#address-cells':
-> > +        const: 1
-> > +
-> > +      '#size-cells':
-> > +        const: 0
-> > +
-> > +    patternProperties:
-> > +      '^led(@[a-f0-9]+)?$':
-> > +        $ref: /schemas/leds/common.yaml#
-> 
-> Are specific ethernet controllers allowed to add their own properties in 
-> led nodes? If so, this doesn't work. As-is, this allows any other 
-> properties. You need 'unevaluatedProperties: false' here to prevent 
-> that. But then no one can add properties. If you want to support that, 
-> then you need this to be a separate schema that devices can optionally 
-> include if they don't extend the properties, and then devices that 
-> extend the binding would essentially have the above with:
-> 
-> $ref: /schemas/leds/common.yaml#
-> unevaluatedProperties: false
-> properties:
->   a-custom-device-prop: ...
-> 
-> 
-> If you wanted to define both common ethernet LED properties and 
-> device specific properties, then you'd need to replace leds/common.yaml 
-> above  with the ethernet one.
-> 
-> This is all the same reasons the DSA/switch stuff and graph bindings are 
-> structured the way they are.
-> 
+Quoting =C3=81lvaro Fern=C3=A1ndez Rojas (2023-03-21 13:10:22)
+> diff --git a/drivers/clk/bcm/clk-bcm63268-timer.c b/drivers/clk/bcm/clk-b=
+cm63268-timer.c
+> new file mode 100644
+> index 000000000000..6a1fdd193cb5
+> --- /dev/null
+> +++ b/drivers/clk/bcm/clk-bcm63268-timer.c
+> @@ -0,0 +1,232 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * BCM63268 Timer Clock and Reset Controller Driver
+[...]
+> +
+> +static inline struct bcm63268_tclkrst_hw *
+> +to_bcm63268_timer_reset(struct reset_controller_dev *rcdev)
+> +{
+> +       return container_of(rcdev, struct bcm63268_tclkrst_hw, rcdev);
+> +}
+> +
+> +static int bcm63268_timer_reset_update(struct reset_controller_dev *rcde=
+v,
+> +                               unsigned long id, bool assert)
+> +{
+> +       struct bcm63268_tclkrst_hw *reset =3D to_bcm63268_timer_reset(rcd=
+ev);
+> +       unsigned long flags;
+> +       uint32_t val;
+> +
+> +       spin_lock_irqsave(&reset->lock, flags);
+> +       val =3D __raw_readl(reset->regs);
 
-Hi Rob, thanks for the review/questions.
+Use regular ol readl() here, unless you have some need for no barrires
+or byte swapping.
 
-The idea of all of this is to keep leds node as standard as possible.
-It was asked to add unevaluatedProperties: False but I didn't understood
-it was needed also for the led nodes.
+> +       if (assert)
+> +               val &=3D ~BIT(id);
+> +       else
+> +               val |=3D BIT(id);
+> +       __raw_writel(val, reset->regs);
 
-leds/common.yaml have additionalProperties set to true but I guess that
-is not OK for the final schema and we need something more specific.
+Same.
 
-Looking at the common.yaml schema reg binding is missing so an
-additional schema is needed.
+> +       spin_unlock_irqrestore(&reset->lock, flags);
+> +
+> +       return 0;
+> +}
+> +
+[...]
+> +
+> +static int bcm63268_tclk_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev =3D &pdev->dev;
+> +       const struct bcm63268_tclk_table_entry *entry, *table;
+> +       struct bcm63268_tclkrst_hw *hw;
+> +       struct clk_hw *clk;
+> +       u8 maxbit =3D 0;
+> +       int i, ret;
+> +
+> +       table =3D of_device_get_match_data(dev);
 
-Reg is needed for ethernet LEDs and PHY but I think we should also permit
-to skip that if the device actually have just one LED. (if this wouldn't
-complicate the implementation. Maybe some hints from Andrew about this
-decision?)
+Use device_get_match_data() instead.
 
-If we decide that reg is a must, if I understood it correctly we should
-create something like leds-ethernet.yaml that would reference common and
-add reg binding? Is it correct? This schema should be laded in leds
-directory and not in the net/ethernet.
+> +       if (!table)
+> +               return -EINVAL;
+> +
+> +       for (entry =3D table; entry->name; entry++)
+> +               maxbit =3D max(maxbit, entry->bit);
+> +       maxbit++;
+> +
+> +       hw =3D devm_kzalloc(&pdev->dev, struct_size(hw, data.hws, maxbit),
+> +                         GFP_KERNEL);
+> +       if (!hw)
+> +               return -ENOMEM;
+> +
+> +       platform_set_drvdata(pdev, hw);
+> +
+> +       spin_lock_init(&hw->lock);
+> +
+> +       hw->data.num =3D maxbit;
+> +       for (i =3D 0; i < maxbit; i++)
+> +               hw->data.hws[i] =3D ERR_PTR(-ENODEV);
+> +
+> +       hw->regs =3D devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(hw->regs))
+> +               return PTR_ERR(hw->regs);
+> +
+> +       for (entry =3D table; entry->name; entry++) {
+> +               clk =3D clk_hw_register_gate(dev, entry->name, NULL, 0,
 
-Also with setting reg mandatory I will have to fix the regex to require
-@ in the node name.
+Use devm?
 
+> +                                          hw->regs, entry->bit,
+> +                                          CLK_GATE_BIG_ENDIAN, &hw->lock=
+);
+> +               if (IS_ERR(clk)) {
+> +                       ret =3D PTR_ERR(clk);
+> +                       goto out_err;
+> +               }
+> +
+> +               hw->data.hws[entry->bit] =3D clk;
+> +       }
+> +
+> +       ret =3D devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> +                                         &hw->data);
+> +       if (ret)
+> +               return ret;
+> +
+> +       hw->rcdev.of_node =3D dev->of_node;
+> +       hw->rcdev.ops =3D &bcm63268_timer_reset_ops;
+> +
+> +       ret =3D devm_reset_controller_register(dev, &hw->rcdev);
+> +       if (ret)
+> +               dev_err(dev, "Failed to register reset controller\n");
+> +
+> +       return 0;
+> +
+> +out_err:
+> +       for (i =3D 0; i < hw->data.num; i++) {
+> +               if (!IS_ERR(hw->data.hws[i]))
+> +                       clk_hw_unregister_gate(hw->data.hws[i]);
 
-Also also if we decide for a more specific schema, I guess I can
-reference that directly in ethernet-phy.yaml and ethernet-controller.yaml
-with something like:
+And then drop this?
 
-leds:
-  $ref: /schemas/leds/leds-ethernet.yaml#
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct of_device_id bcm63268_tclk_dt_ids[] =3D {
+> +       {
+> +               .compatible =3D "brcm,bcm63268-timer-clocks",
+> +               .data =3D &bcm63268_timer_clocks,
 
-Again thanks for the review and hope you can give some
-hint/clarification if I got everything right.
+Are you planning on adding more SoCs to this driver? The data can
+currently be always assumed to be bcm63268_timer_clocks
 
--- 
-	Ansuel
+> +       }, {
+> +               /* sentinel */
+> +       }
+> +};
+> +
