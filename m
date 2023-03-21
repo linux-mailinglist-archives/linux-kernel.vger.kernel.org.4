@@ -2,170 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257856C264C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419B06C265E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjCUAYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S229750AbjCUAd6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 20 Mar 2023 20:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCUAYX (ORCPT
+        with ESMTP id S229458AbjCUAd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:24:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944791207F;
-        Mon, 20 Mar 2023 17:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679358262; x=1710894262;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GRVnvzYi7pT7KDRG53bY6VEAg5OjyUVo2Ng7bX3FNaw=;
-  b=m+CSHdluqnT+vLAT+5fIcyHDdo5faCZ0rT9+lmaPIvKCEk2yreF7x3BP
-   58Cn8Jdj13MtP4Hxfbf72TBXLEE1Si2+Z2UQM+Qvo/PYEGb1FoF4tssGV
-   tqmTjTwwKOsUHK1PVbYLcpKmP/bTeuvepfKJydqKeA+NZwcdQ1PhkjRJg
-   ZJU0mCvvzu6ItQudKueDejJwHfTm58MULHdId+H3+OkyNSvKd9j2ufZW4
-   VlFC1hBbxnuNxg+njmCdXIUlB8PpUUpb96cmje3BsMkXH7cmFfopZzTgH
-   echaK0qeRJSukQoRaqBz6IaLeNRSzaPoe4O4q/Mbcg1pxNVPuQUHwadsw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="338842236"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="338842236"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 17:24:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="681299317"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="681299317"
-Received: from cbellini-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.221.208])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 17:24:19 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 2438D109590; Tue, 21 Mar 2023 03:24:17 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2] mm/page_alloc: Make deferred page init free pages in MAX_ORDER blocks
-Date:   Tue, 21 Mar 2023 03:24:15 +0300
-Message-Id: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 20 Mar 2023 20:33:56 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C26614226;
+        Mon, 20 Mar 2023 17:33:53 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32L0X2Og8021089, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32L0X2Og8021089
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Tue, 21 Mar 2023 08:33:02 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 21 Mar 2023 08:32:27 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 21 Mar 2023 08:32:26 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Tue, 21 Mar 2023 08:32:26 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Tom Rix <trix@redhat.com>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
+Thread-Topic: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
+Thread-Index: AQHZW4S2PiAeUP74qUG+p5pnBukePa8EYhmQ
+Date:   Tue, 21 Mar 2023 00:32:26 +0000
+Message-ID: <e9ca21b87b4246ddaafc5b0cabc9eb74@realtek.com>
+References: <20230320233448.1729899-1-trix@redhat.com>
+In-Reply-To: <20230320233448.1729899-1-trix@redhat.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/3/20_=3F=3F_10:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Normal page init path frees pages during the boot in MAX_ORDER chunks,
-but deferred page init path does it in pageblock blocks.
 
-Change deferred page init path to work in MAX_ORDER blocks.
 
-For cases when MAX_ORDER is larger than pageblock, set migrate type to
-MIGRATE_MOVABLE for all pageblocks covered by the page.
+> -----Original Message-----
+> From: Tom Rix <trix@redhat.com>
+> Sent: Tuesday, March 21, 2023 7:35 AM
+> To: tony0620emma@gmail.com; kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; nathan@kernel.org; ndesaulniers@google.com
+> Cc: linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
+> llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
+> Subject: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
+> 
+> clang with W=1 reports
+> drivers/net/wireless/realtek/rtw88/pci.c:92:21: error:
+>   unused function 'rtw_pci_get_tx_desc' [-Werror,-Wunused-function]
+> static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
+>                     ^
+> This function is not used, so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-Note: the patch depends on the new definiton of MAX_ORDER.
-
-v2:
-
- - Fix commit message;
-
----
- include/linux/mmzone.h |  2 ++
- mm/page_alloc.c        | 19 ++++++++++---------
- 2 files changed, 12 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 96599cb9eb62..f53fe3a7ca45 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -32,6 +32,8 @@
- #endif
- #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
- 
-+#define IS_MAX_ORDER_ALIGNED(pfn) IS_ALIGNED(pfn, MAX_ORDER_NR_PAGES)
-+
- /*
-  * PAGE_ALLOC_COSTLY_ORDER is the order at which allocations are deemed
-  * costly to service.  That is between allocation orders which should
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 87d760236dba..fc02a243425d 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1875,9 +1875,10 @@ static void __init deferred_free_range(unsigned long pfn,
- 	page = pfn_to_page(pfn);
- 
- 	/* Free a large naturally-aligned chunk if possible */
--	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
--		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
--		__free_pages_core(page, pageblock_order);
-+	if (nr_pages == MAX_ORDER_NR_PAGES && IS_MAX_ORDER_ALIGNED(pfn)) {
-+		for (i = 0; i < nr_pages; i += pageblock_nr_pages)
-+			set_pageblock_migratetype(page + i, MIGRATE_MOVABLE);
-+		__free_pages_core(page, MAX_ORDER);
- 		return;
- 	}
- 
-@@ -1901,19 +1902,19 @@ static inline void __init pgdat_init_report_one_done(void)
- /*
-  * Returns true if page needs to be initialized or freed to buddy allocator.
-  *
-- * We check if a current large page is valid by only checking the validity
-+ * We check if a current MAX_ORDER block is valid by only checking the validity
-  * of the head pfn.
-  */
- static inline bool __init deferred_pfn_valid(unsigned long pfn)
- {
--	if (pageblock_aligned(pfn) && !pfn_valid(pfn))
-+	if (IS_MAX_ORDER_ALIGNED(pfn) && !pfn_valid(pfn))
- 		return false;
- 	return true;
- }
- 
- /*
-  * Free pages to buddy allocator. Try to free aligned pages in
-- * pageblock_nr_pages sizes.
-+ * MAX_ORDER_NR_PAGES sizes.
-  */
- static void __init deferred_free_pages(unsigned long pfn,
- 				       unsigned long end_pfn)
-@@ -1924,7 +1925,7 @@ static void __init deferred_free_pages(unsigned long pfn,
- 		if (!deferred_pfn_valid(pfn)) {
- 			deferred_free_range(pfn - nr_free, nr_free);
- 			nr_free = 0;
--		} else if (pageblock_aligned(pfn)) {
-+		} else if (IS_MAX_ORDER_ALIGNED(pfn)) {
- 			deferred_free_range(pfn - nr_free, nr_free);
- 			nr_free = 1;
- 		} else {
-@@ -1937,7 +1938,7 @@ static void __init deferred_free_pages(unsigned long pfn,
- 
- /*
-  * Initialize struct pages.  We minimize pfn page lookups and scheduler checks
-- * by performing it only once every pageblock_nr_pages.
-+ * by performing it only once every MAX_ORDER_NR_PAGES.
-  * Return number of pages initialized.
-  */
- static unsigned long  __init deferred_init_pages(struct zone *zone,
-@@ -1953,7 +1954,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
- 		if (!deferred_pfn_valid(pfn)) {
- 			page = NULL;
- 			continue;
--		} else if (!page || pageblock_aligned(pfn)) {
-+		} else if (!page || IS_MAX_ORDER_ALIGNED(pfn)) {
- 			page = pfn_to_page(pfn);
- 		} else {
- 			page++;
--- 
-2.39.2
+> ---
+>  drivers/net/wireless/realtek/rtw88/pci.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
+> index b4bd831c9845..6a8e6ee82069 100644
+> --- a/drivers/net/wireless/realtek/rtw88/pci.c
+> +++ b/drivers/net/wireless/realtek/rtw88/pci.c
+> @@ -89,13 +89,6 @@ static void rtw_pci_write32(struct rtw_dev *rtwdev, u32 addr, u32 val)
+>         writel(val, rtwpci->mmap + addr);
+>  }
+> 
+> -static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, u8 idx)
+> -{
+> -       int offset = tx_ring->r.desc_size * idx;
+> -
+> -       return tx_ring->r.head + offset;
+> -}
+> -
+>  static void rtw_pci_free_tx_ring_skbs(struct rtw_dev *rtwdev,
+>                                       struct rtw_pci_tx_ring *tx_ring)
+>  {
+> --
+> 2.27.0
 
