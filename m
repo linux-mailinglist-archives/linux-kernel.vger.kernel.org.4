@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF6E6C3833
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666D86C3838
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCURbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
+        id S230025AbjCURco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjCURb3 (ORCPT
+        with ESMTP id S229571AbjCURcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:31:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1740128D25
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:31:25 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so62689275edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679419884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UTZd1bMO8xEU78JJj8yFbCWqQGZ1JfnnMRfW/5G1QAQ=;
-        b=ew6/UtpXqm8+AL/X2UZQaHEwUOVRFd2RRlwoqY/MfdtoolFTe3TS3egemCA/UVhWeT
-         hNdvYi5z8USwDri63hJe9lfVCZQkMoJnsJvBoeLbpETRP8ZQ6ABrTM/0K/NG86dljaM8
-         n2AgMSOjDE+JP7kOR2UGL8q6yGJ4g2d6JAN3s/EThazogkpjfzzgLUPeIHfkadXtk9R2
-         kfD/ZGLiVUdSSljf6UJ+2OWAVTTDduPGjhY+wATkWq0XCbKJ1FfMG7nNj+E8dFQCtd11
-         rPXQXPZC8IUeKKAjSrPvOLdk2oq9brHgOWeKIEUX0Ts22yKWmq0B846EKNWBnhABKkWe
-         IIXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679419884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UTZd1bMO8xEU78JJj8yFbCWqQGZ1JfnnMRfW/5G1QAQ=;
-        b=BDGTLDhderaYupAy1nxFXpIIzT+L3sYfK1WfYCMP/r5so+i2HiGt5MGg+MDdjewJjm
-         /bWnH1cf3BONc/ftLuDdfAIJF/KUV39eRi3WB8GPOPsX6X5FtHacr3WUgwKbTjvzcwtr
-         sNW0u2tK+BjP+i5BPyFfH147GQd1M8pHi52FxdXj6RGZxG89khLhTyG2Lt6bBZpxkoIZ
-         nqbjOBwGmcF2RXQsxHROq0lmOifjlL6vUA9UrqL66OHHzXKi6N2oATEjiXmNpdUlYvQ8
-         NkJhbmMsLvRozV3yliNF7e0Ct0bej91yaZQr9HW1YCdpjTMKG3ChTyNDSWRCUAWGmyBX
-         Z1Eg==
-X-Gm-Message-State: AO0yUKXFxwSjCGQrf47Snu87gtMYVJ+xDbGgVmcS9Yd2bvqbn0nIL9ez
-        PGXmAIvDoQ3n19cfrUFUpnOIUA==
-X-Google-Smtp-Source: AK7set/ony5H01wz51r1wEwsuJS9bKkUDWLT7QLQW72Sb+0M2NjFg/tGSNyKe2mzBjuPT+aaU8VlCA==
-X-Received: by 2002:aa7:dad3:0:b0:4fb:80cf:89e6 with SMTP id x19-20020aa7dad3000000b004fb80cf89e6mr4134467eds.8.1679419884055;
-        Tue, 21 Mar 2023 10:31:24 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id x2-20020a50ba82000000b004fb30fc1dabsm6505645ede.96.2023.03.21.10.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:31:23 -0700 (PDT)
-Message-ID: <c0c6c79b-ac77-cdbf-5b08-38b89e4fe481@linaro.org>
-Date:   Tue, 21 Mar 2023 18:31:22 +0100
+        Tue, 21 Mar 2023 13:32:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D2A13538
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679419906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wgy4ya1FwxC/XDxzCB8Jfy4+qKCjl6s0tQNELR6EvdQ=;
+        b=T3ARX4j/57I2EZtyVRI/Q9xKbgF/UH8GqvnOdwDdgiL5mACSvOGykgJXaz1AXlzRdFP1+6
+        myEqLSvb+rPSl98HaSKLLcfTM3chhgv/7p+qsuWiDdksezw+cetttwGoLyUIOqp4hRK6OV
+        msiPfDckXsfx2Hzyu9UXGIDsohx0YWg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-CSeqk2H1NPqZO1WRKhaNgg-1; Tue, 21 Mar 2023 13:31:42 -0400
+X-MC-Unique: CSeqk2H1NPqZO1WRKhaNgg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B2E880C8C3;
+        Tue, 21 Mar 2023 17:31:42 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BF273175AD;
+        Tue, 21 Mar 2023 17:31:41 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 0F9E84038ED8A; Tue, 21 Mar 2023 14:31:23 -0300 (-03)
+Date:   Tue, 21 Mar 2023 14:31:23 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 01/11] mm/vmstat: remove remote node draining
+Message-ID: <ZBnp69SHwM5SOttF@tpad>
+References: <20230209150150.380060673@redhat.com>
+ <20230209153204.656996515@redhat.com>
+ <6b6cd2fe-2309-b471-8950-3c4334462e69@redhat.com>
+ <Y/5XoAnv43zYzxLR@tpad>
+ <3329f63e-5671-1500-0730-cd46ba461d04@redhat.com>
+ <20230321152031.2bzcury6k6aj7p6k@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V1 1/4] dt-bindings: sram: qcom,imem: Add Boot Stat region
- within IMEM
-Content-Language: en-US
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <1589f33deda07cb9f9e6c3c26bce6e02e53c168e.1679403696.git.quic_schowdhu@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1589f33deda07cb9f9e6c3c26bce6e02e53c168e.1679403696.git.quic_schowdhu@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321152031.2bzcury6k6aj7p6k@suse.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,60 +72,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 14:51, Souradeep Chowdhury wrote:
-> All Qualcomm bootloaders log useful timestamp information related
-> to bootloader stats in the IMEM region. Add the child node within
-> IMEM for the boot stat region containing register address and
-> compatible string.
+On Tue, Mar 21, 2023 at 03:20:31PM +0000, Mel Gorman wrote:
+> On Thu, Mar 02, 2023 at 11:10:03AM +0100, David Hildenbrand wrote:
+> > [...]
+> > 
+> > > 
+> > > > (2) drain_zone_pages() documents that we're draining the PCP
+> > > >      (bulk-freeing them) of the current CPU on remote nodes. That bulk-
+> > > >      freeing will properly adjust free memory counters. What exactly is
+> > > >      the impact when no longer doing that? Won't the "snapshot" of some
+> > > >      counters eventually be wrong? Do we care?
+> > > 
+> > > Don't see why the snapshot of counters will be wrong.
+> > > 
+> > > Instead of freeing pages on pcp list of remote nodes after they are
+> > > considered idle ("3 seconds idle till flush"), what will happen is that
+> > > drain_all_pages() will free those pcps, for example after an allocation
+> > > fails on direct reclaim:
+> > > 
+> > >          page = get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
+> > > 
+> > >          /*
+> > >           * If an allocation failed after direct reclaim, it could be because
+> > >           * pages are pinned on the per-cpu lists or in high alloc reserves.
+> > >           * Shrink them and try again
+> > >           */
+> > >          if (!page && !drained) {
+> > >                  unreserve_highatomic_pageblock(ac, false);
+> > >                  drain_all_pages(NULL);
+> > >                  drained = true;
+> > >                  goto retry;
+> > >          }
+> > > 
+> > > In both cases the pages are freed (and counters maintained) here:
+> > > 
+> > > static inline void __free_one_page(struct page *page,
+> > >                  unsigned long pfn,
+> > >                  struct zone *zone, unsigned int order,
+> > >                  int migratetype, fpi_t fpi_flags)
+> > > {
+> > >          struct capture_control *capc = task_capc(zone);
+> > >          unsigned long buddy_pfn = 0;
+> > >          unsigned long combined_pfn;
+> > >          struct page *buddy;
+> > >          bool to_tail;
+> > > 
+> > >          VM_BUG_ON(!zone_is_initialized(zone));
+> > >          VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
+> > > 
+> > >          VM_BUG_ON(migratetype == -1);
+> > >          if (likely(!is_migrate_isolate(migratetype)))
+> > >                  __mod_zone_freepage_state(zone, 1 << order, migratetype);
+> > > 
+> > >          VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+> > >          VM_BUG_ON_PAGE(bad_range(zone, page), page);
+> > > 
+> > >          while (order < MAX_ORDER - 1) {
+> > >                  if (compaction_capture(capc, page, order, migratetype)) {
+> > >                          __mod_zone_freepage_state(zone, -(1 << order),
+> > >                                                                  migratetype);
+> > >                          return;
+> > >                  }
+> > > 
+> > > > Describing the difference between instructed refresh of vmstat and "remotely
+> > > > drain per-cpu lists" in order to move free memory from the pcp to the buddy
+> > > > would be great.
+> > > 
+> > > The difference is that now remote PCPs will be drained on demand, either via
+> > > kcompactd or direct reclaim (through drain_all_pages), when memory is
+> > > low.
+> > > 
+> > > For example, with the following test:
+> > > 
+> > > dd if=/dev/zero of=file bs=1M count=32000 on a tmpfs filesystem:
+> > > 
+> > >        kcompactd0-116     [005] ...1 228232.042873: drain_all_pages <-kcompactd_do_work
+> > >        kcompactd0-116     [005] ...1 228232.042873: __drain_all_pages <-kcompactd_do_work
+> > >                dd-479485  [003] ...1 228232.455130: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> > >                dd-479485  [011] ...1 228232.721994: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> > >       gnome-shell-3750    [015] ...1 228232.723729: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
+> > > 
+> > > The commit message was indeed incorrect. Updated one:
+> > > 
+> > > "mm/vmstat: remove remote node draining
+> > > 
+> > > Draining of pages from the local pcp for a remote zone should not be
+> > > necessary, since once the system is low on memory (or compaction on a
+> > > zone is in effect), drain_all_pages should be called freeing any unused
+> > > pcps."
+> > > 
+> > > Thanks!
+> > 
+> > Thanks for the explanation, that makes sense to me. Feel free to add my
+> > 
+> > Acked-by: David Hildenbrand <david@redhat.com>
+> > 
+> > ... hoping that some others (Mel, Vlastimil?) can have another look.
+> > 
 > 
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> ---
->  .../devicetree/bindings/sram/qcom,imem.yaml          | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> I was on extended leave and am still in the process of triaging a few
+> thousand mails so I'm working off memory here instead of the code. This
+> is a straight-forward enough question to answer quickly in case I forget
+> later.
 > 
-> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> index 665c06e..c8c3890 100644
-> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
-> @@ -48,6 +48,26 @@ patternProperties:
->      $ref: /schemas/remoteproc/qcom,pil-info.yaml#
->      description: Peripheral image loader relocation region
->  
-> +  "^boot-stat@[0-9a-f]+$":
-> +    type: object
-> +    description:
-> +      node for boot stat.
+> Short answer: I'm not a fan of the patch in concept and I do not think it
+> should be merged.
+> 
+> I agree that drain_all_pages() would free the PCP pages on demand in
+> direct reclaim context but it happens after reclaim has already
+> happened. Hence, the reclaim may be necessary and may cause overreclaim
+> in some situations due to remote CPUs pinning memory in PCP lists.
+> 
+> Similarly, kswapd may trigger early because PCP pages do not contribute
+> to NR_FREE_PAGES so watermark checks can fail even though pages are
+> free, just inaccessible.
+> 
+> Finally, remote pages expire because ideally CPUs allocate local memory
+> assuming memory policies are not forcing use of remote nodes. The expiry
+> means that remote pages get freed back to the buddy lists after a short
+> period. By removing the expiry, it's possible that a local allocation will
+> fail and spill over to a remote node prematurely because free pages were
+> pinned on the PCP lists.
+> 
+> As this patch has the possibility of reclaiming early in both direct and
+> kswapd context and increases the risk of remote node fallback, I think it
+> needs much stronger justification and a warning about the side-effects. For
+> this version unless I'm very wrong -- NAK :(
 
-This basically copies the name of node, so not really helpful. Describe
-what's this.
+Mel,
 
-> +
+Agreed. -v7 of the series dropped this patch and implements draining 
+of non-local NUMA node memory on pcp caches to happen from cpu_vm_stats_fold
+(which might execute remotely from vmstat_shepherd).
+If you can take a look at -v7, it would be awesome.
 
-additionalProperties: false
+Subject: [PATCH v7 13/13] vmstat: add pcp remote node draining via cpu_vm_stats_fold
 
-> +    properties:
-> +      compatible:
-> +        items:
+Large NUMA systems might have significant portions
+of system memory to be trapped in pcp queues. The number of pcp is
+determined by the number of processors and nodes in a system. A system
+with 4 processors and 2 nodes has 8 pcps which is okay. But a system
+with 1024 processors and 512 nodes has 512k pcps with a high potential
+for large amount of memory being caught in them.
 
-Drop items.
+Enable remote node draining for the CONFIG_HAVE_CMPXCHG_LOCAL case,
+where vmstat_shepherd will perform the aging and draining via
+cpu_vm_stats_fold.
 
-> +          - const: qcom,imem-boot_stats
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
 
-No underscores in compatibles. Why this is not SoC specific compatible?
 
-> +
-> +      reg:
-> +        maxItems: 1
-> +        description:
-> +          The base address of the register region in case of
-> +          imem boot stats.
 
-Drop description, it's obvious.
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +
-Best regards,
-Krzysztof
+
+> 
+> -- 
+> Mel Gorman
+> SUSE Labs
+> 
+> 
 
