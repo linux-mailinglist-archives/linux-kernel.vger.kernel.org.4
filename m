@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082DD6C3037
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB786C3034
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjCULUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S231129AbjCULUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCULUm (ORCPT
+        with ESMTP id S230349AbjCULUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:20:42 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8EA2F7AC;
-        Tue, 21 Mar 2023 04:20:23 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32LBK3ql127836;
-        Tue, 21 Mar 2023 06:20:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679397603;
-        bh=nBzsrK9F0f/kSP64wqEA7pCc1XDfaG2toYVJJNk9SuI=;
-        h=From:To:CC:Subject:Date;
-        b=uRgn9ZomS8XS+g4sI+2kHGYnwdniso1bP4nCcpIB3RrCx4rH2TOiIH3tTqM9M5FD6
-         ty3F6dp+XjcL/qtuPNzogEFaBiWAegy9JHT94Aa+gtBRwRWK7lMw6PpMKQigO6uKuI
-         hEVq8qv891a8FO9HhenYXwdk7OCCIhiqgiqzZT8E=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32LBK3PQ008204
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 06:20:03 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 06:20:02 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 06:20:02 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32LBJxVm088542;
-        Tue, 21 Mar 2023 06:20:00 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net-next 0/4] Add CPSWxG SGMII support for J7200 and J721E
-Date:   Tue, 21 Mar 2023 16:49:54 +0530
-Message-ID: <20230321111958.2800005-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 21 Mar 2023 07:20:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82CDFC141
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:20:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 386ACAD7;
+        Tue, 21 Mar 2023 04:20:46 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.54.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FFD43F71E;
+        Tue, 21 Mar 2023 04:20:01 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 11:19:55 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: Support CMDLINE_EXTEND
+Message-ID: <ZBmS28ciIei5sKHY@FVFF77S0Q05N>
+References: <20230320211451.2512800-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320211451.2512800-1-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Mar 21, 2023 at 10:14:51AM +1300, Chris Packham wrote:
+> Support extending the bootloader provided command line for arm64
+> targets. This support is already present via generic DT/EFI code the
+> only thing required is for the architecture to make it selectable.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-This series adds support to configure the CPSW Ethernet Switch in SGMII
-mode, using the am65-cpsw-nuss driver. SGMII mode is supported by the
-CPSWxG instances on TI's J7200 and J721E SoCs. Thus, SGMII mode is added
-in the list of extra_modes for the appropriate compatibles corresponding
-to the aforementioned SoCs.
+We deliberately dropped support for CMDLINE_EXTEND in commit:
 
-Additionally, the method of setting the supported interface via struct
-"phylink_config" is simplified by converting the IF/ELSE statements to
-SWITCH statements.
+  cae118b6acc3 ("arm64: Drop support for CMDLINE_EXTEND")
 
-Regards,
-Siddharth.
+... which was mentioned the last time somone tried to re-add it:
 
-Siddharth Vadapalli (4):
-  net: ethernet: ti: am65-cpsw: Simplify setting supported interface
-  net: ethernet: ti: am65-cpsw: Add support for SGMII mode
-  net: ethernet: ti: am65-cpsw: Enable SGMII mode for J7200
-  net: ethernet: ti: am65-cpsw: Enable SGMII mode for J721E
+  https://lore.kernel.org/linux-arm-kernel/ZAh8dWvbNkVQT11C@arm.com/
 
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 42 +++++++++++++++++++-----
- 1 file changed, 33 insertions(+), 9 deletions(-)
+Has something changes such that those issues no longer apply? If so, please
+call that out explicitly in the commit message. If not, I do not think we
+should take this patch.
 
--- 
-2.25.1
+Thanks,
+Mark.
 
+> ---
+>  arch/arm64/Kconfig | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 1023e896d46b..3c837b085f21 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -2228,6 +2228,12 @@ config CMDLINE_FROM_BOOTLOADER
+>  	  the boot loader doesn't provide any, the default kernel command
+>  	  string provided in CMDLINE will be used.
+>  
+> +config CMDLINE_EXTEND
+> +	bool "Extend bootloader kernel arguments"
+> +	help
+> +	  The command-line arguments provided by the boot loader will be
+> +	  appended to the default kernel command string.
+> +
+>  config CMDLINE_FORCE
+>  	bool "Always use the default kernel command string"
+>  	help
+> -- 
+> 2.40.0
+> 
