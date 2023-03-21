@@ -2,171 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB26A6C2C07
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42346C2C76
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCUILv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 04:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S229738AbjCUIci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbjCUILc (ORCPT
+        with ESMTP id S230167AbjCUIcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:11:32 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451A328E67;
-        Tue, 21 Mar 2023 01:11:06 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1peX4c-002AdC-6o; Tue, 21 Mar 2023 09:10:26 +0100
-Received: from p57bd9952.dip0.t-ipconnect.de ([87.189.153.82] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1peX4b-0013m5-VS; Tue, 21 Mar 2023 09:10:26 +0100
-Message-ID: <ad2234ad155d51c142e59adcf2981bce23d69aa4.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 6/7 v5] sh: fix Kconfig entry for NUMA => SMP
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Kuninori Morimoto <morimoto.kuninori@renesas.com>,
-        linux-sh@vger.kernel.org, stable@vger.kernel.org
-Date:   Tue, 21 Mar 2023 09:10:25 +0100
-In-Reply-To: <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
-References: <20230320231310.28841-1-rdunlap@infradead.org>
-         <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
-MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.82
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 04:32:16 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAD1460A7;
+        Tue, 21 Mar 2023 01:31:32 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 052262B0769F;
+        Tue, 21 Mar 2023 04:12:03 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 21 Mar 2023 04:12:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-transfer-encoding:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1679386323; x=1679393523; bh=p6c5VTiMv6AfZVBMNz3DxVLxCSIdNaJFVMc
+        Qk71zPTY=; b=uVCWvJx6nGWx/5u3VSJfVJjj/h5Ng2P2Yhqie0BJHMjvjzYTE1H
+        S3000Ce0+mrEAYEo+fTrrkOwrGIyGM/RtSIJpIl+AMe3IaZe/M9yfHnG9yQfEsGB
+        osDTshQUiWc3Ls9qw2Zw7uWeyKKv9pZtQgUyAYyK61kK6H6zm7ZRw1iyIFDATAh6
+        bngnkf2pqjCtTHy18W2iC0jMSPclRhXy7pawiFxq3uFJa37/Dw0UOVfoCTYIxNid
+        kVhGUwaRgeQY4B8o9mWH+SDBN77zX5XpwykUHuqV16i9fCmBftgO42riFzH6w1Ei
+        GyD4hF/a4GlUL9X/bR9I68HXVhkZhUlJJ3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679386323; x=
+        1679393523; bh=p6c5VTiMv6AfZVBMNz3DxVLxCSIdNaJFVMcQk71zPTY=; b=s
+        1KchFhGt52dzXyN5O79HxuLj6FqmtaoRirc8tC8IgABafDJR6lWnVdeusmW3YgwN
+        FJAf+yx/n1aoiR0A753RChyEfaoIpIQzkZeE9GElnDfGMGVe4oIkqtFw9qR7h1WP
+        zxqQpmzCduK4QJMEm9wue/7sWeCfuf6P6YHLtFguSITKE6rIm8h05WV74PgknMBG
+        2bAxDrbC+Le26NytxoV2l9iQeICkXFr8qbpiOdPcrl+yCtPjEeppm+ecm6oJOczI
+        x/6d20UEibueIHsAvJp1EBg4CLfe3Tl1BSAVsdcOQAbqRbpMjYLiXHNTVklS4axM
+        ckago2w0Vsl5TtYiY3MpQ==
+X-ME-Sender: <xms:0GYZZJjZT4P_yV-Mx_Quzl7wy0YQtEhKnVKu2qt6FAe5g0Nu5umXIw>
+    <xme:0GYZZOBRlFaFGXG_FQkcgQEutyw7RZhEAYkiTJLcbFTaKAx0oZHJTkyPwuMSM-9_n
+    _kFQQURc5ACQt9CvsA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledguddugecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffkedtffejkeeihedtffevtedvhfdvhfehfffgleekgffgveeftdefgeek
+    vedvjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:0GYZZJF0ltCZr-3PUVxWiK0aO1a98gJRJ1RIE6_3xBjMQmp3OqMi_Q>
+    <xmx:0GYZZORTWXWGlKctJD6dpm53uhz2MzndLAhOFP-b7JCl5028QMmYHA>
+    <xmx:0GYZZGxU24J2mJwqKURxfuq2oxh3zplPa2ump9UmR_oOSDgOlsWU1w>
+    <xmx:02YZZGNbMwV1BEbfQ41yDSjvKrVTgq4nxJ1za-0qfoPrs4jKp0pJRPjrGNk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B3F8BB60086; Tue, 21 Mar 2023 04:12:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <86431868-488b-4a72-944b-231b6d0382b0@app.fastmail.com>
+In-Reply-To: <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
+Date:   Tue, 21 Mar 2023 09:11:36 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Joe Tessler" <jrt@google.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Kevin Hilman" <khilman@baylibre.com>,
+        "Jerome Brunet" <jbrunet@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Michael Tretter" <m.tretter@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Jacopo Mondi" <jacopo+renesas@jmondi.org>,
+        "Kieran Bingham" <kieran.bingham+renesas@ideasonboard.com>,
+        "Laurent Pinchart" <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        "Rui Miguel Silva" <rmfrfs@gmail.com>,
+        "Wenyou Yang" <wenyou.yang@microchip.com>,
+        "Bin Liu" <bin.liu@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        "Minghsiu Tsai" <minghsiu.tsai@mediatek.com>,
+        "Houlong Wei" <houlong.wei@mediatek.com>,
+        "Andrew-CT Chen" <andrew-ct.chen@mediatek.com>,
+        "Andrzej Pietrasiewicz" <andrzejtp2010@gmail.com>,
+        "Jacek Anaszewski" <jacek.anaszewski@gmail.com>,
+        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+        "Patrice Chotard" <patrice.chotard@foss.st.com>,
+        "Yong Deng" <yong.deng@magewell.com>,
+        "Paul Kocialkowski" <paul.kocialkowski@bootlin.com>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Sean Young" <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org,
+        oushixiong <oushixiong@kylinos.cn>
+Subject: Re: [PATCH 20/28] media: platform: jpeg: always reference OF data
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
+On Sun, Mar 12, 2023, at 14:13, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be alwa=
+ys
+> used and the of_match_ptr does not have any sense (this also allows AC=
+PI
+> matching via PRP0001, even though it might not be relevant here).  This
+> also fixes !CONFIG_OF error:
+>
+>   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1890:38: error:=20
+> =E2=80=98mtk8195_jpegdec_drvdata=E2=80=99 defined but not used=20
+> [-Werror=3Dunused-const-variable=3D]
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Tue, 2023-03-21 at 08:55 +0100, Geert Uytterhoeven wrote:
-> On Tue, Mar 21, 2023 at 12:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> > Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
-> > SYS_SUPPORTS_SMP and SMP.
-> 
-> Perhaps because these SoCs do not support SMP?
+I see now that we both submitted the same patch, but now Hans
+merged a worse fix [1] without a changelog text.
 
-Well, there is actually a dual-core 7786 board available, see:
+    Arnd
 
-> https://www.apnet.co.jp/product/superh/ap-sh4ad-0a.html
-
-Quoting:
-
-»The SH7786 is equipped with a dual-core SH-4A and has interfaces such as
- DDR3 SDRAM, PCI Express, USB, and display unit.«
-
-I seem to remember that Oleg Endo had such a dual-core SH4A board.
-
-Also, the Sega Saturn had two SH-2 CPUs:
-
-> https://en.wikipedia.org/wiki/Sega_Saturn#Technical_specifications
-
-> > kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
-> > code + data inside topology.c is only built when CONFIG_NUMA is
-> > set/enabled, so these arch/sh/ configs need to select SMP and
-> > SYS_SUPPORTS_SMP to build the NUMA support.
-> > 
-> > Fixes this build error in multiple SUPERH configs:
-> > 
-> > mm/page_alloc.o: In function `get_page_from_freelist':
-> > page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
-> > 
-> > Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
-> > Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
-> > Fixes: 55ba99eb211a ("sh: Add support for SH7786 CPU subtype.")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> > --- a/arch/sh/Kconfig
-> > +++ b/arch/sh/Kconfig
-> > @@ -442,6 +442,8 @@ config CPU_SUBTYPE_SH7785
-> >         select CPU_SHX2
-> >         select ARCH_SPARSEMEM_ENABLE
-> >         select SYS_SUPPORTS_NUMA
-> > +       select SYS_SUPPORTS_SMP
-> > +       select SMP
-> 
-> SH7785 is single-core.
-> 
-> >         select PINCTRL
-> > 
-> >  config CPU_SUBTYPE_SH7786
-> > @@ -476,6 +478,8 @@ config CPU_SUBTYPE_SH7722
-> >         select CPU_SHX2
-> >         select ARCH_SHMOBILE
-> >         select ARCH_SPARSEMEM_ENABLE
-> > +       select SYS_SUPPORTS_SMP
-> > +       select SMP
-> 
-> SH7722 is single-core.
-> 
-> >         select SYS_SUPPORTS_NUMA
-> >         select SYS_SUPPORTS_SH_CMT
-> >         select PINCTRL
-> > @@ -486,6 +490,8 @@ config CPU_SUBTYPE_SH7366
-> >         select CPU_SHX2
-> >         select ARCH_SHMOBILE
-> >         select ARCH_SPARSEMEM_ENABLE
-> > +       select SYS_SUPPORTS_SMP
-> > +       select SMP
-> 
-> Dunno about this one (no public info available).
-> 
-> >         select SYS_SUPPORTS_NUMA
-> >         select SYS_SUPPORTS_SH_CMT
-> 
-> Wasn't this fixed by commit 61bb6cd2f765b90c ("mm: move
-> node_reclaim_distance to fix NUMA without SMP") in v5.16?
-> 
-> It is not sufficient, after that you run into:
-> 
->     mm/slab.c: In function ‘slab_memory_callback’:
->     mm/slab.c:1127:23: error: implicit declaration of function
-> ‘init_cache_node_node’; did you mean ‘drain_cache_node_node’?
-> [-Werror=implicit-function-declaration]
->      1127 |                 ret = init_cache_node_node(nid);
-> 
-> which you reported before in
-> https://lore.kernel.org/all/b5bdea22-ed2f-3187-6efe-0c72330270a4@infradead.org/
-
-Without the patch, I am getting:
-
-  CC      fs/fat/nfs.o
-mm/slab.c: In function 'slab_memory_callback':
-mm/slab.c:1127:23: error: implicit declaration of function 'init_cache_node_node'; did you mean 'drain_cache_node_node'? [-Werror=implicit-function-declaration]
- 1127 |                 ret = init_cache_node_node(nid);
-      |                       ^~~~~~~~~~~~~~~~~~~~
-      |                       drain_cache_node_node
-
-with make sh7785lcr_defconfig and CONFIG_NUMA=y.
-
-With the patch, it builds fine for me.
-
-FWIW, I just realized we need this for config CPU_SUBTYPE_SH7786 as well.
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/comm=
+it/?h=3D4ae47770d57bff01
