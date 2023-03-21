@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A506C35A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B11896C35AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbjCUP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S231696AbjCUP24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjCUP2j (ORCPT
+        with ESMTP id S230021AbjCUP2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:28:39 -0400
+        Tue, 21 Mar 2023 11:28:40 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E99912CDB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779EC17CED;
         Tue, 21 Mar 2023 08:28:28 -0700 (PDT)
 Date:   Tue, 21 Mar 2023 15:28:26 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679412506;
+        s=2020; t=1679412507;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CHBaZ/SWGtkniVd+1PKIhIQ2oED2sm6RACVOBu3XXnU=;
-        b=PBjxsquSMrb2Q2SC3chZsJPWQAcRGj6HPtGs7D/fz+ZI4+5mGfjMZFbOC7HscuKf3lM5Fg
-        XICcQ6W+7nalIKXj7Fyl+QT0b90mXCHAl8Q7CUZakYw1djW24T/vmAPXkjsrDD1pCK9w+3
-        9FgKCPRo5mKZCrLPP188QUL65VrWB8LDGjn0cEFiIotQcbIYPMb0xMOt3K02THtEHQRl33
-        SX07acmDENZoJr+B0498NgsF56OUsKQHXFNziKTGcgGGV1rTae0pubkCq663bUgejCmDjl
-        Nk/47T6lP0nkqjJvjEwEUhq9VOZk5+vPFSqIUXPXtdYIjEUDqj06dsJdQ5/fLg==
+        bh=Se6GzeIkbinvFUQpe0kWnURIikbXuEwA1tJrGqSZZFk=;
+        b=2++pG2A/J5TbbZS09j3FFHP2kGrtrjnC36T58sztuB6a9aEZv/34Pz9ijbGo+MBv8H19uD
+        2ciKGyHYpB8cDLJ3OdGRZQRZVSHGV6J8Ki8Ou60epMtAxFyrXaBElnqo7Pg1OGXmthj01h
+        rrqgKJOpfcg7XW63yeygMzK5KAKu2z45+pTas8WiG7q4iS2u6uQBpCuhRrWTp3f8zlUmzn
+        vs/EUIQOg6G2qjC3QQd3DZU8oLYOlzG/yLH6BL4EQQAan81dqkl9qSZfJ34hpMxI8e680h
+        N5iL+WspxH2fH/q+rAn4lj1GwfSTgN+iN0AdbGJdlQrGY3GvQKg36DrH3s0MDw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679412506;
+        s=2020e; t=1679412507;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CHBaZ/SWGtkniVd+1PKIhIQ2oED2sm6RACVOBu3XXnU=;
-        b=3YZcZxpXXUhgnqDuA7PaEacYPwKfjB5/oEdbgGK4G/c/AAk0cMmueUoE2u9NfTCh8Ok21r
-        RP55RCeH6+BirVBw==
-From:   "tip-bot2 for Dionna Glaze" <tip-bot2@linutronix.de>
+        bh=Se6GzeIkbinvFUQpe0kWnURIikbXuEwA1tJrGqSZZFk=;
+        b=mbcOmPSKc84qxW8Hap53VowpmHtvvy978B8mkm2saihDyW8xblo4bWjVeLnZrRqaLa6ZtU
+        4/QZemY5eX4JEeAA==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] virt/coco/sev-guest: Double-buffer messages
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+Subject: [tip: x86/sev] crypto: ccp: Get rid of __sev_platform_init_locked()'s
+ local function pointer
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230214164638.1189804-3-dionnaglaze@google.com>
-References: <20230214164638.1189804-3-dionnaglaze@google.com>
+In-Reply-To: <20230307192449.24732-9-bp@alien8.de>
+References: <20230307192449.24732-9-bp@alien8.de>
 MIME-Version: 1.0
-Message-ID: <167941250633.5837.11136413082956254836.tip-bot2@tip-bot2>
+Message-ID: <167941250671.5837.15169735247960456185.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,97 +66,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     965006103a14703cc42043bbf9b5e0cdf7a468ad
-Gitweb:        https://git.kernel.org/tip/965006103a14703cc42043bbf9b5e0cdf7a468ad
-Author:        Dionna Glaze <dionnaglaze@google.com>
-AuthorDate:    Tue, 07 Mar 2023 20:24:48 +01:00
+Commit-ID:     dbf07b544ca12c0ab8bd3fc1ea3509ea713a8bf5
+Gitweb:        https://git.kernel.org/tip/dbf07b544ca12c0ab8bd3fc1ea3509ea713a8bf5
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Tue, 07 Mar 2023 20:24:46 +01:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 21 Mar 2023 13:20:04 +01:00
+CommitterDate: Tue, 21 Mar 2023 12:08:07 +01:00
 
-virt/coco/sev-guest: Double-buffer messages
+crypto: ccp: Get rid of __sev_platform_init_locked()'s local function pointer
 
-The encryption algorithms read and write directly to shared unencrypted
-memory, which may leak information as well as permit the host to tamper
-with the message integrity. Instead, copy whole messages in or out as
-needed before doing any computation on them.
+Add a wrapper instead.
 
-Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+No functional changes.
+
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230214164638.1189804-3-dionnaglaze@google.com
+Link: https://lore.kernel.org/r/20230307192449.24732-9-bp@alien8.de
 ---
- drivers/virt/coco/sev-guest/sev-guest.c | 27 ++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ drivers/crypto/ccp/sev-dev.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 46f1a8d..0c7b47a 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -46,7 +46,15 @@ struct snp_guest_dev {
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 823c67a..e346c00 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -442,11 +442,18 @@ static int __sev_init_ex_locked(int *error)
+ 	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
+ }
  
- 	void *certs_data;
- 	struct snp_guest_crypto *crypto;
-+	/* request and response are in unencrypted memory */
- 	struct snp_guest_msg *request, *response;
++static inline int __sev_do_init_locked(int *psp_ret)
++{
++	if (sev_init_ex_buffer)
++		return __sev_init_ex_locked(psp_ret);
++	else
++		return __sev_init_locked(psp_ret);
++}
 +
-+	/*
-+	 * Avoid information leakage by double-buffering shared messages
-+	 * in fields that are in regular encrypted memory.
-+	 */
-+	struct snp_guest_msg secret_request, secret_response;
-+
- 	struct snp_secrets_page_layout *layout;
- 	struct snp_req_data input;
- 	u32 *os_area_msg_seqno;
-@@ -266,14 +274,17 @@ static int dec_payload(struct snp_guest_dev *snp_dev, struct snp_guest_msg *msg,
- static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload, u32 sz)
+ static int __sev_platform_init_locked(int *error)
  {
- 	struct snp_guest_crypto *crypto = snp_dev->crypto;
--	struct snp_guest_msg *resp = snp_dev->response;
--	struct snp_guest_msg *req = snp_dev->request;
-+	struct snp_guest_msg *resp = &snp_dev->secret_response;
-+	struct snp_guest_msg *req = &snp_dev->secret_request;
- 	struct snp_guest_msg_hdr *req_hdr = &req->hdr;
- 	struct snp_guest_msg_hdr *resp_hdr = &resp->hdr;
+ 	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
+ 	struct psp_device *psp = psp_master;
+-	int (*init_function)(int *error);
+ 	struct sev_device *sev;
  
- 	dev_dbg(snp_dev->dev, "response [seqno %lld type %d version %d sz %d]\n",
- 		resp_hdr->msg_seqno, resp_hdr->msg_type, resp_hdr->msg_version, resp_hdr->msg_sz);
+ 	if (!psp || !psp->sev_data)
+@@ -458,15 +465,12 @@ static int __sev_platform_init_locked(int *error)
+ 		return 0;
  
-+	/* Copy response from shared memory to encrypted memory. */
-+	memcpy(resp, snp_dev->response, sizeof(*resp));
-+
- 	/* Verify that the sequence counter is incremented by 1 */
- 	if (unlikely(resp_hdr->msg_seqno != (req_hdr->msg_seqno + 1)))
- 		return -EBADMSG;
-@@ -297,7 +308,7 @@ static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload, 
- static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8 type,
- 			void *payload, size_t sz)
- {
--	struct snp_guest_msg *req = snp_dev->request;
-+	struct snp_guest_msg *req = &snp_dev->secret_request;
- 	struct snp_guest_msg_hdr *hdr = &req->hdr;
+ 	if (sev_init_ex_buffer) {
+-		init_function = __sev_init_ex_locked;
+ 		rc = sev_read_init_ex_file();
+ 		if (rc)
+ 			return rc;
+-	} else {
+-		init_function = __sev_init_locked;
+ 	}
  
- 	memset(req, 0, sizeof(*req));
-@@ -417,13 +428,21 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	if (!seqno)
- 		return -EIO;
+-	rc = init_function(&psp_ret);
++	rc = __sev_do_init_locked(&psp_ret);
+ 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
+ 		/*
+ 		 * Initialization command returned an integrity check failure
+@@ -477,7 +481,7 @@ static int __sev_platform_init_locked(int *error)
+ 		 */
+ 		dev_err(sev->dev,
+ "SEV: retrying INIT command because of SECURE_DATA_INVALID error. Retrying once to reset PSP SEV state.");
+-		rc = init_function(&psp_ret);
++		rc = __sev_do_init_locked(&psp_ret);
+ 	}
  
-+	/* Clear shared memory's response for the host to populate. */
- 	memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
- 
--	/* Encrypt the userspace provided payload */
-+	/* Encrypt the userspace provided payload in snp_dev->secret_request. */
- 	rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
- 	if (rc)
- 		return rc;
- 
-+	/*
-+	 * Write the fully encrypted request to the shared unencrypted
-+	 * request page.
-+	 */
-+	memcpy(snp_dev->request, &snp_dev->secret_request,
-+	       sizeof(snp_dev->secret_request));
-+
- 	rc = __handle_guest_request(snp_dev, exit_code, fw_err);
- 	if (rc) {
- 		if (rc == -EIO && *fw_err == SNP_GUEST_REQ_INVALID_LEN)
+ 	if (error)
