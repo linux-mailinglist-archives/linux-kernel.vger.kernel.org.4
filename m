@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33AC6C2FA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551F06C2FAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjCUK5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S230437AbjCUK63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjCUK5k (ORCPT
+        with ESMTP id S230387AbjCUK61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:57:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0194B2FCF4;
-        Tue, 21 Mar 2023 03:57:37 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 11:57:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679396256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X2c2FXwkwu2a7pTgBYID1e1ZvubF8W+pwt+MlZiF2uo=;
-        b=CFXmA3oRucB6khZI3QyKBsXLWjR3X/BjTrO4bj0BnyQeI6DWirDRdQQ1tu0Q1bDYvMb2nM
-        p0BSv5EYMqiV24QOUUPN5PU7pyBqu4r8Eb0A2Quz21xTPKTiBx0mDZopMzVhDIoyOs4ubm
-        EPYVlfF0m+P/CWXFne/En2wqF8yeue6iHGN0HTk959dZ1P6mHKYTaOg6luPRSOOivBFvz/
-        sJEFcVRNq0Q1wf9vGGnudhc3P+TYR4ZAdLWcmrdvh2oK+YNSxgfzG0KGHV3423bIItiQD/
-        koIpufbjMNMbhkBzf899oqZxl4j70eYPYjBnUFUp/LNrcYFwOZdoayF/FAUNgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679396256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X2c2FXwkwu2a7pTgBYID1e1ZvubF8W+pwt+MlZiF2uo=;
-        b=moZ61AqTHHrhIAi7KhS6vSjXYjNisECyrkxQR+hn325W+DbQvsHHN9/jCm6LKtEp++2HBo
-        REsQ/peqMk8JMFCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
- other CPU for PREEMPT_RT
-Message-ID: <20230321105734.Z7F3Uvf1@linutronix.de>
-References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
- <20230321100456.0_DhhkZJ@linutronix.de>
- <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
+        Tue, 21 Mar 2023 06:58:27 -0400
+X-Greylist: delayed 361 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Mar 2023 03:58:26 PDT
+Received: from harvie.cz (harvie.cz [77.87.242.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FC33149A9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:58:26 -0700 (PDT)
+Received: from anemophobia.amit.cz (unknown [31.30.84.130])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by harvie.cz (Postfix) with ESMTPSA id A641818037F;
+        Tue, 21 Mar 2023 11:58:19 +0100 (CET)
+From:   Tomas Mudrunka <tomas.mudrunka@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, rppt@kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, tomas.mudrunka@gmail.com
+Subject: Re: Re: [PATCH] Add results of early memtest to /proc/meminfo
+Date:   Tue, 21 Mar 2023 11:58:12 +0100
+Message-Id: <20230321105812.9257-1-tomas.mudrunka@gmail.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
+References: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_PASS,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-21 11:24:46 [+0100], Krzysztof Kozlowski wrote:
-> >> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> >> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> >> @@ -390,7 +390,16 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
-> >>  
-> >>  	/* Disable interrupt and enable polling */
-> >>  	disable_irq_nosync(c_data->throttle_irq);
-> >> -	schedule_delayed_work(&c_data->throttle_work, 0);
-> >> +
-> >> +	/*
-> >> +	 * Workqueue prefers local CPUs and since interrupts have set affinity,
-> >> +	 * the work might execute on a CPU dedicated to realtime tasks.
-> >> +	 */
-> >> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-> >> +		queue_delayed_work_on(WORK_CPU_UNBOUND, system_unbound_wq,
-> >> +				      &c_data->throttle_work, 0);
-> >> +	else
-> >> +		schedule_delayed_work(&c_data->throttle_work, 0);
-> > 
-> > You isolated CPUs and use this on PREEMPT_RT. And this special use-case
-> > is your reasoning to make this change and let it depend on PREEMPT_RT?
-> > 
-> > If you do PREEMPT_RT and you care about latency I would argue that you
-> > either disable cpufreq and set it to PERFORMANCE so that the highest
-> > available frequency is set once and not changed afterwards.
-> 
-> The cpufreq is set to performance. It will be changed anyway because
-> underlying FW notifies through such interrupts about thermal mitigation
-> happening.
+> meminfo is rather top-level and important.  Is this data sufficiently
+> important to justify a place there?
 
-I still fail to understand why this is PREEMPT_RT specific and not a
-problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
-However the thermal notifications have nothing to do with cpufreq.
+There is already "HardwareCorrupted" which is similar, but for
+errors reported by ECC, so it makes sense to have both in single place.
 
-> The only other solution is to disable the cpufreq device, e.g. by not
-> compiling it.
+> Please describe the value.  The use-case(s).  Why would people want
+> this?
 
-People often disable cpufreq because _usually_ the system boots at
-maximum performance. There are however exceptions and even x86 system
-are configured sometimes to a lower clock speed by the firmware/ BIOS.
-In this case it is nice to have a cpufreq so it is possible to set the
-system during boot to a higher clock speed. And then remain idle unless
-the cpufreq governor changed.
+When running large fleet of devices without ECC RAM it's currently not
+easy to do bulk monitoring for memory corruption. You have to parse dmesg,
+but that's ring buffer so the error might disappear after some time.
+In general i do not consider dmesg to be great API to query RAM status.
 
-> Best regards,
-> Krzysztof
+In several companies i've seen such errors remain undetected and cause
+issues for way too long. So i think it makes sense to provide monitoring
+API, so that we can safely detect and act upon them.
 
-Sebastian
+> Comment layout is unconventional.
+
+Fixed in PATCH v2
+
+> Coding style is unconventional (white spaces).
+> I expect this code would look much cleaner if some temporaries were used.
+
+Fixed in PATCH v2
+
+> I don't understand this logic anyway.  Why not just print the value of
+> early_memtest_bad_size>>10 and be done with it.
+
+I think 0 should be reported only when there was no error found at all.
+If memtest detect 256 corrupt bytes it would report 0 kB without such logic.
+Rounding down to 0 like that is not a good idea in my opinion,
+because it will hide the fact something is wrong with the RAM in such case.
+Therefore i've added logic that prevents rounding down to 0.
+
+> The name implies a bool, but the comment says otherwise.
+
+Fixed in PATCH v2
+
+> It's a counter, but it's used as a boolean.  Why not make it bool, and do
+
+Fixed in PATCH v2
+
+> Also, your email client is replacing tabs with spaces.
+
+Fixed in PATCH v2
