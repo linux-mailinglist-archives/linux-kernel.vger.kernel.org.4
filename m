@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C750B6C3063
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF3B6C3066
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjCUL1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S230492AbjCUL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjCUL1s (ORCPT
+        with ESMTP id S230297AbjCUL2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:27:48 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9DA48E1E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:27:45 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id i5so11368028eda.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:27:45 -0700 (PDT)
+        Tue, 21 Mar 2023 07:28:05 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29274988F;
+        Tue, 21 Mar 2023 04:28:01 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id n20so4132859pfa.3;
+        Tue, 21 Mar 2023 04:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679398063;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ghw9ZOYCO8p5X8MZw35JfRmw8QR/Co7FvKY0kNpiVmg=;
-        b=Y0HZjSxpyalb6EJExgDJdAmTI+KnEyQM/8q//l2QvvYM+JP1/ReYVbQh3hNy/Uq9ds
-         rl2YLQGpRMLxM8tRXIIdW3gy1rNPFCAF+J8haTxxc+PWpfcGZ8fssvS2z4tIf/VbZgUM
-         8GHcby76RecYrnz3f3Lof//qIpqYJbVdP4vaSBUAb4D6+zCb/UdEMesPWj9VEEE00dhb
-         gCHPv0q3ZrR/Wd8EIpgfbKD55226zj5ef4Rx8Ahx7ZFoE+WpLJfrBiGJQwLyKTIGAnYK
-         JLSfhGFxEK+KFvbXJXxbsrUSAhciovj+tbi3w/KKBwbc60A9VL+UWuknrQKdKkzoWLG6
-         Qdng==
+        d=gmail.com; s=20210112; t=1679398081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEkTSNyaJiPfFB7l+xqH5i9KcB2YkyXJblJOotBkVwE=;
+        b=SP7T16fA/gl803oergmlEBNZQTq2BZyMyzrrjXBGyB8yU/HqBRFpMZV0w/bWIwNwCw
+         JIgpQXV14afiCkJ1+B+szcCNlnAd9lSOU0iuQ/2jYoB45lTPavwexck+5PjyeAOywK5m
+         QF3HmTEq5PggSNBCN7iSoZ+JeO1OFqLOo2yhje9RBlBqYtoI6xc0H32FQkLdAN/qZdYP
+         kp0kbh9zQRW50zSGFj/zLvkNn5rhcaSWNLTfg4dbIaW/skWErLKNEdmivOVZE9h5bZRS
+         iacU7QBSqUQGXko3uTmwJgBQqRsbK6/bFXlZhxDli8NMl1ZTKTiJKMlOmjXTLqiOLv6v
+         b0mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679398063;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghw9ZOYCO8p5X8MZw35JfRmw8QR/Co7FvKY0kNpiVmg=;
-        b=beNY8n4DpAOVyDVOYNLXM4JsyCPW4yA/lzoWtlrT5m6jKmZesA00tO0Zka0Ktm6MfZ
-         m2FtheDpowLcjzItVFZ5DLjvnk3mXCpneWludGInOoYbOLRJCdZisWhk+nn7E6AsVk88
-         5v/SU6Z4gL+juA4ZtdZESFoXwzedYpy2XClEQ51yhSud8G0KgkO50nR6QykzW0vc9vd4
-         4R6yQa25PX/GiJDxz5aLNqrW+ELG6nF1WiefsQ4mbMKaUTg5LdHqZ9DmggesNCLChru4
-         LckjXm/vRF/2byVZOTqQE4PyszOj+35Jhns2WtyAgVY82DDdbJ1nnr7RQ52k/YEDk2SH
-         JbUQ==
-X-Gm-Message-State: AO0yUKXyInkFw8Zgu7DWCcaHUEWp/mCRVdhH8kc63ARNTa7WojnNIaew
-        7PUZoMcAC8TgPPJuzlgZsyxBbw==
-X-Google-Smtp-Source: AK7set90T2W503PVRuXveaJoEM/exHdqXIVgfTzqo0hhs8/pVFAPVwJ8LkBECNAen5qiKGG/4QsE/A==
-X-Received: by 2002:a17:906:60c9:b0:931:b2ae:116e with SMTP id f9-20020a17090660c900b00931b2ae116emr2083370ejk.64.1679398063687;
-        Tue, 21 Mar 2023 04:27:43 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id kj2-20020a170907764200b009324717b9f3sm5128403ejc.71.2023.03.21.04.27.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 04:27:43 -0700 (PDT)
-Message-ID: <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
-Date:   Tue, 21 Mar 2023 12:27:42 +0100
+        d=1e100.net; s=20210112; t=1679398081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AEkTSNyaJiPfFB7l+xqH5i9KcB2YkyXJblJOotBkVwE=;
+        b=AjWtjOvCOtmy3jizfCxAmWJauuZXnx/P0p+lkLTiVTdjl04DsfEXawC1Ofy9PF98S8
+         i4OxNkr/aK2y/qztKpc+MPOJyfM141RvbVyxCJvOQyTGiW36OJf8WFg6WDQ2A7Kt9ZTQ
+         sgH0wLYKuJlNEND7BwC6FpiKbbj5PnPDv7TSDbdrq8zK70MlyyCSTYRqWmv2uZe507IQ
+         2Hd1BAQuJdE+2+kl2lJCL3zb7Jh3SO9ENIuz9YpJJxWEDaLygEBdRtD2fXvmwPq1M7VD
+         s2lR7WmnmzeacSPXCjQJ/p8JdvhJYskiNPYSQXLsj9fovEI8+N6IHRaEQU4FtubWDmYd
+         ciOA==
+X-Gm-Message-State: AO0yUKVWbFGEfvBeASBV3S/SGSICF8yD5V1rl0fnM4GIgnkZelTi/rnW
+        g9neWGk9FrHYans/3pTA2fQ=
+X-Google-Smtp-Source: AK7set/1YivuKg+wX8KbsGU9JdXAbUAx3D+iQ/vZSSEffQcUZDyOQqvaWQYgW+y+srnTi3hxLiU7kA==
+X-Received: by 2002:a62:7904:0:b0:626:237c:bcfe with SMTP id u4-20020a627904000000b00626237cbcfemr2275307pfc.8.1679398080732;
+        Tue, 21 Mar 2023 04:28:00 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id c26-20020aa781da000000b0062578514d6fsm8037415pfn.58.2023.03.21.04.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 04:28:00 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Add Intel PMU supported fixed counters bit mask
+Date:   Tue, 21 Mar 2023 19:27:42 +0800
+Message-Id: <20230321112742.25255-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
- other CPU for PREEMPT_RT
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
- <20230321100456.0_DhhkZJ@linutronix.de>
- <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
- <20230321105734.Z7F3Uvf1@linutronix.de>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230321105734.Z7F3Uvf1@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,67 +70,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 11:57, Sebastian Andrzej Siewior wrote:
-> On 2023-03-21 11:24:46 [+0100], Krzysztof Kozlowski wrote:
->>>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->>>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->>>> @@ -390,7 +390,16 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
->>>>  
->>>>  	/* Disable interrupt and enable polling */
->>>>  	disable_irq_nosync(c_data->throttle_irq);
->>>> -	schedule_delayed_work(&c_data->throttle_work, 0);
->>>> +
->>>> +	/*
->>>> +	 * Workqueue prefers local CPUs and since interrupts have set affinity,
->>>> +	 * the work might execute on a CPU dedicated to realtime tasks.
->>>> +	 */
->>>> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
->>>> +		queue_delayed_work_on(WORK_CPU_UNBOUND, system_unbound_wq,
->>>> +				      &c_data->throttle_work, 0);
->>>> +	else
->>>> +		schedule_delayed_work(&c_data->throttle_work, 0);
->>>
->>> You isolated CPUs and use this on PREEMPT_RT. And this special use-case
->>> is your reasoning to make this change and let it depend on PREEMPT_RT?
->>>
->>> If you do PREEMPT_RT and you care about latency I would argue that you
->>> either disable cpufreq and set it to PERFORMANCE so that the highest
->>> available frequency is set once and not changed afterwards.
->>
->> The cpufreq is set to performance. It will be changed anyway because
->> underlying FW notifies through such interrupts about thermal mitigation
->> happening.
-> 
-> I still fail to understand why this is PREEMPT_RT specific and not a
-> problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
+From: Like Xu <likexu@tencent.com>
 
-Hm, good point, I actually don't know what is the workqueue
-recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
-preferred?
+Per Intel SDM, fixed-function performance counter 'i' is supported if:
 
-And how such code would look like?
-if (tick_nohz_tick_stopped())?
+	FxCtr[i]_is_supported := ECX[i] || (EDX[4:0] > i);
 
-> However the thermal notifications have nothing to do with cpufreq.
+which means that the KVM user space can use EDX to limit the number of
+fixed counters and at the same time, using ECX to enable part of other
+KVM supported fixed counters.
 
-They have. The FW notifies that thermal mitigation is happening and
-maximum allowed frequency is now XYZ. The cpufreq receives this and sets
-maximum allowed scaling frequency for governor.
+Add a bitmap (instead of always checking the vcpu's CPUIDs) to keep track
+of the guest available fixed counters and perform the semantic checks.
 
-> 
->> The only other solution is to disable the cpufreq device, e.g. by not
->> compiling it.
-> 
-> People often disable cpufreq because _usually_ the system boots at
-> maximum performance. There are however exceptions and even x86 system
-> are configured sometimes to a lower clock speed by the firmware/ BIOS.
-> In this case it is nice to have a cpufreq so it is possible to set the
-> system during boot to a higher clock speed. And then remain idle unless
-> the cpufreq governor changed.
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/include/asm/kvm_host.h |  2 ++
+ arch/x86/kvm/pmu.h              |  8 +++++
+ arch/x86/kvm/vmx/pmu_intel.c    | 53 +++++++++++++++++++++------------
+ 3 files changed, 44 insertions(+), 19 deletions(-)
 
-Which we do not want here, thus disabling cpufreq is not the interesting
-solution...
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index a45de1118a42..14689e583127 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -565,6 +565,8 @@ struct kvm_pmu {
+ 	 */
+ 	bool need_cleanup;
+ 
++	DECLARE_BITMAP(supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
++
+ 	/*
+ 	 * The total number of programmed perf_events and it helps to avoid
+ 	 * redundant check before cleanup if guest don't use vPMU at all.
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index be62c16f2265..9f4504e5e9d5 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -111,6 +111,11 @@ static inline struct kvm_pmc *get_gp_pmc(struct kvm_pmu *pmu, u32 msr,
+ 	return NULL;
+ }
+ 
++static inline bool fixed_ctr_is_supported(struct kvm_pmu *pmu, unsigned int idx)
++{
++	return test_bit(idx, pmu->supported_fixed_pmc_idx);
++}
++
+ /* returns fixed PMC with the specified MSR */
+ static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
+ {
+@@ -120,6 +125,9 @@ static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
+ 		u32 index = array_index_nospec(msr - base,
+ 					       pmu->nr_arch_fixed_counters);
+ 
++		if (!fixed_ctr_is_supported(pmu, index))
++			return NULL;
++
+ 		return &pmu->fixed_counters[index];
+ 	}
+ 
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index e8a3be0b9df9..12f4b2fe7756 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -43,13 +43,16 @@ static int fixed_pmc_events[] = {1, 0, 7};
+ static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
+ {
+ 	struct kvm_pmc *pmc;
+-	u8 old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
++	u8 new_ctrl, old_ctrl, old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
+ 	int i;
+ 
+ 	pmu->fixed_ctr_ctrl = data;
+ 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
+-		u8 new_ctrl = fixed_ctrl_field(data, i);
+-		u8 old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
++		if (!fixed_ctr_is_supported(pmu, i))
++			continue;
++
++		new_ctrl = fixed_ctrl_field(data, i);
++		old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
+ 
+ 		if (old_ctrl == new_ctrl)
+ 			continue;
+@@ -125,6 +128,9 @@ static bool intel_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
+ 
+ 	idx &= ~(3u << 30);
+ 
++	if (fixed && !fixed_ctr_is_supported(pmu, idx))
++		return false;
++
+ 	return fixed ? idx < pmu->nr_arch_fixed_counters
+ 		     : idx < pmu->nr_arch_gp_counters;
+ }
+@@ -145,7 +151,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+ 		counters = pmu->gp_counters;
+ 		num_counters = pmu->nr_arch_gp_counters;
+ 	}
+-	if (idx >= num_counters)
++	if (idx >= num_counters || (fixed && !fixed_ctr_is_supported(pmu, idx)))
+ 		return NULL;
+ 	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
+ 	return &counters[array_index_nospec(idx, num_counters)];
+@@ -500,6 +506,9 @@ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
+ 	int i;
+ 
+ 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
++		if (!fixed_ctr_is_supported(pmu, i))
++			continue;
++
+ 		pmc = &pmu->fixed_counters[i];
+ 		event = fixed_pmc_events[array_index_nospec(i, size)];
+ 		pmc->eventsel = (intel_arch_events[event].unit_mask << 8) |
+@@ -520,6 +529,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 
+ 	pmu->nr_arch_gp_counters = 0;
+ 	pmu->nr_arch_fixed_counters = 0;
++	bitmap_zero(pmu->supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
+ 	pmu->counter_bitmask[KVM_PMC_GP] = 0;
+ 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
+ 	pmu->version = 0;
+@@ -551,13 +561,24 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	pmu->available_event_types = ~entry->ebx &
+ 					((1ull << eax.split.mask_length) - 1);
+ 
+-	if (pmu->version == 1) {
+-		pmu->nr_arch_fixed_counters = 0;
+-	} else {
++	counter_mask = ~(BIT_ULL(pmu->nr_arch_gp_counters) - 1);
++	bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
++
++	if (pmu->version > 1) {
+ 		pmu->nr_arch_fixed_counters =
+-			min3(ARRAY_SIZE(fixed_pmc_events),
+-			     (size_t) edx.split.num_counters_fixed,
+-			     (size_t)kvm_pmu_cap.num_counters_fixed);
++			min_t(int, ARRAY_SIZE(fixed_pmc_events),
++			      kvm_pmu_cap.num_counters_fixed);
++		for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
++			/* FxCtr[i]_is_supported := CPUID.0xA.ECX[i] || (EDX[4:0] > i) */
++			if (!(entry->ecx & BIT_ULL(i) ||
++			      edx.split.num_counters_fixed > i))
++				continue;
++
++			set_bit(i, pmu->supported_fixed_pmc_idx);
++			set_bit(INTEL_PMC_MAX_GENERIC + i, pmu->all_valid_pmc_idx);
++			pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
++			counter_mask &= ~BIT_ULL(INTEL_PMC_MAX_GENERIC + i);
++		}
+ 		edx.split.bit_width_fixed = min_t(int, edx.split.bit_width_fixed,
+ 						  kvm_pmu_cap.bit_width_fixed);
+ 		pmu->counter_bitmask[KVM_PMC_FIXED] =
+@@ -565,10 +586,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 		setup_fixed_pmc_eventsel(pmu);
+ 	}
+ 
+-	for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
+-		pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
+-	counter_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
+-		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
+ 	pmu->global_ctrl_mask = counter_mask;
+ 	pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
+ 			& ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
+@@ -585,11 +602,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 		pmu->raw_event_mask |= (HSW_IN_TX|HSW_IN_TX_CHECKPOINTED);
+ 	}
+ 
+-	bitmap_set(pmu->all_valid_pmc_idx,
+-		0, pmu->nr_arch_gp_counters);
+-	bitmap_set(pmu->all_valid_pmc_idx,
+-		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
+-
+ 	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
+ 	if (cpuid_model_is_consistent(vcpu) &&
+ 	    (perf_capabilities & PMU_CAP_LBR_FMT))
+@@ -605,6 +617,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 			pmu->pebs_enable_mask = counter_mask;
+ 			pmu->reserved_bits &= ~ICL_EVENTSEL_ADAPTIVE;
+ 			for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
++				if (!fixed_ctr_is_supported(pmu, i))
++					continue;
++
+ 				pmu->fixed_ctr_ctrl_mask &=
+ 					~(1ULL << (INTEL_PMC_IDX_FIXED + i * 4));
+ 			}
 
-Best regards,
-Krzysztof
+base-commit: d8708b80fa0e6e21bc0c9e7276ad0bccef73b6e7
+-- 
+2.40.0
 
