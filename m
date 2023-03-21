@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE926C37A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7A66C37A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjCUREI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S230364AbjCURES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjCUREC (ORCPT
+        with ESMTP id S229622AbjCUREC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 13:04:02 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869A922018
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:56 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id r25-20020a056602235900b0074d472df653so7916083iot.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:56 -0700 (PDT)
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B0C23113
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:57 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id d3-20020a056e02050300b00317999dcfb1so8178507ils.4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:03:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679418235;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JYvhqV9O/knwdmN3F4rsQ5x14ox3G/btg2GPgntvNw0=;
-        b=FbKPeNfux1lWS9Eez3OHG9CtTTsBCbvt3C7sC8HjfDZ3YP9Kn4NFCphmxqz1TOwma6
-         Ggn0JOhHO2yFrWJbZHCEe6da25C1aDFgXdmdD5M781xbzARLpeZNVTo/mb3WLHvwfCQ/
-         wwj8Rb4W5/P4PoexGJe/8f0pDnnFFbSBh+K5xOWRAGX74IkX+ShszneGUuiTSp4DoIt4
-         G0+2CchbV7t0sPLMXExZmdHADqF6kmEbXoTdwxpbXABMnhzBEWCP4dDcLY5N20xSRM1w
-         gaom0LP775OHkBw73zLG3xMd0RFuVj+C2o7lDQDI0qO30N35e28vl0MqzAAv7JFtIrJb
-         fz4w==
-X-Gm-Message-State: AO0yUKW4EYtlQPJAEO85Ke8S7JlVQHlDOIgQ8ZDj2PN2Z3wIZTknMSVd
-        n1C6918DLEGH9u6wxHV6i9e58eQ4hnrssQ5wCyAkdeMA6OQb
-X-Google-Smtp-Source: AK7set91M/CtD5CQHh7Ui2XMJWVYWleaSVsU47FcFP7C7NQO0m8T1524jNkeANeIxPNaYwu4UO93Lu4JgZ+r7/K4ZyI2VAyg8PA4
+        bh=iQJQrb9mny4qoyxwqwRsccNTiZVnDvEPXFwh94AIcx4=;
+        b=ndG0xhUw06527VyJnqYOQP5mK7/zHYqiUECuGxr1HH1/z4C6GKBKURw4F5oKW23Ddo
+         1r7ORm/PgCT3KYe2MOw48cOX2bJyZFAiBw1VxAXrmlfbmIwwEkPuAvWI/vfIbeHSCzbc
+         5OPJkHcWKXrO5Se4jhF1KYAFrV4RaIytxDsPeYycVpVLxyahVe2k8BwCxQCjcFPBWH4I
+         xAidiP4xzHJdVM6lJF4u3YWGI7dOwC+AGqBsz31IpNGWemjE3zPjSqDOckLX7zcd9siW
+         lQhpJ6Px33luwkBvTLqhYVwgAYyCy1MddNVM10OefwKLD7KYS0gzavgZAIf8uGXk4oL6
+         jH5Q==
+X-Gm-Message-State: AO0yUKX50tJig/d5Rw+HxyzIr09bvS2TtmIhBB+JMMcf66BFxpJy3KbB
+        HsMI7OYWsDMftQsv5bO1F0zUBZpVxfkciTCY7yhCBeIoypIf
+X-Google-Smtp-Source: AK7set+fiYdL/20PbMmGdByHO7Cgctxr2BNWMLEy39OP9mKD0YmSO0FLCepsjH3LZ27U6vkan+fXqNh6Qfv4AI9Do0zrUEpqe020
 MIME-Version: 1.0
-X-Received: by 2002:a92:2612:0:b0:313:cc98:7eee with SMTP id
- n18-20020a922612000000b00313cc987eeemr1318039ile.1.1679418235443; Tue, 21 Mar
+X-Received: by 2002:a6b:5d0b:0:b0:74e:7a27:d183 with SMTP id
+ r11-20020a6b5d0b000000b0074e7a27d183mr1242791iob.2.1679418235745; Tue, 21 Mar
  2023 10:03:55 -0700 (PDT)
 Date:   Tue, 21 Mar 2023 10:03:55 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005a60a305f76c07dc@google.com>
-Subject: [syzbot] [kernel?] general protection fault in vhost_task_start
-From:   syzbot <syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michael.christie@oracle.com,
-        mst@redhat.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
+Message-ID: <0000000000005f023705f76c075c@google.com>
+Subject: [syzbot] [fbdev?] KASAN: use-after-free Write in fbcon_get_font
+From:   syzbot <syzbot+5a04eb16db96950bb112@syzkaller.appspotmail.com>
+To:     daniel@ffwll.ch, deller@gmx.de, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,115 +59,74 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    6f08c1de13a9 Add linux-next specific files for 20230317
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13d954f6c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8cdb12af294ab55
-dashboard link: https://syzkaller.appspot.com/bug?extid=6b27b2d2aba1c80cc13b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137b6b11c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16358a16c80000
+HEAD commit:    fe15c26ee26e Linux 6.3-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=11bc9c16c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=5a04eb16db96950bb112
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=135becbac80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1182c9d2c80000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/300a30f8157b/disk-6f08c1de.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7cad5b8b07a2/vmlinux-6f08c1de.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/eded56f08b63/bzImage-6f08c1de.xz
-
-The issue was bisected to:
-
-commit 5ab18f4b061ef24a71eea9ffafebd1a82ae2f514
-Author: Mike Christie <michael.christie@oracle.com>
-Date:   Fri Mar 10 22:03:32 2023 +0000
-
-    vhost: use vhost_tasks for worker threads
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11d88e9ac80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=13d88e9ac80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=15d88e9ac80000
+disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com
-Fixes: 5ab18f4b061e ("vhost: use vhost_tasks for worker threads")
+Reported-by: syzbot+5a04eb16db96950bb112@syzkaller.appspotmail.com
 
-RBP: 00007ffe3d8e6050 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-general protection fault, probably for non-canonical address 0xdffffc000000000c: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000060-0x0000000000000067]
-CPU: 0 PID: 5103 Comm: syz-executor280 Not tainted 6.3.0-rc2-next-20230317-syzkaller #0
+==================================================================
+BUG: KASAN: use-after-free in fbcon_get_font+0x240/0x8cc drivers/video/fbdev/core/fbcon.c:2290
+Write of size 22062 at addr ffff0000e1bfabd6 by task syz-executor329/5944
+
+CPU: 0 PID: 5944 Comm: syz-executor329 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:vhost_task_start+0x22/0x40 kernel/vhost_task.c:115
-Code: 00 00 00 00 00 0f 1f 00 f3 0f 1e fa 53 48 89 fb e8 c3 67 2c 00 48 8d 7b 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 0a 48 8b 7b 70 5b e9 fe bd 02 00 e8 79 ec 7e 00 eb
-RSP: 0018:ffffc90003a9fc38 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: fffffffffffffff4 RCX: 0000000000000000
-RDX: 000000000000000c RSI: ffffffff81564c8d RDI: 0000000000000064
-RBP: ffff88802b21dd40 R08: 0000000000000100 R09: ffffffff8c917cf3
-R10: 00000000fffffff4 R11: 0000000000000000 R12: fffffffffffffff4
-R13: ffff888075d000b0 R14: ffff888075d00000 R15: ffff888075d00008
-FS:  0000555556247300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe3d8e5ff8 CR3: 00000000215d4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vhost_worker_create drivers/vhost/vhost.c:580 [inline]
- vhost_dev_set_owner+0x338/0xa90 drivers/vhost/vhost.c:603
- vhost_dev_ioctl+0xb4b/0xe70 drivers/vhost/vhost.c:1764
- vhost_vsock_dev_ioctl+0x389/0xb30 drivers/vhost/vsock.c:862
+Call trace:
+ dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:319 [inline]
+ print_report+0x174/0x514 mm/kasan/report.c:430
+ kasan_report+0xd4/0x130 mm/kasan/report.c:536
+ kasan_check_range+0x264/0x2a4 mm/kasan/generic.c:187
+ __asan_memset+0x40/0x70 mm/kasan/shadow.c:84
+ fbcon_get_font+0x240/0x8cc drivers/video/fbdev/core/fbcon.c:2290
+ con_font_get drivers/tty/vt/vt.c:4559 [inline]
+ con_font_op+0x468/0xfa0 drivers/tty/vt/vt.c:4674
+ vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
+ vt_ioctl+0x1a90/0x252c drivers/tty/vt/vt_ioctl.c:752
+ tty_ioctl+0x8a4/0xd8c drivers/tty/tty_io.c:2777
  vfs_ioctl fs/ioctl.c:51 [inline]
  __do_sys_ioctl fs/ioctl.c:870 [inline]
  __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f82c4252049
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe3d8e6038 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f82c4252049
-RDX: 0000000000000000 RSI: 000000000000af01 RDI: 0000000000000003
-RBP: 00007ffe3d8e6050 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vhost_task_start+0x22/0x40 kernel/vhost_task.c:115
-Code: 00 00 00 00 00 0f 1f 00 f3 0f 1e fa 53 48 89 fb e8 c3 67 2c 00 48 8d 7b 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 0a 48 8b 7b 70 5b e9 fe bd 02 00 e8 79 ec 7e 00 eb
-RSP: 0018:ffffc90003a9fc38 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: fffffffffffffff4 RCX: 0000000000000000
-RDX: 000000000000000c RSI: ffffffff81564c8d RDI: 0000000000000064
-RBP: ffff88802b21dd40 R08: 0000000000000100 R09: ffffffff8c917cf3
-R10: 00000000fffffff4 R11: 0000000000000000 R12: fffffffffffffff4
-R13: ffff888075d000b0 R14: ffff888075d00000 R15: ffff888075d00008
-FS:  0000555556247300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe3d8e5ff8 CR3: 00000000215d4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	00 00                	add    %al,(%rax)
-   2:	00 00                	add    %al,(%rax)
-   4:	0f 1f 00             	nopl   (%rax)
-   7:	f3 0f 1e fa          	endbr64
-   b:	53                   	push   %rbx
-   c:	48 89 fb             	mov    %rdi,%rbx
-   f:	e8 c3 67 2c 00       	callq  0x2c67d7
-  14:	48 8d 7b 70          	lea    0x70(%rbx),%rdi
-  18:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  1f:	fc ff df
-  22:	48 89 fa             	mov    %rdi,%rdx
-  25:	48 c1 ea 03          	shr    $0x3,%rdx
-* 29:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2d:	75 0a                	jne    0x39
-  2f:	48 8b 7b 70          	mov    0x70(%rbx),%rdi
-  33:	5b                   	pop    %rbx
-  34:	e9 fe bd 02 00       	jmpq   0x2be37
-  39:	e8 79 ec 7e 00       	callq  0x7eecb7
-  3e:	eb                   	.byte 0xeb
+ __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+The buggy address belongs to the physical page:
+page:00000000c3c989b0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x121800
+head:00000000c3c989b0 order:10 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0x5ffc00000010000(head|node=0|zone=2|lastcpupid=0x7ff)
+raw: 05ffc00000010000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff0000e1bfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff0000e1bfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff0000e1c00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                   ^
+ ffff0000e1c00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff0000e1c00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
 
 ---
@@ -179,6 +136,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 syzbot can test patches for this issue, for details see:
 https://goo.gl/tpsmEJ#testing-patches
