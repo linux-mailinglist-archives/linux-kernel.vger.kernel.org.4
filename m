@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA03C6C2A46
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEFE6C2A4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjCUGPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S230160AbjCUGQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjCUGPQ (ORCPT
+        with ESMTP id S229992AbjCUGQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:15:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D905B185
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679379270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=M8OnIdfA0wmBLFZVipgL/bCDozNrLAZZSjIdqzAfvHs=;
-        b=BAvI8LeO+gPJdtAUuaXzVvvm46cxuQZHsJwicQNYUQUXziuUzJpfcXiWuqCWsmepvHeu1e
-        tXjZ1ndjnu35uUWxW91PL83eTqzXHhtYOuQRA50i61aOA3LU0Y69lOdqNE9i6yyliMK7DU
-        lkrMEp31d1iYNojesVQJiY1aRhd4rTE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-BCV4DupjPoS9AAPeY9fa1g-1; Tue, 21 Mar 2023 02:14:22 -0400
-X-MC-Unique: BCV4DupjPoS9AAPeY9fa1g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 278B129AA2F0;
-        Tue, 21 Mar 2023 06:14:22 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 53799C15BA0;
-        Tue, 21 Mar 2023 06:14:21 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH] scsi: mpt3sas: Don't print sense pool info twice
-Date:   Mon, 20 Mar 2023 23:14:19 -0700
-Message-Id: <20230321061419.3139051-1-jsnitsel@redhat.com>
+        Tue, 21 Mar 2023 02:16:13 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DDF7EE6;
+        Mon, 20 Mar 2023 23:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679379372; x=1710915372;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IfVWlROUvFTg3fbNGSjW4+BuBAC1kv1Hcw4K8n9PyBc=;
+  b=StXiblce0dRu4LioTmcpAUUGVgnsxPakZjTEddHrbAyNmFNo9ftrMVtP
+   evhWGtaQEr3g+4b0Lk8HW6k3HFsfmbWiFOCPVdrSPeO1ios5R6r5KMvFF
+   DzHZnPfBCqSScsesCoC0hFjC956TObOHNbqIYC5D627FrK2cisLEayJWU
+   raR9gWGbVb/fOSRaPMdExjFbfa8cZc3PmDcROzAKcGoyi58pJgI/cVyeB
+   hyg2HOIq9m0HlMETr10CK9EltHMchIA08nI40aW/uGxRs5/nwWHbDNZ21
+   T8proY9FwOH9r5Yc6cI4+tyfWZ9rcqS2EWSTgT4FOu2zdH/6UJT7W/z/G
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="318509560"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="318509560"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 23:16:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="805198423"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="805198423"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga004.jf.intel.com with ESMTP; 20 Mar 2023 23:16:05 -0700
+Message-ID: <00ee54f0-52c9-8f35-fdc4-aa3c3cd9e755@linux.intel.com>
+Date:   Tue, 21 Mar 2023 14:14:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v7 4/7] iommu/sva: Stop using ioasid_set for SVA
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230320185910.2643260-1-jacob.jun.pan@linux.intel.com>
+ <20230320185910.2643260-5-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230320185910.2643260-5-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-_base_allocate_sense_dma_pool() already prints out the sense pool
-information, so don't print it a second time after calling it in
-_base_allocate_memory_pools(). In addition the version in
-_base_allocate_memory_pools() was using the wrong size value, sz,
-which was last assigned when doing some nvme calculations instead of
-sense_sz to determine the pool size in kilobytes.
+On 3/21/23 2:59 AM, Jacob Pan wrote:
+> From: Jason Gunthorpe<jgg@nvidia.com>
+> 
+> Instead SVA drivers can use a simple global IDA to allocate PASIDs for
+> each mm_struct.
+> 
+> Future work would be to allow drivers using the SVA APIs to reserve global
+> PASIDs from this IDA for their internal use, eg with the DMA API PASID
+> support.
+> 
+> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
+> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
 
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Cc: MPT-FusionLinux.pdl@broadcom.com
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c | 5 -----
- 1 file changed, 5 deletions(-)
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 2ee9ea57554d..14ae0a9c5d3d 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -6616,11 +6616,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
- 	else if (rc == -EAGAIN)
- 		goto try_32bit_dma;
- 	total_sz += sense_sz;
--	ioc_info(ioc,
--	    "sense pool(0x%p)- dma(0x%llx): depth(%d),"
--	    "element_size(%d), pool_size(%d kB)\n",
--	    ioc->sense, (unsigned long long)ioc->sense_dma, ioc->scsiio_depth,
--	    SCSI_SENSE_BUFFERSIZE, sz / 1024);
- 	/* reply pool, 4 byte align */
- 	sz = ioc->reply_free_queue_depth * ioc->reply_sz;
- 	rc = _base_allocate_reply_pool(ioc, sz);
--- 
-2.38.1
-
+Best regards,
+baolu
