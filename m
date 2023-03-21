@@ -2,156 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3E06C2B5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7115F6C2B59
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCUH3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S229942AbjCUH1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCUH3d (ORCPT
+        with ESMTP id S229684AbjCUH12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:29:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D11534027;
-        Tue, 21 Mar 2023 00:29:29 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PgjrW5G0xzrVDj;
-        Tue, 21 Mar 2023 15:28:27 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 15:29:27 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
-Subject: [PATCH] scsi: libsas: Add end eh callback
-Date:   Tue, 21 Mar 2023 07:22:59 +0000
-Message-ID: <20230321072259.35366-1-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 21 Mar 2023 03:27:28 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4724333CD0;
+        Tue, 21 Mar 2023 00:27:27 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id f6-20020a4ace86000000b00537590ae0a2so2262219oos.8;
+        Tue, 21 Mar 2023 00:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679383646;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lN03r+lNraGva2aQZc0gY3Y2eDpzLMJTb6HI5Qu4Nls=;
+        b=Q58pv5EQo1PPfrVfu5MO0Ee72vjuDSirtH/YKgKHtQIMaSpfJTL13qnlDi5Jru7ukn
+         Px7NjPQGG7oAxuTyg2e6DXysVDjqZZJmZ7dvaadKv6b8YAs7N0Vn7j9axhAJntcIYcPq
+         LUJqI1HhZvE0elu9Vv/o+rZ1r/GqzbfXIhrOs4PUeTWZC1+b0cbBUX9pzMUpyd0htNHU
+         v37umS3OKbltDt2Gz7GBmvBmbPk0yykA/By8qG+npgvsGkbePsrlGMu2oZUYK/jk/K/I
+         1XVq0bI33NiCUI3lI8Kp0k8c0iQ1Vsg64jC+dXdqv3HrAuaEwz/eUjzcR85jQUt8GCJr
+         KgyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679383646;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lN03r+lNraGva2aQZc0gY3Y2eDpzLMJTb6HI5Qu4Nls=;
+        b=UUDsDmlTEejdBLMFAUqqorITRDBky36k0g680UKKQQ/A/wANz1ZU4zlCcWj0YfttZm
+         WKtC+gyErKSS2taUV9xPa5wIdNlP5k36U3X99WnlmnaweTQDGGryq3ZN7rljN305isnH
+         8eJAhGLZPMcytulEgs8tP6yhUbFlL3iIS8auyFZSE9Lp3GkrUfj7fcPeCpYDh+wrGSsB
+         xyqj9GWu5kxt9rCWa2bRarprZNPXG7IM3gvK17p0vFbWSe+xHH6CqAHmMKsJ1HMWDWht
+         Rzs1YCNyKfMAAnxQUHOe8dvi5Mb1r/VHY+C4tN1eSpZ1nMZwe5DHTbUBj48/SsofETOC
+         Acig==
+X-Gm-Message-State: AO0yUKVCEueG9OwWVC13AtsESJZghLjQycFobDt8nJ2BiCQb2N3PGyLe
+        WmoBwLJkmu4vJMFGTBRk9lLuhf3vs00ePXYkiqZHvHER67SeFQ==
+X-Google-Smtp-Source: AK7set+RPNpCQUduEbQnJP50HrY1hohDtbIxM2hY1HZLWCi1BvyAVkO2LxZ16ASJNXCyb1AILINeIoRb0r3NASgVfYg=
+X-Received: by 2002:a05:6820:516:b0:536:c774:d6cc with SMTP id
+ m22-20020a056820051600b00536c774d6ccmr473837ooj.0.1679383646619; Tue, 21 Mar
+ 2023 00:27:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com> <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org> <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+ <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org> <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+ <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org> <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+ <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org> <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
+ <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org> <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
+ <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
+In-Reply-To: <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Mar 2023 08:27:13 +0100
+Message-ID: <CAMhs-H9snDAa9K7b+R+wi2VotFCrOQwF3B_55=dpAAkfZ0CdBQ@mail.gmail.com>
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs while the disk is processing an NCQ command and the host
-received the abnormal SDB FIS, let libata EH to analyze the NCQ error, and
-it is not necessary to reset the target to recover.
+On Tue, Mar 21, 2023 at 8:20=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/03/2023 07:56, Sergio Paracuellos wrote:
+> > On Tue, Mar 21, 2023 at 7:43=E2=80=AFAM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 21/03/2023 07:38, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
+> >>>>>>
+> >>>>>> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs whi=
+ch are
+> >>>>>> ARM, so mediatek,mtmips-sysc would work.
+> >>>>>
+> >>>>> I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles w=
+ill
+> >>>>> start with ralink. There are already some existent compatibles for
+> >>>>> mt762x already having ralink as prefix, so to be coherent ralink
+> >>>>> should be maintained as prefix.
+> >>>>
+> >>>> The compatibles I mentioned start already with mediatek, so why do y=
+ou
+> >>>> want to introduce incorrect vendor name for these?
+> >>>
+> >>> Can you point out where these compatible strings for mt7620 and mt762=
+8 are?
+> >>
+> >> git grep
+> >
+> > Not for *-sysc nodes. The only current one in use (from git grep):
+>
+> We do not talk about sysc nodes at all. They do not matter.
 
-Then the hisi_sas has some special process to set dev_status to normal when
-end the eh for NCQ error without reset the target, so add a callback and
-fill it in for the hisi_sas driver.
+Ah, ok. That reason was from where all of my arguments were coming
+from. But if it does not matter, I don't have problems using the
+'mediatek' prefix in the new stuff.
 
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 12 +++++++++---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  7 +++++--
- drivers/scsi/libsas/sas_ata.c          |  4 ++++
- include/scsi/libsas.h                  |  2 ++
- 4 files changed, 20 insertions(+), 5 deletions(-)
+>
+> >
+> > arch/mips/ralink/mt7620.c:      rt_sysc_membase =3D
+> > plat_of_remap_node("ralink,mt7620a-sysc");
+> >
+> > That's the reason I also used prefix ralink for the rest.
+> >
+> > Does it make sense to you to maintain this one as ralink,mt7620a-sysc
+> > and add the following with mediatek prefix?
+> >
+> > mediatek,mt7620-sysc
+> > mediatek,mt7628-sysc
+> > mediatek,mt7688-sysc
+> >
+> > That would be weird IMHO.
+>
+> What exactly would be weird? Did you read the discussion about vendor
+> prefix from Arinc? mt7620 is not a Ralink product, so what would be
+> weird is to use "ralink" vendor prefix. This was never a Ralink. However
+> since there are compatibles using "ralink" for non-ralink devices, we
+> agreed not to change them.
+>
+> These though use at least in one place mediatek, so the above argument
+> does not apply. (and before you say "but they also use ralink and
+> mediatek", it does not matter - it is already inconsistent thus we can
+> choose whatever we want and ralink is not correct).
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 325d6d6a21c3..61686ead0027 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1777,9 +1777,6 @@ static int hisi_sas_I_T_nexus_reset(struct domain_device *device)
- 	struct device *dev = hisi_hba->dev;
- 	int rc;
- 
--	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
--		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
--
- 	rc = hisi_sas_internal_task_abort_dev(sas_dev, false);
- 	if (rc < 0) {
- 		dev_err(dev, "I_T nexus reset: internal abort (%d)\n", rc);
-@@ -1967,6 +1964,14 @@ static bool hisi_sas_internal_abort_timeout(struct sas_task *task,
- 	return false;
- }
- 
-+static void hisi_sas_end_eh(struct domain_device *dev)
-+{
-+	struct hisi_sas_device *sas_dev = dev->lldd_dev;
-+
-+	if (sas_dev->dev_status == HISI_SAS_DEV_NCQ_ERR)
-+		sas_dev->dev_status = HISI_SAS_DEV_NORMAL;
-+}
-+
- static void hisi_sas_port_formed(struct asd_sas_phy *sas_phy)
- {
- 	hisi_sas_port_notify_formed(sas_phy);
-@@ -2083,6 +2088,7 @@ static struct sas_domain_function_template hisi_sas_transport_ops = {
- 	.lldd_write_gpio	= hisi_sas_write_gpio,
- 	.lldd_tmf_aborted	= hisi_sas_tmf_aborted,
- 	.lldd_abort_timeout	= hisi_sas_internal_abort_timeout,
-+	.lldd_end_eh		= hisi_sas_end_eh,
- };
- 
- void hisi_sas_init_mem(struct hisi_hba *hisi_hba)
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 66fcb340b98e..abad57de4aee 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2433,15 +2433,18 @@ static int complete_v3_hw(struct hisi_sas_cq *cq)
- 			struct hisi_sas_device *sas_dev =
- 				&hisi_hba->devices[device_id];
- 			struct domain_device *device = sas_dev->sas_device;
-+			bool force_reset = true;
- 
- 			dev_err(dev, "erroneous completion disk err dev id=%d sas_addr=0x%llx CQ hdr: 0x%x 0x%x 0x%x 0x%x\n",
- 				device_id, itct->sas_addr, dw0, dw1,
- 				complete_hdr->act, dw3);
- 
--			if (is_ncq_err_v3_hw(complete_hdr))
-+			if (is_ncq_err_v3_hw(complete_hdr)) {
- 				sas_dev->dev_status = HISI_SAS_DEV_NCQ_ERR;
-+				force_reset = false;
-+			}
- 
--			sas_ata_device_link_abort(device, true);
-+			sas_ata_device_link_abort(device, force_reset);
- 		} else if (likely(iptt < HISI_SAS_COMMAND_ENTRIES_V3_HW)) {
- 			slot = &hisi_hba->slot_info[iptt];
- 			slot->cmplt_queue_slot = rd_point;
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index 77714a495cbb..2d48643a08cf 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -539,6 +539,10 @@ void sas_ata_end_eh(struct ata_port *ap)
- 	spin_lock_irqsave(&ha->lock, flags);
- 	if (test_and_clear_bit(SAS_DEV_EH_PENDING, &dev->state))
- 		ha->eh_active--;
-+
-+	if (i->dft->lldd_end_eh)
-+		i->dft->lldd_end_eh(device);
-+
- 	spin_unlock_irqrestore(&ha->lock, flags);
- }
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 159823e0afbf..659395ef616e 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -683,6 +683,8 @@ struct sas_domain_function_template {
- 	int (*lldd_lu_reset)(struct domain_device *, u8 *lun);
- 	int (*lldd_query_task)(struct sas_task *);
- 
-+	void (*lldd_end_eh)(struct domain_device *dev);
-+
- 	/* Special TMF callbacks */
- 	void (*lldd_tmf_exec_complete)(struct domain_device *dev);
- 	void (*lldd_tmf_aborted)(struct sas_task *task);
--- 
-2.17.1
+Ok, I see your point now. Thanks for clarification. I will maintain
+'ralink,mt7620a-sysc' since it already exists and change the new stuff
+to use mediatek as prefix. These are 'mediatek,mt7620-sysc',
+'mediatek,mt7628-sysc' and 'mediatek,mt7688-sysc'. Doing so it will
+properly match the 'mediatek,mtmips-sysc.yaml' file name.
 
+>
+>
+> Best regards,
+> Krzysztof
+>
+
+Thanks,
+    Sergio Paracuellos
