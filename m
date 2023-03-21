@@ -2,239 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071C26C35D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939216C35DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjCUPiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S231748AbjCUPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjCUPiN (ORCPT
+        with ESMTP id S230351AbjCUPit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:38:13 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296477D89
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:10 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id j11so19620425lfg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679413087;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/hHAe5iawN3skZzVZDnwhhdvLIa9hx/rH3tuAV1a/Y=;
-        b=nl+cB0MrV4ln5nxojPnc/K4a0UCvfGjtmVhygVZpD7PVa/igo4qoW/bWhyN58nE345
-         sOcsidbdyQelA0q5yyb9CKK/7Vdshos6+YQWgiK6za7PZtTRs9l2JhRNFtr6F58VsC3o
-         S/rBGzfytaeT4LmmjvNV+ZFZjYV5vQOzTmLE2zmjJBni0QbfsVsemeBI8eF5EtzZw285
-         lthQRCX/7kOEOvH+7gtdT2tVdw892MHQ+A4eeK3Tk4Baa1cKXWyZIxE5TVjGxsP7ArPG
-         ZWQc1ymC0IKKpOvNebI4KA1kF/jgmkC0wft0eIjYAlPVZpO2wPPcK+ED2RtpBZXfIQiE
-         njcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679413087;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/hHAe5iawN3skZzVZDnwhhdvLIa9hx/rH3tuAV1a/Y=;
-        b=rACy45kZoxN0MS3bDbOR6N+Sc8TDnjmWAiwIq8jHp12BjIfZxQE1XhxrPAbylAnoh+
-         cdwa00BAw3ipiGlHqVReZgoJf4tq+EPPCfz78+kxOPHAl7NtNoZ3Jqj7no4E9aV8JKc4
-         ve1IVM2QivdfePcGUeMuPHl+GmCQLgTNdxSG4kafQuXqYDCxs8spQdK23m/GsE3itvsl
-         WJWwb3Eg2scRUEf47PCwiq7jzI2C7F0NtPj4wTfttJoBknEa1j8YKIALDXsHWDEDog0k
-         87Eh6T6SuHiggawC+EBgCEumooZG4iqYSaxb6R3ZIV19ZGoV0B8tXtO9s3SbRqOpi67j
-         hSRA==
-X-Gm-Message-State: AO0yUKXKzFa8BUJLwEkInm3vPUH97xF319Q2sSEFVOTVW1C+cvDph6Aa
-        3FzNgtLWbjsTAznKfM/b8i3nLA==
-X-Google-Smtp-Source: AK7set+STU3G9QvNmNnVmdGOtK+qF7WbPNGCp2TWURDMZxtNtpOd5g+l+wav4QS+f2Wk7N556My/8Q==
-X-Received: by 2002:ac2:424e:0:b0:4db:3e56:55c8 with SMTP id m14-20020ac2424e000000b004db3e5655c8mr1010770lfl.59.1679413087349;
-        Tue, 21 Mar 2023 08:38:07 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v5-20020a056512048500b004db513b0175sm2208560lfq.136.2023.03.21.08.38.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 08:38:06 -0700 (PDT)
-Message-ID: <7ef646e0-388e-b2ef-a28c-f1fcce486203@linaro.org>
-Date:   Tue, 21 Mar 2023 17:38:05 +0200
+        Tue, 21 Mar 2023 11:38:49 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C671FF2B;
+        Tue, 21 Mar 2023 08:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wqHE/HmFnAipyC15YC6kC4z9qeOa5pYSIMhsUmlBcnA=; b=cvRImtCFf+1tr5TBScdJO6JydN
+        ilS/AfrFAwSiENYVw8xmUupqouZwJGMhMscvrgZJjo8YPiSXT16Ur6uSDZlBQUGhb+u3u8CNoltIT
+        iDlh1W4Zrm6JPt9H2da1BgMVIv0FmoMn20BzHteqD3UBlrCDRblFrnUJlwn2drXLnBZQa6utu/fWP
+        Wr4SPROlrhBWhLjsBO0DrfxDObVnfbdQhkkwtQwMUpZJ5UqrtxgHSw5Ni17n2BdP811DLwIw3QxLS
+        fui3k4rZy5Zj65i0CKI0LTge8AoOllWu1SCpiuIMuVxiIjJPnW+pOokL1BooWUswiM+LJy82T+ah1
+        KzBkkLYg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52814)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pee4G-0001R7-Ty; Tue, 21 Mar 2023 15:38:32 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pee4E-0007qF-T0; Tue, 21 Mar 2023 15:38:30 +0000
+Date:   Tue, 21 Mar 2023 15:38:30 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
+ for SGMII mode
+Message-ID: <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
+References: <20230321111958.2800005-1-s-vadapalli@ti.com>
+ <20230321111958.2800005-3-s-vadapalli@ti.com>
+ <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
+ <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 04/12] soc: qcom: pmic_glink: register ucsi aux device
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v5-4-552f3b721f9e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v5-4-552f3b721f9e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 15:21, Neil Armstrong wrote:
-> Only register UCSI on know working devices, like on the SM8450
-> or SM8550 which requires UCSI to get USB mode switch events.
+On Tue, Mar 21, 2023 at 07:04:50PM +0530, Siddharth Vadapalli wrote:
+> Hello Russell,
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Two nits below:
-
-> ---
->   drivers/soc/qcom/pmic_glink.c | 65 +++++++++++++++++++++++++++++++++++--------
->   1 file changed, 54 insertions(+), 11 deletions(-)
+> On 21-03-2023 16:59, Russell King (Oracle) wrote:
+> > On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
+> >> Add support for configuring the CPSW Ethernet Switch in SGMII mode.
+> >>
+> >> Depending on the SoC, allow selecting SGMII mode as a supported interface,
+> >> based on the compatible used.
+> >>
+> >> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> >> ---
+> >>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
+> >>  1 file changed, 10 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >> index cba8db14e160..d2ca1f2035f4 100644
+> >> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >> @@ -76,6 +76,7 @@
+> >>  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
+> >>  
+> >>  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
+> >> +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
+> >>  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
+> > 
+> > Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG come
+> > after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting that
+> > from its register offset definition?
 > 
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index bb3fb57abcc6..8bf95df0a56a 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -4,6 +4,7 @@
->    * Copyright (c) 2022, Linaro Ltd
->    */
->   #include <linux/auxiliary_bus.h>
-> +#include <linux/of_device.h>
->   #include <linux/module.h>
->   #include <linux/platform_device.h>
->   #include <linux/rpmsg.h>
-> @@ -11,12 +12,23 @@
->   #include <linux/soc/qcom/pdr.h>
->   #include <linux/soc/qcom/pmic_glink.h>
->   
-> +enum {
-> +	PMIC_GLINK_CLIENT_BATT = 0,
-> +	PMIC_GLINK_CLIENT_ALTMODE,
-> +	PMIC_GLINK_CLIENT_UCSI,
-> +};
-> +
-> +#define PMIC_GLINK_CLIENT_DEFAULT	(BIT(PMIC_GLINK_CLIENT_BATT) |	\
-> +					 BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> +
->   struct pmic_glink {
->   	struct device *dev;
->   	struct pdr_handle *pdr;
->   
->   	struct rpmsg_endpoint *ept;
->   
-> +	unsigned long client_mask;
-> +
->   	struct auxiliary_device altmode_aux;
->   	struct auxiliary_device ps_aux;
->   	struct auxiliary_device ucsi_aux;
-> @@ -233,6 +245,7 @@ static struct rpmsg_driver pmic_glink_rpmsg_driver = {
->   
->   static int pmic_glink_probe(struct platform_device *pdev)
->   {
-> +	const unsigned long *match_data;
->   	struct pdr_service *service;
->   	struct pmic_glink *pg;
->   	int ret;
-> @@ -249,12 +262,27 @@ static int pmic_glink_probe(struct platform_device *pdev)
->   	mutex_init(&pg->client_lock);
->   	mutex_init(&pg->state_lock);
->   
-> -	ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
-> -	if (ret)
-> -		return ret;
-> -	ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
-> -	if (ret)
-> -		goto out_release_altmode_aux;
-> +	match_data = (unsigned long *)of_device_get_match_data(&pdev->dev);
-
-Nit: type cast should not be necessary here.
-
-> +	if (match_data)
-> +		pg->client_mask = *match_data;
-> +	else
-> +		pg->client_mask = PMIC_GLINK_CLIENT_DEFAULT;
-> +
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI)) {
-> +		ret = pmic_glink_add_aux_device(pg, &pg->ucsi_aux, "ucsi");
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE)) {
-> +		ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
-> +		if (ret)
-> +			goto out_release_ucsi_aux;
-> +	}
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT)) {
-> +		ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
-> +		if (ret)
-> +			goto out_release_altmode_aux;
-> +	}
->   
->   	pg->pdr = pdr_handle_alloc(pmic_glink_pdr_callback, pg);
->   	if (IS_ERR(pg->pdr)) {
-> @@ -278,9 +306,14 @@ static int pmic_glink_probe(struct platform_device *pdev)
->   out_release_pdr_handle:
->   	pdr_handle_release(pg->pdr);
->   out_release_aux_devices:
-> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
-> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
->   out_release_altmode_aux:
-> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +out_release_ucsi_aux:
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
-> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
->   
->   	return ret;
->   }
-> @@ -291,8 +324,12 @@ static int pmic_glink_remove(struct platform_device *pdev)
->   
->   	pdr_handle_release(pg->pdr);
->   
-> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
-> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
-> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
-> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
->   
->   	mutex_lock(&__pmic_glink_lock);
->   	__pmic_glink = NULL;
-> @@ -301,8 +338,14 @@ static int pmic_glink_remove(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +/* Do not handle altmode for now on those platforms */
-> +static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
-> +							   BIT(PMIC_GLINK_CLIENT_UCSI);
-> +
->   static const struct of_device_id pmic_glink_of_match[] = {
-> -	{ .compatible = "qcom,pmic-glink", },
-
-Nit: one can leave comma in place to remove noise.
-
-> +	{ .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
-> +	{ .compatible = "qcom,sm8550-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
-> +	{ .compatible = "qcom,pmic-glink" },
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
+> Thank you for reviewing the patch. The registers are as follows:
+> CONTROL_REG offset 0x10
+> STATUS_REG offset  0x14
+> MR_ADV_REG offset  0x18
 > 
+> Since the STATUS_REG is not used in the driver, its offset is omitted.
+> The next register is the MR_ADV_REG, which I placed after the
+> CONTROL_REG. I grouped the register offsets together, to represent the
+> order in which the registers are placed. Due to this, the
+> MR_ADV_ABILITY_REG offset is placed after the CONTROL_REG offset define.
+> 
+> Please let me know if I should move it after the CONTROL_MR_AN_ENABLE
+> define instead.
+
+Well, it's up to you - whether you wish to group the register offsets
+separately from the bit definitions for those registers, or whether
+you wish to describe the register offset and its associated bit
+definitions in one group before moving on to the next register.
+
+> > If the advertisement register is at 0x18, and the lower 16 bits is the
+> > advertisement, are the link partner advertisement found in the upper
+> > 16 bits?
+> 
+> The MR_LP_ADV_ABILITY_REG is at offset 0x020, which is the the register
+> corresponding to the Link Partner advertised value. Also, the
+> AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE Bit is in the CONTROL_REG. The CPSW
+> Hardware specification describes the process of configuring the CPSW MAC
+> for SGMII mode as follows:
+> 1. Write 0x1 (ADVERTISE_SGMII) to the MR_ADV_ABILITY_REG register.
+> 2. Enable auto-negotiation in the CONTROL_REG by setting the
+> AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE bit.
+
+Good to hear that there is a link partner register.
+
+> >>  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
+> >> @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+> >>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+> >>  	struct am65_cpsw_common *common = port->common;
+> >>  
+> >> -	if (common->pdata.extra_modes & BIT(state->interface))
+> >> +	if (common->pdata.extra_modes & BIT(state->interface)) {
+> >> +		if (state->interface == PHY_INTERFACE_MODE_SGMII)
+> >> +			writel(ADVERTISE_SGMII,
+> >> +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+> >> +
+> > 
+> > I think we can do better with this, by implementing proper PCS support.
+> > 
+> > It seems manufacturers tend to use bought-in IP for this, so have a
+> > look at drivers/net/pcs/ to see whether any of those (or the one in
+> > the Mediatek patch set on netdev that has recently been applied) will
+> > idrive your hardware.
+> > 
+> > However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+> > I suspect you won't find a compatible implementation.
+> 
+> I have tested with an SGMII Ethernet PHY in the standard SGMII MAC2PHY
+> configuration. I am not sure if PCS support will be required or not. I
+> hope that the information shared above by me regarding the CPSW
+> Hardware's specification for configuring it in SGMII mode will help
+> determine what the right approach might be. Please let me know whether
+> the current implementation is acceptable or PCS support is necessary.
+
+Nevertheless, this SGMII block is a PCS, and if you're going to want to
+support inband mode (e.g. to read the SGMII word from the PHY), or if
+someone ever wants to use 1000base-X, you're going to need to implement
+this properly as a PCS.
+
+That said, it can be converted later, so isn't a blocking sisue.
 
 -- 
-With best wishes
-Dmitry
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
