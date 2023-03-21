@@ -2,81 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0A56C3C41
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA8C6C3C43
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjCUUxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S229966AbjCUUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjCUUxS (ORCPT
+        with ESMTP id S229816AbjCUUxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:53:18 -0400
-Received: from pv50p00im-ztdg10011201.me.com (pv50p00im-ztdg10011201.me.com [17.58.6.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A2F241EE
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1679431997;
-        bh=0ZnuQUjrwZDWrnJLwNfU9ZEvt169Mzw+VbAzP/NbgBA=;
-        h=Mime-Version:Content-Type:Date:To:Subject:From:Message-Id;
-        b=L/r0KNA1frJtVd/bGT2GtLcOQDbTZmntf0m1J/vdow+GrJN5B3+b9slmsY3G/MhdZ
-         GN3xVTbL7xBbbE90iNWfH9DzwnYlmjCAqOuIbW9EwkTZ+hudj4zLiOfFXusUpJ4k9I
-         oNVJU7XZOaA1aumqScvOjHqrTobrK8tELZtc1dG7GHzmTMqECdYsEo/s3qtOWaeM6J
-         LtgyPTcSuM69O5KB1rjp/5VWd60FFjSolKptr+MbbQk6W5mRtVe5IwIP1212C9qSAt
-         FBtzsdSpevFsua7brlyZKp2cFpd7ADBEd6BZ0c6V4jhvLCRTEZdtKsTEfrAvTaPDtT
-         gimQolH/ZrmMQ==
-Received: from localhost (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-ztdg10011201.me.com (Postfix) with ESMTPSA id 4372C680B6E;
-        Tue, 21 Mar 2023 20:53:14 +0000 (UTC)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 21 Mar 2023 21:53:11 +0100
-To:     "Maxime Ripard" <maxime@cerno.tech>
-Cc:     "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-From:   "Roman Beranek" <romanberanek@icloud.com>
-Message-Id: <CRCCWA4HQQX4.YATGMBYCEH72@iMac.local>
-X-Mailer: aerc 0.14.0
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <20230321145646.w6kr7ddurfxpg5rt@houat>
-In-Reply-To: <20230321145646.w6kr7ddurfxpg5rt@houat>
-X-Proofpoint-GUID: c612MYQytYPmYtx84RnEOuXcSzSfwBD_
-X-Proofpoint-ORIG-GUID: c612MYQytYPmYtx84RnEOuXcSzSfwBD_
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=394 mlxscore=0
- suspectscore=0 clxscore=1015 malwarescore=0 bulkscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2303210165
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 16:53:40 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B3143924
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:53:39 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y4so64902406edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679432018;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8CVfLEQ96fgtEyGuwyUnqAP2WUVOUslh03bRQ3BEX7A=;
+        b=X+dQPoexHev9KjgL10xzyZa8lLljP521vOdDiIPbrDJXqLx023ULI1d5wvOSvzW5dG
+         lKrVdQPwUWxsmL3H2LpZniE39oi1IxA5k6WUfoS7BcCdQlKkp9W8nDN9FOKJl+58WptF
+         Y7GvoMMAcM2QZ7J8DzphsEZ79mp6dTUYegEJlfqdFTjUw47QC67aYORmGt+Jri/1G9vC
+         ebqPIP0t9MbUw0FFcQLur0WtvcTzj08V9vmmzMMN7AJMV4pbjPaIL9aAdDyazht6zeya
+         FlhN3IwD3vfVFAuiJvZs5ylk5xqrKI7+hOkLWahazNezdPWt+4GA/ZDx/gEAmmHcVfMv
+         zBsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679432018;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8CVfLEQ96fgtEyGuwyUnqAP2WUVOUslh03bRQ3BEX7A=;
+        b=j56yuDloVQZQxUEKNBs25WucFcQyfHagLRggdn0UViv1kL7obQIEYsoL4i5M/yTuIk
+         kVsbeWCIn4+MZM8rZfBUIKdVgRheMRaKla6NrLw12D2SmHpMp2Nv+X9NcuiaU2qftSvy
+         qdS8IbrgSz7p/NN26V5odLkj6OdPeIX+06nhGTWpHVKicC6qbFg2hBCuTnlUGxBTUJai
+         JbEhX10WH//4UpVUK93HTyXV+k9k9WGRmMo/fagvx4PSzs6xVXAUNQYnFgaqBI7kiJgy
+         uEyQOizt/BKPBU2fsDMKKYluSZofcRBrtRyxvd+Pff1sDdHhC/ugc+6pKWD3Db5bPV0t
+         +f8Q==
+X-Gm-Message-State: AO0yUKUbkxjvlEUyaz5+618WtuZPq6yRsP1Rk384P+GXAOCQSkALlDm4
+        JR5vHwV+RYpByFJbXGNagaSGbQ==
+X-Google-Smtp-Source: AK7set8buQSL7WJWvLOGJSlf5w169GupneinxCwEc4tmz07+4XkZBxidXr6kRDxDYk6EzYUBpK2bVg==
+X-Received: by 2002:a17:907:6295:b0:932:f88c:c2ff with SMTP id nd21-20020a170907629500b00932f88cc2ffmr16101925ejc.34.1679432017823;
+        Tue, 21 Mar 2023 13:53:37 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id u7-20020a170906b10700b0092f38a6d082sm6218757ejy.209.2023.03.21.13.53.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 13:53:36 -0700 (PDT)
+Message-ID: <17185edd-aa6f-386b-4252-0c6eac1ddcfc@linaro.org>
+Date:   Tue, 21 Mar 2023 20:53:33 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1] misc: fastrpc: Reassign memory ownership only for
+ remote heap
+Content-Language: en-US
+To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, bkumar@qti.qualcomm.com,
+        fastrpc.upstream@qti.qualcomm.com, stable <stable@kernel.org>
+References: <1679394100-27119-1-git-send-email-quic_ekangupt@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <1679394100-27119-1-git-send-email-quic_ekangupt@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Mar 21, 2023 at 5:50 PM CET, Roman Beranek wrote:
 
-> > Also, how was it tested/confirmed?
->
-> By counting Vblank interrupts (GIC 118).
 
-Sorry, that was perhaps too abbreviated. To test this change, I set up
-an A64 board running kmscube on DSI-1 and verified that the rate of
-Vblank IRQs tracked with a video mode set on DSI-1, once with a 2-lane
-panel and once with a 4-lane panel.
+On 21/03/2023 10:21, Ekansh Gupta wrote:
+> The userspace map request for remote heap allocates CMA memory.
+> The ownership of this memory needs to be reassigned to proper
+> owners to allow access from the protection domain running on
+> DSP. This reassigning of ownership is not correct if done for
+> any other supported flags.
+> 
+> When any other flag is requested from userspace, fastrpc is
+> trying to reassign the ownership of memory and this reassignment
+> is getting skipped for remote heap request which is incorrect.
+> Add proper flag check to reassign the memory only if remote heap
+> is requested.
+> 
+> Fixes: 532ad70c6d44 ("misc: fastrpc: Add mmap request assigning for static PD pool")
+> Cc: stable <stable@kernel.org>
+> Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
 
-Roman
+Thanks for fixing this,  without this fix the code inside if condition 
+was a dead code.
+
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+> ---
+>   drivers/misc/fastrpc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index a701132..9b88132 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -1892,7 +1892,7 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
+>   	req.vaddrout = rsp_msg.vaddr;
+>   
+>   	/* Add memory to static PD pool, protection thru hypervisor */
+> -	if (req.flags != ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
+> +	if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
+>   		struct qcom_scm_vmperm perm;
+>   
+>   		perm.vmid = QCOM_SCM_VMID_HLOS;
