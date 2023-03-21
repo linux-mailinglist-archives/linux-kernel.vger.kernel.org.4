@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02046C325E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E176C3262
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjCUNMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        id S230332AbjCUNNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCUNMm (ORCPT
+        with ESMTP id S229783AbjCUNNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:12:42 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE51749F4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:12:41 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so20163217pjt.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679404361;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fAjXByyNeVsllWRRDtI/FHQctq+3KZulJN/OLUyCO0Y=;
-        b=FVqUv2LQHwvg/vVQtrGj4ZriCG8kiq0Mq2nJuDX8CzetcsSLFWAq8LjPk8hJkqsJkF
-         E2X6Sv4Ncdspvnro9L1YmdOlWqyHhjJTbIy94zFkISeWejHNO8ySKiGB5jIOtUbOEn4d
-         VRIW6wS746nkKBXuzmgv82W4PN288lvt4C6SGvecN4ZR+WQm7JtQXqbbg9feBHlPL9yB
-         CJWUHmlHG6AwwM3ejx6pK8F8UmINAvZw8UyaXPQQ3jA7W0XCVYrHvSNAR0nJA0PXRK2I
-         q0lhYtMm3lu64R8y5ZOHgampujPUwuMvWoUTWadi/WVqBBFcPwOJyaBZ8z0Ze6y1kk5Q
-         wjvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679404361;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fAjXByyNeVsllWRRDtI/FHQctq+3KZulJN/OLUyCO0Y=;
-        b=jrM81m+XELfgMBvYnyFVnp5f7rWQ0JDAwj3aorl66V9pigPnJmAgXhIYel3mXLka7V
-         O9nn4LDWhq1DUxhXR/vvP4VP4xVIQ2c0ODNhwDJAOQQeM9SwQlw8GUmrEBJziPaOVeq/
-         l0JOUTQ4aytqximmFPwPIKwEFw9p/NVrbXXjoZSrfw8lagViXT9Uuue+6yJxM2iqMnZT
-         EmpvxBZ7u3E0eN3xV/QqT6pgDk8SzguUlIpukeIr+S8L8E8zL9dVX/ADsxNcrV2A3A6Y
-         DBjxui+3tf6vwk3tyMIIb4l8/dM62Xy8ftqBN6JqlarZa1kTEMUaragBb96Qr8c66Vst
-         fGqg==
-X-Gm-Message-State: AO0yUKUUMoHox+4svttURiCsRcr3ab2j9gy4YDEFT5EBd98iU8jiGJ6k
-        yZth0dkqCFycxgGn12zkuaOIy8bE2KQ=
-X-Google-Smtp-Source: AK7set+Fux4yS6sb9QMc/wWCWwfKerztUvonr+R6TXeModNpu54XsFqCCe8a6xFun9iV4ReqvZDBSA==
-X-Received: by 2002:a05:6a20:a8a5:b0:d8:afd4:4ac7 with SMTP id ca37-20020a056a20a8a500b000d8afd44ac7mr2315740pzb.4.1679404361134;
-        Tue, 21 Mar 2023 06:12:41 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-50.three.co.id. [116.206.28.50])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b005d4360ed2bbsm8222947pfm.197.2023.03.21.06.12.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 06:12:40 -0700 (PDT)
-Message-ID: <a05cfc82-a9e9-ea96-aaca-612ff9c14219@gmail.com>
-Date:   Tue, 21 Mar 2023 20:12:36 +0700
+        Tue, 21 Mar 2023 09:13:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576EAA5E2;
+        Tue, 21 Mar 2023 06:13:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 948D5B81670;
+        Tue, 21 Mar 2023 13:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D874C433EF;
+        Tue, 21 Mar 2023 13:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679404392;
+        bh=Ie0I6DspmqUGmFzLY8M9p06FQQUjb9WBd6Z2Y5RxFMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WCELKUAO4DmRhWUevMaHTsfdWUOjmOwX6QDGRTGx8cr2tDflzYANu1EphfFEiuacN
+         73IJBFv8dFoFgJspV1c2kimtV/h9RslHEeXTHNU71iV2EBgXhherzoHszVgFNDN0Y+
+         SQEdUjvv4ttww2/mSl2jf4bmNKcGUD/3FSuCmYCoXHhZK3ojjR3yc8cHxkZ2MdqGDw
+         6zp/6BorvlCFtxWIlglrzjZLZjn8khx+muMaJjNKTzhW6I/CZ5/1CJX4uQLO80aQO2
+         T6Wec1E+zo0rJmtBFFf3unDCUrY/YYGRwClwRdqzpnsbNM7/shgpSK1BcTieLe2ZLh
+         4e8zFbiwUOlmw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pebox-000683-A5; Tue, 21 Mar 2023 14:14:36 +0100
+Date:   Tue, 21 Mar 2023 14:14:35 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] drm/meson: fix missing component unbind on bind errors
+Message-ID: <ZBmtu4klxYwQyN7R@hovoldconsulting.com>
+References: <20230306103533.4915-1-johan+linaro@kernel.org>
+ <CAFBinCBsC+P=zvh6RF3UKiPnferUYU0QZvZfnn1oS5xWX-65Jw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] scripts/package: add back 'version' for builddeb
-To:     David Wang <00107082@163.com>, linux-kernel@vger.kernel.org
-Cc:     masahiroy@kernel.org
-References: <20230320110819.23668-1-00107082@163.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230320110819.23668-1-00107082@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCBsC+P=zvh6RF3UKiPnferUYU0QZvZfnn1oS5xWX-65Jw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 18:08, David Wang wrote:
-> Fixes: 36862e14e316 (kbuild: deb-pkg: use dh_listpackages to know
-> enabled packages)
-> The 'version' variable is still needed for building
-> debian 'linux-headers' packages, add it back.
-> 
-> Signed-off-by: David Wang <00107082@163.com>
-> ---
->  scripts/package/builddeb | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-> index c5ae57167d7c..5102d0903f9c 100755
-> --- a/scripts/package/builddeb
-> +++ b/scripts/package/builddeb
-> @@ -215,6 +215,7 @@ install_libc_headers () {
->  
->  rm -f debian/files
->  
-> +version=$KERNELRELEASE
->  packages_enabled=$(dh_listpackages)
->  
->  for package in ${packages_enabled}
+On Thu, Mar 09, 2023 at 10:41:18PM +0100, Martin Blumenstingl wrote:
 
-Hi,
+> On Mon, Mar 6, 2023 at 11:35 AM Johan Hovold <johan+linaro@kernel.org> wrote:
+> [...]
+> > @@ -325,23 +325,23 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
+> >
+> >         ret = meson_encoder_hdmi_init(priv);
 
-Again, your patch looks like corrupted (tabs converted to spaces).
-Please resubmit; this time; generate the patch via git-format-patch(1)
-and then send the resulting patch with git-send-email(1).
+> I'm wondering if component_bind_all() can be moved further down.
+> Right now it's between meson_encoder_cvbs_init() and
+> meson_encoder_hdmi_init(). So it seems that encoders don't rely on
+> component registration.
 
-Thanks.
+Perhaps it can, but that would be a separate change (unless there is
+something inherently wrong with the current initialisation order).
+ 
+> Unfortunately I am also not familiar with this and I'm hoping that
+> Neil can comment on this.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Any comments on this one, Neil?
 
+Johan
