@@ -2,64 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5A96C3C83
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D9C6C3C89
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCUVS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S230035AbjCUVTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjCUVSX (ORCPT
+        with ESMTP id S229663AbjCUVTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:18:23 -0400
-Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466241026F;
-        Tue, 21 Mar 2023 14:18:21 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Ph4G3236kzMqrrH;
-        Tue, 21 Mar 2023 22:18:19 +0100 (CET)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Ph4G037PKzMtb2b;
-        Tue, 21 Mar 2023 22:18:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1679433499;
-        bh=AgKPiy7F5VngjyGIL3NQ14WbEEGl71phtnGYVDOOFK4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C0SINHKlnr2CqFRxb6HMxLhGImy5difrGWxbhH8duWG3iWaChE7HA1oFO2TuZJfTI
-         Ihf7M4LpPe8520IBXV5Hlqq/H2ILhWOEF21p8F0uULkAVIvY7/7WH9IG1fBwpNDRqm
-         ZqasefLB8Rh8VocFhNJnv+wKXBI0wwt55E3rRCSU=
-Message-ID: <cb7e6a4b-63d9-ddba-e0fc-d6352df2b3b6@digikod.net>
-Date:   Tue, 21 Mar 2023 22:18:15 +0100
+        Tue, 21 Mar 2023 17:19:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6F0136D3;
+        Tue, 21 Mar 2023 14:19:19 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LJEQfR001100;
+        Tue, 21 Mar 2023 21:19:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=bbozAYZVvpIJ1rSltt7P6n1hBU/8cwQRgE061FnjM7I=;
+ b=DsXBP3/qmMEf3FMQeTlM0NX1KGMFhTygFGvqej6rq6u5Y6pj/Ev5GOKVVnHKENug67AM
+ 5ne6Nj3xpX49KYw/GbH1vj8xjy+4x/b8LCvl2JE/w+VhTgHQn9vqmUIk/tvM3WunFT9C
+ hCjcszzHdkpfuDsmZ3YV/whSl4SuxVBjXLIXPPz3ARYHMLNGWHdL8Pr9YU88LGScxndx
+ NEX8EujJ0uNv0VnlYOsEZTlH/dM0zcomKvO3XfBsMC5PW7Svav/6olxaJhkKdfxRpozy
+ lxUnahFoDtI9aLd0fkmCoLh1W1EOJZ8KesUB34MlwghQXZurw5CU0BsVWnBUcr7UeDXV TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfjjdtgd4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 21:19:15 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32LLBCel005465;
+        Tue, 21 Mar 2023 21:19:14 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfjjdtgck-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 21:19:14 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32L50Jdi018062;
+        Tue, 21 Mar 2023 21:19:12 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3pd4jfc9x2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 21:19:12 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LLJ9g842205758
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 21:19:09 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F289D20043;
+        Tue, 21 Mar 2023 21:19:08 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 51ADE20040;
+        Tue, 21 Mar 2023 21:19:08 +0000 (GMT)
+Received: from localhost (unknown [9.171.1.78])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 Mar 2023 21:19:08 +0000 (GMT)
+Date:   Tue, 21 Mar 2023 22:19:06 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Joe Lawrence <joe.lawrence@redhat.com>, stable@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH] s390: reintroduce expoline dependence to scripts
+Message-ID: <your-ad-here.call-01679433546-ext-8459@work.hours>
+References: <705ce64c-5f73-2ec8-e4bc-dd48c85f0498@kernel.org>
+ <20230316112809.7903-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 0/5] Landlock support for UML
-Content-Language: en-US
-To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>
-References: <20230309165455.175131-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20230309165455.175131-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230316112809.7903-1-jirislaby@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GlJMtsEVQZZ0gT78_adUV8bdi7lGyiQO
+X-Proofpoint-ORIG-GUID: 0ug9ZL6ZKPv_3YE6ECwxu-eCpoqk4EUS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=998 spamscore=0 malwarescore=0 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 impostorscore=0 clxscore=1015 adultscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210166
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,48 +94,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Richard, Anton, Johannes, what do you think about these UML changes?
+On Thu, Mar 16, 2023 at 12:28:09PM +0100, Jiri Slaby (SUSE) wrote:
+> Expolines depend on scripts/basic/fixdep. And build of expolines can now
+> race with the fixdep build:
+> 
+>  make[1]: *** Deleting file 'arch/s390/lib/expoline/expoline.o'
+>  /bin/sh: line 1: scripts/basic/fixdep: Permission denied
+>  make[1]: *** [../scripts/Makefile.build:385: arch/s390/lib/expoline/expoline.o] Error 126
+>  make: *** [../arch/s390/Makefile:166: expoline_prepare] Error 2
+> 
+> The dependence was removed in the below Fixes: commit. So reintroduce
+> the dependence on scripts.
+> 
+> Fixes: a0b0987a7811 ("s390/nospec: remove unneeded header includes")
+> Cc: Joe Lawrence <joe.lawrence@redhat.com>
+> Cc: stable@vger.kernel.org
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> ---
+>  arch/s390/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+> index b3235ab0ace8..ed646c583e4f 100644
+> --- a/arch/s390/Makefile
+> +++ b/arch/s390/Makefile
+> @@ -162,7 +162,7 @@ vdso_prepare: prepare0
+>  
+>  ifdef CONFIG_EXPOLINE_EXTERN
+>  modules_prepare: expoline_prepare
+> -expoline_prepare:
+> +expoline_prepare: scripts
+>  	$(Q)$(MAKE) $(build)=arch/s390/lib/expoline arch/s390/lib/expoline/expoline.o
+>  endif
+>  endif
+> -- 
 
-
-On 09/03/2023 17:54, Mickaël Salaün wrote:
-> Hi,
-> 
-> Commit cb2c7d1a1776 ("landlock: Support filesystem access-control")
-> introduced a new ARCH_EPHEMERAL_INODES configuration, only enabled for
-> User-Mode Linux.  The reason was that UML's hostfs managed inodes in an
-> ephemeral way: from the kernel point of view, the same inode struct
-> could be created several times while being used by user space because
-> the kernel didn't hold references to inodes.  Because Landlock (and
-> probably other subsystems) ties properties (i.e. access rights) to inode
-> objects, it wasn't possible to create rules that match inodes and then
-> allow specific accesses.
-> 
-> This patch series fixes the way UML manages inodes according to the
-> underlying filesystem.  They are now properly handles as for other
-> filesystems, which enables to support Landlock (and probably other
-> features).
-> 
-> Backporting these patches requires some selftest harness patches
-> backports too.
-> 
-> Regards,
-> 
-> Mickaël Salaün (5):
->    hostfs: Fix ephemeral inodes
->    selftests/landlock: Don't create useless file layouts
->    selftests/landlock: Add supports_filesystem() helper
->    selftests/landlock: Make mounts configurable
->    selftests/landlock: Add tests for pseudo filesystems
-> 
->   arch/Kconfig                               |   7 -
->   arch/um/Kconfig                            |   1 -
->   fs/hostfs/hostfs.h                         |   1 +
->   fs/hostfs/hostfs_kern.c                    | 213 ++++++------
->   fs/hostfs/hostfs_user.c                    |   1 +
->   security/landlock/Kconfig                  |   2 +-
->   tools/testing/selftests/landlock/config    |   8 +-
->   tools/testing/selftests/landlock/fs_test.c | 381 +++++++++++++++++++--
->   8 files changed, 472 insertions(+), 142 deletions(-)
-> 
-> 
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+Applied, thank you.
