@@ -2,83 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D59E6C3043
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC4F6C3045
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjCULWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
+        id S230444AbjCULXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjCULW1 (ORCPT
+        with ESMTP id S230417AbjCULXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:22:27 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482582311A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:21:54 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p204so5467738ybc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thingy.jp; s=google; t=1679397711;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N+KqRWhaDx1aJoI/pna5di6cHpQDQbH5Dv0l0ZgDy3g=;
-        b=KVoWmCl3lAefXbSjr1XFa+Pxr15fcLxSACIYq0vUNsPKheJwN9PLuMYI4g/xhAjlJR
-         v5jPl4mNRlohMGFK3j609Jd1v1JyoCHAGE8WkQQir9p+3GVucIAu8ajbJPbJJzf9oW5i
-         f3VlU0/OrWyyNLnaKLuJr/QQ4ZmnEnZCIWWmE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679397711;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N+KqRWhaDx1aJoI/pna5di6cHpQDQbH5Dv0l0ZgDy3g=;
-        b=pM+/MRokx/wpdIsiVM5sepqB7Agtc5xgh0Hl1tTRDHXsoUQBA16hxVcDuLyVv/uyje
-         Cl9jvcfDs1vWVsm59wxJs8dzTXNrx1/EiW8DdHTIBJcbEkRNF4KsMoQNkX1KfQ1g3wmV
-         mUx4glHIsfSYtTO0h1zyXkZQ8UNFferUv9uSveTwPQOM7Wvzo2Kg9tW+svtg2u+wn+ZB
-         Q4cb+EeTBU3guGlKQlkEU37BikRwsVGnockDq3I/9Kq/WDBPj/A3KfPPGB31JJrjivNp
-         9PcUJ5U8SUWrl0yVePWqzv9Ud55lv+o0urc+s0oBpE2bICsmU1CDHGpqGcMuwsDtjceD
-         CdMg==
-X-Gm-Message-State: AAQBX9ddVJl26iqg9byOlE73wtVpkvrugjxU5E1dJPqE+SK2yVUA/Y6+
-        FVmjtKzw5PTkoBe6+htvlgU1r4viqD806EHOaij9Tg==
-X-Google-Smtp-Source: AKy350aGC8yl/vUvR9z4Vm7doUX9SkLJ6MUp8qgSDNHNEIcIwszPmP7Z6Gr3qL15c7ncubDyIJlOLnYGFNkZU0VIB/s=
-X-Received: by 2002:a05:6902:283:b0:b6e:d788:eba7 with SMTP id
- v3-20020a056902028300b00b6ed788eba7mr1159105ybh.6.1679397710763; Tue, 21 Mar
- 2023 04:21:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
- <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com> <59c05b36-3370-4d7b-b8cc-39d6dc36cdd0@app.fastmail.com>
-In-Reply-To: <59c05b36-3370-4d7b-b8cc-39d6dc36cdd0@app.fastmail.com>
-From:   Daniel Palmer <daniel@thingy.jp>
-Date:   Tue, 21 Mar 2023 20:21:40 +0900
-Message-ID: <CAFr9PX=5Xj63Fm2nRa8oPdXbrkKOMG7D1Y_EV361HtYjs7GZaQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: mstar: remove unused config MACH_MERCURY
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 07:23:06 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040BD3E1D0;
+        Tue, 21 Mar 2023 04:22:42 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Pgq2M65w2z6FK2R;
+        Tue, 21 Mar 2023 19:22:19 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 32LBMCZ6070552;
+        Tue, 21 Mar 2023 19:22:13 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 21 Mar 2023 19:22:16 +0800 (CST)
+Date:   Tue, 21 Mar 2023 19:22:16 +0800 (CST)
+X-Zmail-TransId: 2afa64199368ffffffffc3c-b82e7
+X-Mailer: Zmail v1.0
+Message-ID: <202303211922161400872@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <andersson@kernel.org>
+Cc:     <agross@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBidXM6IHFjb20tc3NjLWJsb2NrLWJ1czogdXNlwqBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2VfYnluYW1lKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32LBMCZ6070552
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6419936B.000/4Pgq2M65w2z6FK2R
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-On Tue, 21 Mar 2023 at 18:30, Arnd Bergmann <arnd@arndb.de> wrote:
-> I'd still prefer removing it now and only bringing it
-> back when you actually add the code for it.
+Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
+call to devm_platform_ioremap_resource_byname(), as this is exactly what
+this function does.
 
-Fair enough. Code does exist for it in my tree but I never got around
-to sending it.
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/bus/qcom-ssc-block-bus.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I rescind my nak.
+diff --git a/drivers/bus/qcom-ssc-block-bus.c b/drivers/bus/qcom-ssc-block-bus.c
+index eedeb29a5ff3..ae95112d4e20 100644
+--- a/drivers/bus/qcom-ssc-block-bus.c
++++ b/drivers/bus/qcom-ssc-block-bus.c
+@@ -277,14 +277,14 @@ static int qcom_ssc_block_bus_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, ret, "error when enabling power domains\n");
 
-Cheers,
+ 	/* low level overrides for when the HW logic doesn't "just work" */
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mpm_sscaon_config0");
+-	data->reg_mpm_sscaon_config0 = devm_ioremap_resource(&pdev->dev, res);
++	data->reg_mpm_sscaon_config0 = devm_platform_ioremap_resource_byname(pdev,
++									     "mpm_sscaon_config0");
+ 	if (IS_ERR(data->reg_mpm_sscaon_config0))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(data->reg_mpm_sscaon_config0),
+ 				     "Failed to ioremap mpm_sscaon_config0\n");
 
-Daniel
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mpm_sscaon_config1");
+-	data->reg_mpm_sscaon_config1 = devm_ioremap_resource(&pdev->dev, res);
++	data->reg_mpm_sscaon_config1 = devm_platform_ioremap_resource_byname(pdev,
++									     "mpm_sscaon_config1");
+ 	if (IS_ERR(data->reg_mpm_sscaon_config1))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(data->reg_mpm_sscaon_config1),
+ 				     "Failed to ioremap mpm_sscaon_config1\n");
+-- 
+2.25.1
