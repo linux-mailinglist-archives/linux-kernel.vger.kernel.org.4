@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DC16C3C2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C35B6C3C38
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjCUUto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S229906AbjCUUu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCUUtl (ORCPT
+        with ESMTP id S229666AbjCUUuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:49:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EA2BDD6;
-        Tue, 21 Mar 2023 13:49:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A48A61E22;
-        Tue, 21 Mar 2023 20:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E938DC433D2;
-        Tue, 21 Mar 2023 20:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679431780;
-        bh=2Wwfj2ffEfWI7ejpq1BZ8zSr3+KnhBGdy+rl/B7TI1Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EPgqBAS7OR+RSqF8lbVStrb3JyJDsZt/Mzt6cOlEW+lT8jRf0pka0FLWTZASzZIZ8
-         HRtDURVlmBpxTegB9ZoocN1gcjQSp21+CzqT3O1Ri9QLwFKZs4FUHkWHBumykMpp/Q
-         UzNepFpaQaz2voK9f27YCAqKxmVBlms0GUqlHdjbX4/qe/QMNwbVjPU2ZEbhXIZN7x
-         BW0C0eVO/bsOnospfulgKT1palYALQ6o2BMXRK8V1dXoetbzJnBB3hpNEvOpjlSe/Z
-         2j9FSoPw75EBRj5UC6BYzT4/icvkhEnB+agr+b65iqxUIqRIlY6LMJkRMUiUOl5o7t
-         cyFq/FUkwHR5w==
-Date:   Tue, 21 Mar 2023 13:49:38 -0700
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Jakob Koschel <jkl820.git@gmail.com>
-Cc:     Boris Pismenny <borisp@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next] net/mlx5e: avoid usage of list iterator after
- loop
-Message-ID: <ZBoYYhbE7TpIOFbf@x130>
-References: <20230301-net-mlx5e-avoid-iter-after-loop-v1-1-064c0e9b1505@gmail.com>
+        Tue, 21 Mar 2023 16:50:54 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AF0E3B8;
+        Tue, 21 Mar 2023 13:50:53 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 31so2699378qvc.1;
+        Tue, 21 Mar 2023 13:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679431853;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YqkNWWpGsCv886LAxLON5Ak8M4spZwSJ4mLLYdG8e4c=;
+        b=dQaqaYFYhOT+adxztuCKCzgHPs22u0jGKyiJnWk5XMpUlCj8vCCruML4u3X4BkIMFp
+         SMw8w+w1GLJg79ubUWuyl388xwV3gu/hX1Qsc4KmN07NcH5WZPG1muIYaRI2gzKcdFNZ
+         WXgORn7TTJaF+51B+nxgBjg2F1loph+5N/QoukJxBpn3Lyz85C2s5Cs/Y+GVQlrqwhnO
+         6Girb6u02hJsn8nPWGUBFMjt3kZangfebA6/tEJA1PLmTHJ3/EDKA+FtdpTHaUV6Fvnj
+         wLQJ3pT+ESrYpJ25TPHL6L1rz+ObcGoE0oV694DKMf8/x4gVZecf/JGrY9cnipQ4cuoa
+         9iuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679431853;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqkNWWpGsCv886LAxLON5Ak8M4spZwSJ4mLLYdG8e4c=;
+        b=e39kC0mfDz8P5HVqZGXm+zdkYYf/wUNZNbGczbqd97jUeOvh5mOheFNGcue68KGRB3
+         V9V1PUVzyEt5Ow/4IJEUanMGmjGyggpuU21wBqCg0pPtZDXIkCDl6DUbpmH7F+upr2gZ
+         EN2gHmuctNOMT4dWPd+kKO9a0NxFgppvq5VeqO8x5/wygSiC6vdnVocDHXdhVKhVBCcQ
+         LqjbyuRlHnAB4pnucli95wxNOaHTQqRDEloBdoBrT16KPT2gshrM3EcNiHpmeBK1AxVD
+         7tKBY0ZSfKbmNZLLW4zu+fXwft60jO+3UYYU4eIjj1a+nZUdkG818NFUeMxiL5omjo+b
+         XchQ==
+X-Gm-Message-State: AO0yUKWkECsscXdgGr0WrBWy5lZCTjCt6MUjUBFoNrui6eO8AT4P2Gc+
+        up9ZRv1Hcv/k0dT3WQwzaaA=
+X-Google-Smtp-Source: AK7set/y+BVW09RqrnAdKpFecwOIWZFiQTR1+oIx4AxRnQYKmzVn51M3gro7Hr1jOQg+dYXSjskVjw==
+X-Received: by 2002:a05:6214:19e1:b0:5aa:d98a:8ace with SMTP id q1-20020a05621419e100b005aad98a8acemr2207320qvc.19.1679431852888;
+        Tue, 21 Mar 2023 13:50:52 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id a4-20020ae9e804000000b007467f8b76f0sm5469353qkg.41.2023.03.21.13.50.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 13:50:52 -0700 (PDT)
+Message-ID: <3217ce9f-1069-d63a-032c-9eeed92d896e@gmail.com>
+Date:   Tue, 21 Mar 2023 13:50:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230301-net-mlx5e-avoid-iter-after-loop-v1-1-064c0e9b1505@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] net: dsa: tag_brcm: legacy: fix daisy-chained switches
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        andrew@lunn.ch, jonas.gorski@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230317120815.321871-1-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230317120815.321871-1-noltari@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13 Mar 16:26, Jakob Koschel wrote:
->If potentially no valid element is found, 'priv_rx' would contain an
->invalid pointer past the iterator loop. To ensure 'priv_rx' is always
->valid, we only set it if the correct element was found. That allows
->adding a WARN_ON() in case the code works incorrectly, exposing
->currently undetectable potential bugs.
->
->Additionally, Linus proposed to avoid any use of the list iterator
->variable after the loop, in the attempt to move the list iterator
->variable declaration into the macro to avoid any potential misuse after
->the loop [1].
->
->Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
->Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+On 3/17/23 05:08, Álvaro Fernández Rojas wrote:
+> When BCM63xx internal switches are connected to switches with a 4-byte
+> Broadcom tag, it does not identify the packet as VLAN tagged, so it adds one
+> based on its PVID (which is likely 0).
+> Right now, the packet is received by the BCM63xx internal switch and the 6-byte
+> tag is properly processed. The next step would to decode the corresponding
+> 4-byte tag. However, the internal switch adds an invalid VLAN tag after the
+> 6-byte tag and the 4-byte tag handling fails.
+> In order to fix this we need to remove the invalid VLAN tag after the 6-byte
+> tag before passing it to the 4-byte tag decoding.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-Applied to net-next-mlx5.
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Thanks.
