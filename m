@@ -2,125 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72956C385B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D81A6C385F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjCURfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S229970AbjCURfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjCURfB (ORCPT
+        with ESMTP id S230523AbjCURfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:35:01 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D855507D;
-        Tue, 21 Mar 2023 10:34:27 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id i9so14537769wrp.3;
-        Tue, 21 Mar 2023 10:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679420066;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=asmFs22xWYwR1Ql9m/IrNv+MPUNDn8hSjmwDRYvO7mE=;
-        b=Cqj2C6aG5vEOlhh9N3ybvDA0CV38nhQODnfdnr7utNddd323iDagoJty1Wmi3MAzj1
-         5ORmYT5fQvUnild7C4RhcCNTBn+MoYZ+wDZwZYelu6BKHkW11YFK949ax5B50by+ASR2
-         z+rGI3wR5fVXd4VDgmcsT6zF5x69wKyhbhqIfrhG9BVFTctfaBgDS/l+bX1C56kSqv82
-         bQkKSSAehSLGpFoCU3q62OGoZVi3jDe6HDb5M1Dp2mgHhqsW19otZpJ57DjtZ1CmtPai
-         o7T/ew6WoIYSl6whBmV36jeNaDJ3TItOBrKc4nMJBDWaCg4DNzUSe0ei5Xz7Oik5lb3p
-         y9ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420066;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=asmFs22xWYwR1Ql9m/IrNv+MPUNDn8hSjmwDRYvO7mE=;
-        b=UdI2iQNBYwRf40ivf3ROR132t95BU/p3RUzXdZLCyz6c6JWtECQ5byyGeEwoX10n5u
-         HlepoNTJxMFLYrAHGvNLDPpWPuLXMa645S1mCVZ7NyWp8W96XzSynNZPeXHuJdb464QU
-         A7UTRSW3mlvKe9OR3EcB2CfBZv0yHWR0ldbnxcxGUFw8z78PNqpOVnITtjBdfpGesJ9c
-         VJw+fiM6hCcahor4nk9LLcAryPm8xmhDLxBKaLILO8wyTUiHY8G9hsXnFCtcpetnF5wS
-         pW13beAE+odb7ZZaXZUYpWGYhCe/hLzNjbo8YpgzHwadZthxPrT5YvNIYwyrvoViLM0n
-         KDRQ==
-X-Gm-Message-State: AO0yUKW+9H/kqcAUyWeZhZJhiJjsBcYn1THmZaSDrPrk/pNuGXJXGtJd
-        NgsGZW8iSqLEv81yK+U5Os8=
-X-Google-Smtp-Source: AK7set/lzQZwCSxVaOe5dZ+7TR3xaQty/vg5xvZDpRW8TwTiPQblIbw5kJJTPLp67RySehrPIlCqSg==
-X-Received: by 2002:a5d:65c9:0:b0:2ce:ac31:54ff with SMTP id e9-20020a5d65c9000000b002ceac3154ffmr2776515wrw.2.1679420066191;
-        Tue, 21 Mar 2023 10:34:26 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056000054d00b002da1261aa44sm184775wrf.48.2023.03.21.10.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 10:34:25 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>, Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH v2 4/4] net: dsa: b53: add BCM63268 RGMII configuration
-Date:   Tue, 21 Mar 2023 18:33:59 +0100
-Message-Id: <20230321173359.251778-5-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230321173359.251778-1-noltari@gmail.com>
-References: <20230320155024.164523-1-noltari@gmail.com>
- <20230321173359.251778-1-noltari@gmail.com>
+        Tue, 21 Mar 2023 13:35:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B88532AA;
+        Tue, 21 Mar 2023 10:34:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57595B81908;
+        Tue, 21 Mar 2023 17:34:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B9EC4339C;
+        Tue, 21 Mar 2023 17:34:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679420071;
+        bh=kwmBUU9WFc//wAOTsHeeQNScNVfG/4HR6pbYmzcyOf0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=KCnyTme5s6Xgat1J1YBKgJttYPdWPVtocYSgMStUwLDt3IsVFr3hjedcLwgdyi50e
+         +MfhbbuImrDLhntQLfG9CMIriizUTj0NLG1H6/6Ue1GnfFt1QuJxrYggyXl6iSA6Bz
+         y5gVYUtq9V5bKVgYjGZGDfkelAzksK6yEul047QY3MSjVs2gKv2ymylQAyJoeTBcYW
+         2ql0vN0aeKfU+tCan8RbV1Z+vfRmd1zMPVbB8HP4eVDTSGNyTfMMrA75uY3M9b6DgK
+         2EQk0PXVhsroDpG/YC89kkh364EK2+PDdbeVsyX0SsaAQcv//9CqpmDgYSjv4Z4Zyc
+         FWxT1TEJNz4kg==
+Message-ID: <c087fa09f92838b4e1a2a3e7139b7106.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230320204042.980708-3-mmyangfl@gmail.com>
+References: <20230320204042.980708-1-mmyangfl@gmail.com> <20230320204042.980708-3-mmyangfl@gmail.com>
+Subject: Re: [PATCH v5 2/5] clk: hisilicon: Extract common functions
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     David Yang <mmyangfl@gmail.com>
+Date:   Tue, 21 Mar 2023 10:34:28 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BCM63268 requires special RGMII configuration to work.
+Quoting David Yang (2023-03-20 13:40:35)
+> To be reused with other Hi3798 series SoCs.
+>=20
+> Signed-off-by: David Yang <mmyangfl@gmail.com>
+> ---
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
----
- v2: no changes.
+Please squash this patch in
 
- drivers/net/dsa/b53/b53_common.c | 6 +++++-
- drivers/net/dsa/b53/b53_regs.h   | 1 +
- 2 files changed, 6 insertions(+), 1 deletion(-)
+---8<---
+diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/crg=
+-hi3798.c
+index 3a8d70b7c8ec..0d6886bca3ba 100644
+--- a/drivers/clk/hisilicon/crg-hi3798.c
++++ b/drivers/clk/hisilicon/crg-hi3798.c
+@@ -203,8 +203,9 @@ struct hi3798_clks {
+ 	int complex_clks_nums;
+ };
+=20
+-static struct hisi_clock_data *hi3798_clk_register(
+-		struct platform_device *pdev, const struct hi3798_clks *clks)
++static struct hisi_clock_data *
++hi3798_clk_register(struct platform_device *pdev,
++		    const struct hi3798_clks *clks)
+ {
+ 	struct hisi_clock_data *clk_data;
+ 	int ret;
+@@ -257,8 +258,8 @@ static struct hisi_clock_data *hi3798_clk_register(
+ 	return ERR_PTR(ret);
+ }
+=20
+-static void hi3798_clk_unregister(
+-		struct platform_device *pdev, const struct hi3798_clks *clks)
++static void hi3798_clk_unregister(struct platform_device *pdev,
++				  const struct hi3798_clks *clks)
+ {
+ 	struct hisi_crg_dev *crg =3D platform_get_drvdata(pdev);
+=20
+@@ -276,8 +277,9 @@ static void hi3798_clk_unregister(
+=20
+ #define HI3798_SYSCTRL_NR_CLKS 16
+=20
+-static struct hisi_clock_data *hi3798_sysctrl_clk_register(
+-		struct platform_device *pdev, const struct hi3798_clks *clks)
++static struct hisi_clock_data *
++hi3798_sysctrl_clk_register(struct platform_device *pdev,
++			    const struct hi3798_clks *clks)
+ {
+ 	struct hisi_clock_data *clk_data;
+ 	int ret;
+@@ -302,8 +304,8 @@ static struct hisi_clock_data *hi3798_sysctrl_clk_regis=
+ter(
+ 	return ERR_PTR(ret);
+ }
+=20
+-static void hi3798_sysctrl_clk_unregister(
+-		struct platform_device *pdev, const struct hi3798_clks *clks)
++static void hi3798_sysctrl_clk_unregister(struct platform_device *pdev,
++					  const struct hi3798_clks *clks)
+ {
+ 	struct hisi_crg_dev *crg =3D platform_get_drvdata(pdev);
+=20
+@@ -623,8 +625,8 @@ static const struct hi3798_clks hi3798cv200_crg_clks =
+=3D {
+ 	.phase_clks_nums =3D ARRAY_SIZE(hi3798mv100_phase_clks),
+ };
+=20
+-static struct hisi_clock_data *hi3798cv200_clk_register(
+-				struct platform_device *pdev)
++static struct hisi_clock_data *
++hi3798cv200_clk_register(struct platform_device *pdev)
+ {
+ 	return hi3798_clk_register(pdev, &hi3798cv200_crg_clks);
+ }
+@@ -653,8 +655,8 @@ static const struct hi3798_clks hi3798cv200_sysctrl_clk=
+s =3D {
+ 	.gate_clks_nums =3D ARRAY_SIZE(hi3798cv200_sysctrl_gate_clks),
+ };
+=20
+-static struct hisi_clock_data *hi3798cv200_sysctrl_clk_register(
+-					struct platform_device *pdev)
++static struct hisi_clock_data *
++hi3798cv200_sysctrl_clk_register(struct platform_device *pdev)
+ {
+ 	return hi3798_sysctrl_clk_register(pdev, &hi3798cv200_sysctrl_clks);
+ }
 
-diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
-index 97327d7a6760..1f9b251a5452 100644
---- a/drivers/net/dsa/b53/b53_common.c
-+++ b/drivers/net/dsa/b53/b53_common.c
-@@ -1240,8 +1240,12 @@ static void b53_adjust_63xx_rgmii(struct dsa_switch *ds, int port,
- 		break;
- 	}
- 
--	if (port != dev->imp_port)
-+	if (port != dev->imp_port) {
-+		if (is63268(dev))
-+			rgmii_ctrl |= RGMII_CTRL_MII_OVERRIDE;
-+
- 		rgmii_ctrl |= RGMII_CTRL_ENABLE_GMII;
-+	}
- 
- 	b53_write8(dev, B53_CTRL_PAGE, off, rgmii_ctrl);
- 
-diff --git a/drivers/net/dsa/b53/b53_regs.h b/drivers/net/dsa/b53/b53_regs.h
-index b2c539a42154..bfbcb66bef66 100644
---- a/drivers/net/dsa/b53/b53_regs.h
-+++ b/drivers/net/dsa/b53/b53_regs.h
-@@ -138,6 +138,7 @@
- 
- #define B53_RGMII_CTRL_IMP		0x60
- #define   RGMII_CTRL_ENABLE_GMII	BIT(7)
-+#define   RGMII_CTRL_MII_OVERRIDE	BIT(6)
- #define   RGMII_CTRL_TIMING_SEL		BIT(2)
- #define   RGMII_CTRL_DLL_RXC		BIT(1)
- #define   RGMII_CTRL_DLL_TXC		BIT(0)
--- 
-2.30.2
 
+
+> diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/c=
+rg-hi3798.c
+> index 7e9507de2..2f8f14e73 100644
+> --- a/drivers/clk/hisilicon/crg-hi3798.c
+> +++ b/drivers/clk/hisilicon/crg-hi3798.c
+> @@ -59,6 +59,119 @@ static const struct hisi_fixed_rate_clock hi3798_fixe=
+d_rate_clks[] =3D {
+>         { HI3798_FIXED_250M, "250m", NULL, 0, 250000000, },
+>  };
+> =20
+> +struct hi3798_clks {
+> +       const struct hisi_gate_clock *gate_clks;
+> +       int gate_clks_nums;
+> +       const struct hisi_mux_clock *mux_clks;
+> +       int mux_clks_nums;
+> +       const struct hisi_phase_clock *phase_clks;
+> +       int phase_clks_nums;
+> +};
+> +
+> +static struct hisi_clock_data *hi3798_clk_register(
+> +               struct platform_device *pdev, const struct hi3798_clks *c=
+lks)
+> +{
+> +       struct hisi_clock_data *clk_data;
+> +       int ret;
+> +
+> +       clk_data =3D hisi_clk_alloc(pdev, HI3798_CRG_NR_CLKS);
+> +       if (!clk_data)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       /* hisi_phase_clock is resource managed */
+> +       ret =3D hisi_clk_register_phase(&pdev->dev, clks->phase_clks,
+> +                                     clks->phase_clks_nums, clk_data);
+> +       if (ret)
+> +               return ERR_PTR(ret);
+> +
+> +       ret =3D hisi_clk_register_fixed_rate(hi3798_fixed_rate_clks,
+> +                                          ARRAY_SIZE(hi3798_fixed_rate_c=
+lks),
+> +                                          clk_data);
+> +       if (ret)
+> +               return ERR_PTR(ret);
+> +
+> +       ret =3D hisi_clk_register_mux(clks->mux_clks, clks->mux_clks_nums=
+, clk_data);
+> +       if (ret)
+> +               goto unregister_fixed_rate;
+> +
+> +       ret =3D hisi_clk_register_gate(clks->gate_clks, clks->gate_clks_n=
+ums, clk_data);
+
+Please make a follow-up patch that passes the pdev->dev pointer to these
+registration functions so they can use devm APIs.
+
+> +       if (ret)
+> +               goto unregister_mux;
+> +
+> +       ret =3D of_clk_add_provider(pdev->dev.of_node,
+
+Please make a follow-up patch that migrates this to
+devm_of_clk_add_hw_provider.
+
+> +                       of_clk_src_onecell_get, &clk_data->clk_data);
+> +       if (ret)
+> +               goto unregister_gate;
+> +
