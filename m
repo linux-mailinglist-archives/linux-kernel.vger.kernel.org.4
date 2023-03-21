@@ -2,115 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9EF6C2C00
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787F26C2E77
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjCUIKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        id S229913AbjCUKOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjCUIJd (ORCPT
+        with ESMTP id S229662AbjCUKOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:09:33 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6064A1BAD7;
-        Tue, 21 Mar 2023 01:09:29 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pgkln3yQVz4f3pCM;
-        Tue, 21 Mar 2023 16:09:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgDnnbEzZhlk+NQhFw--.4478S10;
-        Tue, 21 Mar 2023 16:09:27 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ojaswin@linux.ibm.com, shikemeng@huaweicloud.com
-Subject: [PATCH 8/8] ext4: try all groups in ext4_mb_new_blocks_simple
-Date:   Wed, 22 Mar 2023 00:12:20 +0800
-Message-Id: <20230321161220.418652-9-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230321161220.418652-1-shikemeng@huaweicloud.com>
-References: <20230321161220.418652-1-shikemeng@huaweicloud.com>
+        Tue, 21 Mar 2023 06:14:36 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBEE37B6E;
+        Tue, 21 Mar 2023 03:14:33 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32L7RnWJ018738;
+        Tue, 21 Mar 2023 10:00:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=2dv+4RM71KuzbfohiEivfM/kPLjSREHD07ie47ASFQw=;
+ b=zn6CkRMJtoBt61tT3BGCWhezzDiZn2PFiQBxFhjYBuY2kESApWy0dUZQ6g48pRbbhbxL
+ t7edCewO9Bcanb5IQqlIlvTsh4F4g8X+RMfNa4HIIPPvJovryVBFgq89C1VWqZ3oBpdh
+ yw3/in2V7RMPftaY8I9jdyyREmsVSEYNCVCq0lxTSiFRhGmUIu0ioAtVD4lwzEb3cNQ7
+ g21PH9NUuEhtu/1nYPLULm6Y1DAuwWjBkx6MIFeZSoQP0YzUD1gzQ2sZx96vMGCXgcoF
+ of7ZcohCyV9iKGhFUMfiKzRYeUheyTMMaVFE3KfPx9u7yuurKN2UCg/whW/06XAUjMRA JA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pf875rnsj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 10:00:06 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 37DA510002A;
+        Tue, 21 Mar 2023 10:00:05 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2960620FA43;
+        Tue, 21 Mar 2023 10:00:05 +0100 (CET)
+Received: from [10.252.5.41] (10.252.5.41) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 21 Mar
+ 2023 10:00:03 +0100
+Message-ID: <e3644e19-7453-440b-00dc-781104ca83cf@foss.st.com>
+Date:   Tue, 21 Mar 2023 10:00:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDnnbEzZhlk+NQhFw--.4478S10
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur13Kry7uF1DAFyDurWrAFb_yoW8Ar48pr
-        sxCF18Kr1fWFnF9anFg34Sq3WxJw1I9F4UWryfC34rGrZrXryfJFsrKF1Yya1jyFZ3X3ZI
-        vr4Yvry3Aa1jgaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0
-        rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6x
-        IIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xv
-        wVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFc
-        xC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_
-        Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2
-        IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-        W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRKfOw
-        UUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/5] remoteproc: stm32: Call of_node_put() on iteration
+ error
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <andersson@kernel.org>
+CC:     <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <patrice.chotard@foss.st.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <arnaud.pouliquen@st.com>,
+        <hongxing.zhu@nxp.com>, <peng.fan@nxp.com>,
+        <shengjiu.wang@nxp.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230320221826.2728078-1-mathieu.poirier@linaro.org>
+ <20230320221826.2728078-2-mathieu.poirier@linaro.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <20230320221826.2728078-2-mathieu.poirier@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.5.41]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_06,2023-03-20_02,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ext4_mb_new_blocks_simple ignores the group before goal, so it will fail
-if free blocks reside in group before goal. Try all groups to avoid
-unexpected failure.
-Search finishes either if any free block is found or if no available
-blocks are found. Simpliy check "i >= max" to distinguish the above
-cases.
+Hi Mathieu,
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-Suggested-by: Theodore Ts'o <tytso@mit.edu>
----
- fs/ext4/mballoc.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+On 3/20/23 23:18, Mathieu Poirier wrote:
+> Function of_phandle_iterator_next() calls of_node_put() on the last
+> device_node it iterated over, but when the loop exits prematurely it has
+> to be called explicitly> 
+> Fixes: 13140de09cc2 ("remoteproc: stm32: add an ST stm32_rproc driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/stm32_rproc.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+> index 7d782ed9e589..23c1690b8d73 100644
+> --- a/drivers/remoteproc/stm32_rproc.c
+> +++ b/drivers/remoteproc/stm32_rproc.c
+> @@ -223,11 +223,13 @@ static int stm32_rproc_prepare(struct rproc *rproc)
+>  	while (of_phandle_iterator_next(&it) == 0) {
+>  		rmem = of_reserved_mem_lookup(it.node);
+>  		if (!rmem) {
+> +			of_node_put(it.node);
+>  			dev_err(dev, "unable to acquire memory-region\n");
+>  			return -EINVAL;
+>  		}
+>  
+>  		if (stm32_rproc_pa_to_da(rproc, rmem->base, &da) < 0) {
+> +			of_node_put(it.node);
+>  			dev_err(dev, "memory region not valid %pa\n",
+>  				&rmem->base);
+>  			return -EINVAL;
+> @@ -254,8 +256,10 @@ static int stm32_rproc_prepare(struct rproc *rproc)
+>  							   it.node->name);
+>  		}
+>  
+> -		if (!mem)
+> +		if (!mem) {
+> +			of_node_put(it.node);
+>  			return -ENOMEM;
+> +		}
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 5b837918c624..ee564e700278 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -5796,7 +5796,7 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
- 	struct buffer_head *bitmap_bh;
- 	struct super_block *sb = ar->inode->i_sb;
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
--	ext4_group_t group;
-+	ext4_group_t group, nr;
- 	ext4_grpblk_t blkoff;
- 	ext4_grpblk_t max = EXT4_CLUSTERS_PER_GROUP(sb);
- 	ext4_grpblk_t i = 0;
-@@ -5810,7 +5810,7 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
- 
- 	ar->len = 0;
- 	ext4_get_group_no_and_offset(sb, goal, &group, &blkoff);
--	for (; group < ext4_get_groups_count(sb); group++) {
-+	for (nr = ext4_get_groups_count(sb); nr > 0; nr--) {
- 		bitmap_bh = ext4_read_block_bitmap(sb, group);
- 		if (IS_ERR(bitmap_bh)) {
- 			*errp = PTR_ERR(bitmap_bh);
-@@ -5834,10 +5834,13 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
- 		if (i < max)
- 			break;
- 
-+		if (++group >= ext4_get_groups_count(sb))
-+			group = 0;
-+
- 		blkoff = 0;
- 	}
- 
--	if (group >= ext4_get_groups_count(sb) || i >= max) {
-+	if (i >= max) {
- 		*errp = -ENOSPC;
- 		return 0;
- 	}
--- 
-2.30.0
+Good catch!
 
+Looking in code I don't see that we call of_node_put() when we release the
+carveouts. 
+Please tell me if I'm wrong but look to me that we should also call of_node_put()
+in mem->release() op, in drivers. 
+
+This one remains valid.
+reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+
+Thanks,
+Arnaud
+
+
+>  
+>  		rproc_add_carveout(rproc, mem);
+>  		index++;
