@@ -2,224 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA4D6C2A18
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CA96C2A1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjCUF4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S230001AbjCUF6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUF4S (ORCPT
+        with ESMTP id S229579AbjCUF6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:56:18 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2250399EF
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:56:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679378177; x=1710914177;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lF7KE/G6juZgb1twq42PZFWg2ojJe/LZVkHQna+m3eQ=;
-  b=n7EzFWKEA+SPo+FC4KbNEqLNOv7RaSFKJInsgspJGCVyKMDbiO8Vsbq1
-   CbLnodqB3dqdjIK4zUVk9FkSQEgglzMVEjqS8tt+5H8YNO3P719+07Zav
-   XpVKrXIR09ArDyIXC7MZUHKxaweEhjV4HQ2P4BJLiGTegLAsfgR6BckGW
-   Nu9CfILByelpy7aawABaXJdzr8VAZD5YGHpKH6EDsi3U5+SUlGGAdjx5l
-   qBwQj5lwD+ZchrFJ//cdfRtT0c6cVclnu2d4+puFNAjvfNOJKslKgrWvk
-   WrHy2MwPXixY/i64mY0ZBytvbTvYu0zx4gh6KiFTidbnr5mV0f97CBf9/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="327230526"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="327230526"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:56:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855559720"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="855559720"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 22:56:16 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peUyl-000BeQ-15;
-        Tue, 21 Mar 2023 05:56:15 +0000
-Date:   Tue, 21 Mar 2023 13:55:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/shstk] BUILD SUCCESS
- b642e9e5f0dc797f543b431d4ba910a3da72a074
-Message-ID: <641946e3.limZxbP77jq7awPD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 21 Mar 2023 01:58:36 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B1719C7B;
+        Mon, 20 Mar 2023 22:58:34 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso19127452pjb.0;
+        Mon, 20 Mar 2023 22:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679378314;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IYxpXAP3Qj4XTQVGxwubY62608RIpaMdDRQuTEZG/7I=;
+        b=C3bCMTMJtg07k0iGiCNW8mWUJq6oNQ2v7wb2CB1ifFJWuqJW52nmku229LbCM1n0jv
+         S4zV5lc4HyFwbYMBXs7t5Sy3hR9KCqpPQ/rLcrt/mm3Hxmyzazreyz/BuO+NdauAe4KU
+         EhRGJQOhqf1rm6aoR52Q2xHeDQt4X38DieGzSjxK4PWzo1RkDpyN83dzfjfbDV0wDgr+
+         vimX932KglU5qNs+eonV13JbsUZi4U2ndlEiWSwDpnfCdByJ5ZDB6gNzEncdSikqBxRW
+         OOsaWPSQN3HnseL1Ox/1NJfLbUJ6DXnCfEoqLPvMHzO+l+ekS6ISm3mkftAt3UPNBxyu
+         0lSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679378314;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IYxpXAP3Qj4XTQVGxwubY62608RIpaMdDRQuTEZG/7I=;
+        b=ztRV8FnoZR1VN3IXNnDLi3BVd5udbIL+RnnyqW2A2tAINJ/VNRMi2ay1sRGbFSM+xs
+         Y0vOCPTw+jX5mJzjpFmoewyqgvWab+s2mfzWOZpBx9odivnJGky5vYJyqVu+9+NyCmNG
+         uDpe+YIbrmZrMM1+CXS7k8Huy0BTtrYaWtHIsTToXt9KWtwiT7w3qoqslz228VuvSJx2
+         RqIQNAjmERTNkvLopvA4ZsDgqErhsIsL6m3l3KDR2uTOtjSmUeAKztU+lxHQqrXGAp+z
+         n5ujfYsachMH2baIh/r96Ed7CEt05K7DLIyNRtvWBdBBvcv7JMesT/q66R5iKMj3spsB
+         6YBA==
+X-Gm-Message-State: AO0yUKXwMjhnRq6wHXi6IaCyvhhFTEsnNf9JmQBA819L4E/XFW64Fbl1
+        GemGpJ92vV7BEefsM5zvN5xH4PxuO6t7G9NMeGc=
+X-Google-Smtp-Source: AK7set8oqkKf73lv4AMrasm0StsbRGWWZNbidFz7IWqXOj+c/WxbF2TB2OBckkwG3lXcXxqXTVJ+yg==
+X-Received: by 2002:a05:6a20:8b1d:b0:cc:f47b:9a with SMTP id l29-20020a056a208b1d00b000ccf47b009amr1173232pzh.1.1679378313665;
+        Mon, 20 Mar 2023 22:58:33 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.245.205])
+        by smtp.gmail.com with ESMTPSA id j13-20020aa78dcd000000b0062809b2cb05sm1745467pfr.155.2023.03.20.22.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 22:58:33 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+Cc:     David Yang <mmyangfl@gmail.com>, Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: [PATCH] crypto: hisilicon/trng - add support for HiSTB TRNG
+Date:   Tue, 21 Mar 2023 13:58:20 +0800
+Message-Id: <20230321055822.1611239-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/shstk
-branch HEAD: b642e9e5f0dc797f543b431d4ba910a3da72a074  x86/shstk: Add ARCH_SHSTK_STATUS
+HiSTB TRNG are found on some HiSilicon STB SoCs.
 
-elapsed time: 722m
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+ drivers/crypto/hisilicon/Kconfig         |   7 ++
+ drivers/crypto/hisilicon/Makefile        |   2 +-
+ drivers/crypto/hisilicon/trng/Makefile   |   3 +
+ drivers/crypto/hisilicon/trng/trng-stb.c | 128 +++++++++++++++++++++++
+ 4 files changed, 139 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/crypto/hisilicon/trng/trng-stb.c
 
-configs tested: 143
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r021-20230319   gcc  
-alpha                randconfig-r031-20230319   gcc  
-alpha                randconfig-r033-20230319   gcc  
-alpha                randconfig-r036-20230319   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r013-20230320   gcc  
-arc                  randconfig-r025-20230319   gcc  
-arc                  randconfig-r043-20230319   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r024-20230319   gcc  
-arm                  randconfig-r046-20230319   gcc  
-arm                  randconfig-r046-20230320   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r012-20230319   clang
-arm64                randconfig-r014-20230319   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r014-20230319   gcc  
-csky                 randconfig-r035-20230319   gcc  
-hexagon              randconfig-r012-20230320   clang
-hexagon              randconfig-r022-20230319   clang
-hexagon              randconfig-r041-20230319   clang
-hexagon              randconfig-r041-20230320   clang
-hexagon              randconfig-r045-20230319   clang
-hexagon              randconfig-r045-20230320   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230320   clang
-i386                 randconfig-a002-20230320   clang
-i386                          randconfig-a002   clang
-i386                 randconfig-a003-20230320   clang
-i386                 randconfig-a004-20230320   clang
-i386                          randconfig-a004   clang
-i386                 randconfig-a005-20230320   clang
-i386                 randconfig-a006-20230320   clang
-i386                          randconfig-a006   clang
-i386                 randconfig-a011-20230320   gcc  
-i386                 randconfig-a012-20230320   gcc  
-i386                          randconfig-a012   gcc  
-i386                 randconfig-a013-20230320   gcc  
-i386                 randconfig-a014-20230320   gcc  
-i386                          randconfig-a014   gcc  
-i386                 randconfig-a015-20230320   gcc  
-i386                 randconfig-a016-20230320   gcc  
-i386                          randconfig-a016   gcc  
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r036-20230319   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230319   gcc  
-loongarch            randconfig-r022-20230319   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r031-20230319   gcc  
-microblaze           randconfig-r034-20230319   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r026-20230319   gcc  
-mips                           xway_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r016-20230320   gcc  
-nios2                randconfig-r034-20230319   gcc  
-openrisc             randconfig-r011-20230319   gcc  
-openrisc             randconfig-r021-20230319   gcc  
-openrisc             randconfig-r024-20230319   gcc  
-openrisc             randconfig-r025-20230319   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r014-20230320   gcc  
-parisc               randconfig-r022-20230319   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc              randconfig-r021-20230319   clang
-powerpc              randconfig-r033-20230319   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230319   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r023-20230319   clang
-s390                 randconfig-r044-20230319   clang
-sh                               allmodconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
-sh                   randconfig-r011-20230320   gcc  
-sh                   randconfig-r016-20230319   gcc  
-sh                   randconfig-r032-20230319   gcc  
-sh                             sh03_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r012-20230319   gcc  
-sparc                randconfig-r015-20230319   gcc  
-sparc                randconfig-r032-20230319   gcc  
-sparc                randconfig-r035-20230319   gcc  
-sparc64              randconfig-r011-20230319   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230320   clang
-x86_64                        randconfig-a001   clang
-x86_64               randconfig-a002-20230320   clang
-x86_64                        randconfig-a002   gcc  
-x86_64               randconfig-a003-20230320   clang
-x86_64                        randconfig-a003   clang
-x86_64               randconfig-a004-20230320   clang
-x86_64                        randconfig-a004   gcc  
-x86_64               randconfig-a005-20230320   clang
-x86_64                        randconfig-a005   clang
-x86_64               randconfig-a006-20230320   clang
-x86_64                        randconfig-a006   gcc  
-x86_64               randconfig-a011-20230320   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64               randconfig-a012-20230320   gcc  
-x86_64                        randconfig-a012   clang
-x86_64               randconfig-a013-20230320   gcc  
-x86_64                        randconfig-a013   gcc  
-x86_64               randconfig-a014-20230320   gcc  
-x86_64                        randconfig-a014   clang
-x86_64               randconfig-a015-20230320   gcc  
-x86_64                        randconfig-a015   gcc  
-x86_64               randconfig-a016-20230320   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r013-20230319   gcc  
-xtensa               randconfig-r015-20230319   gcc  
-xtensa               randconfig-r023-20230319   gcc  
-xtensa               randconfig-r026-20230319   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
-
+diff --git a/drivers/crypto/hisilicon/Kconfig b/drivers/crypto/hisilicon/Kconfig
+index 4137a8bf1..e8690c223 100644
+--- a/drivers/crypto/hisilicon/Kconfig
++++ b/drivers/crypto/hisilicon/Kconfig
+@@ -82,3 +82,10 @@ config CRYPTO_DEV_HISI_TRNG
+ 	select CRYPTO_RNG
+ 	help
+ 	  Support for HiSilicon TRNG Driver.
++
++config CRYPTO_DEV_HISTB_TRNG
++	tristate "Support for HiSTB TRNG Driver"
++	depends on ARCH_HISI || COMPILE_TEST
++	select HW_RANDOM
++	help
++	  Support for HiSTB TRNG Driver.
+diff --git a/drivers/crypto/hisilicon/Makefile b/drivers/crypto/hisilicon/Makefile
+index 8595a5a5d..fc51e0ede 100644
+--- a/drivers/crypto/hisilicon/Makefile
++++ b/drivers/crypto/hisilicon/Makefile
+@@ -5,4 +5,4 @@ obj-$(CONFIG_CRYPTO_DEV_HISI_SEC2) += sec2/
+ obj-$(CONFIG_CRYPTO_DEV_HISI_QM) += hisi_qm.o
+ hisi_qm-objs = qm.o sgl.o debugfs.o
+ obj-$(CONFIG_CRYPTO_DEV_HISI_ZIP) += zip/
+-obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += trng/
++obj-y += trng/
+diff --git a/drivers/crypto/hisilicon/trng/Makefile b/drivers/crypto/hisilicon/trng/Makefile
+index d909079f3..cf20b057c 100644
+--- a/drivers/crypto/hisilicon/trng/Makefile
++++ b/drivers/crypto/hisilicon/trng/Makefile
+@@ -1,2 +1,5 @@
+ obj-$(CONFIG_CRYPTO_DEV_HISI_TRNG) += hisi-trng-v2.o
+ hisi-trng-v2-objs = trng.o
++
++obj-$(CONFIG_CRYPTO_DEV_HISTB_TRNG) += histb-trng.o
++histb-trng-objs += trng-stb.o
+diff --git a/drivers/crypto/hisilicon/trng/trng-stb.c b/drivers/crypto/hisilicon/trng/trng-stb.c
+new file mode 100644
+index 000000000..e083f7b4c
+--- /dev/null
++++ b/drivers/crypto/hisilicon/trng/trng-stb.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device driver for True RNG in HiSTB SoCs
++ *
++ * Copyright (c) 2023 David Yang
++ */
++
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/hw_random.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++
++#define HISTB_TRNG_CTRL		0x0
++#define HISTB_TRNG_NUMBER	0x4
++#define HISTB_TRNG_STAT		0x8
++
++#define SLEEP_US		10
++#define TIMEOUT_US		10000
++
++static int histb_trng_wait(struct hwrng *rng)
++{
++	void __iomem *base = (void __iomem *) rng->priv;
++	u32 val;
++
++	return readl_relaxed_poll_timeout(base + HISTB_TRNG_STAT,
++					  val, val & 0x7, SLEEP_US, TIMEOUT_US);
++}
++
++static int histb_trng_init(struct hwrng *rng)
++{
++	void __iomem *base = (void __iomem *) rng->priv;
++	u32 val;
++
++	val = readl_relaxed(base + HISTB_TRNG_CTRL);
++
++	/* select rng source 2 */
++	val &= ~0x3;
++	val |= 2;
++	/* post_process_depth */
++	val &= ~(0xf << 8);
++	val |= 9 << 8;
++
++	val |= BIT(7);  /* post_process_enable */
++	val |= BIT(5);  /* drop_enable */
++
++	writel_relaxed(val, base + HISTB_TRNG_CTRL);
++
++	/* is device up? */
++	if (histb_trng_wait(rng)) {
++		pr_err("failed to init rng device\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int histb_trng_read(struct hwrng *rng, void *data, size_t max, bool wait)
++{
++	void __iomem *base = (void __iomem *) rng->priv;
++	size_t i;
++	int ret;
++
++	for (i = 0; i < max; i += sizeof(u32)) {
++		ret = histb_trng_wait(rng);
++		if (ret) {
++			pr_err("failed to generate random number, generated %d\n", i);
++			return i ? i : ret;
++		}
++
++		*((u32 *) data + i) = readl_relaxed(base + HISTB_TRNG_NUMBER);
++	}
++
++	return i;
++}
++
++static int histb_trng_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct hwrng *rng;
++	struct resource *res;
++	int ret;
++
++	rng = devm_kzalloc(dev, sizeof(*rng), GFP_KERNEL);
++	if (!rng)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -ENODEV;
++
++	rng->priv = (unsigned long) devm_ioremap(dev, res->start, resource_size(res));
++	if (!rng->priv)
++		return -ENOMEM;
++
++	rng->name = KBUILD_MODNAME;
++	rng->init = histb_trng_init;
++	rng->read = histb_trng_read;
++
++	ret = devm_hwrng_register(dev, rng);
++	if (ret) {
++		dev_err(dev, "failed to register %s (%d)\n", rng->name, ret);
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, rng);
++	return 0;
++}
++
++static const struct of_device_id histb_trng_of_match[] = {
++	{ .compatible = "hisilicon,histb-trng", },
++	{ }
++};
++
++static struct platform_driver histb_trng_driver = {
++	.probe = histb_trng_probe,
++	.driver = {
++		.name = "histb-trng",
++		.of_match_table = of_match_ptr(histb_trng_of_match),
++	},
++};
++
++module_platform_driver(histb_trng_driver);
++
++MODULE_DESCRIPTION("HiSTB True RNG");
++MODULE_LICENSE("Dual MIT/GPL");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
