@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220136C3863
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D145C6C3866
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCURh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S229970AbjCURi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjCURhw (ORCPT
+        with ESMTP id S229677AbjCURiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:37:52 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F41612CC0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:03 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ek18so62801927edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:03 -0700 (PDT)
+        Tue, 21 Mar 2023 13:38:24 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9200532B6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:38 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id o12so62781688edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679420165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hy3AwSsMA87i05lUHsoXtMd3VNig+4S9hQg//IlQ/pQ=;
-        b=V2SnLsA77wc1oHbJd58PdEVJ3CAjhGtFKXMJ6zNcmwe05R8KdVUM0oBJhUOR90Jvuh
-         k0+wAKe638/okzulT4+xAIbRBKPbGHxGu5O5ietgeyWou4Tmg7tRwb0igf1JzMycY+Qn
-         0DaRf08N6aUwbw5IW/Z0RuoRJYFGsPr6vRKpk=
+        d=linaro.org; s=google; t=1679420247;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NSFN+vcAKBFw9CRrOYxwC+q3dw6MZ4zFCC9rNy3oZWA=;
+        b=mB4V1KsAyRBedrHItqtzDgzZDsCtyU5w9IhYM+dAykklkQa0yAz+MMLvf94MYlP2g+
+         h1AtfqvglvgRcnv4NrxkHxQ7rUqoHxCi1bTM4F8yXSdmeLmWUsvajReSsHHoAIYUhhcZ
+         o7DERoqWNC7h2iO5IUORsDN9G8O0tH5g9NxLvMyL9Boej8KVKlP0orYNimYxHBtgLZkh
+         Rm21t5ti8Ii49KzGtrGjclCKLDRz0++odTj0tgOtqwlwq5/dhtXzqM9nJIEuWHQfJVFJ
+         P9MCWKSh0O4LyUBfE66V5awrIBFLQtCq5tJUnkVW8U/TGWvjkXlibG36M+EirAmjJa52
+         KEfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hy3AwSsMA87i05lUHsoXtMd3VNig+4S9hQg//IlQ/pQ=;
-        b=oEfOjWl1uk0QOZgqUhcvWgNASdmQ/LtR7j+k1YMQPuSPr9R1F1H1jL3y4wuPsCxQ67
-         46Pov+5Or6CXRSaageMabKNW2XuXP05PJ92VzlrL6P5iRYmrbwPIkfPl5qLKTB/9iVCD
-         DQ39+2xhIhzTs58Gyf+CUdBRH0I6Fk2OEzQ8L1jQvOEMrMew3NocjVt22UyLo5O9V8gU
-         A0uBq3IOCkLX8uiR5iiufYJ5PW4itt4t697k18hMqrSTCvh8zTDLDFKdLOBY94+C3vY9
-         QlRBLEnyMi7uneRHoRsEkBhX/LP1JZl7MSibPQ2vmB0HMtOJa2IxDR0GztEib71PMHrx
-         KAWw==
-X-Gm-Message-State: AO0yUKVohDrXq3wF09uznqs63pG7N34ogllO9Otoo7Rd0oqxWwZW1j7A
-        ENjRNQNQjdaO6BX3YtD81rcfuRk26B7UQvZxN+jfuA==
-X-Google-Smtp-Source: AK7set8Bjfz/6/EiRVm089wZPh5o1jEuN7xovPHigYNoxho9nKHWbSmPk+u7BuGjoDy9uKuPKE9+HA==
-X-Received: by 2002:a17:906:6dcd:b0:931:636e:de5a with SMTP id j13-20020a1709066dcd00b00931636ede5amr3814396ejt.31.1679420165130;
-        Tue, 21 Mar 2023 10:36:05 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id a21-20020a170906191500b009339e2e36e4sm3518381eje.81.2023.03.21.10.36.04
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1679420247;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NSFN+vcAKBFw9CRrOYxwC+q3dw6MZ4zFCC9rNy3oZWA=;
+        b=mm8t51xiPurmnQmnkTBgAztYvYRt8G6+EVdA5qVHfM9t1XQHrJeMxQnV8aKBG6TXDj
+         8V294IXV1ehG3aA39fkOq+13keHsLvRS4SeH2/ZOXOO66fJRNf5lPth1vpXLelHvntPw
+         dEaKoPOXNd7LmiKucH0KHBWqVyqGCHt5c8NUWz/YDDV4GwreQ9CdX2k3Qij4iTraw+Ba
+         1cwk2ueAY1RYZq7sLXJRXBAxjYysXQ45ksKBP7c5UcJYjxQgL9+4WsN8MhxlqDsaDh/t
+         cQ/GRynOSRgxCqcb9IKmlTKdvweYx3NV4qN/SHbISpjXQqvzNWCd919fzOSy2eL+xcqz
+         8yMQ==
+X-Gm-Message-State: AO0yUKUVJbIn+vQ4amew3aH0E86EBxHRfYhiQLar1r/1mTtVW3nCaO+m
+        lz4UOM6UGJtaQqmqek9l9MuB4g==
+X-Google-Smtp-Source: AK7set8Uy9OaFw50NEy/nbItPw+/m/3jWKl13WeHGIOpVaMRPYTcSXDoBlgcKw3lU2R9ULIJw5BTTQ==
+X-Received: by 2002:a17:907:a074:b0:923:c199:dab1 with SMTP id ia20-20020a170907a07400b00923c199dab1mr3530925ejc.55.1679420247526;
+        Tue, 21 Mar 2023 10:37:27 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id w29-20020a50d79d000000b004bf5981ef3dsm6216731edi.94.2023.03.21.10.37.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:36:04 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id y4so62861526edo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:36:04 -0700 (PDT)
-X-Received: by 2002:a50:c343:0:b0:4fa:cef4:a27f with SMTP id
- q3-20020a50c343000000b004facef4a27fmr2107141edb.2.1679420164105; Tue, 21 Mar
- 2023 10:36:04 -0700 (PDT)
+        Tue, 21 Mar 2023 10:37:27 -0700 (PDT)
+Message-ID: <611ea918-64a6-f306-b5ec-db55e41abda2@linaro.org>
+Date:   Tue, 21 Mar 2023 18:37:25 +0100
 MIME-Version: 1.0
-References: <20230320071442.172228-1-pedro.falcato@gmail.com>
- <20230320115153.7n5cq4wl2hmcbndf@wittgenstein> <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
- <CAKbZUD2Y2F=3+jf+0dRvenNKk=SsYPxKwLuPty_5-ppBPsoUeQ@mail.gmail.com>
- <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
- <20230321142413.6mlowi5u6ewecodx@wittgenstein> <20230321161736.njmtnkvjf5rf7x5p@wittgenstein>
-In-Reply-To: <20230321161736.njmtnkvjf5rf7x5p@wittgenstein>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 21 Mar 2023 10:35:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi2mLKn6U7_aXMtP46TVSY6MTHv+ff-+xVFJbO914o65A@mail.gmail.com>
-Message-ID: <CAHk-=wi2mLKn6U7_aXMtP46TVSY6MTHv+ff-+xVFJbO914o65A@mail.gmail.com>
-Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V1 3/4] soc: qcom: boot_stat: Add Driver Support for Boot
+ Stats
+Content-Language: en-US
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
+ <3f385562845ae26d519940ca8098fde89282991b.1679403696.git.quic_schowdhu@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3f385562845ae26d519940ca8098fde89282991b.1679403696.git.quic_schowdhu@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,70 +84,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 9:17=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
->  #define WILL_CREATE(flags)     (flags & (O_CREAT | __O_TMPFILE))
-> +#define INVALID_CREATE(flags) \
-> +       ((flags & (O_DIRECTORY | O_CREAT)) =3D=3D (O_DIRECTORY | O_CREAT)=
-)
->  #define O_PATH_FLAGS           (O_DIRECTORY | O_NOFOLLOW | O_PATH | O_CL=
-OEXEC)
->
->  inline struct open_how build_open_how(int flags, umode_t mode)
-> @@ -1207,6 +1209,10 @@ inline int build_open_flags(const struct open_how =
-*how, struct open_flags *op)
->                 if (!(acc_mode & MAY_WRITE))
->                         return -EINVAL;
->         }
+On 21/03/2023 14:51, Souradeep Chowdhury wrote:
+> All of Qualcomm's proprietary Android boot-loaders capture boot time
+> stats, like the time when the bootloader started execution and at what
+> point the bootloader handed over control to the kernel etc. in the IMEM
+> region. This information is captured in a specific format by this driver
+> by mapping a structure to the IMEM memory region and then accessing the
+> members of the structure to print the information. This information is
+> useful in verifying if the existing boot KPIs have regre
+
+
+> +/**
+> + *  struct boot_stats - timestamp information related to boot stats
+> + *  @bootloader_start:	Time for the starting point of the abl bootloader
+> + *  @bootloader_end:	Time when the kernel starts loading from abl bootloader
+> + */
+> +struct boot_stats {
+> +	u32 bootloader_start;
+> +	u32 bootloader_end;
+> +} __packed;
 > +
-> +       if (INVALID_CREATE(flags))
-> +               return -EINVAL;
+> +static struct boot_stats __iomem *boot_stats;
+> +static void __iomem *mpm_counter_base;
+> +static u32 mpm_counter_freq;
+
+No file-scope variables. Does not scale, not easy for review and
+maintenance. Avoid such code.
+
 > +
->         if (flags & O_PATH) {
->                 /* O_PATH only permits certain other flags to be set. */
->                 if (flags & ~O_PATH_FLAGS)
+> +static int mpm_parse_dt(void)
+> +{
+> +	struct device_node *np_imem, *np_mpm2;
+> +
+> +	np_imem = of_find_compatible_node(NULL, NULL,
+> +					  "qcom,imem-boot_stats");
+> +	if (!np_imem) {
+> +		pr_err("can't find qcom,imem node\n");
 
-So the patch looks simple enough, but
+So you are printing errors everywhere, on every soc and with compile
+test on every platform there is in the world... sorry, it does not work
+like that.
 
- (a) I'm not entirely sure I like the extra indirection through
-another #define. This impenetrable thicket of different macros makes
-it a bit hard to see what is going on. I'm not blaming you for it, it
-predates this patch, but..
+> +		return -ENODEV;
+> +	}
+> +	boot_stats = of_iomap(np_imem, 0);
+> +	if (!boot_stats) {
+> +		pr_err("boot_stats: Can't map imem\n");
+> +		goto err1;
+> +	}
 
- (b) this seems to make that O_TMPFILE_MASK macro pointless.
 
-I think (b) kind of re-inforces the point of (a) here.
+> +
+> +static void __exit boot_stats_exit(void)
+> +{
+> +}
+> +module_exit(boot_stats_exit)
 
-The only reason for O_TMPFILE_MASK is literally that old historical
-"make sure old kernels return errors when they don't support
-O_TEMPFILE", and thus the magic re-use of old bit patterns.
 
-But now that we do that "return error if both O_DIRECTORY and O_CREAT
-are set", the O_TMPFILE_MASK check is basically dead, because it ends
-up checking for that same bit pattern except also __O_TMPFILE.
+I don't think this is some special code which deserves init calls. Make
+it module_platform_driver().
 
-And that is *not* obvious from the code, exactly because of that
-thicket of different macros.
 
-In fact, since that whole
+Best regards,
+Krzysztof
 
-        if ((flags & O_TMPFILE_MASK) !=3D O_TMPFILE)
-                return -EINVAL;
-
-is done inside an "if (flags & __O_TMPFILE)", the compiler might as
-well reduce it *exactly* down to that exact same test as
-INVALID_CREATE() now is.
-
-So I really get the feeling that the macros actually hide what is
-going on, and are the exact opposite of being helpful. Case in point:
-with your patch, you now have the exact same test twice in a row,
-except it *looks* like two different tests and one of them is
-conditional on __O_TMPFILE.
-
-For all I know, the compiler may actually notice the redundancy and
-remove one of them, but we shouldn't write bad code with the
-expectation that "the compiler will fix it up". Particularly when it
-just makes it harder for people to understand too.
-
-                     Linus
