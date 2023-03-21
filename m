@@ -2,211 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398EA6C2E65
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1AA6C2E6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjCUKFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S229813AbjCUKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCUKFd (ORCPT
+        with ESMTP id S229635AbjCUKH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:05:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49F6457D5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:05:30 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id x11so13150919pja.5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:05:30 -0700 (PDT)
+        Tue, 21 Mar 2023 06:07:59 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5566A269
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:07:58 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-177b78067ffso15705405fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:07:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679393130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w1duAursv3dYZ+FsVJdTwkT5BNT6wALYEXhbvzy09mQ=;
-        b=vPR3bujvFheanHsY3IbfrdpPJIVjpCDA3EV+NEHfJ704uUcA+b2+DFulJoIw7nm5KZ
-         CwIyAddycqQ1LlGJtLfkgSRYuZgcSrYVQIHdYHw63xygyeKh0QwpLipr5rWcskrSSwJ/
-         28lWCHzGTuNaZaKBL0LeqeAUDUDZPODyCY0aTM+PIw9NFkZSP3wTO1nsy+LsqNomA1mb
-         l0fjcuSfp0xUU/FhpjwBdaCpgC6Mba46yfNm/QWvqT8AdQYiW/3kVT19pwz69e9yewhO
-         MS7OBGx5QVDHMCJplxalHeBaZywaXZehp/4QiiSoYXm7Khk6Cta17VBBND4MVbdmPzh2
-         0a0Q==
+        d=gmail.com; s=20210112; t=1679393273;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oJZSh2E9pSf9T5lgH43uOEogMK4YhEYDaY4XuVS4aqE=;
+        b=HvHOjEosOSLEarWqaSwHxWD2nHvdFNdV+XUPyOcVh10ybry4fu3ETRggrpelavs9yW
+         mWxK2nEGipeDz3wqoOCRwaeyzEOnEuvMd3V0Gm6wQ/XTWB47X7KCjZjxapbpxf70sTlR
+         d7V1FTKDbkOpJspMOS+zACt+AySBwsMRVUye22fDuRv58QQi5fQOU6R5/kq7g8uErzI2
+         VyIEJt3UfWl6IlWCMbb8YBO9nnYhOrfTQkx9o7TtYMH887G+nViyDEpVrGnM69NOMuyN
+         wHbfCNDYSpL11Yn4cks2fTCs3si88MtVnwNqeAYDeSIvhCzm8yKtK/whW9Zrp5S/zzdK
+         dhtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679393130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w1duAursv3dYZ+FsVJdTwkT5BNT6wALYEXhbvzy09mQ=;
-        b=BBvlxOZlqJkMBfm2fxuJ4qPJVqYEKKDukOOMMCU2a5T6a9KCCEZde3auZ934xyI2Rw
-         WSgkQ6MpRmuLWxB6xmwL7AfBD7S4NiEd5Rdnc/Le7jAi4/nYcQWSVlApG+nrraGUXCKg
-         +I1vPlUsmn450CyifuEzUmmrn7Y55NOCHZWHzfCTmm9a/hBfuIo9ewGe5MiBeclrZkux
-         vYotxFTG84/g4lkbo2NZNoJZW/rI/MxE+69AhhYwFS9ejKpYItegaNfmewe+k/b55bOB
-         9DnHBPGfvBee7G+jYif6rZmAQ20tgzW6tSbofgloaLF4EJz5iI9p2iRj/G5mdw+vB/A9
-         LNYA==
-X-Gm-Message-State: AO0yUKXt1khjAa5RPXbSdrVYlXp72SmoSH76yq/2PmyEdr/twzAVoUDX
-        ADM/dYY9vaGtKwSIHA4T9RlYVg==
-X-Google-Smtp-Source: AK7set/vx6sFqB5DNFvFYx7r90EmXOZbKs/Cr4AJaTCz6F9iFLF/J+jY/m9VQEE+zmz1MHocXjBfdw==
-X-Received: by 2002:a17:902:f94e:b0:19f:3b86:4715 with SMTP id kx14-20020a170902f94e00b0019f3b864715mr1560718plb.8.1679393130131;
-        Tue, 21 Mar 2023 03:05:30 -0700 (PDT)
-Received: from destitution (pa49-196-94-140.pa.vic.optusnet.com.au. [49.196.94.140])
-        by smtp.gmail.com with ESMTPSA id x2-20020a170902b40200b001a1cf0744a2sm3750245plr.247.2023.03.21.03.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 03:05:29 -0700 (PDT)
-Received: from dave by destitution with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1peYru-000aOt-0z;
-        Tue, 21 Mar 2023 21:05:26 +1100
-Date:   Tue, 21 Mar 2023 21:05:26 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBmBZqhOHdGt4t9n@destitution>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBkDuLKLhsOHNUeG@destitution>
- <ZBk/Wxj4rXPra/ge@pc636>
- <8cd31bcd-dad4-44e3-920f-299a656aea98@lucifer.local>
+        d=1e100.net; s=20210112; t=1679393273;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oJZSh2E9pSf9T5lgH43uOEogMK4YhEYDaY4XuVS4aqE=;
+        b=BipMfHUyOhPd0TtVujbm+V+O7KlSMAWPgCyNdctmoGEKZgJZwcOnOS4SOZxxy4tS3F
+         LSWM7r81Szc+Alghlp0RIpdv3tbri+pRP6JB2Q0oHgW8cxc7q2HCPoYJuCPS0hkk8oEY
+         lswHNwqYD+3/3QzptPgLzJVPl9m4W6EueYLgh9qNOKaNbmEEDryyMpKFEh8pHcIK2Cbg
+         nqVnz1SBeJBJb91Q4TDQTCXNxVNQzgqvo6i7kCI9LYbfoJm2jxrLtm4bsA6LqnvMh246
+         CayXjLzxFfXkT4K7Za1UqATfEoF0jAhPEtv2TIFGpEuDRa+I5gewq0oNboMebdkL/rKK
+         2oXA==
+X-Gm-Message-State: AO0yUKUI5yxu3wcs/83BUCuuVUHqPRQZy+c1LYG85KhiodgS+LziZFN6
+        UNnqToeqAzKiONB8995ChdpBtxqAsh8WD6xFzlE=
+X-Google-Smtp-Source: AK7set/5jUoMNrJwt/reRzydHa6HyEztfKNqARKPTDb87apJFC2O4nmmTZovTPMb0bqSLdg9prU2HUz90z1SxOdeBSE=
+X-Received: by 2002:a05:6870:13d4:b0:177:adf6:4fa3 with SMTP id
+ 20-20020a05687013d400b00177adf64fa3mr459789oat.2.1679393272748; Tue, 21 Mar
+ 2023 03:07:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8cd31bcd-dad4-44e3-920f-299a656aea98@lucifer.local>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:7511:b0:f6:92bf:aa7a with HTTP; Tue, 21 Mar 2023
+ 03:07:51 -0700 (PDT)
+Reply-To: intlcoris@gmail.com
+From:   coris international <oluwakemiifeoluwa01@gmail.com>
+Date:   Tue, 21 Mar 2023 03:07:51 -0700
+Message-ID: <CANmZ2MZ_nPF03JbygaBxFrpT4QTQj6zjR3BF3nM0ZSb16C6JxA@mail.gmail.com>
+Subject: Att, Client,are you online?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:2b listed in]
+        [list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [oluwakemiifeoluwa01[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [oluwakemiifeoluwa01[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 07:45:56AM +0000, Lorenzo Stoakes wrote:
-> On Tue, Mar 21, 2023 at 06:23:39AM +0100, Uladzislau Rezki wrote:
-> > On Tue, Mar 21, 2023 at 12:09:12PM +1100, Dave Chinner wrote:
-> > > On Sun, Mar 19, 2023 at 07:09:31AM +0000, Lorenzo Stoakes wrote:
-> > > > vmalloc() is, by design, not permitted to be used in atomic context and
-> > > > already contains components which may sleep, so avoiding spin locks is not
-> > > > a problem from the perspective of atomic context.
-> > > >
-> > > > The global vmap_area_lock is held when the red/black tree rooted in
-> > > > vmap_are_root is accessed and thus is rather long-held and under
-> > > > potentially high contention. It is likely to be under contention for reads
-> > > > rather than write, so replace it with a rwsem.
-> > > >
-> > > > Each individual vmap_block->lock is likely to be held for less time but
-> > > > under low contention, so a mutex is not an outrageous choice here.
-> > > >
-> > > > A subset of test_vmalloc.sh performance results:-
-> > > >
-> > > > fix_size_alloc_test             0.40%
-> > > > full_fit_alloc_test		2.08%
-> > > > long_busy_list_alloc_test	0.34%
-> > > > random_size_alloc_test		-0.25%
-> > > > random_size_align_alloc_test	0.06%
-> > > > ...
-> > > > all tests cycles                0.2%
-> > > >
-> > > > This represents a tiny reduction in performance that sits barely above
-> > > > noise.
-> > >
-> > > I'm travelling right now, but give me a few days and I'll test this
-> > > against the XFS workloads that hammer the global vmalloc spin lock
-> > > really, really badly. XFS can use vm_map_ram and vmalloc really
-> > > heavily for metadata buffers and hit the global spin lock from every
-> > > CPU in the system at the same time (i.e. highly concurrent
-> > > workloads). vmalloc is also heavily used in the hottest path
-> > > throught the journal where we process and calculate delta changes to
-> > > several million items every second, again spread across every CPU in
-> > > the system at the same time.
-> > >
-> > > We really need the global spinlock to go away completely, but in the
-> > > mean time a shared read lock should help a little bit....
-> > >
-> 
-> Hugely appreciated Dave, however I must disappoint on the rwsem as I have now
-> reworked my patch set to use the original locks in order to satisfy Willy's
-> desire to make vmalloc atomic in future, and Uladzislau's desire to not have a
-> ~6% performance hit -
-> https://lore.kernel.org/all/cover.1679354384.git.lstoakes@gmail.com/
+Att, Client,
+This is to notify you that you have a message from Mrs Edes Banneth
+which She asked us to deliver to you, are you online? Respond to us.
 
-Yeah, I'd already read that.
+Confirm to us that you receive this update.
 
-What I want to do, though, is to determine whether the problem
-shared access contention or exclusive access contention. If it's
-exclusive access contention, then an rwsem will do nothing to
-alleviate the problem, and that's kinda critical to know before any
-fix for the contention problems are worked out...
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
 
-> > I am working on it. I submitted a proposal how to eliminate it:
-> >
-> >
-> > <snip>
-> > Hello, LSF.
-> >
-> > Title: Introduce a per-cpu-vmap-cache to eliminate a vmap lock contention
-> >
-> > Description:
-> >  Currently the vmap code is not scaled to number of CPU cores in a system
-> >  because a global vmap space is protected by a single spinlock. Such approach
-> >  has a clear bottleneck if many CPUs simultaneously access to one resource.
-> >
-> >  In this talk i would like to describe a drawback, show some data related
-> >  to contentions and places where those occur in a code. Apart of that i
-> >  would like to share ideas how to eliminate it providing a few approaches
-> >  and compare them.
+Sincerely,
 
-If you want data about contention problems with vmalloc
+----
 
-> > Requirements:
-> >  * It should be a per-cpu approach;
-
-Hmmmm. My 2c worth on this: That is not a requirement.
-
-That's a -solution-.
-
-The requirement is that independent concurrent vmalloc/vfree
-operations do not severely contend with each other.
-
-Yes, the solution will probably involve sharding the resource space
-across mulitple independent structures (as we do in filesystems with
-block groups, allocations groups, etc) but that does not necessarily
-need the structures to be per-cpu.
-
-e.g per-node vmalloc arenas might be sufficient and allow more
-expensive but more efficient indexing structures to be used because
-we don't have to care about the explosion of memory that
-fine-grained per-cpu indexing generally entails.  This may also fit
-in to the existing per-node structure of the memory reclaim
-infrastructure to manage things like compaction, balancing, etc of
-vmalloc space assigned to the given node.
-
-Hence I think saying "per-cpu is a requirement" kinda prevents
-exploration of other novel solutions that may have advantages other
-than "just solves the concurrency problem"...
-
-> >  * Search of freed ptrs should not interfere with other freeing(as much as we can);
-> >  *   - offload allocated areas(buzy ones) per-cpu;
-> >  * Cache ready sized objects or merge them into one big per-cpu-space(split on demand);
-> >  * Lazily-freed areas either drained per-cpu individually or by one CPU for all;
-> >  * Prefetch a fixed size in front and allocate per-cpu
-
-I'd call these desired traits and/or potential optimisations, not
-hard requirements.
-
-> > Goals:
-> >  * Implement a per-cpu way of allocation to eliminate a contention.
-
-The goal should be to "allow contention-free vmalloc operations", not
-that we implement a specific solution.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 16 37
+infoinf@accountant.com
+bf_info_coris@yahoo.com
