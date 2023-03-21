@@ -2,67 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4F86C2C42
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA21B6C2C4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjCUIZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S230389AbjCUI1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjCUIZi (ORCPT
+        with ESMTP id S231233AbjCUI0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:25:38 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F81E2CFC6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:25:27 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso19254591pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:25:27 -0700 (PDT)
+        Tue, 21 Mar 2023 04:26:46 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BB443458
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:26:33 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id y4so56531269edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:26:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1679387127;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgQj9ywDGlQyYDMnpmoMwan8/Z++I2S3CCj0itdij/Q=;
-        b=FrakYCjwfQpR45UnVA6pO2ethulH05QX5q69KqHoJkD8WyK1cSV+kDUCAHuWw7S8fF
-         da237msrJsaqmaiQFfLbPv3rvXpwzr0tcQ9jc6J7g7vW1/9esizXtYIncKfPkD9Elyl+
-         7eOrohGt/HewjT0qDv7WfXRsY7g6KQ9Fw9cG4=
+        d=linaro.org; s=google; t=1679387192;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0mTzuTr7Qws+cUrzbSI+C/8BpG+BCY4L1yCujqjQO80=;
+        b=F0XMce0naaobBfyCQtabTxdjFlSDXtRsY59OVOruFSmpR9cvkfZ293h2nrTG5pheLb
+         mjov15+plh04xZriyDiET4af/BfKT329TO0zZ4SaJ9WBsM6RqZczGF3VhRHnd+ZuO+oy
+         gd0q56A62UfbLkchrVvemzOWkVE79g4EMJ5NoAUG4563Dcu4jB3ugwP5iSmX3KGkI9//
+         NuEjyIQsXFxucDiGuD3faRv179z5sC1fFVnTfzU+HONr1V72R8uDwRyGkG4UuOYj9UZc
+         WfHNAFeRmrZ/wnzOsH1VoKwOlBJAkNTN9ajSkqA/1FiYiAd2rYYHPPS9CqsbeXGUIpV5
+         kFhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679387127;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OgQj9ywDGlQyYDMnpmoMwan8/Z++I2S3CCj0itdij/Q=;
-        b=US0VB3+jR2CA4YruXpKhdV4V15284ngETE5pPv3qZGcZVHWrXs1hyLwzMPatn99mb+
-         JfkAWuCC3t2qGLqaZhO5q853U4mWeJsRhBV1JlhZk8dDrx6tOYYfAoP9m9m+pOLX/GGs
-         L/WITD5C5XNunwHI6i0fdDZLORx7blcOhAjXAqesPpffQItaxMQ9PbTjEMm4HahdRMQQ
-         7SXeGIROGrYwCuXwaMYnIVB8IjzhpYi8e9Uv7z9EY5N8zJ6WNdaMoq3/JX7iqyx9vfXx
-         T46kiS2P0xGPmC+T5fIFq+fAoquSL3Ek7q3LjRGm4Cn5PY+Pp4levF5n2tztxjUrkhVt
-         0xrQ==
-X-Gm-Message-State: AO0yUKVferLrXAfKcsR6KVoViW7QS2sSp797FY+Ae8CPZziby9KvbcLe
-        BFTbvhFK28pVZe6CpwnKj+blRNyuQeKTutyzvjZIIA==
-X-Google-Smtp-Source: AK7set89rE6W4egj44dj5+gIJ1O+GwmDIiwtSJDWJo/8WcL+qCmf26CzgGNeSftOOMzLIgyhQHTA3tI5HnlPOWO9K44=
-X-Received: by 2002:a17:90a:f287:b0:23d:20c:2065 with SMTP id
- fs7-20020a17090af28700b0023d020c2065mr371421pjb.1.1679387126703; Tue, 21 Mar
- 2023 01:25:26 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679387192;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mTzuTr7Qws+cUrzbSI+C/8BpG+BCY4L1yCujqjQO80=;
+        b=ycfL6W951Osk9AKP8tsU0BOtVtJFTvBOdE5s/c3U11D0c+49cdh1Jo2P6OlsJIkiQW
+         wBC0y3FnNNCEaIwCSPTFMjYzEtfmbJSJPSm6A0xbfO1JJ12uhDHMVsfBMzHgB53v/9Rb
+         OYP8Z6qe3Y7SSHybprrAIQi3UaFjTSae6utgRQyMSTgIS8QGmJlujo+ugpxl6TncrlDa
+         cY+3PlibcP4RLhf8VnSoPShmv6sA5BArY4cwAuEPKh5I7d2I8NOlJSgcQUCs65HKBGhH
+         MhSoL4flZhCHvf5bdtaxnS02riOJAawq7qAIc8r11kZAy3wCWEsIhm2+lLz0Q0etJrgY
+         E3SQ==
+X-Gm-Message-State: AO0yUKUJvw5FZGZEvPnUj9/jw0Xpbkqb2/zeRL4Q58gjFCgnRW0ITiMq
+        HXz+dBG1f/FRrUG1cucMizGSIQ==
+X-Google-Smtp-Source: AK7set+Yo3j0orRg0yJ8E1/dJwlIJ3rt2gBjk8VtlpRwTZcxqtlBtQSIoTar3pcg+04BUhx1cgL4AA==
+X-Received: by 2002:aa7:d315:0:b0:4ad:738b:6706 with SMTP id p21-20020aa7d315000000b004ad738b6706mr2495618edq.2.1679387192285;
+        Tue, 21 Mar 2023 01:26:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id z67-20020a509e49000000b00501dac14d7asm534626ede.3.2023.03.21.01.26.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 01:26:31 -0700 (PDT)
+Message-ID: <676cb6ac-84a3-025f-bb05-55dd27c365fe@linaro.org>
+Date:   Tue, 21 Mar 2023 09:26:29 +0100
 MIME-Version: 1.0
-References: <CALs4sv2KkjwRrHTEhCneDmN0JJV-x5Db=+ApXOObLpOcPR0=1Q@mail.gmail.com>
- <AHkARAASI0ycAeWt4ZCNhKpF.3.1679377487974.Hmail.mocan@ucloud.cn>
-In-Reply-To: <AHkARAASI0ycAeWt4ZCNhKpF.3.1679377487974.Hmail.mocan@ucloud.cn>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 21 Mar 2023 13:55:15 +0530
-Message-ID: <CALs4sv0rK7+PhwawDGt0q3mdoD3ncmLQHSXkqYMofp6rSOa3Ug@mail.gmail.com>
-Subject: Re: Re: [PATCH] net/net_failover: fix queue exceeding warning
-To:     Faicker Mo <faicker.mo@ucloud.cn>
-Cc:     Sridhar Samudrala <sridhar.samudrala@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002629d705f764c916"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 20/28] media: platform: jpeg: always reference OF data
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org,
+        oushixiong <oushixiong@kylinos.cn>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
+ <86431868-488b-4a72-944b-231b6d0382b0@app.fastmail.com>
+ <8b7816b0-1daa-1c49-6f9d-40769d228a39@linaro.org>
+ <b9342459-efec-4e17-aee6-332ee17f44d2@app.fastmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b9342459-efec-4e17-aee6-332ee17f44d2@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,171 +120,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002629d705f764c916
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 21/03/2023 09:24, Arnd Bergmann wrote:
+> On Tue, Mar 21, 2023, at 09:21, Krzysztof Kozlowski wrote:
+>> On 21/03/2023 09:11, Arnd Bergmann wrote:
+>>> On Sun, Mar 12, 2023, at 14:13, Krzysztof Kozlowski wrote:
+>>>> The driver can match only via the DT table so the table should be always
+>>>> used and the of_match_ptr does not have any sense (this also allows ACPI
+>>>> matching via PRP0001, even though it might not be relevant here).  This
+>>>> also fixes !CONFIG_OF error:
+>>>>
+>>>>   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1890:38: error: 
+>>>> ‘mtk8195_jpegdec_drvdata’ defined but not used 
+>>>> [-Werror=unused-const-variable=]
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> I see now that we both submitted the same patch, but now Hans
+>>
+>> We as you and me? I cannot find your patch on lore:
+>> https://lore.kernel.org/all/?q=f%3Aarnd%40arndb.de
+> 
+> This is the one that I sent back in January:
+> 
+> https://lore.kernel.org/all/20230117172644.3044265-1-arnd@kernel.org
 
-On Tue, Mar 21, 2023 at 11:17=E2=80=AFAM Faicker Mo <faicker.mo@ucloud.cn> =
-wrote:
->
-> When tx from the net_failover device, the actual tx queue number is the s=
-alve device.
+Uh, that's from January! It's still waiting in Patchwork:
+https://patchwork.linuxtv.org/project/linux-media/patch/20230117172644.3044265-1-arnd@kernel.org/
 
-Then why is primary OK..
 
-> The ndo_select_queue of net_failover device returns the txq which is the =
-primary device txq
-> if the primary device is OK.
+Best regards,
+Krzysztof
 
-This is what is done in all the functions. I don't think there is a problem=
-.
-Not sure if there is an issue I am not getting, at least with the descripti=
-on.
-I will let the maintainer take the call. Thanks.
-
-> This number may be bigger than the default 16 of the net_failover device.
->  A warning will be reported in netdev_cap_txqueue which device is the net=
-_failover.
->
->
-> From: Pavan Chebbi <pavan.chebbi@broadcom.com>
->  Date: 2023-03-21 13:11:52
-> To:Faicker Mo <faicker.mo@ucloud.cn>
->  cc: Sridhar Samudrala <sridhar.samudrala@intel.com>,"David S. Miller" <d=
-avem@davemloft.net>,Eric Dumazet <edumazet@google.com>,Jakub Kicinski <kuba=
-@kernel.org>,Paolo Abeni <pabeni@redhat.com>,netdev@vger.kernel.org,linux-k=
-ernel@vger.kernel.org
-> Subject: Re: [PATCH] net/net_failover: fix queue exceeding warning>On Tue=
-, Mar 21, 2023 at 8:15=E2=80=AFAM Faicker Mo <faicker.mo@ucloud.cn> wrote:
-> >>
-> >> If the primary device queue number is bigger than the default 16,
-> >> there is a warning about the queue exceeding when tx from the
-> >> net_failover device.
-> >>
-> >
-> >Can you describe the issue more? If the net device has not implemented
-> >its own selection then netdev_pick_tx should take care of the
-> >real_num_tx_queues.
-> >Is that not happening?
-> >
-> >> Signed-off-by: Faicker Mo <faicker.mo@ucloud.cn>
-> >> ---
-> >>  drivers/net/net_failover.c | 8 ++------
-> >>  1 file changed, 2 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/drivers/net/net_failover.c b/drivers/net/net_failover.c
-> >> index 7a28e082436e..d0c916a53d7c 100644
-> >> --- a/drivers/net/net_failover.c
-> >> +++ b/drivers/net/net_failover.c
-> >> @@ -130,14 +130,10 @@ static u16 net_failover_select_queue(struct net_=
-device *dev,
-> >>                         txq =3D ops->ndo_select_queue(primary_dev, skb=
-, sb_dev);
-> >>                 else
-> >>                         txq =3D netdev_pick_tx(primary_dev, skb, NULL)=
-;
-> >> -
-> >> -               qdisc_skb_cb(skb)->slave_dev_queue_mapping =3D skb->qu=
-eue_mapping;
-> >> -
-> >> -               return txq;
-> >> +       } else {
-> >> +               txq =3D skb_rx_queue_recorded(skb) ? skb_get_rx_queue(=
-skb) : 0;
-> >>         }
-> >>
-> >> -       txq =3D skb_rx_queue_recorded(skb) ? skb_get_rx_queue(skb) : 0=
-;
-> >> -
-> >>         /* Save the original txq to restore before passing to the driv=
-er */
-> >>         qdisc_skb_cb(skb)->slave_dev_queue_mapping =3D skb->queue_mapp=
-ing;
-> >>
-> >> --
-> >> 2.39.1
-> >>
->
->
-
---0000000000002629d705f764c916
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEnzuvMKoOv1TKEbE6AyciMMRn4Ak7yB
-y1nvasC8KytZMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDMy
-MTA4MjUyN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAXEyczhyOM6cLriVKf0NBTFDJ1yKRv28WGbzFVEzS7fPB1eWPV
-Vp0sb0Oml8vZSJpZ1E3Cz5IfQ9OB2Y7C/GyVOr6rZbYd+V+WM4eEtaXMk/XdbgYMYE3cgqVYfhSW
-UoyJRf8HCLUhs8SFuN7pKBLfir72QxDr81Xy4Q03PlhEMluCg2eq4qBgrS9ywT+Mx2CAFYTM0VKS
-kAQlX4o80eQBa4tNIoBjP7suWDUJ56mMNaxSyThanBYsRM/V7/RLL0rAclTZcn0fVLLezsnOJw6e
-I3Jx3Xp2NoKBPxE5Sfzu5gbo97sA2tHkF25ACcHWcnUllVrIXJ3phB+z/+6z0xZK
---0000000000002629d705f764c916--
