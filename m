@@ -2,213 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669186C282E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 902E36C2833
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCUCbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 22:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S229886AbjCUCb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCUCbD (ORCPT
+        with ESMTP id S229473AbjCUCby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:31:03 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C97536440
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:30:59 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id c1so9494833vsk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679365858;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=exFQr+/6snI+BUogDBdJkIX/p5Mws8WG0B8e0JacLng=;
-        b=tJ2i69imF0rxZFF17LM1KKx+kHyfOJES9BFCiE2GUE0YOORO4ZMiZ7lcL7dmv7BBcw
-         8+Eo3bjMKqHidKLlStTzxzbJEeRU92X8LuFRtFrvHjoe+4laqNDdJASFqGHqZNm0JfoT
-         J/GREEQKJJ3B7Z0Uo8hn/bdzuQ9pn1zSUaJCDKHDol6W9ggV6hhPmavmrzxxefbElGe5
-         gj7p6qraPRhrCsrY2+d9IghgCqL80ripXklyDmaX40hnMwMnBUv/UgEt3SfY8XMR1Q7g
-         iHpnpOA0hbjXZp16lh2+JGj5lQn+HeAydzE3hcMZNpM7Xh/nFLiDyGJ6Tnd3hIfPIGnN
-         WZrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679365858;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=exFQr+/6snI+BUogDBdJkIX/p5Mws8WG0B8e0JacLng=;
-        b=EtPZS6leOtLTpB61zjlyqNybJcKGR0ELkq4aLgcv0Oq+/CZLfPXWr64OFU8snlAGW3
-         Ki+W0+DQD8ncpPd3qN2DZLwfX+JbMPaWvkg8g7VmLUa7/XKo7AK6/vNlZRzPQqOr7nlw
-         EWI1xEF9B1vJONG+KVJBVOhXPOxLnWLhLE+8TMNQQ/VnjWFg3mt36EgJdcL9p/kte6Nq
-         KwdRb3rnWEyQKvir5tgLolAKWibDub8I2dX0SnBZgB4KIsRzYVdohoGdiAfLlz5K3RCG
-         w9JmSXIG4WlRSC3MSHdX6qxH/7zpBOltsbEdI+7kRP1y8Bon0T38K1h8OLIPT3oExAk1
-         /YDg==
-X-Gm-Message-State: AO0yUKVZ9yVA7ySNcqbNsNcfIYnx5FyWS9ea17q4404A/m+/T7hru6hO
-        TE4fadoD2+yeSNexONiNlxqJVE5l6aoLr7O9QQFnng==
-X-Google-Smtp-Source: AK7set+sG6/8F+H20vXpFrS94fpodkjGDeoSNmfqlajPi/bTm+Yjhg6T3SJXGP104/FOjSRyjrbyJgzSEhh6fLe3txk=
-X-Received: by 2002:a67:e086:0:b0:425:875f:50c6 with SMTP id
- f6-20020a67e086000000b00425875f50c6mr649582vsl.5.1679365858088; Mon, 20 Mar
- 2023 19:30:58 -0700 (PDT)
+        Mon, 20 Mar 2023 22:31:54 -0400
+Received: from mail-m11880.qiye.163.com (mail-m11880.qiye.163.com [115.236.118.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878B839283;
+        Mon, 20 Mar 2023 19:31:32 -0700 (PDT)
+Received: from [0.0.0.0] (unknown [IPV6:240e:3b7:327f:ce40:a4df:e2d6:538e:9d4f])
+        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id 27C5620463;
+        Tue, 21 Mar 2023 10:31:23 +0800 (CST)
+Message-ID: <4a88721a-ac78-bcad-1b33-f9027baab5ab@sangfor.com.cn>
+Date:   Tue, 21 Mar 2023 10:31:21 +0800
 MIME-Version: 1.0
-References: <20230314124435.471553-1-sashal@kernel.org> <20230314124435.471553-2-sashal@kernel.org>
- <ZBhPV61xAvXfjHw3@duo.ucw.cz>
-In-Reply-To: <ZBhPV61xAvXfjHw3@duo.ucw.cz>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 21 Mar 2023 10:30:45 +0800
-Message-ID: <CABVgOSnawZ3vKUy69qAQC81Ctfcqo9vo_5ot35+fHQs4OqytVA@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 4.14 2/5] rust: arch/um: Disable FP/SIMD
- instruction to match x86
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>,
-        Richard Weinberger <richard@nod.at>, tglx@linutronix.de,
-        mingo@redhat.com, hpa@zytor.com, x86@kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000071111205f75fd57e"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 2/2] tracing: Add documentation for funcgraph-retval
+ and graph_retval_hex
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>, mhiramat@kernel.org,
+        rostedt@goodmis.org, linux@armlinux.org.uk, mark.rutland@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        xiehuan09@gmail.com, huangcun@sangfor.com.cn,
+        dolinux.peng@gmail.com
+Cc:     linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
+ <20230320131650.482594-3-pengdonglin@sangfor.com.cn>
+Content-Language: en-US
+From:   Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <20230320131650.482594-3-pengdonglin@sangfor.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCQ0oYVh5NTR5CHx5OTB5PGlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BGB5PS0EaTx8dQR5JH01BTkhDHkFCH08dWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pi46Sjo6CD0LTBALTjoxDSMe
+        CT8wChFVSlVKTUxCSE1OQ0NPTkxPVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUwdQRgeT0tBGk8fHUEeSR9NQU5IQx5BQh9PHVlXWQgBWUFITk5MNwY+
+X-HM-Tid: 0a870201c9012eb6kusn27c5620463
+X-HM-MType: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000071111205f75fd57e
-Content-Type: text/plain; charset="UTF-8"
+On 2023/3/20 21:16, Donglin Peng wrote:
 
-On Mon, 20 Mar 2023 at 20:19, Pavel Machek <pavel@ucw.cz> wrote:
->
-> Hi!
->
-> > [ Upstream commit 8849818679478933dd1d9718741f4daa3f4e8b86 ]
-> >
-> > The kernel disables all SSE and similar FP/SIMD instructions on
-> > x86-based architectures (partly because we shouldn't be using floats in
-> > the kernel, and partly to avoid the need for stack alignment, see:
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383 )
-> >
-> > UML does not do the same thing, which isn't in itself a problem, but
-> > does add to the list of differences between UML and "normal" x86 builds.
-> >
-> > In addition, there was a crash bug with LLVM < 15 / rustc < 1.65 when
-> > building with SSE, so disabling it fixes rust builds with earlier
-> > compiler versions, see:
-> > https://github.com/Rust-for-Linux/linux/pull/881
->
-> We don't have rust in 4.14, so cited problem can't hit us. This should
-> not go to -stable.
->
-> (Plus, KBUILD_RUSTFLAGS is not going to exist in -stable).
->
+> +There are some limitations when using the funcgraph-retval currently:
+> +
+> +- Even if the function return type is void, a return value will still
+> +  be printed, and you can just ignore it.
+> +
+> +- Even if the return value is not an error code actually, it may be
+> +  displayed as an error code. You should read the code to check.
+> +  For example, both 0xfe and 0xfffe are be interpreted as -2.
 
+For char and short types, displaying as signed decimal may be not 
+appropriate, because they are rarely used to store error code.
 
-I agree, this is not a good fit for -stable. While I'd argue the
-KBUILD_CFLAGS part is still technically valid:
-- As noted, the KBUILD_RUSTFLAGS bit is useless without Rust support.
-- It triggers a bug in older gcc versions (< 11), which is bad anyway,
-and probably worse for -stable:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
+So in "smart" mode (graph_retval_hex=0), I suggest just smart convert 
+error value stored in int or pointer to signed decimal.
 
-There's a patch to work around the latter:
-https://lore.kernel.org/linux-um/20230318041555.4192172-1-davidgow@google.com/
+> +- Only the value of the first return register will be recorded and
+> +  printed even if the return values may be stored in two registers
+> +  actually. For example, both the eax and edx are used to store a
+> +  64 bit return value in the x86 architecture, and the eax stores
+> +  the low 32 bit, the edx stores the high 32 bit, however only the
+> +  value stored in eax will be recorded and printed.
+> +
+>   You can put some comments on specific functions by using
+>   trace_printk() For example, if you want to put a comment inside
+>   the __might_sleep() function, you just have to include
 
-But I'd agree that excluding this change from -stable altogether is
-the better option.
+-- 
+Thanks,
+- Ding Hui
 
-Cheers,
--- David
-
-> Best regards,
->                                                                 Pavel
->
-> > +# Disable SSE and other FP/SIMD instructions to match normal x86
-> > +#
-> > +KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
-> > +KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
-> > +
-> >  ifeq ($(CONFIG_X86_32),y)
-> >  START := 0x8048000
-> >
->
-> --
-> People of Russia, stop Putin before his war on Ukraine escalates.
-
---00000000000071111205f75fd57e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCx
-MxOUYJQg7uKCyQE14y/sHOxPC6P30Dmu+ZBSeWpCbjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjEwMjMwNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABU0d3j+NNBdlMenKSP+V
-q0+xSpYw5aTy8n2vi63mRTs2rDIPcwziwapkbk6/eEjBvUp4AfMdodxO5/D3CNDEgk0cMOxyrMCU
-yiIXW5Z2e9NfzE6OwjEdoKoO4TOX7ZNLR/1GYVguQooBULJ4rvn2YVO7IXfqRjy9FvRdJFnM8A+O
-lKo0WWrRVDOvJQwyvgkgtom2GaJRMkzb9xowbRL+FeGqWrIjGrLPKw62JKW9PHsamSRtlvEyZZTS
-ygCS/BAe2tMDz+7hBFldaAlrddWDcadJiMDCumJQkNppQNayE/SGyCp3d/KgSa38USwP8Z57Z/1Z
-EgN2uvqcGQwOiIoDTA==
---00000000000071111205f75fd57e--
