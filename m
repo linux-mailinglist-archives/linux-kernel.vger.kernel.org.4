@@ -2,92 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D4A6C2F07
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1142A6C2F0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCUKcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S230260AbjCUKdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjCUKca (ORCPT
+        with ESMTP id S230143AbjCUKdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:32:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E308D274B7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:31:42 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679394678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hv1HqQxsWac7KSmwPukBsbS8Rr7ur6VoezJ6IcOtMtU=;
-        b=Yrf+FTaSswbkl17hEKoLtoIuiQvFVEub1dw18V7t9ylegaHDm457FMKKvhvHPHeuev0X5U
-        SyAyBXS/MK5jqC4rgimhZCtfXBZPu0eIJpKhziGyIjL0BI+Uzy75LZSd2t/ur6OZza1NR5
-        iP7suXsgwe2aeqiRTbm6cK8u/NhkXPYIWFXZHTsAk2N+NwwOIx4CN+kSdmyl29DcTOKKOM
-        DrRAUa0hrcpOY+6HCrJ6J/xxk2x0FEF/3WjguAh6QwFvulDTo2VdC3+J75aSJzhDFZUMpA
-        IvKH14XmwTaBpMXqAv/afORi5uCc1CqZG5ju6LSuEORC7EEmOtPXvdbHRCiFEA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679394678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hv1HqQxsWac7KSmwPukBsbS8Rr7ur6VoezJ6IcOtMtU=;
-        b=UrTV7y5LROn1MI1UeQdC6MNlcakGa5yjbXsEh7shgouCOYCCfsDS4HVgbF3Xs3UaikkIJ2
-        zRdE4ayAA2nqrQBA==
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Subject: Re: [PATCH v3 4/8] x86/psp: Add IRQ support
-In-Reply-To: <20230320191956.1354602-5-jpiotrowski@linux.microsoft.com>
-References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
- <20230320191956.1354602-5-jpiotrowski@linux.microsoft.com>
-Date:   Tue, 21 Mar 2023 11:31:18 +0100
-Message-ID: <87h6ue9z0p.ffs@tglx>
+        Tue, 21 Mar 2023 06:33:00 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFAA2684F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:32:25 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id h8so57666278ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679394743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aM4pMbd9h+3fIjUzyTPRMWqM3P8Ga6/igv7ENNsFFog=;
+        b=EYxGPFIIMxiCXWI/mEd7m/ehNebVcC2dyioRpdXbL/OmnKz90GKfT1Unb3HDim+QHG
+         FaMYLF6JjzSZtRqyYBBPZyG7BA3pSF4EKLnPwZf0tKRNrIoEE4UI0qng9tz71RYxezAM
+         4yUaLfDgzLi9aavAXPyLDeSIWfqUSNYhC3sGtt74weOp5gKdiDLnlSrKVA1b2x57ybtW
+         I/Xl+IFpw5Ijihrj9Liyzd/ieeOuF4x9Pz12KA9JNxbmy7MeEkyqR7IEMW+q3ewAYNDQ
+         oJpOb2BtanT970Ke56ROtHePygR1/0KkesMhUAyoIxZaRuZV3hfTSAQ66hNY0pGTolxE
+         Axqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679394743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aM4pMbd9h+3fIjUzyTPRMWqM3P8Ga6/igv7ENNsFFog=;
+        b=y3qvDU8r0SQT2TUnOOvBrsxUgEdzuJ7bSPXM4/hBnfwkJDV7OG8Kudt1ZM4AUUpVbR
+         t06r2nkTsK5psScb/aEO1MLo3wzR5Q4C/T7092pCS2NACpZaZIPlAVEgQaF0QyLObMC7
+         nU7wLG4gb8wd0UNlmhsX63PyGyPI9mmUNJ7yJNu1hmj6d9go6VWk6rZwo9rj0lfTcxRX
+         ipT0aHMWVwKza8XxyjghT37I2Why7hsB7XrTRxwPm8B47Gs0+hoNxn9lr7rFdLWcjbAt
+         8oNTeM4L42otw3R+xC6fzVdUU9A+NGSuI3FifMsqUDZ6Ii7jJSLA/2XuBzM8o5NSTA0G
+         yqzg==
+X-Gm-Message-State: AO0yUKXxvRrQ6Obe3ebExWom0NHpAYG1QlP7bpKdrCyBmDDrUhnRQl1j
+        AK90509g4IQwiHAX9KVI0d8pDQ==
+X-Google-Smtp-Source: AK7set/hfAAEy8OKfBMea9CyBR/XCE2LmXd/fOMAlwfdbQAwHsc+rxmMel4Tjo+wXxAliWG8CWwHvg==
+X-Received: by 2002:a17:906:7ccf:b0:8f4:809e:faee with SMTP id h15-20020a1709067ccf00b008f4809efaeemr11116908ejp.19.1679394742958;
+        Tue, 21 Mar 2023 03:32:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id lz24-20020a170906fb1800b009334309eda5sm3774000ejb.196.2023.03.21.03.32.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 03:32:22 -0700 (PDT)
+Message-ID: <2aeb47d6-0577-f8e4-6070-331af15b1f83@linaro.org>
+Date:   Tue, 21 Mar 2023 11:32:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
+Content-Language: en-US
+To:     Julien Panis <jpanis@baylibre.com>, Rob Herring <robh@kernel.org>
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230315110736.35506-1-jpanis@baylibre.com>
+ <20230315110736.35506-2-jpanis@baylibre.com>
+ <20230320155354.GB1733616-robh@kernel.org>
+ <04914464-2bc2-9d86-e9e2-8a716b929f28@baylibre.com>
+ <2dcfd9dc-6c43-20b7-e27b-8ec2883be237@linaro.org>
+ <887d5e71-334c-b206-08e6-2cc822df9eda@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <887d5e71-334c-b206-08e6-2cc822df9eda@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20 2023 at 19:19, Jeremi Piotrowski wrote:
-> The ACPI PSP device provides a mailbox irq that needs to be configured
-> through the ACPI mailbox register first. This requires passing a CPU
-> vector and physical CPU id and then enabling interrupt delivery.
-> Allocate the irq directly from the default irq domain
-> (x86_vector_domain) to get access to the required information. By
-> passing a cpumask through irq_alloc_info the vector is immediately
-> allocated (and not later during activation) and can be retrieved.
+On 21/03/2023 10:03, Julien Panis wrote:
+> 
+> 
+> On 3/21/23 08:36, Krzysztof Kozlowski wrote:
+>> On 20/03/2023 17:35, Julien Panis wrote:
+>>>
+>>> On 3/20/23 16:53, Rob Herring wrote:
+>>>> On Wed, Mar 15, 2023 at 12:07:33PM +0100, Julien Panis wrote:
+>>>>> TPS6594 is a Power Management IC which provides regulators and others
+>>>>> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+>>>>> PFSM (Pre-configurable Finite State Machine) managing the state of the
+>>>>> device.
+>>>>> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+>>>> As mentioned, the binding needs to be complete. It's missing GPIO at
+>>>> least. RTC and watchdog may or may not need binding changes.
+>>> Thank you for your feedback.
+>>>
+>>> About GPIO, do you speak about 'gpio-controller'
+>>> and/or '#gpio-cells' properties ?
+>> Yes.
+>>
+>>> For RTC (and for watchdog, once the driver will be
+>>> implemented), our driver do not require any node
+>>> to work. What could make an explicit instantiation
+>>> necessary in DT ?
+>> Properties from RTC schema, e.g. start-year, wakeup etc.
+> 
+> TPS6594 RTC driver is being reviewed (this is another patch
+> series, not merged yet). These properties are not used by our
+> driver, that's why we did not have to add some RTC node in
+> the DT (until now, using such properties in our driver was not
+> requested by RTC sub-system maintainers).
 
-Sorry, but this is a horrible hack which violates _all_ design rules
-for interrupts in one go.
+Bindings should be complete, regardless whether you now need this in
+driver or not. Does your comment mean that you will never need these,
+because hardware does not support them, and never going to add?
+Otherwise I don't get why you refer to driver when we talk about bindings...
 
- 1) What's so special about this PSP device that it requires a vector
-    directly from the vector domain and evades interrupt remapping?
 
- 2) Why is this interrupt enabled _before_ it is actually requested?
-
- 3) Why is this interrupt required to be bound to CPU0 and still exposes
-    a disfunctional and broken affinity setter interface in /proc?
-
-There is absolutely zero reason and justification to fiddle in the guts
-of the x86 vector configuration data just because it's possible.
-
-This is clearly a custom MSI implementation and the obvious solution is
-a per device MSI interrupt domain.
-
-Thanks,
-
-        tglx
-
+Best regards,
+Krzysztof
 
