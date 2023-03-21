@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA696C364F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843BA6C3651
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjCUP4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S231229AbjCUP4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCUP4b (ORCPT
+        with ESMTP id S230135AbjCUP4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:56:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB001BAD7;
-        Tue, 21 Mar 2023 08:56:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65D3B61D01;
-        Tue, 21 Mar 2023 15:56:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF93C433D2;
-        Tue, 21 Mar 2023 15:56:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679414188;
-        bh=sV7yWhm3Wpc6nFVwU3vrMTTk99vkybjn2C9WDkFggrc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CnsWLAmSkFMbR0LuoyYJtoyF1Ta6jksja+T7KULFdiFB9ynKTKthvzoYLX+nehfVl
-         ulZHzYQouqMU/ExfQs6vtclh56CrhDTiIRCJcs7fAarc3n7VxOXGS3I8mT/shIzKg0
-         yq0jWOhI+5b8jSPxjZYX2J0wgljtW9/4Mzev8/shWrbpItY4PQXewJ69TKl33/UmAU
-         TOTAOmM8YHE7zkHY5cqvsdDJwWZ1iBOY7aphlle7huHcUD0n5azpXCjBDueKiTxnBB
-         Kd36MUA00Hypdw+QXgYbD/nDBL27H6rv6PpbbOh84etN/p7uX5eMgkfBWvMPSFEEK7
-         1GsL9rzDhj2KA==
-Date:   Tue, 21 Mar 2023 08:56:26 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: next-20230321: arm64: Unable to handle kernel paging request at
- virtual address
-Message-ID: <20230321155626.GA3765079@dev-arch.thelio-3990X>
-References: <CA+G9fYsTk0GPOTEMm1KG2iJvMLG0SqUfG0JSenRYFHuOQTpuxw@mail.gmail.com>
- <ZBl4Zi03pzURXkD9@alley>
+        Tue, 21 Mar 2023 11:56:42 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9103D920
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:56:40 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id cu36so5101461vsb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679414200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OHA0cbdS1dEyb0KuPSwVES+1ODSyv2r98Cp2t9mhxB8=;
+        b=yar+ksCzoZkluxr+vs0ZiQVsF7HNpXYgn8MTm4RndKU9Fo9SxqinqibYQ+b6EAe3TG
+         NCy/89MkYu56pqRngTI6LdM54Mi0lEBqmjZNeNNZkVjj7q7r5FH9fvsFoFGmPpuXwa4a
+         VDLyqm+gxBA2N7ihubkc6XwAdfFPAC/ceNVjOqC7+hS0wQSlFASt80Dm1YKeWXceTQTn
+         JDEqvP8HmcOHjPEwk1gJd7eHpojkdGh5uM4cvf9RNDJHKwsENKO+iMy0ais+/VGpX173
+         ACGyR4G02X8UUrNCCD9BDNdqqudS69NqtZYdyhCH0zGpK6CDBH+vj0/tbzOPo4kE/ynt
+         YecQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679414200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OHA0cbdS1dEyb0KuPSwVES+1ODSyv2r98Cp2t9mhxB8=;
+        b=I7yW7lh3YTCKLj1pgCrKh+c1EtHtiT9wgc86r1MmshdUeWRwTu0lfalrQc+mStLbWT
+         tbMYkyVtbUUO1lF8QHzozHKiaLPh9EtyeE7Yogdh3HBOPSRNne/fvFQzM1/kFOx+Dhhp
+         r7LN4U9C9eAMhQLsBC8krsIGKVuSWDiqTL2FCovJSsX/gi4BR0pApKTwTSHGW6Rjwel3
+         CtcJ8zliFNNvf8k4dFTfHnS/OhLQYGGmlWpI7V3QhV23UAZYc7ANVN1IkGWfWSUOZmMq
+         z4klDFohjf8oAt08XtF9UZ34t797Y74rD7XQtj+KJW83J731BjK80Y9yWZrnyTsQzTIO
+         rBBw==
+X-Gm-Message-State: AO0yUKXgyqw6E+dAh/Q+7XpP257nHNvHN3IxwpRVCd8wgU2wRWbU/A2S
+        FsO5aoL7hZjgfWYUc4PfziMKLUvmHuAaqhqyQg1FXQ==
+X-Google-Smtp-Source: AK7set/6uZ4VQJHCSPEmC6Kx2n6cqlS8YV4W7n02P4n11z6JEfRsyN55Trd6Z4oD/280pdj9aUGBapt6Wv6iGdPSt7w=
+X-Received: by 2002:a67:e00b:0:b0:425:d255:dd38 with SMTP id
+ c11-20020a67e00b000000b00425d255dd38mr1765286vsl.1.1679414199753; Tue, 21 Mar
+ 2023 08:56:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBl4Zi03pzURXkD9@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230321080604.493429263@linuxfoundation.org>
+In-Reply-To: <20230321080604.493429263@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Mar 2023 21:26:28 +0530
+Message-ID: <CA+G9fYtC86ZEBq=qT7ZymtGVKfUurebVGXtTo3JbKYRS_4+B=Q@mail.gmail.com>
+Subject: Re: [PATCH 6.2 000/213] 6.2.8-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        llvm@lists.linux.dev,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,134 +78,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:27:02AM +0100, Petr Mladek wrote:
-> Hi,
-> 
-> I add Luis into Cc.
-> 
-> On Tue 2023-03-21 11:42:56, Naresh Kamboju wrote:
-> > The following kernel crash was noticed on arm64 Juno-r2 and Raspberry Pi 4
-> > Model B on Linux next-20230321.
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > log:
-> > ----
-> > [    3.071500] Unable to handle kernel paging request at virtual
-> > address 0000000000001000
-> 
-> I guess that this is exactly PAGE_SIZE (4k).
-> 
-> > [    3.079432] Mem abort info:
-> > [    3.082225]   ESR = 0x0000000096000004
-> > [    3.085977]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [    3.091295]   SET = 0, FnV = 0
-> > [    3.094350]   EA = 0, S1PTW = 0
-> > [    3.097491]   FSC = 0x04: level 0 translation fault
-> > [    3.102373] Data abort info:
-> > [    3.105252]   ISV = 0, ISS = 0x00000004
-> > [    3.109089]   CM = 0, WnR = 0
-> > [    3.112055] [0000000000001000] user address but active_mm is swapper
-> > [    3.114230] usb 1-1: new high-speed USB device number 2 using ehci-platform
-> > [    3.118418] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> > [    3.118426] Modules linked in:
-> > [    3.134717] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
-> > 6.3.0-rc3-next-20230321 #1
-> > [    3.142126] Hardware name: ARM Juno development board (r2) (DT)
-> > [    3.148052] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    3.155027] pc : string (lib/vsprintf.c:644 lib/vsprintf.c:726)
-> > [    3.158443] lr : vsnprintf (lib/vsprintf.c:2817)
-> > [    3.162196] sp : ffff80000b34b8f0
-> > [    3.165511] x29: ffff80000b34b8f0 x28: ffff800009d7b1ca x27: ffff80000b34bab0
-> > [    3.172666] x26: ffff800009d7b1ca x25: 0000000000000020 x24: 0000000000000008
-> > [    3.179820] x23: 00000000ffffffd8 x22: ffff8000099858a0 x21: ffff80000b34bc30
-> > [    3.186973] x20: ffff80000b34ba90 x19: ffff80000b34ba98 x18: 000000003c98bfdd
-> > [    3.194127] x17: 000000000000001c x16: 00000000eec48da2 x15: 00000000a9dbdd17
-> > [    3.201280] x14: ffff80000b0242e8 x13: 0000000057a049ef x12: 00000000cfa47237
-> > [    3.208433] x11: 0000000000000001 x10: 00000000bd5b8780 x9 : ffff80000812cbec
-> > [    3.215586] x8 : 00000000ffffffff x7 : 0000000000000002 x6 : ffff80000b34ba98
-> > [    3.222739] x5 : ffffffffffffffff x4 : 0000000000000000 x3 : ffff0a00ffffff04
-> > [    3.229891] x2 : 0000000000001000 x1 : 0000000000000000 x0 : ffff80000b34bab0
-> > [    3.237044] Call trace:
-> > [    3.239489] string (lib/vsprintf.c:644 lib/vsprintf.c:726)
-> 
-> This is the line where vsprintf() reads a string to be printed:
-> 
-> static char *string_nocheck(char *buf, char *end, const char *s,
-> 			    struct printf_spec spec)
-> {
-> 	int len = 0;
-> 	int lim = spec.precision;
-> 
-> 	while (lim--) {
-> ---->		char c = *s++;
-> 
-> 
-> > [    3.242551] vsnprintf (lib/vsprintf.c:2817)
-> > [    3.245954] vprintk_store (kernel/printk/printk.c:2200)
-> > [    3.249712] vprintk_emit (kernel/printk/printk.c:2297)
-> > [    3.253381] vprintk_default (kernel/printk/printk.c:2328)
-> > [    3.257137] vprintk (kernel/printk/printk_safe.c:50)
-> > [    3.260198] _printk (kernel/printk/printk.c:2341)
-> > [    3.263257] sysctl_err (fs/proc/proc_sysctl.c:1109)
-> > [    3.266577] __register_sysctl_table (fs/proc/proc_sysctl.c:1140
-> > fs/proc/proc_sysctl.c:1383)
-> > [    3.271202] __register_sysctl_init (fs/proc/proc_sysctl.c:1462)
-> 
-> The has been done some reractoring/modification of this code
-> by the patchset ("[PATCH 00/11] sysctl: deprecate
-> register_sysctl_paths()"), see
-> https://lore.kernel.org/lkml/20230302202826.776286-1-mcgrof@kernel.org/
-> 
-> Luis, does it trigger any bell, please?
-> Do you have an idea where this code could pass a pointer PAGE_SIZE
-> as string to printk("%s")?
+On Tue, 21 Mar 2023 at 14:09, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.2.8 release.
+> There are 213 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 23 Mar 2023 08:05:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.2.8-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.2.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-My bisect actually landed on commit cfe7e6ea5ee2 ("mm: memory-failure:
-Move memory failure sysctls to its own file"). The new sysctl table is
-missing a sentinel. The following diff resolves it for me.
+Powerpc builds need more commits,
+RC1 to RC2 the
+  - Build  clang-16 tqm8xx_defconfig got passed.
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 6367714af61d..b2377f12f062 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -143,6 +143,7 @@ static struct ctl_table memory_failure_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
-+	{ }
- };
- 
- static int __init memory_failure_sysctl_init(void)
+But still following build failures noticed on RC2 with
+  - Build clang-16 ppc64e_defconfig failed
 
-Cheers,
-Nathan
+---
+error: unknown target CPU 'e500mc64'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+error: unknown target CPU 'e500mc64'
 
-# bad: [f3594f0204b756638267242e26d9de611435c3ba] Add linux-next specific files for 20230321
-# good: [7d31677bb7b1944ac89e9155110dc1b9acbb3895] gpu: host1x: fix uninitialized variable use
-git bisect start 'f3594f0204b756638267242e26d9de611435c3ba' '7d31677bb7b1944ac89e9155110dc1b9acbb3895'
-# good: [454faa8515d7c7b90b3e291bc7cc1a84697a23d9] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good 454faa8515d7c7b90b3e291bc7cc1a84697a23d9
-# good: [9bfa51aa7b4f87fe6215a200cca280ebd1c111b4] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
-git bisect good 9bfa51aa7b4f87fe6215a200cca280ebd1c111b4
-# good: [c637c9b5d4540e07ed95698a67770c5fd2241d7e] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git
-git bisect good c637c9b5d4540e07ed95698a67770c5fd2241d7e
-# good: [f1fb10a55d81bc43b7c16e96122c8611e0131ca2] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel.git
-git bisect good f1fb10a55d81bc43b7c16e96122c8611e0131ca2
-# good: [d3294413e4518ef8b31ee46535c873ef0b8a1d1a] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching
-git bisect good d3294413e4518ef8b31ee46535c873ef0b8a1d1a
-# good: [009e0171be8db0a77624899623fadcb59fc40a12] Merge branch 'main' of git://git.infradead.org/users/willy/xarray.git
-git bisect good 009e0171be8db0a77624899623fadcb59fc40a12
-# bad: [cfe7e6ea5ee2149cf2dfc69d3f8a220ab00cb65d] mm: memory-failure: Move memory failure sysctls to its own file
-git bisect bad cfe7e6ea5ee2149cf2dfc69d3f8a220ab00cb65d
-# good: [2e88a8303d02ff107fd6aa5041f9def177483956] proc_sysctl: enhance documentation
-git bisect good 2e88a8303d02ff107fd6aa5041f9def177483956
-# good: [8869a82dcbbf6fbe584ffff16b620b68281b3180] ntfs: simplfy one-level sysctl registration for ntfs_sysctls
-git bisect good 8869a82dcbbf6fbe584ffff16b620b68281b3180
-# good: [7385b7cb60e030f0041c8c83d17d3c63e598c77d] ppc: simplify one-level sysctl registration for nmi_wd_lpm_factor_ctl_table
-git bisect good 7385b7cb60e030f0041c8c83d17d3c63e598c77d
-# good: [36657db1c77c1539812cc1303119cf4ad2e8f34a] x86: simplify one-level sysctl registration for itmt_kern_table
-git bisect good 36657db1c77c1539812cc1303119cf4ad2e8f34a
-# good: [0234a6faf178985c74806e33bde8a9e3052d3555] arm: simplify two-level sysctl registration for ctl_isa_vars
-git bisect good 0234a6faf178985c74806e33bde8a9e3052d3555
-# first bad commit: [cfe7e6ea5ee2149cf2dfc69d3f8a220ab00cb65d] mm: memory-failure: Move memory failure sysctls to its own file
+---
+
+> Christophe Leroy <christophe.leroy@csgroup.eu>
+>     powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
+
+> Christophe Leroy <christophe.leroy@csgroup.eu>
+>     powerpc/64: Set default CPU in Kconfig
+
+following commit also missing fixes:
+--
+From 77e82fa1f9781a958a6ea4aed7aec41239a5a22f Mon Sep 17 00:00:00 2001
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Date: Mon, 19 Dec 2022 19:45:58 +0100
+Subject: powerpc/64: Replace -mcpu=3De500mc64 by -mcpu=3De5500
+
+E500MC64 is a processor pre-dating E5500 that has never been
+commercialised. Use -mcpu=3De5500 for E5500 core.
+
+More details at https://gcc.gnu.org/PR108149
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/fa71ed20d22c156225436374f0ab847daac893bc.16=
+71475543.git.christophe.leroy@csgroup.eu
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
