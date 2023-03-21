@@ -2,209 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D716C2D86
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E82F6C2D83
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCUJFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S231136AbjCUJEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjCUJEa (ORCPT
+        with ESMTP id S230460AbjCUJE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:04:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B14126869;
-        Tue, 21 Mar 2023 02:03:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1688BB811C0;
-        Tue, 21 Mar 2023 09:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6BFC4339E;
-        Tue, 21 Mar 2023 09:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679389418;
-        bh=QBJm/wDer1AQyhtVso4csqiF+C7PJ0MWal4bYdSXE3g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AvdXYjk/crKqEIruwW4kw0vJ2kjxBxGiy6Kf77YfGgXgX7MYQHz/09q5FXvLYmikc
-         Ao6GQ3ZVxCX6z/yrwdMF/JM4HNppaAoFsMyRcX2MxglHdf2hcSrkEjDP4J5TCazN+N
-         qh085GqLho8vSkaxtVip5Jww1FQfP8tcgr/QYryjW0ZQ8H+FQJOe3ELdUcOKF+T2cF
-         XKOJUfa4+cQ+fDdGfsktx43Nm/St2oRrBpex5zHcvZDBDJcYBP5cTnzCE+DF2QKJBv
-         DqquuvxDNGhe+E0drPAYRYWU/wbP5G2TmT6TeH3ptlGoKY1ZH4cIeN1eVJW7x7RHL7
-         GpOCk1rLAPJpw==
-Received: by mail-oi1-f175.google.com with SMTP id e4so3751318oiy.10;
-        Tue, 21 Mar 2023 02:03:38 -0700 (PDT)
-X-Gm-Message-State: AO0yUKU0FXkPbBLyiFfpF8hPPWNXOgkhptdUhV/8akr4tm9/prcTMOzj
-        gZqn595RLfQWdts14k6Eb0WSvcoBPgne8DlhYPo=
-X-Google-Smtp-Source: AK7set9JciBVHXDc8C1ovtlnYoWm6ZJfppLjWyjt/EfJGjNHqGpfDxM9JBt7JuiKy0LHtqKJPXBa6gzD+iT9Sx9VBWA=
-X-Received: by 2002:a54:4817:0:b0:387:1e2d:f281 with SMTP id
- j23-20020a544817000000b003871e2df281mr357453oij.11.1679389417888; Tue, 21 Mar
- 2023 02:03:37 -0700 (PDT)
+        Tue, 21 Mar 2023 05:04:29 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777AA728B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:03:45 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso10649701wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679389424;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PFpQeuwuxYq7wZtArv5D2lpNhMJ5VsJ2OapWoAXxd/s=;
+        b=3K9ISW/+lEplq2clx8BsC7oSBcfy6iDwr04Lm4F9DXwz+uwzKB/96L6qnmdK85eX8O
+         /S0kPjZ79fO9n5GLcQ1WwC2qKdoMxtsx13O0kyDZqQoMI3Pn5xeN44fh/q0Kue9l9qoM
+         pWmJCbTYn5LpY9z5LcmUR9OZE4zfUEIRHrnD97z3fpPrmRAHs89iXB281xNobfae43bc
+         Xe5g8E3ijju3Jo/IZbsOhb8PJhRuuNnlSqS4ff7FYoJkFxFvKG22v/YbPOtmAm+rN3/j
+         /cqE8qTyF+Y87xnDUj9vUT0+1YTX+4cP4KqZbY2A/nZWIkLkHvBSFXACH45c1/xErqAJ
+         lgtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679389424;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PFpQeuwuxYq7wZtArv5D2lpNhMJ5VsJ2OapWoAXxd/s=;
+        b=THjQsQVYkMJlvsnvmB0OJ3ss6H30WPbx8ZQmJ1oEUr6tEccvjBj2Mr2bTpTzPQszTe
+         EFHA2kyIFhnMlqhhGR5PyHjeF3XCR6su5hUuZyaI97yV381ochtx4GMzEQGOBlPO6DA2
+         xOThPJiARldm+Igh/W8Hxmi53IPyTUeXHOyAWmvZB4i9fH/Sq/Di//sGu4VJMiY8nzsC
+         JSnSuiVvac4DgQV2Ep+44zuwqdPHpSK/yAr+2uE0gEdexamnH82uKIYQKmgHTCgFtVld
+         aokM3acOIqPnshArdj6gKm+tM9x0igOacEQxfPqFj15xLvNfRfSEL2no/VI/bwVyTbia
+         cgYw==
+X-Gm-Message-State: AO0yUKVNwhEA9j2Dk7KWSYBNYHqkWDdKjLF3ZjaCqvee6cM6uiGDZrAF
+        L8PEsiy/yRZsxFnqfmOXHUhJhQ==
+X-Google-Smtp-Source: AK7set9/QFtumvHHRHPszzfZDMpsCX6rvKpHJaht7S8cuL3hzwKKJHx3HKC7jKSNqzrx0mk9iRM7wA==
+X-Received: by 2002:a05:600c:228d:b0:3ed:a07b:c591 with SMTP id 13-20020a05600c228d00b003eda07bc591mr1775142wmf.1.1679389423904;
+        Tue, 21 Mar 2023 02:03:43 -0700 (PDT)
+Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id m16-20020a7bcb90000000b003edf2dc7ca3sm5600424wmi.34.2023.03.21.02.03.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 02:03:43 -0700 (PDT)
+Message-ID: <887d5e71-334c-b206-08e6-2cc822df9eda@baylibre.com>
+Date:   Tue, 21 Mar 2023 10:03:41 +0100
 MIME-Version: 1.0
-References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
- <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com> <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
- <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
-In-Reply-To: <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 21 Mar 2023 18:03:01 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
-Message-ID: <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
-Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in /proc/dynamic_debug/control
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Jason Baron <jbaron@akamai.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_AS_SEEN autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     lee@kernel.org, krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230315110736.35506-1-jpanis@baylibre.com>
+ <20230315110736.35506-2-jpanis@baylibre.com>
+ <20230320155354.GB1733616-robh@kernel.org>
+ <04914464-2bc2-9d86-e9e2-8a716b929f28@baylibre.com>
+ <2dcfd9dc-6c43-20b7-e27b-8ec2883be237@linaro.org>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <2dcfd9dc-6c43-20b7-e27b-8ec2883be237@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 6:04=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
+
+
+On 3/21/23 08:36, Krzysztof Kozlowski wrote:
+> On 20/03/2023 17:35, Julien Panis wrote:
+>>
+>> On 3/20/23 16:53, Rob Herring wrote:
+>>> On Wed, Mar 15, 2023 at 12:07:33PM +0100, Julien Panis wrote:
+>>>> TPS6594 is a Power Management IC which provides regulators and others
+>>>> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+>>>> PFSM (Pre-configurable Finite State Machine) managing the state of the
+>>>> device.
+>>>> TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
+>>> As mentioned, the binding needs to be complete. It's missing GPIO at
+>>> least. RTC and watchdog may or may not need binding changes.
+>> Thank you for your feedback.
+>>
+>> About GPIO, do you speak about 'gpio-controller'
+>> and/or '#gpio-cells' properties ?
+> Yes.
 >
-> On Mon, Mar 20, 2023 at 01:59:28PM -0600, jim.cromie@gmail.com wrote:
-> > On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Jason Baron <jbaron@akamai.com=
-> wrote:
-> > >
-> > >
-> > >
-> > > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
-> > > > dynamic-debug METADATA uses KBUILD_MODNAME as:
-> > > >
-> > > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
-> > > >          static struct _ddebug  __aligned(8)                     \
-> > > >          __section("__dyndbg") name =3D {                          =
-\
-> > > >                  .modname =3D KBUILD_MODNAME,                      =
-\
-> > > >
-> > > > This is going amiss for some builtins, ie those enabled here, by:
-> > > >
-> > > >      echo module main +pmf > /proc/dynamic_debug_control
-> > > >      grep =3Dpmf /proc/dynamic_debug/control
-> > > >
-> > > > init/main.c:1187 [main]initcall_blacklist =3Dpmf "blacklisting init=
-call %s\n"
-> > > > init/main.c:1226 [main]initcall_blacklisted =3Dpmf "initcall %s bla=
-cklisted\n"
-> > > > init/main.c:1432 [main]run_init_process =3Dpmf "  with arguments:\n=
-"
-> > > > init/main.c:1434 [main]run_init_process =3Dpmf "    %s\n"
-> > > > init/main.c:1435 [main]run_init_process =3Dpmf "  with environment:=
-\n"
-> > > > init/main.c:1437 [main]run_init_process =3Dpmf "    %s\n"
-> > >
-> > >
-> > > Hi Jim,
-> > >
-> > > So if I'm following correctly, this is not a new issue, the 'module'
-> > > name for dynamic debug has always been this way for builtin.
-> >
-> > It is not a new issue - both PM and init-main have been in [main] for s=
-ome time.
-> >
-> > I believe that with
-> > cfc1d277891e module: Move all into module/
-> >
-> > module's module-name joined them, changing from [module] to [main]
+>> For RTC (and for watchdog, once the driver will be
+>> implemented), our driver do not require any node
+>> to work. What could make an explicit instantiation
+>> necessary in DT ?
+> Properties from RTC schema, e.g. start-year, wakeup etc.
+
+TPS6594 RTC driver is being reviewed (this is another patch
+series, not merged yet). These properties are not used by our
+driver, that's why we did not have to add some RTC node in
+the DT (until now, using such properties in our driver was not
+requested by RTC sub-system maintainers).
+
+>>>> +  ti,spmi-controller:
+>>>> +    type: boolean
+>>>> +    description: |
+>>>> +      Identify the primary PMIC on SPMI bus.
+>>> Perhaps the property name should include 'primary' and 'pmic'.
+>>> Otherwise, it looks like it is just marked as 'a SPMI controller'.
+>> Including 'primary' and 'pmic' will be more understandable indeed.
+>> I will change that in v3.
+>>
+>>>
+>>>> +      A multi-PMIC synchronization scheme is implemented in the PMIC device
+>>>> +      to synchronize the power state changes with other PMIC devices. This is
+>>>> +      accomplished through a SPMI bus: the primary PMIC is the controller
+>>>> +      device on the SPMI bus, and the secondary PMICs are the target devices
+>>>> +      on the SPMI bus.
+>>> Is this a TI specific feature?
+>> I don't think so. I will double-check that.
+>> If not, shall I remove the 'ti,' prefix ?
+> Somehow reminds me qcom,bus-id, but the wording and code are not exactly
+> the same. The question here is whether this is generic feature of all
+> SPMI devices or PMICs, or device specific. If it is generic, then naming
+> and type should be chosen a bit more carefully and then indeed skip
+> "ti," prefix.
+
+Apparently, it's not TI specific. Besides, all the information
+I found about SPMI were related to PMIC devices. I have to
+double-check with TI, though.
+I will either rename it to 'ti,primary-pmic' if TI specific or
+'primary-pmic' if not TI specific.
+
 >
-> If there was a regression due to this, we'd be very interested in
-> hearing about it. Aaron he did the work to move the code to its own direc=
-tory.
+>>>> +
+>>>> +  system-power-controller: true
+>>>> +
+>>>> +  interrupts:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  ti,multi-phase-id:
+>>>> +    description: |
+>>>> +      Describes buck multi-phase configuration, if any. For instance, XY id means
+>>>> +      that outputs of buck converters X and Y are combined in multi-phase mode.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    enum: [12, 34, 123, 1234]
+>>> coupled regulator stuff doesn't work here?
+>> Coupled regulator stuff works here.
+>> Is it also necessary to specify some 'allOf' logic here to ensure
+>> that mutual exclusions described below (for regulators) will be
+>> applied ?
+> None of other regulators do it but you could add something.
 >
-> > We could do
-> > > something simple and just normalize it when we initially create the
-> > > table, but setting the 'module name' to 'core' or 'builtin' or someth=
-ing
-> > > for all these?
-> >
-> > core and builtin would both lump all those separate modules together,
-> > making it less meaningful.
-> >
-> > having stable names independent of M vs Y config choices is imperative,=
- ISTM.
-> >
-> > Also, I dont think "only builtins are affected" captures the whole prob=
-lem.
-> > I dont recall amdgpu or other modules changing when built with =3Dy
-> >
-> > Theres some subtlety in how KBUILD_MODNAME is set,
-> > and probably many current users who like its current behavior.
-> > A new var ?
-> >
-> > 1st, I think that anything tristate gets a sensible value,
-> > but at least some of the builtin-only "modules" get basenames, by defau=
-lt.
 >
-> In general we could all benefit from an enhancement for a shortname for
-> things which could be modules being built-in. We're now seeing requests
-> for dynamic debug, but it could also be usefulf for Nick's future work
-> to help userspace tools / tracing map kallsysms to specific modules when
-> built-in.
-
-
-
-I think I rejected it some years ago.
-He comes back again and again with almost the same approaches,
-until he finds a "sponsor" (it's you) who will get it in.
-
-Recently, I rejected the Kbuild changes again.
-
-
-
-
-> To that end I had suggested the current state of affairs & current diffic=
-ulty
-> in trying to get us a name for this here:
+> Best regards,
+> Krzysztof
 >
-> https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
->
-> I ended up suggesting perhaps we need a -DPOSSIBLE_MODULE then if we
-> could *somehow* pull that off perhaps then we could instead use
-> -DPOSSIBLE_KBUILD_MODNAME which would ensure a consistent symbol when
-> a module is built-in as well.
->
-> That still leaves the difficulty in trying to gather possible-obj-m as
-> a future challenge.
 
-
-I do not understand your point.
-
-Why is it important to achieve "precisely-exactly-possible-obj-m" instead o=
-f
-"perhaps-possible-obj-m"?
-
-
-When "modprobe foo" succeeds, the user is sure that the kernel
-provides the feature "foo" (but he does not care if
-"foo" is built-in or modular).
-
-I think that is the point for kmod check also module.builtin
-before saying no.
-
-
-When CONFIG_FOO=3Dy, "modprobe foo" succeeds because "foo" is available
-as built-in.
-When CONFIG_FOO=3Dn, "modprobe foo" fails because "foo" is not available an=
-ywhere.
-I do not see anything wrong here.
-
-Why do we need to make "modprobe foo" fail, where the feature "foo" is
-still available
-but just because we cannot compile it as a module?
-
-He spams with MODULE_LICENSE removal with no justification.
-
---=20
-Best Regards
-Masahiro Yamada
