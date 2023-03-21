@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D766C2D6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BCD6C2BF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCUJDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S230469AbjCUIJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjCUJCj (ORCPT
+        with ESMTP id S230189AbjCUIJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:02:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB207681
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:01:31 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ek18so56783534edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679389285;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IxUfjmrR83f/eWKndlnoluEe9nId5yJ0ezW/bbuG6h0=;
-        b=QrqVwWfMHhBDDVkhZb08b4C9opfPLvw6XgpI4yRRjBBBah8tfxR/5r1UDwEYf79f4s
-         l6cyMi0Grsz0KhSGbys7wLQwD5skmTWmlttKLbu66ATdpqm8bPPTcG0UoWVq3mVR1Is0
-         +BufFTJzbleB0ihklKHhPTXvlIoowvMPZ55EM1BnS+NDD5u8nUZOmpE3l41ny0PPLD71
-         fEFZI1rKD6ClFDkeIpS9WP3mc6F01+852YXO7ciCjzxyLGeZZmS7KInMp1cTnmsP7zTE
-         hmNvBBRoyG6LqmU0YbMToZK1/xkbPPCoFbAM3ca9tLKgWavo+q7ueHY3KJjIQWoJiO69
-         luWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679389285;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IxUfjmrR83f/eWKndlnoluEe9nId5yJ0ezW/bbuG6h0=;
-        b=lQBVx6Jh51n+1WeI8xsgDM3xS94VS0n1hBl3//CziftDGsftZ50oxBZhtLzBZZaKhy
-         dfrEFxl6jxGdEfdpGUau2tBtLkFeRJsBkScOynTBRvhoEKmuOBDkkfYCGN6KKzgrRX4k
-         WmWGhPQGwekhO7dG8cDEpWXtv94nc8yefL5aKCwu4PzdWKZnr66czfnyYSwLCo+5tGzE
-         z5Sx4kJz6rIu66xGVY1hsSIV+N75Kph6R/JwJZnkQD9OGmO8xO6U60kuOxrQRBMa9N8E
-         bd+NfRBzUt/AHs4IIBN5BaIdg7gw/RLw+ucjGyQzOZi8I0UFv+hyHHx9nvcJxNzBcTEy
-         6jOg==
-X-Gm-Message-State: AO0yUKXksOuFCyKFu8aNMmgiBmaEZSskSWUgp2ymdZYo3ke3UzyeSwvV
-        lPhX/+bvgfU+IPrkM7Ih6xg9LA==
-X-Google-Smtp-Source: AK7set94TVmcohbUjC/oW4eo6etAi9vYBb0C8oqRM6UySprXJ+vAZbtzQRT/D6SgvMMcPGXe0JCudA==
-X-Received: by 2002:aa7:d68d:0:b0:4ac:bd84:43d8 with SMTP id d13-20020aa7d68d000000b004acbd8443d8mr2523886edr.8.1679389285674;
-        Tue, 21 Mar 2023 02:01:25 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id d28-20020a50cd5c000000b004fbdfbb5acesm5969966edj.89.2023.03.21.02.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 02:01:25 -0700 (PDT)
-Message-ID: <9f8e7a74-35c6-6db5-4960-1efa79a23983@linaro.org>
-Date:   Tue, 21 Mar 2023 10:01:24 +0100
+        Tue, 21 Mar 2023 04:09:31 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB5330E89;
+        Tue, 21 Mar 2023 01:09:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pgklk6nx4z4f3p7j;
+        Tue, 21 Mar 2023 16:09:22 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgDnnbEzZhlk+NQhFw--.4478S2;
+        Tue, 21 Mar 2023 16:09:24 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ojaswin@linux.ibm.com, shikemeng@huaweicloud.com
+Subject: [PATCH 0/8] Some fixes and cleanup to mballoc
+Date:   Wed, 22 Mar 2023 00:12:12 +0800
+Message-Id: <20230321161220.418652-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
- <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
- <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
- <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
- <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
- <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
- <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
- <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
- <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
- <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
- <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
- <82f517b5-6697-3379-8d71-163b0d17735d@linaro.org>
- <d640a929-b6a0-1552-e66a-3a7bbabbc69f@arinc9.com>
- <2150938b-5433-6f51-c404-2c0f6976f864@linaro.org>
- <1c279b0a-c814-2fe3-0432-2aa6b3dff16e@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1c279b0a-c814-2fe3-0432-2aa6b3dff16e@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgDnnbEzZhlk+NQhFw--.4478S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jry7Cw17WFW5ZryfCr1fXrb_yoWkuwc_ua
+        4jyrykKFWxJ3Wfua9YgFySvFy8Kr4xtr1jqFyqqrs3Zr17X3ZrAa1kArW3urn3Wr45Aa43
+        JrnrXr18JFn7XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28lY4IEw2IIxx
+        k0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK
+        6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjTRCA
+        pnUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 09:53, Arınç ÜNAL wrote:
->>
->> I do not see how choosing one variant for compatibles having two
->> variants of prefixes, complicates things. Following this argument
->> choosing "ralink" also complicates!
-> 
-> The idea is to make every compatible string of MTMIPS to have the ralink 
-> prefix so it's not mediatek on some schemas and ralink on others. Simpler.
+We use cluster unit and block unit for different structure members. For
+example, in struct ext4_prealloc_space, pa_lstart and pa_pstart are in
+block unit while pa_len and pa_free are in cluster unit; in struct
+ext4_free_extent, fe_logical is in block unit while fe_start and fe_len
+are in cluster unit. The first five patches fix wrong unit use in
+mballoc.
+The rest is random bugfix and cleanup to mballoc, More details can be
+found in respective patches.
+Besides, "kvm-xfstest smoke" passes all test.
+Thanks!
 
-Which is an ABI break, so you cannot do it.
+Kemeng Shi (8):
+  ext4: fix wrong unit use in ext4_mb_normalize_request
+  ext4: fix unit mismatch in ext4_mb_new_blocks_simple
+  ext4: fix wrong unit use in ext4_mb_new_inode_pa
+  ext4: fix wrong unit use in ext4_mb_find_by_goal
+  ext4: treat stripe in block unit
+  ext4: add EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated
+  ext4: remove ext4_block_group and ext4_block_group_offset declaration
+  ext4: try all groups in ext4_mb_new_blocks_simple
 
-Best regards,
-Krzysztof
+ fs/ext4/ext4.h    |  4 ---
+ fs/ext4/mballoc.c | 75 +++++++++++++++++++++++++++++++++++------------
+ fs/ext4/super.c   | 13 ++++++++
+ 3 files changed, 70 insertions(+), 22 deletions(-)
+
+-- 
+2.30.0
 
