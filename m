@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BA06C2B84
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3146C2B86
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjCUHk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S229666AbjCUHlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCUHkz (ORCPT
+        with ESMTP id S229776AbjCUHk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:40:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2D83B64B
+        Tue, 21 Mar 2023 03:40:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2354E3B84F
         for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:40:42 -0700 (PDT)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pgk325l0PznYR6;
-        Tue, 21 Mar 2023 15:37:34 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pgk4051K4zKsPT;
+        Tue, 21 Mar 2023 15:38:24 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>, <david@redhat.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <mawupeng1@huawei.com>, <kuleshovmail@gmail.com>,
         <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v5 1/4] mm/mlock: return EINVAL if len overflows for mlock/munlock
-Date:   Tue, 21 Mar 2023 15:40:32 +0800
-Message-ID: <20230321074035.1526157-2-mawupeng1@huawei.com>
+Subject: [PATCH v5 2/4] mm/mempolicy: return EINVAL for if len overflows for set_mempolicy_home_node
+Date:   Tue, 21 Mar 2023 15:40:33 +0800
+Message-ID: <20230321074035.1526157-3-mawupeng1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230321074035.1526157-1-mawupeng1@huawei.com>
 References: <20230321074035.1526157-1-mawupeng1@huawei.com>
@@ -50,65 +50,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ma Wupeng <mawupeng1@huawei.com>
 
-While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
-The return value of mlock is zero. But nothing will be locked since the
-len in do_mlock overflows to zero due to the following code in mlock:
-
-  len = PAGE_ALIGN(len + (offset_in_page(start)));
-
-The same problem happens in munlock.
-
-Add new check and return -EINVAL to fix this overflowing scenarios since
-they are absolutely wrong.
-
-Return 0 early to avoid burn a bunch of cpu cycles if len == 0.
+Check and return 0 if len == 0 at the beginning of the function.
+Return -EINVAL if len overflows for set_mempolicy_home_node.
 
 Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
 ---
- mm/mlock.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ mm/mempolicy.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 617469fce96d..247ce396bb16 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -479,8 +479,6 @@ static int apply_vma_lock_flags(unsigned long start, size_t len,
- 	end = start + len;
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index a256a241fd1d..0a596c6cbed9 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -1513,13 +1513,16 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
+ 	if (home_node >= MAX_NUMNODES || !node_online(home_node))
+ 		return -EINVAL;
+ 
++	if (!len)
++		return 0;
++
+ 	len = PAGE_ALIGN(len);
+-	end = start + len;
++	if (!len)
++		return -EINVAL;
+ 
++	end = start + len;
  	if (end < start)
  		return -EINVAL;
 -	if (end == start)
 -		return 0;
- 	vma = vma_iter_load(&vmi);
- 	if (!vma)
- 		return -ENOMEM;
-@@ -574,7 +572,13 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
- 	if (!can_do_mlock())
- 		return -EPERM;
- 
-+	if (!len)
-+		return 0;
-+
- 	len = PAGE_ALIGN(len + (offset_in_page(start)));
-+	if (!len)
-+		return -EINVAL;
-+
- 	start &= PAGE_MASK;
- 
- 	lock_limit = rlimit(RLIMIT_MEMLOCK);
-@@ -634,7 +638,13 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
- 
- 	start = untagged_addr(start);
- 
-+	if (!len)
-+		return 0;
-+
- 	len = PAGE_ALIGN(len + (offset_in_page(start)));
-+	if (!len)
-+		return -EINVAL;
-+
- 	start &= PAGE_MASK;
- 
- 	if (mmap_write_lock_killable(current->mm))
+ 	mmap_write_lock(mm);
+ 	for_each_vma_range(vmi, vma, end) {
+ 		/*
 -- 
 2.25.1
 
