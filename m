@@ -2,190 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15F26C2A9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978E76C2AA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjCUGpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S230387AbjCUGpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjCUGpH (ORCPT
+        with ESMTP id S230021AbjCUGps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:45:07 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3799EC0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:45:05 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c18so15036923ple.11
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679381105;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hmo/in41rdsjqnIvRdoFRZ/GQusTqKDlZYzqHkG5bV8=;
-        b=brlTlv10D4jrx36zyNqEvemH3HRxmkZ/MnVJO0AoSSmDWDLwTgTlknZezhxVA8jZ4l
-         AZofYUQ2SWwhzvgpkvCo0vv6acHkPGUUkLBP3u7oVTevB4CjDIvaJZgnuNKvbNgF5EV+
-         2kdIq353xDxaIhaaTo5X8ooT9WmwBIBm1SdRglJX7OsbQxjE+qYzgXbJFzxqDiXu/KRT
-         nOhEFZCAwain/gs8HxrLBUm6UX/l0pSGI0/EH6yzCvW0RVdivfbvc9xHfnyjvJq8YtB5
-         jVZNnPVD5MSYWJsLAzb0og0XQl9GWmhK2PLwbgfx/FBoPRf6YpdL2hALah1kll+7gTk6
-         DPZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679381105;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hmo/in41rdsjqnIvRdoFRZ/GQusTqKDlZYzqHkG5bV8=;
-        b=lPFlP4uL/zGNolFa0TaaU7sREcBmM3mlU8VBA0xWL9eJcBgz+d0TH0SuJm3VTxbaF7
-         VgrV+LqBtKTbD7n+jR+rq68sMs6frw0NEZIPCC9tUinVxi7N8MopgBu3h2DuCy9SKqCw
-         PoU0srXbv6HUU04JFOx2GAsnFMu3QZRdZwYU6seaHElN+2ooFG6yV5fzSqpZSscmWVKK
-         hJMEYgb3QxaLeXfoIs8Be8sM6XIvG/TLQse9AYS8CGH0xyHx9CjQvtVb0jXWPINci546
-         09r1PtbtyrvgC0wHAe9LoX0/BjR2GpWDBNzZFEmoTcuCn+G0tGnT6LQc85uaCPjOlfK+
-         dPMw==
-X-Gm-Message-State: AO0yUKVNU5Gtv5kL11JE6atqQbmLFCgP7k1Z9w7IPZFOiOTbvPA58JRL
-        5SAYNJHJPJPvvbTphA0UOwE=
-X-Google-Smtp-Source: AK7set+MyHdj+9KrLosUzl+Oy2unZ/Rnoj2j+lJ5DW6//iOyRcCGmvM8FZDBLiz3pL68pcjgU9X74g==
-X-Received: by 2002:a17:903:84c:b0:1a0:49eb:4cb2 with SMTP id ks12-20020a170903084c00b001a049eb4cb2mr1360863plb.13.1679381105394;
-        Mon, 20 Mar 2023 23:45:05 -0700 (PDT)
-Received: from C02FG34WMD6R.bytedance.net ([61.213.176.14])
-        by smtp.gmail.com with ESMTPSA id b2-20020a170902b60200b0019602274208sm7804335pls.186.2023.03.20.23.45.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 23:45:05 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] sched/core: Reduce cost of sched_move_task when config autogroup
-Date:   Tue, 21 Mar 2023 14:44:59 +0800
-Message-Id: <20230321064459.39421-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Tue, 21 Mar 2023 02:45:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1C44C08;
+        Mon, 20 Mar 2023 23:45:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85C2CB8128D;
+        Tue, 21 Mar 2023 06:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA22C433EF;
+        Tue, 21 Mar 2023 06:45:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679381140;
+        bh=czxHhCfaCVdk9soB0/1dxDDvx9mGKnnmBacpenJG4GE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bsy9un/KUVIh+FL+0DCyEvXrAwxKeanVhnNUdBHhTTBIGbuElztGmMda9LELDf6Mk
+         D2wjNUEP7DN42KbIUPxE5FS/HgmBmDUgRxQW9QhWxlNeHGlvvTZKy1LMkyx+jworv6
+         heVsOJCXF0NSV7HEv3UQbWIezNWarm9PLm8NPqPvYvTFH2J7hu6yrxg3IxFzCrxkdU
+         K3s1LlVEJa4O/t3apDng/4FJdznuLfQ2kByDbHz+6I5jBHF106WbRKyWHg4Aq5rkMh
+         au54085OJYiGOrtbN0qQ3D29P1jZCy37caxb8cRu1UAAeotMYhUUoM9zp7WdI26oQX
+         1QOJg3c180cqg==
+Received: by mail-oi1-f180.google.com with SMTP id bm2so1538724oib.4;
+        Mon, 20 Mar 2023 23:45:40 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXlE0phmQq/Twq6R8recVdk7onAj2FuZZmBR4PZSiyp4blTbr/o
+        dCASglg608DJOPixBGX6kvoitv5fR7nwoktcbSI=
+X-Google-Smtp-Source: AK7set8kH3ZLXzYFMaT+HHhOIGloSFQWWkZyR3X+iunWo9f+nF2DHd/2dTCpy3cRgXqMzsAFGw5VRGZT3adpvR08VIE=
+X-Received: by 2002:aca:a857:0:b0:384:33df:4dfc with SMTP id
+ r84-20020acaa857000000b0038433df4dfcmr298033oie.11.1679381139427; Mon, 20 Mar
+ 2023 23:45:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+ <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com> <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+In-Reply-To: <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 21 Mar 2023 15:45:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATGL4oBPO6s27Zp15-TvD=y4BuqD24YHzLMJxcbk_Ff3w@mail.gmail.com>
+Message-ID: <CAK7LNATGL4oBPO6s27Zp15-TvD=y4BuqD24YHzLMJxcbk_Ff3w@mail.gmail.com>
+Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in /proc/dynamic_debug/control
+To:     jim.cromie@gmail.com
+Cc:     Jason Baron <jbaron@akamai.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_AS_SEEN autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some sched_move_task calls are useless because that
-task_struct->sched_task_group maybe not changed (equals task_group
-of cpu_cgroup) when system enable autogroup. So do some checks in
-sched_move_task.
+On Tue, Mar 21, 2023 at 5:00=E2=80=AFAM <jim.cromie@gmail.com> wrote:
+>
+> On Mon, Mar 20, 2023 at 12:35=E2=80=AFPM Jason Baron <jbaron@akamai.com> =
+wrote:
+> >
+> >
+> >
+> > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
+> > > dynamic-debug METADATA uses KBUILD_MODNAME as:
+> > >
+> > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> > >          static struct _ddebug  __aligned(8)                     \
+> > >          __section("__dyndbg") name =3D {                          \
+> > >                  .modname =3D KBUILD_MODNAME,                      \
+> > >
+> > > This is going amiss for some builtins, ie those enabled here, by:
+> > >
+> > >      echo module main +pmf > /proc/dynamic_debug_control
+> > >      grep =3Dpmf /proc/dynamic_debug/control
+> > >
+> > > init/main.c:1187 [main]initcall_blacklist =3Dpmf "blacklisting initca=
+ll %s\n"
+> > > init/main.c:1226 [main]initcall_blacklisted =3Dpmf "initcall %s black=
+listed\n"
+> > > init/main.c:1432 [main]run_init_process =3Dpmf "  with arguments:\n"
+> > > init/main.c:1434 [main]run_init_process =3Dpmf "    %s\n"
+> > > init/main.c:1435 [main]run_init_process =3Dpmf "  with environment:\n=
+"
+> > > init/main.c:1437 [main]run_init_process =3Dpmf "    %s\n"
+> >
+> >
+> > Hi Jim,
+> >
+> > So if I'm following correctly, this is not a new issue, the 'module'
+> > name for dynamic debug has always been this way for builtin.
+>
+> It is not a new issue - both PM and init-main have been in [main] for som=
+e time.
+>
+> I believe that with
+> cfc1d277891e module: Move all into module/
+>
+> module's module-name joined them, changing from [module] to [main]
 
-sched_move_task eg:
-task A belongs to cpu_cgroup0 and autogroup0, it will always belong
-to cpu_cgroup0 when do_exit. So there is no need to do {de|en}queue.
-The call graph is as follow.
+Maybe more.
 
-do_exit
-  sched_autogroup_exit_task
-    sched_move_task
-      dequeue_task
-        sched_change_group
-	  A.sched_task_group = sched_get_task_group (=cpu_cgroup0)
-      enqueue_task
+We have almost 100 'main.c' files.
 
-Performance results:
-===========================
-1. env
-        cpu: bogomips=4600.00
-     kernel: 6.3.0-rc3
- cpu_cgroup: 6:cpu,cpuacct:/user.slice
+$ find . -name main.c | wc
+     97      97    3473
 
-2. cmds
-do_exit script:
-```
-for i in {0..10000}; do
-    sleep 0 &
-    done
-wait
-```
-Run the above script, then use the following bpftrace cmd to get
-the cost of sched_move_task:
 
-bpftrace -e 'k:sched_move_task { @ts[tid] = nsecs; }
-             kr:sched_move_task /@ts[tid]/
-                { @ns += nsecs - @ts[tid]; delete(@ts[tid]); }'
 
-3. cost time(ns):
- without patch: 43528033
- with    patch: 18541416
-          diff:-24986617  -57.4%
 
-As the result show, the patch will save 57.4% in the scenario.
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/sched/core.c | 30 ++++++++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
+> We could do
+> > something simple and just normalize it when we initially create the
+> > table, but setting the 'module name' to 'core' or 'builtin' or somethin=
+g
+> > for all these?
+>
+> core and builtin would both lump all those separate modules together,
+> making it less meaningful.
+>
+> having stable names independent of M vs Y config choices is imperative, I=
+STM.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a380f34789a2..1e7d6a8c3455 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -10330,7 +10330,7 @@ void sched_release_group(struct task_group *tg)
- 	spin_unlock_irqrestore(&task_group_lock, flags);
- }
- 
--static void sched_change_group(struct task_struct *tsk)
-+static struct task_group *sched_get_task_group(struct task_struct *tsk)
- {
- 	struct task_group *tg;
- 
-@@ -10342,7 +10342,28 @@ static void sched_change_group(struct task_struct *tsk)
- 	tg = container_of(task_css_check(tsk, cpu_cgrp_id, true),
- 			  struct task_group, css);
- 	tg = autogroup_task_group(tsk, tg);
--	tsk->sched_task_group = tg;
-+
-+	return tg;
-+}
-+
-+static bool sched_task_group_changed(struct task_struct *tsk)
-+{
-+	/*
-+	 * Some sched_move_task calls are useless because that
-+	 * task_struct->sched_task_group maybe not changed (equals
-+	 * task_group of cpu_cgroup) when system enable autogroup.
-+	 * So do some checks in sched_move_task.
-+	 */
-+#ifdef CONFIG_SCHED_AUTOGROUP
-+	return sched_get_task_group(tsk) != tsk->sched_task_group;
-+#else
-+	return true;
-+#endif /* CONFIG_SCHED_AUTOGROUP */
-+}
-+
-+static void sched_change_group(struct task_struct *tsk)
-+{
-+	tsk->sched_task_group = sched_get_task_group(tsk);
- 
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 	if (tsk->sched_class->task_change_group)
-@@ -10367,6 +10388,10 @@ void sched_move_task(struct task_struct *tsk)
- 	struct rq *rq;
- 
- 	rq = task_rq_lock(tsk, &rf);
-+
-+	if (!sched_task_group_changed(tsk))
-+		goto unlock;
-+
- 	update_rq_clock(rq);
- 
- 	running = task_current(rq, tsk);
-@@ -10391,6 +10416,7 @@ void sched_move_task(struct task_struct *tsk)
- 		resched_curr(rq);
- 	}
- 
-+unlock:
- 	task_rq_unlock(rq, tsk, &rf);
- }
- 
--- 
-2.20.1
 
+I do not understand what you mean.
+
+
+KBUILD_MODNAME is not affected by the y/m configuration.
+
+
+
+
+If an object is a member of a composite object, which
+does not necessarily be a real module, KBUILD_MODNAME
+refers to the name of the composite.
+Otherwise, the basename of the source file.
+
+
+Examples:
+
+
+obj-y +=3D alias-name.o
+alias-name-objs :=3D foo.o
+
+  -->  KBUILD_MODNAME is "alias-name"
+
+
+
+obj-y +=3D foo.o
+
+  -->  KBUILD_MODNAME is "foo"
+
+
+
+This is about how you write Makefile code.
+CONFIG options are unrelated.
+
+
+
+
+
+
+
+> Also, I dont think "only builtins are affected" captures the whole proble=
+m.
+> I dont recall amdgpu or other modules changing when built with =3Dy
+>
+> Theres some subtlety in how KBUILD_MODNAME is set,
+> and probably many current users who like its current behavior.
+> A new var ?
+>
+> 1st, I think that anything tristate gets a sensible value,
+> but at least some of the builtin-only "modules" get basenames, by default=
+.
+>
+> arch/x86/events/amd/ibs.c:1398 [ibs]force_ibs_eilvt_setup =3D_ "No EILVT
+> entry available\n"
+> arch/x86/events/intel/pt.c:797 [pt]pt_topa_dump =3D_ "# table @%p, off
+> %llx size %zx\n"w=3D%16llx\n"
+>
+> kvm gets a solid name, because tristate ?
+>
+> arch/x86/kvm/mmu/mmu.c:6661 [kvm]kvm_mmu_invalidate_mmio_sptes =3D_
+> "kvm: kvm [%i]: zapping shadow pages for mmio generation wraparound\n"
+> arch/x86/kvm/hyperv.c:1402 [kvm]kvm_hv_set_msr_pw =3D_ "kvm [%i]: vcpu%i
+> hv crash (0x%llx 0x%llx 0x%llx 0x%llx 0x%llx)\n"
+>
+> kvm-intel and kvm-amd get their names elsewhere.
+>
+> arch/x86/kvm/vmx/nested.c:207 [kvm_intel]nested_vmx_abort =3D_
+> "kvm_intel: nested vmx abort, indicator %d\n"
+> arch/x86/kvm/vmx/nested.c:913 [kvm_intel]nested_vmx_load_msr =3D_
+> "kvm_intel: %s cannot read MSR entry (%u, 0x%08llx)\n"
+>
+> arch/x86/kvm/svm/avic.c:860 [kvm_amd]get_pi_vcpu_info =3D_ "SVM: %s: use
+> GA mode for irq %u\n"
+> arch/x86/kvm/svm/avic.c:889 [kvm_amd]avic_pi_update_irte =3D_ "SVM: %s:
+> host_irq=3D%#x, guest_irq=3D%#x, set=3D%#x\n"
+>
+> iow, I dont know..
+>
+> >
+> > Thanks,
+> >
+> > -Jason
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
