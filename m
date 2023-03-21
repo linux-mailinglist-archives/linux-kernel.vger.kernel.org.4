@@ -2,85 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069616C3746
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004DA6C3747
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjCUQpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
+        id S229984AbjCUQpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjCUQpA (ORCPT
+        with ESMTP id S230302AbjCUQpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:45:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C76151CA6;
-        Tue, 21 Mar 2023 09:44:55 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8CEA320261;
-        Tue, 21 Mar 2023 16:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679417094; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RPsXbsCSQsx4+31OHg2F79XEhh3WwJBis5RlDbou0ik=;
-        b=m0EBA+mOapmgHDChG6dDD83Bg1A1gYYPvGbZbx+ve8KTAcv75Gn6fqTby7n6jhn+3OP5TT
-        FVGYy3gOo21uCvlUxyvf/Tzhyh0u5+xsUB6B+FbUrIKo8Tp1qs06cQzAS1X2dMtuq63xPe
-        DA4NcH52+Je1W4FhUY1QQWEVJwk6j6I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679417094;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RPsXbsCSQsx4+31OHg2F79XEhh3WwJBis5RlDbou0ik=;
-        b=f1//10OGnUmC7VAUfZFT3EIVe/DqgqMxn+eNaPwvJ3te8uI0VD+rWAwWpnB4YkZbF9v2dy
-        6BND9QsYW94hSlBg==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7BF882C141;
-        Tue, 21 Mar 2023 16:44:53 +0000 (UTC)
-Date:   Tue, 21 Mar 2023 16:44:51 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: Make deferred page init free pages in
- MAX_ORDER blocks
-Message-ID: <20230321164451.wtv5okhfyxdxklsq@suse.de>
-References: <20230317153501.19807-1-kirill.shutemov@linux.intel.com>
+        Tue, 21 Mar 2023 12:45:21 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE6113520;
+        Tue, 21 Mar 2023 09:45:10 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c18so16642213ple.11;
+        Tue, 21 Mar 2023 09:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679417109;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PlarJ0OGF8pkEDqeJJSsl/9GBmK/xQa68WOfjnTxTjk=;
+        b=k2dHWrk4ZA7dyNnN5vp5tHWFuDNVcxzxToAO3J3ugpvZ0E10NmX+QZnq/zOW2tl+I/
+         MBMxavAdD9q8L85YzDAE1zObQtM56Zb1YSFKZmFBP6zRk19ym9kC5GvAsprt7ItIWAG/
+         P1U1KRitFyZl/acODJBOFxejxZCh9VcyqbL5Sf5Hxj0mETFG43mU9XTn36/B9NAIC8p5
+         sIPbGfdexpXAxLTKI6w2sStgztHlhV4+3gGO28i/yWLOpSrNuTiiJHahoVgzZLGBQrv5
+         ddU/Q7PwFbbXom3XSsaX+NOjIeFHnNylPhEdIxYElbjGwQqBuh32gLChhxwYEcUA/FGE
+         wUzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679417109;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlarJ0OGF8pkEDqeJJSsl/9GBmK/xQa68WOfjnTxTjk=;
+        b=lU3eUs0t1ueIzDoqO8p2+i8Sd6iZlvzdLNQMJZdGnseVGUxf+4BjO6fs267vauZ4nk
+         LchLGbO4+x5wXAx6xyL+MfBBS70zpym+Qrt9Bgzt9V6LpDRof7oeamYRab3mbMQw4YC7
+         /UkUQHniiM6WRdc8B4AH5dGQdE4vJbH6llv2SCcL2FEx3EYiXZrEIcOC6AheHoIcnPF+
+         F7bjbIvq7TAoVizdZDhZK5EmCF2MYy5NY2fmdnX6q961V+qp0NQ5bmHFYAl4/s1jFydA
+         Oos68TlWAOf26R++Ps/C1XgYqbIw30EyOXzwc+XYA5IDTFJkiPMkDfToelon1KQdBB2J
+         OJKA==
+X-Gm-Message-State: AO0yUKU/HrDDMaFIRsBsn0dOTb7Ft59jkRmkl2hmW3AQDqb+AsOb/3iw
+        QVLgKedu9PcRW76kpmE7KHg=
+X-Google-Smtp-Source: AK7set/0xYNfpLT23Vcb8VnUON0ApbKO9wIPEff4ECW/aMWqnvsEFwzc7VGHpqSz8WKyA4OyIMzJAw==
+X-Received: by 2002:a17:90b:4b07:b0:234:889f:c35d with SMTP id lx7-20020a17090b4b0700b00234889fc35dmr606544pjb.3.1679417109058;
+        Tue, 21 Mar 2023 09:45:09 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id pc2-20020a17090b3b8200b00229b00cc8desm3475194pjb.0.2023.03.21.09.45.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 09:45:08 -0700 (PDT)
+Message-ID: <6f57ea15-08bf-38f3-5065-b3c5fe4863d0@gmail.com>
+Date:   Tue, 21 Mar 2023 09:44:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230317153501.19807-1-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 0/8] perf: arm: Make PMUv3 driver available for aarch32
+Content-Language: en-US
+To:     Zaid Al-Bassam <zalbassam@google.com>,
+        Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu
+References: <20230317195027.3746949-1-zalbassam@google.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230317195027.3746949-1-zalbassam@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 06:35:01PM +0300, Kirill A. Shutemov wrote:
-> Normal page init path frees pages during the boot in MAX_ORDER chunks,
-> but deferred page init path does it in pageblock blocks.
+On 3/17/23 12:50, Zaid Al-Bassam wrote:
+> Currently, PMUv3 driver is only available for ARMv8 aarch64 platforms,
+> ARMv8 platorms running in aarch32 mode dont have access to the driver.
+> This is, especially, a problem for ARMv8 platforms that only have
+> aarch32 support, like the Cortex-A32.
 > 
-> Change deferred page init path to work in MAX_ORDER blocks.
+> Make the PMUv3 driver available to arm arch (ARMv8 aarch32) by moving
+> the PMUv3 driver from arm64 to drivers, that makes the driver common
+> to both arm and arm64 architectures, then add PMUv3 arm Support.
 > 
-> For cases when pageblock is larger than MAX_ORDER, set migrate type to
-> MIGRATE_MOVABLE for all pageblocks covered by the page.
+> The main work in this patchset was made a while back by Marc Zyngier
+> in [1]. Patchset version 1 [v1] rebases Marc's patches to the latest
+> kernel revision and adds additional patches to accommodate the changes
+> in the kernel since Marc wrote the patches.
 > 
+> version 2 [v2] of the patchset was created by Marc Zyngier and I
+> picked it up from [2].
+> 
+> Changes in v2:
+> - Flattened the nested switches in the arm_pmuv3.h for arm.
+> - Removed wrappers and added stubs for the PMU KVM functions for arm.
+> - Added PMU version abstractions.
+> 
+> Changes in v3:
+> - Removed the link tag from the commit messages.
+> - Fixed the license header in the arm_pmuv3.h files.
+> 
+> Changes in v4:
+> - Rebased to 6.3.0-rc2 (Clean rebase)
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm/pmuv3-32bit
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=arm/pmuv3
+> 
+> [v1] https://lore.kernel.org/all/20230126204444.2204061-1-zalbassam@google.com/
+> [v2] https://lore.kernel.org/all/20230210165500.2292608-1-zalbassam@google.com/
+> [v3] https://lore.kernel.org/all/20230213210319.1075872-1-zalbassam@google.com/
+> 
+> Thank you,
+> Zaid Al-Bassam
 
-The problem with the sentence was pointed out already.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-
-Otherwise;
-
-Acked-by: Mel Gorman <mgorman@suse.de>
-
+on Cortex-A53 and Cortex-A72, thanks!
 -- 
-Mel Gorman
-SUSE Labs
+Florian
+
