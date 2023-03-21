@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902E36C2833
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40FC6C2838
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCUCb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 22:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S229483AbjCUCcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCUCby (ORCPT
+        with ESMTP id S229473AbjCUCcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:31:54 -0400
-Received: from mail-m11880.qiye.163.com (mail-m11880.qiye.163.com [115.236.118.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878B839283;
-        Mon, 20 Mar 2023 19:31:32 -0700 (PDT)
-Received: from [0.0.0.0] (unknown [IPV6:240e:3b7:327f:ce40:a4df:e2d6:538e:9d4f])
-        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id 27C5620463;
-        Tue, 21 Mar 2023 10:31:23 +0800 (CST)
-Message-ID: <4a88721a-ac78-bcad-1b33-f9027baab5ab@sangfor.com.cn>
-Date:   Tue, 21 Mar 2023 10:31:21 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 2/2] tracing: Add documentation for funcgraph-retval
- and graph_retval_hex
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>, mhiramat@kernel.org,
-        rostedt@goodmis.org, linux@armlinux.org.uk, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, huangcun@sangfor.com.cn,
-        dolinux.peng@gmail.com
-Cc:     linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
+        Mon, 20 Mar 2023 22:32:10 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42180392AD;
+        Mon, 20 Mar 2023 19:31:48 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id h83so6351839iof.8;
+        Mon, 20 Mar 2023 19:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679365907;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hGWpPpB5KAPHuRmiWoisUus8Y5OkM2ck0KEKmSz4i0U=;
+        b=hU9torN5JJeGKeHoR13hNgl4i1vbBpcHwPlpjyMoH7uOhgqKvpUbRwZNSp3Nub3QdL
+         Fmhe/G2gn003kMTGkrgBAYEK+0w3cNVcw3qtvFl+sAtGrAjVqdlUsbnPkNacm+utFYqy
+         oQlD6bnF+J6wZH52ytBCPpGuivIMhJ8vjVAyW8tJhk7KoO9/51JFLaHp7d2qJWhsCJ8Q
+         sS5qS2VdAxxzqU/BNxXgSLm1mmx/YbsTkovGW5fsO/D5/5Cl82NQQ44/3F0vTVPxashl
+         FxMMBAtCOk+Y4BA2Kj7t1h768M7VM5QV13oWKhVGqd72/66W4+wIP+cT6Sv5J1fMaWy3
+         vJdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679365907;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hGWpPpB5KAPHuRmiWoisUus8Y5OkM2ck0KEKmSz4i0U=;
+        b=PSM0r+T8/n3OJ4XayvHiQsOdWJBwqcXK5QFFAp8+Fg8GLWYblbwDjCos46zgmtd8Lf
+         4Bci2Ij3QXcgKirebKu3DmS7bT/crC9x3lyYYSkoXuWnfj7gBTQfXNXW1EFYfmeX0zHU
+         p+8nKnwFW5mgI77lQBsD0nTGMyh2aUvE95CgdVwL5Tc24dfm4nUeAaXItzL/TBbXYKOf
+         n95pq9UQMNVNyw1iPEG+VXxpkqg08l8AV59CCUsw5xNEPqCl76dk5ftftbj2NXQuMIvv
+         kpBO9KaGp2I76vPhfCuMjjWr/nrUBvJYXnhiLMpSr4qfEiJjCxAAyHnu9FdTezpI/yHF
+         PYQA==
+X-Gm-Message-State: AO0yUKUWLcUQZBwmlLqEUOQO6VykYC64/SBXC817FEZhWOKfLlwiU8wl
+        qGeQYTJCTAgNzV6XZAznn18lSDGbXt4=
+X-Google-Smtp-Source: AK7set9w1XKjD1VYw1ftP2NWhLjXE38EiYgy8vCM8TNbmCGRj+JCVdTaCCuzqE5aKGwjln31H1qDtg==
+X-Received: by 2002:a5e:8f4a:0:b0:753:876:5bf9 with SMTP id x10-20020a5e8f4a000000b0075308765bf9mr840035iop.6.1679365907244;
+        Mon, 20 Mar 2023 19:31:47 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:897f:1387:3268:b209:f4ec])
+        by smtp.gmail.com with ESMTPSA id a28-20020a027a1c000000b004065ad317fdsm2241200jac.151.2023.03.20.19.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 19:31:46 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
- <20230320131650.482594-3-pengdonglin@sangfor.com.cn>
-Content-Language: en-US
-From:   Ding Hui <dinghui@sangfor.com.cn>
-In-Reply-To: <20230320131650.482594-3-pengdonglin@sangfor.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCQ0oYVh5NTR5CHx5OTB5PGlUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BGB5PS0EaTx8dQR5JH01BTkhDHkFCH08dWVdZFhoPEhUdFF
-        lBWU9LSFVKSktISkxVSktLVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pi46Sjo6CD0LTBALTjoxDSMe
-        CT8wChFVSlVKTUxCSE1OQ0NPTkxPVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUwdQRgeT0tBGk8fHUEeSR9NQU5IQx5BQh9PHVlXWQgBWUFITk5MNwY+
-X-HM-Tid: 0a870201c9012eb6kusn27c5620463
-X-HM-MType: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH V2 0/4] clk: imx: Improve imx8mm/imx8mn LCDIF clocks
+Date:   Mon, 20 Mar 2023 21:31:32 -0500
+Message-Id: <20230321023136.57986-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/20 21:16, Donglin Peng wrote:
+Both the i.MX8M Mini and Nano have a video_pll which can be used 
+to source a clock which feeds the lcdif interface.  This interface
+currently fixes video_pll and divides down the clock feeding LCDIF.
+However, when connected to an HDMI bridge chip that supports a
+variety of video resolutions and refresh rates, the only settings
+that properly sync are ones that evenly divide from the video_pll_out
+clock.
 
-> +There are some limitations when using the funcgraph-retval currently:
-> +
-> +- Even if the function return type is void, a return value will still
-> +  be printed, and you can just ignore it.
-> +
-> +- Even if the return value is not an error code actually, it may be
-> +  displayed as an error code. You should read the code to check.
-> +  For example, both 0xfe and 0xfffe are be interpreted as -2.
+This series adds the ability for the clk-compolsite-8m to
+request a better parent clock rate if the proper clock flag is
+enable and sets that flag in the corresponding imx8mm and 
+imx8mn video_pll clocks to increase the number of resolutions
+and refresh rates timings that the LCDIF can produce.
 
-For char and short types, displaying as signed decimal may be not 
-appropriate, because they are rarely used to store error code.
+This also has a side benefit of allowing the video-pll to run
+at a lower clock speed which can potentially save some power
+depending on the requested resolution and refresh rate.
 
-So in "smart" mode (graph_retval_hex=0), I suggest just smart convert 
-error value stored in int or pointer to signed decimal.
+V2:  Split off the new imx8m_clk_hw_composite_flags definition
+     into its own patch and re-order to fix build error.
+      
+Adam Ford (3):
+  clk: imx: composite-8m: Add support to determine_rate
+  clk: imx8mm: Let IMX8MM_CLK_LCDIF_PIXEL set parent rate
+  clk: imx: Let IMX8MN_CLK_DISP_PIXEL set parent rate
 
-> +- Only the value of the first return register will be recorded and
-> +  printed even if the return values may be stored in two registers
-> +  actually. For example, both the eax and edx are used to store a
-> +  64 bit return value in the x86 architecture, and the eax stores
-> +  the low 32 bit, the edx stores the high 32 bit, however only the
-> +  value stored in eax will be recorded and printed.
-> +
->   You can put some comments on specific functions by using
->   trace_printk() For example, if you want to put a comment inside
->   the __might_sleep() function, you just have to include
+ drivers/clk/imx/clk-composite-8m.c | 7 +++++++
+ drivers/clk/imx/clk-imx8mm.c       | 2 +-
+ drivers/clk/imx/clk-imx8mn.c       | 2 +-
+ drivers/clk/imx/clk.h              | 4 ++++
+ 4 files changed, 13 insertions(+), 2 deletions(-)
 
 -- 
-Thanks,
-- Ding Hui
+2.34.1
 
