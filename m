@@ -2,124 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C136C2695
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D146C269D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCUAzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S229710AbjCUA6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 20:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCUAzX (ORCPT
+        with ESMTP id S229610AbjCUA56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:55:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AF33430C
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:55:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89333618F4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:55:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6FB6C4339C;
-        Tue, 21 Mar 2023 00:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679360118;
-        bh=x3dYREr13qysgzwTS5v6Z35aAfe/WZzlbYN9SMZ6zZ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dq4vUy8ghBwgdglCk3r1bXCg9XrfkbsEECqD02CDoEEewVlBvPDfAqHXWcRNsByw0
-         ay17aMja0BFHQc5YZ0YXKLWtZIGZpOfcw7RJYuWwPToQhtesjTwL21w79ybsRQ7EKv
-         JZepj8uP1M9PH0KI/++R7ne3+XnzlcuT/10ptmLus9VgI8K7593s/5n1OVYNIK3mmX
-         QGf+Azfj+5jt5dwqoZpXLjQXAoaX+SPehIT5Tb7vZ/CLCtfs9aP8MaYqOLEvpGfD9h
-         gWuBr+bK4IdzpUbcks1/ZVuhLq0kU9k/emPv4vQKk6/svBwEpgLbfySNkyu9DT3NUH
-         ovF/bX/zGs+ag==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 75E81154039F; Mon, 20 Mar 2023 17:55:18 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-team@meta.com, rostedt@goodmis.org, jgross@suse.com,
-        mingo@kernel.org, peterz@infradead.org, corbet@lwn.net,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jes Sorensen <Jes.Sorensen@gmail.com>
-Subject: [PATCH CSDlock 4/4] kernel/smp: Make csdlock_debug= resettable
-Date:   Mon, 20 Mar 2023 17:55:16 -0700
-Message-Id: <20230321005516.50558-4-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc2
-In-Reply-To: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
-References: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
+        Mon, 20 Mar 2023 20:57:58 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B3430299
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:57:57 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bi9so17149540lfb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679360275;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+QQdv0je5amo1Cq/oKaE0BYeIx+5NHEzCllldmhnRkA=;
+        b=Sv5/kJ7JjO/+KR/2+5I2oRGcDtHD1zZyIh6guCTdrRzJ+t2sK/7lOsblXgxhnrT4Wg
+         QE+EBDpSgpWZvTtBAJlJwRJNS1i01GGk5tMUnPJdXT2HlCEWD/H7qHI8kunxFbtSNAVG
+         dU9xeWyu/UMMxBH45ZPk8R3it1MnWXgplHfTAuiIq3lYNxej5yIHlBBrj6cLckLUPX8+
+         lNyhYUgE6md03W6TjCy0U9o0+W8ZCEQBYdiflHiwrn/Wjjzw5eufP/+DqYpMtKVP6aTJ
+         WJJjgMI1mCYn874Eecyqomc/pJnPoS/bsW0Eh3Y5fE+eUkmuXyahv9Pb63gJTCq80d4J
+         j6sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679360275;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+QQdv0je5amo1Cq/oKaE0BYeIx+5NHEzCllldmhnRkA=;
+        b=bnz7XPv6gsIY49otaUbDasal1DpfTzBqXxUARtDpnHAxfIiKe1Wkfu27cwLCHfOSQg
+         kln7ng5xC6Vcr2Xi5WeBg7hxMG+co7b+E6kJzi52qcTz+ryEXp1/DUInbnz+GZtoXF1s
+         SKBNI6UBLrdAfEcvzk1381zu1Rv6gbb6C0F++TaUt0zlv4kz2fS5gILgf4k0ZHngUSQp
+         NaYCD/re4xY5/s52dUmWf8yF8mM+DuYzefF1HdVY/aReR0cVMMmbYOQm+xkjjvDoT35W
+         Md/AUUUlIjxcy43zruzLvdgq8fwGTxO+ybe+EWUiAM6t7VKpwNt8pfclKItjJfMJgcVp
+         U6xg==
+X-Gm-Message-State: AO0yUKXhtGLY4AtsW9Q95V7kIVEJl1y+5noNr38JPb/jWsy3kzlpfOiO
+        G1ip46TuRLM0U2Qk5qZYWBvV3w==
+X-Google-Smtp-Source: AK7set+/moO/EhNXfUSGHTpDEIfpltuj+gV8kcRXMkwAT/Z6crxiXVSmrm6xJkRykoS8kJXuWTjAiQ==
+X-Received: by 2002:a19:a410:0:b0:4de:f972:6aa with SMTP id q16-20020a19a410000000b004def97206aamr294802lfc.4.1679360275333;
+        Mon, 20 Mar 2023 17:57:55 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f1-20020ac251a1000000b004e95f1c9e7dsm1919893lfk.78.2023.03.20.17.57.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 17:57:54 -0700 (PDT)
+Message-ID: <b396c5ed-5453-8755-c2f0-8fbd79fad2ba@linaro.org>
+Date:   Tue, 21 Mar 2023 02:57:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RESEND PATCH v3 1/3] thermal: qcom-spmi-temp-alarm: enable stage
+ 2 shutdown when required
+Content-Language: en-GB
+To:     David Collins <quic_collinsd@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1674602698.git.quic_collinsd@quicinc.com>
+ <57466b092dd16ed2a25e5a472dfd0b856a5cca00.1674602698.git.quic_collinsd@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <57466b092dd16ed2a25e5a472dfd0b856a5cca00.1674602698.git.quic_collinsd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is currently possible to set the csdlock_debug_enabled static
-branch, but not to reset it.  This is an issue when several different
-entities supply kernel boot parameters and also for kernels built with
-CONFIG_CSD_LOCK_WAIT_DEBUG_DEFAULT=y.
+On 25/01/2023 01:46, David Collins wrote:
+> Certain TEMP_ALARM GEN2 PMIC peripherals need over-temperature
+> stage 2 automatic PMIC partial shutdown to be enabled in order to
+> avoid repeated faults in the event of reaching over-temperature
+> stage 3.  Modify the stage 2 shutdown control logic to ensure that
+> stage 2 shutdown is enabled on all affected PMICs.  Read the
+> digital major and minor revision registers to identify these
+> PMICs.
+> 
+> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+> ---
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 32 +++++++++++++++++++--
+>   1 file changed, 30 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index ad84978109e6..e2e52703ac4d 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /*
+>    * Copyright (c) 2011-2015, 2017, 2020, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+>    */
+>   
+>   #include <linux/bitops.h>
+> @@ -18,6 +19,7 @@
+>   #include "../thermal_core.h"
+>   #include "../thermal_hwmon.h"
+>   
+> +#define QPNP_TM_REG_DIG_MINOR		0x00
+>   #define QPNP_TM_REG_DIG_MAJOR		0x01
+>   #define QPNP_TM_REG_TYPE		0x04
+>   #define QPNP_TM_REG_SUBTYPE		0x05
+> @@ -73,6 +75,7 @@ struct qpnp_tm_chip {
+>   	struct device			*dev;
+>   	struct thermal_zone_device	*tz_dev;
+>   	unsigned int			subtype;
+> +	unsigned int			dig_revision;
+>   	long				temp;
+>   	unsigned int			thresh;
+>   	unsigned int			stage;
+> @@ -224,6 +227,7 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>   	long stage2_threshold_min = (*chip->temp_map)[THRESH_MIN][1];
+>   	long stage2_threshold_max = (*chip->temp_map)[THRESH_MAX][1];
+>   	bool disable_s2_shutdown = false;
+> +	bool require_s2_shutdown = false;
+>   	u8 reg;
+>   
+>   	WARN_ON(!mutex_is_locked(&chip->lock));
+> @@ -256,9 +260,25 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>   				 temp, stage2_threshold_max, stage2_threshold_max);
+>   	}
+>   
+> +	if (chip->subtype == QPNP_TM_SUBTYPE_GEN2) {
+> +		/*
+> +		 * Check if stage 2 automatic partial shutdown must remain
+> +		 * enabled to avoid potential repeated faults upon reaching
+> +		 * over-temperature stage 3.
+> +		 */
+> +		switch (chip->dig_revision) {
+> +		case 0x0001:
+> +		case 0x0002:
+> +		case 0x0100:
+> +		case 0x0101:
+> +			require_s2_shutdown = true;
+> +			break;
+> +		}
+> +	}
 
-Therefore, make the csdlock_debug=0 kernel boot parameter turn off
-debugging.  Last one wins!
+Please move this switch to _probe and set chip->require_s2_shutdown instead.
 
-Reported-by: Jes Sorensen <Jes.Sorensen@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- Documentation/admin-guide/kernel-parameters.txt | 13 +++++++------
- kernel/smp.c                                    | 11 ++++++++---
- 2 files changed, 15 insertions(+), 9 deletions(-)
+> +
+>   skip:
+>   	reg |= chip->thresh;
+> -	if (disable_s2_shutdown)
+> +	if (disable_s2_shutdown && !require_s2_shutdown)
+>   		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
+>   
+>   	return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
+> @@ -373,7 +393,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+>   {
+>   	struct qpnp_tm_chip *chip;
+>   	struct device_node *node;
+> -	u8 type, subtype, dig_major;
+> +	u8 type, subtype, dig_major, dig_minor;
+>   	u32 res;
+>   	int ret, irq;
+>   
+> @@ -429,6 +449,14 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	ret = qpnp_tm_read(chip, QPNP_TM_REG_DIG_MINOR, &dig_minor);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "could not read dig_minor\n");
+> +		return ret;
+> +	}
+> +
+> +	chip->dig_revision = (dig_major << 8) | dig_minor;
+> +
+>   	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
+>   				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
+>   		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index b15198a85acb..5f2ec4b0f927 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -889,12 +889,13 @@
- 	cs89x0_media=	[HW,NET]
- 			Format: { rj45 | aui | bnc }
- 
--	csdlock_debug=	[KNL] Enable debug add-ons of cross-CPU function call
--			handling. When switched on, additional debug data is
--			printed to the console in case a hanging CPU is
--			detected, and that CPU is pinged again in order to try
--			to resolve the hang situation.  The default value of
--			this option depends on the CSD_LOCK_WAIT_DEBUG_DEFAULT
-+	csdlock_debug=	[KNL] Enable or disable debug add-ons of cross-CPU
-+			function call handling. When switched on,
-+			additional debug data is printed to the console
-+			in case a hanging CPU is detected, and that
-+			CPU is pinged again in order to try to resolve
-+			the hang situation.  The default value of this
-+			option depends on the CSD_LOCK_WAIT_DEBUG_DEFAULT
- 			Kconfig option.
- 
- 	dasd=		[HW,NET]
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 7a85bcddd9dc..298ba7570621 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -116,11 +116,16 @@ static DEFINE_STATIC_KEY_MAYBE(CONFIG_CSD_LOCK_WAIT_DEBUG_DEFAULT, csdlock_debug
-  */
- static int __init csdlock_debug(char *str)
- {
-+	int ret;
- 	unsigned int val = 0;
- 
--	get_option(&str, &val);
--	if (val)
--		static_branch_enable(&csdlock_debug_enabled);
-+	ret = get_option(&str, &val);
-+	if (ret) {
-+		if (val)
-+			static_branch_enable(&csdlock_debug_enabled);
-+		else
-+			static_branch_disable(&csdlock_debug_enabled);
-+	}
- 
- 	return 1;
- }
 -- 
-2.40.0.rc2
+With best wishes
+Dmitry
 
