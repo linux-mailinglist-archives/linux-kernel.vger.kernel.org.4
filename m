@@ -2,187 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFDD6C2BEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB26A6C2C07
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCUIIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
+        id S229629AbjCUILv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 04:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUIIg (ORCPT
+        with ESMTP id S231183AbjCUILc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:08:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D293C2E;
-        Tue, 21 Mar 2023 01:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679386114; x=1710922114;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QGXy2d/duKc2M5ZsAkijSTTqJVxAXEAzOUuiNs2X4TE=;
-  b=jgtbOC8uYGKCg3nDTYhJIqGuE6WABcVICbttyrbN+43Rh11Cl1SnxQ9N
-   wKmAXYPigyznfIY+vWp382a2ynLkokz1J8fvmmTFnslZdZ5JSFfDaGbv5
-   hjmfVc9pjRPPjuum7Ithzry2dscywfC3WKDUUyd0t9UIR+1NYYJXKnFhc
-   y8Z+nLRjvyRysXvQEBcz3UDLT5On5q3dsLdK0QgZ4g/zgGMMyR/FlKY+8
-   szc/tPovZlYQrYDIXQQC5sPfNN4/49HGPOA5vnteSr9rX33zTwvGq5neI
-   bkCA9uCRPeMAMlRqwLrqDfbBkWiHPqULR6zyWwdmq2PuaI3uFLyMEL72I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="338912215"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="338912215"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 01:08:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="750445952"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="750445952"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Mar 2023 01:08:19 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peX2Z-000BkM-0c;
-        Tue, 21 Mar 2023 08:08:19 +0000
-Date:   Tue, 21 Mar 2023 16:07:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>
-Subject: Re: [PATCH v4 27/29] LoongArch: KVM: Implement vcpu world switch
-Message-ID: <202303211554.OkK5r3bb-lkp@intel.com>
-References: <20230321035651.598505-28-zhaotianrui@loongson.cn>
+        Tue, 21 Mar 2023 04:11:32 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451A328E67;
+        Tue, 21 Mar 2023 01:11:06 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1peX4c-002AdC-6o; Tue, 21 Mar 2023 09:10:26 +0100
+Received: from p57bd9952.dip0.t-ipconnect.de ([87.189.153.82] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1peX4b-0013m5-VS; Tue, 21 Mar 2023 09:10:26 +0100
+Message-ID: <ad2234ad155d51c142e59adcf2981bce23d69aa4.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 6/7 v5] sh: fix Kconfig entry for NUMA => SMP
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Kuninori Morimoto <morimoto.kuninori@renesas.com>,
+        linux-sh@vger.kernel.org, stable@vger.kernel.org
+Date:   Tue, 21 Mar 2023 09:10:25 +0100
+In-Reply-To: <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
+References: <20230320231310.28841-1-rdunlap@infradead.org>
+         <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321035651.598505-28-zhaotianrui@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.153.82
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tianrui,
+Hi Geert!
 
-Thank you for the patch! Perhaps something to improve:
+On Tue, 2023-03-21 at 08:55 +0100, Geert Uytterhoeven wrote:
+> On Tue, Mar 21, 2023 at 12:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> > Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+> > SYS_SUPPORTS_SMP and SMP.
+> 
+> Perhaps because these SoCs do not support SMP?
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on linus/master v6.3-rc3 next-20230321]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Well, there is actually a dual-core 7786 board available, see:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianrui-Zhao/LoongArch-KVM-Add-kvm-related-header-files/20230321-120249
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20230321035651.598505-28-zhaotianrui%40loongson.cn
-patch subject: [PATCH v4 27/29] LoongArch: KVM: Implement vcpu world switch
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230321/202303211554.OkK5r3bb-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/92ac063f865b08997b28bd090d6fa3986d0f21cb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tianrui-Zhao/LoongArch-KVM-Add-kvm-related-header-files/20230321-120249
-        git checkout 92ac063f865b08997b28bd090d6fa3986d0f21cb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch prepare
+> https://www.apnet.co.jp/product/superh/ap-sh4ad-0a.html
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303211554.OkK5r3bb-lkp@intel.com/
+Quoting:
 
-All warnings (new ones prefixed by >>):
+»The SH7786 is equipped with a dual-core SH-4A and has interfaces such as
+ DDR3 SDRAM, PCI Express, USB, and display unit.«
 
-   arch/loongarch/kernel/asm-offsets.c:17:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      17 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:64:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      64 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:79:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      79 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:95:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-      95 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:138:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     138 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:178:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     178 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:210:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     210 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_signal_defines' [-Wmissing-prototypes]
-     218 | void output_signal_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:256:6: warning: no previous prototype for 'output_smpboot_defines' [-Wmissing-prototypes]
-     256 | void output_smpboot_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:266:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
-     266 | void output_pbe_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
->> arch/loongarch/kernel/asm-offsets.c:277:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     277 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
---
-   arch/loongarch/kernel/asm-offsets.c:17:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      17 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:64:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      64 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:79:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      79 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:95:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-      95 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:138:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     138 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:178:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     178 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:210:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     210 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_signal_defines' [-Wmissing-prototypes]
-     218 | void output_signal_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:256:6: warning: no previous prototype for 'output_smpboot_defines' [-Wmissing-prototypes]
-     256 | void output_smpboot_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/kernel/asm-offsets.c:266:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
-     266 | void output_pbe_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
->> arch/loongarch/kernel/asm-offsets.c:277:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     277 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   <stdin>:569:2: warning: #warning syscall fstat not implemented [-Wcpp]
+I seem to remember that Oleg Endo had such a dual-core SH4A board.
 
+Also, the Sega Saturn had two SH-2 CPUs:
 
-vim +/output_kvm_defines +277 arch/loongarch/kernel/asm-offsets.c
+> https://en.wikipedia.org/wiki/Sega_Saturn#Technical_specifications
 
-   276	
- > 277	void output_kvm_defines(void)
+> > kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
+> > code + data inside topology.c is only built when CONFIG_NUMA is
+> > set/enabled, so these arch/sh/ configs need to select SMP and
+> > SYS_SUPPORTS_SMP to build the NUMA support.
+> > 
+> > Fixes this build error in multiple SUPERH configs:
+> > 
+> > mm/page_alloc.o: In function `get_page_from_freelist':
+> > page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
+> > 
+> > Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
+> > Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
+> > Fixes: 55ba99eb211a ("sh: Add support for SH7786 CPU subtype.")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> > --- a/arch/sh/Kconfig
+> > +++ b/arch/sh/Kconfig
+> > @@ -442,6 +442,8 @@ config CPU_SUBTYPE_SH7785
+> >         select CPU_SHX2
+> >         select ARCH_SPARSEMEM_ENABLE
+> >         select SYS_SUPPORTS_NUMA
+> > +       select SYS_SUPPORTS_SMP
+> > +       select SMP
+> 
+> SH7785 is single-core.
+> 
+> >         select PINCTRL
+> > 
+> >  config CPU_SUBTYPE_SH7786
+> > @@ -476,6 +478,8 @@ config CPU_SUBTYPE_SH7722
+> >         select CPU_SHX2
+> >         select ARCH_SHMOBILE
+> >         select ARCH_SPARSEMEM_ENABLE
+> > +       select SYS_SUPPORTS_SMP
+> > +       select SMP
+> 
+> SH7722 is single-core.
+> 
+> >         select SYS_SUPPORTS_NUMA
+> >         select SYS_SUPPORTS_SH_CMT
+> >         select PINCTRL
+> > @@ -486,6 +490,8 @@ config CPU_SUBTYPE_SH7366
+> >         select CPU_SHX2
+> >         select ARCH_SHMOBILE
+> >         select ARCH_SPARSEMEM_ENABLE
+> > +       select SYS_SUPPORTS_SMP
+> > +       select SMP
+> 
+> Dunno about this one (no public info available).
+> 
+> >         select SYS_SUPPORTS_NUMA
+> >         select SYS_SUPPORTS_SH_CMT
+> 
+> Wasn't this fixed by commit 61bb6cd2f765b90c ("mm: move
+> node_reclaim_distance to fix NUMA without SMP") in v5.16?
+> 
+> It is not sufficient, after that you run into:
+> 
+>     mm/slab.c: In function ‘slab_memory_callback’:
+>     mm/slab.c:1127:23: error: implicit declaration of function
+> ‘init_cache_node_node’; did you mean ‘drain_cache_node_node’?
+> [-Werror=implicit-function-declaration]
+>      1127 |                 ret = init_cache_node_node(nid);
+> 
+> which you reported before in
+> https://lore.kernel.org/all/b5bdea22-ed2f-3187-6efe-0c72330270a4@infradead.org/
+
+Without the patch, I am getting:
+
+  CC      fs/fat/nfs.o
+mm/slab.c: In function 'slab_memory_callback':
+mm/slab.c:1127:23: error: implicit declaration of function 'init_cache_node_node'; did you mean 'drain_cache_node_node'? [-Werror=implicit-function-declaration]
+ 1127 |                 ret = init_cache_node_node(nid);
+      |                       ^~~~~~~~~~~~~~~~~~~~
+      |                       drain_cache_node_node
+
+with make sh7785lcr_defconfig and CONFIG_NUMA=y.
+
+With the patch, it builds fine for me.
+
+FWIW, I just realized we need this for config CPU_SUBTYPE_SH7786 as well.
+
+Adrian
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
