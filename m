@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1FB6C2A02
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7F96C2A09
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjCUFre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S229872AbjCUFuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCUFr3 (ORCPT
+        with ESMTP id S229524AbjCUFuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:47:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055B82A152;
-        Mon, 20 Mar 2023 22:47:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679377647; x=1710913647;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lQJIJFxogi+f9wpwcy5bQR4Ve4cHujdBkxgNOyEbJ+I=;
-  b=ALhnGtdEa53/UGguXkqfgG5XpK2Vg9Rt00t0TbY40LEJGyVzHoEfJVde
-   +RskY9AAfe2W1ReG36HDiuYa8h1kzfE2wUzUTm2Qba7uQewXZgSIYzJ2o
-   Lc3SakI7RT9DValajNWGTQewNrlYjlKdLGJVPWO70ME5iK2wTGEjMqXpu
-   grRqG6vmq9+2wNpvPkxTcviJof4/FnhgG9gFM+4DebvW7iWvZgUEzxVvU
-   zDYI6WmBAczzAYfW1XT9gf7TzSd1IorKDhq6MbkPaLDyGPU8p3x9vrlGA
-   Qtq4iooJlr1yp4mnHY8RGU2sr437RHN9JWcFwOtmUR1O3cBH3nNlIXb4F
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="336359303"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="336359303"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:47:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="927271471"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="927271471"
-Received: from zhouf-mobl.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.249.171.160])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:47:25 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] thermal/governors/step_wise: Adjust code logic to align with the comment
-Date:   Tue, 21 Mar 2023 13:47:14 +0800
-Message-Id: <20230321054714.76287-2-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230321054714.76287-1-rui.zhang@intel.com>
-References: <20230321054714.76287-1-rui.zhang@intel.com>
+        Tue, 21 Mar 2023 01:50:05 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7718A5C;
+        Mon, 20 Mar 2023 22:50:02 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso7948362oti.8;
+        Mon, 20 Mar 2023 22:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679377801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PQRYTyJUcXjGIlb32K69CN7N/CfuacDHmOLvuVVkIeU=;
+        b=F5so8U9eSPDfKwLwdhjWe1tE8PfeVDHKjkiyKaVpWQqKRuyuavEeTzXd4hk6L3z6zp
+         VHPO8QjxcIT4MYzTcNnHQK4kCkDGjZgPowyHLuCLV9GljdqpK9u99uNfqkBMK5RA93gv
+         FGjbjWg9KVC+SGloN3ekhh+2k6L7EF7wthr0pjQIqJLNck01caZneaWdLgqxokr/RLrO
+         1sgViMnoTTZxc9T5zi936whRCWGOMENT2d8QDQSNUknsMhStPJdQFhKuw7YCDQdWuHuY
+         XA7Htk2YAl4jH1GHMq/ggeJA09GTqzjWLySHNgMO09vanozHHeos4pEKMn6CfOVlZGDt
+         TxtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679377801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PQRYTyJUcXjGIlb32K69CN7N/CfuacDHmOLvuVVkIeU=;
+        b=F+s8zjzIrEGYsx6hUIpY4AypQRSgaI1J7euQkQ42p6TNiWR74+Ud4W3WVMAditLJQr
+         CaowjZJsj4VOVBiY73DILXuj3n8dIFKKlDOzRQycXhzqak3mJzisw0X7W0rwfuLLvRVa
+         z9eC4RuXcuND7FSIotBqml8LvChmRxDlfbzak3IIEgZykkxXvnR98fmKAE/gY0B6iJWI
+         3K6BFRwIxhGk/uEJd1rgoZrcWFqAWmntoK5dVXJ3X9PqM0Xo6MUHeEVOY7DngFtGfSQB
+         ukGxegKWRtQPXMBRWWZRJ6bN8VxyHS5OmJ16tKzw9wIOZilgG8lIG8cJCCN7Gokc3AHu
+         v7Sg==
+X-Gm-Message-State: AO0yUKWmHcErfDaWY4rFJTxA2dExzj9FWKjUTnOPCZDHm/k8X/cLEk4a
+        PK3HM0Z9jYhzC7DHIEy1kM5zp9CPH1PMihlxGU0=
+X-Google-Smtp-Source: AK7set9hGdm8jb3Zms52xIkHW02ezlDplA4s1W/5C+8w1fxRVUiCGMOX1ghjWbWe1rulG24xEDF5Rs78eQG2Vsd6oW8=
+X-Received: by 2002:a05:6830:13d3:b0:69e:24a7:e042 with SMTP id
+ e19-20020a05683013d300b0069e24a7e042mr409968otq.3.1679377801763; Mon, 20 Mar
+ 2023 22:50:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230320233955.2921179-1-robh@kernel.org>
+In-Reply-To: <20230320233955.2921179-1-robh@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Mar 2023 06:49:49 +0100
+Message-ID: <CAMhs-H829e-QSwMXAVN6b4pYTB+_d-PLJxbEqdhd9oOrYnY-aQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: phy: Drop unneeded quotes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the algorithm of choosing the next target state in step_wise
-governor, the code does the right thing but is implemented in a
-way different from what the comment describes. And this hurts the code
-readability.
+On Tue, Mar 21, 2023 at 12:40=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-As the logic in the comment is simpler, adjust the code logic to align
-with the comment.
+>  .../devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml    | 4 ++--
 
-No functional change.
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/thermal/gov_step_wise.c | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 7a760b6a4279..318b38d04eb9 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -53,24 +53,16 @@ static unsigned long get_target_state(struct thermal_instance *instance,
- 		return next_target;
- 	}
- 
--	switch (trend) {
--	case THERMAL_TREND_RAISING:
--		if (throttle) {
-+	if (throttle) {
-+		if (trend == THERMAL_TREND_RAISING)
- 			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
--		}
--		break;
--	case THERMAL_TREND_DROPPING:
--		if (cur_state <= instance->lower) {
--			if (!throttle)
-+	} else {
-+		if (trend == THERMAL_TREND_DROPPING) {
-+			if (cur_state <= instance->lower)
- 				next_target = THERMAL_NO_TARGET;
--		} else {
--			if (!throttle) {
-+			else
- 				next_target = clamp((cur_state - 1), instance->lower, instance->upper);
--			}
- 		}
--		break;
--	default:
--		break;
- 	}
- 
- 	return next_target;
--- 
-2.25.1
-
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
