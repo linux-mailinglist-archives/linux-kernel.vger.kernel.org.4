@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3D86C3DCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2463B6C3DD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjCUWjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S230014AbjCUWmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjCUWjm (ORCPT
+        with ESMTP id S229544AbjCUWmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:39:42 -0400
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B32F58C05
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:39:41 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id E3C0B802BE9D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 22:39:40 +0000 (UTC)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 7E0391004807B
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 22:39:40 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id ekdop8cthRSTPekdop9sqT; Tue, 21 Mar 2023 22:39:40 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=VeEygHl9 c=1 sm=1 tr=0 ts=641a322c
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=rfUgbRho1piRMPMoZasA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hUW8pYd+LpC4DENJtd2TZsFH9B+ajPMexhgePaVCXTI=; b=YuufMZlMKj7oRLVDFXwO3b4FrG
-        JLWDA2BmXmq3yFVFiLh0QAqx2mh/lM5FHorczcq+VuDWWsbLyvpnwhDSV+qori5qW4L+hfPbe8wST
-        zWlo1QdCT9A3G1dwLwn6hDWornt3zxMfxQsapobq/MrdZRq7rPAh+MFmDCzxfn4OsonnDnpwqOY1L
-        N81eLvW79IMxo1XhTN6M3Wi1rEqX3KtuWesFksPxRD4kPh3jioA1elYzpo7zOIvlgR6qGGOdU8vsA
-        d+K/nzfmQPtVzv2+imVVkyTbjoloznaC8v7fkcp6Q1zYksupz3q9sTfnIefQ+hKgDWaBl+YyD8zvU
-        W7OS5Ntg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32786 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pekdm-000EuT-VH;
-        Tue, 21 Mar 2023 16:39:39 -0600
-Subject: Re: [PATCH 5.15 000/115] 5.15.104-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230320145449.336983711@linuxfoundation.org>
-In-Reply-To: <20230320145449.336983711@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <bb957243-48f6-5aee-281e-d820c3de6155@w6rz.net>
-Date:   Tue, 21 Mar 2023 15:39:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Mar 2023 18:42:13 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236B058C09
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:42:12 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id f14so7675311iow.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google; t=1679438531;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6jDzsttz/Z1eHYKj405pV9Blev59eyzoaBzMYfjRtNs=;
+        b=FbuEPLzjGcUCi2cFfW7+KLrqrWm95kIC11bt4fzbF/b61kskPlMJluOllYVw1m0h6A
+         wjtYOFhDA9Fwh/wB2xK96Ao7cb0XoGBINiTpnnfE8nTFlhkeZaF0oJ37B6Dm1zkZQ/6I
+         2Bw+XaNr4Si9JrMDXDNLAqQh3VFCWoWLBsdEA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679438531;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6jDzsttz/Z1eHYKj405pV9Blev59eyzoaBzMYfjRtNs=;
+        b=ZyAju8gIxpjireGgW24UTXKoVdAEwUYNzrqVh2RWd5OQwVXnMjxfkeotjCz3oJkhUK
+         9JBdo68V/gRbcPf83+5JTdDPdp2KxTzIm6U4oi6cNoctlMefp1DB0QAPpYnIDwFXh5ye
+         jFGgZkJa+tTEcvTcmCArFGGdhyZjPXxcCKuwUwq2mKknDxUJkjFTX1QL/8Sm1lDO6L0j
+         QDbYjcmTS2X/E1to2hu2ZfqcUkw/cUcqkzTdeXghCxbx4+WvXN+DfultHMgIHpCJJqpf
+         HIperMQvU3C4/ZcX6f5LFphzIpSQS41oamPW8iAYRVf1Jr8KWrF1uvqoIzw76IuyIiqt
+         u1aA==
+X-Gm-Message-State: AO0yUKXXbVi9MLBRzDwB8bnZIFF4ES06aW1W0w4IJp6t6M64yoTiQWpb
+        pNCZF4BDx9gd0rOluMJ9p0nckA==
+X-Google-Smtp-Source: AK7set9UDQnyyrcCtYn7eXxYQZekjyMc7aOmhQHbXeN5LP4f214+4CiDgvD4W08V+UsjisQ1AgvMWw==
+X-Received: by 2002:a5d:8406:0:b0:74c:8801:af4b with SMTP id i6-20020a5d8406000000b0074c8801af4bmr177109ion.1.1679438531124;
+        Tue, 21 Mar 2023 15:42:11 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id p13-20020a6b630d000000b0074c8a021d4csm3905352iog.44.2023.03.21.15.42.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 15:42:10 -0700 (PDT)
+Message-ID: <48674d8f-9753-780c-f37c-f83ea2855ae6@ieee.org>
+Date:   Tue, 21 Mar 2023 17:42:09 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
+ <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
+ <alpine.DEB.2.22.394.2303212140480.2919@hadrien>
+ <5efa6e6d-8573-31de-639a-d15b2e9deca0@ieee.org>
+ <alpine.DEB.2.22.394.2303212218500.2919@hadrien>
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pekdm-000EuT-VH
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:32786
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 36
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <alpine.DEB.2.22.394.2303212218500.2919@hadrien>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 7:53 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.104 release.
-> There are 115 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Mar 2023 14:54:26 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.104-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 3/21/23 4:29 PM, Julia Lawall wrote:
+> There do seem to be more than 100 definitions like:
+> 
+> #define to_dove_clk(hw) container_of(hw, struct dove_clk, hw)
+> 
+> where we have to hope that at all of the usage sites the argument is
+> called hw.  Probably anything else would cause a compiler error, but still
+> it looks strange.
+> 
+> julia
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Yeah, that's poorly done and unfortunate.  The argument to
+the parameter should be named something different.  I didn't
+understand what you meant before but yes, this isn't good.
+These should be fixed first.
 
-Tested-by: Ron Economos <re@w6rz.net>
+					-Alex
 
