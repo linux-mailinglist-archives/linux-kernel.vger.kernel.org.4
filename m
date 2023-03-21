@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B046C3844
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083906C384E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCURd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S230294AbjCURe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjCURdy (ORCPT
+        with ESMTP id S229510AbjCURev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:33:54 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B63823A7F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:39 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id e11so7691096lji.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:39 -0700 (PDT)
+        Tue, 21 Mar 2023 13:34:51 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9655505C;
+        Tue, 21 Mar 2023 10:34:21 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j24so5643662wrd.0;
+        Tue, 21 Mar 2023 10:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679420017;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LDwSwzPjD3OmF84qtgDXFqEH88rRTxQOUzKCvWTZg7o=;
-        b=Nuj2JeD4rsGzzlDo9UKgA4bvRT01eirRyUTYHHwsc+ua4RG/H6RTxWwwUX/VoOF1JQ
-         7LNmg/FqYH3ASWg9k77e8ut/0/rAZZTlDhSJ4P4Gc6xlWdlRx2jNcNNW1/JioFZxOG/F
-         /JBq/CwCeSO47RYdKCTsRd77dXUqgSio8i+HeWZ57nUra1tCn7B6nmeTJmt2qzBbbTcY
-         EQ1dmdjel1rb0hQAEk03dPGujuTy8YR35Dws1Gz2WK+QBgkTH/sOzvrmXDivMMAZmExS
-         RKSvg03OzB/szl2vgDBhGyhYoH7tyyskFzffPTE3qRYct7KjBuevQp9fA6oGAP6IRLvO
-         /PGw==
+        d=gmail.com; s=20210112; t=1679420057;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=smJRVW/FrnuNdUD8cl2fR53KDB/Y49Fg7o55MfQn18I=;
+        b=okE/S97qVRKsRy5os7SLORRU5OGGTC124JaJcFqYmezLMUzBZTWmPb/PXD3i51jvTl
+         Wus9Lb3ndeS7AD4Ot8+8V7eso0AkNA3YtE+3kFWs/HA4XHDriMkfx75YTuvvGXx025b1
+         9SIWTIQ7ePidnbSURXPTogR8ft6GWnB00HLOHGmxuTO7tbzudfQXken+tepVUvSmTo8b
+         QNaAWJngOcp6V5PVud1wr6wNqM0WS423zAjEJc4HpnBf6gUY5oDJ3DaPMdgtWV/IT6rr
+         b4bO3G/xqtOTJufWgI3pP2rXQqNNyEgG8DCk1bjc5f/LIzzCdV5eP+aI+G3gu4M2hLI2
+         /W5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420017;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LDwSwzPjD3OmF84qtgDXFqEH88rRTxQOUzKCvWTZg7o=;
-        b=Yw3mgkU94xKl1IWDjMrgJlR3M/Drnx5tsZXu9Og1LFTfbbUNiObsa2dsG/wRf1EbZy
-         6iJJfPF8Ap1Mmcb7/TlmAitdRR3uKywa/qCcVTVbPSPG5KymzA84CyZKX1fhFav2Pmj/
-         CcgFiYJOoTrLenPScAW8vAI+r1eAN3AQPO0fNoSjubxR9KB72l1dwGiYz85ovT2yERHL
-         eBR/7NmMFgQxlhIga8OaI7pwm1XvdWIih+SnAQo0REWT/j8b/14VO2RpJYy+yz55ZqtP
-         hkR26sUEMYRyz2izMtvsF/cec3HOStEzMO9aJzbh6cJvLGG8R7R7mZ9TE3w+SMEVsGa/
-         FPqg==
-X-Gm-Message-State: AO0yUKX2lCiGnKFj4p5NxVIcnyDLKXzUyhVlbviUpKXd88PUdOjF0Lts
-        afbLsabdoyIYY8AEMyZkNsyBRA==
-X-Google-Smtp-Source: AK7set9oLoBN5qVhPyUil9/Rg3m9u1I4YYDTnxm3ahqrTYWVm7mtVqkYbJ3Og4n7B59zrYisKgcJFA==
-X-Received: by 2002:a05:651c:10e:b0:29b:d436:5c91 with SMTP id a14-20020a05651c010e00b0029bd4365c91mr1158228ljb.4.1679420017283;
-        Tue, 21 Mar 2023 10:33:37 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id u5-20020ac24c25000000b004e7a0f67490sm2220806lfq.110.2023.03.21.10.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:33:36 -0700 (PDT)
-Message-ID: <564e5b54-66a5-2cb8-5bfc-b13b08f5eb6e@linaro.org>
-Date:   Tue, 21 Mar 2023 18:33:35 +0100
+        d=1e100.net; s=20210112; t=1679420057;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=smJRVW/FrnuNdUD8cl2fR53KDB/Y49Fg7o55MfQn18I=;
+        b=oy69jKOLuovBKZzTN2KOy/dwM+6Mokf9TlH37PY0EJcgZ8uW+PKlTXxu56YQgKcA7V
+         nu8L6YDPGzd81Kb2KRPf2O7robVJIWL8EmKOezbxaSCTJvDdQf1SfAtQmQ2cUdJQ+ya2
+         wn2nmbPojfsrcRetx/5woCAGX+eUlNMyEcvx+O82otMhVW1iOal3WuRmOqKv3C/QBOG9
+         0aqOJ6hpwRnvorWPjGQXVjS5HQ0VhhWcJOhMub+cgYRv+sCPZAjzcRHQaOwHo3Rfm9cL
+         0PPbM2VnJ8t54u9CGmaDp9gvPFx5IGLJHNU8DH3ugXL2NLY48T7oVqJuwYUirN4UUD4c
+         p+ZQ==
+X-Gm-Message-State: AO0yUKWThv/bZuf1mMg1aMmYO48GX5bbx1SrzQFfsfXUkFlBrH8uEmkf
+        rWOVkpz8Ir+6Q5J3aoQWNvM=
+X-Google-Smtp-Source: AK7set/C04ryg0NorzhacJUWhL7vs6/KZ3lU5EbnosyNfsNkrZxMsTsuQX7tFXCFAvfGMOz1Favxfw==
+X-Received: by 2002:adf:ead0:0:b0:2cf:e710:a4b9 with SMTP id o16-20020adfead0000000b002cfe710a4b9mr2725892wrn.32.1679420056462;
+        Tue, 21 Mar 2023 10:34:16 -0700 (PDT)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id b13-20020a056000054d00b002da1261aa44sm184775wrf.48.2023.03.21.10.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 10:34:13 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v2 0/4] net: dsa: b53: configure 6318 and 63268 RGMII ports
+Date:   Tue, 21 Mar 2023 18:33:55 +0100
+Message-Id: <20230321173359.251778-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230320155024.164523-1-noltari@gmail.com>
+References: <20230320155024.164523-1-noltari@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
- specifying channel num
-Content-Language: en-US
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-2-815606092fff@linaro.org>
- <2f54ae85-f7b9-4666-cc05-6aa034028789@kernel.org>
- <38fe0736-b566-9e1b-d7f3-71e3fcd01d90@linaro.org>
- <f8baed88-6a3b-17c5-4134-ce3917ee8632@kernel.org>
- <101834f0-e00c-5469-c8a5-59a00a5160a5@linaro.org>
- <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <b3ef4fb6-91c7-1730-ceef-22fa3ef08e4e@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,118 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+BCM6318 and BCM63268 need special configuration for their RGMII ports, so we
+need to be able to identify them as a special BCM63xx switch.
+In the meantime, let's add some missing BCM63xx SoCs to B53 MMAP device table.
 
+This should be applied after "net: dsa: b53: add support for BCM63xx RGMIIs":
+https://patchwork.kernel.org/project/netdevbpf/patch/20230319220805.124024-1-noltari@gmail.com/
 
-On 21.03.2023 15:49, Georgi Djakov wrote:
-> On 21.03.23 16:23, Konrad Dybcio wrote:
->>
->>
->> On 21.03.2023 15:21, Georgi Djakov wrote:
->>> On 21.03.23 16:09, Konrad Dybcio wrote:
->>>>
->>>> On 21.03.2023 15:06, Georgi Djakov wrote:
->>>>> Hi Konrad,
->>>>>
->>>>> Thanks for the patch!
->>>>>
->>>>> On 8.03.23 23:40, Konrad Dybcio wrote:
->>>>>> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
->>>>>> one channel. This should be taken into account in bandwidth calcualtion,
->>>>>> as we're supposed to feed msmbus with the per-channel bandwidth. Add
->>>>>> support for specifying that and use it during bandwidth aggregation.
->>>>>>
->>>>>
->>>>> This looks good, but do you have any follow-up patch to use this and set
->>>>> the channels in some driver?
->>>> Yes, I have a couple of OOT drivers that are gonna make use of it.
->>>> TBF it should have been sent separately from the QoS mess, but I
->>>> don't think it's much of an issue to take it as-is.
->>>>
->>>> The aforementioned OOT drivers for MSM8998 and SM6375 will be
->>>> submitted after we reach a consensus on how we want to ensure
->>>> that each node is guaranteed to have its clocks enabled before
->>>> access, among some other minor things.
->>>
->>> Yes, these QoS clocks are confusing. Maybe you can even submit them
->>> without configuring any QoS stuff in first place? Does enabling QoS
->>> actually show any benefits on these devices?
->> Haven't tested that thoroughly to be honest. But I'll try to get
->> some numbers.
-> 
-> I expect this to have impact only on some latency sensitive stuff like
-> modem or when there is heavy traffic flows. Maybe we can start without
-> QoS first and then add it on top as a next step?
-I only now remembered why I didn't do that.. Adding QoS at a later time
-will break older DTs, as with QoS we need to pass some clocks to the driver.
+Álvaro Fernández Rojas (4):
+  dt-bindings: net: dsa: b53: add more 63xx SoCs
+  net: dsa: b53: mmap: add more 63xx SoCs
+  net: dsa: b53: mmap: allow passing a chip ID
+  net: dsa: b53: add BCM63268 RGMII configuration
 
-Konrad
-> 
-> BR,
-> Georgi
-> 
->>
->> Konrad
->>>
->>> Thanks,
->>> Georgi
->>>
->>>> Konrad
->>>>>
->>>>> BR,
->>>>> Georgi
->>>>>
->>>>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>> ---
->>>>>>     drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
->>>>>>     drivers/interconnect/qcom/icc-rpm.h | 2 ++
->>>>>>     2 files changed, 8 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>>> index 35fd75ae70e3..27c4c6497994 100644
->>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>>> @@ -317,6 +317,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>>>>>     {
->>>>>>         struct icc_node *node;
->>>>>>         struct qcom_icc_node *qn;
->>>>>> +    u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>>>>>         int i;
->>>>>>           /* Initialise aggregate values */
->>>>>> @@ -334,7 +335,11 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->>>>>>         list_for_each_entry(node, &provider->nodes, node_list) {
->>>>>>             qn = node->data;
->>>>>>             for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->>>>>> -            agg_avg[i] += qn->sum_avg[i];
->>>>>> +            if (qn->channels)
->>>>>> +                sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
->>>>>> +            else
->>>>>> +                sum_avg[i] = qn->sum_avg[i];
->>>>>> +            agg_avg[i] += sum_avg[i];
->>>>>>                 agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
->>>>>>             }
->>>>>>         }
->>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->>>>>> index 8ba1918d7997..8aed5400afda 100644
->>>>>> --- a/drivers/interconnect/qcom/icc-rpm.h
->>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.h
->>>>>> @@ -66,6 +66,7 @@ struct qcom_icc_qos {
->>>>>>      * @id: a unique node identifier
->>>>>>      * @links: an array of nodes where we can go next while traversing
->>>>>>      * @num_links: the total number of @links
->>>>>> + * @channels: number of channels at this node (e.g. DDR channels)
->>>>>>      * @buswidth: width of the interconnect between a node and the bus (bytes)
->>>>>>      * @sum_avg: current sum aggregate value of all avg bw requests
->>>>>>      * @max_peak: current max aggregate value of all peak bw requests
->>>>>> @@ -78,6 +79,7 @@ struct qcom_icc_node {
->>>>>>         u16 id;
->>>>>>         const u16 *links;
->>>>>>         u16 num_links;
->>>>>> +    u16 channels;
->>>>>>         u16 buswidth;
->>>>>>         u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->>>>>>         u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->>>>>>
->>>>>
->>>
-> 
+ .../devicetree/bindings/net/dsa/brcm,b53.yaml |  3 ++
+ drivers/net/dsa/b53/b53_common.c              | 19 +++++++++++-
+ drivers/net/dsa/b53/b53_mmap.c                | 29 +++++++++++++++----
+ drivers/net/dsa/b53/b53_priv.h                |  9 +++++-
+ drivers/net/dsa/b53/b53_regs.h                |  1 +
+ 5 files changed, 53 insertions(+), 8 deletions(-)
+
+-- 
+2.30.2
+
