@@ -2,200 +2,469 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3796C2A32
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F436C2A37
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjCUGHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S230078AbjCUGJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCUGHG (ORCPT
+        with ESMTP id S230041AbjCUGJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:07:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2522B62A;
-        Mon, 20 Mar 2023 23:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679378825; x=1710914825;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=q1uNIayphFD5viyr4cF9zkm4qPwcm9Q4kvp3yDt0hw0=;
-  b=CbBiWln2/pn8l0LZM1ohRFUAWiaLWtvfNirm8FC3U0oe8YXNcGS3XGAT
-   936AM3V9jJUaapCNv1lsDsCbfbyGlfpi4cusQkib4aIFgi0qGhwKQtldE
-   Sz1jjrWEiZVT1sWJDardrdAGs6vy0qxo24KdeNZZQsdLBE6sv+6QOo0Jh
-   VxUDuXrgAvJg7oWdSfg5iWa8BzUfbsp5FBwpdLsijD4bCkEU5X9ZyiB2q
-   aawSIJmn+xKrROIDbvlj6WTW54NgH3kMhHMDJeS7o0MW2ek3JGo+flCNi
-   e97cN05yPoe3HMQ0DOOKN9ZPBi7zF+L6GWtUQ4lmNXJONKkpgXaoQUwLL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="341215224"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="341215224"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 23:07:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="855562985"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="855562985"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2023 23:06:40 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 23:06:28 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 23:06:28 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 20 Mar 2023 23:06:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LG+I/neYw0jd43hjzpA/x4XQyqZGbQP+KSSsABPcyOoegRI4KtxCqz5gAXGTL3Yq2p6Wp/SnnV5jB5l65hsB6hZ1FI/5UhGMzAKjNKafZtxvi7ce7Hv9PvL7AoOIn5qU20euiEem+/r9GPRWkb0pMHZy7gWeYNIfwboTlvks3xwO2+tfnu0oR9F1D/tPutn1pLhtM6IAOSWy9ysgxZ5OPUF/R46paARBkUFQmToDlX1G2H2fUhgBngFasNaTbDWJWR1cgvNnVbJ/I/fl9lgN2iwMc9J9GmeTF8YAd1VyB9rxaYUI17fX4tRjvbnSmOXKV3HeWlhHedzlRig63/4W2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m97aZ7O/pJ8s8L9z91VbOEvnFuMVW7cxR7YNy4MdXXU=;
- b=eaI7WqVQURb7Sbgko2b7OkXQAeli3OUQLHuRKj2sqoTy8v84+77IXmAb5TZTYHMju3lLRvbVqDk0aXeUBby2CvhBp/Q0RU2ZDLFplffokYoY09wvgAZC9/mWP8lFPJ//rz0o6qOWeReoVT+OgkYUqfj2Z0G4Z1AxQmYpL4M0NW3+v6kAUOKJFdNeNUFQ5y0bAndCoyMSIynlVgbOqotmNi5KIAhOeh6fRcLkk3ma6rFpqrl3CKlgd27NP/JOOJJNWoADYXLRB7V5u7RDQD0QPjDMlUdAcxmHUv/seBnZoVfXbyy5JbXqg3sLQYOFINy3TQwS8KARGOCBWTSg7rCRAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by CY8PR11MB7686.namprd11.prod.outlook.com (2603:10b6:930:70::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 06:06:26 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::6f7:944a:aaad:301f]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::6f7:944a:aaad:301f%8]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
- 06:06:26 +0000
-From:   "Liu, Yi L" <yi.l.liu@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH v2 1/5] iommufd: Add nesting related data structures for
- Intel VT-d
-Thread-Topic: [PATCH v2 1/5] iommufd: Add nesting related data structures for
- Intel VT-d
-Thread-Index: AQHZUmBbUDr/lqYncEGY8NQoQwlnI68DwO6AgAEOuLA=
-Date:   Tue, 21 Mar 2023 06:06:25 +0000
-Message-ID: <DS0PR11MB752963483E616EC55F372D82C3819@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230309082207.612346-1-yi.l.liu@intel.com>
- <20230309082207.612346-2-yi.l.liu@intel.com> <ZBhkf8ugXFPi8dej@nvidia.com>
-In-Reply-To: <ZBhkf8ugXFPi8dej@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|CY8PR11MB7686:EE_
-x-ms-office365-filtering-correlation-id: aeaf3349-7e0e-4276-a8e9-08db29d26792
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vgjr0AsfoT7wHJLhOmh296BOBUXzr4M43IAXISO6IQwIZSTlSnFCJue19OCUZriOOmD9sDZv/GzuCqPuT/3SAzdEpOstggik8T+OInAaSObF3/Nwy/z+sJhRdsxvRQROWeTACqCdfml1+LmhaGnUlBWCRNjNHInx10xeJrais61LdMsvEiUJl7vAQc4MrgUPNxdNLcDfW8yK+yufNdR+l+kffDlwIpwuOPan32cbcPmt4+diQmOH0RsocEwPUVwKVNdRE9Fx8dbkrWveKN36puNKdCfPJhgOv4mzMPC6kUXnv3/t2SeHpIOSgNA6m34Z1rNyC/7UHaNUqJN5gbQ5lmCkqWjaGx8kJddV7BJP2a5G2xbL8gpjEvzwMRK4ewEOGFxBdbAx8eDiVArY2JGdslKls8uvk5VtXaMzYHOWBqyhXACQhQdeS5sLME5+D0nBCGg5Y4Kd5UoE0qrp11megY3YZ+MpJjmV2WqzbFMOO/y5rywaNA7O8losFW41dBSd+292kgcmI9xnQFFpWRtyMvee3434g2T9tMcwEqPaiF6kUTPh+/pA4qfvqRENQj99tmu+X0rKNSYxm7rJsWGJPvHGl2YLgFOdHUQvUhPfFNRjhgWi0NYJV6aXwp+lVAfsDUod5kQQ7uWheEnTVzC/3/V7md0FwJG06Mdxg6HBmEgwTZK0PEkfi+OlZFuUczKHg4qzfu5IfOUnJcHRdvNvCw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199018)(82960400001)(38070700005)(6506007)(9686003)(186003)(26005)(71200400001)(86362001)(7696005)(38100700002)(2906002)(52536014)(478600001)(83380400001)(122000001)(55016003)(316002)(33656002)(54906003)(4744005)(8676002)(66946007)(4326008)(5660300002)(7416002)(41300700001)(8936002)(66446008)(64756008)(66476007)(6916009)(66556008)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UDnNex9tz2zN17F3UAWK+5I2v8wmSPqrqOfBMKt8zWXSPeukmafhX+r8q3vl?=
- =?us-ascii?Q?DnY4dj4lAyjNLyA8E5DYBTYkdqrT4L3vqzS9sl1eUkq03MNENkEHKlba2O5L?=
- =?us-ascii?Q?Yf0m3DvzBSfUndkGXTiCts0PQv2Jeq42YOS7C0mpzOQzrBkkpqFafPaV5yuf?=
- =?us-ascii?Q?DNf6HjEJSbMv8Xqm5eiVQDczG+W9RjTZrdrvJM2Yq0ukJgVrc58gzypGML08?=
- =?us-ascii?Q?jNCjj9vGCjmkeol7qJlRqXw6PxUHmgJFwnZy2u8qLNFhyVYnXj1D3DAXNoaQ?=
- =?us-ascii?Q?xY/N8RFq51qzrvweycWl+7572DtHtkPGl3bLgPH+fD8tzEAwlaYfaWdrTq4k?=
- =?us-ascii?Q?FLPP+DP607DEbzX3y8fJgxxiFD2Yir20f6DXCanGlkN7r3nrbh0UwIZ9yPZF?=
- =?us-ascii?Q?5wRsScGEXgEDDHbD3qeu12mcr16Bzyfda7vT+7VFoXgMARMpPb5UDe6c1vyG?=
- =?us-ascii?Q?kVEHrc8mO50PV4X8Dgc1NE0wv4PEJWTRGXQ6hqMneJFXEoV86ExIHB0aKV7X?=
- =?us-ascii?Q?2eFAHPLIlEBRxFZ0mqK3BxBwGhNlgA6UjEatbkbXHx004MQY+Fo0lQiny9FS?=
- =?us-ascii?Q?OIQiLiKhFTGy4OFAueU8LlNre41j7ry6pNZpeer4twqYDByDV1JvzScMATIy?=
- =?us-ascii?Q?077iGzJmIHnf/Xu9S8FDamdOaZqJEvUXe8A3O/oO5cyqhmrtOi6aXQs3jBy3?=
- =?us-ascii?Q?zkBmQRCgwE19qZ4dWiS+RKXOrR2G/5P0XCtJ1WZ10rwU50bwoC1Ckm/+lPZe?=
- =?us-ascii?Q?+n8ZfTUAV/DtUUUxEiH03Z40UPQRU1VFEij6g36pnEESkO8RHiUIw2jwH2+l?=
- =?us-ascii?Q?sSRlDhL4accqAxi8zHd5KqiEgMiu225pMFT6LoZjgHeMnNtiwGlD2FrgKwGr?=
- =?us-ascii?Q?qX0xNDItDJocxUGXolVnDfrbqnYE1YHN31oSiN1hEZF9Vcnn+xJYOGW5YdIv?=
- =?us-ascii?Q?oEMTEba/6wHzX+Y3FHeMAkAWUG7z0i669atCTwI0eU8aBvSxePf+15vvUqa8?=
- =?us-ascii?Q?IoTHJej3/dRU64XeRHo8L1evjxgRpDIXdhQUvoEhhmdABWiFZLxsoOTcjJtM?=
- =?us-ascii?Q?mB/CTYuLiCrzb14T2Q1fbmibb4YyaqJ+U3DU5bLmAyR6BGvjL7IfMxCzfpX7?=
- =?us-ascii?Q?gBHCu22/4JtNibct5AIQkF/ToRqtWrJDhGZquvKMv20wQw1Cfe1BE4muFHc+?=
- =?us-ascii?Q?DfWTVPeVSTCU+kOjRHjKE+RuLTMGuWtGE7vol01qnbH1Sc5uekBN0bQfA7sx?=
- =?us-ascii?Q?nTHSMlLvyioai3xHfh0SIF4ZLBctuX/AETogPkHa1lggBI+QIMcM3o37ECRg?=
- =?us-ascii?Q?UO/tXGVg0XEWSRt/aQVHMcFI67Kx6bTIAl9habTcyVPermKpyR0WjBtCBmu/?=
- =?us-ascii?Q?YRdP2TwWffAEU7ZHJtBNokEK8vNzshlN4auvwI7dH7WZWup/HrOMKNwmqVC3?=
- =?us-ascii?Q?oH3ey20hEz1nmpWeu9/ZVYTSwi70A+yIZvTnn90O8XsZqLmyMi+A1V/PQ4CA?=
- =?us-ascii?Q?YVjfFuE6PwTM/Yf/8qReAjk52Q3U3gSJPC+16Tsso2Nwq76NkG1YHlZY0jxv?=
- =?us-ascii?Q?PCKGtvFxJOgP3jTsLBaTZqoKA/k7NehSLL+I3O5B?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 21 Mar 2023 02:09:03 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA8811E83;
+        Mon, 20 Mar 2023 23:08:55 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2267424DFE2;
+        Tue, 21 Mar 2023 14:08:54 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 14:08:54 +0800
+Received: from [192.168.125.82] (183.27.97.64) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 14:08:53 +0800
+Message-ID: <2aa1bdbd-e37e-941a-9422-0908545c14f7@starfivetech.com>
+Date:   Tue, 21 Mar 2023 14:08:51 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aeaf3349-7e0e-4276-a8e9-08db29d26792
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 06:06:26.0437
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yDFr2IPmog3y8bg5ElX+JtOyInmXHHhhv8GQE1eu9Js4yukBwrWlLbNR9Ih022sAemK3lFItG7wzJABQdc/Ebw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7686
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/3] phy: starfive: Add mipi dphy rx support
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230223015952.201841-1-changhuang.liang@starfivetech.com>
+ <20230223015952.201841-3-changhuang.liang@starfivetech.com>
+ <ZBhTmTEcrV59oaw3@matsya>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <ZBhTmTEcrV59oaw3@matsya>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Monday, March 20, 2023 9:50 PM
->=20
-> On Thu, Mar 09, 2023 at 12:22:03AM -0800, Yi Liu wrote:
->=20
-> > +struct iommu_hwpt_invalidate_intel_vtd {
-> > +	__u8 granularity;
-> > +	__u8 padding[7];
-> > +	__u32 flags;
-> > +	__u32 __reserved;
-> > +	__u64 addr;
-> > +	__u64 granule_size;
-> > +	__u64 nb_granules;
-> > +};
->=20
-> Is there a reason this has such a weird layout? Put the granularity in
-> the __reserved slot?
 
-No special reason. This layout was from the previous merged version.
-Will modify it as you suggested.
 
-> Consider the discussion on ARM if you prefer to use the native HW
-> command structure instead?
+On 2023/3/20 20:37, Vinod Koul wrote:
+> On 22-02-23, 17:59, Changhuang Liang wrote:
+>> [...]
+>> +++ b/drivers/phy/starfive/phy-starfive-dphy-rx.c
+>> @@ -0,0 +1,362 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * DPHY driver for the StarFive JH7110 SoC
+>> + *
+>> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+>> + */
+>> +
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/io.h>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/phy/phy.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/reset.h>
+>> +
+>> +#define STF_DPHY_APBCFGSAIF__SYSCFG(x)		(x)
+> 
+> What is the purpose of this? also whats with __ ?
+> 
 
-Yes, will think about it. at least granule_size and nb_granules are not
-necessary. They was added in the previous abstracted invalidation
-uapi structure.
+In starfive jh7110 SoC, Dphy rx module register's name is called such as
+STF_DPHY_APBCFGSAIF__SYSCFG_4, STF_DPHY_APBCFGSAIF__SYSCFG_8, STF_DPHY_APBCFGSAIF__SYSCFG_12...
+so I merge them to use a marco STF_DPHY_APBCFGSAIF__SYSCFG(x).
 
-Regards,
-Yi Liu
+Should I use one "_" is enoughed?
+
+>> +
+>> +#define STF_DPHY_DA_CDPHY_R100_CTRL0_2D1C_EFUSE_EN BIT(6)
+>> +#define STF_DPHY_DA_CDPHY_R100_CTRL0_2D1C_EFUSE_IN GENMASK(12, 7)
+>> +#define STF_DPHY_DA_CDPHY_R100_CTRL1_2D1C_EFUSE_EN BIT(19)
+>> +#define STF_DPHY_DA_CDPHY_R100_CTRL1_2D1C_EFUSE_IN GENMASK(25, 20)
+>> +
+>> +#define STF_DPHY_DATA_BUS16_8			BIT(8)
+>> +#define STF_DPHY_DEBUG_MODE_SEL			GENMASK(15, 9)
+>> +
+>> +#define STF_DPHY_ENABLE_CLK			BIT(6)
+>> +#define STF_DPHY_ENABLE_CLK1			BIT(7)
+>> +#define STF_DPHY_ENABLE_LAN0			BIT(8)
+>> +#define STF_DPHY_ENABLE_LAN1			BIT(9)
+>> +#define STF_DPHY_ENABLE_LAN2			BIT(10)
+>> +#define STF_DPHY_ENABLE_LAN3			BIT(11)
+>> +#define STF_DPHY_GPI_EN				GENMASK(17, 12)
+>> +#define STF_DPHY_HS_FREQ_CHANGE_CLK		BIT(18)
+>> +#define STF_DPHY_HS_FREQ_CHANGE_CLK1		BIT(19)
+>> +#define STF_DPHY_LANE_SWAP_CLK			GENMASK(22, 20)
+>> +#define STF_DPHY_LANE_SWAP_CLK1			GENMASK(25, 23)
+>> +#define STF_DPHY_LANE_SWAP_LAN0			GENMASK(28, 26)
+>> +#define STF_DPHY_LANE_SWAP_LAN1			GENMASK(31, 29)
+>> +
+>> +#define STF_DPHY_LANE_SWAP_LAN2			GENMASK(2, 0)
+>> +#define STF_DPHY_LANE_SWAP_LAN3			GENMASK(5, 3)
+>> +#define STF_DPHY_MP_TEST_EN			BIT(6)
+>> +#define STF_DPHY_MP_TEST_MODE_SEL		GENMASK(11, 7)
+>> +#define STF_DPHY_PLL_CLK_SEL			GENMASK(21, 12)
+>> +#define STF_DPHY_PRECOUNTER_IN_CLK		GENMASK(29, 22)
+>> +
+>> +#define STF_DPHY_PRECOUNTER_IN_CLK1		GENMASK(7, 0)
+>> +#define STF_DPHY_PRECOUNTER_IN_LAN0		GENMASK(15, 8)
+>> +#define STF_DPHY_PRECOUNTER_IN_LAN1		GENMASK(23, 16)
+>> +#define STF_DPHY_PRECOUNTER_IN_LAN2		GENMASK(31, 24)
+>> +
+>> +#define STF_DPHY_PRECOUNTER_IN_LAN3		GENMASK(7, 0)
+>> +#define STF_DPHY_RX_1C2C_SEL			BIT(8)
+>> +
+>> +struct regval_t {
+> 
+> regval should be okay, no?
+> 
+
+OK, will change to regval
+
+>> +	u32 addr;
+>> +	u32 val;
+>> +};
+>> +
+>> +struct stf_dphy {
+>> +	struct device *dev;
+>> +	void __iomem *regs;
+>> +	struct clk *cfg_clk;
+>> +	struct clk *ref_clk;
+>> +	struct clk *tx_clk;
+>> +	struct reset_control *rstc;
+>> +	struct regulator *mipi_0p9;
+>> +	struct phy *phy;
+>> +	struct regmap *stf_aon_syscon;
+>> +	unsigned int aon_gp_reg;
+>> +};
+>> +
+>> +struct stf_dphy_info {
+>> +	bool external_support;
+>> +	int (*external_get)(struct stf_dphy *dphy);
+>> +	void (*external_init)(struct stf_dphy *dphy);
+>> +	void (*external_exit)(struct stf_dphy *dphy);
+>> +};
+>> +
+>> +static const struct stf_dphy_info *stf_dphy_info;
+>> +
+>> +static const struct regval_t stf_dphy_init_list[] = {
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(4), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(8), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(12), 0x0000fff0 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(16), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(20), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(24), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(28), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(32), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(36), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(40), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(40), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(48), 0x24000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(52), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(56), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(60), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(64), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(68), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(72), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(76), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(80), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(84), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(88), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(92), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(96), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(100), 0x02000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(104), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(108), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(112), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(116), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(120), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(124), 0x0000000c },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(128), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(132), 0xcc500000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(136), 0x000000cc },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(140), 0x00000000 },
+>> +	{ STF_DPHY_APBCFGSAIF__SYSCFG(144), 0x00000000 },
+>> +};
+>> +
+>> +static int stf_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
+>> +{
+>> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
+>> +	int map[6] = {4, 0, 1, 2, 3, 5};
+> 
+> what does this mean?
+> 
+
+This is the physical lane and logical lane mapping table, should I add a note for it?
+
+>> +	int i;
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(stf_dphy_init_list); i++)
+>> +		writel(stf_dphy_init_list[i].val,
+>> +		       dphy->regs + stf_dphy_init_list[i].addr);
+>> +
+>> +	writel(FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL0_2D1C_EFUSE_EN, 1) |
+>> +	       FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL0_2D1C_EFUSE_IN, 0x1b) |
+>> +	       FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL1_2D1C_EFUSE_EN, 1) |
+>> +	       FIELD_PREP(STF_DPHY_DA_CDPHY_R100_CTRL1_2D1C_EFUSE_IN, 0x1b),
+>> +	       dphy->regs + STF_DPHY_APBCFGSAIF__SYSCFG(0));
+>> +
+>> +	writel(FIELD_PREP(STF_DPHY_DATA_BUS16_8, 0) |
+>> +	       FIELD_PREP(STF_DPHY_DEBUG_MODE_SEL, 0x5a),
+>> +	       dphy->regs + STF_DPHY_APBCFGSAIF__SYSCFG(184));
+>> +
+>> +	writel(FIELD_PREP(STF_DPHY_ENABLE_CLK, 1) |
+>> +	       FIELD_PREP(STF_DPHY_ENABLE_CLK1, 1) |
+>> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN0, 1) |
+>> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN1, 1) |
+>> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN2, 1) |
+>> +	       FIELD_PREP(STF_DPHY_ENABLE_LAN3, 1) |
+>> +	       FIELD_PREP(STF_DPHY_GPI_EN, 0) |
+>> +	       FIELD_PREP(STF_DPHY_HS_FREQ_CHANGE_CLK, 0) |
+>> +	       FIELD_PREP(STF_DPHY_HS_FREQ_CHANGE_CLK1, 0) |
+>> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_CLK, map[0]) |
+>> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_CLK1, map[5]) |
+>> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN0, map[1]) |
+>> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN1, map[2]),
+>> +	       dphy->regs + STF_DPHY_APBCFGSAIF__SYSCFG(188));
+>> +
+>> +	writel(FIELD_PREP(STF_DPHY_LANE_SWAP_LAN2, map[3]) |
+>> +	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN3, map[4]) |
+>> +	       FIELD_PREP(STF_DPHY_MP_TEST_EN, 0) |
+>> +	       FIELD_PREP(STF_DPHY_MP_TEST_MODE_SEL, 0) |
+>> +	       FIELD_PREP(STF_DPHY_PLL_CLK_SEL, 0x37c) |
+>> +	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_CLK, 8),
+>> +	       dphy->regs + STF_DPHY_APBCFGSAIF__SYSCFG(192));
+>> +
+>> +	writel(FIELD_PREP(STF_DPHY_PRECOUNTER_IN_CLK1, 8) |
+>> +	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN0, 7) |
+>> +	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN1, 7) |
+>> +	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN2, 7),
+>> +	       dphy->regs + STF_DPHY_APBCFGSAIF__SYSCFG(196));
+>> +
+>> +	writel(FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN3, 7) |
+>> +	       FIELD_PREP(STF_DPHY_RX_1C2C_SEL, 0),
+>> +	       dphy->regs + STF_DPHY_APBCFGSAIF__SYSCFG(200));
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int stf_dphy_init(struct phy *phy)
+>> +{
+>> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
+>> +	int ret;
+>> +
+>> +	ret = regulator_enable(dphy->mipi_0p9);
+>> +	if (ret)
+>> +		goto err_0p9;
+>> +
+>> +	if (stf_dphy_info->external_support && stf_dphy_info->external_init)
+>> +		stf_dphy_info->external_init(dphy);
+>> +
+>> +	return 0;
+>> +
+>> +err_0p9:
+>> +	return ret;
+>> +}
+>> +
+>> +static int stf_dphy_exit(struct phy *phy)
+>> +{
+>> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
+>> +
+>> +	if (stf_dphy_info->external_support && stf_dphy_info->external_exit)
+>> +		stf_dphy_info->external_exit(dphy);
+>> +
+>> +	regulator_disable(dphy->mipi_0p9);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int stf_dphy_power_on(struct phy *phy)
+>> +{
+>> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
+>> +
+>> +	clk_set_rate(dphy->cfg_clk, 99000000);
+>> +	clk_set_rate(dphy->ref_clk, 49500000);
+>> +	clk_set_rate(dphy->tx_clk, 19800000);
+>> +	reset_control_deassert(dphy->rstc);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int stf_dphy_power_off(struct phy *phy)
+>> +{
+>> +	struct stf_dphy *dphy = phy_get_drvdata(phy);
+>> +
+>> +	reset_control_assert(dphy->rstc);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct phy_ops stf_dphy_ops = {
+>> +	.init      = stf_dphy_init,
+>> +	.exit      = stf_dphy_exit,
+>> +	.configure = stf_dphy_configure,
+>> +	.power_on  = stf_dphy_power_on,
+>> +	.power_off = stf_dphy_power_off,
+>> +};
+>> +
+>> +static int stf_dphy_probe(struct platform_device *pdev)
+>> +{
+>> +	struct phy_provider *phy_provider;
+>> +	struct stf_dphy *dphy;
+>> +	int ret;
+>> +
+>> +	dphy = devm_kzalloc(&pdev->dev, sizeof(*dphy), GFP_KERNEL);
+>> +	if (!dphy)
+>> +		return -ENOMEM;
+>> +	stf_dphy_info = of_device_get_match_data(&pdev->dev);
+>> +	dev_set_drvdata(&pdev->dev, dphy);
+>> +	dphy->dev = &pdev->dev;
+>> +
+>> +	dphy->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(dphy->regs))
+>> +		return PTR_ERR(dphy->regs);
+>> +
+>> +	dphy->cfg_clk = devm_clk_get(&pdev->dev, "cfg");
+>> +	if (IS_ERR(dphy->cfg_clk))
+>> +		return PTR_ERR(dphy->cfg_clk);
+>> +
+>> +	dphy->ref_clk = devm_clk_get(&pdev->dev, "ref");
+>> +	if (IS_ERR(dphy->ref_clk))
+>> +		return PTR_ERR(dphy->ref_clk);
+>> +
+>> +	dphy->tx_clk = devm_clk_get(&pdev->dev, "tx");
+>> +	if (IS_ERR(dphy->tx_clk))
+>> +		return PTR_ERR(dphy->tx_clk);
+>> +
+>> +	dphy->rstc = devm_reset_control_array_get_exclusive(&pdev->dev);
+>> +	if (IS_ERR(dphy->rstc))
+>> +		return PTR_ERR(dphy->rstc);
+>> +
+>> +	dphy->mipi_0p9 = devm_regulator_get(&pdev->dev, "mipi_0p9");
+>> +	if (IS_ERR(dphy->mipi_0p9))
+>> +		return PTR_ERR(dphy->mipi_0p9);
+>> +
+>> +	if (stf_dphy_info->external_support && stf_dphy_info->external_get) {
+>> +		ret = stf_dphy_info->external_get(dphy);
+>> +		if (ret < 0) {
+>> +			dev_err(&pdev->dev, "Failed to get PHY external info\n");
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+>> +	dphy->phy = devm_phy_create(&pdev->dev, NULL, &stf_dphy_ops);
+>> +	if (IS_ERR(dphy->phy)) {
+>> +		dev_err(&pdev->dev, "Failed to create PHY\n");
+>> +		return PTR_ERR(dphy->phy);
+>> +	}
+>> +
+>> +	phy_set_drvdata(dphy->phy, dphy);
+>> +	phy_provider = devm_of_phy_provider_register(&pdev->dev,
+>> +						     of_phy_simple_xlate);
+>> +
+>> +	return PTR_ERR_OR_ZERO(phy_provider);
+>> +}
+>> +
+>> +static int stf_external_get(struct stf_dphy *dphy)
+>> +{
+>> +	struct of_phandle_args args;
+>> +	int ret;
+>> +
+>> +	ret = of_parse_phandle_with_fixed_args(dphy->dev->of_node,
+>> +					       "starfive,aon-syscon",
+>> +					       1, 0, &args);
+>> +	if (ret < 0) {
+>> +		dev_err(dphy->dev, "Failed to parse starfive,aon-syscon\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	dphy->stf_aon_syscon = syscon_node_to_regmap(args.np);
+>> +	of_node_put(args.np);
+>> +	if (IS_ERR(dphy->stf_aon_syscon))
+>> +		return PTR_ERR(dphy->stf_aon_syscon);
+>> +
+>> +	dphy->aon_gp_reg = args.args[0];
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void stf_external_init(struct stf_dphy *dphy)
+>> +{
+>> +	regmap_update_bits(dphy->stf_aon_syscon, dphy->aon_gp_reg,
+>> +			   BIT(31), BIT(31));
+>> +}
+>> +
+>> +static void stf_external_exit(struct stf_dphy *dphy)
+>> +{
+>> +	regmap_update_bits(dphy->stf_aon_syscon, dphy->aon_gp_reg,
+>> +			   BIT(31), 0);
+>> +}
+>> +
+>> +static const struct stf_dphy_info starfive_dphy_info = {
+>> +	.external_support = true,
+>> +	.external_get = stf_external_get,
+>> +	.external_init = stf_external_init,
+>> +	.external_exit = stf_external_exit,
+>> +};
+>> +
+>> +static const struct of_device_id stf_dphy_dt_ids[] = {
+>> +	{
+>> +		.compatible = "starfive,jh7110-dphy-rx",
+>> +		.data = &starfive_dphy_info,
+> 
+> is there a plan to support multiple versions which need different
+> get/init/exit methods?
+> 
+
+There is no plan to support multiple versions. So this different methods
+interface can cancel?
+
+>> +	},
+>> +	{ /* sentinel */ },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, stf_dphy_dt_ids);
+>> +
+>> +static struct platform_driver stf_dphy_driver = {
+>> +	.probe = stf_dphy_probe,
+>> +	.driver = {
+>> +		.name	= "starfive-dphy-rx",
+>> +		.of_match_table = stf_dphy_dt_ids,
+>> +	},
+>> +};
+>> +module_platform_driver(stf_dphy_driver);
+>> +
+>> +MODULE_AUTHOR("Jack Zhu <jack.zhu@starfivetech.com>");
+>> +MODULE_AUTHOR("Changhuang Liang <changhuang.liang@starfivetech.com>");
+>> +MODULE_DESCRIPTION("Starfive DPHY RX driver");
+>> +MODULE_LICENSE("GPL");
+>> -- 
+>> 2.25.1
+> 
