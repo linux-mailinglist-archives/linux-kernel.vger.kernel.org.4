@@ -2,118 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC4E6C3536
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32706C3543
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjCUPL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S231601AbjCUPMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjCUPLW (ORCPT
+        with ESMTP id S231593AbjCUPMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:11:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A171E181;
-        Tue, 21 Mar 2023 08:11:12 -0700 (PDT)
-Message-ID: <ac95f1f7-2af3-1461-2ea2-3608d081de3f@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679411470;
+        Tue, 21 Mar 2023 11:12:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5959EF9D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679411495;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cBlQ00hG8MhlBw3zA8EtNC/Bw+Cu0Ips6JNpdNr1g4M=;
-        b=fVwfxng4IJTFZtsvF5yprFb/Wp0n9ZX+YVtvS6VP0JX/6/0Vbv7GVCeL51O7ZtxD8le2kK
-        2Tvy1i/v6SNwo7OlIr0f9p2sENh4xSSCglMUubh8/o7+wEklup/srCZ9X/hjuYNd+x2d/c
-        yWu2jxtyanfdUXDQPrhKakVWTRFix7dB57Ef73t7sPPC0hr3LBD0RXeKaYKomrVDK8Fpby
-        gUZGXQw/uZ4mKgmMJVPVVBvq7y6C2x+BOyTFcD3P10v4iTCGLI2SiU4FFHBT9nOskH3hGT
-        CheittC97+dYnkCxcBps8ffDush3p7q+UTCPTHNXeSUoo1/6QcVuctV0HbBo3A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679411470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cBlQ00hG8MhlBw3zA8EtNC/Bw+Cu0Ips6JNpdNr1g4M=;
-        b=2x5XtpYX4NC5EfkxM7kkgkx3ui432bSQnPyGkedfMh7q0Y4F4gh0SO76UXyaMeULraCzYY
-        KDfMxDpKcyF2Y+BA==
-Date:   Tue, 21 Mar 2023 16:11:07 +0100
+        bh=YsalzkC56zpU2rDmbQ0VUjilQkDx+3Gh+sNLgCZQJM0=;
+        b=a4wEXQNpOduu993AJB4GM/N1D9BOXnLhsypiBjF/se2RDXlTQeCe/LKMKFLrCN7yif3MLQ
+        X1yATV3da/DxZWwLbSsch4RtxEopEsJtdIKFMNFK79q0TnBnL1KQxAx84bLJlbO++VN6zo
+        H0EABe+eLSGpxL5704spLwwHvjjrJwc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-354-ecqY9WomN-KgJgvct2qxpQ-1; Tue, 21 Mar 2023 11:11:34 -0400
+X-MC-Unique: ecqY9WomN-KgJgvct2qxpQ-1
+Received: by mail-wm1-f72.google.com with SMTP id k18-20020a05600c1c9200b003ed2a3f101fso10137265wms.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:11:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679411489;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YsalzkC56zpU2rDmbQ0VUjilQkDx+3Gh+sNLgCZQJM0=;
+        b=ZKarflarlHIA3dZ4VTJfATstXXVeJBQzwfTS+VFDE41WAPaNx7mTdhQo6JqsYlW1s3
+         zYBdUfaRvRwi7/nkVtJ9sMoUcU/t/A98FGmFYP8uFSJrY2+SJi1Gkg0yoKGeETzIaQBA
+         A+IM5e2Vt/Rd2+odNWR9MCSFYu3rL5WO1VKYYf+yEMwXTyPtfqY/rpRrqabCcTinWuwj
+         BYXkL7l4WS3/rLVA3Qm8YB8Ti2wkb9euFQCVqlI5uZkIZtNOxI4V7mgk7ZFCGtuBim/y
+         6bVqQk5ziUM507rFWZ0eIZoow8knx6AZi3Oa4ACRO0TWgIrU28I6mIEsgWFwouUrn5fq
+         NbeA==
+X-Gm-Message-State: AO0yUKX4IuFRKIkh+J0CilfHIopL0ZqrIjLSS3eOJqL/7IBiGrExuoqU
+        eyv9MSjnPJMnVGvFK0HMyzuCZHt0+keTkWWRYC6DbrLpzoF1d8hfOuf4brlWY1EdK9vPsg4XLtw
+        Vyn/pqjlDd5mVKPYZpSDgtKu4
+X-Received: by 2002:a7b:c7cf:0:b0:3ed:5a7d:fcfe with SMTP id z15-20020a7bc7cf000000b003ed5a7dfcfemr2751333wmk.3.1679411489765;
+        Tue, 21 Mar 2023 08:11:29 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8c5q656St+C8eydyBRX4ly1NSD5lwVif694CoWt4z3/ARNNlS3mU+K2K0zfpCc8MVaWwcWxQ==
+X-Received: by 2002:a7b:c7cf:0:b0:3ed:5a7d:fcfe with SMTP id z15-20020a7bc7cf000000b003ed5a7dfcfemr2751310wmk.3.1679411489460;
+        Tue, 21 Mar 2023 08:11:29 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
+        by smtp.gmail.com with ESMTPSA id v26-20020a05600c215a00b003eafc47eb09sm13666500wml.43.2023.03.21.08.11.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 08:11:28 -0700 (PDT)
+Message-ID: <eaa75ce0-7064-7919-0e72-6bb4ccc5d0d6@redhat.com>
+Date:   Tue, 21 Mar 2023 16:11:27 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Donglin Peng <pengdonglin@sangfor.com.cn>, mhiramat@kernel.org,
-        linux@armlinux.org.uk, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
- <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
- <2eeef5a3-cbe7-7a01-489a-87c5ac00adf7@linutronix.de>
- <20230321104413.43a81ffb@gandalf.local.home>
-From:   Florian Kauer <florian.kauer@linutronix.de>
-Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing the
- return value of function
-In-Reply-To: <20230321104413.43a81ffb@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org
+References: <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
+ <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
+ <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
+ <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
+ <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+ <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
+ <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
+ <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
+ <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.23 15:44, Steven Rostedt wrote:
-> On Tue, 21 Mar 2023 15:09:40 +0100
-> Florian Kauer <florian.kauer@linutronix.de> wrote:
+On 20.03.23 22:23, Luis Chamberlain wrote:
+> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
+>> On 20.03.23 22:09, Luis Chamberlain wrote:
+>>> On Mon, Mar 20, 2023 at 08:40:07PM +0100, David Hildenbrand wrote:
+>>>> On 20.03.23 10:38, David Hildenbrand wrote:
+>>>>> On 18.03.23 01:11, Luis Chamberlain wrote:
+>>>>>> On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
+>>>>>>> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
+>>>>>>>> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
+>>>>>>>>> I expect to have a machine (with a crazy number of CPUs/devices) available
+>>>>>>>>> in a couple of days (1-2), so no need to rush.
+>>>>>>>>>
+>>>>>>>>> The original machine I was able to reproduce with is blocked for a little
+>>>>>>>>> bit longer; so I hope the alternative I looked up will similarly trigger the
+>>>>>>>>> issue easily.
+>>>>>>>>
+>>>>>>>> OK give this a spin:
+>>>>>>>>
+>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
+>>>>>>
+>>>>>> Today I am up to here:
+>>>>>>
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
+>>>>>>
+>>>>>> The last patch really would have no justification yet at all unless it
+>>>>>> does help your case.
+>>>>>
+>>>>> Still waiting on the system (the replacement system I was able to grab
+>>>>> broke ...).
+>>>>>
+>>>>> I'll let you know once I succeeded in reproducing + testing your fixes.
+>>>>
+>>>> Okay, I have a system where I can reproduce.
+>>>>
+>>>> Should I give
+>>>>
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts
+>>>>
+>>>> from yesterday a churn?
+>>>
+>>> Yes please give that a run.
+>>
+>> Reproduced with v6.3.0-rc1 (on 1st try)
 > 
->> On 20.03.23 14:16, Donglin Peng wrote:
->>> When using the function_graph tracer to analyze system call failures,
->>> it can be time-consuming to analyze the trace logs and locate the kernel
->>> function that first returns an error. This change aims to simplify the
->>> process by recording the function return value to the 'retval' member of
->>> 'ftrace_graph_ent' and printing it when outputing the trace log.  
->>
->> I just came across your patch by pure luck and it helped me a lot
->> to trace down a problem I had, thanks!
->>
->> So you can have my
->> Tested-by: Florian Kauer <florian.kauer@linutronix.de>
->>  
->>> New trace options are introduced: funcgraph-retval and graph_retval_hex.  
->>
->> I would personally prefer to have the second option scoped better, so for example
->> "funcgraph-retval-hex".
+> By reproduced, you mean it fails to boot?
+
+It boots but we get vmap allocation warnings, because the ~440 CPUs 
+manage to completely exhaust the module vmap area due to KASAN.
+
 > 
-> That could be an ftrace option.
+>> Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
+> 
+> Oh wow, so to clarify, it boots OK?
 
-What do you mean? In the current implementation both funcgraph-retval and graph_retval_hex
-are options for the function_graph tracer, but one is prefixed with "funcgraph-" as nearly
-all other options for the function_graph tracer and one is not (and is even snake_case, while
-the others are kebab-case). So it just looks inconsistent for me, but there might be a reason?
+It boots and I don't get the vmap allocation warnings.
 
-By the way: The documentation patch also references "function-retval" instead of
-"funcgraph-retval" in the documentation of the graph_retval_hex option.
+> 
+>>> Please collect systemd-analyze given lack of any other tool to evaluate
+>>> any deltas. Can't think of anything else to gather other than seeing if
+>>> it booted.
+>>
+>> Issue is that some services (kdump, tuned) seem to take sometimes ages on
+>> that system to start for some reason,
+> 
+> How about disabling that?
 
-> Anyway, could you tell us your use case, and that could go into the change
-> log of this patch as "one use case that this helped with".
+It seems to be random services. On my debug kernel with KASAN everything 
+is just super slow. I'll try to measure on a !debug kernel.
 
-Nothing spectacular. I just wanted to find out why ICMP port unreachable messages
-sporadically lead to -111 (Connection Refused) for __sys_sendto() when IP_RECVERR is set
-and the call never fails if IP_RECVERR is not set. (I am still unsure if this is
-REALLY intended behavior, but at least it makes sense why this occurs when reading
-the sources).
+-- 
+Thanks,
 
-And with this patch, the -111 is directly popping up in the trace, but I do not think
-that my missing knowledge about details of the kernel network stack
-really qualifies as a good argument ;-)
+David / dhildenb
 
-Greetings,
-Florian
