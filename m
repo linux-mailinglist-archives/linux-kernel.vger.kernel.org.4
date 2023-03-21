@@ -2,407 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D135E6C3846
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B036C383F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCUReO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S230207AbjCURd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjCUReK (ORCPT
+        with ESMTP id S230202AbjCURd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:34:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1374617A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679419990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LgfGTuq3iZNHpPTQKBE8qmgZ4CuvjtSnRz/xWCxlQVQ=;
-        b=hldOgpagb7CvFSWydp1FMPKl+2QDS+ZhV2bOPDiFfSs6F2hKdGUmhODIfg18yIm3h+skdG
-        WJLLJf7NxdveA+4+YaqdFBruw+FrueugxLJdsEYDruvkABqAJCyfHZA9lvSZaywXAZUxIL
-        Wp0XdZRnwsR5xvh6n/LmJQT44tstkI0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-494-T8W4e-SuPamCBK1tzvnlwQ-1; Tue, 21 Mar 2023 13:33:09 -0400
-X-MC-Unique: T8W4e-SuPamCBK1tzvnlwQ-1
-Received: by mail-qt1-f200.google.com with SMTP id c14-20020ac87d8e000000b003e38726ec8bso810364qtd.23
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:09 -0700 (PDT)
+        Tue, 21 Mar 2023 13:33:26 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898CD53D8F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:21 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id t5so25951227edd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679420000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ochp5U/z+JPJ/YorY5MT0cSwY1Sw+z1CDqsaJ+qW2jU=;
+        b=xeo1rt1i/Xy2YmniokvFRCzHeMIAub0jrdV+Ou2OsopQ7Sx0W9xBotcgFRZ4VnBH/G
+         2JAJBkYP1rpDPBNIErbDLhNLdX56BwjhubSL+Zdjsr+Kgo7psncK5VmkbNEOjMxlcONp
+         ewZ+1KlwinjdvLlWoMn+2Gpp63T0xvWjjGGMT6DiHIuKdUJOaPBj1Xc41DEeaM++/QmL
+         Z3fir6JozYswMIGIAnts48g2SQHx9wJLSnF39oI5FUx+5WvabIjNHH4KXqgBfquLCS7x
+         OFq2zt2zYVIrWqNF3F05qma6e7v/HIvd2Wf9SNVzUPCJY1XsXnMs0bmUQ0OBaGQLKpdL
+         ItFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679419989;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679420000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LgfGTuq3iZNHpPTQKBE8qmgZ4CuvjtSnRz/xWCxlQVQ=;
-        b=3K1vmqwqeAVp4kO25G18gkwfZOCB6L2oGXUcGPURJod36RNFJgQtZN4sAPQgAQaYa0
-         ak4yAldOUSWUTAxigPU3LtDkNtZg+gTbMO03d389PJlOFZvDtUf5IKpcpyjG1+mPOBhp
-         1VUAJ2wXBbRoxes83g6O4IcsaIZnxms6AOiquxBfYQmczlhfuThw9GUwyibe/b0fHJSS
-         ZYQEepJZ08ev57GcbUUdttcIzd39dk32RtI9y13tKehhfPw/8VqtVZpGXhg0MgVY+d5b
-         ym4y/vozU2FWsLIswMz/lDVWfLfaeZTlIxE13/24JmTA57/b7aTmgn7h8TfT4p8mD5jl
-         fOOg==
-X-Gm-Message-State: AO0yUKVuOipUwW/qsbkIAbM44s/uFYuPejBgfnVNhfkeY4+jmGvehTRu
-        evUFV3vK3Qm1qG6kG20JtNRrLUCfX2Z162or7JIQg7Lbp79NnbXRsFpoiD2x6QkBP+kwLiwXOoP
-        BKIjyt8XSWYcjOhnkG58wyYUNWfjs14Q=
-X-Received: by 2002:ac8:7c55:0:b0:3bf:c3f9:70a3 with SMTP id o21-20020ac87c55000000b003bfc3f970a3mr1208461qtv.26.1679419988946;
-        Tue, 21 Mar 2023 10:33:08 -0700 (PDT)
-X-Google-Smtp-Source: AK7set83+iaYCeYsz2V7w4NmnWFvf/0dfadMALWX0NW0OMPWEvU7qlhCb9nr2yBqkTGlddy+inC6CQ==
-X-Received: by 2002:ac8:7c55:0:b0:3bf:c3f9:70a3 with SMTP id o21-20020ac87c55000000b003bfc3f970a3mr1208426qtv.26.1679419988621;
-        Tue, 21 Mar 2023 10:33:08 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-29-20.cust.vodafonedsl.it. [2.34.29.20])
-        by smtp.gmail.com with ESMTPSA id 196-20020a370acd000000b0074690b42617sm3125514qkk.15.2023.03.21.10.33.07
+        bh=Ochp5U/z+JPJ/YorY5MT0cSwY1Sw+z1CDqsaJ+qW2jU=;
+        b=8NE93efNf1y5DBwDtVIvmUi2eLwf+XaOSFgMG3D4+LPnD8Hppz67MrZKsZN0HC4Vbc
+         ZJUWQa7JqTYc4PXC9VvCAcai0cZHLl6OPQUhOZegqLo4zBE/KhOlrgmMay2FDzuvGFdO
+         NW01tFkRsIbFaCPfhAIICqK8iuSla+N96KgUaXd0w0ExxagemCvCQYrip8yyoxYzCq4p
+         QDP11O9zWAjYchEKsUOQ+dMkCYx30oYM+LzRHpqinyAoeBQE4fC4BY92u456W3SjzJju
+         2jRXVxL6jH2zPGmTPfB9olwWX1qjSGbHCuNyWD9qPjkbcZevsjQLbcYBl/6jaaiITh4x
+         /dkA==
+X-Gm-Message-State: AO0yUKVQTZzvaWijR4A9pAeqaXiocDJR95K+bb/SNJ51WZm2O7jqoV0s
+        QJfcFNo7YYpJm81sT7Ff23kuDg==
+X-Google-Smtp-Source: AK7set/v/ZVk5N7EL089HA1rFs0IQ+7797TjgYvJfWP5FuppUeBwgImPuQRLLhQvRVpAJCuZMYTb1A==
+X-Received: by 2002:a17:906:4a0d:b0:88f:a236:69e6 with SMTP id w13-20020a1709064a0d00b0088fa23669e6mr3428975eju.7.1679420000035;
+        Tue, 21 Mar 2023 10:33:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id o7-20020a1709062e8700b00933356c681esm4552255eji.150.2023.03.21.10.33.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:33:08 -0700 (PDT)
-Message-ID: <988e8e8e-d514-4c69-a384-7d0a70c514c4@redhat.com>
-Date:   Tue, 21 Mar 2023 18:33:05 +0100
+        Tue, 21 Mar 2023 10:33:19 -0700 (PDT)
+Message-ID: <fc46c48d-2de0-ba3a-08b0-a09526bd9e26@linaro.org>
+Date:   Tue, 21 Mar 2023 18:33:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH v2 2/4] fpga: add fake FPGA bridge
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230310170412.708363-1-marpagan@redhat.com>
- <20230310170412.708363-3-marpagan@redhat.com>
- <ZBQlnUQWZHJ+ZBu5@yilunxu-OptiPlex-7050>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V1 2/4] dt-bindings: soc: qcom,mpm-sleep-counter: Add the
+ dtschema
 Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZBQlnUQWZHJ+ZBu5@yilunxu-OptiPlex-7050>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
+ <576e53a1d0ef218536da976102b4cc207436ec1d.1679403696.git.quic_schowdhu@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <576e53a1d0ef218536da976102b4cc207436ec1d.1679403696.git.quic_schowdhu@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-03-17 09:32, Xu Yilun wrote:
-> On 2023-03-10 at 18:04:10 +0100, Marco Pagani wrote:
->> Add fake FPGA bridge driver with support functions. The driver includes
->> a counter for the number of switching cycles. This module is part of
->> the KUnit tests for the FPGA subsystem.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/tests/fake-fpga-bridge.c | 228 ++++++++++++++++++++++++++
->>  drivers/fpga/tests/fake-fpga-bridge.h |  36 ++++
->>  2 files changed, 264 insertions(+)
->>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.c
->>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.h
->>
->> diff --git a/drivers/fpga/tests/fake-fpga-bridge.c b/drivers/fpga/tests/fake-fpga-bridge.c
->> new file mode 100644
->> index 000000000000..8a2f64fc1bbb
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fake-fpga-bridge.c
->> @@ -0,0 +1,228 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Driver for the fake FPGA bridge
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#include <linux/types.h>
->> +#include <linux/device.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/fpga/fpga-bridge.h>
->> +#include <kunit/test.h>
->> +
->> +#include "fake-fpga-bridge.h"
->> +
->> +#define FAKE_FPGA_BRIDGE_DEV_NAME	"fake_fpga_bridge"
->> +
->> +struct fake_bridge_priv {
->> +	int id;
->> +	bool enable;
->> +	int cycles_count;
->> +	struct kunit *test;
->> +};
->> +
->> +struct fake_bridge_data {
->> +	struct kunit *test;
->> +};
->> +
->> +static int op_enable_show(struct fpga_bridge *bridge)
->> +{
->> +	struct fake_bridge_priv *priv;
->> +
->> +	priv = bridge->priv;
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Fake FPGA bridge %d: enable_show\n",
->> +			   priv->id);
+On 21/03/2023 14:51, Souradeep Chowdhury wrote:
+> Add the device tree bindings for the module power manager sleep
+> counter.
 > 
-> Why check the kunit pointer every time? I remember you mentioned that
-> the fake fpga modules are expected to be used out of Kunit test, so the
-> priv->test may be NULL? I suggest you work on these usecases in separate
-> patchsets. For now just check priv->test on probe is fine.
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> ---
+>  .../bindings/soc/qcom/qcom,mpm-sleep-counter.yaml  | 40 ++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
+> new file mode 100644
+> index 0000000..f9f46b7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/qcom/qcom,mpm-sleep-counter.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MPM Sleep Counter
+> +
+> +maintainers:
+> +  - Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +
+> +description: |
+> +    MPM(Module Power Manager) has a sleep counter which is used to track
 
-The idea was to provide additional info messages, tied with the test, if the
-fake bridge is registered with a test instance. If you believe these prints
-are unnecessary, I can remove them or replace them with generic dev_info().
+Missing space:
+MPM (Module
 
->> +
->> +	return priv->enable;
->> +}
->> +
->> +static int op_enable_set(struct fpga_bridge *bridge, bool enable)
->> +{
->> +	struct fake_bridge_priv *priv;
->> +
->> +	priv = bridge->priv;
->> +
->> +	if (enable && !priv->enable)
->> +		priv->cycles_count++;
->> +
->> +	priv->enable = enable;
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Fake FPGA bridge %d: enable_set: %d\n",
->> +			   priv->id, enable);
->> +
->> +	return 0;
->> +}
->> +
->> +static void op_remove(struct fpga_bridge *bridge)
->> +{
->> +	struct fake_bridge_priv *priv;
->> +
->> +	priv = bridge->priv;
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Fake FPGA bridge: remove\n");
->> +}
->> +
->> +static const struct fpga_bridge_ops fake_fpga_bridge_ops = {
->> +	.enable_show = op_enable_show,
->> +	.enable_set = op_enable_set,
->> +	.fpga_bridge_remove = op_remove,
->> +};
->> +
->> +/**
->> + * fake_fpga_bridge_register() - register a fake FPGA bridge.
->> + * @bridge_ctx: fake FPGA bridge context data structure.
->> + * @parent: parent device.
->> + * @test: KUnit test context object.
->> + *
->> + * Return: 0 if registration succeeded, an error code otherwise.
->> + */
->> +int fake_fpga_bridge_register(struct fake_fpga_bridge *bridge_ctx,
->> +			      struct device *parent, struct kunit *test)
-> 
-> struct fake_fpga_bridge *fake_fpga_bridge_register(struct device *parent, ...)
-> 
-> Is it better?
-> 
-> Thanks,
-> Yilun
+> +    various stages of the boot process in Qualcomm.
 
-Agreed, it is better. I'll change the registration functions for the fake
-bridge, manager, and region in the next version.
+in Qualcomm SoC. Because you do not track it in the company...
 
-> 
->> +{
->> +	struct fake_bridge_data pdata;
->> +	struct fake_bridge_priv *priv;
->> +	int ret;
->> +
->> +	pdata.test = test;
->> +
->> +	bridge_ctx->pdev = platform_device_alloc(FAKE_FPGA_BRIDGE_DEV_NAME,
->> +						 PLATFORM_DEVID_AUTO);
->> +	if (IS_ERR(bridge_ctx->pdev)) {
->> +		pr_err("Fake FPGA bridge device allocation failed\n");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	bridge_ctx->pdev->dev.parent = parent;
->> +	platform_device_add_data(bridge_ctx->pdev, &pdata, sizeof(pdata));
->> +
->> +	ret = platform_device_add(bridge_ctx->pdev);
->> +	if (ret) {
->> +		pr_err("Fake FPGA bridge device add failed\n");
->> +		platform_device_put(bridge_ctx->pdev);
->> +		return ret;
->> +	}
->> +
->> +	bridge_ctx->bridge = platform_get_drvdata(bridge_ctx->pdev);
->> +
->> +	if (test) {
->> +		priv = bridge_ctx->bridge->priv;
->> +		kunit_info(test, "Fake FPGA bridge %d registered\n", priv->id);
->> +	}
->> +
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_register);
->> +
->> +/**
->> + * fake_fpga_bridge_unregister() - unregister a fake FPGA bridge.
->> + * @bridge_ctx: fake FPGA bridge context data structure.
->> + */
->> +void fake_fpga_bridge_unregister(struct fake_fpga_bridge *bridge_ctx)
->> +{
->> +	struct fake_bridge_priv *priv;
->> +	struct kunit *test;
->> +	int id;
->> +
->> +	if (!bridge_ctx)
->> +		return;
->> +
->> +	priv = bridge_ctx->bridge->priv;
->> +	test = priv->test;
->> +	id = priv->id;
->> +
->> +	if (bridge_ctx->pdev) {
->> +		platform_device_unregister(bridge_ctx->pdev);
->> +		if (test)
->> +			kunit_info(test, "Fake FPGA bridge %d unregistered\n", id);
->> +	}
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_unregister);
->> +
->> +/**
->> + * fake_fpga_bridge_get_state() - get state of a fake FPGA bridge.
->> + * @bridge_ctx: fake FPGA bridge context data structure.
->> + *
->> + * Return: 1 if the bridge is enabled, 0 if disabled.
->> + */
->> +int fake_fpga_bridge_get_state(const struct fake_fpga_bridge *bridge_ctx)
->> +{
->> +	return bridge_ctx->bridge->br_ops->enable_show(bridge_ctx->bridge);
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_get_state);
->> +
->> +/**
->> + * fake_fpga_bridge_get_cycles_count() - get the number of switching cycles.
->> + * @bridge_ctx: fake FPGA bridge context data structure.
->> + *
->> + * Return: number of switching cycles.
->> + */
->> +int fake_fpga_bridge_get_cycles_count(const struct fake_fpga_bridge *bridge_ctx)
->> +{
->> +	struct fake_bridge_priv *priv;
->> +
->> +	priv = bridge_ctx->bridge->priv;
->> +
->> +	return priv->cycles_count;
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_get_cycles_count);
->> +
->> +static int fake_fpga_bridge_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev;
->> +	struct fpga_bridge *bridge;
->> +	struct fake_bridge_data *pdata;
->> +	struct fake_bridge_priv *priv;
->> +	static int id_count;
->> +
->> +	dev = &pdev->dev;
->> +	pdata = dev_get_platdata(dev);
->> +
->> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +
->> +	priv->id = id_count++;
->> +	priv->enable = true;
->> +
->> +	if (pdata)
->> +		priv->test = pdata->test;
->> +
->> +	bridge = fpga_bridge_register(dev, "Fake FPGA Bridge",
->> +				      &fake_fpga_bridge_ops, priv);
->> +	if (IS_ERR(bridge))
->> +		return PTR_ERR(bridge);
->> +
->> +	platform_set_drvdata(pdev, bridge);
->> +
->> +	return 0;
->> +}
->> +
->> +static int fake_fpga_bridge_remove(struct platform_device *pdev)
->> +{
->> +	struct fpga_bridge *bridge = platform_get_drvdata(pdev);
->> +
->> +	fpga_bridge_unregister(bridge);
->> +
->> +	return 0;
->> +}
->> +
->> +static struct platform_driver fake_fpga_bridge_drv = {
->> +	.driver = {
->> +		.name = FAKE_FPGA_BRIDGE_DEV_NAME
->> +	},
->> +	.probe = fake_fpga_bridge_probe,
->> +	.remove = fake_fpga_bridge_remove,
->> +};
->> +
->> +module_platform_driver(fake_fpga_bridge_drv);
->> +
->> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
->> +MODULE_DESCRIPTION("Fake FPGA Bridge");
->> +MODULE_LICENSE("GPL v2");
->> diff --git a/drivers/fpga/tests/fake-fpga-bridge.h b/drivers/fpga/tests/fake-fpga-bridge.h
->> new file mode 100644
->> index 000000000000..ae224b13f284
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fake-fpga-bridge.h
->> @@ -0,0 +1,36 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Header file for the fake FPGA bridge
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#ifndef __FPGA_FAKE_BRIDGE_H
->> +#define __FPGA_FAKE_BRIDGE_H
->> +
->> +#include <linux/platform_device.h>
->> +#include <kunit/test.h>
->> +
->> +/**
->> + * struct fake_fpga_bridge - fake FPGA bridge context data structure
->> + *
->> + * @bridge: FPGA bridge.
->> + * @pdev: platform device of the FPGA bridge.
->> + */
->> +struct fake_fpga_bridge {
->> +	struct fpga_bridge *bridge;
->> +	struct platform_device *pdev;
->> +};
->> +
->> +int fake_fpga_bridge_register(struct fake_fpga_bridge *bridge_ctx,
->> +			      struct device *parent, struct kunit *test);
->> +
->> +void fake_fpga_bridge_unregister(struct fake_fpga_bridge *bridge_ctx);
->> +
->> +int fake_fpga_bridge_get_state(const struct fake_fpga_bridge *bridge_ctx);
->> +
->> +int fake_fpga_bridge_get_cycles_count(const struct fake_fpga_bridge *bridge_ctx);
->> +
->> +#endif /* __FPGA_FAKE_BRIDGE_H */
->> -- 
->> 2.39.2
->>
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Thanks,
-Marco
+Drop items.
+
+> +      - const: qcom,mpm2-sleep-counter
+
+SoC specific compatible.
+
+> +
+> +  reg:
+> +    items:
+> +      - description: MPM Sleep Counter Base
+
+just maxItems: 1
+
+> +
+> +  clock-frequency:
+> +    description: Frequency for the sleep counter
+
+Since this does not have clocks, what frequency you are setting here?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    mpm2-sleep-counter@c221000{
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +       compatible = "qcom,mpm2-sleep-counter";
+> +       reg = <0xc221000 0x1000>;
+> +       clock-frequency = <32768>;
+> +    };
+
+Best regards,
+Krzysztof
 
