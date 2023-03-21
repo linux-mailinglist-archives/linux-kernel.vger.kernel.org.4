@@ -2,122 +2,471 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD766C3837
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430FA6C383C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCURc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S230156AbjCURdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCURc1 (ORCPT
+        with ESMTP id S229941AbjCURdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:32:27 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A170B13D5C;
-        Tue, 21 Mar 2023 10:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xUZFSZQsr16SNSQJKusTXYyu832nutqEq5J/FsHnccU=; b=AVftADjchhmt+Jp4bRXmDpPWgb
-        QPWGGGotXG4NW1Bxs8o7Mp2rYgt/rL0QpXwz7h7on7QEc0WLk1BogpwK3a4peFkSHmTxBkVUyXocp
-        j16OfEx0Oa09g8pUR/qFB7nkgAKzV/AW/0T7oiuhW2LiRPbNE7GT6NZmc/fLBVcY22b/BpDYwIOMJ
-        2N+0YvkAiRDtyivAXO6s+QL9tNvKIH+3z2wm6TRGR2P1oF6tdGWQwzSQ2WpgY5ufuJR9Gx3RyzHQF
-        kR1xJKNsXr60PT+/7CeaDjk9yyvTwktOC8fZrAOTP1SzL9jUPDeglbIOlB9HuOkQdulRWp8kKMoJC
-        oqAmnEXA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51692)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pefq5-0001da-I2; Tue, 21 Mar 2023 17:32:01 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pefpp-0007vh-5A; Tue, 21 Mar 2023 17:31:45 +0000
-Date:   Tue, 21 Mar 2023 17:31:45 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing
- the return value of function
-Message-ID: <ZBnqAYO7rdk4Qikq@shell.armlinux.org.uk>
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
- <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
+        Tue, 21 Mar 2023 13:33:15 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABB1166E7;
+        Tue, 21 Mar 2023 10:33:05 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id f5-20020a4ad805000000b005399cfd276bso1876773oov.6;
+        Tue, 21 Mar 2023 10:33:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679419984;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2CnL7hgvPnni7trOuk9467gN9OsVhQvyHsDFM8C85TE=;
+        b=erKzFFARO+2sBeW5xA3ifXL+hbLFsauWD0I612nh3ZqpFHQUn5hcazqIm2ZVoC8rpd
+         HUPwe4tllkl7H5QiTeuAalMF2g7HGCrjN5H8KSwOh9QaHH4lpsdnvQRSB7MLiGVCmpiQ
+         zDRhtAtmtr0prA07NurpdNtx49i8Zw0vU1btnd7UnoVUMSmkIXsL8eRu5UpH9jWzLOtZ
+         Fp0e6YxxGygI4B4pIAWC/vErJwGVsQZFgP53grEsUFnlrSsKiyGRlawN3tk5UFLxmOcx
+         rxlKPPDwaIEqlf87HBAkFvdgRtC/vPGEGKcSs452u4JrEkxHhXSwjtQvgHv+zOGBNX2H
+         NIYQ==
+X-Gm-Message-State: AO0yUKVAc8qcTsk/aU9HY9GidmD8da4UIg/gaohpGG3SltfY4DMY0X6E
+        +kKHxafOGrP75IlOyMdypw==
+X-Google-Smtp-Source: AK7set94YgcKGUBqS/jmcEyCGuFJ245hmQff358C8dqQKs6OobLo4j5MwstfAkhefwZM+zU1beaMRw==
+X-Received: by 2002:a4a:3307:0:b0:53b:68bf:ada3 with SMTP id q7-20020a4a3307000000b0053b68bfada3mr704104ooq.3.1679419984314;
+        Tue, 21 Mar 2023 10:33:04 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y13-20020a4ad64d000000b0053b5271f030sm1204741oos.39.2023.03.21.10.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 10:33:04 -0700 (PDT)
+Received: (nullmailer pid 990808 invoked by uid 1000);
+        Tue, 21 Mar 2023 17:33:03 -0000
+Date:   Tue, 21 Mar 2023 12:33:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v2 01/11] of: Load KUnit DTB from of_core_init()
+Message-ID: <20230321173303.GA950598-robh@kernel.org>
+References: <20230315183729.2376178-1-sboyd@kernel.org>
+ <20230315183729.2376178-2-sboyd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230315183729.2376178-2-sboyd@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 06:16:49AM -0700, Donglin Peng wrote:
-> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-> index 3e7bcaca5e07..ba1986e27af8 100644
-> --- a/arch/arm/kernel/entry-ftrace.S
-> +++ b/arch/arm/kernel/entry-ftrace.S
-> @@ -258,7 +258,15 @@ ENDPROC(ftrace_graph_regs_caller)
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  ENTRY(return_to_handler)
->  	stmdb	sp!, {r0-r3}
-> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
-> +	/*
-> +	 * Pass both the function return values in the register r0 and r1
-> +	 * to ftrace_return_to_handler
-> +	 */
-> +	add	r2, sp, #16		@ sp at exit of instrumented routine
-> +#else
->  	add	r0, sp, #16		@ sp at exit of instrumented routine
-> +#endif
->  	bl	ftrace_return_to_handler
-...
-> -unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
-> +static unsigned long __ftrace_return_to_handler(unsigned long retval_1st,
-> +			unsigned long retval_2nd, unsigned long frame_pointer)
-...
-> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
-> +unsigned long ftrace_return_to_handler(unsigned long retval_1st,
-> +			unsigned long retval_2nd, unsigned long frame_pointer)
+On Wed, Mar 15, 2023 at 11:37:18AM -0700, Stephen Boyd wrote:
+> Load a small DTB for KUnit from of_core_init() as long as CONFIG_OF=y
+> and CONFIG_KUNIT=y/m. This allows KUnit tests to load overlays into the
+> running system. It also allows KUnit tests to run on any architecture
+> that supports it so that devicetree can be used while unit testing
+> architecture specific code.
+> 
+> Overlays need a target node to apply their overlays to, so make a fake
+> bus called 'kunit-bus' in the root node to allow this. Make the node a
+> simple-bus so that platform devices are automatically created for nodes
+> added as children of this node. Unit test overlays can target this node
+> via the label 'kunit_bus'.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  drivers/of/.kunitconfig |   3 +
+>  drivers/of/Kconfig      |  13 +++
+>  drivers/of/Makefile     |   4 +
+>  drivers/of/base.c       | 182 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/of/kunit.dtso   |  10 +++
+>  drivers/of/of_private.h |   6 ++
+>  drivers/of/of_test.c    |  43 ++++++++++
+>  drivers/of/unittest.c   | 101 +---------------------
+>  8 files changed, 262 insertions(+), 100 deletions(-)
+>  create mode 100644 drivers/of/.kunitconfig
+>  create mode 100644 drivers/of/kunit.dtso
+>  create mode 100644 drivers/of/of_test.c
+> 
+> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
+> new file mode 100644
+> index 000000000000..5a8fee11978c
+> --- /dev/null
+> +++ b/drivers/of/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_OF=y
+> +CONFIG_OF_KUNIT_TEST=y
+> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> index 644386833a7b..f6739b9560c5 100644
+> --- a/drivers/of/Kconfig
+> +++ b/drivers/of/Kconfig
+> @@ -37,6 +37,19 @@ config OF_UNITTEST
+>  
+>  	  If unsure, say N here. This option is not safe to enable.
+>  
+> +config OF_KUNIT
+> +	def_bool KUNIT
+> +	select OF_RESOLVE
+> +
+> +config OF_KUNIT_TEST
+> +	tristate "Devicetree KUnit DTB Test" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This option builds KUnit unit tests for device tree infrastructure.
+> +
+> +	  If unsure, say N here, but this option is safe to enable.
+> +
+>  config OF_ALL_DTBS
+>  	bool "Build all Device Tree Blobs"
+>  	depends on COMPILE_TEST
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index e0360a44306e..cf6ee7ba6350 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -19,4 +19,8 @@ obj-y	+= kexec.o
+>  endif
+>  endif
+>  
+> +DTC_FLAGS_kunit += -@
+> +obj-$(CONFIG_OF_KUNIT) += kunit.dtbo.o
+> +obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
+> +
+>  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+> diff --git a/drivers/of/base.c b/drivers/of/base.c
+> index ac6fde53342f..090c5d7925e4 100644
+> --- a/drivers/of/base.c
+> +++ b/drivers/of/base.c
+> @@ -16,13 +16,16 @@
+>  
+>  #define pr_fmt(fmt)	"OF: " fmt
+>  
+> +#include <linux/align.h>
+>  #include <linux/console.h>
+>  #include <linux/ctype.h>
+>  #include <linux/cpu.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_fdt.h>
+
+base.c deals with unflattened trees. There shouldn't be anything FDT 
+related in it.
+
+>  #include <linux/of_graph.h>
+> +#include <linux/printk.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+> @@ -163,10 +166,90 @@ void __of_phandle_cache_inv_entry(phandle handle)
+>  		phandle_cache[handle_hash] = NULL;
+>  }
+>  
+> +#ifdef CONFIG_OF_KUNIT
+
+base.c is already quite big. This should probably be its own file. 
+Perhaps in kunit code because that's what we do for everything else 
+(e.g. DT clock code goes in drivers/clk/). (My goal is to eliminate 
+drivers/of/. That's easier than finding maintainers. ;) )
+
+> +static int __init of_kunit_add_data(void)
 > +{
-> +	return __ftrace_return_to_handler(retval_1st, retval_2nd, frame_pointer);
+> +	void *kunit_fdt;
+> +	void *kunit_fdt_align;
+> +	struct device_node *kunit_node = NULL, *np;
+> +	/*
+> +	 * __dtbo_kunit_begin[] and __dtbo_kunit_end[] are magically
+> +	 * created by cmd_dt_S_dtbo in scripts/Makefile.lib
+> +	 */
+> +	extern uint8_t __dtbo_kunit_begin[];
+> +	extern uint8_t __dtbo_kunit_end[];
+> +	const int size = __dtbo_kunit_end - __dtbo_kunit_begin;
+> +	int rc;
+> +	void *ret;
+> +
+> +	if (!size) {
+> +		pr_warn("kunit.dtbo is empty\n");
+> +		return -ENODATA;
+> +	}
+> +
+> +	kunit_fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+> +	if (!kunit_fdt)
+> +		return -ENOMEM;
+> +
+> +	kunit_fdt_align = PTR_ALIGN(kunit_fdt, FDT_ALIGN_SIZE);
+> +	memcpy(kunit_fdt_align, __dtbo_kunit_begin, size);
+> +
+> +	ret = of_fdt_unflatten_tree(kunit_fdt_align, NULL, &kunit_node);
+
+I don't understand why this doesn't use of_overlay_fdt_apply(). Your 
+test(s) shouldn't be any different than any other overlay user (granted, 
+there aren't many). You apply the overlay, run your test, then remove 
+the overlay.
+
+> +	if (!ret) {
+> +		pr_warn("unflatten KUnit tree failed\n");
+> +		kfree(kunit_fdt);
+> +		return -ENODATA;
+> +	}
+> +	if (!kunit_node) {
+> +		pr_warn("KUnit tree is empty\n");
+> +		kfree(kunit_fdt);
+> +		return -ENODATA;
+> +	}
+> +
+> +	of_overlay_mutex_lock();
+> +	rc = of_resolve_phandles(kunit_node);
+> +	if (rc) {
+> +		pr_err("Failed to resolve KUnit phandles (rc=%i)\n", rc);
+> +		of_overlay_mutex_unlock();
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!of_root) {
+
+There's patches from Frank and others under review which will always 
+create and empty DT if the bootloader/arch didn't provide one. This 
+series should rely on that. (Or just assume that when that happens, your 
+tests will run in more environments)
+
+> +		of_root = kunit_node;
+> +		of_chosen = of_find_node_by_path("/chosen");
+> +	} else {
+> +		/* attach the sub-tree to live tree */
+> +		np = kunit_node->child;
+> +		while (np) {
+> +			struct device_node *next = np->sibling;
+> +
+> +			np->parent = of_root;
+> +			of_test_attach_node_and_children(np);
+> +			np = next;
+> +		}
+> +	}
+> +
+> +	if (!of_aliases)
+> +		of_aliases = of_find_node_by_path("/aliases");
+> +
+> +	of_overlay_mutex_unlock();
+> +
+> +	return 0;
 > +}
 > +#else
-> +unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+> +static inline int __init of_kunit_add_data(void) { return 0; }
+> +#endif
+> +
+>  void __init of_core_init(void)
+>  {
+>  	struct device_node *np;
+> +	int ret;
+>  
+> +	ret = of_kunit_add_data();
+> +	if (ret) {
+> +		pr_err("failed to add kunit test data\n");
+> +		return;
+> +	}
+>  
+>  	/* Create the kset, and register existing nodes */
+>  	mutex_lock(&of_mutex);
+> @@ -1879,6 +1962,105 @@ int of_update_property(struct device_node *np, struct property *newprop)
+>  	return rc;
+>  }
+>  
+> +#if defined(CONFIG_OF_UNITTEST) || defined (CONFIG_KUNIT)
+> +/**
+> + * update_node_properties - adds the properties of np into dup node (present in
+> + * live tree) and updates parent of children of np to dup.
+> + *
+> + * @np: node whose properties are being added to the live tree
+> + * @dup: node present in live tree to be updated
+> + */
+> +static void __init update_node_properties(struct device_node *np,
+> +					struct device_node *dup)
+
+Please split any moving of code to separate patches.
+
+I'm not remembering why we need these test functions vs. just applying 
+overlays. Frank? Perhaps because it's trying to test the overlay code 
+itself. But you should just be a user of the overlay API and not need to 
+do anything special.
+
 > +{
-> +	return __ftrace_return_to_handler(0, 0, frame_pointer);
+> +	struct property *prop;
+> +	struct property *save_next;
+> +	struct device_node *child;
+> +	int ret;
+> +
+> +	for_each_child_of_node(np, child)
+> +		child->parent = dup;
+> +
+> +	/*
+> +	 * "unittest internal error: unable to add testdata property"
+> +	 *
+> +	 *    If this message reports a property in node '/__symbols__' then
+> +	 *    the respective unittest overlay contains a label that has the
+> +	 *    same name as a label in the live devicetree.  The label will
+> +	 *    be in the live devicetree only if the devicetree source was
+> +	 *    compiled with the '-@' option.  If you encounter this error,
+> +	 *    please consider renaming __all__ of the labels in the unittest
+> +	 *    overlay dts files with an odd prefix that is unlikely to be
+> +	 *    used in a real devicetree.
+> +	 */
+> +
+> +	/*
+> +	 * open code for_each_property_of_node() because of_add_property()
+> +	 * sets prop->next to NULL
+> +	 */
+> +	for (prop = np->properties; prop != NULL; prop = save_next) {
+> +		save_next = prop->next;
+> +		ret = of_add_property(dup, prop);
+> +		if (ret) {
+> +			if (ret == -EEXIST && !strcmp(prop->name, "name"))
+> +				continue;
+> +			pr_err("unittest internal error: unable to add testdata property %pOF/%s",
+> +			       np, prop->name);
+> +		}
+> +	}
+> +}
+> +
+> +/**
+> + * of_test_attach_node_and_children - attaches nodes and its children to live tree.
+> + * @np:	Node to attach to live tree
+> + *
+> + * CAUTION: misleading function name - if node @np already exists in
+> + * the live tree then children of @np are *not* attached to the live
+> + * tree.  This works for the current test devicetree nodes because such
+> + * nodes do not have child nodes.
+> + */
+> +void __init of_test_attach_node_and_children(struct device_node *np)
+> +{
+> +	struct device_node *next, *dup, *child;
+> +	unsigned long flags;
+> +	const char *full_name;
+> +
+> +	full_name = kasprintf(GFP_KERNEL, "%pOF", np);
+> +
+> +	if (!strcmp(full_name, "/__local_fixups__") ||
+> +	    !strcmp(full_name, "/__fixups__")) {
+> +		kfree(full_name);
+> +		return;
+> +	}
+> +
+> +	dup = of_find_node_by_path(full_name);
+> +	kfree(full_name);
+> +	if (dup) {
+> +		update_node_properties(np, dup);
+> +		return;
+> +	}
+> +
+> +	child = np->child;
+> +	np->child = NULL;
+> +
+> +	mutex_lock(&of_mutex);
+> +	raw_spin_lock_irqsave(&devtree_lock, flags);
+> +	np->sibling = np->parent->child;
+> +	np->parent->child = np;
+> +	of_node_clear_flag(np, OF_DETACHED);
+> +	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+> +
+> +	__of_attach_node_sysfs(np);
+> +	mutex_unlock(&of_mutex);
+> +
+> +	while (child) {
+> +		next = child->sibling;
+> +		of_test_attach_node_and_children(child);
+> +		child = next;
+> +	}
 > +}
 > +#endif
 > +
+>  static void of_alias_add(struct alias_prop *ap, struct device_node *np,
+>  			 int id, const char *stem, int stem_len)
+>  {
+> diff --git a/drivers/of/kunit.dtso b/drivers/of/kunit.dtso
+> new file mode 100644
+> index 000000000000..d512057df98d
+> --- /dev/null
+> +++ b/drivers/of/kunit.dtso
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	/* Container node where KUnit tests can load overlays */
+> +	kunit_bus: kunit-bus {
+> +		compatible = "simple-bus";
+> +	};
+> +};
 
-Hi,
+Why do we need an overlay to apply overlays to? 
 
-To echo Mark's criticism, I also don't like this. I feel it would be
-better if ftrace_return_to_handler() always took the same arguments
-irrespective of the setting of CONFIG_FUNCTION_GRAPH_RETVAL.
 
-On 32-bit ARM, we have to stack r0-r3 anyway to prevent the call to
-ftrace_return_to_handler() corrupting the return value, and these
-are the registers we need. So we might as well pass a pointer to
-these stacked registers. Whether that's acceptable on other
-architectures, I couldn't say.
+> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+> index fb6792d381a6..2151a28ca234 100644
+> --- a/drivers/of/of_private.h
+> +++ b/drivers/of/of_private.h
+> @@ -96,6 +96,12 @@ static inline void of_overlay_mutex_lock(void) {};
+>  static inline void of_overlay_mutex_unlock(void) {};
+>  #endif
+>  
+> +#if defined(CONFIG_OF_UNITTEST) || defined (CONFIG_KUNIT)
+> +void __init of_test_attach_node_and_children(struct device_node *np);
+> +#else
+> +static inline void __init of_test_attach_node_and_children(struct device_node *np) {}
+> +#endif
+> +
+>  #if defined(CONFIG_OF_UNITTEST) && defined(CONFIG_OF_OVERLAY)
+>  extern void __init unittest_unflatten_overlay_base(void);
+>  #else
+> diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
+> new file mode 100644
+> index 000000000000..a4d70ac344ad
+> --- /dev/null
+> +++ b/drivers/of/of_test.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit tests for OF APIs
+> + */
+> +#include <linux/kconfig.h>
+> +#include <linux/of.h>
+> +
+> +#include <kunit/test.h>
+> +
+> +/*
+> + * Test that the root node / exists.
+> + */
+> +static void dtb_root_node_exists(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/"));
+> +}
+> +
+> +/*
+> + * Test that the /__symbols__ node exists.
+> + */
+> +static void dtb_symbols_node_exists(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/__symbols__"));
+> +}
 
-Thanks.
+Many base DTs will not have this. And the kunit tests themselves 
+shouldn't need it because they should be independent of the base tree.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Rob
