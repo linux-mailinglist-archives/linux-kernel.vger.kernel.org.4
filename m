@@ -2,187 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E316C31D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642046C31D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjCUMie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S229606AbjCUMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCUMic (ORCPT
+        with ESMTP id S229611AbjCUMjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:38:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443383A89;
-        Tue, 21 Mar 2023 05:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679402308; x=1710938308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=grkzZTfxbepPQpIIZtj3sIRJT5IRKvQUYOcRRo5Vy/A=;
-  b=EHTEK93x5lrl8ILe3StWciCYbCagGOrCS4QYIoVYzEVZKgGocsyxPn5Y
-   JrAG84vEMI3Iilw7ZZZwYMYRmNd++f0LuZntEBgRhCFQZ/JFkAGlAwgAG
-   y8oyxXy4ozD7hxebg1ydvPzfWPC0AlfR8lqa5X19fHk6sde1gbrzOV4L0
-   GofRLSIdPOZTQyNTfbgXu9TxkfOjTc4+FVVxhSBBlrxI1c8ephdnJ3dPH
-   vSxky6PQefxapz2C6kKDdJ5juDCi9/PNCqi1Ys+gGxEgNwE4KwqtcWIke
-   6FRggIUIhnGWI4JX6B/PvtCOl92GMwpScsexUWIGrqihGxzTn+jt3GxEb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319316550"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="319316550"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 05:38:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="792066007"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="792066007"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
-  by fmsmga002.fm.intel.com with SMTP; 21 Mar 2023 05:38:21 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Mar 2023 14:38:21 +0200
-Date:   Tue, 21 Mar 2023 14:38:20 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH V10 4/4] PCI: vmd: Add quirk to configure PCIe ASPM and
- LTR
-Message-ID: <ZBmlPIU4FIBU7HU1@intel.com>
-References: <20230120031522.2304439-1-david.e.box@linux.intel.com>
- <20230120031522.2304439-5-david.e.box@linux.intel.com>
- <ZBjko/ifunIwsK2v@intel.com>
- <8675a80b311443d3c3ed99e09832bd07355bfcc2.camel@linux.intel.com>
+        Tue, 21 Mar 2023 08:39:00 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A01F3A89;
+        Tue, 21 Mar 2023 05:38:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MawnTCdOopxh4mRgpQWW9QEgwEhHfdHTB8BqZtK6iHCmkfxvNxSU4fUdT7x5+Z3ArGIOJm6lNzP3SZrrmhYe6bKujA/SPJDrNszoBK0s7W32PJoUNwPtHHd0zZjnozNUbq1MXGaGcU/RAtYsAxm3ekniDSvy/WRL7kBgWtwuwEIOQHb3rDjn7EOqLVEgX4N1I8uym7A9AnXD37q46m5wgmjs3ifI53w1JQzKVafTALOrV4CfvWyFNsqYTg5ynTI4N3GkafXnAot7agFDcmrK4E73U+lKB/Oi68fNjYz+G/FJIbhYCc0zjHUaGGVoU12FTKtaQa7xdUYiuPVSidVuIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jbRoW6+D7/O7l/79tpnWPBKbEQ9EHSjRvBSvgdbmFG8=;
+ b=LpfRstEfNxj+qaxbwFmWtItxxfWJNBjMGmlZSp0kvpUKdrvXspxZ9WSR7yRSdrJqvg8g78lzgJLuwwgNam2vp+GAhiW0aiO9dpgeoIKlYCj9DhTjgRnSPpGkubPo5UH2U9GD4lXqBpT24UFItyZW4iYZ3Nvti9MYzflw5D+dqvS1ZJ5gfNQIOPRdM5i7lv1SdvShbufvpDVbUAaiQz1LkHM8UNWEQVv5Vew4r0Z+R+9LhVmSGamIVNrHP1yPnX/gtNVhWoeiTlhKeH8TIDtKYrWNhbwSMpoDDBZQ2Luqs8CoRKVS95dUluXBsVRK8yHQmNX7kV+H0iL2NiXaJaDFVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jbRoW6+D7/O7l/79tpnWPBKbEQ9EHSjRvBSvgdbmFG8=;
+ b=t0nRSzOhO3fK9aqHvZCTlQM9ZuWEvKbXrqfXIny6Ic+2nalw2vqq2giilgIIUsZ89NDYgH1XIQl2LDlM3ZZZetGxpJq79ziyps8wamkhnRGEVJIgAgt4Fnr0WIty8ogWBr2pZwUUZbbE3C+lA6w4InE3zxD9PSoRh521o3KTV90=
+Received: from CY5PR14CA0007.namprd14.prod.outlook.com (2603:10b6:930:2::8) by
+ MW3PR12MB4425.namprd12.prod.outlook.com (2603:10b6:303:5e::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Tue, 21 Mar 2023 12:38:44 +0000
+Received: from CY4PEPF0000C97B.namprd02.prod.outlook.com
+ (2603:10b6:930:2:cafe::c5) by CY5PR14CA0007.outlook.office365.com
+ (2603:10b6:930:2::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Tue, 21 Mar 2023 12:38:44 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 165.204.84.17)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: Fail (protection.outlook.com: domain of xilinx.com does not
+ designate 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000C97B.mail.protection.outlook.com (10.167.241.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.30 via Frontend Transport; Tue, 21 Mar 2023 12:38:41 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Mar
+ 2023 07:38:41 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Mar
+ 2023 05:38:41 -0700
+Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 21 Mar 2023 07:38:37 -0500
+From:   Harini Katakam <harini.katakam@amd.com>
+To:     <robh+dt@kernel.org>, <andrew@lunn.ch>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <steen.hegelund@microchip.com>, <bjarni.jonasson@microchip.com>,
+        <ioana.ciornei@nxp.com>, <likaige@loongson.cn>,
+        <harini.katakam@xilinx.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <harinikatakamlinux@gmail.com>,
+        <michal.simek@xilinx.com>, <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH net-next v2 0/2] Macb PTP minor updates
+Date:   Tue, 21 Mar 2023 18:08:34 +0530
+Message-ID: <20230321123836.6906-1-harini.katakam@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8675a80b311443d3c3ed99e09832bd07355bfcc2.camel@linux.intel.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97B:EE_|MW3PR12MB4425:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60b58eab-539a-4c00-b0fb-08db2a093422
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YDxxiNC/XmAXB+1x+ZLPQZEsGr7oC/eisATrUZcmUk4blCYmMvl2C9tjHX+hakIwTLQKSoMPxFYAgoBjSf7NV14BcwJjeGuG5bFV9U7YvDZZrH0llupMPil6tAjHyAj6dZl0JpNUG5fbw4AMAJUeQQw04xhX1BmsGn0ufY9ceE3m9F4Enr3WCsdSzUOdqkIl1JEQXl1ma9Ki9s9w3SEk+QPojWhHuviLSrMROHui2Xr4yPek4O+D9Pt7p/BV/yLrKLQZNj2Eua4PO3GNiOjWdPFqlYdRFVOgxFd0KnoawPuR4QcoBnsvtVHNk/uRu+t3Fpt3O/8Ga15JQQhPJpUdExC2HEWvCF8CMeGKjS2fOh65qy5ptYgoKsmLur7lpUms6d6HarK+knpETcfnZlHj/ky5tdXkivNlsuaGUyMUQn7ZzCWwJQENmurYInZ9Hh52FTmv+dH1nj2W24Jmb0YTt9WNivipIfDVJXP1w0gnlnqYTazMlcm17l4CiQaR0OCIQ9GwsU6JdiJMMkXdu7DQ98SXUnn51ENd6mYKgcvL+W/PiJv6igTHDZemQdNdNfRoGmhVnCzcUi2I4bRcJ13iXl+qV7wbm6X/iJw30drpLF5fJ4WSb28bGaFrbiXcrn0ff4YzpDUfw59PfE+jPRu6jxg0k7idr2ozU/AF7gPQp4CX3nW/6i+OTtVqgmpsFgJUIwW71tOKucXFXQrF7gPRMaS51honc+Oq9IoPlkLcVr8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(396003)(346002)(451199018)(46966006)(40470700004)(2906002)(5660300002)(15650500001)(8936002)(2616005)(7416002)(4744005)(44832011)(36756003)(40480700001)(356005)(82310400005)(921005)(83170400001)(82740400003)(81166007)(426003)(35950700001)(42882007)(336012)(47076005)(83380400001)(40460700003)(8676002)(4326008)(70586007)(70206006)(6666004)(110136005)(498600001)(316002)(54906003)(26005)(41300700001)(1076003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 12:38:41.9560
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60b58eab-539a-4c00-b0fb-08db2a093422
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4425
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 07:24:16PM -0700, David E. Box wrote:
-> Hi,
-> 
-> On Tue, 2023-03-21 at 00:56 +0200, Ville Syrjälä wrote:
-> > On Thu, Jan 19, 2023 at 07:15:22PM -0800, David E. Box wrote:
-> > > +/*
-> > > + * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-> > > + */
-> > > +static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
-> > > +{
-> > > +       unsigned long features = *(unsigned long *)userdata;
-> > > +       u16 ltr = VMD_BIOS_PM_QUIRK_LTR;
-> > > +       u32 ltr_reg;
-> > > +       int pos;
-> > > +
-> > > +       if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
-> > > +               return 0;
-> > > +
-> > > +       pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
-> 
-> We call pci_enable_link_state from a callback that's run during pci_walk_bus()
-> which I see already acquires the semaphore. We've had this patch for well over a
-> year and I haven't seen this issue before. Is there a particular config needed
-> to reproduce it?
+- Enable PTP unicast
+- Optimize HW timestamp reading
 
-Not sure what would affect it, beyond the normal PROVE_LOCKING=y.
+v2:
+- Handle unicast setting with one register R/W operation
+- Update HW timestamp logic to remove sec_rollover variable
+- Removed Richard Cochran's ACK as patch 2/2 changed
 
-This is the .config our CI uses:
-https://gitlab.freedesktop.org/gfx-ci/i915-infra/-/blob/master/kconfig/debug
+Harini Katakam (2):
+  net: macb: Enable PTP unicast
+  net: macb: Optimize reading HW timestamp
 
-> 
-> As far as a solution I think we can copy what __pci_disable_link_state() does
-> and add a bool argument so that we only do down/up on the semaphore when set to
-> true. Since we know we will in be the lock during the bus walk we can set it to
-> false.
-> 
-> David
-> 
-> > 
-> > Hi,
-> > 
-> > This is tripping lockdep on one our CI ADL machines.
-> > 
-> > https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_12814/bat-adlp-6/boot0.txt
-> > 
-> > <4>[   13.815380] ============================================
-> > <4>[   13.815382] WARNING: possible recursive locking detected
-> > <4>[   13.815384] 6.3.0-rc1-CI_DRM_12814-g4753bbc2a817+ #1 Not tainted
-> > <4>[   13.815386] --------------------------------------------
-> > <4>[   13.815387] swapper/0/1 is trying to acquire lock:
-> > <4>[   13.815389] ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3}, at:
-> > pci_enable_link_state+0x69/0x1d0
-> > <4>[   13.815396] 
-> >                   but task is already holding lock:
-> > <4>[   13.815398] ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3}, at:
-> > pci_walk_bus+0x24/0x90
-> > <4>[   13.815403] 
-> >                   other info that might help us debug this:
-> > <4>[   13.815404]  Possible unsafe locking scenario:
-> > 
-> > <4>[   13.815406]        CPU0
-> > <4>[   13.815407]        ----
-> > <4>[   13.815408]   lock(pci_bus_sem);
-> > <4>[   13.815410]   lock(pci_bus_sem);
-> > <4>[   13.815411] 
-> >                    *** DEADLOCK ***
-> > 
-> > <4>[   13.815413]  May be due to missing lock nesting notation
-> > 
-> > <4>[   13.815414] 2 locks held by swapper/0/1:
-> > <4>[   13.815416]  #0: ffff8881029511b8 (&dev->mutex){....}-{3:3}, at:
-> > __driver_attach+0xab/0x180
-> > <4>[   13.815422]  #1: ffffffff827ab0b0 (pci_bus_sem){++++}-{3:3}, at:
-> > pci_walk_bus+0x24/0x90
-> > <4>[   13.815426] 
-> >                   stack backtrace:
-> > <4>[   13.815428] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.0-rc1-
-> > CI_DRM_12814-g4753bbc2a817+ #1
-> > <4>[   13.815431] Hardware name: Intel Corporation Alder Lake Client
-> > Platform/AlderLake-P DDR4 RVP, BIOS ADLPFWI1.R00.3135.A00.2203251419
-> > 03/25/2022
-> > <4>[   13.815434] Call Trace:
-> > <4>[   13.815436]  <TASK>
-> > <4>[   13.815437]  dump_stack_lvl+0x64/0xb0
-> > <4>[   13.815443]  __lock_acquire+0x9b5/0x2550
-> > <4>[   13.815461]  lock_acquire+0xd7/0x330
-> > <4>[   13.815463]  ? pci_enable_link_state+0x69/0x1d0
-> > <4>[   13.815466]  down_read+0x3d/0x180
-> > <4>[   13.815480]  ? pci_enable_link_state+0x69/0x1d0
-> > <4>[   13.815482]  pci_enable_link_state+0x69/0x1d0
-> > <4>[   13.815485]  ? __pfx_vmd_pm_enable_quirk+0x10/0x10
-> > <4>[   13.815488]  vmd_pm_enable_quirk+0x49/0xb0
-> > <4>[   13.815490]  pci_walk_bus+0x6d/0x90
-> > <4>[   13.815492]  vmd_probe+0x75f/0x9d0
-> > <4>[   13.815495]  pci_device_probe+0x95/0x120
-> > <4>[   13.815498]  really_probe+0x164/0x3c0
-> > <4>[   13.815500]  ? __pfx___driver_attach+0x10/0x10
-> > <4>[   13.815503]  __driver_probe_device+0x73/0x170
-> > <4>[   13.815506]  driver_probe_device+0x19/0xa0
-> > <4>[   13.815508]  __driver_attach+0xb6/0x180
-> > <4>[   13.815511]  ? __pfx___driver_attach+0x10/0x10
-> > <4>[   13.815513]  bus_for_each_dev+0x77/0xd0
-> > <4>[   13.815516]  bus_add_driver+0x114/0x210
-> > <4>[   13.815518]  driver_register+0x5b/0x110
-> > <4>[   13.815520]  ? __pfx_vmd_drv_init+0x10/0x10
-> > <4>[   13.815523]  do_one_initcall+0x57/0x330
-> > <4>[   13.815527]  kernel_init_freeable+0x181/0x3a0
-> > <4>[   13.815529]  ? __pfx_kernel_init+0x10/0x10
-> > <4>[   13.815532]  kernel_init+0x15/0x120
-> > <4>[   13.815534]  ret_from_fork+0x29/0x50
-> > <4>[   13.815537]  </TASK>
-> > 
+ drivers/net/ethernet/cadence/macb.h      |  4 ++++
+ drivers/net/ethernet/cadence/macb_main.c | 15 +++++++++++++--
+ drivers/net/ethernet/cadence/macb_ptp.c  |  4 ++--
+ 3 files changed, 19 insertions(+), 4 deletions(-)
 
 -- 
-Ville Syrjälä
-Intel
+2.17.1
+
