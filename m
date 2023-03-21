@@ -2,131 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8C46C3C5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBDE6C3C65
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjCUU7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S230107AbjCUVCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCUU7S (ORCPT
+        with ESMTP id S229871AbjCUVCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:59:18 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBEF2CC75;
-        Tue, 21 Mar 2023 13:59:15 -0700 (PDT)
+        Tue, 21 Mar 2023 17:02:40 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65216574DD;
+        Tue, 21 Mar 2023 14:02:39 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id p203so18812614ybb.13;
+        Tue, 21 Mar 2023 14:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=9q3c6DZ84qERaYxwpBLMMZMDxJrnwUpqZmpXF6Hs6ks=;
-  b=nqFkP6g7VrkH6F9TIZQuEyi4wfkMDquj8ZeBCPqQE62fZzKFPB/t3ip8
-   O58YVcqMbnHQV7IEILZ/MbN+HnYPzihOvUaByrZiJeE4f0O8FcpchHgoR
-   s1ZX/QVdcpKsZUgfS4zT5u/gLNi9II2BsXIWw0vikJ4H7ZVgfLR+aap4O
-   s=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,279,1673910000"; 
-   d="scan'208";a="50854107"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 21:59:14 +0100
-Date:   Tue, 21 Mar 2023 21:59:13 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] staging: greybus: remove unnecessary blank line
-In-Reply-To: <20230321181725.8691-1-eng.mennamahmoud.mm@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303212158170.2919@hadrien>
-References: <20230321181725.8691-1-eng.mennamahmoud.mm@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112; t=1679432558;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7KdYKeJhs6BlAbgaUy8umwaslI0fUCE3dBqVeYeDGa4=;
+        b=bjYjHDJStZi1r9+Dbh03/V+dKle/fh0I2f8dANFi6Z7Ffw6/6lEuAmi+EtVvshC8YO
+         0VZIzOm4z4XG1JwEsNe9uLN9RUWclnIsuy2EFe81Wywbjt/W9FQpXpJYu0+Wp9fb42Nc
+         G2m4V3Uuz5U223CYTzEkAuOWJeNEQ32rOv9DJAfonOuVpm7xfw3iI4tITYZyLgNglwaY
+         6buutuajtIpLZPQXUWIo4A6lEMIst8TWmsfkES/IzmzS2195lHLcnRaNV1Ng4Nvo3W89
+         uJKdgYowqcj+I7rmdzbWzxAN2mEYOFNbARgG5Mn1wGMKv1kr24hG62cpdHRXpE3h5+LU
+         AEIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679432558;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7KdYKeJhs6BlAbgaUy8umwaslI0fUCE3dBqVeYeDGa4=;
+        b=Q8pnUb5p8QNob8kUSDJ94Rqe1+DMdX+o2btf+DJzo1fN29iEBDvwgKGWVXzonlxkU/
+         0s8A6Mz8DW7TogwnBj7/a/MrW1bCSMjsxirC1B1RBExfxRASq+9z2AUVD+fLGcXYfOjO
+         Udr51ScQnlIdIcRYoXkHKJZcInwVg28DfE4a++TUe7paGp7HZkgnM+w0zryeYq2OdXF3
+         J6T61RTpnGs5TKPtn0IHKtB+W2xGiF23+IFBiZYrPGmshstqSC+EgWmBzLuqOxdfs6ag
+         oo7DqDY8g+T5hFxaZaSAdulzWr0HXKkEKkDTo3642CfaJSnbC2L0iaTNWZ2/N2SRWOve
+         TnJg==
+X-Gm-Message-State: AAQBX9dMj4p16qP2KGV6EViE1BJrWVT8p15q6RhZcgVG0HSCr95xAr+J
+        pFQfmP+4m3TLKsV/1vTOD6rZW94R2EJgWohlMwYoyn25tw==
+X-Google-Smtp-Source: AKy350btW9WCm9AQmE3K1LLLcrTqOju2+M8P5TE4wmOswUXQ6vy6ttqgKH5L2NNJ1AHtqCpunxcZuuTWV1YXvemYS70=
+X-Received: by 2002:a05:6902:1208:b0:b6f:dcd:6cd2 with SMTP id
+ s8-20020a056902120800b00b6f0dcd6cd2mr2154016ybu.10.1679432558494; Tue, 21 Mar
+ 2023 14:02:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20230316222109.1940300-1-usama.arif@bytedance.com>
+ <20230316222109.1940300-10-usama.arif@bytedance.com> <CAMzpN2jMyLP9h5o_wwdThHipAns2_dx3Nf8JYhj5pEqaeWXqYg@mail.gmail.com>
+ <30efad7b8a5922cdaa48ab89a2dbaf425daf49a8.camel@infradead.org>
+In-Reply-To: <30efad7b8a5922cdaa48ab89a2dbaf425daf49a8.camel@infradead.org>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Tue, 21 Mar 2023 17:02:27 -0400
+Message-ID: <CAMzpN2ijBZV0d+FjXpi8iP9rQ2gFgQ-9TtkZMB4xDizox1yW3g@mail.gmail.com>
+Subject: Re: [PATCH v15 09/12] x86/smpboot: Support parallel startup of
+ secondary CPUs
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Usama Arif <usama.arif@bytedance.com>, tglx@linutronix.de,
+        kim.phillips@amd.com, piotrgorski@cachyos.org,
+        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Tue, 21 Mar 2023, Menna Mahmoud wrote:
-
-> Remove unnecessary blank line before struct as reported
-> by checkpatch:
+On Tue, Mar 21, 2023 at 3:12=E2=80=AFPM David Woodhouse <dwmw2@infradead.or=
+g> wrote:
 >
-> " CHECK: Please don't use multiple blank lines "
+> On Tue, 2023-03-21 at 14:28 -0400, Brian Gerst wrote:
+> >
+> > > @@ -264,6 +318,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, =
+SYM_L_GLOBAL)
+> > >          lgdt    (%rsp)
+> > >          addq    $16, %rsp
+> > >
+> > > +       /* Drop the realmode protection. For the boot CPU the pointer=
+ is NULL! */
+> > > +       movq    trampoline_lock(%rip), %rax
+> > > +       testq   %rax, %rax
+> > > +       jz      .Lsetup_data_segments
+> > > +       lock
+> > > +       btrl    $0, (%rax)
+> > > +
+> > > +.Lsetup_data_segments:
+> > >          /* set up data segments */
+> > >          xorl %eax,%eax
+> > >          movl %eax,%ds
+> >
+> > This can still go earlier, right after "movq TASK_threadsp(%rax),
+> > %rsp".  The GDT descriptor is placed on the idle thread stack, so it's
+> > safe to drop the lock before it.
 >
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
-> change in v2:
-> 	add patches that have same edit in sigle patch.
-> ---
->  drivers/staging/greybus/greybus_authentication.h | 1 -
->  1 file changed, 1 deletion(-)
 >
-> diff --git a/drivers/staging/greybus/greybus_authentication.h b/drivers/staging/greybus/greybus_authentication.h
-> index 7edc7295b7ab..48b4a9794d3c 100644
-> --- a/drivers/staging/greybus/greybus_authentication.h
-> +++ b/drivers/staging/greybus/greybus_authentication.h
-> @@ -41,7 +41,6 @@
->  #define CAP_AUTH_RESULT_CR_NO_KEY	0x03
->  #define CAP_AUTH_RESULT_CR_SIG_FAIL	0x04
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -335,6 +335,17 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_=
+L_GLOBAL)
+>         movq    pcpu_hot + X86_current_task(%rdx), %rax
+>         movq    TASK_threadsp(%rax), %rsp
 >
+> +       /*
+> +        * Now that this CPU is running on its own stack, drop the realmo=
+de
+> +        * protection. For the boot CPU the pointer is NULL!
+> +        */
+> +       movq    trampoline_lock(%rip), %rax
+> +       testq   %rax, %rax
+> +       jz      .Lsetup_gdt
+> +       lock
+> +       btrl    $0, (%rax)
+> +
+> +.Lsetup_gdt:
+>         /*
+>          * We must switch to a new descriptor in kernel space for the GDT
+>          * because soon the kernel won't have access anymore to the users=
+pace
+> @@ -377,14 +388,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_=
+L_GLOBAL)
+>         shrq    $32, %rdx
+>         wrmsr
+>
+> -       /* Drop the realmode protection. For the boot CPU the pointer is =
+NULL! */
+> -       movq    trampoline_lock(%rip), %rax
+> -       testq   %rax, %rax
+> -       jz      .Lsetup_idt
+> -       lock
+> -       btrl    $0, (%rax)
 > -
->  /* IOCTL support */
->  struct cap_ioc_get_endpoint_uid {
->  	__u8			uid[8];
-> --
-> 2.34.1
+> -.Lsetup_idt:
+>         /* Setup and Load IDT */
+>         pushq   %rsi
+>         call    early_setup_idt
 >
->
-> From 6f56ebcda89f91cdfe6e64c0707dc476ebc1e819 Mon Sep 17 00:00:00 2001
-> From: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> Date: Tue, 21 Mar 2023 00:03:32 +0200
-> Subject: [PATCH v2 2/2] staging: greybus: remove unnecessary blank line
 
-This doesn't look right.  If you put two changes in a single message, you
-shouldn't repeat the log message etc.  Use git log -p to look at what
-others have done.
-
-julia
-
->
-> Remove unnecessary blank line before struct as reported
-> by checkpatch:
->
-> " CHECK: Please don't use multiple blank lines "
->
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
-> change in v2:
->         add patches that have same edit in sigle patch.
-> ---
->  drivers/staging/greybus/pwm.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-> index 3fda172239d2..26d39e08c3b6 100644
-> --- a/drivers/staging/greybus/pwm.c
-> +++ b/drivers/staging/greybus/pwm.c
-> @@ -24,7 +24,6 @@ struct gb_pwm_chip {
->  #define pwm_chip_to_gb_pwm_chip(chip) \
->  	container_of(chip, struct gb_pwm_chip, chip)
->
-> -
->  static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
->  {
->  	struct gb_pwm_count_response response;
-> --
-> 2.34.1
->
->
->
+Looks good, thanks.
