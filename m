@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474006C38EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D546C38F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjCUSKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S230233AbjCUSKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCUSKS (ORCPT
+        with ESMTP id S229993AbjCUSKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:10:18 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BED21A12
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:10:14 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id i9so14638613wrp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679422213;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CcTyMNvBbaopJZP7W6LTt5OpFhIYB8Xn1nXJQSlLefI=;
-        b=YPUUkli16izZ5m5JbGXAKg0IxA1wX2n/dqT6FwqvDqUfy+cRCWnZOuI893AgMF34aP
-         ie9S29Jog54ei/mK8n6KuVSdDgtoIt7EY9QUS0yIobYtyxZWFimuLneyMugIwl4iEf6h
-         DAsSp0MQwaRO0k0rulxFcGd+UG2GzF2ryVkk77AXNmQ+ZM+GQMiwjz/fuGOj9n4TrD9H
-         w2JE/YiK+bpK4t/Ny5h7FSBuUpgV7aqbAplkzS8ZF++HB8HlRPbvbo6X+wkMSq383UMV
-         85D9exBKrsA4vw9ZovrjP8JmgeutduWGh51AmjwMXdpuis6ONtb1k4Qdap0Uq1Fx8Fm0
-         /BfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679422213;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CcTyMNvBbaopJZP7W6LTt5OpFhIYB8Xn1nXJQSlLefI=;
-        b=EpuqG5WvkunBQxcZGznUOH0bq5sQWTZhEfrQhtBqcZN0H6dbjp70anFLYUZtyAqdBw
-         dgfPhBOeZBGXle0Exb2Z1rmnQFU65VJJpDSWmrzcd48cr4XDpY4m5BZSxsxkZ/qSxI71
-         TaSlivwveFPdcObCSSV6xrnD0lmmSEaiLUxTjrOlz2KOXbzawjY8DGU0CBQtN73nlMRu
-         i9P3vyIJlSvcOzvtHQAlcLpTBGH0s4CRm0hermsL8plqNQVZLn28dyLWGWv/vK/QLfhx
-         vsQFM7YTzQkqIHs1iitk13u+89JOVIOG1ReAH8WxJt+FgkXpKeKhnHJ/SlOVbjKM0tQC
-         WaEA==
-X-Gm-Message-State: AO0yUKWZfnCkS+57/7ghT3f3+BAOb02tmSZAB/Amny1Bh9Xwl1JEn1IE
-        H8lt6qMS8As2KpHtszW/67Q=
-X-Google-Smtp-Source: AK7set/Gu857TQGoYOTPU6EQouhqZy2GyJkobL7p3w8DsFG9d2WPaNeMIrq+jLnw6UO3i3BlYKMObg==
-X-Received: by 2002:a5d:55c6:0:b0:2cf:f314:774d with SMTP id i6-20020a5d55c6000000b002cff314774dmr3289104wrw.44.1679422212616;
-        Tue, 21 Mar 2023 11:10:12 -0700 (PDT)
-Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.googlemail.com with ESMTPSA id c10-20020adffb0a000000b002c70c99db74sm11858260wrr.86.2023.03.21.11.10.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:10:11 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH] MAINTAINERS: add myself as vmalloc reviewer
-Date:   Tue, 21 Mar 2023 18:09:55 +0000
-Message-Id: <55f663af6100c84a71a0065ac0ed22463aa340de.1679421959.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 21 Mar 2023 14:10:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF7B5098D;
+        Tue, 21 Mar 2023 11:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rNKm/FBXON69zfkdwg//RKhKlf2JyDi+UDBM9ckgKRg=; b=47A0euJJt653yC1Zr//T2LCZsF
+        VxQD/qUkuk7KqkLXEAgfcALylKhcWlwO4HBPhsCKu/BcK9QPry6z8D9EwWJlvt1KSjNZ2IMYnf2Fw
+        zW9B0BkVxuDhRN8UB35h5Hb0f3pPhvstn1MG1O+YLauv/OG5eRauTYaaUCXDjyLXp6QFpA8gLy8BQ
+        IJ0PTCRe/EsN4o1M02BlARQWDgIlUJEe6bOTJfmHC9oepaKIgA5/vDFFXPbJqRpG3+dVhGl7iP57U
+        7eJp7J/v+Ix2UOwnnLO02xKpPle9MhYkuxE0cM1vxRKWv3A2zkxq0xTNT2dfHvMgZhBziM7eTN/Ee
+        Ty+FZILQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pegRG-00DJjO-00;
+        Tue, 21 Mar 2023 18:10:26 +0000
+Date:   Tue, 21 Mar 2023 11:10:25 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] fs/drop_caches: move drop_caches sysctls into its own
+ file
+Message-ID: <ZBnzEY2PLbUtMKqX@bombadil.infradead.org>
+References: <20230321130908.6972-1-frank.li@vivo.com>
+ <ZBneeOYHKBZl8SGe@casper.infradead.org>
+ <ZBnho5yPbXIQs752@bombadil.infradead.org>
+ <ZBnnFtKVgAFQ4yeo@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBnnFtKVgAFQ4yeo@casper.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +61,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have recently been involved in both reviewing and submitting patches to
-the vmalloc code in mm and would be willing and happy to help out with
-review going forward if it would be helpful!
+On Tue, Mar 21, 2023 at 05:19:18PM +0000, Matthew Wilcox wrote:
+> On Tue, Mar 21, 2023 at 09:56:03AM -0700, Luis Chamberlain wrote:
+> > On Tue, Mar 21, 2023 at 04:42:32PM +0000, Matthew Wilcox wrote:
+> > > On Tue, Mar 21, 2023 at 09:09:07PM +0800, Yangtao Li wrote:
+> > > > +static struct ctl_table drop_caches_table[] = {
+> > > > +	{
+> > > > +		.procname	= "drop_caches",
+> > > > +		.data		= &sysctl_drop_caches,
+> > > > +		.maxlen		= sizeof(int),
+> > > > +		.mode		= 0200,
+> > > > +		.proc_handler	= drop_caches_sysctl_handler,
+> > > > +		.extra1		= SYSCTL_ONE,
+> > > > +		.extra2		= SYSCTL_FOUR,
+> > > > +	},
+> > > > +	{}
+> > > > +};
+> > > 
+> > > Could we avoid doing this until we no longer need an entire zero entry
+> > > after the last one? 
+> > 
+> > That may be 2-3 kernel release from now. The way to use ARRAY_SIZE()
+> > really is to deprecate the crap APIs that allow messy directory sysctl
+> > structures.
+> 
+> I'm OK with waiting another year to commence this cleanup.  We've lived
+> with the giant tables for decades already.  Better to get the new API
+> right than split the tables now, then have to touch all the places
+> again.
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+We can do that sure.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b79463ea1049..69d19130af2f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13419,6 +13419,7 @@ VMALLOC
- M:	Andrew Morton <akpm@linux-foundation.org>
- R:	Uladzislau Rezki <urezki@gmail.com>
- R:	Christoph Hellwig <hch@infradead.org>
-+R:	Lorenzo Stoakes <lstoakes@gmail.com>
- L:	linux-mm@kvack.org
- S:	Maintained
- W:	http://www.linux-mm.org
---
-2.39.2
+  Luis
