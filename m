@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22A16C31F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6B56C31F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjCUMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S230316AbjCUMoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjCUMn2 (ORCPT
+        with ESMTP id S230411AbjCUMnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:43:28 -0400
+        Tue, 21 Mar 2023 08:43:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CA64D42E;
-        Tue, 21 Mar 2023 05:42:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FCB9EC9;
+        Tue, 21 Mar 2023 05:43:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D7361B80;
-        Tue, 21 Mar 2023 12:42:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 123B6C433AC;
-        Tue, 21 Mar 2023 12:42:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 690D461B77;
+        Tue, 21 Mar 2023 12:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38BCC433EF;
+        Tue, 21 Mar 2023 12:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679402557;
-        bh=J20LlY5TbVnPM0z5FlTNCPp5ZAh4UVG6euTTWc5LkUw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FdVixEWY/0QvALciIzaXMuyjtTuctDu5uQnZAkKUVwbR8UBXJtwUnyxQtT/p/30ic
-         zpl55Nm+hUpZq5XJiO53LWzTvqQltae2LMbqInH9aGehkHNAgTJ164pX4YQxll3KMy
-         TD2ug+AYx3+44yAUcXSFocaJgG/jig0Jy18j4H5xsbdoMjB9gU+8MwEJ0DkP5ks6eT
-         KCLNhOoO34XSRvOPyEnyvii8NdivuEDpea1bCdkez29ZJqdilkcKgnBSN/Qfu6vbBe
-         soG30ERWWcrojAZnMfrIwsqxFHO8VOzwjVm6uKlK0AbKWOD4M/k7pMnLwbWFhV/Dwd
-         V04BWarn/LWkw==
-Received: by mail-yb1-f176.google.com with SMTP id z83so16892638ybb.2;
-        Tue, 21 Mar 2023 05:42:37 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eJgFzaDRWA/HkJoeYF2lRLHj0ex4B7hgaaPRfdZAOYUyvoqJes
-        kVYWAKeEJJrMj9fRTSB3udSDF1XTBsnP2A9ybw==
-X-Google-Smtp-Source: AKy350ZhCPEnnrwloI2VYkVonvOVRbKLguR0+fCqDHc7mDqtOx67pDwKgadHRUXyovXV1023X8BMqxVSAgSWqc8/Yn8=
-X-Received: by 2002:a05:6902:150c:b0:b6c:f26c:e5b0 with SMTP id
- q12-20020a056902150c00b00b6cf26ce5b0mr1453538ybu.1.1679402556021; Tue, 21 Mar
- 2023 05:42:36 -0700 (PDT)
+        s=k20201202; t=1679402598;
+        bh=xcJkoQTIIOmCXDoY8pP/8Jt34/V+tPqbIw1wqfFT8H8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=INWXDDFDvGVVzzZg4su/goP/n0OeZ2zbnBlOx3kOlFJQ3w1WhpP61mWbS3JQgnc9t
+         ZVttUFWOeeNF3i3tSDAAAlv9ei1Iq4ab09f/9n2wohMk/6DLkZxeKMg0ZXAh5WAdiL
+         qcY9sF9NxJEaI9B+xN8F2HvgjKz8Ej2beSUiW6Nb5qJUFm82e0Wve4/BU+/mjpKsAT
+         4QIphehdf2N9PLin360UE6E3Huq+YZp69qWG1C9FrRHpGC5eD2I+cBXcjRNt5XmnKi
+         S3XoOxdnPIA9EZ+/BBrd0NCnT4mkGnP7Mf+agDljUxjppYjLgCGrF/KB5ln1n2oY/X
+         6cke/v5Dj1lOw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9FE4E4052D; Tue, 21 Mar 2023 09:43:16 -0300 (-03)
+Date:   Tue, 21 Mar 2023 09:43:16 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] perf tools: Sync perf_event_attr::config3 addition
+Message-ID: <ZBmmZGhodcpefjRu@kernel.org>
+References: <20220914-arm-perf-tool-spe1-2-v2-v5-0-2cf5210b2f77@kernel.org>
+ <20220914-arm-perf-tool-spe1-2-v2-v5-1-2cf5210b2f77@kernel.org>
+ <Y/DQ7Y+FD4cMn29J@kernel.org>
+ <CAL_JsqLD_P1X1+vKODgZP1vaie2+c__X_HM8kWWzSb7PxZqZew@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230320233904.2920197-1-robh@kernel.org> <ZBlTJbdAmh5H3PD0@kroah.com>
-In-Reply-To: <ZBlTJbdAmh5H3PD0@kroah.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 21 Mar 2023 07:42:24 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL9LYOpk88RCBJcsX5DnroOUdvXXtpwDPoabt3A1S7SVQ@mail.gmail.com>
-Message-ID: <CAL_JsqL9LYOpk88RCBJcsX5DnroOUdvXXtpwDPoabt3A1S7SVQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: Drop unneeded quotes
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqLD_P1X1+vKODgZP1vaie2+c__X_HM8kWWzSb7PxZqZew@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,20 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 1:48=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Mar 20, 2023 at 06:39:02PM -0500, Rob Herring wrote:
-> > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> > checking for this can be enabled in yamllint.
+Em Mon, Mar 20, 2023 at 01:21:10PM -0500, Rob Herring escreveu:
+> On Sat, Feb 18, 2023 at 7:21 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
 > >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
-> Or do you want me to take this through the USB tree?  if so, just let me
-> know.
+> > Em Fri, Feb 17, 2023 at 04:32:10PM -0600, Rob Herring escreveu:
+> > > Arm SPEv1.2 adds another 64-bits of event filtering control. As the
+> > > existing perf_event_attr::configN fields are all used up for SPE PMU, an
+> > > additional field is needed. Add a new 'config3' field.
+> > >
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > > This matches commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
+> > > for the kernel queued in linux-next.
+> >
+> > When you mention linux-next where was it that it picked this from?
+> >
+> > For me to get this merged into the perf tools "next" (perf/core) it must
+> > already have been merged in the kernel counterpart (tip/perf/core).
+> >
+> > Ok so it is not in tip/perf/core, but got in next yesterday, and PeterZ
+> > acked it, good, will process it soon.
+> 
+> Hi Arnaldo, Are you going to apply this or are you expecting something from me?
 
-You can take it.
+Sorry for the delay, applied.
 
-Rob
+- Arnaldo
