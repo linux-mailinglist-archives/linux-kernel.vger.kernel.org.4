@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8149F6C2EA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C206C2EAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjCUKYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S230141AbjCUKYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCUKX7 (ORCPT
+        with ESMTP id S229991AbjCUKYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:23:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BC614212;
-        Tue, 21 Mar 2023 03:23:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F7D5B81597;
-        Tue, 21 Mar 2023 10:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A380AC433EF;
-        Tue, 21 Mar 2023 10:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679394234;
-        bh=ZsLPYOdjcPsLO2pttCc5ghlJ9bpA4xBtpFYwK368Nno=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DHMvsMuhjrNMVCpm46jlgS0qKFhfMFY4dHai8izH6uYfBKBvp6iOFMztZovfjuux3
-         gejjEok/BdnhlXOwo8xmRFKoQin9kBL8cNEBWPBanLhFg85PqsPC4lWwSxH/fscPge
-         Mmzfcpmgcnu9Ys09rjiW8m2D9x6SiUJOR5KVE93wAeOYxGAUrsVQsSeB/5Bkozlhar
-         s05pn/XlavtkFKmb7OOgOEdiDPRIEQq6nuVDUkiLDfuVWwKVIt5hUslLQ4bq+5xNte
-         ROFlgdPt4FKRDmpM9M1oFppaUPVig7FSWYSnbkiUZ7a/xyycLZ/XFNqTwFqG/vbcoY
-         hg+xslRP9BfRQ==
-Message-ID: <b532eb5b-3313-859a-e2f0-fc6ce49224f4@kernel.org>
-Date:   Tue, 21 Mar 2023 12:23:48 +0200
+        Tue, 21 Mar 2023 06:24:42 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8F71A4B7;
+        Tue, 21 Mar 2023 03:24:25 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q14so587804ljm.11;
+        Tue, 21 Mar 2023 03:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679394264;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uhFdi1uiSeZOwxVmf0kVcvm/UyzlDMDXvQmSf1SDDC8=;
+        b=GmUXM8c9wgJmKWFQvRdr5V3g9jTmnYxfcrVwrymq20rqbgLOiRP3ecoRAelvgW0n0E
+         inuB0DeC/Yza4JUU0BjxLr9QuqM8Ii9bV0Ub09GNNKNMtojihphe/QaiC3Dk9l6D4rqG
+         Uh5UbiU0E/VqNl/rbUaYATH2pquZjH5ISkEDMPL0PUlpNOnaa2STLm9ZFSA3mqgad3pI
+         nzC0d5ODRLWkhvYS0WD66FM61GsoZHSytUDpe6EgAua0lG5YPlLcsSbPGvRa3aA1nB+T
+         4gYTkl6+Bap2LYYuPVVl7fKvVcFE5jWuTIHINRZQQIMsnMAkxfUSTVwxsNbb0yPL/mMU
+         oQOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679394264;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uhFdi1uiSeZOwxVmf0kVcvm/UyzlDMDXvQmSf1SDDC8=;
+        b=FvwTM761zt/F78u/rdFB75k7s08OkKvr9gxf5VLnM9ina56V3BeoSVU5kpm6onCz+I
+         XdFlPYcam+lCnvJrf8p4qt5ShzjqmpZ0xzfcUFt+FSv/7neHBYaTJO7Njra0PhFxkr4w
+         gHTbjvTEC7lDyEvx1gl5TUcXDHc/e+2r+lI4dlhi4m8WiM5/7lVuKAogMMd9w89gJhhy
+         sSqck/hx8Ct6EElw62eFoI0T+4H4IS6t/2d0OZh7AWBLGT8UmQlrgYyX+FeXBK/JEkCs
+         iHgkHZq0b85v+BkgqrPNTv7/KG8an17EBh76rrig07C7rCesV48kQ8TM5tKQzVoFmVAj
+         fVDw==
+X-Gm-Message-State: AO0yUKW4PKqkZU2E81fsY2V0f/BLB90GoeTpTOVo5JJMbP6yKwH+lpIO
+        53wTFMBDWcvJZk9a/G48rIk=
+X-Google-Smtp-Source: AK7set+KMF+Wu8C2Jt5CwGQjhAtjGC9RSF+0DgfVw0yOXHTTNZvvHDvbyir1beiOoNj3T/H9pBwQEw==
+X-Received: by 2002:a2e:8806:0:b0:298:ac8b:bf19 with SMTP id x6-20020a2e8806000000b00298ac8bbf19mr692761ljh.50.1679394263576;
+        Tue, 21 Mar 2023 03:24:23 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id n12-20020a2e904c000000b00299f0194108sm2163069ljg.31.2023.03.21.03.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 03:24:22 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V5 0/3] nvmem: add fixed cells layout
+Date:   Tue, 21 Mar 2023 11:24:15 +0100
+Message-Id: <20230321102418.4190-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/5] soc: ti: pruss: Add
- pruss_{request,release}_mem_region() API
-Content-Language: en-US
-To:     Md Danish Anwar <a0501179@ti.com>, Andrew Davis <afd@ti.com>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-3-danishanwar@ti.com>
- <3f26b194-287c-074d-8e78-572875f9a734@kernel.org>
- <52aeb13f-1fe4-825f-9d28-ba64860ae76d@ti.com>
- <13048b01-641a-1d92-178c-02b87c5fa1b9@ti.com>
- <5b936f1b-3c5b-30ab-7074-e202fd6555b6@ti.com>
- <67dd1d04-147d-0e40-c06b-6e1e0dd05f13@kernel.org>
- <e4cdd295-d292-255a-fbd0-b1728aaca155@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <e4cdd295-d292-255a-fbd0-b1728aaca155@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,323 +75,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rafał Miłecki <rafal@milecki.pl>
 
+NVMEM bindings received a new feature recently: layouts. They allow 
+defining NVMEM device content in a separated DT node named 
+"nvmem-layout". That improvement results in cleaner and more generic
+bindings.
 
-On 21/03/2023 11:48, Md Danish Anwar wrote:
-> Hi Roger,
-> 
-> On 21/03/23 14:54, Roger Quadros wrote:
->> Hi,
->>
->> On 21/03/2023 07:23, Md Danish Anwar wrote:
->>> Hi Andrew, Roger,
->>>
->>> On 20/03/23 21:48, Andrew Davis wrote:
->>>> On 3/20/23 12:11 AM, Md Danish Anwar wrote:
->>>>> Hi Roger,
->>>>>
->>>>> On 17/03/23 14:26, Roger Quadros wrote:
->>>>>> Hi Andrew & Danish,
->>>>>>
->>>>>>
->>>>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
->>>>>>> From: "Andrew F. Davis" <afd@ti.com>
->>>>>>>
->>>>>>> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
->>>>>>> to the PRUSS platform driver to allow client drivers to acquire and release
->>>>>>> the common memory resources present within a PRU-ICSS subsystem. This
->>>>>>> allows the client drivers to directly manipulate the respective memories,
->>>>>>> as per their design contract with the associated firmware.
->>>>>>>
->>>>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
->>>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>>>>> Signed-off-by: Andrew F. Davis <afd@ti.com>
->>>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->>>>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->>>>>>> ---
->>>>>>>   drivers/soc/ti/pruss.c           | 77 ++++++++++++++++++++++++++++++++
->>>>>>>   include/linux/pruss_driver.h     | 27 +++--------
->>>>>>>   include/linux/remoteproc/pruss.h | 39 ++++++++++++++++
->>>>>>
->>>>>>
->>>>>> We have these 2 header files and I think anything that deals with
->>>>>> 'struct pruss' should go in include/linux/pruss_driver.h
->>>>>>
->>>>>> Anything that deals with pru_rproc (i.e. struct rproc) should go in
->>>>>> include/linux/remoteproc/pruss.h
->>>>>>
->>>>>> Do you agree?
->>>>>>
->>>>>
->>>>> I agree with you Roger but Andrew is the right person to comment here as he is
->>>>> the author of this and several other patches.
->>>>>
->>>>> Hi Andrew, Can you please comment on this?
->>>>>
->>>>
->>>> Original idea was a consumer driver (like "ICSSG Ethernet Driver" in your other
->>>> series) could just
->>>>
->>>> #include <linux/remoteproc/pruss.h>
->>>>
->>>> and get everything they need, and nothing they do not.
->>>>
->>>
->>> If we plan on continuing the original idea, then I think keeping the header
->>> files as it is will be the best. Because if we move anything that deals with
->>> 'struct pruss' to include/linux/pruss_driver.h and anything that deals with
->>> pru_rproc (i.e. struct rproc) to include/linux/remoteproc/pruss.h, then the
->>> consumer drivers will need to do,
->>>
->>> #include <linux/remoteproc/pruss.h>
->>> #include <linux/pruss_driver.h>
->>>
->>> Roger, should I keep the header files arrangement as it is?
->>>
->>
->> OK but can we please rename one of them to something else so they don't
->> sound very similar. Maybe you could use Andrew's suggestion below.
->>
-> 
-> Yes sure, I'll rename the header files to reduce confusion. The pruss_driver.h
-> is located in include/linux, implying it's not internal to PRUSS. So I will
-> keep this header file name as it is.
-> 
-> There are total 3 pruss related header files.
-> 
-> 1. include/linux/pruss_driver.h (Public header file, not internal to PRUSS,
-> will keep it as it is. This exists to allow communication between the pruss
-> core and the pru rproc driver which live in different subsystems.)
+New bindings & drivers should use layouts design. If possible we should
+also try converting existing bindings & drivers to layouts.
 
-Andrew asked you to rename this to pruss_internal.h
+This patchset allows defining NVMEM cells in a new way (using NVMEM
+layout feature).
 
-> 2. include/linux/remoteproc/pruss.h (Public header file, not internal to PRUSS,
-> will keep it as it is. Only this header file needs to be included by client
-> drivers.)
-> 3. drivers/soc/ti/pruss.h (Internal to PRUSS, I will rename this to
-> pruss_internal.h, this file has private definitions and APIs to modify PRUSS
-> CFG space. This file is private to pruss.c)
+This deprecates support for defining NVMEM cells as direct DT device
+node subnodes but IT DOESN'T drop support for that.
 
-No point in changing this file's name as this is not visible elsewhere.
+PLEASE understand what this patchset handles. It adds new & preferred
+way of defining NVMEM cells. This patchset does NOT meant to:
+1. Convert ALL existing bindings or drivers (it's a task for later)
+2. Add support for new extra features (like multiple layouts)
+3. Break any backward compatibility (it WON'T happen)
 
-> 
-> Please let me know if the above looks OK.
-> 
->>>> pruss_driver.h (which could be renamed pruss_internal.h) exists to allow
->>>> comunication between the pruss core and the pru rproc driver which live
->>>> in different subsystems.
->>>>
->>>> Andrew
->>>>
->>>>>>>   3 files changed, 121 insertions(+), 22 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>>>>>> index a169aa1ed044..c8053c0d735f 100644
->>>>>>> --- a/drivers/soc/ti/pruss.c
->>>>>>> +++ b/drivers/soc/ti/pruss.c
->>>>>>> @@ -88,6 +88,82 @@ void pruss_put(struct pruss *pruss)
->>>>>>>   }
->>>>>>>   EXPORT_SYMBOL_GPL(pruss_put);
->>>>>>>   +/**
->>>>>>> + * pruss_request_mem_region() - request a memory resource
->>>>>>> + * @pruss: the pruss instance
->>>>>>> + * @mem_id: the memory resource id
->>>>>>> + * @region: pointer to memory region structure to be filled in
->>>>>>> + *
->>>>>>> + * This function allows a client driver to request a memory resource,
->>>>>>> + * and if successful, will let the client driver own the particular
->>>>>>> + * memory region until released using the pruss_release_mem_region()
->>>>>>> + * API.
->>>>>>> + *
->>>>>>> + * Return: 0 if requested memory region is available (in such case pointer to
->>>>>>> + * memory region is returned via @region), an error otherwise
->>>>>>> + */
->>>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->>>>>>> +                 struct pruss_mem_region *region)
->>>>>>> +{
->>>>>>> +    if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
->>>>>>> +        return -EINVAL;
->>>>>>> +
->>>>>>> +    mutex_lock(&pruss->lock);
->>>>>>> +
->>>>>>> +    if (pruss->mem_in_use[mem_id]) {
->>>>>>> +        mutex_unlock(&pruss->lock);
->>>>>>> +        return -EBUSY;
->>>>>>> +    }
->>>>>>> +
->>>>>>> +    *region = pruss->mem_regions[mem_id];
->>>>>>> +    pruss->mem_in_use[mem_id] = region;
->>>>>>> +
->>>>>>> +    mutex_unlock(&pruss->lock);
->>>>>>> +
->>>>>>> +    return 0;
->>>>>>> +}
->>>>>>> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
->>>>>>> +
->>>>>>> +/**
->>>>>>> + * pruss_release_mem_region() - release a memory resource
->>>>>>> + * @pruss: the pruss instance
->>>>>>> + * @region: the memory region to release
->>>>>>> + *
->>>>>>> + * This function is the complimentary function to
->>>>>>> + * pruss_request_mem_region(), and allows the client drivers to
->>>>>>> + * release back a memory resource.
->>>>>>> + *
->>>>>>> + * Return: 0 on success, an error code otherwise
->>>>>>> + */
->>>>>>> +int pruss_release_mem_region(struct pruss *pruss,
->>>>>>> +                 struct pruss_mem_region *region)
->>>>>>> +{
->>>>>>> +    int id;
->>>>>>> +
->>>>>>> +    if (!pruss || !region)
->>>>>>> +        return -EINVAL;
->>>>>>> +
->>>>>>> +    mutex_lock(&pruss->lock);
->>>>>>> +
->>>>>>> +    /* find out the memory region being released */
->>>>>>> +    for (id = 0; id < PRUSS_MEM_MAX; id++) {
->>>>>>> +        if (pruss->mem_in_use[id] == region)
->>>>>>> +            break;
->>>>>>> +    }
->>>>>>> +
->>>>>>> +    if (id == PRUSS_MEM_MAX) {
->>>>>>> +        mutex_unlock(&pruss->lock);
->>>>>>> +        return -EINVAL;
->>>>>>> +    }
->>>>>>> +
->>>>>>> +    pruss->mem_in_use[id] = NULL;
->>>>>>> +
->>>>>>> +    mutex_unlock(&pruss->lock);
->>>>>>> +
->>>>>>> +    return 0;
->>>>>>> +}
->>>>>>> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->>>>>>> +
->>>>>>>   static void pruss_of_free_clk_provider(void *data)
->>>>>>>   {
->>>>>>>       struct device_node *clk_mux_np = data;
->>>>>>> @@ -290,6 +366,7 @@ static int pruss_probe(struct platform_device *pdev)
->>>>>>>           return -ENOMEM;
->>>>>>>         pruss->dev = dev;
->>>>>>> +    mutex_init(&pruss->lock);
->>>>>>>         child = of_get_child_by_name(np, "memories");
->>>>>>>       if (!child) {
->>>>>>> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
->>>>>>> index 86242fb5a64a..22b4b37d2536 100644
->>>>>>> --- a/include/linux/pruss_driver.h
->>>>>>> +++ b/include/linux/pruss_driver.h
->>>>>>> @@ -9,37 +9,18 @@
->>>>>>>   #ifndef _PRUSS_DRIVER_H_
->>>>>>>   #define _PRUSS_DRIVER_H_
->>>>>>>   +#include <linux/mutex.h>
->>>>>>>   #include <linux/remoteproc/pruss.h>
->>>>>>>   #include <linux/types.h>
->>>>>>>   -/*
->>>>>>> - * enum pruss_mem - PRUSS memory range identifiers
->>>>>>> - */
->>>>>>> -enum pruss_mem {
->>>>>>> -    PRUSS_MEM_DRAM0 = 0,
->>>>>>> -    PRUSS_MEM_DRAM1,
->>>>>>> -    PRUSS_MEM_SHRD_RAM2,
->>>>>>> -    PRUSS_MEM_MAX,
->>>>>>> -};
->>>>>>> -
->>>>>>> -/**
->>>>>>> - * struct pruss_mem_region - PRUSS memory region structure
->>>>>>> - * @va: kernel virtual address of the PRUSS memory region
->>>>>>> - * @pa: physical (bus) address of the PRUSS memory region
->>>>>>> - * @size: size of the PRUSS memory region
->>>>>>> - */
->>>>>>> -struct pruss_mem_region {
->>>>>>> -    void __iomem *va;
->>>>>>> -    phys_addr_t pa;
->>>>>>> -    size_t size;
->>>>>>> -};
->>>>>>> -
->>>>>>>   /**
->>>>>>>    * struct pruss - PRUSS parent structure
->>>>>>>    * @dev: pruss device pointer
->>>>>>>    * @cfg_base: base iomap for CFG region
->>>>>>>    * @cfg_regmap: regmap for config region
->>>>>>>    * @mem_regions: data for each of the PRUSS memory regions
->>>>>>> + * @mem_in_use: to indicate if memory resource is in use
->>>>>>> + * @lock: mutex to serialize access to resources
->>>>>>>    * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
->>>>>>>    * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
->>>>>>>    */
->>>>>>> @@ -48,6 +29,8 @@ struct pruss {
->>>>>>>       void __iomem *cfg_base;
->>>>>>>       struct regmap *cfg_regmap;
->>>>>>>       struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
->>>>>>> +    struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
->>>>>>> +    struct mutex lock; /* PRU resource lock */
->>>>>>>       struct clk *core_clk_mux;
->>>>>>>       struct clk *iep_clk_mux;
->>>>>>>   };
->>>>>>> diff --git a/include/linux/remoteproc/pruss.h
->>>>>>> b/include/linux/remoteproc/pruss.h
->>>>>>> index 93a98cac7829..33f930e0a0ce 100644
->>>>>>> --- a/include/linux/remoteproc/pruss.h
->>>>>>> +++ b/include/linux/remoteproc/pruss.h
->>>>>>> @@ -44,6 +44,28 @@ enum pru_ctable_idx {
->>>>>>>       PRU_C31,
->>>>>>>   };
->>>>>>>   +/*
->>>>>>> + * enum pruss_mem - PRUSS memory range identifiers
->>>>>>> + */
->>>>>>> +enum pruss_mem {
->>>>>>> +    PRUSS_MEM_DRAM0 = 0,
->>>>>>> +    PRUSS_MEM_DRAM1,
->>>>>>> +    PRUSS_MEM_SHRD_RAM2,
->>>>>>> +    PRUSS_MEM_MAX,
->>>>>>> +};
->>>>>>> +
->>>>>>> +/**
->>>>>>> + * struct pruss_mem_region - PRUSS memory region structure
->>>>>>> + * @va: kernel virtual address of the PRUSS memory region
->>>>>>> + * @pa: physical (bus) address of the PRUSS memory region
->>>>>>> + * @size: size of the PRUSS memory region
->>>>>>> + */
->>>>>>> +struct pruss_mem_region {
->>>>>>> +    void __iomem *va;
->>>>>>> +    phys_addr_t pa;
->>>>>>> +    size_t size;
->>>>>>> +};
->>>>>>> +
->>>>>>>   struct device_node;
->>>>>>>   struct rproc;
->>>>>>>   struct pruss;
->>>>>>> @@ -52,6 +74,10 @@ struct pruss;
->>>>>>>     struct pruss *pruss_get(struct rproc *rproc);
->>>>>>>   void pruss_put(struct pruss *pruss);
->>>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->>>>>>> +                 struct pruss_mem_region *region);
->>>>>>> +int pruss_release_mem_region(struct pruss *pruss,
->>>>>>> +                 struct pruss_mem_region *region);
->>>>>>>     #else
->>>>>>>   @@ -62,6 +88,19 @@ static inline struct pruss *pruss_get(struct rproc
->>>>>>> *rproc)
->>>>>>>     static inline void pruss_put(struct pruss *pruss) { }
->>>>>>>   +static inline int pruss_request_mem_region(struct pruss *pruss,
->>>>>>> +                       enum pruss_mem mem_id,
->>>>>>> +                       struct pruss_mem_region *region)
->>>>>>> +{
->>>>>>> +    return -EOPNOTSUPP;
->>>>>>> +}
->>>>>>> +
->>>>>>> +static inline int pruss_release_mem_region(struct pruss *pruss,
->>>>>>> +                       struct pruss_mem_region *region)
->>>>>>> +{
->>>>>>> +    return -EOPNOTSUPP;
->>>>>>> +}
->>>>>>> +
->>>>>>>   #endif /* CONFIG_TI_PRUSS */
->>>>>>>     #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->>>>>>
+V5:
+Support "fixed-layout" internally in NVMEM core (see PATCH 3/3)
 
+Rafał Miłecki (3):
+  dt-bindings: nvmem: layouts: add fixed-layout
+  dt-bindings: nvmem: convert base example to use NVMEM fixed cells
+    layout
+  nvmem: core: add support for fixed cells *layout*
 
-cheers,
--roger
+ .../bindings/nvmem/layouts/fixed-cell.yaml    | 31 ++++++++++
+ .../bindings/nvmem/layouts/fixed-layout.yaml  | 49 +++++++++++++++
+ .../bindings/nvmem/layouts/nvmem-layout.yaml  |  5 +-
+ .../devicetree/bindings/nvmem/nvmem.yaml      | 61 ++++++++-----------
+ drivers/nvmem/core.c                          | 32 +++++++++-
+ 5 files changed, 136 insertions(+), 42 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
+
+-- 
+2.34.1
+
