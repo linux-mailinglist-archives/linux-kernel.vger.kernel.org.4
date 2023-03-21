@@ -2,220 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEE46C2CB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DA36C2CBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCUIlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S230238AbjCUIm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCUIlm (ORCPT
+        with ESMTP id S230288AbjCUImz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:41:42 -0400
+        Tue, 21 Mar 2023 04:42:55 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB6F43936
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:40:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62F924C80
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679388010;
+        s=mimecast20190719; t=1679388066;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3ue5AFGaReKj/xnbY98VYj9OaV+WVOdpiOY5id9iIGc=;
-        b=Dhbno0w/uBzR8s2EiaHZEcjlQsBw2xdUMzXroMYDPXcNn4yHllSx7VHKd6wm+/NcwAERXc
-        vuVxJptjk+F1G9fOaHstNwyEtyAdg/XJNDC3NbY8D8NVFBK1frlWbsn+Udh/CeM6yDBfxq
-        XOSWR8wgaSMCulxvRBNMRBv54SxoN/w=
+        bh=UrZUszRAkIR7jRT9XRyW8BoS4vhzOXVnojjI03jNGwI=;
+        b=b2J5ex95cgn+0C+Ie/uFX3sQyhEEtVGvMWwVFyR8wUpSd2JdyrTMCOu72kXrE/AgXGPOUv
+        3hRDjfYXl/iCNc6hOcvhoTgFiSO9v+FuOPJcsd0kGD2zCXp6hs8JXKHeu6KoXLOHJ9Fbpa
+        Ukn/R+YVw4hPkJoBeVdI2i7bcolI3MM=
 Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
  [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-503-Xc1kjUkDNKaASZ-zAc1IDQ-1; Tue, 21 Mar 2023 04:40:08 -0400
-X-MC-Unique: Xc1kjUkDNKaASZ-zAc1IDQ-1
-Received: by mail-qv1-f71.google.com with SMTP id jo13-20020a056214500d00b004c6c72bf1d0so7253887qvb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:40:08 -0700 (PDT)
+ us-mta-127-cYjQ0kRcNJmsu1dteiO-RQ-1; Tue, 21 Mar 2023 04:41:05 -0400
+X-MC-Unique: cYjQ0kRcNJmsu1dteiO-RQ-1
+Received: by mail-qv1-f71.google.com with SMTP id px9-20020a056214050900b005d510cdfc41so20377qvb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:41:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679388008;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ue5AFGaReKj/xnbY98VYj9OaV+WVOdpiOY5id9iIGc=;
-        b=7d3KDh5KOny2jURfrFWOHJvWAzvN0Ye/fOxdcRUkj6K56iFjNI0wv1s6FDIJS2VV6S
-         Oz/bJMusG/tHiL0sSOrCUbzmBr8CV9Zq5+hu2fCKmuuR10UP9MXzl1p0KJd1Oai7FKTv
-         ydRFxq9ylvby6EqmqJVZ2ev6DWxqTxWrfeOUQuMtQHkpyHcbBPx3Gd1BSUgKlGgKGhgA
-         dSjZKwAOhEnicqBUMAINaPg7DQ97roftnlEhcxSE9kOh8fCxsZFygkcSFMsiZ8KMNzsG
-         I4VhEGW7FZ3kga5V+s/TJFYtZ9u9ghH1R26mGZy0vxaupgjw5Yog5/HmLUusu9mZmjov
-         8eXQ==
-X-Gm-Message-State: AO0yUKWb9y6yFbfBa0TwLIwXhCcorYyKeNo6mNk4NfxeFu1SRaQlizZk
-        lgRTODav+giRMioz3Z6oOhu9fMjXdLVqhRma5UafUO+MSplcUphB0a/rkaGRZXuj002OFAQJWR0
-        oqWwH+6bvKeT4DfxJ2ZI95c+j
-X-Received: by 2002:ac8:7f82:0:b0:3b8:6ae9:b10d with SMTP id z2-20020ac87f82000000b003b86ae9b10dmr2446530qtj.2.1679388008125;
-        Tue, 21 Mar 2023 01:40:08 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8QDeZYCc7+c7IEn1uW0Jnl2bYqoqO+r68HTwXQ2vd7mj/LnUa34SC9AX/rzKtTfj6hGS72jQ==
-X-Received: by 2002:ac8:7f82:0:b0:3b8:6ae9:b10d with SMTP id z2-20020ac87f82000000b003b86ae9b10dmr2446521qtj.2.1679388007827;
-        Tue, 21 Mar 2023 01:40:07 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id h12-20020ac8548c000000b003d58d0297e5sm8076455qtq.3.2023.03.21.01.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 01:40:07 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 09:40:02 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v3] virtio/vsock: allocate multiple skbuffs on tx
-Message-ID: <20230321084002.5anjcr3ikw3ynbse@sgarzare-redhat>
-References: <f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru>
+        d=1e100.net; s=20210112; t=1679388065;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UrZUszRAkIR7jRT9XRyW8BoS4vhzOXVnojjI03jNGwI=;
+        b=3xZ1W6ih7x8vL2CVXoLwkcv77ZQhe/8xNkhoex8lpiI7qV3/U3OiWDWswgLjGImYEC
+         9UZ0MwFpnB3YBdm6lO0bLbv1G6PTFxZ0RSfn8iOxxpZLzV0lH8i0rGyzWck71PQ6nnrL
+         o/IXmBm8ObPfAxKsWZ+620my5zTGUnNBCoSJI0MkS0/mnMbPkAUIKax2O18CQBDuXM0C
+         Xese9BmhtfM5ihPnUU2sUNu/sznNhLcR0NqbqkHB4jm3iQqeSXfnnkrM1fvu6m0XV/S/
+         SKvtMb/UlL+QKFBa+52D2RDSPqM0oqDr1HXHn+iSSYkpB6Hg4H34IaEF98Kke0oea2Xl
+         wpWg==
+X-Gm-Message-State: AO0yUKV+1Brc98AMNS960NunRnglagZmBytbNCoQhs4HySgzk1tjBUpj
+        ZWiS57RbMwzTdJpZpzD4EaqIDl8FSnevHYDXjk3eVAAlg/oN+moY1j56ott+fjopnI0gDe0o0lF
+        14J4/1gzw7xYLz3tjw4wDB7FY
+X-Received: by 2002:a05:6214:1c0d:b0:56e:bff1:83a7 with SMTP id u13-20020a0562141c0d00b0056ebff183a7mr2493953qvc.18.1679388065172;
+        Tue, 21 Mar 2023 01:41:05 -0700 (PDT)
+X-Google-Smtp-Source: AK7set80Mc4WMUXVAditkQkfF49VzFGUh1Am+pL4ZneetO0OMWrGtOq6LmDAM3/EBamu/DO49jCZvw==
+X-Received: by 2002:a05:6214:1c0d:b0:56e:bff1:83a7 with SMTP id u13-20020a0562141c0d00b0056ebff183a7mr2493941qvc.18.1679388064895;
+        Tue, 21 Mar 2023 01:41:04 -0700 (PDT)
+Received: from [192.168.149.90] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b00746476405bbsm8881825qkp.122.2023.03.21.01.41.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 01:41:04 -0700 (PDT)
+Message-ID: <03df0429-9fb2-5326-9bf8-47367818fd49@redhat.com>
+Date:   Tue, 21 Mar 2023 09:40:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/3] KVM: support the cpu feature FLUSH_L1D
+To:     Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, Ben Serebrin <serebrin@google.com>,
+        Peter Shier <pshier@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20230201132905.549148-1-eesposit@redhat.com>
+ <CALMp9eTt3xzAEoQ038bJQ9LN0ZOXrSWsN7xnNUD+0SS=WwF7Pg@mail.gmail.com>
+Content-Language: de-CH
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+In-Reply-To: <CALMp9eTt3xzAEoQ038bJQ9LN0ZOXrSWsN7xnNUD+0SS=WwF7Pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:31:48AM +0300, Arseniy Krasnov wrote:
->This adds small optimization for tx path: instead of allocating single
->skbuff on every call to transport, allocate multiple skbuff's until
->credit space allows, thus trying to send as much as possible data without
->return to af_vsock.c.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> Link to v1:
-> https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
-> Link to v2:
-> https://lore.kernel.org/netdev/ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru/
->
-> Changelog:
-> v1 -> v2:
-> - If sent something, return number of bytes sent (even in
->   case of error). Return error only if failed to sent first
->   skbuff.
->
-> v2 -> v3:
-> - Handle case when transport callback returns unexpected value which
->   is not equal to 'skb->len'. Break loop.
-> - Don't check for zero value of 'rest_len' before calling
->   'virtio_transport_put_credit()'. Decided to add this check directly
->   to 'virtio_transport_put_credit()' in separate patch.
->
-> net/vmw_vsock/virtio_transport_common.c | 59 +++++++++++++++++++------
-> 1 file changed, 45 insertions(+), 14 deletions(-)
->
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index 6564192e7f20..e0b2c6ecbe22 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
-> 	const struct virtio_transport *t_ops;
-> 	struct virtio_vsock_sock *vvs;
-> 	u32 pkt_len = info->pkt_len;
->-	struct sk_buff *skb;
->+	u32 rest_len;
->+	int ret;
->
-> 	info->type = virtio_transport_get_type(sk_vsock(vsk));
->
->@@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->
-> 	vvs = vsk->trans;
->
->-	/* we can send less than pkt_len bytes */
->-	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
->-		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
->-
-> 	/* virtio_transport_get_credit might return less than pkt_len credit */
-> 	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
->
->@@ -227,17 +224,51 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
-> 	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
-> 		return pkt_len;
->
->-	skb = virtio_transport_alloc_skb(info, pkt_len,
->-					 src_cid, src_port,
->-					 dst_cid, dst_port);
->-	if (!skb) {
->-		virtio_transport_put_credit(vvs, pkt_len);
->-		return -ENOMEM;
->-	}
->+	ret = 0;
->+	rest_len = pkt_len;
->+
->+	do {
->+		struct sk_buff *skb;
->+		size_t skb_len;
->+
->+		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
->+
->+		skb = virtio_transport_alloc_skb(info, skb_len,
->+						 src_cid, src_port,
->+						 dst_cid, dst_port);
->+		if (!skb) {
->+			ret = -ENOMEM;
->+			break;
->+		}
->+
->+		virtio_transport_inc_tx_pkt(vvs, skb);
->
->-	virtio_transport_inc_tx_pkt(vvs, skb);
->+		ret = t_ops->send_pkt(skb);
->
->-	return t_ops->send_pkt(skb);
->+		if (ret < 0)
->+			break;
->+
->+		/* Both virtio and vhost 'send_pkt()' returns 'skb_len',
->+		 * but for reliability use 'ret' instead of 'skb_len'.
->+		 * Also if partial send happens (e.g. 'ret' != 'skb_len')
->+		 * somehow, we break this loop, but account such returned
->+		 * value in 'virtio_transport_put_credit()'.
->+		 */
->+		rest_len -= ret;
->+
->+		if (ret != skb_len) {
->+			ret = -EFAULT;
 
-Okay, but `ret` will be overwritten by the check we have before the
-return ...
 
->+			break;
->+		}
->+	} while (rest_len);
->+
->+	virtio_transport_put_credit(vvs, rest_len);
->+
->+	/* Return number of bytes, if any data has been sent. */
->+	if (rest_len != pkt_len)
->+		ret = pkt_len - rest_len;
+Am 20/03/2023 um 17:52 schrieb Jim Mattson:
+> On Wed, Feb 1, 2023 at 5:29 AM Emanuele Giuseppe Esposito
+> <eesposit@redhat.com> wrote:
+>>
+>> As the title suggest, if the host cpu supports flush_l1d flag and
+>> QEMU/userspace wants to boot a VM with the same flag (or emulate same
+>> host features), KVM should be able to do so.
+>>
+>> Patch 3 is the main fix, because if flush_l1d is not advertised by
+>> KVM, a linux VM will erroneously mark
+>> /sys/devices/system/cpu/vulnerabilities/mmio_stale_data
+>> as vulnerable, even though it isn't since the host has the feature
+>> and takes care of this. Not sure what would happen in the nested case though.
+>>
+>> Patch 1 and 2 are just taken and refactored from Jim Mattison's serie that it
+>> seems was lost a while ago:
+>> https://patchwork.kernel.org/project/kvm/patch/20180814173049.21756-1-jmattson@google.com/
+>>
+>> I thought it was worth re-posting them.
+> 
+> What has changed since the patches were originally posted, and Konrad
+> dissed them?
+> 
 
-... here.
+From the upstream conversation, I honestly didn't really catch that
+Konrad dissed them. Or at least, I didn't read a valid reason for doing
+so, contrary to what Sean instead provided. I thought it was just forgotten.
 
-Since we don't expect this condition for now, perhaps we can avoid
-setting ret with -EFAULT, but we can add a WARN_ONCE (interrupting the
-loop as you did here).
+My bad, next time I will be more careful when trying to resume old
+patches :)
 
-This way we return the partial length as we did before.
-
-Thanks,
-Stefano
-
->+
->+	return ret;
-> }
->
-> static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
->-- 
->2.25.1
->
+Thank you,
+Emanuele
 
