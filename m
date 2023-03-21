@@ -2,151 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E873D6C2F84
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2B46C2F85
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCUKue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S230337AbjCUKuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjCUKuT (ORCPT
+        with ESMTP id S230506AbjCUKu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:50:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F262AAF32
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:49:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0601B8129E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4D8CC433D2;
-        Tue, 21 Mar 2023 10:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679395790;
-        bh=mBqXmjcYNZV8WUHWvRmKJEG6BOl47liAF/vEszOX6CM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WI0RS9QO/yJi7euLFQQ5te4EDv/GVE2eqa+wH99Pdj9Hg+jeWAlBdpq20fx0z/XaY
-         jxXuN9umZMXteRglPrkDeeXWS02m5fL6nQykzSJXNFgsJzROommjP5530bEYGD/Y+6
-         c6Tqqx/hNNodNtszK98Qd1KEOpShlRtBVnIdxFuE=
-Date:   Tue, 21 Mar 2023 11:49:47 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Inshal Khan <kziaul123@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Staging: rtl8712: Remove redundant parentheses and
- improve macro definition
-Message-ID: <ZBmLy6hhdabmB5Ph@kroah.com>
-References: <ZBmJ0luUeoX/uhZp@mehmed-HP-Pavilion-Laptop-15-eh2xxx>
+        Tue, 21 Mar 2023 06:50:29 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BFFCC25
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=K+47pFmtJRN8XvBP84rKwr7jkvxmpJlYJ7O+WJ3xa+c=; b=CMonzY/ypbt+qD+s8ym+vzOU2b
+        ov8s8ZLZc9LvvZdq9Jj4DNluolJyk6T1Gd7KDV1PCtHkbFN9aTtHqg5sqQrhSZyYb+foUcU8xbHSW
+        zGap5YfhJslugj7ZMsO5ndZt0ip+B/xocnkTrN3hykfghD09JKxZNZRP8nWc5PUF7bXOwE9UbR5mh
+        ezTMZ7xyJz9HM3Fe/IjLv9KdcYSnYw7lS/B3BXi6pO1IeiFnCgqitYbgcFOjdvzeNutkOT9P+2Ezo
+        eNurKApuEX6Ur3AW/nsisRYkzWfU6R5rzYzqtxTrBoWXiyHQWa/N/4ErJ2Sqexh7SMzdnGxWOfxF2
+        2VmNZ/Aw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1peZYt-004EWu-2R;
+        Tue, 21 Mar 2023 10:49:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BA8B83002FC;
+        Tue, 21 Mar 2023 11:49:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7BA3D2408A2FA; Tue, 21 Mar 2023 11:49:49 +0100 (CET)
+Date:   Tue, 21 Mar 2023 11:49:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
+        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Message-ID: <20230321104949.GI2234901@hirez.programming.kicks-ass.net>
+References: <20230317160810.107988-1-vincent.guittot@linaro.org>
+ <20230321100206.GE2234901@hirez.programming.kicks-ass.net>
+ <7bba69e0-5261-9921-16b7-c8592b5d213b@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBmJ0luUeoX/uhZp@mehmed-HP-Pavilion-Laptop-15-eh2xxx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <7bba69e0-5261-9921-16b7-c8592b5d213b@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 04:11:22PM +0530, Inshal Khan wrote:
-> This commit simplifies the code in the ieee80211 and osdep_intf modules by
-> removing unnecessary parentheses and improving the readability and avoiding
-> any unexpected as well as operator preceedence side effects of RND4 macro.
-> These changes improve the robustness of the driver and make it easier to
-> maintain going forward.
+On Tue, Mar 21, 2023 at 11:29:13AM +0100, Dietmar Eggemann wrote:
+> On 21/03/2023 11:02, Peter Zijlstra wrote:
+> > On Fri, Mar 17, 2023 at 05:08:10PM +0100, Vincent Guittot wrote:
+> >> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> >> fixes an overflowing bug, but ignore a case that se->exec_start is reset
+> >> after a migration.
+> >>
+> >> For fixing this case, we delay the reset of se->exec_start after
+> >> placing the entity which se->exec_start to detect long sleeping task.
+> >>
+> >> In order to take into account a possible divergence between the clock_task
+> >> of 2 rqs, we increase the threshold to around 104 days.
+> >>
+> >>
+> >> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> >> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+> >> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> >> ---
+> > 
+> > Blergh, this just isn't going to be nice. I'll go queue this for
+> > sched/urgent and then we can forget about this for a little while.
+> > 
+> > Thanks!
 > 
-> Signed-off-by: Inshal Khan <kziaul123@gmail.com>
-> ---
->  drivers/staging/rtl8712/ieee80211.c  | 10 +++++-----
->  drivers/staging/rtl8712/osdep_intf.h |  5 ++++-
->  2 files changed, 9 insertions(+), 6 deletions(-)
+> Don't we miss setting `se->exec_start = 0` for fair task in
+> move_queued_task()? ( ... and __migrate_swap_task())
 > 
-> diff --git a/drivers/staging/rtl8712/ieee80211.c b/drivers/staging/rtl8712/ieee80211.c
-> index 7d8f1a29d18a..85e698c2126d 100644
-> --- a/drivers/staging/rtl8712/ieee80211.c
-> +++ b/drivers/staging/rtl8712/ieee80211.c
-> @@ -63,8 +63,8 @@ uint r8712_is_cckrates_included(u8 *rate)
->  	u32 i = 0;
->  
->  	while (rate[i] != 0) {
-> -		if ((((rate[i]) & 0x7f) == 2) || (((rate[i]) & 0x7f) == 4) ||
-> -		    (((rate[i]) & 0x7f) == 11) || (((rate[i]) & 0x7f) == 22))
-> +		if (((rate[i] & 0x7f) == 2) || ((rate[i] & 0x7f) == 4) ||
-> +		    ((rate[i] & 0x7f) == 11) || ((rate[i] & 0x7f) == 22))
->  			return true;
->  		i++;
->  	}
-> @@ -76,8 +76,8 @@ uint r8712_is_cckratesonly_included(u8 *rate)
->  	u32 i = 0;
->  
->  	while (rate[i] != 0) {
-> -		if ((((rate[i]) & 0x7f) != 2) && (((rate[i]) & 0x7f) != 4) &&
-> -		    (((rate[i]) & 0x7f) != 11)  && (((rate[i]) & 0x7f) != 22))
-> +		if (((rate[i] & 0x7f) != 2) && ((rate[i] & 0x7f) != 4) &&
-> +		    ((rate[i] & 0x7f) != 11)  && ((rate[i] & 0x7f) != 22))
->  			return false;
->  		i++;
->  	}
-> @@ -147,7 +147,7 @@ static uint r8712_get_rateset_len(u8 *rateset)
->  	uint i = 0;
->  
->  	while (1) {
-> -		if ((rateset[i]) == 0)
-> +		if (rateset[i] == 0)
->  			break;
->  		if (i > 12)
->  			break;
-> diff --git a/drivers/staging/rtl8712/osdep_intf.h b/drivers/staging/rtl8712/osdep_intf.h
-> index 9e75116c987e..3d4f82cc60f9 100644
-> --- a/drivers/staging/rtl8712/osdep_intf.h
-> +++ b/drivers/staging/rtl8712/osdep_intf.h
-> @@ -17,7 +17,10 @@
->  #include "osdep_service.h"
->  #include "drv_types.h"
->  
-> -#define RND4(x)	(((x >> 2) + ((x & 3) != 0)) << 2)
-> +#define RND4(x) ({ \
-> +		typeof(x) _x = (x); \
-> +		(((_x) + 3) & ~3); \
-> +		})
->  
->  struct intf_priv {
->  	u8 *intf_dev;
-> -- 
-> 2.34.1
-> 
-> 
+> https://lkml.kernel.org/r/df2cccda-1550-b06b-aa74-e0f054e9fb9d@arm.com
 
-Hi,
+Ah, I see what you mean now... When I read your and Vincent's replies
+earlier today I though you mean to avoid the extra ENQUEUE_MIGRATED use,
+but your actual goal was to capure more sites.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Hmm, we could of course go add more ENQUEUE_MIGRATED, but you're right
+in that TASK_ON_RQ_MIGRATING already captures that.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+An alternative is something like the below, that matches
+deactivate_task(), but still uses ENQUEUE_MIGRATED to pass it down into
+the class methods.
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+Hmm?
 
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2084,6 +2084,9 @@ static inline void dequeue_task(struct r
+ 
+ void activate_task(struct rq *rq, struct task_struct *p, int flags)
+ {
++	if (task_on_rq_migrating(p))
++		flags |= ENQUEUE_MIGRATED;
++
+ 	enqueue_task(rq, p, flags);
+ 
+ 	p->on_rq = TASK_ON_RQ_QUEUED;
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8726,7 +8726,7 @@ static void attach_task(struct rq *rq, s
+ 	lockdep_assert_rq_held(rq);
+ 
+ 	WARN_ON_ONCE(task_rq(p) != rq);
+-	activate_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_MIGRATED);
++	activate_task(rq, p, ENQUEUE_NOCLOCK);
+ 	check_preempt_curr(rq, p, 0);
+ }
+ 
