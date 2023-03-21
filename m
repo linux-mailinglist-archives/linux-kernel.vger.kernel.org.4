@@ -2,142 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B572B6C2B70
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAFD6C2B78
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCUHfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S230146AbjCUHgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCUHfo (ORCPT
+        with ESMTP id S230047AbjCUHg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:35:44 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418F07ABE;
-        Tue, 21 Mar 2023 00:35:42 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-17ab3a48158so15465944fac.1;
-        Tue, 21 Mar 2023 00:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679384141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qdHfj4sdFMGXDnAj5aOPs1KpxyU4UUeMTEwbtSXJ54c=;
-        b=LBQpduqOap6tVJmYINV6onRQ2QPO+9UdWalgPVl/1NdQwYSxscoSrPPtWTpMJmTaZc
-         piMsJXuBiVXFk+J3Sdpn5LYyE6bwxsWc6lReQ2slWGn97gf95GeYPscVypiMptCBi8O4
-         JU7d3ard6XMJhxhlj5WLxD1Rf921wvCxEx9b65AgXzuaTW6PBHiFsStJ0S7gPPPAngB6
-         E6duzrf/OgR8tPB9U4fxDpf5kVgxW1DqFiz0YL7EuSbxUGlttSmqY0KTpfVFtqS4n3iJ
-         yoHT6G6SnZO54bQgVIt/LUjxXE6Km708JbunJwQgEkEHe7Mk1JsWwXTXeu8+atwP6gL7
-         Bw3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679384141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qdHfj4sdFMGXDnAj5aOPs1KpxyU4UUeMTEwbtSXJ54c=;
-        b=0SJRcK9ELJGofos17AxeVI5+o0P6GhnwbOW2L1ruxDa7Jqpls/CJ85Q1ugxYeRBVZB
-         ST1QTTbBb8ZNOOmgZsSfVxPHOCjYnARHzpcihYSIgBWGkQkoYW4K7u4OP899UbhcICEi
-         PgE7CHiIiHVWQ+ipoV9Ad9zoy560dJPCX3apGyHNBA8lHipSjc9VDDzFsXCSovKn0WVq
-         qD3SRyfKb25OT+z+/gamQFCpcADQWmzfsj/yENNA+oSvnCqbGH0xCl40M5YQGlimlSNH
-         cL+I9yAcyUQ3W57j6y43Cze4xIdG6p6XFYkm6U9EIIjH/9b//NtimuScirFIg9MxUZJw
-         jBkg==
-X-Gm-Message-State: AO0yUKUEkOlYb4xT46ImbP+jSXwHoWyM/SbnrkTVWy69bwkz/wbN/Y5B
-        FCxxryp/DEK0KGgHfZoN5ZJd1gX418+zfU/c7rZU+8qBDu+k6g==
-X-Google-Smtp-Source: AK7set/1n3lp8dOhZMqOoyuQesh615zIgJC3SfMMrLq0l5xZcGIIvBxf2PJUsrIjODZByGDuC+hQCaBSqmFZgaTLAns=
-X-Received: by 2002:a05:6871:4904:b0:177:abbb:f20c with SMTP id
- tw4-20020a056871490400b00177abbbf20cmr374592oab.0.1679384141429; Tue, 21 Mar
- 2023 00:35:41 -0700 (PDT)
+        Tue, 21 Mar 2023 03:36:28 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96FF34F55;
+        Tue, 21 Mar 2023 00:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679384185; x=1710920185;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w1ZF+W0g9hbiFuEgTu+ASaGNsyVN6bbhz9c5OcOHljI=;
+  b=Pwj5ZsXsYbFS7fMBcNSYqqObURjWzrdbk1b9SdhaybNIscqDYHunFy9O
+   OwwM781O/xShcl6yravOhd9Ahm4mlbM0ZRvS92e0Ou4beK9vRsCvp5rlq
+   +dB3lRLx4xGapamYfj0YOcnEu2+EnSwR9GMYnVQZsq3RT45aAf2LY16gM
+   Y/qZGKHAXOWzz72zxRmXs+094G50A+kFZRT64cMlliCaQritQUn4qhxNy
+   c+XFtDJ5HpKM35cgvJsCHuE3i1VUPZX5l911xhDck4yefUIh6I1JGDFfs
+   QXsb+HpftLsKNO6hrvdbd28O3vAcr6gae1tCJde4cyO7IlWcFcZ+Js8pD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="322714459"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="322714459"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 00:36:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="711700213"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="711700213"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Mar 2023 00:36:19 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peWXa-000Bj8-17;
+        Tue, 21 Mar 2023 07:36:18 +0000
+Date:   Tue, 21 Mar 2023 15:36:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        robh+dt@kernel.org, lpieralisi@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com, sumitg@nvidia.com
+Subject: Re: [Patch v3 07/11] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Message-ID: <202303211551.eBLRqnv0-lkp@intel.com>
+References: <20230320182441.11904-8-sumitg@nvidia.com>
 MIME-Version: 1.0
-References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
- <20230321050034.1431379-2-sergio.paracuellos@gmail.com> <5f295438-8334-d374-2ae6-2a385ffb317d@linaro.org>
- <CAMhs-H_dSgcPNQVusHWVvztYHptOxSJ_o7G0eU9=M1C7RXdsVw@mail.gmail.com> <0ece990e-fd81-856a-bd0e-8a2572448aa3@linaro.org>
-In-Reply-To: <0ece990e-fd81-856a-bd0e-8a2572448aa3@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 21 Mar 2023 08:35:29 +0100
-Message-ID: <CAMhs-H81DYAQYbNo+tNj+M1Og+cgomcTepPUBiLK7QXmbjuB=A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] dt-bindings: clock: add mtmips SoCs system controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, arinc.unal@arinc9.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320182441.11904-8-sumitg@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 8:16=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 21/03/2023 08:00, Sergio Paracuellos wrote:
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    items:
-> >>> +      - enum:
-> >>> +          - ralink,mt7620-sysc
-> >>
-> >> Since you decided to send it before we finish discussion:
-> >> NAK - this is already used as mediatek
-> >
-> > Sorry, there was too much stuff commented so I preferred to clean up
-> > all of them while maintaining the compatibles with the ralink prefix
-> > instead since that was where the current discussion was at that point.
->
-> You did not even wait for me to send feedback on this, in old thread.
+Hi Sumit,
 
-My apologies, I thought it was better to send it at that point. Will
-wait for feedback from now on before sending anything.
+Thank you for the patch! Perhaps something to improve:
 
->
-> >
-> >>
-> >>> +          - ralink,mt7620a-sysc
-> >
-> > As I have said, this one exists:
-> >
-> > arch/mips/ralink/mt7620.c:      rt_sysc_membase =3D
-> > plat_of_remap_node("ralink,mt7620a-sysc");
->
-> And why do you ignore others which have mediatek?
->
-> >
-> >
-> >>> +          - ralink,mt7628-sysc
-> >>
-> >> Same here.
->
-> Same problem.
->
-> >>
-> >>> +          - ralink,mt7688-sysc
-> >>
-> >> I expect you to check the others.
-> >
-> > I can change others to mediatek but that would be a bit weird, don't yo=
-u think?
->
-> No, I expect to have mediatek where the model is already used with
-> mediatek prefix.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-mem-ctrl/for-next pci/next pci/for-linus]
+[cannot apply to tegra/for-next rafael-pm/linux-next linus/master v6.3-rc3 next-20230321]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It is clear now, thanks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/firmware-tegra-add-function-to-get-BPMP-data/20230321-024112
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230320182441.11904-8-sumitg%40nvidia.com
+patch subject: [Patch v3 07/11] cpufreq: tegra194: add OPP support and set bandwidth
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230321/202303211551.eBLRqnv0-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fa31f117302fc7c15b5d9deeefb8c650554f503d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sumit-Gupta/firmware-tegra-add-function-to-get-BPMP-data/20230321-024112
+        git checkout fa31f117302fc7c15b5d9deeefb8c650554f503d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/cpufreq/
 
->
->
->
-> Best regards,
-> Krzysztof
->
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303211551.eBLRqnv0-lkp@intel.com/
 
-Thanks Krzysztof.
+All warnings (new ones prefixed by >>):
 
-Best regards,
-    Sergio Paracuellos
+>> drivers/cpufreq/tegra194-cpufreq.c:397:5: warning: no previous prototype for 'tegra_cpufreq_init_cpufreq_table' [-Wmissing-prototypes]
+     397 | int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/tegra_cpufreq_init_cpufreq_table +397 drivers/cpufreq/tegra194-cpufreq.c
+
+   396	
+ > 397	int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
+   398					     struct cpufreq_frequency_table *bpmp_lut,
+   399					     struct cpufreq_frequency_table **opp_table)
+   400	{
+   401		struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+   402		struct cpufreq_frequency_table *freq_table = NULL;
+   403		struct cpufreq_frequency_table *pos;
+   404		struct device *cpu_dev;
+   405		struct dev_pm_opp *opp;
+   406		unsigned long rate;
+   407		int ret, max_opps;
+   408		int j = 0;
+   409	
+   410		cpu_dev = get_cpu_device(policy->cpu);
+   411		if (!cpu_dev) {
+   412			pr_err("%s: failed to get cpu%d device\n", __func__, policy->cpu);
+   413			return -ENODEV;
+   414		}
+   415	
+   416		/* Initialize OPP table mentioned in operating-points-v2 property in DT */
+   417		ret = dev_pm_opp_of_add_table_indexed(cpu_dev, 0);
+   418		if (!ret) {
+   419			max_opps = dev_pm_opp_get_opp_count(cpu_dev);
+   420			if (max_opps <= 0) {
+   421				dev_err(cpu_dev, "Failed to add OPPs\n");
+   422				return max_opps;
+   423			}
+   424	
+   425			/* Disable all opps and cross-validate against LUT later */
+   426			for (rate = 0; ; rate++) {
+   427				opp = dev_pm_opp_find_freq_ceil(cpu_dev, &rate);
+   428				if (IS_ERR(opp))
+   429					break;
+   430	
+   431				dev_pm_opp_put(opp);
+   432				dev_pm_opp_disable(cpu_dev, rate);
+   433			}
+   434		} else {
+   435			dev_err(cpu_dev, "Invalid or empty opp table in device tree\n");
+   436			data->icc_dram_bw_scaling = false;
+   437			return ret;
+   438		}
+   439	
+   440		freq_table = kcalloc((max_opps + 1), sizeof(*freq_table), GFP_KERNEL);
+   441		if (!freq_table)
+   442			return -ENOMEM;
+   443	
+   444		/*
+   445		 * Cross check the frequencies from BPMP-FW LUT against the OPP's present in DT.
+   446		 * Enable only those DT OPP's which are present in LUT also.
+   447		 */
+   448		cpufreq_for_each_valid_entry(pos, bpmp_lut) {
+   449			opp = dev_pm_opp_find_freq_exact(cpu_dev, pos->frequency * KHZ, false);
+   450			if (IS_ERR(opp))
+   451				continue;
+   452	
+   453			ret = dev_pm_opp_enable(cpu_dev, pos->frequency * KHZ);
+   454			if (ret < 0)
+   455				return ret;
+   456	
+   457			freq_table[j].driver_data = pos->driver_data;
+   458			freq_table[j].frequency = pos->frequency;
+   459			j++;
+   460		}
+   461	
+   462		freq_table[j].driver_data = pos->driver_data;
+   463		freq_table[j].frequency = CPUFREQ_TABLE_END;
+   464	
+   465		*opp_table = &freq_table[0];
+   466	
+   467		dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
+   468	
+   469		return ret;
+   470	}
+   471	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
