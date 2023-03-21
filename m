@@ -2,153 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC706C3443
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D02B6C3427
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjCUObk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S231165AbjCUOZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCUObh (ORCPT
+        with ESMTP id S231195AbjCUOZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:31:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02CAD3C16;
-        Tue, 21 Mar 2023 07:31:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 397B6AD7;
-        Tue, 21 Mar 2023 07:25:18 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.54.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4ADBD3F6C4;
-        Tue, 21 Mar 2023 07:24:31 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 14:24:28 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing
- the return value of function
-Message-ID: <ZBm+HKK9laIXAdsc@FVFF77S0Q05N>
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
- <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
+        Tue, 21 Mar 2023 10:25:13 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217F850720
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:24:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id i5so13485697eda.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679408674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P2N7HOyTMan8aohfwKI6BXAWpRIQI2QyRgOjl9UhlGQ=;
+        b=buelsAInYUz592Ha3E+qlaF/e1fvGmSSWMuCMxJCENWh6BWLQv3/mSmHBxZUlb56Jz
+         IyX2XhtQVThmv6XidPvdwNeVj+9dz45oT8lY1Ei0eAiFTLNuOGnnQFtOVl/BUjPnyKIC
+         wjYS3d32q/xQB2VZVJxHAXCFd4wiCiJKxi1vC8ODnT2VSVqTT2FJ8BpYcpRZKppMAwo2
+         8cOqjs5uKj8Oaz0OWrBZZU9spzC+C+qFfjewXk01TQ9BAI0RKWifBOs49UwSh8kRlBWP
+         egzsnkVWrKvJmKr7ukSy/69Qidp/kCj+wlRi+qrBBTpfYWjwzSKJ+oxq7oWipdyG2Ojr
+         iYjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679408674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P2N7HOyTMan8aohfwKI6BXAWpRIQI2QyRgOjl9UhlGQ=;
+        b=pO8AtWuoDJbPsk981aRXlY2buB19osQaV9AXOqYrI54YqiNDuL1guigaRe4rSTDHx2
+         9MMgMH6Dsh6jGz98ot4KQYvYYmx9VhecYIuGx+Z/gWyWwpvl/HWjnpcYWIgAF30mo3EG
+         x2tt5oYs35xIPT74UbFRSTwdXfsktR3vQiPwg+tz+kAB8iM4UEPX2M+E0VkhHWPmIXD3
+         JVS65pf/9G/7C1GBL83kT/RK2zbzpjGZ6xr4xd3GGXYgqGfZaTeUMmy+F8e1HDeAqqru
+         hv6mIyq98xBGLQiyx8d90Exn9zD3eapuZXSMcfgXDpJpXot0c1rB/I1fgje4x7TpIqSF
+         gvuQ==
+X-Gm-Message-State: AO0yUKVKKjZEhVv7NgZdifZqvoFgU2wIrswvmKaCcMXOi1CORcwfUgo2
+        tQHaXHHLqr1kMEiJ2rmtbuVbng==
+X-Google-Smtp-Source: AK7set/6NWk0Yycxy5H9S15Knlom2d0dHGQeEF66ACxI8O98OmUTqIAWOCBFyeJfne7ZH9AczGL6KQ==
+X-Received: by 2002:aa7:d748:0:b0:4fb:4fc2:e600 with SMTP id a8-20020aa7d748000000b004fb4fc2e600mr2993633eds.42.1679408674570;
+        Tue, 21 Mar 2023 07:24:34 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id u25-20020a50c2d9000000b004faf34064c8sm6332860edf.62.2023.03.21.07.24.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 07:24:34 -0700 (PDT)
+Message-ID: <fa073ce7-a9ef-9e8e-8791-71578a0834bc@linaro.org>
+Date:   Tue, 21 Mar 2023 14:24:32 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v11 13/26] gunyah: vm_mgr: Add ioctls to support basic
+ non-proxy VM boot
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+ <20230304010632.2127470-14-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230304010632.2127470-14-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 06:16:49AM -0700, Donglin Peng wrote:
-> When using the function_graph tracer to analyze system call failures,
-> it can be time-consuming to analyze the trace logs and locate the kernel
-> function that first returns an error. This change aims to simplify the
-> process by recording the function return value to the 'retval' member of
-> 'ftrace_graph_ent' and printing it when outputing the trace log.
-> 
-> New trace options are introduced: funcgraph-retval and graph_retval_hex.
-> The former is used to control whether to display the return value, while
-> the latter is used to control the display format of the reutrn value.
-> 
-> Note that even if a function's return type is void, a return value will
-> still be printed, so just ignore it.
-> 
-> Currently, this modification supports the following commonly used
-> processor architectures: x86_64, x86, arm64, arm, riscv.
-> 
-> Here is an example:
-> 
-> I want to attach the demo process to a cpu cgroup, but it failed:
-> 
-> echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
-> -bash: echo: write error: Invalid argument
-> 
-> The strace logs tells that the write system call returned -EINVAL(-22):
-> ...
-> write(1, "273\n", 4)                    = -1 EINVAL (Invalid argument)
-> ...
-> 
-> Use the following commands to capture trace logs when calling the write
-> system call:
-> 
-> cd /sys/kernel/debug/tracing/
-> echo 0 > tracing_on
-> echo > trace
-> echo *sys_write > set_graph_function
-> echo *spin* > set_graph_notrace
-> echo *rcu* >> set_graph_notrace
-> echo *alloc* >> set_graph_notrace
-> echo preempt* >> set_graph_notrace
-> echo kfree* >> set_graph_notrace
-> echo $$ > set_ftrace_pid
-> echo function_graph > current_tracer
-> echo 1 > tracing_on
-> echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
-> echo 0 > tracing_on
-> echo 1 > options/funcgraph-retval
-> cat trace > ~/trace.log
-> 
-> Search the error code -22 directly in the file trace.log and find the
-> first function that return -22, then read the function code to get the
-> root cause.
-> 
-> ...
-> 
->  1)          | cgroup_migrate() {
->  1) 0.651 us |   cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
->  1)          |   cgroup_migrate_execute() {
->  1)          |     cpu_cgroup_can_attach() {
->  1)          |       cgroup_taskset_first() {
->  1) 0.732 us |         cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
->  1) 1.232 us |       } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
->  1) 0.380 us |       sched_rt_can_attach(); /* = 0x0 */
->  1) 2.335 us |     } /* cpu_cgroup_can_attach = -22 */
->  1) 4.369 us |   } /* cgroup_migrate_execute = -22 */
->  1) 7.143 us | } /* cgroup_migrate = -22 */
-> 
-> ...
-> 
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
-
-> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-> index 350ed81324ac..d1a5d76e6d72 100644
-> --- a/arch/arm64/kernel/entry-ftrace.S
-> +++ b/arch/arm64/kernel/entry-ftrace.S
-> @@ -276,7 +276,15 @@ SYM_CODE_START(return_to_handler)
->  	stp x4, x5, [sp, #32]
->  	stp x6, x7, [sp, #48]
->  
-> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
-> +	/*
-> +	 * Pass both the function return values in the register x0 and x1
-> +	 * to ftrace_return_to_handler.
-> +	 */
-> +	mov	x2, x29			//     parent's fp
-> +#else
->  	mov	x0, x29			//     parent's fp
-> +#endif
->  	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(fp);
->  	mov	x30, x0			// restore the original return address
 
 
-Please don't make the calling convention of the asm change depending on a
-selectable config option.
+On 04/03/2023 01:06, Elliot Berman wrote:
+> Add remaining ioctls to support non-proxy VM boot:
+> 
+>   - Gunyah Resource Manager uses the VM's devicetree to configure the
+>     virtual machine. The location of the devicetree in the guest's
+>     virtual memory can be declared via the SET_DTB_CONFIG ioctl.
+>   - Trigger start of the virtual machine with VM_START ioctl.
+> 
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   drivers/virt/gunyah/vm_mgr.c    | 243 ++++++++++++++++++++++++++++++--
+>   drivers/virt/gunyah/vm_mgr.h    |  10 ++
+>   drivers/virt/gunyah/vm_mgr_mm.c |  23 +++
+>   include/linux/gunyah_rsc_mgr.h  |   6 +
+>   include/uapi/linux/gunyah.h     |  13 ++
+>   5 files changed, 282 insertions(+), 13 deletions(-)
+> 
 
-We already store the regs here; I'd be happy to make that a struct ftrace_regs
-and pass a pointer to that to C code. Then it's be easy to acquire the value
-you want in the exact same way as upon entry, and it'll work even if we decide
-to return a structure by value somewhere (as that can use registers x2-x7 too).
+...
 
-Thanks,
-Mark.
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> index a19207e3e065..d6abd8605a2e 100644
+> --- a/include/uapi/linux/gunyah.h
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -49,4 +49,17 @@ struct gh_userspace_memory_region {
+>   #define GH_VM_SET_USER_MEM_REGION	_IOW(GH_IOCTL_TYPE, 0x1, \
+>   						struct gh_userspace_memory_region)
+>   
+> +/**
+> + * struct gh_vm_dtb_config - Set the location of the VM's devicetree blob
+> + * @guest_phys_addr: Address of the VM's devicetree in guest memory.
+> + * @size: Maximum size of the devicetree.
+> + */
+> +struct gh_vm_dtb_config {
+> +	__u64 guest_phys_addr;
+> +	__u64 size;
+> +};
+> +#define GH_VM_SET_DTB_CONFIG	_IOW(GH_IOCTL_TYPE, 0x2, struct gh_vm_dtb_config)
+> +
+> +#define GH_VM_START		_IO(GH_IOCTL_TYPE, 0x3)
+A comment here that this is going to *ONLY* start an un-authenticated VM 
+would be useful to the users.
+
+with that fixed,
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+
+
+> +
+>   #endif
