@@ -2,145 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F0D6C29FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0851C6C29FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCUFp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S229848AbjCUFrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCUFp5 (ORCPT
+        with ESMTP id S229494AbjCUFq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:45:57 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD55E1589F
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:45:55 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id z42so14358039ljq.13
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679377554;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/HBDOzpKH5imfC4osZ7C5dgTOV9Q7fw2SPiikWGL4lc=;
-        b=Y+Qc6kHfnFZVD/Btd+XH2aI5kVriqVu91X2973a9xpyltMZaZvQXr0HxHKeUmC+n/Y
-         acM6Jm8QTjOblpusfM4S5F5EhZuvyB0Q91EU43GgucInnSGRiDn8APjYVYNseLp/J7AL
-         yjYy9DfjwUzSDgxlWjLZG9vNtIldcAfE+yJgWCVvV1InvOH62f78OenMIFA1k84ejC1Q
-         iW30yIA10QNgHWVxsug2HyhJnjuI/oBpPMmoM1mP2HFQDx2Mt0eWij4b4edC2YNeHql2
-         EnrYjadoKye+6UMU/mSouMECLFfJVJKVNwnNh5hxrCjZqErsMUadk3bx6Nr0PdFtnT43
-         UXyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679377554;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/HBDOzpKH5imfC4osZ7C5dgTOV9Q7fw2SPiikWGL4lc=;
-        b=2EqyajClJGXybQQn+NiFBW+8fxgCgSjA7Y+M/NTV2mfqmkiujWnFFmfqpAAeeF1jmT
-         6CrY7ih57qPC/ev20PJeZXzB2Eo0u/irxlhwfDVewUVfVsmu4shg/9zKy604Q0lK9ofe
-         NZcHvLIcs1/X5W5vUg86zJ17fORWoWqn6U40HLP1P5RLlGdlHhAKYznv+79S7WNCltLm
-         xXxM523dufSpae6D4uCBGqFMhm++7zwV694icQ5tq9ERklQq9oADxy2H5N2uuLuaYolg
-         OFxVgz8ekHsWLW+idl+G1xAqzBU9lnHH+aVKSHkOOG9WbmNOvOxUk6MYeP2RHneiBcjM
-         93Uw==
-X-Gm-Message-State: AO0yUKX3NxmBsIlc6R91NqMAm7zuFUlCZtb49qZ29mZ9ZxRtkZ7g+vsV
-        jNxj7PG0h4NSLXF71qjgyh4=
-X-Google-Smtp-Source: AK7set8dSP5W4abkNf6oYLDISmKZHVAMC46issOrfH5biXxz6mfFYkUxhEOz9loABb8Mc2QaBVCEmw==
-X-Received: by 2002:a2e:3c05:0:b0:29b:d530:b175 with SMTP id j5-20020a2e3c05000000b0029bd530b175mr419576lja.17.1679377553772;
-        Mon, 20 Mar 2023 22:45:53 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id p5-20020a2e8045000000b0029f7d27b78bsm56751ljg.110.2023.03.20.22.45.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 22:45:53 -0700 (PDT)
-Message-ID: <d13cd7bf-0b1e-e9e1-266a-00db40e51de7@gmail.com>
-Date:   Tue, 21 Mar 2023 07:45:52 +0200
+        Tue, 21 Mar 2023 01:46:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CE01B2FD
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:46:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 641211FD6C;
+        Tue, 21 Mar 2023 05:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679377614; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=37GC4VJhAC/IqstfkyAnKas1JN15Zt+fTln7QOtrFUs=;
+        b=VAggRJLnp8rbYKHl+wljY5aLbvkJN/GUFYXu3kG/U2WSPqPx0R1BSF1ljNEcq4hj0Z6069
+        yLB0titeSBYEPtNkrDJM5NILJJI9QtOHac4v7mnpkmTJ/wm6MkqPUAt7Hkx+vslZBk7j7E
+        LlhNV/4UJdxcrGVUGjLIyLBYuenjfjs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2598213443;
+        Tue, 21 Mar 2023 05:46:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yV6hB85EGWTpSAAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 21 Mar 2023 05:46:54 +0000
+Message-ID: <2b292b59-0b9b-b752-de5f-f057cd84c671@suse.com>
+Date:   Tue, 21 Mar 2023 06:46:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <maxime@cerno.tech>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <cover.1679062529.git.mazziesaccount@gmail.com>
- <1abd47784b08939ff08ff03d3d4f60449e87625f.1679062529.git.mazziesaccount@gmail.com>
- <20230317150916.a3xrh25ywe5k77yp@houat>
- <e8f50fe8-bad3-e59e-4d80-e2f7db9c9933@gmail.com>
- <5ace543cae7a54db399750a1b330c3ae.sboyd@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v4 2/8] kunit: drm/tests: move generic helpers
-In-Reply-To: <5ace543cae7a54db399750a1b330c3ae.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH RFC smp] Remove diagnostics and adjust config for CSD lock
+ diagnostics
+Content-Language: en-US
+To:     paulmck@kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel-team@meta.com, rostedt@goodmis.org, mingo@kernel.org,
+        peterz@infradead.org, corbet@lwn.net
+References: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------17c90BvlF6G6Jf6ZDVy7B32e"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Morning Stephen,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------17c90BvlF6G6Jf6ZDVy7B32e
+Content-Type: multipart/mixed; boundary="------------20fBpv9ceUnE2Cg6StICYAEX";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: paulmck@kernel.org, linux-kernel@vger.kernel.org
+Cc: kernel-team@meta.com, rostedt@goodmis.org, mingo@kernel.org,
+ peterz@infradead.org, corbet@lwn.net
+Message-ID: <2b292b59-0b9b-b752-de5f-f057cd84c671@suse.com>
+Subject: Re: [PATCH RFC smp] Remove diagnostics and adjust config for CSD lock
+ diagnostics
+References: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
+In-Reply-To: <0c368b66-71b2-442f-a8f7-e6decc4be2d6@paulmck-laptop>
 
-On 3/20/23 21:23, Stephen Boyd wrote:
-> Quoting Matti Vaittinen (2023-03-18 23:36:20)
->>>
->>> I think you would have an easier time if you just copied and renamed
->>> them into the kunit folder as an preparation series.
->>
->> Yes. That would simplify the syncing between the trees. It slightly bugs
->> me to add dublicate code in kernel-but the clean-up series for DRM users
->> could be prepared at the same time. It would be even possible to just
->> change the drm-helper to be a wrapper for the generic one - and leave
->> the callers intact - although it leaves some seemingly unnecessary
->> "onion code" there.
->>
->>> That way, you wouldn't have to coordinate DRM, CCF and IIO, you'd just
->>> create new helpers that can be reused/converted to by everyone eventually
->>
->> Yes. Thanks - I think I may go with this approach for the v5 :)
-> 
-> Which kunit directory?
+--------------20fBpv9ceUnE2Cg6StICYAEX
+Content-Type: multipart/mixed; boundary="------------wOxAHOmBs6kh7hWJgvr26y7P"
 
-I was thinking of adding the platform_device.h (I liked your suggestion) 
-in the include/kunit/
+--------------wOxAHOmBs6kh7hWJgvr26y7P
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> I imagine if there are conflicts they will be
-> trivial so it probably doesn't matter.
+T24gMjEuMDMuMjMgMDE6NTQsIFBhdWwgRS4gTWNLZW5uZXkgd3JvdGU6DQo+IEhlbGxvIQ0K
+PiANCj4gVGhpcyBzZXJpZXMgcmVtb3ZlcyBDU0QtbG9jayBkaWFnbm9zdGljcyB0aGF0IHdl
+cmUgb25jZSB2ZXJ5IHVzZWZ1bA0KPiBidXQgd2hpY2ggaGF2ZSBub3Qgc2VlbiBtdWNoIGFj
+dGlvbiBzaW5jZS4gIEl0IGFsc28gYWRqdXN0cyBLY29uZmlnIGFuZA0KPiBrZXJuZWwtYm9v
+dC1wYXJhbWV0ZXIgc2V0dXAuDQo+IA0KPiAxLglsb2NraW5nL2NzZF9sb2NrOiBBZGQgS2Nv
+bmZpZyBvcHRpb24gZm9yIGNzZF9kZWJ1ZyBkZWZhdWx0Lg0KPiANCj4gMi4JbG9ja2luZy9j
+c2RfbG9jazogUmVtb3ZlIGFkZGVkIGRhdGEgZnJvbSBDU0QgbG9jayBkZWJ1Z2dpbmcuDQo+
+IA0KPiAzLglsb2NraW5nL2NzZF9sb2NrOiBSZW1vdmUgcGVyLUNQVSBkYXRhIGluZGlyZWN0
+aW9uIGZyb20gQ1NEDQo+IAlsb2NrIGRlYnVnZ2luZy4NCj4gDQo+IDQuCWtlcm5lbC9zbXA6
+IE1ha2UgY3NkbG9ja19kZWJ1Zz0gcmVzZXR0YWJsZS4NCj4gDQo+IAkJCQkJCVRoYW54LCBQ
+YXVsDQo+IA0KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gDQo+ICAgRG9jdW1lbnRhdGlvbi9h
+ZG1pbi1ndWlkZS9rZXJuZWwtcGFyYW1ldGVycy50eHQgICB8ICAgMTcgLQ0KPiAgIGIvRG9j
+dW1lbnRhdGlvbi9hZG1pbi1ndWlkZS9rZXJuZWwtcGFyYW1ldGVycy50eHQgfCAgICA2DQo+
+ICAgYi9rZXJuZWwvc21wLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAgIDINCj4gICBiL2xpYi9LY29uZmlnLmRlYnVnICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgICAgOQ0KPiAgIGtlcm5lbC9zbXAuYyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgMjYwICsrLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gICA1IGZp
+bGVzIGNoYW5nZWQsIDQ3IGluc2VydGlvbnMoKyksIDI0NyBkZWxldGlvbnMoLSkNCg0KRm9y
+IHRoZSBzZXJpZXM6DQoNCkFja2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5j
+b20+DQoNCg0KSnVlcmdlbg0K
+--------------wOxAHOmBs6kh7hWJgvr26y7P
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Probably so. Still, I am not the one who needs to deal with the 
-conflicts. Hence I like at least asking if people see good way to avoid 
-them in the first place.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Besides, I was not sure if you were planning to add similar helper or 
-just wrappers to individual functions. Wanted to ping you just in case 
-this has some impact to what you do.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-> Have you Cced kunit folks and the
-> list on the kunit patches? They may have some opinion.
+--------------wOxAHOmBs6kh7hWJgvr26y7P--
 
-This patch was should have contained the 
-include/kunit/platform_device.h. That file was pulling the Kunit people 
-in recipients but I messed up things with last minute changes so both 
-the header and people were dropped. I'll fix this for v5.
+--------------20fBpv9ceUnE2Cg6StICYAEX--
 
-Yours,
-	-- Matti
+--------------17c90BvlF6G6Jf6ZDVy7B32e
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+-----BEGIN PGP SIGNATURE-----
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQZRM0FAwAAAAAACgkQsN6d1ii/Ey9V
+TAf/V6Aq6zo/cHjHRK2Xz0Zwc8JVbGELCS6NxMyoK2tuEIGsCcFEln+GwUu9s/FEFeoy5dKbVVAv
+upjsMx4sj1wPrkhqFjfCjsM8m88a+3JR7zlYw1g83ZH97ZF5Hv8IHWRvifX7U4B24Xlj9P4mISb7
+OHKbeNjmXKop+dXCshyljyAGK250nj4Y5A6oriwDMDNxZqSx8A1/ODmBrTIqXcLpknShijXaoJAT
+CSD/rfqEvwwZlqciVd75QxzhcWtT4zhKmGsEOQ+OFKvDfOEkmkGPYRz2e+9TB7dQgVgn2d4QmmxE
+F1tI7XtUzPhY09SQV1tfvVfK1Q879R8FP2IIPCRyWw==
+=dBlt
+-----END PGP SIGNATURE-----
 
+--------------17c90BvlF6G6Jf6ZDVy7B32e--
