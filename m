@@ -2,163 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5746C3544
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646CB6C3545
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjCUPMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
+        id S231610AbjCUPM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjCUPMj (ORCPT
+        with ESMTP id S231418AbjCUPMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:12:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C9B4ECE5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679411556; x=1710947556;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=x9a3YOj4a+R+7xggcFJXpjB82SQTOk9c6QKb7Ibe/Fk=;
-  b=cY7jLu3M7702IEHS45h/FHliK+vY3S/jSyl1bUoaegV4kzCn1uhUuS2N
-   sYI9B1GIjHFIf7tAlP6MEhgGix+qVrX1ZZxThq+MKpmnxO0FECIiMJcPP
-   2lxLaCvUxNEEHEHUK8w/JuAB92ZGlqMdJ1dRtFXJLis8AuBpTtILpE4A3
-   hgd1plHHOi0FGBVAbOhEOcCh+0QNV6bNdHHIOfENzveJNTRLcWZp3cS2c
-   eZXDRsq594ETi4GajeCYMfB3ROzNExxb9DSHInkZXJMQu5WDKC7CE75Iy
-   fo7CwmtTVaofPkxpwIe3K0Bcn2t0fLO5lkoAu19dIxECJ0ZXIWVMVJnjz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="425245678"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="425245678"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:12:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="927445689"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="927445689"
-Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:12:29 -0700
-Date:   Tue, 21 Mar 2023 17:12:27 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     James Morse <james.morse@arm.com>
-cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
-Subject: Re: [PATCH v3 17/19] x86/resctrl: Allow overflow/limbo handlers to
- be scheduled on any-but cpu
-In-Reply-To: <20230320172620.18254-18-james.morse@arm.com>
-Message-ID: <118d53a6-e292-50a0-dc8f-32c573379ed7@linux.intel.com>
-References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-18-james.morse@arm.com>
+        Tue, 21 Mar 2023 11:12:45 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEE150983
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:12:39 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id d10so8753355pgt.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679411559;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+R1rOHrkxNc1mE2qEpnHzeekyoCGMoA2eexCQ+q58BY=;
+        b=ncDt/ksE/I91Iyx1Z2Jf7hHIQnte2/iQmRwlGHniXxBebaFqNLTsSELP+OdHk00ILg
+         0mbBRzLlZThGJOFSLWytqRI3FvKa2qp86B7nqATDeM9akDQGK0Od/CPo321/k7GYlK6F
+         fbjEEAdH8+WHLUTB4HHVP7tScVKqxVKO6G/EQMXndsXqZJ0Rp+8prMVzrx5v8sU6yoL0
+         hLEcbMge0iT3twDRZsEAAukTy1wtO5Jh1WfKGfAt45zJqQolHxnWKQeE63L9PtMWEBgW
+         36f9oXUnzMUxd43g4xir+HTw0UKBPHTS0hlccpB8xyFYQ6BYO1RvxRKREwihISCllZZF
+         oY2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679411559;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+R1rOHrkxNc1mE2qEpnHzeekyoCGMoA2eexCQ+q58BY=;
+        b=HqeeN1XbS6Dp4fNg3mJzgC1It+GPrOCUT2e2j0pG7v3ZVlCZxngzmA0afsRcT9C9oT
+         pXbT0ayyVsYgXulY5Bmp94UOJNJUR1vmujE3hCQ7FtZbGXKJ4IgLIoYCPB8Azb/6ZOM8
+         HYdh2Um0g2WaOobVgpSEirI+xk4yFhkTEM91ZwA3nMhH7rocUvz1x7leWyuDKzxCTSH1
+         TjOdY1fuQhfDBaFRhS2ZP5jhqdSgF/iPhoqsWAr+HJOal1wwpnY3CC5JtQXPwbA2kOm7
+         9QXF/H0SbYe90Es/pEya9xfq0HZJHHFZbjjXoc12n41Hv75dLy+ZJ2P2maHpRis9EnNT
+         mxXA==
+X-Gm-Message-State: AO0yUKXwn+pVjE4qye3lORwuCty81BQo1PZYo06okAFYsbuyhLmaGEI5
+        xHqrz/Z31KTijJ//Ulbvsp1zkZ+lheM8yOafoiH6RQ==
+X-Google-Smtp-Source: AK7set9F1WixTSQKJNK/H113IKA9GRRiTexCBsIIzeuNawSVdFJ0q3CTWp009b1dumUwIPFHqfT2gkiOTCTpyZ+9CJI=
+X-Received: by 2002:a65:4841:0:b0:50a:c1b3:ed55 with SMTP id
+ i1-20020a654841000000b0050ac1b3ed55mr748682pgs.11.1679411558960; Tue, 21 Mar
+ 2023 08:12:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310160610.742382-1-james.clark@arm.com> <20230310160610.742382-3-james.clark@arm.com>
+ <c01553d3-d0b3-eebd-55e5-ab9defdf1124@arm.com>
+In-Reply-To: <c01553d3-d0b3-eebd-55e5-ab9defdf1124@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Tue, 21 Mar 2023 15:12:27 +0000
+Message-ID: <CAJ9a7VinZOoHnJaOyyO8+jQpvDsru9t4kmpdYyMv5qAq3vy2tQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] coresight: Change name of pdata->conns
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023, James Morse wrote:
+On Thu, 16 Mar 2023 at 17:17, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>
+> On 10/03/2023 16:06, James Clark wrote:
+> > conns is actually for output connections. Change the name to make it
+> > clearer and so that we can add input connections later.
+> >
+> > No functional changes.
+> >
+> > Signed-off-by: James Clark <james.clark@arm.com>
+> > ---
+> >   drivers/hwtracing/coresight/coresight-core.c  | 26 +++++++++----------
+> >   .../hwtracing/coresight/coresight-platform.c  | 12 ++++-----
+> >   .../hwtracing/coresight/coresight-tmc-etr.c   |  2 +-
+> >   include/linux/coresight.h                     |  2 +-
+> >   4 files changed, 21 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> > index e3b63fd52b9c..c0eda7407fb8 100644
+> > --- a/drivers/hwtracing/coresight/coresight-core.c
+> > +++ b/drivers/hwtracing/coresight/coresight-core.c
+> > @@ -119,7 +119,7 @@ static int coresight_find_link_inport(struct coresight_device *csdev,
+> >       struct coresight_connection *conn;
+> >
+> >       for (i = 0; i < parent->pdata->nr_outport; i++) {
+> > -             conn = &parent->pdata->conns[i];
+> > +             conn = &parent->pdata->out_conns[i];
+> >               if (conn->child_dev == csdev)
+> >                       return conn->child_port;
+> >       }
+> > @@ -137,7 +137,7 @@ static int coresight_find_link_outport(struct coresight_device *csdev,
+> >       struct coresight_connection *conn;
+> >
+> >       for (i = 0; i < csdev->pdata->nr_outport; i++) {
+> > -             conn = &csdev->pdata->conns[i];
+> > +             conn = &csdev->pdata->out_conns[i];
+> >               if (conn->child_dev == child)
+> >                       return conn->outport;
+> >       }
+> > @@ -606,7 +606,7 @@ coresight_find_enabled_sink(struct coresight_device *csdev)
+> >       for (i = 0; i < csdev->pdata->nr_outport; i++) {
+> >               struct coresight_device *child_dev;
+> >
+> > -             child_dev = csdev->pdata->conns[i].child_dev;
+> > +             child_dev = csdev->pdata->out_conns[i].child_dev;
+> >               if (child_dev)
+> >                       sink = coresight_find_enabled_sink(child_dev);
+> >               if (sink)
+> > @@ -722,7 +722,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
+> >       for (i = 0; i < csdev->pdata->nr_outport; i++) {
+> >               struct coresight_device *child;
+> >
+> > -             child  = csdev->pdata->conns[i].child_dev;
+> > +             child = csdev->pdata->out_conns[i].child_dev;
+> >               if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+> >                       if (!coresight_get_ref(child))
+> >                               goto err;
+> > @@ -733,7 +733,7 @@ static int coresight_grab_device(struct coresight_device *csdev)
+> >       for (i--; i >= 0; i--) {
+> >               struct coresight_device *child;
+> >
+> > -             child  = csdev->pdata->conns[i].child_dev;
+> > +             child = csdev->pdata->out_conns[i].child_dev;
+> >               if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+> >                       coresight_put_ref(child);
+> >       }
+> > @@ -752,7 +752,7 @@ static void coresight_drop_device(struct coresight_device *csdev)
+> >       for (i = 0; i < csdev->pdata->nr_outport; i++) {
+> >               struct coresight_device *child;
+> >
+> > -             child  = csdev->pdata->conns[i].child_dev;
+> > +             child = csdev->pdata->out_conns[i].child_dev;
+> >               if (child && child->type == CORESIGHT_DEV_TYPE_HELPER)
+> >                       coresight_put_ref(child);
+> >       }
+> > @@ -794,7 +794,7 @@ static int _coresight_build_path(struct coresight_device *csdev,
+> >       for (i = 0; i < csdev->pdata->nr_outport; i++) {
+> >               struct coresight_device *child_dev;
+> >
+> > -             child_dev = csdev->pdata->conns[i].child_dev;
+> > +             child_dev = csdev->pdata->out_conns[i].child_dev;
+> >               if (child_dev &&
+> >                   _coresight_build_path(child_dev, sink, path) == 0) {
+> >                       found = true;
+> > @@ -964,7 +964,7 @@ coresight_find_sink(struct coresight_device *csdev, int *depth)
+> >               struct coresight_device *child_dev, *sink = NULL;
+> >               int child_depth = curr_depth;
+> >
+> > -             child_dev = csdev->pdata->conns[i].child_dev;
+> > +             child_dev = csdev->pdata->out_conns[i].child_dev;
+> >               if (child_dev)
+> >                       sink = coresight_find_sink(child_dev, &child_depth);
+> >
+> > @@ -1334,7 +1334,7 @@ static int coresight_orphan_match(struct device *dev, void *data)
+> >        * an orphan connection whose name matches @csdev, link it.
+> >        */
+> >       for (i = 0; i < i_csdev->pdata->nr_outport; i++) {
+> > -             conn = &i_csdev->pdata->conns[i];
+> > +             conn = &i_csdev->pdata->out_conns[i];
+> >
+> >               /* Skip the port if FW doesn't describe it */
+> >               if (!conn->child_fwnode)
+> > @@ -1375,7 +1375,7 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
+> >       int i, ret = 0;
+> >
+> >       for (i = 0; i < csdev->pdata->nr_outport; i++) {
+> > -             struct coresight_connection *conn = &csdev->pdata->conns[i];
+> > +             struct coresight_connection *conn = &csdev->pdata->out_conns[i];
+> >
+> >               if (!conn->child_fwnode)
+> >                       continue;
+> > @@ -1412,7 +1412,7 @@ static int coresight_remove_match(struct device *dev, void *data)
+> >        * a connection whose name matches @csdev, remove it.
+> >        */
+> >       for (i = 0; i < iterator->pdata->nr_outport; i++) {
+> > -             conn = &iterator->pdata->conns[i];
+> > +             conn = &iterator->pdata->out_conns[i];
+> >
+> >               if (conn->child_dev == NULL || conn->child_fwnode == NULL)
+> >                       continue;
+> > @@ -1548,7 +1548,7 @@ void coresight_release_platform_data(struct coresight_device *csdev,
+> >                                    struct coresight_platform_data *pdata)
+> >   {
+> >       int i;
+> > -     struct coresight_connection *conns = pdata->conns;
+> > +     struct coresight_connection *conns = pdata->out_conns;
+> >
+> >       for (i = 0; i < pdata->nr_outport; i++) {
+> >               /* If we have made the links, remove them now */
+> > @@ -1560,7 +1560,7 @@ void coresight_release_platform_data(struct coresight_device *csdev,
+> >                */
+> >               if (conns[i].child_fwnode) {
+> >                       fwnode_handle_put(conns[i].child_fwnode);
+> > -                     pdata->conns[i].child_fwnode = NULL;
+> > +                     pdata->out_conns[i].child_fwnode = NULL;
+> >               }
+> >       }
+> >       if (csdev)
+> > diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> > index 475899714104..5085525a32bb 100644
+> > --- a/drivers/hwtracing/coresight/coresight-platform.c
+> > +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> > @@ -27,9 +27,9 @@ static int coresight_alloc_conns(struct device *dev,
+> >                                struct coresight_platform_data *pdata)
+> >   {
+> >       if (pdata->nr_outport) {
+> > -             pdata->conns = devm_kcalloc(dev, pdata->nr_outport,
+> > -                                         sizeof(*pdata->conns), GFP_KERNEL);
+> > -             if (!pdata->conns)
+> > +             pdata->out_conns = devm_kcalloc(dev, pdata->nr_outport,
+> > +                                         sizeof(*pdata->out_conns), GFP_KERNEL);
+> > +             if (!pdata->out_conns)
+> >                       return -ENOMEM;
+> >       }
+> >
+> > @@ -251,7 +251,7 @@ static int of_coresight_parse_endpoint(struct device *dev,
+> >                       break;
+> >               }
+> >
+> > -             conn = &pdata->conns[endpoint.port];
+> > +             conn = &pdata->out_conns[endpoint.port];
+> >               if (conn->child_fwnode) {
+> >                       dev_warn(dev, "Duplicate output port %d\n",
+> >                                endpoint.port);
+> > @@ -744,8 +744,8 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+> >               int port = conns[i].outport;
+> >
+> >               /* Duplicate output port */
+> > -             WARN_ON(pdata->conns[port].child_fwnode);
+> > -             pdata->conns[port] = conns[i];
+> > +             WARN_ON(pdata->out_conns[port].child_fwnode);
+> > +             pdata->out_conns[port] = conns[i];
+> >       }
+> >
+> >       devm_kfree(&adev->dev, conns);
+> > diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> > index ed589cfff1b5..86d4a08aa833 100644
+> > --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> > +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+> > @@ -782,7 +782,7 @@ tmc_etr_get_catu_device(struct tmc_drvdata *drvdata)
+> >               return NULL;
+> >
+> >       for (i = 0; i < etr->pdata->nr_outport; i++) {
+> > -             tmp = etr->pdata->conns[i].child_dev;
+> > +             tmp = etr->pdata->out_conns[i].child_dev;
+> >               if (tmp && coresight_is_catu_device(tmp))
+> >                       return tmp;
+> >       }
+> > diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> > index 1f878e8ed8c4..322d7273e122 100644
+> > --- a/include/linux/coresight.h
+> > +++ b/include/linux/coresight.h
+> > @@ -109,7 +109,7 @@ union coresight_dev_subtype {
+> >   struct coresight_platform_data {
+> >       int nr_inport;
+> >       int nr_outport;
+> > -     struct coresight_connection *conns;
+> > +     struct coresight_connection *out_conns;
+>
+> The comment above this structure might need to reflect the name change.
+>
+> Otherwise looks good to me.
+>
+> Suzuki
+>
+> >   };
+> >
+> >   /**
+>
 
-> When a CPU is taken offline resctrl may need to move the overflow or
-> limbo handlers to run on a different CPU.
-> 
-> Once the offline callbacks have been split, cqm_setup_limbo_handler()
-> will be called while the CPU that is going offline is still present
-> in the cpu_mask.
-> 
-> Pass the CPU to exclude to cqm_setup_limbo_handler() and
-> mbm_setup_overflow_handler(). These functions can use a variant of
-> cpumask_any_but() when selecting the CPU. -1 is used to indicate no CPUs
-> need excluding.
-> 
-> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> Changes since v2:
->  * Rephrased a comment to avoid a two letter bad-word. (we)
->  * Avoid assigning mbm_work_cpu if the domain is going to be free()d
->  * Added cpumask_any_housekeeping_but(), I dislike the name
-> ---
->  arch/x86/kernel/cpu/resctrl/core.c     |  8 +++--
->  arch/x86/kernel/cpu/resctrl/internal.h | 37 ++++++++++++++++++++--
->  arch/x86/kernel/cpu/resctrl/monitor.c  | 43 +++++++++++++++++++++-----
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c |  6 ++--
->  include/linux/resctrl.h                |  3 ++
->  5 files changed, 83 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> index 8e25ea49372e..aafe4b74587c 100644
-> --- a/arch/x86/kernel/cpu/resctrl/core.c
-> +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> @@ -582,12 +582,16 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
->  	if (r == &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl) {
->  		if (is_mbm_enabled() && cpu == d->mbm_work_cpu) {
->  			cancel_delayed_work(&d->mbm_over);
-> -			mbm_setup_overflow_handler(d, 0);
-> +			/*
-> +			 * exclude_cpu=-1 as this CPU has already been removed
-> +			 * by cpumask_clear_cpu()d
-> +			 */
-> +			mbm_setup_overflow_handler(d, 0, RESCTRL_PICK_ANY_CPU);
->  		}
->  		if (is_llc_occupancy_enabled() && cpu == d->cqm_work_cpu &&
->  		    has_busy_rmid(r, d)) {
->  			cancel_delayed_work(&d->cqm_limbo);
-> -			cqm_setup_limbo_handler(d, 0);
-> +			cqm_setup_limbo_handler(d, 0, RESCTRL_PICK_ANY_CPU);
->  		}
->  	}
->  }
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index 3eb5b307b809..47838ba6876e 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -78,6 +78,37 @@ static inline unsigned int cpumask_any_housekeeping(const struct cpumask *mask)
->  	return cpu;
->  }
->  
-> +/**
-> + * cpumask_any_housekeeping_but() - Chose any cpu in @mask, preferring those
-> + *			            that aren't marked nohz_full, excluding
-> + *				    the provided CPU
-> + * @mask:	The mask to pick a CPU from.
-> + * @exclude_cpu:The CPU to avoid picking.
-> + *
-> + * Returns a CPU from @mask, but not @but. If there are houskeeping CPUs that
-> + * don't use nohz_full, these are preferred.
-> + * Returns >= nr_cpu_ids if no CPUs are available.
-> + */
-> +static inline unsigned int
-> +cpumask_any_housekeeping_but(const struct cpumask *mask, int exclude_cpu)
-> +{
-> +	int cpu, hk_cpu;
-> +
-> +	cpu = cpumask_any_but(mask, exclude_cpu);
-> +	if (tick_nohz_full_cpu(cpu)) {
-> +		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
-> +		if  (hk_cpu == exclude_cpu) {
-> +			hk_cpu = cpumask_nth_andnot(1, mask,
-> +						    tick_nohz_full_mask);
-
-I'm left to wonder if it's okay to alter tick_nohz_full_mask in resctrl 
-code??
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
 
 
--- 
- i.
-
+--
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
