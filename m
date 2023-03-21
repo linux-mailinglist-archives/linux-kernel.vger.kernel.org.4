@@ -2,147 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026D96C3C8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558D26C3C96
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCUVT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
+        id S230093AbjCUVWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjCUVT4 (ORCPT
+        with ESMTP id S229791AbjCUVWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:19:56 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD8E15CA1;
-        Tue, 21 Mar 2023 14:19:55 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id s8so2293530ois.2;
-        Tue, 21 Mar 2023 14:19:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679433595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rxrm14m3oOQq155kNi7UN+pIky0d6E6e5S3ZZURwtHI=;
-        b=dWYMj952ENsHTcFOvTsaDHzTeiMxmh244VuLITViqN/XsO8VXTbScAg5DBOAOTn2bN
-         S/gbF+/X4NvH8Tb+U/m9N3h3KaZ7yGRr+j7tmUsZyfFpwLBr5Veu1j8p+SLkz6yF5dKD
-         YSfjjlcDb13Q/rAsmOlbKZPbmrDzJwh/RMtCKghb4iLNBuPxeryyo3IymI43Tq8bkXXP
-         wP9X1Swpa2Oj5XZm3liitQiE8yly2hGxKJw7cNXv+/Txw1l+9LW/INsIVI/UVltYASAb
-         /QSlMW4HQwahgMOMHK+bnZigdjoOrgHUL6cn0yBP138R5V93kGKnCb9knFceFvjEh6Lz
-         2kiw==
-X-Gm-Message-State: AO0yUKX/LhDaX+9aestZxqrzYegh1os1QqYCyjhfsa1kM4r55DxpwozF
-        qPtoAIn6le+ddd95UqVpboo/sj89wA==
-X-Google-Smtp-Source: AK7set+DQD+hptyUlvhbR1ibNJoT1JdCD96NXfu6tMZkCuead4Bp4COOgVeDLZXLAO1gyQwMEitUBw==
-X-Received: by 2002:aca:a90f:0:b0:386:9e54:aac3 with SMTP id s15-20020acaa90f000000b003869e54aac3mr271068oie.32.1679433594715;
-        Tue, 21 Mar 2023 14:19:54 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q204-20020a4a33d5000000b0053853156b5csm5117406ooq.8.2023.03.21.14.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 14:19:54 -0700 (PDT)
-Received: (nullmailer pid 1635108 invoked by uid 1000);
-        Tue, 21 Mar 2023 21:19:53 -0000
-Date:   Tue, 21 Mar 2023 16:19:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
- Document support for LEDs node
-Message-ID: <20230321211953.GA1544549-robh@kernel.org>
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-11-ansuelsmth@gmail.com>
+        Tue, 21 Mar 2023 17:22:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8391A442C9;
+        Tue, 21 Mar 2023 14:22:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1378061C52;
+        Tue, 21 Mar 2023 21:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7652AC433EF;
+        Tue, 21 Mar 2023 21:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679433756;
+        bh=7g9jByW3d7CzWFzHWigjSdnscnxSJPVdQ5hsZ3Zmn7Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VkMDL3nIm5kUOSRD/buVKCJ+1nTHRaAA51zdV+71eREQOJSKkjhQFGbPZFy1wcYiQ
+         9WKsfpZkn5s2GJTZrlslPF/D3tTbvfeBDanQPvrqhXGH5BiqOtM1JfiOT++OcS2SZe
+         Gvwsd/yYNWxuyD4lvCALSdDYANG+9+HxGE+tddn3imCL8pamdnQXa3x5B75sVd0wKk
+         0u2vX+yCEp4SZ8UCKEXQzCvPE6ASdf11ucBmNWUhp40qQEXji941ioemG8STlfWKQG
+         rRRnMB4gF8MdFVmkUlAYxU3BAgz6W49OlQPtVhLQKq3HBhdqlIHYAeVq14AnqSiB7u
+         vT0rjCCtEqmgw==
+Received: by mail-lf1-f42.google.com with SMTP id bi9so20827466lfb.12;
+        Tue, 21 Mar 2023 14:22:36 -0700 (PDT)
+X-Gm-Message-State: AO0yUKU+VDdIkC/DJTG/rG8pBbfq2riv+MNQa/UCCmp8Y8kk2tQrWbS1
+        JML/MJPDSbunAsBJe/SN1F53VAjLQRzWWSBoKS8=
+X-Google-Smtp-Source: AKy350bjsgHx59NmZzrYuKAFGunhyn6AkWLtJFZw6gBNaWQPCchHrRzcNTgi7VUFjf4uR8mp7mqw1LW5R/jXsF94BVU=
+X-Received: by 2002:a05:6512:1090:b0:4d8:86c2:75ea with SMTP id
+ j16-20020a056512109000b004d886c275eamr11003lfg.3.1679433754869; Tue, 21 Mar
+ 2023 14:22:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230319191814.22067-11-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <4a55805c694cff4cc9281961f2d457262bea48e6.1679423785.git.kevin@kevinlocke.name>
+In-Reply-To: <4a55805c694cff4cc9281961f2d457262bea48e6.1679423785.git.kevin@kevinlocke.name>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 22 Mar 2023 06:21:57 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASMRbEX3ZW4MLjPS9CJeqJt2NaUkL7cLT1PfwJ8uhu9bw@mail.gmail.com>
+Message-ID: <CAK7LNASMRbEX3ZW4MLjPS9CJeqJt2NaUkL7cLT1PfwJ8uhu9bw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: deb-pkg: set version for linux-headers paths
+To:     Kevin Locke <kevin@kevinlocke.name>
+Cc:     linux-kbuild@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 08:18:09PM +0100, Christian Marangi wrote:
-> Document support for LEDs node in ethernet-controller.
-> Ethernet Controller may support different LEDs that can be configured
-> for different operation like blinking on traffic event or port link.
-> 
-> Also add some Documentation to describe the difference of these nodes
-> compared to PHY LEDs, since ethernet-controller LEDs are controllable
-> by the ethernet controller regs and the possible intergated PHY doesn't
-> have control on them.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+On Wed, Mar 22, 2023 at 3:36=E2=80=AFAM Kevin Locke <kevin@kevinlocke.name>=
+ wrote:
+>
+> As a result of the switch to dh_listpackages, $version is no longer set
+> when install_kernel_headers() is called.  This causes files in the
+> linux-headers deb package to be installed to a path with an empty
+> $version (e.g. /usr/src/linux-headers-/scripts/sign-file rather than
+> /usr/src/linux-headers-6.3.0-rc3/scripts/sign-file).
+>
+> To avoid this, while continuing to use the version information from
+> dh_listpackages, set $version from $package.
+>
+> Fixes: 36862e14e316 ("kbuild: deb-pkg: use dh_listpackages to know enable=
+d packages")
+> Signed-off-by: Kevin Locke <kevin@kevinlocke.name>
 > ---
->  .../bindings/net/ethernet-controller.yaml     | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> index 00be387984ac..a93673592314 100644
-> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> @@ -222,6 +222,27 @@ properties:
->          required:
->            - speed
->  
-> +  leds:
-> +    type: object
-> +    description:
-> +      Describes the LEDs associated by Ethernet Controller.
-> +      These LEDs are not integrated in the PHY and PHY doesn't have any
-> +      control on them. Ethernet Controller regs are used to control
-> +      these defined LEDs.
-> +
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
-> +    patternProperties:
-> +      '^led(@[a-f0-9]+)?$':
-> +        $ref: /schemas/leds/common.yaml#
+>  scripts/package/builddeb | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+> index c5ae57167d7c..6fd590437f47 100755
+> --- a/scripts/package/builddeb
+> +++ b/scripts/package/builddeb
+> @@ -229,6 +229,7 @@ do
+>         linux-libc-dev)
+>                 install_libc_headers debian/linux-libc-dev;;
+>         linux-headers-*)
+> +               version=3D${package#linux-headers-}
+>                 install_kernel_headers debian/linux-headers;;
 
-Are specific ethernet controllers allowed to add their own properties in 
-led nodes? If so, this doesn't work. As-is, this allows any other 
-properties. You need 'unevaluatedProperties: false' here to prevent 
-that. But then no one can add properties. If you want to support that, 
-then you need this to be a separate schema that devices can optionally 
-include if they don't extend the properties, and then devices that 
-extend the binding would essentially have the above with:
-
-$ref: /schemas/leds/common.yaml#
-unevaluatedProperties: false
-properties:
-  a-custom-device-prop: ...
+Thank you for catching this.
+Can you pass it as the second argument to the function?
 
 
-If you wanted to define both common ethernet LED properties and 
-device specific properties, then you'd need to replace leds/common.yaml 
-above  with the ethernet one.
+   install_kerne_headers debian/linux-headers ${package#linux-headers-}
 
-This is all the same reasons the DSA/switch stuff and graph bindings are 
-structured the way they are.
 
-Rob
+
+>         esac
+>  done
+> --
+> 2.39.2
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
