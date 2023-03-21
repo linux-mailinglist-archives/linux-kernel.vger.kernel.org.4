@@ -2,96 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEB96C31CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C2F6C31D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjCUMhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S230480AbjCUMiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCUMhe (ORCPT
+        with ESMTP id S229808AbjCUMiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:37:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46FB4346F;
-        Tue, 21 Mar 2023 05:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EKPzzBQ3FvBycDuqBFuN9h8/3as7Wm8d7ysB+f2krm4=; b=nvjbX0z/nmnuQ6KwN3CNm8WoLu
-        oyEVoMHPWDfIbLBsKuQBad4rZOOiRoj5uThoiY3ks5tCiIvftymvBulFkhxEeNft/MYn6IUmgQzTX
-        xlWmqmGKYRdKZlKb/eP5Qupv1MBzXbv2T3mStJjk2S8lbDPiTtF5XVVPyLSxVGxUBHBsc+AeiNFyh
-        pkrDNXbSNnzs4NeGGEdoBYxtdFWKiW9vRbGijsMbUyoNFz+Mw0BaTLocTU7JlVRj+1NbTg/zTSIRm
-        Ts2x53hXcC+N11eHg7QYP8n945U6vZPrlZgqMjPrGyIJQj6eLTRMTWadfHu3OlFLvzqu45sIMa1Y9
-        qKQ4zYKw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pebF1-00CLpY-1d;
-        Tue, 21 Mar 2023 12:37:27 +0000
-Date:   Tue, 21 Mar 2023 05:37:27 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc@vger.kernel.org,
-        Wenchao Chen <wenchao.chen666@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Christian Lohle <cloehle@hyperstone.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bean Huo <beanhuo@micron.com>
-Subject: Re: [PATCH] mmc: core: Allow to avoid REQ_FUA if the eMMC supports
- an internal cache
-Message-ID: <ZBmlB2K3KMt7Apv5@infradead.org>
-References: <20230316164514.1615169-1-ulf.hansson@linaro.org>
- <ZBNIg8+rOdFKcsS8@infradead.org>
- <522a5d01-e939-278a-3354-1bbfb1bd6557@intel.com>
- <ZBf8dZm1FZIusMls@infradead.org>
- <CAPDyKFogTyf30X+3JGeqf+yER_OLQ8JwXy6oEF3Rn78KzLSDxw@mail.gmail.com>
+        Tue, 21 Mar 2023 08:38:16 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AFE9EC9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:38:09 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id h8so59039699ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679402288;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fAHU5kqXRYKOLBxaAoswUkMHVemnT1L6PZ6oDpy10Og=;
+        b=MpW1PxAiokgthWrvl0fAhVprwNnKMOzVF5kPm8DWuvwwuYdC/IZu/5/sJlhOcR9MLL
+         9k1Ll2OzrGnEPdO12o5Not8Ij7zDVDNULBaQaI3oLJxXf2EEFoAci7QfsNB158/P96JH
+         O894ra4J1L+2MIi4pJg2BCEkV1QSvMEX0wdZJXlYbdhn1byEljr/2jAxvgUEwCZa3qy5
+         LFA8eWEXe4WrJ5nGq9RiIFQnPHsbPqWR9XHxiUhl+iWqAsUffZvXR1y9z9dLbMBcwSnm
+         DSKF0EI8mkgjeaREKfVET7gFLUD4JOU54ASbSsUejmCTAtO058LNyXEntJM07Ao3Upmt
+         wa5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679402288;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fAHU5kqXRYKOLBxaAoswUkMHVemnT1L6PZ6oDpy10Og=;
+        b=PYjJGQXgZFq5X/Wj4ueU4JS29QTWPsQDRoFMyp3/h8EGYFAHmvPsZzgk+k+I91Ti75
+         Fkmp7VlaZ/OFXtbK7N94wLcGOGw5/Odf8W6cRGjQkCL50+2wWYA5TglOYeyakjaOVW/a
+         WN8oJzUD8AXRAmDRXxcrmB+AbMc75dgS5flcIkHFqhi+O2d/6j1cqjDESN9jwWHEzr7i
+         V/rxqa9OKwtaWybtjh+9XCt9rD3zmtLnO3Hcr1kYWAV9JIHvxeg+knrLfn4FZQj/7WuH
+         Bbj54hurL6+TjswHjrcOVFXoEAK+X+NQImswlq4qhfwR9q1z9+TaVC381CuJLwDE3ScT
+         6EGg==
+X-Gm-Message-State: AO0yUKXEg9NMXNu1tSCcYrgfP/5cx68YFVAvpSGJBWWmSJ+z1UN9Wh2D
+        1/rmjNk7+5mG+PFbWMyCiCFnNw==
+X-Google-Smtp-Source: AK7set+vNaEbl3l1Z6hbghc31W3om2GAvq3BZt9/SEGY2N7Ry7e+QAITpS/ixh1bfJlmj1UWuz7y3Q==
+X-Received: by 2002:a17:906:7249:b0:895:58be:957 with SMTP id n9-20020a170906724900b0089558be0957mr2691044ejk.2.1679402287907;
+        Tue, 21 Mar 2023 05:38:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id v14-20020a1709063bce00b0093344ef3764sm3865240ejf.57.2023.03.21.05.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 05:38:07 -0700 (PDT)
+Message-ID: <55cfacf6-03e0-b9bc-83f3-3e9f2d7b2d4d@linaro.org>
+Date:   Tue, 21 Mar 2023 13:38:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFogTyf30X+3JGeqf+yER_OLQ8JwXy6oEF3Rn78KzLSDxw@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: drm/bridge: Add no-hpd property
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sam@ravnborg.org,
+        jani.nikula@intel.com, tzimmermann@suse.de, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, r-ravikumar@ti.com,
+        lyude@redhat.com, alexander.deucher@amd.com, sjakhade@cadence.com,
+        yamonkar@cadence.com, a-bhatia1@ti.com
+References: <20230316140823.234263-1-j-choudhary@ti.com>
+ <20230316140823.234263-2-j-choudhary@ti.com>
+ <dbc43c09-f8ec-f877-598a-adff47d44b0e@linaro.org>
+ <79ce5fe8-9fb0-5caa-67a0-87dee7867856@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <79ce5fe8-9fb0-5caa-67a0-87dee7867856@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 04:24:36PM +0100, Ulf Hansson wrote:
-> > Neither to ATA or SCSI, but applications and file systems always very
-> > much expected it, so withou it storage devices would be considered
-> > fault.  Only NVMe actually finally made it part of the standard.
+On 21/03/2023 13:02, Jayesh Choudhary wrote:
+>>
+>>> +    type: boolean
+>>> +    description:
+>>> +      Set if the HPD line on the bridge isn't hooked up to anything or is
+>>> +      otherwise unusable.
+>>
+>> It's the property of the panel, not bridge. Unless you want to say that
+>> bridge physically does not have HPD? Does it follow the standard in such
+>> case?
 > 
-> Even if the standard doesn't say, it's perfectly possible that the
-> storage device implements it.
+> MHDP does have hpd. But the mhdp driver should handle the cases when the
 
-That's exactly what I'm saying above.
+This is about bindings, not driver. Your driver can still handle this as
+it wishes.
 
-> > But these are completely separate issue.  Torn writes are completely
-> > unrelated to cache flushes.  You can indeed work around torn writes
-> > by checksums, but not the lack of cache flushes or vice versa.
-> 
-> It's not a separate issue for eMMC. Please read the complete commit
-> message for further clarifications in this regard.
+> hpd pin of bridge is not connected to that of the DP-connector. This is 
+> to add support for that. (optional property)
 
-The commit message claims that checksums replace cache flushes.  Which
-is dangerously wrong.  So please don't refer me to it again - this
-dangerously incorrect commit message is wht alerted me to reply to the
-patch.
+Which is indicated by panel no-hpd, right? Or you mean now that HPD
+physically cannot go to panel because it is cut on the bridge side? But
+isn't this the same case (from hardware/bindings point, not driver) as
+panel would not have HPD?
 
-> > > However, the issue has been raised that reliable write is not
-> > > needed to provide sufficient assurance of data integrity, and that
-> > > in fact, cache flush can be used instead and perform better.
-> >
-> > It does not.
-> 
-> Can you please elaborate on this?
 
-Flushing caches does not replace the invariant of not tearing subsector
-writes.  And if you need to use reliable writes for (some) devices to
-not tear sectors, no amount of cache flushing is going to paper over
-the problem.
+Best regards,
+Krzysztof
+
