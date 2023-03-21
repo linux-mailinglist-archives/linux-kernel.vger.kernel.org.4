@@ -2,115 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34E76C30D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8914D6C30DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjCULuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
+        id S229710AbjCULux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjCULug (ORCPT
+        with ESMTP id S229981AbjCULuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:50:36 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4AC1EBC5;
-        Tue, 21 Mar 2023 04:50:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I5zZRHjNUjfMsh8vT3j8x7sRsQvcP1OEdYVUCMFoRNrffQFIOzDD2uIT+e15smlS62+tnfREHhl/iYscCFo60SMITVaXNW3e8jWAb57Du0IeAdNeSXejoLE7i/nqBS8pFLii5j7r3FkXnUOwldw5x4pl2X4oFbd3oHi5tvW6XvAGeZMhD872SYOngZ3ZJ54Ls8Esy+QoblnHM8qnizq1c1efYcuqQWJfb+93rS2crLa10sDylP4nF1frjOG2PdZgrypRddUjWgTfXkXK7Sg3NreAc2NR7KMPAK1cmOd5rYeUKcNcv5LUcS7CBdOhhlZ5EuhwYVEF98ejH/2QBJJC6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=55vXSENPPS0zRrFzNLPdkwGQNwqYQQ3mo1+0gTSxpf4=;
- b=ndLQbV3ISi1E/I+OX3oWoD3s0iUfx79Ajrjp+Y2Pd0GPOPj+R75wpx9mY6uWQgCGE5gb6VvlFBDQBxnuRp7UOvc4F6byq2yTrqJqRKxx9/+JQqYSx+AqVVmobn2VxSqCcIsGt7BEWNfUbFn1k7g4Oa6z3Q25vKWnHTx50r1WR6YW+9t66ZYz4wuJk6/dzLDHh+Zf3y+6VDB1wSi6lrxp+/yeCNEKG1fYn26iZitlBhYQkz0ra37M5TCh3CLR0V3WVI2JKpTGF02P57AOok+ZiNC+DxKPh2xmFlgpDF8uSR1ihB9h6a6SCVxtje03O8uxAhrkORfhGAvgnJb3KBpcsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=55vXSENPPS0zRrFzNLPdkwGQNwqYQQ3mo1+0gTSxpf4=;
- b=X9rAjNIegJdZAWPkDgDyfxfBpNAK31USDgZ37XhLQA+4tj7/xbz4J2BkT+0P/jfOfH0oUqYEz1R7SrhgKGWLydoryKG8KvhIIJuclzeSPESTpVLkSg8PZRNksqowRkTsqhj9lZvueufqeXJeqHxkuR7TvsyIL8YsWNvE8cAQ6hNQNhSTKB84Nk62695NqtktCtzMP726OfzjnLLewN7dAuqRiGzCKyrASCGV3tcMoe/+sbkB1tFVTKmVnOLYkvZVrS3L6vUwNzE0QwkQoBgtE4Lm8WJNvLFmwMrP9enfiBcqmBg0uBgbNvng9mhmSW/cfxMbNxHI/f98uj1YKqAYIg==
-Received: from MW4PR04CA0145.namprd04.prod.outlook.com (2603:10b6:303:84::30)
- by MN2PR12MB4160.namprd12.prod.outlook.com (2603:10b6:208:19a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 11:50:08 +0000
-Received: from CO1NAM11FT077.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::71) by MW4PR04CA0145.outlook.office365.com
- (2603:10b6:303:84::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Tue, 21 Mar 2023 11:50:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT077.mail.protection.outlook.com (10.13.175.55) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.16 via Frontend Transport; Tue, 21 Mar 2023 11:50:07 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 21 Mar 2023
- 04:49:59 -0700
-Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 21 Mar
- 2023 04:49:53 -0700
-Message-ID: <dcf8b1a9-d0e3-510f-8dc3-5ef9eebb0696@nvidia.com>
-Date:   Tue, 21 Mar 2023 17:19:49 +0530
+        Tue, 21 Mar 2023 07:50:51 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F211557D;
+        Tue, 21 Mar 2023 04:50:44 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 228CA24E290;
+        Tue, 21 Mar 2023 19:50:31 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 19:50:31 +0800
+Received: from [192.168.125.108] (183.27.97.64) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Mar
+ 2023 19:50:29 +0800
+Message-ID: <3c04aa10-1df1-ffe0-d876-8f35fb9790dc@starfivetech.com>
+Date:   Tue, 21 Mar 2023 19:50:29 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Patch v3 07/11] cpufreq: tegra194: add OPP support and set
- bandwidth
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 4/5] usb: cdns3: add StarFive JH7110 USB driver.
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, <treding@nvidia.com>,
-        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>
-CC:     <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
-        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
-        <ishah@nvidia.com>, <bbasu@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-References: <20230320182441.11904-8-sumitg@nvidia.com>
- <202303211551.eBLRqnv0-lkp@intel.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <202303211551.eBLRqnv0-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Rob Herring <robh@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        "Roger Quadros" <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-5-minda.chen@starfivetech.com>
+ <20230320152652.GA1713196-robh@kernel.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <20230320152652.GA1713196-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT077:EE_|MN2PR12MB4160:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78e70ece-dd8b-4060-b32b-08db2a026b1c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XT6G8TH/n9iX+XeNWNEh+uH+w7zRZF7OfqA/4sxnV6EWDiGaeVBwwZcO+nzjvze/yqQKzgONMnK1LER+B6+xmWtfQGIIrTRYy+SZtRD9vxRabSqN6a0WJXplRsAQcmcYxy4zs3YCvLjJTDVpKGWfeU/RJ+zDMWxjeuoWy6AUXQhsJazh+G/PRPw1a5AXFlrqe231OGEQ3QaFApEf2lqncyKlp4GI3KaFXH0t2BJpsXbEiJsoqlqJfaJqSgMqNASL21TT+3dNEpjLzQcnLTsqlmOBxZraPAfA20F7Q9vJLoxdAeplJoegBKX750unNg0aDG56VZRxO1+V3Mqplt0vQNvpkZ1yrIAx/1FYG6qiJeYl5Re6dKDRb9myEQSc/YAvFXW1oVSSnELyaTcPgZFfid4BI8EAf7M4cccutvshP05JL/ZtCXaJF7QNHCAC5YH32lfPEyKCwsXOQcGBrKYttpA4FTU3vZYDYTN1nrLKYDScPEiDHLegM5a5HUcLOVgI4SLD7fSgvTr+2q6g1tWT33aJ7qqWfROLwytpWmnF9JigxyVrM9QSTZ7gFAjMw9+EPjKDHyLi6NzkwHr8DUD5j7lFgz4MgUdY78m2fJeQZftPHTliIJ6chOF5qQVJWMUYrMX3T7cYbhDtDD6G27rlN24oJx5X4oFdaHadbECH+sDYD6EOiB3uHNGLuBl/NAVb8zz1T777zEAYEd8djEYDS0RXQSg/rPDNBNI3Am53dO0GDWqB9051P2MM98d99SuAnU4kwusFUDZcAV5NRxx+QtFKfbYK0KHSLnVVydo9TngGjI6aSw7YooaUgsUGoGYUOOQvEJdB/E3IQAzouM2smELJDtsoV8vuHTP8ymyjNyk=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199018)(40470700004)(46966006)(36840700001)(82740400003)(7636003)(82310400005)(86362001)(40460700003)(31696002)(40480700001)(36756003)(356005)(70586007)(70206006)(8936002)(16526019)(107886003)(8676002)(4326008)(41300700001)(6666004)(53546011)(26005)(966005)(186003)(478600001)(31686004)(16576012)(110136005)(316002)(54906003)(83380400001)(2616005)(2906002)(7416002)(5660300002)(47076005)(426003)(36860700001)(336012)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 11:50:07.7307
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78e70ece-dd8b-4060-b32b-08db2a026b1c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT077.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4160
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -119,66 +70,394 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 21/03/23 13:06, kernel test robot wrote:
-> External email: Use caution opening links or attachments
+On 2023/3/20 23:26, Rob Herring wrote:
+> On Wed, Mar 15, 2023 at 06:44:10PM +0800, Minda Chen wrote:
+>> There is a Cadence USB3 core for JH7110 SoCs, the cdns
+>> core is the child of this USB wrapper module device.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  MAINTAINERS                        |   7 +
+>>  drivers/usb/cdns3/Kconfig          |  11 ++
+>>  drivers/usb/cdns3/Makefile         |   1 +
+>>  drivers/usb/cdns3/cdns3-starfive.c | 305 +++++++++++++++++++++++++++++
+>>  4 files changed, 324 insertions(+)
+>>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 4263c005e45c..c530c966ab26 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19985,6 +19985,13 @@ F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
+>>  F:	drivers/phy/starfive/phy-jh7110-pcie.c
+>>  F:	drivers/phy/starfive/phy-jh7110-usb.c
+>>  
+>> +STARFIVE JH71X0 USB DRIVERS
+>> +M:	Emil Renner Berthing <kernel@esmil.dk>
+>> +M:	Minda Chen <minda.chen@starfivetech.com>
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> +F:	drivers/usb/cdns3/cdns3-starfive.c
+>> +
+>>  STATIC BRANCH/CALL
+>>  M:	Peter Zijlstra <peterz@infradead.org>
+>>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+>> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
+>> index b98ca0a1352a..0a514b591527 100644
+>> --- a/drivers/usb/cdns3/Kconfig
+>> +++ b/drivers/usb/cdns3/Kconfig
+>> @@ -78,6 +78,17 @@ config USB_CDNS3_IMX
+>>  
+>>  	  For example, imx8qm and imx8qxp.
+>>  
+>> +config USB_CDNS3_STARFIVE
+>> +	tristate "Cadence USB3 support on StarFive SoC platforms"
+>> +	depends on ARCH_STARFIVE || COMPILE_TEST
+>> +	help
+>> +	  Say 'Y' or 'M' here if you are building for StarFive SoCs
+>> +	  platforms that contain Cadence USB3 controller core.
+>> +
+>> +	  e.g. JH7110.
+>> +
+>> +	  If you choose to build this driver as module it will
+>> +	  be dynamically linked and module will be called cdns3-starfive.ko
+>>  endif
+>>  
+>>  if USB_CDNS_SUPPORT
+>> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
+>> index 61edb2f89276..48dfae75b5aa 100644
+>> --- a/drivers/usb/cdns3/Makefile
+>> +++ b/drivers/usb/cdns3/Makefile
+>> @@ -24,6 +24,7 @@ endif
+>>  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)		+= cdns3-pci-wrap.o
+>>  obj-$(CONFIG_USB_CDNS3_TI)			+= cdns3-ti.o
+>>  obj-$(CONFIG_USB_CDNS3_IMX)			+= cdns3-imx.o
+>> +obj-$(CONFIG_USB_CDNS3_STARFIVE)		+= cdns3-starfive.o
+>>  
+>>  cdnsp-udc-pci-y					:= cdnsp-pci.o
+>>  
+>> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
+>> new file mode 100644
+>> index 000000000000..a99f98f85235
+>> --- /dev/null
+>> +++ b/drivers/usb/cdns3/cdns3-starfive.c
+>> @@ -0,0 +1,305 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/**
+>> + * cdns3-starfive.c - StarFive specific Glue layer for Cadence USB Controller
+>> + *
+>> + * Copyright (C) 2022 Starfive, Inc.
+>> + * Author:	Yanhong Wang <yanhong.wang@starfivetech.com>
+>> + * Author:	Mason Huo <mason.huo@starfivetech.com>
+>> + * Author:	Minda Chen <minda.chen@starfivetech.com>
+>> + */
+>> +
+>> +#include <linux/bits.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/io.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/reset.h>
+>> +#include <linux/usb/otg.h>
+>> +#include "core.h"
+>> +
+>> +#define USB_STRAP_HOST			BIT(17)
+>> +#define USB_STRAP_DEVICE		BIT(18)
+>> +#define USB_STRAP_MASK			GENMASK(18, 16)
+>> +
+>> +#define USB_SUSPENDM_HOST		BIT(19)
+>> +#define USB_SUSPENDM_MASK		BIT(19)
+>> +
+>> +#define USB_SUSPENDM_BYPS		BIT(20)
+>> +#define USB_REFCLK_MODE			BIT(23)
+>> +#define USB_PLL_EN			BIT(22)
+>> +#define USB_PDRSTN_SPLIT		BIT(17)
+>> +
+>> +#define PCIE_CKREF_SRC_MASK		GENMASK(19, 18)
+>> +#define PCIE_CLK_SEL_MASK		GENMASK(21, 20)
+>> +#define PCIE_PHY_MODE			BIT(20)
+>> +#define PCIE_PHY_MODE_MASK		GENMASK(21, 20)
+>> +#define PCIE_USB3_BUS_WIDTH_MASK	GENMASK(3, 2)
+>> +#define PCIE_USB3_RATE_MASK		GENMASK(6, 5)
+>> +#define PCIE_USB3_RX_STANDBY_MASK	BIT(7)
+>> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
+>> +
+>> +struct cdns_starfive {
+>> +	struct device *dev;
+>> +	struct regmap *stg_syscon;
+>> +	struct regmap *sys_syscon;
+>> +	struct reset_control *resets;
+>> +	struct clk_bulk_data *clks;
+>> +	int num_clks;
+>> +	u32 sys_offset;
+>> +	u32 stg_offset_4;
+>> +	u32 stg_offset_196;
+>> +	u32 stg_offset_328;
+>> +	u32 stg_offset_500;
+>> +	bool usb2_only;
+>> +};
+>> +
+>> +static int cdns_mode_init(struct platform_device *pdev,
+>> +				struct cdns_starfive *data, const char **out_mode)
+>> +{
+>> +	struct device_node *child;
+>> +	const char *dr_mode = NULL;
+>> +
+>> +	child = of_get_compatible_child(pdev->dev.of_node, "cdns,usb3");
+>> +	if (!child) {
+>> +		return dev_err_probe(&pdev->dev, -ENODEV,
+>> +			"Failed to find child node\n");
+>> +	}
+>> +
+>> +	/* Init usb 2.0 utmi phy */
+>> +	regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+>> +		USB_SUSPENDM_BYPS, USB_SUSPENDM_BYPS);
+>> +	regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+>> +		USB_PLL_EN, USB_PLL_EN);
+>> +	regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+>> +		USB_REFCLK_MODE, USB_REFCLK_MODE);
+>> +
+>> +	if (!of_find_property(child, "cdns3,usb3-phy", NULL)) {
 > 
+> No such property defined in the binding. And there shouldn't be...
 > 
-> Hi Sumit,
+>> +		/* Disconnect usb 3.0 phy mode */
+>> +		regmap_update_bits(data->sys_syscon, data->sys_offset,
+>> +			USB_PDRSTN_SPLIT, USB_PDRSTN_SPLIT);
+>> +		data->usb2_only = 1;
+>> +	} else {
+>> +		/* Config usb 3.0 pipe phy */
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_196,
+>> +			PCIE_CKREF_SRC_MASK, 0);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_196,
+>> +			PCIE_CLK_SEL_MASK, 0);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_328,
+>> +			PCIE_PHY_MODE_MASK, PCIE_PHY_MODE);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+>> +			PCIE_USB3_BUS_WIDTH_MASK, 0);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+>> +			PCIE_USB3_RATE_MASK, 0);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+>> +			PCIE_USB3_RX_STANDBY_MASK, 0);
+>> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
+>> +			PCIE_USB3_PHY_ENABLE, PCIE_USB3_PHY_ENABLE);
+>> +
+>> +		/* Connect usb 3.0 phy mode */
+>> +		regmap_update_bits(data->sys_syscon, data->sys_offset,
+>> +			USB_PDRSTN_SPLIT, 0);
+>> +	}
 > 
-> Thank you for the patch! Perhaps something to improve:
+> This all looks like PHY configuration. It should be in the PHY driver 
+> instead. If there's some USB controller specific config for the PHY, 
+> then look into having phy cells for that. Multi-mode PHYs sometimes put 
+> the PHY mode into phy cells for example.
 > 
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on krzk-mem-ctrl/for-next pci/next pci/for-linus]
-> [cannot apply to tegra/for-next rafael-pm/linux-next linus/master v6.3-rc3 next-20230321]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/firmware-tegra-add-function-to-get-BPMP-data/20230321-024112
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230320182441.11904-8-sumitg%40nvidia.com
-> patch subject: [Patch v3 07/11] cpufreq: tegra194: add OPP support and set bandwidth
-> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230321/202303211551.eBLRqnv0-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/fa31f117302fc7c15b5d9deeefb8c650554f503d
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sumit-Gupta/firmware-tegra-add-function-to-get-BPMP-data/20230321-024112
->          git checkout fa31f117302fc7c15b5d9deeefb8c650554f503d
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/cpufreq/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303211551.eBLRqnv0-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/cpufreq/tegra194-cpufreq.c:397:5: warning: no previous prototype for 'tegra_cpufreq_init_cpufreq_table' [-Wmissing-prototypes]
->       397 | int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
->           |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-
-Thank you for the report.
-
-Adding static to the function prototype fixes the warning.
-Can we please squash the below change (or) please let me know if i need 
-to re-send the patch.
-
-  +++ b/drivers/cpufreq/tegra194-cpufreq.c
-  @@ -394,7 +394,7 @@ static unsigned int tegra194_get_speed(u32 cpu)
-          return rate;
-   }
-
-  -int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
-  +static int tegra_cpufreq_init_cpufreq_table(
-                             struct cpufreq_policy *policy,
-                             struct cpufreq_frequency_table *bpmp_lut,
-                             struct cpufreq_frequency_table **opp_table)
-
-Thank you,
-Sumit Gupta
+I think so. But actually they are not PHY register setting. They are SOC system-control
+registers set which shared by other device. OK, They can be moved to PHY driver. 
+>> +
+>> +	if (!of_property_read_string(child, "dr_mode", &dr_mode)) {
+>> +		if (!strcmp(dr_mode, "host")) {
+>> +			regmap_update_bits(data->stg_syscon,
+>> +				data->stg_offset_4,
+>> +				USB_STRAP_MASK,
+>> +				USB_STRAP_HOST);
+>> +			regmap_update_bits(data->stg_syscon,
+>> +				data->stg_offset_4,
+>> +				USB_SUSPENDM_MASK,
+>> +				USB_SUSPENDM_HOST);
+>> +		} else if (!strcmp(dr_mode, "peripheral")) {
+>> +			regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+>> +				USB_STRAP_MASK, USB_STRAP_DEVICE);
+>> +			regmap_update_bits(data->stg_syscon, data->stg_offset_4,
+>> +				USB_SUSPENDM_MASK, 0);
+>> +		}
+>> +	}
+>> +
+>> +	if (out_mode)
+>> +		*out_mode = dr_mode;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cdns_clk_rst_init(struct cdns_starfive *data)
+>> +{
+>> +	int ret;
+>> +
+>> +	data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
+>> +	if (data->num_clks < 0)
+>> +		return dev_err_probe(data->dev, -ENODEV,
+>> +			"Failed to get clocks\n");
+>> +
+>> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+>> +	if (ret)
+>> +		return dev_err_probe(data->dev, ret,
+>> +			"failed to enable clocks\n");
+>> +
+>> +	data->resets = devm_reset_control_array_get_exclusive(data->dev);
+>> +	if (IS_ERR(data->resets)) {
+>> +		ret = dev_err_probe(data->dev, PTR_ERR(data->resets),
+>> +			"Failed to get resets");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	ret = reset_control_deassert(data->resets);
+>> +	if (ret) {
+>> +		ret = dev_err_probe(data->dev, ret,
+>> +			"failed to reset clocks\n");
+>> +		goto err_clk_init;
+>> +	}
+>> +
+>> +	return ret;
+>> +
+>> +err_clk_init:
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	return ret;
+>> +}
+>> +
+>> +static int cdns_starfive_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct device_node *node = pdev->dev.of_node;
+>> +	struct cdns_starfive *data;
+>> +	unsigned int args[4];
+>> +	const char *dr_mode;
+>> +	int ret;
+>> +
+>> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	platform_set_drvdata(pdev, data);
+>> +
+>> +	data->dev = dev;
+>> +
+>> +	data->stg_syscon = syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
+>> +		"starfive,stg-syscon", 4, args);
+>> +
+>> +	if (IS_ERR(data->stg_syscon))
+>> +		return dev_err_probe(dev, PTR_ERR(data->stg_syscon),
+>> +			"Failed to parse starfive,stg-syscon\n");
+>> +
+>> +	data->stg_offset_4 = args[0];
+>> +	data->stg_offset_196 = args[1];
+>> +	data->stg_offset_328 = args[2];
+>> +	data->stg_offset_500 = args[3];
+>> +
+>> +	data->sys_syscon = syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
+>> +		"starfive,sys-syscon", 1, args);
+>> +	if (IS_ERR(data->sys_syscon))
+>> +		return dev_err_probe(dev, PTR_ERR(data->sys_syscon),
+>> +			"Failed to parse starfive,sys-syscon\n");
+>> +
+>> +	data->sys_offset = args[0];
+>> +
+>> +	ret = cdns_mode_init(pdev, data, &dr_mode);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = cdns_clk_rst_init(data);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = of_platform_populate(node, NULL, NULL, dev);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "Failed to create children\n");
+>> +
+>> +	device_set_wakeup_capable(dev, true);
+>> +	pm_runtime_set_active(dev);
+>> +	pm_runtime_enable(dev);
+>> +
+>> +	dev_info(dev, "usb mode %s %s probe success\n",
+>> +		dr_mode ? dr_mode : "unknown", data->usb2_only ? "2.0" : "3.0");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cdns_starfive_remove_core(struct device *dev, void *c)
+>> +{
+>> +	struct platform_device *pdev = to_platform_device(dev);
+>> +
+>> +	platform_device_unregister(pdev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cdns_starfive_remove(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct cdns_starfive *data = dev_get_drvdata(dev);
+>> +
+>> +	pm_runtime_get_sync(dev);
+>> +	device_for_each_child(dev, NULL, cdns_starfive_remove_core);
+>> +
+>> +	reset_control_assert(data->resets);
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_put_noidle(dev);
+>> +	platform_set_drvdata(pdev, NULL);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +#ifdef CONFIG_PM
+>> +static int cdns_starfive_resume(struct device *dev)
+>> +{
+>> +	struct cdns_starfive *data = dev_get_drvdata(dev);
+>> +	int ret;
+>> +
+>> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = reset_control_deassert(data->resets);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cdns_starfive_suspend(struct device *dev)
+>> +{
+>> +	struct cdns_starfive *data = dev_get_drvdata(dev);
+>> +
+>> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+>> +	reset_control_assert(data->resets);
+>> +
+>> +	return 0;
+>> +}
+>> +#endif
+>> +
+>> +static const struct dev_pm_ops cdns_starfive_pm_ops = {
+>> +	SET_RUNTIME_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume, NULL)
+>> +	SET_SYSTEM_SLEEP_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume)
+>> +};
+>> +
+>> +static const struct of_device_id cdns_starfive_of_match[] = {
+>> +	{ .compatible = "starfive,jh7110-usb", },
+>> +	{ /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, cdns_starfive_of_match);
+>> +
+>> +static struct platform_driver cdns_starfive_driver = {
+>> +	.probe		= cdns_starfive_probe,
+>> +	.remove		= cdns_starfive_remove,
+>> +	.driver		= {
+>> +		.name	= "cdns3-starfive",
+>> +		.of_match_table	= cdns_starfive_of_match,
+>> +		.pm	= &cdns_starfive_pm_ops,
+>> +	},
+>> +};
+>> +module_platform_driver(cdns_starfive_driver);
+>> +
+>> +MODULE_ALIAS("platform:cdns3-starfive");
+>> +MODULE_AUTHOR("YanHong Wang <yanhong.wang@starfivetech.com>");
+>> +MODULE_AUTHOR("Mason Huo <mason.huo@starfivetech.com>");
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_DESCRIPTION("Cadence USB3 StarFive Glue Layer");
+>> -- 
+>> 2.17.1
+>> 
