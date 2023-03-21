@@ -2,159 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2F26C2BC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F83F6C2BC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjCUHzi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 03:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S230478AbjCUHzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjCUHzg (ORCPT
+        with ESMTP id S230468AbjCUHzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:55:36 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7BE18AA2;
-        Tue, 21 Mar 2023 00:55:35 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id 31so1427814qvc.1;
-        Tue, 21 Mar 2023 00:55:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679385333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aAJ52VlFJHeAiC/ScNh14/AnDk6oLXAbKeiEG12Lh9A=;
-        b=XZqS0AR13TbRVaQdXJwy6MnAydrTdql96entjbmJDf6o5yDSZWDGSD29Rwx+ZetaZC
-         X2LFghLVmcv4f8MvAj5xHnlsws5Y64kKrrZLS8iQdydW5/PhzRhFnuugO9iAcbNB172z
-         3lTpoxN2nl8jPR5GFF1EaYxq88bS4A01DrXm78bGkGaHhIEZEhNrAGyr6pB60bHpDG9R
-         AR+b0z0TqzGmACaQ8NydVadYskwy+sAS0/mN7hRbdy0RC7lexuHNMKmn00IUzevRa4vJ
-         LAWVoalNerByhwubLzpICbGevEiNU/vW47CFDsRLC8xDVuC6h1n54JjJteLqTBPqwzfW
-         1u8g==
-X-Gm-Message-State: AO0yUKUfy7g4S+Jp9s6d8mnaqlA5oihWlkUnqYdQ5qGR1tkTJDuIRcqO
-        d4uSHPuA26iYJTlLOlPEWJ5LoIdyyCSGcw==
-X-Google-Smtp-Source: AK7set9+ExVxKk/nPWrrUDapMUJhL/VgAARa5OCrGnwe6afIhMvMCe4UOPFLUa2mlRFOOY304DWvoA==
-X-Received: by 2002:a05:6214:d46:b0:56b:fb58:c350 with SMTP id 6-20020a0562140d4600b0056bfb58c350mr2162157qvr.26.1679385333160;
-        Tue, 21 Mar 2023 00:55:33 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id r9-20020a37a809000000b007463509f94asm5063777qke.55.2023.03.21.00.55.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 00:55:32 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5418d54d77bso266162037b3.12;
-        Tue, 21 Mar 2023 00:55:32 -0700 (PDT)
-X-Received: by 2002:a81:b65e:0:b0:533:9252:32fa with SMTP id
- h30-20020a81b65e000000b00533925232famr491636ywk.4.1679385332320; Tue, 21 Mar
- 2023 00:55:32 -0700 (PDT)
+        Tue, 21 Mar 2023 03:55:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9321C7F5;
+        Tue, 21 Mar 2023 00:55:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EED6A21A70;
+        Tue, 21 Mar 2023 07:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679385339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9cGY12kDQSwASIHfhJiV2pRr9ipekQXRkFafDBu1XBk=;
+        b=egdeMcqdv25PErCesAzCg289ZaANuPs9QP53OZbgodUWtlljfv5IWJ1hr/r6URWplpp0/j
+        NQ/PGyNDQXvcO+hxCR3tu7qSvhPa+9FpS7uObiD5RQMD24KGMQnbgCRoZlmhZE8Ea1QU01
+        ND3mqsU4qfp/DPOeFiYkdrtrjuCanyc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679385339;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9cGY12kDQSwASIHfhJiV2pRr9ipekQXRkFafDBu1XBk=;
+        b=wDA9s17OE8q24MWB2jK0ByNbJtNmEbp17cxlen43oljpli0F+NRSPrNQkLSJEfsnfMUVWc
+        PQ8fctZ/cwcFyVAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFE5C13440;
+        Tue, 21 Mar 2023 07:55:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fOAKLvtiGWR2NwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 07:55:39 +0000
+Message-ID: <e639c07d-7104-95a1-35ba-c183036e71ea@suse.cz>
+Date:   Tue, 21 Mar 2023 08:55:39 +0100
 MIME-Version: 1.0
-References: <20230320231310.28841-1-rdunlap@infradead.org>
-In-Reply-To: <20230320231310.28841-1-rdunlap@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 21 Mar 2023 08:55:21 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
-Message-ID: <CAMuHMdXnbRvCjtgpbMnUVoRbHSk407t7Sr4XPpoiaE7M1h+4Ng@mail.gmail.com>
-Subject: Re: [PATCH 6/7 v5] sh: fix Kconfig entry for NUMA => SMP
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Kuninori Morimoto <morimoto.kuninori@renesas.com>,
-        linux-sh@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 04/10] drm/i915: Fix MAX_ORDER usage in
+ i915_gem_object_get_pages_internal()
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+On 3/15/23 12:31, Kirill A. Shutemov wrote:
+> MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
+> can deliver is MAX_ORDER-1.
+> 
+> Fix MAX_ORDER usage in i915_gem_object_get_pages_internal().
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Thanks for your patch!
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-On Tue, Mar 21, 2023 at 12:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
-> SYS_SUPPORTS_SMP and SMP.
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_internal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> index 6bc26b4b06b8..eae9e9f6d3bf 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> @@ -36,7 +36,7 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+>  	struct sg_table *st;
+>  	struct scatterlist *sg;
+>  	unsigned int npages; /* restricted by sg_alloc_table */
+> -	int max_order = MAX_ORDER;
+> +	int max_order = MAX_ORDER - 1;
+>  	unsigned int max_segment;
+>  	gfp_t gfp;
+>  
 
-Perhaps because these SoCs do not support SMP?
-
-> kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
-> code + data inside topology.c is only built when CONFIG_NUMA is
-> set/enabled, so these arch/sh/ configs need to select SMP and
-> SYS_SUPPORTS_SMP to build the NUMA support.
->
-> Fixes this build error in multiple SUPERH configs:
->
-> mm/page_alloc.o: In function `get_page_from_freelist':
-> page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
->
-> Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
-> Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
-> Fixes: 55ba99eb211a ("sh: Add support for SH7786 CPU subtype.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-
-> --- a/arch/sh/Kconfig
-> +++ b/arch/sh/Kconfig
-> @@ -442,6 +442,8 @@ config CPU_SUBTYPE_SH7785
->         select CPU_SHX2
->         select ARCH_SPARSEMEM_ENABLE
->         select SYS_SUPPORTS_NUMA
-> +       select SYS_SUPPORTS_SMP
-> +       select SMP
-
-SH7785 is single-core.
-
->         select PINCTRL
->
->  config CPU_SUBTYPE_SH7786
-> @@ -476,6 +478,8 @@ config CPU_SUBTYPE_SH7722
->         select CPU_SHX2
->         select ARCH_SHMOBILE
->         select ARCH_SPARSEMEM_ENABLE
-> +       select SYS_SUPPORTS_SMP
-> +       select SMP
-
-SH7722 is single-core.
-
->         select SYS_SUPPORTS_NUMA
->         select SYS_SUPPORTS_SH_CMT
->         select PINCTRL
-> @@ -486,6 +490,8 @@ config CPU_SUBTYPE_SH7366
->         select CPU_SHX2
->         select ARCH_SHMOBILE
->         select ARCH_SPARSEMEM_ENABLE
-> +       select SYS_SUPPORTS_SMP
-> +       select SMP
-
-Dunno about this one (no public info available).
-
->         select SYS_SUPPORTS_NUMA
->         select SYS_SUPPORTS_SH_CMT
-
-Wasn't this fixed by commit 61bb6cd2f765b90c ("mm: move
-node_reclaim_distance to fix NUMA without SMP") in v5.16?
-
-It is not sufficient, after that you run into:
-
-    mm/slab.c: In function ‘slab_memory_callback’:
-    mm/slab.c:1127:23: error: implicit declaration of function
-‘init_cache_node_node’; did you mean ‘drain_cache_node_node’?
-[-Werror=implicit-function-declaration]
-     1127 |                 ret = init_cache_node_node(nid);
-
-which you reported before in
-https://lore.kernel.org/all/b5bdea22-ed2f-3187-6efe-0c72330270a4@infradead.org/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
