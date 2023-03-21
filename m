@@ -2,119 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CDB6C306A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871886C306B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCUL3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S229872AbjCULaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjCUL3k (ORCPT
+        with ESMTP id S229592AbjCULaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:29:40 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2BC30DD;
-        Tue, 21 Mar 2023 04:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oap6q/AKU/Nc85sAkWOr7bFdsfJR4UbCwf+1zdilgRk=; b=cOHlEbBF3+ess4lXDJfK8ftydZ
-        39HCBk3XatFET00yeA/AMIUDN+J3uZQz7afNKQW6y2RzZ66ZNDId/EqIDNvbewVbUotTn6U/DANPU
-        H+8hH8qwwTlquFkTp2qHLbb5VNAf5i3jV4v+Hj7iLAnJCf/atvpFKlSJCW1RztmM3wrwNtPYD3mof
-        82nevGjvgJIrm7W5UBpmxfIsNxsYHbTg/TQYFpak+D84wGReSoLG0gRO59Q+eADhTzh36AxXL+sUX
-        bHeQxYgNn3DQ0W94LpIB/HznYy7KDkV5mDDZEe3PMzGW7QH5qvTN8NmcfasEmp3dGZOc/U20Az+mg
-        VsItqCyA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55716)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1peaBH-0000zs-K9; Tue, 21 Mar 2023 11:29:31 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1peaBG-0007gs-A6; Tue, 21 Mar 2023 11:29:30 +0000
-Date:   Tue, 21 Mar 2023 11:29:30 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
- for SGMII mode
-Message-ID: <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
-References: <20230321111958.2800005-1-s-vadapalli@ti.com>
- <20230321111958.2800005-3-s-vadapalli@ti.com>
+        Tue, 21 Mar 2023 07:30:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7291F4EEA
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679398197; x=1710934197;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Su0mgso3qzTUPnrqbdAvVrElMC8Pma5v9atr/AX7Tig=;
+  b=aD/uApM0A0YKhuOEPS0jT3AqDCBv/0nM5afUxwFycMME1L+DQ1qSxn6G
+   4BXp6/7VcA6iu5SmgNYTYfkqw7qAnd5k1yImvXQBQ1GgqkHCmIw80I8kv
+   pInthgTCP26GVCxYjjIVURv9l+DLZQVawTKgh8PH/mGZyUy3SCgANpgxn
+   iEbOQR2th9k6VkcajJeVq2qJb3c6/ZrB1SO1QOAn+DYf2mZU7FzKZ/XHI
+   ixY5cUrkD0iBqrdI7vgvAtufd0HPpktrWArfUIWH6PXf+dzMe6sqJJaU7
+   aR7LD9k74TlYTHo3gdNgcGkUnc8OKj9mFmqB3ZSvavgCGbJxZOl07BjLH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="401483183"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="401483183"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 04:29:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="711771715"
+X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
+   d="scan'208";a="711771715"
+Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 04:29:51 -0700
+Date:   Tue, 21 Mar 2023 13:29:48 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     James Morse <james.morse@arm.com>
+cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+Subject: Re: [PATCH v3 05/19] x86/resctrl: Allow RMID allocation to be scoped
+ by CLOSID
+In-Reply-To: <20230320172620.18254-6-james.morse@arm.com>
+Message-ID: <bd22cfed-7d3b-413d-840-95bf2f498b48@linux.intel.com>
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-6-james.morse@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321111958.2800005-3-s-vadapalli@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
-> Add support for configuring the CPSW Ethernet Switch in SGMII mode.
+On Mon, 20 Mar 2023, James Morse wrote:
+
+> MPAMs RMID values are not unique unless the CLOSID is considered as well.
 > 
-> Depending on the SoC, allow selecting SGMII mode as a supported interface,
-> based on the compatible used.
+> alloc_rmid() expects the RMID to be an independent number.
 > 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Pass the CLOSID in to alloc_rmid(). Use this to compare indexes when
+> allocating. If the CLOSID is not relevant to the index, this ends up
+> comparing the free RMID with itself, and the first free entry will be
+> used. With MPAM the CLOSID is included in the index, so this becomes a
+> walk of the free RMID entries, until one that matches the supplied
+> CLOSID is found.
+> 
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
 > ---
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+> Changes since v2;
+>  * Rephrased comment in resctrl_find_free_rmid() to describe this in terms of
+>    list_entry_first()
+>  * Rephrased comment above alloc_rmid()
+> ---
+>  arch/x86/kernel/cpu/resctrl/internal.h    |  2 +-
+>  arch/x86/kernel/cpu/resctrl/monitor.c     | 54 +++++++++++++++++------
+>  arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  2 +-
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c    |  2 +-
+>  4 files changed, 43 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> index cba8db14e160..d2ca1f2035f4 100644
-> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> @@ -76,6 +76,7 @@
->  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
+> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+> index 47506e2afd59..e11d9ce943d3 100644
+> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+> @@ -535,7 +535,7 @@ void rdtgroup_pseudo_lock_remove(struct rdtgroup *rdtgrp);
+>  struct rdt_domain *get_domain_from_cpu(int cpu, struct rdt_resource *r);
+>  int closids_supported(void);
+>  void closid_free(int closid);
+> -int alloc_rmid(void);
+> +int alloc_rmid(u32 closid);
+>  void free_rmid(u32 closid, u32 rmid);
+>  int rdt_get_mon_l3_config(struct rdt_resource *r);
+>  bool __init rdt_cpu_has(int flag);
+> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+> index 03a7d13dd653..ca58a433c668 100644
+> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+> @@ -337,25 +337,51 @@ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d)
+>  	return find_first_bit(d->rmid_busy_llc, idx_limit) != idx_limit;
+>  }
 >  
->  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
-> +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
->  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
-
-Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG come
-after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting that
-from its register offset definition?
-
-If the advertisement register is at 0x18, and the lower 16 bits is the
-advertisement, are the link partner advertisement found in the upper
-16 bits?
-
->  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
-> @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
->  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
->  	struct am65_cpsw_common *common = port->common;
+> -/*
+> - * As of now the RMIDs allocation is global.
+> - * However we keep track of which packages the RMIDs
+> - * are used to optimize the limbo list management.
+> - */
+> -int alloc_rmid(void)
+> +static struct rmid_entry *resctrl_find_free_rmid(u32 closid)
+>  {
+> -	struct rmid_entry *entry;
+> -
+> -	lockdep_assert_held(&rdtgroup_mutex);
+> +	struct rmid_entry *itr;
+> +	u32 itr_idx, cmp_idx;
 >  
-> -	if (common->pdata.extra_modes & BIT(state->interface))
-> +	if (common->pdata.extra_modes & BIT(state->interface)) {
-> +		if (state->interface == PHY_INTERFACE_MODE_SGMII)
-> +			writel(ADVERTISE_SGMII,
-> +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+>  	if (list_empty(&rmid_free_lru))
+> -		return rmid_limbo_count ? -EBUSY : -ENOSPC;
+> +		return rmid_limbo_count ? ERR_PTR(-EBUSY) : ERR_PTR(-ENOSPC);
+>  
+> -	entry = list_first_entry(&rmid_free_lru,
+> -				 struct rmid_entry, list);
+> -	list_del(&entry->list);
+> +	list_for_each_entry(itr, &rmid_free_lru, list) {
+> +		/*
+> +		 * get the index of this free RMID, and the index it would need
+> +		 * to be if it were used with this CLOSID.
+> +		 * If the CLOSID is irrelevant on this architecture, these will
+> +		 * always be the same meaning the compiler can reduce this loop
+> +		 * to a single list_entry_first() call.
+> +		 */
+> +		itr_idx = resctrl_arch_rmid_idx_encode(itr->closid, itr->rmid);
+> +		cmp_idx = resctrl_arch_rmid_idx_encode(closid, itr->rmid);
+>  
+> -	return entry->rmid;
+> +		if (itr_idx == cmp_idx)
+> +			return itr;
+> +	}
 > +
+> +	return ERR_PTR(-ENOSPC);
+> +}
+> +
+> +/*
+> + * For MPAM the RMID value is not unique, and has to be considered with
+> + * the CLOSID. The (CLOSID, RMID) pair is allocated on all domains, which
+> + * allows all domains to be managed by a single limbo list.
+> + * Each domain also has a rmid_busy_llc to reduce the work of the limbo handler.
+> + */
+> +int alloc_rmid(u32 closid)
+> +{
+> +	struct rmid_entry *entry;
+> +
+> +	lockdep_assert_held(&rdtgroup_mutex);
+> +
+> +	entry = resctrl_find_free_rmid(closid);
+> +	if (!IS_ERR(entry)) {
+> +		list_del(&entry->list);
+> +		return entry->rmid;
+> +	}
+> +
+> +	return PTR_ERR(entry);
 
-I think we can do better with this, by implementing proper PCS support.
+Reverse the if condition to make this follow the normal error handling 
+pattern.
 
-It seems manufacturers tend to use bought-in IP for this, so have a
-look at drivers/net/pcs/ to see whether any of those (or the one in
-the Mediatek patch set on netdev that has recently been applied) will
-idrive your hardware.
-
-However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
-I suspect you won't find a compatible implementation.
-
-Thanks.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+ i.
+
