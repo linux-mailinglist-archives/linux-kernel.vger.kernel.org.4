@@ -2,210 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3ADF6C36F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4946C36FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCUQbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S229889AbjCUQeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCUQbg (ORCPT
+        with ESMTP id S229683AbjCUQeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:31:36 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B6738013;
-        Tue, 21 Mar 2023 09:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=t/rjQKj0LE5FASB99J7K94aXzuyufuTX7nhjjJbOPx0=; b=xMD124U37+hdXe76lN/nnDHzvC
-        ryK4I1DLu4Tw7Ww8JSVhGQ4R6MW71Rm/VdAf4AQdhKE/U4s/lhgg6sYzKb+eaT2JyhOAEj8OpVxcx
-        y5ycYrURhqEgkP7WgLxgiORLSWdL23Wy8ueOaj5I9Q/+1BRGMgsxQXZI/k8+jN9q/BkK1rL1gdiO8
-        pDZWdfGI6szRWjfBne6YyqHTVTx8oRUIEPbeBO67kqFi22io5QGAgqYy6EsqyvQyh6r6QQbxgbS6R
-        uExLFGbRYwtrwKP0uIdXRyCOKD8XTlp/npRqqZcSl/Wc17gTHKMKxc8GPj9i6yDlXURmAY5PjrVN8
-        /LXSVLFw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peetU-00D5F1-2C;
-        Tue, 21 Mar 2023 16:31:28 +0000
-Date:   Tue, 21 Mar 2023 09:31:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Jason Baron <jbaron@akamai.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in
- /proc/dynamic_debug/control
-Message-ID: <ZBnb4KVdx26tMDLO@bombadil.infradead.org>
-References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
- <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
- <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
- <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
- <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
+        Tue, 21 Mar 2023 12:34:21 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725DC32520;
+        Tue, 21 Mar 2023 09:34:19 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y4so62122345edo.2;
+        Tue, 21 Mar 2023 09:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679416458;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zNGolYpDrXdQ4yw85TNBwydhoA3Qk61HxNkRR+pIP84=;
+        b=YJR8N4eQya8afKsJpfIgoPzvkwi62Zcu8UGAUtvod1XEqiXg6gAtvpEGuJ7hweuTyx
+         R7tHzH0kj5NyWJmFx6huhVHExcxEM7u+4ha3QNOzvayCZ1snmL4CkY5EP7msaSiaPcGy
+         WXi10NWg24LzHg69KqcqOakcTWfENixFfBDgBV7vf6O2T9LKCTTJuruTNiTu95LY60PD
+         7vSOftSuV3G6xDmHO5wDge3y3oqT7H9kBiUNJVPjSaMMA5liPBTVg8gHa/O8wwZGo7F/
+         AzUTgJhyaF+tqZzFR0J480/Nh+foVd0GM2tv2Y2bx7p4LDg8XrY67u3u10v+8Ib4zG3/
+         rO3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679416458;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zNGolYpDrXdQ4yw85TNBwydhoA3Qk61HxNkRR+pIP84=;
+        b=FQmA0wWzypNu60y6YpEAc41pCDzY+KAiZseK5DrNgAwPZgiXKNcYSASpc+LNLFhPyo
+         iZs8PnrjhGUbSgalQEkWD0xFIAnfj1jG4Duh4bn8LeB5YOahQp/5nFiqtZd/VB6uG4/v
+         UMcocNS8YpNWZGD+s09+vlpzn7o36dy4PbECKHzuIAzmd9lQvaGPhexVIBexFgiBzIJf
+         QZUyg1mKOeycWNTWsTpHbSqOW2msns2fcobJwHKaPMw3oHa4UnI/fEKXlueTCdchmO9Y
+         x4iZS/Sn+8ljJmF1rQvfQQx7Cjp4kadKr6Xzai7v1wRAsWicrrIbk8duxKCYg64ztXFL
+         BDjA==
+X-Gm-Message-State: AO0yUKWP8xyVGamf0WBOJKh93nbFPVTLiOrQjQF99pRsl02YkAoWVRpa
+        6tiin289gAsrmXgbQqUbLP8=
+X-Google-Smtp-Source: AK7set83D/mgQ4qoK/5/etmILfDSp8t6HFjpc7DEZSv2/LTC4BFOA5pGFplW5Si7c2xzArvJCGkeQg==
+X-Received: by 2002:a17:906:b185:b0:939:90ee:e086 with SMTP id w5-20020a170906b18500b0093990eee086mr3698059ejy.28.1679416458000;
+        Tue, 21 Mar 2023 09:34:18 -0700 (PDT)
+Received: from carbian ([2a02:8109:aa3f:ead8::a9c0])
+        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b0091fdd2ee44bsm5977632ejc.197.2023.03.21.09.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 09:34:17 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 17:34:15 +0100
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/3] iio: accel: Add support for Kionix/ROHM KX132
+ accelerometer
+Message-ID: <ZBnch1tSKyR4fA7H@carbian>
+References: <cover.1679009443.git.mehdi.djait.k@gmail.com>
+ <6f31fe7dbd142c01315891f6868ff75f7d7cde32.1679009443.git.mehdi.djait.k@gmail.com>
+ <20230319162207.77ef0686@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,SUBJ_AS_SEEN,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230319162207.77ef0686@jic23-huawei>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 06:03:01PM +0900, Masahiro Yamada wrote:
-> On Tue, Mar 21, 2023 at 6:04 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Mon, Mar 20, 2023 at 01:59:28PM -0600, jim.cromie@gmail.com wrote:
-> > > On Mon, Mar 20, 2023 at 12:35 PM Jason Baron <jbaron@akamai.com> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
-> > > > > dynamic-debug METADATA uses KBUILD_MODNAME as:
-> > > > >
-> > > > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
-> > > > >          static struct _ddebug  __aligned(8)                     \
-> > > > >          __section("__dyndbg") name = {                          \
-> > > > >                  .modname = KBUILD_MODNAME,                      \
-> > > > >
-> > > > > This is going amiss for some builtins, ie those enabled here, by:
-> > > > >
-> > > > >      echo module main +pmf > /proc/dynamic_debug_control
-> > > > >      grep =pmf /proc/dynamic_debug/control
-> > > > >
-> > > > > init/main.c:1187 [main]initcall_blacklist =pmf "blacklisting initcall %s\n"
-> > > > > init/main.c:1226 [main]initcall_blacklisted =pmf "initcall %s blacklisted\n"
-> > > > > init/main.c:1432 [main]run_init_process =pmf "  with arguments:\n"
-> > > > > init/main.c:1434 [main]run_init_process =pmf "    %s\n"
-> > > > > init/main.c:1435 [main]run_init_process =pmf "  with environment:\n"
-> > > > > init/main.c:1437 [main]run_init_process =pmf "    %s\n"
-> > > >
-> > > >
-> > > > Hi Jim,
-> > > >
-> > > > So if I'm following correctly, this is not a new issue, the 'module'
-> > > > name for dynamic debug has always been this way for builtin.
-> > >
-> > > It is not a new issue - both PM and init-main have been in [main] for some time.
-> > >
-> > > I believe that with
-> > > cfc1d277891e module: Move all into module/
-> > >
-> > > module's module-name joined them, changing from [module] to [main]
-> >
-> > If there was a regression due to this, we'd be very interested in
-> > hearing about it. Aaron he did the work to move the code to its own directory.
-> >
-> > > We could do
-> > > > something simple and just normalize it when we initially create the
-> > > > table, but setting the 'module name' to 'core' or 'builtin' or something
-> > > > for all these?
-> > >
-> > > core and builtin would both lump all those separate modules together,
-> > > making it less meaningful.
-> > >
-> > > having stable names independent of M vs Y config choices is imperative, ISTM.
-> > >
-> > > Also, I dont think "only builtins are affected" captures the whole problem.
-> > > I dont recall amdgpu or other modules changing when built with =y
-> > >
-> > > Theres some subtlety in how KBUILD_MODNAME is set,
-> > > and probably many current users who like its current behavior.
-> > > A new var ?
-> > >
-> > > 1st, I think that anything tristate gets a sensible value,
-> > > but at least some of the builtin-only "modules" get basenames, by default.
-> >
-> > In general we could all benefit from an enhancement for a shortname for
-> > things which could be modules being built-in. We're now seeing requests
-> > for dynamic debug, but it could also be usefulf for Nick's future work
-> > to help userspace tools / tracing map kallsysms to specific modules when
-> > built-in.
+Hello Jonathan,
+
+On Sun, Mar 19, 2023 at 04:22:07PM +0000, Jonathan Cameron wrote:
+> On Fri, 17 Mar 2023 00:48:37 +0100
+> Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
 > 
+> > Add support for the basic accelerometer features such as getting the
+> > acceleration data via IIO. (raw reads, triggered buffer [data-ready] or
+> > using the WMI IRQ).
+> > 
+> > Datasheet: https://kionixfs.azureedge.net/en/document/KX132-1211-Technical-Reference-Manual-Rev-5.0.pdf
+> > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
 > 
+> Nothing much specific to this patch, most changes will be as a result
+> of bringing this inline with the changes suggested for patch 2.
 > 
-> I think I rejected it some years ago.
-
-Good to know.
-
-> He comes back again and again with almost the same approaches,
-> until he finds a "sponsor" (it's you) who will get it in.
-
-Actually I also rejected the same approach too.
-
-> Recently, I rejected the Kbuild changes again.
-
-Yes I saw.
-
-> > To that end I had suggested the current state of affairs & current difficulty
-> > in trying to get us a name for this here:
-> >
-> > https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
-> >
-> > I ended up suggesting perhaps we need a -DPOSSIBLE_MODULE then if we
-> > could *somehow* pull that off perhaps then we could instead use
-> > -DPOSSIBLE_KBUILD_MODNAME which would ensure a consistent symbol when
-> > a module is built-in as well.
-> >
-> > That still leaves the difficulty in trying to gather possible-obj-m as
-> > a future challenge.
+> thanks,
 > 
-> I do not understand your point.
+> Jonathan
+> >  
+> > diff --git a/drivers/iio/accel/kionix-kx022a.h b/drivers/iio/accel/kionix-kx022a.h
+> > index 3bb40e9f5613..7e43bdb37156 100644
+> > --- a/drivers/iio/accel/kionix-kx022a.h
+> > +++ b/drivers/iio/accel/kionix-kx022a.h
+> > @@ -90,8 +90,61 @@
+> >  #define KX022A_REG_SELF_TEST	0x60
+> >  #define KX022A_MAX_REGISTER	0x60
+> >  
+> > +
 > 
-> Why is it important to achieve "precisely-exactly-possible-obj-m" instead of
-> "perhaps-possible-obj-m"?
+> Push these down into the c file.
+
+Do you mean all REG and MASK defines ? 
+Even kx022a defines them in the h file, or am I misunderstanding your
+comment ?
+
 > 
-> When "modprobe foo" succeeds, the user is sure that the kernel
-> provides the feature "foo" (but he does not care if
-> "foo" is built-in or modular).
+> > +#define KX132_REG_WHO		0x13
+> > +#define KX132_ID		0x3d
+> > +
+> > +#define KX132_FIFO_LENGTH	86
+> > +
+> > +#define KX132_REG_CNTL2		0x1c
+> > +#define KX132_REG_CNTL		0x1b
+> > +#define KX132_MASK_RES		BIT(6)
+> > +#define KX132_GSEL_2		0x0
+> > +#define KX132_GSEL_4		BIT(3)
+> > +#define KX132_GSEL_8		BIT(4)
+> > +#define KX132_GSEL_16		GENMASK(4, 3)
+> > +
+> > +#define KX132_REG_INS2		0x17
+> > +#define KX132_MASK_INS2_WMI	BIT(5)
+> > +
+> > +#define KX132_REG_XADP_L	0x02
+> > +#define KX132_REG_XOUT_L	0x08
+> > +#define KX132_REG_YOUT_L	0x0a
+> > +#define KX132_REG_ZOUT_L	0x0c
+> > +#define KX132_REG_COTR		0x12
+> > +#define KX132_REG_TSCP		0x14
+> > +#define KX132_REG_INT_REL	0x1a
+> > +
+> > +#define KX132_REG_ODCNTL	0x21
+> > +
+> > +#define KX132_REG_BTS_WUF_TH	0x4a
+> > +#define KX132_REG_MAN_WAKE	0x4d
+> > +
+> > +#define KX132_REG_BUF_CNTL1	0x5e
+> > +#define KX132_REG_BUF_CNTL2	0x5f
+> > +#define KX132_REG_BUF_STATUS_1	0x60
+> > +#define KX132_REG_BUF_STATUS_2	0x61
+> > +#define KX132_MASK_BUF_SMP_LVL	GENMASK(9, 0)
+> > +#define KX132_REG_BUF_CLEAR	0x62
+> > +#define KX132_REG_BUF_READ	0x63
+> > +#define KX132_ODR_SHIFT		3
+> > +#define KX132_FIFO_MAX_WMI_TH	86
+> > +
+> > +#define KX132_REG_INC1		0x22
+> > +#define KX132_REG_INC5		0x26
+> > +#define KX132_REG_INC6		0x27
+> > +#define KX132_IPOL_LOW		0
+> > +#define KX132_IPOL_HIGH		KX_MASK_IPOL
+> > +#define KX132_ITYP_PULSE	KX_MASK_ITYP
+> > +
+> > +#define KX132_REG_INC4		0x25
+> > +
+> > +#define KX132_REG_SELF_TEST	0x5d
+> > +#define KX132_MAX_REGISTER	0x76
+> > +
+> >  enum kx022a_device_type {
+> >  	KX022A,
+> > +	KX132,
+> As mentioned in previous review, I think this would be neater
+> done by just exporting the chip_info structures directly rather than
+> putting them in an array.
 
-You are thinking about the modprobe situation. That is in no way shape
-or form the end goal. Nick suggests he has tooling enhancements which
-allow userspace to disambiguate symbols from kallsyms which are built-in
-to come things which are modules. His hacks bring back the tristate crap
-which both you and I have rejected. The alternative is to live with what
-we *do* have. What do *do* have is to rely on the module license tag to
-see if something could possibly be a module.
+I gave the reason in a response to the previous review.
 
-The module license cleanup is motivated by the fact that relying on the
-fact that a module license tag does not always mean something can be a
-module. Having something which could never be a module still use
-MODULE_LICENSE() and have modprobe succeed is not fatal. However, if
-future tooling *is* going to be relied upon to display to tracer /
-debuggers where symbols come from, it becomes more useful if that
-information is a bit more deterministic.
-
-We eventually want to actually see if we can just infer the
-MODULE_LICENSE() from the SPDX tag, how we go about that remains
-to be seen, but if we *at least* had MODULE_LICENSE only in places
-that *were really* modules this reduces the scope.
-
-While we don't *need* to "fix" code which is using MODULE_LICENSE()
-which can *never* be modules, removing that cruft *can* still be useful
-from a driver maintainer perspective.
-
-> He spams with MODULE_LICENSE removal with no justification.
-
-If we don't want Nick to rely on the old tristate crap then the only
-tooling available he has today at his disposal to map symbols to
-possible modules is the MODULE_LICENSE tag.
-
-Part of the issue with Nick's patches all along has been proper
-justification / documentation. Try to take a step back and think about
-the possible *value-add* of userspace having more concrete information
-for traces / debugging. Again, value of his patches are separate, but
-*if* someone wanted to bring such tooling which *did* want to help map
-symbols more closely to possible modules *relying* on module-license is
-one of the cheap ways to do it today without incurring a build system
-slowdown.
-
-  Luis
+--
+Kind Regards
+Mehdi Djait
