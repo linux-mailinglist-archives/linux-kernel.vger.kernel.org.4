@@ -2,49 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC4F6C3045
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8A66C3047
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjCULXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S230252AbjCULXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjCULXG (ORCPT
+        with ESMTP id S229524AbjCULXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:23:06 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040BD3E1D0;
-        Tue, 21 Mar 2023 04:22:42 -0700 (PDT)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Mar 2023 07:23:45 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EB23402B;
+        Tue, 21 Mar 2023 04:23:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Pgq2M65w2z6FK2R;
-        Tue, 21 Mar 2023 19:22:19 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl1.zte.com.cn with SMTP id 32LBMCZ6070552;
-        Tue, 21 Mar 2023 19:22:13 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 21 Mar 2023 19:22:16 +0800 (CST)
-Date:   Tue, 21 Mar 2023 19:22:16 +0800 (CST)
-X-Zmail-TransId: 2afa64199368ffffffffc3c-b82e7
-X-Mailer: Zmail v1.0
-Message-ID: <202303211922161400872@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <andersson@kernel.org>
-Cc:     <agross@kernel.org>, <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBidXM6IHFjb20tc3NjLWJsb2NrLWJ1czogdXNlwqBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2VfYnluYW1lKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 32LBMCZ6070552
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6419936B.000/4Pgq2M65w2z6FK2R
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7ACEE21C40;
+        Tue, 21 Mar 2023 11:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679397774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jm4Zo+132JX6oDMe1XDUBhnQkufOn7dSsCZdHcEvdNw=;
+        b=scqa6Uvj/eZzzNK7VVNdWOA0ZTnUoluYYR8I4n1tBXEkmQcOy3t7Mc3lLfpJBgfxEcfuHi
+        N/aB2RQFO1j+nhcIWEF7g/XSdbiUKU1OdXqOYsqNETqH7fd0eIcX15wW4m2U0Lkl1fAiZV
+        y6D261EzxXaLRgBGiLEq6lIss5Q5gY8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679397774;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jm4Zo+132JX6oDMe1XDUBhnQkufOn7dSsCZdHcEvdNw=;
+        b=lMPsKxz29mC6Kip5uLuptPvKfg4EMoBPHtDHYBjOvVKvd7TpnClwc2nlTDHp8eoSXpfDuG
+        VesV8igNJqxu8KCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 593AE13451;
+        Tue, 21 Mar 2023 11:22:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id scMCFY6TGWSmZAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 11:22:54 +0000
+Message-ID: <7f08c635-039a-da10-76a2-1d88c37b1911@suse.cz>
+Date:   Tue, 21 Mar 2023 12:22:54 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,39 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On 3/15/23 12:31, Kirill A. Shutemov wrote:
+> MAX_ORDER currently defined as number of orders page allocator supports:
+> user can ask buddy allocator for page order between 0 and MAX_ORDER-1.
+> 
+> This definition is counter-intuitive and lead to number of bugs all over
+> the kernel.
+> 
+> Change the definition of MAX_ORDER to be inclusive: the range of orders
+> user can ask from buddy allocator is 0..MAX_ORDER now.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
-call to devm_platform_ioremap_resource_byname(), as this is exactly what
-this function does.
+With the fixups:
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/bus/qcom-ssc-block-bus.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/bus/qcom-ssc-block-bus.c b/drivers/bus/qcom-ssc-block-bus.c
-index eedeb29a5ff3..ae95112d4e20 100644
---- a/drivers/bus/qcom-ssc-block-bus.c
-+++ b/drivers/bus/qcom-ssc-block-bus.c
-@@ -277,14 +277,14 @@ static int qcom_ssc_block_bus_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, ret, "error when enabling power domains\n");
-
- 	/* low level overrides for when the HW logic doesn't "just work" */
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mpm_sscaon_config0");
--	data->reg_mpm_sscaon_config0 = devm_ioremap_resource(&pdev->dev, res);
-+	data->reg_mpm_sscaon_config0 = devm_platform_ioremap_resource_byname(pdev,
-+									     "mpm_sscaon_config0");
- 	if (IS_ERR(data->reg_mpm_sscaon_config0))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(data->reg_mpm_sscaon_config0),
- 				     "Failed to ioremap mpm_sscaon_config0\n");
-
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mpm_sscaon_config1");
--	data->reg_mpm_sscaon_config1 = devm_ioremap_resource(&pdev->dev, res);
-+	data->reg_mpm_sscaon_config1 = devm_platform_ioremap_resource_byname(pdev,
-+									     "mpm_sscaon_config1");
- 	if (IS_ERR(data->reg_mpm_sscaon_config1))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(data->reg_mpm_sscaon_config1),
- 				     "Failed to ioremap mpm_sscaon_config1\n");
--- 
-2.25.1
