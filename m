@@ -2,158 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EAD6C29C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F386C29CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjCUFXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S229980AbjCUFYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjCUFXq (ORCPT
+        with ESMTP id S229913AbjCUFXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 01:23:46 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54A17AA4;
-        Mon, 20 Mar 2023 22:23:43 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id eh3so55156040edb.11;
-        Mon, 20 Mar 2023 22:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679376222;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lAuDp41/Jc9fpuI9VECojCxomDXuMmNXR8rPFwVFJCc=;
-        b=BHAOXHiS4k4TJgqRzzZoaBWltYI+Ohh+eodyGTbGiHP8Dg1q0nLI4p+CoX1rwg2w3N
-         tCA9V31XCHJ6itq3dPhid7873bq3r9XGcrKb3qmJ40Pjos0FvDBUhD2DlC8sE1oRoGm3
-         rGnLGz0fVlorTchxIVGSl82Pz+VMyfkYR7rfiKRiQ/1rxCAfy4KPV94TxmwLxBg5/Ctk
-         G2CYMSyllsK0ewyt4sOcNyfo3/2zBrXdsmgtKOYmEkpjEdsO9/MXMr8OnJCAvAi87KiU
-         GZHAihtjaJGaDYUJN1IFTmZ9s22FqTCLJkh3L/egQ75SJgZ6PYCNAbgAsLPCevbYaj2i
-         kzSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679376222;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lAuDp41/Jc9fpuI9VECojCxomDXuMmNXR8rPFwVFJCc=;
-        b=6aCRE6fPwjcpeEN6YMYi26JBvNEcG1f01YhOzCvtq3f/Uj6qBbzinDAMsHy1bc867X
-         sgYS2kqkzg+HFCLMNVcLubuR53fwc1Tj1Ae/ZeFbm3UZvVH2kbTb2Rj6J1mlRBsTt2rk
-         qroahv8bw2LvHLsjyuDgdr/CFFbeihy4gBRf0QWhViyPPhgsfE4nxxgauAKK4G5ykaVv
-         juxg2/CIUt9EeY8lH84+cV+czs0ECTJfG7ErSrXGQQfiQAQvPiigmpPeqVVKMK8vtvYe
-         vTviDs/innrdvYqw4sNTMR57zmRmfeGY3dXVarEgNK84EJMUvhm8fUwV1yrLJEw894qH
-         IbtQ==
-X-Gm-Message-State: AO0yUKXaEAHdQgw1nLCkP/FzLAjGtIQjDF2vXRrj/eA3wsGbYBNfxb0l
-        trr6SAt7lu+64vdeKxuCIko=
-X-Google-Smtp-Source: AK7set9TcfYfZ/XME1QNGZ73w+jPmylxr6E5FwUlYCjpaqJZ07PpOC7KRKrgFUrwNWcUwK482e0t/g==
-X-Received: by 2002:a17:906:f10c:b0:930:a3a1:bede with SMTP id gv12-20020a170906f10c00b00930a3a1bedemr1546987ejb.50.1679376222041;
-        Mon, 20 Mar 2023 22:23:42 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id kg2-20020a17090776e200b009334219656dsm3472789ejc.56.2023.03.20.22.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 22:23:41 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 21 Mar 2023 06:23:39 +0100
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBk/Wxj4rXPra/ge@pc636>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBkDuLKLhsOHNUeG@destitution>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A86A83E1
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:23:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57B546195D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053CBC433EF;
+        Tue, 21 Mar 2023 05:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679376223;
+        bh=Bl81czR/G5Q+BkeayvN9xxkRrRyrsFU1ZSuvHOhqwQk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BN7PvaXa0kQp7q2Gn8SHGMdVBXvE4b1ebmaS4QKWTY2XoRi67FMH2Oqncj+PvxD2Y
+         +NLvl7jDzt9ujOudoXqJWaqxYnElvpAozEnFGm0Y+SCZN3V432Vx2nyMJIAlnNWwRn
+         lQ4ZHYwFO6s2I8JKuuk2WmbSVR/ybh5of61jFbI8j+WLTphZS/bIvyY+63utqqWFf2
+         LBTRlhZRg3X2fZ0fxT3MBdLOp0hewP0V3npz8uCA1pX43yw8RHyDqVgXVD8X50XG0t
+         zAmmrCAlkNlzlFqA0nvcQtgfvSpw2p5KFRjrhVp71G3wTbPmM9N0aQtWdf4h6xusVL
+         CrDS6ptuQZSAQ==
+Date:   Mon, 20 Mar 2023 22:23:41 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, ndesaulniers@google.com,
+        trix@redhat.com, corbet@lwn.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] x86: Avoid relocation information in final vmlinux
+Message-ID: <20230321052341.GA1536736@dev-arch.thelio-3990X>
+References: <20230320121006.4863-1-petr.pavlu@suse.com>
+ <e8a36925-2965-1dae-da01-5d06ba6747c8@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZBkDuLKLhsOHNUeG@destitution>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e8a36925-2965-1dae-da01-5d06ba6747c8@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:09:12PM +1100, Dave Chinner wrote:
-> On Sun, Mar 19, 2023 at 07:09:31AM +0000, Lorenzo Stoakes wrote:
-> > vmalloc() is, by design, not permitted to be used in atomic context and
-> > already contains components which may sleep, so avoiding spin locks is not
-> > a problem from the perspective of atomic context.
+On Mon, Mar 20, 2023 at 01:12:07PM -0700, Dave Hansen wrote:
+> On 3/20/23 05:10, Petr Pavlu wrote:
+> > The issue is then that the collected vmlinux file and hence distribution
+> > packages end up unnecessarily large because of this extra data. The
+> > following is a size comparison of vmlinux v6.0 with and without the
+> > relocation information:
+> > | Configuration      | With relocs | Stripped relocs |
+> > | x86_64_defconfig   |       70 MB |           43 MB |
+> > | +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
 > > 
-> > The global vmap_area_lock is held when the red/black tree rooted in
-> > vmap_are_root is accessed and thus is rather long-held and under
-> > potentially high contention. It is likely to be under contention for reads
-> > rather than write, so replace it with a rwsem.
-> > 
-> > Each individual vmap_block->lock is likely to be held for less time but
-> > under low contention, so a mutex is not an outrageous choice here.
-> > 
-> > A subset of test_vmalloc.sh performance results:-
-> > 
-> > fix_size_alloc_test             0.40%
-> > full_fit_alloc_test		2.08%
-> > long_busy_list_alloc_test	0.34%
-> > random_size_alloc_test		-0.25%
-> > random_size_align_alloc_test	0.06%
-> > ...
-> > all tests cycles                0.2%
-> > 
-> > This represents a tiny reduction in performance that sits barely above
-> > noise.
+> > Optimize a resulting vmlinux by adding a postlink step that splits the
+> > relocation information into vmlinux.relocs and then strips it from the
+> > vmlinux binary.
 > 
-> I'm travelling right now, but give me a few days and I'll test this
-> against the XFS workloads that hammer the global vmalloc spin lock
-> really, really badly. XFS can use vm_map_ram and vmalloc really
-> heavily for metadata buffers and hit the global spin lock from every
-> CPU in the system at the same time (i.e. highly concurrent
-> workloads). vmalloc is also heavily used in the hottest path
-> throught the journal where we process and calculate delta changes to
-> several million items every second, again spread across every CPU in
-> the system at the same time.
+> When I saw that this adds a postlink step, I read that as, "adds another
+> step to the unbearably slow single-threaded part of kernel builds". :)
 > 
-> We really need the global spinlock to go away completely, but in the
-> mean time a shared read lock should help a little bit....
+> But, here's one data point that made me feel a lot better.  Using a
+> random .config:
 > 
-I am working on it. I submitted a proposal how to eliminate it:
+> > https://sr71.net/~dave/intel/config-reloctest
+> 
+> the builds get a _bit_ slower, going from 37.0s->37.7s.  This is pretty
+> arbitrary of course, using my compiler on my hardware, so YMMV.  But,
+> for me, this seems like a reasonable tradeoff given the space savings.
+> 
+> I'd be curious what other people are seeing.
 
+I am seeing a negligible difference (~1%) with LLVM 16 when targeting
+the following configuration combinations and building the 'bzImage'
+target.
 
-<snip>
-Hello, LSF.
+* allmodconfig:
 
-Title: Introduce a per-cpu-vmap-cache to eliminate a vmap lock contention
+Benchmark 1: v6.3-rc3
+  Time (mean ± σ):     93.370 s ±  0.313 s    [User: 3462.570 s, System: 371.420 s]
+  Range (min … max):   92.993 s … 93.659 s    5 runs
 
-Description:
- Currently the vmap code is not scaled to number of CPU cores in a system
- because a global vmap space is protected by a single spinlock. Such approach
- has a clear bottleneck if many CPUs simultaneously access to one resource.
+Benchmark 2: v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"
+  Time (mean ± σ):     93.539 s ±  0.193 s    [User: 3464.361 s, System: 370.709 s]
+  Range (min … max):   93.281 s … 93.816 s    5 runs
 
- In this talk i would like to describe a drawback, show some data related
- to contentions and places where those occur in a code. Apart of that i
- would like to share ideas how to eliminate it providing a few approaches
- and compare them.
+Summary
+  'v6.3-rc3' ran
+    1.00 ± 0.00 times faster than 'v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"'
 
-Requirements:
- * It should be a per-cpu approach;
- * Search of freed ptrs should not interfere with other freeing(as much as we can);
- *   - offload allocated areas(buzy ones) per-cpu;
- * Cache ready sized objects or merge them into one big per-cpu-space(split on demand);
- * Lazily-freed areas either drained per-cpu individually or by one CPU for all;
- * Prefetch a fixed size in front and allocate per-cpu
+* allmodconfig + debug info (DWARF5):
 
-Goals:
- * Implement a per-cpu way of allocation to eliminate a contention.
+Benchmark 1: v6.3-rc3
+  Time (mean ± σ):     97.952 s ±  0.451 s    [User: 3673.380 s, System: 378.814 s]
+  Range (min … max):   97.420 s … 98.568 s    5 runs
 
-Thanks!
-<snip>
+Benchmark 2: v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"
+  Time (mean ± σ):     98.302 s ±  1.050 s    [User: 3674.310 s, System: 378.323 s]
+  Range (min … max):   97.603 s … 100.152 s    5 runs
 
---
-Uladzislau Rezki
+Summary
+  'v6.3-rc3' ran
+    1.00 ± 0.01 times faster than 'v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"'
 
+* allyesconfig bzImage:
+
+Benchmark 1: v6.3-rc3
+  Time (mean ± σ):     674.232 s ±  1.581 s    [User: 24901.883 s, System: 2223.728 s]
+  Range (min … max):   672.478 s … 676.678 s    5 runs
+
+Benchmark 2: v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"
+  Time (mean ± σ):     679.783 s ±  2.454 s    [User: 24903.720 s, System: 2228.943 s]
+  Range (min … max):   676.369 s … 682.772 s    5 runs
+
+Summary
+  'v6.3-rc3' ran
+    1.01 ± 0.00 times faster than 'v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"'
+
+* allyesconfig + debug info (DWARF5):
+
+Benchmark 1: v6.3-rc3
+  Time (mean ± σ):     709.745 s ±  1.880 s    [User: 26570.531 s, System: 2304.563 s]
+  Range (min … max):   707.918 s … 712.818 s    5 runs
+
+Benchmark 2: v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"
+  Time (mean ± σ):     711.773 s ±  1.152 s    [User: 26571.973 s, System: 2307.176 s]
+  Range (min … max):   710.127 s … 713.224 s    5 runs
+
+Summary
+  'v6.3-rc3' ran
+    1.00 ± 0.00 times faster than 'v6.3-rc3 + "x86: Avoid relocation information in final vmlinux"'
+
+Cheers,
+Nathan
