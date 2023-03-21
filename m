@@ -2,174 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B01D6C2F2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A79076C2F29
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjCUKgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S230196AbjCUKgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjCUKgr (ORCPT
+        with ESMTP id S230008AbjCUKgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 06:36:47 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D632658C;
-        Tue, 21 Mar 2023 03:36:14 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id c4so8685632pfl.0;
-        Tue, 21 Mar 2023 03:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679394968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=19wMmvfNWQyO4plWiUVaSYLzZEvvz2rrcCtkkcHymrA=;
-        b=XA2Or4IIUOT0w8WumqdaJjkHZ8CnX5ppAwonPbP4+Lky47xrJthUuf9oZjNW5Q5BYk
-         1QcvQJGo27FQnytWA//NmhvgEIGFYFtLPjD92qSWJpZeZK/QtH6P9NE3DekkkRGWSIjD
-         8UExGk4+RwfIgGSdhEcP8Qa27AI8qZJaq8JrkuHZGMkOJJNnzrve9X8OEHozsqtc5hep
-         T0P5U/CU5MG6pPLM9aQ6Y/ZzyV1MTMNhE5h7cFaGnzqqjW1dsKRfjHh4E4qnuQNj3jQv
-         unSGzxE2Bmdw2b6XR7x2VK6IDiEMwOtVD1pa7aNkaXPm+BGZjrwH5RXRFwsU7gt++8wP
-         ejnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679394968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=19wMmvfNWQyO4plWiUVaSYLzZEvvz2rrcCtkkcHymrA=;
-        b=0UI68w/PdOqAjFIqaJfssqWc6rTwSmIqUD2gf+ZOISK2jWCKH4QfKzzjRzXk2QyP73
-         ucCI0p1ljPU8lUsZkRrZ0Ux3jhCraNUUHZRJXopH7ljCWhT7mnlby+aRxxk0aWnIBPA1
-         m23V+HIt/aMKIkelmNci8b/IWfdHmS2x5wTQhvf8ug7Ac3M3MfoUCV3LTXnxKDOjZXGh
-         A4OKcg1741WFvfHsIaWFkwohMo7DRuAn9llxgeaoFvGzEu9hcInqU/dpXwKIsfpYMF53
-         tR7JrSg1QYU5gcno0eLqntsjeKOBiIW4CYhA1uRCO/HaK9OFmDyvbIKp/2L11XdX/VCi
-         H4XQ==
-X-Gm-Message-State: AO0yUKV/9BQFs1779twB5oGVne1wUqVZeC1xgB1rdj0cBg+7liyAFgq+
-        RsB3GPwbdR9SGgTRTvo9w0oxzoqV5pEyoXDsKwE=
-X-Google-Smtp-Source: AK7set9Ai3aUCQzsCnSs67dxCqfbDdyWFvnULvCzjfwd10kfeVpg4uoBXfmJUhY664JgGow0KWFsS/aeRCpc953/MNs=
-X-Received: by 2002:a63:a442:0:b0:503:77cd:b7b4 with SMTP id
- c2-20020a63a442000000b0050377cdb7b4mr472055pgp.12.1679394967834; Tue, 21 Mar
- 2023 03:36:07 -0700 (PDT)
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCCD193C8;
+        Tue, 21 Mar 2023 03:36:10 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 2D1131343;
+        Tue, 21 Mar 2023 11:36:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1679394966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E0MuSZFY8OGr+b15UxWX+eX6mHT3AIP15MrknYT0oDo=;
+        b=SYUR6h5ShloAmYOjykyuNNESDI6xZ92J1NZljaxgdIBboeWcWErdhkrNePPyKYGro2kE4k
+        HVFfr/+/dNP+X0ckUs7pomi7/cIU9ga7I9I/FmZSnFsSJvs5/HOvS/Zu6+em3AbjFv1rG7
+        5oJxDEN6Y74ByO7vPdtHskc1yqIwdM60BnPuw/S5IqG92SAUl3ExnlXZebl8H7E3Kvyb/w
+        /eIs57oU4z8whxiCJPeK+tJ1VU6A2xzhfv4HnsjidOl2rJDAEjbrALVIdRYOhOxZioqEdx
+        rEOyYgFeHk41EWZDnXLL3FIj5JLy9uO+4DrTXvfe8no37uaLyOFBgiihuGOzaQ==
 MIME-Version: 1.0
-References: <20230320182813.963508-1-noltari@gmail.com>
-In-Reply-To: <20230320182813.963508-1-noltari@gmail.com>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Tue, 21 Mar 2023 11:35:56 +0100
-Message-ID: <CAOiHx=nKVWfa1-_VAf3bz+6PPz0uWMHyEtoVVOysFf0srZorBA@mail.gmail.com>
-Subject: Re: [RFC PATCH] drivers: net: dsa: b53: mmap: add phy ops
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Cc:     f.fainelli@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 21 Mar 2023 11:36:05 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Ra?= =?UTF-8?Q?fa=C5=82_Mi=C5=82ecki?= 
+        <rafal@milecki.pl>
+Subject: Re: [PATCH V5 3/3] nvmem: core: add support for fixed cells *layout*
+In-Reply-To: <20230321102418.4190-4-zajec5@gmail.com>
+References: <20230321102418.4190-1-zajec5@gmail.com>
+ <20230321102418.4190-4-zajec5@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <024fd4500089d479b60580449d3567b8@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 at 19:28, =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gma=
-il.com> wrote:
->
-> Currently, B53 MMAP BCM63xx devices with an external switch hang when
-> performing PHY read and write operations due to invalid registers access.
-> This adds support for PHY ops by using the internal bus from mdio-mux-bcm=
-6368
-> when probed by device tree and also falls back to direct MDIO registers i=
-f not.
->
-> This is an alternative to:
-> - https://patchwork.kernel.org/project/netdevbpf/cover/20230317113427.302=
-162-1-noltari@gmail.com/
-> - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.302=
-162-2-noltari@gmail.com/
-> - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.302=
-162-3-noltari@gmail.com/
-> - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.302=
-162-4-noltari@gmail.com/
-> As discussed, it was an ABI break and not the correct way of fixing the i=
-ssue.
->
-> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+Am 2023-03-21 11:24, schrieb Rafał Miłecki:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> This adds support for the "fixed-layout" NVMEM layout binding. It 
+> allows
+> defining NVMEM cells in a layout DT node named "nvmem-layout".
+> 
+> While NVMEM subsystem supports layout drivers it has been discussed 
+> that
+> "fixed-layout" may actually be supperted internally. It's because:
+> 1. It's a very basic layout
+> 2. It allows sharing code with legacy syntax parsing
+> 3. It's safer for soc_device_match() due to -EPROBE_DEFER
+> 4. This will make the syntax transition easier
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  drivers/net/dsa/b53/b53_mmap.c    | 86 +++++++++++++++++++++++++++++++
->  include/linux/platform_data/b53.h |  1 +
->  2 files changed, 87 insertions(+)
->
-> diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mma=
-p.c
-> index 706df04b6cee..7deca1c557c5 100644
-> --- a/drivers/net/dsa/b53/b53_mmap.c
-> +++ b/drivers/net/dsa/b53/b53_mmap.c
-> @@ -19,14 +19,25 @@
->  #include <linux/bits.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/of_mdio.h>
->  #include <linux/io.h>
->  #include <linux/platform_device.h>
->  #include <linux/platform_data/b53.h>
->
->  #include "b53_priv.h"
->
-> +#define REG_MDIOC              0xb0
-> +#define  REG_MDIOC_EXT_MASK    BIT(16)
-> +#define  REG_MDIOC_REG_SHIFT   20
-> +#define  REG_MDIOC_PHYID_SHIFT 25
-> +#define  REG_MDIOC_RD_MASK     BIT(30)
-> +#define  REG_MDIOC_WR_MASK     BIT(31)
-> +
-> +#define REG_MDIOD              0xb4
-> +
->  struct b53_mmap_priv {
->         void __iomem *regs;
-> +       struct mii_bus *bus;
->  };
->
->  static int b53_mmap_read8(struct b53_device *dev, u8 page, u8 reg, u8 *v=
-al)
-> @@ -216,6 +227,69 @@ static int b53_mmap_write64(struct b53_device *dev, =
-u8 page, u8 reg,
->         return 0;
+>  drivers/nvmem/core.c | 32 +++++++++++++++++++++++++++++---
+>  1 file changed, 29 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 212c5ba5789f..591b640f53dd 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -694,7 +694,7 @@ static int nvmem_validate_keepouts(struct
+> nvmem_device *nvmem)
+>  	return 0;
 >  }
->
-> +static inline void b53_mmap_mdio_read(struct b53_device *dev, int phy_id=
-,
-> +                                     int loc, u16 *val)
+> 
+> -static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
+> +static int nvmem_add_cells_from_dt(struct nvmem_device *nvmem, struct
+> device_node *np)
+>  {
+>  	struct nvmem_layout *layout = nvmem->layout;
+>  	struct device *dev = &nvmem->dev;
+> @@ -702,7 +702,7 @@ static int nvmem_add_cells_from_of(struct
+> nvmem_device *nvmem)
+>  	const __be32 *addr;
+>  	int len, ret;
+> 
+> -	for_each_child_of_node(dev->of_node, child) {
+> +	for_each_child_of_node(np, child) {
+>  		struct nvmem_cell_info info = {0};
+> 
+>  		addr = of_get_property(child, "reg", &len);
+> @@ -740,6 +740,28 @@ static int nvmem_add_cells_from_of(struct
+> nvmem_device *nvmem)
+>  	return 0;
+>  }
+> 
+> +static int nvmem_add_cells_from_legacy_of(struct nvmem_device *nvmem)
 > +{
-> +       uint32_t reg;
-> +
-> +       b53_mmap_write32(dev, 0, REG_MDIOC, 0);
-> +
-> +       reg =3D REG_MDIOC_RD_MASK |
-> +             (phy_id << REG_MDIOC_PHYID_SHIFT) |
-> +             (loc << REG_MDIOC_REG_SHIFT);
-> +
-> +       b53_mmap_write32(dev, 0, REG_MDIOC, reg);
-> +       udelay(50);
-> +       b53_mmap_read16(dev, 0, REG_MDIOD, val);
+> +	return nvmem_add_cells_from_dt(nvmem, nvmem->dev.of_node);
 > +}
 > +
-> +static inline int b53_mmap_mdio_write(struct b53_device *dev, int phy_id=
-,
-> +                                     int loc, u16 val)
+> +static int nvmem_add_cells_fixed(struct nvmem_device *nvmem)
+> +{
+> +	struct device_node *layout_np;
+> +	int err = 0;
+> +
+> +	layout_np = of_nvmem_layout_get_container(nvmem);
+> +	if (!layout_np)
+> +		return 0;
+> +
+> +	if (of_device_is_compatible(layout_np, "fixed-layout"))
+> +		err = nvmem_add_cells_from_dt(nvmem, layout_np);
+> +
+> +	of_node_put(layout_np);
+> +
+> +	return err;
+> +}
+> +
+>  int __nvmem_layout_register(struct nvmem_layout *layout, struct module 
+> *owner)
+>  {
+>  	layout->owner = owner;
+> @@ -970,7 +992,7 @@ struct nvmem_device *nvmem_register(const struct
+> nvmem_config *config)
+>  	if (rval)
+>  		goto err_remove_cells;
+> 
+> -	rval = nvmem_add_cells_from_of(nvmem);
+> +	rval = nvmem_add_cells_from_legacy_of(nvmem);
+>  	if (rval)
+>  		goto err_remove_cells;
+> 
+> @@ -980,6 +1002,10 @@ struct nvmem_device *nvmem_register(const struct
+> nvmem_config *config)
+>  	if (rval)
+>  		goto err_remove_cells;
+> 
+> +	rval = nvmem_add_cells_fixed(nvmem);
 
-On nitpick here: AFACT, what you are actually getting there as phy_id
-isn't the phy_id but the port_id, it just happens to be identical for
-internal ports.
+nvmem_add_cells_from_fixed_layout()?
 
-So in theory you would first need to convert this to the appropriate
-phy_id (+ which bus) first, else you risk reading from the wrong
-device (and/or bus).
+Reviewed-by: Michael Walle <michael@walle.cc>
 
-See how the phys_mii_mask is based on the indexes of the user ports,
-not their actual phy_ids. [1] [2]
-
-[1] https://elixir.bootlin.com/linux/latest/source/net/dsa/dsa.c#L660
-[2] https://elixir.bootlin.com/linux/latest/source/include/net/dsa.h#L596
-
-Regards
-Jonas
+> +	if (rval)
+> +		goto err_remove_cells;
+> +
+>  	rval = nvmem_add_cells_from_layout(nvmem);
+>  	if (rval)
+>  		goto err_remove_cells;
