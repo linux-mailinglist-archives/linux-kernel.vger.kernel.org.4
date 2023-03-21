@@ -2,130 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB49F6C35BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B8D6C35BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjCUPdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S230489AbjCUPdy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 11:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjCUPdn (ORCPT
+        with ESMTP id S231534AbjCUPdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:33:43 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FECE1B57E;
-        Tue, 21 Mar 2023 08:33:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ez4sVw5QZJVWFt/Lkc3WrUIWjeEu3U4WBZM8pbacuQReXDZl0XhUGw+FmWy55TLv4g+UbotWJ/p4x8XXF2CoYgjHDxQxx08JjY8iLAd1gzNUq5mKHVpTVVGNLQQReM/WrKxVjCTb8AZvE1pn51+sYzB4HqNwrOWbrL70DztrLqddNTGkfWv7Anu+AE/IrOvTRAQB6frKv/cif3GX4NTkNbLVVUpGAnGJLccxuWda8ndW78hoF+mMi6e593iO4g1/KXx5dUoVN7arT3DBdZ8wcyTjG2oZWK6Tef+64BG/h0/7cdbqI/+RqQFL7wIg+yyiajodAdEnWPZoZki/5DuBVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DOjan4i38dWPg5PkKOBvj2iXDWkLQeEIGXG301DH8dk=;
- b=jBsPW0i87lksZM6ulEdHnGHM1hF2PNWCQn2n77vwsG1hSdsr9DJwaqToGONYhAAGVjTO9TwUzUx9ci5tw25hh5UowsO458KJ5uuftIXda3jo/4nRq+9xuubt6n3XHFmwxxa/uKaBkpHIEZ1ugWLlGDiE+fAFMMEbUTazW8hJlJbQjXyyt4nEiwcWiq49K/siv/UxmkBWih9IPZHCoHjJ5wPVZYtNt+DYgMizvrdwS5xKaoLgJ5ulDv+lLfAKm0ww4aye9mr20hdkCshh6WZBOHVsq/AcXw7keYJER4+4PczCnU/ruiLReqkHKkt9cm7pA4mzyPE/JkhyxCyhvHo0rQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DOjan4i38dWPg5PkKOBvj2iXDWkLQeEIGXG301DH8dk=;
- b=xYhO11OZvZVvD698DreMQuStuLeaSfMZ0obhNJQuAAAsbhKkAOtevwXmIZhPcW3CBI++87Vr7IOAif9IVAxYUAxJuiSKNDO+vHel8Bj+FAgIPFCyT30RCsbhNMMVzBAenu1xHI2hb9m+JOEKEo2/HDrq48UwrkjKKdMjYCntB5w=
-Received: from MW4PR03CA0011.namprd03.prod.outlook.com (2603:10b6:303:8f::16)
- by SA1PR12MB8987.namprd12.prod.outlook.com (2603:10b6:806:386::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 15:33:40 +0000
-Received: from CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8f:cafe::90) by MW4PR03CA0011.outlook.office365.com
- (2603:10b6:303:8f::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Tue, 21 Mar 2023 15:33:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT096.mail.protection.outlook.com (10.13.175.84) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6222.16 via Frontend Transport; Tue, 21 Mar 2023 15:33:39 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 21 Mar
- 2023 10:33:37 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fpga@vger.kernel.org>
-Subject: [PATCH] fpga: xilinx-pr-decoupler: Use readl wrapper instead of pure readl
-Date:   Tue, 21 Mar 2023 16:33:23 +0100
-Message-ID: <0381e4e8061c2fee182a104768e84feff3a82d25.1679412800.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 21 Mar 2023 11:33:51 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BFA4BEB5;
+        Tue, 21 Mar 2023 08:33:50 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id r5so18323221qtp.4;
+        Tue, 21 Mar 2023 08:33:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679412829;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y1FAG7EG+oo0WLGCAeT69lFpq2lucqpqtpr3jD7v1IY=;
+        b=INfHfxHGEI/5w8IQ9W21SiFqMaTJ06sHByu6ZOQS1PJ3c8UePiz9zcMHIFOVl1Rf1B
+         PiNcJflp0SUEZIV9stxgeiCbaUy62tR47rrbA7gaV+g0XcC0sHPGNmcP3O+pLQjWUxoT
+         /iczIE7PN/dE6pRSHSQe7EyqvNbf8cvUZRSxE8IgV7TVWomThA7EV/c0r5SU8iSQOV5i
+         ErgqovkevFa4DHjcL6tEBShCg3Wf6GeNWtEo6hbnQHWWgCMFNYLB+BbrlJ789TfP8qqV
+         Xt9vwKI1M6sYY6XTKJWHkVXs5mqf+n+8ZzdS+nHkdoZwl4lWrM0TfZEpD4xq5f3AVtos
+         qs8A==
+X-Gm-Message-State: AO0yUKWyuGvLmPiBIuko0TzAjt00+C1/SzV+V4WBgUJ+gBoZzo0XZHd1
+        oomAg/WBf1cbXreMSn5RHvKqr6tOHPKy0A==
+X-Google-Smtp-Source: AK7set+wM/CgmaLWb/Q/BFbPIxBQ3OldCjO2kaTQBKU/yUCIWgpBS7zfr0hPJ2Dp8gjZoCpk72ohtg==
+X-Received: by 2002:a05:622a:1ba6:b0:3d8:3aed:66f4 with SMTP id bp38-20020a05622a1ba600b003d83aed66f4mr346788qtb.41.1679412829145;
+        Tue, 21 Mar 2023 08:33:49 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id 130-20020a370888000000b007467f7536d0sm4958460qki.99.2023.03.21.08.33.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 08:33:48 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5445009c26bso286836797b3.8;
+        Tue, 21 Mar 2023 08:33:48 -0700 (PDT)
+X-Received: by 2002:a81:ac0d:0:b0:545:45f4:2e50 with SMTP id
+ k13-20020a81ac0d000000b0054545f42e50mr1317822ywh.4.1679412828173; Tue, 21 Mar
+ 2023 08:33:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT096:EE_|SA1PR12MB8987:EE_
-X-MS-Office365-Filtering-Correlation-Id: b09906de-a9fb-41d5-c3dd-08db2a21a556
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DdsKw28i7MOvWj/K5KTZWP5HN1ZvnKb5/Beb0FJib2EVH5zF4g+SsoZNNuFkbRbRcwjJBqAlQN5qM9PBkv++oVO78ncwMXtXPB6OD6aO3gBO4D1lJBtNEGS7lDSks93WcJ61MHZyP/Dl3dsD9S4cnuwIra3IrdLkNbt2ItluqZn2RfKt5OQdGIR2JyiXYuS1cfjQMTQuMsmf9biek3GbHKKmZvLVvmBwTxSUOlutiragGxZbO7xrXAwrZQebS0jK6wCSlMtv9UWPQLaFuBB1B6voqMnKvTdqos19zgDy7Eoy/YTOkatQFhgWMfUHxmrGz4t87xQAOsixmzssJM8nZRBuKRXlnH8wYg+jVy7XMnprThVhtqRFNVh8Wt/Qq8/BiCIl3my9WtPOaBfsKZRwUx6YN55kUdo74CD6CUFRsij1Yea+EB4p+5fyjQsGx7Z02aGOeIiNlxFF6jir1DootCPbR56X0V+BGFbx1iojx4LMyutk8FzXEepWmmJ3Ve5xfIJaQ+6YoUTxm74FkvfHoN+FSjSBExFb+0pxBVOBqvUKFJlRkpUF097YSmm5gS1Tgpil4ZBJTZ7s5aKuiEK6TgzmerYyAJOZ5djf+mV4S+2/fAkQbaAKBVf6S6r4XTCYBdhZVI0j3hR2yO2+qiqu1wGOStrFO8h6OSTgw7bjSkmYKaRFwTo4IKvgYvAk9UTIosZCbWnXmUZi5swqZF8GXmxx0R5tWGske2+tC/KDxMWZraqvNgUBcriVLHG7qaEO
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199018)(46966006)(40470700004)(36840700001)(40460700003)(40480700001)(5660300002)(2616005)(70206006)(8676002)(70586007)(6666004)(54906003)(4744005)(316002)(4326008)(41300700001)(44832011)(36860700001)(8936002)(336012)(26005)(110136005)(47076005)(16526019)(83380400001)(186003)(966005)(426003)(478600001)(82310400005)(86362001)(36756003)(82740400003)(2906002)(356005)(81166007)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 15:33:39.7708
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b09906de-a9fb-41d5-c3dd-08db2a21a556
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8987
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+ <20230320082146.4117022-1-geert@linux-m68k.org> <c85681c6-6fcf-33ed-210f-661e539f78d8@infradead.org>
+ <CAMuHMdWw0OdLPUORh6=Be8AW6bN+Pa2t=dcF47B1m=-ihsNPZQ@mail.gmail.com> <7e876937-4254-a2d8-f810-513f067b4855@infradead.org>
+In-Reply-To: <7e876937-4254-a2d8-f810-513f067b4855@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 Mar 2023 16:33:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU+t2-LO2WbWCpOuVWm1ZqR29GKH3k8WfCGKK1Vsr0K5w@mail.gmail.com>
+Message-ID: <CAMuHMdU+t2-LO2WbWCpOuVWm1ZqR29GKH3k8WfCGKK1Vsr0K5w@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v6.3-rc3 (drm/msm/)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Driver has IO wrappers but xlnx_pr_decouple_read() is not used and readl is
-used instead which is just wrong.
-It is also generating sparse issue that xlnx_pr_decouple_read() is unused.
+Hi Randy,
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+On Tue, Mar 21, 2023 at 4:10 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 3/21/23 00:34, Geert Uytterhoeven wrote:
+> > On Tue, Mar 21, 2023 at 6:38 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> >> On 3/20/23 01:21, Geert Uytterhoeven wrote:
+> >>> Below is the list of build error/warning regressions/improvements in
+> >>> v6.3-rc3[1] compared to v6.2[2].
+> >>>
+> >>> Summarized:
+> >>>   - build errors: +9/-14
+> >>>   - build warnings: +4/-1447
+> >>>
+> >>> JFYI, when comparing v6.3-rc3[1] to v6.3-rc2[3], the summaries are:
+> >>>   - build errors: +0/-1
+> >>>   - build warnings: +0/-0
+> >>>
+> >>> Happy fixing! ;-)
+> >>>
+> >>> Thanks to the linux-next team for providing the build service.
+> >>>
+> >>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e8d018dd0257f744ca50a729e3d042cf2ec9da65/ (all 152 configs)
+> >>> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9c3395d5e3dcc6daee66c6908354d47bf98cb0c/ (all 152 configs)
+> >>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/eeac8ede17557680855031c6f305ece2378af326/ (all 152 configs)
+> >>>
+> >>>
+> >>> *** ERRORS ***
+> >>>
+> >>> 9 error regressions:
+> >>
+> >>>   + /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant:  => 300:2, 299:2, 296:2
+> >>
+> >>
+> >> Are these due to the sign bit being set after a shift?
+> >> It looks that way since it is only reported for such values.
+> >
+> > Yep.
+> >
+> >> From the reports on the build server, it only happens when building with gcc5.
+> >> I don't have the ability to build with gcc5 or I would test it.
+> >
+> > I deliberately installed gcc-5.5.0-nolibc/aarch64-linux to reproduce it
+> > (gcc5 on x86 didn't reproduce).
+>
+> Yes, I installed that same compiler. When I tried to use it, I got:
+>
+> /opt/crosstool/gcc-5.5.0-nolibc/aarch64-linux/bin/aarch64-linux-gcc: unknown C compiler
+> scripts/Kconfig.include:44: Sorry, this C compiler is not supported.
 
-Created based on discussion with Tom here
-https://lore.kernel.org/r/20230317230617.1673923-1-trix@redhat.com
----
- drivers/fpga/xilinx-pr-decoupler.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I didn't run into that. I used
 
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index 2d9c491f7be9..b76d85449b8f 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct fpga_bridge *bridge)
- 	if (err)
- 		return err;
- 
--	status = readl(priv->io_base);
-+	status = xlnx_pr_decouple_read(priv, CTRL_OFFSET);
- 
- 	clk_disable(priv->clk);
- 
+make ARCH=arm64
+CROSS_COMPILE=/opt/cross/gcc-5.5.0-nolibc/aarch64-linux/bin/aarch64-linux-
+drivers/gpu/drm/msm/msm_mdss.o
+
+I did have to disable CONFIG_GCC_PLUGINS, else it couldn't find
+<gmp.h>.
+
+> >> @Rob and other drm/msm people, what do you think about this?
+> >> (or is this already fixed somewhere but not yet in linux-next?)
+> >
+> > Thanks, I posted a similar fix two weeks ago:
+> > https://lore.kernel.org/all/20230306090633.65918-1-geert+renesas@glider.be
+>
+> OK, I replied to that one.
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.36.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
