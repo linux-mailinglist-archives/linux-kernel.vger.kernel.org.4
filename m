@@ -2,161 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7115F6C2B59
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54106C2B5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjCUH1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
+        id S229767AbjCUHaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCUH12 (ORCPT
+        with ESMTP id S229541AbjCUHaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:27:28 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4724333CD0;
-        Tue, 21 Mar 2023 00:27:27 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id f6-20020a4ace86000000b00537590ae0a2so2262219oos.8;
-        Tue, 21 Mar 2023 00:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679383646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lN03r+lNraGva2aQZc0gY3Y2eDpzLMJTb6HI5Qu4Nls=;
-        b=Q58pv5EQo1PPfrVfu5MO0Ee72vjuDSirtH/YKgKHtQIMaSpfJTL13qnlDi5Jru7ukn
-         Px7NjPQGG7oAxuTyg2e6DXysVDjqZZJmZ7dvaadKv6b8YAs7N0Vn7j9axhAJntcIYcPq
-         LUJqI1HhZvE0elu9Vv/o+rZ1r/GqzbfXIhrOs4PUeTWZC1+b0cbBUX9pzMUpyd0htNHU
-         v37umS3OKbltDt2Gz7GBmvBmbPk0yykA/By8qG+npgvsGkbePsrlGMu2oZUYK/jk/K/I
-         1XVq0bI33NiCUI3lI8Kp0k8c0iQ1Vsg64jC+dXdqv3HrAuaEwz/eUjzcR85jQUt8GCJr
-         KgyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679383646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lN03r+lNraGva2aQZc0gY3Y2eDpzLMJTb6HI5Qu4Nls=;
-        b=UUDsDmlTEejdBLMFAUqqorITRDBky36k0g680UKKQQ/A/wANz1ZU4zlCcWj0YfttZm
-         WKtC+gyErKSS2taUV9xPa5wIdNlP5k36U3X99WnlmnaweTQDGGryq3ZN7rljN305isnH
-         8eJAhGLZPMcytulEgs8tP6yhUbFlL3iIS8auyFZSE9Lp3GkrUfj7fcPeCpYDh+wrGSsB
-         xyqj9GWu5kxt9rCWa2bRarprZNPXG7IM3gvK17p0vFbWSe+xHH6CqAHmMKsJ1HMWDWht
-         Rzs1YCNyKfMAAnxQUHOe8dvi5Mb1r/VHY+C4tN1eSpZ1nMZwe5DHTbUBj48/SsofETOC
-         Acig==
-X-Gm-Message-State: AO0yUKVCEueG9OwWVC13AtsESJZghLjQycFobDt8nJ2BiCQb2N3PGyLe
-        WmoBwLJkmu4vJMFGTBRk9lLuhf3vs00ePXYkiqZHvHER67SeFQ==
-X-Google-Smtp-Source: AK7set+RPNpCQUduEbQnJP50HrY1hohDtbIxM2hY1HZLWCi1BvyAVkO2LxZ16ASJNXCyb1AILINeIoRb0r3NASgVfYg=
-X-Received: by 2002:a05:6820:516:b0:536:c774:d6cc with SMTP id
- m22-20020a056820051600b00536c774d6ccmr473837ooj.0.1679383646619; Tue, 21 Mar
- 2023 00:27:26 -0700 (PDT)
+        Tue, 21 Mar 2023 03:30:13 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2076.outbound.protection.outlook.com [40.107.96.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466FC35247;
+        Tue, 21 Mar 2023 00:30:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UcDuHc+lFiGKddAAaq2pxoT3Da8saW13mrmypycFO00GdGXJwq+qKFEplXcXjhr68k1q978aBZfLwXWgIRuC89XCqu6r650tTkysS3aevC+Um3mhgGU8Iq1q+f4wfZ8SintsIoC7dfC/n1kuh1SEEv6VYqmk4Q0vkX5Ub0HJxaMPj/2legIWFxdTnDgawEWuTe5dXfmEKa+AcqOh9zWd9e0uUYsavoFJzcVnGzSqz4+HhgyFvPuwmTZH9dG2NaEM1P0aJbyYQ5MEraoelqC3fP5KwWJRf75TChajyTLIYydqTq4d4Lcz32hN7ihesrk2Jqgnr0G94zkVKCLoaoq+uA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gU9CjJf864Aq0/iVXS3JAav2H6/gfzdhuzbEb/K6mv0=;
+ b=d/hw69fxO1VAS8rcrK0Fxq/hMT0KpJOB/ymjOxrnHoM/xyRr/3+5SFVq9ATOcd7/tIuntm7zkjJ8nMETMDievQbOVu1jWDwkre8aGV7NaPTdhsKDZjoLSDmvuSnlPS2jsLMugcc5M4AEWyRc631csMl3483XuiUeENcjemgDmaZHNZ6/Kri/zfBrpSZLa1DCnfIR/LGPRZbnHXI3MVUAfMeGBYhHWkHnazjRVTrrcVYV+SAjQAjDtjArN3rcK13w3MPCV9TRbLF7Fvir2OvA+u2BY4R6glyZaU3DqUpIAkWQxBBfBCYrbDZCsHvNzERDw9X5x65eqwe6jnRBq8iuAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gU9CjJf864Aq0/iVXS3JAav2H6/gfzdhuzbEb/K6mv0=;
+ b=DJjL90wzG3OCkL6gxDQliFZyAoFVkO4t+3JRS7CimzzvYoYPmrEs670e4rmJzlW+0naQAt3T9IHb98iB+kH6kMht6dtGRV5FkmiR7JmQl1hdH83n4BzsjJBPpfzjPMU/WROCDGcPX33aTI0adBGwziN3HNQHNz4+zE3QmvF/kkyNPgnYTcTSj93+m0PzxV+Bg5L2lN2xbGOWtNcm8I1KAdT6DAd5iv/8zpZxOo8E2oVGGkuWX2yQgGiea1lxgOCTIo3abe3MjZ9h/Mya16ON+/ZqYNmKRpHsuirzgZ5K0mz/ZlBzaHZFazgKNS7ak5TrGFnEA78md6Bl/9nNYL+gSg==
+Received: from BN8PR15CA0019.namprd15.prod.outlook.com (2603:10b6:408:c0::32)
+ by SJ1PR12MB6268.namprd12.prod.outlook.com (2603:10b6:a03:455::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 07:30:08 +0000
+Received: from BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:c0:cafe::c8) by BN8PR15CA0019.outlook.office365.com
+ (2603:10b6:408:c0::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Tue, 21 Mar 2023 07:30:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT069.mail.protection.outlook.com (10.13.176.152) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.16 via Frontend Transport; Tue, 21 Mar 2023 07:30:08 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 21 Mar 2023
+ 00:29:58 -0700
+Received: from 0e64808-lcelt.nvidia.com (10.126.230.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Tue, 21 Mar 2023 00:29:55 -0700
+From:   Haotien Hsu <haotienh@nvidia.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     JC Kuo <jckuo@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+        Haotien Hsu <haotienh@nvidia.com>
+Subject: [PATCH v4] usb: xhci: tegra: fix sleep in atomic call
+Date:   Tue, 21 Mar 2023 15:29:46 +0800
+Message-ID: <20230321072946.935211-1-haotienh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com> <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
- <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
- <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org> <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org> <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org> <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
- <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org> <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
- <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org> <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
- <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
-In-Reply-To: <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 21 Mar 2023 08:27:13 +0100
-Message-ID: <CAMhs-H9snDAa9K7b+R+wi2VotFCrOQwF3B_55=dpAAkfZ0CdBQ@mail.gmail.com>
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT069:EE_|SJ1PR12MB6268:EE_
+X-MS-Office365-Filtering-Correlation-Id: cfceffa8-6313-4854-41c9-08db29de1904
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SndbQ2iht6+UNe59p9103bfRdi3xSJVbat4RAm1vt7xFprHdUU+y0Xs3Hwis0Ntr4rnyFZTgDrWiJw06Tt/K1hB7TylPgyOvCAk1KF6tzRFAoe/6KcrJ48JKwOkpaYhdEAZwQ7S7YjpSUk6sDpqXmBiaGSy5n+92mylG0/32kLc23vzqDk/8AORbpxF0drYPJq0VQjb/CUnctbpxRY9bptR4pcmUilMoPhAhSwPXftsjgJsK0y83pZXOIX4xvMkOKudqrxZrO6TA6kN5IT446Dn5+jFiMnfSRkwpTy9dj0WZMCsWkJUH7+B3TEjv6HgsCW8+cvfJUOEeqCkGoksx52AIqNBfX6OXOrEQtbBhbSRigRKuXky9v0zXR6p2XKxCIIDYJBXmDDB23abWx7q1/dpE9u4rgBxGn7QNex5BHW+tBKrjnJmePPLHG63zEl5NugtFTCczuLctESKmyEy7Qw0ihh4jd+0YdEVZkxpUdruE4LDplN2O+N6+eqEMGW2yVnAOjPJYtI590SfzpGS2fBlXqLuUuOhZwKFnw5IQh8T3Kqy+hIHtlQFBqpiZO2mrxP80mmaWE/Kl2B/tR4QC24tSuyAcqko7up5Foymj26sU7l3pbdo9VwDqB8Dss45VbWX4KDlepwIyhVBKeefM7QPHQhGugIzfKvwJVu/Mn5rttBdd5AG1A0/lS6ITpOuco/Aalv0N1RKwzeitCtEs4Pajr7XZ24PqA+Xy+H81DfBV2cKZ8bfRAoHLvI6agIIF
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(46966006)(36840700001)(40470700004)(86362001)(40460700003)(36756003)(4326008)(41300700001)(70586007)(8936002)(8676002)(54906003)(70206006)(5660300002)(478600001)(110136005)(82310400005)(2906002)(26005)(36860700001)(356005)(83380400001)(7696005)(6666004)(107886003)(40480700001)(316002)(426003)(186003)(7636003)(1076003)(47076005)(16526019)(2616005)(336012)(82740400003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 07:30:08.0213
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cfceffa8-6313-4854-41c9-08db29de1904
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6268
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 8:20=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 21/03/2023 07:56, Sergio Paracuellos wrote:
-> > On Tue, Mar 21, 2023 at 7:43=E2=80=AFAM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 21/03/2023 07:38, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> >>>>>>
-> >>>>>> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs whi=
-ch are
-> >>>>>> ARM, so mediatek,mtmips-sysc would work.
-> >>>>>
-> >>>>> I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles w=
-ill
-> >>>>> start with ralink. There are already some existent compatibles for
-> >>>>> mt762x already having ralink as prefix, so to be coherent ralink
-> >>>>> should be maintained as prefix.
-> >>>>
-> >>>> The compatibles I mentioned start already with mediatek, so why do y=
-ou
-> >>>> want to introduce incorrect vendor name for these?
-> >>>
-> >>> Can you point out where these compatible strings for mt7620 and mt762=
-8 are?
-> >>
-> >> git grep
-> >
-> > Not for *-sysc nodes. The only current one in use (from git grep):
->
-> We do not talk about sysc nodes at all. They do not matter.
+From: Wayne Chang <waynec@nvidia.com>
 
-Ah, ok. That reason was from where all of my arguments were coming
-from. But if it does not matter, I don't have problems using the
-'mediatek' prefix in the new stuff.
+When we set the OTG port to Host mode, we observed the following splat:
+[  167.057718] BUG: sleeping function called from invalid context at
+include/linux/sched/mm.h:229
+[  167.057872] Workqueue: events tegra_xusb_usb_phy_work
+[  167.057954] Call trace:
+[  167.057962]  dump_backtrace+0x0/0x210
+[  167.057996]  show_stack+0x30/0x50
+[  167.058020]  dump_stack_lvl+0x64/0x84
+[  167.058065]  dump_stack+0x14/0x34
+[  167.058100]  __might_resched+0x144/0x180
+[  167.058140]  __might_sleep+0x64/0xd0
+[  167.058171]  slab_pre_alloc_hook.constprop.0+0xa8/0x110
+[  167.058202]  __kmalloc_track_caller+0x74/0x2b0
+[  167.058233]  kvasprintf+0xa4/0x190
+[  167.058261]  kasprintf+0x58/0x90
+[  167.058285]  tegra_xusb_find_port_node.isra.0+0x58/0xd0
+[  167.058334]  tegra_xusb_find_port+0x38/0xa0
+[  167.058380]  tegra_xusb_padctl_get_usb3_companion+0x38/0xd0
+[  167.058430]  tegra_xhci_id_notify+0x8c/0x1e0
+[  167.058473]  notifier_call_chain+0x88/0x100
+[  167.058506]  atomic_notifier_call_chain+0x44/0x70
+[  167.058537]  tegra_xusb_usb_phy_work+0x60/0xd0
+[  167.058581]  process_one_work+0x1dc/0x4c0
+[  167.058618]  worker_thread+0x54/0x410
+[  167.058650]  kthread+0x188/0x1b0
+[  167.058672]  ret_from_fork+0x10/0x20
 
->
-> >
-> > arch/mips/ralink/mt7620.c:      rt_sysc_membase =3D
-> > plat_of_remap_node("ralink,mt7620a-sysc");
-> >
-> > That's the reason I also used prefix ralink for the rest.
-> >
-> > Does it make sense to you to maintain this one as ralink,mt7620a-sysc
-> > and add the following with mediatek prefix?
-> >
-> > mediatek,mt7620-sysc
-> > mediatek,mt7628-sysc
-> > mediatek,mt7688-sysc
-> >
-> > That would be weird IMHO.
->
-> What exactly would be weird? Did you read the discussion about vendor
-> prefix from Arinc? mt7620 is not a Ralink product, so what would be
-> weird is to use "ralink" vendor prefix. This was never a Ralink. However
-> since there are compatibles using "ralink" for non-ralink devices, we
-> agreed not to change them.
->
-> These though use at least in one place mediatek, so the above argument
-> does not apply. (and before you say "but they also use ralink and
-> mediatek", it does not matter - it is already inconsistent thus we can
-> choose whatever we want and ralink is not correct).
+The function tegra_xusb_padctl_get_usb3_companion eventually calls
+tegra_xusb_find_port and this in turn calls kasprintf which might sleep
+and so cannot be called from an atomic context.
 
-Ok, I see your point now. Thanks for clarification. I will maintain
-'ralink,mt7620a-sysc' since it already exists and change the new stuff
-to use mediatek as prefix. These are 'mediatek,mt7620-sysc',
-'mediatek,mt7628-sysc' and 'mediatek,mt7688-sysc'. Doing so it will
-properly match the 'mediatek,mtmips-sysc.yaml' file name.
+Fix this by moving the call to tegra_xusb_padctl_get_usb3_companion to
+the tegra_xhci_id_work function where it is really needed.
 
->
->
-> Best regards,
-> Krzysztof
->
+Fixes: f836e7843036 ("usb: xhci-tegra: Add OTG support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Wayne Chang <waynec@nvidia.com>
+Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+---
+V3 -> V4: Remove copyright change from this patch
+V2 -> V3: Add version information
+V1 -> V2: Add "Fixes" and "Cc:" lines and update copyright years
+---
+ drivers/usb/host/xhci-tegra.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thanks,
-    Sergio Paracuellos
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 1ff22f675930..b40e897ec092 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1360,6 +1360,10 @@ static void tegra_xhci_id_work(struct work_struct *work)
+ 
+ 	mutex_unlock(&tegra->lock);
+ 
++	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(
++							tegra->padctl,
++							tegra->otg_usb2_port);
++
+ 	if (tegra->host_mode) {
+ 		/* switch to host mode */
+ 		if (tegra->otg_usb3_port >= 0) {
+@@ -1474,9 +1478,6 @@ static int tegra_xhci_id_notify(struct notifier_block *nb,
+ 	}
+ 
+ 	tegra->otg_usb2_port = tegra_xusb_get_usb2_port(tegra, usbphy);
+-	tegra->otg_usb3_port = tegra_xusb_padctl_get_usb3_companion(
+-							tegra->padctl,
+-							tegra->otg_usb2_port);
+ 
+ 	tegra->host_mode = (usbphy->last_event == USB_EVENT_ID) ? true : false;
+ 
+-- 
+2.25.1
+
