@@ -2,47 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C6B6C2FEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108DC6C2FEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCULNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S229989AbjCULOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCULNn (ORCPT
+        with ESMTP id S230194AbjCULNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:13:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9C9747801
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:13:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BF2EAD7;
-        Tue, 21 Mar 2023 04:13:57 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB69A3F71E;
-        Tue, 21 Mar 2023 04:13:11 -0700 (PDT)
-Message-ID: <45741d41-3357-bffd-a244-954c32c9fe15@arm.com>
-Date:   Tue, 21 Mar 2023 12:13:06 +0100
+        Tue, 21 Mar 2023 07:13:55 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E633FBB2;
+        Tue, 21 Mar 2023 04:13:36 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id e71so16625627ybc.0;
+        Tue, 21 Mar 2023 04:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679397215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FU5JVJ+9D5IKP+4Ix/nQDFSU6B0sdw04+DWifxCdsMU=;
+        b=PHEQpiV0E4XYsgrwB0FGPU9lV8PpO9eSiNfWV4urD6aDzx3BgEoCkndrGlBmm4YEF+
+         +Xib0Bbb/hBPouzZZvznMkO4Ks0L/XR5leeQxiblC4wePl0x/SHQy3umlx7Ob6h7Vchy
+         hPjflxfMzaZpy/X99xAWAG8fkJ+TCjqP55WP3ekNGbxUFW0m52hR52/sbQM55qumYVYW
+         LqCQcMAfnZTeZxBjqnt5UIvcqCG9kSW6+GXXF+nyaccMxd7+wf+mABwkJ55gi4fWHb6v
+         G+TuR0wxmBb58dAVyM/TtCBlj7k/TDkj40EhVf3k3K6ot3bqTBieoXWWRENvCK7cKmtz
+         SKUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679397215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FU5JVJ+9D5IKP+4Ix/nQDFSU6B0sdw04+DWifxCdsMU=;
+        b=jozeUbpebNJHwWXfCCZsvkChMd6atrDkrG9hZanxrZWBW3Ff1aZxHk/Oul/xCGiNqF
+         GUEP2kAi915DKnR/QxMvDd3qB5pPQ30Fve7qgBKV3rUKomfc4Sh7EtC1Fh6CN1z5ECCw
+         kgLlFaBXyubCTQZh8nURdqGLb39SttpOW7LwesPerbRfhGeehP18ytjGm4+N7tZxydHo
+         CyqUtaS0YFSNLv5UGvyHdKbRnWYgi64gpHwYYN4BgVROKbDqwfp2s2/7fC9qUdLkWxQj
+         s8oTSP/NTTbWTXMvoYDUkj0I3ZTlVOzroDdag1T912gso/sL7iIDCzPMNs5IHZu18W+L
+         60QA==
+X-Gm-Message-State: AAQBX9fEQpCh529LeXALir666oMkOEZB7FQGDqideNce339kNl6gQf0p
+        ZNuBbWdvKtkJ26cIVyBtYh4KoLvqnGrhg4uUPVc=
+X-Google-Smtp-Source: AKy350aKCZlqYxRZWHzB38oGRFyPr1QVUoR1aWiJN45RzcZMA9VAUaFhT37UxudYTrOAQrmVMuUNffs3CjNFZOY4JKA=
+X-Received: by 2002:a05:6902:1104:b0:b6a:5594:5936 with SMTP id
+ o4-20020a056902110400b00b6a55945936mr1154445ybu.5.1679397215365; Tue, 21 Mar
+ 2023 04:13:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, zhangqiao22@huawei.com
-References: <20230317160810.107988-1-vincent.guittot@linaro.org>
- <20230321100206.GE2234901@hirez.programming.kicks-ass.net>
- <7bba69e0-5261-9921-16b7-c8592b5d213b@arm.com>
- <20230321104949.GI2234901@hirez.programming.kicks-ass.net>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230321104949.GI2234901@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230320203732.222345-1-nunog@fr24.com>
+In-Reply-To: <20230320203732.222345-1-nunog@fr24.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 21 Mar 2023 12:13:24 +0100
+Message-ID: <CAJ8uoz2N4M+FB-ijzTrVm+91yhtqfKKwmPkxjefJrmSeJOocbg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next V2] xsk: allow remap of fill and/or completion rings
+To:     =?UTF-8?Q?Nuno_Gon=C3=A7alves?= <nunog@fr24.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,81 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 11:49, Peter Zijlstra wrote:
-> On Tue, Mar 21, 2023 at 11:29:13AM +0100, Dietmar Eggemann wrote:
->> On 21/03/2023 11:02, Peter Zijlstra wrote:
->>> On Fri, Mar 17, 2023 at 05:08:10PM +0100, Vincent Guittot wrote:
->>>> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
->>>> fixes an overflowing bug, but ignore a case that se->exec_start is reset
->>>> after a migration.
->>>>
->>>> For fixing this case, we delay the reset of se->exec_start after
->>>> placing the entity which se->exec_start to detect long sleeping task.
->>>>
->>>> In order to take into account a possible divergence between the clock_task
->>>> of 2 rqs, we increase the threshold to around 104 days.
->>>>
->>>>
->>>> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
->>>> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
->>>> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
->>>> ---
->>>
->>> Blergh, this just isn't going to be nice. I'll go queue this for
->>> sched/urgent and then we can forget about this for a little while.
->>>
->>> Thanks!
->>
->> Don't we miss setting `se->exec_start = 0` for fair task in
->> move_queued_task()? ( ... and __migrate_swap_task())
->>
->> https://lkml.kernel.org/r/df2cccda-1550-b06b-aa74-e0f054e9fb9d@arm.com
-> 
-> Ah, I see what you mean now... When I read your and Vincent's replies
-> earlier today I though you mean to avoid the extra ENQUEUE_MIGRATED use,
-> but your actual goal was to capure more sites.
-> 
-> Hmm, we could of course go add more ENQUEUE_MIGRATED, but you're right
-> in that TASK_ON_RQ_MIGRATING already captures that.
+On Mon, 20 Mar 2023 at 21:54, Nuno Gon=C3=A7alves <nunog@fr24.com> wrote:
+>
+> The remap of fill and completion rings was frowned upon as they
+> control the usage of UMEM which does not support concurrent use.
+> At the same time this would disallow the remap of these rings
+> into another process.
+>
+> A possible use case is that the user wants to transfer the socket/
+> UMEM ownership to another process (via SYS_pidfd_getfd) and so
+> would need to also remap these rings.
+>
+> This will have no impact on current usages and just relaxes the
+> remap limitation.
 
-And in case of move_queued_task() this would have to be conditioned on
-SCHED_NORMAL.
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-> An alternative is something like the below, that matches
-> deactivate_task(), but still uses ENQUEUE_MIGRATED to pass it down into
-> the class methods.
-> 
-> Hmm?
-> 
-> 
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2084,6 +2084,9 @@ static inline void dequeue_task(struct r
->  
->  void activate_task(struct rq *rq, struct task_struct *p, int flags)
->  {
-> +	if (task_on_rq_migrating(p))
-> +		flags |= ENQUEUE_MIGRATED;
-> +
->  	enqueue_task(rq, p, flags);
->  
->  	p->on_rq = TASK_ON_RQ_QUEUED;
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -8726,7 +8726,7 @@ static void attach_task(struct rq *rq, s
->  	lockdep_assert_rq_held(rq);
->  
->  	WARN_ON_ONCE(task_rq(p) != rq);
-> -	activate_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_MIGRATED);
-> +	activate_task(rq, p, ENQUEUE_NOCLOCK);
->  	check_preempt_curr(rq, p, 0);
->  }
-
-Would work too.
-
-IMHO, setting `se->exec_start = 0` for task_on_rq_migrating(p) already
-in migrate_task_rq_fair() would have the charm that
-entity_is_long_sleeper() would bail out early for these tasks.
-
-
-
+> Signed-off-by: Nuno Gon=C3=A7alves <nunog@fr24.com>
+> ---
+>  net/xdp/xsk.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 2ac58b282b5eb..e2571ec067526 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -1301,9 +1301,10 @@ static int xsk_mmap(struct file *file, struct sock=
+et *sock,
+>         loff_t offset =3D (loff_t)vma->vm_pgoff << PAGE_SHIFT;
+>         unsigned long size =3D vma->vm_end - vma->vm_start;
+>         struct xdp_sock *xs =3D xdp_sk(sock->sk);
+> +       int state =3D READ_ONCE(xs->state);
+>         struct xsk_queue *q =3D NULL;
+>
+> -       if (READ_ONCE(xs->state) !=3D XSK_READY)
+> +       if (state !=3D XSK_READY && state !=3D XSK_BOUND)
+>                 return -EBUSY;
+>
+>         if (offset =3D=3D XDP_PGOFF_RX_RING) {
+> @@ -1314,9 +1315,11 @@ static int xsk_mmap(struct file *file, struct sock=
+et *sock,
+>                 /* Matches the smp_wmb() in XDP_UMEM_REG */
+>                 smp_rmb();
+>                 if (offset =3D=3D XDP_UMEM_PGOFF_FILL_RING)
+> -                       q =3D READ_ONCE(xs->fq_tmp);
+> +                       q =3D READ_ONCE(state =3D=3D XSK_READY ? xs->fq_t=
+mp :
+> +                                                          xs->pool->fq);
+>                 else if (offset =3D=3D XDP_UMEM_PGOFF_COMPLETION_RING)
+> -                       q =3D READ_ONCE(xs->cq_tmp);
+> +                       q =3D READ_ONCE(state =3D=3D XSK_READY ? xs->cq_t=
+mp :
+> +                                                          xs->pool->cq);
+>         }
+>
+>         if (!q)
+> --
+> 2.40.0
+>
