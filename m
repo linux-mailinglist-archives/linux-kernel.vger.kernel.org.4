@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4D96C2E17
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F536C2E1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCUJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        id S229670AbjCUJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCUJjN (ORCPT
+        with ESMTP id S229525AbjCUJlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:39:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D433668D;
-        Tue, 21 Mar 2023 02:39:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Mar 2023 05:41:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759353D90C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:41:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59BADB8133B;
-        Tue, 21 Mar 2023 09:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B11C4339B;
-        Tue, 21 Mar 2023 09:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679391548;
-        bh=y4DQQgqTeIOp+QSV53CC0j5id0oCyBXkdp89zbwqiMA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R5Z9G5RhRob13EVQTljJZCAmCEYyyM9fYBf+rNjtCNqM+iL+MxJ1+MujMcRZjZTjr
-         xhhPd4QD5t4ElLlkVFsDLYb7I341Y4aXnl3zQvTDyUxVTQn5l92Y9fk8AW2n4qMHDQ
-         Ejjc8Y8rkqkOYZsNTJ3BN2Lt69j6rVDwMCO3gMNdcsdg5wzs54qUT/56B6ywxM3nLo
-         TLHeUenQTUE6+PBT1FfrIBbc1OMamsmaFeq1zx24yEkc1KAKMs0xkOZyrmycKQIOZO
-         xPSi/PbZuEset6GkJzTHqUw90m8nOr0CIcWhxYqZFU1Y7yDsPu3hFFto6M9ADEy2dg
-         Ymd2iQIXqNicg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1peYTo-0002Y0-DN; Tue, 21 Mar 2023 10:40:32 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        ath11k@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sc8280xp-x13s: add wifi calibration variant
-Date:   Tue, 21 Mar 2023 10:40:11 +0100
-Message-Id: <20230321094011.9759-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230321094011.9759-1-johan+linaro@kernel.org>
-References: <20230321094011.9759-1-johan+linaro@kernel.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A371721A75;
+        Tue, 21 Mar 2023 09:41:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679391672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e86jmMfhyx3g3Qd21WKPXVLg7NEfwOFc8WYM94djY1s=;
+        b=hOtDvriSHngf2Um59z9J/Xm4r/QXMm1VvW0bn1bn4dLRaYvJtkkkjA4ERm/8hbvjXDyABf
+        T+j6eOncRLjUdHpJGnzw7qlZ5m7nxPhkYS+kvHkaLwgpj/0p2MXErJ1DrIIQf1+E/+foo7
+        HweY4ijkswx9MQMMvHsqb39fvXLIwHQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679391672;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e86jmMfhyx3g3Qd21WKPXVLg7NEfwOFc8WYM94djY1s=;
+        b=P3EnkHVyN4KTsYuNwt92A+YLNu0wUuJOaOUbHxoz72R81jKN2YBJ4hvektWjxbq724Htl6
+        TsUSYCZczxwuIfAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6786213451;
+        Tue, 21 Mar 2023 09:41:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XGqCGLh7GWQxEwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 09:41:12 +0000
+Message-ID: <20b896db-9dd6-fcc3-a72a-ce0044d4ab75@suse.cz>
+Date:   Tue, 21 Mar 2023 10:41:12 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     "chenjun (AM)" <chenjun102@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "xuqiang (M)" <xuqiang36@huawei.com>,
+        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230314123403.100158-1-chenjun102@huawei.com>
+ <0cad1ff3-8339-a3eb-fc36-c8bda1392451@suse.cz>
+ <344c7521d72e4107b451c19b329e9864@huawei.com>
+ <8c700468-245d-72e9-99e7-b99d4547e6d8@suse.cz>
+ <aeb2bd3990004b9eb4f151aa833ddcf2@huawei.com>
+ <015855b3-ced3-8d84-e21d-cc6ce112b556@suse.cz> <ZBgjZn7WOqO5ruws@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ZBgjZn7WOqO5ruws@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the bus topology for PCIe domain 6 and add the ath11k
-calibration variant so that the board file (calibration data) can be
-loaded.
+On 3/20/23 10:12, Mike Rapoport wrote:
+> On Mon, Mar 20, 2023 at 09:05:57AM +0100, Vlastimil Babka wrote:
+>> On 3/19/23 08:22, chenjun (AM) wrote:
+>> > 在 2023/3/17 20:06, Vlastimil Babka 写道:
+>> > 
+>> > If we ignore __GFP_ZERO passed by kzalloc， kzalloc will not work.
+>> > Could we just unmask __GFP_RECLAIMABLE | __GFP_RECLAIM?
+>> > 
+>> > pc.flags &= ~(__GFP_RECLAIMABLE | __GFP_RECLAIM)
+>> > pc.flags |= __GFP_THISNODE
+>> 
+>> __GFP_RECLAIMABLE would be wrong, but also ignored as new_slab() does:
+>> 	flags & (GFP_RECLAIM_MASK | GFP_CONSTRAINT_MASK)
+>> 
+>> which would filter out __GFP_ZERO as well. That's not a problem as kzalloc()
+>> will zero out the individual allocated objects, so it doesn't matter if we
+>> don't zero out the whole slab page.
+>> 
+>> But I wonder, if we're not past due time for a helper e.g.
+>> gfp_opportunistic(flags) that would turn any allocation flags to a
+>> GFP_NOWAIT while keeping the rest of relevant flags intact, and thus there
+>> would be one canonical way to do it - I'm sure there's a number of places
+>> with their own variants now?
+>> With such helper we'd just add __GFP_THISNODE to the result here as that's
+>> specific to this particular opportunistic allocation.
+> 
+> I like the idea, but maybe gfp_no_reclaim() would be clearer?
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216246
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Tested-by: Steev Klimaszewski <steev@kali.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index 150f51f1db37..0051025e0aa8 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -711,6 +711,23 @@ &pcie4 {
- 	pinctrl-0 = <&pcie4_default>;
- 
- 	status = "okay";
-+
-+	pcie@0 {
-+		device_type = "pci";
-+		reg = <0x0 0x0 0x0 0x0 0x0>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		bus-range = <0x01 0xff>;
-+
-+		wifi@0 {
-+			compatible = "pci17cb,1103";
-+			reg = <0x10000 0x0 0x0 0x0 0x0>;
-+
-+			qcom,ath11k-calibration-variant = "LE_X13S";
-+		};
-+	};
- };
- 
- &pcie4_phy {
--- 
-2.39.2
-
+Well, that name would say how it's implemented, but not exactly as we also
+want to add __GFP_NOWARN. "gfp_opportunistic()" or a better name with
+similar meaning was meant to convey the intention of what this allocation is
+trying to do, and I think that's better from the API users POV?
