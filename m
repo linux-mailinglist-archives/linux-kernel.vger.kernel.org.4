@@ -2,119 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA526C37EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF4D6C37DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjCURMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S230457AbjCURLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjCURL4 (ORCPT
+        with ESMTP id S229905AbjCURLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:11:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA75B5370A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679418620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eV478PA/Hk/t+tkEqxFD+LaNbEr3bs77VNjalKwaSeE=;
-        b=dkbzQW6OYSAwtk8LbaWcM9U+ryhWI2jlJbwI4keO+j8Mcqtzef56tBlbkpPKgmIX7zp/qM
-        6YEwhpR6viKbEooD4THzvukOBt6KP2YusDQzmt8WC76HmXmaHWgFo5CHp0XuLEKgb7MwOs
-        E1gDJM7Ie/CuckAD3+v1i7Bmyg6xrEo=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-342-FaKpEkUQPuKGw19JmlhB8A-1; Tue, 21 Mar 2023 13:10:18 -0400
-X-MC-Unique: FaKpEkUQPuKGw19JmlhB8A-1
-Received: by mail-qt1-f200.google.com with SMTP id s4-20020a05622a1a8400b003dbc6fc558aso6896337qtc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:10:18 -0700 (PDT)
+        Tue, 21 Mar 2023 13:11:06 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280D93A82
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:10:40 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso1016728wmo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679418623;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/UziWlDmjNcjfsalPu/efplDFLQQZhUDiMxL92GPlU8=;
+        b=Kt2FXpLIXzsQz/qZI1KmFGbtdRT0y8ochCon83eL88/iAjB0A088QD9XEA/BT0ya0F
+         LrmX8xzsDj1k+NFYF29NO/Einn9ifSAbBirYwQvhekVJEC/HiDiMaLrBJVcRIzZupztf
+         8lUY5gY6oG1/6XSohvDQqjHjHGu6PzJg0DKxFtgEV5FgHfDJQ9yWB0f/D4G0wKcmwLK9
+         BVSZ0T05QTCbKh1WMJn6Sn7yN8oEFzBMgfnge1wqLkHn6xB4+nwmUhhcb6E9+swY9RzF
+         S4l+28g9Jx+tTWP5A1lNBXcLAusSlx0ATKbFEYrUcKBmdfmvBgTqBVY9YyivsK7ExLF7
+         UibA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679418618;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eV478PA/Hk/t+tkEqxFD+LaNbEr3bs77VNjalKwaSeE=;
-        b=NuKT2upgmzJD13pn4FFyk4E5+XpL8H6QpfI73PKKMLhcA1RxaUkmRCeTuflvCQ8Y1z
-         3Wy8QTkyxZheE391zvz/AFo5mj/4+lPq6vZXLDFF8I1MaUwnun3uC0qwAmr+lMo9pjNz
-         Ow7tTyvtIGzrFEP8cAilrt73wgzPEtSm4MYs2U8+/oolblEvY/Nz3gQj5JT/gw5CYKtO
-         rTbN/OsDHzNdrxZolxEkORu5mbP8gG/0zq0dseUgiKTq6RqqXXr8aigO5gtGuEainp/J
-         AbONN+bCgrDBcxCQjF8Aqffbkc/nJKX+joHa+r8sr77DaU2YaJqDzUvfRie7YuvnS3Dy
-         yz+w==
-X-Gm-Message-State: AO0yUKVUz8Cxkh0thYA5MpSUml9OED89Pd9vFNIlrbFlu/vESI5BDmki
-        BsW+gZg+vJkyevUScOSrrBI3KUSYBTluIB3cv16oB1Hwb0W0OCpZjm6hiYUZtoyTE5L7gNiItao
-        8WcvgOPq5sQ0msTz8XomP3kf2
-X-Received: by 2002:a05:6214:1248:b0:5ab:af50:eb41 with SMTP id r8-20020a056214124800b005abaf50eb41mr1268685qvv.14.1679418618056;
-        Tue, 21 Mar 2023 10:10:18 -0700 (PDT)
-X-Google-Smtp-Source: AK7set97uIe6CMD1+C8TfEABm2y039+BlpvCFoYFo2lNCzufbwTL3awI2y6KlXes4DSNwbGg3evF/g==
-X-Received: by 2002:a05:6214:1248:b0:5ab:af50:eb41 with SMTP id r8-20020a056214124800b005abaf50eb41mr1268633qvv.14.1679418617727;
-        Tue, 21 Mar 2023 10:10:17 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05620a288600b00706bc44fda8sm9729513qkp.79.2023.03.21.10.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:10:17 -0700 (PDT)
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: Use readl wrapper instead of
- pure readl
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org
-References: <0381e4e8061c2fee182a104768e84feff3a82d25.1679412800.git.michal.simek@amd.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <18e45db9-0b7d-abc3-5564-93968819f877@redhat.com>
-Date:   Tue, 21 Mar 2023 10:10:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        d=1e100.net; s=20210112; t=1679418623;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/UziWlDmjNcjfsalPu/efplDFLQQZhUDiMxL92GPlU8=;
+        b=ZCUC9q+oplvxySfeCXGdwcIEtFX4JxAwIVVYOJm0yVFE3Fhf91gp6MDT2/8AHIEYc2
+         +4r3HD2KOJb9ZcuJLsZN5I9IADl2eStH0STgWnb+Ndk6MiZoUiOaXQTRwTMUCl7kQNkA
+         vOVoqzR+D0oB3D3LfK5++87X03NXzV8LNWF0R99EnkNxFQp6DOJZnYvowXcxP33YNfnK
+         gU4KS4zdq19/oi546I9kM+DBILcPXS/9nYt9dseZX8TWc9lC931O8eRYtahwa6ie84Fn
+         iAvtsAvJsKPymN+EWS5R88umZX6VfiG7to9Z06SoHan2twkApOQEs0CtSe5/AO36zftO
+         WFcQ==
+X-Gm-Message-State: AO0yUKVkDwywAMzSN+WpiHIBR26heT9H0wmY1E1Qs5dEvBo/sPfewbw8
+        Jck42iUIwQjgHSq+YG3Wm6i6ig==
+X-Google-Smtp-Source: AK7set8NXZ/xh1t+gruBsHs+QR9lI0pckQQSjPaxb4UtNhFt8EtvgdMMKb9f57F1kf7AWPWXh8xhuA==
+X-Received: by 2002:a05:600c:2194:b0:3db:8de:6993 with SMTP id e20-20020a05600c219400b003db08de6993mr3051336wme.4.1679418623199;
+        Tue, 21 Mar 2023 10:10:23 -0700 (PDT)
+Received: from baylibre-ThinkPad-T14s-Gen-2i.. (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003eddf20ed5bsm8308347wmq.18.2023.03.21.10.10.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 10:10:22 -0700 (PDT)
+From:   Julien Panis <jpanis@baylibre.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
+        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com
+Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+Subject: [PATCH v3 0/4] TI TPS6594 PMIC support (Core, ESM, PFSM)
+Date:   Tue, 21 Mar 2023 18:10:16 +0100
+Message-Id: <20230321171020.74736-1-jpanis@baylibre.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-In-Reply-To: <0381e4e8061c2fee182a104768e84feff3a82d25.1679412800.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TPS6594 is a Power Management IC which provides regulators and others
+features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+communicate through the I2C or SPI interfaces.
+TPS6594 is the super-set device while TPS6593 and LP8764X are derivatives.
 
-On 3/21/23 8:33 AM, Michal Simek wrote:
-> Driver has IO wrappers but xlnx_pr_decouple_read() is not used and readl is
-> used instead which is just wrong.
-> It is also generating sparse issue that xlnx_pr_decouple_read() is unused.
->
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
->
-> Created based on discussion with Tom here
-> https://lore.kernel.org/r/20230317230617.1673923-1-trix@redhat.com
-> ---
->   drivers/fpga/xilinx-pr-decoupler.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> index 2d9c491f7be9..b76d85449b8f 100644
-> --- a/drivers/fpga/xilinx-pr-decoupler.c
-> +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> @@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct fpga_bridge *bridge)
->   	if (err)
->   		return err;
->   
-> -	status = readl(priv->io_base);
-> +	status = xlnx_pr_decouple_read(priv, CTRL_OFFSET);
+This series adds support to TI TPS6594 PMIC and its derivatives.
 
-Thanks for the change.
+The features implemented in this series are:
+- Core (MFD I2C and SPI entry points)
+- ESM (child device)
+- PFSM (child device)
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+- Core description:
+I2C and SPI interface protocols are implemented, with and without
+the bit-integrity error detection feature (CRC mode).
+In multi-PMIC configuration, all instances share a single GPIO of
+the SoC to generate interrupt requests via their respective nINT
+output pin.
 
->   
->   	clk_disable(priv->clk);
->   
+- ESM description:
+This device monitors the SoC error output signal at its nERR_SOC
+input pin. In error condition, ESM toggles its nRSTOUT_SOC pin
+to reset the SoC.
+Basically, ESM driver starts ESM hardware.
+
+- PFSM description:
+Strictly speaking, PFSM is not hardware. It is a piece of code.
+PMIC integrates a state machine which manages operational modes.
+Depending on the current operational mode, some voltage domains
+remain energized while others can be off.
+PFSM driver can be used to trigger transitions between configured
+states.
+
+Link to v2:
+https://lore.kernel.org/all/20230315110736.35506-1-jpanis@baylibre.com/
+
+Others series will be submitted over the next few weeks, providing
+drivers for others child devices like GPIOs (pinctrl), RTC, and
+regulators. Board support will also be added (device trees).
+
+Julien Panis (4):
+  dt-bindings: mfd: Add TI TPS6594 PMIC
+  mfd: tps6594: Add driver for TI TPS6594 PMIC
+  misc: tps6594-esm: Add driver for TI TPS6594 ESM
+  misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
+
+ .../devicetree/bindings/mfd/ti,tps6594.yaml   |  231 ++++
+ .../userspace-api/ioctl/ioctl-number.rst      |    1 +
+ drivers/mfd/Kconfig                           |   32 +
+ drivers/mfd/Makefile                          |    3 +
+ drivers/mfd/tps6594-core.c                    |  453 ++++++++
+ drivers/mfd/tps6594-i2c.c                     |  244 ++++
+ drivers/mfd/tps6594-spi.c                     |  129 +++
+ drivers/misc/Kconfig                          |   23 +
+ drivers/misc/Makefile                         |    2 +
+ drivers/misc/tps6594-esm.c                    |  132 +++
+ drivers/misc/tps6594-pfsm.c                   |  304 +++++
+ include/linux/mfd/tps6594.h                   | 1020 +++++++++++++++++
+ include/uapi/linux/tps6594_pfsm.h             |   45 +
+ 13 files changed, 2619 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+ create mode 100644 drivers/mfd/tps6594-core.c
+ create mode 100644 drivers/mfd/tps6594-i2c.c
+ create mode 100644 drivers/mfd/tps6594-spi.c
+ create mode 100644 drivers/misc/tps6594-esm.c
+ create mode 100644 drivers/misc/tps6594-pfsm.c
+ create mode 100644 include/linux/mfd/tps6594.h
+ create mode 100644 include/uapi/linux/tps6594_pfsm.h
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.37.3
 
