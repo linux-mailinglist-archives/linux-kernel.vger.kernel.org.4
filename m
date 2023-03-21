@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955636C3271
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B566C3270
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjCUNR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S230220AbjCUNRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjCUNRw (ORCPT
+        with ESMTP id S230444AbjCUNRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:17:52 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8B43B3D3;
-        Tue, 21 Mar 2023 06:17:49 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id bk5so1773275oib.6;
-        Tue, 21 Mar 2023 06:17:49 -0700 (PDT)
+        Tue, 21 Mar 2023 09:17:51 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FDE4D43B;
+        Tue, 21 Mar 2023 06:17:48 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id bj20so1596957oib.3;
+        Tue, 21 Mar 2023 06:17:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679404669;
+        d=1e100.net; s=20210112; t=1679404668;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=j+nNG4CRmvp57djbTm+wpvC5ckLMSjxKHNGUYKAJVhM=;
-        b=YZCr8Yhm04akhb5xZg53KolEZsVX6trLY3amJqSfgPhUUjAuBu5MYvuF9UAHYMyLhw
-         E0Uj8ESPo4kgOWD4PE+xBDxvBPb7t3k8jmZXnVC6he+n2PSaNaaejOL1FRaNgpI0e/SS
-         h4SVEsoPUwCSBVeCyOup3Pq8deGrUnvW/e18Lbo2iBo6VKIWk0m86o9aevB8avhKxN5l
-         loCxuc3may/rNC2mdQ6txwka3D7y/ynQUQ/fMpiEQwzOFtoiURw80FGaWZdpKVFKeelq
-         WtcO/jG/vBycX2uREvCv+hN3hiTovNBx04wEE0PcclelmA/lzDVFwqI+37bm4BXqQspi
-         J2ZQ==
-X-Gm-Message-State: AO0yUKUM9wQDuq8PelnhuuPFCCarq8t1gcDMKZYEPleM4ar2JF+4fMjy
-        JR2OJAB/Khe4SzUwbkZoCg==
-X-Google-Smtp-Source: AK7set82FcKW/p5W4iGNn5MuODuFnAoFOZ5uexG3vj4tkSfjSNgfps8JYyPhOdVceB21qsXggYRnpQ==
-X-Received: by 2002:aca:2316:0:b0:386:c5ad:16ab with SMTP id e22-20020aca2316000000b00386c5ad16abmr1011331oie.10.1679404668834;
-        Tue, 21 Mar 2023 06:17:48 -0700 (PDT)
+        bh=RKFqK3vizbVItE0Cn4feua408V8iYvKHy477NK5MvsM=;
+        b=o6db8qMa/zC1W43vkyeIqYZEeb6lal2VtaY0OI8P2WnzCSbTCSZ6xD6qOhGdR2kFW4
+         QS9LpFLd0p938V5X4aKKj4jHC8Qczk6s1dH9I7ZXW9+Xx/utVKCssf+CdFIWUlU6Orel
+         jXu+7f3N/843f1fisLTlBX+3K/pyGgVdO14InweOr3GAQO3qZTbMaxnX66l5pclJJi8o
+         VN5ajGmlz6p0XOMRkO6992aFWPtB3VUZPHuGliSkHFGBHOlTCn/W1EUHXcPJZ7sknkD2
+         UChSlZPvPZuUbJVvskpGdrOmD0C/+RbHegMW+BUoJH+pXsI9JY9XVkKw6p9GDRv1dl2L
+         bfXw==
+X-Gm-Message-State: AO0yUKVr//7Pzazp7zR5QmrRQGfRBMRsIA5qfsFjXjNFZDH1nLJWV7JR
+        Bw4e5i+6LLsH8IxSXsXFfQ==
+X-Google-Smtp-Source: AK7set89u0lOd0rAB3//AB0HK9sZNy2C6IAY/a+SEX76MJY/W718L2aKFJYEB6cJofa9CVpivIRkRQ==
+X-Received: by 2002:a05:6808:1528:b0:386:ce33:df83 with SMTP id u40-20020a056808152800b00386ce33df83mr1244781oiw.14.1679404667635;
+        Tue, 21 Mar 2023 06:17:47 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v41-20020a4a8c6c000000b0052532296449sm4843750ooj.20.2023.03.21.06.17.48
+        by smtp.gmail.com with ESMTPSA id c3-20020a4a4f03000000b00528d2384dc8sm4891385oob.23.2023.03.21.06.17.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 06:17:48 -0700 (PDT)
-Received: (nullmailer pid 582077 invoked by uid 1000);
+        Tue, 21 Mar 2023 06:17:47 -0700 (PDT)
+Received: (nullmailer pid 582079 invoked by uid 1000);
         Tue, 21 Mar 2023 13:17:45 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        vkoul@kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>
-In-Reply-To: <20230320135710.1989-4-johan+linaro@kernel.org>
-References: <20230320135710.1989-1-johan+linaro@kernel.org>
- <20230320135710.1989-4-johan+linaro@kernel.org>
-Message-Id: <167940239018.531701.12929244936825953214.robh@kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: mfd: qcom,spmi-pmic: add nvram
- function
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230320150617.1824465-1-abel.vesa@linaro.org>
+References: <20230320150617.1824465-1-abel.vesa@linaro.org>
+Message-Id: <167940239319.533705.8462694080496957870.robh@kernel.org>
+Subject: Re: [RESEND PATCH v5] dt-bindings: mfd: qcom,spmi-pmic: Add
+ pattern property for phy
 Date:   Tue, 21 Mar 2023 08:17:45 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -73,12 +72,20 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 20 Mar 2023 14:57:10 +0100, Johan Hovold wrote:
-> Add an 'nvram' pattern property and a reference to the corresponding
-> SDAM DT schema.
+On Mon, 20 Mar 2023 17:06:17 +0200, Abel Vesa wrote:
+> The phy pattern property will be used for providing eUSB2 repeater
+> functionality. This will be modelled as a Qualcomm PHY driver.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Lee Jones <lee@kernel.org>
 > ---
+> 
+> Resend of:
+> https://lore.kernel.org/all/20230208190200.2966723-3-abel.vesa@linaro.org/
+> 
+> Added Krzysztof's R-b tag and Lee's A-b tag.
+> 
 >  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
 >  1 file changed, 4 insertions(+)
 > 
@@ -90,13 +97,13 @@ incorrect. These may not be new warnings.
 Note that it is not yet a requirement to have 0 warnings for dtbs_check.
 This will change in the future.
 
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230320135710.1989-4-johan+linaro@kernel.org
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230320150617.1824465-1-abel.vesa@linaro.org
 
 
 pm8941@0: gpio@c000: 'otg' does not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
 	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
 
-pm8941@0: 'pwrkey@800' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^nvram@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
+pm8941@0: 'pwrkey@800' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'phy@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
 	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
 	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
 	arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dtb
@@ -105,12 +112,12 @@ pm8941@0: 'pwrkey@800' does not match any of the regexes: '(.*)?(wled|leds)@[0-9
 	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dtb
 	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dtb
 
-pma8084@0: 'pwrkey@800' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^nvram@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
+pma8084@0: 'pwrkey@800' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'phy@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
 	arch/arm/boot/dts/qcom-apq8084-ifc6540.dtb
 	arch/arm/boot/dts/qcom-apq8084-mtp.dtb
 	arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dtb
 
-pmic@0: 'extcon@1300' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^nvram@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
+pmic@0: 'extcon@1300' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'phy@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
 	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
 	arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dtb
 	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
@@ -333,7 +340,7 @@ pmic@3: wled@d800: Unevaluated properties are not allowed ('interrupt-names' was
 	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
 	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
 
-pmic@5: 'led-controller@d300' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^nvram@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
+pmic@5: 'led-controller@d300' does not match any of the regexes: '(.*)?(wled|leds)@[0-9a-f]+$', '^adc-tm@[0-9a-f]+$', '^adc@[0-9a-f]+$', '^audio-codec@[0-9a-f]+$', '^charger@[0-9a-f]+$', '^mpps@[0-9a-f]+$', '^rtc@[0-9a-f]+$', '^temp-alarm@[0-9a-f]+$', '^usb-detect@[0-9a-f]+$', '^usb-vbus-regulator@[0-9a-f]+$', '^vibrator@[0-9a-f]+$', 'gpio@[0-9a-f]+$', 'phy@[0-9a-f]+$', 'pinctrl-[0-9]+', 'pon@[0-9a-f]+$'
 	arch/arm64/boot/dts/qcom/sc7180-idp.dtb
 	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dtb
 	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dtb
