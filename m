@@ -2,70 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1216C3587
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5626C358A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjCUPWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S231709AbjCUPWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbjCUPWF (ORCPT
+        with ESMTP id S231661AbjCUPWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:22:05 -0400
-Received: from 163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F7B81D936
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=LzMtmN8pLBEwPXlMa/QVxc9cYzqkW8riSwKqtl7QGno=; b=T
-        R5TIUF1P2uOFHhEjK8Q/Iwvc+mSi67PIQfzgZ1yioVGsO4r29pIF3b+QeU2CQKkq
-        LKY2JyxA2HMOtOmavvh2sM2NFPLNVf6aolwIcPx4bt0ak2xShP/mTIbsY1AxBAaW
-        0Q1/+uZo9vC/TDx6Woyjhd/vKavF008yeGi1u5Z/sI=
-Received: from 00107082$163.com ( [222.64.154.91] ) by ajax-webmail-wmsvr134
- (Coremail) ; Tue, 21 Mar 2023 23:20:41 +0800 (CST)
-X-Originating-IP: [222.64.154.91]
-Date:   Tue, 21 Mar 2023 23:20:41 +0800 (CST)
-From:   "David Wang" <00107082@163.com>
-To:     "Bagas Sanjaya" <bagasdotme@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, masahiroy@kernel.org
-Subject: Re:Re: [PATCH] scripts/package: add back 'version' for builddeb
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <a05cfc82-a9e9-ea96-aaca-612ff9c14219@gmail.com>
-References: <20230320110819.23668-1-00107082@163.com>
- <a05cfc82-a9e9-ea96-aaca-612ff9c14219@gmail.com>
-X-NTES-SC: AL_QuycC/iavUgv5yCRYukXn0oTju85XMCzuv8j3YJeN500iivk3DsDWG1aAXjr0tu+NRKoogqJVgdNxdxfRZNWX6SilaKKBV0fEd67BXZ9WYG0
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Tue, 21 Mar 2023 11:22:32 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BEE457DD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:22:03 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id z19so5967680plo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google; t=1679412123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6gWfY3tQUtshjFSkcAdDgcrIWsk+2YKijGy43yiViKk=;
+        b=EaR2/n2qw+RyvpiZ1yCsIKAcdWm37lT15zD0Eq+LIDerzkbF29Qpc8oGElyy34NZPr
+         l4Lx4DuvMJaS34Sfd//GyLDGUbt8pzJbBd7BfQqMSiFz8uKPAWKWu+xXZJotGnqfFatR
+         lz2shj9+DWX2Gb3sbL/SHkaPBtR/Wxz3SLytg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679412123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6gWfY3tQUtshjFSkcAdDgcrIWsk+2YKijGy43yiViKk=;
+        b=0Lv58GglWC5DyH80hL+gNuc0YNgZNnqeBV+azj9cu9n3BoOTgzTWpXY3KM1joMN8hx
+         XHI5ZVRoCbn4CFQM3SvI7+F+OjepcrHb8MecMMV3wW+Qu06UBCLUeOOe4C66jsxrrv0u
+         6lL+L0NnzYqslvFlA1v/5EbOuT18zrDklHyLLxqO9+YCi4hzNC9rC3s7L2ThN7c7uEwD
+         TeJFp5KHgcl6MpMe/9jzsdQizD6wGVteMwKQ3DTlhV/cAJceuq8tnZBiQ4s9EQ0DU5k5
+         EJVkzi4moqXwyA0UzryplstEX8P8jvzBhWRephAYNQxAURShAHS+m6iX000LIlDc1+Ka
+         1UNA==
+X-Gm-Message-State: AO0yUKX377S7uEnTZtFoKc2H2KnBEQemDnpYnDdiSCH1SGsEETo9KpNC
+        QxX6F6hNsRH2/9Vgm8SsUY2v4w==
+X-Google-Smtp-Source: AK7set+kulQ7RY0SJLZceDsuQd7Xg4twQsw+0TsI21QGPHuCcuIHG7WMoLXcFTf0NePX91aMu6DBLA==
+X-Received: by 2002:a17:90b:3a8d:b0:237:ae7c:1594 with SMTP id om13-20020a17090b3a8d00b00237ae7c1594mr247406pjb.8.1679412122531;
+        Tue, 21 Mar 2023 08:22:02 -0700 (PDT)
+Received: from b1f8169a9f5c (124-148-239-102.tpgi.com.au. [124.148.239.102])
+        by smtp.gmail.com with ESMTPSA id s61-20020a17090a69c300b00230cbb4b6e8sm8129524pjj.24.2023.03.21.08.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 08:22:01 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 15:21:53 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc2 review
+Message-ID: <20230321152153.GA8@b1f8169a9f5c>
+References: <20230321080705.245176209@linuxfoundation.org>
 MIME-Version: 1.0
-Message-ID: <3ee67285.5853.18704c2158c.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: _____wAXpDhJyxlkO8gAAA--.2788W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiMwM5qlXmEKuFjQACsh
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321080705.245176209@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cj4KPkFnYWluLCB5b3VyIHBhdGNoIGxvb2tzIGxpa2UgY29ycnVwdGVkICh0YWJzIGNvbnZlcnRl
-ZCB0byBzcGFjZXMpLgo+UGxlYXNlIHJlc3VibWl0OyB0aGlzIHRpbWU7IGdlbmVyYXRlIHRoZSBw
-YXRjaCB2aWEgZ2l0LWZvcm1hdC1wYXRjaCgxKQo+YW5kIHRoZW4gc2VuZCB0aGUgcmVzdWx0aW5n
-IHBhdGNoIHdpdGggZ2l0LXNlbmQtZW1haWwoMSkuCj4KPlRoYW5rcy4KPgpJIGRpZCB1c2UgYGdp
-dCBmb3JtYXQtcGF0Y2hgIGFuZCBgZ2l0IHNlbmQtZW1haWxgLCBidXQgSSBkaWQgbm90IHJ1biBz
-Y3JpcHRzL2NoZWNrcGF0Y2gucGwuCk5vdyB3aGVuIEkgcnVuIHNjcmlwdHMvY2hlY2twYXRjaC5w
-bCBhZ2FpbnN0IHRoZSBmaWxlIGdlbmVyYXRlZCBieSBgZ2l0IGZvcm1hdC1wYXRjaGAsIGl0IHNo
-b3dzIGEgd2FybmluZyBhYm91dCAiRml4ZXM6IiB0YWcsIGFuZApJIGhhdmUgcmVzZW5kIGEgcGF0
-Y2ggd2hpY2ggcGFzcyB0aGUgY2hlY2tzIG9mIHNjcmlwdHMvY2hlY2twYXRjaC5wbCwgaG9wZSB0
-aGlzIHRpbWUgaXQgY291bGQgYmUgb2suCgpgYGAKJCBzY3JpcHRzL2NoZWNrcGF0Y2gucGwgMDAw
-MS1zY3JpcHRzLXBhY2thZ2UtYWRkLWJhY2stdmVyc2lvbi1mb3ItYnVpbGRkZWIucGF0Y2gKdG90
-YWw6IDAgZXJyb3JzLCAwIHdhcm5pbmdzLCA3IGxpbmVzIGNoZWNrZWQKCjAwMDEtc2NyaXB0cy1w
-YWNrYWdlLWFkZC1iYWNrLXZlcnNpb24tZm9yLWJ1aWxkZGViLnBhdGNoIGhhcyBubyBvYnZpb3Vz
-IHN0eWxlIHByb2JsZW1zIGFuZCBpcyByZWFkeSBmb3Igc3VibWlzc2lvbi4KYGBgCgoKRGF2aWQ=
+On Tue, Mar 21, 2023 at 09:39:14AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 198 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 23 Mar 2023 08:06:28 +0000.
+> Anything received after that time might be too late.
 
+Hi Greg,
+
+6.1.21-rc2 tested.
+
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
