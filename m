@@ -2,76 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF826C3C4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ACE6C3C52
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCUUyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 16:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S229784AbjCUU5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjCUUyr (ORCPT
+        with ESMTP id S229510AbjCUU5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:54:47 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9585955520;
-        Tue, 21 Mar 2023 13:54:45 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id m2so15054375wrh.6;
-        Tue, 21 Mar 2023 13:54:45 -0700 (PDT)
+        Tue, 21 Mar 2023 16:57:41 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D7B56786;
+        Tue, 21 Mar 2023 13:57:39 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LGnGSx007501;
+        Tue, 21 Mar 2023 20:57:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=b/6YT4Y9TY9voR/fF25e2KlsGN0L/1L6LGtiy+LtmJo=;
+ b=t/IF/IO57EH6FKDSB8pgoo9lpzXKxfL7j5kriRgfN1TU0WpOc4FAVAZ1xrewfms9NJl9
+ RDT8GPzX2XkI4AMYmfHuIhaeOl3zJW3U8sB3ej+yrUh9vuwOLte7Gxx2Z8QaPvWgGibi
+ FBd92GWwhn1WbdQ3YDah4G0SD8wbH6o84GQyEVtWJehiF9s68eeQA1d6VyO2fuap4bt5
+ P7McZ9eAcmyWe+HTCj6HtCx6t89k/7Uf6lj5VcGwbcF4Z/MA50VwXg6iTW09UWXc/GDO
+ 6I4NqW/OXkfZ8xiHACdD8y5Vs91TyuEZrgihd0Drs8nnQSbtUD28Btye+kc2Bt7T/dG0 rg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pd3qdqc2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 20:57:26 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32LKriJM029748;
+        Tue, 21 Mar 2023 20:57:25 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2047.outbound.protection.outlook.com [104.47.56.47])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3pfm130448-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 20:57:25 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oZHMxKHq/trV2dvc6JFUemvOvldj5vG8u0yoAZlmgpMIK3LshOX9/aprBnXItVeIhUoUuni/6rDSuxZVOtXIcQhOq8Yr5K5dmfhmrUjsSv2HgIrJ0E9J0Jp+3fMhdt3sL6CvL2WDFeWULsR1152PkU0bKLe5IaLYEoiywv/sFxIPfUg6g9TibyBAxhA3YECkmaIm1bNyH1B4nMXvWyepPRUbNK2j7uzSa2i8Ku+ycTw6SL8B1yGwx2PDyD5SVl6dLrWW7odUrDaJ0haCf/8HytjF3Ee/0zVIxh1b6E7bg5TJb80LbHs6wxYyxn9fg40wAUuDPNjLLAK1K9mDROvDTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b/6YT4Y9TY9voR/fF25e2KlsGN0L/1L6LGtiy+LtmJo=;
+ b=nqTCueAHF0Aaou2BSDbj1Q3FPRNFaMJtuHytQ35tj8xsOBDBEcE/e+K8eUZSMV78ykIPr8O0fFNhRo3+X60943fRtOZ8yqGsERSh0mwS3aCiOIQEuT/N7yigGN/+QneeVZBNYYk/x9e6w6yPZ0y4iK1xJ1dD2972vm5e77oGcXseNR515JYqzpRR9ojAvdFnt2y+pSUj5u76zlXpTh5trb8QjxnZqO2dJhNeFtHr9khc1B4ivUTcoJrA3jonc3f7GDWlBee0o1RP3Slh1N7Zklj4JkQ76B8201e1ZrOHjFRIsLl/UuEJQQRdatIzw3QQ1sB5YiIRUfksqs9xl1Qjtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679432084;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djyPCeztN5boBqxO3bRuQFLy3bknB1j3IWxmRWH4tok=;
-        b=K2T9ISzZGBsjo+H3DC3xNn/GfV+dlSSaWpMyi0v9+VnMQbOp2uQZBGhOvfXUOdKPv7
-         OjDNKZpaSqIwTM7/v/Zqqp8+MZu1slgfRyTyNUqzABdsK3pl+jYaTLt39YgsCMvTNrBR
-         9KhudgegX2vpuDbkGzlfj2/3RuEkcBs3TSToa/yl0ro7kEuLoREzRnciju7WFD2eE0lO
-         Ro+kFQgVS39f27HPCthzBpwQtcegWCYPoiGSU/keSc6JYUY968EBkXpF76ze3Ku7vUY2
-         vr3b91LMfviYqyyomTIjHOcHrYgY1r+V3jVybqgjtLWfL1QOovsultE/bkUHKCZzkOWM
-         lkTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679432084;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=djyPCeztN5boBqxO3bRuQFLy3bknB1j3IWxmRWH4tok=;
-        b=X6WytVbFGn4p0w8WWjwxWDJsxGB9b32YOFRBE1OG9JtPTLBaEaSJCaFlChuPYzvjyA
-         0s5WOeL/R0Y2ydSGlbYJsLz3DE+tpi6blE/JoTCaXI80Jc8ABl5XxE25IwCAZ6TR24ym
-         mgZ+TTD8XqFRByUwWRrMUxhtkPmwefpGnxKmHHSPfvRb0mZUL+WpQ+f32k4CDBYOFFET
-         b6V8Sj46VvuIyS/6BWPBPDpZRXwbofwY8O7fZJsIeRfmeV5nyCCnNpQpNnD7ThRCNH1q
-         P68LBR/ARldDQST8HidFujakfetbzS8JPehV0UZuUwB2+u+pQ2krGl9MEkZmmXLbDQE5
-         VzRw==
-X-Gm-Message-State: AO0yUKVU5BdP1BNglyDfdmva+TXBHBRgvbkcPJsmqQNwSqE+flU6QX50
-        567BVq8yQu3DIcp9MM9YcIu3EFEd0vk=
-X-Google-Smtp-Source: AK7set+i0F+Gcs9rYPy2oaxQ6DJCUcEdzchALZAnBYz6EMwAc4UbmZe+m094k7gbQKUk5tdBwOglnA==
-X-Received: by 2002:adf:f74a:0:b0:2d1:7ade:aac with SMTP id z10-20020adff74a000000b002d17ade0aacmr3308849wrp.0.1679432083775;
-        Tue, 21 Mar 2023 13:54:43 -0700 (PDT)
-Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.googlemail.com with ESMTPSA id a8-20020a056000100800b002d8566128e5sm3744575wrx.25.2023.03.21.13.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 13:54:43 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b/6YT4Y9TY9voR/fF25e2KlsGN0L/1L6LGtiy+LtmJo=;
+ b=LpUGelejWzjnfy6rudvrQJBSNytlDRpXNg4VJmLk/KAeUZiggnVD9TpuQCC5TFpZQsTAyMXyLSM/qNFZyNQ+2C4wHCulmfvr0i/rY1AjmkIbR7p/DcQSPYGVkiYA/mmSbXUcFVung10KACAKgNMWn468HDMVBeo7WWAs2YKeNWI=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by PH8PR10MB6646.namprd10.prod.outlook.com (2603:10b6:510:222::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 20:57:22 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3db5:6e11:9aca:708a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3db5:6e11:9aca:708a%8]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 20:57:22 +0000
+Date:   Tue, 21 Mar 2023 13:57:19 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
         David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v4 4/4] mm: vmalloc: convert vread() to vread_iter()
-Date:   Tue, 21 Mar 2023 20:54:33 +0000
-Message-Id: <6b3899bbbf1f4bd6b7133c8b6f27b3a8791607b0.1679431886.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1679431886.git.lstoakes@gmail.com>
-References: <cover.1679431886.git.lstoakes@gmail.com>
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] mm/hugetlb: Fix uffd wr-protection for CoW optimization
+ path
+Message-ID: <20230321205719.GA6030@monkey>
+References: <20230321191840.1897940-1-peterx@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321191840.1897940-1-peterx@redhat.com>
+X-ClientProxiedBy: MW4PR04CA0297.namprd04.prod.outlook.com
+ (2603:10b6:303:89::32) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH8PR10MB6646:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49416313-4805-4bdd-ae39-08db2a4edde7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n5kVFltkJyC+XIL2PcXJnk9J08uf+hfhi9HWM7ZZNFThLIZIO78mvGTrrE+dV2jQFtg4qIxBD6Iyr9otkdbPqOuHzoPAxjInyjNLQIqsdhPGolfHLrhc+/2Ho2NlB4Joear62YYUajWxtlx8PJcANlxecjQfYFK7CoybJ9TywcUujvUuLyqMaVmaCM7LiOhVkFCJKcFULVS90jSBgGx0eEmHnKkFMC4Pij4rXfP50ZqWGtcfBdJBzPYZ3D9vcId1KvXpcsRkLkbJE1OOFbvDjYktA9w7kvS7SnmRXMjERDr+38GQpRYSr+UARfCVel0enRHzAwnxll21nl/KqpPCQm9k1zPvfFXHkQ1QLgijp5DhZkNwipZ9NcvQ2TxYuqSiK6k4ayYZOm44s1OEnzG/djjXtT18vENSjq2ouFZ34hskB47/2rTbF6vXNuicTwzkXJN4Z6ZxjkHkKuWh1Bg/D9jMMdoUhMOdKKgU4nUp4dKYwdO1Htqbh7VDRyKK3r5STavoWHIotxOX7nlMZ5yMtMNjDQLeBS0DB/oTKcDeQ00wQmdAXxyu3ieCYn2v1gasK8Msk4xz4Jmcfe6MGcwkSPAouTnTSwh7zV7EfeYnJbsjfbzEpE/mudzONcUz66YpxMBi9HpaKcPdZFhlhECMjQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(39860400002)(346002)(376002)(366004)(396003)(451199018)(6486002)(186003)(4326008)(6666004)(478600001)(83380400001)(316002)(66476007)(6916009)(66556008)(9686003)(66946007)(8676002)(26005)(53546011)(6506007)(1076003)(54906003)(41300700001)(6512007)(7416002)(8936002)(44832011)(5660300002)(38100700002)(2906002)(86362001)(33716001)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zZ97mURsFvWaFQ4Fmop9Pf8F/BRXa1R6/OICb8JHLsSHJp8/uLuGiYcC0uV0?=
+ =?us-ascii?Q?RSr90xwVk+Ih2qFIZgX6FdtsarJ50pjCZosG+MDvNRrdeTZYhKaMOJ+Bxn3H?=
+ =?us-ascii?Q?3Mil8gGEqAreDkE1pZFPwSu2s4EY9HPM2OiJaI5bD+dZxnLJrQ9Tkx9MePlu?=
+ =?us-ascii?Q?Zpl3wp9E0GF3L+2fG/WOEI9qbryer6PJgjv9JdhCDiL6GSfcGI3xDAsEFhpW?=
+ =?us-ascii?Q?wjthlTtb8DOi8BfV92AtEG8T4oTMcMc5JLqPrYtsxwDulyzVVxSgXi6+Q3MB?=
+ =?us-ascii?Q?rYr7QUKj8lyZ/u2EpCEh8Pxrwa1m4rAQCMeRoppU2XRMvL3QHCfIzAmLWoBP?=
+ =?us-ascii?Q?k1VIYy/BSZlACkb53m1Py7J6OWcesua/wUGZltZPBW1ACE5XWIzccXJ6/rCM?=
+ =?us-ascii?Q?0krQll/UEfWRCDivVQ7h1CugXHV47ygUDAQd1xMwwTJ/8cHrzGINKGcyyQ5y?=
+ =?us-ascii?Q?eShjDA9lCDVWicryIw2p0R64GI5J+1kBAiphYWF1ynU2KnGGOnMa87wkL9lt?=
+ =?us-ascii?Q?mX1NowFv4Wp4ZWUKDSs63hY55sGLSJ+TelJh5J6Ja79NtW89L4T7gYl1DqK8?=
+ =?us-ascii?Q?JX18RrBx9SDaIDU4pCXf/zgyVwlXXt53/i21RPJ9Zlg0k5PkozmvnN3q+WvU?=
+ =?us-ascii?Q?MGbM0XIrd0t/0BA3sWrK597HiyGKeiInieELbFmLrirfGUzq0E2auQ/6U4mo?=
+ =?us-ascii?Q?TgurPn9xvWFOtOzzlczIVeKlHoYS4GVANE1zl6OtADTRTo7W1mr0W4mP+YT5?=
+ =?us-ascii?Q?FFue07zHoKarT8Ho1A+lxYkHVdnByzwKmUj/uKPozwtqucttVZdlEJp65p3T?=
+ =?us-ascii?Q?67qaEHCx86P5BiUJQHjZu4wvDyFkvvuVS11cjFW0umrebDup6VgD57nUsH7a?=
+ =?us-ascii?Q?dYBwAMuIACX4WWhoH0iQuvuSJNzc7IRBY+ZvFYSozeRZviWkn12NiNQNYSrE?=
+ =?us-ascii?Q?0NsHluSN/Riaqb9w88HxZTLFyTUH2JyNJdEpY2xi6zUOrSE63z2y9KAnV7SH?=
+ =?us-ascii?Q?nxscOA2eqLUTIzzM0+OcFxgFXsHOunTitBmLc1iKdsK/okz4EFqbEdJNQSBp?=
+ =?us-ascii?Q?q5ST1TuMITgMWxl7dyxgAwI0i/pk1TF5z0RvO2nzHu3NQ/z3fEao3piW7wN2?=
+ =?us-ascii?Q?gmZOci8PWLLEMLjVO/U5FrFBMJ/jZLz2bZ01H+E897noNydxDwai3pOhl5kx?=
+ =?us-ascii?Q?iSau7Y6n3BSNXQikdPMoxefuvZPlTOXSDj90XAYEriU+ZigMQs7WEcLsebtu?=
+ =?us-ascii?Q?VBumdr0SE4MsY8vgHzK6L/iO6Q76UCXyPLqAZKYjPdjuQnQ29ToCvhYKdTTC?=
+ =?us-ascii?Q?pnz95uICNb6gdrGdHMz7dHV0DJBKqrAeC/sb0VJ8z8mZQO14ewkmb5rEFtnz?=
+ =?us-ascii?Q?bJBD15BMVukM7ZnEu5d0Ftgov85/GabbIPbJe0sIy8rNIMicqZT9V/dGAdte?=
+ =?us-ascii?Q?E0JR31SvyByq8TnFH4OIzUu7FA1O3nDDT+sSxOGBI3BtpvI5/if1cGIulsTk?=
+ =?us-ascii?Q?UYQKQhVlA1P3sBatHbT/ixu1b107rv/sXMQeHjuauuvxnN34sLGmzSP1m0Or?=
+ =?us-ascii?Q?gpXdqNe2hrd+/Ft6yJ9fg7jdWZJ3rVu/WriizfWcAEc4gYshcv9nfgbiRRtq?=
+ =?us-ascii?Q?UA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?DxGHsb6r+O50cwwCARV6HmFISbqttATYQkivZhjATsWqWZxEdZDW3h/RARe8?=
+ =?us-ascii?Q?eWRI6xhdSUyds+TR3tuMAdVDzpYSwZG/UTxBeewym/EZxD8qm/HgaTeVNLZA?=
+ =?us-ascii?Q?k1iUY1hwzYBfFLu5YqGGURUjJwZBKwzqdnOad0uDGsvYuPFkpPVd/jlfkvuh?=
+ =?us-ascii?Q?m1LI6lydpEwqMX55o27S7AyQLqDOFZs1I8dUE0pKCkv6cZ9kkWX3vdHvG9Wq?=
+ =?us-ascii?Q?+RLlIxm6BIP0diXNxng9XfWrYPzPDzOF2fooJsNr8jW1dMU0PKil7inGLOHo?=
+ =?us-ascii?Q?IyZWi9xjQMP37l7ZQEvz7W8DKaDZ4YHZCQiTXoPKc4Ldy+Sqmojsgin/8OH4?=
+ =?us-ascii?Q?4CCMhJ2oWtYTy2ErqnK7dmsjdpeQ6ay/D8/fWqbdXKA/BWUjrNu8w9rhbEuy?=
+ =?us-ascii?Q?PUgcGkW8rPyYC5Yo8um3RKU0LRAU8qA1XtFxoudUBqWRMtXesODxU6Ira+Xo?=
+ =?us-ascii?Q?lA4XWtE5cfiwjk4JUVLMz5rCj4fOguJF1YQ1ZmdaqZsO5wUwFN5beG/FfRzI?=
+ =?us-ascii?Q?iDSVPl5tlf+E+nvHOFKXbwUOux9rSWIqZ19Y/islbENFyXDk4geh+7pQDu7/?=
+ =?us-ascii?Q?n0t7XYP8bOg1IZnzX1qOftXGaN2jS6c4LFbeEYa/B1S+A5YwgwZu9EYpaZE6?=
+ =?us-ascii?Q?HeOLMtLpDsBraUgIB0BvbXt7bGxOryPOE09rUk+MVQurrj/fgInooT7uWzqa?=
+ =?us-ascii?Q?vHH6UQrGBXsg54eLvdbAsXZ/XqrYUw9iqfb9kyPIJCIk05t0Beg/XkggZRht?=
+ =?us-ascii?Q?Vk5/W1fwGGURSY1rrRX2x/GZFL/NFSzd+ELK1Mf1rqkSKmLRof2ccUpinjBO?=
+ =?us-ascii?Q?4P1fJXHDOwFNk2Xyo/okBmllQmx0GCwHSBEMssetL1QhYRoJOwC+kFT3mLav?=
+ =?us-ascii?Q?IcRgguks3tJ40udwXUpNzKotRXD6kiZxSj6Zoy6L506MvCeP+6SBcf+EtN+V?=
+ =?us-ascii?Q?TFFWhXPZkmv//6+Ej+JysioHArvFhzo33SFCojBeUQi7K6u8GYi2+1K/ZUPX?=
+ =?us-ascii?Q?OdDSw+esFO7fbxLf+G86yQ+HSA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49416313-4805-4bdd-ae39-08db2a4edde7
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 20:57:22.3695
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J5bqlw/ikmMypPFIKaGvT4C6z1c7w9xaJDgeCWAh5timloWdz3baBA6x39YLVW1BeTg1vBH/b076Uuv4t9GVlQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6646
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
+ bulkscore=0 suspectscore=0 mlxlogscore=999 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303210165
+X-Proofpoint-GUID: dGSeGsYfgqtm-2ZhGlRC8154OtTzxZi4
+X-Proofpoint-ORIG-GUID: dGSeGsYfgqtm-2ZhGlRC8154OtTzxZi4
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,498 +171,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having previously laid the foundation for converting vread() to an iterator
-function, pull the trigger and do so.
+On 03/21/23 15:18, Peter Xu wrote:
 
-This patch attempts to provide minimal refactoring and to reflect the
-existing logic as best we can, for example we continue to zero portions of
-memory not read, as before.
+Thanks Peter!
 
-Overall, there should be no functional difference other than a performance
-improvement in /proc/kcore access to vmalloc regions.
+> This patch fixes an issue that a hugetlb uffd-wr-protected mapping can be
+> writable even with uffd-wp bit set.  It only happens with all these
+> conditions met: (1) hugetlb memory (2) private mapping (3) original mapping
+> was missing, then (4) being wr-protected (IOW, pte marker installed).  Then
+               ^^^^
+Nit, but is the word "then" intended to be there?  Almost makes it sound as
+if wr-protected was a result of the previous 3 conditions being met.
 
-Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
-we dispense with it. We need to ensure userland pages are faulted in before
-proceeding, as we take spin locks.
+> write to the page to trigger.
+> 
+> Userfaultfd-wp trap for hugetlb was implemented in hugetlb_fault() before
+> even reaching hugetlb_wp() to avoid taking more locks that userfault won't
+> need.  However there's one CoW optimization path for missing hugetlb page
+> that can trigger hugetlb_wp() inside hugetlb_no_page(), that can bypass the
+> userfaultfd-wp traps.
+> 
+> A few ways to resolve this:
+> 
+>   (1) Skip the CoW optimization for hugetlb private mapping, considering
+>   that private mappings for hugetlb should be very rare, so it may not
+>   really be helpful to major workloads.  The worst case is we only skip the
+>   optimization if userfaultfd_wp(vma)==true, because uffd-wp needs another
+>   fault anyway.
+> 
+>   (2) Move the userfaultfd-wp handling for hugetlb from hugetlb_fault()
+>   into hugetlb_wp().  The major cons is there're a bunch of locks taken
+>   when calling hugetlb_wp(), and that will make the changeset unnecessarily
+>   complicated due to the lock operations.
+> 
+>   (3) Carry over uffd-wp bit in hugetlb_wp(), so it'll need to fault again
+>   for uffd-wp privately mapped pages.
+> 
+> This patch chose option (3) which contains the minimum changeset (simplest
+> for backport) and also make sure hugetlb_wp() itself will start to be
+> always safe with uffd-wp ptes even if called elsewhere in the future.
 
-Additionally, we must account for the fact that at any point a copy may
-fail if this happens, we exit indicating fewer bytes retrieved than
-expected.
+I was going to suggest (1) as that would be the simplest.  But, since (3)
+makes hugetlb_wp() safe for future callers, that is actually preferred.
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- fs/proc/kcore.c         |  26 ++---
- include/linux/vmalloc.h |   3 +-
- mm/nommu.c              |  10 +-
- mm/vmalloc.c            | 234 +++++++++++++++++++++++++---------------
- 4 files changed, 160 insertions(+), 113 deletions(-)
+> 
+> This patch will be needed for v5.19+ hence copy stable.
+> 
+> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Cc: linux-stable <stable@vger.kernel.org>
+> Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  mm/hugetlb.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 8bfd07f4c143..22337b191eae 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5478,7 +5478,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>  		       struct folio *pagecache_folio, spinlock_t *ptl)
+>  {
+>  	const bool unshare = flags & FAULT_FLAG_UNSHARE;
+> -	pte_t pte;
+> +	pte_t pte, newpte;
+>  	struct hstate *h = hstate_vma(vma);
+>  	struct page *old_page;
+>  	struct folio *new_folio;
+> @@ -5622,8 +5622,10 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>  		mmu_notifier_invalidate_range(mm, range.start, range.end);
+>  		page_remove_rmap(old_page, vma, true);
+>  		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
+> -		set_huge_pte_at(mm, haddr, ptep,
+> -				make_huge_pte(vma, &new_folio->page, !unshare));
+> +		newpte = make_huge_pte(vma, &new_folio->page, !unshare);
+> +		if (huge_pte_uffd_wp(pte))
+> +			newpte = huge_pte_mkuffd_wp(newpte);
+> +		set_huge_pte_at(mm, haddr, ptep, newpte);
+>  		folio_set_hugetlb_migratable(new_folio);
+>  		/* Make the old page be freed below */
+>  		new_folio = page_folio(old_page);
+> -- 
+> 2.39.1
+> 
 
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index 25e0eeb8d498..221e16f75ba5 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -307,13 +307,9 @@ static void append_kcore_note(char *notes, size_t *i, const char *name,
- 	*i = ALIGN(*i + descsz, 4);
- }
- 
--static ssize_t
--read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
-+static ssize_t read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
- {
--	struct file *file = iocb->ki_filp;
--	char *buf = file->private_data;
- 	loff_t *ppos = &iocb->ki_pos;
--
- 	size_t phdrs_offset, notes_offset, data_offset;
- 	size_t page_offline_frozen = 1;
- 	size_t phdrs_len, notes_len;
-@@ -507,9 +503,12 @@ read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
- 
- 		switch (m->type) {
- 		case KCORE_VMALLOC:
--			vread(buf, (char *)start, tsz);
--			/* we have to zero-fill user buffer even if no read */
--			if (copy_to_iter(buf, tsz, iter) != tsz) {
-+			/*
-+			 * Make sure user pages are faulted in as we acquire
-+			 * spinlocks in vread_iter().
-+			 */
-+			if (fault_in_iov_iter_writeable(iter, tsz) ||
-+			    vread_iter(iter, (char *)start, tsz) != tsz) {
- 				ret = -EFAULT;
- 				goto out;
- 			}
-@@ -582,10 +581,6 @@ static int open_kcore(struct inode *inode, struct file *filp)
- 	if (ret)
- 		return ret;
- 
--	filp->private_data = kmalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!filp->private_data)
--		return -ENOMEM;
--
- 	if (kcore_need_update)
- 		kcore_update_ram();
- 	if (i_size_read(inode) != proc_root_kcore->size) {
-@@ -596,16 +591,9 @@ static int open_kcore(struct inode *inode, struct file *filp)
- 	return 0;
- }
- 
--static int release_kcore(struct inode *inode, struct file *file)
--{
--	kfree(file->private_data);
--	return 0;
--}
--
- static const struct proc_ops kcore_proc_ops = {
- 	.proc_read_iter	= read_kcore_iter,
- 	.proc_open	= open_kcore,
--	.proc_release	= release_kcore,
- 	.proc_lseek	= default_llseek,
- };
- 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 69250efa03d1..461aa5637f65 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -9,6 +9,7 @@
- #include <asm/page.h>		/* pgprot_t */
- #include <linux/rbtree.h>
- #include <linux/overflow.h>
-+#include <linux/uio.h>
- 
- #include <asm/vmalloc.h>
- 
-@@ -251,7 +252,7 @@ static inline void set_vm_flush_reset_perms(void *addr)
- #endif
- 
- /* for /proc/kcore */
--extern long vread(char *buf, char *addr, unsigned long count);
-+extern long vread_iter(struct iov_iter *iter, const char *addr, size_t count);
- 
- /*
-  *	Internals.  Don't use..
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 57ba243c6a37..e0fcd948096e 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -36,6 +36,7 @@
- #include <linux/printk.h>
- 
- #include <linux/uaccess.h>
-+#include <linux/uio.h>
- #include <asm/tlb.h>
- #include <asm/tlbflush.h>
- #include <asm/mmu_context.h>
-@@ -198,14 +199,13 @@ unsigned long vmalloc_to_pfn(const void *addr)
- }
- EXPORT_SYMBOL(vmalloc_to_pfn);
- 
--long vread(char *buf, char *addr, unsigned long count)
-+long vread_iter(struct iov_iter *iter, char *addr, size_t count)
- {
- 	/* Don't allow overflow */
--	if ((unsigned long) buf + count < count)
--		count = -(unsigned long) buf;
-+	if ((unsigned long) addr + count < count)
-+		count = -(unsigned long) addr;
- 
--	memcpy(buf, addr, count);
--	return count;
-+	return copy_to_iter(addr, count, iter);
- }
- 
- /*
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 978194dc2bb8..ebfa1e9fe6f9 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -37,7 +37,6 @@
- #include <linux/rbtree_augmented.h>
- #include <linux/overflow.h>
- #include <linux/pgtable.h>
--#include <linux/uaccess.h>
- #include <linux/hugetlb.h>
- #include <linux/sched/mm.h>
- #include <asm/tlbflush.h>
-@@ -3442,62 +3441,95 @@ void *vmalloc_32_user(unsigned long size)
- EXPORT_SYMBOL(vmalloc_32_user);
- 
- /*
-- * small helper routine , copy contents to buf from addr.
-- * If the page is not present, fill zero.
-+ * Atomically zero bytes in the iterator.
-+ *
-+ * Returns the number of zeroed bytes.
-  */
-+size_t zero_iter(struct iov_iter *iter, size_t count)
-+{
-+	size_t remains = count;
-+
-+	while (remains > 0) {
-+		size_t num, copied;
-+
-+		num = remains < PAGE_SIZE ? remains : PAGE_SIZE;
-+		copied = copy_page_to_iter_atomic(ZERO_PAGE(0), 0, num, iter);
-+		remains -= copied;
-+
-+		if (copied < num)
-+			break;
-+	}
-+
-+	return count - remains;
-+}
- 
--static int aligned_vread(char *buf, char *addr, unsigned long count)
-+/*
-+ * small helper routine, copy contents to iter from addr.
-+ * If the page is not present, fill zero.
-+ *
-+ * Returns the number of copied bytes.
-+ */
-+static size_t aligned_vread_iter(struct iov_iter *iter,
-+				 const char *addr, size_t count)
- {
--	struct page *p;
--	int copied = 0;
-+	size_t remains = count;
-+	struct page *page;
- 
--	while (count) {
-+	while (remains > 0) {
- 		unsigned long offset, length;
-+		size_t copied = 0;
- 
- 		offset = offset_in_page(addr);
- 		length = PAGE_SIZE - offset;
--		if (length > count)
--			length = count;
--		p = vmalloc_to_page(addr);
-+		if (length > remains)
-+			length = remains;
-+		page = vmalloc_to_page(addr);
- 		/*
--		 * To do safe access to this _mapped_ area, we need
--		 * lock. But adding lock here means that we need to add
--		 * overhead of vmalloc()/vfree() calls for this _debug_
--		 * interface, rarely used. Instead of that, we'll use
--		 * kmap() and get small overhead in this access function.
-+		 * To do safe access to this _mapped_ area, we need lock. But
-+		 * adding lock here means that we need to add overhead of
-+		 * vmalloc()/vfree() calls for this _debug_ interface, rarely
-+		 * used. Instead of that, we'll use an local mapping via
-+		 * copy_page_to_iter_atomic() and accept a small overhead in
-+		 * this access function.
- 		 */
--		if (p) {
--			/* We can expect USER0 is not used -- see vread() */
--			void *map = kmap_atomic(p);
--			memcpy(buf, map + offset, length);
--			kunmap_atomic(map);
--		} else
--			memset(buf, 0, length);
-+		if (page)
-+			copied = copy_page_to_iter_atomic(page, offset, length,
-+							  iter);
-+
-+		/* Zero anything we were unable to copy. */
-+		copied += zero_iter(iter, length - copied);
-+
-+		addr += copied;
-+		remains -= copied;
- 
--		addr += length;
--		buf += length;
--		copied += length;
--		count -= length;
-+		if (copied != length)
-+			break;
- 	}
--	return copied;
-+
-+	return count - remains;
- }
- 
--static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags)
-+/*
-+ * Read from a vm_map_ram region of memory.
-+ *
-+ * Returns the number of copied bytes.
-+ */
-+static size_t vmap_ram_vread_iter(struct iov_iter *iter, const char *addr,
-+				  size_t count, unsigned long flags)
- {
- 	char *start;
- 	struct vmap_block *vb;
- 	unsigned long offset;
--	unsigned int rs, re, n;
-+	unsigned int rs, re;
-+	size_t remains, n;
- 
- 	/*
- 	 * If it's area created by vm_map_ram() interface directly, but
- 	 * not further subdividing and delegating management to vmap_block,
- 	 * handle it here.
- 	 */
--	if (!(flags & VMAP_BLOCK)) {
--		aligned_vread(buf, addr, count);
--		return;
--	}
-+	if (!(flags & VMAP_BLOCK))
-+		return aligned_vread_iter(iter, addr, count);
- 
- 	/*
- 	 * Area is split into regions and tracked with vmap_block, read out
-@@ -3505,50 +3537,65 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
- 	 */
- 	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
- 	if (!vb)
--		goto finished;
-+		goto finished_zero;
- 
- 	spin_lock(&vb->lock);
- 	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
- 		spin_unlock(&vb->lock);
--		goto finished;
-+		goto finished_zero;
- 	}
-+
-+	remains = count;
- 	for_each_set_bitrange(rs, re, vb->used_map, VMAP_BBMAP_BITS) {
--		if (!count)
--			break;
-+		size_t copied;
-+
-+		if (remains == 0)
-+			goto finished;
-+
- 		start = vmap_block_vaddr(vb->va->va_start, rs);
--		while (addr < start) {
--			if (count == 0)
--				goto unlock;
--			*buf = '\0';
--			buf++;
--			addr++;
--			count--;
-+
-+		if (addr < start) {
-+			size_t to_zero = min_t(size_t, start - addr, remains);
-+			size_t zeroed = zero_iter(iter, to_zero);
-+
-+			addr += zeroed;
-+			remains -= zeroed;
-+
-+			if (remains == 0 || zeroed != to_zero)
-+				goto finished;
- 		}
-+
- 		/*it could start reading from the middle of used region*/
- 		offset = offset_in_page(addr);
- 		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
--		if (n > count)
--			n = count;
--		aligned_vread(buf, start+offset, n);
-+		if (n > remains)
-+			n = remains;
-+
-+		copied = aligned_vread_iter(iter, start + offset, n);
- 
--		buf += n;
--		addr += n;
--		count -= n;
-+		addr += copied;
-+		remains -= copied;
-+
-+		if (copied != n)
-+			goto finished;
- 	}
--unlock:
-+
- 	spin_unlock(&vb->lock);
- 
--finished:
-+finished_zero:
- 	/* zero-fill the left dirty or free regions */
--	if (count)
--		memset(buf, 0, count);
-+	return count - remains + zero_iter(iter, remains);
-+finished:
-+	/* We couldn't copy/zero everything */
-+	spin_unlock(&vb->lock);
-+	return count - remains;
- }
- 
- /**
-- * vread() - read vmalloc area in a safe way.
-- * @buf:     buffer for reading data
-- * @addr:    vm address.
-- * @count:   number of bytes to be read.
-+ * vread_iter() - read vmalloc area in a safe way to an iterator.
-+ * @iter:         the iterator to which data should be written.
-+ * @addr:         vm address.
-+ * @count:        number of bytes to be read.
-  *
-  * This function checks that addr is a valid vmalloc'ed area, and
-  * copy data from that area to a given buffer. If the given memory range
-@@ -3568,13 +3615,12 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
-  * (same number as @count) or %0 if [addr...addr+count) doesn't
-  * include any intersection with valid vmalloc area
-  */
--long vread(char *buf, char *addr, unsigned long count)
-+long vread_iter(struct iov_iter *iter, const char *addr, size_t count)
- {
- 	struct vmap_area *va;
- 	struct vm_struct *vm;
--	char *vaddr, *buf_start = buf;
--	unsigned long buflen = count;
--	unsigned long n, size, flags;
-+	char *vaddr;
-+	size_t n, size, flags, remains;
- 
- 	addr = kasan_reset_tag(addr);
- 
-@@ -3582,18 +3628,22 @@ long vread(char *buf, char *addr, unsigned long count)
- 	if ((unsigned long) addr + count < count)
- 		count = -(unsigned long) addr;
- 
-+	remains = count;
-+
- 	spin_lock(&vmap_area_lock);
- 	va = find_vmap_area_exceed_addr((unsigned long)addr);
- 	if (!va)
--		goto finished;
-+		goto finished_zero;
- 
- 	/* no intersects with alive vmap_area */
--	if ((unsigned long)addr + count <= va->va_start)
--		goto finished;
-+	if ((unsigned long)addr + remains <= va->va_start)
-+		goto finished_zero;
- 
- 	list_for_each_entry_from(va, &vmap_area_list, list) {
--		if (!count)
--			break;
-+		size_t copied;
-+
-+		if (remains == 0)
-+			goto finished;
- 
- 		vm = va->vm;
- 		flags = va->flags & VMAP_FLAGS_MASK;
-@@ -3608,6 +3658,7 @@ long vread(char *buf, char *addr, unsigned long count)
- 
- 		if (vm && (vm->flags & VM_UNINITIALIZED))
- 			continue;
-+
- 		/* Pair with smp_wmb() in clear_vm_uninitialized_flag() */
- 		smp_rmb();
- 
-@@ -3616,38 +3667,45 @@ long vread(char *buf, char *addr, unsigned long count)
- 
- 		if (addr >= vaddr + size)
- 			continue;
--		while (addr < vaddr) {
--			if (count == 0)
-+
-+		if (addr < vaddr) {
-+			size_t to_zero = min_t(size_t, vaddr - addr, remains);
-+			size_t zeroed = zero_iter(iter, to_zero);
-+
-+			addr += zeroed;
-+			remains -= zeroed;
-+
-+			if (remains == 0 || zeroed != to_zero)
- 				goto finished;
--			*buf = '\0';
--			buf++;
--			addr++;
--			count--;
- 		}
-+
- 		n = vaddr + size - addr;
--		if (n > count)
--			n = count;
-+		if (n > remains)
-+			n = remains;
- 
- 		if (flags & VMAP_RAM)
--			vmap_ram_vread(buf, addr, n, flags);
-+			copied = vmap_ram_vread_iter(iter, addr, n, flags);
- 		else if (!(vm->flags & VM_IOREMAP))
--			aligned_vread(buf, addr, n);
-+			copied = aligned_vread_iter(iter, addr, n);
- 		else /* IOREMAP area is treated as memory hole */
--			memset(buf, 0, n);
--		buf += n;
--		addr += n;
--		count -= n;
-+			copied = zero_iter(iter, n);
-+
-+		addr += copied;
-+		remains -= copied;
-+
-+		if (copied != n)
-+			goto finished;
- 	}
--finished:
--	spin_unlock(&vmap_area_lock);
- 
--	if (buf == buf_start)
--		return 0;
-+finished_zero:
-+	spin_unlock(&vmap_area_lock);
- 	/* zero-fill memory holes */
--	if (buf != buf_start + buflen)
--		memset(buf, 0, buflen - (buf - buf_start));
-+	return count - remains + zero_iter(iter, remains);
-+finished:
-+	/* Nothing remains, or We couldn't copy/zero everything. */
-+	spin_unlock(&vmap_area_lock);
- 
--	return buflen;
-+	return count - remains;
- }
- 
- /**
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+
 -- 
-2.39.2
-
+Mike Kravetz
