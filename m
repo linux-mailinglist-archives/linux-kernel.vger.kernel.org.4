@@ -2,139 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5709E6C3A5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EA56C3A62
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCUT0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S229950AbjCUT1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCUT0R (ORCPT
+        with ESMTP id S229639AbjCUT1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:26:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6B818168
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679426731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=85m7idf7+4iCJskalXeMQ1A6vtydsiefpfGzk6u9aGk=;
-        b=Pz1UiyaKRNzSVCFGehzWkD8GveHgtAPF+bHhZCMMIh1N5j+U4wpPlJt2/XL1sX6eTZlz2G
-        C7J3nEsiAV7djWxoYGpHhVWz7SrMERcTAfCUR+flRNA9dAqNZn3tRZ5cckEuL3kjL0KEDY
-        8qJ4BfsqjdvoYO5hiv9xnd/Hz8hNVtI=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-AL7MW4jDNdKdOP8NmxHLdg-1; Tue, 21 Mar 2023 15:25:29 -0400
-X-MC-Unique: AL7MW4jDNdKdOP8NmxHLdg-1
-Received: by mail-qk1-f200.google.com with SMTP id x80-20020a376353000000b0074681bc7f42so3522883qkb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:25:29 -0700 (PDT)
+        Tue, 21 Mar 2023 15:27:07 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B394FA9A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:27:05 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id h9so16695492ljq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679426824;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8butvfKm6QGKCwPNW1OovXvIW+7ZWnx4ygsGQRPI5ug=;
+        b=m0ys7kgiRzstX+2u40ASM63cvOrln/ko2KPNqQ8WesZHFdS/Cl7mjQtLCX/hNS62U6
+         GwAl333XElLMgFWy2VCwm0Dmr8aVcnTYqlzSdU6pI1kFhqJiyk4GZYBwRqJ4Ohi5tIyE
+         /zmPiNyUvzXf51ZUZnz3+7t/QOBMeO1VO6lln4fg9g36px30kcWIrGIp30UOxGNFA409
+         7wMlf+VtPJ5hqFsF/0ujqPY6tVrkbZ5gBm08bB5Ymy5tons588Ddl7MJ2yVitgeOKlBj
+         W/iq1fPaBVpFb4ktn21M53HGKwoAlS65fCw7MJOYRfZ5NaT45fWmIA6MwlVM2MG/oGuJ
+         +SEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679426729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=85m7idf7+4iCJskalXeMQ1A6vtydsiefpfGzk6u9aGk=;
-        b=akYOsQQOH3rfUd8fCC5/nZOc/1J9iSXI5If+K3u9rNir/IjMp+dN7QJ2zCLrSk2uOG
-         bJfa1PyyoK4Q8aYzlOJVazv1HZ3TqGBPi38qdKy8/az+qRRujXeMdyFnExXvikXNoa8W
-         azfbntTmLUOFfF35xzEr8hyw6M5uwwqLNk8YJ/iM8mQ1ifUL27sKInIotnmaaep49KQ8
-         jAbnNNZBUH9y8VDRbIkadvWvIQrpu1RXXVFllxZngB9VDoiP2zJkbxYtKsc4Pjm8VXfK
-         jxJ7JRLXObEYiXaDCfAjH79N+ZgRUBqOc/kQnDl1YgLKJd7To3qE6DuKNS652034enrO
-         TlgA==
-X-Gm-Message-State: AO0yUKU6XL8Np9lbqtydXAlcZ2bBy+Ey6bmgO5i3MEJcXDuCMPW1gpO7
-        in/9d4xqyykIcqEde4qye1XyKLPYyv6Uyy8yvoDFnOADMjwjy1TURkEpKNpxnpG8U0qeqTEP5fc
-        YeW37j69UghPBW6OlMZDKjYz0
-X-Received: by 2002:a05:622a:1ba6:b0:3c0:40c3:b8fd with SMTP id bp38-20020a05622a1ba600b003c040c3b8fdmr6057132qtb.6.1679426729258;
-        Tue, 21 Mar 2023 12:25:29 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+9iqNdU6v9wQzdMs3AczgBSXHN3PRvEEclpNBfmVrHlftA95NuuUy9gB8wfKiTRndykR9lzQ==
-X-Received: by 2002:a05:622a:1ba6:b0:3c0:40c3:b8fd with SMTP id bp38-20020a05622a1ba600b003c040c3b8fdmr6057082qtb.6.1679426728928;
-        Tue, 21 Mar 2023 12:25:28 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id 77-20020a370650000000b007458c5a807csm9774944qkg.83.2023.03.21.12.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 12:25:28 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 15:25:26 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 1/7] userfaultfd: Add UFFD WP Async support
-Message-ID: <ZBoEpkq66ZxHFr8A@x1n>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-2-usama.anjum@collabora.com>
- <ZBNr4nohj/Tw4Zhw@x1n>
- <1b78ee32-003d-5645-c223-619b66d41733@collabora.com>
+        d=1e100.net; s=20210112; t=1679426824;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8butvfKm6QGKCwPNW1OovXvIW+7ZWnx4ygsGQRPI5ug=;
+        b=QPqhpReUGVWT/id1oTCzdpwaDovIx0iCdRF4l7KfLP3C13BU7D8hoPMfAQiclUS9Va
+         8xIVmB8PVlZy3DGXVZWj+fjY53MLtOw+k3p87xsIB7yTkcoCJx6XiLC1DwqjssGtEFoX
+         C8STVLtvHi40b3HSG2O93mR8Fs4huebPcVTg2bgVkW0lGHbLTddu7QPE9NKG/HJWnyD2
+         w6X6g2UZx1a4K+9MJD0s+3kunfA7UoTnQrGUqFTHmM0vjrwKXU24carRKMqsmlezmH53
+         MwUjb/m1W3BhW64sgetFgStRE9A4NnR79O/cMXvWW7WOU3E2TXn4dh/x1ZWfMqCVDBLm
+         nWsQ==
+X-Gm-Message-State: AO0yUKWzdHdPP2pIUfQYM18VqYLSDNR1dVRZYYfvrZiNk/vcNcndCvJ+
+        cvnmBPYvr9yVYJIj8OHpJW+ARQ==
+X-Google-Smtp-Source: AK7set8DUiYHUR6OH7OruNeqw9r7zHuMnkJVrTn9fq1x4odawBTusR3MMG0EACKU8AnQQjhAsKwShg==
+X-Received: by 2002:a2e:b60d:0:b0:294:899:afc3 with SMTP id r13-20020a2eb60d000000b002940899afc3mr1396161ljn.35.1679426823716;
+        Tue, 21 Mar 2023 12:27:03 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id o10-20020a2e730a000000b00294692d8645sm2379823ljc.17.2023.03.21.12.27.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 12:27:03 -0700 (PDT)
+Message-ID: <41111f93-ef02-0e57-98af-01327213d854@linaro.org>
+Date:   Tue, 21 Mar 2023 20:27:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1b78ee32-003d-5645-c223-619b66d41733@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/5] arm64: dts: qcom: Enable Crypto Engine for a few
+ Qualcomm SoCs
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org, rfoss@kernel.org
+References: <20230321190118.3327360-1-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230321190118.3327360-1-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Muhammad,
 
-On Tue, Mar 21, 2023 at 05:21:15PM +0500, Muhammad Usama Anjum wrote:
-> Thank you so much for the patch. I've tested hugetlb mem. This patch is
-> working fine for hugetlb shmem:
-> *shmid = shmget(2, size, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
-> mem = shmat(*shmid, 0, 0);
+
+On 21.03.2023 20:01, Bhupesh Sharma wrote:
+> This patchset enables Crypto Engine support for Qualcomm SoCs like
+> SM6115, SM8150, SM8250 and SM8350.
 > 
-> I've found slight issue with hugetlb mem which has been mmaped:
-> mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
-> 	   MAP_ANONYMOUS | MAP_HUGETLB | MAP_PRIVATE, -1, 0);
-> The issue is that even after witting to this memory, the wp flag is still
-> present there and memory doesn't appear to be dirty when it should have
-> been dirty. The temporary fix is to write to memory and write protect the
-> memory one extra time.
+> While at it, also fix the compatible string for BAM DMA engine
+> used in sdm845.dtsi
+> 
+> Note that:
+> - SM8250 crypto engine patch utilizes the work already done by myself and
+>   Vladimir.
+> - SM8350 crypto engine patch utilizes the work already done by Robert.
+> 
+> This patchset depends on the dt-bindings patch which added support for
+> SM6115 and QCS2290 SoCs:
+> https://lore.kernel.org/linux-arm-msm/20230321184811.3325725-1-bhupesh.sharma@linaro.org/
+You could have included that one here for easier tracking!
 
-I looked into this today and found it's an existing bug that can trigger
-with sync mode too.. as long as protection applied to unpopulated hugetlb
-private mappings, then write to it.
-
-I've sent a fix for it here and have you copied:
-
-https://lore.kernel.org/linux-mm/20230321191840.1897940-1-peterx@redhat.com/T/#u
-
-Please have a look and see whether it also fixes your issue.
-
-PS: recently I added a warning in commit c2da319c2e2789 and that can indeed
-capture this one when verifying using pagemap.  I'd guess your dmesg should
-also contain something dumped.
-
-Thanks,
-
--- 
-Peter Xu
-
+Konrad
+> 
+> Also this patchset is rebased on linux-next/master.
+> 
+> Bhupesh Sharma (5):
+>   arm64: dts: qcom: sdm845: Fix the BAM DMA engine compatible string
+>   arm64: dts: qcom: sm6115: Add Crypto Engine support
+>   arm64: dts: qcom: sm8150: Add Crypto Engine support
+>   arm64: dts: qcom: sm8250: Add Crypto Engine support
+>   arm64: dts: qcom: sm8350: Add Crypto Engine support
+> 
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi |  2 +-
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 26 ++++++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi | 26 ++++++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 26 ++++++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 26 ++++++++++++++++++++++++++
+>  5 files changed, 105 insertions(+), 1 deletion(-)
+> 
