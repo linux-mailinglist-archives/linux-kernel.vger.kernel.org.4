@@ -2,197 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E6A6C3D60
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A824E6C3D67
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCUWBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S229816AbjCUWIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjCUWBS (ORCPT
+        with ESMTP id S229675AbjCUWI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:01:18 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559095614D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:00:48 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id q99-20020a17090a1b6c00b0023f0c6c6b3dso5968106pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679436046;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+iGntBtVRJjD4o480g3Ec0CENpb6X11x9JeRvhErT0=;
-        b=j1gwEl2XqCykbfMpcCLwM8y8MF47Jdosm/r2/BLi61FTQRxWIMTi1IjHX9YQ9nQAKq
-         p/Cle9TrbcWcZS/e26akLlTSXNsz2bY14u7mUg1Yk/vT+oGidLfPprXJN8cUHa97nfle
-         5E37kyY+kc6QtIldgnBFO8VDYvAZmfbMLgVKQWZl17opxD3laEOw2KekIjr1k2EUaJNA
-         c6d9nzDNWOlr0Hntu0jyxOs4L2czPLAuUWv9y5ElqxGAE2i18JhZ/sveILZVP1d2NcTD
-         /rKSD4YbTNjlVViUPHy9KO4dGbXgEgUPh+d7/T6RXhQIC/Ngmq43PQXOQYn6aCFhB0xB
-         jwEg==
+        Tue, 21 Mar 2023 18:08:29 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D696ACC20;
+        Tue, 21 Mar 2023 15:08:27 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id p20-20020a056830319400b0069f914e5c74so1117048ots.3;
+        Tue, 21 Mar 2023 15:08:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679436046;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G+iGntBtVRJjD4o480g3Ec0CENpb6X11x9JeRvhErT0=;
-        b=opw2asb509DZZzXYDOf3HeG9sQthSmw0svkwGIyRxfregwIJuDWFcN+PgydOWpYO5l
-         6dGFJRFJe1TF4Hiz1/kAJN+eBRrFwBPJTw6ci4M8Mzxbb3GtxQZ//pMjUpeLCBJbQSbF
-         9qpGYSTZlPdNMva7dln5H2VINq2BnmdFXFAXArlXO801ex3z9oQoU9arO3aXgVlYbXdK
-         034XIqFySgdMZrZH7a8g3JIBQALPbwW6nvVAhn4q2jspNNXN2Bm8vs70rI9vTx1zX1Z6
-         y6HJnb6v1C6C3lDdXrHG5F3A8aamUwXAKaFyhWvy3GFcQQusb9hb5zKaKwVd8q581Tbw
-         n0HA==
-X-Gm-Message-State: AO0yUKX3wXffGYc3yFQPdAKa8WyVL2Aau3/s0c4bvhrF+p9mABRGSV95
-        nZVtaCF0fwoLy2+fqmRfxslTNVOMdVE=
-X-Google-Smtp-Source: AK7set9LH1Y3w0ma4uzI/zS8MJ9A1jvQwicm85z1bRm3olEHtxhvQqi/+Aw125ALJ3uKxOceH+dcr66rHIY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2d0c:b0:627:df77:8303 with SMTP id
- fa12-20020a056a002d0c00b00627df778303mr680408pfb.5.1679436046123; Tue, 21 Mar
- 2023 15:00:46 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 21 Mar 2023 15:00:21 -0700
-In-Reply-To: <20230321220021.2119033-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230321220021.2119033-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-Message-ID: <20230321220021.2119033-14-seanjc@google.com>
-Subject: [PATCH v4 13/13] KVM: x86/mmu: Merge all handle_changed_pte*() functions
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679436507;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZpDMWU1r+Zt8jZrtXFc2D2tco7/VMKbA4jzzKhsFGCA=;
+        b=WBya72RTjhbb7R5dPkjv+WPWNTE2xUJDKvVoZmX78LOaNMI9eMb4mN7u0N7W+5sRVA
+         T4kRpnpV/FGv+U6Y5tmGvJe3lVKzp87DqRXi29e3EteLXTrODt8+BPeI4CbuzXcwQkJ0
+         GuWW5o/iHmGQFsKjZhOrYq/9yJqIYz3btl7kWFdHTWOhMQ0khvxwJ6jg1uNNotjIjp6w
+         168UcYdRoXlvizhFjmKMz4OgQF1zMB35/jjX7smzL7ZTRT8Nhj2SscNv2stx9gjVoZzH
+         a9AMFM2hojnV3FsxgZrfuOsflgsQhatXXi+y2Chi3KhNS3jPQt8FBXu9Q/Qu0cY1zOPy
+         iisg==
+X-Gm-Message-State: AO0yUKVy+rS1nFvAP4sNrAlAu2KwKbW2Z+HTLG7dNmfuOeZ5zXnrsN8i
+        /zPAIWFi0OgCyB85FM2lyWAXyyOSZw==
+X-Google-Smtp-Source: AK7set+96sV7YUNKjhPVEomctIU42GJayDjjb8XCwvoVE0twKuMLd+lcSJ8FKJwNdgf4/oaqvJA4uQ==
+X-Received: by 2002:a05:6830:2009:b0:69f:2774:b60 with SMTP id e9-20020a056830200900b0069f27740b60mr408963otp.8.1679436507024;
+        Tue, 21 Mar 2023 15:08:27 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t26-20020a05683014da00b0068d752f1870sm5626034otq.5.2023.03.21.15.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 15:08:26 -0700 (PDT)
+Received: (nullmailer pid 1740280 invoked by uid 1000);
+        Tue, 21 Mar 2023 22:08:25 -0000
+Date:   Tue, 21 Mar 2023 17:08:25 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nikita Travkin <nikita@trvn.ru>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v2 1/2] dt-bindings: leds: aw2013: Document vddio-supply
+Message-ID: <20230321220825.GA1685482-robh@kernel.org>
+References: <20230320174949.174600-1-linmengbo0689@protonmail.com>
+ <20230320175131.174657-1-linmengbo0689@protonmail.com>
+ <922eab51-6931-8533-db51-51cd911a36b3@linaro.org>
+ <ZBitAGOmF/hyxDYP@gerhold.net>
+ <94cdb512-b168-6ffe-73c1-caf23bb79d6f@linaro.org>
+ <ZBoR0DPQ+AufzKHk@gerhold.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBoR0DPQ+AufzKHk@gerhold.net>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vipin Sharma <vipinsh@google.com>
+On Tue, Mar 21, 2023 at 09:21:36PM +0100, Stephan Gerhold wrote:
+> On Tue, Mar 21, 2023 at 07:42:37AM +0100, Krzysztof Kozlowski wrote:
+> > On 20/03/2023 19:59, Stephan Gerhold wrote:
+> > > On Mon, Mar 20, 2023 at 07:04:22PM +0100, Krzysztof Kozlowski wrote:
+> > >> On 20/03/2023 18:55, Lin, Meng-Bo wrote:
+> > >>> Some LEDs controllers are used with external pull-up for the interrupt
+> > >>> line and the I2C lines, so we might need to enable a regulator to bring
+> > >>> the lines into usable state.
+> > >>
+> > >> Not a property of this device.
+> > >>
+> > >>> Otherwise, this might cause spurious
+> > >>> interrupts and reading from I2C will fail.
+> > >>>
+> > >>> Document support for "vddio-supply" that is enabled by the aw2013 driver
+> > >>> so that the regulator gets enabled when needed.
+> > >>>
+> > >>> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+> > >>> ---
+> > >>>  Documentation/devicetree/bindings/leds/leds-aw2013.yaml | 5 +++++
+> > >>>  1 file changed, 5 insertions(+)
+> > >>>
+> > >>> diff --git a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
+> > >>> index 08f3e1cfc1b1..79b69cf1d1fe 100644
+> > >>> --- a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
+> > >>> +++ b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
+> > >>> @@ -23,6 +23,11 @@ properties:
+> > >>>    vcc-supply:
+> > >>>      description: Regulator providing power to the "VCC" pin.
+> > >>>  
+> > >>> +  vddio-supply:
+> > >>> +    description: |
+> > >>> +      Optional regulator that provides digital I/O voltage,
+> > >>
+> > >> NAK. I responded to your patch and you just send a v2 without explanation.
+> > >>
+> > >> The device does not have VDDIO pin, either.
+> > >>
+> > > 
+> > > The power supply Lin is trying to add here is basically the "VIO1"
+> > > example in "Figure 1 AW2013 Typical Application Circuit" on page 1 of
+> > > the AW2013 datasheet [1]. The I2C pins and the interrupt output are both
+> > > open-drain and therefore require external pull-up resistors, connected
+> > > to a power supply that might not be always on.
+> > > 
+> > > Because of the open-drain pins AW2013 does indeed not have a dedicated
+> > > input pin for the I/O supply voltage. However, it is still necessary to
+> > > describe the power supply _somewhere_, to ensure that it is enabled when
+> > > needed.
+> > > 
+> > > It is hard to model this properly but it's generally easiest to handle
+> > > this inside the peripheral driver since it knows exactly when I2C and/or
+> > > interrupt lines are currently needed or not. This situation is fairly
+> > > common for I2C devices so there are several precedents, e.g.:
+> > > 
+> > >   1. cypress,tm2-touchkey.yaml: "vddio-supply"
+> > >      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3e730ec11d51283ad62a98436967c01b718132ab
+> > >   2. goodix,gt7375p.yaml: "mainboard-vddio-supply"
+> > >      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1d18c1f3b7d938bdefc44289d137b4e6c7a3d502
+> > 
+> > Both are mistaken. How can you enumerate or autodetect a device if its
+> > regulator pulling up I2C are not on?
+> 
+> You don't. By design I2C does not support enumeration or autodetection.
+> Nothing we implement in software can change that.
+> 
+> I2C devices have all sorts of requirements before they show up on the
+> bus at all (power supplies, enable GPIOs, clocks, ...). All these are
+> currently modelled as part of the consumer IC.
+> 
+> > What's more, on I2C lines you could have more devices, so you expect
+> > each of them having the supply?
+> 
+> Yes, I don't think this is a problem since it's typical for regulators
+> to be shared. If at least one of the I2C devices is active, the bus will
+> be active as well.
+> 
+> > These are properties of I2C controller, not the consumer. I2C controller
+> > should enable any regulators necessary for the IO pins.
+> 
+> In general I agree with you here. But as I mentioned already there is
+> usually more than just the I2C I/O lines. For AW2013 there is at least
+> also the open-drain interrupt line. On other ICs there could also be
+> arbitrary GPIO lines that are used in open-drain mode. Those are
+> completely unrelated to the I2C controller.
+> 
+> Do you have any suggestions how to handle the power supply for those?
+> 
+> IMO for interrupts lines the pull-up I/O supply is hardly a property of
+> the interrupt controller. It just cares that a line switches from high
+> to low. It's not exactly a property of the consumer IC either. However,
+> since operating the interrupt line in open-drain mode is part of the
+> consumer IC specification I would say that the I/O supply for interrupt
+> lines is better described on the consumer side.
+> 
+> For sake of completeness we could additionally describe the supply for
+> the I2C lines on the I2C controller, but then we still need this patch
+> or something else for the interrupt lines.
 
-Merge __handle_changed_pte() and handle_changed_spte_acc_track() into a
-single function, handle_changed_pte(), as the two are always used
-together.  Remove the existing handle_changed_pte(), as it's just a
-wrapper that calls __handle_changed_pte() and
-handle_changed_spte_acc_track().
+I think a supply on the device side is fine here. Just be clear in the 
+description about its purpose. We have much worse abuses than this 
+(random bus clocks added to SoC devices).
 
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
-[sean: massage changelog]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/tdp_mmu.c | 42 +++++++++++---------------------------
- 1 file changed, 12 insertions(+), 30 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index e8ee49b6da5b..b2fca11b91ff 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -334,17 +334,6 @@ static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
- 				u64 old_spte, u64 new_spte, int level,
- 				bool shared);
- 
--static void handle_changed_spte_acc_track(u64 old_spte, u64 new_spte, int level)
--{
--	if (!is_shadow_present_pte(old_spte) || !is_last_spte(old_spte, level))
--		return;
--
--	if (is_accessed_spte(old_spte) &&
--	    (!is_shadow_present_pte(new_spte) || !is_accessed_spte(new_spte) ||
--	     spte_to_pfn(old_spte) != spte_to_pfn(new_spte)))
--		kvm_set_pfn_accessed(spte_to_pfn(old_spte));
--}
--
- static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
- {
- 	kvm_account_pgtable_pages((void *)sp->spt, +1);
-@@ -487,7 +476,7 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
- }
- 
- /**
-- * __handle_changed_spte - handle bookkeeping associated with an SPTE change
-+ * handle_changed_spte - handle bookkeeping associated with an SPTE change
-  * @kvm: kvm instance
-  * @as_id: the address space of the paging structure the SPTE was a part of
-  * @gfn: the base GFN that was mapped by the SPTE
-@@ -502,9 +491,9 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
-  * dirty logging updates are handled in common code, not here (see make_spte()
-  * and fast_pf_fix_direct_spte()).
-  */
--static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
--				  u64 old_spte, u64 new_spte, int level,
--				  bool shared)
-+static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-+				u64 old_spte, u64 new_spte, int level,
-+				bool shared)
- {
- 	bool was_present = is_shadow_present_pte(old_spte);
- 	bool is_present = is_shadow_present_pte(new_spte);
-@@ -588,15 +577,10 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
- 	if (was_present && !was_leaf &&
- 	    (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
- 		handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
--}
- 
--static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
--				u64 old_spte, u64 new_spte, int level,
--				bool shared)
--{
--	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level,
--			      shared);
--	handle_changed_spte_acc_track(old_spte, new_spte, level);
-+	if (was_leaf && is_accessed_spte(old_spte) &&
-+	    (!is_present || !is_accessed_spte(new_spte) || pfn_changed))
-+		kvm_set_pfn_accessed(spte_to_pfn(old_spte));
- }
- 
- /*
-@@ -639,9 +623,8 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
- 	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
- 		return -EBUSY;
- 
--	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
--			      new_spte, iter->level, true);
--	handle_changed_spte_acc_track(iter->old_spte, new_spte, iter->level);
-+	handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-+			    new_spte, iter->level, true);
- 
- 	return 0;
- }
-@@ -705,8 +688,7 @@ static u64 tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
- 
- 	old_spte = kvm_tdp_mmu_write_spte(sptep, old_spte, new_spte, level);
- 
--	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
--	handle_changed_spte_acc_track(old_spte, new_spte, level);
-+	handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
- 	return old_spte;
- }
- 
-@@ -1275,7 +1257,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
- 	 * Note, when changing a read-only SPTE, it's not strictly necessary to
- 	 * zero the SPTE before setting the new PFN, but doing so preserves the
- 	 * invariant that the PFN of a present * leaf SPTE can never change.
--	 * See __handle_changed_spte().
-+	 * See handle_changed_spte().
- 	 */
- 	tdp_mmu_iter_set_spte(kvm, iter, 0);
- 
-@@ -1300,7 +1282,7 @@ bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	/*
- 	 * No need to handle the remote TLB flush under RCU protection, the
- 	 * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
--	 * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
-+	 * shadow page. See the WARN on pfn_changed in handle_changed_spte().
- 	 */
- 	return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
- }
--- 
-2.40.0.rc2.332.ga46443480c-goog
+Rob
 
