@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC39A6C38BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C136C38BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjCUR44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S230298AbjCUR5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjCUR4r (ORCPT
+        with ESMTP id S230361AbjCUR4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:56:47 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCB751F87
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:13 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id z11so9533421pfh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:13 -0700 (PDT)
+        Tue, 21 Mar 2023 13:56:51 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CDC51C91
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:29 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so17206271pjp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:56:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679421373;
+        d=linaro.org; s=google; t=1679421388;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JcWEe9joi8P8ARZ5qcjwVaBgYJlRU0nCB/dSTsR7BZE=;
-        b=BdFO2Bzg5VN6qELjKThLhtxuZDAMj449O0zQFII2/4mPwjRxKA9p6IFnTgyZdJ+Yif
-         72fel+67kGplwxE65coeiOstlWrXS883W3az8ewpXD2OEsRtrQb+mhRhCwIJkUgiurL3
-         Ij+z8dRd0xLZ2lQbkh0t9tfue09RzPSH1ZivQ7Obi8OtLVesOKtSyYdi6QOPXj1wodj4
-         xQ228Fc/HClk9RaBYVlicvUfKMcGGZDEVd2hQLnKuc0rxtWABmIwf7bfLu+pku20z20X
-         72RQ3QQMHYqhwvjIo9f20GAIBok8uv/HXtvYi4SXdH/dLUi3gpy9anjVQaTbCv0g5VKl
-         DUtQ==
+        bh=r94G8t+laaLRHOqp7P6NpxqXY5ipeIxkdHAuq3GhtkU=;
+        b=FqHGROlFeKRmjeq5RlLPU34wtJAd1p5fe0lZ//1ZGPnYLu2AjOOVTuxxzO98KffaFL
+         lk+3qizt2R4AK6AR6mCf3Kn/u8mTYHjdJYmuIiFl3OlpZ1eNMwl9/hq83DKtd7rCDtxS
+         RCXDW9R/ajRyFK/UhSmcqgM06xDl2DWQOHuKrPvRkquC7InbHhLKbUbmWDQiDdnEkYsv
+         Er9NCeoQT9xP5AdZ6KE+Zhzqz9nj2Xd8jYXKR8gshFvML5TmwC39qYkAjB9NCSqc9mdC
+         BBGhuZFPkvImL4kvzyhdNndy4oTWPoSWy42+7Vv3uMrgu4w/HOIBQcmaKUsPf0fy9+7P
+         Objg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679421373;
+        d=1e100.net; s=20210112; t=1679421388;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JcWEe9joi8P8ARZ5qcjwVaBgYJlRU0nCB/dSTsR7BZE=;
-        b=gMom2DfoLQDBgKOQCgPBhOF0PgFGCYVDKWM+q+ya38zI3QVNyYGQs9TdSOo4S7uCuv
-         h04aSOr3IqMDcMoe9H/SmxleBqEBYeGwXe1lXfjyUNe6B5F5TUzgDCfX7hARF5uIoNnT
-         t496m+QusZoFDRI1RdpXaIz9sl/+ISnk1aMnzXDssU042SU4Vc0VtwJWWlNGc8Lcdbcy
-         puYK/oZqp7iWUyDkugy7yZO+xR+CKRo5cedZKPiauk9AXIXRvenXpzlsSV4xOtPLrPrr
-         vYRfcg2rfTq8JqpViIJ8SLJW/kcSYqnMbNBkPESJOThifmwcI5TRwXKnuusuH5TWt+c0
-         NJNg==
-X-Gm-Message-State: AO0yUKWPTt6n1rugJ3+HtV2qnQL0YHvUxJZSoyJJ9zvmHGaQYjGdwmWW
-        puvYTzTubR6OXnrrcZMBn9Fy8JX1r3dfP/rp/wwzoa++9tMlKLyx
-X-Google-Smtp-Source: AK7set9caOFUUE4baZmzhHOMs7GGW4kqYh9hURY2D1Nf6DlWIqoxLJ7xjDwowBO49y+3wj8nzLHfnJ6vUMdffi82cWs=
-X-Received: by 2002:a05:6a00:1816:b0:625:f78a:56f with SMTP id
- y22-20020a056a00181600b00625f78a056fmr363552pfa.3.1679421372892; Tue, 21 Mar
- 2023 10:56:12 -0700 (PDT)
+        bh=r94G8t+laaLRHOqp7P6NpxqXY5ipeIxkdHAuq3GhtkU=;
+        b=JQ+ueUpm0vO5tL4OZRol0NxsfVvfVpDY28RnZ6AHNqdwM2khO7VrMoG2uuK2JGFg+V
+         eSGHtBAp6QCPoAGbrMUqQiBjA2eLJGxPFDrA1NDaRa05KwB4jQ6FTo9ONXJoVNrBtQ1W
+         dhgtChwkotOPPZP88ky2qbS7KLkKXmE/Mhu09rOF7ysVaZmRWB2FijlBmk4n+HcqNu5L
+         KaevPGrqLqh47oFErycvaxpuT+ah1tOJ74SoL4i9dVQe4SGkY70Q3lhxj4vst8tW84Mh
+         DAGtlVoJjMGxhC29fGC2siYHjLUjH05RjiD+g58AQ/gINFRdj1zT2+e7eyiwSydy7Ei0
+         /tPg==
+X-Gm-Message-State: AO0yUKVxUIkPTFsu1TkInWmqkt4AgBZyU9a39AUuxH5PQgX9cA0Xv68A
+        QLHWE/61218RpISEW9KrcTDOkk8QZdQHBruFQV1Efw==
+X-Google-Smtp-Source: AK7set99Lezq0qYv6gzZV3r6/9X/dce2iZeZI5kDliHXHztkipzJifJgdyGO+cknsvtp3ylxbHTLLHsBNuUA0FbXeWs=
+X-Received: by 2002:a17:90a:d205:b0:23c:fae6:c1e1 with SMTP id
+ o5-20020a17090ad20500b0023cfae6c1e1mr252377pju.6.1679421388545; Tue, 21 Mar
+ 2023 10:56:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230310160610.742382-1-james.clark@arm.com> <20230310160610.742382-7-james.clark@arm.com>
- <5f0a3b47-4dd5-8afb-796e-ddde70bbbdbc@arm.com>
-In-Reply-To: <5f0a3b47-4dd5-8afb-796e-ddde70bbbdbc@arm.com>
+References: <20230310160610.742382-1-james.clark@arm.com> <20230310160610.742382-6-james.clark@arm.com>
+ <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
+In-Reply-To: <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
 From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 21 Mar 2023 17:56:01 +0000
-Message-ID: <CAJ9a7Vgg7B6RZTj_EJ5ow3v4xrY-AyKZtdw-BNBi39bkgKbcxg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] coresight: Store in-connections as well as out-connections
+Date:   Tue, 21 Mar 2023 17:56:16 +0000
+Message-ID: <CAJ9a7Vg1EebruGT0irGE6sgk-Rs39-ptX_N3U=NkG3OsQeuBFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] coresight: Dynamically add connections
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>
 Cc:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
@@ -73,383 +73,126 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi James
 
-On Thu, 16 Mar 2023 at 20:23, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+On Thu, 16 Mar 2023 at 17:12, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
 >
 > On 10/03/2023 16:06, James Clark wrote:
-> > This will allow CATU to get its associated ETR in a generic way where
-> > currently the enable path has some hard coded searches which avoid
-> > the need to store input connections.
+> > Add a function for adding connections dynamically. This also removes
+> > the 1:1 mapping between port number and the index into the connections
+> > array. The only place this mapping was used was in the warning for
+> > duplicate output ports, which has been replaced by a search. Other
+> > uses of the port number already use the port member variable.
+> >
+> > Being able to dynamically add connections will allow other devices like
+> > CTI to re-use the connection mechanism despite not having explicit
+> > connections described in the DT.
 > >
 > > Signed-off-by: James Clark <james.clark@arm.com>
 > > ---
-> >   drivers/hwtracing/coresight/coresight-core.c  | 56 +++++++++++++++--
-> >   .../hwtracing/coresight/coresight-platform.c  | 61 ++++++++++++++++---
-> >   drivers/hwtracing/coresight/coresight-sysfs.c |  1 -
-> >   include/linux/coresight.h                     | 25 ++++++++
-> >   4 files changed, 130 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> > index f457914e445e..a8ba7493c09a 100644
-> > --- a/drivers/hwtracing/coresight/coresight-core.c
-> > +++ b/drivers/hwtracing/coresight/coresight-core.c
-> > @@ -59,6 +59,7 @@ const u32 coresight_barrier_pkt[4] = {0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fff
-> >   EXPORT_SYMBOL_GPL(coresight_barrier_pkt);
-> >
-> >   static const struct cti_assoc_op *cti_assoc_ops;
-> > +static int coresight_fixup_inputs(struct coresight_device *csdev);
-> >
-> >   ssize_t coresight_simple_show_pair(struct device *_dev,
-> >                             struct device_attribute *attr, char *buf)
-> > @@ -1369,6 +1370,35 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
-> >                        csdev, coresight_orphan_match);
-> >   }
-> >
-> > +/*
-> > + * Device connections are discovered before one/both devices have been created,
-> > + * so inputs must be added later.
-> > + */
-> > +static int coresight_fixup_inputs(struct coresight_device *csdev)
-> > +{
-> > +     int i, ret = 0;
-> > +     struct coresight_connection *out_conn;
-> > +     struct coresight_connection in_conn;
-> > +
-> > +     for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> > +             out_conn = &csdev->pdata->out_conns[i];
-> > +             if (!out_conn->remote_dev || !out_conn->remote_dev->pdata)
-> > +                     continue;
-> > +
-> > +             /* Reverse local/remote relationships for inputs */
-> > +             in_conn.remote_dev = csdev;
-> > +             in_conn.remote_port = out_conn->port;
-> > +             in_conn.port = out_conn->remote_port;
-> > +             in_conn.remote_fwnode = csdev->dev.fwnode;
-> > +             ret = coresight_add_in_conn(out_conn->remote_dev->dev.parent,
-> > +                                         out_conn->remote_dev->pdata,
-> > +                                         &in_conn);
-> > +             if (ret)
-> > +                     return ret;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> >
-> >   static int coresight_fixup_device_conns(struct coresight_device *csdev)
-> >   {
-> > @@ -1427,11 +1457,20 @@ static int coresight_remove_match(struct device *dev, void *data)
->
-> Removing the connection should be much simpler now with the inports
-> connection tracking.
->
-> i.e., coresight_remove_conns() need not iterate over all the devices on
-> the coresight bus. We had to do that to find all the devices connecting
-> to the removed device.
->
-> Instead with the in_conns we could readily get the csdev instance and
-> remove the connection from those devices.
->
-> Similarly for the out_conns can give you the remove device for removing
-> the in_conns on that device.
->
-> i.e,
->
-> static void coresight_remove_conns(csdev)
-> {
->         struct coresight_device *remote;
->
->         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
->                 remote = csdev->data->out_conns[i].remote_dev;
->
->                 if (!remote)
->                         continue;
->
->                 for (j = 0; j < remote->pdata->nr_inconns; j++) {
->                         if (remote->pdata->in_conns[i].remote_dev ==  csdev)
->                         /* Clear in_conns[i] on remote */
->
->                 }
->          }
->
->         Similarly for in_conns
->         for (i = 0; i < csdev->pdata->nr_inconns; i++) {
->                 remote = csdev->data->in_conns[i].remote_dev;
->
->                 if (!remote)
->                         continue;
->
->                 for (j = 0; j < remote->pdata->nr_outconns; j++) {
->                         if (remote->pdata->out_conns[i].remote_dev ==  csdev)
->                         /* Clear out_conns[i] on remote */
-> }
->
->
-> >                        */
-> >                       fwnode_handle_put(conn->remote_fwnode);
-> >                       conn->remote_fwnode = NULL;
-> > +                     conn->remote_dev = NULL;
-> > +                     /* No need to continue */
-> > +                     break;
-> > +             }
-> > +     }
-> > +     for (i = 0; i < iterator->pdata->nr_inconns; i++) {
-> > +             conn = &iterator->pdata->in_conns[i];
-> > +             if (csdev == conn->remote_dev) {
-> > +                     conn->remote_fwnode = NULL;
-> > +                     conn->remote_dev = NULL;
-> >                       /* No need to continue */
-> >                       break;
-> >               }
-> >       }
-> > -
-> >       /*
-> >        * Returning '0' ensures that all known component on the
-> >        * bus will be checked.
-> > @@ -1552,21 +1591,28 @@ void coresight_release_platform_data(struct coresight_device *csdev,
-> >
-> >       for (i = 0; i < pdata->nr_outconns; i++) {
-> >               /* If we have made the links, remove them now */
-> > -             if (csdev && conns[i].remote_dev)
-> > +             if (csdev && conns[i].remote_dev) {
-> >                       coresight_remove_links(csdev, &conns[i]);
-> > +                     conns[i].remote_dev = NULL;
-> > +             }
-> > +
-> >               /*
-> >                * Drop the refcount and clear the handle as this device
-> >                * is going away
-> >                */
-> >               if (conns[i].remote_fwnode) {
-> >                       fwnode_handle_put(conns[i].remote_fwnode);
-> > -                     pdata->out_conns[i].remote_fwnode = NULL;
-> > +                     conns[i].remote_fwnode = NULL;
-> >               }
-> >       }
-> > +     for (i = 0; i < pdata->nr_inconns; i++) {
-> > +             pdata->in_conns[i].remote_dev = NULL;
-> > +             pdata->in_conns[i].remote_fwnode = NULL;
-> > +     }
-> > +
-> >       if (csdev)
-> >               coresight_remove_conns_sysfs_group(csdev);
-> >   }
-> > -
-> >   struct coresight_device *coresight_register(struct coresight_desc *desc)
-> >   {
-> >       int ret;
-> > @@ -1659,6 +1705,8 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
-> >       ret = coresight_create_conns_sysfs_group(csdev);
-> >       if (!ret)
-> >               ret = coresight_fixup_device_conns(csdev);
-> > +     if (!ret)
-> > +             ret = coresight_fixup_inputs(csdev);
-> Don't we also need to fixup the "input" connections on this
-> device ? It would be good move all of this connection stuff
-> into a wrapper function.
->
-> >       if (!ret)
-> >               ret = coresight_fixup_orphan_conns(csdev);
+> >   .../hwtracing/coresight/coresight-platform.c  | 77 ++++++++++++++-----
+> >   include/linux/coresight.h                     |  7 +-
+> >   2 files changed, 64 insertions(+), 20 deletions(-)
 > >
 > > diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-> > index 16553f7dde12..20e3351cbdc2 100644
+> > index c77238cdf448..16553f7dde12 100644
 > > --- a/drivers/hwtracing/coresight/coresight-platform.c
 > > +++ b/drivers/hwtracing/coresight/coresight-platform.c
-> > @@ -20,8 +20,7 @@
-> >
-> >   #include "coresight-priv.h"
-> >   /*
-> > - * coresight_alloc_conns: Allocate connections record for each output
-> > - * port from the device.
-> > + * coresight_alloc_conns: Allocate connections record for each input/output device.
-> >    */
-> >   static int coresight_alloc_conns(struct device *dev,
+> > @@ -27,8 +27,9 @@ static int coresight_alloc_conns(struct device *dev,
 > >                                struct coresight_platform_data *pdata)
-> > @@ -33,7 +32,14 @@ static int coresight_alloc_conns(struct device *dev,
+> >   {
+> >       if (pdata->nr_outconns) {
+> > -             pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
+> > -                                         sizeof(*pdata->out_conns), GFP_KERNEL);
+> > +             pdata->out_conns = devm_krealloc_array(
+> > +                     dev, pdata->out_conns, pdata->nr_outconns,
+>
+> super minor nit:
+>                 pdata->out_conns = devm_krealloc_array(dev,
+>
+>
+> > +                     sizeof(*pdata->out_conns), GFP_KERNEL | __GFP_ZERO);
 > >               if (!pdata->out_conns)
 > >                       return -ENOMEM;
 > >       }
-> > -
-> > +     if (pdata->nr_inconns) {
-> > +             pdata->in_conns = devm_krealloc_array(dev, pdata->in_conns,
-> > +                                                   pdata->nr_inconns,
-> > +                                                   sizeof(*pdata->in_conns),
-> > +                                                   GFP_KERNEL | __GFP_ZERO);
-> > +             if (!pdata->in_conns)
-> > +                     return -ENOMEM;
-> > +     }
->
-> devm_krealloc_array() skips any allocation if the requested new_size <=
-> origin_size. So this should be fine for the out_conns, to not realloc
-> the space again unnecessarily.
->
+> > @@ -36,6 +37,48 @@ static int coresight_alloc_conns(struct device *dev,
 > >       return 0;
 > >   }
 > >
-> > @@ -79,6 +85,45 @@ int coresight_add_conn(struct device *dev,
-> >   }
-> >   EXPORT_SYMBOL_GPL(coresight_add_conn);
->
-> Should this be named as add_out_conn in the previous patch
-> just to make it explicit and easier to read.
->
-> >
 > > +/*
 > > + * Add a connection in the first free slot, or realloc
-> > + * if there is no space.
+> > + * if there is no space. @conn's contents is copied into the new slot.
 > > + *
-> > + * Do nothing if the connection already exists because inputs are
-> > + * fixed up multiple times.
+> > + * If the output port is already assigned on this device, return -EINVAL
 > > + */
-> > +int coresight_add_in_conn(struct device *dev,
-> > +                       struct coresight_platform_data *pdata,
->
-> minor nit: Is there any reason why this can't simply be:
->
->     int coresight_add_in_conn(struct coresight_device *csdev,
->                              struct coresight_connection *conn)
->     {
->                 struct device *dev = csdev->dev.parent;
->                 struct coresight_platform_data *pdata = csdev->pdata;
->
-> > +                       struct coresight_connection *conn)
->
->
-> Suzuki
->
->
+> > +int coresight_add_conn(struct device *dev,
+> > +                    struct coresight_platform_data *pdata,
+> > +                    const struct coresight_connection *conn)
 > > +{
 > > +     int ret;
 > > +     struct coresight_connection *free_conn = NULL;
-> > +     int i;
+> > +     struct coresight_connection *i;
 > > +
-> > +     /* Search for a free slot or exit if a duplicate is found */
-> > +     if (pdata->in_conns) {
-> > +             for (i = 0; i < pdata->nr_inconns; ++i) {
-> > +                     if (!free_conn && !pdata->in_conns[i].remote_fwnode)
-> > +                             free_conn = &pdata->in_conns[i];
-> > +                     if (pdata->in_conns[i].remote_fwnode ==
-> > +                         conn->remote_fwnode)
-> > +                             return 0;
+> > +     /*
+> > +      * Search for a free slot, and while looking for one, warn
+> > +      * on any existing duplicate output port.
+> > +      */
+> > +     for (i = pdata->out_conns; i < pdata->out_conns + pdata->nr_outconns;
+> > +          ++i) {
+>
+> minor nit: I see why you have gone against using "i" as index into
+> the array. But I think having that as the index is still better
+> readable.
+>
+>         for (i = 0; i < pdata->nr_outconns; i++) {
+>                 struct coresight_connection *c = &pdata->out_conns[i];
+>
+> > +             if (i->remote_fwnode && conn->port != -1 &&
+> > +                 i->port == conn->port) {
+> > +                     dev_warn(dev, "Duplicate output port %d\n", i->port);
+> > +                     return -EINVAL;
 > > +             }
-> > +     }
-> > +
 
-As with the out conns this assumes there can never be a match after a free slot.
+This code assumes that slots are filled sequentially and that it is
+not possible to release slots out of order - i.e. if we find a free
+slot, there is not a match in a later slot.
+I can't think how this could happen but a comment to confirm this
+might be needed here.
+
+When we had 1:1 port / array index then this check was guaranteed
 
 Mike
 
+
+
+> > +             if (!i->remote_fwnode && !free_conn)
+> > +                     free_conn = i;
+> > +     }
+> > +
 > > +     if (!free_conn) {
-> > +             pdata->nr_inconns++;
+>
+> and:
+>         /* No free slots */
+>         if (i == pdata->nr_outconns) {
+>
+> > +             pdata->nr_outconns++;
 > > +             ret = coresight_alloc_conns(dev, pdata);
 > > +             if (ret)
 > > +                     return ret;
-> > +             free_conn = &pdata->in_conns[pdata->nr_inconns - 1];
+> > +             free_conn = &pdata->out_conns[pdata->nr_outconns - 1];
 > > +     }
 > > +
-> > +     *free_conn = *conn;
-> > +     return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(coresight_add_in_conn);
-> > +
-> >   static struct device *
-> >   coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
-> >   {
-> > @@ -249,7 +294,7 @@ static int of_coresight_get_cpu(struct device *dev)
-> >
-> >   /*
-> >    * of_coresight_parse_endpoint : Parse the given output endpoint @ep
-> > - * and fill the connection information in @conn
-> > + * and fill the connection information in @in_conn and @out_conn
-> >    *
-> >    * Parses the local port, remote device name and the remote port.
-> >    *
-> > @@ -333,14 +378,14 @@ static int of_get_coresight_platform_data(struct device *dev,
-> >       /* Get the number of input and output port for this component */
-> >       of_coresight_get_ports(node, &pdata->nr_inconns, &pdata->nr_outconns);
-> >
-> > -     /* If there are no output connections, we are done */
-> > -     if (!pdata->nr_outconns)
-> > -             return 0;
-> > -
-> >       ret = coresight_alloc_conns(dev, pdata);
-> >       if (ret)
-> >               return ret;
-> >
-> > +     /* If there are no output connections, we are done */
-> > +     if (!pdata->nr_outconns)
-> > +             return 0;
-> > +
-> >       parent = of_coresight_get_output_ports_node(node);
-> >       /*
-> >        * If the DT uses obsoleted bindings, the ports are listed
-> > diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
-> > index 3da9868d9237..2abf9639ac0f 100644
-> > --- a/drivers/hwtracing/coresight/coresight-sysfs.c
-> > +++ b/drivers/hwtracing/coresight/coresight-sysfs.c
-> > @@ -202,5 +202,4 @@ void coresight_remove_links(struct coresight_device *orig,
-> >       devm_kfree(&orig->dev, conn->link->orig_name);
-> >       devm_kfree(&orig->dev, conn->link);
-> >       conn->link = NULL;
-> > -     conn->remote_dev = NULL;
-> >   }
-> > diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> > index 47fa58d6981d..fd268b24c761 100644
-> > --- a/include/linux/coresight.h
-> > +++ b/include/linux/coresight.h
-> > @@ -110,6 +110,7 @@ struct coresight_platform_data {
-> >       int nr_inconns;
-> >       int nr_outconns;
-> >       struct coresight_connection *out_conns;
-> > +     struct coresight_connection *in_conns;
 >
-> Please document the field above the structure.
+> and:
+>         pdata->out_conns[i] = *conn;
+>
+>
+> Otherwise looks good to me.
 >
 > Suzuki
 >
 >
-> >   };
-> >
-> >   /**
-> > @@ -177,6 +178,27 @@ struct coresight_desc {
-> >    *               @remote_fwnode once the remote's coresight_device has
-> >    *               been created.
-> >    * @link: Representation of the connection as a sysfs link.
-> > + *
-> > + * The full connection structure looks like this, where in_conns store references to
-> > + * the parent device in the same remote_dev member as output connections.
-> > + *
-> > + *       +-----------------------------+            +-----------------------------+
-> > + *       |coresight_device             |            |coresight_connection         |
-> > + *       |-----------------------------|            |-----------------------------|
-> > + *  ---->|                             |            |                             |
-> > + *  |    |                             |            |                  remote_dev*|------
-> > + *  |    |pdata->out_conns[nr_outconns]|----------->|                             |      |
-> > + *  |    |                             |            |                             |      |
-> > + *  |    +-----------------------------+            +-----------------------------+      |
-> > + *  |                                                                                    |
-> > + *  |    +-----------------------------+            +-----------------------------+      |
-> > + *  |    |coresight_connection         |            |coresight_device             |      |
-> > + *  |    |-----------------------------|            |------------------------------      |
-> > + *  |    |                             |            |                             |<-----
-> > + *  -----|remote_dev*                  |            |                             |
-> > + *       |                             |<-----------|pdata->in_conns[nr_inconns]  |
-> > + *       |                             |            |                             |
-> > + *       +-----------------------------+            +-----------------------------+
-> >    */
-> >   struct coresight_connection {
-> >       int port;
-> > @@ -619,5 +641,8 @@ struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
-> >   int coresight_add_conn(struct device *dev,
-> >                      struct coresight_platform_data *pdata,
-> >                      const struct coresight_connection *conn);
-> > +int coresight_add_in_conn(struct device *dev,
-> > +                       struct coresight_platform_data *pdata,
-> > +                       struct coresight_connection *conn);
-> >
-> >   #endif              /* _LINUX_COREISGHT_H */
->
 
 
--- 
+--
 Mike Leach
 Principal Engineer, ARM Ltd.
 Manchester Design Centre. UK
