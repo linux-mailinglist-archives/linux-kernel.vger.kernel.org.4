@@ -2,127 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14CE6C270E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 02:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C8E6C2717
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 02:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCUBLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 21:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S230234AbjCUBNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 21:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbjCUBLZ (ORCPT
+        with ESMTP id S230239AbjCUBNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 21:11:25 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D436FE2
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 18:10:34 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id le6so14383050plb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 18:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679360957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ard8tYEtuim88umne0gyaePxSaABF63V8F0JJy1BBA8=;
-        b=2j9RQkllMk34kvITCdHHjbV+9is81Ls1mIfbwpFF0L5ntmfjrZkH3/NfJCdQkerk9F
-         9jB+kVCeIcfsN4zSQqa7P/4mc6GGhWbZgjj6RwGJlqMG1cieO7aTZXyE505+yaBuKcCF
-         T2Yy3ULdf0DVv5/fivzuhR2U2Uuuk556TlrBmuHg4esUEOa37J8uO1DpHIFXInGDsXGZ
-         uYUtaGTC4eyXjOo8Rrrnys7rGvTdpncaLTgYaT5qYQ1UpcpK7eMmgHj5YfTLC7lpcrNu
-         V427PnGRswjr8vdYxpl88XyC2Dqm2bCZiquR+94YqMrYGWDEN8Fu9BrhRowl4HCQjO67
-         qUdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679360957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ard8tYEtuim88umne0gyaePxSaABF63V8F0JJy1BBA8=;
-        b=orD2EzEz7Q1+eJHVA1bHBE9cbSKdhZr5XL1wDSB+/fIQO+RYpeLmfBhaJdye57oZ7w
-         e+op8cWKbt4OLVyuIo74jtYG2nZy1q6i1ohSmLIQwm6ghPDIX8w78ll8UDphYM4kUvNW
-         +rjZKKm+k8M+FHxFQOmA+dIPKVzaWwUvURP31xn2naveTC7CjtKmcWI+mR3rQZFCM8xx
-         e2vgsdJWmCyMVjH1+prNH/L0DCXUqXF2v4GfD60qZxowPtyP0gsoDaOZzfROan1A+B83
-         VdRk1THHPxLZ8yY557DuKh/17l5DudFl+Q4FT9+OC0S17qf9ykV5R801Rc9uZR3deOw9
-         r/6Q==
-X-Gm-Message-State: AO0yUKXT1ckypL010sa6VCNOs2t5FR478THVKhaxlfMvy+WlvSvVjexH
-        WPUZFtVGRqQDtWtVeWoZYSjEGg==
-X-Google-Smtp-Source: AK7set+UOYEWRVZ3UVEikJR6Cx2WhJxXds4/6C4hRFkW/myx6zHNT32/ivnnzhI1BkOCjTw/kBkjRw==
-X-Received: by 2002:a17:902:d48c:b0:1a0:57df:861c with SMTP id c12-20020a170902d48c00b001a057df861cmr16695481plg.1.1679360956742;
-        Mon, 20 Mar 2023 18:09:16 -0700 (PDT)
-Received: from destitution (pa49-196-94-140.pa.vic.optusnet.com.au. [49.196.94.140])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170903028400b0019a723a831dsm7344655plr.158.2023.03.20.18.09.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 18:09:16 -0700 (PDT)
-Received: from dave by destitution with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1peQUy-000WO0-0v;
-        Tue, 21 Mar 2023 12:09:12 +1100
-Date:   Tue, 21 Mar 2023 12:09:12 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBkDuLKLhsOHNUeG@destitution>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+        Mon, 20 Mar 2023 21:13:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C7849E3
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 18:12:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1787618F5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 01:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A788C433EF;
+        Tue, 21 Mar 2023 01:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679361099;
+        bh=ODNl9OOZ7GRaMqnxRe71E34bayxsvyWE18W1XmyJcUg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fCpVW8xXtAjiy+lHjQ8vuRPOTZ6Yswb3wmiJ6C1gOxD4PPs80PDCRTfEjwJ7js0Fx
+         YlJ7JABUz9owixjvDI1eym+GF2gY/WYQ1VIwnCV/j6YwfG/T1LzwsNWEwup4LMn17d
+         ahpVCvWGsRuQpJsP8Go6DW81OsM+fcJm+lh2orRphAb/ylMtiZWexMO3iON4J8ffjI
+         zMVGVNPfNz9g7zFgYw/AZ8znVaGfNSj8AbX9L+5lMrxiMG7tF/A7AtE6sDKqK/UQnY
+         jHklFRT7jj9ePANeT0WFgv+tdHbSd1BrpERZNt0M7KVZcD6tqQR18KGgVqJvIRAdyk
+         ZMnFfZR4RqYwQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id D1C8B1540395; Mon, 20 Mar 2023 18:11:38 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Willy Tarreau <w@1wt.eu>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH nolibc 01/14] tools/nolibc: always disable stack protector for tests
+Date:   Mon, 20 Mar 2023 18:11:24 -0700
+Message-Id: <20230321011137.51837-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc2
+In-Reply-To: <6a3206d0-e5cd-4990-9604-444a24a8207c@paulmck-laptop>
+References: <6a3206d0-e5cd-4990-9604-444a24a8207c@paulmck-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 07:09:31AM +0000, Lorenzo Stoakes wrote:
-> vmalloc() is, by design, not permitted to be used in atomic context and
-> already contains components which may sleep, so avoiding spin locks is not
-> a problem from the perspective of atomic context.
-> 
-> The global vmap_area_lock is held when the red/black tree rooted in
-> vmap_are_root is accessed and thus is rather long-held and under
-> potentially high contention. It is likely to be under contention for reads
-> rather than write, so replace it with a rwsem.
-> 
-> Each individual vmap_block->lock is likely to be held for less time but
-> under low contention, so a mutex is not an outrageous choice here.
-> 
-> A subset of test_vmalloc.sh performance results:-
-> 
-> fix_size_alloc_test             0.40%
-> full_fit_alloc_test		2.08%
-> long_busy_list_alloc_test	0.34%
-> random_size_alloc_test		-0.25%
-> random_size_align_alloc_test	0.06%
-> ...
-> all tests cycles                0.2%
-> 
-> This represents a tiny reduction in performance that sits barely above
-> noise.
+From: Thomas Weißschuh <linux@weissschuh.net>
 
-I'm travelling right now, but give me a few days and I'll test this
-against the XFS workloads that hammer the global vmalloc spin lock
-really, really badly. XFS can use vm_map_ram and vmalloc really
-heavily for metadata buffers and hit the global spin lock from every
-CPU in the system at the same time (i.e. highly concurrent
-workloads). vmalloc is also heavily used in the hottest path
-throught the journal where we process and calculate delta changes to
-several million items every second, again spread across every CPU in
-the system at the same time.
+Stack protectors need support from libc.
+This support is not provided by nolibc which leads to compiler errors
+when stack protectors are enabled by default in a compiler:
 
-We really need the global spinlock to go away completely, but in the
-mean time a shared read lock should help a little bit....
+      CC      nolibc-test
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `stat':
+    nolibc-test.c:(.text+0x1d1): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `poll.constprop.0':
+    nolibc-test.c:(.text+0x37b): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `vfprintf.constprop.0':
+    nolibc-test.c:(.text+0x712): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `pad_spc.constprop.0':
+    nolibc-test.c:(.text+0x80d): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o: in function `printf':
+    nolibc-test.c:(.text+0x8c4): undefined reference to `__stack_chk_fail'
+    /usr/bin/ld: /tmp/ccqbHEPk.o:nolibc-test.c:(.text+0x12d4): more undefined references to `__stack_chk_fail' follow
+    collect2: error: ld returned 1 exit status
 
--Dave.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ tools/testing/selftests/nolibc/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 8fe61d3e3cce..874d141da8c4 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for nolibc tests
+ include ../../../scripts/Makefile.include
++# We need this for the "cc-option" macro.
++include ../../../build/Build.include
+ 
+ # we're in ".../tools/testing/selftests/nolibc"
+ ifeq ($(srctree),)
+@@ -72,6 +74,7 @@ endif
+ 
+ CFLAGS_s390 = -m64
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables $(CFLAGS_$(ARCH))
++CFLAGS  += $(call cc-option,-fno-stack-protector)
+ LDFLAGS := -s
+ 
+ help:
 -- 
-Dave Chinner
-david@fromorbit.com
+2.40.0.rc2
+
