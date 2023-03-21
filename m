@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102D96C38AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DF06C38B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjCURz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S230283AbjCUR4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCURzY (ORCPT
+        with ESMTP id S230107AbjCURzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:55:24 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2D9515D8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:55:23 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id ix20so16873610plb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:55:23 -0700 (PDT)
+        Tue, 21 Mar 2023 13:55:50 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F45070F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:55:49 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso1964989pjc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:55:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled; t=1679421322;
+        d=sladewatkins.net; s=googled; t=1679421348;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O2f7rgn2h3aX/OgonL+LZ4pVeZntbx1pC+H3yOOxuPo=;
-        b=POoPbVQzBxPUZ9UVHQFclfZPqdYhET4djBJsztO6uaI2Xh59alX2Y6nwES4W+JkJB4
-         7nQ48aAarEIbKFczycMLb/dMh+p1c2KwRNUMNhTcCQ8hMO8gXPv6iPaRq7f8+31+ZPdV
-         iGpsXdJ8M7bwAqddpnJNHPtPfG9cLUqrcxk6r3RyD2DWV58X5HpA0nBurpDxSGR51HQ8
-         UuO/OarnuvLM+MglRW9T0uQznVVXi0Uyb7olJa69yKDPsWYO5JTHKC7XIFeE5kvkw4BO
-         1iB2NgswFTkUC5TQUw1/HGNW4D0BAc6LcyFeeb5gTiGZJ4pfNpxNqdeDsO+jSY24m52q
-         jamQ==
+        bh=anmwm8yh/Vv8uX68Kbemfb9lejd4xrXhy7Hrxs7x/Xc=;
+        b=p+5z7EVJQPLlOQLYbDplKK87mDndC8RzhIx2+st0XPbLsiD60EhRtLtfqfOMrMg+UX
+         /6Fwj04we+rGkipUMwrnIhhNChD58Q+D0HcJUHND61pTEtL7rj9utgbbf8CfmF/HIZbF
+         EDeRugM3ONkg2u9p7433FET+ZotZEyzDYdmf/hRf9jAOgoYDSNjm1bEYnHJI5BHOvQ1y
+         PC2DH9oJ4lT9AG6rBH6ke+6Py0SlJmK5fXwyCpNspaE/JhcQP8CehRxKb7kOddg7f5om
+         LTr1C2/zgoe8GetVf6eCS9oLMEcn6Qvb3IETEgBN+7KAKQUJf6eumactKjZ0GyKoighV
+         JuTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679421322;
+        d=1e100.net; s=20210112; t=1679421348;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O2f7rgn2h3aX/OgonL+LZ4pVeZntbx1pC+H3yOOxuPo=;
-        b=SeOf5Vi8lArh/NDSYanYG8eA/Ns97lGtVS+Ns6G/CY7gerH3grxNsSQ9tB9I/NzNJG
-         exiqMt8t9dji3PX53+1z56OBaJLQfyTYurPm6l6AhMOWm9B8h/l2hXvhgF4iEFs8L8YZ
-         wdb1NPdFuFgP8q+OLhvg5KU/H+vz99UMPCOrTaBwsPBa1iwFnOWUjNolkYFmg10ac65d
-         vRDytAVbnzChez7W14ED5dsTy1m4ANnndsIKlB0f2A4gsTZFar5wa0Sju2SiTpRfDuWz
-         eAM8dk9ogAj1eLKAPrKUEQ5jt6leSEHN6tepQ6Vbu5bhA2+8itXo5lCG3tuDcYiOc7Ud
-         gFgw==
-X-Gm-Message-State: AO0yUKXTjHmvJoPVPJbkzjXL7aaod8iMGYJPfbTkJ7syop5Z+JJ4LXR4
-        RFgtx0Zq8Mva2w8Z8EzmVK8XSbrJ4KNwVs69ScuhQ7bezzWIrJmg/dLG+HtD4M0sjsfNz34za+I
-        Gk/jYnMjDnK4CSaPuESWfAw/PTHtVwALFdDg=
-X-Google-Smtp-Source: AK7set/L+0d/V5U9z7rXu+z18lp6xAoVqf1aZZt5Bgnm0x6j85D095LBMwxBvdARwmaE0pXegdHoYmXQkVGkYgWkLoI=
-X-Received: by 2002:a17:902:e892:b0:1a0:7630:8ef9 with SMTP id
- w18-20020a170902e89200b001a076308ef9mr1383862plg.12.1679421320553; Tue, 21
- Mar 2023 10:55:20 -0700 (PDT)
+        bh=anmwm8yh/Vv8uX68Kbemfb9lejd4xrXhy7Hrxs7x/Xc=;
+        b=YWqoaNy4s+RgXF7d9xxKmNNGlumTntbap6SsMs//LTMPCcJ+BMtiKiLPvpOYJq7uk+
+         WG+8qY3xgORYTjPUx3J7Ofb4HGRVDFppKrq4LpEJeZOcHLRcZB987ng9sVhcOZq5LH4t
+         8JbBL3kU6j3wHhzOiGow2ZWwqR0cHPI5zOstAnBhExVsU6b9aI0V2ixj7QHUCTb42VDj
+         v40n1Er5JMJMLCoLr9TIWGXzubPcM1ulWesb6SP0A7UwlV8OQ7gimQah0qAKK65Gh7Gc
+         NXd7mF5oqF1lpHf10EPgt0lG2KCUKXuMAp+gBo8TNfAfAa6RWZzWoFHAxfjBMTYvzvWx
+         nPBQ==
+X-Gm-Message-State: AO0yUKXM6DkOOf41fy+IyY0/rCxCqnDygVRMVeEmN5MvSSAmqsoTas7I
+        OCcoaSG/ck0VhF9ErK6ixAvYtUCpI3TZ4KTLE511CYTEfsY65UOrjPdwnnSVwHsV4WyH4yPuI8o
+        7apkrjsafhwipTQiOBu1sX+KXq0VM9xLnjmY=
+X-Google-Smtp-Source: AK7set+aSSNndRQzBA2NvrSAm3VcmzzTjttcwiReGOC8KcfvRLO1EcHhKyk4ELdF6t0E/8bB9RzPogDwF+CPhKhae0E=
+X-Received: by 2002:a17:90b:190b:b0:23d:535f:59c7 with SMTP id
+ mp11-20020a17090b190b00b0023d535f59c7mr221120pjb.7.1679421348502; Tue, 21 Mar
+ 2023 10:55:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230321080705.245176209@linuxfoundation.org>
-In-Reply-To: <20230321080705.245176209@linuxfoundation.org>
+References: <20230321080647.018123628@linuxfoundation.org>
+In-Reply-To: <20230321080647.018123628@linuxfoundation.org>
 From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Tue, 21 Mar 2023 13:55:09 -0400
-Message-ID: <CA+pv=HOMuAfbHwkp4BYMeoJk4sL=bSoF=rGcYeXnLHZm2HsbzA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc2 review
+Date:   Tue, 21 Mar 2023 13:55:37 -0400
+Message-ID: <CA+pv=HOG7Ye9qvUTyYuCNYW=iEbmwEtGO9534EcPz4iUKTFMcg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/57] 5.4.238-rc2 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
@@ -81,20 +81,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, Mar 21, 2023 at 4:39=E2=80=AFAM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> This is the start of the stable review cycle for the 6.1.21 release.
-> There are 198 patches in this series, all will be posted as a response
+> This is the start of the stable review cycle for the 5.4.238 release.
+> There are 57 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 >
-> Responses should be made by Thu, 23 Mar 2023 08:06:28 +0000.
+> Responses should be made by Thu, 23 Mar 2023 08:06:33 +0000.
 > Anything received after that time might be too late.
 >
 > The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.21-rc2.gz
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.238-rc2.gz
 > or in the git tree and branch at:
 >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
+-rc.git linux-5.4.y
 > and the diffstat can be found below.
 
 Compiles and boots on my x86_64 test systems. No errors or regressions.
