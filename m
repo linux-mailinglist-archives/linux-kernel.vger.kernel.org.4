@@ -2,186 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A096C3A3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9216C3A38
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCUTRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S230010AbjCUTRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCUTRw (ORCPT
+        with ESMTP id S229808AbjCUTQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:17:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D0E5679A;
-        Tue, 21 Mar 2023 12:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679426246; x=1710962246;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IqD4xidHyUJU/zSXxeaPq4TjqmZevMWxlbR1cEzIV9M=;
-  b=VHzlb3MqlSWgw4BubpxFBF70zF8xLii/z0BrWSJ3+bDeZAuUBgyTjnL0
-   l9wg8eGOrWhiyYun9KsnP6sixKoyvkBZq10ONkT6YrNvIRQMzbfBgOCW9
-   raYi7jIWqu9RgReQtM+06JRrHHvPVpB4DwnrNqdjgywarIhJMeulKm5I+
-   svMRIT3Io4+UzhYg42Zwkr0lZ01CCTdcKISfpFIInfQ1tAM8j/CkVqVCj
-   lHV8dOvsAkhaUR/yP1AZfbjMx10+a9msg82I5RpRa0WCQU7TP249m7P4C
-   cAwtbTh7BYrTtHIpdNwjJXWsQTNNZDK3DCk0nL6zN+4yK+ud0nH5z9NF3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340577087"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="340577087"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 12:15:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="631716433"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="631716433"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Mar 2023 12:15:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pehSY-000CKu-1m;
-        Tue, 21 Mar 2023 19:15:50 +0000
-Date:   Wed, 22 Mar 2023 03:15:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, jernel@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2
- queue buffer storage
-Message-ID: <202303220301.fby6vJcX-lkp@intel.com>
-References: <20230321102855.346732-4-benjamin.gaignard@collabora.com>
+        Tue, 21 Mar 2023 15:16:59 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A5A4B82B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:16:32 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id d14so4548032ion.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679426171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=68/H4+xam4m5wiaqKB4DLi8WxDgUwxT+IYkB5YBtOss=;
+        b=Ch1bBNzmPQDbcLE1jy3YVa3GAf/t+fX97A2iSqvCLkaA7DQ1JECTOviq+QK2Zdpmxm
+         97Utmb+f1Hb4NYius8BS1RYAYgMs2/4lHJ0/Yl7mTSaCJFNIFSaLgUiF6KxW8vAev61A
+         MQfXTYGvQQ9b8gksZsjgy4w3Td4EcJlZsChRFgcf6K+QzlXkjlMFDY0Jbu9T28kh2weH
+         +D41OHGXmcRcY92LAbzAn/T2qhxWyP+St10u+wBB17QWAdp5cdRHDAqssvtsGVlzAfJr
+         2KJ1N8C4rCLx3pgXw6RteEqmXV7iDytshITlAZ6eKb0KuCInFjbC7Rto3Gx7mY+jq5rD
+         HyaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679426171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=68/H4+xam4m5wiaqKB4DLi8WxDgUwxT+IYkB5YBtOss=;
+        b=QXJKPa7zuLoh8wFjV/DZxWGeroKSdlgOK5bHkGNb2OlpxVTtZO2YBUOQMLUu2BmSy2
+         Mtdmv+DwfjAFzAK0zvWhLdDr8BMojYj0o35jJRVmAZRMHeJ4yWuwaeu80iDSkqREZGSM
+         CmbRfCTTR3KlnsJZp28rDaEY2ahjugxZRn7PfLp26i9e1/CQf4ebPgICgDF8eTcw9pOX
+         tqyJkX1f2VmNdrY+3rEE0yb3nCNWQmCQDee1RDl1DmW8mUAB55x3yzhnomZlxViTG/Aw
+         6sjM+UhvdLJqC478GDv9xUXCLiUHLbM4CiMsUBEzp3y1u50sgchUqqRBuDzVecnF8XB3
+         qWoQ==
+X-Gm-Message-State: AO0yUKUJnutYax397Y4dlTmA7nqe73DaZYBXzfR4QRHR6le8Nc0XAvqg
+        utfPD3stBXAIwwKEjGZDQY2+jA==
+X-Google-Smtp-Source: AK7set+VXE0JqlJu/khih18+jA1dIbHsYYvLTbg2wtKzlalWn4L4Eqgy+q/HxDA9auS9TdmUks2B5w==
+X-Received: by 2002:a6b:2ac2:0:b0:740:7d21:d96f with SMTP id q185-20020a6b2ac2000000b007407d21d96fmr2122857ioq.1.1679426171077;
+        Tue, 21 Mar 2023 12:16:11 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id s10-20020a6bdc0a000000b0074e7960e70dsm45058ioc.51.2023.03.21.12.16.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 12:16:10 -0700 (PDT)
+Message-ID: <8d532de2-bf3a-dee4-1cad-e11714e914d0@kernel.dk>
+Date:   Tue, 21 Mar 2023 13:16:08 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321102855.346732-4-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [GIT PULL] keys: Miscellaneous fixes/changes
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Bharath SM <bharathsm@microsoft.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        keyrings@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <2851036.1679417029@warthog.procyon.org.uk>
+ <CAHk-=wh1b0r+5SnwWedx=J4aZhRif1HLN_moxEG9Jzy23S6QUA@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wh1b0r+5SnwWedx=J4aZhRif1HLN_moxEG9Jzy23S6QUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On 3/21/23 12:48?PM, Linus Torvalds wrote:
+> On Tue, Mar 21, 2023 at 9:43?AM David Howells <dhowells@redhat.com> wrote:
+>>
+>>  (1) Fix request_key() so that it doesn't cache a looked up key on the
+>>      current thread if that thread is a kernel thread.  The cache is
+>>      cleared during notify_resume - but that doesn't happen in kernel
+>>      threads.  This is causing cifs DNS keys to be un-invalidateable.
+> 
+> I've pulled this, but I'd like people to look a bit more at this.
+> 
+> The issue with TIF_NOTIFY_RESUME is that it is only done on return to
+> user space.
+> 
+> And these days, PF_KTHREAD isn't the only case that never returns to
+> user space. PF_IO_WORKER has the exact same behaviour.
+> 
+> Now, to counteract this, as of this merge window (and marked for
+> stable) IO threads do a fake "return to user mode" handling in
+> io_run_task_work(), and so I think we're all good, but I'd like people
+> to at least think about this.
 
-I love your patch! Yet something to improve:
+I haven't seen the patch yet as it hasn't been pushed, but can imagine
+what it looks like. It may make sense to add some debug check for
+PF_KTHREAD having TIF_NOTIFY_RESUME set, or task_work pending for that
+matter, as that is generally not workable without doing something to
+handle it explicitly.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linus/master v6.3-rc3 next-20230321]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230321102855.346732-4-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2 queue buffer storage
-config: hexagon-randconfig-r015-20230319 (https://download.01.org/0day-ci/archive/20230322/202303220301.fby6vJcX-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/aab64e29070dfec3a043b5020399f79554d6cae4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
-        git checkout aab64e29070dfec3a043b5020399f79554d6cae4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303220301.fby6vJcX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/media/common/videobuf2/videobuf2-core.c:29:
-   In file included from include/media/videobuf2-core.h:19:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/media/common/videobuf2/videobuf2-core.c:29:
-   In file included from include/media/videobuf2-core.h:19:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/media/common/videobuf2/videobuf2-core.c:29:
-   In file included from include/media/videobuf2-core.h:19:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/media/common/videobuf2/videobuf2-core.c:37:1: error: incompatible pointer types returning 'size_t *' (aka 'unsigned int *') from a function with result type 'unsigned long *' [-Werror,-Wincompatible-pointer-types]
-   module_param(max_vb_buffer_per_queue, ulong, 0644);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/moduleparam.h:127:2: note: expanded from macro 'module_param'
-           module_param_named(name, name, type, perm)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/moduleparam.h:150:2: note: expanded from macro 'module_param_named'
-           param_check_##type(name, &(value));                                \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:65:1: note: expanded from here
-   param_check_ulong
-   ^
-   include/linux/moduleparam.h:446:36: note: expanded from macro 'param_check_ulong'
-   #define param_check_ulong(name, p) __param_check(name, p, unsigned long)
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/moduleparam.h:409:67: note: expanded from macro '__param_check'
-           static inline type __always_unused *__check_##name(void) { return(p); }
-                                                                            ^~~
-   6 warnings and 1 error generated.
-
-
-vim +37 drivers/media/common/videobuf2/videobuf2-core.c
-
-    36	
-  > 37	module_param(max_vb_buffer_per_queue, ulong, 0644);
-    38	
+For PF_IO_WORKER, with the commit you mentioned, those threads should
+deal with TIF_NOTIFY_RESUME just fine. Until something else gets added
+that is also run from exit_to_user_mode...
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Jens Axboe
+
