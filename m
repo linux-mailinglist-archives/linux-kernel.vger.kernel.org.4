@@ -2,127 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0DD6C2AE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C2A6C2AEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjCUG5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S230363AbjCUG5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjCUG5H (ORCPT
+        with ESMTP id S230477AbjCUG5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:57:07 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF0824BED;
-        Mon, 20 Mar 2023 23:56:38 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id bf30so3877685oib.12;
-        Mon, 20 Mar 2023 23:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679381798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7CB30YBR/unG1rtVrj/VEIoIIDqVdeb6HobkvOGdOhs=;
-        b=ljEyPQ/miVXVu+ZkXp99IVFxim/tHSNUWMN+4y6JRzkUykqZhmcnNntq5viRLU26lW
-         3+BbBMyvpE1sPre6zjo+lrT/+JDUo1yl1O4FblkNIaUquGngGNjiyX6U2URmgXv5gMAk
-         vU0VrR1p/ostCdOeelGYLa/sAyRBmtkDFZdOv5wAkn11p3M0VIfT8EDuj9KWM2FmXGJr
-         SAOlEMjX/r9JnXWKZFx2ngdrJowL4QiRsJdfNnESe5wGxPqOWAEpVKOjXWD5WBcpzYW2
-         pMKGsXI/PL9kpKOFNH9b+dOQO+YAQ1vbxXPijZG1T6z/uawYtBCb2M5BdD9j++O/8ykx
-         oY3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679381798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7CB30YBR/unG1rtVrj/VEIoIIDqVdeb6HobkvOGdOhs=;
-        b=bS+zGYvnWGl8dFobnOa9JMVP2WIW7H061c4TLa7Xp4Pvj8TqqCOWgoE9yQwbPhgpjL
-         eP+Bw1ucK5tcn5ZCB2YLXg7C98dzgBByuya9qCyW36dmlRWYdBfBHnF2pxMD5wux4ars
-         Z3b6gutQ9iRZPAc3Cbmkwf3azfrNZjyXubjRkjFNmOEJnn5StokRyAZFH3S/Vint74UX
-         SZ0ZFM+jj4IoXo2JfzVQ9ru64AQJOX+YZq92nL7CzC4Rt7M2QuE3B4xSE5PDYMybi2It
-         QnGp2LnRzwkaw9jk6kHssG7VQuDADrk6U/WfyjKrb7iplMFaIenJAguI/4G4Q7VwAwSy
-         SFoA==
-X-Gm-Message-State: AO0yUKVyeJ1uVxB5e4KB3M/f9Z8T6nYuuZmwYzQFigeTXR19FVTldOBE
-        PzGrQX4GJ/b57gSN5wKXrqyotzzcmPIfPvVaXEk=
-X-Google-Smtp-Source: AK7set8XAb32jOcG6ctlGx42mqM8SUCZhdbCzSCOqkbYwbN4WIQyCH/Ly80MQgmj1MEHdFvG6xKhBB0Rd57/AHcSI5g=
-X-Received: by 2002:a05:6808:199f:b0:384:21dd:2793 with SMTP id
- bj31-20020a056808199f00b0038421dd2793mr313020oib.0.1679381798025; Mon, 20 Mar
- 2023 23:56:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
- <20230320161823.1424278-2-sergio.paracuellos@gmail.com> <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
- <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
- <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org> <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
- <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org> <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
- <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org> <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
- <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org> <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
- <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
-In-Reply-To: <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 21 Mar 2023 07:56:25 +0100
-Message-ID: <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
-Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
- tree binding documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 02:57:13 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 582D3279AE;
+        Mon, 20 Mar 2023 23:57:05 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxJMQ_VRlk6kYPAA--.11168S3;
+        Tue, 21 Mar 2023 14:57:03 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx8eQ+VRlkSE0IAA--.35439S2;
+        Tue, 21 Mar 2023 14:57:02 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] perf bench syscall: Add fork syscall benchmark
+Date:   Tue, 21 Mar 2023 14:57:01 +0800
+Message-Id: <1679381821-22736-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Cx8eQ+VRlkSE0IAA--.35439S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZFW7JFWktrWDAr1DKrW7Arb_yoWrtFW5pF
+        s7C3W8Ja1ruFWYvw13tr1qgF9xAwn2qr15K3Zakws8Zr47W343tr4xWFWagF17Ww4kta45
+        uF4kZrW8Wa1rXaUanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4
+        kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
+        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8loGPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 7:43=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 21/03/2023 07:38, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> >>>>
-> >>>> Ah, but indeed there are newer Mediatek MT6xxx and MT8xxx SoCs which=
- are
-> >>>> ARM, so mediatek,mtmips-sysc would work.
-> >>>
-> >>> I can use 'mediatek,mtmips-sysc.yaml' as the name but compatibles wil=
-l
-> >>> start with ralink. There are already some existent compatibles for
-> >>> mt762x already having ralink as prefix, so to be coherent ralink
-> >>> should be maintained as prefix.
-> >>
-> >> The compatibles I mentioned start already with mediatek, so why do you
-> >> want to introduce incorrect vendor name for these?
-> >
-> > Can you point out where these compatible strings for mt7620 and mt7628 =
-are?
->
-> git grep
+This is a follow up patch for the execve bench which is actually
+fork + execve, it makes sense to add the fork syscall benchmark
+to compare the execve part precisely.
 
-Not for *-sysc nodes. The only current one in use (from git grep):
+Some archs have no __NR_fork definition which is used only as a
+check condition to call test_fork(), let us just define it as -1
+to avoid build error.
 
-arch/mips/ralink/mt7620.c:      rt_sysc_membase =3D
-plat_of_remap_node("ralink,mt7620a-sysc");
+Suggested-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/arch/x86/include/uapi/asm/unistd_32.h |  4 ++--
+ tools/arch/x86/include/uapi/asm/unistd_64.h |  3 +++
+ tools/perf/bench/bench.h                    |  1 +
+ tools/perf/bench/syscall.c                  | 35 +++++++++++++++++++++++++++++
+ tools/perf/builtin-bench.c                  |  1 +
+ 5 files changed, 42 insertions(+), 2 deletions(-)
 
-That's the reason I also used prefix ralink for the rest.
+diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
+index 2712d5e..b8ddfc4 100644
+--- a/tools/arch/x86/include/uapi/asm/unistd_32.h
++++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __NR_execve
+-#define __NR_execve 11
++#ifndef __NR_fork
++#define __NR_fork 2
+ #endif
+ #ifndef __NR_getppid
+ #define __NR_getppid 64
+diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
+index a6f7fe8..f70d2cad 100644
+--- a/tools/arch/x86/include/uapi/asm/unistd_64.h
++++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
+@@ -1,4 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __NR_fork
++#define __NR_fork 57
++#endif
+ #ifndef __NR_execve
+ #define __NR_execve 59
+ #endif
+diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
+index e438931..edfc257 100644
+--- a/tools/perf/bench/bench.h
++++ b/tools/perf/bench/bench.h
+@@ -23,6 +23,7 @@ int bench_sched_messaging(int argc, const char **argv);
+ int bench_sched_pipe(int argc, const char **argv);
+ int bench_syscall_basic(int argc, const char **argv);
+ int bench_syscall_getpgid(int argc, const char **argv);
++int bench_syscall_fork(int argc, const char **argv);
+ int bench_syscall_execve(int argc, const char **argv);
+ int bench_mem_memcpy(int argc, const char **argv);
+ int bench_mem_memset(int argc, const char **argv);
+diff --git a/tools/perf/bench/syscall.c b/tools/perf/bench/syscall.c
+index fe79f7f..ea4dfc07 100644
+--- a/tools/perf/bench/syscall.c
++++ b/tools/perf/bench/syscall.c
+@@ -18,6 +18,10 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ 
++#ifndef __NR_fork
++#define __NR_fork -1
++#endif
++
+ #define LOOPS_DEFAULT 10000000
+ static	int loops = LOOPS_DEFAULT;
+ 
+@@ -31,6 +35,23 @@ static const char * const bench_syscall_usage[] = {
+ 	NULL
+ };
+ 
++static void test_fork(void)
++{
++	pid_t pid = fork();
++
++	if (pid < 0) {
++		fprintf(stderr, "fork failed\n");
++		exit(1);
++	} else if (pid == 0) {
++		exit(0);
++	} else {
++		if (waitpid(pid, NULL, 0) < 0) {
++			fprintf(stderr, "waitpid failed\n");
++			exit(1);
++		}
++	}
++}
++
+ static void test_execve(void)
+ {
+ 	const char *pathname = "/bin/true";
+@@ -71,6 +92,12 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
+ 		case __NR_getpgid:
+ 			getpgid(0);
+ 			break;
++		case __NR_fork:
++			test_fork();
++			/* Only loop 10000 times to save time */
++			if (i == 10000)
++				loops = 10000;
++			break;
+ 		case __NR_execve:
+ 			test_execve();
+ 			/* Only loop 10000 times to save time */
+@@ -92,6 +119,9 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
+ 	case __NR_getpgid:
+ 		name = "getpgid()";
+ 		break;
++	case __NR_fork:
++		name = "fork()";
++		break;
+ 	case __NR_execve:
+ 		name = "execve()";
+ 		break;
+@@ -143,6 +173,11 @@ int bench_syscall_getpgid(int argc, const char **argv)
+ 	return bench_syscall_common(argc, argv, __NR_getpgid);
+ }
+ 
++int bench_syscall_fork(int argc, const char **argv)
++{
++	return bench_syscall_common(argc, argv, __NR_fork);
++}
++
+ int bench_syscall_execve(int argc, const char **argv)
+ {
+ 	return bench_syscall_common(argc, argv, __NR_execve);
+diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
+index 814e9af..d0fcc3c 100644
+--- a/tools/perf/builtin-bench.c
++++ b/tools/perf/builtin-bench.c
+@@ -53,6 +53,7 @@ static struct bench sched_benchmarks[] = {
+ static struct bench syscall_benchmarks[] = {
+ 	{ "basic",	"Benchmark for basic getppid(2) calls",		bench_syscall_basic	},
+ 	{ "getpgid",	"Benchmark for getpgid(2) calls",		bench_syscall_getpgid	},
++	{ "fork",	"Benchmark for fork(2) calls",			bench_syscall_fork	},
+ 	{ "execve",	"Benchmark for execve(2) calls",		bench_syscall_execve	},
+ 	{ "all",	"Run all syscall benchmarks",			NULL			},
+ 	{ NULL,		NULL,						NULL			},
+-- 
+2.1.0
 
-Does it make sense to you to maintain this one as ralink,mt7620a-sysc
-and add the following with mediatek prefix?
-
-mediatek,mt7620-sysc
-mediatek,mt7628-sysc
-mediatek,mt7688-sysc
-
-That would be weird IMHO.
-
-> Best regards,
-> Krzysztof
-
-Thanks,
-    Sergio Paracuellos
