@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A5E6C2916
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBDD6C291A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 05:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjCUEVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 00:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S229449AbjCUEXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 00:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUEVk (ORCPT
+        with ESMTP id S229622AbjCUEXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 00:21:40 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0996E1E9C5
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:21:39 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e18so802942wra.9
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 21:21:38 -0700 (PDT)
+        Tue, 21 Mar 2023 00:23:39 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AE212868;
+        Mon, 20 Mar 2023 21:23:38 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso15084963fac.12;
+        Mon, 20 Mar 2023 21:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679372497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FaA3YcfbP2IfbH5dMI6u00735TG6aAqY5ouGiTU+WFk=;
-        b=EtrMWxnRRahazbpCMKjpmWwtsarzSHOaV8RTrJMK4Tieua8mA6870vyBXSdwgZpLww
-         Q7rqQD6789WQ4Yks+JOYwjL2jyoF+GUokGtRiuO9eqY3+AgR8RZKScux+Ivjcrn3IkUS
-         R3jNV5C4BTMMY0RcEN0c2H0H8NfAVbBAwf4gYPHYEJylP44mBULHDtp8Mw1CT5nQ6Nwj
-         /0Fp+Y/rVk01hdpNoVgeEkmGwTgcU4i2QUlMJw3IADa5RlpQK/htT4/xydc6PKAlkPEi
-         99a4VkdCezsLRgm5zNtNUdo1zFPQFqv0YYW2dAiYFbMyMurMJekoKPV07X2xcbpt8n10
-         FL/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679372497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679372617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FaA3YcfbP2IfbH5dMI6u00735TG6aAqY5ouGiTU+WFk=;
-        b=vL4QdoW+LwPCH9BXb7ofj9MKFPp/WN23Hgxyv2F8F0SpaLMjk2sJzQPZOu4clpxVOj
-         OFSe9ElZrYn6AACxj92NgpaQGjalSI3urnV2KEgzR2EDMC3BgOqg3wc7xtNk2W1LM2Ws
-         +b+tRC6CWsaddgJSx3PLECiLWwjlaLOXjJqqdA+or6CaGuWEcKRx/T4l2WKp+NIO5im6
-         t8pBZ9o+k+vZErzxFt1I51G+tc0kQA1d/DgHLGYePAUNFUug9hkusTydM77IIxbIpXma
-         oiGsws3BGC0JxL/sWGsEVqy+JswjeDGfJMB/ZDQ3QZKOQ2K5Ys0Aj19agCG1mUMAZtai
-         zb2Q==
-X-Gm-Message-State: AO0yUKXVjnjfjrXd613n6rlxHZCr8WzHsr2Tu/LYfGbxE4j44UEZhlTm
-        QHskIasu0cECbPjFbG8CM/M=
-X-Google-Smtp-Source: AK7set9mZGHw3yoEvNxRRdaPhFjETeu4dlT4c5n8MfQKVOlfTRsqWB//SFmS1Q1Nlouet/QTsHbrfg==
-X-Received: by 2002:a05:6000:541:b0:2d8:ce83:5de0 with SMTP id b1-20020a056000054100b002d8ce835de0mr903209wrf.48.1679372497306;
-        Mon, 20 Mar 2023 21:21:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e4-20020a5d4e84000000b002ceac2ccc4asm10317162wru.23.2023.03.20.21.21.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 21:21:35 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 07:21:31 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Kloudifold <cloudifold.3125@gmail.com>, outreachy@lists.linux.dev,
-        teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, alison.schofield@intel.com
-Subject: Re: [PATCH v3] staging: sm750: Rename sm750_hw_cursor_* functions to
- snake_case
-Message-ID: <713dea35-3db7-4898-912d-b52ecab0a420@kili.mountain>
-References: <ZBW+NX4SLaCyEnJd@CloudiRingWorld>
- <dd1e1fcc-2a4e-438f-ad61-ef7640b8e423@kili.mountain>
- <6418ca43e651b_2c274e294ae@iweiny-mobl.notmuch>
+        bh=26n9Fj0XRag4eT+rhFG7hdMB+QgQvTFFvrbS9ZfWqXQ=;
+        b=o4IFSN0hUNN/FKoHtilOVOpaxTOjdvJW4Bw7OSMuT6bH8oSZqnwEcZ08Jwh/MU4RdV
+         JuGUtBtSCRoU72qYFEWLaxu97JEpl7WA9a7FEmL2zEqKBkedOIbLC1DdGWyJplVYxbbk
+         9qTfgTGqffuFUqE4whS2yXwdaC+9mAs+vQgoRm9f+o9ErbIVFIaJfSVhahp9f3YQK0ZA
+         JmLNzS4pQwvcZaj+g7cxyLcAH0+y+WxVMSKSO6fr/H8wSwomac+lf2NhWRwHJX2wQ/f3
+         NsrqiZ+3O+AchimaNyVMcjmKFuhHFx7UrBl0QvnfAb2OKmFBA34Dqf3MpRAIHs0hV/lc
+         aSSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679372617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=26n9Fj0XRag4eT+rhFG7hdMB+QgQvTFFvrbS9ZfWqXQ=;
+        b=6eb4KAK86Xy+7Qi6eTPeygcLQ3yDztTI6Z+pylmA4VPK5A8BRkgkQbfe40qwF9DbAE
+         pmhurjPOtJW61ZJoX1ZTuHniHNKK9SX2daR7BfvIsHxQBKthZYs8IrvYBqbx2v9g8+nY
+         h4C7oGTfgUmlkdjkxIYGAzeWYRpE869beLHHfajMGMONaGDOzUvLYLU0UuJksk/QsSZW
+         dcY080nOkp0lwwoyklfyMwQOO7lqEJrfkwe8tCNYAijY0QLTQ4dy0hLDKXsb7rFfBZ2h
+         Gz0Fb2JkIauGcdwJiqnqGvWNNBmTE8NG0H5xRjc3+DSD24WvkRKlr3t19uzaUqMeGCdR
+         fdWQ==
+X-Gm-Message-State: AO0yUKVpE8Rpan5n1Mn5fIJQ5i+YY01Id0HiPPC69DLcqyaUuuvO43t+
+        wcjF/3U8R7hDs4hnpnpmpJz7pIo4nFv22Ej2MpI=
+X-Google-Smtp-Source: AK7set9CA2uoTUKHKEfuByZqzqpS0iFxe74NVh1Fj/sg+c9HccsyC2LJNYepkVoZ5cifDgg50z4EUzcjybb25t+zvK4=
+X-Received: by 2002:a05:6870:1314:b0:17a:c59b:8836 with SMTP id
+ 20-20020a056870131400b0017ac59b8836mr148672oab.0.1679372617394; Mon, 20 Mar
+ 2023 21:23:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6418ca43e651b_2c274e294ae@iweiny-mobl.notmuch>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-8-sergio.paracuellos@gmail.com> <966523bee1d28d546969a24eff60d315.sboyd@kernel.org>
+ <CAMhs-H-y6TsSoKsJzM0gkFk6wx7xNigXKJb7wm8rBzrigtJANg@mail.gmail.com> <90dd1f841e7941d8b5931ef68cd6d14e.sboyd@kernel.org>
+In-Reply-To: <90dd1f841e7941d8b5931ef68cd6d14e.sboyd@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 21 Mar 2023 05:23:26 +0100
+Message-ID: <CAMhs-H8A-c0wo0vExRP_e9my6vzuOkoYwJ2WBTsnjh-X5iK08A@mail.gmail.com>
+Subject: Re: [PATCH 07/10] mips: ralink: remove clock related function prototypes
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org, arinc.unal@arinc9.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,11 +75,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fair enough.  Also I wouldn't have said anything if the patch had been
-checkpatch clean.  I was testing to see if the extra --- lines mattered
-and that's when git complained about white space problems and it's like
-you say, the extra --- lines don't cause an issue.
+On Mon, Mar 20, 2023 at 10:21=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wr=
+ote:
+>
+> Quoting Sergio Paracuellos (2023-03-20 13:17:47)
+> > Hi Stephen,
+> >
+> > On Mon, Mar 20, 2023 at 8:38=E2=80=AFPM Stephen Boyd <sboyd@kernel.org>=
+ wrote:
+> > >
+> > > Quoting Sergio Paracuellos (2023-03-20 09:18:20)
+> > > > Clock related code has been removed from 'arch/mips/ralink' folder =
+and put
+> > > > into drivers space. Hence remove clock related prototypes which are=
+ not
+> > > > used anymore.
+> > > >
+> > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > > ---
+> > > >  arch/mips/ralink/common.h | 3 ---
+> > > >  1 file changed, 3 deletions(-)
+> > > >
+> > > > diff --git a/arch/mips/ralink/common.h b/arch/mips/ralink/common.h
+> > > > index 87fc16751281..fcdfc9dc6210 100644
+> > > > --- a/arch/mips/ralink/common.h
+> > > > +++ b/arch/mips/ralink/common.h
+> > > > @@ -23,9 +23,6 @@ extern struct ralink_soc_info soc_info;
+> > > >
+> > > >  extern void ralink_of_remap(void);
+> > > >
+> > > > -extern void ralink_clk_init(void);
+> > >
+> > > Why isn't this removed in the patch that removes the function?
+> >
+> > Because the function exists for all the SoCs code and there are
+> > several patches removing it; one per SoC, so I decided to remove this
+> > at the end. Should I squash all patches together instead?
+>
+> No. But you should squash this with whatever patch removes the last one.
 
-regards,
-dan carpenter
+Ah, ok. I see your point. I will squash this with the last removal, then.
 
+Thanks,
+    Sergio Paracuellos
