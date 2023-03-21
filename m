@@ -2,210 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D81A6C385F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220136C3863
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCURfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S229890AbjCURh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjCURfH (ORCPT
+        with ESMTP id S230160AbjCURhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:35:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B88532AA;
-        Tue, 21 Mar 2023 10:34:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57595B81908;
-        Tue, 21 Mar 2023 17:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B9EC4339C;
-        Tue, 21 Mar 2023 17:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679420071;
-        bh=kwmBUU9WFc//wAOTsHeeQNScNVfG/4HR6pbYmzcyOf0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=KCnyTme5s6Xgat1J1YBKgJttYPdWPVtocYSgMStUwLDt3IsVFr3hjedcLwgdyi50e
-         +MfhbbuImrDLhntQLfG9CMIriizUTj0NLG1H6/6Ue1GnfFt1QuJxrYggyXl6iSA6Bz
-         y5gVYUtq9V5bKVgYjGZGDfkelAzksK6yEul047QY3MSjVs2gKv2ymylQAyJoeTBcYW
-         2ql0vN0aeKfU+tCan8RbV1Z+vfRmd1zMPVbB8HP4eVDTSGNyTfMMrA75uY3M9b6DgK
-         2EQk0PXVhsroDpG/YC89kkh364EK2+PDdbeVsyX0SsaAQcv//9CqpmDgYSjv4Z4Zyc
-         FWxT1TEJNz4kg==
-Message-ID: <c087fa09f92838b4e1a2a3e7139b7106.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Mar 2023 13:37:52 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F41612CC0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:03 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ek18so62801927edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679420165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hy3AwSsMA87i05lUHsoXtMd3VNig+4S9hQg//IlQ/pQ=;
+        b=V2SnLsA77wc1oHbJd58PdEVJ3CAjhGtFKXMJ6zNcmwe05R8KdVUM0oBJhUOR90Jvuh
+         k0+wAKe638/okzulT4+xAIbRBKPbGHxGu5O5ietgeyWou4Tmg7tRwb0igf1JzMycY+Qn
+         0DaRf08N6aUwbw5IW/Z0RuoRJYFGsPr6vRKpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679420165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hy3AwSsMA87i05lUHsoXtMd3VNig+4S9hQg//IlQ/pQ=;
+        b=oEfOjWl1uk0QOZgqUhcvWgNASdmQ/LtR7j+k1YMQPuSPr9R1F1H1jL3y4wuPsCxQ67
+         46Pov+5Or6CXRSaageMabKNW2XuXP05PJ92VzlrL6P5iRYmrbwPIkfPl5qLKTB/9iVCD
+         DQ39+2xhIhzTs58Gyf+CUdBRH0I6Fk2OEzQ8L1jQvOEMrMew3NocjVt22UyLo5O9V8gU
+         A0uBq3IOCkLX8uiR5iiufYJ5PW4itt4t697k18hMqrSTCvh8zTDLDFKdLOBY94+C3vY9
+         QlRBLEnyMi7uneRHoRsEkBhX/LP1JZl7MSibPQ2vmB0HMtOJa2IxDR0GztEib71PMHrx
+         KAWw==
+X-Gm-Message-State: AO0yUKVohDrXq3wF09uznqs63pG7N34ogllO9Otoo7Rd0oqxWwZW1j7A
+        ENjRNQNQjdaO6BX3YtD81rcfuRk26B7UQvZxN+jfuA==
+X-Google-Smtp-Source: AK7set8Bjfz/6/EiRVm089wZPh5o1jEuN7xovPHigYNoxho9nKHWbSmPk+u7BuGjoDy9uKuPKE9+HA==
+X-Received: by 2002:a17:906:6dcd:b0:931:636e:de5a with SMTP id j13-20020a1709066dcd00b00931636ede5amr3814396ejt.31.1679420165130;
+        Tue, 21 Mar 2023 10:36:05 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id a21-20020a170906191500b009339e2e36e4sm3518381eje.81.2023.03.21.10.36.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 10:36:04 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id y4so62861526edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:36:04 -0700 (PDT)
+X-Received: by 2002:a50:c343:0:b0:4fa:cef4:a27f with SMTP id
+ q3-20020a50c343000000b004facef4a27fmr2107141edb.2.1679420164105; Tue, 21 Mar
+ 2023 10:36:04 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230320071442.172228-1-pedro.falcato@gmail.com>
+ <20230320115153.7n5cq4wl2hmcbndf@wittgenstein> <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
+ <CAKbZUD2Y2F=3+jf+0dRvenNKk=SsYPxKwLuPty_5-ppBPsoUeQ@mail.gmail.com>
+ <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
+ <20230321142413.6mlowi5u6ewecodx@wittgenstein> <20230321161736.njmtnkvjf5rf7x5p@wittgenstein>
+In-Reply-To: <20230321161736.njmtnkvjf5rf7x5p@wittgenstein>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Mar 2023 10:35:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi2mLKn6U7_aXMtP46TVSY6MTHv+ff-+xVFJbO914o65A@mail.gmail.com>
+Message-ID: <CAHk-=wi2mLKn6U7_aXMtP46TVSY6MTHv+ff-+xVFJbO914o65A@mail.gmail.com>
+Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aleksa Sarai <cyphar@cyphar.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230320204042.980708-3-mmyangfl@gmail.com>
-References: <20230320204042.980708-1-mmyangfl@gmail.com> <20230320204042.980708-3-mmyangfl@gmail.com>
-Subject: Re: [PATCH v5 2/5] clk: hisilicon: Extract common functions
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     David Yang <mmyangfl@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     David Yang <mmyangfl@gmail.com>
-Date:   Tue, 21 Mar 2023 10:34:28 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting David Yang (2023-03-20 13:40:35)
-> To be reused with other Hi3798 series SoCs.
->=20
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
-
-Please squash this patch in
-
----8<---
-diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/crg=
--hi3798.c
-index 3a8d70b7c8ec..0d6886bca3ba 100644
---- a/drivers/clk/hisilicon/crg-hi3798.c
-+++ b/drivers/clk/hisilicon/crg-hi3798.c
-@@ -203,8 +203,9 @@ struct hi3798_clks {
- 	int complex_clks_nums;
- };
-=20
--static struct hisi_clock_data *hi3798_clk_register(
--		struct platform_device *pdev, const struct hi3798_clks *clks)
-+static struct hisi_clock_data *
-+hi3798_clk_register(struct platform_device *pdev,
-+		    const struct hi3798_clks *clks)
- {
- 	struct hisi_clock_data *clk_data;
- 	int ret;
-@@ -257,8 +258,8 @@ static struct hisi_clock_data *hi3798_clk_register(
- 	return ERR_PTR(ret);
- }
-=20
--static void hi3798_clk_unregister(
--		struct platform_device *pdev, const struct hi3798_clks *clks)
-+static void hi3798_clk_unregister(struct platform_device *pdev,
-+				  const struct hi3798_clks *clks)
- {
- 	struct hisi_crg_dev *crg =3D platform_get_drvdata(pdev);
-=20
-@@ -276,8 +277,9 @@ static void hi3798_clk_unregister(
-=20
- #define HI3798_SYSCTRL_NR_CLKS 16
-=20
--static struct hisi_clock_data *hi3798_sysctrl_clk_register(
--		struct platform_device *pdev, const struct hi3798_clks *clks)
-+static struct hisi_clock_data *
-+hi3798_sysctrl_clk_register(struct platform_device *pdev,
-+			    const struct hi3798_clks *clks)
- {
- 	struct hisi_clock_data *clk_data;
- 	int ret;
-@@ -302,8 +304,8 @@ static struct hisi_clock_data *hi3798_sysctrl_clk_regis=
-ter(
- 	return ERR_PTR(ret);
- }
-=20
--static void hi3798_sysctrl_clk_unregister(
--		struct platform_device *pdev, const struct hi3798_clks *clks)
-+static void hi3798_sysctrl_clk_unregister(struct platform_device *pdev,
-+					  const struct hi3798_clks *clks)
- {
- 	struct hisi_crg_dev *crg =3D platform_get_drvdata(pdev);
-=20
-@@ -623,8 +625,8 @@ static const struct hi3798_clks hi3798cv200_crg_clks =
-=3D {
- 	.phase_clks_nums =3D ARRAY_SIZE(hi3798mv100_phase_clks),
- };
-=20
--static struct hisi_clock_data *hi3798cv200_clk_register(
--				struct platform_device *pdev)
-+static struct hisi_clock_data *
-+hi3798cv200_clk_register(struct platform_device *pdev)
- {
- 	return hi3798_clk_register(pdev, &hi3798cv200_crg_clks);
- }
-@@ -653,8 +655,8 @@ static const struct hi3798_clks hi3798cv200_sysctrl_clk=
-s =3D {
- 	.gate_clks_nums =3D ARRAY_SIZE(hi3798cv200_sysctrl_gate_clks),
- };
-=20
--static struct hisi_clock_data *hi3798cv200_sysctrl_clk_register(
--					struct platform_device *pdev)
-+static struct hisi_clock_data *
-+hi3798cv200_sysctrl_clk_register(struct platform_device *pdev)
- {
- 	return hi3798_sysctrl_clk_register(pdev, &hi3798cv200_sysctrl_clks);
- }
-
-
-
-> diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/c=
-rg-hi3798.c
-> index 7e9507de2..2f8f14e73 100644
-> --- a/drivers/clk/hisilicon/crg-hi3798.c
-> +++ b/drivers/clk/hisilicon/crg-hi3798.c
-> @@ -59,6 +59,119 @@ static const struct hisi_fixed_rate_clock hi3798_fixe=
-d_rate_clks[] =3D {
->         { HI3798_FIXED_250M, "250m", NULL, 0, 250000000, },
->  };
-> =20
-> +struct hi3798_clks {
-> +       const struct hisi_gate_clock *gate_clks;
-> +       int gate_clks_nums;
-> +       const struct hisi_mux_clock *mux_clks;
-> +       int mux_clks_nums;
-> +       const struct hisi_phase_clock *phase_clks;
-> +       int phase_clks_nums;
-> +};
+On Tue, Mar 21, 2023 at 9:17=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+>  #define WILL_CREATE(flags)     (flags & (O_CREAT | __O_TMPFILE))
+> +#define INVALID_CREATE(flags) \
+> +       ((flags & (O_DIRECTORY | O_CREAT)) =3D=3D (O_DIRECTORY | O_CREAT)=
+)
+>  #define O_PATH_FLAGS           (O_DIRECTORY | O_NOFOLLOW | O_PATH | O_CL=
+OEXEC)
+>
+>  inline struct open_how build_open_how(int flags, umode_t mode)
+> @@ -1207,6 +1209,10 @@ inline int build_open_flags(const struct open_how =
+*how, struct open_flags *op)
+>                 if (!(acc_mode & MAY_WRITE))
+>                         return -EINVAL;
+>         }
 > +
-> +static struct hisi_clock_data *hi3798_clk_register(
-> +               struct platform_device *pdev, const struct hi3798_clks *c=
-lks)
-> +{
-> +       struct hisi_clock_data *clk_data;
-> +       int ret;
+> +       if (INVALID_CREATE(flags))
+> +               return -EINVAL;
 > +
-> +       clk_data =3D hisi_clk_alloc(pdev, HI3798_CRG_NR_CLKS);
-> +       if (!clk_data)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       /* hisi_phase_clock is resource managed */
-> +       ret =3D hisi_clk_register_phase(&pdev->dev, clks->phase_clks,
-> +                                     clks->phase_clks_nums, clk_data);
-> +       if (ret)
-> +               return ERR_PTR(ret);
-> +
-> +       ret =3D hisi_clk_register_fixed_rate(hi3798_fixed_rate_clks,
-> +                                          ARRAY_SIZE(hi3798_fixed_rate_c=
-lks),
-> +                                          clk_data);
-> +       if (ret)
-> +               return ERR_PTR(ret);
-> +
-> +       ret =3D hisi_clk_register_mux(clks->mux_clks, clks->mux_clks_nums=
-, clk_data);
-> +       if (ret)
-> +               goto unregister_fixed_rate;
-> +
-> +       ret =3D hisi_clk_register_gate(clks->gate_clks, clks->gate_clks_n=
-ums, clk_data);
+>         if (flags & O_PATH) {
+>                 /* O_PATH only permits certain other flags to be set. */
+>                 if (flags & ~O_PATH_FLAGS)
 
-Please make a follow-up patch that passes the pdev->dev pointer to these
-registration functions so they can use devm APIs.
+So the patch looks simple enough, but
 
-> +       if (ret)
-> +               goto unregister_mux;
-> +
-> +       ret =3D of_clk_add_provider(pdev->dev.of_node,
+ (a) I'm not entirely sure I like the extra indirection through
+another #define. This impenetrable thicket of different macros makes
+it a bit hard to see what is going on. I'm not blaming you for it, it
+predates this patch, but..
 
-Please make a follow-up patch that migrates this to
-devm_of_clk_add_hw_provider.
+ (b) this seems to make that O_TMPFILE_MASK macro pointless.
 
-> +                       of_clk_src_onecell_get, &clk_data->clk_data);
-> +       if (ret)
-> +               goto unregister_gate;
-> +
+I think (b) kind of re-inforces the point of (a) here.
+
+The only reason for O_TMPFILE_MASK is literally that old historical
+"make sure old kernels return errors when they don't support
+O_TEMPFILE", and thus the magic re-use of old bit patterns.
+
+But now that we do that "return error if both O_DIRECTORY and O_CREAT
+are set", the O_TMPFILE_MASK check is basically dead, because it ends
+up checking for that same bit pattern except also __O_TMPFILE.
+
+And that is *not* obvious from the code, exactly because of that
+thicket of different macros.
+
+In fact, since that whole
+
+        if ((flags & O_TMPFILE_MASK) !=3D O_TMPFILE)
+                return -EINVAL;
+
+is done inside an "if (flags & __O_TMPFILE)", the compiler might as
+well reduce it *exactly* down to that exact same test as
+INVALID_CREATE() now is.
+
+So I really get the feeling that the macros actually hide what is
+going on, and are the exact opposite of being helpful. Case in point:
+with your patch, you now have the exact same test twice in a row,
+except it *looks* like two different tests and one of them is
+conditional on __O_TMPFILE.
+
+For all I know, the compiler may actually notice the redundancy and
+remove one of them, but we shouldn't write bad code with the
+expectation that "the compiler will fix it up". Particularly when it
+just makes it harder for people to understand too.
+
+                     Linus
