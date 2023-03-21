@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0E76C2EEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5C46C2EF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjCUK3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S230196AbjCUKaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCUK30 (ORCPT
+        with ESMTP id S229961AbjCUK30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 06:29:26 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176B77D9A;
-        Tue, 21 Mar 2023 03:29:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559F62685C;
+        Tue, 21 Mar 2023 03:29:20 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:f5ef:1040:e3c1:3d00])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E27B666030E9;
-        Tue, 21 Mar 2023 10:29:11 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A3E0066030EE;
+        Tue, 21 Mar 2023 10:29:12 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679394552;
-        bh=B0Rfbtcd7Lj6Gt4LwrxhZy0EbZHQ5j8h6KrandWni6M=;
+        s=mail; t=1679394553;
+        bh=Iem6HuAbjZeNxfcZHAnfFZWjJnJ1iJw/BVVWXexqEJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U7ybreOdVzDSiHTzKZh1y3KSBMBFwimkHYkkSq/PYEu0qP70tXr1PdbsOoPEhW08E
-         kmw3KFdN7WwfDalciAutik2Q9MFIgEV1NQjlMXlZHzuhAyAo6gV4ShLd7mWg6yeaup
-         6UETgFv2/3RzfMQLjjAbvlG+AT8E+hRBLjKjiDlSAielO9/FuAtP2bO5wfcBltixR8
-         SdNTY2r/6XhkgpE9msAKGD0zYVu2+PTelJ9U7tDefT0uw2xhOl4LDfjWyu596D5HwH
-         cDVPmRoAxZuuWFGu2KO/PMoXC7aGxYj0qBzN1lAKFerJkURxEIzJRYJNQbwVmMt+PW
-         wdP9KV3p8RI0Q==
+        b=WButoN+nNQSgZEerfDe52xiPWzHegqd9VQfxTzPkPgVJ/nAPKuov6Ae1l+BdAZDbr
+         pc4b0sl58f/TaeR2yao2PDQLC08h2ldDoeTqn9LN1ahRrqK2ZoVDLklFZ97+UdZwat
+         tfUBjdmxhrIhJCGrTJ6/sldyl3qieqNsbOijAx3fUvIVDqwE8Z1/15ZVWx/UGC3xF4
+         qcxN9/XJvRmDmywniptzSy00CA6mpAPbMIo9TpMhG/uh1alnO1YEeVo1jgTQ4E0HL5
+         XSeEHEuEwcXnBltev8vDXcUCE1BRyMdC8vqzTsDBFBhWUaab/3POgr65OjHNTFD9n5
+         BU6MGHEEVKWMg==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
         ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
@@ -48,9 +48,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         linux-rockchip@lists.infradead.org, kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 6/8] media: v4l2: Add mem2mem helpers for DELETE_BUF ioctl
-Date:   Tue, 21 Mar 2023 11:28:53 +0100
-Message-Id: <20230321102855.346732-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 7/8] media: vim2m: Use v4l2-mem2mem helpers for VIDIOC_DELETE_BUF ioctl
+Date:   Tue, 21 Mar 2023 11:28:54 +0100
+Message-Id: <20230321102855.346732-8-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
 References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
@@ -65,82 +65,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create v4l2-mem2mem helpers for VIDIOC_DELETE_BUF ioctl.
+Make vim2m support VIDIOC_DELETE_BUF ioctl.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c | 20 ++++++++++++++++++++
- include/media/v4l2-mem2mem.h           | 12 ++++++++++++
- 2 files changed, 32 insertions(+)
+ drivers/media/test-drivers/vim2m.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 0cc30397fbad..42f51ca25379 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -831,6 +831,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
+diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
+index 7964426bf2f7..3500a3df66c8 100644
+--- a/drivers/media/test-drivers/vim2m.c
++++ b/drivers/media/test-drivers/vim2m.c
+@@ -960,6 +960,7 @@ static const struct v4l2_ioctl_ops vim2m_ioctl_ops = {
+ 	.vidioc_dqbuf		= v4l2_m2m_ioctl_dqbuf,
+ 	.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
+ 	.vidioc_create_bufs	= v4l2_m2m_ioctl_create_bufs,
++	.vidioc_delete_buf	= v4l2_m2m_ioctl_delete_buf,
+ 	.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
  
-+int v4l2_m2m_delete_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+			struct v4l2_buffer *buf)
-+{
-+	struct vb2_queue *vq;
-+
-+	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-+
-+	return vb2_delete_buf(vq, buf);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_delete_buf);
-+
- int v4l2_m2m_create_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_create_buffers *create)
- {
-@@ -1377,6 +1388,15 @@ int v4l2_m2m_ioctl_create_bufs(struct file *file, void *priv,
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_create_bufs);
- 
-+int v4l2_m2m_ioctl_delete_buf(struct file *file, void *priv,
-+			      struct v4l2_buffer *buf)
-+{
-+	struct v4l2_fh *fh = file->private_data;
-+
-+	return v4l2_m2m_delete_buf(file, fh->m2m_ctx, buf);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_delete_buf);
-+
- int v4l2_m2m_ioctl_querybuf(struct file *file, void *priv,
- 				struct v4l2_buffer *buf)
- {
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index bb9de6a899e0..96f1b1f3b840 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -381,6 +381,16 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_buffer *buf);
- 
-+/**
-+ * v4l2_m2m_delete_buf() - delete buffer from the queue
-+ *
-+ * @file: pointer to struct &file
-+ * @m2m_ctx: m2m context assigned to the instance given by struct &v4l2_m2m_ctx
-+ * @buf: pointer to struct &v4l2_buffer
-+ */
-+int v4l2_m2m_delete_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+			struct v4l2_buffer *buf);
-+
- /**
-  * v4l2_m2m_create_bufs() - create a source or destination buffer, depending
-  * on the type
-@@ -846,6 +856,8 @@ int v4l2_m2m_ioctl_reqbufs(struct file *file, void *priv,
- 				struct v4l2_requestbuffers *rb);
- int v4l2_m2m_ioctl_create_bufs(struct file *file, void *fh,
- 				struct v4l2_create_buffers *create);
-+int v4l2_m2m_ioctl_delete_buf(struct file *file, void *priv,
-+				struct v4l2_buffer *buf);
- int v4l2_m2m_ioctl_querybuf(struct file *file, void *fh,
- 				struct v4l2_buffer *buf);
- int v4l2_m2m_ioctl_expbuf(struct file *file, void *fh,
+ 	.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
 -- 
 2.34.1
 
