@@ -2,181 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1CB6C2FD1
+	by mail.lfdr.de (Postfix) with ESMTP id B5FDF6C2FD3
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjCULJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
+        id S230504AbjCULJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjCULIh (ORCPT
+        with ESMTP id S230498AbjCULIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:08:37 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA4E3E1E3;
-        Tue, 21 Mar 2023 04:08:32 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id CFE785C00CD;
-        Tue, 21 Mar 2023 07:08:31 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 21 Mar 2023 07:08:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679396911; x=
-        1679483311; bh=RMUyY24KVPUr2kuw3Jz6nElWvCSULjyC1kNh/s6lQlQ=; b=E
-        KCJqVU37dGL/jAYaoCalJYg8HEzX4Tk+7YXps1J67iMBQ14ON5M7rcgrCRRjJBJA
-        1KR6BQ1HP8YgrUhpw6sXR4Mzlbxskn9LcK6TUdBWOJso9DFDNM2CwsRjoWSzzVdB
-        kjdvIdDLBtuucjMqJzu7+sgu5GIfxj6/61EYO67ezJWw8B/2FLV9IjsE5M/uIhYt
-        lI3jnHoaE1Nfypb9WGW+uie9F46BR2SD+iGW6nBVu6HjrpGmunga9YDH6Mum5UI+
-        5QVtsSKEHAjAMhObwnxJqoI01qhNHh/3ZBErOb9MJwfoEQC6ioNwMh9qXJxwJHIH
-        UbruH/r2VBGMxIyo9MVzg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679396911; x=
-        1679483311; bh=RMUyY24KVPUr2kuw3Jz6nElWvCSULjyC1kNh/s6lQlQ=; b=I
-        8ij9zH8Vk9qa8A82aaFfxbWTmSjPHJsOeKLV3ABKaJokfgY65T/iOLHYC3VxhQmG
-        KDFZh/LTNctR4BcO+ynAE4X47qXPidwM24+H/zbgcGNIF63KfLKBpzWKakoPIuQB
-        65OdYabaVJagU6aM2QdCLj3MJb4d91mpfkY/xP59piH+HsrM1ZhB1A/IW3YhoC1t
-        PvS3MoEflpvKe5l/dO45oHfJRFjMFzrT/qlWC/R3ilSo3vWnh8WYBgDOD3r1vPFX
-        xzfkMVp5py5SGqBlP5FKELGBXJkWTr5IiAP0t4FEGOBgXSnT+9teYZloCrKXWKfM
-        St8RmvzYjmvxchtbiCQow==
-X-ME-Sender: <xms:L5AZZF0JTSX9CWLeGzNm34wTaNOyXmD9M64feYRDaKJwPqW9jdZ_Hw>
-    <xme:L5AZZMGm6KeLLQ3CXwfdr0PIEbP0lrSWkr_YdvmozEGu5LiAXL--3le2LIQOPbc1F
-    BPipS6eCWw1f0SHpPY>
-X-ME-Received: <xmr:L5AZZF6-LJMfB8gaKJhhOCv4F0Kdcwbt0bWYpOIifuNsGglEAEgffOYEP-Gp__18B0a_5jgq5xU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludefheegvdeuvd
-    dvgeekgfdvtdettdelieeihfegtedugeekhfdvhfejfedtnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomh
-X-ME-Proxy: <xmx:L5AZZC3uoCSqnFZgv1Y5WP87fRYtYCBEqRUjJ157T9Z_my_i7FKsbw>
-    <xmx:L5AZZIGbQQLR_pvbKLnfln6ElnLSreM9hATAEPhe4UAkCPp7LQ-JTw>
-    <xmx:L5AZZD-4d6FLIpmVdEg-y2na_DYd-ZooTmvUh_JbiXYVDBHzoYfZRQ>
-    <xmx:L5AZZL9Y-EmhICS9i61ujCnyDI53kMfBXlvPb94IyO964ep1xUmkSQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Mar 2023 07:08:29 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, robh+dt@kernel.org,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        linux-riscv@lists.infradead.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v3 4/4] of: address: Always use dma_default_coherent for default coherency
-Date:   Tue, 21 Mar 2023 11:08:13 +0000
-Message-Id: <20230321110813.26808-5-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20230321110813.26808-1-jiaxun.yang@flygoat.com>
-References: <20230321110813.26808-1-jiaxun.yang@flygoat.com>
+        Tue, 21 Mar 2023 07:08:44 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FBD3E08B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:08:40 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id c10so5885500vsh.12
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679396919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CkY36efev75olXTgASXSrDXJvbFbYvncoigSCIDA+tk=;
+        b=kZ7YYOQ/Z4vEsQHK3UH5xp/MDV26EXrvhXhlAtZrgy0gOSfp+tOZv+LKZ+o+ARgEU7
+         yKxJO17yOibLCxOq09napoiOZntvTvTITOpD00a4BGoavXJb1QqtTiJI3XD9QZytnp3f
+         YxCBj9K+ss2fheOT2XTB5LpkcxmPqvAmwkQQv4PCByjDbxRh76uoRoxJQx/uetF5wLha
+         6HEMKGlAM0NW1lteSqFS7nydzSHhXViUruA3JISpQbbroeIIiHWNNtLu0Tb0xQsotQI+
+         uWrdAx7O4CFasbAaOqDrnktEjOUv6clRVUB3y+jBGX/hdx8UqrxNmSjBbt7dEWaRA2Hs
+         /Dgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679396919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CkY36efev75olXTgASXSrDXJvbFbYvncoigSCIDA+tk=;
+        b=r9HBzooW4QtmM6EKOnfw14efUexdeGpRXEYNJmZ99+Do6n09mqpMAiZMazbnOgzCJy
+         d+9DWj4Do2TG47o233lw45o7nVrypjqHPSPFixefG8UszYNYWAQQSHx5sCvr5ynwzjgv
+         QiyYyPr/rs4hnR8fPebP4lO/Q50ljsnB/VCPC6bTEdBAgTm10ulrEq0CyqEL3AhBcDTk
+         Tl87POdcl/yqP7XQQa1iTA6KET7fpVBgMjUe5psIyI02JabkUPuvGuYnyl0uL5xZ20JN
+         QVuJX38kXPUlNk3/RtXjUVFxY6qqQ+Ua/mwzAYJQnYZmPheascwnliykqvGdaSjbFVGX
+         qXgg==
+X-Gm-Message-State: AO0yUKV29JBt9F2sjKnAjZ6+KBMIb5ybhZWqaStPvPE9yZTZ7jdRepJI
+        uhgF7EqZHgfGPXl6JgTiy5WVJ2oI1Ke6kDP+C29DOg==
+X-Google-Smtp-Source: AK7set/g/Slv+mbINeBhgLGsle7PgsGbYuRTcG0kcRTYJMnHXRn7NfYpZ6eL996oS8V7iLpdP+fwiXyjEwl8R6DeKHA=
+X-Received: by 2002:a67:c809:0:b0:420:10e:14e8 with SMTP id
+ u9-20020a67c809000000b00420010e14e8mr913320vsk.1.1679396919240; Tue, 21 Mar
+ 2023 04:08:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230315183408.2723-1-praveen.kannoju@oracle.com> <SA1PR10MB6445AE5B65A9C85838142CE08C819@SA1PR10MB6445.namprd10.prod.outlook.com>
+In-Reply-To: <SA1PR10MB6445AE5B65A9C85838142CE08C819@SA1PR10MB6445.namprd10.prod.outlook.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 21 Mar 2023 04:08:27 -0700
+Message-ID: <CANn89iLmC8Wd6PcBeN899c_pp0VKNP2S=gctBS8cP8+spknL1A@mail.gmail.com>
+Subject: Re: [PATCH RFC] net/sched: use real_num_tx_queues in dev_watchdog()
+To:     Praveen Kannoju <praveen.kannoju@oracle.com>
+Cc:     "jhs@mojatatu.com" <jhs@mojatatu.com>,
+        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rajesh Sivaramasubramaniom 
+        <rajesh.sivaramasubramaniom@oracle.com>,
+        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
+        Manjunath Patil <manjunath.b.patil@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As for now all arches have dma_default_coherent reflecting default
-DMA coherency for of devices, so there is no need to have a standalone
-config option.
+On Tue, Mar 21, 2023 at 3:05=E2=80=AFAM Praveen Kannoju
+<praveen.kannoju@oracle.com> wrote:
+>
+> Ping.
+>
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-v3: Squash setting ARCH_DMA_DEFAULT_COHERENT into this patch.
----
- arch/powerpc/Kconfig |  2 +-
- arch/riscv/Kconfig   |  2 +-
- drivers/of/Kconfig   |  4 ----
- drivers/of/address.c | 10 +---------
- 4 files changed, 3 insertions(+), 15 deletions(-)
+I do not think dev_watchdog() needs to be efficient ?
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 57f5d2f53d06..824e00a1277b 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -113,6 +113,7 @@ config PPC
- 	#
- 	select ARCH_32BIT_OFF_T if PPC32
- 	select ARCH_DISABLE_KASAN_INLINE	if PPC_RADIX_MMU
-+	select ARCH_DMA_DEFAULT_COHERENT	if !NOT_COHERENT_CACHE
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_HAS_COPY_MC			if PPC64
-@@ -273,7 +274,6 @@ config PPC
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK	if PPC64
- 	select NEED_SG_DMA_LENGTH
- 	select OF
--	select OF_DMA_DEFAULT_COHERENT		if !NOT_COHERENT_CACHE
- 	select OF_EARLY_FLATTREE
- 	select OLD_SIGACTION			if PPC32
- 	select OLD_SIGSUSPEND
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 36a5b6fed0d3..6425b5c5d6d4 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -12,6 +12,7 @@ config 32BIT
- 
- config RISCV
- 	def_bool y
-+	select ARCH_DMA_DEFAULT_COHERENT
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
- 	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
-@@ -121,7 +122,6 @@ config RISCV
- 	select MODULES_USE_ELF_RELA if MODULES
- 	select MODULE_SECTIONS if MODULES
- 	select OF
--	select OF_DMA_DEFAULT_COHERENT
- 	select OF_EARLY_FLATTREE
- 	select OF_IRQ
- 	select PCI_DOMAINS_GENERIC if PCI
-diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-index 644386833a7b..e40f10bf2ba4 100644
---- a/drivers/of/Kconfig
-+++ b/drivers/of/Kconfig
-@@ -102,8 +102,4 @@ config OF_OVERLAY
- config OF_NUMA
- 	bool
- 
--config OF_DMA_DEFAULT_COHERENT
--	# arches should select this if DMA is coherent by default for OF devices
--	bool
--
- endif # OF
-diff --git a/drivers/of/address.c b/drivers/of/address.c
-index c105d66a1fa4..23ade4919853 100644
---- a/drivers/of/address.c
-+++ b/drivers/of/address.c
-@@ -1103,15 +1103,7 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
- bool of_dma_is_coherent(struct device_node *np)
- {
- 	struct device_node *node;
--	bool is_coherent = IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT);
--
--	/*
--	 * DT-based MIPS doesn't use OF_DMA_DEFAULT_COHERENT, but
--	 * might override the system-wide default at runtime.
--	 */
--#if defined(CONFIG_MIPS) && defined(CONFIG_DMA_NONCOHERENT)
--	is_coherent = dma_default_coherent;
--#endif
-+	bool is_coherent = dma_default_coherent;
- 
- 	node = of_node_get(np);
- 
--- 
-2.37.1 (Apple Git-137.1)
+In any case, reading dev->real_num_tx_queues from a timer handler
+could be racy vs RTNL.
 
+While reading dev->num_tx_queues is not racy.
+
+I think you should describe what problem you are trying to solve.
+
+> > -----Original Message-----
+> > From: Praveen Kumar Kannoju <praveen.kannoju@oracle.com>
+> > Sent: 16 March 2023 12:04 AM
+> > To: jhs@mojatatu.com; xiyou.wangcong@gmail.com; jiri@resnulli.us; davem=
+@davemloft.net; edumazet@google.com;
+> > kuba@kernel.org; pabeni@redhat.com; netdev@vger.kernel.org; linux-kerne=
+l@vger.kernel.org
+> > Cc: Rajesh Sivaramasubramaniom <rajesh.sivaramasubramaniom@oracle.com>;=
+ Rama Nichanamatlu
+> > <rama.nichanamatlu@oracle.com>; Manjunath Patil <manjunath.b.patil@orac=
+le.com>; Praveen Kannoju
+> > <praveen.kannoju@oracle.com>
+> > Subject: [PATCH RFC] net/sched: use real_num_tx_queues in dev_watchdog(=
+)
+> >
+> > Currently dev_watchdog() loops through num_tx_queues[Number of TX queue=
+s allocated at alloc_netdev_mq() time] instead of
+> > real_num_tx_queues [Number of TX queues currently active in device] to =
+detect transmit queue time out. Make this efficient by
+> > using real_num_tx_queues.
+> >
+> > Signed-off-by: Praveen Kumar Kannoju <praveen.kannoju@oracle.com>
+> > ---
+> > PS: Please let me know if I am missing something obvious here.
+> >  net/sched/sch_generic.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c index a9=
+aadc4e6858..e7d41a25f0e8 100644
+> > --- a/net/sched/sch_generic.c
+> > +++ b/net/sched/sch_generic.c
+> > @@ -506,7 +506,7 @@ static void dev_watchdog(struct timer_list *t)
+> >                       unsigned int i;
+> >                       unsigned long trans_start;
+> >
+> > -                     for (i =3D 0; i < dev->num_tx_queues; i++) {
+> > +                     for (i =3D 0; i < dev->real_num_tx_queues; i++) {
+> >                               struct netdev_queue *txq;
+> >
+> >                               txq =3D netdev_get_tx_queue(dev, i);
+> > --
+> > 2.31.1
+>
