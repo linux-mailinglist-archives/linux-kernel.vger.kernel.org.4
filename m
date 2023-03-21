@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237A66C3989
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECE46C398E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjCUStP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S230443AbjCUSun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjCUStN (ORCPT
+        with ESMTP id S230479AbjCUSul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:49:13 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96F7567A5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:44 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ew6so594147edb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:44 -0700 (PDT)
+        Tue, 21 Mar 2023 14:50:41 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5A26A1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:50:21 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id o14so7391668ioa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:50:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679424516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o0ckUw7dWkverm2igg++8Ynt0yEw3mz/3PbETIyN2lM=;
-        b=QrW8QLlhXRLLsjP3F+4fhjZ2IV7VEOnnPtdH2kcuNjaRfDJSfySxSopa0Z7evi2/vh
-         KzYZQ0l0gdztGMIZz+L+NfeD8ytvURoY+K8KAMU6h0FCLYrEP/O7bEinnhzm8wsuJV9V
-         9+n5ef7AaK2xYbe1rb2jSLzCj4TgJ/mN5USyk=
+        d=ieee.org; s=google; t=1679424621;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xDr70Nnl1VATn+QsQLIB3bXV6I1lenwh+WDqNDOsA0Q=;
+        b=DcTJTnyhiYLJeNioUDLmuSVg6UoVRxbbe5ZSgac+myOX2cLkzG9RbvRC5CNDWpB6uf
+         v83+q2Ltq1PlTNMTJ2tbM2GtMfQdEJF/z1MDcE00HTKDACl9T2hI05OTuPXTwc4EhkSE
+         btWd7/Cy/Vms+sGLosNbqH9xybP/DNMVyyGs0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o0ckUw7dWkverm2igg++8Ynt0yEw3mz/3PbETIyN2lM=;
-        b=h7SjElPmgRWuBaU5jQfbzl0ZwXKkMRxUmI63I+7I4Mj/Z2//LsCPaiTD1XNpXljzGr
-         OSRiWHxek6jZteMIbyC/QyOo3+dyqHM8DcHCotpDNw5dWY4cR75rWF3E0LmkVCST7cs8
-         w6LWwHbNjgA1JQLi8IoTIOOzZT6+GsryPed+M240IBnkXz6mOlvAkrHgKz6ZDE5OF/tl
-         YDEOMf1zs5eFjF2X1mEYPz2aUYg0DFkf0EyjgEv7LDHO5DXxPHyM60Wd1gBqu7LTdHz8
-         QsPPXrh/GQ3N8ZCq+xukFK+CF1+4T0/VOHqJWPudheRBcmJtsOHqPhLNtKrcs/+Im7A2
-         YE/Q==
-X-Gm-Message-State: AO0yUKXWai/TrmefWMZAPEQjGw7zPivIDtf6h8/sGwPNEEy1e8z5NfOX
-        KlaJfE0LPIa+U4SeiHegwhUXTynq7hHrvWpkFF5bhWsw
-X-Google-Smtp-Source: AK7set/ANVf4hIIcvl8FCSLo9tAzc5vpodQ4gxK4VGFY+ehfx8U2vbTGwsaa5lrS6lm/c0IU0AT3Qg==
-X-Received: by 2002:a17:906:938d:b0:925:5eb8:92fd with SMTP id l13-20020a170906938d00b009255eb892fdmr3626268ejx.14.1679424515760;
-        Tue, 21 Mar 2023 11:48:35 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id b17-20020a17090630d100b009300424a2fdsm6155443ejb.144.2023.03.21.11.48.34
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1679424621;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDr70Nnl1VATn+QsQLIB3bXV6I1lenwh+WDqNDOsA0Q=;
+        b=sibw02xQiWz7/URvankSQsGWxrgna9G22udiWDhqEJjWpXoDrgBJn5qv/O5cLwcJo9
+         A2AtqHZpJ+eIGGrOGniyMAju2eN+h3B9zPcTaGqDq13XvCcYF/dVfnsYwb7G4UjBfapp
+         t4UtBYslZqzOTDc4VI4/2xjiD5+4dD5YdR0yb0u+KymeH/RnhwJjNjOmKtkE29gQy9jn
+         Oe4bK1KZm6NIVZPeMUQXsApSEDNScQDwp7fLdKtMhB94yZ8zECVBnSqINl6zJ0xznx/E
+         6tIt+v3J7W5tcDHpVsdKiWZqp77Zq2bW8JD7wd/VQSl2pnNJFqVtQH6Y3VvysQOpF865
+         G62A==
+X-Gm-Message-State: AO0yUKXUDk/mN1lXvCEc1Jr+KqyxJjmhVfwIT+k8gJnP2T8sm39RG8Kt
+        o3zFS2VB5bICMttX6HYEWolrWHSc2ujVULJXI8g=
+X-Google-Smtp-Source: AK7set/4kVSlvtI2ppfTio176h7OTJNhkCUm3QA9gCe292hvJ6C5sdw+51ybOK5/SJkFjQYInjN53Q==
+X-Received: by 2002:a5e:de46:0:b0:752:ee32:322d with SMTP id e6-20020a5ede46000000b00752ee32322dmr2315828ioq.18.1679424620929;
+        Tue, 21 Mar 2023 11:50:20 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id c25-20020a5d8b59000000b0071664d0a4d7sm3875903iot.49.2023.03.21.11.50.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 11:48:35 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id ew6so593718edb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:34 -0700 (PDT)
-X-Received: by 2002:a17:907:9b03:b0:932:da0d:9375 with SMTP id
- kn3-20020a1709079b0300b00932da0d9375mr2409395ejc.4.1679424514115; Tue, 21 Mar
- 2023 11:48:34 -0700 (PDT)
+        Tue, 21 Mar 2023 11:50:20 -0700 (PDT)
+Message-ID: <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
+Date:   Tue, 21 Mar 2023 13:50:19 -0500
 MIME-Version: 1.0
-References: <2851036.1679417029@warthog.procyon.org.uk>
-In-Reply-To: <2851036.1679417029@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 21 Mar 2023 11:48:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh1b0r+5SnwWedx=J4aZhRif1HLN_moxEG9Jzy23S6QUA@mail.gmail.com>
-Message-ID: <CAHk-=wh1b0r+5SnwWedx=J4aZhRif1HLN_moxEG9Jzy23S6QUA@mail.gmail.com>
-Subject: Re: [GIT PULL] keys: Miscellaneous fixes/changes
-To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Bharath SM <bharathsm@microsoft.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        keyrings@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
+Content-Language: en-US
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Julia Lawall <julia.lawall@inria.fr>
+References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,25 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 9:43=E2=80=AFAM David Howells <dhowells@redhat.com>=
- wrote:
->
->  (1) Fix request_key() so that it doesn't cache a looked up key on the
->      current thread if that thread is a kernel thread.  The cache is
->      cleared during notify_resume - but that doesn't happen in kernel
->      threads.  This is causing cifs DNS keys to be un-invalidateable.
+On 3/21/23 1:34 PM, Menna Mahmoud wrote:
+> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> static inline function.
+> 
+> It is not great to have macros that use the `container_of` macro,
+> because from looking at the definition one cannot tell what type
+> it applies to.
+> 
+> One can get the same benefit from an efficiency point of view
+> by making an inline function.
+> 
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
 
-I've pulled this, but I'd like people to look a bit more at this.
+I'm sorry if this conflicts with what others have said.
 
-The issue with TIF_NOTIFY_RESUME is that it is only done on return to
-user space.
+But the use of a macro (with a container_of() right-hand
+side) to get at the structure containing a field pointer
+is a widely-used idiom throughout the kernel.
 
-And these days, PF_KTHREAD isn't the only case that never returns to
-user space. PF_IO_WORKER has the exact same behaviour.
+What you propose achieves the same result but I would
+lean toward keeping it as a macro, mainly because it
+is so common.
 
-Now, to counteract this, as of this merge window (and marked for
-stable) IO threads do a fake "return to user mode" handling in
-io_run_task_work(), and so I think we're all good, but I'd like people
-to at least think about this.
+					-Alex
+> ---
+> changes in v2:
+> 	-send patch as a single patch.
+> 	-edit the name of struct object.
+> 	-edit commit message.
+> ---
+>   drivers/staging/greybus/gbphy.h | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+> index d4a225b76338..e7ba232bada1 100644
+> --- a/drivers/staging/greybus/gbphy.h
+> +++ b/drivers/staging/greybus/gbphy.h
+> @@ -15,7 +15,10 @@ struct gbphy_device {
+>   	struct list_head list;
+>   	struct device dev;
+>   };
+> -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> +static inline struct gbphy_device *to_gbphy_dev(const struct device *_dev)
+> +{
+> +	return container_of(_dev, struct gbphy_device, dev);
+> +}
+>   
+>   static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+>   {
+> @@ -43,7 +46,10 @@ struct gbphy_driver {
+>   
+>   	struct device_driver driver;
+>   };
+> -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
+> +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *drv)
+> +{
+> +	return container_of(drv, struct gbphy_driver, driver);
+> +}
+>   
+>   int gb_gbphy_register_driver(struct gbphy_driver *driver,
+>   			     struct module *owner, const char *mod_name);
 
-              Linus
