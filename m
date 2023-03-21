@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8AE6C2B21
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8EB6C2B28
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjCUHOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S230220AbjCUHOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjCUHOJ (ORCPT
+        with ESMTP id S230182AbjCUHOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:14:09 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE8F19C47
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:14:06 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cn12so10255738edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:14:06 -0700 (PDT)
+        Tue, 21 Mar 2023 03:14:48 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1231A97C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:14:29 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r11so55908877edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:14:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679382845;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RpFiX0kGSU3MmscTQy/8QOp1uiypHFRfPT7CenGfskI=;
-        b=Ko+Rzx/RKcfeOZxi63DixRfyGBEy4+A/fIXbxkxRhPs06nPrmJGPpHihuOuyXwR5L/
-         V/dbazwfMzfdjgmST5WTYMP2S3uAJduFP2GT9rC7LtmwKIGvgnUWmi3fj1sdGZchqb44
-         M2CJKqg9B9qOLH1aEXIc82d7ekklCZPRosH8JvM9+fm9xZf0A75L0U8IxLaL4SALR64/
-         e/skkVxYlVo6umq/wqdPTC/8b+W7iqvsAerrF44GiNBhKg9Ln8dGuubYWF/RB1Iw6TGr
-         rKzxfJszS6iido/EEu9L2B7iIsrYpHdlVMwqEfKsAsOToaNh3N9Sd5q9ma7dO8JLA1As
-         HIpg==
+        d=linaro.org; s=google; t=1679382867;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DMKnA20mFWi0udSf/zybjijsVLooERpPllnHaq0vSy0=;
+        b=Z2tptAG0szt5WNjW2A8IMPCmHMgELon3SubWx7AKhDU0xIffe3LnFIrr5q8zLqLI+X
+         Xm3dah3AqFbg0NLuY8W5bgOImwQACErjkpj1eA2mPVT9NQ7vpOFtkEnMRtap/XqaswKS
+         UY4m4hbod/FsvEt0S4ZUNpDl2npVNjGQATizktgLlCRt1fraCmy+kE7/1bgQ24r9z/Cr
+         hnPnxNmaLWJABKci9MgSodgUQR71McHZ5TCKadUna5Rc0FhBYvCXX3nFur8KFr8jWedI
+         4qBHhIp1fn52/CcHghUui7oXEkKicjZiH887RIbL6LuEMZXWSwRfluo6vewTAKpzkWMW
+         BbQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679382845;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RpFiX0kGSU3MmscTQy/8QOp1uiypHFRfPT7CenGfskI=;
-        b=2QVGwQBBOsj8begJqCEVKNqCRrRbiHknvl3aGetnOuLsEPiKiUN/z88mF3Bg/vRQw/
-         D1TsEHEGhZ3ndA69AGyOMHjpup/K1839gHaEcYNn0uJEBnb9yq29bB/zljypAIjCIf56
-         +97k9nmiKnFfih4TGfuVdJs+hEQX9nVooQArdwbaZdWIY3yH92B2YHbx4LrIr/TRIRYb
-         KkKX672pk9Il+K56Vw7RDHphc1wC4wr9+uRyQvq/cbDrSTBB7Ym++pXAr0IVs/dkGPhi
-         qlZv6jQzRVIDaKypJrJfHu2XNqwhdmF4+2Zmqaat6H281bVZMTGNA4/lAlFZWVItWKvI
-         +OLw==
-X-Gm-Message-State: AO0yUKWt/6kqghUiQblrGlEINEOkx6aaPcfpr55kU+UpebKoggGP6WMx
-        tgZE42vKt66IU0dXZl380GZlXA==
-X-Google-Smtp-Source: AK7set8YbhRjK1nsoK2w12o2BUz+XcJUSI/ULYsqTpkQiEwlmX58cny9P9DXEL6QlYFOpF3ZU8MZDQ==
-X-Received: by 2002:a17:906:7054:b0:932:4eea:17ce with SMTP id r20-20020a170906705400b009324eea17cemr1584920ejj.39.1679382845028;
-        Tue, 21 Mar 2023 00:14:05 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170906118f00b0092421bf4927sm5458201eja.95.2023.03.21.00.14.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 00:14:04 -0700 (PDT)
-Message-ID: <3f5e01bd-24ee-66cc-1a5d-b3fc09c2a96d@linaro.org>
-Date:   Tue, 21 Mar 2023 08:14:03 +0100
+        d=1e100.net; s=20210112; t=1679382867;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DMKnA20mFWi0udSf/zybjijsVLooERpPllnHaq0vSy0=;
+        b=B+d+/Mu94xpek+jy/AejyRDq/pZaC0tj4BthKtWzaKBjphS+7yDnZJHbtwRlR/krmB
+         J6cg+Dc+oOlXSZTe3FkniVvYP5w6c3LV/PFrPxnDwPMz0V5lWVcGPUBSw/SFbNDVF9BM
+         ZicJ3Mn7ObwS+hi/drhmIwExMcagAi4df1uBYLGCdB4Jq6XutP2slGtA/j0czt8efq5m
+         As0cpqrlf5A+xsLwSRIv+QqDQHgW0O70WyJ1uvozQpRM8ZP7n8zByYnUdBrqwNQekPKK
+         OHCOfv3CdPw2fowoFoIT32v/Jw/BNHUYrwJ/jes9bcclTxOk7al2OE7kDXXfERfpzkac
+         0GUQ==
+X-Gm-Message-State: AO0yUKXE4AfZpgNjwrX9iMP9yF06QSh6v1FGtyIP1cgn2wVxIQ8+nZXR
+        jy11h1gGYWEy3Vf9zR07aLmtDZH0s3DcWldyEWcuPA==
+X-Google-Smtp-Source: AK7set+7Z7aazmG76t5T4UkCTOEf4hlLtWpVyZGBTI2mG3jrxtWYBAve38VvAviEerfMWdlce9pJaW8edCnz+XxY9SE=
+X-Received: by 2002:a50:9fad:0:b0:4c1:6acc:ea5 with SMTP id
+ c42-20020a509fad000000b004c16acc0ea5mr1104322edf.4.1679382866821; Tue, 21 Mar
+ 2023 00:14:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: timer: Add timer for StarFive JH7110
- SoC
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
-References: <20230320135433.144832-1-xingyu.wu@starfivetech.com>
- <20230320135433.144832-2-xingyu.wu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230320135433.144832-2-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230320145420.204894191@linuxfoundation.org>
+In-Reply-To: <20230320145420.204894191@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Mar 2023 12:44:14 +0530
+Message-ID: <CA+G9fYsiKyJYQnRf8fJi_27bOTZZtskOQ0-=H9cf2McH5CgPOw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/30] 4.14.311-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,38 +73,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 14:54, Xingyu Wu wrote:
-> Add bindings for the timer on the JH7110 RISC-V SoC
-> by StarFive Technology Ltd.
-> 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
->  .../bindings/timer/starfive,jh7110-timer.yaml | 95 +++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timer.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/starfive,jh7110-timer.yaml b/Documentation/devicetree/bindings/timer/starfive,jh7110-timer.yaml
-> new file mode 100644
-> index 000000000000..24b34618f2c8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/starfive,jh7110-timer.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/starfive,jh7110-timer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive JH7110 Timer
+On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.311 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Mar 2023 14:54:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.311-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Actually one change is needed - missing blank line.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> +maintainers:
-> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
-> +  - Samin Guo <samin.guo@starfivetech.com>
-> +
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.14.311-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 771f7d636cc99d7d29357a63b34dc212c76c2e16
+* git describe: v4.14.310-31-g771f7d636cc9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.310-31-g771f7d636cc9
 
-Best regards,
-Krzysztof
+## Test Regressions (compared to v4.14.310)
 
+## Metric Regressions (compared to v4.14.310)
+
+## Test Fixes (compared to v4.14.310)
+
+## Metric Fixes (compared to v4.14.310)
+
+## Test result summary
+total: 75642, pass: 64390, fail: 3110, skip: 8031, xfail: 111
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 199 total, 197 passed, 2 failed
+* arm64: 37 total, 35 passed, 2 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 34 total, 33 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
