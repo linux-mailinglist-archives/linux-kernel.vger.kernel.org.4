@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC546C3654
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C33666C3659
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjCUP4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S230497AbjCUP5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjCUP4w (ORCPT
+        with ESMTP id S230452AbjCUP5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:56:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5274850FAD;
-        Tue, 21 Mar 2023 08:56:47 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r11so61592133edd.5;
-        Tue, 21 Mar 2023 08:56:47 -0700 (PDT)
+        Tue, 21 Mar 2023 11:57:39 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC872E1B9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:57:38 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id y32-20020a634960000000b0050fa03fa554so976734pgk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679414205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Avxg+wqBheAZBOFL4DRSDNWUNaL22DnyGnVWnYTFkUc=;
-        b=BGFUA/vTAoKrvp1XiMnjzwiBRikzw9EI3kIEyJid3gpdbWhJRhGr8REYMcKymQRBHE
-         KLh2K1Fz4WD0tVcav03cxcGTRDeVWiMTnS1WpjSDFC4HB3ggG16ZvAE8ft4lF0rv8tTL
-         +0K5mrsowODR+zXpgxUioti3txwEAdlQey0r2d5mg23pJJWP2lih4wLKdTJtGH/Cb+II
-         al19FGOxCWuyNr0Ije0g+eZOrzlvU8jvemgLHd4ILOW1j4oO9JdQhWyEVZwGly8G46o4
-         V5p/glr2MJuQBJYS0a2S132z8O600YZHTVcJvAtFsEUnFt7bfG8OWIQ1UetpCLEZiNL2
-         t7+Q==
+        d=google.com; s=20210112; t=1679414258;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TuyGVvWAn55aYhNiXLfxVytcsj8nJb6xC8tKSkb4wQk=;
+        b=U/zU5H++KR0gIcnwTxdhnXzHjcEi5S2Oy5auyA6COWM+geGdf7hbBiBI2xbEgGJzFd
+         5Wc44M3kv+D+13PpmMBtwE2c0KRA4v6LxFC7d8tmKbblcyB+sFSB2pRKDtSwuN/bavhK
+         tCE7ZQBlE9AKsOqG668/OeKioiLpowfs6AxS25M8YkjzomcSQA3KJ9Q9aD/8C4NXYigd
+         WrBxnmXQiO4P+vAMd2Bxv6izjbtr3oKVb7ioxEg8wm5SNeGl0KmW7g9J/3SH/H4AcdCz
+         B7rm2iCdy47B9ZPiLJPE9dYj6RMukAobg/jJbOtCZgzkKJOEnixSwwcYTIHzUhZucqE4
+         N6Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679414205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Avxg+wqBheAZBOFL4DRSDNWUNaL22DnyGnVWnYTFkUc=;
-        b=f2F5iMo42EHwedzNhV9QeQ8KdmXOoLiOWStirPPQiV7Ueg3bJgYcStXcop1TSsqdp2
-         zKc64oeXT80Wp2p/47NSciT0RXOTwEvFVoLtZGBil/O1ynWaetVYrP52dqlSykM1CcL4
-         ZRmxLmZ29P8hJFcWZ/xPGDw4MTJO82LSP4x2BIz27Bf4QzmKYYOGHlCTCW4kjF3jdQDz
-         2PMxN7PFbReOQjM62X+PonIUKc7xScZXIUnvfxsn6UXigNlvNS/mzMDONLzuJkW4u2NJ
-         20fC6LyDqFhe/Tzg3z8klAuMC/igGQX7UVZ5Ia1B5PyWZbOsFUkbPCM9o9VDUSMnwyaC
-         IOfA==
-X-Gm-Message-State: AO0yUKVZI0rjxjcHN4BGPsyP8XrNr8iYT/+rks6NirjX5ffWcIkASJ0x
-        U4+bsJ7iLBi80jtNUF2KzF8=
-X-Google-Smtp-Source: AK7set9zJtJATgBFmUbEPELSo4KADQnNTfcPzJvVliB52XwsopA65iCr2MFLwxuxd6dIJYMvmu6KLw==
-X-Received: by 2002:a17:906:180c:b0:92c:8e4a:1a42 with SMTP id v12-20020a170906180c00b0092c8e4a1a42mr3309080eje.32.1679414205533;
-        Tue, 21 Mar 2023 08:56:45 -0700 (PDT)
-Received: from carbian ([2a02:8109:aa3f:ead8::a9c0])
-        by smtp.gmail.com with ESMTPSA id ot9-20020a170906ccc900b009331450d04esm4824055ejb.178.2023.03.21.08.56.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 08:56:45 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 16:56:43 +0100
-From:   Mehdi Djait <mehdi.djait.k@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] iio: accel: kionix-kx022a: Add chip_info structure
-Message-ID: <ZBnTuykAqse5vBhO@carbian>
-References: <cover.1679009443.git.mehdi.djait.k@gmail.com>
- <3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k@gmail.com>
- <4c28925d-c07c-61b7-8863-9c00e6846687@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c28925d-c07c-61b7-8863-9c00e6846687@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        d=1e100.net; s=20210112; t=1679414258;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TuyGVvWAn55aYhNiXLfxVytcsj8nJb6xC8tKSkb4wQk=;
+        b=G9HT6uxD0Y4Pa4/5tEtVgOTDDV58Zwh50xvAzBXRMSLHhRuFm7lbyThZGQdod0TSUR
+         dQDicCso9MWW/no9R62bg6o8Cv/iH2WRzHgYgckjSnE6zpDYGyJQ9VSwzqpI0a73VEFE
+         uH4dUB8zirQacpUsZM8VxNx9MxM+Z1BEdUDQyGSwyqoa5LCB+H7dma6tBRdnIWpYyr+l
+         0cSDrGKDAHWNCvQ35VtiPe8I4fgcep0fR4VMH2hHSocgPHrv3HA506+zNRlnUtTRm5Nu
+         xrVxSyqMDn2G2bQb9voTagvt+yvqjLc4yLy/E3+3jg/DfioWQwkqKkwG/gKeCZsX+g4r
+         5Czg==
+X-Gm-Message-State: AO0yUKWUTvkBYv2qL9m5riHkH2+fSnUgo/qMxGdt7658mJRwkCDVDbQE
+        jpK/493uHjX9xALCWBOpV1EiS/LoNPc=
+X-Google-Smtp-Source: AK7set+ptGadWzmRjzpcteGPVaH7/ZML7PoMG36ojaji+Q3hAwLbhUQy6qndT9djtwX8nZfExjOV2eg8hbs=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:851:b0:628:30d:2d2f with SMTP id
+ q17-20020a056a00085100b00628030d2d2fmr181003pfk.5.1679414258343; Tue, 21 Mar
+ 2023 08:57:38 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 08:57:37 -0700
+In-Reply-To: <7b428c85-5f20-a077-70b6-f361d2e7ffe7@grsecurity.net>
+Mime-Version: 1.0
+References: <20230201194604.11135-1-minipli@grsecurity.net>
+ <20230201194604.11135-5-minipli@grsecurity.net> <ZBJEGfmv42MA6bKh@google.com> <7b428c85-5f20-a077-70b6-f361d2e7ffe7@grsecurity.net>
+Message-ID: <ZBnT8XhO9WuQFFK0@google.com>
+Subject: Re: [PATCH v3 4/6] KVM: x86: Make use of kvm_read_cr*_bits() when
+ testing bits
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,132 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Matti,
+On Mon, Mar 20, 2023, Mathias Krause wrote:
+> On 15.03.23 23:18, Sean Christopherson wrote:
+> > On Wed, Feb 01, 2023, Mathias Krause wrote:
+> >> Make use of the kvm_read_cr{0,4}_bits() helper functions when we only
+> >> want to know the state of certain bits instead of the whole register.
+> >>
+> >> This not only makes the intend cleaner, it also avoids a VMREAD in case
+> >> the tested bits aren't guest owned.
+> >>
+> >> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> >> ---
+> >>  arch/x86/kvm/pmu.c     | 4 ++--
+> >>  arch/x86/kvm/vmx/vmx.c | 4 ++--
+> >>  2 files changed, 4 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> >> index d939d3b84e6f..d9922277df67 100644
+> >> --- a/arch/x86/kvm/pmu.c
+> >> +++ b/arch/x86/kvm/pmu.c
+> >> @@ -439,9 +439,9 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+> >>  	if (!pmc)
+> >>  		return 1;
+> >>  
+> >> -	if (!(kvm_read_cr4(vcpu) & X86_CR4_PCE) &&
+> >> +	if (!(kvm_read_cr4_bits(vcpu, X86_CR4_PCE)) &&
+> > 
+> > Purely as an FYI, I proposed adding helpers to query single CR0/CR4 bits in a
+> > separate thread[*].  No need to do anything on your end, I'll plan on applying
+> > this patch first and will handle whatever conflicts arise.
+> > 
+> > [*] https://lore.kernel.org/all/ZAuRec2NkC3+4jvD@google.com
+> 
+> Unfortunately, not all users of kvm_read_cr*_bits() only want to read a
+> single bit. There are a very few that read bit masks -- but you're
+> probably fully aware of this.
 
-> > +static int kx022a_get_fifo_bytes(struct kx022a_data *data)
-> > +{
-> > +	struct device *dev = regmap_get_device(data->regmap);
-> > +	__le16 buf_status;
-> > +	int ret, fifo_bytes;
-> > +
-> > +	ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1, &buf_status, sizeof(buf_status));
-> > +	if (ret) {
-> > +		dev_err(dev, "Error reading buffer status\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	buf_status &= data->chip_info->buf_smp_lvl_mask;
-> > +	fifo_bytes = le16_to_cpu(buf_status);
-> > +
-> > +	/*
-> > +	 * The KX022A has FIFO which can store 43 samples of HiRes data from 2
-> > +	 * channels. This equals to 43 (samples) * 3 (channels) * 2 (bytes/sample) to
-> > +	 * 258 bytes of sample data. The quirk to know is that the amount of bytes in
-> > +	 * the FIFO is advertised via 8 bit register (max value 255). The thing to note
-> > +	 * is that full 258 bytes of data is indicated using the max value 255.
-> > +	 */
-> > +	if (data->chip_info->type == KX022A && fifo_bytes == KX022A_FIFO_FULL_VALUE)
-> > +		fifo_bytes = KX022A_FIFO_MAX_BYTES;
-> > +
-> > +	if (fifo_bytes % KX_FIFO_SAMPLES_SIZE_BYTES)
-> > +		dev_warn(data->dev, "Bad FIFO alignment. Data may be corrupt\n");
-> > +
-> > +	return fifo_bytes;
-> > +}
-> 
-> I like adding this function. Here I agree with Jonathan - having a device
-> specific functions would clarify this a bit. The KX022A "quirk" is a bit
-> confusing. You could then get rid of the buf_smp_lvl_mask.
-
-my bad here, I should have made a separate patch and explained more ...
-buf_smp_lvl_mask is essential because kionix products use different
-number of bits to report "the number of data bytes that have been stored in the 
-sample buffer" using the registers BUF_STATUS_1 and BUF_STATUS_2
-
-kx022a: 8bits
-kx132: 10bits
-kx12x: 11bits
-kx126: 12bits
-
-I think this function is quite generic and can be used for different
-kionix devices: 
-
-- It reads BUF_STATUS_1 and BUF_STATUS_2 and then uses a chip specific
-mask 
-- It takes care of the quirk of kx022a which is just a simple if statement 
-
-> 
-> > +
-> >   static int kx022a_drop_fifo_contents(struct kx022a_data *data)
-> >   {
-> >   	/*
-> > @@ -593,35 +588,22 @@ static int kx022a_drop_fifo_contents(struct kx022a_data *data)
-> >   	 */
-> >   	data->timestamp = 0;
-> > -	return regmap_write(data->regmap, KX022A_REG_BUF_CLEAR, 0x0);
-> > +	return regmap_write(data->regmap, data->chip_info->buf_clear, 0x0);
-> >   }
-> >   static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
-> >   			       bool irq)
-> >   {
-> >   	struct kx022a_data *data = iio_priv(idev);
-> > -	struct device *dev = regmap_get_device(data->regmap);
-> > -	__le16 buffer[KX022A_FIFO_LENGTH * 3];
-> > +	__le16 buffer[data->chip_info->fifo_length * 3];
-> 
-> I don't like this. Having the length of an array decided at run-time is not
-> something I appreciate. Maybe you could just always reserve the memory so
-> that the largest FIFO gets supported. I am just wondering how large arrays
-> we can safely allocate from the stack?
-
-I was stupid enough to ignore the warnings... 
-I will take care of it in the v2
-
-> 
-> 
-> > @@ -812,14 +792,14 @@ static int kx022a_fifo_enable(struct kx022a_data *data)
-> >   		goto unlock_out;
-> >   	/* Enable buffer */
-> > -	ret = regmap_set_bits(data->regmap, KX022A_REG_BUF_CNTL2,
-> > -			      KX022A_MASK_BUF_EN);
-> > +	ret = regmap_set_bits(data->regmap, data->chip_info->buf_cntl2,
-> > +			      KX_MASK_BUF_EN);
-> >   	if (ret)
-> >   		goto unlock_out;
-> > -	data->state |= KX022A_STATE_FIFO;
-> > +	data->state |= KX_STATE_FIFO;
-> >   	ret = regmap_set_bits(data->regmap, data->ien_reg,
-> > -			      KX022A_MASK_WMI);
-> > +			      KX_MASK_WMI);
-> 
-> I think this fits to one line now. (even on my screen)
-> 
-> >   	if (ret)
-> >   		goto unlock_out;
-> 
-> > -int kx022a_probe_internal(struct device *dev)
-> > +int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info)
-> 
-> As mentioned elsewhere, this might also work if the chip-type enum was
-> passed here as parameter. That way the bus specific part would not need to
-> know about the struct chip_info...
-> 
-> >   {
-> >   	static const char * const regulator_names[] = {"io-vdd", "vdd"};
-> >   	struct iio_trigger *indio_trig;
-> > @@ -1023,6 +1003,7 @@ int kx022a_probe_internal(struct device *dev)
-> >   		return -ENOMEM;
-> >   	data = iio_priv(idev);
-> > +	data->chip_info = chip_info;
-> 
-> ...Here you could then pick the correct chip_info based on the chip-type
-> enum. In that case I'd like to get the regmap_config(s) in own file. Not
-> sure how that would look like though.
-> 
-> All in all, I like how this looks like. Nice job!
-
-Thank you for the feedback :)
-
---
-Kind Regards 
-Mehdi Djait
+Yeah, we won't be able to get rid of kvm_read_cr*_bits() entirely, the goal is
+purely to make code that does query a single bit slightly more readable/obvious.
