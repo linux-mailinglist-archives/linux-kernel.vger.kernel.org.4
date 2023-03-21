@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1AA6C2E6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B511E6C2E73
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCUKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S229891AbjCUKMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCUKH7 (ORCPT
+        with ESMTP id S229713AbjCUKMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:07:59 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5566A269
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:07:58 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-177b78067ffso15705405fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:07:58 -0700 (PDT)
+        Tue, 21 Mar 2023 06:12:51 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2385A2D5B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:12:48 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b20so24540519edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 03:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679393273;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oJZSh2E9pSf9T5lgH43uOEogMK4YhEYDaY4XuVS4aqE=;
-        b=HvHOjEosOSLEarWqaSwHxWD2nHvdFNdV+XUPyOcVh10ybry4fu3ETRggrpelavs9yW
-         mWxK2nEGipeDz3wqoOCRwaeyzEOnEuvMd3V0Gm6wQ/XTWB47X7KCjZjxapbpxf70sTlR
-         d7V1FTKDbkOpJspMOS+zACt+AySBwsMRVUye22fDuRv58QQi5fQOU6R5/kq7g8uErzI2
-         VyIEJt3UfWl6IlWCMbb8YBO9nnYhOrfTQkx9o7TtYMH887G+nViyDEpVrGnM69NOMuyN
-         wHbfCNDYSpL11Yn4cks2fTCs3si88MtVnwNqeAYDeSIvhCzm8yKtK/whW9Zrp5S/zzdK
-         dhtw==
+        d=linaro.org; s=google; t=1679393566;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MBblg6ouqKODHyX877fXDi2urk7+HMZmQEWvK4N+5xA=;
+        b=cyDchbnmi/K2X12VsJrtHmzOjhrjENPwu2ileUBtV/RR8kgrZ0leVFpzOYCfij+f8s
+         +j0bZQSRs/xu91acp5PQGXNgAyIDjwcpuExswfSxzVRjnvoiryoQqjxckO02RX9RZUwE
+         Uyz4OfHVdkj2VLarrKqf4fzVEd9lh5y2GPMzm3nnByYCs7FmDLUTw/uzJPuT+m5NUSkF
+         FHrzc2YTyAYiXxW4nsBVVBpeddlVENEZ8XQvNE6RXkAZHCtOqvAQBAsyl7kw9ONLHFkT
+         3fZwrtBB3WppLix8HvgVD9jWpWM3/6BDfqmkPmssj0pcorizhIN0+KD8P5ok8DVg/GP7
+         Z8nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679393273;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20210112; t=1679393566;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oJZSh2E9pSf9T5lgH43uOEogMK4YhEYDaY4XuVS4aqE=;
-        b=BipMfHUyOhPd0TtVujbm+V+O7KlSMAWPgCyNdctmoGEKZgJZwcOnOS4SOZxxy4tS3F
-         LSWM7r81Szc+Alghlp0RIpdv3tbri+pRP6JB2Q0oHgW8cxc7q2HCPoYJuCPS0hkk8oEY
-         lswHNwqYD+3/3QzptPgLzJVPl9m4W6EueYLgh9qNOKaNbmEEDryyMpKFEh8pHcIK2Cbg
-         nqVnz1SBeJBJb91Q4TDQTCXNxVNQzgqvo6i7kCI9LYbfoJm2jxrLtm4bsA6LqnvMh246
-         CayXjLzxFfXkT4K7Za1UqATfEoF0jAhPEtv2TIFGpEuDRa+I5gewq0oNboMebdkL/rKK
-         2oXA==
-X-Gm-Message-State: AO0yUKUI5yxu3wcs/83BUCuuVUHqPRQZy+c1LYG85KhiodgS+LziZFN6
-        UNnqToeqAzKiONB8995ChdpBtxqAsh8WD6xFzlE=
-X-Google-Smtp-Source: AK7set/5jUoMNrJwt/reRzydHa6HyEztfKNqARKPTDb87apJFC2O4nmmTZovTPMb0bqSLdg9prU2HUz90z1SxOdeBSE=
-X-Received: by 2002:a05:6870:13d4:b0:177:adf6:4fa3 with SMTP id
- 20-20020a05687013d400b00177adf64fa3mr459789oat.2.1679393272748; Tue, 21 Mar
- 2023 03:07:52 -0700 (PDT)
+        bh=MBblg6ouqKODHyX877fXDi2urk7+HMZmQEWvK4N+5xA=;
+        b=7YkB3SAg/dn1zrY9+K9abGaYDgVV4yILgIhHO5JG1QtYTXn37ROa3n402IqmlXUmfL
+         Zf4mnFm32WmZJGse0EpCVgROQJv6ENtR/B4O3pgrG9Bw4QKh2n4NMuycJifdNWPRQYOR
+         jiIHwT3GJwXPhWuU1zVFsHQFcROsCSPqbmXfiYsTtaX3laMVMha22YLuZXYgXwrs8YTF
+         gRrqwPvC3G0XqAKL5f5XsM871XZIygdkqifsX/3V32i+6CR/xINw0Bi4/vSgRjbKGeNA
+         ZegeuP+JkNw9Uc5Z0FYd8Fauz/CQnAoZjjA5t+t6///ubSAIB1Kr+4k/DfY94g0w72ZQ
+         BLLw==
+X-Gm-Message-State: AO0yUKVirNEzK7vwigxhP4Jgp9bkAPA2byRjX7EuAg8nBn4AB3zj15+b
+        BPkyUWU7yRGZ9awP/dZqUAapUA==
+X-Google-Smtp-Source: AK7set9y91HFCneDKUYOtGWZfa4sI4vIRE5C0iaFvRabDlbD7NgNvD8qB02c9rR0uphL/1AlejObbA==
+X-Received: by 2002:aa7:d317:0:b0:4fb:5795:b7e0 with SMTP id p23-20020aa7d317000000b004fb5795b7e0mr2523640edq.31.1679393566673;
+        Tue, 21 Mar 2023 03:12:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id g9-20020a056402320900b004fd219242a5sm5983006eda.7.2023.03.21.03.12.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 03:12:46 -0700 (PDT)
+Message-ID: <c4d67c22-6953-0f2c-4b80-cc9ab2ab5e8b@linaro.org>
+Date:   Tue, 21 Mar 2023 11:12:45 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6358:7511:b0:f6:92bf:aa7a with HTTP; Tue, 21 Mar 2023
- 03:07:51 -0700 (PDT)
-Reply-To: intlcoris@gmail.com
-From:   coris international <oluwakemiifeoluwa01@gmail.com>
-Date:   Tue, 21 Mar 2023 03:07:51 -0700
-Message-ID: <CANmZ2MZ_nPF03JbygaBxFrpT4QTQj6zjR3BF3nM0ZSb16C6JxA@mail.gmail.com>
-Subject: Att, Client,are you online?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: wireless: add ath11k pcie bindings
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ath11k@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230321094011.9759-1-johan+linaro@kernel.org>
+ <20230321094011.9759-2-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230321094011.9759-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:2b listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [oluwakemiifeoluwa01[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [oluwakemiifeoluwa01[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Att, Client,
-This is to notify you that you have a message from Mrs Edes Banneth
-which She asked us to deliver to you, are you online? Respond to us.
+On 21/03/2023 10:40, Johan Hovold wrote:
+> Add devicetree bindings for Qualcomm ath11k PCIe devices such as WCN6855
+> for which the calibration data variant may need to be described.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  .../net/wireless/qcom,ath11k-pci.yaml         | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/wireless/qcom,ath11k-pci.yaml
+> 
 
-Confirm to us that you receive this update.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-We look forward to serving you better
-Your Financial Comfort Is A Priority
-Thank you for choosing Corisbank International.
+Best regards,
+Krzysztof
 
-Sincerely,
-
-----
-
-Mr Diakarya Ouattara
-Managing Director
-Bank Coris
-Burkina Faso
-+226 556 16 37
-infoinf@accountant.com
-bf_info_coris@yahoo.com
