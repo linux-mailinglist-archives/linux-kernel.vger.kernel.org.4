@@ -2,160 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75BE6C369D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA636C369F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCUQK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S230060AbjCUQLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjCUQKZ (ORCPT
+        with ESMTP id S229583AbjCUQLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:10:25 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8D13609B;
-        Tue, 21 Mar 2023 09:10:22 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 27CEAC8008E;
-        Tue, 21 Mar 2023 17:10:20 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id JParbD9YrLXB; Tue, 21 Mar 2023 17:10:19 +0100 (CET)
-Received: from [192.168.178.25] (business-24-134-105-141.pool2.vodafone-ip.de [24.134.105.141])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id 971B9C80090;
-        Tue, 21 Mar 2023 17:10:19 +0100 (CET)
-Message-ID: <f50b3db3-785d-3efd-b45d-13e1e93f60cc@tuxedocomputers.com>
-Date:   Tue, 21 Mar 2023 17:10:19 +0100
+        Tue, 21 Mar 2023 12:11:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B1D4D297;
+        Tue, 21 Mar 2023 09:11:44 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 17:11:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679415102;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=nG0bOzqdgsuZ4sSUc4UXldoJdmKCghe+OL+gnubJm/U=;
+        b=jJpuOhRcELM19ikq6o6peDpFolcfScaGLaNM8vHLDcS+6bhoPiMD9/Nbn0JpO/CDxxI2FU
+        9wBfiBLoe74DbcBzGjsjoFkfQr1BkdAPS89Eej/gCIT23RwHvL9h+7N/I97Y0E4bOoKANQ
+        o5SIznCLfxG2O5r08hvJLbtTL8OvhY/+4sTz+foiwCuyRV0QATb+2TNKYiRWMde6YIc1el
+        LQTMRYo03ZymIHkFNgw032Oa2688gQrhloXvi7Ek1t7xgps+piG2tlwLSmu2qfSz97c7MK
+        POAo02BCl9ZZyYCFE36z4DlW6iOanWfX3fal6XtLxMOheYb77migsFkeey0Y8Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679415102;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=nG0bOzqdgsuZ4sSUc4UXldoJdmKCghe+OL+gnubJm/U=;
+        b=HtVblRZN8VEhdTg0yUDC5F1Pr7yJQqO2u1qqfa0HDbzNzKDXpPob2YLcxvbYynx/fl03aE
+        QwNqIet1mEWH2rDA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6] locking/rwbase: Mitigate indefinite writer starvation.
+Message-ID: <20230321161140.HMcQEhHb@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] Input: i8042 - add TUXEDO devices to i8042 quirk
- tables for partial fix
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, dmitry.torokhov@gmail.com,
-        tiwai@suse.de, samuel@cavoj.net, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220708161005.1251929-1-wse@tuxedocomputers.com>
- <20220708161005.1251929-3-wse@tuxedocomputers.com>
- <37a7e536-252a-c8a9-1412-37d3f2052a6d@redhat.com>
- <c5a7fa10-7b6a-fa0d-622e-4392fda1ee93@tuxedocomputers.com>
- <e84a2cb3-ea2f-6ce4-aba8-4026b3e6bedd@redhat.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <e84a2cb3-ea2f-6ce4-aba8-4026b3e6bedd@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 11.07.22 um 14:55 schrieb Hans de Goede:
-> Hi,
->
-> On 7/11/22 14:45, Werner Sembach wrote:
->> Hi,
->>
->> On 7/8/22 21:39, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 7/8/22 18:10, Werner Sembach wrote:
->>>> A lot of modern Clevo barebones have touchpad and/or keyboard issues after
->>>> suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
->>>> have an external PS/2 port so this can safely be set for all of them.
->>>>
->>>> I'm not entirely sure if every device listed really needs all four quirks,
->>>> but after testing and production use. No negative effects could be
->>>> observed when setting all four.
->>>>
->>>> Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
->>>> and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
->>>> boot and sometimes also after resume. However both are required for the
->>>> keyboard to not fail completely sometimes after boot or resume.
->>> Hmm, the very laggy bit does not sound good. Have you looked into other
->>> solutions, e.g. what happens if you use just nomux without any of the
->>> other 3 options ?
->> I tried a lot of combinations, but it was some time ago.
->>
->> iirc: at least nomux and reset are required and both individually cause the lagging.
->>
->> So the issue is not fixed by just using a different set of quirks.
-> Hmm, ok. So given that this seems to be the best we can do
-> the patch looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->
-> Regards,
->
-> Hans
+The rw_semaphore and rwlock_t locks are unfair to writers. Readers can
+indefinitely acquire the lock unless the writer fully acquired the lock.
+This can never happen if there is always a reader in the critical
+section owning the lock.
 
-Afaik this patch never got merged. Sadly I still have no better solution, so I 
-wanted to bring the patch up for discussion again as it still makes the 
-situation better in my opinion.
+Mel Gorman reported that since LTP-20220121 the dio_truncate test case
+went from having 1 reader to having 16 reader and the number of readers
+is sufficient to prevent the down_write ever succeeding while readers
+exist. Eventually the test is killed after 30 minutes as a failure.
 
-Kind Regards,
+Mel proposed a timeout to limit how long a writer can be blocked until
+the reader is forced into the slowpath.
+Thomas argued that there is no added value by providing this timeout.
+From PREEMPT_RT point of view, there are no critical rw_semaphore or
+rwlock_t locks left where the reader must be prefer.
 
-Werner Sembach
+Mitigate indefinite writer starvation by forcing the READER into the
+slowpath once the WRITER attempts to acquire the lock.
 
->
->
->>>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->>>> Cc: stable@vger.kernel.org
->>>> ---
->>>>    drivers/input/serio/i8042-x86ia64io.h | 28 +++++++++++++++++++++++++++
->>>>    1 file changed, 28 insertions(+)
->>>>
->>>> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
->>>> index 5204a7dd61d4..9dc0266e5168 100644
->>>> --- a/drivers/input/serio/i8042-x86ia64io.h
->>>> +++ b/drivers/input/serio/i8042-x86ia64io.h
->>>> @@ -1107,6 +1107,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->>>>            .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>>>                        SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>>>        },
->>>> +    {
->>>> +        /*
->>>> +         * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
->>>> +         * the keyboard very laggy for ~5 seconds after boot and
->>>> +         * sometimes also after resume.
->>>> +         * However both are required for the keyboard to not fail
->>>> +         * completely sometimes after boot or resume.
->>>> +         */
->>>> +        .matches = {
->>>> +            DMI_MATCH(DMI_BOARD_NAME, "N150CU"),
->>>> +        },
->>>> +        .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>>> +                    SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>>> +    },
->>>>        {
->>>>            .matches = {
->>>>                DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
->>>> @@ -1114,6 +1128,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->>>>            .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>>>                        SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>>>        },
->>>> +    {
->>>> +        /*
->>>> +         * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
->>>> +         * the keyboard very laggy for ~5 seconds after boot and
->>>> +         * sometimes also after resume.
->>>> +         * However both are required for the keyboard to not fail
->>>> +         * completely sometimes after boot or resume.
->>>> +         */
->>>> +        .matches = {
->>>> +            DMI_MATCH(DMI_BOARD_NAME, "NHxxRZQ"),
->>>> +        },
->>>> +        .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>>> +                    SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>>> +    },
->>>>        {
->>>>            .matches = {
->>>>                DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
->
+Reported-by: Mel Gorman <mgorman@techsingularity.net>
+Link: https://lore.kernel.org/877cwbq4cq.ffs@tglx
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+- v5..v6: https://lore.kernel.org/all/Y+0W0wgyaJqYHKoj@linutronix.de/
+  - dropped the timeout and forcing reader into the slowpath once a
+    writer is waiting.
+
+- v4..v5 https://lore.kernel.org/20230120140847.4pjqf3oinemokcyp@techsingularity.net
+  - Reworded last paragraph of the commit message as Mel's suggestion
+  - RT/DL tasks are no longer excluded from the waiter timeout. There
+    is no reason why this should be done since no RT user relies on
+    rwsem (and would need this kind of behaviour). The critical user
+    from RT perspective replaced rwsem with RCU.
+    Avoiding special treatment avoids this kind of bug with RT
+    readers.
+  - Update comments accordingly.
+
+ kernel/locking/rwbase_rt.c | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+index c201aadb93017..25ec0239477c2 100644
+--- a/kernel/locking/rwbase_rt.c
++++ b/kernel/locking/rwbase_rt.c
+@@ -72,15 +72,6 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+ 	int ret;
+ 
+ 	raw_spin_lock_irq(&rtm->wait_lock);
+-	/*
+-	 * Allow readers, as long as the writer has not completely
+-	 * acquired the semaphore for write.
+-	 */
+-	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
+-		atomic_inc(&rwb->readers);
+-		raw_spin_unlock_irq(&rtm->wait_lock);
+-		return 0;
+-	}
+ 
+ 	/*
+ 	 * Call into the slow lock path with the rtmutex->wait_lock
+-- 
+2.40.0
+
