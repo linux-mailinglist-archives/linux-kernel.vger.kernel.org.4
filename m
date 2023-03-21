@@ -2,403 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEB46C2E34
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7636C2E3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjCUJtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S229778AbjCUJuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCUJtK (ORCPT
+        with ESMTP id S229525AbjCUJud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:49:10 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CBF954;
-        Tue, 21 Mar 2023 02:49:06 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L9msi0037365;
-        Tue, 21 Mar 2023 04:48:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679392134;
-        bh=JJIYrcey46uy+S3AUzULE5SHPkG70JA9TDTd6IjyWNw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=onWV1zrmtM6rWiMG74/F8iknw9yrrTiJrZuCkPgvScMJGGBwoDtqlboYdYckJYDCH
-         ZLQfpG3KsiG/jL8XCg40VZNZKi/ZZI+NOnXOgh29x79loOGHyMB9Wp3YY2bh4TWyfE
-         ymu85u/8ZCpSxc3Ax3I6zery9CbMJ423TA5EBQ74=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L9msAO096312
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 04:48:54 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 04:48:53 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 04:48:53 -0500
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L9mmPr021899;
-        Tue, 21 Mar 2023 04:48:49 -0500
-Message-ID: <e4cdd295-d292-255a-fbd0-b1728aaca155@ti.com>
-Date:   Tue, 21 Mar 2023 15:18:48 +0530
+        Tue, 21 Mar 2023 05:50:33 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CBB1EFD0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=YC2+/4EQm/xVd44KstXWy+xxjzvPLGHanbp1gp7EHEE=; b=qUDjy+d2aq3Psn2pcHO9LLS7yt
+        e3WWAH4EK+iuZHsojMNL+sV+YSH2bj43/KalbNInxH+F96Ce0MRwJcbu3JPxqiwkWE4JToByVwvjx
+        o2htecKBFUcirwxVeKIW41MLRlS8ob8/Py+JzUS813msnC8ZHukDq/MkT5dRXrhlwf3mk5VvxvBae
+        b1skw6cwEUnVwDRgVC8OJ5oKmdOeU6vg4QiVlvmDQlqUpyA83mfTEO0Y6FLLt1bytwGA9qrF4rDxn
+        q29XruWChuvJ+draakmDQXNMkclJPDOU1jNQ3U9GNWnl99/83IT/Frdx2DX3jxdRK/SSsLIOQLWu6
+        vjCGaC4A==;
+Received: from [38.44.66.31] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1peYd8-001h2N-89; Tue, 21 Mar 2023 10:50:10 +0100
+Date:   Tue, 21 Mar 2023 08:49:59 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Lee Jones <lee@kernel.org>, dri-devel@lists.freedesktop.org,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel@vger.kernel.org, Melissa Wen <melissa.srw@gmail.com>
+Subject: Re: [PATCH 06/37] drm/vkms/vkms_composer: Fix a few different
+ kerneldoc formatting
+Message-ID: <20230321094940.ndf5nhvfr2y67d3x@mail.igalia.com>
+References: <20230317081718.2650744-1-lee@kernel.org>
+ <20230317081718.2650744-7-lee@kernel.org>
+ <20230320234639.va6an7gton3u6eke@mail.igalia.com>
+ <23fe0765-fb3b-9bf4-ecb4-507e6f3edefe@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/5] soc: ti: pruss: Add
- pruss_{request,release}_mem_region() API
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, Andrew Davis <afd@ti.com>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-3-danishanwar@ti.com>
- <3f26b194-287c-074d-8e78-572875f9a734@kernel.org>
- <52aeb13f-1fe4-825f-9d28-ba64860ae76d@ti.com>
- <13048b01-641a-1d92-178c-02b87c5fa1b9@ti.com>
- <5b936f1b-3c5b-30ab-7074-e202fd6555b6@ti.com>
- <67dd1d04-147d-0e40-c06b-6e1e0dd05f13@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <67dd1d04-147d-0e40-c06b-6e1e0dd05f13@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mszaorulbvh6kbof"
+Content-Disposition: inline
+In-Reply-To: <23fe0765-fb3b-9bf4-ecb4-507e6f3edefe@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
 
-On 21/03/23 14:54, Roger Quadros wrote:
-> Hi,
-> 
-> On 21/03/2023 07:23, Md Danish Anwar wrote:
->> Hi Andrew, Roger,
->>
->> On 20/03/23 21:48, Andrew Davis wrote:
->>> On 3/20/23 12:11 AM, Md Danish Anwar wrote:
->>>> Hi Roger,
->>>>
->>>> On 17/03/23 14:26, Roger Quadros wrote:
->>>>> Hi Andrew & Danish,
->>>>>
->>>>>
->>>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
->>>>>> From: "Andrew F. Davis" <afd@ti.com>
->>>>>>
->>>>>> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
->>>>>> to the PRUSS platform driver to allow client drivers to acquire and release
->>>>>> the common memory resources present within a PRU-ICSS subsystem. This
->>>>>> allows the client drivers to directly manipulate the respective memories,
->>>>>> as per their design contract with the associated firmware.
->>>>>>
->>>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
->>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>>>> Signed-off-by: Andrew F. Davis <afd@ti.com>
->>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->>>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->>>>>> ---
->>>>>>   drivers/soc/ti/pruss.c           | 77 ++++++++++++++++++++++++++++++++
->>>>>>   include/linux/pruss_driver.h     | 27 +++--------
->>>>>>   include/linux/remoteproc/pruss.h | 39 ++++++++++++++++
->>>>>
->>>>>
->>>>> We have these 2 header files and I think anything that deals with
->>>>> 'struct pruss' should go in include/linux/pruss_driver.h
->>>>>
->>>>> Anything that deals with pru_rproc (i.e. struct rproc) should go in
->>>>> include/linux/remoteproc/pruss.h
->>>>>
->>>>> Do you agree?
->>>>>
->>>>
->>>> I agree with you Roger but Andrew is the right person to comment here as he is
->>>> the author of this and several other patches.
->>>>
->>>> Hi Andrew, Can you please comment on this?
->>>>
->>>
->>> Original idea was a consumer driver (like "ICSSG Ethernet Driver" in your other
->>> series) could just
->>>
->>> #include <linux/remoteproc/pruss.h>
->>>
->>> and get everything they need, and nothing they do not.
->>>
->>
->> If we plan on continuing the original idea, then I think keeping the header
->> files as it is will be the best. Because if we move anything that deals with
->> 'struct pruss' to include/linux/pruss_driver.h and anything that deals with
->> pru_rproc (i.e. struct rproc) to include/linux/remoteproc/pruss.h, then the
->> consumer drivers will need to do,
->>
->> #include <linux/remoteproc/pruss.h>
->> #include <linux/pruss_driver.h>
->>
->> Roger, should I keep the header files arrangement as it is?
->>
-> 
-> OK but can we please rename one of them to something else so they don't
-> sound very similar. Maybe you could use Andrew's suggestion below.
-> 
+--mszaorulbvh6kbof
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hvarfbsob5fb6dvn"
+Content-Disposition: inline
 
-Yes sure, I'll rename the header files to reduce confusion. The pruss_driver.h
-is located in include/linux, implying it's not internal to PRUSS. So I will
-keep this header file name as it is.
 
-There are total 3 pruss related header files.
+--hvarfbsob5fb6dvn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1. include/linux/pruss_driver.h (Public header file, not internal to PRUSS,
-will keep it as it is. This exists to allow communication between the pruss
-core and the pru rproc driver which live in different subsystems.)
-2. include/linux/remoteproc/pruss.h (Public header file, not internal to PRUSS,
-will keep it as it is. Only this header file needs to be included by client
-drivers.)
-3. drivers/soc/ti/pruss.h (Internal to PRUSS, I will rename this to
-pruss_internal.h, this file has private definitions and APIs to modify PRUSS
-CFG space. This file is private to pruss.c)
+O 03/20, Randy Dunlap wrote:
+>=20
+>=20
+> On 3/20/23 16:46, Melissa Wen wrote:
+> > On 03/17, Lee Jones wrote:
+> >> Fixes the following W=3D1 kernel build warning(s):
+> >>
+> >>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Function parameter =
+or member 'frame_info' not described in 'pre_mul_alpha_blend'
+> >>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Excess function par=
+ameter 'src_frame_info' description in 'pre_mul_alpha_blend'
+> >>  drivers/gpu/drm/vkms/vkms_composer.c:72: warning: Cannot understand  =
+* @wb_frame_info: The writeback frame buffer metadata
+> >>
+> >> Cc: Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
+> >> Cc: Melissa Wen <melissa.srw@gmail.com>
+> >> Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
+> >> Cc: Daniel Vetter <daniel@ffwll.ch>
+> >> Cc: David Airlie <airlied@gmail.com>
+> >> Cc: dri-devel@lists.freedesktop.org
+> >> Signed-off-by: Lee Jones <lee@kernel.org>
+> >> ---
+> >>  drivers/gpu/drm/vkms/vkms_composer.c | 6 ++++--
+> >>  1 file changed, 4 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vk=
+ms/vkms_composer.c
+> >> index 8e53fa80742b2..41668eedf4272 100644
+> >> --- a/drivers/gpu/drm/vkms/vkms_composer.c
+> >> +++ b/drivers/gpu/drm/vkms/vkms_composer.c
+> >> @@ -22,7 +22,7 @@ static u16 pre_mul_blend_channel(u16 src, u16 dst, u=
+16 alpha)
+> >> =20
+> >>  /**
+> >>   * pre_mul_alpha_blend - alpha blending equation
+> >> - * @src_frame_info: source framebuffer's metadata
+> >> + * @frame_info: source framebuffer's metadata
+> >>   * @stage_buffer: The line with the pixels from src_plane
+> >>   * @output_buffer: A line buffer that receives all the blends output
+> >>   *
+> >> @@ -69,11 +69,13 @@ static void fill_background(const struct pixel_arg=
+b_u16 *background_color,
+> >>  }
+> >> =20
+> >>  /**
+> >> - * @wb_frame_info: The writeback frame buffer metadata
+> >> + * blend
+> > As we are already here:
+> > * blend - blend pixels from a given row and calculate crc
+>=20
+>  * blend: blend pixels from a given row and calculate CRC
+>=20
+> preferably.
 
-Please let me know if the above looks OK.
+Hmm.. I didn't get the colon suggestion. This first line is a brief
+description of the function blend(), so I understand that a more
+accurate doc standard is:
 
->>> pruss_driver.h (which could be renamed pruss_internal.h) exists to allow
->>> comunication between the pruss core and the pru rproc driver which live
->>> in different subsystems.
->>>
->>> Andrew
->>>
->>>>>>   3 files changed, 121 insertions(+), 22 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>>>>> index a169aa1ed044..c8053c0d735f 100644
->>>>>> --- a/drivers/soc/ti/pruss.c
->>>>>> +++ b/drivers/soc/ti/pruss.c
->>>>>> @@ -88,6 +88,82 @@ void pruss_put(struct pruss *pruss)
->>>>>>   }
->>>>>>   EXPORT_SYMBOL_GPL(pruss_put);
->>>>>>   +/**
->>>>>> + * pruss_request_mem_region() - request a memory resource
->>>>>> + * @pruss: the pruss instance
->>>>>> + * @mem_id: the memory resource id
->>>>>> + * @region: pointer to memory region structure to be filled in
->>>>>> + *
->>>>>> + * This function allows a client driver to request a memory resource,
->>>>>> + * and if successful, will let the client driver own the particular
->>>>>> + * memory region until released using the pruss_release_mem_region()
->>>>>> + * API.
->>>>>> + *
->>>>>> + * Return: 0 if requested memory region is available (in such case pointer to
->>>>>> + * memory region is returned via @region), an error otherwise
->>>>>> + */
->>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->>>>>> +                 struct pruss_mem_region *region)
->>>>>> +{
->>>>>> +    if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
->>>>>> +        return -EINVAL;
->>>>>> +
->>>>>> +    mutex_lock(&pruss->lock);
->>>>>> +
->>>>>> +    if (pruss->mem_in_use[mem_id]) {
->>>>>> +        mutex_unlock(&pruss->lock);
->>>>>> +        return -EBUSY;
->>>>>> +    }
->>>>>> +
->>>>>> +    *region = pruss->mem_regions[mem_id];
->>>>>> +    pruss->mem_in_use[mem_id] = region;
->>>>>> +
->>>>>> +    mutex_unlock(&pruss->lock);
->>>>>> +
->>>>>> +    return 0;
->>>>>> +}
->>>>>> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
->>>>>> +
->>>>>> +/**
->>>>>> + * pruss_release_mem_region() - release a memory resource
->>>>>> + * @pruss: the pruss instance
->>>>>> + * @region: the memory region to release
->>>>>> + *
->>>>>> + * This function is the complimentary function to
->>>>>> + * pruss_request_mem_region(), and allows the client drivers to
->>>>>> + * release back a memory resource.
->>>>>> + *
->>>>>> + * Return: 0 on success, an error code otherwise
->>>>>> + */
->>>>>> +int pruss_release_mem_region(struct pruss *pruss,
->>>>>> +                 struct pruss_mem_region *region)
->>>>>> +{
->>>>>> +    int id;
->>>>>> +
->>>>>> +    if (!pruss || !region)
->>>>>> +        return -EINVAL;
->>>>>> +
->>>>>> +    mutex_lock(&pruss->lock);
->>>>>> +
->>>>>> +    /* find out the memory region being released */
->>>>>> +    for (id = 0; id < PRUSS_MEM_MAX; id++) {
->>>>>> +        if (pruss->mem_in_use[id] == region)
->>>>>> +            break;
->>>>>> +    }
->>>>>> +
->>>>>> +    if (id == PRUSS_MEM_MAX) {
->>>>>> +        mutex_unlock(&pruss->lock);
->>>>>> +        return -EINVAL;
->>>>>> +    }
->>>>>> +
->>>>>> +    pruss->mem_in_use[id] = NULL;
->>>>>> +
->>>>>> +    mutex_unlock(&pruss->lock);
->>>>>> +
->>>>>> +    return 0;
->>>>>> +}
->>>>>> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->>>>>> +
->>>>>>   static void pruss_of_free_clk_provider(void *data)
->>>>>>   {
->>>>>>       struct device_node *clk_mux_np = data;
->>>>>> @@ -290,6 +366,7 @@ static int pruss_probe(struct platform_device *pdev)
->>>>>>           return -ENOMEM;
->>>>>>         pruss->dev = dev;
->>>>>> +    mutex_init(&pruss->lock);
->>>>>>         child = of_get_child_by_name(np, "memories");
->>>>>>       if (!child) {
->>>>>> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
->>>>>> index 86242fb5a64a..22b4b37d2536 100644
->>>>>> --- a/include/linux/pruss_driver.h
->>>>>> +++ b/include/linux/pruss_driver.h
->>>>>> @@ -9,37 +9,18 @@
->>>>>>   #ifndef _PRUSS_DRIVER_H_
->>>>>>   #define _PRUSS_DRIVER_H_
->>>>>>   +#include <linux/mutex.h>
->>>>>>   #include <linux/remoteproc/pruss.h>
->>>>>>   #include <linux/types.h>
->>>>>>   -/*
->>>>>> - * enum pruss_mem - PRUSS memory range identifiers
->>>>>> - */
->>>>>> -enum pruss_mem {
->>>>>> -    PRUSS_MEM_DRAM0 = 0,
->>>>>> -    PRUSS_MEM_DRAM1,
->>>>>> -    PRUSS_MEM_SHRD_RAM2,
->>>>>> -    PRUSS_MEM_MAX,
->>>>>> -};
->>>>>> -
->>>>>> -/**
->>>>>> - * struct pruss_mem_region - PRUSS memory region structure
->>>>>> - * @va: kernel virtual address of the PRUSS memory region
->>>>>> - * @pa: physical (bus) address of the PRUSS memory region
->>>>>> - * @size: size of the PRUSS memory region
->>>>>> - */
->>>>>> -struct pruss_mem_region {
->>>>>> -    void __iomem *va;
->>>>>> -    phys_addr_t pa;
->>>>>> -    size_t size;
->>>>>> -};
->>>>>> -
->>>>>>   /**
->>>>>>    * struct pruss - PRUSS parent structure
->>>>>>    * @dev: pruss device pointer
->>>>>>    * @cfg_base: base iomap for CFG region
->>>>>>    * @cfg_regmap: regmap for config region
->>>>>>    * @mem_regions: data for each of the PRUSS memory regions
->>>>>> + * @mem_in_use: to indicate if memory resource is in use
->>>>>> + * @lock: mutex to serialize access to resources
->>>>>>    * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
->>>>>>    * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
->>>>>>    */
->>>>>> @@ -48,6 +29,8 @@ struct pruss {
->>>>>>       void __iomem *cfg_base;
->>>>>>       struct regmap *cfg_regmap;
->>>>>>       struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
->>>>>> +    struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
->>>>>> +    struct mutex lock; /* PRU resource lock */
->>>>>>       struct clk *core_clk_mux;
->>>>>>       struct clk *iep_clk_mux;
->>>>>>   };
->>>>>> diff --git a/include/linux/remoteproc/pruss.h
->>>>>> b/include/linux/remoteproc/pruss.h
->>>>>> index 93a98cac7829..33f930e0a0ce 100644
->>>>>> --- a/include/linux/remoteproc/pruss.h
->>>>>> +++ b/include/linux/remoteproc/pruss.h
->>>>>> @@ -44,6 +44,28 @@ enum pru_ctable_idx {
->>>>>>       PRU_C31,
->>>>>>   };
->>>>>>   +/*
->>>>>> + * enum pruss_mem - PRUSS memory range identifiers
->>>>>> + */
->>>>>> +enum pruss_mem {
->>>>>> +    PRUSS_MEM_DRAM0 = 0,
->>>>>> +    PRUSS_MEM_DRAM1,
->>>>>> +    PRUSS_MEM_SHRD_RAM2,
->>>>>> +    PRUSS_MEM_MAX,
->>>>>> +};
->>>>>> +
->>>>>> +/**
->>>>>> + * struct pruss_mem_region - PRUSS memory region structure
->>>>>> + * @va: kernel virtual address of the PRUSS memory region
->>>>>> + * @pa: physical (bus) address of the PRUSS memory region
->>>>>> + * @size: size of the PRUSS memory region
->>>>>> + */
->>>>>> +struct pruss_mem_region {
->>>>>> +    void __iomem *va;
->>>>>> +    phys_addr_t pa;
->>>>>> +    size_t size;
->>>>>> +};
->>>>>> +
->>>>>>   struct device_node;
->>>>>>   struct rproc;
->>>>>>   struct pruss;
->>>>>> @@ -52,6 +74,10 @@ struct pruss;
->>>>>>     struct pruss *pruss_get(struct rproc *rproc);
->>>>>>   void pruss_put(struct pruss *pruss);
->>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->>>>>> +                 struct pruss_mem_region *region);
->>>>>> +int pruss_release_mem_region(struct pruss *pruss,
->>>>>> +                 struct pruss_mem_region *region);
->>>>>>     #else
->>>>>>   @@ -62,6 +88,19 @@ static inline struct pruss *pruss_get(struct rproc
->>>>>> *rproc)
->>>>>>     static inline void pruss_put(struct pruss *pruss) { }
->>>>>>   +static inline int pruss_request_mem_region(struct pruss *pruss,
->>>>>> +                       enum pruss_mem mem_id,
->>>>>> +                       struct pruss_mem_region *region)
->>>>>> +{
->>>>>> +    return -EOPNOTSUPP;
->>>>>> +}
->>>>>> +
->>>>>> +static inline int pruss_release_mem_region(struct pruss *pruss,
->>>>>> +                       struct pruss_mem_region *region)
->>>>>> +{
->>>>>> +    return -EOPNOTSUPP;
->>>>>> +}
->>>>>> +
->>>>>>   #endif /* CONFIG_TI_PRUSS */
->>>>>>     #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->>>>>
->>>>> cheers,
->>>>> -roger
->>>>
->>
-> 
-> cheers,
-> -roger
+blend() - Blend pixels from a given row and calculate crc
 
--- 
-Thanks and Regards,
-Danish.
+Thanks,
+
+Melissa
+
+>=20
+> > Reviewed-by: Melissa Wen <mwen@igalia.com>
+> >=20
+> >> + * @wb: The writeback frame buffer metadata
+> >>   * @crtc_state: The crtc state
+> >>   * @crc32: The crc output of the final frame
+> >>   * @output_buffer: A buffer of a row that will receive the result of =
+the blend(s)
+> >>   * @stage_buffer: The line with the pixels from plane being blend to =
+the output
+> >> + * @row_size: Size of memory taken up by row data (line_width * pixel=
+_size)
+> >>   *
+> >>   * This function blends the pixels (Using the `pre_mul_alpha_blend`)
+> >>   * from all planes, calculates the crc32 of the output from the forme=
+r step,
+> >> --=20
+> >> 2.40.0.rc1.284.g88254d51c5-goog
+> >>
+>=20
+> --=20
+> ~Randy
+
+--hvarfbsob5fb6dvn--
+
+--mszaorulbvh6kbof
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmQZfccACgkQwqF3j0dL
+ehwgAw//T17cNrIVrWzZVC1UtoRoMvZTisxv51xOE0428x7H937p4RnfQE/kBRsb
+auqimM45XwAdY5n2YU4hVhxfFy48neld07VGjD5UoJVMzJl7sN2/cPXljOGe85OI
+202/YDOFJ7r7PmX2CdxdInXG/Q/pwXTsptHRgVhQft0aHFFH7N794UfkYFbdNaQC
+VB0EMCo3FrBjIVyFh1Vf+MA3r7OPVWDkpBNv7jtiem47VPLxY0onY/UbkRziCuiS
+sI1Byh9doxRA9NrwLwOnwy3W2poa21nTqZmuGCZsecAJ1l+hr/06hJ6dSw9dfcV9
+JHTRMeS29rJvxQ9arkfho5lbmy9aRBOwmMSMvAAZDSYJzJwbycPcWbG0J4AZP8Rc
+H1y9vkV5lVNaFSajr+mCoTENPva3snTBKyUCdGHa5k7hk/24pYudTrMmKk/ac1Aa
+T5Sty2+snLmKq3IuXT8LPxvKpEXNXOgwCSh4KabnkV3Uf+Tk1Wj9I+qzwoKgbJkh
+1DnoMAp9dWj783CsFKrXvsPbRgKEwpgLi6rQZ8ZbUeqgUxmMmSVB1gy6wmFpOP/S
+i8lidJta87Ui1iUXl9qF3/vcImxuYt3JsM5mrJW5C379X7sAyUVQJhxguxlZXGan
+jbF3/k9H2rePneOgckRZs1oFLwzp8InjZe6cR3OrjXH6SPcVUxc=
+=86St
+-----END PGP SIGNATURE-----
+
+--mszaorulbvh6kbof--
