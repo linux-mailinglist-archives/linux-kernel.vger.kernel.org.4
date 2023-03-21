@@ -2,260 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF3B6C3066
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CDB6C306A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjCUL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S229854AbjCUL3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjCUL2F (ORCPT
+        with ESMTP id S229592AbjCUL3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:28:05 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29274988F;
-        Tue, 21 Mar 2023 04:28:01 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id n20so4132859pfa.3;
-        Tue, 21 Mar 2023 04:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679398081;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AEkTSNyaJiPfFB7l+xqH5i9KcB2YkyXJblJOotBkVwE=;
-        b=SP7T16fA/gl803oergmlEBNZQTq2BZyMyzrrjXBGyB8yU/HqBRFpMZV0w/bWIwNwCw
-         JIgpQXV14afiCkJ1+B+szcCNlnAd9lSOU0iuQ/2jYoB45lTPavwexck+5PjyeAOywK5m
-         QF3HmTEq5PggSNBCN7iSoZ+JeO1OFqLOo2yhje9RBlBqYtoI6xc0H32FQkLdAN/qZdYP
-         kp0kbh9zQRW50zSGFj/zLvkNn5rhcaSWNLTfg4dbIaW/skWErLKNEdmivOVZE9h5bZRS
-         iacU7QBSqUQGXko3uTmwJgBQqRsbK6/bFXlZhxDli8NMl1ZTKTiJKMlOmjXTLqiOLv6v
-         b0mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679398081;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AEkTSNyaJiPfFB7l+xqH5i9KcB2YkyXJblJOotBkVwE=;
-        b=AjWtjOvCOtmy3jizfCxAmWJauuZXnx/P0p+lkLTiVTdjl04DsfEXawC1Ofy9PF98S8
-         i4OxNkr/aK2y/qztKpc+MPOJyfM141RvbVyxCJvOQyTGiW36OJf8WFg6WDQ2A7Kt9ZTQ
-         sgH0wLYKuJlNEND7BwC6FpiKbbj5PnPDv7TSDbdrq8zK70MlyyCSTYRqWmv2uZe507IQ
-         2Hd1BAQuJdE+2+kl2lJCL3zb7Jh3SO9ENIuz9YpJJxWEDaLygEBdRtD2fXvmwPq1M7VD
-         s2lR7WmnmzeacSPXCjQJ/p8JdvhJYskiNPYSQXLsj9fovEI8+N6IHRaEQU4FtubWDmYd
-         ciOA==
-X-Gm-Message-State: AO0yUKVWbFGEfvBeASBV3S/SGSICF8yD5V1rl0fnM4GIgnkZelTi/rnW
-        g9neWGk9FrHYans/3pTA2fQ=
-X-Google-Smtp-Source: AK7set/1YivuKg+wX8KbsGU9JdXAbUAx3D+iQ/vZSSEffQcUZDyOQqvaWQYgW+y+srnTi3hxLiU7kA==
-X-Received: by 2002:a62:7904:0:b0:626:237c:bcfe with SMTP id u4-20020a627904000000b00626237cbcfemr2275307pfc.8.1679398080732;
-        Tue, 21 Mar 2023 04:28:00 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id c26-20020aa781da000000b0062578514d6fsm8037415pfn.58.2023.03.21.04.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 04:28:00 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Add Intel PMU supported fixed counters bit mask
-Date:   Tue, 21 Mar 2023 19:27:42 +0800
-Message-Id: <20230321112742.25255-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 21 Mar 2023 07:29:40 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2BC30DD;
+        Tue, 21 Mar 2023 04:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oap6q/AKU/Nc85sAkWOr7bFdsfJR4UbCwf+1zdilgRk=; b=cOHlEbBF3+ess4lXDJfK8ftydZ
+        39HCBk3XatFET00yeA/AMIUDN+J3uZQz7afNKQW6y2RzZ66ZNDId/EqIDNvbewVbUotTn6U/DANPU
+        H+8hH8qwwTlquFkTp2qHLbb5VNAf5i3jV4v+Hj7iLAnJCf/atvpFKlSJCW1RztmM3wrwNtPYD3mof
+        82nevGjvgJIrm7W5UBpmxfIsNxsYHbTg/TQYFpak+D84wGReSoLG0gRO59Q+eADhTzh36AxXL+sUX
+        bHeQxYgNn3DQ0W94LpIB/HznYy7KDkV5mDDZEe3PMzGW7QH5qvTN8NmcfasEmp3dGZOc/U20Az+mg
+        VsItqCyA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55716)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1peaBH-0000zs-K9; Tue, 21 Mar 2023 11:29:31 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1peaBG-0007gs-A6; Tue, 21 Mar 2023 11:29:30 +0000
+Date:   Tue, 21 Mar 2023 11:29:30 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
+ for SGMII mode
+Message-ID: <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
+References: <20230321111958.2800005-1-s-vadapalli@ti.com>
+ <20230321111958.2800005-3-s-vadapalli@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321111958.2800005-3-s-vadapalli@ti.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
+> Add support for configuring the CPSW Ethernet Switch in SGMII mode.
+> 
+> Depending on the SoC, allow selecting SGMII mode as a supported interface,
+> based on the compatible used.
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> index cba8db14e160..d2ca1f2035f4 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -76,6 +76,7 @@
+>  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
+>  
+>  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
+> +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
+>  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
 
-Per Intel SDM, fixed-function performance counter 'i' is supported if:
+Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG come
+after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting that
+from its register offset definition?
 
-	FxCtr[i]_is_supported := ECX[i] || (EDX[4:0] > i);
+If the advertisement register is at 0x18, and the lower 16 bits is the
+advertisement, are the link partner advertisement found in the upper
+16 bits?
 
-which means that the KVM user space can use EDX to limit the number of
-fixed counters and at the same time, using ECX to enable part of other
-KVM supported fixed counters.
+>  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
+> @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
+>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>  	struct am65_cpsw_common *common = port->common;
+>  
+> -	if (common->pdata.extra_modes & BIT(state->interface))
+> +	if (common->pdata.extra_modes & BIT(state->interface)) {
+> +		if (state->interface == PHY_INTERFACE_MODE_SGMII)
+> +			writel(ADVERTISE_SGMII,
+> +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+> +
 
-Add a bitmap (instead of always checking the vcpu's CPUIDs) to keep track
-of the guest available fixed counters and perform the semantic checks.
+I think we can do better with this, by implementing proper PCS support.
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/include/asm/kvm_host.h |  2 ++
- arch/x86/kvm/pmu.h              |  8 +++++
- arch/x86/kvm/vmx/pmu_intel.c    | 53 +++++++++++++++++++++------------
- 3 files changed, 44 insertions(+), 19 deletions(-)
+It seems manufacturers tend to use bought-in IP for this, so have a
+look at drivers/net/pcs/ to see whether any of those (or the one in
+the Mediatek patch set on netdev that has recently been applied) will
+idrive your hardware.
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index a45de1118a42..14689e583127 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -565,6 +565,8 @@ struct kvm_pmu {
- 	 */
- 	bool need_cleanup;
- 
-+	DECLARE_BITMAP(supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
-+
- 	/*
- 	 * The total number of programmed perf_events and it helps to avoid
- 	 * redundant check before cleanup if guest don't use vPMU at all.
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index be62c16f2265..9f4504e5e9d5 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -111,6 +111,11 @@ static inline struct kvm_pmc *get_gp_pmc(struct kvm_pmu *pmu, u32 msr,
- 	return NULL;
- }
- 
-+static inline bool fixed_ctr_is_supported(struct kvm_pmu *pmu, unsigned int idx)
-+{
-+	return test_bit(idx, pmu->supported_fixed_pmc_idx);
-+}
-+
- /* returns fixed PMC with the specified MSR */
- static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
- {
-@@ -120,6 +125,9 @@ static inline struct kvm_pmc *get_fixed_pmc(struct kvm_pmu *pmu, u32 msr)
- 		u32 index = array_index_nospec(msr - base,
- 					       pmu->nr_arch_fixed_counters);
- 
-+		if (!fixed_ctr_is_supported(pmu, index))
-+			return NULL;
-+
- 		return &pmu->fixed_counters[index];
- 	}
- 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index e8a3be0b9df9..12f4b2fe7756 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -43,13 +43,16 @@ static int fixed_pmc_events[] = {1, 0, 7};
- static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
- {
- 	struct kvm_pmc *pmc;
--	u8 old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
-+	u8 new_ctrl, old_ctrl, old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
- 	int i;
- 
- 	pmu->fixed_ctr_ctrl = data;
- 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
--		u8 new_ctrl = fixed_ctrl_field(data, i);
--		u8 old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
-+		if (!fixed_ctr_is_supported(pmu, i))
-+			continue;
-+
-+		new_ctrl = fixed_ctrl_field(data, i);
-+		old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
- 
- 		if (old_ctrl == new_ctrl)
- 			continue;
-@@ -125,6 +128,9 @@ static bool intel_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
- 
- 	idx &= ~(3u << 30);
- 
-+	if (fixed && !fixed_ctr_is_supported(pmu, idx))
-+		return false;
-+
- 	return fixed ? idx < pmu->nr_arch_fixed_counters
- 		     : idx < pmu->nr_arch_gp_counters;
- }
-@@ -145,7 +151,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
- 		counters = pmu->gp_counters;
- 		num_counters = pmu->nr_arch_gp_counters;
- 	}
--	if (idx >= num_counters)
-+	if (idx >= num_counters || (fixed && !fixed_ctr_is_supported(pmu, idx)))
- 		return NULL;
- 	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
- 	return &counters[array_index_nospec(idx, num_counters)];
-@@ -500,6 +506,9 @@ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
- 	int i;
- 
- 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
-+		if (!fixed_ctr_is_supported(pmu, i))
-+			continue;
-+
- 		pmc = &pmu->fixed_counters[i];
- 		event = fixed_pmc_events[array_index_nospec(i, size)];
- 		pmc->eventsel = (intel_arch_events[event].unit_mask << 8) |
-@@ -520,6 +529,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 
- 	pmu->nr_arch_gp_counters = 0;
- 	pmu->nr_arch_fixed_counters = 0;
-+	bitmap_zero(pmu->supported_fixed_pmc_idx, KVM_PMC_MAX_FIXED);
- 	pmu->counter_bitmask[KVM_PMC_GP] = 0;
- 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
- 	pmu->version = 0;
-@@ -551,13 +561,24 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	pmu->available_event_types = ~entry->ebx &
- 					((1ull << eax.split.mask_length) - 1);
- 
--	if (pmu->version == 1) {
--		pmu->nr_arch_fixed_counters = 0;
--	} else {
-+	counter_mask = ~(BIT_ULL(pmu->nr_arch_gp_counters) - 1);
-+	bitmap_set(pmu->all_valid_pmc_idx, 0, pmu->nr_arch_gp_counters);
-+
-+	if (pmu->version > 1) {
- 		pmu->nr_arch_fixed_counters =
--			min3(ARRAY_SIZE(fixed_pmc_events),
--			     (size_t) edx.split.num_counters_fixed,
--			     (size_t)kvm_pmu_cap.num_counters_fixed);
-+			min_t(int, ARRAY_SIZE(fixed_pmc_events),
-+			      kvm_pmu_cap.num_counters_fixed);
-+		for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
-+			/* FxCtr[i]_is_supported := CPUID.0xA.ECX[i] || (EDX[4:0] > i) */
-+			if (!(entry->ecx & BIT_ULL(i) ||
-+			      edx.split.num_counters_fixed > i))
-+				continue;
-+
-+			set_bit(i, pmu->supported_fixed_pmc_idx);
-+			set_bit(INTEL_PMC_MAX_GENERIC + i, pmu->all_valid_pmc_idx);
-+			pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
-+			counter_mask &= ~BIT_ULL(INTEL_PMC_MAX_GENERIC + i);
-+		}
- 		edx.split.bit_width_fixed = min_t(int, edx.split.bit_width_fixed,
- 						  kvm_pmu_cap.bit_width_fixed);
- 		pmu->counter_bitmask[KVM_PMC_FIXED] =
-@@ -565,10 +586,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 		setup_fixed_pmc_eventsel(pmu);
- 	}
- 
--	for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
--		pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
--	counter_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
--		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
- 	pmu->global_ctrl_mask = counter_mask;
- 	pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
- 			& ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
-@@ -585,11 +602,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 		pmu->raw_event_mask |= (HSW_IN_TX|HSW_IN_TX_CHECKPOINTED);
- 	}
- 
--	bitmap_set(pmu->all_valid_pmc_idx,
--		0, pmu->nr_arch_gp_counters);
--	bitmap_set(pmu->all_valid_pmc_idx,
--		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
--
- 	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
- 	if (cpuid_model_is_consistent(vcpu) &&
- 	    (perf_capabilities & PMU_CAP_LBR_FMT))
-@@ -605,6 +617,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 			pmu->pebs_enable_mask = counter_mask;
- 			pmu->reserved_bits &= ~ICL_EVENTSEL_ADAPTIVE;
- 			for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
-+				if (!fixed_ctr_is_supported(pmu, i))
-+					continue;
-+
- 				pmu->fixed_ctr_ctrl_mask &=
- 					~(1ULL << (INTEL_PMC_IDX_FIXED + i * 4));
- 			}
+However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
+I suspect you won't find a compatible implementation.
 
-base-commit: d8708b80fa0e6e21bc0c9e7276ad0bccef73b6e7
+Thanks.
+
 -- 
-2.40.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
