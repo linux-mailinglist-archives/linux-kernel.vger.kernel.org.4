@@ -2,150 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42346C2C76
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617D26C2C0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCUIci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S231193AbjCUIM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjCUIcQ (ORCPT
+        with ESMTP id S230302AbjCUIM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:32:16 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAD1460A7;
-        Tue, 21 Mar 2023 01:31:32 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id 052262B0769F;
-        Tue, 21 Mar 2023 04:12:03 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 21 Mar 2023 04:12:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1679386323; x=1679393523; bh=p6c5VTiMv6AfZVBMNz3DxVLxCSIdNaJFVMc
-        Qk71zPTY=; b=uVCWvJx6nGWx/5u3VSJfVJjj/h5Ng2P2Yhqie0BJHMjvjzYTE1H
-        S3000Ce0+mrEAYEo+fTrrkOwrGIyGM/RtSIJpIl+AMe3IaZe/M9yfHnG9yQfEsGB
-        osDTshQUiWc3Ls9qw2Zw7uWeyKKv9pZtQgUyAYyK61kK6H6zm7ZRw1iyIFDATAh6
-        bngnkf2pqjCtTHy18W2iC0jMSPclRhXy7pawiFxq3uFJa37/Dw0UOVfoCTYIxNid
-        kVhGUwaRgeQY4B8o9mWH+SDBN77zX5XpwykUHuqV16i9fCmBftgO42riFzH6w1Ei
-        GyD4hF/a4GlUL9X/bR9I68HXVhkZhUlJJ3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679386323; x=
-        1679393523; bh=p6c5VTiMv6AfZVBMNz3DxVLxCSIdNaJFVMcQk71zPTY=; b=s
-        1KchFhGt52dzXyN5O79HxuLj6FqmtaoRirc8tC8IgABafDJR6lWnVdeusmW3YgwN
-        FJAf+yx/n1aoiR0A753RChyEfaoIpIQzkZeE9GElnDfGMGVe4oIkqtFw9qR7h1WP
-        zxqQpmzCduK4QJMEm9wue/7sWeCfuf6P6YHLtFguSITKE6rIm8h05WV74PgknMBG
-        2bAxDrbC+Le26NytxoV2l9iQeICkXFr8qbpiOdPcrl+yCtPjEeppm+ecm6oJOczI
-        x/6d20UEibueIHsAvJp1EBg4CLfe3Tl1BSAVsdcOQAbqRbpMjYLiXHNTVklS4axM
-        ckago2w0Vsl5TtYiY3MpQ==
-X-ME-Sender: <xms:0GYZZJjZT4P_yV-Mx_Quzl7wy0YQtEhKnVKu2qt6FAe5g0Nu5umXIw>
-    <xme:0GYZZOBRlFaFGXG_FQkcgQEutyw7RZhEAYkiTJLcbFTaKAx0oZHJTkyPwuMSM-9_n
-    _kFQQURc5ACQt9CvsA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffkedtffejkeeihedtffevtedvhfdvhfehfffgleekgffgveeftdefgeek
-    vedvjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:0GYZZJF0ltCZr-3PUVxWiK0aO1a98gJRJ1RIE6_3xBjMQmp3OqMi_Q>
-    <xmx:0GYZZORTWXWGlKctJD6dpm53uhz2MzndLAhOFP-b7JCl5028QMmYHA>
-    <xmx:0GYZZGxU24J2mJwqKURxfuq2oxh3zplPa2ump9UmR_oOSDgOlsWU1w>
-    <xmx:02YZZGNbMwV1BEbfQ41yDSjvKrVTgq4nxJ1za-0qfoPrs4jKp0pJRPjrGNk>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B3F8BB60086; Tue, 21 Mar 2023 04:12:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <86431868-488b-4a72-944b-231b6d0382b0@app.fastmail.com>
-In-Reply-To: <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
-Date:   Tue, 21 Mar 2023 09:11:36 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Joe Tessler" <jrt@google.com>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Kevin Hilman" <khilman@baylibre.com>,
-        "Jerome Brunet" <jbrunet@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Michael Tretter" <m.tretter@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Jacopo Mondi" <jacopo+renesas@jmondi.org>,
-        "Kieran Bingham" <kieran.bingham+renesas@ideasonboard.com>,
-        "Laurent Pinchart" <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        "Rui Miguel Silva" <rmfrfs@gmail.com>,
-        "Wenyou Yang" <wenyou.yang@microchip.com>,
-        "Bin Liu" <bin.liu@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "Minghsiu Tsai" <minghsiu.tsai@mediatek.com>,
-        "Houlong Wei" <houlong.wei@mediatek.com>,
-        "Andrew-CT Chen" <andrew-ct.chen@mediatek.com>,
-        "Andrzej Pietrasiewicz" <andrzejtp2010@gmail.com>,
-        "Jacek Anaszewski" <jacek.anaszewski@gmail.com>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        "Patrice Chotard" <patrice.chotard@foss.st.com>,
-        "Yong Deng" <yong.deng@magewell.com>,
-        "Paul Kocialkowski" <paul.kocialkowski@bootlin.com>,
-        "Chen-Yu Tsai" <wens@csie.org>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Sean Young" <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: Re: [PATCH 20/28] media: platform: jpeg: always reference OF data
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 04:12:29 -0400
+Received: from mail-m312.qiye.163.com (mail-m312.qiye.163.com [103.74.31.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A77B447;
+        Tue, 21 Mar 2023 01:12:17 -0700 (PDT)
+Received: from ucloud.cn (unknown [127.0.0.1])
+        by mail-m312.qiye.163.com (Hmail) with ESMTP id EF75180411;
+        Tue, 21 Mar 2023 16:11:39 +0800 (CST)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+Message-ID: <AP2AlAA-I3id1jhRl3Q*8qr3.1.1679386299965.Hmail.mocan@ucloud.cn>
+To:     faicker.mo@ucloud.cn
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSF0gbmV0L25ldF9mYWlsb3ZlcjogZml4IHF1ZXVlIGV4Y2VlZGluZyB3YXJuaW5n?=
+X-Priority: 3
+X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2015-163.com
+X-Originating-IP: 106.75.220.2
+MIME-Version: 1.0
+Received: from mocan@ucloud.cn( [106.75.220.2) ] by ajax-webmail ( [127.0.0.1] ) ; Tue, 21 Mar 2023 16:11:39 +0800 (GMT+08:00)
+From:   Faicker Mo <faicker.mo@ucloud.cn>
+Date:   Tue, 21 Mar 2023 16:11:39 +0800 (GMT+08:00)
+X-HM-NTES-SC: AL0_4z5B86Wr4Tz9jdMF+bhXMTnwvDqncMttaLoBi+EWdvVxqV7pHkTF0SPzZ8K4ssdJ85775Ka8PD56oQ1G/bqUvijlUj73D7BymlWQPFDLwFvrIsD09fhvVADqy0Ek9bxVVM3np1ZQCa0BHsaLw7LmODcpcOYxkK6s+HtA0lyXJ/8=
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJQjdXWS1ZQUlXWQ8JGhUIEh9ZQVkZSh9KVk1CTk1NQ00dSk5CGlUZERMWGhIXJBQOD1
+        lXWRgSC1lBWUpLTVVMTlVJSUtVSVlXWRYaDxIVHRRZQVlPS0hVSkpLSEpDVUpLS1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzorSToXOjpWMkgSH0oREykXSCpR
+        QwoJSFVKVUpNTEJIQ01IS0tIT0tVMxYaEhdVHRoSGBAeCVUWFDsOGBcUDh9VGBVFWVdZEgtZQVlK
+        S01VTE5VSUlLVUlZV1kIAVlBT0NPTzcG
+X-HM-Tid: 0a870337991100d2kurm186c12516a5
+X-HM-MType: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023, at 14:13, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be alwa=
-ys
-> used and the of_match_ptr does not have any sense (this also allows AC=
-PI
-> matching via PRP0001, even though it might not be relevant here).  This
-> also fixes !CONFIG_OF error:
->
->   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1890:38: error:=20
-> =E2=80=98mtk8195_jpegdec_drvdata=E2=80=99 defined but not used=20
-> [-Werror=3Dunused-const-variable=3D]
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-I see now that we both submitted the same patch, but now Hans
-merged a worse fix [1] without a changelog text.
-
-    Arnd
-
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/comm=
-it/?h=3D4ae47770d57bff01
+V2hlbiB0eCBmcm9tIHRoZSBuZXRfZmFpbG92ZXIgZGV2aWNlLCB0aGUgYWN0dWFsIHR4IHF1ZXVl
+IG51bWJlciBpcyB0aGUgc2FsdmUgZGV2aWNlLgpUaGUgbmRvX3NlbGVjdF9xdWV1ZSBvZiBuZXRf
+ZmFpbG92ZXIgZGV2aWNlIHJldHVybnMgdGhlIHR4cSB3aGljaCBpcyB0aGUgcHJpbWFyeSBkZXZp
+Y2UgdHhxCmlmIHRoZSBwcmltYXJ5IGRldmljZSBpcyBPSy4KVGhpcyBudW1iZXIgbWF5IGJlIGJp
+Z2dlciB0aGFuIHRoZSBkZWZhdWx0IDE2IG9mIHRoZSBuZXRfZmFpbG92ZXIgZGV2aWNlLgrCoEEg
+d2FybmluZyB3aWxsIGJlIHJlcG9ydGVkIGluIG5ldGRldl9jYXBfdHhxdWV1ZSB3aGljaCBkZXZp
+Y2UgaXMgdGhlIG5ldF9mYWlsb3Zlci4KCkZyb206IFBhdmFuIENoZWJiaSA8cGF2YW4uY2hlYmJp
+QGJyb2FkY29tLmNvbT4KIERhdGU6IDIwMjMtMDMtMjEgMTM6MTE6NTIKVG86RmFpY2tlciBNbyA8
+ZmFpY2tlci5tb0B1Y2xvdWQuY24+CiBjYzogU3JpZGhhciBTYW11ZHJhbGEgPHNyaWRoYXIuc2Ft
+dWRyYWxhQGludGVsLmNvbT4sIkRhdmlkIFMuIE1pbGxlciIgPGRhdmVtQGRhdmVtbG9mdC5uZXQ+
+LEVyaWMgRHVtYXpldCA8ZWR1bWF6ZXRAZ29vZ2xlLmNvbT4sSmFrdWIgS2ljaW5za2kgPGt1YmFA
+a2VybmVsLm9yZz4sUGFvbG8gQWJlbmkgPHBhYmVuaUByZWRoYXQuY29tPixuZXRkZXZAdmdlci5r
+ZXJuZWwub3JnLGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcKU3ViamVjdDogUmU6IFtQQVRD
+SF0gbmV0L25ldF9mYWlsb3ZlcjogZml4IHF1ZXVlIGV4Y2VlZGluZyB3YXJuaW5nPk9uIFR1ZSwg
+TWFyIDIxLCAyMDIzIGF0IDg6MTXigK9BTSBGYWlja2VyIE1vIDxmYWlja2VyLm1vQHVjbG91ZC5j
+bj4gd3JvdGU6Cj4+Cj4+IElmIHRoZSBwcmltYXJ5IGRldmljZSBxdWV1ZSBudW1iZXIgaXMgYmln
+Z2VyIHRoYW4gdGhlIGRlZmF1bHQgMTYsCj4+IHRoZXJlIGlzIGEgd2FybmluZyBhYm91dCB0aGUg
+cXVldWUgZXhjZWVkaW5nIHdoZW4gdHggZnJvbSB0aGUKPj4gbmV0X2ZhaWxvdmVyIGRldmljZS4K
+Pj4KPgo+Q2FuIHlvdSBkZXNjcmliZSB0aGUgaXNzdWUgbW9yZT8gSWYgdGhlIG5ldCBkZXZpY2Ug
+aGFzIG5vdCBpbXBsZW1lbnRlZAo+aXRzIG93biBzZWxlY3Rpb24gdGhlbiBuZXRkZXZfcGlja190
+eCBzaG91bGQgdGFrZSBjYXJlIG9mIHRoZQo+cmVhbF9udW1fdHhfcXVldWVzLgo+SXMgdGhhdCBu
+b3QgaGFwcGVuaW5nPwo+Cj4+IFNpZ25lZC1vZmYtYnk6IEZhaWNrZXIgTW8gPGZhaWNrZXIubW9A
+dWNsb3VkLmNuPgo+PiAtLS0KPj4gIGRyaXZlcnMvbmV0L25ldF9mYWlsb3Zlci5jIHwgOCArKy0t
+LS0tLQo+PiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkK
+Pj4KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L25ldF9mYWlsb3Zlci5jIGIvZHJpdmVycy9u
+ZXQvbmV0X2ZhaWxvdmVyLmMKPj4gaW5kZXggN2EyOGUwODI0MzZlLi5kMGM5MTZhNTNkN2MgMTAw
+NjQ0Cj4+IC0tLSBhL2RyaXZlcnMvbmV0L25ldF9mYWlsb3Zlci5jCj4+ICsrKyBiL2RyaXZlcnMv
+bmV0L25ldF9mYWlsb3Zlci5jCj4+IEBAIC0xMzAsMTQgKzEzMCwxMCBAQCBzdGF0aWMgdTE2IG5l
+dF9mYWlsb3Zlcl9zZWxlY3RfcXVldWUoc3RydWN0IG5ldF9kZXZpY2UgKmRldiwKPj4gICAgICAg
+ICAgICAgICAgICAgICAgICAgdHhxID0gb3BzLT5uZG9fc2VsZWN0X3F1ZXVlKHByaW1hcnlfZGV2
+LCBza2IsIHNiX2Rldik7Cj4+ICAgICAgICAgICAgICAgICBlbHNlCj4+ICAgICAgICAgICAgICAg
+ICAgICAgICAgIHR4cSA9IG5ldGRldl9waWNrX3R4KHByaW1hcnlfZGV2LCBza2IsIE5VTEwpOwo+
+PiAtCj4+IC0gICAgICAgICAgICAgICBxZGlzY19za2JfY2Ioc2tiKS0+c2xhdmVfZGV2X3F1ZXVl
+X21hcHBpbmcgPSBza2ItPnF1ZXVlX21hcHBpbmc7Cj4+IC0KPj4gLSAgICAgICAgICAgICAgIHJl
+dHVybiB0eHE7Cj4+ICsgICAgICAgfSBlbHNlIHsKPj4gKyAgICAgICAgICAgICAgIHR4cSA9IHNr
+Yl9yeF9xdWV1ZV9yZWNvcmRlZChza2IpID8gc2tiX2dldF9yeF9xdWV1ZShza2IpIDogMDsKPj4g
+ICAgICAgICB9Cj4+Cj4+IC0gICAgICAgdHhxID0gc2tiX3J4X3F1ZXVlX3JlY29yZGVkKHNrYikg
+PyBza2JfZ2V0X3J4X3F1ZXVlKHNrYikgOiAwOwo+PiAtCj4+ICAgICAgICAgLyogU2F2ZSB0aGUg
+b3JpZ2luYWwgdHhxIHRvIHJlc3RvcmUgYmVmb3JlIHBhc3NpbmcgdG8gdGhlIGRyaXZlciAqLwo+
+PiAgICAgICAgIHFkaXNjX3NrYl9jYihza2IpLT5zbGF2ZV9kZXZfcXVldWVfbWFwcGluZyA9IHNr
+Yi0+cXVldWVfbWFwcGluZzsKPj4KPj4gLS0KPj4gMi4zOS4xCj4+CgoKCg0KDQo=
