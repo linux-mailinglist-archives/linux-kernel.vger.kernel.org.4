@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91B46C2878
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 04:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABFC6C287A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 04:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjCUDE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 23:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S229813AbjCUDKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 23:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCUDE0 (ORCPT
+        with ESMTP id S229497AbjCUDKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 23:04:26 -0400
-Received: from out-4.mta0.migadu.com (out-4.mta0.migadu.com [IPv6:2001:41d0:1004:224b::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68846193EC
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 20:04:23 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679367859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2CzmygZ3+9dcEEzX9d9IRsXgfDbVX0/dCnDP3lROHyI=;
-        b=XRudqie4wY/koaYw9RjFAc1kxFGp3McOvtX0jtPKxU9wE3Z56T8ivT/dyQlovSiQok2a/t
-        ffkEdEdqj2iGLxgIdoh9GoaDkOGbnJyVVfB0OctS8xcS+ae5KP8QY5GSwgODj8y4RumCSl
-        lY9os2eKS3biWyHMuZKSfPRtUcFrL1Q=
+        Mon, 20 Mar 2023 23:10:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29F324CAC;
+        Mon, 20 Mar 2023 20:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2EA79B811CF;
+        Tue, 21 Mar 2023 03:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D932AC433EF;
+        Tue, 21 Mar 2023 03:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679368217;
+        bh=5II7b+BkVoa4QOA60BgChtOdWYA0PzzTAZsvlZtgtLw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GdrpCZCIC8A4OKRXMMTtaTDf3wHFP8iv4In0FTOpLiX8avN+ToWtsJxMLxhF87Y4V
+         QEB2xOeZQlenGJ97WqeaSvioVLljgnMI03y0Jj0ORJDER1mWLGMNpRpxSpPMNfjrT4
+         2TynwHJbpEX/AKMozC/d2kDAiZ1YNIdY+/ZlgfqEOOC0XJZmMpbV+pmTLk2P904jfp
+         szSo6CEJbTXmFifsO/JIQWFgtLJGrJRijiLcD7VWYgOC/ghZQWxm2BgZilmccD+DdA
+         66dsoFaIdyQRdjofw2vUSQVwi2ElUPRanYXfHs3SlmoNDXpRsCfgC1+w7o18YqXmx4
+         sIyTTr7F1e7Kg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC675E68D22;
+        Tue, 21 Mar 2023 03:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm: kfence: fix PG_slab and memcg_data clearing
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20230320142954.fd314c5e46c1d18887ccf8cc@linux-foundation.org>
-Date:   Tue, 21 Mar 2023 11:03:41 +0800
-Cc:     Muchun Song <songmuchun@bytedance.com>, glider@google.com,
-        elver@google.com, dvyukov@google.com, sjpark@amazon.de,
-        jannh@google.com, Roman Gushchin <roman.gushchin@linux.dev>,
-        kasan-dev@googlegroups.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <962CB717-DF8B-490A-86A0-2ACE90209012@linux.dev>
-References: <20230320030059.20189-1-songmuchun@bytedance.com>
- <20230320142954.fd314c5e46c1d18887ccf8cc@linux-foundation.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: cxgb3: remove unused fl_to_qset function
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167936821776.24814.6478937204704825271.git-patchwork-notify@kernel.org>
+Date:   Tue, 21 Mar 2023 03:10:17 +0000
+References: <20230319172433.1708161-1-trix@redhat.com>
+In-Reply-To: <20230319172433.1708161-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> On Mar 21, 2023, at 05:29, Andrew Morton <akpm@linux-foundation.org> =
-wrote:
->=20
-> On Mon, 20 Mar 2023 11:00:59 +0800 Muchun Song =
-<songmuchun@bytedance.com> wrote:
->=20
->> It does not reset PG_slab and memcg_data when KFENCE fails to =
-initialize
->> kfence pool at runtime. It is reporting a "Bad page state" message =
-when
->> kfence pool is freed to buddy. The checking of whether it is a =
-compound
->> head page seems unnecessary sicne we already guarantee this when =
-allocating
->> kfence pool, removing the check to simplify the code.
->>=20
->> Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
->> Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
->> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
->=20
-> I'm not sure how the -stable maintainers are to handle two Fixes: =
-tags.
-> Can we narrow it down to one please?  I assume 8f0b36497303 triggered
-> the bad_page() warning?
->=20
+On Sun, 19 Mar 2023 13:24:33 -0400 you wrote:
+> clang with W=1 reports
+> drivers/net/ethernet/chelsio/cxgb3/sge.c:169:32: error: unused function
+>   'fl_to_qset' [-Werror,-Wunused-function]
+> static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
+>                                ^
+> This function is not used, so remove it.
+> 
+> [...]
 
-Actually, 0ce20dd84089 triggered the PG_slab warning and 8f0b36497303
-triggered the "page still charged to cgroup" warning. This patch fixes
-both warnings. Moreover, 8f0b36497303 fixes 0ce20dd84089 as well. So I =
-think
-we can narrow it down to 0ce20dd84089.
+Here is the summary with links:
+  - net: cxgb3: remove unused fl_to_qset function
+    https://git.kernel.org/netdev/net-next/c/a08df15eab0c
 
-Thanks.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
