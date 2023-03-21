@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896E76C38DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9386C38F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjCUSEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S229922AbjCUSLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjCUSEb (ORCPT
+        with ESMTP id S229657AbjCUSLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:04:31 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECAE2A999;
-        Tue, 21 Mar 2023 11:04:21 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id l16so8673978ybe.6;
-        Tue, 21 Mar 2023 11:04:21 -0700 (PDT)
+        Tue, 21 Mar 2023 14:11:17 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4964D42C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:11:15 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id e21so3857930ljn.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:11:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679421861;
+        d=linux-foundation.org; s=google; t=1679422273;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sBdvXh/c3I/U5M/2ybbvcKctKEFyFqgkWliPpnVIxQk=;
-        b=SipYV3YA0zrzvmEAe30qwziS5hscxDJcXBtvyGPKiDeS/a5/78Y7ULbxZFIuUEPGOX
-         o7P1hkar9PNEHRl5tBd9K+osE590hpor8PAiD7JrbmkJE9n1mWxdIwI+Wwd8VN3DF5Vp
-         WAGj21Yr2UbQbY8WMWxHMbrPA8dc7tWU5QK6IBJ8lnIsqa4b+aIdNjot3/h9Igoe/KzE
-         ZEv9jkmTrVhgzLBw4Sop/BEf/FQBKiIGXJiNiJgsL/yWnculcNGigGaHFcTb0EdyGmBY
-         rUj/5gqadi4kmXFa+AseUOgBrta/UoyqMmo29rn8uePcc730y+0kwNDMYzlYC0P79Zri
-         9tBw==
+        bh=E7SLq5regHpbyQXTIDtK1SgaDzSaRkQ8eVCIyS1gzK4=;
+        b=Ir56PUvfE5P8xAmbSzdyQ++ini5dtdhU3y0B/4u/Muu1HkvECffUm7gSTsUeePAICQ
+         LxUqSnsOGQ6TvAX6S0GB0CeH2vc3eCgaTpooDzUkk00Wh17ZSWEWnwELKzKrBIarmA+7
+         CfgUQH/lsf3cTUzCT5RhBcmM+kD04M6qdwLX4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679421861;
+        d=1e100.net; s=20210112; t=1679422273;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sBdvXh/c3I/U5M/2ybbvcKctKEFyFqgkWliPpnVIxQk=;
-        b=cjaQzcf8DHUUQ50zfpMTEsImGEXz5GhHFE9wtaqrZ22aRc5I2rEa3TfWoOhJp2P227
-         qSH0eC2iZFxJpE0ybLjy7+ev7iG2Be4wE1K9QPw2l0ZmSE75GtUh0ChR/dAyFg5PStjA
-         NRaehLM5XYmr6VeH8AvFoudA49ynev28neqHucZoaucst3cmQW6+4L9vO5yJrPVr1D2G
-         AdhYe+tPdoOTOe/nEJTuuN0PZLhpI7JVJ/yK6hIqQ1ZSazRwmUpdEqbVsCXtdnYwY4xG
-         z1olXUsc1Je4kS8wtzGsQ159vU848OFGMJdC7XtqdPyrHYVtqFhh6aUkFaxKAi0sJuyw
-         I/1A==
-X-Gm-Message-State: AAQBX9fkovDlsZY611WaLvd9W132xI68opCh7w6J8/nvuR3IZE4pfbRp
-        9EqFuwVnwuFWBqF7AvC9UGkVqE7011m0W+5Ynhc=
-X-Google-Smtp-Source: AKy350aqIu+5LqJWWDRZJb8jTAYnVYgUsIoJ1tMqb9Gfunl4Czz5IhEZHTP2GhG3bVR36wQJXrhdapaVcqBc+g7x62Q=
-X-Received: by 2002:a05:6902:1109:b0:b6d:fc53:c5c0 with SMTP id
- o9-20020a056902110900b00b6dfc53c5c0mr2338157ybu.1.1679421860715; Tue, 21 Mar
- 2023 11:04:20 -0700 (PDT)
+        bh=E7SLq5regHpbyQXTIDtK1SgaDzSaRkQ8eVCIyS1gzK4=;
+        b=Q3s3CIaeoNjHK50wKSNx87zeU7qV91DG0q6ip/0Ld+svgvP8YWYOwSU66+fN7IufQB
+         uAHgLqBYJwHR3Kq/rAff0tgFNAXcWrcq36FKk0YIqjaShShHQSztLUFBZgbpHvyrbDtL
+         8ZRTdgNcVgCZh/FJ9sBSEnEBtz3oUw6N20wm4BJLVsvRs7wAEKdhHt1/YlhMFftofbws
+         twCo3RHebWMCN5l91H3gHtrGmy1IQ7mRCaLki32G4SI3/GG4sQ5KLxS/lbI/hCXfr840
+         brzWq/3br9Goue5GcRqVQehCxf4ABFhO2v2gj49RFU75g8Pr26hnkNhr6djzgSfrVPRf
+         WOig==
+X-Gm-Message-State: AO0yUKXwmOASz8T8AK/KiaOMYfhGK8WGkOijxrm66NYB5oRvzgWaHdKT
+        3Z/Up3Ls81dR3J3qmBryDUYxNHXdHBSqko4wF6G9jg==
+X-Google-Smtp-Source: AK7set++rBqofAzNm9tMeIuOYMSliGCANQT/AB2qL6IJJAO4gYQ1nPCcG+VuCOmXklIJuYgIU7uCEQ==
+X-Received: by 2002:a2e:a16b:0:b0:295:9074:7c4c with SMTP id u11-20020a2ea16b000000b0029590747c4cmr1328411ljl.45.1679422273481;
+        Tue, 21 Mar 2023 11:11:13 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id t18-20020a2e9c52000000b002934b5d6a61sm2325544ljj.121.2023.03.21.11.11.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 11:11:13 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id t14so16442655ljd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:11:13 -0700 (PDT)
+X-Received: by 2002:a17:906:6d6:b0:933:f6e8:26d9 with SMTP id
+ v22-20020a17090606d600b00933f6e826d9mr1718588ejb.15.1679421883223; Tue, 21
+ Mar 2023 11:04:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230320182813.963508-1-noltari@gmail.com> <CAOiHx=nKVWfa1-_VAf3bz+6PPz0uWMHyEtoVVOysFf0srZorBA@mail.gmail.com>
-In-Reply-To: <CAOiHx=nKVWfa1-_VAf3bz+6PPz0uWMHyEtoVVOysFf0srZorBA@mail.gmail.com>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Tue, 21 Mar 2023 19:04:09 +0100
-Message-ID: <CAKR-sGdpck1GPMpqM3M-H6Bz_mp+xiV-o6ZuR6QZATNA_=Xa0A@mail.gmail.com>
-Subject: Re: [RFC PATCH] drivers: net: dsa: b53: mmap: add phy ops
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     f.fainelli@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230321122514.1743889-1-mark.rutland@arm.com> <20230321122514.1743889-2-mark.rutland@arm.com>
+In-Reply-To: <20230321122514.1743889-2-mark.rutland@arm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Mar 2023 11:04:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
+Message-ID: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
+        aou@eecs.berkeley.edu, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, davem@davemloft.net,
+        gor@linux.ibm.com, hca@linux.ibm.com, linux-arch@vger.kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robin.murphy@arm.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk, will@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,134 +81,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonas,
-
-El mar, 21 mar 2023 a las 11:36, Jonas Gorski
-(<jonas.gorski@gmail.com>) escribi=C3=B3:
+On Tue, Mar 21, 2023 at 5:25=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
 >
-> On Mon, 20 Mar 2023 at 19:28, =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@g=
-mail.com> wrote:
-> >
-> > Currently, B53 MMAP BCM63xx devices with an external switch hang when
-> > performing PHY read and write operations due to invalid registers acces=
-s.
-> > This adds support for PHY ops by using the internal bus from mdio-mux-b=
-cm6368
-> > when probed by device tree and also falls back to direct MDIO registers=
- if not.
-> >
-> > This is an alternative to:
-> > - https://patchwork.kernel.org/project/netdevbpf/cover/20230317113427.3=
-02162-1-noltari@gmail.com/
-> > - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.3=
-02162-2-noltari@gmail.com/
-> > - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.3=
-02162-3-noltari@gmail.com/
-> > - https://patchwork.kernel.org/project/netdevbpf/patch/20230317113427.3=
-02162-4-noltari@gmail.com/
-> > As discussed, it was an ABI break and not the correct way of fixing the=
- issue.
-> >
-> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> > ---
-> >  drivers/net/dsa/b53/b53_mmap.c    | 86 +++++++++++++++++++++++++++++++
-> >  include/linux/platform_data/b53.h |  1 +
-> >  2 files changed, 87 insertions(+)
-> >
-> > diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_m=
-map.c
-> > index 706df04b6cee..7deca1c557c5 100644
-> > --- a/drivers/net/dsa/b53/b53_mmap.c
-> > +++ b/drivers/net/dsa/b53/b53_mmap.c
-> > @@ -19,14 +19,25 @@
-> >  #include <linux/bits.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> > +#include <linux/of_mdio.h>
-> >  #include <linux/io.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/platform_data/b53.h>
-> >
-> >  #include "b53_priv.h"
-> >
-> > +#define REG_MDIOC              0xb0
-> > +#define  REG_MDIOC_EXT_MASK    BIT(16)
-> > +#define  REG_MDIOC_REG_SHIFT   20
-> > +#define  REG_MDIOC_PHYID_SHIFT 25
-> > +#define  REG_MDIOC_RD_MASK     BIT(30)
-> > +#define  REG_MDIOC_WR_MASK     BIT(31)
-> > +
-> > +#define REG_MDIOD              0xb4
-> > +
-> >  struct b53_mmap_priv {
-> >         void __iomem *regs;
-> > +       struct mii_bus *bus;
-> >  };
-> >
-> >  static int b53_mmap_read8(struct b53_device *dev, u8 page, u8 reg, u8 =
-*val)
-> > @@ -216,6 +227,69 @@ static int b53_mmap_write64(struct b53_device *dev=
-, u8 page, u8 reg,
-> >         return 0;
-> >  }
-> >
-> > +static inline void b53_mmap_mdio_read(struct b53_device *dev, int phy_=
-id,
-> > +                                     int loc, u16 *val)
-> > +{
-> > +       uint32_t reg;
-> > +
-> > +       b53_mmap_write32(dev, 0, REG_MDIOC, 0);
-> > +
-> > +       reg =3D REG_MDIOC_RD_MASK |
-> > +             (phy_id << REG_MDIOC_PHYID_SHIFT) |
-> > +             (loc << REG_MDIOC_REG_SHIFT);
-> > +
-> > +       b53_mmap_write32(dev, 0, REG_MDIOC, reg);
-> > +       udelay(50);
-> > +       b53_mmap_read16(dev, 0, REG_MDIOD, val);
-> > +}
-> > +
-> > +static inline int b53_mmap_mdio_write(struct b53_device *dev, int phy_=
-id,
-> > +                                     int loc, u16 val)
+> * arm64's copy_to_user() under-reports the number of bytes copied in
+>   some cases, e.g.
+
+So I think this is the ok case.
+
+> * arm's copy_to_user() under-reports the number of bytes copied in some
+>   cases, and both copy_to_user() and copy_from_user() don't guarantee
+>   that at least a single byte is copied when a partial copy is possible,
+
+Again, this is ok historically.
+
+> * i386's copy_from_user does not guarantee that at least a single byte
+>   is copied when a partial copit is possible, e.g.
 >
-> On nitpick here: AFACT, what you are actually getting there as phy_id
-> isn't the phy_id but the port_id, it just happens to be identical for
-> internal ports.
+>   | too few bytes consumed (offset=3D4093, size=3D8, ret=3D8)
+
+And here's the real example of "we've always done this optimization".
+The exact details have differed, but the i386 case is the really
+really traditional one: it does word-at-a-time copies, and does *not*
+try to fall back to byte-wise copies. Never has.
+
+> * riscv's copy_to_user() and copy_from_user() don't guarantee that at
+>   least a single byte is copied when a partial copy is possible, e.g.
 >
-> So in theory you would first need to convert this to the appropriate
-> phy_id (+ which bus) first, else you risk reading from the wrong
-> device (and/or bus).
+>   | too few bytes consumed (offset=3D4095, size=3D2, ret=3D2)
 
-I agree with you and your suggestion gave me an idea, what if
-phy_read/phy_write wasn't set in b53 dsa_switch_ops for mmap?
+Yup. This is all the same "we've never forced byte-at-a-time copies"
 
-So I implemented the following patch:
-https://gist.github.com/Noltari/cfecb29d6401d06b9cb5dd199607918b#file-net-d=
-sa-b53-mmap-disable-phy-read-write-patch
-
-And this is the result:
-https://gist.github.com/Noltari/cfecb29d6401d06b9cb5dd199607918b#file-net-d=
-sa-b53-mmap-disable-phy-read-write-log
-
-As you can see, bcm6368-mdio-mux is now used for every mii access as
-it should have been from the beginning...
-So I guess that the correct way of fixing the issue would be to
-disable phy read/write from b53 mmap. However, I don't know if the
-patch that I provided is correct, or if I should remove those from
-dsa_switch_ops in any other way (I'm open to suggestions).
-
+> * s390 passes all tests
 >
-> See how the phys_mii_mask is based on the indexes of the user ports,
-> not their actual phy_ids. [1] [2]
->
-> [1] https://elixir.bootlin.com/linux/latest/source/net/dsa/dsa.c#L660
-> [2] https://elixir.bootlin.com/linux/latest/source/include/net/dsa.h#L596
->
-> Regards
-> Jonas
+> * sparc's copy_from_user() over-reports the number of bbytes copied in
+>   some caes, e.g.
 
---
-Best regards,
-=C3=81lvaro
+So this case I think this is wrong, and an outright bug. That can
+cause people to think that uninitialized data is initialized, and leak
+sensitive information.
+
+> * x86_64 passes all tests
+
+I suspect your testing is flawed due to being too limited, and x86-64
+having multiple different copying routines.
+
+Yes, at some point we made everything be quite careful with
+"handle_tail" etc, but we end up still having things that fail early,
+and fail hard.
+
+At a minimum, at least unsafe_copy_to_user() will fault and not do the
+"fill to the very last byte" case. Of course, that doesn't return a
+partial length (it only has a "fail" case), but it's an example of
+this whole thing where we haven't really been byte-exact when doing
+copies.
+
+So again, I get the feeling that these rules may make sense from a
+validation standpoint, but I'm not 100% sure we should generally have
+to be this careful.
+
+                 Linus
