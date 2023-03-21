@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0236C28A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 04:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237C76C28AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 04:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjCUDiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 23:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S229612AbjCUDmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 23:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCUDiQ (ORCPT
+        with ESMTP id S229550AbjCUDmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 23:38:16 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AE67AB9;
-        Mon, 20 Mar 2023 20:38:14 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id h8so54639709ede.8;
-        Mon, 20 Mar 2023 20:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679369892;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d4reHO6m1QrpLcgDFWTCpHMyCc1+fqEZ3eH5LXVHOdU=;
-        b=He+Vpp6rzyqI5SGxD/bHXjf60Dgtj9rwsuwB2bcJ4AtceS9KDgbpLsF6H1jYPgxYuG
-         fj5SaN3Cd6uX+U2+a3xrNdOqt7U9jQoRvaFE5ZzE+tgBYn6MOLWfSUhHzi7GbplNuJRC
-         VxH1lXGWs0Ai7bl9nSUg9DqxfvhYHO5IUkPUofd/xmVVGd3EZFIG5WAHHWP0nJ1SPIpq
-         miEomaX2BFFyjEKltK+Mqab/ORjR5+leiHFQ6YrbVTN2uyvbSbYd1UGObUctxu6T8XSt
-         SO/pAReFppScBNXSGJF1uGFwOoXTlSBxVlZ8wtmkTFLLGF5NEfN4YvRKXDsugZBMMfYi
-         kKWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679369892;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d4reHO6m1QrpLcgDFWTCpHMyCc1+fqEZ3eH5LXVHOdU=;
-        b=pFwPJbf4+/ZxGa+2s3+ebDbZzETzXK+PD8keo5UoF7JoEfRefP13G+w6TyE9aDcyt7
-         NnHNERUF49Yy1hDkWD0/jUOcY5tVAvgF1nZEihCOicReTo4nhrI9koI4oDVKt8GniI9Q
-         zUnaBLii4hVa3oIUqfUQVJBSVj5AxbvZQkeZcFuziVB0QrjT4CY+0Pabb0snmKQHurHL
-         aePFhaB6/ln8smkfavAnVfV4p+XTlFbkSGk/PY0WSkgkVGjRXah+eZKIU3jfO66K9Vcr
-         E/tFCY43VuWx5HmVfX2ySB9mk7/QahRkfPtcOn+7hcjaWSVi26P3MjkwFyd6u+Dbu0Jf
-         TG/A==
-X-Gm-Message-State: AO0yUKUxEBjhpFs5kD/iplmEgh8YSEQtWZ24GgKC9D3cJ6trKzPJiMJQ
-        1B/kmlU91Qu5cXClIUAOcluGlBwCpHWZUg==
-X-Google-Smtp-Source: AK7set9i+KRlF5m1WFQ8OYQm5OEPDMoPwdjE/UJygioKJjSR3dYouu5FbnrEbcgt/Qd5COHT4kqmIw==
-X-Received: by 2002:a17:907:1def:b0:8b2:d30:e722 with SMTP id og47-20020a1709071def00b008b20d30e722mr1268754ejc.3.1679369892532;
-        Mon, 20 Mar 2023 20:38:12 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:6c2c:25d2:96b3:40e6])
-        by smtp.gmail.com with ESMTPSA id g25-20020a50d0d9000000b00501c2a9e16dsm2671755edf.74.2023.03.20.20.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 20:38:12 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] ARM: mstar: remove unused config MACH_MERCURY
-Date:   Tue, 21 Mar 2023 04:38:10 +0100
-Message-Id: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 23:42:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8102932E56;
+        Mon, 20 Mar 2023 20:41:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA38EB81235;
+        Tue, 21 Mar 2023 03:41:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17888C433EF;
+        Tue, 21 Mar 2023 03:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679370116;
+        bh=Jk2T8KzAk6AYQ1kjo+O7hUQbaKhmKLsFTuvlYvwxK/A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oLf3l/0yU8YpuM7jfKUSyIKeoRoUdovOG9TYbeB30Wm8DCFIhnaL6MV24hkWZyeUi
+         6zntvyKAunOQIffo2oeilPDVtH4aJAV0jofS/FBZkNcRE+rIbye/YZnJ1A3rnj/G9N
+         rIvBgzbrwLPBn3WT5EBKLRtM/fCUT4srAorE1TX+XroTG2dxAn3sjDnSNVzrDn63Z5
+         4U0YEr+xP21vy0nzcmFci9MHCHCEsBP903MTQ5c275B9i8ZSY9Kn6uHYE4A5RvCkBX
+         CL+b8t1GpWaKooO9pIVDpcC21GnX3+ZTBEVLVQcqcQUApDiAeDVzcATDiDvffwRsiR
+         wQjxtHPocjnNg==
+Date:   Mon, 20 Mar 2023 20:41:53 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, bhupesh.sharma@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
+Subject: Re: [PATCH net-next v2 09/12] net: stmmac: Add EMAC3 variant of
+ dwmac4
+Message-ID: <20230320204153.21736840@kernel.org>
+In-Reply-To: <20230320221617.236323-10-ahalaney@redhat.com>
+References: <20230320221617.236323-1-ahalaney@redhat.com>
+        <20230320221617.236323-10-ahalaney@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 312b62b6610c ("ARM: mstar: Add machine for MStar/Sigmastar Armv7
-SoCs") adds the config MACH_INFINITY and MACH_MERCURY. The MACH_INFINITY
-config is used in the gpio-msc313 driver, but the MACH_MERCURY config is
-never used to configure anything in the kernel tree.
+On Mon, 20 Mar 2023 17:16:14 -0500 Andrew Halaney wrote:
+> The next approach that was checked was to have a function pointer
+> embedded inside a structure that does the appropriate conversion based
+> on the variant that's in use. However, some of the function definitions
+> are like the following:
+> 
+>     void emac3_set_rx_ring_len(void __iomem *ioaddr, u32 len, u32 chan)
 
-Remove the unused config MACH_MERCURY.
+I checked a couple of callbacks and they seem to all be called with
+priv->iomem as an arg, so there is no strong reason to pass iomem
+instead of priv / hw. Or at least not to pass both..
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/arm/mach-mstar/Kconfig | 7 -------
- 1 file changed, 7 deletions(-)
+I think that's a better approach than adding the wrappers :(
 
-diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
-index 5dbea7b485af..fa9709f30b46 100644
---- a/arch/arm/mach-mstar/Kconfig
-+++ b/arch/arm/mach-mstar/Kconfig
-@@ -20,11 +20,4 @@ config MACH_INFINITY
- 	help
- 	  Support for MStar/Sigmastar infinity IP camera SoCs.
- 
--config MACH_MERCURY
--	bool "MStar/Sigmastar mercury SoC support"
--	default ARCH_MSTARV7
--	help
--	  Support for MStar/Sigmastar mercury dash camera SoCs.
--	  Note that older Mercury2 SoCs are ARM9 based and not supported.
--
- endif
--- 
-2.17.1
-
+Are you familiar with coccinelle / spatch? It's often better than 
+just regexps for refactoring, maybe it can help?
