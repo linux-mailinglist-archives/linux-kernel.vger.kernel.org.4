@@ -2,74 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870706C2F3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519CB6C2F3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 11:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjCUKkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 06:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S230361AbjCUKl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 06:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCUKkf (ORCPT
+        with ESMTP id S230281AbjCUKlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 06:40:35 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9273F969;
-        Tue, 21 Mar 2023 03:40:30 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id l12so13127641wrm.10;
-        Tue, 21 Mar 2023 03:40:30 -0700 (PDT)
+        Tue, 21 Mar 2023 06:41:23 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC1A18B27;
+        Tue, 21 Mar 2023 03:41:07 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32L8HSSW022316;
+        Tue, 21 Mar 2023 10:40:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=P9sk6GhVLUfSKhtp/9wt/a/M1LKjpHIxuhNivET3wwE=;
+ b=O/GO7qUw1zu/xlDML2l6+03jF3ZmKyf3cAELxOBiUeYrjWYhT4iWvnc0so9+pAgvVsK7
+ shhTHDgr7Oy3ce82LfZHgMwUvXAIFz0H6y0I8vm4SwC+CBtrCDZ309VCx2FoQMBmRouH
+ l/ZEuUwWeMC3jBlHZfQ66f+I8rLkpO7O7O5yPHEP4yW+u/xTsUQSax983MUwS+koJn7h
+ Hv0h3e+O9NUBVYm2NNh40QH3BQkhVHJChJWgBABUlPOT6kMYPsNJ5IAb97kOkG37+58o
+ WUO8V378F4GThr4Rnhu7GyR7ywMfnHy6Z+7WSluh0C7bN+gK6QMg9380d6Vxln01S80S 9w== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pd3qdnspf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 10:40:50 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32L9xmVj038673;
+        Tue, 21 Mar 2023 10:40:49 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pd3rd1b05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 10:40:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k5WGD9a1mGfpI6OOrn49erF6WHUYCLXFSNySozVJCg9/MBpayKqc8psA7+xdvWnn8pCOOri811oXg3+hXns9p3xDySmh+xdk63jG5z4Ft2xd3kPbsD0Ynnt+UQKhrWQy6yLgevGtzzDyUX1n9Sew3YxOHQhayLbECmI0V4jmPZnzliWK7BlMI/fHvoFEW0uQSgGAKsQt6Z5bh3lwj3EiYQdxbeU8ObvmyMA3Fb6QP337oAWZqsi8XQ+AJnLr52cg3Vv/IlGl5X+vIfmr8l4Co1rIGExcynxMzGS1YQHdfkCwEk4JQpdOSgpZDfCCT1gJ00CrAGTrqleo+m1ROMBuEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P9sk6GhVLUfSKhtp/9wt/a/M1LKjpHIxuhNivET3wwE=;
+ b=oGSUbArN6G66JIuqKRwd3gEWRiWEvX3mHEpdchOfMe4OiH1XXJZdDkp2RuyTHV01Qbx0gH/ANDnoHJkvpxuHwuVtpMzOLp4Uqp0gQ0XBOQyrKAV7mo9HBAPFSXmOZWkacXvlS4fu64YA7tLDxE0fE1wb3lxQFWvE6QdCIwxaaW4gSAPlnt0TAOzjNCWmTD4SgKOZlO0E0EYY0Wxb53iGwde258HnGN8XKDTCdXp1Ns7Og59SJ/xegcSQdhPqVam3tAv9w+pjmjPQvwmqm/CLqLl2x1oOObFFM3/laufZBog+l+iryNiRgRdGHwqkAo/86j8fHgh/Ubzz+D2/nYe9ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679395229;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dj2Qn6oeOgRBAl4RZUHns/bCgUMdKYR3c35f0yuuFQk=;
-        b=lX81PpD2FVxMC5jLUTnjzORBN/4dg68aqqBZHoqbGFGlUGlGMDpYS62ZOjfdpBRLNh
-         hbmD0ofkoE0aYFOcO1oCcG66gZrbcDJJbJexY7eai8s6LHqrGmzYYv2p82g+PEM0W+88
-         RfAq90w2sK4jkgMI/qWGWB5D7SXo1sb9OAoT3EgQTpEXVRw7ttNGNuzns+wzyHCmzmzE
-         8f2t9IVIqSGj7+bTrNh2Al5R9ohFJwsXzjXd3mwn4K3U+cRgYlKHf0LXGUqBmQw+dWSZ
-         wtqQVFlmHj91xYIC08smsu5MTUGLRTw84Iug3tEiwdQAHyxdmp0ZESA1K78Y65IeySRL
-         qK6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679395229;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dj2Qn6oeOgRBAl4RZUHns/bCgUMdKYR3c35f0yuuFQk=;
-        b=IelbE/Zbi5Sf8BjTCJUh3vKHkyc8tISrUxAzV99BDsduyCgYMQIsO1niapiJ94SAap
-         uNLJ2YUYn5beJKePcMrIUGWUEfgQcyQHJAw27S75Ag+7idhl+cUsrF2nEedLfzEnmpu3
-         q0iy5ZFaam6tOtZnyNii1js20cU2DvlDWzot46tNMIQSdcA0p+KeIZ8iV35v5E6dyfiS
-         QDFZmmMZVHDEXzAFOY+r7vhhVf0MCUnnutBiST2VOUo60bWFB8PvpwTCdWoPk3w2E8PG
-         sclpwK6EEQfPhnBSFqWWJbNxG6rjnWv+mLu70fSvP77e2RLVsvojj/3T9bKJVt2Eya5J
-         JiNA==
-X-Gm-Message-State: AO0yUKXb5VeMDw6r5Egqb3R7e+6qscx9Xug6HN78yurQMCGsV5MTRipk
-        rwqOnVc7HjELd9qd6UCbr9k=
-X-Google-Smtp-Source: AK7set9Y+oOsTYzkxKCUS9hHGgVu/zZ4V8SCWWcLVRSYbQUX6isF/J+3eZ0+wK3jiM1bqPZ9zEcG0Q==
-X-Received: by 2002:a5d:448e:0:b0:2d8:28a9:f9e6 with SMTP id j14-20020a5d448e000000b002d828a9f9e6mr1813360wrq.32.1679395228974;
-        Tue, 21 Mar 2023 03:40:28 -0700 (PDT)
-Received: from krava (net-93-147-243-166.cust.vodafonedsl.it. [93.147.243.166])
-        by smtp.gmail.com with ESMTPSA id m9-20020adffa09000000b002c70d97af78sm11049879wrr.85.2023.03.21.03.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 03:40:28 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 21 Mar 2023 11:40:24 +0100
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Florent Revest <revest@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kpsingh@kernel.org
-Subject: Re: [PATCH 1/7] ftrace: Let unregister_ftrace_direct_multi() call
- ftrace_free_filter()
-Message-ID: <ZBmJmKlfwvur8A54@krava>
-References: <20230316173811.1223508-1-revest@chromium.org>
- <20230316173811.1223508-2-revest@chromium.org>
- <ZBl9JahKr+50sBW0@FVFF77S0Q05N>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P9sk6GhVLUfSKhtp/9wt/a/M1LKjpHIxuhNivET3wwE=;
+ b=FWy6MLj+RlQG15M7SbRQ0vPPf9F3JzKE55huA3vf3D2LVoSqSJzQcGcHEvrmToQKCre7hmnJDC5SGfl4Gcgz7DtnM9EQXdpLkuOrnOzHQY6FQOAEhND+WvzBGuw+ahrLoNWa55a6lSDRSqSiyTiLV6Vi7SIdHZdiE/NYefnwpqc=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by DM8PR10MB5399.namprd10.prod.outlook.com (2603:10b6:8:25::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 10:40:47 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 10:40:47 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, jim.cromie@gmail.com,
+        linux-modules@vger.kernel.org, Aaron Tomlin <atomlin@redhat.com>,
+        Jason Baron <jbaron@akamai.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in
+ /proc/dynamic_debug/control
+References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+        <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
+        <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+        <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
+        <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
+Emacs:  because Hell was full.
+Date:   Tue, 21 Mar 2023 10:40:42 +0000
+In-Reply-To: <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
+        (Masahiro Yamada's message of "Tue, 21 Mar 2023 18:03:01 +0900")
+Message-ID: <87edpis7yt.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0612.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:314::6) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBl9JahKr+50sBW0@FVFF77S0Q05N>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|DM8PR10MB5399:EE_
+X-MS-Office365-Filtering-Correlation-Id: aabe8372-6260-417d-c82c-08db29f8bb0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3MT24WwY/GlowjHRXSmt5xr+FCcrfv5w6vBYXg8idzbPqPsJBPrwVDq4F/JS1a8zEavV6vuZWCyyPW4v5YKkZE144Bao/J4P/vijd09enFxwNSRy/o3V+sWVnsuwTU+8aJJRhuZrAvC0r9gJDPucSU01JFekrOfpE4t3P41nH8xjZ1J0QIE6pJcgA3YlvHc+/5aJFCfNrJT7klNY1iZJva598y557qmtHb1KVwZ0Qwchk3wkqffbzIWe3WdzhoMnV4pNENnvJ46C6gU17nLRiC3h+hbK87twRZO3YWYfCDbOBjLpJMDQhrgjo9OO5i5/oZV7VafjW2lbTH9xinIptelNQNRZsG/h18FJLZ+1yHcwAGpLnSE5VhX/hGpPJwBqSrO5eMf0GvZAp8P6i3Q4T/GAmvUWnuqOOA+Ivfp08svbXjVytoehArAj8IgHhVTA06KhMVayC9mMa9qpxwKMIYPunX2GAOp799g1wY1Tn9FT705CqzIZwbKgwBJJ9XfyqgKH0lk6Nbs7egIcJQIzwuDZHIYfs2rihp+ph3h+keDMMFtXr3fh5/qRMBRiwQgt4Byb7mZrDzfzfc20jC2bROO9ZOo8s3a3AtvNLVslMBQa6p7tkBh1EIIbsD0UG/iXCnBk2OFrIqB2aLt1tFJ0UA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199018)(86362001)(6666004)(9686003)(6486002)(6512007)(186003)(6506007)(38100700002)(2906002)(478600001)(316002)(66946007)(54906003)(4744005)(44832011)(8676002)(4326008)(8936002)(41300700001)(6916009)(5660300002)(66476007)(36756003)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tB8u5wglIF7vJqCwtIUZOwu692fdCJ8/cRIt62fobq9Xv4T8alUGPBJJgJRt?=
+ =?us-ascii?Q?ofzJxpata7IxUsiVWgT6mRV1U9uDDQD4SDxojK92T5nVAL+lt9itiUJ3QP/V?=
+ =?us-ascii?Q?hlpP9FsfM4jSA6DiRValp/edTDxR6LJ1c8nlrDg7MtVv/uu9qNwZR0im0nye?=
+ =?us-ascii?Q?Ekos1gyCFVzzmbD8vR5ApCyK75emkrIDb0CD1S/i1rEuYjVOd2NwBCDzFYBx?=
+ =?us-ascii?Q?ugvUOLSDVSMFpqUAM20wRIJvlEy7jbZZm478VhwLliZ7NqaGpCElomKH0wUn?=
+ =?us-ascii?Q?3ebxUnx2uGOsFZag9DYY5bnDJqDosHYhic8k0c1UUI/ZKO9Ress/Az+tGen7?=
+ =?us-ascii?Q?IvLNRfZVVbYGCuDTUaTPfEpcOHVidRqmzcPzsoDLPOBsDza1s50qOQAE2ZZY?=
+ =?us-ascii?Q?Ktra4B35Gw5dpS3uTrwHJ2x4jsUt02OA7COsWtmO+k35tGHwCr7Jkn6K7W3v?=
+ =?us-ascii?Q?4IxUfpt+R+R716UiRVejG9qhCk+KZJh4wXJvDknmBXt7CT8XD6oIXaBdJzCJ?=
+ =?us-ascii?Q?M/tQ5hWVI26hUaJVC3Yqv8uplwLORySegwDutTa7AT98+DWIUbJX4XCHJINY?=
+ =?us-ascii?Q?wOXzgSYEQSt83W5DYd9Z8YnoSkSCobs9bKO0BLDaOYj6x4tJ9ZdewT4ayMmo?=
+ =?us-ascii?Q?GED5E9aFxpAynAQsFnuQvvmGGG02hFUXx1tYz41yFCqSJIiGRuBxD/OoA1AZ?=
+ =?us-ascii?Q?ryxkXMtLqy8+RBOXNe7BQGQ01f4j4RwZ/E0SZAOgXQKiIh9O35dJYLaDQWaS?=
+ =?us-ascii?Q?nG8EA8vq3Pl4rH4L0lONGzVME6tTL5Og2Ud9DIMuiBKj5aDvNs0zIyrccnDM?=
+ =?us-ascii?Q?JjBgYkwQMm5gquM+2jCe6wR5RPPeOelZhxtgqXJecvjvCVTUHZhwh+aAUhG/?=
+ =?us-ascii?Q?2yWcJxFgnRmHwG3Rt5M4Ax6tWHUv3+hM25mc/RxBdpyZ07OZ6Zz1Ailsfebb?=
+ =?us-ascii?Q?4V7xTHTE/9dMQW3H8Su81ek0KIp4kOM4TeKCEuwRbauVxG/ABlE3fH0/Bj3y?=
+ =?us-ascii?Q?LCnWdbr39eloB4AGbtNAg9TYOW/xeDO6fRn7Q9BiCOxAuaJpo1J3lVimBMHM?=
+ =?us-ascii?Q?Yv76a4H8+9+cLqRBkVcGR4+6rsve9lo/wJYk+qZg+BMbvNKo0YK1lxFZ8e/U?=
+ =?us-ascii?Q?VyTdZA+2fgxuM5hLR328Cff73BMlehZreExXgMsaYm9eISlfI1kq0nSIUU2c?=
+ =?us-ascii?Q?Tvvzf4Dur+YkDeQUDoCo10qg9JsbX9emCZKg+RNsAqnHBu4rWrXgrrnUJICf?=
+ =?us-ascii?Q?eC9PJzBgycVCbuznr5vj0+MqPi0poV719QzCRC4e3nJoXDWwSXTsM/CA/YmB?=
+ =?us-ascii?Q?k4NUIpDqceQkawyOcXmEst59u//I/KQDZ72kgl2wx+txrwGPmZxKCP8jcI45?=
+ =?us-ascii?Q?OdCnqXJdBSSQUhXnPIQCT6VQ6TCmu52On/mMKcAmPlOGdnkrB8zQm8SfNJVZ?=
+ =?us-ascii?Q?BP8UlfmcOh2WWSf9s6V/ND+wYjxgcFtGzpnGlQh3+k+WW5AeB4vIPQqNZuEX?=
+ =?us-ascii?Q?spFk31DF3KXJLqOQrsXW7qtDUdnyJfDJ+c8iYoSr33O2+IVX2nGMRYyw9OcE?=
+ =?us-ascii?Q?6SZyxu+LNoHfejKOnWluaVRf5vfAuuxz9kgs/wjiI/zo4D1qSyTtZXM1bR9v?=
+ =?us-ascii?Q?0Q=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?XUpXPF9fKzVW6mj3JqHrIbZBxPYIjO71ZYwb6djTuQOTzUyzBb++mXOhSsrx?=
+ =?us-ascii?Q?rBJYQsL0jnLhJZtD1yN9TyzJeR8K2PvrKRstIxD7mqIdR1GSLleNtSCNWTM4?=
+ =?us-ascii?Q?6iyEiKdDF8c8gaz1WTbf+Uu3fzKDrCvIIWdVm/KVM+hTf1v9uxQwIz0sU6qS?=
+ =?us-ascii?Q?cOj8MwQJB1fCAakddfAeD3Ak8yO4WWutdYojNMGu4VMJzQ6Sqm7WmDhXz1UL?=
+ =?us-ascii?Q?uApQ3raGUljBvZVJoinPtSpCpzEjl3P+V1wfpdq4cnIO/Y//fS6wpFf7hCrL?=
+ =?us-ascii?Q?ZZHB1BCD6BBQXmupEvVvQS4+HUxOAOsvpRt0658eyKeOqnCy2nRurARkNZxw?=
+ =?us-ascii?Q?5mFH6rSm30PnTqOzzrRer66l60jL8T8hxhbYteaXH0ZXBwo7nLl95FWrhH6y?=
+ =?us-ascii?Q?bxwhhP5WpdjYn808d3kmzecEgi8qsMa1m43EdAB9nZ0I4cLHpexAwghyy4+w?=
+ =?us-ascii?Q?G6bksczydyLcBapkGS+kD0seipYdF4DgM7Lq9JomXG/K0EMIAwEuskPn2qkX?=
+ =?us-ascii?Q?/jDP6RdQD/23WCxdnTxCWBpjVvHFikjX0+4aj7CnsZ6ebI+tVt0RyPUWZRJd?=
+ =?us-ascii?Q?+UW2y+8RkvVdi81OpW8H24OxdqeZ7j0L5Zqn/c+DiSJKkZqpLBlQWrbacGMo?=
+ =?us-ascii?Q?8Pn1m/TGN8jZ+xtz8H8eqXG1RgpzefIbT+urZheJWRJ83tvycLyfmHnO8fZ0?=
+ =?us-ascii?Q?IIKTLm3Fo/zWo4zkZ9iszAMJPhQLRSG5tfqK0LG5uKo9iTYE+92v5nb5yjle?=
+ =?us-ascii?Q?TwSwqL3gxS0BaiHcIh16rskGi1aChV/QMfl26R7xFP/dbEUYpZCyx0A4oAkf?=
+ =?us-ascii?Q?qvx7jfTNdgHev1UBJcufgCl3yviDLAyKLHj3nVK1h87/Cx6CNZFl0OHka1LZ?=
+ =?us-ascii?Q?7hifRzXh0pjFHTrOp/i9vI0x1Oid6O5otogUkqCLfgMB8cExHeJMaU6bV7Ei?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aabe8372-6260-417d-c82c-08db29f8bb0e
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 10:40:47.1087
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vpfco5UPsU2PAWnupEX4mAO6Qx/jLZAYbEC/WkGj0Ek4XyDedaCm2ZCObl119zE8dGxQIZB7nZEnoJbUmqMEDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR10MB5399
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_08,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=683 mlxscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303210082
+X-Proofpoint-GUID: c0vhCaWtlVcmoB9HOpqbvGWO8LoVPaHR
+X-Proofpoint-ORIG-GUID: c0vhCaWtlVcmoB9HOpqbvGWO8LoVPaHR
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,SUBJ_AS_SEEN autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,130 +171,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:47:17AM +0000, Mark Rutland wrote:
-> On Thu, Mar 16, 2023 at 06:38:05PM +0100, Florent Revest wrote:
-> > A common pattern when using the ftrace_direct_multi API is to unregister
-> > the ops and also immediately free its filter. We've noticed it's very
-> > easy for users to miss calling ftrace_free_filter().
-> > 
-> > This adds a "free_filters" argument to unregister_ftrace_direct_multi()
-> > to both remind the user they should free filters and also to make their
-> > life easier.
-> > 
-> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> > Signed-off-by: Florent Revest <revest@chromium.org>
-> > ---
-> >  include/linux/ftrace.h                      | 6 ++++--
-> >  kernel/bpf/trampoline.c                     | 2 +-
-> >  kernel/trace/ftrace.c                       | 6 +++++-
-> >  samples/ftrace/ftrace-direct-multi-modify.c | 3 +--
-> >  samples/ftrace/ftrace-direct-multi.c        | 3 +--
-> >  5 files changed, 12 insertions(+), 8 deletions(-)
-> 
-> This looks good to me; I see that the BPF code frees the filter in
-> bpf_trampoline_put(), so it not doing so via unregister_ftrace_direct_multi()
-> looks fine. FWIW:
-> 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
+On 21 Mar 2023, Masahiro Yamada stated:
+> He spams with MODULE_LICENSE removal with no justification.
 
-yes, I was going to ack the next version ;-)
+Luis a) asked me to do it b) asked me to split it up like that (believe
+me, it was extra work). A good few maintainers subsequently protested
+that it wasn't split up even more finely.
 
-thanks,
-jirka
-
-> 
-> Mark.
-> 
-> > 
-> > diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> > index 366c730beaa3..5b68ee874bc1 100644
-> > --- a/include/linux/ftrace.h
-> > +++ b/include/linux/ftrace.h
-> > @@ -407,7 +407,8 @@ int ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
-> >  				unsigned long new_addr);
-> >  unsigned long ftrace_find_rec_direct(unsigned long ip);
-> >  int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
-> > -int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
-> > +int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr,
-> > +				   bool free_filters);
-> >  int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
-> >  int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr);
-> >  
-> > @@ -446,7 +447,8 @@ static inline int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned
-> >  {
-> >  	return -ENODEV;
-> >  }
-> > -static inline int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> > +static inline int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr,
-> > +						 bool free_filters)
-> >  {
-> >  	return -ENODEV;
-> >  }
-> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > index d0ed7d6f5eec..88bc23f1e10a 100644
-> > --- a/kernel/bpf/trampoline.c
-> > +++ b/kernel/bpf/trampoline.c
-> > @@ -198,7 +198,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
-> >  	int ret;
-> >  
-> >  	if (tr->func.ftrace_managed)
-> > -		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr);
-> > +		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr, false);
-> >  	else
-> >  		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
-> >  
-> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> > index 29baa97d0d53..fa379cf91fdb 100644
-> > --- a/kernel/trace/ftrace.c
-> > +++ b/kernel/trace/ftrace.c
-> > @@ -5804,7 +5804,8 @@ EXPORT_SYMBOL_GPL(register_ftrace_direct_multi);
-> >   *  0 on success
-> >   *  -EINVAL - The @ops object was not properly registered.
-> >   */
-> > -int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> > +int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr,
-> > +				   bool free_filters)
-> >  {
-> >  	struct ftrace_hash *hash = ops->func_hash->filter_hash;
-> >  	int err;
-> > @@ -5822,6 +5823,9 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> >  	/* cleanup for possible another register call */
-> >  	ops->func = NULL;
-> >  	ops->trampoline = 0;
-> > +
-> > +	if (free_filters)
-> > +		ftrace_free_filter(ops);
-> >  	return err;
-> >  }
-> >  EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
-> > diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-> > index b58c594efb51..196b43971cb5 100644
-> > --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> > +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> > @@ -151,8 +151,7 @@ static int __init ftrace_direct_multi_init(void)
-> >  static void __exit ftrace_direct_multi_exit(void)
-> >  {
-> >  	kthread_stop(simple_tsk);
-> > -	unregister_ftrace_direct_multi(&direct, my_tramp);
-> > -	ftrace_free_filter(&direct);
-> > +	unregister_ftrace_direct_multi(&direct, my_tramp, true);
-> >  }
-> >  
-> >  module_init(ftrace_direct_multi_init);
-> > diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-> > index c27cf130c319..ea0e88ee5e43 100644
-> > --- a/samples/ftrace/ftrace-direct-multi.c
-> > +++ b/samples/ftrace/ftrace-direct-multi.c
-> > @@ -78,8 +78,7 @@ static int __init ftrace_direct_multi_init(void)
-> >  
-> >  static void __exit ftrace_direct_multi_exit(void)
-> >  {
-> > -	unregister_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
-> > -	ftrace_free_filter(&direct);
-> > +	unregister_ftrace_direct_multi(&direct, (unsigned long) my_tramp, true);
-> >  }
-> >  
-> >  module_init(ftrace_direct_multi_init);
-> > -- 
-> > 2.40.0.rc2.332.ga46443480c-goog
-> > 
+I consider doing what Luis asks to constitute justification enough to
+give it a try in this area -- or at least I'm not going to say no
+without a damn good reason!
