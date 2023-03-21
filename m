@@ -2,168 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F0F6C3D9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2F26C3DAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCUWS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S230017AbjCUWU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjCUWSk (ORCPT
+        with ESMTP id S229939AbjCUWUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:18:40 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EE81E5F7;
-        Tue, 21 Mar 2023 15:18:39 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 14-20020a9d010e000000b0069f1287f557so5029305otu.0;
-        Tue, 21 Mar 2023 15:18:39 -0700 (PDT)
+        Tue, 21 Mar 2023 18:20:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B920D1E5F7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679437204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3d30Yo9IkuDAuQ71lplDlZlFi1tH3/S4QrO8CaL0yaU=;
+        b=ZtiEf4t8MUqzHpuzHeZ+bOwGam9Wxo2Js5CYJlO4XyhWpY0qiPe7lgHO0lt9GcWIJ3QUaE
+        v/+SWBAP/WjwYQ2iv/5RVPe5mJGab/pFW7pPd3BNgm5eep8dcJUAWqGPsZGTMALQsIE2iQ
+        rHdZrZwbM4gaVysIKCDnPhcyCg3x1vs=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-403-PWxLgyBePLCKKyAKfOdqKw-1; Tue, 21 Mar 2023 18:20:03 -0400
+X-MC-Unique: PWxLgyBePLCKKyAKfOdqKw-1
+Received: by mail-ot1-f70.google.com with SMTP id c2-20020a056830000200b0069f1299335fso4298285otp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:20:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679437119;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PgT8vls4hh33J9msm1OhhnWu9ZRUnj1Q8H8sA1kcql4=;
-        b=2j1XzdhuJEgmIpJjAEjO4juWgUjZhnhG4F+vsFq4Fs1JeMUCW/eIwYloRHP/AEMz0Z
-         DSbaIHp+FEKUml/nMMI2a4PtDFITbIrnwoKnAEIvqmdfzuuaq4VsUfDxcvQtQy1ZbGsG
-         63R7sdtvAe9EKhnn8/9smsw/wOTc3S2nBYEvfqeQL2yTY33aUz0xUgrZOyBvDK25fT/r
-         KNxEHBLbbR301JfVDIXL70UN8H/NL3L87CfL8GyuBkToo8GR9jLFSoLAZOcHFY2qCVgl
-         hzAAtgUpR98UTWx8PQLlFMfAFoFyFCRGPhvVRCUPLzoFUwN0AvHjr/5Rjt+8/1EtcYpP
-         9Pmg==
-X-Gm-Message-State: AO0yUKXR0S0IIES71tHon3po1bVdBnW68dLLeg+Fy7kUwJr/g7S6555+
-        G3xQ37Lf63xXO9h0C3fdWguzAKU2Lg==
-X-Google-Smtp-Source: AK7set+rU5ha02hkCLeAmjMoAnusptaZ98SOslOUw6UTplb/Yxc9KvFfzwg/VROypKzVU4n34lhKIA==
-X-Received: by 2002:a9d:3f6:0:b0:693:c3bb:8392 with SMTP id f109-20020a9d03f6000000b00693c3bb8392mr74660otf.7.1679437119170;
-        Tue, 21 Mar 2023 15:18:39 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q204-20020a4a33d5000000b0053853156b5csm5163244ooq.8.2023.03.21.15.18.38
+        d=1e100.net; s=20210112; t=1679437203;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3d30Yo9IkuDAuQ71lplDlZlFi1tH3/S4QrO8CaL0yaU=;
+        b=I5RJlCKxvn1OtPUCr0ZebmwmQ/YfDK99TujASOIhliTdSIYqOxnwo1MsbzTAbo3mfx
+         d+8x1iOoL/jvqMzDhQy9h9zz20FyEbvZPPT3wfaYu1ZXp6eBqwqw1cZ0lMwY7BzQGh5e
+         MmXoTY5CDFW1OcRVX1dxFXiwGOkYKnYsB3JcoplAJZBbs6rxL/601BGOVqHm5lD+7Z2m
+         egW9uuJwxgIo5/B10M4C/G9YDk1f9wz/IrwRq7blFE92xvvg2S0buokR3bDjmzy066ea
+         3INGDaGXW0ZLNVVRtutT7LeSlUY1Mq1xII8Ctcf47gYLCKFiYvq+E1wb+m45RbhENKre
+         82xA==
+X-Gm-Message-State: AO0yUKXxpFtTkjQqqtjszYUIc64fywnRwtfSYtR+IEV9ZOM1GbSvIik7
+        G1ILyROJI1EPf9ExF+7qwVGFY2TfHD7KNeDdGcond82OOj+CSCGlRVwM63kmUPxvLQmpB11tO/C
+        6HLR8YLvwwUsdI+o+rJ0kyrCv
+X-Received: by 2002:a05:6870:461c:b0:17a:cabc:c92c with SMTP id z28-20020a056870461c00b0017acabcc92cmr389500oao.4.1679437202780;
+        Tue, 21 Mar 2023 15:20:02 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+U0ekkEh5oox/1FTDAwz5G/lXb0i1Zm4idONxXrNRjXje54uB3CMGHl647zfImhCphOO1Nqw==
+X-Received: by 2002:a05:6870:461c:b0:17a:cabc:c92c with SMTP id z28-20020a056870461c00b0017acabcc92cmr389491oao.4.1679437202547;
+        Tue, 21 Mar 2023 15:20:02 -0700 (PDT)
+Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id x5-20020a9d6285000000b0069d4e5284fdsm5566268otk.7.2023.03.21.15.20.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 15:18:38 -0700 (PDT)
-Received: (nullmailer pid 1764639 invoked by uid 1000);
-        Tue, 21 Mar 2023 22:18:37 -0000
-Date:   Tue, 21 Mar 2023 17:18:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] dt-bindings: clock: add mtmips SoCs system
- controller
-Message-ID: <20230321221837.GA1751474-robh@kernel.org>
-References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
- <20230321050034.1431379-2-sergio.paracuellos@gmail.com>
- <5f295438-8334-d374-2ae6-2a385ffb317d@linaro.org>
- <CAMhs-H_dSgcPNQVusHWVvztYHptOxSJ_o7G0eU9=M1C7RXdsVw@mail.gmail.com>
- <ce13ca6c-e61a-d31e-2626-d818a5d0e15e@arinc9.com>
+        Tue, 21 Mar 2023 15:20:02 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 17:19:58 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, bhupesh.sharma@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
+Subject: Re: [PATCH net-next v2 09/12] net: stmmac: Add EMAC3 variant of
+ dwmac4
+Message-ID: <20230321221958.e3s7mbpxp5hpm7su@halaney-x13s>
+References: <20230320221617.236323-1-ahalaney@redhat.com>
+ <20230320221617.236323-10-ahalaney@redhat.com>
+ <20230320204153.21736840@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ce13ca6c-e61a-d31e-2626-d818a5d0e15e@arinc9.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230320204153.21736840@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:09:59AM +0300, Arınç ÜNAL wrote:
-> On 21.03.2023 10:00, Sergio Paracuellos wrote:
-> > On Tue, Mar 21, 2023 at 7:45 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > > 
-> > > On 21/03/2023 06:00, Sergio Paracuellos wrote:
-> > > > Adds device tree binding documentation for system controller node present
-> > > > in Mediatek MIPS and Ralink SOCs. This node is a clock and reset provider
-> > > > for the rest of the world. This covers RT2880, RT3050, RT3052, RT3350,
-> > > > RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
-> > > > 
-> > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > ---
-> > > >   .../bindings/clock/mediatek,mtmips-sysc.yaml  | 65 +++++++++++++++++++
-> > > >   1 file changed, 65 insertions(+)
-> > > >   create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..f07e1652723b
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-> > > > @@ -0,0 +1,65 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/clock/mediatek,mtmips-sysc.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: MTMIPS SoCs System Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > +
-> > > > +description: |
-> > > > +  MediaTek MIPS and Ralink SoCs provides a system controller to allow
-> > > > +  to access to system control registers. These registers include clock
-> > > > +  and reset related ones so this node is both clock and reset provider
-> > > > +  for the rest of the world.
-> > > > +
-> > > > +  These SoCs have an XTAL from where the cpu clock is
-> > > > +  provided as well as derived clocks for the bus and the peripherals.
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    items:
-> > > > +      - enum:
-> > > > +          - ralink,mt7620-sysc
-> > > 
-> > > Since you decided to send it before we finish discussion:
-> > > NAK - this is already used as mediatek
+On Mon, Mar 20, 2023 at 08:41:53PM -0700, Jakub Kicinski wrote:
+> On Mon, 20 Mar 2023 17:16:14 -0500 Andrew Halaney wrote:
+> > The next approach that was checked was to have a function pointer
+> > embedded inside a structure that does the appropriate conversion based
+> > on the variant that's in use. However, some of the function definitions
+> > are like the following:
 > > 
-> > Sorry, there was too much stuff commented so I preferred to clean up
-> > all of them while maintaining the compatibles with the ralink prefix
-> > instead since that was where the current discussion was at that point.
-> > 
-> > > 
-> > > > +          - ralink,mt7620a-sysc
-> > 
-> > As I have said, this one exists:
-> > 
-> > arch/mips/ralink/mt7620.c:      rt_sysc_membase =
-> > plat_of_remap_node("ralink,mt7620a-sysc");
-> > 
-> > 
-> > > > +          - ralink,mt7628-sysc
-> > > 
-> > > Same here.
-> > > 
-> > > > +          - ralink,mt7688-sysc
-> > > 
-> > > I expect you to check the others.
-> > 
-> > I can change others to mediatek but that would be a bit weird, don't you think?
+> >     void emac3_set_rx_ring_len(void __iomem *ioaddr, u32 len, u32 chan)
 > 
-> I've seen some parts of the MTMIPS platform use mediatek compatible strings
-> thanks to Krzysztof pointing them out. I don't like having some parts of the
-> MTMIPS platform (pci, mmc, usbphy, etc.) with mediatek compatible string
-> while others are ralink.
+> I checked a couple of callbacks and they seem to all be called with
+> priv->iomem as an arg, so there is no strong reason to pass iomem
+> instead of priv / hw. Or at least not to pass both..
+> 
+> I think that's a better approach than adding the wrappers :(
+> 
+> Are you familiar with coccinelle / spatch? It's often better than 
+> just regexps for refactoring, maybe it can help?
+> 
 
-That's unfortunate, but again, compatibles are just unique identifiers. 
-They are only wrong if they aren't unique...
+No worries, I'll try and refactor as you mentioned. Looking at it some
+this afternoon makes me think I'll try something like this:
 
-> Like Krzysztof said [0], Ralink is now Mediatek, thus there is no conflict
-> and no issues with different vendor used. So I'd rather keep new things
-> Ralink and gradually change these mediatek strings to ralink.
+    diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+    index 16a7421715cb..75c55f696c7a 100644
+    --- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
+    +++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+    @@ -12,7 +12,7 @@
+     ({ \
+            int __result = -EINVAL; \
+            if ((__priv)->hw->__module && (__priv)->hw->__module->__cname) { \
+    -               (__priv)->hw->__module->__cname((__arg0), ##__args); \
+    +               (__priv)->hw->__module->__cname((__priv), (__arg0), ##__args); \
+                    __result = 0; \
+            } \
+            __result; \
+    @@ -21,7 +21,7 @@
+     ({ \
+            int __result = -EINVAL; \
+            if ((__priv)->hw->__module && (__priv)->hw->__module->__cname) \
+    -               __result = (__priv)->hw->__module->__cname((__arg0), ##__args); \
+    +               __result = (__priv)->hw->__module->__cname((__priv), (__arg0), ##__args); \
+            __result; \
+     })
+     
+    @@ -34,68 +34,68 @@ struct dma_edesc;
+     /* Descriptors helpers */
+     struct stmmac_desc_ops {
+            /* DMA RX descriptor ring initialization */
+    -       void (*init_rx_desc)(struct dma_desc *p, int disable_rx_ic, int mode,
+    -                       int end, int bfsize);
+    +       void (*init_rx_desc)(struct stmmac_priv *priv, struct dma_desc *p,
+    +                            int disable_rx_ic, int mode, int end, int bfsize);
+            /* DMA TX descriptor ring initialization */
+    (...)
 
-So break the ABI multiple times slowly. Again, either you live with 
-*all* the existing compatible strings or you declare it is fine to break 
-the ABI on these platforms and switch everything at once. Carrying both 
-strings (in bindings or drivers) and breaking the ABI is lose-lose.
+and then, I'll add something like:
 
-Rob
+    diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
+    index a152678b82b7..f5f406a09ae3 100644
+    --- a/include/linux/stmmac.h
+    +++ b/include/linux/stmmac.h
+    @@ -273,5 +273,7 @@ struct plat_stmmacenet_data {
+            bool use_phy_wol;
+            bool sph_disable;
+            bool serdes_up_after_phy_linkup;
+    +       u32 mtl_base;
+    +       u32 mtl_offset;
+     };
+     #endif
+
+and rewrite:
+
+    #define MTL_CHANX_BASE_ADDR(x)		(MTL_CHAN_BASE_ADDR + \
+                                            (x * MTL_CHAN_BASE_OFFSET))
+
+to use mtl_base/offset if they exist, and so on for the DMA versions,
+etc...
+
+I'm sure I'll probably run into some issue and change course slightly,
+but thought I'd post a hint of the path to make sure I'm not way off the
+mark.
+
+Thanks for your feedback,
+Andrew
+
