@@ -2,91 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C036C3610
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AFC6C3619
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjCUPn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S231326AbjCUPqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbjCUPni (ORCPT
+        with ESMTP id S230425AbjCUPqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:43:38 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE4A2BEDF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:43:34 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id cu36so5065127vsb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679413413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y00xZTMnW/WazbGdbgQrBycDfNcdSIYV3Mj2B7uLQTc=;
-        b=sPFXiF51FOiH1Az8z8W3OFjCkyrxHA+rMnCni2Cfh0p1HCJTcba1loA9m5PGDrcBXG
-         9m+0Pa72K/zYMdNxB8WA+Ea5uLprRi5MKyVdqgvc9IcEHQVbziqDVOwZSF2SEwWHvJFp
-         wdlm2p8YJ0yvelTRL6Yg5tRI+T08JHaput8IFf1Lo5momgM1EGsA4BansylobRI3ESf+
-         /nOllXRmzQzan52DN49tMCrAZ7utbT7p3Xz3sYSK5e5GOJ4iD+p7oRFZMxF4WGxF/DYD
-         DzfJwrC9q726iq7rpNhtVrAnraybW2odx9sG8zE/vhT/Oi4qHerQ+cP2j28uOWuNSft4
-         AUEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679413413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y00xZTMnW/WazbGdbgQrBycDfNcdSIYV3Mj2B7uLQTc=;
-        b=YtQvA47IfIYsYpnlH66FRbZ6U6gGNRJ0TVRrBHDHmOJbPo5bdecjcY/pUvojlfWg9/
-         eRQCIIfQy7u1/noUOX1EcbMk8y2feqskw1JQau1pWTHTDvFRuea6Wd2MzTceFDeQC4Br
-         nFBFrSiCeVSjtlT9ySMDUaAWrxr04e9rwsXzcSqos+ogVhxx0QV7enzxaLEncWcd0qMD
-         M32mTPC0NnJKHQqVxDgCQ6qpI5i0BaDUiqRw9NhsDy+hJUOxSyopXCAQZccC5Gif5zvs
-         FgpoMouImfX2nixgh7aP84CYAfQ/jXdVzTOW7gdD1PwFZfO38yibERQA+TL8M5qnGm/1
-         W+Uw==
-X-Gm-Message-State: AAQBX9cwFez7bNEjs/fg+OmdYlFTYzjFQqDtqNiQSVrk2hOtPBv3d3En
-        M+wnF0metOLzCr3fug4RNoyUyfq9HK80Bctf0a/VWg==
-X-Google-Smtp-Source: AK7set+uE31fRevBboLUAiIpZN5iCBwZ5X84oVwutDcKQH0rj2bO1OlFmwPCvwxrPKza1UPYQ2We10CceECf7Oyd3pc=
-X-Received: by 2002:a67:d891:0:b0:425:b38b:650 with SMTP id
- f17-20020a67d891000000b00425b38b0650mr1896281vsj.7.1679413412722; Tue, 21 Mar
- 2023 08:43:32 -0700 (PDT)
+        Tue, 21 Mar 2023 11:46:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5C327D65;
+        Tue, 21 Mar 2023 08:45:47 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LEfsn5003037;
+        Tue, 21 Mar 2023 15:45:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=QRt10JJxVCPiCHUlVUqOiidSy3l3ySYjEArqbvKwIRQ=;
+ b=dFXWV43Hh0eEsaY7TPTjED6tHhuqYSnVSDy9gw+SLc1YEdmOCc1MVTOtHaeQ+PtOr46X
+ KQbKZwkIo9oMgN8tZC2r/w2ZDXiubufMKaaaBnR11wo4aNmeGOEQztmhXoukGYLJBDqK
+ Er7I30kBO93hoA200eqZXnIAajozKwzLpXmbBv2QxigGn5IMKXAbv81R8mK9rONvvHCH
+ 8o9eGqI5DjPVnR/jnB2X1O3SRwVDftzztH1Rzi3tfHGVdyFNG/8XDyjvMBSH8riFk+Up
+ how1eUHywRZ3Vazd0eQ04A5fzFAC033ardmVN9IkEfBYsNHKFDp4VfulMnzcWLSxBzvZ 7w== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf2j4ae30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 15:45:22 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LDcUHB022636;
+        Tue, 21 Mar 2023 15:45:21 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3pd4x7g46c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 15:45:21 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LFjKNC3408572
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 15:45:20 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 359AA58059;
+        Tue, 21 Mar 2023 15:45:20 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3541C58058;
+        Tue, 21 Mar 2023 15:45:19 +0000 (GMT)
+Received: from [9.160.111.39] (unknown [9.160.111.39])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Mar 2023 15:45:19 +0000 (GMT)
+Message-ID: <88ff9cea-4c44-9c65-4f8a-091851099133@linux.ibm.com>
+Date:   Tue, 21 Mar 2023 10:45:18 -0500
 MIME-Version: 1.0
-References: <CANn89iLy+-rQDSKCg6g=xkNLL5SmgkB7gyMSgxCEPp13-+eLbw@mail.gmail.com>
- <26269528616bb41dcb2b5a3314f87fb36d45acac.camel@redhat.com>
-In-Reply-To: <26269528616bb41dcb2b5a3314f87fb36d45acac.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 21 Mar 2023 08:43:20 -0700
-Message-ID: <CANn89i+vKjBZAC-Htt9K6+WxFHaSH190Mm9WMiy2ZUkuQJZ0Gg@mail.gmail.com>
-Subject: Re: syzbot + epoll
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Xiumei Mu <xmu@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/4] eeprom: ee1004: Enable devices on multiple busses
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        devicetree@vger.kernel.org, andrew@aj.id.au, joel@jms.id.au,
+        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+References: <20230321151642.461618-1-eajames@linux.ibm.com>
+ <20230321151642.461618-2-eajames@linux.ibm.com>
+ <CAL_JsqJR2BOX4sk0K3V7-12Pi7Th0G_Dqjfp_MxxoCf0qnNg0A@mail.gmail.com>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <CAL_JsqJR2BOX4sk0K3V7-12Pi7Th0G_Dqjfp_MxxoCf0qnNg0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5beygrTMhKaWTmuX9ZjQ7pve0joKCkVU
+X-Proofpoint-ORIG-GUID: 5beygrTMhKaWTmuX9ZjQ7pve0joKCkVU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210121
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 8:20=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
 
-> (adding Hillf, as was looking to this issue, too)
+On 3/21/23 10:39, Rob Herring wrote:
+> On Tue, Mar 21, 2023 at 10:17 AM Eddie James <eajames@linux.ibm.com> wrote:
+>> The driver previously prevented probing devices on more than one
+>> bus due to locking constraints with the special page addresses. This
+>> constraint can be removed by allocating a reference-counted bus
+>> structure containing the lock, rather than using global variables.
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/misc/eeprom/ee1004.c | 175 +++++++++++++++++++++--------------
+>>   1 file changed, 106 insertions(+), 69 deletions(-)
+>>
+>> diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
+>> index c8c6deb7ed89..950813821087 100644
+>> --- a/drivers/misc/eeprom/ee1004.c
+>> +++ b/drivers/misc/eeprom/ee1004.c
+>> @@ -9,12 +9,15 @@
+>>    * Copyright (C) 2008 Wolfram Sang, Pengutronix
+>>    */
+>>
+>> +#include <linux/err.h>
+>>   #include <linux/i2c.h>
+>>   #include <linux/init.h>
+>>   #include <linux/kernel.h>
+>> +#include <linux/list.h>
+>>   #include <linux/mod_devicetable.h>
+>>   #include <linux/module.h>
+>>   #include <linux/mutex.h>
+>> +#include <linux/of_device.h>
+> What do you need from here? I don't see anything.
 >
-> The fix LGTM and syzkaller says it addresses the issue:
->
-> https://groups.google.com/g/syzkaller-bugs/c/oiBUmGsqz_Q/m/1IQ4vbROAgAJ
->
-> I see Andrew removed the patch from the -mm tree. I guess at this point
-> a new version of "epoll: use refcount to reduce ep_mutex contention",
-> including the above is needed?
->
-> If the above is correct, would a co-devel tag fit you Eric?
+> of_device.h is a mess of implicit includes which I'm currently trying
+> to detangle. See the ~13 year old comment in it about removing
+> of_platform.h include. When I'm done, pretty much only bus
+> implementations should include of_device.h.
 
-Squashing patches make sense for sure, thanks.
+
+You're right, I mistakenly thought I needed it for of_device_id. I'll 
+remove it in v3.
+
+Thanks,
+
+Eddie
+
+
+>
+> Rob
