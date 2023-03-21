@@ -2,162 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62656C3D3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2196C3D42
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjCUV6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S229464AbjCUWA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjCUV6F (ORCPT
+        with ESMTP id S229584AbjCUWAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:58:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9671F59435;
-        Tue, 21 Mar 2023 14:57:04 -0700 (PDT)
-Received: from localhost (unknown [188.24.179.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B35566030F1;
-        Tue, 21 Mar 2023 21:57:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679435822;
-        bh=GwkI7NvsahRI9WNBHxkf1so8O+1ehcR5/nTJjj5XqyE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=byK0mMTEq51+ezXCzHTz6KzNJ+w0ZC98Udl6/zMTpEEzpptMWt0laFhQVm9j1S0i3
-         8JR0X4E5elQRvtodxqrAT7dKFxnYdOYtF+t2dv9nbKN4xr/cN5pwY7abSPfc8sNtXo
-         HZih93oHeVNx2y9TGHx3B9vBC+NC+5gqDrhKM6y2zVJg4FmGyoPn7joqmw+/WO28q4
-         CtuTsX9UXuzPF/btdDE0fR7pQQq/vj7dVglw8NsrcI5G8hFwOh0Jis770zceqqOqpP
-         UJgYfRxWfYcZO6psUdBNBir+QOL4SDEwiTeP2lvM3z+GBTkQ2DIP9zz5dpYXeIcc+i
-         QMKLnbo2dhhiA==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v2 10/10] arm64: dts: rockchip: rk3588-rock-5b: Add analog audio
-Date:   Tue, 21 Mar 2023 23:56:24 +0200
-Message-Id: <20230321215624.78383-11-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
-References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 18:00:25 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678B446BC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:00:24 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id bh9-20020a170902a98900b0019e506b80d0so9551504plb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679436024;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a+AyS3qLAngEd+4v3YTH37wX1v3joPIWuJJ+LA8XqHs=;
+        b=OCfGn8zxOqlPVCaKyiMVKorp/2xxvaVp8MEemcBkwehLu6OBQQ9iQkUxnqBjEbqH6o
+         d+lIg1ZfF8iqlGl+/oAY1ZHHG6tprSUidOrS+W758WOYiDlarYqRbIOgMpJPYYsYfbDp
+         FrUfVY5yMmot6hpeZQIQriwxe2YOyEEkDEHMW++rfLLIw/4VonCFYuQ1ylcnJ1S0pnbQ
+         jBM+jjEVapJZzmecpFKlBinvT02sW9cDLdkFqDENYVjuuuSXjJL9zzQCeUhRt9P715B1
+         t2nTzLE/Q14CUGVc0KMfKmhi+B74I1Ui/XV3l4WXPniITLINHSyGCNbSp0AxpavOQewH
+         advw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679436024;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+AyS3qLAngEd+4v3YTH37wX1v3joPIWuJJ+LA8XqHs=;
+        b=MZQh+1eG16Tn4HDZI6mRvcGUqbSQhaVHgJ/5Ffq10EykUs/H5PO8PRcL6wmfYQfxsX
+         lnl7wa9rrqY1LWeZnRqD2nC6E6bA2QQiy5JPO2Hv0E5A7sFVIPM0rsQNrO2bhhut4okn
+         ttp632aIOV3MN8BexAp5zCCHTV9q//1OBPynN/ofzkSzqkBhFPDWq7WcL47Gxo7T0sHm
+         Eo0ht+Jh362uPZAT8QUMfb0u3wpyaurttJ/IqBNvoMHSZXGObYukt+Cc9BvJI+NFI9uQ
+         8K5yuRGdN9OGdrUAiYF/4bKpuYBXGL1ssNf+V5Duxq7lmdaueJBw2GlDfDo/SfqcWxdw
+         oLsg==
+X-Gm-Message-State: AO0yUKU4zlKL3qk92KDf8tGSpyc2PXXfSoqQxjlNHcN3YtDubzhn/+wA
+        X+ug52kuqGvsc3iJxEZWV3dlVqwPE8U=
+X-Google-Smtp-Source: AK7set9pLa3LCmuE2pzR0ufgMjazp5NKgQ40wShH7pV5gcVAZ3XrSkrbzxL6Rjqw+gAkBWmAsvh4mHmJHFo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:61b0:0:b0:50c:bde:50c7 with SMTP id
+ i16-20020a6561b0000000b0050c0bde50c7mr133167pgv.12.1679436023853; Tue, 21 Mar
+ 2023 15:00:23 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 21 Mar 2023 15:00:08 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
+Message-ID: <20230321220021.2119033-1-seanjc@google.com>
+Subject: [PATCH v4 00/13] KVM: x86/mmu: Optimize clear dirty log
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the necessary DT nodes for the Rock 5B board to enable the analog
-audio support provided by the Everest Semi ES8316 codec.
+This is a massaged version of Vipin's series to optimize clearing dirty
+state in the TDP MMU.  It's basically the same as v3, just spread out over
+more patches.  The only meaningful difference in the end is that
+clear_dirty_gfn_range() also gets similar treatment in handling Dirty vs.
+Writable logic.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- .../boot/dts/rockchip/rk3588-rock-5b.dts      | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
+Vipin, I'm still planning on applying this for 6.4, but the changes ended
+up being a wee bit bigger than I'm comfortable making on the fly, thus the
+formal posting.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-index 95805cb0adfa..945eac304766 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-@@ -2,6 +2,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "rk3588.dtsi"
- 
- / {
-@@ -25,6 +26,59 @@ vcc5v0_sys: vcc5v0-sys-regulator {
- 		regulator-min-microvolt = <5000000>;
- 		regulator-max-microvolt = <5000000>;
- 	};
-+
-+	sound {
-+		compatible = "audio-graph-card";
-+		label = "Analog";
-+
-+		widgets = "Microphone", "Mic Jack",
-+			  "Headphone", "Headphones";
-+
-+		routing = "MIC2", "Mic Jack",
-+			  "Headphones", "HPOL",
-+			  "Headphones", "HPOR";
-+
-+		dais = <&i2s0_8ch_p0>;
-+		hp-det-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hp_detect>;
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+
-+	es8316: es8316@11 {
-+		compatible = "everest,es8316";
-+		reg = <0x11>;
-+		clocks = <&cru I2S0_8CH_MCLKOUT>;
-+		clock-names = "mclk";
-+		#sound-dai-cells = <0>;
-+
-+		port {
-+			es8316_p0_0: endpoint {
-+				remote-endpoint = <&i2s0_8ch_p0_0>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2s0_8ch {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2s0_lrck
-+		     &i2s0_mclk
-+		     &i2s0_sclk
-+		     &i2s0_sdi0
-+		     &i2s0_sdo0>;
-+	status = "okay";
-+
-+	i2s0_8ch_p0: port {
-+		i2s0_8ch_p0_0: endpoint {
-+			dai-format = "i2s";
-+			mclk-fs = <256>;
-+			remote-endpoint = <&es8316_p0_0>;
-+		};
-+	};
- };
- 
- &sdhci {
-@@ -42,3 +96,11 @@ &uart2 {
- 	pinctrl-0 = <&uart2m0_xfer>;
- 	status = "okay";
- };
-+
-+&pinctrl {
-+	sound {
-+		hp_detect: hp-detect {
-+			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
+v4:
+- Split patches into more fine-grained chunks.
+- Massage changelogs as needed.
+- Collect reviews. [David]
+
+v3:
+- https://lore.kernel.org/all/20230211014626.3659152-1-vipinsh@google.com
+- Tried to do better job at writing commit messages.
+- Made kvm_tdp_mmu_clear_spte_bits() similar to the kvm_tdp_mmu_write_spte().
+- clear_dirty_pt_masked() evaluates mask for the bit to be cleared outside the
+  loop and use that for all of the SPTEs instead of calculating for each SPTE.
+- Some naming changes based on the feedbacks.
+- Split out the dead code clean from the optimization code.
+
+
+v2: https://lore.kernel.org/lkml/20230203192822.106773-1-vipinsh@google.com/
+- Clear dirty log and age gfn range does not go through
+  handle_changed_spte, they handle their SPTE changes locally to improve
+  their speed.
+- Clear only specific bits atomically when updating SPTEs in clearing
+  dirty log and aging gfn range functions.
+- Removed tdp_mmu_set_spte_no_[acc_track|dirty_log] APIs.
+- Converged all handle_changed_spte related functions to one place.
+
+v1: https://lore.kernel.org/lkml/20230125213857.824959-1-vipinsh@google.com
+
+Vipin Sharma (13):
+  KVM: x86/mmu: Add a helper function to check if an SPTE needs atomic
+    write
+  KVM: x86/mmu: Use kvm_ad_enabled() to determine if TDP MMU SPTEs need
+    wrprot
+  KVM: x86/mmu: Consolidate Dirty vs. Writable clearing logic in TDP MMU
+  KVM: x86/mmu: Atomically clear SPTE dirty state in the clear-dirty-log
+    flow
+  KVM: x86/mmu: Drop access tracking checks when clearing TDP MMU dirty
+    bits
+  KVM: x86/mmu: Bypass __handle_changed_spte() when clearing TDP MMU
+    dirty bits
+  KVM: x86/mmu: Remove "record_dirty_log" in __tdp_mmu_set_spte()
+  KVM: x86/mmu: Clear only A-bit (if enabled) when aging TDP MMU SPTEs
+  KVM: x86/mmu: Drop unnecessary dirty log checks when aging TDP MMU
+    SPTEs
+  KVM: x86/mmu: Bypass __handle_changed_spte() when aging TDP MMU SPTEs
+  KVM: x86/mmu: Remove "record_acc_track" in __tdp_mmu_set_spte()
+  KVM: x86/mmu: Remove handle_changed_spte_dirty_log()
+  KVM: x86/mmu: Merge all handle_changed_pte*() functions
+
+ arch/x86/kvm/mmu/tdp_iter.h |  48 +++++---
+ arch/x86/kvm/mmu/tdp_mmu.c  | 215 ++++++++++++------------------------
+ 2 files changed, 106 insertions(+), 157 deletions(-)
+
+
+base-commit: f3d90f901d18749dca096719540a075f59240051
 -- 
-2.40.0
+2.40.0.rc2.332.ga46443480c-goog
 
