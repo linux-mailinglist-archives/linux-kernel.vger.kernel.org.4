@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EB56C26A5
+	by mail.lfdr.de (Postfix) with ESMTP id 457D76C26A4
 	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjCUA71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S229784AbjCUA7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 20:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCUA7X (ORCPT
+        with ESMTP id S229788AbjCUA7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 20 Mar 2023 20:59:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51086305ED
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:59:19 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040E62E809;
+        Mon, 20 Mar 2023 17:59:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9D8CB80AB3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E9FC433D2;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4DA6CCE173B;
+        Tue, 21 Mar 2023 00:59:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 935B1C4339B;
         Tue, 21 Mar 2023 00:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679360356;
-        bh=6DcpPXTZ7xNkasjI+sZ0IKPVFtzvWjhG3dAxGsBoKj0=;
+        bh=0gTL+aqcupkQrNtpVa/HMos2Go+Vhcx9J9bRVNbcF8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Usq6838HtSh4AJ4uEwQ2w2/FrtkFBPfpZvAGA5aV7V1F5bwty9qeH/7l/UWplbeeu
-         QG3PHOUI6544DMilXTPS5UoIIB0mIw3kREHoCBd833CBRyBSQueiYKk+mgwhcqR6CW
-         5N/aLkxewMc6+QuQFqTddL7eZYcAIlFqdM7OTbzxUY2IHRwCfA5LbGlo0zYlUQbKdQ
-         st5OUax/zb/0c8eD2eCEI/6ciI/6Kg6GwlU8agjG7IHXpTFdcmjuCjd3gBoAuAl+LF
-         ZG0rCn9OJY0AHsiD8trqKtb8LXzA9K+OydhTA8+sHVjiSJ7/Mbuwbl5EppznkkDW9S
-         uzPJSAKggcBYg==
+        b=LT+TRtQRLFcOmu5rf/UDTWKXvwIdQLKZxKiV5qtI3IihJJwDhOr2NTeSjO39O02Pv
+         ESEVzkjd8DOeLJjrL3AJiAEUHhW/7vNpLWmR/snWP6Q2FW68y6/EKb2+HIbZlEkNYQ
+         xfNGmbIIo+12uHFr1WpNApAxoX36i39mPjHjs8ZA+4SN4ROJ8buIOV4AoSOC379Jvr
+         yZGC/fP3TvgcdKQBv/GaUD1+SiMDVOjEeEoHaUtT1oopC8KCtVbsiISQkB6JgKNPVi
+         n8ipHx9XoIkreEVh9IbOY51tVxL1l8B7FSYoC8jAQrJ8O9wk4CDBWCnN4JwviOyF/0
+         aNKW1WrgTndCg==
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 23BA81540395; Mon, 20 Mar 2023 17:59:16 -0700 (PDT)
+        id 28DF9154039B; Mon, 20 Mar 2023 17:59:16 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kernel-team@meta.com, mingo@kernel.org
 Cc:     elver@google.com, andreyknvl@google.com, glider@google.com,
         dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Haibo Li <haibo.li@mediatek.com>, stable@vger.kernel.org,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH kcsan 1/2] instrumented.h: Fix all kernel-doc format warnings
-Date:   Mon, 20 Mar 2023 17:59:13 -0700
-Message-Id: <20230321005914.50783-1-paulmck@kernel.org>
+Subject: [PATCH kcsan 2/2] kcsan: Avoid READ_ONCE() in read_instrumented_memory()
+Date:   Mon, 20 Mar 2023 17:59:14 -0700
+Message-Id: <20230321005914.50783-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc2
 In-Reply-To: <a26f2bdb-1504-487b-8ec8-001adafc5491@paulmck-laptop>
 References: <a26f2bdb-1504-487b-8ec8-001adafc5491@paulmck-laptop>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,215 +58,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Marco Elver <elver@google.com>
 
-Fix 26 kernel-doc notation warnings by converting the function
-documentation to kernel-doc format.
+Haibo Li reported:
 
-Warning example:
+ | Unable to handle kernel paging request at virtual address
+ |   ffffff802a0d8d7171
+ | Mem abort info:o:
+ |   ESR = 0x9600002121
+ |   EC = 0x25: DABT (current EL), IL = 32 bitsts
+ |   SET = 0, FnV = 0 0
+ |   EA = 0, S1PTW = 0 0
+ |   FSC = 0x21: alignment fault
+ | Data abort info:o:
+ |   ISV = 0, ISS = 0x0000002121
+ |   CM = 0, WnR = 0 0
+ | swapper pgtable: 4k pages, 39-bit VAs, pgdp=000000002835200000
+ | [ffffff802a0d8d71] pgd=180000005fbf9003, p4d=180000005fbf9003,
+ | pud=180000005fbf9003, pmd=180000005fbe8003, pte=006800002a0d8707
+ | Internal error: Oops: 96000021 [#1] PREEMPT SMP
+ | Modules linked in:
+ | CPU: 2 PID: 45 Comm: kworker/u8:2 Not tainted
+ |   5.15.78-android13-8-g63561175bbda-dirty #1
+ | ...
+ | pc : kcsan_setup_watchpoint+0x26c/0x6bc
+ | lr : kcsan_setup_watchpoint+0x88/0x6bc
+ | sp : ffffffc00ab4b7f0
+ | x29: ffffffc00ab4b800 x28: ffffff80294fe588 x27: 0000000000000001
+ | x26: 0000000000000019 x25: 0000000000000001 x24: ffffff80294fdb80
+ | x23: 0000000000000000 x22: ffffffc00a70fb68 x21: ffffff802a0d8d71
+ | x20: 0000000000000002 x19: 0000000000000000 x18: ffffffc00a9bd060
+ | x17: 0000000000000001 x16: 0000000000000000 x15: ffffffc00a59f000
+ | x14: 0000000000000001 x13: 0000000000000000 x12: ffffffc00a70faa0
+ | x11: 00000000aaaaaaab x10: 0000000000000054 x9 : ffffffc00839adf8
+ | x8 : ffffffc009b4cf00 x7 : 0000000000000000 x6 : 0000000000000007
+ | x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffffffc00a70fb70
+ | x2 : 0005ff802a0d8d71 x1 : 0000000000000000 x0 : 0000000000000000
+ | Call trace:
+ |  kcsan_setup_watchpoint+0x26c/0x6bc
+ |  __tsan_read2+0x1f0/0x234
+ |  inflate_fast+0x498/0x750
+ |  zlib_inflate+0x1304/0x2384
+ |  __gunzip+0x3a0/0x45c
+ |  gunzip+0x20/0x30
+ |  unpack_to_rootfs+0x2a8/0x3fc
+ |  do_populate_rootfs+0xe8/0x11c
+ |  async_run_entry_fn+0x58/0x1bc
+ |  process_one_work+0x3ec/0x738
+ |  worker_thread+0x4c4/0x838
+ |  kthread+0x20c/0x258
+ |  ret_from_fork+0x10/0x20
+ | Code: b8bfc2a8 2a0803f7 14000007 d503249f (78bfc2a8) )
+ | ---[ end trace 613a943cb0a572b6 ]-----
 
-instrumented.h:155: warning: Function parameter or member 'to' not described in 'instrument_copy_from_user_after'
-instrumented.h:155: warning: Function parameter or member 'from' not described in 'instrument_copy_from_user_after'
-instrumented.h:155: warning: Function parameter or member 'n' not described in 'instrument_copy_from_user_after'
-instrumented.h:155: warning: Function parameter or member 'left' not described in 'instrument_copy_from_user_after'
+The reason for this is that on certain arm64 configuration since
+e35123d83ee3 ("arm64: lto: Strengthen READ_ONCE() to acquire when
+CONFIG_LTO=y"), READ_ONCE() may be promoted to a full atomic acquire
+instruction which cannot be used on unaligned addresses.
 
-Fixes: 36e4d4dd4fc4 ("include/linux: Add instrumented.h infrastructure")
-Fixes: 00047c2e6d7c ("instrumented.h: Introduce read-write instrumentation hooks")
-Fixes: 33b75c1d884e ("instrumented.h: allow instrumenting both sides of copy_from_user()")
-Fixes: 888f84a6da4d ("x86: asm: instrument usercopy in get_user() and put_user()")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Marco Elver <elver@google.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Marco Elver <elver@google.com>
+Fix it by avoiding READ_ONCE() in read_instrumented_memory(), and simply
+forcing the compiler to do the required access by casting to the
+appropriate volatile type. In terms of generated code this currently
+only affects architectures that do not use the default READ_ONCE()
+implementation.
+
+The only downside is that we are not guaranteed atomicity of the access
+itself, although on most architectures a plain load up to machine word
+size should still be atomic (a fact the default READ_ONCE() still relies
+on itself).
+
+Reported-by: Haibo Li <haibo.li@mediatek.com>
+Tested-by: Haibo Li <haibo.li@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.17+
+Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/instrumented.h | 63 +++++++++++++++---------------------
- 1 file changed, 26 insertions(+), 37 deletions(-)
+ kernel/kcsan/core.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index 501fa8486749..1b608e00290a 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -15,12 +15,11 @@
- 
- /**
-  * instrument_read - instrument regular read access
-+ * @v: address of access
-+ * @size: size of access
-  *
-  * Instrument a regular read access. The instrumentation should be inserted
-  * before the actual read happens.
-- *
-- * @ptr address of access
-- * @size size of access
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index 54d077e1a2dc..5a60cc52adc0 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -337,11 +337,20 @@ static void delay_access(int type)
   */
- static __always_inline void instrument_read(const volatile void *v, size_t size)
+ static __always_inline u64 read_instrumented_memory(const volatile void *ptr, size_t size)
  {
-@@ -30,12 +29,11 @@ static __always_inline void instrument_read(const volatile void *v, size_t size)
- 
- /**
-  * instrument_write - instrument regular write access
-+ * @v: address of access
-+ * @size: size of access
-  *
-  * Instrument a regular write access. The instrumentation should be inserted
-  * before the actual write happens.
-- *
-- * @ptr address of access
-- * @size size of access
-  */
- static __always_inline void instrument_write(const volatile void *v, size_t size)
- {
-@@ -45,12 +43,11 @@ static __always_inline void instrument_write(const volatile void *v, size_t size
- 
- /**
-  * instrument_read_write - instrument regular read-write access
-+ * @v: address of access
-+ * @size: size of access
-  *
-  * Instrument a regular write access. The instrumentation should be inserted
-  * before the actual write happens.
-- *
-- * @ptr address of access
-- * @size size of access
-  */
- static __always_inline void instrument_read_write(const volatile void *v, size_t size)
- {
-@@ -60,12 +57,11 @@ static __always_inline void instrument_read_write(const volatile void *v, size_t
- 
- /**
-  * instrument_atomic_read - instrument atomic read access
-+ * @v: address of access
-+ * @size: size of access
-  *
-  * Instrument an atomic read access. The instrumentation should be inserted
-  * before the actual read happens.
-- *
-- * @ptr address of access
-- * @size size of access
-  */
- static __always_inline void instrument_atomic_read(const volatile void *v, size_t size)
- {
-@@ -75,12 +71,11 @@ static __always_inline void instrument_atomic_read(const volatile void *v, size_
- 
- /**
-  * instrument_atomic_write - instrument atomic write access
-+ * @v: address of access
-+ * @size: size of access
-  *
-  * Instrument an atomic write access. The instrumentation should be inserted
-  * before the actual write happens.
-- *
-- * @ptr address of access
-- * @size size of access
-  */
- static __always_inline void instrument_atomic_write(const volatile void *v, size_t size)
- {
-@@ -90,12 +85,11 @@ static __always_inline void instrument_atomic_write(const volatile void *v, size
- 
- /**
-  * instrument_atomic_read_write - instrument atomic read-write access
-+ * @v: address of access
-+ * @size: size of access
-  *
-  * Instrument an atomic read-write access. The instrumentation should be
-  * inserted before the actual write happens.
-- *
-- * @ptr address of access
-- * @size size of access
-  */
- static __always_inline void instrument_atomic_read_write(const volatile void *v, size_t size)
- {
-@@ -105,13 +99,12 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
- 
- /**
-  * instrument_copy_to_user - instrument reads of copy_to_user
-+ * @to: destination address
-+ * @from: source address
-+ * @n: number of bytes to copy
-  *
-  * Instrument reads from kernel memory, that are due to copy_to_user (and
-  * variants). The instrumentation must be inserted before the accesses.
-- *
-- * @to destination address
-- * @from source address
-- * @n number of bytes to copy
-  */
- static __always_inline void
- instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
-@@ -123,13 +116,12 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
- 
- /**
-  * instrument_copy_from_user_before - add instrumentation before copy_from_user
-+ * @to: destination address
-+ * @from: source address
-+ * @n: number of bytes to copy
-  *
-  * Instrument writes to kernel memory, that are due to copy_from_user (and
-  * variants). The instrumentation should be inserted before the accesses.
-- *
-- * @to destination address
-- * @from source address
-- * @n number of bytes to copy
-  */
- static __always_inline void
- instrument_copy_from_user_before(const void *to, const void __user *from, unsigned long n)
-@@ -140,14 +132,13 @@ instrument_copy_from_user_before(const void *to, const void __user *from, unsign
- 
- /**
-  * instrument_copy_from_user_after - add instrumentation after copy_from_user
-+ * @to: destination address
-+ * @from: source address
-+ * @n: number of bytes to copy
-+ * @left: number of bytes not copied (as returned by copy_from_user)
-  *
-  * Instrument writes to kernel memory, that are due to copy_from_user (and
-  * variants). The instrumentation should be inserted after the accesses.
-- *
-- * @to destination address
-- * @from source address
-- * @n number of bytes to copy
-- * @left number of bytes not copied (as returned by copy_from_user)
-  */
- static __always_inline void
- instrument_copy_from_user_after(const void *to, const void __user *from,
-@@ -158,12 +149,11 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
- 
- /**
-  * instrument_get_user() - add instrumentation to get_user()-like macros
-+ * @to: destination variable, may not be address-taken
-  *
-  * get_user() and friends are fragile, so it may depend on the implementation
-  * whether the instrumentation happens before or after the data is copied from
-  * the userspace.
-- *
-- * @to destination variable, may not be address-taken
-  */
- #define instrument_get_user(to)				\
- ({							\
-@@ -175,14 +165,13 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
- 
- /**
-  * instrument_put_user() - add instrumentation to put_user()-like macros
-+ * @from: source address
-+ * @ptr: userspace pointer to copy to
-+ * @size: number of bytes to copy
-  *
-  * put_user() and friends are fragile, so it may depend on the implementation
-  * whether the instrumentation happens before or after the data is copied from
-  * the userspace.
-- *
-- * @from source address
-- * @ptr userspace pointer to copy to
-- * @size number of bytes to copy
-  */
- #define instrument_put_user(from, ptr, size)			\
- ({								\
++	/*
++	 * In the below we don't necessarily need the read of the location to
++	 * be atomic, and we don't use READ_ONCE(), since all we need for race
++	 * detection is to observe 2 different values.
++	 *
++	 * Furthermore, on certain architectures (such as arm64), READ_ONCE()
++	 * may turn into more complex instructions than a plain load that cannot
++	 * do unaligned accesses.
++	 */
+ 	switch (size) {
+-	case 1:  return READ_ONCE(*(const u8 *)ptr);
+-	case 2:  return READ_ONCE(*(const u16 *)ptr);
+-	case 4:  return READ_ONCE(*(const u32 *)ptr);
+-	case 8:  return READ_ONCE(*(const u64 *)ptr);
++	case 1:  return *(const volatile u8 *)ptr;
++	case 2:  return *(const volatile u16 *)ptr;
++	case 4:  return *(const volatile u32 *)ptr;
++	case 8:  return *(const volatile u64 *)ptr;
+ 	default: return 0; /* Ignore; we do not diff the values. */
+ 	}
+ }
 -- 
 2.40.0.rc2
 
