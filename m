@@ -2,80 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BE46C3D19
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B356C3D21
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjCUVyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S229778AbjCUV4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCUVyA (ORCPT
+        with ESMTP id S229512AbjCUV4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:54:00 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1110A5F4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:53:39 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-17683b570b8so17614744fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:53:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679435619;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V7dlhMHJsN/E3hZ6mSfVJ0w2onuWiTVDlzOKy1rs8gk=;
-        b=770KHevIbpsKzMBVnEMR51JYMqDODixAf90QVJCuXTp/AMUUF70chB7UsYeTdr/5Lb
-         Shp7pjFmEUi2xGRx8cVLsepS3+s1hYA0m+sf2kSr4IaSzTrrrDwSNpo8yYyw5dFaVntl
-         ZdvkQ8d6hY/fkYOSfRmwwy771UsoLRgmb0FLJxbpxJfsNfhIGvHqEamQsVfC1YrRtULe
-         /JAsKeBOHbK6gechxNoQJpQSrQeeWkYeh819VgbQVkL6lpo7syULARV196YOxNGmUFeI
-         34fAiMhcFk9GjOygl4GJNmRdsaBPQ7cU9PxbrYXnM5jktjacRUTWt3V51MVX+NBHEOb+
-         hHyA==
-X-Gm-Message-State: AO0yUKWL3ItM9293KZ5O8JPDnWP05Kt4ehy7f2QxUkE+cFtWyCVIfw1c
-        GFTr2DJb7AAgxAXrnA3ZGA==
-X-Google-Smtp-Source: AK7set+lm76NDlTKvThCGXJnW8/L+gYBJXTObIByLduFQedcvor/xR7l0FIkytHpEXUMnsitoZwgGg==
-X-Received: by 2002:a05:6870:8302:b0:177:c59e:39d8 with SMTP id p2-20020a056870830200b00177c59e39d8mr320299oae.17.1679435619152;
-        Tue, 21 Mar 2023 14:53:39 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m21-20020a0568301e7500b0069b55289f07sm5742344otr.43.2023.03.21.14.53.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 14:53:38 -0700 (PDT)
-Received: (nullmailer pid 1670807 invoked by uid 1000);
-        Tue, 21 Mar 2023 21:53:37 -0000
-Date:   Tue, 21 Mar 2023 16:53:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     krzysztof.kozlowski@linaro.org, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        kernel@sberdevices.ru, linux-kernel@vger.kernel.org,
-        rockosov@gmail.com
-Subject: Re: [PATCH v3] checkpatch: add missing bindings license check
-Message-ID: <20230321215337.GA1656483-robh@kernel.org>
-References: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
+        Tue, 21 Mar 2023 17:56:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDDC3E633;
+        Tue, 21 Mar 2023 14:56:30 -0700 (PDT)
+Received: from localhost (unknown [188.24.179.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3C3DB66030D8;
+        Tue, 21 Mar 2023 21:56:29 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679435789;
+        bh=LuZwe7bTMqmCqjiHWWchmraD16aQHXj8HS9LSc1Ljfk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=edLkylBsVvkmnZKiwqZHTkYbZEwGbNfmRImklUR10H7Mg6YnVIbOIFv1p0CQjjdAt
+         LE6eaUFJL6kBiMfjWE+78/760zRywE2C90+6P3iXPqHGB2swj7A+k4dJ89tNL4nMS4
+         N15IsfCJWCOGDYhuq+EwLL3qL7IlTH0PA3wxnVCl2uyQ8qYc0WpHDjbyTTuh819kPE
+         c8poUMEq22cd5kZVShRByIfYFj1xdIdARjZXUOpcCZ7HcZPoamnyOGcDQp+iFkm8gw
+         sKXu5EJ8Vv2hG77WmMblrybY9mDLxiMUyNAlE6eauIkFwJpF9Jvzsj0BOSFj9XBmmn
+         S86+p7khrGDRA==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+Subject: [PATCH v2 00/10] Enable I2S support for RK3588/RK3588S SoCs
+Date:   Tue, 21 Mar 2023 23:56:14 +0200
+Message-Id: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 11:33:50PM +0300, Dmitry Rokosov wrote:
-> All headers from 'include/dt-bindings/' must be verified by checkpatch
-> together with Documentation bindings, because all of them are part of
-> the whole DT bindings system.
-> 
-> The requirement is dual licensed and matching pattern:
->     /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+There are five I2S/PCM/TDM controllers and two I2S/PCM controllers embedded in
+the RK3588 and RK3588S SoCs. Furthermore, RK3588 provides four additional
+I2S/PCM/TDM controllers.
 
-This is not correct. The headers can and should be licensed like the dts 
-files which are (unfortunately) all over the place and differ from the 
-bindings.
+This patch series adds the required device tree nodes to support all the above.
 
-Also, GPL-2.0-or-later is neither desired nor encouraged. 
+Additionally, it enables analog audio support for the Rock 5B SBC, which has
+been used to test both audio playback and recording.
 
-Rob
+Note that some of the DT bindings fixes in this series are not particularly
+related to I2S, but are required for a proper dtbs_check validation.
+
+Changes in v2:
+ - Rebased onto next-20230321 and drop patches 03-08/11 already applied by Mark
+ - Replaced patch 01/11 with v2 07/10
+ - Reworked patch 02/11 to v2 01-06/10
+ - v1: https://lore.kernel.org/lkml/20230315114806.3819515-1-cristian.ciocaltea@collabora.com/
+
+Cristian Ciocaltea (10):
+  dt-bindings: serial: snps-dw-apb-uart: Switch dma-names order
+  ARM: dts: sun6i: a31: Switch dma-names order for snps,dw-apb-uart
+    nodes
+  ARM: dts: sun8i: a23/a33: Switch dma-names order for snps,dw-apb-uart
+    nodes
+  ARM: dts: sun8i: v3s: Switch dma-names order for snps,dw-apb-uart
+    nodes
+  ARM: dts: sunxi: h3/h5: Switch dma-names order for snps,dw-apb-uart
+    nodes
+  riscv: dts: allwinner: d1: Switch dma-names order for snps,dw-apb-uart
+    nodes
+  arm64: dts: rockchip: rk3588s: Move
+    assigned-clocks/assigned-clock-rates out of scmi
+  arm64: dts: rockchip: rk3588s: Add I2S nodes
+  arm64: dts: rockchip: rk3588: Add I2S nodes
+  arm64: dts: rockchip: rk3588-rock-5b: Add analog audio
+
+ .../bindings/serial/snps-dw-apb-uart.yaml     |   2 +-
+ arch/arm/boot/dts/sun6i-a31.dtsi              |  12 +-
+ arch/arm/boot/dts/sun8i-a23-a33.dtsi          |  10 +-
+ arch/arm/boot/dts/sun8i-v3s.dtsi              |   6 +-
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi            |   8 +-
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      |  62 +++++++
+ arch/arm64/boot/dts/rockchip/rk3588.dtsi      |  68 ++++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     | 156 +++++++++++++++++-
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  12 +-
+ 9 files changed, 307 insertions(+), 29 deletions(-)
+
+-- 
+2.40.0
+
