@@ -2,189 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400856C263D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F17B6C263F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCUAMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S229939AbjCUANP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 20:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjCUAMR (ORCPT
+        with ESMTP id S229601AbjCUANI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:12:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E5303F9;
-        Mon, 20 Mar 2023 17:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679357536; x=1710893536;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=B8XSB724V1ynOerGo+ksuYNKlXxt/rMPS7KW4XzfHbQ=;
-  b=kuBD0mfGg+QX+vVcsj8mO9IXKi4Zho9LibNYj1z6lbUGKd7leXklOxV9
-   ilHLmHl5DhrWYc6sRWJCM1n/m8A4rH5nNKE5z00IrpyynbZEUE1Yy0n+F
-   KeBzdgTKjOUMYaopVaZ0O+tgkGmhrTPg7LlGd6gzxsAt8Oz5KBmtmh2Yk
-   HG8BrPcv32gkwtXlF47VKLGMVLVwO/aZBkNow9V/Yr5Vpv+BPMk4lhTsG
-   DQPsHrPqEUTxlUizBC7c6zSTWEOuxWg/3gNYPonphyqne8brGuAcl5Bx2
-   vYrHafz2Ey6UWi8k27Z9bQ9pK6GvgxIwJwt28x2KsQNRIn+Fm2XDE896d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="338839742"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="338839742"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 17:12:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="805099589"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="805099589"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP; 20 Mar 2023 17:12:11 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 17:12:10 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 17:12:10 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 17:12:10 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 20 Mar 2023 17:12:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e02xbZn9dszzNOybK5X4FglTQKgpmkaswIIBrXN7AAZJedmuYzZuOpstgZxkHTz2nv3cTTIppqQtgvbyoPa/ElpA5EkRo/kksIS6q5DEJpdscenTbU2YbgrhrIlKnQXPmg7oFr+DRdDmDHttsBI7tBiZUrlvrs1cWAqEM8wv+3HYG0Wj9nsYaLjPthTGj1rLqdJLyJcCcHtr+yOT9rABDGnFVRjMbSVdOOQPc6xSOpyV7YgH3fGlg+Iz2xi2Sm4GdKLmbZTsZ1bWc5tcbvLTJ10YNC0HFQRKyR9gjsmIH5zFko5+5BM6f7Pa32LWyo1j70wKgNjBc2jpOWrKZz1cqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2k6bcoG+QV9MZDwnhiDSvKv/eCyTU9srjUth1w2o3LI=;
- b=Pq4MXF967iy5iQRAUVI3Mhw7CZur8TmrJ4Bl56y8B/0r0EbH/VzeujSKBJzH4iYcD2s9z2Cf1KF9lqkE/JDZ+eWXl16uEnP+qxxsZjmm4rxOwgIRoUimyxJ5DOLZKFKzql7nB1aFERjHrhiq+Zso3R92OxkZlGmIZ9+3vpf3URLWmWxHpLLjEwK0NY7jvqgLsr8GzaXkkTuIVeKDJiP5wvUpCrdl7BqcqQQS3MZCZeAEw4BKCMh5LN1y9HRBRdN6XKDhZ3OSMCbc6Z+wZEf06u1BYshVTo0tmKW/tr+FRSV0N/wqdw6JNg/F18o1Y0XeKY0N92s0BE4iSRR8Ex82Pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by SN7PR11MB6826.namprd11.prod.outlook.com (2603:10b6:806:2a1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 00:12:07 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::7576:1f4a:2a6c:72f7]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::7576:1f4a:2a6c:72f7%2]) with mapi id 15.20.6178.029; Tue, 21 Mar 2023
- 00:12:07 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-CC:     "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v5 22/34] x86/fred: FRED initialization code
-Thread-Topic: [PATCH v5 22/34] x86/fred: FRED initialization code
-Thread-Index: AQHZUKIwUYB0dIbGLUidau1bSRiyL67/CYqAgACFIwCAAJcqAIAD0N0AgAB6oTA=
-Date:   Tue, 21 Mar 2023 00:12:06 +0000
-Message-ID: <SA1PR11MB67345D935A2368261E584085A8819@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230307023946.14516-1-xin3.li@intel.com>
- <20230307023946.14516-23-xin3.li@intel.com>
- <CAJhGHyADXz-3PCFS3M_7TJ8qLGJ=4NcV9aBWrpjemuXB_SnMGg@mail.gmail.com>
- <5D679723-D84F-42F0-AD8A-8BD1A38FB6CD@zytor.com>
- <CAJhGHyC0_1xJD2R03-NoRVpMXFTHR4v8CdzyJOZe_k0rdv=NfQ@mail.gmail.com>
- <20230320164950.GR2194297@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230320164950.GR2194297@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|SN7PR11MB6826:EE_
-x-ms-office365-filtering-correlation-id: c114681a-0f29-4324-c84b-08db29a0e82a
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gjJYF+X8h0xP/l2kXOcBKCxH1zPH0v7ddjcohzKNiT5PzfTQMbFSMIDxtjPAWO6fGhHWvwkRzMlF8fkTd/Y0MsepxDqP4HljCPhp7fMEaSp9S7LpXpMh12r0uqs/sPwfu9GtiBgFpdjU9kMRzDbTfkgoRJGZjueyovdTNqTymp1+QEVvXZ8UXuo8czj0xw1/NKv1pigMMmwuoqsKpZ4DRiE1YzsuikmnosEjS2gydL6IqL4hY+W496nRVKY76squsjX97cUy1BdWySjQ765Mbi/KTppCN2O82+m13GXFda8J5jihnKla25su5QpS0iqST+uYUqWeHrsuhrUJeS4vRnZA6Fqg7j7V7eb+Jq6QMXaZDyDQsdM/RIuAfXB/147ma2ttTJoAQKoNpF3SuAcLpSwt+BDug9L64ZjpLI1W6t95djg3Lxcu8lVM9zsTr4PV7oXZiR9FyKLsqTUQRVVmCm60VeulwFLzCwJdbLpiLbDvNTlGJ3NYZpKFYFu/tzHo7mFhv6ccbZ7vEkJUP1pKrVUt3DA7UGLWgPLXJUQxYn2el6gwVrEujfAoyuPhp9KjbXmw3U6JCj8WRJAK9+lufBuzu6hzcUsLbd6eQhTZBgt0PKJ5BIRwaVySf1/KVVpxeIQCHUYAl9uUDlz84GI7jFi3JXVqE3LMbtcnD/5waz5vYeWIGseMf1VsvqWHy05KbvKPP57NIPmee+RmszHiZg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199018)(33656002)(71200400001)(86362001)(478600001)(316002)(38070700005)(54906003)(110136005)(4326008)(8676002)(66556008)(66946007)(66446008)(66476007)(76116006)(64756008)(7696005)(186003)(38100700002)(26005)(6506007)(41300700001)(9686003)(122000001)(82960400001)(7416002)(52536014)(5660300002)(4744005)(55016003)(8936002)(2906002)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FQu20fNIU/rffU81yrksuW63E7ohBPE3L9G2M49nkfZVMgM13kPg3j/M/TiF?=
- =?us-ascii?Q?eDRgVEv7mwOen2Bgsx4dkeGF9d6ltJvi68lzd2NqpZwNnPk4DdCbJ+YTw6oH?=
- =?us-ascii?Q?A5CyfF3scr4lwoiHNZm5IlnnhBSjHnhEv2EgskiCQ49k0vDFtPZ4U2es9p5g?=
- =?us-ascii?Q?CqWUpBVcCY8agQklEHXiHk4A9MHeP8CEuuMYykoUpM3JyN3B+uF86jRLcHm6?=
- =?us-ascii?Q?f5jWACCd/vloASncmyDPyisTxhCiHFRn6N4sIFu7imKAvyypqndDy2rkRwcz?=
- =?us-ascii?Q?R7CKMFUv16NRUW1LqYWk60YZ00jENDqSj+Rp1+ilGPh90RFwCL9jTDVBDmR/?=
- =?us-ascii?Q?nZBDWKf1WTxhZjzk3kCkpMBnmT7Aul+/NAkXaT0VcCX8JNLeyF1p3/W+LPCb?=
- =?us-ascii?Q?uKwpKA0wYcuKCJ0iL8Kpqv94E5RS0z94nkvgUqxRpwmNbh/stWTpzm7Z01/R?=
- =?us-ascii?Q?riTfJR4QiUSI7laphbYrCDTPJ7zux4F3DH6COBECZKK/sOnn3R+unk57Pgyq?=
- =?us-ascii?Q?Ej6D/r+HsOEd+4xYQSWzjN9SlM56p8oGGDYVhCgXyWAnB4uhjpiLrX24Gj1n?=
- =?us-ascii?Q?yL/fqsHi0e5BnhtMq0QFuGLvz1hTTb4IE/iIgXKArb7xnF6uIPRdFNNSyMOz?=
- =?us-ascii?Q?yrG1ezVJ0Eq0hNFv/zrhVpNlwsFoF8cjOZj01nMuPqsXrgsGXN6JKLggCaST?=
- =?us-ascii?Q?d+fmO0WRUovWzpzs3cMJiMzUktl0ml4HRO1uH77G4GNhGepwgFOV+0Gp+0ex?=
- =?us-ascii?Q?13lbJRz3f/8iCHTrSP2BvXpYZgln+C5JJtWuVqQHLQ1lS53KHTdStp4yO7PK?=
- =?us-ascii?Q?B8s+ANxKdrcuSCP7xPzdcsqbaVR1bntTgz0GVAludZLScb1oLLq2DpA4jPnr?=
- =?us-ascii?Q?Qv0isjUrcZB/Zf5ELumyZsgRpaP1mgFprLbaHwV5J99PxN3croUvJSx5wVT7?=
- =?us-ascii?Q?leUj7KZsry1r+Eyz6vSIqVVvRUwjktM2bxeSbPDYHNaS6iMDadicuVbKb6rM?=
- =?us-ascii?Q?YENuArkp9BLq/ydSqyWvE2fKGkZ0MRdNm+IQFXX+xEit8mzPtDNoCM7hFxN/?=
- =?us-ascii?Q?0PmUMjbXFcxSLaCX59EQxiuAaP6E1oNOciUPAIzSMKngBuh8IGHfrlnDxzr1?=
- =?us-ascii?Q?Ug7WWrZLE2rm1awBEU1JnfdyKi4MNQl8bnwG9KUYU2qF4vCEP0kQABaHU/l1?=
- =?us-ascii?Q?QOUyMxKoQvGYO6+aT4DG+0cTL0HyfD1ZKw+cOdTnJ/KZ6L8HD2vWIEtL0hme?=
- =?us-ascii?Q?WWG7EaHOmfMzLymURUQzsp3tNfShWU4jYRDs4l+0IemSiViRDmsYBTdHUcb9?=
- =?us-ascii?Q?zSyEqij8LJ6XtjxH4QeVMYme3VT0FI4DriVH1JDbZo3Y8CmKJxqoLirOB09t?=
- =?us-ascii?Q?VFAPsqyk6nWZawDmHKxUki4zM5PcMM3pQDuT2UjDVQc76br33hDyPMjy+Vp3?=
- =?us-ascii?Q?XTk1z2XA1mGzpR1tKEcRalAtIPcSAL+0KJWk2Yn1vPuyLbvC/fwgbXM1eehZ?=
- =?us-ascii?Q?OBU8WUNHgcqMvwvFwd3oeslDolQqN3r9USsaDgVwnKLKNPCj9xIQezs5p6U8?=
- =?us-ascii?Q?/l5YWZj20zslLtgDMcI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c114681a-0f29-4324-c84b-08db29a0e82a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 00:12:06.9524
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Nay4SazjSoHzIhrg0kKb1hh51nQ73GOtGtNg+A5yuStrp6rS+m2YrAaTodFPTZGKOYHijV6tog21kVNGh4o8vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6826
-X-OriginatorOrg: intel.com
+        Mon, 20 Mar 2023 20:13:08 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B736E2A167
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:12:56 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230321001252epoutp04ae5f558d9d5d36de9a380b0cbfbdecde~ORtCiLPtP0704907049epoutp049
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:12:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230321001252epoutp04ae5f558d9d5d36de9a380b0cbfbdecde~ORtCiLPtP0704907049epoutp049
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679357572;
+        bh=PaEWPPd/BY1we4un0qO+7j4N9iZdp9EdLrjCEp8lr8k=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=E+EbrR2lLPb5QMjv+zWONLw/Y9DEqFS6YrJinHL8VQpH010u7cEE8znOnQX0C93qh
+         Gz0szdXpDiBX6xi0VEfeKXe+M04AzGCWeO29pGNey1Q/g8m50OLL1udmnWchoaD1mr
+         n26jGdFP+l+JRSd5BkxS8Qm1yA4AdXsg7/ArsBEc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230321001252epcas2p2af72b0899698fac1eafa829ad5fd7e98~ORtCN_PP21912619126epcas2p2K;
+        Tue, 21 Mar 2023 00:12:52 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4PgX9v56kMz4x9Pt; Tue, 21 Mar
+        2023 00:12:51 +0000 (GMT)
+X-AuditID: b6c32a46-743fa70000007a4b-df-6418f6832e4c
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        44.EE.31307.386F8146; Tue, 21 Mar 2023 09:12:51 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2] f2fs: Fix system crash due to lack of free space in LFS
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
+Date:   Tue, 21 Mar 2023 09:12:51 +0900
+X-CMS-MailID: 20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJKsWRmVeSWpSXmKPExsWy7bCmqW7zN4kUgze35CxOTz3LZPFk/Sxm
+        i0uL3C0u75rDZjH1/BEmB1aPTas62Tx2L/jM5NG3ZRWjx+dNcgEsUdk2GamJKalFCql5yfkp
+        mXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBrlRTKEnNKgUIBicXFSvp2NkX5
+        pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGTNfPWUq+KdTcXZmE3MD
+        4wLVLkZODgkBE4kj6+6zdzFycQgJ7GCUWDx7G1MXIwcHr4CgxN8dwiA1wgLeEn2nHrCB2EIC
+        ShLXDvSyQMT1JTYvXsYOYrMJ6Er83bAczBYReMUocWa1KMR8XokZ7U9ZIGxpie3LtzJC2BoS
+        P5b1MkPYohI3V79lh7HfH5sPVSMi0XrvLFSNoMSDn7uh4pISiw6dZ4Kw8yX+rrjOBmHXSGxt
+        aIOK60tc69gItpdXwFfiU+tHsPksAqoS7w6cgZrjIrHzxF1WEJtZQF5i+9s5zCCvMwtoSqzf
+        pQ9iSggoSxy5xQJRwSfRcfgvO8xXO+Y9gdqkJrF502ZWCFtG4sLjNqjpHhL7e+6zQkItUOLj
+        xPlsExjlZyHCdhaSvbMQ9i5gZF7FKJZaUJybnlpsVGAEj87k/NxNjOA0p+W2g3HK2w96hxiZ
+        OBgPMUpwMCuJ8LoxS6QI8aYkVlalFuXHF5XmpBYfYjQF+ngis5Rocj4w0eaVxBuaWBqYmJkZ
+        mhuZGpgrifNK255MFhJITyxJzU5NLUgtgulj4uCUamBqbzOcO0FMNsrJZYX5NCVNN267HQrP
+        3+/qM+eaaZibtO12rt+DpC83rrx1ZOuZyqDK6WLTe/hSTZbOdFGjuJnHctKffuyV+/j21NL9
+        GVcWqLwQmMGqWSLBWHVqfpn83V6TFg0BkZdlbmtf9jYf/ZsXfUE90e/hyuNmGx8lXXU9k7u5
+        9Nzd8Hs5Stx2VdKK2Qdubo7/8OySobF4UNCvTCn/h1rhP1+u7eoTj12jF6C9f87M+6dy1XZu
+        +7afg8FnNc/Eqq6vu03Kz8+6kn30zUGFN/rdf7dcOW1zL31RXL6zSGUHu5tm8GrvY0oVNxzm
+        5/v1mUzNeLTtGMeyZ2H5Zyp2C11J9E9xid337881relKLMUZiYZazEXFiQCS/11T/AMAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8
+References: <CGME20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > If there is no other concrete reason other than overflowing for
-> > assigning NMI and #DB with a stack level > 0, #VE should also be
-> > assigned with a stack level > 0, and #BP too. #VE can happen anytime
-> > and anywhere, so it is subject to overflowing too.
->=20
-> So #BP needs the stack-gap (redzone) for text_poke_bp().
->=20
-> #BP can end up in kprobes which can then end up in ftrace/perf, depending=
- on
-> how it's all wired up.
->=20
-> #VE is currently a trainwreck vs NMI/MCE, but I think FRED solves the wor=
-st of
-> that. I'm not exactly sure how deep the #VE handler goes.
->=20
+When f2fs tries to checkpoint during foreground gc in LFS mode, system
+crash occurs due to lack of free space if the amount of dirty node and
+dentry pages generated by data migration exceeds free space.
+The reproduction sequence is as follows.
 
-VE under IDT is *not* using an IST, we need some solid rationales here.
+ - 20GiB capacity block device (null_blk)
+ - format and mount with LFS mode
+ - create a file and write 20,000MiB
+ - 4k random write on full range of the file
 
-Thanks!
-  Xin
+ RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
+ Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
+ RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
+ RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
+ RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
+ RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
+ R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
+ R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
+ FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
+ CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
+ DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ Call Trace:
+ <TASK>
+ allocate_segment_by_default+0x9c/0x110 [f2fs]
+ f2fs_allocate_data_block+0x243/0xa30 [f2fs]
+ ? __mod_lruvec_page_state+0xa0/0x150
+ do_write_page+0x80/0x160 [f2fs]
+ f2fs_do_write_node_page+0x32/0x50 [f2fs]
+ __write_node_page+0x339/0x730 [f2fs]
+ f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
+ block_operations+0x257/0x340 [f2fs]
+ f2fs_write_checkpoint+0x102/0x1050 [f2fs]
+ f2fs_gc+0x27c/0x630 [f2fs]
+ ? folio_mark_dirty+0x36/0x70
+ f2fs_balance_fs+0x16f/0x180 [f2fs]
+
+This patch adds checking whether free sections are enough before checkpoint
+during gc.
+
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+---
+ fs/f2fs/gc.c      | 10 ++++++++--
+ fs/f2fs/gc.h      |  2 ++
+ fs/f2fs/segment.h | 27 ++++++++++++++++++++++-----
+ 3 files changed, 32 insertions(+), 7 deletions(-)
+
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 4546e01b2ee0..dd563866d3c9 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
+ 	};
+ 	unsigned int skipped_round = 0, round = 0;
++	unsigned int need_lower = 0, need_upper = 0;
+ 
+ 	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+ 				gc_control->nr_free_secs,
+@@ -1858,8 +1859,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		}
+ 	}
+ 
+-	/* Write checkpoint to reclaim prefree segments */
+-	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
++	ret = get_need_secs(sbi, &need_lower, &need_upper);
++
++	/*
++	 * Write checkpoint to reclaim prefree segments.
++	 * We need more three extra sections for writer's data/node/dentry.
++	 */
++	if (free_sections(sbi) <= need_upper + NR_GC_CHECKPOINT_SECS &&
+ 				prefree_segments(sbi)) {
+ 		ret = f2fs_write_checkpoint(sbi, &cpc);
+ 		if (ret)
+diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+index 19b956c2d697..e81d22bf3772 100644
+--- a/fs/f2fs/gc.h
++++ b/fs/f2fs/gc.h
+@@ -30,6 +30,8 @@
+ /* Search max. number of dirty segments to select a victim segment */
+ #define DEF_MAX_VICTIM_SEARCH 4096 /* covers 8GB */
+ 
++#define NR_GC_CHECKPOINT_SECS (3)	/* data/node/dentry sections */
++
+ struct f2fs_gc_kthread {
+ 	struct task_struct *f2fs_gc_task;
+ 	wait_queue_head_t gc_wait_queue_head;
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index be8f2d7d007b..52a6d1ed4f24 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -605,8 +605,12 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
+ 	return true;
+ }
+ 
+-static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+-					int freed, int needed)
++/*
++ * calculate needed sections for dirty node/dentry
++ * and call has_curseg_enough_space
++ */
++static inline bool get_need_secs(struct f2fs_sb_info *sbi,
++				  unsigned int *lower, unsigned int *upper)
+ {
+ 	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
+ 					get_pages(sbi, F2FS_DIRTY_DENTS) +
+@@ -616,20 +620,33 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+ 	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
+ 	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
+ 	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
++
++	*lower = node_secs + dent_secs;
++	*upper = *lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
++
++	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
++}
++
++static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
++					int freed, int needed)
++{
+ 	unsigned int free, need_lower, need_upper;
++	bool curseg_enough;
+ 
+ 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
+ 		return false;
+ 
++	curseg_enough = get_need_secs(sbi, &need_lower, &need_upper);
++
+ 	free = free_sections(sbi) + freed;
+-	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
+-	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
++	need_lower += (needed + reserved_sections(sbi));
++	need_upper += (needed + reserved_sections(sbi));
+ 
+ 	if (free > need_upper)
+ 		return false;
+ 	else if (free <= need_lower)
+ 		return true;
+-	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
++	return curseg_enough;
+ }
+ 
+ static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+-- 
+2.34.1
