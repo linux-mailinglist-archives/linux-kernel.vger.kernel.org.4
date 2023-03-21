@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB786C3034
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EF36C303A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjCULUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S229801AbjCULUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjCULUb (ORCPT
+        with ESMTP id S230021AbjCULUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:20:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82CDFC141
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:20:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 386ACAD7;
-        Tue, 21 Mar 2023 04:20:46 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.54.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FFD43F71E;
-        Tue, 21 Mar 2023 04:20:01 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 11:19:55 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: Support CMDLINE_EXTEND
-Message-ID: <ZBmS28ciIei5sKHY@FVFF77S0Q05N>
-References: <20230320211451.2512800-1-chris.packham@alliedtelesis.co.nz>
+        Tue, 21 Mar 2023 07:20:42 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA9130289;
+        Tue, 21 Mar 2023 04:20:23 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32LBK6Il127860;
+        Tue, 21 Mar 2023 06:20:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679397606;
+        bh=sA5WPt7hqmI71j0RcfE7aJp3jEnVUd4Dp5NXf/LOYxc=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=w1D61zYKNATROdXVJ0omKaXrychowTw0thICdPIYMld8poYbkIaebSHgIe5r+2dl0
+         1SY9OD/CWLwwURBNxSJl21xUTVlqdC7xxgfb6QosWBVnthFwTxHpkmn5IILD0/ASwT
+         mW8MVTc4SMViOQdTfw0dMI6kaiFvYc//ALjAATa8=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32LBK6f9091404
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Mar 2023 06:20:06 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Mar 2023 06:20:06 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Mar 2023 06:20:06 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32LBJxVn088542;
+        Tue, 21 Mar 2023 06:20:03 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net-next 1/4] net: ethernet: ti: am65-cpsw: Simplify setting supported interface
+Date:   Tue, 21 Mar 2023 16:49:55 +0530
+Message-ID: <20230321111958.2800005-2-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230321111958.2800005-1-s-vadapalli@ti.com>
+References: <20230321111958.2800005-1-s-vadapalli@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320211451.2512800-1-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:14:51AM +1300, Chris Packham wrote:
-> Support extending the bootloader provided command line for arm64
-> targets. This support is already present via generic DT/EFI code the
-> only thing required is for the architecture to make it selectable.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Convert the existing IF/ELSE statement based approach of setting the
+supported_interfaces member of struct "phylink_config", to SWITCH
+statements. This will help scale to newer PHY-MODES as well as newer
+compatibles.
 
-We deliberately dropped support for CMDLINE_EXTEND in commit:
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 27 ++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-  cae118b6acc3 ("arm64: Drop support for CMDLINE_EXTEND")
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 4cfbc1c2b1c4..cba8db14e160 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -2143,15 +2143,30 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
+ 	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100 | MAC_1000FD;
+ 	port->slave.phylink_config.mac_managed_pm = true; /* MAC does PM */
+ 
+-	if (phy_interface_mode_is_rgmii(port->slave.phy_if)) {
++	switch (port->slave.phy_if) {
++	case PHY_INTERFACE_MODE_RGMII:
++	case PHY_INTERFACE_MODE_RGMII_ID:
++	case PHY_INTERFACE_MODE_RGMII_RXID:
++	case PHY_INTERFACE_MODE_RGMII_TXID:
+ 		phy_interface_set_rgmii(port->slave.phylink_config.supported_interfaces);
+-	} else if (port->slave.phy_if == PHY_INTERFACE_MODE_RMII) {
++		break;
++
++	case PHY_INTERFACE_MODE_RMII:
+ 		__set_bit(PHY_INTERFACE_MODE_RMII,
+ 			  port->slave.phylink_config.supported_interfaces);
+-	} else if (common->pdata.extra_modes & BIT(port->slave.phy_if)) {
+-		__set_bit(PHY_INTERFACE_MODE_QSGMII,
+-			  port->slave.phylink_config.supported_interfaces);
+-	} else {
++		break;
++
++	case PHY_INTERFACE_MODE_QSGMII:
++		if (common->pdata.extra_modes & BIT(port->slave.phy_if)) {
++			__set_bit(port->slave.phy_if,
++				  port->slave.phylink_config.supported_interfaces);
++		} else {
++			dev_err(dev, "selected phy-mode is not supported\n");
++			return -EOPNOTSUPP;
++		}
++		break;
++
++	default:
+ 		dev_err(dev, "selected phy-mode is not supported\n");
+ 		return -EOPNOTSUPP;
+ 	}
+-- 
+2.25.1
 
-... which was mentioned the last time somone tried to re-add it:
-
-  https://lore.kernel.org/linux-arm-kernel/ZAh8dWvbNkVQT11C@arm.com/
-
-Has something changes such that those issues no longer apply? If so, please
-call that out explicitly in the commit message. If not, I do not think we
-should take this patch.
-
-Thanks,
-Mark.
-
-> ---
->  arch/arm64/Kconfig | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 1023e896d46b..3c837b085f21 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -2228,6 +2228,12 @@ config CMDLINE_FROM_BOOTLOADER
->  	  the boot loader doesn't provide any, the default kernel command
->  	  string provided in CMDLINE will be used.
->  
-> +config CMDLINE_EXTEND
-> +	bool "Extend bootloader kernel arguments"
-> +	help
-> +	  The command-line arguments provided by the boot loader will be
-> +	  appended to the default kernel command string.
-> +
->  config CMDLINE_FORCE
->  	bool "Always use the default kernel command string"
->  	help
-> -- 
-> 2.40.0
-> 
