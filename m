@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7366C3314
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F736C331A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjCUNj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S230189AbjCUNli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjCUNj1 (ORCPT
+        with ESMTP id S229899AbjCUNlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:39:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB511A7;
-        Tue, 21 Mar 2023 06:39:26 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 14:39:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679405963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
-        b=nAS1PiYdPQp25hSPtZD9qb4LVvIfl5+Iq5YN9Mxy/T1EHmDnbg8pR/VShA4l3+N1ogc6aW
-        VwtM2UDEZYA6VEkgWdZEDkmtWRDDukXVPXLHXTbLyH6ZbjoAJ9Cfs5RNZleYiuxWbLLgIz
-        1sA8e5lPAUKvng31ckchCFGaRylR3MWgiUqvqFPZFhGgEtSm+7G2BcaFlLjBdm8CtUZKbR
-        3qpTBNFWDOtkTbPA45Uc3zYiQeeDTJQCf42V2Lq7jvmRwTnHCalrc8CIeNA59l2+sM/kZT
-        lmWt30xKc70YatBYQPgSqUoUNbdlTLtiQnQbj5RrCjiGXUR/tmB3GkxlH4nR2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679405963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uW5fpG7UdO7junfYXzpr1VASUwkYgjePEMEZI0s2uKU=;
-        b=MuC8fJg05kjTXLdb4HxI+i197gCnckEYTxojaKeYuFelpshq39C3x6bX0kq2UQSeu12Sg0
-        dPtD75Vt7oRPDUAA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
- other CPU for PREEMPT_RT
-Message-ID: <20230321133922.ontdC41h@linutronix.de>
-References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
- <20230321100456.0_DhhkZJ@linutronix.de>
- <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
- <20230321105734.Z7F3Uvf1@linutronix.de>
- <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+        Tue, 21 Mar 2023 09:41:35 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7423B6A70;
+        Tue, 21 Mar 2023 06:41:32 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LCvBYW005914;
+        Tue, 21 Mar 2023 13:41:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=aFr/E2BfAVYF/VpSXNgsbIX54SC1gXcp13vhvu8ZRcU=;
+ b=XePJy6kzog7iLbOw86uwR0XF4CKwvFJwTcPIny7MkvpKdGIs/iX9lVdamclWSkDVu9Vq
+ sth16GRQSDurVifyAORiJ+edf10BCGdWKiuIzqClurMbLig05XjTLiLX7e8B0U31Vbtv
+ dkeM1yWg1i/zwDsmpL4cL0ooVDOxYSjUcyT5Tf5CibFIre+shmkRX4rpmaqkt/Jn1KTn
+ aJ/Y+OEdDjIqMhjYHNOduWAsDrn3L8ynlQxQkCuZPySqn3kVspRArsn4s5zs5zWwL1C8
+ ORqliZfpaaD2reXsj6qgfbStKE4A2pxIRJ5NACzUh1lLKE6nIFX6bH3VT2Uwh7BgSagi 2A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf7qns7vq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 13:41:31 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32LCwCoA008957;
+        Tue, 21 Mar 2023 13:41:31 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pf7qns7v4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 13:41:30 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32L9RLNK015046;
+        Tue, 21 Mar 2023 13:41:29 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3pd4jfcqhe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 13:41:29 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LDfPUp65208738
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Mar 2023 13:41:25 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CBFA20043;
+        Tue, 21 Mar 2023 13:41:25 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D194A20040;
+        Tue, 21 Mar 2023 13:41:24 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.90])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 Mar 2023 13:41:24 +0000 (GMT)
+Date:   Tue, 21 Mar 2023 14:41:24 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Lizhe <sensor1010@163.com>
+Cc:     akrowiak@linux.ibm.com, pasic@linux.ibm.com, jjherne@linux.ibm.com,
+        freude@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] s390/vfio-ap-drv: Remove redundant driver match
+ function
+Message-ID: <ZBm0BDdJr/s7GVTF@osiris>
+References: <20230319041941.259830-1-sensor1010@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230319041941.259830-1-sensor1010@163.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cNNSfWsMjyVffsA3Z48USOaK74xl_XfB
+X-Proofpoint-ORIG-GUID: 3B-TALr-VURsZ5q3BhPYu8YHqzLFCpZB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_08,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=715
+ priorityscore=1501 clxscore=1015 phishscore=0 impostorscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-21 12:27:42 [+0100], Krzysztof Kozlowski wrote:
-> > I still fail to understand why this is PREEMPT_RT specific and not a
-> > problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
+On Sun, Mar 19, 2023 at 12:19:41PM +0800, Lizhe wrote:
+> If there is no driver match function, the driver core assumes that each
+> candidate pair (driver, device) matches, see driver_match_device().
 > 
-> Hm, good point, I actually don't know what is the workqueue
-> recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
-> preferred?
-
-If you isolate a CPU you want the kernel to stay away from it. The idea
-is that something is done on that CPU and the kernel should leave it
-alone. That is why the HZ tick avoided. That is why timers migrate to
-the "housekeeping" CPU and do not fire on the CPU that it was programmed
-on (unless the timer has to fire on this CPU).
-
-> And how such code would look like?
-> if (tick_nohz_tick_stopped())?
-
-Yeah closer :) The CPU-mask for workqueues can still be different on
-non-NOHZ-full CPUs. Still you interrupt the CPU doing in-userland work
-and this is not desired.
-
-You have a threaded-IRQ which does nothing but schedules a worker. Why?
-Why not sleep and remain in that threaded IRQ until the work is done?
-You _can_ sleep in the threaded IRQ if you have to. Force-threaded is
-different but this is one is explicit threaded so you could do it.
-	
-> > However the thermal notifications have nothing to do with cpufreq.
+> Drop the matrix bus's match function that always returned 1 and so 
+> implements the same behaviour as when there is no match function
 > 
-> They have. The FW notifies that thermal mitigation is happening and
-> maximum allowed frequency is now XYZ. The cpufreq receives this and sets
-> maximum allowed scaling frequency for governor.
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> ---
+>  drivers/s390/crypto/vfio_ap_drv.c | 6 ------
+>  1 file changed, 6 deletions(-)
 
-I see. So the driver is doing something in worst case. This interrupt,
-you have per-CPU and you need to do this CPU? I mean could you change
-the affinity of the interrupt to another CPU?
-
-> Best regards,
-> Krzysztof
-
-Sebastian
+Applied.
