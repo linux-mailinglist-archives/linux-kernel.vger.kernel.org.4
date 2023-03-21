@@ -2,129 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F426C3350
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC826C335E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 14:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjCUNv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 09:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S230368AbjCUNxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 09:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjCUNvW (ORCPT
+        with ESMTP id S231271AbjCUNxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 09:51:22 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABFE48E14
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:51:18 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230321135115euoutp02a194dd2baf9ade3785335c537791237f~Oc3koYE_g2740927409euoutp02r
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:51:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230321135115euoutp02a194dd2baf9ade3785335c537791237f~Oc3koYE_g2740927409euoutp02r
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679406675;
-        bh=GXvO1SsecXjjDHDwdPtRSbMeXGhDy7A8WdxlRFo4Nr0=;
-        h=Date:Subject:From:To:CC:In-Reply-To:References:From;
-        b=btqueFTYct3WTvXqNvUnZ5kK9w6L19fRvsRD+1MwxQ2sO35BIZHefZxtkAKKjy1LJ
-         ebT4EI8ZQ3Vq/XQMNfQOyqPmCrJLLbgFRh1StSkLTCluvQDYXvMzDyoB8ncQ8NjbO2
-         1DmH8XLKirWW0Wq55p1LYBVH/bCDnbeyi1PxsupA=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230321135114eucas1p1421153d2c93b7964acf9dead67635270~Oc3kSR3x01567415674eucas1p1O;
-        Tue, 21 Mar 2023 13:51:14 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id B1.C1.09503.256B9146; Tue, 21
-        Mar 2023 13:51:14 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230321135114eucas1p1a65af09247f837ebabfac32fb91d2d72~Oc3j0Ycp81905019050eucas1p16;
-        Tue, 21 Mar 2023 13:51:14 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230321135114eusmtrp2f41f7a9a9136fc979dea94b9d55170dc~Oc3jzsLWj0369203692eusmtrp2r;
-        Tue, 21 Mar 2023 13:51:14 +0000 (GMT)
-X-AuditID: cbfec7f2-e8fff7000000251f-0b-6419b6522e66
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 55.E1.08862.256B9146; Tue, 21
-        Mar 2023 13:51:14 +0000 (GMT)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230321135114eusmtip192c5cd30d3eac61e329f07f2ea2a3a25~Oc3jp4s5m0964409644eusmtip1G;
-        Tue, 21 Mar 2023 13:51:14 +0000 (GMT)
-Received: from [192.168.8.209] (106.210.248.172) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Tue, 21 Mar 2023 13:51:12 +0000
-Message-ID: <ea4a45b8-837d-ec60-8320-126346e49a42@samsung.com>
-Date:   Tue, 21 Mar 2023 14:51:12 +0100
+        Tue, 21 Mar 2023 09:53:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68B448E29;
+        Tue, 21 Mar 2023 06:53:08 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LAL17U023402;
+        Tue, 21 Mar 2023 13:52:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=CZ5IUOIM+6Nj1yrJM1EOzdYAdH912N3pQCkds+1bKvQ=;
+ b=lu/pPiF4AY4StyhIlR0sPXKCVNXS8mUcidUvg7zzV0EodzVfaHXUauI2iIC19LmTOiWH
+ D59cEp7Gq0brpO/6/7uxywKKAiaRL8A8YwdSRcA+oYVObwts8HY9u7v800YRPFC7m18A
+ JMiDqQuTELdWYO/wwuWfIAZltjeh9gC7DG6h95BWnLNZY1vpxAvijRgZLwMu6LZkZJB5
+ xQV7YEXTqyiWV7VsIglupdzYE3Jh36bp75h67Fesfzk/3oCK5aG4Pkt0ZF8RqPKmPtc+
+ C2l+wCrKF2vWHcumBB7e+pGA3M0lkhB3Vuu+ysoGQhj9Lcyu7+8L9TT1+Cr3qc5zRe9P Dw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pf41vsnve-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 13:52:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32LDqsF5015312
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 13:52:54 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 21 Mar 2023 06:52:50 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V1 0/4] soc: qcom: boot_stats: Add driver support for boot_stats
+Date:   Tue, 21 Mar 2023 19:21:47 +0530
+Message-ID: <cover.1679403696.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 1/3] filemap: convert page_endio to folio_endio
-Content-Language: en-US
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Christoph Hellwig <hch@infradead.org>, <hubcap@omnibond.com>,
-        <senozhatsky@chromium.org>, <martin@omnibond.com>,
-        <minchan@kernel.org>, <viro@zeniv.linux.org.uk>,
-        <brauner@kernel.org>, <axboe@kernel.dk>,
-        <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <gost.dev@samsung.com>, <mcgrof@kernel.org>,
-        <devel@lists.orangefs.org>
-In-Reply-To: <04047489-e528-4451-4af2-c19bd3635e7e@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.172]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAKsWRmVeSWpSXmKPExsWy7djPc7pB2yRTDPZNMrKYs34Nm8Xqu/1s
-        Fq8Pf2K02L95CpPF6QmLmCza7/YxWey9pW2xZ+9JFovLu+awWdxb85/V4uT6/8wWNyY8ZbRY
-        9vU9u8XujYvYLM7/Pc5q8fvHHDYHAY/ZDRdZPDav0PK4fLbUY9OqTjaPTZ8msXucmPGbxaNh
-        6i02j1+377B6fN4k57HpyVumAK4oLpuU1JzMstQifbsErox5P7tYCrr4K/rmP2JpYLzL1cXI
-        ySEhYCLReqCNqYuRi0NIYAWjxI19a6GcL4wSb++9Y4NwPjNKzLi2jAWm5cuq6awQieWMEvPm
-        /2aCq/p/ZDY7hLObUWL7g92sIC28AnYSTxd/YgSxWQRUJToubIKKC0qcnPkEaCwHh6hAlMSL
-        12UgprCAu8THXXkgFcwC4hK3nsxnAgmzCWhJNHayg5giAhoSb7YYgSxiFtjKLHGk4xXYcE4B
-        e4kPq9pZIFo1JVq3/2aHsOUltr+dwwxxv7LEnNc7oOxaibXHzoBdLCHwilNiyYIvbBAJF4lz
-        p+5BPSws8er4FnYIW0bi/06Qe0DsaomnN34zQzS3MEr071zPBnKdhIC1RN+ZHAjTUeLobA0I
-        k0/ixltBiHP4JCZtm848gVF1FlIwzELy8CwkH8xC8sECRpZVjOKppcW56anFhnmp5XrFibnF
-        pXnpesn5uZsYgYnw9L/jn3Ywzn31Ue8QIxMH4yFGCQ5mJRFeN2aJFCHelMTKqtSi/Pii0pzU
-        4kOM0hwsSuK82rYnk4UE0hNLUrNTUwtSi2CyTBycUg1MLSrRXpEG/90Pbr7QHOrJnbDx88VW
-        DtkX9vvkT72PXyD2IkDcc57rp1JWVW+3Wtk9n5SfvuYWCrN6mai5p2fO1KUqYe6nr990zhBo
-        8D5y/Y6I7fcHpda+OT/OPb3vrMJ2JbD3vaDwVKY1UTsVkr+E7pFoe5e2XbwmbO/XOV3Onw1/
-        rVo3TWhqqMqBk/O5vk14ONfJSi46Y3/wnsQVCslStV63GTdFH9BlWr+pUvBr8K2Q/RrXr5TN
-        kpY6MjOkYeZxs+Yby7c9cRf8uDZl/yoGRqVD6Y6fOu5khgVrd9RsK+hNSUwv8lJWcXnR+0VG
-        MFTjZs1WqwrJBg/u9TWfek7m5tfW3DbqVV0UGbpgg5USS3FGoqEWc1FxIgBwnAg38wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOKsWRmVeSWpSXmKPExsVy+t/xu7pB2yRTDD7dE7aYs34Nm8Xqu/1s
-        Fq8Pf2K02L95CpPF6QmLmCza7/YxWey9pW2xZ+9JFovLu+awWdxb85/V4uT6/8wWNyY8ZbRY
-        9vU9u8XujYvYLM7/Pc5q8fvHHDYHAY/ZDRdZPDav0PK4fLbUY9OqTjaPTZ8msXucmPGbxaNh
-        6i02j1+377B6fN4k57HpyVumAK4oPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsj
-        UyV9O5uU1JzMstQifbsEvYx5P7tYCrr4K/rmP2JpYLzL1cXIySEhYCLxZdV01i5GLg4hgaWM
-        EvuWXGaCSMhIfLrykR3CFpb4c62LDaLoI6PE9T2bWSCc3YwSR39/ZAWp4hWwk3i6+BMjiM0i
-        oCrRcWETVFxQ4uTMJywgtqhAlMTTO4eYuxg5OIQF3CU+7soDCTMLiEvcejKfCSTMJqAl0djJ
-        DmKKCGhIvNliBLKJWWArs8SRjleMEGu/MUlcer8RbDyngL3Eh1XtLBBzNCVat/9mh7DlJba/
-        ncMM8YCyxJzXO6DsWolX93czTmAUnYXkullIzpiFZNQsJKMWMLKsYhRJLS3OTc8tNtQrTswt
-        Ls1L10vOz93ECEwh24793LyDcd6rj3qHGJk4GA8xSnAwK4nwujFLpAjxpiRWVqUW5ccXleak
-        Fh9iNAUG0URmKdHkfGASyyuJNzQzMDU0MbM0MLU0M1YS5/Us6EgUEkhPLEnNTk0tSC2C6WPi
-        4JRqYGKc8Xp6w52UCRuXfM4wClmRvG7PJNlX51/r/dyU99vpx+t/kYskEr9Znk96PWHeXeNr
-        Du/szmpm/HMIDdnhkfOCcfG8l5xdaqtLdgVe/hg/qfOlP5PzzTdla/euVN9uIHXC+4DWrg+u
-        VYpN/qqlCRaRS4yuzFwcEVba9sFiHlfacaa+7dYikgeOFRZy3V63YXVtU/63Ob4X1H7rcFjI
-        X3PYvzGS3yjvw62Fb6U/sRcuFv6rp3t6gv8kjUqLpjXrm4J2JhpfPH1j57vdPw13yt674rVW
-        JOJC1dnY6MUSdpt/5otl/9CPa+F6s+bw0/JPK3/t3dthJ6S2vNHws9B2ubSNzSfMQ9+Uvi2Z
-        UPvyA8c6JZbijERDLeai4kQAcFQi6aoDAAA=
-X-CMS-MailID: 20230321135114eucas1p1a65af09247f837ebabfac32fb91d2d72
-X-Msg-Generator: CA
-X-RootMTR: 20230315123234eucas1p2503d83ad0180cecde02e924d7b143535
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230315123234eucas1p2503d83ad0180cecde02e924d7b143535
-References: <20230315123233.121593-1-p.raghav@samsung.com>
-        <CGME20230315123234eucas1p2503d83ad0180cecde02e924d7b143535@eucas1p2.samsung.com>
-        <20230315123233.121593-2-p.raghav@samsung.com>
-        <ZBHcl8Pz2ULb4RGD@infradead.org>
-        <d6cde35e-359a-e837-d2e0-f2bd362f2c3e@samsung.com>
-        <ZBSH6Uq6IIXON/rh@casper.infradead.org>
-        <04047489-e528-4451-4af2-c19bd3635e7e@samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6TGQosM47Pkw6twuqmlW-6F23xmBE4AQ
+X-Proofpoint-GUID: 6TGQosM47Pkw6twuqmlW-6F23xmBE4AQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_10,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 adultscore=0 spamscore=0 clxscore=1011 phishscore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303210108
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,64 +79,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+Qualcomm's proprietary Android boot-loaders capture boot time
+stats, like the time when the bootloader started execution and at what
+point the bootloader handed over control to the kernel etc. in the IMEM
+region. This information is captured in a specific format by this driver
+by mapping a structure to the IMEM memory region and then accessing the
+members of the structure to print the information. This information is
+useful in verifying if existing boot KPIs have regressed or not.
+A sample log in SM8450(waipio) device is as follows:-
 
-On 2023-03-17 17:14, Pankaj Raghav wrote:
-> On 2023-03-17 16:31, Matthew Wilcox wrote:
->>> +
->>> +       while ((folio = readahead_folio(rac))) {
->>> +               folio_mark_uptodate(folio);
->>> +               folio_unlock(folio);
->>>         }
->>
->> readahead_folio() is a bit too heavy-weight for that, IMO.  I'd do this
->> as;
->>
->> 	while ((folio = readahead_folio(rac))) {
->> 		if (!ret)
->> 			folio_mark_uptodate(folio);
->> 		folio_unlock(folio);
->> 	}
->>
-> 
-> This looks good.
-> 
->> (there's no need to call folio_set_error(), nor folio_clear_uptodate())
-> 
-> I am trying to understand why these calls are not needed for the error case.
-> I see similar pattern, for e.g. in iomap_finish_folio_read() where we call these
-> functions for the error case.
-> 
+KPI: Pre ABL Time = 3s
+KPI: ABL Time = 14s
+KPI: Kernel MPM timestamp = 890206
 
-I am planning to send the next version. It would be great if I can get a rationale for your
-statement regarding not needing to call folio_set_error() or folio_clear_uptodate().
+The Module Power Manager(MPM) sleep counter starts ticking at the PBL
+stage and the timestamp generated by the sleep counter is logged by
+the Qualcomm proprietary bootloader(ABL) at two points-> First when it
+starts execution which is logged here as "Pre ABL Time" and the second
+when it is about to load the kernel logged as "ABL Time". Both these
+values are read up by the driver from IMEM region and printed as above.
+The current sleep counter timestamp is also logged by the driver.
 
-> If we don't need to call these anymore, can the mpage code also be shortened like this:
-> 
-> -static void mpage_end_io(struct bio *bio)
-> +static void mpage_read_end_io(struct bio *bio)
->  {
-> -       struct bio_vec *bv;
-> -       struct bvec_iter_all iter_all;
-> +       struct folio_iter fi;
-> +       int err = blk_status_to_errno(bio->bi_status);
-> 
-> -       bio_for_each_segment_all(bv, bio, iter_all) {
-> -               struct page *page = bv->bv_page;
-> -               page_endio(page, bio_op(bio),
-> -                          blk_status_to_errno(bio->bi_status));
-> +       bio_for_each_folio_all(fi, bio) {
-> +               struct folio *folio = fi.folio;
-> +
-> +               if (!err)
-> +                       folio_mark_uptodate(folio);
-> +               folio_unlock(folio);
-> +       }
-> +
-> +       bio_put(bio);
-> +}
-> +
-> +static void mpage_write_end_io(struct bio *bio)
-> +{
-> ....
-> +
+Souradeep Chowdhury (4):
+  dt-bindings: sram: qcom,imem: Add Boot Stat region within IMEM
+  dt-bindings: soc: qcom,mpm-sleep-counter: Add the dtschema
+  soc: qcom: boot_stat: Add Driver Support for Boot Stats
+  MAINTAINERS: Add the entry for boot_stats driver support
+
+ .../bindings/soc/qcom/qcom,mpm-sleep-counter.yaml  |  40 ++++++++
+ .../devicetree/bindings/sram/qcom,imem.yaml        |  20 ++++
+ MAINTAINERS                                        |   7 ++
+ drivers/soc/qcom/Kconfig                           |   7 ++
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/boot_stats.c                      | 108 +++++++++++++++++++++
+ 6 files changed, 183 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
+ create mode 100644 drivers/soc/qcom/boot_stats.c
+
+-- 
+2.7.4
+
