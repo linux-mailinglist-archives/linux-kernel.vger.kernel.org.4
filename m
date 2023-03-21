@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722B06C3144
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488416C314C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjCUMI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S230393AbjCUMMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjCUMI4 (ORCPT
+        with ESMTP id S229456AbjCUMMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:08:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC112A98D;
-        Tue, 21 Mar 2023 05:08:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 21 Mar 2023 08:12:51 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5B933CE4;
+        Tue, 21 Mar 2023 05:12:49 -0700 (PDT)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2B31B81333;
-        Tue, 21 Mar 2023 12:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F11C433EF;
-        Tue, 21 Mar 2023 12:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679400532;
-        bh=6A/miAskGVR9HfTQCL3jlLTYshOj3euChPnwZTDShqQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rbJoWxyFGW3vJB94wzWf2Tv/5ZMWf+UUqsu0RjiqMZewAYO4XjB8HDBbuDBO4zIYs
-         HR2sqL2xB9Hb+mKXfeobIMBCDf5MGeVezaiUSAPBuxwcpVSRneC3PiUSizL93mal8H
-         Cwg0/7qKLXAo0o6VAkhAcfViGImgiMDQBx/DDfyyRuy+HiTk+R1Vz8Rd9JrYIm1C/p
-         wfiEGE92t610pwMeTiHdW/P5KFRx8udT86lDnFuE4/A56vdmQ/xcE2NsgY0fCAyAhm
-         bBoWZzrHjNVtJRFLpOIGMGLPoVhfgsZ8ILMaWAmqGpQASILp3Wp6eRbQuheaCdZpDO
-         aPSMWDLUzDnGA==
-Date:   Tue, 21 Mar 2023 12:08:46 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-Message-ID: <f7811b40-80a3-4985-b92d-1df3e28a0935@sirena.org.uk>
-References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
- <20230317082950.12738-3-zhuyinbo@loongson.cn>
- <68b6034f-8305-4854-a4c9-962be988ade7@sirena.org.uk>
- <9b7aff76-eff4-3b82-d7af-a723fbf21a32@loongson.cn>
- <9917d619-1104-4040-bb6f-c564fcf72806@sirena.org.uk>
- <5c281b1a-b6a7-c62e-6247-5d82ebd5e0d6@loongson.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M7Nomm7l0wJkWLyB"
-Content-Disposition: inline
-In-Reply-To: <5c281b1a-b6a7-c62e-6247-5d82ebd5e0d6@loongson.cn>
-X-Cookie: Will it improve my CASH FLOW?
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Pgr8c4Llhz6FK2Q;
+        Tue, 21 Mar 2023 20:12:48 +0800 (CST)
+Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
+        by mse-fl2.zte.com.cn with SMTP id 32LCCQTh002869;
+        Tue, 21 Mar 2023 20:12:26 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp03[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Tue, 21 Mar 2023 20:12:29 +0800 (CST)
+Date:   Tue, 21 Mar 2023 20:12:29 +0800 (CST)
+X-Zmail-TransId: 2b0564199f2d308-a24cd
+X-Mailer: Zmail v1.0
+Message-ID: <202303212012296834902@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <edumazet@google.com>
+Cc:     <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.xin16@zte.com.cn>,
+        <jiang.xuexin@zte.com.cn>, <zhang.yunkai@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIXSBycHM6IHByb2Nlc3MgdGhlIHNrYiBkaXJlY3RseSBpZiBycHMgY3B1IG5vdCBjaGFuZ2Vk?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 32LCCQTh002869
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 64199F40.000/4Pgr8c4Llhz6FK2Q
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: xu xin <xu.xin16@zte.com.cn>
 
---M7Nomm7l0wJkWLyB
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In the RPS procedure of NAPI receiving, regardless of whether the
+rps-calculated CPU of the skb equals to the currently processing CPU, RPS
+will always use enqueue_to_backlog to enqueue the skb to per-cpu backlog,
+which will trigger a new NET_RX softirq.
 
-On Tue, Mar 21, 2023 at 10:54:32AM +0800, zhuyinbo wrote:
-> =E5=9C=A8 2023/3/20 =E4=B8=8B=E5=8D=888:52, Mark Brown =E5=86=99=E9=81=93:
+Actually, it's not necessary to enqueue it to backlog when rps-calculated
+CPU id equals to the current processing CPU, and we can call
+__netif_receive_skb or __netif_receive_skb_list to process the skb directly.
+The benefit is that it can reduce the number of softirqs of NET_RX and reduce
+the processing delay of skb.
 
-> > No, that doesn't help if setup() reconfigures the controller while it's
-> > doing a transfer.  The issue is that the controller might be put into
-> > the wrong mode or run at the wrong speed.
+The measured result shows the patch brings 50% reduction of NET_RX softirqs.
+The test was done on the QEMU environment with two-core CPU by iperf3.
+taskset 01 iperf3 -c 192.168.2.250 -t 3 -u -R;
+taskset 02 iperf3 -c 192.168.2.250 -t 3 -u -R;
 
-> sorry, I don't got that why cpu still can call setup's critical region wh=
-en
-> cpu call transfer_one to=C2=A0 transfer spi data.
+Previous RPS:
+		    	CPU0       CPU1
+NET_RX:         45          0    (before iperf3 testing)
+NET_RX:        1095         241   (after iperf3 testing)
 
-> when I added a spin_lock for setup and transfer_one then setup and
-> transfer_one's critical region cann't be called
+Patched RPS:
+                CPU0       CPU1
+NET_RX:         28          4    (before iperf3 testing)
+NET_RX:         573         32   (after iperf3 testing)
 
-> simultaneously as I know, because the their lock was same lock.
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+---
+ net/core/dev.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Think what happens if the two SPI devices have different configurations
-- for example, a different SPI mode.  The register state won't be
-corrupted but the devices will still end up seeing misconfigured SPI
-transfers.
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c7853192563d..c33ddac3c012 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5666,8 +5666,9 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
+ 	if (static_branch_unlikely(&rps_needed)) {
+ 		struct rps_dev_flow voidflow, *rflow = &voidflow;
+ 		int cpu = get_rps_cpu(skb->dev, skb, &rflow);
++		int current_cpu = smp_processor_id();
 
---M7Nomm7l0wJkWLyB
-Content-Type: application/pgp-signature; name="signature.asc"
+-		if (cpu >= 0) {
++		if (cpu >= 0 && cpu != current_cpu) {
+ 			ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+ 			rcu_read_unlock();
+ 			return ret;
+@@ -5699,8 +5700,9 @@ void netif_receive_skb_list_internal(struct list_head *head)
+ 		list_for_each_entry_safe(skb, next, head, list) {
+ 			struct rps_dev_flow voidflow, *rflow = &voidflow;
+ 			int cpu = get_rps_cpu(skb->dev, skb, &rflow);
++			int current_cpu = smp_processor_id();
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQZnk4ACgkQJNaLcl1U
-h9DYtwf/SbP0hA3InEd2In5nhzi9n0bIx6KFpq8iuj1fEY5iTK5GaZ3jJ8DF5PGC
-B/Hpt7T63RZCZ7ZPmPpkIrhx19A8KBr4iE1IP0jiS0P/YlYqOSy+rigwVohGT6Im
-Uu0WbtfNCcwnYuVqxnXV0c6j/DcBk8xw9cliAheNQ9t1EkMm1LFUuwYF8DNGeOyd
-C+LHYOnxEeD7jZCc4+9ZUCZBOlx9XjEID6kvIX246HsKwATseFUGEK13E0DQd+ss
-+5MkJ3WnJOFYscp3UgJzf3Va2abaDkUgRiouALeKh+DDI9NJDv0ZDAd0PZ5oPefl
-qnVBNI6o4GZ5h1I2R9VD8sHl15/d8A==
-=iwav
------END PGP SIGNATURE-----
-
---M7Nomm7l0wJkWLyB--
+-			if (cpu >= 0) {
++			if (cpu >= 0 && cpu != current_cpu) {
+ 				/* Will be handled, remove from list */
+ 				skb_list_del_init(skb);
+ 				enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+-- 
+2.15.2
