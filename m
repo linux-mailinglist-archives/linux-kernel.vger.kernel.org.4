@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AE06C2DE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5AC6C2DE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjCUJay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S229746AbjCUJai convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 05:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjCUJaw (ORCPT
+        with ESMTP id S230056AbjCUJaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:30:52 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9B230F8;
-        Tue, 21 Mar 2023 02:30:46 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id DE6B53200B6C;
-        Tue, 21 Mar 2023 05:30:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 21 Mar 2023 05:30:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679391042; x=1679477442; bh=+E
-        ypSQsK60sfT/bFJ/jrHrCRBSgL7jrmaK2N/Q19Plo=; b=KCo5tMqSoan+ASkjyf
-        MzAsfV1mcekU9j4T3uzsD9rJFZUu0oM4C3lLYkADQKB7YFwyZAaeJlK1d9mFtCiw
-        RPi2FZ7o0ZTu/bqMvMtM3SGkdSH63NdboLl6baFh4+BoNDzgqcDH+ik7n/OGjT9P
-        ycU+sXfvLUDVJpn3+G43XWHV3f/SC4QPZvqiA5cPUXH5MpCM9a5qUe25yv7cw3Qe
-        ajY/8A8rQttSlrzEZqG+4f2xvR/zKBEKrs6ngetRuHzeWFP+hpFGrsmQ4Gqqqst2
-        5RgMiHZzTLZnQjvRw+kdLdBritgMGMozuKK9bVY9Zan/q8Lm6pX9j6eMPawciAo6
-        pM5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679391042; x=1679477442; bh=+EypSQsK60sfT
-        /bFJ/jrHrCRBSgL7jrmaK2N/Q19Plo=; b=T9N9qT610m60k7w9/Hx+v2y+hUyHa
-        EtQCht93ZrhO85hiI7dZ0cH6djJZBX73LAsHKdxvXrr2R4V0F/+aO8A1ffJ2z2Ly
-        BcOFHNHBX9EXnifsH+OuM5nzwQBguBuEQehngX+JAPHYD/TBroYD+LmSzTqjhaLJ
-        FQERaHN8mENDQIVUd/UCPMJAMCioD0ZAxm+SkHEx0FIP17LqyrtMZhsgVhGcVJso
-        hrFSrwbx++K4mSa6Qnmc0VYuOaGGQnne1s/tLJ5NV4+svmt4vQ/fonfzlzsQAro+
-        WAY3cvgiJmutKxqDnyarApud2jjZCk/Ymk2L/hDEBIJSJolrXk4Gwg0yg==
-X-ME-Sender: <xms:QnkZZMkrYMhumZnlOiLzLdNZdGKLgRgPdKQonSkMtO-UrXSyvP3r3w>
-    <xme:QnkZZL1Wi6tph5D9I4fXiq9IS6tbNqqeoZ6g0vcWInn-mjz7QZIF5QtGOmOXC5oSN
-    RVAdxX8Z0HZqSixf1Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:QnkZZKoU3g3J3iUBK7QuIDx4XjZhAwRLUzT4wtecFJgjxWpoBDLFbA>
-    <xmx:QnkZZIn0uisGvHanxlLmoZuMvdJ5rHr433-8aMF0PCgMbYcNyyNP6Q>
-    <xmx:QnkZZK343A7b9Z_xQNMphaQzwKKhXidSgkmtAv2KiV8ZluvEc1_BXQ>
-    <xmx:QnkZZG-PB7USSheHECWfpCPN8ST5Doo474bz5UoPFgL5xv4-iOIacg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1FAB4B60086; Tue, 21 Mar 2023 05:30:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <59c05b36-3370-4d7b-b8cc-39d6dc36cdd0@app.fastmail.com>
-In-Reply-To: <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com>
-References: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
- <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com>
-Date:   Tue, 21 Mar 2023 10:30:21 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Daniel Palmer" <daniel@thingy.jp>,
-        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
-Cc:     "Romain Perier" <romain.perier@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: mstar: remove unused config MACH_MERCURY
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 05:30:35 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B627291
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:30:26 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PgmTd56TCznYDJ;
+        Tue, 21 Mar 2023 17:27:17 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 17:30:23 +0800
+Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
+ dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2507.021;
+ Tue, 21 Mar 2023 17:30:23 +0800
+From:   "chenjun (AM)" <chenjun102@huawei.com>
+To:     Mike Rapoport <rppt@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "xuqiang (M)" <xuqiang36@huawei.com>,
+        "Wangkefeng (OS Kernel Lab)" <wangkefeng.wang@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: Re: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
+Thread-Topic: [PATCH] mm/slub: Reduce memory consumption in extreme scenarios
+Thread-Index: AQHZVnGyqCLx+d0GeECeM+z9zE2Dsg==
+Date:   Tue, 21 Mar 2023 09:30:23 +0000
+Message-ID: <c3a2280eff5c419ea14b6cad34474e08@huawei.com>
+References: <20230314123403.100158-1-chenjun102@huawei.com>
+ <0cad1ff3-8339-a3eb-fc36-c8bda1392451@suse.cz>
+ <344c7521d72e4107b451c19b329e9864@huawei.com>
+ <8c700468-245d-72e9-99e7-b99d4547e6d8@suse.cz>
+ <aeb2bd3990004b9eb4f151aa833ddcf2@huawei.com>
+ <015855b3-ced3-8d84-e21d-cc6ce112b556@suse.cz> <ZBgjZn7WOqO5ruws@kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.43]
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023, at 09:33, Daniel Palmer wrote:
-> Hi Lukas
->
-> On Tue, 21 Mar 2023 at 12:38, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+在 2023/3/20 17:12, Mike Rapoport 写道:
+> On Mon, Mar 20, 2023 at 09:05:57AM +0100, Vlastimil Babka wrote:
+>> On 3/19/23 08:22, chenjun (AM) wrote:
+>>> 在 2023/3/17 20:06, Vlastimil Babka 写道:
+>>>> On 3/17/23 12:32, chenjun (AM) wrote:
+>>>>> 在 2023/3/14 22:41, Vlastimil Babka 写道:
+>>>>>>>     	pc.flags = gfpflags;
+>>>>>>> +
+>>>>>>> +	/*
+>>>>>>> +	 * when (node != NUMA_NO_NODE) && (gfpflags & __GFP_THISNODE)
+>>>>>>> +	 * 1) try to get a partial slab from target node with __GFP_THISNODE.
+>>>>>>> +	 * 2) if 1) failed, try to allocate a new slab from target node with
+>>>>>>> +	 *    __GFP_THISNODE.
+>>>>>>> +	 * 3) if 2) failed, retry 1) and 2) without __GFP_THISNODE constraint.
+>>>>>>> +	 */
+>>>>>>> +	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+>>>>>>> +			pc.flags |= __GFP_THISNODE;
+>>>>>>
+>>>>>> Hmm I'm thinking we should also perhaps remove direct reclaim possibilities
+>>>>>> from the attempt 2). In your qemu test it should make no difference, as it
+>>>>>> fills everything with kernel memory that is not reclaimable. But in practice
+>>>>>> the target node might be filled with user memory, and I think it's better to
+>>>>>> quickly allocate on a different node than spend time in direct reclaim. So
+>>>>>> the following should work I think?
+>>>>>>
+>>>>>> pc.flags = GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
+>>>>>>
+>>>>>
+>>>>> Hmm, Should it be that:
+>>>>>
+>>>>> pc.flags |= GFP_NOWAIT | __GFP_NOWARN |__GFP_THISNODE
+>>>>
+>>>> No, we need to ignore the other reclaim-related flags that the caller
+>>>> passed, or it wouldn't work as intended.
+>>>> The danger is that we ignore some flag that would be necessary to pass, but
+>>>> I don't think there's any?
+>>>>
+>>>>
+>>>
+>>> If we ignore __GFP_ZERO passed by kzalloc， kzalloc will not work.
+>>> Could we just unmask __GFP_RECLAIMABLE | __GFP_RECLAIM?
+>>>
+>>> pc.flags &= ~(__GFP_RECLAIMABLE | __GFP_RECLAIM)
+>>> pc.flags |= __GFP_THISNODE
 >>
->> Commit 312b62b6610c ("ARM: mstar: Add machine for MStar/Sigmastar Armv7
->> SoCs") adds the config MACH_INFINITY and MACH_MERCURY. The MACH_INFINITY
->> config is used in the gpio-msc313 driver, but the MACH_MERCURY config is
->> never used to configure anything in the kernel tree.
+>> __GFP_RECLAIMABLE would be wrong, but also ignored as new_slab() does:
+>> 	flags & (GFP_RECLAIM_MASK | GFP_CONSTRAINT_MASK)
 >>
->> Remove the unused config MACH_MERCURY.
->
-> Because work is still on going to push that stuff.
->
-> nak from me.
+>> which would filter out __GFP_ZERO as well. That's not a problem as kzalloc()
+>> will zero out the individual allocated objects, so it doesn't matter if we
+>> don't zero out the whole slab page.
+>>
+>> But I wonder, if we're not past due time for a helper e.g.
+>> gfp_opportunistic(flags) that would turn any allocation flags to a
+>> GFP_NOWAIT while keeping the rest of relevant flags intact, and thus there
+>> would be one canonical way to do it - I'm sure there's a number of places
+>> with their own variants now?
+>> With such helper we'd just add __GFP_THISNODE to the result here as that's
+>> specific to this particular opportunistic allocation.
+> 
+> I like the idea, but maybe gfp_no_reclaim() would be clearer?
+> 
 
-The symbol has been unused three year though, and will
-show up every time someone runs a script to look for
-orphaned Kconfig entries.
+#define gfp_no_reclaim(gfpflag) (gfpflag & ~__GFP_DIRECT_RECLAIM)
 
-I'd still prefer removing it now and only bringing it
-back when you actually add the code for it.
+And here,
 
-     Arnd
+pc.flags = gfp_no_reclaim(gfpflags) | __GFP_THISNODE.
+
+Do I get it right？
