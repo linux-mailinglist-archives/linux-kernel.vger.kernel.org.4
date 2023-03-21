@@ -2,90 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E596C2DD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985CD6C2DD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCUJ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S230052AbjCUJ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjCUJ2Q (ORCPT
+        with ESMTP id S230093AbjCUJ22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:28:16 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C73C83E4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:28:15 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54184571389so270163887b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679390894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76Qus1bli/VwOY3y8BO9Hj8Ms3aeQpfzWEQJcd1zGgg=;
-        b=VkpYKq5PwFB/4tSmj2zzDcO8TG8YaKieF9O6DL6vMZ17b6c3VAUsKvhZx9GWRjWNJW
-         tcPskQ6SjDjflBtEMeBhXQ+0YlUzTnKYc+W69Phzp50XFaNeNGmLAeDnqgfzSZK5ivSw
-         YQrGh2L9JNZ/Vaq0gHO3ipTylEYUiEE0pL7/2BTUAsQVCwe7R7JY03ywBVMGGSWqOb7s
-         Kx9WTRMdYGMMR0MSb7qKDY1AgspEJrZeWK3ubDyFmtGaAqQ/gRHAe5awTEPAGc/cXWdn
-         N6JzUarIhOdiehx8Hexc1yJuE0HYYnC1XQOIqeArQFNjYgpPWPTVNbjXraz8QMbtke8I
-         Sqzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679390894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76Qus1bli/VwOY3y8BO9Hj8Ms3aeQpfzWEQJcd1zGgg=;
-        b=F73rs7PwKBoabz9JpSl4Wx8iP9MDiZEBe+iPtCjqunc6aiB3BeA1RtSrtSWfKYMpg+
-         7fLCtlS1vl9d3bY/0++MLlLE5ZFcN1CsuIlLVqVL8vlRsH+5pApRVRTNX8a+VGyBTGOq
-         kZ9eec+7YeBAH8Ar1iDLMGL7kV9Hv0Q2DFem1hHf+ABAspYhLjjVmrFaNHRID5k0ov87
-         1Al+I8BKIlgAD7Hu2SJJFxtkEzY4BrelYeID8aYgbaqeGkRt8avfwZXhtTD2YitkiqKi
-         n/VGQRgxWdYcjick19GJ3B7zwvLO54j7aVKXAQjd/r9E46DF7YVjqdqdmQs3rc86Fg5t
-         lWFw==
-X-Gm-Message-State: AAQBX9cxPvHj48Aet6wlKXL/WtvvtXGOxCcYxbB9x5dfeFDQIIJAd63Y
-        M5vkY+7YKsPkuspF9C3VFAN/qUKGpylOEOY/iPSlZA==
-X-Google-Smtp-Source: AKy350YexCT1RHA6Cn204g9h8Q7dT08X4aKbreYthmzBiusk86//w6WusQsW0SU29UHZG3AZ4xmbQp5CwJHhY3dQlIQ=
-X-Received: by 2002:a81:e20a:0:b0:532:e887:2c23 with SMTP id
- p10-20020a81e20a000000b00532e8872c23mr636381ywl.9.1679390894044; Tue, 21 Mar
- 2023 02:28:14 -0700 (PDT)
+        Tue, 21 Mar 2023 05:28:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA4D320058;
+        Tue, 21 Mar 2023 02:28:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E82D2AD7;
+        Tue, 21 Mar 2023 02:29:08 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.54.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00B833F766;
+        Tue, 21 Mar 2023 02:28:23 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 09:28:13 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Tom Rix <trix@redhat.com>, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] ftrace: set direct_ops storage-class-specifier to static
+Message-ID: <ZBl4rZz/fULw+sWp@FVFF77S0Q05N>
+References: <20230311135113.711824-1-trix@redhat.com>
+ <ZBibbUQlkytYsoN9@FVFF77S0Q05N.cambridge.arm.com>
+ <20230320135132.26b29f36@gandalf.local.home>
 MIME-Version: 1.0
-References: <20230320233928.2920693-1-robh@kernel.org>
-In-Reply-To: <20230320233928.2920693-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 21 Mar 2023 10:28:03 +0100
-Message-ID: <CACRpkdbrsh6e-AJ9Qp2G=47zBsRWxDxOfZXp9-7kvOSQ1Vw0Kg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: interrupt-controller: Drop unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320135132.26b29f36@gandalf.local.home>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:39=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
-e:
+On Mon, Mar 20, 2023 at 01:51:32PM -0400, Steven Rostedt wrote:
+> On Mon, 20 Mar 2023 17:44:13 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
+> > On Sat, Mar 11, 2023 at 08:51:13AM -0500, Tom Rix wrote:
+> > > smatch reports this warning
+> > > kernel/trace/ftrace.c:2594:19: warning:
+> > >   symbol 'direct_ops' was not declared. Should it be static?
+> > > 
+> > > The variable direct_ops is only used in ftrace.c, so it should be static
+> > > 
+> > > Signed-off-by: Tom Rix <trix@redhat.com>  
+> > 
+> > This makes sense, and as this stands:
+> > 
+> > Acked-by: Mark Rutland <mark.rutland@arm.com>
+> > 
+> > ... but Florent's rework of the API is going to remove this anyway:
+> > 
+> >   https://lore.kernel.org/all/20230316173811.1223508-1-revest@chromium.org/
+> >   https://lore.kernel.org/all/20230316173811.1223508-4-revest@chromium.org/
+> > 
+> > ... so if we take Florent's series, this patch isn't necessary.
+> 
+> Except that it's already upstream:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8732565549011cabbea08329a1aefd78a68d96c7
+> 
+> I had to rebase Florent's patch to accommodate this change.
 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Sorry for the noise; my fault for being so far behind with patch review!
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Mark.
